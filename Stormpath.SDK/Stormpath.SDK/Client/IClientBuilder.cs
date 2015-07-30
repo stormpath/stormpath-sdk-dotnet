@@ -1,10 +1,13 @@
-﻿namespace Stormpath.SDK.Client
+﻿using Stormpath.SDK.Api;
+
+namespace Stormpath.SDK.Client
 {
     public interface IClientBuilder
     {
-        IClientBuilder SetApiKey(ApiKey apiKey);
+        IClientBuilder SetApiKey(IApiKey apiKey);
 
-        IClientBuilder SetAuthenticationScheme(AuthenticationScheme authenticationScheme);
+        //IClientBuilder SetAuthenticationScheme(AuthenticationScheme authenticationScheme);
+        // TODO
 
         IClientBuilder SetConnectionTimeout(int timeout);
 

@@ -12,6 +12,7 @@ namespace Stormpath.SDK.Api
 
         Task<string> GetSecretAsync();
 
+        // begin TODO
         // ApiKeyStatus
 
         //void SetStatus()
@@ -21,5 +22,6 @@ namespace Stormpath.SDK.Api
         //Task<ITenant>
 
         // void Save()
+        // end TODO
     }
 }

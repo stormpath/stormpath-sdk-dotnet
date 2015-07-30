@@ -8,6 +8,19 @@ namespace Stormpath.SDK.Api
 {
     public interface IApiKeyBuilder
     {
+        IApiKeyBuilder SetId(string id);
 
+        IApiKeyBuilder SetSecret(string secret);
+
+        // begin TODO
+        // setProperties
+        // setReader
+        // setInputString
+        // setFileLocaiton
+        // setIdPropertyName
+        // setSecretPropertyName
+        // end TODO
+
+        IApiKey Build();
     }
 }
