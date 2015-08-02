@@ -4,7 +4,7 @@ namespace Stormpath.SDK.Client
 {
     public interface IClientBuilder
     {
-        IClientBuilder SetApiKey(IApiKey apiKey);
+        IClientBuilder SetApiKey(IClientApiKey apiKey);
 
         //IClientBuilder SetAuthenticationScheme(AuthenticationScheme authenticationScheme);
         // TODO

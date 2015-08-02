@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,10 +45,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\IApiKey.cs" />
-    <Compile Include="Api\IApiKeyBuilder.cs" />
+    <Compile Include="Api\ClientApiKeys.cs" />
+    <Compile Include="Api\IClientApiKey.cs" />
+    <Compile Include="Api\IClientApiKeyBuilder.cs" />
     <Compile Include="Client\IClient.cs" />
     <Compile Include="Client\IClientBuilder.cs" />
+    <Compile Include="Impl\Api\ClientApiKey.cs" />
+    <Compile Include="Impl\Api\DefaultClientApiKeyBuilder.cs" />
+    <Compile Include="Impl\DS\IInternalDataStore.cs" />
+    <Compile Include="Impl\Extensions\StringExtensions.cs" />
+    <Compile Include="Impl\Utility\Properties.cs" />
+    <Compile Include="Impl\Utility\GenericComparer.cs" />
+    <Compile Include="Impl\Utility\HashCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
