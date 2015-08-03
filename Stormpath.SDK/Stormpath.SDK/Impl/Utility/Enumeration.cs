@@ -26,8 +26,8 @@ namespace Stormpath.SDK.Impl.Utility
     // https://lostechies.com/jimmybogard/2008/08/12/enumeration-classes/
     public abstract class Enumeration : IComparable
     {
-        private readonly int _value;
-        private readonly string _displayName;
+        private readonly int value;
+        private readonly string displayName;
 
         protected Enumeration()
         {
@@ -35,18 +35,18 @@ namespace Stormpath.SDK.Impl.Utility
 
         protected Enumeration(int value, string displayName)
         {
-            _value = value;
-            _displayName = displayName;
+            this.value = value;
+            this.displayName = displayName;
         }
 
         public int Value
         {
-            get { return _value; }
+            get { return this.value; }
         }
 
         public string DisplayName
         {
-            get { return _displayName; }
+            get { return this.displayName; }
         }
 
         public static bool operator ==(Enumeration a, Enumeration b)
@@ -71,7 +71,7 @@ namespace Stormpath.SDK.Impl.Utility
 
         public override string ToString()
         {
-            return DisplayName;
+            return this.DisplayName;
         }
 
         public static IEnumerable<T> GetAll<T>() where T : Enumeration, new()
@@ -101,14 +101,14 @@ namespace Stormpath.SDK.Impl.Utility
             }
 
             var typeMatches = GetType().Equals(obj.GetType());
-            var valueMatches = _value.Equals(otherValue.Value);
+            var valueMatches = value.Equals(otherValue.Value);
 
             return typeMatches && valueMatches;
         }
 
         public override int GetHashCode()
         {
-            return _value.GetHashCode();
+            return value.GetHashCode();
         }
 
         public static int AbsoluteDifference(Enumeration firstValue, Enumeration secondValue)

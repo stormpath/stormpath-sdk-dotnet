@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Client
         public static AuthenticationScheme SAuthC1 = new AuthenticationScheme(1, "SAUTHC1", typeof(SAuthc1RequestAuthenticator));
 #pragma warning restore SA1401 // Fields must be private
 
-        private readonly Type _authenticatorType;
+        private readonly Type authenticatorType;
 
         private AuthenticationScheme()
         {
@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Client
 
         private AuthenticationScheme(int value, string displayName, Type authenticatorType) : base(value, displayName)
         {
-            _authenticatorType = authenticatorType;
+            this.authenticatorType = authenticatorType;
         }
     }
 }

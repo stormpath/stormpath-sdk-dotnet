@@ -23,8 +23,7 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal class DefaultClientBuilder : IClientBuilder
     {
-        private readonly string _baseUrl = "https://api.stormpath.com/v1";
-
+        // private readonly string baseUrl = "https://api.stormpath.com/v1";
         IClient IClientBuilder.Build()
         {
             throw new NotImplementedException();

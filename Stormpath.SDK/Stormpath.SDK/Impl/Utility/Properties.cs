@@ -24,17 +24,17 @@ namespace Stormpath.SDK.Impl.Utility
     internal class Properties
     {
         private static readonly char[] IgnoreLinesStartingWith = { '#', '!' };
-        private readonly IDictionary<string, string> _props;
+        private readonly IDictionary<string, string> props;
 
         public Properties(string input)
         {
-            _props = Parse(input);
+            this.props = Parse(input);
         }
 
         public string GetProperty(string key)
         {
             string value;
-            if (_props.TryGetValue(key, out value))
+            if (this.props.TryGetValue(key, out value))
             {
                 return value;
             }
@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Impl.Utility
 
         public int Count()
         {
-            return _props.Count;
+            return this.props.Count;
         }
 
         private static IDictionary<string, string> Parse(string input)

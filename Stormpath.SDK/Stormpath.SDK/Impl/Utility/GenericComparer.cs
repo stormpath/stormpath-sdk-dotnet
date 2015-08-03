@@ -22,13 +22,13 @@ namespace Stormpath.SDK.Impl.Utility
 {
     internal class GenericComparer<T> : IEqualityComparer<T>
     {
-        private readonly Func<T, T, bool> _areEqualFunc;
-        private readonly Func<T, int> _hashFunc;
+        private readonly Func<T, T, bool> areEqualFunc;
+        private readonly Func<T, int> hashFunc;
 
         public GenericComparer(Func<T, T, bool> areEqualFunc, Func<T, int> hashFunc)
         {
-            _areEqualFunc = areEqualFunc;
-            _hashFunc = hashFunc;
+            this.areEqualFunc = areEqualFunc;
+            this.hashFunc = hashFunc;
         }
 
         public bool Equals(T x, T y)
@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Impl.Utility
                 return false;
             }
 
-            var result = false;
+            var result = areEqualFunc(x, y);
             return result;
         }
 
@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Impl.Utility
                 return 0;
             }
 
-            return HashCode.Start;
+            return hashFunc(obj);
         }
     }
 }

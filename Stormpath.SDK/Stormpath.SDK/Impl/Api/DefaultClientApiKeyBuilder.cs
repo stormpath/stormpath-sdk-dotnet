@@ -31,58 +31,58 @@ namespace Stormpath.SDK.Impl.Api
             System.IO.Path.Combine(Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%"), ".stormpath\\", "apiKey.properties");
 
         // Instance fields
-        private string _apiKeyId;
-        private string _apiKeySecret;
-        private System.IO.Stream _apiKeyFileInputStream;
-        private string _apiKeyFilePath;
-        private string _apiKeyIdPropertyName = DefaultIdPropertyName;
-        private string _apiKeySecretPropertyName = DefaultSecretPropertyName;
+        private string apiKeyId;
+        private string apiKeySecret;
+        private System.IO.Stream apiKeyFileInputStream;
+        private string apiKeyFilePath;
+        private string apiKeyIdPropertyName = DefaultIdPropertyName;
+        private string apiKeySecretPropertyName = DefaultSecretPropertyName;
 
         // Wrappers for static .NET Framework calls (for easier unit testing)
-        private readonly IConfigurationManager _configuration;
-        private readonly IEnvironment _environment;
-        private readonly IFile _file;
+        private readonly IConfigurationManager config;
+        private readonly IEnvironment env;
+        private readonly IFile file;
 
         public DefaultClientApiKeyBuilder(IConfigurationManager configuration, IEnvironment environment, IFile file)
         {
-            _configuration = configuration;
-            _environment = environment;
-            _file = file;
+            this.config = configuration;
+            this.env = environment;
+            this.file = file;
         }
 
         IClientApiKeyBuilder IClientApiKeyBuilder.SetId(string id)
         {
-            _apiKeyId = id;
+            this.apiKeyId = id;
             return this;
         }
 
         IClientApiKeyBuilder IClientApiKeyBuilder.SetSecret(string secret)
         {
-            _apiKeySecret = secret;
+            this.apiKeySecret = secret;
             return this;
         }
 
         IClientApiKeyBuilder IClientApiKeyBuilder.SetInputStream(System.IO.Stream stream)
         {
-            _apiKeyFileInputStream = stream;
+            this.apiKeyFileInputStream = stream;
             return this;
         }
 
         IClientApiKeyBuilder IClientApiKeyBuilder.SetFileLocation(string path)
         {
-            _apiKeyFilePath = path;
+            this.apiKeyFilePath = path;
             return this;
         }
 
         IClientApiKeyBuilder IClientApiKeyBuilder.SetIdPropertyName(string idPropertyName)
         {
-            _apiKeyIdPropertyName = idPropertyName;
+            this.apiKeyIdPropertyName = idPropertyName;
             return this;
         }
 
         IClientApiKeyBuilder IClientApiKeyBuilder.SetSecretPropertyName(string secretPropertyName)
         {
-            _apiKeySecretPropertyName = secretPropertyName;
+            this.apiKeySecretPropertyName = secretPropertyName;
             return this;
         }
 
@@ -90,66 +90,66 @@ namespace Stormpath.SDK.Impl.Api
         {
             // 1. Try to load default API key properties file. Lowest priority
             var defaultProperties = GetDefaultApiKeyFileProperties();
-            string id = defaultProperties?.GetProperty(_apiKeyIdPropertyName);
-            string secret = defaultProperties?.GetProperty(_apiKeySecretPropertyName);
+            string id = defaultProperties?.GetProperty(this.apiKeyIdPropertyName);
+            string secret = defaultProperties?.GetProperty(this.apiKeySecretPropertyName);
 
             // 2. Try file location specified by environment variables
-            var envFileLocation = _environment.GetEnvironmentVariable("STORMPATH_API_KEY_FILE");
+            var envFileLocation = this.env.GetEnvironmentVariable("STORMPATH_API_KEY_FILE");
             if (!string.IsNullOrEmpty(envFileLocation))
             {
                 var envProperties = GetPropertiesFromEnvironmentVariableFileLocation(envFileLocation);
-                id = envProperties?.GetProperty(_apiKeyIdPropertyName, defaultValue: id);
-                secret = envProperties?.GetProperty(_apiKeySecretPropertyName, defaultValue: secret);
+                id = envProperties?.GetProperty(this.apiKeyIdPropertyName, defaultValue: id);
+                secret = envProperties?.GetProperty(this.apiKeySecretPropertyName, defaultValue: secret);
             }
 
             // 3. Try environment variables directly
-            var idFromEnvironment = _environment.GetEnvironmentVariable("STORMPATH_API_KEY_ID");
-            var secretFromEnvironment = _environment.GetEnvironmentVariable("STORMPATH_API_KEY_SECRET");
-            bool retrievedValuesFromEnvironment = !string.IsNullOrEmpty(idFromEnvironment) && !string.IsNullOrEmpty(secretFromEnvironment);
-            if (retrievedValuesFromEnvironment)
+            var idFromEnvironment = this.env.GetEnvironmentVariable("STORMPATH_API_KEY_ID");
+            var secretFromEnvironment = this.env.GetEnvironmentVariable("STORMPATH_API_KEY_SECRET");
+            bool didRetrieveValuesFromEnvironment = !string.IsNullOrEmpty(idFromEnvironment) && !string.IsNullOrEmpty(secretFromEnvironment);
+            if (didRetrieveValuesFromEnvironment)
             {
                 id = idFromEnvironment;
                 secret = secretFromEnvironment;
             }
 
             // 4. Try file location specified by web.config/app.config
-            var appConfigFileLocation = _configuration.AppSettings?["STORMPATH_API_KEY_FILE"];
+            var appConfigFileLocation = this.config.AppSettings?["STORMPATH_API_KEY_FILE"];
             if (!string.IsNullOrEmpty(appConfigFileLocation))
             {
                 var appConfigProperties = GetPropertiesFromAppConfigFileLocation(appConfigFileLocation);
-                id = appConfigProperties?.GetProperty(_apiKeyIdPropertyName, defaultValue: id);
-                secret = appConfigProperties?.GetProperty(_apiKeySecretPropertyName, defaultValue: secret);
+                id = appConfigProperties?.GetProperty(this.apiKeyIdPropertyName, defaultValue: id);
+                secret = appConfigProperties?.GetProperty(this.apiKeySecretPropertyName, defaultValue: secret);
             }
 
             // 5. Try web.config/app.config keys directly
-            var idFromAppConfig = _configuration.AppSettings?["STORMPATH_API_KEY_ID"];
-            var secretFromAppConfig = _configuration.AppSettings?["STORMPATH_API_KEY_SECRET"];
-            bool retrievedValuesFromAppConfig = !string.IsNullOrEmpty(idFromAppConfig) && !string.IsNullOrEmpty(secretFromAppConfig);
-            if (retrievedValuesFromAppConfig)
+            var idFromAppConfig = this.config.AppSettings?["STORMPATH_API_KEY_ID"];
+            var secretFromAppConfig = this.config.AppSettings?["STORMPATH_API_KEY_SECRET"];
+            bool didRetrieveValuesFromAppConfig = !string.IsNullOrEmpty(idFromAppConfig) && !string.IsNullOrEmpty(secretFromAppConfig);
+            if (didRetrieveValuesFromAppConfig)
             {
                 id = idFromAppConfig;
                 secret = secretFromAppConfig;
             }
 
             // 6. Try configured property file
-            if (!string.IsNullOrEmpty(_apiKeyFilePath))
+            if (!string.IsNullOrEmpty(this.apiKeyFilePath))
             {
                 var fileProperties = GetPropertiesFromFile();
-                id = fileProperties?.GetProperty(_apiKeyIdPropertyName, defaultValue: id);
-                secret = fileProperties?.GetProperty(_apiKeySecretPropertyName, defaultValue: secret);
+                id = fileProperties?.GetProperty(this.apiKeyIdPropertyName, defaultValue: id);
+                secret = fileProperties?.GetProperty(this.apiKeySecretPropertyName, defaultValue: secret);
             }
 
             // 7. Try an input stream that was passed to us
-            if (_apiKeyFileInputStream != null)
+            if (this.apiKeyFileInputStream != null)
             {
                 var streamProperties = GetPropertiesFromStream();
-                id = streamProperties?.GetProperty(_apiKeyIdPropertyName, defaultValue: id);
-                secret = streamProperties?.GetProperty(_apiKeySecretPropertyName, defaultValue: secret);
+                id = streamProperties?.GetProperty(this.apiKeyIdPropertyName, defaultValue: id);
+                secret = streamProperties?.GetProperty(this.apiKeySecretPropertyName, defaultValue: secret);
             }
 
             // 8. Explicitly-configured values always take precedence
-            id = _apiKeyId.OrIfEmptyUse(id);
-            secret = _apiKeySecret.OrIfEmptyUse(secret);
+            id = this.apiKeyId.OrIfEmptyUse(id);
+            secret = this.apiKeySecret.OrIfEmptyUse(secret);
 
             if (string.IsNullOrEmpty(id))
             {
@@ -174,7 +174,7 @@ namespace Stormpath.SDK.Impl.Api
         {
             try
             {
-                var source = _file.ReadAllText(DefaultApiKeyPropertiesFileLocation);
+                var source = this.file.ReadAllText(DefaultApiKeyPropertiesFileLocation);
                 return new Properties(source);
             }
             catch
@@ -192,7 +192,7 @@ namespace Stormpath.SDK.Impl.Api
         {
             try
             {
-                var source = _file.ReadAllText(path);
+                var source = this.file.ReadAllText(path);
                 var properties = new Properties(source);
                 return properties;
             }
@@ -200,7 +200,7 @@ namespace Stormpath.SDK.Impl.Api
             {
                 var msg =
                     $"Unable to load API Key properties file [{path}] specified by environment variable " +
-                    "STORMPATH_API_KEY_FILE. This can safely be ignored as this is a fallback location - " +
+                    "STORMPATH_API_KEYthis.File. This can safely be ignored as this is a fallback location - " +
                     "other more specific locations will be checked.";
 
                 // todo - log (catch exception for this)
@@ -212,7 +212,7 @@ namespace Stormpath.SDK.Impl.Api
         {
             try
             {
-                var source = _file.ReadAllText(path);
+                var source = this.file.ReadAllText(path);
                 var properties = new Properties(source);
                 return properties;
             }
@@ -220,7 +220,7 @@ namespace Stormpath.SDK.Impl.Api
             {
                 var msg =
                     $"Unable to load API Key properties file [{path}] specified by config key " +
-                    "STORMPATH_API_KEY_FILE. This can safely be ignored as this is a fallback location - " +
+                    "STORMPATH_API_KEYthis.File. This can safely be ignored as this is a fallback location - " +
                     "other more specific locations will be checked.";
 
                 // todo - log (catch exception for this)
@@ -232,27 +232,27 @@ namespace Stormpath.SDK.Impl.Api
         {
             try
             {
-                var source = _file.ReadAllText(_apiKeyFilePath);
+                var source = this.file.ReadAllText(this.apiKeyFilePath);
                 var properties = new Properties(source);
                 return properties;
             }
             catch (Exception ex)
             {
                 throw new ApplicationException(
-                    $"Unable to read properties from specified file location [{_apiKeyFilePath}]", ex);
+                    $"Unable to read properties from specified file location [{this.apiKeyFilePath}]", ex);
             }
         }
 
         private Properties GetPropertiesFromStream()
         {
-            if (!_apiKeyFileInputStream.CanRead)
+            if (!this.apiKeyFileInputStream.CanRead)
             {
                 return null;
             }
 
             try
             {
-                using (var reader = new System.IO.StreamReader(_apiKeyFileInputStream))
+                using (var reader = new System.IO.StreamReader(this.apiKeyFileInputStream))
                 {
                     var source = reader.ReadToEnd();
                     return new Properties(source);

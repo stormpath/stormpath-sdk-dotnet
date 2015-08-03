@@ -62,24 +62,24 @@ namespace Stormpath.SDK.Tests.SDK
                 "apiKey.id = 144JVZINOF5EBNCMG9EXAMPLE\r\n" +
                 "apiKey.secret = lWxOiKqKPNwJmSldbiSkEbkNjgh2uRSNAb+AEXAMPLE";
 
-            private IClientApiKeyBuilder _builder;
-            private IFile _file;
+            private IClientApiKeyBuilder builder;
+            private IFile file;
 
             [TestInitialize]
             public void Setup()
             {
-                _file = Substitute.For<IFile>();
-                _file.ReadAllText(defaultLocation)
+                this.file = Substitute.For<IFile>();
+                this.file.ReadAllText(defaultLocation)
                     .Returns(fileContents);
 
-                _builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), _file);
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), file);
             }
 
             [TestMethod]
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void With_default_properties_file()
             {
-                var clientApiKey = _builder.Build();
+                var clientApiKey = this.builder.Build();
 
                 clientApiKey.GetId().ShouldBe("144JVZINOF5EBNCMG9EXAMPLE");
                 clientApiKey.GetSecret().ShouldBe("lWxOiKqKPNwJmSldbiSkEbkNjgh2uRSNAb+AEXAMPLE");
@@ -89,7 +89,7 @@ namespace Stormpath.SDK.Tests.SDK
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void Default_properties_file_is_lower_priority_than_explicit()
             {
-                var clientApiKey = _builder
+                var clientApiKey = this.builder
                     .SetId("different")
                     .SetSecret("also_different")
                     .Build();
@@ -108,29 +108,29 @@ namespace Stormpath.SDK.Tests.SDK
                 "apiKey.id = envId\r\n" +
                 "apiKey.secret = envSecret\r\n";
 
-            private IClientApiKeyBuilder _builder;
-            private IEnvironment _environment;
-            private IFile _file;
+            private IClientApiKeyBuilder builder;
+            private IEnvironment env;
+            private IFile file;
 
             [TestInitialize]
             public void Setup()
             {
-                _environment = Substitute.For<IEnvironment>();
-                _environment.GetEnvironmentVariable(envVariableName)
+                this.env = Substitute.For<IEnvironment>();
+                this.env.GetEnvironmentVariable(envVariableName)
                     .Returns(testLocation);
 
-                _file = Substitute.For<IFile>();
-                _file.ReadAllText(testLocation)
+                this.file = Substitute.For<IFile>();
+                this.file.ReadAllText(testLocation)
                     .Returns(fileContents);
 
-                _builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), _environment, _file);
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), env, file);
             }
 
             [TestMethod]
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void With_properties_file_from_env_variable()
             {
-                var clientApiKey = _builder.Build();
+                var clientApiKey = this.builder.Build();
 
                 clientApiKey.GetId().ShouldBe("envId");
                 clientApiKey.GetSecret().ShouldBe("envSecret");
@@ -140,7 +140,7 @@ namespace Stormpath.SDK.Tests.SDK
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void Env_variable_properties_file_is_lower_priority_than_explicit()
             {
-                var clientApiKey = _builder
+                var clientApiKey = this.builder
                     .SetId("different")
                     .SetSecret("also_different")
                     .Build();
@@ -158,26 +158,26 @@ namespace Stormpath.SDK.Tests.SDK
             private readonly string secretVariableName = "STORMPATH_API_KEY_SECRET";
             private readonly string fakeApiSecretId = "secretSetByEnv";
 
-            private IClientApiKeyBuilder _builder;
-            private IEnvironment _environment;
+            private IClientApiKeyBuilder builder;
+            private IEnvironment env;
 
             [TestInitialize]
             public void Setup()
             {
-                _environment = Substitute.For<IEnvironment>();
-                _environment.GetEnvironmentVariable(idVariableName)
+                this.env = Substitute.For<IEnvironment>();
+                this.env.GetEnvironmentVariable(idVariableName)
                     .Returns(fakeApiKeyId);
-                _environment.GetEnvironmentVariable(secretVariableName)
+                this.env.GetEnvironmentVariable(secretVariableName)
                     .Returns(fakeApiSecretId);
 
-                _builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), _environment, Substitute.For<IFile>());
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), env, Substitute.For<IFile>());
             }
 
             [TestMethod]
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void With_values_from_env_variables()
             {
-                var clientApiKey = _builder
+                var clientApiKey = this.builder
                     .Build();
 
                 clientApiKey.GetId().ShouldBe(fakeApiKeyId);
@@ -188,7 +188,7 @@ namespace Stormpath.SDK.Tests.SDK
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void Env_variable_values_are_lower_priority_than_explicit()
             {
-                var clientApiKey = _builder
+                var clientApiKey = this.builder
                     .SetId("different")
                     .SetSecret("also_different")
                     .Build();
@@ -207,31 +207,31 @@ namespace Stormpath.SDK.Tests.SDK
                 "apiKey.id = fromAppConfig?\r\n" +
                 "apiKey.secret = fooSecret!\r\n";
 
-            private IClientApiKeyBuilder _builder;
-            private IConfigurationManager _config;
-            private IFile _file;
+            private IClientApiKeyBuilder builder;
+            private IConfigurationManager config;
+            private IFile file;
 
             [TestInitialize]
             public void Setup()
             {
-                _config = Substitute.For<IConfigurationManager>();
-                _config.AppSettings.Returns(new System.Collections.Specialized.NameValueCollection()
+                this.config = Substitute.For<IConfigurationManager>();
+                this.config.AppSettings.Returns(new System.Collections.Specialized.NameValueCollection()
                 {
                     { configVariableName, testLocation }
                 });
 
-                _file = Substitute.For<IFile>();
-                _file.ReadAllText(testLocation)
+                this.file = Substitute.For<IFile>();
+                this.file.ReadAllText(testLocation)
                     .Returns(fileContents);
 
-                _builder = new DefaultClientApiKeyBuilder(_config, Substitute.For<IEnvironment>(), _file);
+                this.builder = new DefaultClientApiKeyBuilder(config, Substitute.For<IEnvironment>(), file);
             }
 
             [TestMethod]
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void With_properties_file_from_app_config()
             {
-                var clientApiKey = _builder.Build();
+                var clientApiKey = this.builder.Build();
 
                 clientApiKey.GetId().ShouldBe("fromAppConfig?");
                 clientApiKey.GetSecret().ShouldBe("fooSecret!");
@@ -241,7 +241,7 @@ namespace Stormpath.SDK.Tests.SDK
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void App_config_properties_file_is_lower_priority_than_explicit()
             {
-                var clientApiKey = _builder
+                var clientApiKey = this.builder
                     .SetId("different")
                     .SetSecret("also_different")
                     .Build();
@@ -259,27 +259,27 @@ namespace Stormpath.SDK.Tests.SDK
             private readonly string secretVariableName = "STORMPATH_API_KEY_SECRET";
             private readonly string fakeApiSecretId = "secretSetByAppConfig";
 
-            private IClientApiKeyBuilder _builder;
-            private IConfigurationManager _config;
+            private IClientApiKeyBuilder builder;
+            private IConfigurationManager config;
 
             [TestInitialize]
             public void Setup()
             {
-                _config = Substitute.For<IConfigurationManager>();
-                _config.AppSettings.Returns(new System.Collections.Specialized.NameValueCollection()
+                this.config = Substitute.For<IConfigurationManager>();
+                this.config.AppSettings.Returns(new System.Collections.Specialized.NameValueCollection()
                 {
                     { idVariableName, fakeApiKeyId },
                     { secretVariableName, fakeApiSecretId }
                 });
 
-                _builder = new DefaultClientApiKeyBuilder(_config, Substitute.For<IEnvironment>(), Substitute.For<IFile>());
+                this.builder = new DefaultClientApiKeyBuilder(config, Substitute.For<IEnvironment>(), Substitute.For<IFile>());
             }
 
             [TestMethod]
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void With_properties_file_from_app_config()
             {
-                var clientApiKey = _builder.Build();
+                var clientApiKey = this.builder.Build();
 
                 clientApiKey.GetId().ShouldBe(fakeApiKeyId);
                 clientApiKey.GetSecret().ShouldBe(fakeApiSecretId);
@@ -289,7 +289,7 @@ namespace Stormpath.SDK.Tests.SDK
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void App_config_values_are_lower_priority_than_explicit()
             {
-                var clientApiKey = _builder
+                var clientApiKey = this.builder
                     .SetId("different")
                     .SetSecret("also_different")
                     .Build();
@@ -302,12 +302,12 @@ namespace Stormpath.SDK.Tests.SDK
         [TestClass]
         public class Building_With_Stream
         {
-            private IClientApiKeyBuilder _builder;
+            private IClientApiKeyBuilder builder;
 
             [TestInitialize]
             public void Setup()
             {
-                _builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), Substitute.For<IFile>());
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), Substitute.For<IFile>());
             }
 
             [TestMethod]
@@ -320,7 +320,7 @@ namespace Stormpath.SDK.Tests.SDK
 
                 using (var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(streamContents)))
                 {
-                    var clientApiKey = _builder
+                    var clientApiKey = this.builder
                         .SetInputStream(stream)
                         .Build();
 
@@ -333,19 +333,19 @@ namespace Stormpath.SDK.Tests.SDK
         [TestClass]
         public class Building_With_Explicit_Values
         {
-            private IClientApiKeyBuilder _builder;
+            private IClientApiKeyBuilder builder;
 
             [TestInitialize]
             public void Setup()
             {
-                _builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), Substitute.For<IFile>());
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), Substitute.For<IFile>());
             }
 
             [TestMethod]
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void With_explicit_values()
             {
-                var clientApiKey = _builder
+                var clientApiKey = this.builder
                     .SetId("foo")
                     .SetSecret("bar")
                     .Build();
@@ -363,24 +363,24 @@ namespace Stormpath.SDK.Tests.SDK
                 "apiKey.id = foobar\r\n" +
                 "apiKey.secret = bazsecret!\r\n";
 
-            private IClientApiKeyBuilder _builder;
-            private IFile _file;
+            private IClientApiKeyBuilder builder;
+            private IFile file;
 
             [TestInitialize]
             public void Setup()
             {
-                _file = Substitute.For<IFile>();
-                _file.ReadAllText(testLocation)
+                this.file = Substitute.For<IFile>();
+                this.file.ReadAllText(testLocation)
                     .Returns(fileContents);
 
-                _builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), _file);
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), file);
             }
 
             [TestMethod]
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void With_properties_file()
             {
-                var clientApiKey = _builder
+                var clientApiKey = this.builder
                     .SetFileLocation(testLocation)
                     .Build();
 
@@ -392,7 +392,7 @@ namespace Stormpath.SDK.Tests.SDK
             [TestCategory(nameof(ClientApiKeys) + ".Builder")]
             public void Properties_file_is_lower_priority_than_explicit()
             {
-                var clientApiKey = _builder
+                var clientApiKey = this.builder
                     .SetFileLocation(testLocation)
                     .SetId("different")
                     .SetSecret("also_different")

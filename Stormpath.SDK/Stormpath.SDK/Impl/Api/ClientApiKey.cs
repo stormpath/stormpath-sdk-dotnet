@@ -26,19 +26,8 @@ namespace Stormpath.SDK.Impl.Api
     /// </summary>
     internal partial class ClientApiKey : IClientApiKey
     {
-        private readonly string _id;
-        private readonly string _secret;
-
-        private static readonly GenericComparer<ClientApiKey> _comparer = new GenericComparer<ClientApiKey>(
-            (ClientApiKey x, ClientApiKey y) =>
-            {
-                return x._id == y._id && x._secret == y._secret;
-            },
-            (ClientApiKey x) =>
-            {
-                return HashCode.Start
-                    .Hash(x._id);
-            });
+        private readonly string id;
+        private readonly string secret;
 
         internal ClientApiKey(string id, string secret)
         {
@@ -52,18 +41,18 @@ namespace Stormpath.SDK.Impl.Api
                 throw new ArgumentNullException("API key secret cannot be null or empty.");
             }
 
-            _id = id;
-            _secret = secret;
+            this.id = id;
+            this.secret = secret;
         }
 
         string IClientApiKey.GetId()
         {
-            return _id;
+            return this.id;
         }
 
         string IClientApiKey.GetSecret()
         {
-            return _secret;
+            return this.secret;
         }
     }
 
@@ -72,9 +61,20 @@ namespace Stormpath.SDK.Impl.Api
     /// </summary>
     internal partial class ClientApiKey : IEquatable<ClientApiKey>
     {
+        private static readonly GenericComparer<ClientApiKey> Comparer = new GenericComparer<ClientApiKey>(
+            (ClientApiKey x, ClientApiKey y) =>
+            {
+                return x.id == y.id && x.secret == y.secret;
+            },
+            (ClientApiKey x) =>
+            {
+                return HashCode.Start
+                    .Hash(x.id);
+            });
+
         public static bool operator ==(ClientApiKey x, ClientApiKey y)
         {
-            return _comparer.Equals(x, y);
+            return Comparer.Equals(x, y);
         }
 
         public static bool operator !=(ClientApiKey x, ClientApiKey y)
@@ -95,12 +95,12 @@ namespace Stormpath.SDK.Impl.Api
                 return false;
             }
 
-            return _comparer.Equals(this, other);
+            return Comparer.Equals(this, other);
         }
 
         public override int GetHashCode()
         {
-            return _comparer.GetHashCode(this);
+            return Comparer.GetHashCode(this);
         }
     }
 }
