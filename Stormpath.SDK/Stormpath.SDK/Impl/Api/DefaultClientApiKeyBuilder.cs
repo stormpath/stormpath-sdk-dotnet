@@ -1,4 +1,21 @@
-﻿namespace Stormpath.SDK.Impl.Api
+﻿// <copyright file="DefaultClientApiKeyBuilder.cs" company="Stormpath, Inc.">
+//      Copyright (c) 2015 Stormpath, Inc.
+// </copyright>
+// <remarks>
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </remarks>
+
+namespace Stormpath.SDK.Impl.Api
 {
     using System;
     using Extensions;
@@ -68,7 +85,6 @@
             _apiKeySecretPropertyName = secretPropertyName;
             return this;
         }
-
 
         IClientApiKey IClientApiKeyBuilder.Build()
         {
@@ -161,12 +177,13 @@
                 var source = _file.ReadAllText(DefaultApiKeyPropertiesFileLocation);
                 return new Properties(source);
             }
-            catch //(Exception ignored)
+            catch
             {
                 var msg =
                     $"Unable to find or load default API Key properties file [{DefaultApiKeyPropertiesFileLocation}] " +
                     "This can safely be ignored as this is a fallback location - other more specific locations will be checked.";
-                // todo - log
+
+                // todo - log (catch exception for this)
                 return null;
             }
         }
@@ -179,13 +196,14 @@
                 var properties = new Properties(source);
                 return properties;
             }
-            catch //(Exception ignored)
+            catch
             {
                 var msg =
                     $"Unable to load API Key properties file [{path}] specified by environment variable " +
                     "STORMPATH_API_KEY_FILE. This can safely be ignored as this is a fallback location - " +
                     "other more specific locations will be checked.";
-                // todo - log
+
+                // todo - log (catch exception for this)
                 return null;
             }
         }
@@ -198,13 +216,14 @@
                 var properties = new Properties(source);
                 return properties;
             }
-            catch //(Exception ignored)
+            catch
             {
                 var msg =
                     $"Unable to load API Key properties file [{path}] specified by config key " +
                     "STORMPATH_API_KEY_FILE. This can safely be ignored as this is a fallback location - " +
                     "other more specific locations will be checked.";
-                // todo - log
+
+                // todo - log (catch exception for this)
                 return null;
             }
         }
@@ -226,7 +245,11 @@
 
         private Properties GetPropertiesFromStream()
         {
-            if (!_apiKeyFileInputStream.CanRead) return null;
+            if (!_apiKeyFileInputStream.CanRead)
+            {
+                return null;
+            }
+
             try
             {
                 using (var reader = new System.IO.StreamReader(_apiKeyFileInputStream))
@@ -240,6 +263,5 @@
                 throw new ApplicationException("Unable to read properties from specified input stream.", ex);
             }
         }
-
     }
 }
