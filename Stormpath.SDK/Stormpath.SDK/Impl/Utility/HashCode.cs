@@ -2,7 +2,7 @@
 {
     // Borrowed from Şafak Gür (http://stackoverflow.com/a/18613926/3191599)
     // Helper extension that allows hashcodes to be calcualated fluently
-    public struct HashCode
+    internal struct HashCode
     {
         private readonly int hashCode;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    public class GenericComparer<T> : IEqualityComparer<T>
+    internal class GenericComparer<T> : IEqualityComparer<T>
     {
         private readonly Func<T, T, bool> _areEqualFunc;
         private readonly Func<T, int> _hashFunc;

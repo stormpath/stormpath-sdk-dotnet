@@ -54,10 +54,22 @@
     <Compile Include="Impl\Api\DefaultClientApiKeyBuilder.cs" />
     <Compile Include="Impl\DS\IInternalDataStore.cs" />
     <Compile Include="Impl\Extensions\StringExtensions.cs" />
+    <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />
+    <Compile Include="Impl\Utility\EnvironmentWrapper.cs" />
+    <Compile Include="Impl\Utility\FileWrapper.cs" />
+    <Compile Include="Impl\Utility\IConfigurationManager.cs" />
+    <Compile Include="Impl\Utility\IEnvironment.cs" />
+    <Compile Include="Impl\Utility\IFile.cs" />
     <Compile Include="Impl\Utility\Properties.cs" />
     <Compile Include="Impl\Utility\GenericComparer.cs" />
     <Compile Include="Impl\Utility\HashCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta003\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
