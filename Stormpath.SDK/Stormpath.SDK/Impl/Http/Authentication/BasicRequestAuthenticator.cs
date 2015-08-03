@@ -1,4 +1,4 @@
-﻿// <copyright file="IClientBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="BasicRequestAuthenticator.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,22 +15,17 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using Stormpath.SDK.Api;
 
-namespace Stormpath.SDK.Client
+namespace Stormpath.SDK.Impl.Http.Authentication
 {
-    public interface IClientBuilder
+    internal class BasicRequestAuthenticator : IRequestAuthenticator
     {
-        IClientBuilder SetApiKey(IClientApiKey apiKey);
-
-        // TODO IClientBuilder SetProxy(Proxy proxy);
-        // TODO IClientBuilder SetCacheManager(CacheManager manager);
-        IClientBuilder SetAuthenticationScheme(AuthenticationScheme scheme);
-
-        IClientBuilder SetConnectionTimeout(int timeout);
-
-        IClientBuilder SetBaseUrl(string baseUrl);
-
-        IClient Build();
+        void IRequestAuthenticator.Authenticate(IRequest request, IClientApiKey apiKey)
+        {
+            // TODO
+            throw new NotImplementedException();
+        }
     }
 }

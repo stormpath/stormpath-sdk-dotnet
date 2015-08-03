@@ -50,13 +50,20 @@
     <Compile Include="Api\ClientApiKeys.cs" />
     <Compile Include="Api\IClientApiKey.cs" />
     <Compile Include="Api\IClientApiKeyBuilder.cs" />
+    <Compile Include="Client\AuthenticationScheme.cs" />
     <Compile Include="Client\IClient.cs" />
     <Compile Include="Client\IClientBuilder.cs" />
     <Compile Include="Impl\Api\ClientApiKey.cs" />
     <Compile Include="Impl\Api\DefaultClientApiKeyBuilder.cs" />
+    <Compile Include="Impl\Client\DefaultClientBuilder.cs" />
     <Compile Include="Impl\DS\IInternalDataStore.cs" />
     <Compile Include="Impl\Extensions\StringExtensions.cs" />
+    <Compile Include="Impl\Http\Authentication\BasicRequestAuthenticator.cs" />
+    <Compile Include="Impl\Http\Authentication\IRequestAuthenticator.cs" />
+    <Compile Include="Impl\Http\Authentication\SAuthc1RequestAuthenticator.cs" />
+    <Compile Include="Impl\Http\IRequest.cs" />
     <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />
+    <Compile Include="Impl\Utility\Enumeration.cs" />
     <Compile Include="Impl\Utility\EnvironmentWrapper.cs" />
     <Compile Include="Impl\Utility\FileWrapper.cs" />
     <Compile Include="Impl\Utility\IConfigurationManager.cs" />
@@ -74,6 +81,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta003\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
