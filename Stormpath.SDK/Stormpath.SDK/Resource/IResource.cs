@@ -1,4 +1,4 @@
-﻿// <copyright file="IClient.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IResource.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,16 +15,10 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Tenant;
-
-namespace Stormpath.SDK.Client
+namespace Stormpath.SDK.Resource
 {
-    public interface IClient : ITenantActions
+    public interface IResource
     {
-        string BaseUrl { get; }
-
-        AuthenticationScheme AuthenticationScheme { get; }
-
-        int ConnectionTimeout { get; }
+        string Href { get; }
     }
 }

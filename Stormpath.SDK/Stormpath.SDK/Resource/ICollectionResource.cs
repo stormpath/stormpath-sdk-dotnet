@@ -1,4 +1,4 @@
-﻿// <copyright file="IClient.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ICollectionResource.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,16 +15,17 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Tenant;
+using System.Collections.Generic;
 
-namespace Stormpath.SDK.Client
+namespace Stormpath.SDK.Resource
 {
-    public interface IClient : ITenantActions
+    public interface ICollectionResource<T> : IEnumerable<T>
+        where T : IResource
     {
-        string BaseUrl { get; }
+        int Offset { get; }
 
-        AuthenticationScheme AuthenticationScheme { get; }
+        int Limit { get; }
 
-        int ConnectionTimeout { get; }
+        int Size { get; }
     }
 }

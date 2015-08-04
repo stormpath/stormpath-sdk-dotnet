@@ -1,4 +1,4 @@
-﻿// <copyright file="IClient.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IGroupList.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,16 +15,11 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Tenant;
+using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Client
+namespace Stormpath.SDK.Group
 {
-    public interface IClient : ITenantActions
+    public interface IGroupList : ICollectionResource<IGroup>
     {
-        string BaseUrl { get; }
-
-        AuthenticationScheme AuthenticationScheme { get; }
-
-        int ConnectionTimeout { get; }
     }
 }

@@ -245,10 +245,7 @@ namespace Stormpath.SDK.Impl.Api
 
         private Properties GetPropertiesFromStream()
         {
-            if (!this.apiKeyFileInputStream.CanRead)
-            {
-                return null;
-            }
+            if (!this.apiKeyFileInputStream.CanRead) return null;
 
             try
             {

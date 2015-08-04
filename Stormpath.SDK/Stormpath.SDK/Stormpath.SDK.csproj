@@ -47,14 +47,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\IAccount.cs" />
+    <Compile Include="Account\IAccountList.cs" />
     <Compile Include="Api\ClientApiKeys.cs" />
     <Compile Include="Api\IClientApiKey.cs" />
     <Compile Include="Api\IClientApiKeyBuilder.cs" />
+    <Compile Include="Application\IApplication.cs" />
+    <Compile Include="Application\IApplicationList.cs" />
     <Compile Include="Client\AuthenticationScheme.cs" />
     <Compile Include="Client\IClient.cs" />
     <Compile Include="Client\IClientBuilder.cs" />
+    <Compile Include="Directory\IDirectory.cs" />
+    <Compile Include="Directory\IDirectoryList.cs" />
+    <Compile Include="Group\IGroup.cs" />
+    <Compile Include="Group\IGroupList.cs" />
     <Compile Include="Impl\Api\ClientApiKey.cs" />
     <Compile Include="Impl\Api\DefaultClientApiKeyBuilder.cs" />
+    <Compile Include="Impl\Client\DefaultClient.cs" />
     <Compile Include="Impl\Client\DefaultClientBuilder.cs" />
     <Compile Include="Impl\DS\IInternalDataStore.cs" />
     <Compile Include="Impl\Extensions\StringExtensions.cs" />
@@ -73,6 +82,10 @@
     <Compile Include="Impl\Utility\GenericComparer.cs" />
     <Compile Include="Impl\Utility\HashCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource\ICollectionResource.cs" />
+    <Compile Include="Resource\IResource.cs" />
+    <Compile Include="Tenant\ITenant.cs" />
+    <Compile Include="Tenant\ITenantActions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

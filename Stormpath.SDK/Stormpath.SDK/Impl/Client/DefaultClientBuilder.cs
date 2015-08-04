@@ -18,35 +18,54 @@
 using System;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
 {
     internal class DefaultClientBuilder : IClientBuilder
     {
-        // private readonly string baseUrl = "https://api.stormpath.com/v1";
-        IClient IClientBuilder.Build()
-        {
-            throw new NotImplementedException();
-        }
+        private static readonly int DefaultConnectionTimeout = 20 * 1000;
+
+        private string baseUrl = "https://api.stormpath.com/v1";
+        private IClientApiKey apiKey;
+        private AuthenticationScheme authenticationScheme;
+        private int connectionTimeout = DefaultConnectionTimeout;
 
         IClientBuilder IClientBuilder.SetApiKey(IClientApiKey apiKey)
         {
-            throw new NotImplementedException();
+            if (apiKey == null) throw new ArgumentNullException("API Key cannot be null.");
+
+            this.apiKey = apiKey;
+            return this;
         }
 
         IClientBuilder IClientBuilder.SetAuthenticationScheme(AuthenticationScheme scheme)
         {
-            throw new NotImplementedException();
+            this.authenticationScheme = scheme;
+            return this;
         }
 
         IClientBuilder IClientBuilder.SetBaseUrl(string baseUrl)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(baseUrl)) throw new ArgumentNullException("Base URL cannot be empty.");
+
+            this.baseUrl = baseUrl;
+            return this;
         }
 
         IClientBuilder IClientBuilder.SetConnectionTimeout(int timeout)
         {
-            throw new NotImplementedException();
+            if (timeout < 0) throw new ArgumentOutOfRangeException("Timeout cannot be negative.");
+
+            this.connectionTimeout = timeout;
+            return this;
+        }
+
+        IClient IClientBuilder.Build()
+        {
+            if (this.apiKey == null || !this.apiKey.IsValid()) throw new ArgumentException("API Key is not valid or has not been set. Use ClientApiKeys.Builder() to construct one.");
+
+            return new DefaultClient(this.apiKey, this.baseUrl, this.authenticationScheme, this.connectionTimeout);
         }
     }
 }

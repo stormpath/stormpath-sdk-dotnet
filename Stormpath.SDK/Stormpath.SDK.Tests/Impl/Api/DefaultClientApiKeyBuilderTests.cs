@@ -1,4 +1,4 @@
-﻿// <copyright file="ClientApiKeysBuilderTests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultClientApiKeyBuilderTests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -23,17 +23,17 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Impl.Api;
 using Stormpath.SDK.Impl.Utility;
 
-namespace Stormpath.SDK.Tests.SDK
+namespace Stormpath.SDK.Tests.Impl.Api
 {
     [TestClass]
-    public class ClientApiKeysBuilderTests
+    public class DefaultClientApiKeyBuilderTests
     {
         [TestClass]
         public class Building_With_Missing_Values
         {
             [TestMethod]
             [ExpectedException(typeof(ApplicationException))]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void With_missing_id_throws_error()
             {
                 var clientApiKey = ClientApiKeys.Builder()
@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.SDK
 
             [TestMethod]
             [ExpectedException(typeof(ApplicationException))]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void With_missing_secret_throws_error()
             {
                 var clientApiKey = ClientApiKeys.Builder()
@@ -69,14 +69,13 @@ namespace Stormpath.SDK.Tests.SDK
             public void Setup()
             {
                 this.file = Substitute.For<IFile>();
-                this.file.ReadAllText(defaultLocation)
-                    .Returns(fileContents);
+                this.file.ReadAllText(defaultLocation).Returns(fileContents);
 
                 this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), file);
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void With_default_properties_file()
             {
                 var clientApiKey = this.builder.Build();
@@ -86,7 +85,7 @@ namespace Stormpath.SDK.Tests.SDK
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void Default_properties_file_is_lower_priority_than_explicit()
             {
                 var clientApiKey = this.builder
@@ -96,6 +95,23 @@ namespace Stormpath.SDK.Tests.SDK
 
                 clientApiKey.GetId().ShouldBe("different");
                 clientApiKey.GetSecret().ShouldBe("also_different");
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Builders")]
+            public void Default_properties_file_observes_property_name_settings()
+            {
+                var modifiedFile = fileContents
+                    .Replace("apiKey.id", "myProps.ID")
+                    .Replace("apiKey.secret", "myProps.SECRET");
+                this.file.ReadAllText(defaultLocation).Returns(modifiedFile);
+
+                var clientApiKey = this.builder
+                    .SetIdPropertyName("myProps.ID")
+                    .SetSecretPropertyName("myProps.SECRET")
+                    .Build();
+                clientApiKey.GetId().ShouldBe("144JVZINOF5EBNCMG9EXAMPLE");
+                clientApiKey.GetSecret().ShouldBe("lWxOiKqKPNwJmSldbiSkEbkNjgh2uRSNAb+AEXAMPLE");
             }
         }
 
@@ -116,18 +132,16 @@ namespace Stormpath.SDK.Tests.SDK
             public void Setup()
             {
                 this.env = Substitute.For<IEnvironment>();
-                this.env.GetEnvironmentVariable(envVariableName)
-                    .Returns(testLocation);
+                this.env.GetEnvironmentVariable(envVariableName).Returns(testLocation);
 
                 this.file = Substitute.For<IFile>();
-                this.file.ReadAllText(testLocation)
-                    .Returns(fileContents);
+                this.file.ReadAllText(testLocation).Returns(fileContents);
 
                 this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), env, file);
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void With_properties_file_from_env_variable()
             {
                 var clientApiKey = this.builder.Build();
@@ -137,7 +151,7 @@ namespace Stormpath.SDK.Tests.SDK
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void Env_variable_properties_file_is_lower_priority_than_explicit()
             {
                 var clientApiKey = this.builder
@@ -147,6 +161,23 @@ namespace Stormpath.SDK.Tests.SDK
 
                 clientApiKey.GetId().ShouldBe("different");
                 clientApiKey.GetSecret().ShouldBe("also_different");
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Builders")]
+            public void Env_variable_properties_file_observes_property_name_settings()
+            {
+                var modifiedFile = fileContents
+                    .Replace("apiKey.id", "env.ID")
+                    .Replace("apiKey.secret", "env.SECRET");
+                this.file.ReadAllText(testLocation).Returns(modifiedFile);
+
+                var clientApiKey = this.builder
+                    .SetIdPropertyName("env.ID")
+                    .SetSecretPropertyName("env.SECRET")
+                    .Build();
+                clientApiKey.GetId().ShouldBe("envId");
+                clientApiKey.GetSecret().ShouldBe("envSecret");
             }
         }
 
@@ -165,27 +196,24 @@ namespace Stormpath.SDK.Tests.SDK
             public void Setup()
             {
                 this.env = Substitute.For<IEnvironment>();
-                this.env.GetEnvironmentVariable(idVariableName)
-                    .Returns(fakeApiKeyId);
-                this.env.GetEnvironmentVariable(secretVariableName)
-                    .Returns(fakeApiSecretId);
+                this.env.GetEnvironmentVariable(idVariableName).Returns(fakeApiKeyId);
+                this.env.GetEnvironmentVariable(secretVariableName).Returns(fakeApiSecretId);
 
                 this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), env, Substitute.For<IFile>());
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void With_values_from_env_variables()
             {
-                var clientApiKey = this.builder
-                    .Build();
+                var clientApiKey = this.builder.Build();
 
                 clientApiKey.GetId().ShouldBe(fakeApiKeyId);
                 clientApiKey.GetSecret().ShouldBe(fakeApiSecretId);
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void Env_variable_values_are_lower_priority_than_explicit()
             {
                 var clientApiKey = this.builder
@@ -221,14 +249,13 @@ namespace Stormpath.SDK.Tests.SDK
                 });
 
                 this.file = Substitute.For<IFile>();
-                this.file.ReadAllText(testLocation)
-                    .Returns(fileContents);
+                this.file.ReadAllText(testLocation).Returns(fileContents);
 
                 this.builder = new DefaultClientApiKeyBuilder(config, Substitute.For<IEnvironment>(), file);
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void With_properties_file_from_app_config()
             {
                 var clientApiKey = this.builder.Build();
@@ -238,7 +265,7 @@ namespace Stormpath.SDK.Tests.SDK
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void App_config_properties_file_is_lower_priority_than_explicit()
             {
                 var clientApiKey = this.builder
@@ -248,6 +275,23 @@ namespace Stormpath.SDK.Tests.SDK
 
                 clientApiKey.GetId().ShouldBe("different");
                 clientApiKey.GetSecret().ShouldBe("also_different");
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Builders")]
+            public void App_config_properties_file_observes_property_name_settings()
+            {
+                var modifiedFile = fileContents
+                    .Replace("apiKey.id", "appConfigFile.ID")
+                    .Replace("apiKey.secret", "appConfigFile.secret");
+                this.file.ReadAllText(testLocation).Returns(modifiedFile);
+
+                var clientApiKey = this.builder
+                    .SetIdPropertyName("appConfigFile.ID")
+                    .SetSecretPropertyName("appConfigFile.secret")
+                    .Build();
+                clientApiKey.GetId().ShouldBe("fromAppConfig?");
+                clientApiKey.GetSecret().ShouldBe("fooSecret!");
             }
         }
 
@@ -276,7 +320,7 @@ namespace Stormpath.SDK.Tests.SDK
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void With_properties_file_from_app_config()
             {
                 var clientApiKey = this.builder.Build();
@@ -286,7 +330,7 @@ namespace Stormpath.SDK.Tests.SDK
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void App_config_values_are_lower_priority_than_explicit()
             {
                 var clientApiKey = this.builder
@@ -304,6 +348,10 @@ namespace Stormpath.SDK.Tests.SDK
         {
             private IClientApiKeyBuilder builder;
 
+            private readonly string streamContents =
+                "apiKey.id = streams_r_neet\r\n" +
+                "apiKey.secret = pls_dont_steal!\r\n";
+
             [TestInitialize]
             public void Setup()
             {
@@ -311,17 +359,34 @@ namespace Stormpath.SDK.Tests.SDK
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void With_values_from_stream()
             {
-                var streamContents =
-                    "apiKey.id = streams_r_neet\r\n" +
-                    "apiKey.secret = pls_dont_steal!\r\n";
-
                 using (var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(streamContents)))
                 {
                     var clientApiKey = this.builder
                         .SetInputStream(stream)
+                        .Build();
+
+                    clientApiKey.GetId().ShouldBe("streams_r_neet");
+                    clientApiKey.GetSecret().ShouldBe("pls_dont_steal!");
+                }
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Builders")]
+            public void Stream_values_observes_property_name_settings()
+            {
+                var modifiedContents = streamContents
+                    .Replace("apiKey.id", "my.id")
+                    .Replace("apiKey.secret", "my.secret");
+
+                using (var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(modifiedContents)))
+                {
+                    var clientApiKey = this.builder
+                        .SetInputStream(stream)
+                        .SetIdPropertyName("my.id")
+                        .SetSecretPropertyName("my.secret")
                         .Build();
 
                     clientApiKey.GetId().ShouldBe("streams_r_neet");
@@ -342,7 +407,7 @@ namespace Stormpath.SDK.Tests.SDK
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void With_explicit_values()
             {
                 var clientApiKey = this.builder
@@ -370,14 +435,13 @@ namespace Stormpath.SDK.Tests.SDK
             public void Setup()
             {
                 this.file = Substitute.For<IFile>();
-                this.file.ReadAllText(testLocation)
-                    .Returns(fileContents);
+                this.file.ReadAllText(testLocation).Returns(fileContents);
 
                 this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), file);
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void With_properties_file()
             {
                 var clientApiKey = this.builder
@@ -389,7 +453,7 @@ namespace Stormpath.SDK.Tests.SDK
             }
 
             [TestMethod]
-            [TestCategory(nameof(ClientApiKeys) + ".Builder")]
+            [TestCategory("Impl.Builders")]
             public void Properties_file_is_lower_priority_than_explicit()
             {
                 var clientApiKey = this.builder
@@ -400,6 +464,24 @@ namespace Stormpath.SDK.Tests.SDK
 
                 clientApiKey.GetId().ShouldBe("different");
                 clientApiKey.GetSecret().ShouldBe("also_different");
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Builders")]
+            public void Properties_file_observes_property_name_settings()
+            {
+                var modifiedFile = fileContents
+                    .Replace("apiKey.id", "myfile.Id")
+                    .Replace("apiKey.secret", "myfile.Secret");
+                this.file.ReadAllText(testLocation).Returns(modifiedFile);
+
+                var clientApiKey = this.builder
+                    .SetFileLocation(testLocation)
+                    .SetIdPropertyName("myfile.Id")
+                    .SetSecretPropertyName("myfile.Secret")
+                    .Build();
+                clientApiKey.GetId().ShouldBe("foobar");
+                clientApiKey.GetSecret().ShouldBe("bazsecret!");
             }
         }
     }

@@ -54,6 +54,12 @@ namespace Stormpath.SDK.Impl.Api
         {
             return this.secret;
         }
+
+        bool IClientApiKey.IsValid()
+        {
+            return !string.IsNullOrEmpty(this.id)
+                && !string.IsNullOrEmpty(this.secret);
+        }
     }
 
     /// <summary>

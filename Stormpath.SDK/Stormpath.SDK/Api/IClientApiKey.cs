@@ -22,5 +22,7 @@ namespace Stormpath.SDK.Api
         string GetId();
 
         string GetSecret();
+
+        bool IsValid();
     }
 }

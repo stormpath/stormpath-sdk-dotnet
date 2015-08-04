@@ -63,9 +63,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Impl\Client\DefaultClientBuilderTests.cs" />
     <Compile Include="Impl\ExtensionsTests\StringExtensionsTests.cs" />
     <Compile Include="Impl\Utility\PropertiesTests.cs" />
-    <Compile Include="SDK\ClientApiKeysBuilderTests.cs" />
+    <Compile Include="Impl\Api\DefaultClientApiKeyBuilderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +75,7 @@
       <Name>Stormpath.SDK</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Impl\Api\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Stormpath.SDK.Tests.ruleset" />
