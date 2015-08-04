@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stormpath.SDK", "Stormpath.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stormpath.SDK.Tests", "Stormpath.SDK.Tests\Stormpath.SDK.Tests.csproj", "{3579A409-6C66-4181-8268-C851878E5E22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stormpath.Demo", "Stormpath.Demo\Stormpath.Demo.csproj", "{301DA33A-8F36-47C7-BCD1-B89725689B4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3579A409-6C66-4181-8268-C851878E5E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3579A409-6C66-4181-8268-C851878E5E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3579A409-6C66-4181-8268-C851878E5E22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{301DA33A-8F36-47C7-BCD1-B89725689B4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{301DA33A-8F36-47C7-BCD1-B89725689B4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{301DA33A-8F36-47C7-BCD1-B89725689B4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{301DA33A-8F36-47C7-BCD1-B89725689B4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
