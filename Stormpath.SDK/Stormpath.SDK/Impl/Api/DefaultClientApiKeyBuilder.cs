@@ -15,13 +15,13 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using Stormpath.SDK.Api;
+using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Impl.Utility;
+
 namespace Stormpath.SDK.Impl.Api
 {
-    using System;
-    using Extensions;
-    using SDK.Api;
-    using Utility;
-
     internal sealed class DefaultClientApiKeyBuilder : IClientApiKeyBuilder
     {
         private static readonly string DefaultIdPropertyName = "apiKey.id";

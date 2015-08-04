@@ -15,12 +15,12 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using Stormpath.SDK.Api;
+using Stormpath.SDK.Impl.Utility;
+
 namespace Stormpath.SDK.Impl.Api
 {
-    using System;
-    using SDK.Api;
-    using Utility;
-
     /// <summary>
     /// Main body of ClientApiKey class. (documentation todo)
     /// </summary>

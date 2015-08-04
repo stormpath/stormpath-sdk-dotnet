@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Client
     {
 #pragma warning disable SA1401 // Fields must be private
         public static AuthenticationScheme Basic = new AuthenticationScheme(0, "BASIC", typeof(BasicRequestAuthenticator));
-        public static AuthenticationScheme SAuthC1 = new AuthenticationScheme(1, "SAUTHC1", typeof(SAuthc1RequestAuthenticator));
+        public static AuthenticationScheme SAuthc1 = new AuthenticationScheme(1, "SAUTHC1", typeof(SAuthc1RequestAuthenticator));
 #pragma warning restore SA1401 // Fields must be private
 
         private readonly Type authenticatorType;
