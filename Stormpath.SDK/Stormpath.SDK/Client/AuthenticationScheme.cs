@@ -17,7 +17,7 @@
 
 using System;
 using Stormpath.SDK.Impl.Http.Authentication;
-using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Client
 {

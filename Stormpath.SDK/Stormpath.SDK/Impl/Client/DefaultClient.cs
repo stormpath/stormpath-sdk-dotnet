@@ -95,5 +95,10 @@ namespace Stormpath.SDK.Impl.Client
         {
             throw new NotImplementedException();
         }
+
+        Task<ITenant> IClient.GetCurrentTenantAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

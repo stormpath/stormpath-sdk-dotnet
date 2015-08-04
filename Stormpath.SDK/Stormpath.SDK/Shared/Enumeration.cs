@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Stormpath.SDK.Impl.Utility
+namespace Stormpath.SDK.Shared
 {
     // Borrowed this excellent type-safe enum pattern from J. Bogard
     // https://lostechies.com/jimmybogard/2008/08/12/enumeration-classes/

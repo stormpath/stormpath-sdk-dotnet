@@ -55,6 +55,7 @@
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Application\IApplicationList.cs" />
     <Compile Include="Client\AuthenticationScheme.cs" />
+    <Compile Include="Client\Clients.cs" />
     <Compile Include="Client\IClient.cs" />
     <Compile Include="Client\IClientBuilder.cs" />
     <Compile Include="Directory\IDirectory.cs" />
@@ -72,7 +73,7 @@
     <Compile Include="Impl\Http\Authentication\SAuthc1RequestAuthenticator.cs" />
     <Compile Include="Impl\Http\IRequest.cs" />
     <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />
-    <Compile Include="Impl\Utility\Enumeration.cs" />
+    <Compile Include="Shared\Enumeration.cs" />
     <Compile Include="Impl\Utility\EnvironmentWrapper.cs" />
     <Compile Include="Impl\Utility\FileWrapper.cs" />
     <Compile Include="Impl\Utility\IConfigurationManager.cs" />

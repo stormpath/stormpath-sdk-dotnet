@@ -1,4 +1,4 @@
-﻿// <copyright file="IClient.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Clients.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,19 +15,13 @@
 // limitations under the License.
 // </remarks>
 
-using System.Threading.Tasks;
-using Stormpath.SDK.Tenant;
-
 namespace Stormpath.SDK.Client
 {
-    public interface IClient : ITenantActions
+    public sealed class Clients
     {
-        string BaseUrl { get; }
-
-        AuthenticationScheme AuthenticationScheme { get; }
-
-        int ConnectionTimeout { get; }
-
-        Task<ITenant> GetCurrentTenantAsync();
+        public static IClientBuilder Builder()
+        {
+            return new Impl.Client.DefaultClientBuilder();
+        }
     }
 }
