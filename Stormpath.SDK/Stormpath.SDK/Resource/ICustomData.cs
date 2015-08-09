@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountList.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ICustomData.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,11 +15,11 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Resource;
+using System.Collections.Generic;
 
-namespace Stormpath.SDK.Account
+namespace Stormpath.SDK.Resource
 {
-    public interface IAccountList : ICollectionResourceQueryable<IAccount>
+    public interface ICustomData : IAuditable, IDictionary<string, object>
     {
     }
 }

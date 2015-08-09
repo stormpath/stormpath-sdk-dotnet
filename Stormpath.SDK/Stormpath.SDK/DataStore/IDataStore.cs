@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccount.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IDataStore.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,34 +15,16 @@
 // limitations under the License.
 // </remarks>
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Tenant;
 
-namespace Stormpath.SDK.Account
+namespace Stormpath.SDK.DataStore
 {
-    public interface IAccount : IResource, IAuditable, IExtendable
+    public interface IDataStore
     {
-        string Username { get; }
+        IEnumerable<T> GetCollection<T>(string href);
 
-        string Email { get; }
-
-        string FullName { get; }
-
-        string GivenName { get; }
-
-        string MiddleName { get; }
-
-        string Surname { get; }
-
-        AccountStatus Status { get; }
-
-        Task<IGroupList> GetGroupsAsync();
-
-        Task<IDirectory> GetDirectoryAsync();
-
-        Task<ITenant> GetTenantAsync();
+        Task<IEnumerable<T>> GetCollectionAsync<T>(string href);
     }
 }

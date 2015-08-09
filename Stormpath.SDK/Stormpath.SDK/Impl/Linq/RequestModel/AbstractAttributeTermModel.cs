@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountList.cs" company="Stormpath, Inc.">
+﻿// <copyright file="AbstractAttributeTermModel.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,11 +15,10 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Resource;
-
-namespace Stormpath.SDK.Account
+namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
-    public interface IAccountList : ICollectionResourceQueryable<IAccount>
+    internal abstract class AbstractAttributeTermModel
     {
+        public string Field { get; protected set; }
     }
 }

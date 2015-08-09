@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountList.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DatetimeFieldNameTranslator.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,11 +15,21 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Resource;
+using System.Collections.Generic;
 
-namespace Stormpath.SDK.Account
+namespace Stormpath.SDK.Impl.Linq.StaticNameTranslators
 {
-    public interface IAccountList : ICollectionResourceQueryable<IAccount>
+    internal static class DatetimeFieldNameTranslator
     {
+        private static readonly Dictionary<string, string> ValidNames = new Dictionary<string, string>()
+            {
+                { "CreatedAt", "createdAt" },
+                { "ModifiedAt", "modifiedAt" }
+            };
+
+        public static bool TryGetValue(string methodName, out string fieldName)
+        {
+            return ValidNames.TryGetValue(methodName, out fieldName);
+        }
     }
 }

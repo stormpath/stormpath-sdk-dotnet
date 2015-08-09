@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountList.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IInternalDataStore.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,11 +15,10 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Resource;
-
-namespace Stormpath.SDK.Account
+namespace Stormpath.SDK.Impl.DataStore
 {
-    public interface IAccountList : ICollectionResourceQueryable<IAccount>
+    internal interface IInternalDataStore
     {
+        // TODO
     }
 }

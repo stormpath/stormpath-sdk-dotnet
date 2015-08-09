@@ -18,7 +18,6 @@
 using System;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
 {

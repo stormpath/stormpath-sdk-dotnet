@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Group
 {
-    public interface IGroupList : ICollectionResource<IGroup>
+    public interface IGroupList : ICollectionResourceQueryable<IGroup>
     {
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccount.cs" company="Stormpath, Inc.">
+﻿// <copyright file="AccountStatus.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,34 +15,23 @@
 // limitations under the License.
 // </remarks>
 
-using System.Threading.Tasks;
-using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
-using Stormpath.SDK.Resource;
-using Stormpath.SDK.Tenant;
-
 namespace Stormpath.SDK.Account
 {
-    public interface IAccount : IResource, IAuditable, IExtendable
+    public enum AccountStatus
     {
-        string Username { get; }
+        /// <summary>
+        /// The account is able to log into assigned applications.
+        /// </summary>
+        Enabled,
 
-        string Email { get; }
+        /// <summary>
+        /// The account cannot log into any applications.
+        /// </summary>
+        Disabled,
 
-        string FullName { get; }
-
-        string GivenName { get; }
-
-        string MiddleName { get; }
-
-        string Surname { get; }
-
-        AccountStatus Status { get; }
-
-        Task<IGroupList> GetGroupsAsync();
-
-        Task<IDirectory> GetDirectoryAsync();
-
-        Task<ITenant> GetTenantAsync();
+        /// <summary>
+        /// The account is disabled and has not verified their email address.
+        /// </summary>
+        Unverified
     }
 }

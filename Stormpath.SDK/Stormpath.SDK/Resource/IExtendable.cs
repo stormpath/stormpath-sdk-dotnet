@@ -1,4 +1,4 @@
-﻿// <copyright file="ICollectionResource.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IExtendable.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,17 +15,12 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Resource
 {
-    public interface ICollectionResource<T> : IEnumerable<T>
-        where T : IResource
+    public interface IExtendable
     {
-        int Offset { get; }
-
-        int Limit { get; }
-
-        int Size { get; }
+        Task<ICustomData> GetCustomDataAsync();
     }
 }

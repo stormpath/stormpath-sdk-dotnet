@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Application
 {
-    public interface IApplicationList : ICollectionResource<IApplication>
+    public interface IApplicationList : ICollectionResourceQueryable<IApplication>
     {
     }
 }

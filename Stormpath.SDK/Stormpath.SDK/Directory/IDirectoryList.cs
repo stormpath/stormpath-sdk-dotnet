@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Directory
 {
-    public interface IDirectoryList : ICollectionResource<IDirectory>
+    public interface IDirectoryList : ICollectionResourceQueryable<IDirectory>
     {
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="IInternalDataStore.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAuditable.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,10 +15,14 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.DS
+using System;
+
+namespace Stormpath.SDK.Resource
 {
-    internal interface IInternalDataStore
+    public interface IAuditable
     {
-        // TODO
+        DateTimeOffset CreatedAt { get; }
+
+        DateTimeOffset ModifiedAt { get; }
     }
 }

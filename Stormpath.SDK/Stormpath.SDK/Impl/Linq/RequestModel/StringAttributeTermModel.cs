@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountList.cs" company="Stormpath, Inc.">
+﻿// <copyright file="StringAttributeTermModel.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,11 +15,19 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Resource;
-
-namespace Stormpath.SDK.Account
+namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
-    public interface IAccountList : ICollectionResourceQueryable<IAccount>
+    internal class StringAttributeTermModel : AbstractAttributeTermModel
     {
+        public StringAttributeTermModel(string field, string value, StringAttributeMatchingType type)
+        {
+            this.Field = field;
+            this.Value = value;
+            this.MatchType = type;
+        }
+
+        public string Value { get; private set; }
+
+        public StringAttributeMatchingType MatchType { get; private set; }
     }
 }
