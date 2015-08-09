@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Impl\Client\DefaultClientBuilderTests.cs" />
     <Compile Include="Impl\ExtensionsTests\StringExtensionsTests.cs" />
+    <Compile Include="Impl\Utility\Iso8601Tests.cs" />
     <Compile Include="Impl\Utility\PropertiesTests.cs" />
     <Compile Include="Impl\Api\DefaultClientApiKeyBuilderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

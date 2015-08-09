@@ -73,6 +73,7 @@
     <Compile Include="Impl\Http\Authentication\SAuthc1RequestAuthenticator.cs" />
     <Compile Include="Impl\Http\IRequest.cs" />
     <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />
+    <Compile Include="Impl\Utility\Iso8601.cs" />
     <Compile Include="Shared\Enumeration.cs" />
     <Compile Include="Impl\Utility\EnvironmentWrapper.cs" />
     <Compile Include="Impl\Utility\FileWrapper.cs" />
