@@ -45,6 +45,7 @@ namespace Stormpath.SDK.Impl.Linq
             if (inProgress.IsStringTermComplete())
             {
                 this.GeneratedModels.Add(new StringAttributeTermModel(inProgress.Field, inProgress.StringValue, inProgress.StringMatchType.Value));
+                inProgress = new WhereAttributeTermInProgressModel();
             }
 
             if (inProgress.IsDateTermComplete())
@@ -66,6 +67,7 @@ namespace Stormpath.SDK.Impl.Linq
                 }
 
                 this.GeneratedModels.Add(model);
+                inProgress = new WhereAttributeTermInProgressModel();
             }
 
             return visited;

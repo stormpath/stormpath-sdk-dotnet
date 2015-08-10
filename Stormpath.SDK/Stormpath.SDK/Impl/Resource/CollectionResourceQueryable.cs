@@ -27,7 +27,6 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Impl.Resource
 {
     internal class CollectionResourceQueryable<T> : QueryableBase<T>, ICollectionResourceQueryable<T>
-        where T : IResource
     {
         public CollectionResourceQueryable(string url, string resource, IDataStore dataStore)
             : base(ExtendedQueryParser.Create(), CreateQueryExecutor(url, resource, dataStore))
@@ -43,11 +42,11 @@ namespace Stormpath.SDK.Impl.Resource
         {
         }
 
-        public string Url { get; private set; }
+        internal string Url { get; private set; }
 
-        public string Resource { get; private set; }
+        internal string Resource { get; private set; }
 
-        public IDataStore DataStore { get; private set; }
+        internal IDataStore DataStore { get; private set; }
 
         int ICollectionResourceQueryable<T>.Offset
         {

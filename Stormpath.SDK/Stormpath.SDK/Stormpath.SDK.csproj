@@ -107,6 +107,7 @@
     <Compile Include="Resource\IAuditable.cs" />
     <Compile Include="Resource\ICustomData.cs" />
     <Compile Include="Resource\IExtendable.cs" />
+    <Compile Include="Resource\Shorthand.cs" />
     <Compile Include="Shared\Enumeration.cs" />
     <Compile Include="Impl\Utility\EnvironmentWrapper.cs" />
     <Compile Include="Impl\Utility\FileWrapper.cs" />

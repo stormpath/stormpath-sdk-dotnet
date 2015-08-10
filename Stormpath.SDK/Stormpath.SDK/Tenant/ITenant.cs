@@ -16,10 +16,11 @@
 // </remarks>
 
 using System.Threading.Tasks;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tenant
 {
-    public interface ITenant : ITenantActions
+    public interface ITenant : IResource, ITenantActions
     {
         Task<string> GetNameAsync();
 
