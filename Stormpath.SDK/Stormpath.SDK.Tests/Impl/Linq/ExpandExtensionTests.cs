@@ -30,6 +30,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         private static string resource = "bar";
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Expand_one_link()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -42,6 +43,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Expand_multiple_links()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -55,6 +57,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Expand_collection_query_with_offset()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -67,6 +70,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Expand_collection_query_with_limit()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -79,6 +83,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Expand_collection_query_with_both_parameters()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -91,6 +96,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Expand_all_the_things()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -105,6 +111,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Expand_throws_if_used_on_an_attribute()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -116,6 +123,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Expand_throws_if_parameters_are_supplied_for_link()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -127,6 +135,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Expand_throws_if_syntax_is_dumb()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);

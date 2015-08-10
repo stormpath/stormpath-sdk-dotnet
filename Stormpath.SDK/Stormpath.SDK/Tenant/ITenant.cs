@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System.Threading.Tasks;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tenant

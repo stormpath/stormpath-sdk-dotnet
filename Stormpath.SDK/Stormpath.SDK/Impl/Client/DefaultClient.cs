@@ -76,6 +76,11 @@ namespace Stormpath.SDK.Impl.Client
             throw new NotImplementedException();
         }
 
+        IApplicationList ITenantActions.GetApplications()
+        {
+            throw new NotImplementedException();
+        }
+
         Task<IApplicationList> ITenantActions.GetApplicationsAsync()
         {
             throw new NotImplementedException();

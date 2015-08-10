@@ -28,9 +28,11 @@ namespace Stormpath.SDK.Impl.Linq.RequestModel
 
         public string FilterTerm { get; set; }
 
-        public List<StringAttributeTermModel> AttributeTerms { get; } = new List<StringAttributeTermModel>();
+        public List<StringAttributeTermModel> StringAttributeTerms { get; } = new List<StringAttributeTermModel>();
 
         public List<DatetimeAttributeTermModel> DatetimeAttributeTerms { get; } = new List<DatetimeAttributeTermModel>();
+
+        public List<DatetimeShorthandAttributeTermModel> DatetimeShorthandAttributeTerms { get; } = new List<DatetimeShorthandAttributeTermModel>();
 
         public List<OrderByModel> OrderByTerms { get; } = new List<OrderByModel>();
 
@@ -41,7 +43,7 @@ namespace Stormpath.SDK.Impl.Linq.RequestModel
             var modelAsString = model as StringAttributeTermModel;
             if (modelAsString != null)
             {
-                this.AttributeTerms.Add(modelAsString);
+                this.StringAttributeTerms.Add(modelAsString);
                 return; // done
             }
 
@@ -49,6 +51,13 @@ namespace Stormpath.SDK.Impl.Linq.RequestModel
             if (modelAsDatetime != null)
             {
                 this.DatetimeAttributeTerms.Add(modelAsDatetime);
+                return; // done
+            }
+
+            var modelAsDatetimeShorthand = model as DatetimeShorthandAttributeTermModel;
+            if (modelAsDatetimeShorthand != null)
+            {
+                this.DatetimeShorthandAttributeTerms.Add(modelAsDatetimeShorthand);
                 return; // done
             }
 

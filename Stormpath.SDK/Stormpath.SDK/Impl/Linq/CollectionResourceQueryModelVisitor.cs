@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Remotion.Linq;
 using Remotion.Linq.Clauses;
@@ -40,72 +41,30 @@ namespace Stormpath.SDK.Impl.Linq
 
         public override void VisitResultOperator(ResultOperatorBase resultOperator, QueryModel queryModel, int index)
         {
+            if (IsUnsupportedResultOperator(resultOperator))
+                throw new NotSupportedException("One or more LINQ operators are not supported.");
+
             // Todo Any
             // TODO First
             // TODO Count/LongCount
             // Todo DefaultIfEmpty
             // Todo ElementAt[OrDefault]
             // TODO Single
-            var takeResultOperator = resultOperator as TakeResultOperator;
-            if (takeResultOperator != null)
-            {
-                var expression = takeResultOperator.Count;
-                if (expression.NodeType == ExpressionType.Constant)
-                {
-                    ParsedModel.Limit = (int)((ConstantExpression)expression).Value;
-                }
-                else
-                {
-                    throw new NotSupportedException("Unsupported expression in Take clause.");
-                }
-
+            if (HandleTakeResultOperator(resultOperator))
                 return; // done
-            }
 
-            var skipResultOperator = resultOperator as SkipResultOperator;
-            if (skipResultOperator != null)
-            {
-                var expression = skipResultOperator.Count as ConstantExpression;
-                if (expression == null)
-                    throw new NotSupportedException("Unsupported expression in Skip clause.");
-
-                ParsedModel.Offset = (int)expression.Value;
+            if (HandleSkipResultOperator(resultOperator))
                 return; // done
-            }
 
-            var expandResultOperator = resultOperator as ExpandResultOperator;
-            if (expandResultOperator != null)
-            {
-                var methodCallExpression = expandResultOperator.KeySelector as MethodCallExpression;
-                if (methodCallExpression == null)
-                    throw new NotSupportedException("Expand must be used on a link property method.");
+            if (HandleExpandExtensionResultOperator(resultOperator))
+                return; // done
 
-                var expandField = string.Empty;
-                if (LinkMethodNameTranslator.TryGetValue(methodCallExpression.Method.Name, out expandField))
-                {
-                    bool paginationParametersPresent =
-                        expandResultOperator?.Offset?.Value != null ||
-                        expandResultOperator?.Limit?.Value != null;
-                    if (paginationParametersPresent)
-                        throw new NotSupportedException("Pagination options cannot be used on link-only properties.");
+            base.VisitResultOperator(resultOperator, queryModel, index);
+        }
 
-                    ParsedModel.Expansions.Add(new ExpansionTerm(expandField));
-                    return; // done
-                }
-
-                if (CollectionLinkMethodTranslator.TryGetValue(methodCallExpression.Method.Name, out expandField))
-                {
-                    ParsedModel.Expansions.Add(new ExpansionTerm(expandField,
-                        (int?)expandResultOperator.Offset.Value,
-                        (int?)expandResultOperator.Limit.Value));
-                    return; // done
-                }
-
-                throw new NotSupportedException("The selected method does not support expansions.");
-            }
-
-            bool isUnsupported =
-                resultOperator is AllResultOperator ||
+        private bool IsUnsupportedResultOperator(ResultOperatorBase resultOperator)
+        {
+            return resultOperator is AllResultOperator ||
                 resultOperator is AggregateResultOperator ||
                 resultOperator is AggregateFromSeedResultOperator ||
                 resultOperator is AverageResultOperator ||
@@ -122,28 +81,135 @@ namespace Stormpath.SDK.Impl.Linq
                 resultOperator is ReverseResultOperator ||
                 resultOperator is SumResultOperator ||
                 resultOperator is UnionResultOperator;
-            if (isUnsupported)
+        }
+
+        private bool HandleTakeResultOperator(ResultOperatorBase resultOperator)
+        {
+            var takeResultOperator = resultOperator as TakeResultOperator;
+            if (takeResultOperator == null)
+                return false;
+
+            var expression = takeResultOperator.Count;
+            if (expression.NodeType == ExpressionType.Constant)
             {
-                throw new NotSupportedException("One or more LINQ operators are not supported.");
+                ParsedModel.Limit = (int)((ConstantExpression)expression).Value;
+            }
+            else
+            {
+                throw new NotSupportedException("Unsupported expression in Take clause.");
             }
 
-            base.VisitResultOperator(resultOperator, queryModel, index);
+            return true;
+        }
+
+        private bool HandleSkipResultOperator(ResultOperatorBase resultOperator)
+        {
+            var skipResultOperator = resultOperator as SkipResultOperator;
+            if (skipResultOperator == null)
+                return false;
+
+            var expression = skipResultOperator.Count as ConstantExpression;
+            if (expression == null)
+                throw new NotSupportedException("Unsupported expression in Skip clause.");
+
+            ParsedModel.Offset = (int)expression.Value;
+
+            return true;
+        }
+
+        private bool HandleExpandExtensionResultOperator(ResultOperatorBase resultOperator)
+        {
+            var expandResultOperator = resultOperator as ExpandResultOperator;
+            if (expandResultOperator == null)
+                return false;
+
+            var methodCallExpression = expandResultOperator.KeySelector as MethodCallExpression;
+            if (methodCallExpression == null)
+                throw new NotSupportedException("Expand must be used on a link property method.");
+
+            var expandField = string.Empty;
+            if (LinkMethodNameTranslator.TryGetValue(methodCallExpression.Method.Name, out expandField))
+            {
+                bool paginationParametersPresent =
+                    expandResultOperator?.Offset?.Value != null ||
+                    expandResultOperator?.Limit?.Value != null;
+                if (paginationParametersPresent)
+                    throw new NotSupportedException("Pagination options cannot be used on link-only properties.");
+
+                ParsedModel.Expansions.Add(new ExpansionTerm(expandField));
+                return true; // done
+            }
+
+            if (CollectionLinkMethodNameTranslator.TryGetValue(methodCallExpression.Method.Name, out expandField))
+            {
+                ParsedModel.Expansions.Add(new ExpansionTerm(expandField,
+                    (int?)expandResultOperator.Offset.Value,
+                    (int?)expandResultOperator.Limit.Value));
+                return true; // done
+            }
+
+            throw new NotSupportedException("The selected method does not support expansions.");
         }
 
         public override void VisitWhereClause(WhereClause whereClause, QueryModel queryModel, int index)
         {
-            // Handle custom .Filter extension method
-            var filterClause = whereClause as FilterClause;
-            if (filterClause != null)
-            {
-                ParsedModel.FilterTerm = filterClause.Term;
+            // Handle simple cases
+            if (HandleWhereFilterExtensionMethod(whereClause))
                 return; // done
-            }
+            if (HandleWhereWithinDateExtensionMethod(whereClause))
+                return; // done
 
             this.ParsedModel.AddAttributeTerms(
                 CollectionResourceWhereExpressionVisitor.GenerateModels(whereClause.Predicate));
 
             base.VisitWhereClause(whereClause, queryModel, index);
+        }
+
+        private bool HandleWhereFilterExtensionMethod(WhereClause whereClause)
+        {
+            var filterClause = whereClause as FilterClause;
+            if (filterClause == null)
+                return false;
+
+            ParsedModel.FilterTerm = filterClause.Term;
+            return true;
+        }
+
+        private bool HandleWhereWithinDateExtensionMethod(WhereClause whereClause)
+        {
+            var methodCall = whereClause.Predicate as MethodCallExpression;
+            bool isWithinMethodCall = methodCall?.Method.DeclaringType == typeof(CollectionResourceQueryableWithinExtensions);
+            if (!isWithinMethodCall)
+                return false;
+
+            var fieldName = string.Empty;
+            var methodCallMember = methodCall.Arguments[0] as MemberExpression;
+            bool validField = methodCallMember != null && DatetimeFieldNameTranslator.TryGetValue(methodCallMember.Member.Name, out fieldName);
+            if (!validField)
+                throw new NotSupportedException("Within must be used on a supported datetime field.");
+
+            var numberOfConstantArgs = methodCall.Arguments.Count - 1;
+            var yearArg = (int)(methodCall.Arguments[1] as ConstantExpression).Value;
+            int? monthArg = null,
+                dayArg = null,
+                hourArg = null,
+                minuteArg = null,
+                secondArg = null;
+
+            if (methodCall.Arguments.Count >= 3)
+                monthArg = (methodCall.Arguments?[2] as ConstantExpression)?.Value as int?;
+            if (methodCall.Arguments.Count >= 4)
+                dayArg = (methodCall.Arguments?[3] as ConstantExpression)?.Value as int?;
+            if (methodCall.Arguments.Count >= 5)
+                hourArg = (methodCall.Arguments?[4] as ConstantExpression)?.Value as int?;
+            if (methodCall.Arguments.Count >= 6)
+                minuteArg = (methodCall.Arguments?[5] as ConstantExpression)?.Value as int?;
+            if (methodCall.Arguments.Count == 7)
+                secondArg = (methodCall.Arguments?[6] as ConstantExpression)?.Value as int?;
+
+            this.ParsedModel.AddAttributeTerm(new DatetimeShorthandAttributeTermModel(fieldName, yearArg, monthArg, dayArg, hourArg, minuteArg, secondArg));
+
+            return true;
         }
 
         public override void VisitOrdering(Ordering ordering, QueryModel queryModel, OrderByClause orderByClause, int index)

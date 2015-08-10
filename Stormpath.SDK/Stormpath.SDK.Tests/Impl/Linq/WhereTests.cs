@@ -31,6 +31,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         private static string resource = "bar";
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_throws_for_constant()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -47,6 +48,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_throws_for_unsupported_comparison_operators()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -58,6 +60,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_throws_for_more_complex_overloads_of_helper_methods()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -74,6 +77,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_throws_for_unsupported_helper_methods()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -85,6 +89,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_throws_for_binary_or()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -96,6 +101,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_attribute_equals()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -108,6 +114,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_attribute_equals_using_helper_method()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -120,6 +127,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_attribute_starts_with()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -132,6 +140,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_attribute_ends_with()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -144,6 +153,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_attribute_contains()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -156,6 +166,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_multiple_attributes_with_and()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -168,6 +179,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_multiple_wheres()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -181,6 +193,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_date_attribute_greater_than()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -194,6 +207,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_date_attribute_greater_than_or_equalto()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -207,6 +221,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_date_attribute_less_than()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -220,6 +235,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_date_attribute_less_than_or_equalto()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -233,6 +249,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Where_date_attribute_between()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -244,18 +261,6 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .ToList();
 
             harness.WasCalledWithArguments("createdAt=(2015-01-01T00:00:00.000Z,2015-12-31T23:59:59.000Z]");
-        }
-
-        [TestMethod]
-        public void Where_date_using_shorthand()
-        {
-            var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
-
-            harness.Queryable
-                .Where(x => x.CreatedAt == Shorthand.Year(2015))
-                .ToList();
-
-            harness.WasCalledWithArguments("createdAt=2015");
         }
     }
 }

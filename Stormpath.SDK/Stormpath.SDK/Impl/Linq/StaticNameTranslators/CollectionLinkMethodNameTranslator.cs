@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.Linq.StaticNameTranslators
 {
-    internal static class CollectionLinkMethodTranslator
+    internal static class CollectionLinkMethodNameTranslator
     {
         private static readonly Dictionary<string, string> ValidNames = new Dictionary<string, string>()
             {

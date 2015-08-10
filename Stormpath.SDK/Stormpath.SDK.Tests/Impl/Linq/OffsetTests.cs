@@ -28,6 +28,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         private static string resource = "bar";
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Filter_with_simple_parameter()
         {
             // Arrange
@@ -43,6 +44,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Filter_multiple_calls_are_LIFO()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);

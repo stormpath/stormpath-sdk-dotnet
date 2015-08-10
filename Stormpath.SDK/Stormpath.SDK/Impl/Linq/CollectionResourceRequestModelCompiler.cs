@@ -35,9 +35,9 @@ namespace Stormpath.SDK.Impl.Linq
                 arguments.Add("q", model.FilterTerm);
 
             // From .Where(x => ?)
-            if (model.AttributeTerms.Count > 0)
+            if (model.StringAttributeTerms.Count > 0)
             {
-                foreach (var term in model.AttributeTerms)
+                foreach (var term in model.StringAttributeTerms)
                 {
                     switch (term.MatchType)
                     {
@@ -90,6 +90,53 @@ namespace Stormpath.SDK.Impl.Linq
                     }
 
                     arguments.Add(term.Field, datetimeAttribute.ToString());
+                }
+            }
+
+            // From .Where(x => [createdAt|modifiedAt].Within(???)
+            if (model.DatetimeShorthandAttributeTerms.Count > 0)
+            {
+                foreach (var term in model.DatetimeShorthandAttributeTerms)
+                {
+                    var shorthandAttribute = new StringBuilder();
+
+                    shorthandAttribute.Append(term.Year);
+                    if (term.Month.HasValue)
+                    {
+                        shorthandAttribute.Append($"-{term.Month.Value:D2}");
+                    }
+
+                    if (term.Month.HasValue &&
+                        term.Day.HasValue)
+                    {
+                        shorthandAttribute.Append($"-{term.Day.Value:D2}");
+                    }
+
+                    if (term.Month.HasValue &&
+                        term.Day.HasValue &&
+                        term.Hour.HasValue)
+                    {
+                        shorthandAttribute.Append($"T{term.Hour.Value:D2}");
+                    }
+
+                    if (term.Month.HasValue &&
+                        term.Day.HasValue &&
+                        term.Hour.HasValue &&
+                        term.Minute.HasValue)
+                    {
+                        shorthandAttribute.Append($":{term.Minute.Value:D2}");
+                    }
+
+                    if (term.Month.HasValue &&
+                        term.Day.HasValue &&
+                        term.Hour.HasValue &&
+                        term.Hour.HasValue &&
+                        term.Second.HasValue)
+                    {
+                        shorthandAttribute.Append($":{term.Second.Value:D2}");
+                    }
+
+                    arguments.Add(term.Field, shorthandAttribute.ToString());
                 }
             }
 

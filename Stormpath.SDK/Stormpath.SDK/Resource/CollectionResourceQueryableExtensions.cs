@@ -36,7 +36,7 @@ namespace Stormpath.SDK
         }
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single class", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single class", Justification = "Extension methods grouped together")]
     public static class CollectionResourceQueryableExpandExtensions
     {
         public static ICollectionResourceQueryable<T> Expand<T, TKey>(this ICollectionResourceQueryable<T> source, Expression<Func<T, TKey>> keySelector)
@@ -59,6 +59,40 @@ namespace Stormpath.SDK
                     Expression.Quote(keySelector),
                     Expression.Constant(offset, typeof(int?)),
                     Expression.Constant(limit, typeof(int?))));
+        }
+    }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single class", Justification = "Extension methods grouped together")]
+    public static class CollectionResourceQueryableWithinExtensions
+    {
+        public static bool Within(this DateTimeOffset field, int year)
+        {
+            throw new NotSupportedException("Direct calls to Within() are not supported. Use from inside a LINQ Where predicate.");
+        }
+
+        public static bool Within(this DateTimeOffset field, int year, int month)
+        {
+            throw new NotSupportedException("Direct calls to Within() are not supported. Use from inside a LINQ Where predicate.");
+        }
+
+        public static bool Within(this DateTimeOffset field, int year, int month, int day)
+        {
+            throw new NotSupportedException("Direct calls to Within() are not supported. Use from inside a LINQ Where predicate.");
+        }
+
+        public static bool Within(this DateTimeOffset field, int year, int month, int day, int hour)
+        {
+            throw new NotSupportedException("Direct calls to Within() are not supported. Use from inside a LINQ Where predicate.");
+        }
+
+        public static bool Within(this DateTimeOffset field, int year, int month, int day, int hour, int minute)
+        {
+            throw new NotSupportedException("Direct calls to Within() are not supported. Use from inside a LINQ Where predicate.");
+        }
+
+        public static bool Within(this DateTimeOffset field, int year, int month, int day, int hour, int minute, int second)
+        {
+            throw new NotSupportedException("Direct calls to Within() are not supported. Use from inside a LINQ Where predicate.");
         }
     }
 }

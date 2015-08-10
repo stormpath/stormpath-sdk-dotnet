@@ -70,6 +70,7 @@
     <Compile Include="Impl\Client\DefaultClientBuilderTests.cs" />
     <Compile Include="Impl\ExtensionsTests\StringExtensionsTests.cs" />
     <Compile Include="Impl\Linq\CollectionResourceRequestModelTests.cs" />
+    <Compile Include="Impl\Linq\WithinExtensionTests.cs" />
     <Compile Include="Impl\Linq\OffsetTests.cs" />
     <Compile Include="Impl\Linq\UnsupportedFilterTests.cs" />
     <Compile Include="Impl\Linq\OrderByTests.cs" />

@@ -28,6 +28,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public class ExpansionTermTests
         {
             [TestMethod]
+            [TestCategory("Impl.Linq")]
             public void Expansion_with_null_subparameters_is_valid()
             {
                 var expansion = new ExpansionTerm("foo");
@@ -36,6 +37,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             }
 
             [TestMethod]
+            [TestCategory("Impl.Linq")]
             public void Expansion_with_subparameters_is_valid()
             {
                 var expansion = new ExpansionTerm("foo", 10, 10);
@@ -44,6 +46,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             }
 
             [TestMethod]
+            [TestCategory("Impl.Linq")]
             public void Expansion_with_empty_fieldname_is_invalid()
             {
                 var expansion = new ExpansionTerm(string.Empty);
@@ -52,6 +55,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             }
 
             [TestMethod]
+            [TestCategory("Impl.Linq")]
             public void Expansion_with_offset_zero_is_valid()
             {
                 var expansion = new ExpansionTerm("foo", offset: 0);
@@ -60,6 +64,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             }
 
             [TestMethod]
+            [TestCategory("Impl.Linq")]
             public void Expansion_with_offset_negative_is_invalid()
             {
                 var expansion = new ExpansionTerm("foo", offset: -1);
@@ -68,6 +73,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             }
 
             [TestMethod]
+            [TestCategory("Impl.Linq")]
             public void Expansion_with_limit_zero_is_invalid()
             {
                 var expansion = new ExpansionTerm("foo", limit: 0);
@@ -76,6 +82,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             }
 
             [TestMethod]
+            [TestCategory("Impl.Linq")]
             public void Expansion_with_limit_negative_is_invalid()
             {
                 var expansion = new ExpansionTerm("foo", limit: -1);

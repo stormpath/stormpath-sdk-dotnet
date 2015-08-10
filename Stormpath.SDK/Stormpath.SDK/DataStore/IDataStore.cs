@@ -17,7 +17,6 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.DataStore
 {

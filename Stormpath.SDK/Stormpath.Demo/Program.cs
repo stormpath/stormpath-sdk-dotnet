@@ -4,7 +4,6 @@ using System.Linq;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using System.Threading;
-using Stormpath.SDK.Application;
 
 namespace Stormpath.Demo
 {
