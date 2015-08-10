@@ -22,7 +22,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class TestHarness<T>
+    public class LinqTestHarness<T>
         where T : IResource
     {
         public IDataStore DataStore { get; private set; }
@@ -38,12 +38,12 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             DataStore.Received().GetCollection<T>($"{Url}/{Resource}?{arguments}");
         }
 
-        public static TestHarness<TType> Create<TType>(string url, string resource)
+        public static LinqTestHarness<TType> Create<TType>(string url, string resource)
             where TType : IResource
         {
             var ds = Substitute.For<IDataStore>();
 
-            return new TestHarness<TType>()
+            return new LinqTestHarness<TType>()
             {
                 DataStore = ds,
                 Resource = resource,

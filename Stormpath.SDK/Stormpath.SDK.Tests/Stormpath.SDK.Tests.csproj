@@ -78,7 +78,7 @@
     <Compile Include="Impl\Linq\WhereTests.cs" />
     <Compile Include="Impl\Linq\ExpandExtensionTests.cs" />
     <Compile Include="Impl\Linq\FilterExtensionTests.cs" />
-    <Compile Include="Impl\Linq\TestHarness.cs" />
+    <Compile Include="Impl\Linq\LinqTestHarness.cs" />
     <Compile Include="Impl\Utility\Iso8601Tests.cs" />
     <Compile Include="Impl\Utility\PropertiesTests.cs" />
     <Compile Include="Impl\Api\DefaultClientApiKeyBuilderTests.cs" />

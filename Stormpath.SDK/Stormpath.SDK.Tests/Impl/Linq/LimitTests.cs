@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Take_with_constant_becomes_limit()
         {
-            var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             harness.Queryable
                 .Take(10)
@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Take_with_variable_becomes_limit()
         {
-            var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var limit = 20;
             harness.Queryable
@@ -59,7 +59,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Take_with_function_becomes_limit()
         {
-            var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var limitFunc = new Func<int>(() => 25);
             harness.Queryable
@@ -73,7 +73,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Take_multiple_calls_are_LIFO()
         {
-            var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             harness.Queryable
                 .Take(10).Take(5)

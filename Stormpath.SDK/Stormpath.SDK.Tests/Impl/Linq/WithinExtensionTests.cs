@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Where_date_using_shorthand_for_year()
         {
-            var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015))
@@ -57,7 +57,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Where_date_using_shorthand_for_month()
         {
-            var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01))
@@ -70,7 +70,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Where_date_using_shorthand_for_day()
         {
-            var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01, 01))
@@ -83,7 +83,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Where_date_using_shorthand_for_hour()
         {
-            var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01, 01, 12))
@@ -96,7 +96,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Where_date_using_shorthand_for_minute()
         {
-            var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30))
@@ -109,7 +109,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Where_date_using_shorthand_for_second()
         {
-            var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30, 31))
