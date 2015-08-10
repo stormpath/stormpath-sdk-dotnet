@@ -70,7 +70,13 @@
     <Compile Include="Impl\Client\DefaultClientBuilderTests.cs" />
     <Compile Include="Impl\ExtensionsTests\StringExtensionsTests.cs" />
     <Compile Include="Impl\Linq\CollectionResourceRequestModelTests.cs" />
-    <Compile Include="Impl\Linq\LinqTests.cs" />
+    <Compile Include="Impl\Linq\OffsetTests.cs" />
+    <Compile Include="Impl\Linq\UnsupportedFilterTests.cs" />
+    <Compile Include="Impl\Linq\OrderByTests.cs" />
+    <Compile Include="Impl\Linq\LimitTests.cs" />
+    <Compile Include="Impl\Linq\WhereTests.cs" />
+    <Compile Include="Impl\Linq\ExpandExtensionTests.cs" />
+    <Compile Include="Impl\Linq\FilterExtensionTests.cs" />
     <Compile Include="Impl\Linq\TestHarness.cs" />
     <Compile Include="Impl\Utility\Iso8601Tests.cs" />
     <Compile Include="Impl\Utility\PropertiesTests.cs" />
