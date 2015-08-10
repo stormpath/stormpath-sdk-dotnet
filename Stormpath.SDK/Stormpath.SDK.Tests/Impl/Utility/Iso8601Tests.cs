@@ -26,6 +26,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
     public class Iso8601Tests
     {
         [TestMethod]
+        [TestCategory("Impl.Utility")]
         public void Format_from_local_date()
         {
             // Midnight Pacific Time, Jan 1, 2015 = 2015-01-01 08:00 UTC
@@ -40,6 +41,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
         }
 
         [TestMethod]
+        [TestCategory("Impl.Utility")]
         public void Format_from_UTC_date()
         {
             var alreadyInUtc = new DateTimeOffset(2016, 02, 01, 12, 00, 00, TimeSpan.Zero);

@@ -31,6 +31,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         private static string resource = "bar";
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Aggregate_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -42,6 +43,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void All_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -53,6 +55,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Average_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -64,6 +67,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Cast_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -75,6 +79,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Concat_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -86,6 +91,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Contains_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -97,6 +103,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Distinct_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -108,6 +115,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Except_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -119,6 +127,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void GroupBy_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -130,6 +139,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void GroupJoin_clause_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -145,6 +155,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Intersect_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -156,6 +167,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Join_clause_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -170,6 +182,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Last_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -186,6 +199,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Max_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -197,6 +211,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Min_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -208,6 +223,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void OfType_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -219,6 +235,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Reverse_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -230,6 +247,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Select_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -243,6 +261,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void SelectMany_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -254,6 +273,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void SequenceEqual_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -265,6 +285,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void SkipWhile_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -276,6 +297,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Sum_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -287,6 +309,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void TakeWhile_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -298,6 +321,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Union_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
@@ -309,6 +333,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [TestMethod]
+        [TestCategory("Impl.Linq")]
         public void Zip_is_unsupported()
         {
             var harness = TestHarness<IAccount>.Create<IAccount>(url, resource);
