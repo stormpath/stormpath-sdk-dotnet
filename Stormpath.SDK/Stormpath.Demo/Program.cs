@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Linq;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using System.Threading;
+using Stormpath.SDK.Application;
 
 namespace Stormpath.Demo
 {
@@ -42,15 +44,20 @@ namespace Stormpath.Demo
             
             // Get current tenant
             var tenant = await client.GetCurrentTenantAsync();
-            Console.WriteLine($"Current tenant is: {await tenant.GetNameAsync()}");
+            Console.WriteLine($"Current tenant is: {tenant.Name}");
+
+            // Get 
+            var myApp = tenant.GetApplications()
+                .Where(x => x.Name == "My Application")
+                .First();
 
             // List applications
-            // TODO
-            //Console.WriteLine("\nTenant applications:");
+            //Console.WriteLine("Tenant applications:");
             //var applications = await tenant.GetApplicationsAsync();
             //foreach (var app in applications)
-            //    Console.WriteLine("{0}\t{1}", app.Name, app.Status ? "enabled" : "disabled");
-            //var myApp = applications.First();
+            //{
+            //    Console.WriteLine("{0}\t{1}", app.Name, app.Status == ApplicationStatus.Enabled ? "enabled" : "disabled");
+            //}
 
             //// Add some users
             //Console.WriteLine("\nAdding users to '{0}'...", myApp.Name);

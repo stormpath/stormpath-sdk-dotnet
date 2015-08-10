@@ -22,8 +22,6 @@ namespace Stormpath.SDK.Tenant
 {
     public interface ITenant : IResource, ITenantActions
     {
-        Task<string> GetNameAsync();
-
-        Task<string> GetKeyAsync();
+        string Name { get; }
     }
 }

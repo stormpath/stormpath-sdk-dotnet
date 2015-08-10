@@ -99,8 +99,8 @@ namespace Stormpath.SDK.Resource
         {
             return new DateTimeOffset(
                 shorthand.year,
-                shorthand.month ?? 0,
-                shorthand.day ?? 0,
+                shorthand.month ?? 1,
+                shorthand.day ?? 1,
                 shorthand.hour ?? 0,
                 shorthand.minute ?? 0,
                 shorthand.second ?? 0,

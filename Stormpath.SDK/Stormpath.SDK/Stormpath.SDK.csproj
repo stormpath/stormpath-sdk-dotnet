@@ -57,6 +57,7 @@
     <Compile Include="Api\ClientApiKeys.cs" />
     <Compile Include="Api\IClientApiKey.cs" />
     <Compile Include="Api\IClientApiKeyBuilder.cs" />
+    <Compile Include="Application\ApplicationStatus.cs" />
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Application\IApplicationList.cs" />
     <Compile Include="Client\AuthenticationScheme.cs" />

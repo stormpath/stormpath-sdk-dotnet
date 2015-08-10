@@ -21,5 +21,8 @@ namespace Stormpath.SDK.Application
 {
     public interface IApplication : IResource
     {
+        string Name { get; }
+
+        ApplicationStatus Status { get; }
     }
 }

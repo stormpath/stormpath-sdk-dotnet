@@ -20,7 +20,6 @@ using System.Linq;
 namespace Stormpath.SDK.Resource
 {
     public interface ICollectionResourceQueryable<T> : IQueryable<T>
-        where T : IResource
     {
         int Offset { get; }
 

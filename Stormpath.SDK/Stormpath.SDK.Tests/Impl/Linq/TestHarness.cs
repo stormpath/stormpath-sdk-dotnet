@@ -33,6 +33,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
         public ICollectionResourceQueryable<T> Queryable { get; private set; }
 
+        public void WasCalledWithArguments(string arguments)
+        {
+            DataStore.Received().GetCollection<T>($"{Url}/{Resource}?{arguments}");
+        }
+
         public static TestHarness<TType> Create<TType>(string url, string resource)
             where TType : IResource
         {

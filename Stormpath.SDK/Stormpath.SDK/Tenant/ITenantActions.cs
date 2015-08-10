@@ -29,6 +29,8 @@ namespace Stormpath.SDK.Tenant
 
         Task<IApplicationList> GetApplicationsAsync();
 
+        IApplicationList GetApplications();
+
         Task<IDirectory> CreateDirectoryAsync(IDirectory directory);
 
         Task<IDirectoryList> GetDirectoriesAsync();
