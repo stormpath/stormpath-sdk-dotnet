@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace Stormpath.SDK.Linq
 {
     public interface IAsyncQueryable<T> : IQueryable<T>
     {
+        IEnumerable<T> CurrentPage { get; }
+
         Task<bool> MoveNextAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }
