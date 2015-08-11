@@ -37,12 +37,14 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Where(x => true).ToList();
+                var query = harness.Queryable.Where(x => true);
+                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
             });
 
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Where(x => false).ToList();
+                var query = harness.Queryable.Where(x => false);
+                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
             });
         }
 
@@ -54,7 +56,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Where(x => x.Email != "foo").ToList();
+                var query = harness.Queryable.Where(x => x.Email != "foo");
+                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
             });
         }
 
@@ -66,12 +69,14 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Where(x => x.Email.Equals("bar", StringComparison.CurrentCulture)).ToList();
+                var query = harness.Queryable.Where(x => x.Email.Equals("bar", StringComparison.CurrentCulture));
+                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
             });
 
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Where(x => x.Email.StartsWith("foo", StringComparison.OrdinalIgnoreCase)).ToList();
+                var query = harness.Queryable.Where(x => x.Email.StartsWith("foo", StringComparison.OrdinalIgnoreCase));
+                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
             });
         }
 
@@ -83,7 +88,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Where(x => x.Email.ToUpper() == "FOO").ToList();
+                var query = harness.Queryable.Where(x => x.Email.ToUpper() == "FOO");
+                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
             });
         }
 
@@ -95,7 +101,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Where(x => x.Email == "foo" || x.Email == "bar").ToList();
+                var query = harness.Queryable.Where(x => x.Email == "foo" || x.Email == "bar");
+                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
             });
         }
 
@@ -105,11 +112,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Where(x => x.Email == "tk421@deathstar.co")
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.Email == "tk421@deathstar.co");
 
-            harness.WasCalledWithArguments("email=tk421@deathstar.co");
+            query.GeneratedArgumentsWere(url, resource, "email=tk421@deathstar.co");
         }
 
         [TestMethod]
@@ -118,11 +124,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Where(x => x.Email.Equals("tk421@deathstar.co"))
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.Email.Equals("tk421@deathstar.co"));
 
-            harness.WasCalledWithArguments("email=tk421@deathstar.co");
+            query.GeneratedArgumentsWere(url, resource, "email=tk421@deathstar.co");
         }
 
         [TestMethod]
@@ -131,11 +136,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Where(x => x.Email.StartsWith("tk421"))
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.Email.StartsWith("tk421"));
 
-            harness.WasCalledWithArguments("email=tk421*");
+            query.GeneratedArgumentsWere(url, resource, "email=tk421*");
         }
 
         [TestMethod]
@@ -144,11 +148,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Where(x => x.Email.EndsWith("deathstar.co"))
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.Email.EndsWith("deathstar.co"));
 
-            harness.WasCalledWithArguments("email=*deathstar.co");
+            query.GeneratedArgumentsWere(url, resource, "email=*deathstar.co");
         }
 
         [TestMethod]
@@ -157,11 +160,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Where(x => x.Email.Contains("421"))
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.Email.Contains("421"));
 
-            harness.WasCalledWithArguments("email=*421*");
+            query.GeneratedArgumentsWere(url, resource, "email=*421*");
         }
 
         [TestMethod]
@@ -170,11 +172,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Where(x => x.Email == "tk421@deathstar.co" && x.Username == "tk421")
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.Email == "tk421@deathstar.co" && x.Username == "tk421");
 
-            harness.WasCalledWithArguments("email=tk421@deathstar.co&username=tk421");
+            query.GeneratedArgumentsWere(url, resource, "email=tk421@deathstar.co&username=tk421");
         }
 
         [TestMethod]
@@ -183,12 +184,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
+            var query = harness.Queryable
                 .Where(x => x.Email == "tk421@deathstar.co")
-                .Where(x => x.Username.StartsWith("tk421"))
-                .ToList();
+                .Where(x => x.Username.StartsWith("tk421"));
 
-            harness.WasCalledWithArguments("email=tk421@deathstar.co&username=tk421*");
+            query.GeneratedArgumentsWere(url, resource, "email=tk421@deathstar.co&username=tk421*");
         }
 
         [TestMethod]
@@ -198,11 +198,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var testDate = new DateTimeOffset(2015, 01, 01, 06, 00, 00, TimeSpan.Zero);
-            harness.Queryable
-                .Where(x => x.CreatedAt > testDate)
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.CreatedAt > testDate);
 
-            harness.WasCalledWithArguments("createdAt=(2015-01-01T06:00:00.000Z,]");
+            query.GeneratedArgumentsWere(url, resource, "createdAt=(2015-01-01T06:00:00.000Z,]");
         }
 
         [TestMethod]
@@ -212,11 +211,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var testDate = new DateTimeOffset(2015, 01, 01, 06, 00, 00, TimeSpan.Zero);
-            harness.Queryable
-                .Where(x => x.CreatedAt >= testDate)
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.CreatedAt >= testDate);
 
-            harness.WasCalledWithArguments("createdAt=[2015-01-01T06:00:00.000Z,]");
+            query.GeneratedArgumentsWere(url, resource, "createdAt=[2015-01-01T06:00:00.000Z,]");
         }
 
         [TestMethod]
@@ -226,11 +224,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var testDate = new DateTimeOffset(2016, 01, 01, 12, 00, 00, TimeSpan.Zero);
-            harness.Queryable
-                .Where(x => x.ModifiedAt < testDate)
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.ModifiedAt < testDate);
 
-            harness.WasCalledWithArguments("modifiedAt=[,2016-01-01T12:00:00.000Z)");
+            query.GeneratedArgumentsWere(url, resource, "modifiedAt=[,2016-01-01T12:00:00.000Z)");
         }
 
         [TestMethod]
@@ -240,11 +237,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var testDate = new DateTimeOffset(2016, 01, 01, 12, 00, 00, TimeSpan.Zero);
-            harness.Queryable
-                .Where(x => x.ModifiedAt <= testDate)
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.ModifiedAt <= testDate);
 
-            harness.WasCalledWithArguments("modifiedAt=[,2016-01-01T12:00:00.000Z]");
+            query.GeneratedArgumentsWere(url, resource, "modifiedAt=[,2016-01-01T12:00:00.000Z]");
         }
 
         [TestMethod]
@@ -255,11 +251,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             var testStartDate = new DateTimeOffset(2015, 01, 01, 00, 00, 00, TimeSpan.Zero);
             var testEndDate = new DateTimeOffset(2015, 12, 31, 23, 59, 59, TimeSpan.Zero);
-            harness.Queryable
-                .Where(x => x.CreatedAt > testStartDate && x.CreatedAt <= testEndDate)
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.CreatedAt > testStartDate && x.CreatedAt <= testEndDate);
 
-            harness.WasCalledWithArguments("createdAt=(2015-01-01T00:00:00.000Z,2015-12-31T23:59:59.000Z]");
+            query.GeneratedArgumentsWere(url, resource, "createdAt=(2015-01-01T00:00:00.000Z,2015-12-31T23:59:59.000Z]");
         }
     }
 }

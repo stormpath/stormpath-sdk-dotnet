@@ -1,4 +1,4 @@
-﻿// <copyright file="AsyncTests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="LinqAssertExtensions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,29 +15,22 @@
 // limitations under the License.
 // </remarks>
 
-using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
-using Stormpath.SDK.Application;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    [TestClass]
-    public class MyTestClass
+    public static class LinqAssertExtensions
     {
-        private static string url = "http://f.oo";
-        private static string resource = "bar";
-
-        [TestMethod]
-        [TestCategory("Impl.Linq")]
-        public async Task FirstAsync()
+        public static void GeneratedArgumentsWere<T>(this IQueryable<T> queryable, string url, string resource, string arguments)
         {
-            var harness = LinqTestHarness<IApplication>.Create<IApplication>(url, resource);
-            var applications = harness.Queryable;
+            var resourceQueryable = queryable as ICollectionResourceQueryable<T>;
+            if (resourceQueryable == null)
+                Assert.Fail("This queryable is not an ICollectionResourceQueryable.");
 
-            IApplication first = null; // await applications.FirstAsync();
-
-            first.ShouldNotBe(null);
+            resourceQueryable.CurrentHref.ShouldBe($"{url}/{resource}?{arguments}");
         }
     }
 }

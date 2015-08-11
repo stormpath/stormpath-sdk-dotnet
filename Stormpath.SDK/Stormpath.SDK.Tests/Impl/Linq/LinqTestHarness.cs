@@ -16,7 +16,8 @@
 // </remarks>
 
 using NSubstitute;
-using Stormpath.SDK.DataStore;
+using Shouldly;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
@@ -25,7 +26,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
     public class LinqTestHarness<T>
         where T : IResource
     {
-        public IDataStore DataStore { get; private set; }
+        internal IDataStore DataStore { get; private set; }
 
         public string Url { get; private set; }
 
@@ -33,9 +34,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
         public ICollectionResourceQueryable<T> Queryable { get; private set; }
 
-        public void WasCalledWithArguments(string arguments)
+        public void GeneratedArgumentsWere(string arguments)
         {
-            DataStore.Received().GetCollection<T>($"{Url}/{Resource}?{arguments}");
+            Queryable.CurrentHref.ShouldBe($"{Url}/{Resource}?{arguments}");
         }
 
         public static LinqTestHarness<TType> Create<TType>(string url, string resource)

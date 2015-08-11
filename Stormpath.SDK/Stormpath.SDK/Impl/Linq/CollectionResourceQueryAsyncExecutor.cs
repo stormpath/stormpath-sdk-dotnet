@@ -20,28 +20,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Remotion.Linq;
-using Stormpath.SDK.DataStore;
+using Stormpath.SDK.Impl.DataStore;
 
 namespace Stormpath.SDK.Impl.Linq
 {
     internal class CollectionResourceQueryAsyncExecutor : IAsyncQueryExecutor
     {
-        private readonly string url;
-        private readonly string resource;
-        private readonly IDataStore dataStore;
-
         public CollectionResourceQueryAsyncExecutor(string url, string resource, IDataStore dataStore)
         {
-            this.url = url;
-            this.resource = resource;
-            this.dataStore = dataStore;
+            this.Url = url;
+            this.Resource = resource;
+            this.DataStore = dataStore;
         }
+
+        public string Url { get; private set; }
+
+        public string Resource { get; private set; }
+
+        public IDataStore DataStore { get; private set; }
 
         public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
         {
-            var arguments = QueryModelToArguments(queryModel);
-
-            return dataStore.GetCollection<T>($"{url}/{resource}?{arguments}");
+            throw new NotImplementedException();
         }
 
         public Task<T> ExecuteAsync<T>(QueryModel queryModel)
@@ -74,11 +74,7 @@ namespace Stormpath.SDK.Impl.Linq
 
         public Task<IEnumerable<T>> ExecuteCollectionAsync<T>(QueryModel queryModel)
         {
-            var model = CollectionResourceQueryModelVisitor.GenerateRequestModel(queryModel);
-            var arguments = CollectionResourceRequestModelCompiler.GetArguments(model);
-            var argumentString = string.Join("&", arguments);
-
-            return dataStore.GetCollectionAsync<T>($"{url}/{resource}?{argumentString}");
+            throw new NotImplementedException();
         }
 
         public T ExecuteScalarAsync<T>(QueryModel queryModel)

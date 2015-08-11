@@ -16,12 +16,13 @@
 // </remarks>
 
 using System.Linq;
-using Stormpath.SDK.Impl.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Linq
 {
     public interface IAsyncQueryable<T> : IQueryable<T>
     {
-        IAsyncQueryProvider AsyncProvider { get; }
+        Task<bool> MoveNextAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

@@ -34,11 +34,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Skip(10)
-                .ToList();
+            var query = harness.Queryable
+                .Skip(10);
 
-            harness.WasCalledWithArguments("offset=10");
+            query.GeneratedArgumentsWere(url, resource, "offset=10");
         }
 
         [TestMethod]
@@ -48,11 +47,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var offset = 20;
-            harness.Queryable
-                .Skip(offset)
-                .ToList();
+            var query = harness.Queryable
+                .Skip(offset);
 
-            harness.WasCalledWithArguments("offset=20");
+            query.GeneratedArgumentsWere(url, resource, "offset=20");
         }
 
         [TestMethod]
@@ -62,11 +60,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var offsetFunc = new Func<int>(() => 25);
-            harness.Queryable
-                .Skip(offsetFunc())
-                .ToList();
+            var query = harness.Queryable
+                .Skip(offsetFunc());
 
-            harness.WasCalledWithArguments("offset=25");
+            query.GeneratedArgumentsWere(url, resource, "offset=25");
         }
 
         [TestMethod]
@@ -75,12 +72,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Skip(10).Skip(5)
-                .ToList();
+            var query = harness.Queryable
+                .Skip(10).Skip(5);
 
             // Expected behavior: the last call will be kept
-            harness.WasCalledWithArguments("offset=5");
+            query.GeneratedArgumentsWere(url, resource, "offset=5");
         }
     }
 }

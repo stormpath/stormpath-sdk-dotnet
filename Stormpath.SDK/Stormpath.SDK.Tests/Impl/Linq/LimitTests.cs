@@ -34,11 +34,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Take(10)
-                .ToList();
+            var query = harness.Queryable
+                .Take(10);
 
-            harness.WasCalledWithArguments("limit=10");
+            query.GeneratedArgumentsWere(url, resource, "limit=10");
         }
 
         [TestMethod]
@@ -48,11 +47,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var limit = 20;
-            harness.Queryable
-                .Take(limit)
-                .ToList();
+            var query = harness.Queryable
+                .Take(limit);
 
-            harness.WasCalledWithArguments("limit=20");
+            query.GeneratedArgumentsWere(url, resource, "limit=20");
         }
 
         [TestMethod]
@@ -62,11 +60,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var limitFunc = new Func<int>(() => 25);
-            harness.Queryable
-                .Take(limitFunc())
-                .ToList();
+            var query = harness.Queryable
+                .Take(limitFunc());
 
-            harness.WasCalledWithArguments("limit=25");
+            query.GeneratedArgumentsWere(url, resource, "limit=25");
         }
 
         [TestMethod]
@@ -75,12 +72,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Take(10).Take(5)
-                .ToList();
+            var query = harness.Queryable
+                .Take(10).Take(5);
 
             // Expected behavior: the last call will be kept
-            harness.WasCalledWithArguments("limit=5");
+            query.GeneratedArgumentsWere(url, resource, "limit=5");
         }
     }
 }

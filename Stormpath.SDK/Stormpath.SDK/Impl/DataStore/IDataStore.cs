@@ -1,4 +1,4 @@
-﻿// <copyright file="ICollectionResourceQueryable.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IDataStore.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,21 +15,13 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using Stormpath.SDK.Linq;
+using System.Threading.Tasks;
+using Stormpath.SDK.Impl.Resource;
 
-namespace Stormpath.SDK.Resource
+namespace Stormpath.SDK.Impl.DataStore
 {
-    public interface ICollectionResourceQueryable<T> : IAsyncQueryable<T>
+    internal interface IDataStore
     {
-        int Offset { get; }
-
-        int Limit { get; }
-
-        int Size { get; }
-
-        IEnumerable<T> CurrentPage { get; }
-
-        string CurrentHref { get; }
+        Task<CollectionResponsePageDto<T>> GetCollectionAsync<T>(string href);
     }
 }

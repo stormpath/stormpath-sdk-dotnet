@@ -1,4 +1,4 @@
-﻿// <copyright file="IDataStore.cs" company="Stormpath, Inc.">
+﻿// <copyright file="CollectionResponsePageDto.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,14 +16,19 @@
 // </remarks>
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Stormpath.SDK.DataStore
+namespace Stormpath.SDK.Impl.Resource
 {
-    public interface IDataStore
+    internal class CollectionResponsePageDto<T>
     {
-        IEnumerable<T> GetCollection<T>(string href);
+        public string Href { get; set; }
 
-        Task<IEnumerable<T>> GetCollectionAsync<T>(string href);
+        public int Offset { get; set; }
+
+        public int Limit { get; set; }
+
+        public int Size { get; set; }
+
+        public List<T> Items { get; set; }
     }
 }

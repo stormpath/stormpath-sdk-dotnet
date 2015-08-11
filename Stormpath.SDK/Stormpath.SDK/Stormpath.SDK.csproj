@@ -64,7 +64,6 @@
     <Compile Include="Client\Clients.cs" />
     <Compile Include="Client\IClient.cs" />
     <Compile Include="Client\IClientBuilder.cs" />
-    <Compile Include="DataStore\IDataStore.cs" />
     <Compile Include="Directory\IDirectory.cs" />
     <Compile Include="Directory\IDirectoryList.cs" />
     <Compile Include="Group\IGroup.cs" />
@@ -73,6 +72,7 @@
     <Compile Include="Impl\Api\DefaultClientApiKeyBuilder.cs" />
     <Compile Include="Impl\Client\DefaultClient.cs" />
     <Compile Include="Impl\Client\DefaultClientBuilder.cs" />
+    <Compile Include="Impl\DataStore\IDataStore.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\Extensions\StringExtensions.cs" />
     <Compile Include="Impl\Http\Authentication\BasicRequestAuthenticator.cs" />
@@ -107,9 +107,9 @@
     <Compile Include="Impl\Linq\StaticNameTranslators\LinkMethodNameTranslator.cs" />
     <Compile Include="Impl\Linq\StaticNameTranslators\StringHelperMethodNameTranslator.cs" />
     <Compile Include="Impl\Resource\CollectionResourceQueryable.cs" />
+    <Compile Include="Impl\Resource\CollectionResponsePageDto.cs" />
     <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />
     <Compile Include="Impl\Utility\Iso8601.cs" />
-    <Compile Include="Linq\AsyncQueryableExtensions.cs" />
     <Compile Include="Linq\CollectionResourceQueryableExtensions.cs" />
     <Compile Include="Linq\IAsyncQueryable.cs" />
     <Compile Include="Resource\IAuditable.cs" />
@@ -137,7 +137,9 @@
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta003\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DataStore\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

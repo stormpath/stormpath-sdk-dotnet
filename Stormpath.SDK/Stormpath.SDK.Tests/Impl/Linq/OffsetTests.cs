@@ -35,12 +35,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             // Act
-            harness.Queryable
-                .Filter("Joe")
-                .ToList();
+            var query = harness.Queryable
+                .Filter("Joe");
 
             // Assert
-            harness.WasCalledWithArguments("q=Joe");
+            query.GeneratedArgumentsWere(url, resource, "q=Joe");
         }
 
         [TestMethod]
@@ -49,13 +48,12 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
+            var query = harness.Queryable
                 .Filter("Joe")
-                .Filter("Joey")
-                .ToList();
+                .Filter("Joey");
 
             // Expected behavior: the last call will be kept
-            harness.WasCalledWithArguments("q=Joey");
+            query.GeneratedArgumentsWere(url, resource, "q=Joey");
         }
     }
 }

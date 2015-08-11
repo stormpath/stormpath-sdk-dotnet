@@ -71,6 +71,7 @@
     <Compile Include="Impl\ExtensionsTests\StringExtensionsTests.cs" />
     <Compile Include="Impl\Linq\AsyncTests.cs" />
     <Compile Include="Impl\Linq\CollectionResourceRequestModelTests.cs" />
+    <Compile Include="Impl\Linq\LinqAssertExtensions.cs" />
     <Compile Include="Impl\Linq\WithinExtensionTests.cs" />
     <Compile Include="Impl\Linq\OffsetTests.cs" />
     <Compile Include="Impl\Linq\UnsupportedFilterTests.cs" />

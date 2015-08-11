@@ -35,11 +35,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Expand(x => x.GetDirectoryAsync())
-                .ToList();
+            var query = harness.Queryable
+                .Expand(x => x.GetDirectoryAsync());
 
-            harness.WasCalledWithArguments("expand=directory");
+            query.GeneratedArgumentsWere(url, resource, "expand=directory");
         }
 
         [TestMethod]
@@ -48,12 +47,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
+            var query = harness.Queryable
                 .Expand(x => x.GetDirectoryAsync())
-                .Expand(x => x.GetTenantAsync())
-                .ToList();
+                .Expand(x => x.GetTenantAsync());
 
-            harness.WasCalledWithArguments("expand=directory,tenant");
+            query.GeneratedArgumentsWere(url, resource, "expand=directory,tenant");
         }
 
         [TestMethod]
@@ -62,11 +60,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Expand(x => x.GetGroupsAsync(), offset: 10)
-                .ToList();
+            var query = harness.Queryable
+                .Expand(x => x.GetGroupsAsync(), offset: 10);
 
-            harness.WasCalledWithArguments("expand=groups(offset:10)");
+            query.GeneratedArgumentsWere(url, resource, "expand=groups(offset:10)");
         }
 
         [TestMethod]
@@ -75,11 +72,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Expand(x => x.GetGroupsAsync(), limit: 20)
-                .ToList();
+            var query = harness.Queryable
+                .Expand(x => x.GetGroupsAsync(), limit: 20);
 
-            harness.WasCalledWithArguments("expand=groups(limit:20)");
+            query.GeneratedArgumentsWere(url, resource, "expand=groups(limit:20)");
         }
 
         [TestMethod]
@@ -88,11 +84,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Expand(x => x.GetGroupsAsync(), 5, 15)
-                .ToList();
+            var query = harness.Queryable
+                .Expand(x => x.GetGroupsAsync(), 5, 15);
 
-            harness.WasCalledWithArguments("expand=groups(offset:5,limit:15)");
+            query.GeneratedArgumentsWere(url, resource, "expand=groups(offset:5,limit:15)");
         }
 
         [TestMethod]
@@ -101,13 +96,12 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
+            var query = harness.Queryable
                 .Expand(x => x.GetTenantAsync())
                 .Expand(x => x.GetGroupsAsync(), 10, 20)
-                .Expand(x => x.GetDirectoryAsync())
-                .ToList();
+                .Expand(x => x.GetDirectoryAsync());
 
-            harness.WasCalledWithArguments("expand=tenant,groups(offset:10,limit:20),directory");
+            query.GeneratedArgumentsWere(url, resource, "expand=tenant,groups(offset:10,limit:20),directory");
         }
 
         [TestMethod]
@@ -118,7 +112,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Expand(x => x.Email).ToList();
+                var query = harness.Queryable.Expand(x => x.Email);
+                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
             });
         }
 
@@ -130,7 +125,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Expand(x => x.GetDirectoryAsync(), limit: 10).ToList();
+                var query = harness.Queryable.Expand(x => x.GetDirectoryAsync(), limit: 10);
+                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
             });
         }
 
@@ -142,7 +138,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Expand(x => x.GetTenantAsync().GetAwaiter()).ToList();
+                var query = harness.Queryable.Expand(x => x.GetTenantAsync().GetAwaiter());
+                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
             });
         }
     }

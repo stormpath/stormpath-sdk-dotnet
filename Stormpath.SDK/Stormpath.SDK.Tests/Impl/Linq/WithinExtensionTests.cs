@@ -46,11 +46,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015))
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.CreatedAt.Within(2015));
 
-            harness.WasCalledWithArguments("createdAt=2015");
+            query.GeneratedArgumentsWere(url, resource, "createdAt=2015");
         }
 
         [TestMethod]
@@ -59,11 +58,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015, 01))
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.CreatedAt.Within(2015, 01));
 
-            harness.WasCalledWithArguments("createdAt=2015-01");
+            query.GeneratedArgumentsWere(url, resource, "createdAt=2015-01");
         }
 
         [TestMethod]
@@ -72,11 +70,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015, 01, 01))
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.CreatedAt.Within(2015, 01, 01));
 
-            harness.WasCalledWithArguments("createdAt=2015-01-01");
+            query.GeneratedArgumentsWere(url, resource, "createdAt=2015-01-01");
         }
 
         [TestMethod]
@@ -85,11 +82,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015, 01, 01, 12))
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.CreatedAt.Within(2015, 01, 01, 12));
 
-            harness.WasCalledWithArguments("createdAt=2015-01-01T12");
+            query.GeneratedArgumentsWere(url, resource, "createdAt=2015-01-01T12");
         }
 
         [TestMethod]
@@ -98,11 +94,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30))
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30));
 
-            harness.WasCalledWithArguments("createdAt=2015-01-01T12:30");
+            query.GeneratedArgumentsWere(url, resource, "createdAt=2015-01-01T12:30");
         }
 
         [TestMethod]
@@ -111,11 +106,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
 
-            harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30, 31))
-                .ToList();
+            var query = harness.Queryable
+                .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30, 31));
 
-            harness.WasCalledWithArguments("createdAt=2015-01-01T12:30:31");
+            query.GeneratedArgumentsWere(url, resource, "createdAt=2015-01-01T12:30:31");
         }
     }
 }
