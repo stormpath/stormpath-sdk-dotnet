@@ -112,7 +112,7 @@ namespace Stormpath.SDK.Impl.Resource
             }
         }
 
-        IEnumerable<T> ICollectionResourceQueryable<T>.CurrentPage
+        IEnumerable<T> IAsyncQueryable<T>.CurrentPage
         {
             get
             {
@@ -133,13 +133,11 @@ namespace Stormpath.SDK.Impl.Resource
 
         async Task<bool> IAsyncQueryable<T>.MoveNextAsync(CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            if (!IsCompiled())
+            if (this.compiledModel == null)
                 CompileExpressionToRequestModel();
 
             var url = GenerateRequestUrlFromModel();
-            var result = await dataStore.GetCollectionAsync<T>(url);
+            var result = await dataStore.GetCollectionAsync<T>(url, cancellationToken);
 
             if (!result.Items.Any())
                 return false;
@@ -149,16 +147,16 @@ namespace Stormpath.SDK.Impl.Resource
             this.currentSize = result.Size;
             this.currentItems = result.Items;
 
+            retrievedAtLeastOnce = true;
             return true;
-        }
-
-        private bool IsCompiled()
-        {
-            return this.compiledModel != null;
         }
 
         private void CompileExpressionToRequestModel()
         {
+            bool noExpressionToCompile = this.expression == null;
+            if (noExpressionToCompile)
+                return; // done
+
             var model = ExtendedQueryParser.Create().GetParsedQuery(this.expression);
             var visitor = new CollectionResourceQueryModelVisitor();
             visitor.VisitQueryModel(model);
@@ -167,8 +165,12 @@ namespace Stormpath.SDK.Impl.Resource
 
         private string GenerateRequestUrlFromModel()
         {
-            if (!IsCompiled())
+            if (this.compiledModel == null)
                 CompileExpressionToRequestModel();
+
+            bool noModelToGenerateArgumentsFrom = this.compiledModel == null;
+            if (noModelToGenerateArgumentsFrom)
+                return baseHref;
 
             var argumentList = CollectionResourceRequestModelCompiler.GetArguments(this.compiledModel);
             var arguments = string.Join("&", argumentList);

@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Skip_becomes_offset()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var query = harness.Queryable
                 .Skip(10);
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Skip_with_variable_becomes_offset()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var offset = 20;
             var query = harness.Queryable
@@ -57,7 +57,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Skip_with_function_becomes_offset()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var offsetFunc = new Func<int>(() => 25);
             var query = harness.Queryable
@@ -70,7 +70,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Skip_multiple_calls_are_LIFO()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var query = harness.Queryable
                 .Skip(10).Skip(5);

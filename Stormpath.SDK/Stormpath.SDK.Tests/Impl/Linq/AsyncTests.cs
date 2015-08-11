@@ -15,29 +15,82 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
-using Stormpath.SDK.Application;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Tests.Mocks;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
     [TestClass]
-    public class MyTestClass
+    public class AsyncTests
     {
         private static string url = "http://f.oo";
         private static string resource = "bar";
 
-        [TestMethod]
-        [TestCategory("Impl.Linq")]
-        public async Task FirstAsync()
+        [TestClass]
+        public class FirstAsync
         {
-            var harness = LinqTestHarness<IApplication>.Create<IApplication>(url, resource);
-            var applications = harness.Queryable;
+            [TestMethod]
+            [TestCategory("Impl.Linq")]
+            public async Task FirstAsync_returns_first()
+            {
+                var mockDataStore = new MockDataStore<IAccount>(new List<IAccount>()
+                {
+                    new MockAccount() { GivenName = "Luke", Surname = "Skywalker" },
+                    new MockAccount() { GivenName = "Han", Surname = "Solo" }
+                });
+                var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, mockDataStore);
 
-            IApplication first = null; // await applications.FirstAsync();
+                var luke = await harness.Queryable.FirstAsync();
 
-            first.ShouldNotBe(null);
+                luke.Surname.ShouldBe("Skywalker");
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Linq")]
+            public void FirstAsync_throws_when_no_items_exist()
+            {
+                var mockDataStore = new MockDataStore<IAccount>(Enumerable.Empty<IAccount>());
+                var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, mockDataStore);
+
+                Should.Throw<InvalidOperationException>(async () =>
+                {
+                    var jabba = await harness.Queryable.FirstAsync();
+                });
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Linq")]
+            public async Task FirstOrDefaultAsync_returns_first()
+            {
+                var mockDataStore = new MockDataStore<IAccount>(new List<IAccount>()
+                {
+                    new MockAccount() { GivenName = "Luke", Surname = "Skywalker" },
+                    new MockAccount() { GivenName = "Han", Surname = "Solo" }
+                });
+                var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, mockDataStore);
+
+                var luke = await harness.Queryable.FirstOrDefaultAsync();
+
+                luke.Surname.ShouldBe("Skywalker");
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Linq")]
+            public async Task FirstOrDefaultAsync_returns_default_when_no_items_exist()
+            {
+                var mockDataStore = new MockDataStore<IAccount>(Enumerable.Empty<IAccount>());
+                var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, mockDataStore);
+
+                var notLuke = await harness.Queryable.FirstOrDefaultAsync();
+
+                notLuke.ShouldBe(null);
+            }
         }
     }
 }

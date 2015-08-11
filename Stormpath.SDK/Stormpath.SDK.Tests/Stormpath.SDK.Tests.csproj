@@ -70,6 +70,9 @@
     <Compile Include="Impl\Client\DefaultClientBuilderTests.cs" />
     <Compile Include="Impl\ExtensionsTests\StringExtensionsTests.cs" />
     <Compile Include="Impl\Linq\AsyncTests.cs" />
+    <Compile Include="Mocks\MockAccount.cs" />
+    <Compile Include="Mocks\MockDataStore.cs" />
+    <Compile Include="Impl\Resource\CollectionResourceQueryableTests.cs" />
     <Compile Include="Impl\Linq\CollectionResourceRequestModelTests.cs" />
     <Compile Include="Impl\Linq\LinqAssertExtensions.cs" />
     <Compile Include="Impl\Linq\WithinExtensionTests.cs" />
@@ -80,7 +83,7 @@
     <Compile Include="Impl\Linq\WhereTests.cs" />
     <Compile Include="Impl\Linq\ExpandExtensionTests.cs" />
     <Compile Include="Impl\Linq\FilterExtensionTests.cs" />
-    <Compile Include="Impl\Linq\LinqTestHarness.cs" />
+    <Compile Include="Impl\CollectionTestHarness.cs" />
     <Compile Include="Impl\Utility\Iso8601Tests.cs" />
     <Compile Include="Impl\Utility\PropertiesTests.cs" />
     <Compile Include="Impl\Api\DefaultClientApiKeyBuilderTests.cs" />

@@ -1,4 +1,4 @@
-﻿// <copyright file="IDataStore.cs" company="Stormpath, Inc.">
+﻿// <copyright file="CollectionResourceQueryableTests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,14 +15,13 @@
 // limitations under the License.
 // </remarks>
 
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Impl.Resource;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Tests.Impl.Resource
 {
-    internal interface IDataStore
+    [TestClass]
+    public class CollectionResourceQueryableTests
     {
-        Task<CollectionResponsePageDto<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
+        // TODO
     }
 }

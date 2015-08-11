@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Expand_one_link()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var query = harness.Queryable
                 .Expand(x => x.GetDirectoryAsync());
@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Expand_multiple_links()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var query = harness.Queryable
                 .Expand(x => x.GetDirectoryAsync())
@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Expand_collection_query_with_offset()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var query = harness.Queryable
                 .Expand(x => x.GetGroupsAsync(), offset: 10);
@@ -70,7 +70,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Expand_collection_query_with_limit()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var query = harness.Queryable
                 .Expand(x => x.GetGroupsAsync(), limit: 20);
@@ -82,7 +82,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Expand_collection_query_with_both_parameters()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var query = harness.Queryable
                 .Expand(x => x.GetGroupsAsync(), 5, 15);
@@ -94,7 +94,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Expand_all_the_things()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var query = harness.Queryable
                 .Expand(x => x.GetTenantAsync())
@@ -108,7 +108,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Expand_throws_if_used_on_an_attribute()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             Should.Throw<NotSupportedException>(() =>
             {
@@ -121,7 +121,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Expand_throws_if_parameters_are_supplied_for_link()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             Should.Throw<NotSupportedException>(() =>
             {
@@ -134,7 +134,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Expand_throws_if_syntax_is_dumb()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             Should.Throw<NotSupportedException>(() =>
             {

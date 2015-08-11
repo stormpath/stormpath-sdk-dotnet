@@ -28,8 +28,6 @@ namespace Stormpath.SDK.Resource
 
         int Size { get; }
 
-        IEnumerable<T> CurrentPage { get; }
-
         string CurrentHref { get; }
     }
 }

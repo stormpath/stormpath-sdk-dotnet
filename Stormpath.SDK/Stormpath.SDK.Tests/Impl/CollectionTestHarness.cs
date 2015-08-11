@@ -1,4 +1,4 @@
-﻿// <copyright file="LinqTestHarness.cs" company="Stormpath, Inc.">
+﻿// <copyright file="CollectionTestHarness.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -21,9 +21,9 @@ using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Tests.Impl.Linq
+namespace Stormpath.SDK.Tests.Impl
 {
-    public class LinqTestHarness<T>
+    public class CollectionTestHarness<T>
         where T : IResource
     {
         internal IDataStore DataStore { get; private set; }
@@ -39,12 +39,12 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Queryable.CurrentHref.ShouldBe($"{Url}/{Resource}?{arguments}");
         }
 
-        public static LinqTestHarness<TType> Create<TType>(string url, string resource)
+        internal static CollectionTestHarness<TType> Create<TType>(string url, string resource, IDataStore mockDataStore = null)
             where TType : IResource
         {
-            var ds = Substitute.For<IDataStore>();
+            var ds = mockDataStore ?? Substitute.For<IDataStore>();
 
-            return new LinqTestHarness<TType>()
+            return new CollectionTestHarness<TType>()
             {
                 DataStore = ds,
                 Resource = resource,

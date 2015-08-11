@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public void Filter_with_simple_parameter()
         {
             // Arrange
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             // Act
             var query = harness.Queryable
@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [TestCategory("Impl.Linq")]
         public void Filter_multiple_calls_are_LIFO()
         {
-            var harness = LinqTestHarness<IAccount>.Create<IAccount>(url, resource);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
 
             var query = harness.Queryable
                 .Filter("Joe")

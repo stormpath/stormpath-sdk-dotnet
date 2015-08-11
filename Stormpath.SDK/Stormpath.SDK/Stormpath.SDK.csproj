@@ -110,6 +110,7 @@
     <Compile Include="Impl\Resource\CollectionResponsePageDto.cs" />
     <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />
     <Compile Include="Impl\Utility\Iso8601.cs" />
+    <Compile Include="Linq\AsyncQueryableExtensions.cs" />
     <Compile Include="Linq\CollectionResourceQueryableExtensions.cs" />
     <Compile Include="Linq\IAsyncQueryable.cs" />
     <Compile Include="Resource\IAuditable.cs" />
