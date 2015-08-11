@@ -1,4 +1,4 @@
-﻿// <copyright file="IApplicationList.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IApplicationAsyncList.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Application
 {
-    public interface IApplicationList : ICollectionResourceQueryable<IApplication>
+    public interface IApplicationAsyncList : ICollectionResourceQueryable<IApplication>
     {
     }
 }

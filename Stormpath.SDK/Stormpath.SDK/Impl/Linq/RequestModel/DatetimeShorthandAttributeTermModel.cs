@@ -15,8 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-
 namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
     internal class DatetimeShorthandAttributeTermModel : AbstractAttributeTermModel

@@ -1,4 +1,4 @@
-﻿// <copyright file="ICollectionResourceQueryable.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAsyncQueryable.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,16 +15,13 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Linq;
+using System.Linq;
+using Stormpath.SDK.Impl.Linq;
 
-namespace Stormpath.SDK.Resource
+namespace Stormpath.SDK.Linq
 {
-    public interface ICollectionResourceQueryable<T> : IAsyncQueryable<T>
+    public interface IAsyncQueryable<T> : IQueryable<T>
     {
-        int Offset { get; }
-
-        int Limit { get; }
-
-        int Size { get; }
+        IAsyncQueryProvider AsyncProvider { get; }
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="CollectionResourceQueryExecutor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="CollectionResourceQueryAsyncExecutor.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,20 +15,22 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Remotion.Linq;
 using Stormpath.SDK.DataStore;
 
 namespace Stormpath.SDK.Impl.Linq
 {
-    internal class CollectionResourceQueryExecutor : IQueryExecutor
+    internal class CollectionResourceQueryAsyncExecutor : IAsyncQueryExecutor
     {
         private readonly string url;
         private readonly string resource;
         private readonly IDataStore dataStore;
 
-        public CollectionResourceQueryExecutor(string url, string resource, IDataStore dataStore)
+        public CollectionResourceQueryAsyncExecutor(string url, string resource, IDataStore dataStore)
         {
             this.url = url;
             this.resource = resource;
@@ -37,11 +39,25 @@ namespace Stormpath.SDK.Impl.Linq
 
         public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
         {
+            var arguments = QueryModelToArguments(queryModel);
+
+            return dataStore.GetCollection<T>($"{url}/{resource}?{arguments}");
+        }
+
+        public Task<T> ExecuteAsync<T>(QueryModel queryModel)
+        {
+            var arguments = QueryModelToArguments(queryModel);
+
+            // return dataStore.GetCollectionAsync<T>($"{url}/{resource}?{arguments}");
+            throw new NotImplementedException();
+        }
+
+        private static string QueryModelToArguments(QueryModel queryModel)
+        {
             var model = CollectionResourceQueryModelVisitor.GenerateRequestModel(queryModel);
             var arguments = CollectionResourceRequestModelCompiler.GetArguments(model);
             var argumentString = string.Join("&", arguments);
-
-            return dataStore.GetCollection<T>($"{url}/{resource}?{argumentString}");
+            return argumentString;
         }
 
         public T ExecuteScalar<T>(QueryModel queryModel)
@@ -54,6 +70,25 @@ namespace Stormpath.SDK.Impl.Linq
             return returnDefaultWhenEmpty
                 ? ExecuteCollection<T>(queryModel).SingleOrDefault()
                 : ExecuteCollection<T>(queryModel).Single();
+        }
+
+        public Task<IEnumerable<T>> ExecuteCollectionAsync<T>(QueryModel queryModel)
+        {
+            var model = CollectionResourceQueryModelVisitor.GenerateRequestModel(queryModel);
+            var arguments = CollectionResourceRequestModelCompiler.GetArguments(model);
+            var argumentString = string.Join("&", arguments);
+
+            return dataStore.GetCollectionAsync<T>($"{url}/{resource}?{argumentString}");
+        }
+
+        public T ExecuteScalarAsync<T>(QueryModel queryModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T ExecuteSingleAsync<T>(QueryModel queryModel, bool returnDefaultWhenEmpty)
+        {
+            throw new NotImplementedException();
         }
     }
 }

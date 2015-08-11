@@ -26,7 +26,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal class CollectionResourceQueryable<T> : QueryableBase<T>, ICollectionResourceQueryable<T>
+    internal class CollectionResourceQueryable<T> : AsyncQueryableBase<T>, ICollectionResourceQueryable<T>
     {
         public CollectionResourceQueryable(string url, string resource, IDataStore dataStore)
             : base(ExtendedQueryParser.Create(), CreateQueryExecutor(url, resource, dataStore))
@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Impl.Resource
             this.DataStore = dataStore;
         }
 
-        // This constructor is called internally by LINQ
+        // (This constructor is called internally by LINQ)
         public CollectionResourceQueryable(IQueryProvider provider, Expression expression)
             : base(provider, expression)
         {
@@ -72,9 +72,9 @@ namespace Stormpath.SDK.Impl.Resource
             }
         }
 
-        private static IQueryExecutor CreateQueryExecutor(string url, string resource, IDataStore dataStore)
+        private static IAsyncQueryExecutor CreateQueryExecutor(string url, string resource, IDataStore dataStore)
         {
-            return new CollectionResourceQueryExecutor(url, resource, dataStore);
+            return new CollectionResourceQueryAsyncExecutor(url, resource, dataStore);
         }
     }
 }

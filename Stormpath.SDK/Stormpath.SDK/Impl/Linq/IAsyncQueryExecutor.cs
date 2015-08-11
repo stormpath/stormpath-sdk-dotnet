@@ -1,4 +1,4 @@
-﻿// <copyright file="ICollectionResourceQueryable.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAsyncQueryExecutor.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,16 +15,18 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Remotion.Linq;
 
-namespace Stormpath.SDK.Resource
+namespace Stormpath.SDK.Impl.Linq
 {
-    public interface ICollectionResourceQueryable<T> : IAsyncQueryable<T>
+    internal interface IAsyncQueryExecutor : IQueryExecutor
     {
-        int Offset { get; }
+        Task<IEnumerable<T>> ExecuteCollectionAsync<T>(QueryModel queryModel);
 
-        int Limit { get; }
+        T ExecuteScalarAsync<T>(QueryModel queryModel);
 
-        int Size { get; }
+        T ExecuteSingleAsync<T>(QueryModel queryModel, bool returnDefaultWhenEmpty);
     }
 }

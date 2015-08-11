@@ -1,4 +1,4 @@
-﻿// <copyright file="TestHarness.cs" company="Stormpath, Inc.">
+﻿// <copyright file="LinqTestHarness.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>

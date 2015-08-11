@@ -1,4 +1,4 @@
-﻿// <copyright file="ITenantActions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="AsyncTests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,29 +16,28 @@
 // </remarks>
 
 using System.Threading.Tasks;
-using Stormpath.SDK.Account;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 
-namespace Stormpath.SDK.Tenant
+namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public interface ITenantActions
+    [TestClass]
+    public class MyTestClass
     {
-        Task<IApplication> CreateApplicationAsync(IApplication application);
+        private static string url = "http://f.oo";
+        private static string resource = "bar";
 
-        Task<IApplicationAsyncList> GetApplicationsAsync();
+        [TestMethod]
+        [TestCategory("Impl.Linq")]
+        public async Task FirstAsync()
+        {
+            var harness = LinqTestHarness<IApplication>.Create<IApplication>(url, resource);
+            var applications = harness.Queryable;
 
-        IApplicationAsyncList GetApplications();
+            var first = await applications.FirstAsync();
 
-        Task<IDirectory> CreateDirectoryAsync(IDirectory directory);
-
-        Task<IDirectoryList> GetDirectoriesAsync();
-
-        Task<IAccount> VerifyAccountEmailAsync();
-
-        Task<IAccountList> GetAccountsAsync();
-
-        Task<IGroupList> GetGroupsAsync();
+            first.ShouldNotBe(null);
+        }
     }
 }

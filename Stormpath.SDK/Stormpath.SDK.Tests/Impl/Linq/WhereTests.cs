@@ -20,7 +20,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {

@@ -76,12 +76,13 @@ namespace Stormpath.SDK.Impl.Client
             throw new NotImplementedException();
         }
 
-        IApplicationList ITenantActions.GetApplications()
+        IApplicationAsyncList ITenantActions.GetApplications()
         {
+            // return new CollectionResourceQueryable()
             throw new NotImplementedException();
         }
 
-        Task<IApplicationList> ITenantActions.GetApplicationsAsync()
+        Task<IApplicationAsyncList> ITenantActions.GetApplicationsAsync()
         {
             throw new NotImplementedException();
         }
