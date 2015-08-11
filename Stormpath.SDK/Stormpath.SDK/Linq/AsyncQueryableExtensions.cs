@@ -41,5 +41,21 @@ namespace Stormpath.SDK
 
             return source.CurrentPage.FirstOrDefault();
         }
+
+        public static async Task<T> SingleAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                throw new InvalidOperationException("The sequence has no elements.");
+
+            return source.CurrentPage.Single();
+        }
+
+        public static async Task<T> SingleOrDefaultAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                return default(T);
+
+            return source.CurrentPage.SingleOrDefault();
+        }
     }
 }

@@ -82,7 +82,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             [TestMethod]
             [TestCategory("Impl.Linq")]
-            public async Task FirstOrDefaultAsync_returns_default_when_no_items_exist()
+            public async Task FirstOrDefaultAsync_returns_null_when_no_items_exist()
             {
                 var mockDataStore = new MockDataStore<IAccount>(Enumerable.Empty<IAccount>());
                 var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, mockDataStore);
@@ -90,6 +90,99 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 var notLuke = await harness.Queryable.FirstOrDefaultAsync();
 
                 notLuke.ShouldBe(null);
+            }
+        }
+
+        [TestClass]
+        public class SingleAsync
+        {
+            [TestMethod]
+            [TestCategory("Impl.Linq")]
+            public async Task SingleAsync_returns_one()
+            {
+                var mockDataStore = new MockDataStore<IAccount>(new List<IAccount>()
+                {
+                    new MockAccount() { GivenName = "Han", Surname = "Solo" },
+                });
+                var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, mockDataStore);
+
+                var han = await harness.Queryable.SingleAsync();
+
+                han.Surname.ShouldBe("Solo");
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Linq")]
+            public void SingleAsync_throws_when_more_than_one_item_exists()
+            {
+                var mockDataStore = new MockDataStore<IAccount>(new List<IAccount>()
+                {
+                    new MockAccount() { GivenName = "Han", Surname = "Solo" },
+                    new MockAccount() { GivenName = "Luke", Surname = "Skywalker" }
+                });
+                var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, mockDataStore);
+
+                Should.Throw<InvalidOperationException>(async () =>
+                {
+                    var han = await harness.Queryable.SingleAsync();
+                });
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Linq")]
+            public void SingleAsync_throws_when_no_items_exist()
+            {
+                var mockDataStore = new MockDataStore<IAccount>(Enumerable.Empty<IAccount>());
+                var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, mockDataStore);
+
+                Should.Throw<InvalidOperationException>(async () =>
+                {
+                    var jabba = await harness.Queryable.SingleAsync();
+                });
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Linq")]
+            public async Task SingleOrDefaultAsync_returns_one()
+            {
+                var mockDataStore = new MockDataStore<IAccount>(new List<IAccount>()
+                {
+                    new MockAccount() { GivenName = "Han", Surname = "Solo" },
+                });
+                var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, mockDataStore);
+
+                var han = await harness.Queryable.SingleOrDefaultAsync();
+
+                han.Surname.ShouldBe("Solo");
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Linq")]
+            public void SingleOrDefaultAsync_throws_when_more_than_one_item_exists()
+            {
+                var mockDataStore = new MockDataStore<IAccount>(new List<IAccount>()
+                {
+                    new MockAccount() { GivenName = "Han", Surname = "Solo" },
+                    new MockAccount() { GivenName = "Luke", Surname = "Skywalker" }
+                });
+                var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, mockDataStore);
+
+                Should.Throw<InvalidOperationException>(async () =>
+                {
+                    var han = await harness.Queryable.SingleOrDefaultAsync();
+                });
+            }
+
+            [TestMethod]
+            [TestCategory("Impl.Linq")]
+            public async Task SingleOrDefaultAsync_returns_null_when_no_items_exist()
+            {
+                var mockDataStore = new MockDataStore<IAccount>(Enumerable.Empty<IAccount>());
+                var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, mockDataStore);
+
+                var notHan = await harness.Queryable.SingleOrDefaultAsync();
+
+                notHan.ShouldBe(null);
             }
         }
     }
