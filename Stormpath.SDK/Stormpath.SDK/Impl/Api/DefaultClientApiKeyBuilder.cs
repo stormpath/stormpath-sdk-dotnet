@@ -24,8 +24,13 @@ namespace Stormpath.SDK.Impl.Api
 {
     internal sealed class DefaultClientApiKeyBuilder : IClientApiKeyBuilder
     {
-        private static readonly string DefaultIdPropertyName = "apiKey.id";
-        private static readonly string DefaultSecretPropertyName = "apiKey.secret";
+        // Used when reading values from a properties file
+        private static readonly string DefaultFileIdPropertyName = "apiKey.id";
+        private static readonly string DefaultFileSecretPropertyName = "apiKey.secret";
+
+        // Used when retrieving values directly from environment variables or app.config
+        private static readonly string DefaultDirectIdPropertyName = "STORMPATH_API_KEY_ID";
+        private static readonly string DefaultDirectSecretPropertyName = "STORMPATH_API_KEY_SECRET";
 
         private static readonly string DefaultApiKeyPropertiesFileLocation =
             System.IO.Path.Combine(Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%"), ".stormpath\\", "apiKey.properties");
@@ -35,8 +40,8 @@ namespace Stormpath.SDK.Impl.Api
         private string apiKeySecret;
         private System.IO.Stream apiKeyFileInputStream;
         private string apiKeyFilePath;
-        private string apiKeyIdPropertyName = DefaultIdPropertyName;
-        private string apiKeySecretPropertyName = DefaultSecretPropertyName;
+        private string apiKeyIdPropertyName;
+        private string apiKeySecretPropertyName;
 
         // Wrappers for static .NET Framework calls (for easier unit testing)
         private readonly IConfigurationManager config;
@@ -90,21 +95,21 @@ namespace Stormpath.SDK.Impl.Api
         {
             // 1. Try to load default API key properties file. Lowest priority
             var defaultProperties = GetDefaultApiKeyFileProperties();
-            string id = defaultProperties?.GetProperty(this.apiKeyIdPropertyName);
-            string secret = defaultProperties?.GetProperty(this.apiKeySecretPropertyName);
+            string id = defaultProperties?.GetProperty(this.apiKeyIdPropertyName ?? DefaultFileIdPropertyName);
+            string secret = defaultProperties?.GetProperty(this.apiKeySecretPropertyName ?? DefaultFileSecretPropertyName);
 
             // 2. Try file location specified by environment variables
             var envFileLocation = this.env.GetEnvironmentVariable("STORMPATH_API_KEY_FILE");
             if (!string.IsNullOrEmpty(envFileLocation))
             {
                 var envProperties = GetPropertiesFromEnvironmentVariableFileLocation(envFileLocation);
-                id = envProperties?.GetProperty(this.apiKeyIdPropertyName, defaultValue: id);
-                secret = envProperties?.GetProperty(this.apiKeySecretPropertyName, defaultValue: secret);
+                id = envProperties?.GetProperty(this.apiKeyIdPropertyName ?? DefaultFileIdPropertyName, defaultValue: id);
+                secret = envProperties?.GetProperty(this.apiKeySecretPropertyName ?? DefaultFileSecretPropertyName, defaultValue: secret);
             }
 
             // 3. Try environment variables directly
-            var idFromEnvironment = this.env.GetEnvironmentVariable("STORMPATH_API_KEY_ID");
-            var secretFromEnvironment = this.env.GetEnvironmentVariable("STORMPATH_API_KEY_SECRET");
+            var idFromEnvironment = this.env.GetEnvironmentVariable(this.apiKeyIdPropertyName ?? DefaultDirectIdPropertyName);
+            var secretFromEnvironment = this.env.GetEnvironmentVariable(this.apiKeySecretPropertyName ?? DefaultDirectSecretPropertyName);
             bool didRetrieveValuesFromEnvironment = !string.IsNullOrEmpty(idFromEnvironment) && !string.IsNullOrEmpty(secretFromEnvironment);
             if (didRetrieveValuesFromEnvironment)
             {
@@ -117,13 +122,13 @@ namespace Stormpath.SDK.Impl.Api
             if (!string.IsNullOrEmpty(appConfigFileLocation))
             {
                 var appConfigProperties = GetPropertiesFromAppConfigFileLocation(appConfigFileLocation);
-                id = appConfigProperties?.GetProperty(this.apiKeyIdPropertyName, defaultValue: id);
-                secret = appConfigProperties?.GetProperty(this.apiKeySecretPropertyName, defaultValue: secret);
+                id = appConfigProperties?.GetProperty(this.apiKeyIdPropertyName ?? DefaultFileIdPropertyName, defaultValue: id);
+                secret = appConfigProperties?.GetProperty(this.apiKeySecretPropertyName ?? DefaultFileSecretPropertyName, defaultValue: secret);
             }
 
             // 5. Try web.config/app.config keys directly
-            var idFromAppConfig = this.config.AppSettings?["STORMPATH_API_KEY_ID"];
-            var secretFromAppConfig = this.config.AppSettings?["STORMPATH_API_KEY_SECRET"];
+            var idFromAppConfig = this.config.AppSettings?[this.apiKeyIdPropertyName ?? DefaultDirectIdPropertyName];
+            var secretFromAppConfig = this.config.AppSettings?[this.apiKeySecretPropertyName ?? DefaultDirectSecretPropertyName];
             bool didRetrieveValuesFromAppConfig = !string.IsNullOrEmpty(idFromAppConfig) && !string.IsNullOrEmpty(secretFromAppConfig);
             if (didRetrieveValuesFromAppConfig)
             {
@@ -135,21 +140,21 @@ namespace Stormpath.SDK.Impl.Api
             if (!string.IsNullOrEmpty(this.apiKeyFilePath))
             {
                 var fileProperties = GetPropertiesFromFile();
-                id = fileProperties?.GetProperty(this.apiKeyIdPropertyName, defaultValue: id);
-                secret = fileProperties?.GetProperty(this.apiKeySecretPropertyName, defaultValue: secret);
+                id = fileProperties?.GetProperty(this.apiKeyIdPropertyName ?? DefaultFileIdPropertyName, defaultValue: id);
+                secret = fileProperties?.GetProperty(this.apiKeySecretPropertyName ?? DefaultFileSecretPropertyName, defaultValue: secret);
             }
 
             // 7. Try an input stream that was passed to us
             if (this.apiKeyFileInputStream != null)
             {
                 var streamProperties = GetPropertiesFromStream();
-                id = streamProperties?.GetProperty(this.apiKeyIdPropertyName, defaultValue: id);
-                secret = streamProperties?.GetProperty(this.apiKeySecretPropertyName, defaultValue: secret);
+                id = streamProperties?.GetProperty(this.apiKeyIdPropertyName ?? DefaultFileIdPropertyName, defaultValue: id);
+                secret = streamProperties?.GetProperty(this.apiKeySecretPropertyName ?? DefaultFileSecretPropertyName, defaultValue: secret);
             }
 
             // 8. Explicitly-configured values always take precedence
-            id = this.apiKeyId.OrIfEmptyUse(id);
-            secret = this.apiKeySecret.OrIfEmptyUse(secret);
+            id = this.apiKeyId ?? id;
+            secret = this.apiKeySecret ?? secret;
 
             if (string.IsNullOrEmpty(id))
             {

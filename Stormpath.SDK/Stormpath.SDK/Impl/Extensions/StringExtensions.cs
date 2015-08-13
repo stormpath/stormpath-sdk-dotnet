@@ -19,13 +19,10 @@ namespace Stormpath.SDK.Impl.Extensions
 {
     internal static class StringExtensions
     {
-        public static string OrIfEmptyUse(this string source, string defaultValue)
+        public static string Nullable(this string source)
         {
             if (string.IsNullOrEmpty(source))
-            {
-                return defaultValue;
-            }
-
+                return null;
             return source;
         }
     }
