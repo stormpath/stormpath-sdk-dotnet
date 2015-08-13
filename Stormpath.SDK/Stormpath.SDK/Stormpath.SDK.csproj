@@ -102,6 +102,7 @@
     <Compile Include="Impl\Linq\StaticNameTranslators\FieldNameTranslator.cs" />
     <Compile Include="Impl\Linq\StaticNameTranslators\LinkMethodNameTranslator.cs" />
     <Compile Include="Impl\Linq\StaticNameTranslators\StringHelperMethodNameTranslator.cs" />
+    <Compile Include="Impl\Linq\Sync\SyncCollectionEnumeratorAdapter.cs" />
     <Compile Include="Impl\Resource\CollectionResourceQueryable.cs" />
     <Compile Include="Impl\Resource\CollectionResponsePageDto.cs" />
     <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />

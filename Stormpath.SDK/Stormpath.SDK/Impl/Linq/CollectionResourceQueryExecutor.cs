@@ -21,6 +21,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Remotion.Linq;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Linq
 {
@@ -41,12 +42,14 @@ namespace Stormpath.SDK.Impl.Linq
 
         public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
         {
-            var arguments = QueryModelToArguments(queryModel);
+            var arguments = ValidateAndGenerateArguments(queryModel);
+            var asyncCollection = new CollectionResourceQueryable<T>(this.Url, this.Resource, this.DataStore);
+            var adapter = new Sync.SyncCollectionEnumeratorAdapter<T>(asyncCollection);
 
-            throw new NotImplementedException();
+            return adapter;
         }
 
-        private static string QueryModelToArguments(QueryModel queryModel)
+        private static string ValidateAndGenerateArguments(QueryModel queryModel)
         {
             var model = CollectionResourceQueryModelVisitor.GenerateRequestModel(queryModel);
             var arguments = CollectionResourceRequestModelCompiler.GetArguments(model);

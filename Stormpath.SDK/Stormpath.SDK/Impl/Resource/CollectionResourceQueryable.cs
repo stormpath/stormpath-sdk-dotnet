@@ -72,7 +72,6 @@ namespace Stormpath.SDK.Impl.Resource
             this.expression = expression;
         }
 
-        // (This is used by Relinq)
         private static IQueryExecutor CreateQueryExecutor(string url, string resource, IDataStore dataStore)
         {
             return new CollectionResourceQueryExecutor(url, resource, dataStore);

@@ -70,6 +70,7 @@
     <Compile Include="Impl\Client\DefaultClientBuilderTests.cs" />
     <Compile Include="Impl\ExtensionsTests\StringExtensionsTests.cs" />
     <Compile Include="Impl\Linq\AsyncTests.cs" />
+    <Compile Include="Impl\Linq\SyncAdapterTests.cs" />
     <Compile Include="Mocks\FakeAccounts.cs" />
     <Compile Include="Mocks\FakeAccount.cs" />
     <Compile Include="Mocks\FakeDataStore.cs" />
