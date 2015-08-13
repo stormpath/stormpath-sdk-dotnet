@@ -1,8 +1,8 @@
 language: csharp
-solution: Stormpath.SDK.sln
+solution: ./Stormpath.SDK/Stormpath.SDK.sln
 install:
   - nuget restore ./Stormpath.SDK/Stormpath.SDK.sln
   - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=Release Stormpath-SDK.sln
+  - xbuild /p:Configuration=Release ./Stormpath.SDK/Stormpath-SDK.sln
   - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./Stormpath.SDK/Stormpath.SDK.Tests/bin/Release/Stormpath.SDK.Tests.dll
