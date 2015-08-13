@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/stormpath/stormpath-sdk-csharp.svg)](https://travis-ci.org/stormpath/stormpath-sdk-csharp)
+
 # Stormpath .NET SDK #
 
 *An advanced, reliable and easy-to-use user management API for .NET by security experts*
