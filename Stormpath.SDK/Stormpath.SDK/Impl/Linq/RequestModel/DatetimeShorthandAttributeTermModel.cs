@@ -17,7 +17,7 @@
 
 namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
-    internal class DatetimeShorthandAttributeTermModel : AbstractAttributeTermModel
+    internal sealed class DatetimeShorthandAttributeTermModel : AbstractAttributeTermModel
     {
         public DatetimeShorthandAttributeTermModel(
             string field,

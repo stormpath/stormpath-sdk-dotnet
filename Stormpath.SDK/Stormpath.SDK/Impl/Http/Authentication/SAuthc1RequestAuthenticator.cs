@@ -20,7 +20,7 @@ using Stormpath.SDK.Api;
 
 namespace Stormpath.SDK.Impl.Http.Authentication
 {
-    internal class SAuthc1RequestAuthenticator : IRequestAuthenticator
+    internal sealed class SAuthc1RequestAuthenticator : IRequestAuthenticator
     {
         // TODO
         void IRequestAuthenticator.Authenticate(IRequest request, IClientApiKey apiKey)

@@ -17,7 +17,7 @@
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    internal class FileWrapper : IFile
+    internal sealed class FileWrapper : IFile
     {
         public string ReadAllText(string path)
         {

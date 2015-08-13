@@ -25,7 +25,7 @@ using Stormpath.SDK.Impl.Linq.StaticNameTranslators;
 
 namespace Stormpath.SDK.Impl.Linq
 {
-    internal class CollectionResourceWhereExpressionVisitor : ThrowingExpressionTreeVisitor
+    internal sealed class CollectionResourceWhereExpressionVisitor : ThrowingExpressionTreeVisitor
     {
         private WhereAttributeTermInProgressModel inProgress = new WhereAttributeTermInProgressModel();
 

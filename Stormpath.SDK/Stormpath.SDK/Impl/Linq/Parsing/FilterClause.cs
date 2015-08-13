@@ -21,7 +21,7 @@ using Remotion.Linq.Clauses;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
 {
-    internal class FilterClause : WhereClause
+    internal sealed class FilterClause : WhereClause
     {
         public FilterClause(Expression predicate)
             : base(predicate)

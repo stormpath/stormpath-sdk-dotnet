@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.Linq.StaticNameTranslators
 {
-    public static class FieldNameTranslator
+    internal static class FieldNameTranslator
     {
         private static readonly Dictionary<string, string> ValidNames = new Dictionary<string, string>()
             {

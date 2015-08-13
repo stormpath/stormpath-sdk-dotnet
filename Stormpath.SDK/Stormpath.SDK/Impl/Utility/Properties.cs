@@ -21,7 +21,7 @@ using System.Linq;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    internal class Properties
+    internal sealed class Properties
     {
         private static readonly char[] IgnoreLinesStartingWith = { '#', '!' };
         private readonly IDictionary<string, string> props;

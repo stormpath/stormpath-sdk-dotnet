@@ -222,7 +222,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 // so two calls will return 25 items, and the 3rd will return 1. However, ToListAsync
                 // will make another call to the server, just to make sure another item hasn't been added
                 // to the end while we were enumerating.
-                var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat<IAccount>(new FakeAccount(), 51));
+                var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 51));
                 var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, fakeDataStore);
 
                 var longList = await harness.Queryable.ToListAsync();

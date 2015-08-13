@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
-    internal class CollectionResourceRequestModel
+    internal sealed class CollectionResourceRequestModel
     {
         public int? Offset { get; set; }
 

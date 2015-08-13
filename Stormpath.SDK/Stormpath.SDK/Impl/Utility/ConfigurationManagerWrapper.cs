@@ -21,7 +21,7 @@ using System.Configuration;
 namespace Stormpath.SDK.Impl.Utility
 {
     // A simple wrapper around ConfigurationManager, used for injecting an otherwise sadly static object
-    internal class ConfigurationManagerWrapper : IConfigurationManager
+    internal sealed class ConfigurationManagerWrapper : IConfigurationManager
     {
         public NameValueCollection AppSettings
         {

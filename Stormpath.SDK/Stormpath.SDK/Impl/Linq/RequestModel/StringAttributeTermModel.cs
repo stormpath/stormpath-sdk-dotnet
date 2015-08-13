@@ -17,7 +17,7 @@
 
 namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
-    internal class StringAttributeTermModel : AbstractAttributeTermModel
+    internal sealed class StringAttributeTermModel : AbstractAttributeTermModel
     {
         public StringAttributeTermModel(string field, string value, StringAttributeMatchingType type)
         {

@@ -23,7 +23,7 @@ using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
 {
-    public class FilterExpressionNode : MethodCallExpressionNodeBase
+    internal sealed class FilterExpressionNode : MethodCallExpressionNodeBase
     {
         private readonly ConstantExpression filterTerm;
 

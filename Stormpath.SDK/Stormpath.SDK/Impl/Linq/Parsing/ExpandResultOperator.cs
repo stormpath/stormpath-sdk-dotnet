@@ -24,7 +24,7 @@ using Remotion.Linq.Clauses.StreamedData;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
 {
-    internal class ExpandResultOperator : SequenceTypePreservingResultOperatorBase
+    internal sealed class ExpandResultOperator : SequenceTypePreservingResultOperatorBase
     {
         public ExpandResultOperator(Expression keySelector, ConstantExpression offset, ConstantExpression limit)
         {

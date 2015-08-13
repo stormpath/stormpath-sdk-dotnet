@@ -17,7 +17,7 @@
 
 namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
-    public enum StringAttributeMatchingType
+    internal enum StringAttributeMatchingType
     {
         /// <summary>
         /// Finds matches via direct case-insensitive search.

@@ -31,6 +31,7 @@ namespace Stormpath.SDK.Impl.Linq.Sync
         public SyncCollectionEnumeratorAdapter(ICollectionResourceQueryable<T> asyncCollection, CancellationToken cancellationToken = default(CancellationToken))
         {
             this.asyncCollection = asyncCollection;
+            this.cancellationToken = cancellationToken;
         }
 
         public IEnumerator<T> GetEnumerator()

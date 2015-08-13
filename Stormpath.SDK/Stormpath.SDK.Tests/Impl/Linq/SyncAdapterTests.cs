@@ -15,15 +15,11 @@
 // limitations under the License.
 // </remarks>
 
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Mocks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Shouldly;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {

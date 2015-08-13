@@ -21,7 +21,7 @@ using Stormpath.SDK.Client;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    internal class DefaultClientBuilder : IClientBuilder
+    internal sealed class DefaultClientBuilder : IClientBuilder
     {
         private static readonly int DefaultConnectionTimeout = 20 * 1000;
 

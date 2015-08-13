@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal class CollectionResponsePageDto<T>
+    internal sealed class CollectionResponsePageDto<T>
     {
         public string Href { get; set; }
 

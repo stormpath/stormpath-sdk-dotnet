@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    internal class GenericComparer<T> : IEqualityComparer<T>
+    internal sealed class GenericComparer<T> : IEqualityComparer<T>
     {
         private readonly Func<T, T, bool> areEqualFunc;
         private readonly Func<T, int> hashFunc;

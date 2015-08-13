@@ -27,7 +27,7 @@ using Stormpath.SDK.Impl.Linq.StaticNameTranslators;
 
 namespace Stormpath.SDK.Impl.Linq
 {
-    internal class CollectionResourceQueryModelVisitor : QueryModelVisitorBase
+    internal sealed class CollectionResourceQueryModelVisitor : QueryModelVisitorBase
     {
         public CollectionResourceRequestModel ParsedModel { get; private set; } = new CollectionResourceRequestModel();
 

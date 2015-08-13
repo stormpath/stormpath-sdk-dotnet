@@ -19,7 +19,7 @@ using System;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    internal class EnvironmentWrapper : IEnvironment
+    internal sealed class EnvironmentWrapper : IEnvironment
     {
         public string ExpandEnvironmentVariables(string name)
         {

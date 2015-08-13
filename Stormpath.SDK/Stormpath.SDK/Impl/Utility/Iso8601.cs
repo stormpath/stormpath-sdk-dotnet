@@ -19,7 +19,7 @@ using System;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    public static class Iso8601
+    internal static class Iso8601
     {
         public static string Format(DateTimeOffset dto)
         {

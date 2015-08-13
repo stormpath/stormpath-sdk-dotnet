@@ -19,7 +19,7 @@ using System;
 
 namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
-    internal class DatetimeAttributeTermModel : AbstractAttributeTermModel
+    internal sealed class DatetimeAttributeTermModel : AbstractAttributeTermModel
     {
         public DatetimeAttributeTermModel(
             string field,

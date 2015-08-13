@@ -17,7 +17,7 @@
 
 namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
-    internal class ExpansionTerm
+    internal sealed class ExpansionTerm
     {
         public ExpansionTerm(string field, int? offset = null, int? limit = null)
         {

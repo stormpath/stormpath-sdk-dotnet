@@ -25,7 +25,7 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Linq
 {
-    internal class CollectionResourceQueryExecutor : IQueryExecutor
+    internal sealed class CollectionResourceQueryExecutor : IQueryExecutor
     {
         public CollectionResourceQueryExecutor(string url, string resource, IDataStore dataStore)
         {

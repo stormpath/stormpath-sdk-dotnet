@@ -19,7 +19,7 @@ using System;
 
 namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
-    internal class WhereAttributeTermInProgressModel
+    internal sealed class WhereAttributeTermInProgressModel
     {
         public string Field { get; set; }
 

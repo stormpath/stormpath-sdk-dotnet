@@ -17,7 +17,7 @@
 
 namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
-    internal class OrderByModel
+    internal sealed class OrderByModel
     {
         public OrderByModel(string field, bool descending)
         {

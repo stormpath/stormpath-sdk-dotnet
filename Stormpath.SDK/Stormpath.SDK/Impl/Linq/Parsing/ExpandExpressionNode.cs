@@ -23,7 +23,7 @@ using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
 {
-    internal class ExpandExpressionNode : ResultOperatorExpressionNodeBase
+    internal sealed class ExpandExpressionNode : ResultOperatorExpressionNodeBase
     {
         private readonly LambdaExpression keySelectorLambda;
         private readonly ConstantExpression offset = null;
