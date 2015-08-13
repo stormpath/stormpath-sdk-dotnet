@@ -1,4 +1,4 @@
-﻿// <copyright file="MockAccount.cs" company="Stormpath, Inc.">
+﻿// <copyright file="FakeAccount.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -21,7 +21,7 @@ using Stormpath.SDK.Account;
 
 namespace Stormpath.SDK.Tests.Mocks
 {
-    public class MockAccount : IAccount
+    public class FakeAccount : IAccount
     {
         public string Href { get; set; }
 

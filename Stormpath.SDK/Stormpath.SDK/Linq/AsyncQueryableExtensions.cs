@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,36 +27,91 @@ namespace Stormpath.SDK
 {
     public static class AsyncQueryableExtensions
     {
-        public static async Task<T> FirstAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<T> FirstAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            var asyncSource = source as IAsyncQueryable<T>;
+            if (asyncSource == null)
+                throw new InvalidOperationException("This queryable does not support asynchronous operations.");
+
+            if (!await asyncSource.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 throw new InvalidOperationException("The sequence has no elements.");
 
-            return source.CurrentPage.First();
+            return asyncSource.CurrentPage.First();
         }
 
-        public static async Task<T> FirstOrDefaultAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<T> FirstOrDefaultAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            var asyncSource = source as IAsyncQueryable<T>;
+            if (asyncSource == null)
+                throw new InvalidOperationException("This queryable does not support asynchronous operations.");
+
+            if (!await asyncSource.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 return default(T);
 
-            return source.CurrentPage.FirstOrDefault();
+            return asyncSource.CurrentPage.FirstOrDefault();
         }
 
-        public static async Task<T> SingleAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<T> SingleAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            var asyncSource = source as IAsyncQueryable<T>;
+            if (asyncSource == null)
+                throw new InvalidOperationException("This queryable does not support asynchronous operations.");
+
+            if (!await asyncSource.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 throw new InvalidOperationException("The sequence has no elements.");
 
-            return source.CurrentPage.Single();
+            return asyncSource.CurrentPage.Single();
         }
 
-        public static async Task<T> SingleOrDefaultAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<T> SingleOrDefaultAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            var asyncSource = source as IAsyncQueryable<T>;
+            if (asyncSource == null)
+                throw new InvalidOperationException("This queryable does not support asynchronous operations.");
+
+            if (!await asyncSource.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 return default(T);
 
-            return source.CurrentPage.SingleOrDefault();
+            return asyncSource.CurrentPage.SingleOrDefault();
+        }
+
+        public static async Task<List<T>> ToListAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var asyncSource = source as IAsyncQueryable<T>;
+            if (asyncSource == null)
+                throw new InvalidOperationException("This queryable does not support asynchronous operations.");
+
+            var results = new List<T>();
+
+            while (await asyncSource.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            {
+                results.AddRange(asyncSource.CurrentPage);
+            }
+
+            return results;
+        }
+
+        public static Task ForEachAsync<T>(this IQueryable<T> source, Action<T> @delegate, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return source.ForEachAsync((item, _) => @delegate(item), cancellationToken);
+        }
+
+        public static async Task ForEachAsync<T>(this IQueryable<T> source, Action<T, int> @delegate, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var asyncSource = source as IAsyncQueryable<T>;
+            if (asyncSource == null)
+                throw new InvalidOperationException("This queryable does not support asynchronous operations.");
+
+            var index = 0;
+
+            while (await asyncSource.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            {
+                foreach (var item in asyncSource.CurrentPage)
+                {
+                    @delegate(item, index++);
+                    cancellationToken.ThrowIfCancellationRequested();
+                }
+            }
         }
     }
 }

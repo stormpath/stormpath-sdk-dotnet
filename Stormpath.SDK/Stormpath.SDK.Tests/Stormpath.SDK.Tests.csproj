@@ -70,11 +70,12 @@
     <Compile Include="Impl\Client\DefaultClientBuilderTests.cs" />
     <Compile Include="Impl\ExtensionsTests\StringExtensionsTests.cs" />
     <Compile Include="Impl\Linq\AsyncTests.cs" />
-    <Compile Include="Mocks\MockAccount.cs" />
-    <Compile Include="Mocks\MockDataStore.cs" />
+    <Compile Include="Mocks\FakeAccounts.cs" />
+    <Compile Include="Mocks\FakeAccount.cs" />
+    <Compile Include="Mocks\FakeDataStore.cs" />
     <Compile Include="Impl\Resource\CollectionResourceQueryableTests.cs" />
     <Compile Include="Impl\Linq\CollectionResourceRequestModelTests.cs" />
-    <Compile Include="Impl\Linq\LinqAssertExtensions.cs" />
+    <Compile Include="LinqAssertExtensions.cs" />
     <Compile Include="Impl\Linq\WithinExtensionTests.cs" />
     <Compile Include="Impl\Linq\OffsetTests.cs" />
     <Compile Include="Impl\Linq\UnsupportedFilterTests.cs" />

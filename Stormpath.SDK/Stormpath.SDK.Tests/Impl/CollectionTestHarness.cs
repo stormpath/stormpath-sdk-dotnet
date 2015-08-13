@@ -16,7 +16,6 @@
 // </remarks>
 
 using NSubstitute;
-using Shouldly;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
@@ -33,11 +32,6 @@ namespace Stormpath.SDK.Tests.Impl
         public string Resource { get; private set; }
 
         public ICollectionResourceQueryable<T> Queryable { get; private set; }
-
-        public void GeneratedArgumentsWere(string arguments)
-        {
-            Queryable.CurrentHref.ShouldBe($"{Url}/{Resource}?{arguments}");
-        }
 
         internal static CollectionTestHarness<TType> Create<TType>(string url, string resource, IDataStore mockDataStore = null)
             where TType : IResource

@@ -1,4 +1,4 @@
-﻿// <copyright file="CollectionResourceQueryAsyncExecutor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="CollectionResourceQueryExecutor.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -24,9 +24,9 @@ using Stormpath.SDK.Impl.DataStore;
 
 namespace Stormpath.SDK.Impl.Linq
 {
-    internal class CollectionResourceQueryAsyncExecutor : IAsyncQueryExecutor
+    internal class CollectionResourceQueryExecutor : IQueryExecutor
     {
-        public CollectionResourceQueryAsyncExecutor(string url, string resource, IDataStore dataStore)
+        public CollectionResourceQueryExecutor(string url, string resource, IDataStore dataStore)
         {
             this.Url = url;
             this.Resource = resource;
@@ -41,14 +41,8 @@ namespace Stormpath.SDK.Impl.Linq
 
         public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<T> ExecuteAsync<T>(QueryModel queryModel)
-        {
             var arguments = QueryModelToArguments(queryModel);
 
-            // return dataStore.GetCollectionAsync<T>($"{url}/{resource}?{arguments}");
             throw new NotImplementedException();
         }
 
@@ -70,21 +64,6 @@ namespace Stormpath.SDK.Impl.Linq
             return returnDefaultWhenEmpty
                 ? ExecuteCollection<T>(queryModel).SingleOrDefault()
                 : ExecuteCollection<T>(queryModel).Single();
-        }
-
-        public Task<IEnumerable<T>> ExecuteCollectionAsync<T>(QueryModel queryModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T ExecuteScalarAsync<T>(QueryModel queryModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T ExecuteSingleAsync<T>(QueryModel queryModel, bool returnDefaultWhenEmpty)
-        {
-            throw new NotImplementedException();
         }
     }
 }

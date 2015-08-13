@@ -15,12 +15,15 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tests.Mocks;
 
-namespace Stormpath.SDK.Tests.Impl.Linq
+namespace Stormpath.SDK.Tests
 {
     public static class LinqAssertExtensions
     {
@@ -31,6 +34,19 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 Assert.Fail("This queryable is not an ICollectionResourceQueryable.");
 
             resourceQueryable.CurrentHref.ShouldBe($"{url}/{resource}?{arguments}");
+        }
+
+        // The same thing as above, but for testing whether a FakeDataStore received a particular URL call
+        internal static void WasCalledWithArguments<T>(this IDataStore ds, string url, string resource, string arguments)
+        {
+            var asFake = ds as FakeDataStore<T>;
+            if (asFake == null)
+                throw new ApplicationException("Only works on FakeDataStore.");
+
+            if (string.IsNullOrEmpty(arguments))
+                asFake.GetCalls().ShouldContain($"{url}/{resource}");
+            else
+                asFake.GetCalls().ShouldContain($"{url}/{resource}?{arguments}");
         }
     }
 }

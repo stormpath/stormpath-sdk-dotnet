@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stormpath.SDK.Account;
 

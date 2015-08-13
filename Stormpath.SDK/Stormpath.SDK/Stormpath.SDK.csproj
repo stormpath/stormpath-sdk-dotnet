@@ -79,13 +79,9 @@
     <Compile Include="Impl\Http\Authentication\IRequestAuthenticator.cs" />
     <Compile Include="Impl\Http\Authentication\SAuthc1RequestAuthenticator.cs" />
     <Compile Include="Impl\Http\IRequest.cs" />
-    <Compile Include="Impl\Linq\AsyncQueryableBase.cs" />
-    <Compile Include="Impl\Linq\AsyncQueryProviderWrapper.cs" />
-    <Compile Include="Impl\Linq\CollectionResourceQueryAsyncExecutor.cs" />
+    <Compile Include="Impl\Linq\CollectionResourceQueryExecutor.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryModelVisitor.cs" />
     <Compile Include="Impl\Linq\CollectionResourceWhereExpressionVisitor.cs" />
-    <Compile Include="Impl\Linq\IAsyncQueryExecutor.cs" />
-    <Compile Include="Impl\Linq\IAsyncQueryProvider.cs" />
     <Compile Include="Impl\Linq\Parsing\ExpandExpressionNode.cs" />
     <Compile Include="Impl\Linq\Parsing\ExpandResultOperator.cs" />
     <Compile Include="Impl\Linq\Parsing\ExtendedQueryParser.cs" />
