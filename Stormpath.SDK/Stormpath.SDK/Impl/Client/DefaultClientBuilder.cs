@@ -32,7 +32,8 @@ namespace Stormpath.SDK.Impl.Client
 
         IClientBuilder IClientBuilder.SetApiKey(IClientApiKey apiKey)
         {
-            if (apiKey == null) throw new ArgumentNullException("API Key cannot be null.");
+            if (apiKey == null)
+                throw new ArgumentNullException("API Key cannot be null.");
 
             this.apiKey = apiKey;
             return this;
@@ -46,7 +47,8 @@ namespace Stormpath.SDK.Impl.Client
 
         IClientBuilder IClientBuilder.SetBaseUrl(string baseUrl)
         {
-            if (string.IsNullOrEmpty(baseUrl)) throw new ArgumentNullException("Base URL cannot be empty.");
+            if (string.IsNullOrEmpty(baseUrl))
+                throw new ArgumentNullException("Base URL cannot be empty.");
 
             this.baseUrl = baseUrl;
             return this;
@@ -54,7 +56,8 @@ namespace Stormpath.SDK.Impl.Client
 
         IClientBuilder IClientBuilder.SetConnectionTimeout(int timeout)
         {
-            if (timeout < 0) throw new ArgumentOutOfRangeException("Timeout cannot be negative.");
+            if (timeout < 0)
+                throw new ArgumentOutOfRangeException("Timeout cannot be negative.");
 
             this.connectionTimeout = timeout;
             return this;
@@ -62,7 +65,8 @@ namespace Stormpath.SDK.Impl.Client
 
         IClient IClientBuilder.Build()
         {
-            if (this.apiKey == null || !this.apiKey.IsValid()) throw new ArgumentException("API Key is not valid or has not been set. Use ClientApiKeys.Builder() to construct one.");
+            if (this.apiKey == null || !this.apiKey.IsValid())
+                throw new ArgumentException("API Key is not valid or has not been set. Use ClientApiKeys.Builder() to construct one.");
 
             return new DefaultClient(this.apiKey, this.baseUrl, this.authenticationScheme, this.connectionTimeout);
         }

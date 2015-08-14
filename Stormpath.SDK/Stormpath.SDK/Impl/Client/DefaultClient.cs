@@ -35,9 +35,12 @@ namespace Stormpath.SDK.Impl.Client
 
         public DefaultClient(IClientApiKey apiKey, string baseUrl, AuthenticationScheme authenticationScheme, int timeout)
         {
-            if (apiKey == null || !apiKey.IsValid()) throw new ArgumentException("API Key is not valid.");
-            if (string.IsNullOrEmpty(baseUrl)) throw new ArgumentNullException("Base URL cannot be empty.");
-            if (timeout < 0) throw new ArgumentException("Timeout cannot be negative.");
+            if (apiKey == null || !apiKey.IsValid())
+                throw new ArgumentException("API Key is not valid.");
+            if (string.IsNullOrEmpty(baseUrl))
+                throw new ArgumentNullException("Base URL cannot be empty.");
+            if (timeout < 0)
+                throw new ArgumentException("Timeout cannot be negative.");
 
             this.baseUrl = baseUrl;
             this.authScheme = authenticationScheme;

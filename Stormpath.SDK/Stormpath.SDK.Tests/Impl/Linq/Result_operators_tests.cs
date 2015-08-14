@@ -1,4 +1,4 @@
-﻿// <copyright file="Linq_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Result_operators_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,23 +15,22 @@
 // limitations under the License.
 // </remarks>
 
+using Stormpath.SDK.Tests.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Linq_tests
+    public class Result_operators_tests
     {
-        private readonly string _url = "http://f.oo";
-        private readonly string _resource = "bar";
-
-        protected string url
+        [Fact]
+        public void First_generates_proper_arguments()
         {
-            get { return _url; }
-        }
-
-        protected string resource
-        {
-            get { return _resource; }
+            Assertly.Fail("todo");
         }
     }
 }

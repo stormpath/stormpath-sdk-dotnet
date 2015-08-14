@@ -74,7 +74,8 @@ namespace Stormpath.SDK.Shared
             return this.DisplayName;
         }
 
-        public static IEnumerable<T> GetAll<T>() where T : Enumeration, new()
+        public static IEnumerable<T> GetAll<T>()
+            where T : Enumeration, new()
         {
             var type = typeof(T);
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);

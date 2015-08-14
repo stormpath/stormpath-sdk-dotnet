@@ -1,4 +1,4 @@
-﻿// <copyright file="Offset.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Filter_extension.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -21,25 +21,35 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Offset : Linq_tests
+    public class Filter_extension_tests : Linq_tests
     {
         private CollectionTestHarness<IAccount> harness;
 
-        public Offset() : base()
+        public Filter_extension_tests() : base()
         {
-            harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource);
+            harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
         }
 
         [Fact]
         public void Filter_with_simple_parameter()
         {
-            Assertly.Fail("todo");
+            // Act
+            var query = harness.Queryable
+                .Filter("Joe");
+
+            // Assert
+            query.GeneratedArgumentsWere(url, resource, "q=Joe");
         }
 
         [Fact]
         public void Filter_multiple_calls_are_LIFO()
         {
-            Assertly.Fail("todo");
+            var query = harness.Queryable
+                .Filter("Joe")
+                .Filter("Joey");
+
+            // Expected behavior: the last call will be kept
+            query.GeneratedArgumentsWere(url, resource, "q=Joey");
         }
     }
 }

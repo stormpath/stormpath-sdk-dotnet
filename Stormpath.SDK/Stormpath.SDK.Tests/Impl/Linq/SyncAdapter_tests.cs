@@ -1,4 +1,4 @@
-﻿// <copyright file="Linq_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SyncAdapter_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,23 +15,29 @@
 // limitations under the License.
 // </remarks>
 
+using System.Linq;
+using Shouldly;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Linq_tests
+    public class SyncAdapter_tests : Linq_tests
     {
-        private readonly string _url = "http://f.oo";
-        private readonly string _resource = "bar";
-
-        protected string url
+        [Fact]
+        public void ToList_synchronously_iterates_thru_collection()
         {
-            get { return _url; }
-        }
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource,
+                new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.DarthVader, 52)));
 
-        protected string resource
-        {
-            get { return _resource; }
+            var items = harness.Queryable
+                .Skip(10)
+                .Take(5)
+                .ToList();
+
+            items.Count.ShouldBe(42);
         }
     }
 }

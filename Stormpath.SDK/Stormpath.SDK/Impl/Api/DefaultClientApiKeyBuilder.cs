@@ -35,6 +35,11 @@ namespace Stormpath.SDK.Impl.Api
         private static readonly string DefaultApiKeyPropertiesFileLocation =
             System.IO.Path.Combine(Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%"), ".stormpath\\", "apiKey.properties");
 
+        // Wrappers for static .NET Framework calls (for easier unit testing)
+        private readonly IConfigurationManager config;
+        private readonly IEnvironment env;
+        private readonly IFile file;
+
         // Instance fields
         private string apiKeyId;
         private string apiKeySecret;
@@ -42,11 +47,6 @@ namespace Stormpath.SDK.Impl.Api
         private string apiKeyFilePath;
         private string apiKeyIdPropertyName;
         private string apiKeySecretPropertyName;
-
-        // Wrappers for static .NET Framework calls (for easier unit testing)
-        private readonly IConfigurationManager config;
-        private readonly IEnvironment env;
-        private readonly IFile file;
 
         public DefaultClientApiKeyBuilder(IConfigurationManager configuration, IEnvironment environment, IFile file)
         {
@@ -250,7 +250,8 @@ namespace Stormpath.SDK.Impl.Api
 
         private Properties GetPropertiesFromStream()
         {
-            if (!this.apiKeyFileInputStream.CanRead) return null;
+            if (!this.apiKeyFileInputStream.CanRead)
+                return null;
 
             try
             {

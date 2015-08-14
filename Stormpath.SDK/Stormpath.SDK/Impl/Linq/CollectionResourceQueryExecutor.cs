@@ -49,14 +49,6 @@ namespace Stormpath.SDK.Impl.Linq
             return adapter;
         }
 
-        private static string ValidateAndGenerateArguments(QueryModel queryModel)
-        {
-            var model = CollectionResourceQueryModelVisitor.GenerateRequestModel(queryModel);
-            var arguments = CollectionResourceRequestModelCompiler.GetArguments(model);
-            var argumentString = string.Join("&", arguments);
-            return argumentString;
-        }
-
         public T ExecuteScalar<T>(QueryModel queryModel)
         {
             return ExecuteCollection<T>(queryModel).Single();
@@ -67,6 +59,14 @@ namespace Stormpath.SDK.Impl.Linq
             return returnDefaultWhenEmpty
                 ? ExecuteCollection<T>(queryModel).SingleOrDefault()
                 : ExecuteCollection<T>(queryModel).Single();
+        }
+
+        private static string ValidateAndGenerateArguments(QueryModel queryModel)
+        {
+            var model = CollectionResourceQueryModelVisitor.GenerateRequestModel(queryModel);
+            var arguments = CollectionResourceRequestModelCompiler.GetArguments(model);
+            var argumentString = string.Join("&", arguments);
+            return argumentString;
         }
     }
 }

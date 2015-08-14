@@ -34,11 +34,14 @@ namespace Stormpath.SDK.Impl.Linq.RequestModel
 
         public bool IsValid()
         {
-            if (string.IsNullOrEmpty(this.Field)) return false;
+            if (string.IsNullOrEmpty(this.Field))
+                return false;
 
-            if (this.Offset.HasValue && this.Offset.Value < 0) return false;
+            if (this.Offset.HasValue && this.Offset.Value < 0)
+                return false;
 
-            if (this.Limit.HasValue && this.Limit.Value <= 0) return false;
+            if (this.Limit.HasValue && this.Limit.Value <= 0)
+                return false;
 
             return true;
         }
