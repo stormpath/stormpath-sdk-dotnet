@@ -39,6 +39,10 @@
       <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Remotion.Linq, Version=1.15.15.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Remotion.Linq.1.15.15.0\lib\portable-net45+wp80+wpa81+win\Remotion.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Shouldly, Version=2.5.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
       <HintPath>..\packages\Shouldly.2.5.0\lib\net40\Shouldly.dll</HintPath>
       <Private>True</Private>
@@ -57,7 +61,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Impl\DefaultClientApiKeyBuilderTests.cs" />
+    <Compile Include="Fakes\FakeAccount.cs" />
+    <Compile Include="Fakes\FakeAccounts.cs" />
+    <Compile Include="Fakes\FakeDataStore.cs" />
+    <Compile Include="Helpers\Assertly.cs" />
+    <Compile Include="Helpers\CollectionTestHarness.cs" />
+    <Compile Include="Helpers\LinqAssertExtensions.cs" />
+    <Compile Include="Impl\CollectionResourceRequestModel_validation_tests.cs" />
+    <Compile Include="Impl\DefaultClientApiKeyBuilder_tests.cs" />
+    <Compile Include="Impl\DefaultClientBuilder_tests.cs" />
+    <Compile Include="Impl\Extensions_tests.cs" />
+    <Compile Include="Impl\Linq\Expand_extension.cs" />
+    <Compile Include="Impl\Linq\Offset.cs" />
+    <Compile Include="Impl\Linq\Linq_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

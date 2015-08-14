@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultClientApiKeyBuilderTests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultClientApiKeyBuilder_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -25,7 +25,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class DefaultClientApiKeyBuilderTests
+    public class DefaultClientApiKeyBuilder_tests
     {
         public class With_missing_values
         {
@@ -364,11 +364,11 @@ namespace Stormpath.SDK.Tests.Impl
 
         public class Building_with_stream
         {
-            private IClientApiKeyBuilder builder;
-
             private readonly string streamContents =
                 "apiKey.id = streams_r_neet\r\n" +
                 "apiKey.secret = pls_dont_steal!\r\n";
+
+            private IClientApiKeyBuilder builder;
 
             public Building_with_stream()
             {
