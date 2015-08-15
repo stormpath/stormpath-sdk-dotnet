@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                     FakeAccounts.LukeSkywalker,
                     FakeAccounts.HanSolo
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
 
             var luke = await harness.Queryable.FirstAsync();
 
@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public void FirstAsync_throws_when_no_items_exist()
         {
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
 
             Should.Throw<InvalidOperationException>(async () =>
             {
@@ -65,7 +65,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                     FakeAccounts.LukeSkywalker,
                     FakeAccounts.HanSolo
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
 
             var luke = await harness.Queryable.FirstOrDefaultAsync();
 
@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task FirstOrDefaultAsync_returns_null_when_no_items_exist()
         {
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
 
             var notLuke = await harness.Queryable.FirstOrDefaultAsync();
 
