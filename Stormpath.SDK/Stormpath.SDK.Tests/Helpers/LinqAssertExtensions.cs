@@ -15,8 +15,8 @@
 // limitations under the License.
 // </remarks>
 
-using System;
 using System.Linq;
+using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
@@ -39,13 +39,23 @@ namespace Stormpath.SDK.Tests.Helpers
         internal static void WasCalledWithArguments<T>(this IDataStore ds, string url, string resource, string arguments)
         {
             var asFake = ds as FakeDataStore<T>;
-            if (asFake == null)
-                throw new ApplicationException("Only works on FakeDataStore.");
-
-            if (string.IsNullOrEmpty(arguments))
-                asFake.GetCalls().ShouldContain($"{url}/{resource}");
+            if (asFake != null)
+            {
+                if (string.IsNullOrEmpty(arguments))
+                    asFake.GetCalls().ShouldContain($"{url}/{resource}");
+                else
+                    asFake.GetCalls().ShouldContain($"{url}/{resource}?{arguments}");
+                return;
+            }
             else
-                asFake.GetCalls().ShouldContain($"{url}/{resource}?{arguments}");
+            {
+                // Maybe it's an NSubstitute mock
+                if (string.IsNullOrEmpty(arguments))
+                    ds.Received().GetCollectionAsync<T>($"{url}/{resource}");
+                else
+                    ds.Received().GetCollectionAsync<T>($"{url}/{resource}?{arguments}");
+                return;
+            }
         }
     }
 }

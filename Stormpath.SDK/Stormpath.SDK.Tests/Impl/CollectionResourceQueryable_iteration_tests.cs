@@ -57,21 +57,6 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
-        public async Task Subsequent_iterations_increment_existing_pagination_arguments()
-        {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource,
-                new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 50)));
-
-            var query = harness.Queryable
-                .Take(5)
-                .Skip(10);
-
-            await (query as ICollectionResourceQueryable<IAccount>).MoveNextAsync();
-            await (query as ICollectionResourceQueryable<IAccount>).MoveNextAsync();
-            harness.DataStore.WasCalledWithArguments<IAccount>(url, resource, "limit=5&offset=15");
-        }
-
-        [Fact]
         public async Task Subsequent_iterations_add_pagination_arguments_if_none_exist()
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource,

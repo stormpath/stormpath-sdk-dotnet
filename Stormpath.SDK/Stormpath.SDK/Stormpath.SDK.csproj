@@ -92,6 +92,7 @@
     <Compile Include="Impl\Linq\RequestModel\CollectionResourceRequestModel.cs" />
     <Compile Include="Impl\Linq\RequestModel\DatetimeShorthandAttributeTermModel.cs" />
     <Compile Include="Impl\Linq\RequestModel\DatetimeAttributeTermModel.cs" />
+    <Compile Include="Impl\Linq\RequestModel\ExecutionPlanModel.cs" />
     <Compile Include="Impl\Linq\RequestModel\ExpansionTerm.cs" />
     <Compile Include="Impl\Linq\RequestModel\OrderByModel.cs" />
     <Compile Include="Impl\Linq\RequestModel\StringAttributeMatchingType.cs" />

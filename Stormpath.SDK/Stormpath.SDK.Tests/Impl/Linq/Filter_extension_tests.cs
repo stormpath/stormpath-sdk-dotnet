@@ -1,4 +1,4 @@
-﻿// <copyright file="Filter_extension.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Filter_extension_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -23,33 +23,26 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 {
     public class Filter_extension_tests : Linq_tests
     {
-        private CollectionTestHarness<IAccount> harness;
-
-        public Filter_extension_tests() : base()
-        {
-            harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
-        }
-
         [Fact]
         public void Filter_with_simple_parameter()
         {
             // Act
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Filter("Joe");
 
             // Assert
-            query.GeneratedArgumentsWere(url, resource, "q=Joe");
+            query.GeneratedArgumentsWere(Url, Resource, "q=Joe");
         }
 
         [Fact]
         public void Filter_multiple_calls_are_LIFO()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Filter("Joe")
                 .Filter("Joey");
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(url, resource, "q=Joey");
+            query.GeneratedArgumentsWere(Url, Resource, "q=Joey");
         }
     }
 }

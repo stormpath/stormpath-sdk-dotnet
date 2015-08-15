@@ -1,4 +1,4 @@
-﻿// <copyright file="Limit.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Take_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -23,52 +23,55 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Limit_tests : Linq_tests
+    public class Take_tests : Linq_tests
     {
-        private CollectionTestHarness<IAccount> harness;
-
-        public Limit_tests() : base()
-        {
-            harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
-        }
-
         [Fact]
         public void Take_with_constant_becomes_limit()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Take(10);
 
-            query.GeneratedArgumentsWere(url, resource, "limit=10");
+            query.GeneratedArgumentsWere(Url, Resource, "limit=10");
         }
 
         [Fact]
         public void Take_with_variable_becomes_limit()
         {
             var limit = 20;
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Take(limit);
 
-            query.GeneratedArgumentsWere(url, resource, "limit=20");
+            query.GeneratedArgumentsWere(Url, Resource, "limit=20");
         }
 
         [Fact]
         public void Take_with_function_becomes_limit()
         {
             var limitFunc = new Func<int>(() => 25);
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Take(limitFunc());
 
-            query.GeneratedArgumentsWere(url, resource, "limit=25");
+            query.GeneratedArgumentsWere(Url, Resource, "limit=25");
         }
 
         [Fact]
         public void Take_multiple_calls_are_LIFO()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Take(10).Take(5);
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(url, resource, "limit=5");
+            query.GeneratedArgumentsWere(Url, Resource, "limit=5");
+        }
+
+        [Fact]
+        public void Take_limit_is_100()
+        {
+            var query = Harness.Queryable
+                .Take(101);
+
+            // Expected behavior: the last call will be kept
+            query.GeneratedArgumentsWere(Url, Resource, "limit=100");
         }
     }
 }

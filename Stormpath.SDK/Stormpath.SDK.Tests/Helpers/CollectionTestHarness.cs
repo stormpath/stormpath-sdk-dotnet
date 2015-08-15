@@ -15,6 +15,8 @@
 // limitations under the License.
 // </remarks>
 
+using System.Linq;
+using System.Threading.Tasks;
 using NSubstitute;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
@@ -36,7 +38,7 @@ namespace Stormpath.SDK.Tests.Helpers
         internal static CollectionTestHarness<TType> Create<TType>(string url, string resource, IDataStore mockDataStore = null)
             where TType : IResource
         {
-            var ds = mockDataStore ?? Substitute.For<IDataStore>();
+            var ds = mockDataStore ?? MockEmptyDataStore<TType>();
 
             return new CollectionTestHarness<TType>()
             {
@@ -45,6 +47,20 @@ namespace Stormpath.SDK.Tests.Helpers
                 Url = url,
                 Queryable = new CollectionResourceQueryable<TType>(url, resource, ds)
             };
+        }
+
+        private static IDataStore MockEmptyDataStore<TType>()
+        {
+            var emptyMock = Substitute.For<IDataStore>();
+            emptyMock.GetCollectionAsync<TType>(Arg.Any<string>()).Returns(
+                    Task.FromResult(new CollectionResponsePageDto<TType>()
+                    {
+                        Limit = 0,
+                        Offset = 0,
+                        Size = 0,
+                        Items = Enumerable.Empty<TType>().ToList()
+                    }));
+            return emptyMock;
         }
     }
 }

@@ -18,9 +18,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
 using Remotion.Linq;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Linq.RequestModel;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Linq
@@ -40,33 +41,46 @@ namespace Stormpath.SDK.Impl.Linq
 
         public IDataStore DataStore { get; private set; }
 
-        public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
+        public IEnumerable<T> ExecuteCollection<T>(CollectionResourceRequestModel requestModel)
         {
-            var arguments = ValidateAndGenerateArguments(queryModel);
-            var asyncCollection = new CollectionResourceQueryable<T>(this.Url, this.Resource, this.DataStore);
+            var asyncCollection = new CollectionResourceQueryable<T>(this.Url, this.Resource, this.DataStore, requestModel);
             var adapter = new Sync.SyncCollectionEnumeratorAdapter<T>(asyncCollection);
 
             return adapter;
         }
 
+        public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
+        {
+            var model = GenerateRequestModel(queryModel);
+
+            return ExecuteCollection<T>(model);
+        }
+
         public T ExecuteScalar<T>(QueryModel queryModel)
         {
-            return ExecuteCollection<T>(queryModel).Single();
+            // TODO support a synchronous path for scalar result operators like Count, Any
+            throw new NotSupportedException("This operation is not supported. Use async methods.");
         }
 
         public T ExecuteSingle<T>(QueryModel queryModel, bool returnDefaultWhenEmpty)
         {
+            var model = GenerateRequestModel(queryModel);
+
             return returnDefaultWhenEmpty
                 ? ExecuteCollection<T>(queryModel).SingleOrDefault()
                 : ExecuteCollection<T>(queryModel).Single();
         }
 
-        private static string ValidateAndGenerateArguments(QueryModel queryModel)
+        private static MethodInfo GetGenericExecuteCollectionMethod(Type innerType)
         {
-            var model = CollectionResourceQueryModelVisitor.GenerateRequestModel(queryModel);
-            var arguments = CollectionResourceRequestModelCompiler.GetArguments(model);
-            var argumentString = string.Join("&", arguments);
-            return argumentString;
+            var method = typeof(CollectionResourceQueryExecutor).GetMethod(nameof(ExecuteCollection), new Type[] { typeof(CollectionResourceRequestModel) });
+            var generic = method.MakeGenericMethod(innerType);
+            return generic;
+        }
+
+        private static CollectionResourceRequestModel GenerateRequestModel(QueryModel queryModel)
+        {
+            return CollectionResourceQueryModelVisitor.GenerateRequestModel(queryModel);
         }
     }
 }

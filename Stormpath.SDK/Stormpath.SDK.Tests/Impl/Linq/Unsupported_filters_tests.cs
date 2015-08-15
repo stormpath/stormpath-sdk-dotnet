@@ -1,4 +1,4 @@
-﻿// <copyright file="Unsupported_filters.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Unsupported_filters_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -27,19 +27,12 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 {
     public class Unsupported_filters_tests : Linq_tests
     {
-        private CollectionTestHarness<IAccount> harness;
-
-        public Unsupported_filters_tests() : base()
-        {
-            harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
-        }
-
         [Fact]
         public void Aggregate_is_unsupported()
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Aggregate((x, y) => x);
+                Harness.Queryable.Aggregate((x, y) => x);
             });
         }
 
@@ -48,7 +41,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.All(x => x.Email == "foo");
+                Harness.Queryable.All(x => x.Email == "foo");
             });
         }
 
@@ -57,7 +50,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Average(x => 1.0);
+                Harness.Queryable.Average(x => 1.0);
             });
         }
 
@@ -66,8 +59,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.Cast<Tenant.ITenant>();
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                var query = Harness.Queryable.Cast<Tenant.ITenant>();
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -76,8 +69,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.Concat(Enumerable.Empty<IAccount>());
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                var query = Harness.Queryable.Concat(Enumerable.Empty<IAccount>());
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -86,7 +79,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Contains(Substitute.For<IAccount>());
+                Harness.Queryable.Contains(Substitute.For<IAccount>());
             });
         }
 
@@ -95,8 +88,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.Distinct();
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                var query = Harness.Queryable.Distinct();
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -105,8 +98,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.Except(Enumerable.Empty<IAccount>());
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                var query = Harness.Queryable.Except(Enumerable.Empty<IAccount>());
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -115,8 +108,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.GroupBy(x => x.Email);
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                var query = Harness.Queryable.GroupBy(x => x.Email);
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -125,11 +118,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.GroupJoin(Enumerable.Empty<IAccount>(),
+                var query = Harness.Queryable.GroupJoin(Enumerable.Empty<IAccount>(),
                     outer => outer.Email,
                     inner => inner.Username,
                     (outer, results) => new { outer.CreatedAt, results });
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -138,8 +131,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.Intersect(Enumerable.Empty<IAccount>());
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                var query = Harness.Queryable.Intersect(Enumerable.Empty<IAccount>());
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -148,11 +141,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.Join(Enumerable.Empty<IAccount>(),
+                var query = Harness.Queryable.Join(Enumerable.Empty<IAccount>(),
                     outer => outer.Email,
                     inner => inner.Username,
                     (outer, inner) => outer.CreatedAt);
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -161,12 +154,12 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Last();
+                Harness.Queryable.Last();
             });
 
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.LastOrDefault();
+                Harness.Queryable.LastOrDefault();
             });
         }
 
@@ -175,7 +168,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Max();
+                Harness.Queryable.Max();
             });
         }
 
@@ -184,7 +177,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Min();
+                Harness.Queryable.Min();
             });
         }
 
@@ -193,8 +186,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.OfType<IAccount>();
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                var query = Harness.Queryable.OfType<IAccount>();
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -203,8 +196,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.Reverse();
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                var query = Harness.Queryable.Reverse();
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -213,9 +206,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable
+                var query = Harness.Queryable
                     .Select(x => x.Email);
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -224,8 +217,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.SelectMany(x => x.Email);
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                var query = Harness.Queryable.SelectMany(x => x.Email);
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -234,7 +227,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.SequenceEqual(Enumerable.Empty<IAccount>());
+                Harness.Queryable.SequenceEqual(Enumerable.Empty<IAccount>());
             });
         }
 
@@ -243,8 +236,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.SkipWhile(x => x.Email == "foobar");
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                var query = Harness.Queryable.SkipWhile(x => x.Email == "foobar");
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -253,7 +246,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.Sum(x => 1);
+                Harness.Queryable.Sum(x => 1);
             });
         }
 
@@ -262,8 +255,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.TakeWhile(x => x.Email == "foobar");
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                var query = Harness.Queryable.TakeWhile(x => x.Email == "foobar");
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -272,8 +265,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.Union(Enumerable.Empty<IAccount>());
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                var query = Harness.Queryable.Union(Enumerable.Empty<IAccount>());
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
 
@@ -282,9 +275,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = harness.Queryable.Zip(Enumerable.Empty<IAccount>(),
+                var query = Harness.Queryable.Zip(Enumerable.Empty<IAccount>(),
                     (first, second) => first.Email == second.Email);
-                query.GeneratedArgumentsWere(url, resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });
         }
     }

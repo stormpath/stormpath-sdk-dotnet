@@ -1,4 +1,4 @@
-﻿// <copyright file="OrderBy.cs" company="Stormpath, Inc.">
+﻿// <copyright file="OrderBy_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -28,39 +28,32 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 {
     public class OrderBy_tests : Linq_tests
     {
-        private CollectionTestHarness<IAccount> harness;
-
-        public OrderBy_tests() : base()
-        {
-            harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
-        }
-
         [Fact]
         public void Order_by_a_field()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .OrderBy(x => x.GivenName);
 
-            query.GeneratedArgumentsWere(url, resource, "orderBy=givenName");
+            query.GeneratedArgumentsWere(Url, Resource, "orderBy=givenName");
         }
 
         [Fact]
         public void Order_by_a_field_descending()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .OrderByDescending(x => x.Email);
 
-            query.GeneratedArgumentsWere(url, resource, "orderBy=email desc");
+            query.GeneratedArgumentsWere(Url, Resource, "orderBy=email desc");
         }
 
         [Fact]
         public void Order_by_multiple_fields()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .OrderBy(x => x.GivenName)
                 .ThenByDescending(x => x.Username);
 
-            query.GeneratedArgumentsWere(url, resource, "orderBy=givenName,username desc");
+            query.GeneratedArgumentsWere(Url, Resource, "orderBy=givenName,username desc");
         }
 
         [Fact]
@@ -68,7 +61,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                harness.Queryable.OrderBy(x => x.GivenName, Substitute.For<IComparer<string>>()).ToList();
+                Harness.Queryable.OrderBy(x => x.GivenName, Substitute.For<IComparer<string>>()).ToList();
             });
         }
     }

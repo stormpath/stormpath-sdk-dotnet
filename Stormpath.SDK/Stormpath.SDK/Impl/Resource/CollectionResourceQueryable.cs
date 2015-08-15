@@ -31,7 +31,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal sealed class CollectionResourceQueryable<T> : QueryableBase<T>, ICollectionResourceQueryable<T>
+    internal class CollectionResourceQueryable<T> : QueryableBase<T>, ICollectionResourceQueryable<T>
     {
         private readonly Expression expression;
 
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         private CollectionResourceRequestModel compiledModel = null;
 
-        private bool retrievedAtLeastOnce = false;
+        private int totalItemsRetrieved = 0;
 
         private int currentOffset;
 
@@ -56,6 +56,14 @@ namespace Stormpath.SDK.Impl.Resource
         {
             this.baseHref = $"{url}/{resource}";
             this.dataStore = dataStore;
+        }
+
+        // This constructor is used for a synchronous wrapper via CollectionResourceQueryExecutor
+        // TODO make this more SOLID and have an actual synchronous execution path that isn't a hack or wrapper
+        public CollectionResourceQueryable(string url, string resource, IDataStore dataStore, CollectionResourceRequestModel existingRequestModel)
+            : this(url, resource, dataStore)
+        {
+            this.compiledModel = existingRequestModel;
         }
 
         // (This constructor is called internally by LINQ)
@@ -82,7 +90,8 @@ namespace Stormpath.SDK.Impl.Resource
         {
             get
             {
-                if (!retrievedAtLeastOnce)
+                bool atLeastOnePageRetrieved = totalItemsRetrieved > 0;
+                if (!atLeastOnePageRetrieved)
                     throw new InvalidOperationException("Call MoveNextAsync() first to retrieve the collection.");
 
                 return currentOffset;
@@ -93,7 +102,8 @@ namespace Stormpath.SDK.Impl.Resource
         {
             get
             {
-                if (!retrievedAtLeastOnce)
+                bool atLeastOnePageRetrieved = totalItemsRetrieved > 0;
+                if (!atLeastOnePageRetrieved)
                     throw new InvalidOperationException("Call MoveNextAsync() first to retrieve the collection.");
 
                 return currentLimit;
@@ -104,7 +114,8 @@ namespace Stormpath.SDK.Impl.Resource
         {
             get
             {
-                if (!retrievedAtLeastOnce)
+                bool atLeastOnePageRetrieved = totalItemsRetrieved > 0;
+                if (!atLeastOnePageRetrieved)
                     throw new InvalidOperationException("Call MoveNextAsync() first to retrieve the collection.");
 
                 return currentSize;
@@ -115,7 +126,8 @@ namespace Stormpath.SDK.Impl.Resource
         {
             get
             {
-                if (!retrievedAtLeastOnce)
+                bool atLeastOnePageRetrieved = totalItemsRetrieved > 0;
+                if (!atLeastOnePageRetrieved)
                     throw new InvalidOperationException("Call MoveNextAsync() first to retrieve the collection.");
 
                 return currentItems; // TODO ?? Enumerable.Empty<T> ?
@@ -141,8 +153,12 @@ namespace Stormpath.SDK.Impl.Resource
                 }
             }
 
-            // Start incrementing offset as we MoveNext through the server-side collection
-            if (retrievedAtLeastOnce)
+            bool retrievedEnoughItems = totalItemsRetrieved >= compiledModel.ExecutionPlan.MaxItems;
+            if (retrievedEnoughItems)
+                return false;
+
+            bool atLeastOnePageRetrieved = totalItemsRetrieved > 0;
+            if (atLeastOnePageRetrieved)
             {
                 if (!this.compiledModel.Offset.HasValue)
                     this.compiledModel.Offset = 0;
@@ -152,7 +168,7 @@ namespace Stormpath.SDK.Impl.Resource
             var url = GenerateRequestUrlFromModel();
             var result = await dataStore.GetCollectionAsync<T>(url, cancellationToken);
 
-            bool anyNewItems = result.Items?.Any() ?? false;
+            bool anyNewItems = result?.Items?.Any() ?? false;
             if (!anyNewItems)
                 return false;
 
@@ -161,7 +177,7 @@ namespace Stormpath.SDK.Impl.Resource
             this.currentSize = result.Size;
             this.currentItems = result.Items;
 
-            retrievedAtLeastOnce = true;
+            this.totalItemsRetrieved += result.Items.Count;
             return true;
         }
 
@@ -171,11 +187,16 @@ namespace Stormpath.SDK.Impl.Resource
             if (noExpressionToCompile)
                 return false;
 
-            var model = ExtendedQueryParser.Create().GetParsedQuery(this.expression);
+            var queryModel = ExtendedQueryParser.Create().GetParsedQuery(this.expression);
+            this.compiledModel = ParseQueryModelToRequestModel(queryModel);
+            return true;
+        }
+
+        private static CollectionResourceRequestModel ParseQueryModelToRequestModel(QueryModel model)
+        {
             var visitor = new CollectionResourceQueryModelVisitor();
             visitor.VisitQueryModel(model);
-            this.compiledModel = visitor.ParsedModel;
-            return true;
+            return visitor.ParsedModel;
         }
 
         private string GenerateRequestUrlFromModel()

@@ -15,23 +15,51 @@
 // limitations under the License.
 // </remarks>
 
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
     public class Linq_tests
     {
-        private readonly string _url = "http://f.oo";
-        private readonly string _resource = "bar";
+        private readonly string url = "http://f.oo";
+        private readonly string resource = "bar";
+        private CollectionTestHarness<IAccount> harness;
 
-        protected string url
+        public Linq_tests()
         {
-            get { return _url; }
+            // Default test harness. Child classes can overwrite
+            harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource);
         }
 
-        protected string resource
+        internal Linq_tests(IDataStore ds)
         {
-            get { return _resource; }
+            harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, ds);
+        }
+
+        protected string Url
+        {
+            get { return url; }
+        }
+
+        protected string Resource
+        {
+            get { return resource; }
+        }
+
+        protected CollectionTestHarness<IAccount> Harness
+        {
+            get
+            {
+                return harness;
+            }
+
+            set
+            {
+                harness = value;
+            }
         }
     }
 }

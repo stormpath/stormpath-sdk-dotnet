@@ -15,22 +15,78 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Tests.Helpers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Shouldly;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Result_operators_tests
+    public class Result_operators_tests : Linq_tests
     {
+        public Result_operators_tests()
+            : base(new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance))
+        {
+        }
+
         [Fact]
         public void First_generates_proper_arguments()
         {
-            Assertly.Fail("todo");
+            // Execution behavior:
+            // Limit the query to 1 result so we can minimize transfer over the wire
+            var firstRebel = Harness.Queryable
+                .First();
+
+            Harness.DataStore.WasCalledWithArguments<IAccount>(Url, Resource, "limit=1");
+            firstRebel.ShouldBe(FakeAccounts.RebelAlliance.First());
+        }
+
+        [Fact]
+        public void FirstOrDefault_generates_proper_arguments()
+        {
+            // (Empty data store)
+            Harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource);
+
+            // Execution behavior:
+            // Limit the query to 1 result so we can minimize transfer over the wire
+            var firstRebel = Harness.Queryable
+                .FirstOrDefault();
+
+            Harness.DataStore.WasCalledWithArguments<IAccount>(Url, Resource, "limit=1");
+            firstRebel.ShouldBe(null);
+        }
+
+        [Fact]
+        public void Single_generates_proper_arguments()
+        {
+            Harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource,
+                new FakeDataStore<IAccount>(new List<IAccount>() { FakeAccounts.BobaFett }));
+
+            // Execution behavior:
+            // Limit the query to 1 result so we can minimize transfer over the wire
+            var boba = Harness.Queryable
+                .Single();
+
+            Harness.DataStore.WasCalledWithArguments<IAccount>(Url, Resource, "limit=1");
+            boba.ShouldBe(FakeAccounts.BobaFett);
+        }
+
+        [Fact]
+        public void SingleOrDefault_generates_proper_arguments()
+        {
+            // (Empty data store)
+            Harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource);
+
+            // Execution behavior:
+            // Limit the query to 1 result so we can minimize transfer over the wire
+            var boba = Harness.Queryable
+                .SingleOrDefault();
+
+            Harness.DataStore.WasCalledWithArguments<IAccount>(Url, Resource, "limit=1");
+            boba.ShouldBe(null);
         }
     }
 }

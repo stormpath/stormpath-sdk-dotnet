@@ -1,4 +1,4 @@
-﻿// <copyright file="Within_extension.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Within_extension_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -26,13 +26,6 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 {
     public class Within_extension_tests : Linq_tests
     {
-        private CollectionTestHarness<IAccount> harness;
-
-        public Within_extension_tests() : base()
-        {
-            harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
-        }
-
         [Fact]
         public void Within_throws_when_using_outside_LINQ()
         {
@@ -46,55 +39,55 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Where_date_using_shorthand_for_year()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015));
 
-            query.GeneratedArgumentsWere(url, resource, "createdAt=2015");
+            query.GeneratedArgumentsWere(Url, Resource, "createdAt=2015");
         }
 
         [Fact]
         public void Where_date_using_shorthand_for_month()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01));
 
-            query.GeneratedArgumentsWere(url, resource, "createdAt=2015-01");
+            query.GeneratedArgumentsWere(Url, Resource, "createdAt=2015-01");
         }
 
         [Fact]
         public void Where_date_using_shorthand_for_day()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01, 01));
 
-            query.GeneratedArgumentsWere(url, resource, "createdAt=2015-01-01");
+            query.GeneratedArgumentsWere(Url, Resource, "createdAt=2015-01-01");
         }
 
         [Fact]
         public void Where_date_using_shorthand_for_hour()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01, 01, 12));
 
-            query.GeneratedArgumentsWere(url, resource, "createdAt=2015-01-01T12");
+            query.GeneratedArgumentsWere(Url, Resource, "createdAt=2015-01-01T12");
         }
 
         [Fact]
         public void Where_date_using_shorthand_for_minute()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30));
 
-            query.GeneratedArgumentsWere(url, resource, "createdAt=2015-01-01T12:30");
+            query.GeneratedArgumentsWere(Url, Resource, "createdAt=2015-01-01T12:30");
         }
 
         [Fact]
         public void Where_date_using_shorthand_for_second()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30, 31));
 
-            query.GeneratedArgumentsWere(url, resource, "createdAt=2015-01-01T12:30:31");
+            query.GeneratedArgumentsWere(Url, Resource, "createdAt=2015-01-01T12:30:31");
         }
     }
 }

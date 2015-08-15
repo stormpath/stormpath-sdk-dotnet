@@ -29,6 +29,8 @@ namespace Stormpath.SDK.Impl.Linq
 {
     internal sealed class CollectionResourceQueryModelVisitor : QueryModelVisitorBase
     {
+        private static readonly int DefaultApiPageLimit = 100;
+
         public CollectionResourceRequestModel ParsedModel { get; private set; } = new CollectionResourceRequestModel();
 
         public static CollectionResourceRequestModel GenerateRequestModel(QueryModel queryModel)
@@ -38,17 +40,34 @@ namespace Stormpath.SDK.Impl.Linq
             return visitor.ParsedModel;
         }
 
+        public override void VisitMainFromClause(MainFromClause fromClause, QueryModel queryModel)
+        {
+            // Used to store the original type the query is executing against
+            // (see ExecuteScalar in CollectionResourceQueryExecutor for why we need this)
+            ParsedModel.CollectionType = fromClause.ItemType;
+
+            base.VisitMainFromClause(fromClause, queryModel);
+        }
+
         public override void VisitResultOperator(ResultOperatorBase resultOperator, QueryModel queryModel, int index)
         {
             if (IsUnsupportedResultOperator(resultOperator))
                 throw new NotSupportedException("One or more LINQ operators are not supported.");
 
-            // Todo Any
-            // TODO First
+            bool isScalar =
+                resultOperator is AnyResultOperator ||
+                resultOperator is FirstResultOperator ||
+                resultOperator is SingleResultOperator;
+            if (isScalar)
+            {
+                ParsedModel.Limit = 1;
+                ParsedModel.ExecutionPlan.MaxItems = 1;
+                return;
+            }
+
             // TODO Count/LongCount
             // Todo DefaultIfEmpty
             // Todo ElementAt[OrDefault]
-            // TODO Single
             if (HandleTakeResultOperator(resultOperator))
                 return; // done
 
@@ -63,12 +82,14 @@ namespace Stormpath.SDK.Impl.Linq
 
         private bool IsUnsupportedResultOperator(ResultOperatorBase resultOperator)
         {
+            // TODO make this a dictionary lookup
             return resultOperator is AllResultOperator ||
                 resultOperator is AggregateResultOperator ||
                 resultOperator is AggregateFromSeedResultOperator ||
                 resultOperator is AverageResultOperator ||
                 resultOperator is CastResultOperator ||
                 resultOperator is ContainsResultOperator ||
+                resultOperator is DefaultIfEmptyResultOperator ||
                 resultOperator is DistinctResultOperator ||
                 resultOperator is ExceptResultOperator ||
                 resultOperator is GroupResultOperator ||
@@ -91,7 +112,12 @@ namespace Stormpath.SDK.Impl.Linq
             var expression = takeResultOperator.Count;
             if (expression.NodeType == ExpressionType.Constant)
             {
-                ParsedModel.Limit = (int)((ConstantExpression)expression).Value;
+                var limit = (int)((ConstantExpression)expression).Value;
+                ParsedModel.ExecutionPlan.MaxItems = limit;
+
+                ParsedModel.Limit = limit;
+                if (limit > DefaultApiPageLimit)
+                    ParsedModel.Limit = DefaultApiPageLimit;
             }
             else
             {

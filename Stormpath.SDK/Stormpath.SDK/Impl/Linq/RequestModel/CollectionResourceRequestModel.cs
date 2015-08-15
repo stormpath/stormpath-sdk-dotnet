@@ -22,6 +22,8 @@ namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
     internal sealed class CollectionResourceRequestModel
     {
+        public Type CollectionType { get; set; }
+
         public int? Offset { get; set; }
 
         public int? Limit { get; set; }
@@ -37,6 +39,8 @@ namespace Stormpath.SDK.Impl.Linq.RequestModel
         public List<OrderByModel> OrderByTerms { get; } = new List<OrderByModel>();
 
         public List<ExpansionTerm> Expansions { get; } = new List<ExpansionTerm>();
+
+        public ExecutionPlanModel ExecutionPlan { get; } = new ExecutionPlanModel();
 
         public void AddAttributeTerm(AbstractAttributeTermModel model)
         {

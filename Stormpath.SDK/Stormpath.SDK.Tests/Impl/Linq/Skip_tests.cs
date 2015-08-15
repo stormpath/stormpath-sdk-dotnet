@@ -1,4 +1,4 @@
-﻿// <copyright file="Offset.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Skip_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -23,52 +23,45 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Offset_tests : Linq_tests
+    public class Skip_tests : Linq_tests
     {
-        private CollectionTestHarness<IAccount> harness;
-
-        public Offset_tests() : base()
-        {
-            harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource);
-        }
-
         [Fact]
         public void Skip_becomes_offset()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Skip(10);
 
-            query.GeneratedArgumentsWere(url, resource, "offset=10");
+            query.GeneratedArgumentsWere(Url, Resource, "offset=10");
         }
 
         [Fact]
         public void Skip_with_variable_becomes_offset()
         {
             var offset = 20;
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Skip(offset);
 
-            query.GeneratedArgumentsWere(url, resource, "offset=20");
+            query.GeneratedArgumentsWere(Url, Resource, "offset=20");
         }
 
         [Fact]
         public void Skip_with_function_becomes_offset()
         {
             var offsetFunc = new Func<int>(() => 25);
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Skip(offsetFunc());
 
-            query.GeneratedArgumentsWere(url, resource, "offset=25");
+            query.GeneratedArgumentsWere(Url, Resource, "offset=25");
         }
 
         [Fact]
         public void Skip_multiple_calls_are_LIFO()
         {
-            var query = harness.Queryable
+            var query = Harness.Queryable
                 .Skip(10).Skip(5);
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(url, resource, "offset=5");
+            query.GeneratedArgumentsWere(Url, Resource, "offset=5");
         }
     }
 }
