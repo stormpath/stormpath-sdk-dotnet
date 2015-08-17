@@ -51,9 +51,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
 
-            Should.Throw<InvalidOperationException>(async () =>
+            Should.Throw<InvalidOperationException>(() =>
             {
-                var jabba = await harness.Queryable.FirstAsync();
+                var jabbaTask = harness.Queryable.FirstAsync();
+                return jabbaTask;
             });
         }
 

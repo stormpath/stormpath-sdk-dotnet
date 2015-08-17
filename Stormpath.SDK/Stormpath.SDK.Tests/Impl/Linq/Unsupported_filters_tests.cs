@@ -273,7 +273,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Zip_is_unsupported()
         {
-            Should.Throw<NotSupportedException>(() =>
+            Should.Throw<Exception>(() =>
             {
                 var query = Harness.Queryable.Zip(Enumerable.Empty<IAccount>(),
                     (first, second) => first.Email == second.Email);

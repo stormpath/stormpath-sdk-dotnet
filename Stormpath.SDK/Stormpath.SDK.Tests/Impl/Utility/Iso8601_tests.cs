@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
 
             // 4PM Pacific Time, Dec 31 2015 = 2015-01-01 00:00 UTC
             var fourInTheLocalAfternoonDec31 = new DateTime(2014, 12, 31, 16, 00, 00);
-            var midnightUtcIso8601 = Iso8601.Format(new DateTimeOffset(fourInTheLocalAfternoonDec31, TimeZone.CurrentTimeZone.GetUtcOffset(fourInTheLocalAfternoonDec31)));
+            var midnightUtcIso8601 = Iso8601.Format(new DateTimeOffset(fourInTheLocalAfternoonDec31, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time").BaseUtcOffset));
             midnightUtcIso8601.ShouldBe("2015-01-01T00:00:00.000Z");
         }
 
