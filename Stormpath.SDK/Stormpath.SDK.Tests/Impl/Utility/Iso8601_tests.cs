@@ -19,6 +19,7 @@ using System;
 using Shouldly;
 using Stormpath.SDK.Impl.Utility;
 using Xunit;
+using Stormpath.SDK.Tests.Helpers;
 
 namespace Stormpath.SDK.Tests.Impl.Utility
 {
@@ -27,6 +28,10 @@ namespace Stormpath.SDK.Tests.Impl.Utility
         [Fact]
         public void Formatting_from_local_date()
         {
+            var pacificTimeZoneName = "Pacific Standard Time";
+            if (PlatformHelper.IsRunningOnMono())
+                pacificTimeZoneName = "US/Pacific";
+
             // Midnight Pacific Time, Jan 1, 2015 = 2015-01-01 08:00 UTC
             var midnightPacificTimeJan1 = new DateTimeOffset(2015, 01, 01, 00, 00, 00, 00, TimeSpan.FromHours(-8));
             var eightHoursLaterUtc8601 = Iso8601.Format(midnightPacificTimeJan1);
@@ -34,7 +39,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
 
             // 4PM Pacific Time, Dec 31 2015 = 2015-01-01 00:00 UTC
             var fourInTheLocalAfternoonDec31 = new DateTime(2014, 12, 31, 16, 00, 00);
-            var midnightUtcIso8601 = Iso8601.Format(new DateTimeOffset(fourInTheLocalAfternoonDec31, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time").BaseUtcOffset));
+            var midnightUtcIso8601 = Iso8601.Format(new DateTimeOffset(fourInTheLocalAfternoonDec31, TimeZoneInfo.FindSystemTimeZoneById(pacificTimeZoneName).BaseUtcOffset));
             midnightUtcIso8601.ShouldBe("2015-01-01T00:00:00.000Z");
         }
 

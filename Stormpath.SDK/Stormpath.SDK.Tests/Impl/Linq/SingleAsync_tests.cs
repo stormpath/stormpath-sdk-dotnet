@@ -54,7 +54,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 });
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
 
-            Should.Throw<InvalidOperationException>(async () =>
+            // TODO InvalidOperationException (after xUnit 2.0)
+            Should.Throw<Exception>(async () =>
             {
                 var han = await harness.Queryable.SingleAsync();
             });
@@ -66,7 +67,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
 
-            Should.Throw<InvalidOperationException>(async () =>
+            // TODO InvalidOperationException (after xUnit 2.0)
+            Should.Throw<Exception>(async () =>
             {
                 var jabba = await harness.Queryable.SingleAsync();
             });
@@ -96,7 +98,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 });
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
 
-            Should.Throw<InvalidOperationException>(async () =>
+            // TODO InvalidOperationException (after xUnit 2.0)
+            Should.Throw<Exception>(async () =>
             {
                 var han = await harness.Queryable.SingleOrDefaultAsync();
             });

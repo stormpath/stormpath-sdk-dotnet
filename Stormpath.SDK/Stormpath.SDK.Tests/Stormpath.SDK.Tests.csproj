@@ -68,6 +68,7 @@
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\CollectionTestHarness.cs" />
     <Compile Include="Helpers\LinqAssertExtensions.cs" />
+    <Compile Include="Helpers\PlatformHelper.cs" />
     <Compile Include="Impl\CollectionResourceQueryable_iteration_tests.cs" />
     <Compile Include="Impl\CollectionResourceRequestModel_validation_tests.cs" />
     <Compile Include="Impl\DefaultClientApiKeyBuilder_tests.cs" />
