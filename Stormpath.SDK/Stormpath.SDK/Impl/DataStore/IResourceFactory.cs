@@ -1,4 +1,4 @@
-﻿// <copyright file="ICollectionResourceQueryable.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IResourceFactory.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,18 +15,15 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Linq;
+using System.Collections;
+using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Resource
+namespace Stormpath.SDK.Impl.DataStore
 {
-    public interface ICollectionResourceQueryable<T> : IAsyncQueryable<T>
+    internal interface IResourceFactory
     {
-        int Offset { get; }
+        T CreateDefault<T>() where T : class, IResource;
 
-        int Limit { get; }
-
-        int Size { get; }
-
-        string CurrentHref { get; }
+        T Deserialize<T>(Hashtable properties) where T : class, IResource;
     }
 }

@@ -70,6 +70,11 @@ namespace Stormpath.SDK.Tests.Fakes
             };
         }
 
+        Task<T> IDataStore.GetResource<T>(string href, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         private static Regex limitRegex = new Regex(@"limit=(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static int? GetLimitFromUrlString(string href)

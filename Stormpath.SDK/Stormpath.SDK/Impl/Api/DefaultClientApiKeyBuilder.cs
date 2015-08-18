@@ -17,7 +17,6 @@
 
 using System;
 using Stormpath.SDK.Api;
-using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Api

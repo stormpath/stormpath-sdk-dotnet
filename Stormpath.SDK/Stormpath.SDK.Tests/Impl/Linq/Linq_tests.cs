@@ -18,7 +18,6 @@
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Tests.Helpers;
-using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {

@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 

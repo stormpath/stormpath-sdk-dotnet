@@ -1,4 +1,4 @@
-﻿// <copyright file="ICollectionResourceQueryable.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IRequestExecutor.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,18 +15,9 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Linq;
-
-namespace Stormpath.SDK.Resource
+namespace Stormpath.SDK.Impl.DataStore
 {
-    public interface ICollectionResourceQueryable<T> : IAsyncQueryable<T>
+    internal interface IRequestExecutor
     {
-        int Offset { get; }
-
-        int Limit { get; }
-
-        int Size { get; }
-
-        string CurrentHref { get; }
     }
 }

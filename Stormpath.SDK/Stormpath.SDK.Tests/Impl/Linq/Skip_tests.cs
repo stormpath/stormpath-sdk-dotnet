@@ -17,7 +17,6 @@
 
 using System;
 using System.Linq;
-using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
