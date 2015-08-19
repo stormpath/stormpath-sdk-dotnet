@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.DataStore;
