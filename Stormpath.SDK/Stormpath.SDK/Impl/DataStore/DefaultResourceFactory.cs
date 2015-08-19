@@ -20,6 +20,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.Account;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Tenant;
 
@@ -33,22 +34,48 @@ namespace Stormpath.SDK.Impl.DataStore
             { typeof(ITenant), typeof(DefaultTenant) }
         };
 
-        T IResourceFactory.CreateDefault<T>()
+        private readonly IDataStore dataStore;
+
+        public DefaultResourceFactory(IDataStore dataStore)
+        {
+            this.dataStore = dataStore;
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element must begin with upper-case letter", Justification = "Reviewed")]
+        private IResourceFactory _this
+        {
+            get { return this; }
+        }
+
+        T IResourceFactory.Instantiate<T>()
+        {
+            return _this.Instantiate<T>(null);
+        }
+
+        T IResourceFactory.Instantiate<T>(Hashtable properties)
         {
             Type targetType;
             if (!typeMap.TryGetValue(typeof(T), out targetType))
                 throw new ApplicationException($"Unknown resource type {typeof(T).Name}");
 
-            var targetObject = Activator.CreateInstance(targetType) as T;
-            if (targetObject == null)
+            object targetObject;
+            try
+            {
+                if (properties == null)
+                    targetObject = Activator.CreateInstance(targetType, new object[] { dataStore });
+                else
+                    targetObject = Activator.CreateInstance(targetType, new object[] { dataStore, properties });
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException($"Error creating resource type {targetType.Name}", e);
+            }
+
+            var targetObjectAsT = targetObject as T;
+            if (targetObjectAsT == null)
                 throw new ApplicationException($"Unable to create resource type {targetType.Name}");
 
-            return targetObject;
-        }
-
-        T IResourceFactory.Deserialize<T>(Hashtable properties)
-        {
-            throw new NotImplementedException();
+            return targetObjectAsT;
         }
     }
 }

@@ -22,8 +22,8 @@ namespace Stormpath.SDK.Impl.DataStore
 {
     internal interface IResourceFactory
     {
-        T CreateDefault<T>() where T : class, IResource;
+        T Instantiate<T>() where T : class, IResource;
 
-        T Deserialize<T>(Hashtable properties) where T : class, IResource;
+        T Instantiate<T>(Hashtable properties) where T : class, IResource;
     }
 }

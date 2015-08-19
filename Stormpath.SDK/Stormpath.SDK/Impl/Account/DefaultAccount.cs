@@ -16,101 +16,81 @@
 // </remarks>
 
 using System;
+using System.Collections;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
 {
-    internal sealed class DefaultAccount : IAccount
+    internal sealed class DefaultAccount : AbstractExtendableInstanceResource, IAccount
     {
-        DateTimeOffset IAuditable.CreatedAt
+        private static readonly string AccessTokensPropertyName = "accessTokens";
+        private static readonly string ApiKeysPropertyName = "apiKeys";
+        private static readonly string ApplicationsPropertyName = "applications";
+        private static readonly string DirectoryPropertyName = "directory";
+        private static readonly string EmailPropertyName = "email";
+        private static readonly string EmailVerificationTokenPropertyName = "emailVerificationToken";
+        private static readonly string FullNamePropertyName = "fullName";
+        private static readonly string GivenNamePropertyName = "givenName";
+        private static readonly string GroupMembershipsPropertyName = "groupMemberships";
+        private static readonly string GroupsPropertyName = "groups";
+        private static readonly string MiddleNamePropertyName = "middleName";
+        private static readonly string ProviderDataPropertyName = "providerData";
+        private static readonly string RefreshTokensPropertyName = "refreshTokens";
+        private static readonly string StatusPropertyName = "status";
+        private static readonly string SurnamePropertyName = "surname";
+        private static readonly string TenantPropertyName = "tenant";
+        private static readonly string UsernamePropertyName = "username";
+
+        public DefaultAccount(IDataStore dataStore)
+            : base(dataStore)
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
         }
 
-        string IAccount.Email
+        public DefaultAccount(IDataStore dataStore, Hashtable properties)
+            : base(dataStore, properties)
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
         }
 
-        string IAccount.FullName
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        internal LinkProperty AccessTokens => GetLinkProperty(AccessTokensPropertyName);
 
-        string IAccount.GivenName
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        internal LinkProperty ApiKeys => GetLinkProperty(ApiKeysPropertyName);
 
-        string IResource.Href
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        internal LinkProperty Applications => GetLinkProperty(ApplicationsPropertyName);
 
-        string IAccount.MiddleName
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        internal LinkProperty Directory => GetLinkProperty(DirectoryPropertyName);
 
-        DateTimeOffset IAuditable.ModifiedAt
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        string IAccount.Email => GetProperty<string>(EmailPropertyName);
 
-        AccountStatus IAccount.Status
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        internal LinkProperty EmailVerificationToken => GetLinkProperty(EmailVerificationTokenPropertyName);
 
-        string IAccount.Surname
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        string IAccount.FullName => GetProperty<string>(FullNamePropertyName);
 
-        string IAccount.Username
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        string IAccount.GivenName => GetProperty<string>(GivenNamePropertyName);
 
-        Task<ICustomData> IExtendable.GetCustomDataAsync()
-        {
-            throw new NotImplementedException();
-        }
+        internal LinkProperty GroupMemberships => GetLinkProperty(GroupMembershipsPropertyName);
+
+        internal LinkProperty Groups => GetLinkProperty(GroupsPropertyName);
+
+        string IAccount.MiddleName => GetProperty<string>(MiddleNamePropertyName);
+
+        internal LinkProperty ProviderData => GetLinkProperty(ProviderDataPropertyName);
+
+        internal LinkProperty RefreshTokens => GetLinkProperty(RefreshTokensPropertyName);
+
+        AccountStatus IAccount.Status => GetProperty<AccountStatus>(StatusPropertyName);
+
+        string IAccount.Surname => GetProperty<string>(SurnamePropertyName);
+
+        internal LinkProperty Tenant => GetLinkProperty(TenantPropertyName);
+
+        string IAccount.Username => GetProperty<string>(UsernamePropertyName);
 
         Task<IDirectory> IAccount.GetDirectoryAsync()
         {

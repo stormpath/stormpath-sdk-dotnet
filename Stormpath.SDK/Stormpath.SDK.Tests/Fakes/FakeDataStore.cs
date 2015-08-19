@@ -23,6 +23,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
@@ -70,7 +71,7 @@ namespace Stormpath.SDK.Tests.Fakes
             };
         }
 
-        Task<T> IDataStore.GetResource<T>(string href, CancellationToken cancellationToken)
+        Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -99,6 +100,11 @@ namespace Stormpath.SDK.Tests.Fakes
                 return null;
 
             return int.Parse(match.Groups[1].Value);
+        }
+
+        Task IDataStore.Save(IResource resource)
+        {
+            throw new NotImplementedException();
         }
     }
 }

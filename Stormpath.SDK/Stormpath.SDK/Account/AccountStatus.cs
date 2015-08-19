@@ -15,23 +15,58 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections.Generic;
+using Stormpath.SDK.Shared;
+
 namespace Stormpath.SDK.Account
 {
-    public enum AccountStatus
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Public enumeration elements")]
+    public sealed class AccountStatus : Enumeration
     {
         /// <summary>
         /// The account is able to log into assigned applications.
         /// </summary>
-        Enabled,
+        public static AccountStatus Enabled = new AccountStatus(0, "ENABLED");
 
         /// <summary>
         /// The account cannot log into any applications.
         /// </summary>
-        Disabled,
+        public static AccountStatus Disabled = new AccountStatus(1, "DISABLED");
 
         /// <summary>
         /// The account is disabled and has not verified their email address.
         /// </summary>
-        Unverified
+        public static AccountStatus Unverified = new AccountStatus(2, "UNVERIFIED");
+
+        private static readonly Dictionary<string, AccountStatus> LookupMap = new Dictionary<string, AccountStatus>()
+        {
+            { Enabled.DisplayName, Enabled },
+            { Disabled.DisplayName, Disabled },
+            { Unverified.DisplayName, Unverified }
+        };
+
+        private AccountStatus()
+        {
+        }
+
+        private AccountStatus(int value, string displayName)
+            : base(value, displayName)
+        {
+        }
+
+        public static explicit operator AccountStatus(string status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static AccountStatus Parse(string status)
+        {
+            AccountStatus found;
+            if (!LookupMap.TryGetValue(status.ToUpper(), out found))
+                throw new ApplicationException($"Could not parse status value '{status.ToUpper()}'");
+
+            return found;
+        }
     }
 }

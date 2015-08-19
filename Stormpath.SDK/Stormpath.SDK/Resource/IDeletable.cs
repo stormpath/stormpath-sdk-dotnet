@@ -1,4 +1,4 @@
-﻿// <copyright file="IInternalDataStore.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IDeletable.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,10 +15,12 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.DataStore
+using System.Threading.Tasks;
+
+namespace Stormpath.SDK.Resource
 {
-    internal interface IInternalDataStore
+    public interface IDeletable
     {
-        // TODO
+        Task DeleteAsync();
     }
 }

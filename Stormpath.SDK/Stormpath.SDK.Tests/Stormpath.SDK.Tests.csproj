@@ -74,6 +74,7 @@
     <Compile Include="Fakes\FakeAccount.cs" />
     <Compile Include="Fakes\FakeAccounts.cs" />
     <Compile Include="Fakes\FakeDataStore.cs" />
+    <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\CollectionTestHarness.cs" />
     <Compile Include="Helpers\LinqAssertExtensions.cs" />
@@ -82,7 +83,9 @@
     <Compile Include="Impl\CollectionResourceRequestModel_validation_tests.cs" />
     <Compile Include="Impl\DefaultClientApiKeyBuilder_tests.cs" />
     <Compile Include="Impl\DefaultClientBuilder_tests.cs" />
+    <Compile Include="Impl\DefaultResourceFactory_tests.cs" />
     <Compile Include="Impl\Extensions_tests.cs" />
+    <Compile Include="Impl\InternalDataStore_tests.cs" />
     <Compile Include="Impl\Linq\CountAsync_tests.cs" />
     <Compile Include="Impl\Linq\Expand_extension_tests.cs" />
     <Compile Include="Impl\Linq\Filter_extension_tests.cs" />

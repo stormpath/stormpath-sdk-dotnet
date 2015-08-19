@@ -15,9 +15,16 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal interface IRequestExecutor
+    internal interface IRequestExecutor : IDisposable
     {
+        string GetSync(string href);
+
+        Task<string> GetAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

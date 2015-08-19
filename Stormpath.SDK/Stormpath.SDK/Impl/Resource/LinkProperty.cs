@@ -1,4 +1,4 @@
-﻿// <copyright file="Iso8601.cs" company="Stormpath, Inc.">
+﻿// <copyright file="LinkProperty.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,24 +15,21 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Globalization;
-
-namespace Stormpath.SDK.Impl.Utility
+namespace Stormpath.SDK.Impl.Resource
 {
-    internal static class Iso8601
+    internal sealed class LinkProperty
     {
-        public static string Format(DateTimeOffset dto)
+        public LinkProperty()
         {
-            return dto.UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ",
-                CultureInfo.InvariantCulture);
         }
 
-        public static DateTimeOffset Parse(string iso8601)
+        public LinkProperty(string href)
         {
-            string pattern = "yyyy-MM-dd'T'HH:mm:ss.FFFK";
-            return DateTimeOffset.ParseExact(iso8601, pattern,
-                CultureInfo.InvariantCulture);
+            this.Href = href;
         }
+
+        public string Href { get; }
+
+        public override string ToString() => Href;
     }
 }

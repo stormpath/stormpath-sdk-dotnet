@@ -18,15 +18,17 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal interface IDataStore
     {
-        Task<T> GetResource<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> GetResourceAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken))
+            where T : class, IResource;
 
         Task<CollectionResponsePageDto<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
 
-        // TODO GetCollection synchronous
+        Task Save(IResource resource);
     }
 }

@@ -16,37 +16,50 @@
 // </remarks>
 
 using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class InternalDataStore : IDataStore, IDisposable
     {
-        private readonly IResourceFactory resourceFactory;
         private readonly IRequestExecutor requestExecutor;
-        private readonly HttpClient client;
+        private readonly IMapSerializer mapMarshaller;
+        private readonly IResourceFactory resourceFactory;
 
         private bool disposed = false;
 
         public InternalDataStore()
+            : this(new NetHttpRequestExecutor())
         {
-            client = new HttpClient();
         }
 
-        async Task<T> IDataStore.GetResource<T>(string href, CancellationToken cancellationToken)
+        internal InternalDataStore(IRequestExecutor requestExecutor)
         {
-            var response = await client.GetAsync(href, cancellationToken);
+            this.requestExecutor = requestExecutor;
+            this.mapMarshaller = new JsonNetMapMarshaller();
+            this.resourceFactory = new DefaultResourceFactory(this);
+        }
 
-            var content = await response.Content.ReadAsStringAsync();
+        async Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
+        {
+            var json = await requestExecutor.GetAsync(href, cancellationToken);
 
-            // var obj =
-            throw new NotImplementedException();
+            var map = mapMarshaller.Deserialize(json);
+            var resource = resourceFactory.Instantiate<T>(map);
+
+            return resource;
         }
 
         Task<CollectionResponsePageDto<T>> IDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task IDataStore.Save(IResource resource)
         {
             throw new NotImplementedException();
         }
@@ -57,7 +70,7 @@ namespace Stormpath.SDK.Impl.DataStore
             {
                 if (disposing)
                 {
-                    client.Dispose();
+                    requestExecutor.Dispose();
                 }
 
                 disposed = true;
