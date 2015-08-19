@@ -16,15 +16,15 @@
 // </remarks>
 
 using System;
+using System.Net.Http;
 using Stormpath.SDK.Api;
 
 namespace Stormpath.SDK.Impl.Http.Authentication
 {
     internal sealed class BasicRequestAuthenticator : IRequestAuthenticator
     {
-        void IRequestAuthenticator.Authenticate(IRequest request, IClientApiKey apiKey)
+        void IRequestAuthenticator.Authenticate(HttpRequestMessage request, IClientApiKey apiKey)
         {
-            // TODO
             throw new NotImplementedException();
         }
     }

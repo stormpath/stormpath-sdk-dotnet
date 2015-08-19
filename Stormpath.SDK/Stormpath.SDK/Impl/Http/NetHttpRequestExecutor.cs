@@ -41,11 +41,17 @@ namespace Stormpath.SDK.Impl.Http
             this.connectionTimeout = connectionTimeout;
 
             client = new HttpClient();
+            SetupClient();
         }
 
         AuthenticationScheme IRequestExecutor.AuthenticationScheme => authScheme;
 
         int IRequestExecutor.ConnectionTimeout => connectionTimeout;
+
+        private void SetupClient()
+        {
+            client.Timeout = TimeSpan.FromMilliseconds(connectionTimeout);
+        }
 
         Task<string> IRequestExecutor.GetAsync(string href, CancellationToken cancellationToken)
         {

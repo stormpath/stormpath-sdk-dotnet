@@ -16,11 +16,13 @@
 // </remarks>
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
@@ -28,6 +30,7 @@ namespace Stormpath.SDK.Impl.Client
     internal sealed class DefaultClient : IClient
     {
         private IInternalDataStore dataStore;
+        private string currentTenantHref;
 
         public DefaultClient(IClientApiKey apiKey, string baseUrl, AuthenticationScheme authenticationScheme, int connectionTimeout)
         {
@@ -43,6 +46,8 @@ namespace Stormpath.SDK.Impl.Client
             var requestExecutor = factory.CreateRequestExecutor(apiKey, authenticationScheme, connectionTimeout);
             this.dataStore = factory.CreateDataStore(requestExecutor, baseUrl);
         }
+
+        private string CurrentTenantHref => currentTenantHref.Nullable() ?? "tenants/current";
 
         AuthenticationScheme IClient.AuthenticationScheme
         {
@@ -70,9 +75,16 @@ namespace Stormpath.SDK.Impl.Client
             throw new NotImplementedException();
         }
 
-        Task<ITenant> IClient.GetCurrentTenantAsync()
+        async Task<ITenant> IClient.GetCurrentTenantAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var tenant = await dataStore
+                .GetResourceAsync<ITenant>(this.CurrentTenantHref, cancellationToken)
+                .ConfigureAwait(false);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            this.currentTenantHref = tenant.Href;
+
+            return tenant;
         }
     }
 }

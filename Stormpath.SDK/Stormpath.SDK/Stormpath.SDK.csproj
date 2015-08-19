@@ -85,6 +85,8 @@
     <Compile Include="Group\IGroupList.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\DataStore\IMapSerializer.cs" />
+    <Compile Include="Impl\Http\Authentication\DefaultRequestAuthenticatorFactory.cs" />
+    <Compile Include="Impl\Http\Authentication\IRequestAuthenticatorFactory.cs" />
     <Compile Include="Impl\Http\IRequestExecutor.cs" />
     <Compile Include="Impl\DataStore\IResourceFactory.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceFactory.cs" />
@@ -103,6 +105,8 @@
     <Compile Include="Impl\Http\Authentication\SAuthc1RequestAuthenticator.cs" />
     <Compile Include="Impl\Http\IRequest.cs" />
     <Compile Include="Impl\Http\NetHttpRequestExecutor.cs" />
+    <Compile Include="Impl\Http\Authentication\RequestAuthenticationException.cs" />
+    <Compile Include="Impl\Http\RequestException.cs" />
     <Compile Include="Impl\InternalFactory.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryExecutor.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryModelVisitor.cs" />

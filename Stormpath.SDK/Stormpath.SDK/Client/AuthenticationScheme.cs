@@ -21,12 +21,11 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Client
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "<Pending>")]
     public sealed class AuthenticationScheme : Enumeration
     {
-#pragma warning disable SA1401 // Fields must be private
         public static AuthenticationScheme Basic = new AuthenticationScheme(0, "BASIC", typeof(BasicRequestAuthenticator));
         public static AuthenticationScheme SAuthc1 = new AuthenticationScheme(1, "SAUTHC1", typeof(SAuthc1RequestAuthenticator));
-#pragma warning restore SA1401 // Fields must be private
 
         private readonly Type authenticatorType;
 

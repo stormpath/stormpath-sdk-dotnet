@@ -1,4 +1,4 @@
-﻿// <copyright file="IClient.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IRequestAuthenticatorFactory.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,20 +15,12 @@
 // limitations under the License.
 // </remarks>
 
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Tenant;
+using Stormpath.SDK.Client;
 
-namespace Stormpath.SDK.Client
+namespace Stormpath.SDK.Impl.Http.Authentication
 {
-    public interface IClient : ITenantActions
+    internal interface IRequestAuthenticatorFactory
     {
-        string BaseUrl { get; }
-
-        AuthenticationScheme AuthenticationScheme { get; }
-
-        int ConnectionTimeout { get; }
-
-        Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
+        IRequestAuthenticator Create(AuthenticationScheme scheme);
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="IClient.cs" company="Stormpath, Inc.">
+﻿// <copyright file="RequestException.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,20 +15,21 @@
 // limitations under the License.
 // </remarks>
 
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Tenant;
+using System;
 
-namespace Stormpath.SDK.Client
+namespace Stormpath.SDK.Impl.Http
 {
-    public interface IClient : ITenantActions
+    [Serializable]
+    internal class RequestException : ApplicationException
     {
-        string BaseUrl { get; }
+        public RequestException(string message)
+            : base(message)
+        {
+        }
 
-        AuthenticationScheme AuthenticationScheme { get; }
-
-        int ConnectionTimeout { get; }
-
-        Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
+        public RequestException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }

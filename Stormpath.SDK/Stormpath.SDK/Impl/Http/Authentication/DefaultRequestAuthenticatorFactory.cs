@@ -1,4 +1,4 @@
-﻿// <copyright file="SAuthc1RequestAuthenticator.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultRequestAuthenticatorFactory.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,17 +15,22 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Net.Http;
-using Stormpath.SDK.Api;
+using Stormpath.SDK.Client;
 
 namespace Stormpath.SDK.Impl.Http.Authentication
 {
-    internal sealed class SAuthc1RequestAuthenticator : IRequestAuthenticator
+    internal sealed class DefaultRequestAuthenticatorFactory : IRequestAuthenticatorFactory
     {
-        void IRequestAuthenticator.Authenticate(HttpRequestMessage request, IClientApiKey apiKey)
+        IRequestAuthenticator IRequestAuthenticatorFactory.Create(AuthenticationScheme scheme)
         {
-            throw new NotImplementedException();
+            if (scheme == null ||
+                scheme == AuthenticationScheme.SAuthc1)
+                return new SAuthc1RequestAuthenticator();
+
+            if (scheme == AuthenticationScheme.Basic)
+                return new BasicRequestAuthenticator();
+
+            throw new RequestAuthenticationException("Unknown authentication scheme.");
         }
     }
 }
