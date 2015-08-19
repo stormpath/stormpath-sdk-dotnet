@@ -16,70 +16,61 @@
 // </remarks>
 
 using System;
+using System.Collections;
 using System.Threading.Tasks;
-using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
-using Stormpath.SDK.Resource;
+using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
-    internal sealed class DefaultTenant : ITenant
+    internal sealed class DefaultTenant : AbstractExtendableInstanceResource, ITenant
     {
-        string IResource.Href
+        private static readonly string AccountsPropertyName = "accounts";
+        private static readonly string AgentsPropertyName = "agents";
+        private static readonly string ApplicationsPropertyName = "applications";
+        private static readonly string DirectoriesPropertyName = "directories";
+        private static readonly string GroupsPropertyName = "groups";
+        private static readonly string IdSitesPropertyName = "idSites";
+        private static readonly string KeyPropertyName = "key";
+        private static readonly string NamePropertyName = "name";
+        private static readonly string OrganizationsPropertyName = "organizations";
+
+        public DefaultTenant(IDataStore dataStore)
+            : base(dataStore)
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
         }
 
-        string ITenant.Name
+        public DefaultTenant(IDataStore dataStore, Hashtable properties)
+             : base(dataStore, properties)
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
         }
+
+        internal LinkProperty Accounts => GetLinkProperty(AccountsPropertyName);
+
+        internal LinkProperty Agents => GetLinkProperty(AgentsPropertyName);
+
+        internal LinkProperty Applications => GetLinkProperty(ApplicationsPropertyName);
+
+        internal LinkProperty Directories => GetLinkProperty(DirectoriesPropertyName);
+
+        internal LinkProperty Groups => GetLinkProperty(GroupsPropertyName);
+
+        internal LinkProperty IdSites => GetLinkProperty(IdSitesPropertyName);
+
+        string ITenant.Key => GetProperty<string>(KeyPropertyName);
+
+        string ITenant.Name => GetProperty<string>(NamePropertyName);
+
+        internal LinkProperty Organizations => GetLinkProperty(OrganizationsPropertyName);
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application)
         {
             throw new NotImplementedException();
         }
 
-        Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IAccountList> ITenantActions.GetAccountsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         IApplicationAsyncList ITenantActions.GetApplications()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IApplicationAsyncList> ITenantActions.GetApplicationsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IDirectoryList> ITenantActions.GetDirectoriesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IGroupList> ITenantActions.GetGroupsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IAccount> ITenantActions.VerifyAccountEmailAsync()
         {
             throw new NotImplementedException();
         }

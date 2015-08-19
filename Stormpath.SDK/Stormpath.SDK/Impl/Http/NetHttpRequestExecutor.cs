@@ -19,20 +19,33 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Api;
+using Stormpath.SDK.Client;
 
 namespace Stormpath.SDK.Impl.Http
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:DoNotUseRegions", Justification = "Reviewed.")]
     internal sealed class NetHttpRequestExecutor : IRequestExecutor
     {
+        private readonly IClientApiKey apiKey;
+        private readonly AuthenticationScheme authScheme;
+        private readonly int connectionTimeout;
         private readonly HttpClient client;
 
         private bool disposed = false; // To detect redundant calls
 
-        public NetHttpRequestExecutor()
+        public NetHttpRequestExecutor(IClientApiKey apiKey, AuthenticationScheme authenticationScheme, int connectionTimeout)
         {
+            this.apiKey = apiKey;
+            this.authScheme = authenticationScheme;
+            this.connectionTimeout = connectionTimeout;
+
             client = new HttpClient();
         }
+
+        AuthenticationScheme IRequestExecutor.AuthenticationScheme => authScheme;
+
+        int IRequestExecutor.ConnectionTimeout => connectionTimeout;
 
         Task<string> IRequestExecutor.GetAsync(string href, CancellationToken cancellationToken)
         {
@@ -43,6 +56,8 @@ namespace Stormpath.SDK.Impl.Http
         {
             throw new NotImplementedException();
         }
+
+        #region IDisposable implementation
 
         private void Dispose(bool disposing)
         {
@@ -61,5 +76,7 @@ namespace Stormpath.SDK.Impl.Http
         {
             Dispose(true);
         }
+
+        #endregion
     }
 }

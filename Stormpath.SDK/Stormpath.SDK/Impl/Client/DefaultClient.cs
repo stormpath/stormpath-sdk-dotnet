@@ -17,51 +17,46 @@
 
 using System;
 using System.Threading.Tasks;
-using Stormpath.SDK.Account;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
-using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class DefaultClient : IClient
     {
-        private readonly string baseUrl;
-        private readonly AuthenticationScheme authScheme;
-        private readonly int connectionTimeout;
+        private IInternalDataStore dataStore;
 
-        public DefaultClient(IClientApiKey apiKey, string baseUrl, AuthenticationScheme authenticationScheme, int timeout)
+        public DefaultClient(IClientApiKey apiKey, string baseUrl, AuthenticationScheme authenticationScheme, int connectionTimeout)
         {
             if (apiKey == null || !apiKey.IsValid())
                 throw new ArgumentException("API Key is not valid.");
             if (string.IsNullOrEmpty(baseUrl))
                 throw new ArgumentNullException("Base URL cannot be empty.");
-            if (timeout < 0)
+            if (connectionTimeout < 0)
                 throw new ArgumentException("Timeout cannot be negative.");
 
-            this.baseUrl = baseUrl;
-            this.authScheme = authenticationScheme;
-            this.connectionTimeout = timeout;
+            var factory = new InternalFactory();
 
-            // TODO
+            var requestExecutor = factory.CreateRequestExecutor(apiKey, authenticationScheme, connectionTimeout);
+            this.dataStore = factory.CreateDataStore(requestExecutor, baseUrl);
         }
 
         AuthenticationScheme IClient.AuthenticationScheme
         {
-            get { return this.authScheme; }
+            get { return this.dataStore.RequestExecutor.AuthenticationScheme; }
         }
 
         string IClient.BaseUrl
         {
-            get { return this.baseUrl; }
+            get { return this.dataStore.BaseUrl; }
         }
 
         int IClient.ConnectionTimeout
         {
-            get { return this.connectionTimeout; }
+            get { return this.dataStore.RequestExecutor.ConnectionTimeout; }
         }
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application)
@@ -69,39 +64,9 @@ namespace Stormpath.SDK.Impl.Client
             throw new NotImplementedException();
         }
 
-        Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IAccountList> ITenantActions.GetAccountsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         IApplicationAsyncList ITenantActions.GetApplications()
         {
             // return new CollectionResourceQueryable()
-            throw new NotImplementedException();
-        }
-
-        Task<IApplicationAsyncList> ITenantActions.GetApplicationsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IDirectoryList> ITenantActions.GetDirectoriesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IGroupList> ITenantActions.GetGroupsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IAccount> ITenantActions.VerifyAccountEmailAsync()
-        {
             throw new NotImplementedException();
         }
 

@@ -20,7 +20,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.Account;
-using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Tenant;
 

@@ -83,8 +83,9 @@
     <Compile Include="Directory\IDirectoryList.cs" />
     <Compile Include="Group\IGroup.cs" />
     <Compile Include="Group\IGroupList.cs" />
+    <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\DataStore\IMapSerializer.cs" />
-    <Compile Include="Impl\DataStore\IRequestExecutor.cs" />
+    <Compile Include="Impl\Http\IRequestExecutor.cs" />
     <Compile Include="Impl\DataStore\IResourceFactory.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceFactory.cs" />
     <Compile Include="Impl\Account\DefaultAccount.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Impl\Http\Authentication\SAuthc1RequestAuthenticator.cs" />
     <Compile Include="Impl\Http\IRequest.cs" />
     <Compile Include="Impl\Http\NetHttpRequestExecutor.cs" />
+    <Compile Include="Impl\InternalFactory.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryExecutor.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryModelVisitor.cs" />
     <Compile Include="Impl\Linq\CollectionResourceWhereExpressionVisitor.cs" />
@@ -166,10 +168,10 @@
     <None Include="Stormpath.SDK.ruleset" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta006\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <Folder Include="DataStore\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataStore\" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta008\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

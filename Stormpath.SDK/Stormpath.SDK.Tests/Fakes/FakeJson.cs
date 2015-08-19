@@ -21,6 +21,43 @@ namespace Stormpath.SDK.Tests.Fakes
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "Reviewed")]
     public static class FakeJson
     {
+        #region Tenant foo-bar
+
+        public static readonly string Tenant = @"
+{
+    ""accounts"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foo-bar/accounts""
+    },
+    ""agents"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foo-bar/agents""
+    },
+    ""applications"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foo-bar/applications""
+    },
+    ""createdAt"": ""2015-07-21T23:50:49.058Z"",
+    ""customData"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foo-bar/customData""
+    },
+    ""directories"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foo-bar/directories""
+    },
+    ""groups"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foo-bar/groups""
+    },
+    ""href"": ""https://api.stormpath.com/v1/tenants/foo-bar"",
+    ""idSites"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foo-bar/idSites""
+    },
+    ""key"": ""foo-bar"",
+    ""modifiedAt"": ""2015-07-21T23:50:49.579Z"",
+    ""name"": ""foo-bar"",
+    ""organizations"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foo-bar/organizations""
+    }
+}";
+
+        #endregion
+
         #region Account han.solo@corellia.core
 
         public static readonly string Account = @"

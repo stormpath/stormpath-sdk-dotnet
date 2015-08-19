@@ -24,25 +24,28 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal sealed class InternalDataStore : IDataStore, IDisposable
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:DoNotUseRegions", Justification = "Reviewed.")]
+    internal sealed class InternalDataStore : IInternalDataStore, IDisposable
     {
+        private readonly string baseUrl;
         private readonly IRequestExecutor requestExecutor;
         private readonly IMapSerializer mapMarshaller;
         private readonly IResourceFactory resourceFactory;
 
         private bool disposed = false;
 
-        public InternalDataStore()
-            : this(new NetHttpRequestExecutor())
+        internal InternalDataStore(IRequestExecutor requestExecutor, string baseUrl)
         {
-        }
-
-        internal InternalDataStore(IRequestExecutor requestExecutor)
-        {
+            this.baseUrl = baseUrl;
             this.requestExecutor = requestExecutor;
+
             this.mapMarshaller = new JsonNetMapMarshaller();
             this.resourceFactory = new DefaultResourceFactory(this);
         }
+
+        IRequestExecutor IInternalDataStore.RequestExecutor => this.requestExecutor;
+
+        string IInternalDataStore.BaseUrl => this.baseUrl;
 
         async Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
         {
@@ -64,6 +67,8 @@ namespace Stormpath.SDK.Impl.DataStore
             throw new NotImplementedException();
         }
 
+        #region IDisposable implementation
+
         private void Dispose(bool disposing)
         {
             if (!disposed)
@@ -82,5 +87,7 @@ namespace Stormpath.SDK.Impl.DataStore
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
         }
+
+        #endregion
     }
 }

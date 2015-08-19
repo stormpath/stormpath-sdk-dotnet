@@ -1,4 +1,4 @@
-﻿// <copyright file="ITenantActions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IInternalDataStore.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,15 +15,14 @@
 // limitations under the License.
 // </remarks>
 
-using System.Threading.Tasks;
-using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.Http;
 
-namespace Stormpath.SDK.Tenant
+namespace Stormpath.SDK.Impl.DataStore
 {
-    public interface ITenantActions
+    internal interface IInternalDataStore : IDataStore
     {
-        Task<IApplication> CreateApplicationAsync(IApplication application);
+        IRequestExecutor RequestExecutor { get; }
 
-        IApplicationAsyncList GetApplications();
+        string BaseUrl { get; }
     }
 }

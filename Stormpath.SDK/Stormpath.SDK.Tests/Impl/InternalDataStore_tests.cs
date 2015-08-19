@@ -21,7 +21,10 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 
@@ -35,7 +38,7 @@ namespace Stormpath.SDK.Tests.Impl
         public InternalDataStore_tests()
         {
             fakeRequestExecutor = Substitute.For<IRequestExecutor>();
-            dataStore = new InternalDataStore(fakeRequestExecutor);
+            dataStore = new InternalDataStore(fakeRequestExecutor, "http://foobar");
         }
 
         [Fact]
@@ -70,6 +73,32 @@ namespace Stormpath.SDK.Tests.Impl
             (account as DefaultAccount).ProviderData.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/providerData");
             (account as DefaultAccount).RefreshTokens.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/refreshTokens");
             (account as DefaultAccount).Tenant.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foobarTenant");
+        }
+
+        [Fact]
+        public async Task Instantiating_Tenant_from_JSON()
+        {
+            var href = "http://foobar/tenant";
+            fakeRequestExecutor.GetAsync(href)
+                .Returns(Task.FromResult(FakeJson.Tenant));
+
+            var tenant = await dataStore.GetResourceAsync<ITenant>(href);
+
+            // Verify against data from FakeJson.Tenant
+            tenant.CreatedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.058Z"));
+            tenant.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foo-bar");
+            tenant.Key.ShouldBe("foo-bar");
+            tenant.ModifiedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.579Z"));
+            tenant.Name.ShouldBe("foo-bar");
+
+            (tenant as DefaultTenant).Accounts.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foo-bar/accounts");
+            (tenant as DefaultTenant).Agents.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foo-bar/agents");
+            (tenant as DefaultTenant).Applications.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foo-bar/applications");
+            (tenant as DefaultTenant).CustomData.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foo-bar/customData");
+            (tenant as DefaultTenant).Directories.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foo-bar/directories");
+            (tenant as DefaultTenant).Groups.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foo-bar/groups");
+            (tenant as DefaultTenant).IdSites.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foo-bar/idSites");
+            (tenant as DefaultTenant).Organizations.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foo-bar/organizations");
         }
     }
 }

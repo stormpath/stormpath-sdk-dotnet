@@ -18,11 +18,16 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Client;
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Impl.Http
 {
     internal interface IRequestExecutor : IDisposable
     {
+        AuthenticationScheme AuthenticationScheme { get; }
+
+        int ConnectionTimeout { get; }
+
         string GetSync(string href);
 
         Task<string> GetAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
