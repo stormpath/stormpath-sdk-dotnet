@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Tests.Impl
 {
     public class Extensions_tests
     {
-        public class Nullable_string
+        public class String_Nullable
         {
             [Fact]
             public void Returns_null_when_string_is_null()
@@ -41,6 +41,48 @@ namespace Stormpath.SDK.Tests.Impl
             public void Returns_string()
             {
                 "foobar".Nullable().ShouldBe("foobar");
+            }
+        }
+
+        public class String_ToBase64
+        {
+            [Fact]
+            public void Returns_null_when_string_is_null()
+            {
+                ((string)null).ToBase64(System.Text.Encoding.UTF8).ShouldBe(null);
+            }
+
+            [Fact]
+            public void Returns_empty_when_string_is_empty()
+            {
+                string.Empty.ToBase64(System.Text.Encoding.UTF8).ShouldBe(string.Empty);
+            }
+
+            [Fact]
+            public void Returns_Zm9vYmFy_for_foobar()
+            {
+                "foobar".ToBase64(System.Text.Encoding.UTF8).ShouldBe("Zm9vYmFy");
+            }
+        }
+
+        public class String_FromBase64
+        {
+            [Fact]
+            public void Returns_null_when_string_is_null()
+            {
+                ((string)null).FromBase64(System.Text.Encoding.UTF8).ShouldBe(null);
+            }
+
+            [Fact]
+            public void Returns_empty_when_string_is_empty()
+            {
+                string.Empty.FromBase64(System.Text.Encoding.UTF8).ShouldBe(string.Empty);
+            }
+
+            [Fact]
+            public void Returns_Zm9vYmFy_for_foobar()
+            {
+                "Zm9vYmFy".FromBase64(System.Text.Encoding.UTF8).ShouldBe("foobar");
             }
         }
     }

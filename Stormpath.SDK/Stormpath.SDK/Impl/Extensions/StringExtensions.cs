@@ -15,6 +15,9 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Text;
+
 namespace Stormpath.SDK.Impl.Extensions
 {
     internal static class StringExtensions
@@ -24,6 +27,22 @@ namespace Stormpath.SDK.Impl.Extensions
             if (string.IsNullOrEmpty(source))
                 return null;
             return source;
+        }
+
+        public static string ToBase64(this string source, Encoding encoding)
+        {
+            if (source == null)
+                return null;
+
+            return Convert.ToBase64String(encoding.GetBytes(source));
+        }
+
+        public static string FromBase64(this string base64Source, Encoding encoding)
+        {
+            if (base64Source == null)
+                return null;
+
+            return encoding.GetString(Convert.FromBase64String(base64Source));
         }
     }
 }
