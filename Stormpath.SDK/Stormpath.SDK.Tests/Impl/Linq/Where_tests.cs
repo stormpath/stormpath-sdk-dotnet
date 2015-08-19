@@ -158,7 +158,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.CreatedAt > testDate);
 
-            query.GeneratedArgumentsWere(Url, Resource, "createdAt=(2015-01-01T06:00:00.000Z,]");
+            query.GeneratedArgumentsWere(Url, Resource, "createdAt=(2015-01-01T06:00:00Z,]");
         }
 
         [Fact]
@@ -168,7 +168,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.CreatedAt >= testDate);
 
-            query.GeneratedArgumentsWere(Url, Resource, "createdAt=[2015-01-01T06:00:00.000Z,]");
+            query.GeneratedArgumentsWere(Url, Resource, "createdAt=[2015-01-01T06:00:00Z,]");
         }
 
         [Fact]
@@ -178,7 +178,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.ModifiedAt < testDate);
 
-            query.GeneratedArgumentsWere(Url, Resource, "modifiedAt=[,2016-01-01T12:00:00.000Z)");
+            query.GeneratedArgumentsWere(Url, Resource, "modifiedAt=[,2016-01-01T12:00:00Z)");
         }
 
         [Fact]
@@ -188,7 +188,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.ModifiedAt <= testDate);
 
-            query.GeneratedArgumentsWere(Url, Resource, "modifiedAt=[,2016-01-01T12:00:00.000Z]");
+            query.GeneratedArgumentsWere(Url, Resource, "modifiedAt=[,2016-01-01T12:00:00Z]");
         }
 
         [Fact]
@@ -199,7 +199,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.CreatedAt > testStartDate && x.CreatedAt <= testEndDate);
 
-            query.GeneratedArgumentsWere(Url, Resource, "createdAt=(2015-01-01T00:00:00.000Z,2015-12-31T23:59:59.000Z]");
+            query.GeneratedArgumentsWere(Url, Resource, "createdAt=(2015-01-01T00:00:00Z,2015-12-31T23:59:59Z]");
         }
     }
 }

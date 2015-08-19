@@ -21,6 +21,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Impl.Http.Authentication;
 
 namespace Stormpath.SDK.Impl.Http
 {
@@ -30,15 +31,23 @@ namespace Stormpath.SDK.Impl.Http
         private readonly IClientApiKey apiKey;
         private readonly AuthenticationScheme authScheme;
         private readonly int connectionTimeout;
+
+        private readonly IRequestAuthenticator requestAuthenticator;
         private readonly HttpClient client;
 
         private bool disposed = false; // To detect redundant calls
 
         public NetHttpRequestExecutor(IClientApiKey apiKey, AuthenticationScheme authenticationScheme, int connectionTimeout)
         {
+            if (!apiKey.IsValid())
+                throw new ApplicationException("API Key is invalid.");
+
             this.apiKey = apiKey;
             this.authScheme = authenticationScheme;
             this.connectionTimeout = connectionTimeout;
+
+            IRequestAuthenticatorFactory requestAuthenticatorFactory = new DefaultRequestAuthenticatorFactory();
+            requestAuthenticator = requestAuthenticatorFactory.Create(authenticationScheme);
 
             client = new HttpClient();
             SetupClient();
@@ -53,9 +62,29 @@ namespace Stormpath.SDK.Impl.Http
             client.Timeout = TimeSpan.FromMilliseconds(connectionTimeout);
         }
 
-        Task<string> IRequestExecutor.GetAsync(string href, CancellationToken cancellationToken)
+        async Task<string> IRequestExecutor.GetAsync(string href, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var request = new HttpRequestMessage(HttpMethod.Get, href);
+
+            requestAuthenticator.Authenticate(request, apiKey);
+
+            try
+            {
+                var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+
+                // TODO more refined error handling
+                response.EnsureSuccessStatusCode(); // throws
+                return null; // not reached
+            }
+            catch (Exception e)
+            {
+                throw new RequestException("Unable to execute HTTP request.", e);
+            }
         }
 
         string IRequestExecutor.GetSync(string href)

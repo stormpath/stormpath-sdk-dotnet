@@ -60,6 +60,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultClient_tests.cs" />
+    <Compile Include="Integration_tests.cs" />
     <Compile Include="NamespaceExtensions.cs" />
     <Compile Include="Namespace_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

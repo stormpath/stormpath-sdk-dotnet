@@ -35,12 +35,12 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             // Midnight Pacific Time, Jan 1, 2015 = 2015-01-01 08:00 UTC
             var midnightPacificTimeJan1 = new DateTimeOffset(2015, 01, 01, 00, 00, 00, 00, TimeSpan.FromHours(-8));
             var eightHoursLaterUtc8601 = Iso8601.Format(midnightPacificTimeJan1);
-            eightHoursLaterUtc8601.ShouldBe("2015-01-01T08:00:00.000Z");
+            eightHoursLaterUtc8601.ShouldBe("2015-01-01T08:00:00Z");
 
             // 4PM Pacific Time, Dec 31 2015 = 2015-01-01 00:00 UTC
             var fourInTheLocalAfternoonDec31 = new DateTime(2014, 12, 31, 16, 00, 00);
             var midnightUtcIso8601 = Iso8601.Format(new DateTimeOffset(fourInTheLocalAfternoonDec31, TimeZoneInfo.FindSystemTimeZoneById(pacificTimeZoneName).BaseUtcOffset));
-            midnightUtcIso8601.ShouldBe("2015-01-01T00:00:00.000Z");
+            midnightUtcIso8601.ShouldBe("2015-01-01T00:00:00Z");
         }
 
         [Fact]
@@ -48,11 +48,11 @@ namespace Stormpath.SDK.Tests.Impl.Utility
         {
             var alreadyInUtc = new DateTimeOffset(2016, 02, 01, 12, 00, 00, TimeSpan.Zero);
             var directlyInto8601 = Iso8601.Format(alreadyInUtc);
-            directlyInto8601.ShouldBe("2016-02-01T12:00:00.000Z");
+            directlyInto8601.ShouldBe("2016-02-01T12:00:00Z");
 
             var dateTimeInUtc = new DateTime(2016, 02, 02, 16, 30, 00, DateTimeKind.Utc);
             var alsoConvertsFine = Iso8601.Format(new DateTimeOffset(dateTimeInUtc, TimeSpan.Zero));
-            alsoConvertsFine.ShouldBe("2016-02-02T16:30:00.000Z");
+            alsoConvertsFine.ShouldBe("2016-02-02T16:30:00Z");
         }
     }
 }
