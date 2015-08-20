@@ -1,8 +1,13 @@
 language: csharp
-solution: ./Stormpath.SDK/Stormpath.SDK.sln
+solution: "./Stormpath.SDK/Stormpath.SDK.sln"
 install:
-  - nuget restore -source "https://www.nuget.org/api/v2;https://www.myget.org/F/xunit" ./Stormpath.SDK/Stormpath.SDK.sln
-  - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
+- nuget restore -source "https://www.nuget.org/api/v2;https://www.myget.org/F/xunit"
+  ./Stormpath.SDK/Stormpath.SDK.sln
+- nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=Release ./Stormpath.SDK/Stormpath.SDK.sln
-  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./Stormpath.SDK/Stormpath.SDK.Tests/bin/Release/Stormpath.SDK.Tests.dll
+- xbuild /p:Configuration=Release ./Stormpath.SDK/Stormpath.SDK.sln
+- mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./Stormpath.SDK/Stormpath.SDK.Tests/bin/Release/Stormpath.SDK.Tests.dll
+env:
+  global:
+  - secure: sMEfLcgXwYvRsaVRFVDzHQoMCNwgtC39F4VQe3fdq+q4oIcOYn1+e/80ZgfP3JqSTcJyhEtNfQLU1D3rYa5mfCsZjeU9EHabK1fheMRgMY9VMR24v1SG/54wXY9teBnUm1BIi+/yFdybl8a02KsvhwWqHhFVthJQqVV4y7SnQk8BKJJ/75b2Vr/Rq6W6DSXPeZoXif+uvNbFkngE7Dy8d3nhjOybh9aXSv3oWyMKIrR5zvMCNCHsPeW2+X+3x5Cr8ryMnuQ+b3tX8qlPhxyeUvcTlFcCuZYHHs/4CTHL9zEcaAkU4bYg1zfDRDHiJ/e3h591KfVSS+E/1mh29XsnE1NMIbWHKJpNB0KlW5z4qO7t7Atgsb9FOuvvqCYFvkI9WmM08ilhTt369sEXNKsEkLTsAtYH2igWng7J6meAnj5fyRcN7d8VlPRPyUbzW8RFKQn69wF7nmfU2wYQaRfbiDpYOcHOxtOA2SNuYVG2Ysf6JMIgWzeKcRwC6HWjPZu/kNk6+wGQv2d2VSapex1/tXazB8+8cpjCGK6Kqw115Y01JZ6ePfj584Wfstr3XlVSfeu9hCvGhO5EhLBq6KjL5TdfnkaFtq2CFsSHjYHumQNwW0rgmcL6nqs2SrG/feut5GUSVqZKgy9xy/7TOxoHwrnTXZqu4TgOSzpN82oNXkg=
+  - secure: LU2ISkFH002BC+ZSfz/LbK6+IzZ0502SkUvytbjHh+rEt3Q509xi8zd6tzxX7SfLFAIqLOW9KM+MsVMImcJPp1QKegE1ly8CjbLxXlXIurkxvvm7XERfAZWaJP8WzMVhlLpcDyIc4fC3FkHpaAivRX0XQmVElR78HnxB/+P9lD0FsXlwjpKWH9QZUARJSuh+KCmLgpgQPF1+PBGNA5koP84Ky6oGvWGcbHOK6ZwkeaC37/l5Hmi/yOnmU0Eu5BK5N6+iBQpZwNs1iEBFijMdsai3KooodK9/7m1B99bi178w9iSvrVw0ZBVGbfYDYoDnCT6FhAKIPXjYHWhQyKZ6dguKnxlIBDq9gE4PBQSfTfT7blmeJtPJNwg5INiy72XXRNT9FaFv2usWRgZstPkAg7LkYrmzJtM1oP/zAkavMTvohjzuFUpFR9NQAClUD08wbq1WBY50VgJ8cNHYeqh5J04DRhgH5Gx7O0bPHw6PmuFjU4PZ7zmzfPUo74rdqa/KdmuMSvtx/pWeMpdSKLWgBOYrVagyOkweHk78GAOMDOT6IQHD0kK/rEpQ5qxbmjIpD3I/VKp0drszo+lUz7tlRKnd+wC2KrTYKqqQAVBkD0htmrw9WhSebrLFT8HXvkZpxq9zCV9h99CUL2/Afg3oDBnNGjkABYAHNtSRT9HHzZY=

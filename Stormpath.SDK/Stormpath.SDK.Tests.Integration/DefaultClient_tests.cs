@@ -28,7 +28,11 @@ namespace Stormpath.SDK.Tests.Integration
         {
             var tenant = await harness.Client.GetCurrentTenantAsync();
 
-            // TODO Verify tenant data?
+            tenant.ShouldNotBe(null);
+            tenant.Href.ShouldNotBe(null);
+            tenant.Name.ShouldNotBe(null);
+
+            // TODO - verify actual tenant data?
         }
     }
 }
