@@ -15,6 +15,10 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -22,7 +26,7 @@ namespace Stormpath.SDK.Tests.Integration
 {
     public class DefaultClient_tests : Integration_tests
     {
-        [Fact(Skip="Todo")]
+        [Fact(Skip ="Todo")]
         public async Task Getting_current_tenant()
         {
             var tenant = await harness.Client.GetCurrentTenantAsync();

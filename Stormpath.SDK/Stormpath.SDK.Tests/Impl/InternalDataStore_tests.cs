@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
@@ -45,7 +46,7 @@ namespace Stormpath.SDK.Tests.Impl
         public async Task Instantiating_Account_from_JSON()
         {
             var href = "http://foobar/account";
-            fakeRequestExecutor.GetAsync(href)
+            fakeRequestExecutor.GetAsync(new Uri(href))
                 .Returns(Task.FromResult(FakeJson.Account));
 
             var account = await dataStore.GetResourceAsync<IAccount>(href);
@@ -79,7 +80,7 @@ namespace Stormpath.SDK.Tests.Impl
         public async Task Instantiating_Tenant_from_JSON()
         {
             var href = "http://foobar/tenant";
-            fakeRequestExecutor.GetAsync(href)
+            fakeRequestExecutor.GetAsync(new Uri(href))
                 .Returns(Task.FromResult(FakeJson.Tenant));
 
             var tenant = await dataStore.GetResourceAsync<ITenant>(href);

@@ -1,4 +1,4 @@
-﻿// <copyright file="PlatformHelper.cs" company="Stormpath, Inc.">
+﻿// <copyright file="UserAgentBuilder_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,19 +16,23 @@
 // </remarks>
 
 using System;
+using Shouldly;
+using Stormpath.SDK.Impl.Http;
+using Xunit;
 
-namespace Stormpath.SDK.Tests.Helpers
+namespace Stormpath.SDK.Tests.Impl
 {
-    public static class PlatformHelper
+    public class UserAgentBuilder_tests
     {
-        private static readonly Lazy<bool> IsRunningOnMonoValue = new Lazy<bool>(() =>
+        [Fact]
+        public void UserAgent_is_known()
         {
-            return Type.GetType("Mono.Runtime") != null;
-        });
+            var userAgent = UserAgentBuilder.GetUserAgent();
 
-        public static bool IsRunningOnMono()
-        {
-            return IsRunningOnMonoValue.Value;
+            userAgent.ShouldNotContain("unknown");
+
+            // TODO change this when moving to xUnit 2.0+
+            Console.WriteLine($"UserAgent: {userAgent}");
         }
     }
 }

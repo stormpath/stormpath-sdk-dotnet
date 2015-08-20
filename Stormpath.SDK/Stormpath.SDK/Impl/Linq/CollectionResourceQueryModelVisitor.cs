@@ -167,9 +167,11 @@ namespace Stormpath.SDK.Impl.Linq
 
             if (CollectionLinkMethodNameTranslator.TryGetValue(methodCallExpression.Method.Name, out expandField))
             {
-                ParsedModel.Expansions.Add(new ExpansionTerm(expandField,
-                    (int?)expandResultOperator.Offset.Value,
-                    (int?)expandResultOperator.Limit.Value));
+                ParsedModel.Expansions.Add(
+                    new ExpansionTerm(
+                        expandField,
+                        (int?)expandResultOperator.Offset.Value,
+                        (int?)expandResultOperator.Limit.Value));
                 return true; // done
             }
 

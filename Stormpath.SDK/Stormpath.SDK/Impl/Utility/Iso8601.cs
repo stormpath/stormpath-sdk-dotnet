@@ -24,14 +24,17 @@ namespace Stormpath.SDK.Impl.Utility
     {
         public static string Format(DateTimeOffset dto)
         {
-            return dto.UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ",
+            return dto.UtcDateTime.ToString(
+                "yyyy-MM-ddTHH:mm:ssZ",
                 CultureInfo.InvariantCulture);
         }
 
         public static DateTimeOffset Parse(string iso8601String)
         {
             string pattern = "yyyy-MM-dd'T'HH:mm:ss.FFFK";
-            return DateTimeOffset.ParseExact(iso8601String, pattern,
+            return DateTimeOffset.ParseExact(
+                iso8601String,
+                pattern,
                 CultureInfo.InvariantCulture);
         }
     }

@@ -118,7 +118,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = Harness.Queryable.GroupJoin(Enumerable.Empty<IAccount>(),
+                var query = Harness.Queryable.GroupJoin(
+                    Enumerable.Empty<IAccount>(),
                     outer => outer.Email,
                     inner => inner.Username,
                     (outer, results) => new { outer.CreatedAt, results });
@@ -141,7 +142,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = Harness.Queryable.Join(Enumerable.Empty<IAccount>(),
+                var query = Harness.Queryable.Join(
+                    Enumerable.Empty<IAccount>(),
                     outer => outer.Email,
                     inner => inner.Username,
                     (outer, inner) => outer.CreatedAt);
@@ -275,7 +277,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<Exception>(() =>
             {
-                var query = Harness.Queryable.Zip(Enumerable.Empty<IAccount>(),
+                var query = Harness.Queryable.Zip(
+                    Enumerable.Empty<IAccount>(),
                     (first, second) => first.Email == second.Email);
                 query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
             });

@@ -1,4 +1,4 @@
-﻿// <copyright file="GenericComparer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="GenericEqualityComparer.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -20,12 +20,12 @@ using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    internal sealed class GenericComparer<T> : IEqualityComparer<T>
+    internal sealed class GenericEqualityComparer<T> : IEqualityComparer<T>
     {
         private readonly Func<T, T, bool> areEqualFunc;
         private readonly Func<T, int> hashFunc;
 
-        public GenericComparer(Func<T, T, bool> areEqualFunc, Func<T, int> hashFunc)
+        public GenericEqualityComparer(Func<T, T, bool> areEqualFunc, Func<T, int> hashFunc)
         {
             this.areEqualFunc = areEqualFunc;
             this.hashFunc = hashFunc;

@@ -28,8 +28,8 @@ namespace Stormpath.SDK.Impl.Http
 
         int ConnectionTimeout { get; }
 
-        string GetSync(string href);
+        string GetSync(Uri href);
 
-        Task<string> GetAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
+        Task<string> GetAsync(Uri href, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

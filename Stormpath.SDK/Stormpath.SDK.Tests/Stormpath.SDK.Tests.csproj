@@ -78,7 +78,6 @@
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\CollectionTestHarness.cs" />
     <Compile Include="Helpers\LinqAssertExtensions.cs" />
-    <Compile Include="Helpers\PlatformHelper.cs" />
     <Compile Include="Impl\Authentication\BasicRequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\DefaultRequestAuthenticatorFactory_tests.cs" />
     <Compile Include="Impl\CollectionResourceQueryable_iteration_tests.cs" />
@@ -103,6 +102,7 @@
     <Compile Include="Impl\Linq\Unsupported_filters_tests.cs" />
     <Compile Include="Impl\Linq\Where_tests.cs" />
     <Compile Include="Impl\Linq\Within_extension_tests.cs" />
+    <Compile Include="Impl\UserAgentBuilder_tests.cs" />
     <Compile Include="Impl\Utility\Iso8601_tests.cs" />
     <Compile Include="Impl\Utility\Properties_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

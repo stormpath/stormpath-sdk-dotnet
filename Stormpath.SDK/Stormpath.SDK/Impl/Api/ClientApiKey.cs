@@ -67,7 +67,7 @@ namespace Stormpath.SDK.Impl.Api
     /// </summary>
     internal partial class ClientApiKey : IEquatable<ClientApiKey>
     {
-        private static readonly GenericComparer<ClientApiKey> Comparer = new GenericComparer<ClientApiKey>(
+        private static readonly GenericEqualityComparer<ClientApiKey> Comparer = new GenericEqualityComparer<ClientApiKey>(
             (ClientApiKey x, ClientApiKey y) =>
             {
                 return x.id == y.id && x.secret == y.secret;

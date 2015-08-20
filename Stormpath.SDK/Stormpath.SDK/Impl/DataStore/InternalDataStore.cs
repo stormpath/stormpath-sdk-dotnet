@@ -49,7 +49,14 @@ namespace Stormpath.SDK.Impl.DataStore
 
         async Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
         {
-            var json = await requestExecutor.GetAsync(href, cancellationToken);
+            if (!href.StartsWith("https://"))
+                href = $"{baseUrl}/{href}";
+
+            Uri hrefUri;
+            if (!Uri.TryCreate(href, UriKind.Absolute, out hrefUri))
+                throw new RequestException($"The URI is not valid: {href}");
+
+            var json = await requestExecutor.GetAsync(hrefUri, cancellationToken);
 
             var map = mapMarshaller.Deserialize(json);
             var resource = resourceFactory.Instantiate<T>(map);

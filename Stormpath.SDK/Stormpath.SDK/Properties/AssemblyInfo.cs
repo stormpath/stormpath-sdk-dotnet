@@ -22,12 +22,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Stormpath.Core")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Stormpath.SDK")]
+[assembly: AssemblyDescription("The Official Stormpath SDK for .NET")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Stormpath.Core")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCompany("Stormpath, Inc.")]
+[assembly: AssemblyProduct("Stormpath C# SDK")]
+[assembly: AssemblyCopyright("Copyright © 2015 Stormpath, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -49,7 +49,7 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.2.0.0")]
+[assembly: AssemblyFileVersion("0.2.0.0")]
 [assembly: InternalsVisibleTo("Stormpath.SDK.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

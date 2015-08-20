@@ -16,7 +16,9 @@
 // </remarks>
 
 using System;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Api;
@@ -60,36 +62,52 @@ namespace Stormpath.SDK.Impl.Http
         private void SetupClient()
         {
             client.Timeout = TimeSpan.FromMilliseconds(connectionTimeout);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(UserAgentBuilder.GetUserAgent()));
         }
 
-        async Task<string> IRequestExecutor.GetAsync(string href, CancellationToken cancellationToken)
+        async Task<string> IRequestExecutor.GetAsync(Uri href, CancellationToken cancellationToken)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, href);
+            Uri currentUri = href;
 
-            requestAuthenticator.Authenticate(request, apiKey);
-
-            try
+            while (true)
             {
+                var request = new HttpRequestMessage(HttpMethod.Get, href);
+                requestAuthenticator.Authenticate(request, apiKey);
                 var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
+                if (IsRedirect(response))
+                {
+                    currentUri = response.Headers.Location;
+                    continue;
+                }
 
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-
-                // TODO more refined error handling
-                response.EnsureSuccessStatusCode(); // throws
-                return null; // not reached
-            }
-            catch (Exception e)
-            {
-                throw new RequestException("Unable to execute HTTP request.", e);
+                else
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    throw new RequestException($"Unable to execute HTTP request. Message: '{content}'");
+                }
             }
         }
 
-        string IRequestExecutor.GetSync(string href)
+        string IRequestExecutor.GetSync(Uri href)
         {
             throw new NotImplementedException();
+        }
+
+        private bool IsRedirect(HttpResponseMessage response)
+        {
+            bool moved =
+                response.StatusCode == HttpStatusCode.MovedPermanently || // 301
+                response.StatusCode == HttpStatusCode.Redirect || // 302
+                response.StatusCode == HttpStatusCode.TemporaryRedirect; // 307
+            bool hasNewLocation = !string.IsNullOrEmpty(response.Headers.Location?.AbsolutePath);
+
+            return moved && hasNewLocation;
         }
 
         #region IDisposable implementation

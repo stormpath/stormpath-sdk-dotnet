@@ -142,7 +142,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             try
             {
-                await harness.Queryable.ForEachAsync((acct, index) =>
+                await harness.Queryable.ForEachAsync(
+                    (acct, index) =>
                 {
                     reachedIndex = index;
 
