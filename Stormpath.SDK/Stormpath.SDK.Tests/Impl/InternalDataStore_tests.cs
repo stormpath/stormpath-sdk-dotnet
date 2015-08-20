@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
@@ -46,7 +47,7 @@ namespace Stormpath.SDK.Tests.Impl
         public async Task Instantiating_Account_from_JSON()
         {
             var href = "http://foobar/account";
-            fakeRequestExecutor.GetAsync(new Uri(href))
+            fakeRequestExecutor.GetAsync(new Uri(href), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(FakeJson.Account));
 
             var account = await dataStore.GetResourceAsync<IAccount>(href);

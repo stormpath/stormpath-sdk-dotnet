@@ -63,7 +63,8 @@ namespace Stormpath.SDK.Impl.Http
         {
             client.Timeout = TimeSpan.FromMilliseconds(connectionTimeout);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(UserAgentBuilder.GetUserAgent()));
+            // client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(UserAgentBuilder.GetUserAgent()));
+            client.DefaultRequestHeaders.Add("UserAgent", UserAgentBuilder.GetUserAgent());
         }
 
         async Task<string> IRequestExecutor.GetAsync(Uri href, CancellationToken cancellationToken)

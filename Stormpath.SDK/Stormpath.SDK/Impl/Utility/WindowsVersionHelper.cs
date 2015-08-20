@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 namespace Stormpath.SDK.Impl.Utility
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter", Justification = "Reviewed.")]
-    public static class WindowsVersionHelper
+    internal static class WindowsVersionHelper
     {
         // List from https://msdn.microsoft.com/en-us/library/windows/desktop/ms724833(v=vs.85).aspx
         private static readonly int NTWorkstation = 1;

@@ -22,7 +22,7 @@ using System.Reflection;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    public static class PlatformHelper
+    internal static class PlatformHelper
     {
         // Lazy will cache this result so the semi-expensive reflection call only happens once.
         private static readonly Lazy<bool> IsRunningOnMonoValue = new Lazy<bool>(() =>
@@ -67,9 +67,7 @@ namespace Stormpath.SDK.Impl.Utility
             if (!IsRunningOnMono())
                 return "unknown";
 
-            var version = $"{Environment.Version.Major}.{Environment.Version}";
-            if (Environment.Version.MajorRevision > 0)
-                version = $"{version}.{Environment.Version.MajorRevision}";
+            var version = $"{Environment.Version.Major}.{Environment.Version.Minor}";
 
             return version;
         }
@@ -176,7 +174,12 @@ namespace Stormpath.SDK.Impl.Utility
 
         private static string GetMonoOSVersion()
         {
-            return Environment.OSVersion.VersionString.Replace(' ', '-');
+            var osVersion = Environment.OSVersion.Version;
+            var version = $"{osVersion.Major}.{osVersion.Minor}.{osVersion.MajorRevision}.{osVersion.MinorRevision}";
+            if (!string.IsNullOrEmpty(Environment.OSVersion.ServicePack))
+                version = $"{version}-{Environment.OSVersion.ServicePack}";
+
+            return version;
         }
     }
 }

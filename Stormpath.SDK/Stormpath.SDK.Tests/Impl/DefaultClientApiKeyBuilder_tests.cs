@@ -29,12 +29,22 @@ namespace Stormpath.SDK.Tests.Impl
     {
         public class With_missing_values
         {
+            private IClientApiKeyBuilder builder;
+
+            public With_missing_values()
+            {
+                this.builder = new DefaultClientApiKeyBuilder(
+                    Substitute.For<IConfigurationManager>(),
+                    Substitute.For<IEnvironment>(),
+                    Substitute.For<IFile>());
+            }
+
             [Fact]
             public void With_missing_id_throws_error()
             {
                 Assert.Throws<ApplicationException>(() =>
                 {
-                    var clientApiKey = ClientApiKeys.Builder()
+                    var clientApiKey = builder
                         .SetSecret("foo")
                         .Build();
                 });
@@ -45,7 +55,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 Assert.Throws<ApplicationException>(() =>
                 {
-                    var clientApiKey = ClientApiKeys.Builder()
+                    var clientApiKey = builder
                         .SetId("foo")
                         .Build();
                 });
