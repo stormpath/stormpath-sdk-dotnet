@@ -18,7 +18,6 @@
 using System;
 using Shouldly;
 using Stormpath.SDK.Impl.Utility;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Utility

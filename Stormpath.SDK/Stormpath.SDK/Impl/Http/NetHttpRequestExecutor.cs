@@ -70,7 +70,6 @@ namespace Stormpath.SDK.Impl.Http
             client = new HttpClient(clientSettings);
             client.Timeout = TimeSpan.FromMilliseconds(connectionTimeout);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            // client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(UserAgentBuilder.GetUserAgent()));
             client.DefaultRequestHeaders.Add("User-Agent", UserAgentBuilder.GetUserAgent());
         }
 

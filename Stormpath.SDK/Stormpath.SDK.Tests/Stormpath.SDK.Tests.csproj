@@ -102,9 +102,11 @@
     <Compile Include="Impl\Linq\Unsupported_filters_tests.cs" />
     <Compile Include="Impl\Linq\Where_tests.cs" />
     <Compile Include="Impl\Linq\Within_extension_tests.cs" />
+    <Compile Include="Impl\QueryString_tests.cs" />
     <Compile Include="Impl\UserAgentBuilder_tests.cs" />
     <Compile Include="Impl\Utility\Iso8601_tests.cs" />
     <Compile Include="Impl\Utility\Properties_tests.cs" />
+    <Compile Include="Impl\Utility\RequestHelper_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
