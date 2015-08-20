@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -29,6 +30,7 @@ namespace Stormpath.SDK.Impl.Http.Authentication
 {
     internal sealed class SAuthc1RequestAuthenticator : IRequestAuthenticator
     {
+        private static readonly string StormpathDateHeaderName = "X-Stormpath-Date";
         private static readonly string IDTerminator = "sauthc1_request";
         private static readonly string Algorithm = "HMAC-SHA-256";
         private static readonly string AuthenticationScheme = "SAuthc1";
@@ -39,36 +41,58 @@ namespace Stormpath.SDK.Impl.Http.Authentication
 
         void IRequestAuthenticator.Authenticate(HttpRequestMessage request, IClientApiKey apiKey)
         {
-            var utcNow = DateTimeOffset.UtcNow;
-            var dateTimeString = Iso8601.Format(utcNow);
-            var dateString = utcNow.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
-
+            var now = DateTimeOffset.UtcNow;
             var nonce = Guid.NewGuid().ToString();
-            var requestBody = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            AuthenticateCore(request, apiKey, now, nonce);
+        }
+
+        internal void AuthenticateCore(HttpRequestMessage request, IClientApiKey apiKey, DateTimeOffset now, string nonce)
+        {
+            if (string.IsNullOrEmpty(request?.RequestUri?.AbsoluteUri))
+                throw new RequestAuthenticationException("URL must not be empty.");
+
+            var uri = request.RequestUri;
+            if (!uri.IsAbsoluteUri)
+                throw new RequestAuthenticationException("URL must be an absolute path.");
+
+            var relativeResourcePath = uri.AbsolutePath;
+
+            var timestamp = Iso8601.Format(now, withSeparators: false);
+            var dateStamp = now.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+
+            // Add HOST header before signing
+            var hostHeader = uri.Host;
+            if (!uri.IsDefaultPort)
+                hostHeader = $"{hostHeader}:{uri.Port}";
+            request.Headers.Host = hostHeader;
+
+            // Add X-Stormpath-Date before signing
+            request.Headers.Add(StormpathDateHeaderName, timestamp);
+
+            var requestBody = string.Empty;
+            if (request.Content != null)
+                requestBody = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             var requestBodyHash = ToHex(Hash(requestBody, Encoding.UTF8));
-            var signedHeadersString = GetSortedHeaderKeys(request.Headers);
+            var sortedHeaderKeys = GetSortedHeaderNames(request.Headers);
 
             var canonicalRequest = new StringBuilder()
                 .Append(request.Method.Method.ToUpper())
                 .Append(Newline)
-                .Append(CanonicalizeResourcePath(request))
+                .Append(CanonicalizeResourcePath(relativeResourcePath))
                 .Append(Newline)
                 .Append(CanonicalizeQueryString(request))
                 .Append(Newline)
                 .Append(CanonicalizeHeaders(request))
                 .Append(Newline)
-                .Append(signedHeadersString)
+                .Append(sortedHeaderKeys)
                 .Append(Newline)
                 .Append(requestBodyHash)
                 .ToString();
 
             var id = new StringBuilder()
-                .Append(apiKey.GetId())
-                .Append("/")
-                .Append(dateString)
-                .Append("/")
-                .Append(nonce)
-                .Append("/")
+                .Append(apiKey.GetId()).Append("/")
+                .Append(dateStamp).Append("/")
+                .Append(nonce).Append("/")
                 .Append(IDTerminator)
                 .ToString();
 
@@ -76,34 +100,27 @@ namespace Stormpath.SDK.Impl.Http.Authentication
             var stringToSign = new StringBuilder()
                 .Append(Algorithm)
                 .Append(Newline)
-                .Append(dateTimeString)
+                .Append(timestamp)
                 .Append(Newline)
                 .Append(id)
                 .Append(Newline)
                 .Append(canonicalRequestHash)
                 .ToString();
 
-            byte[] secret = Encoding.UTF8.GetBytes($"{AuthenticationScheme}{apiKey.GetSecret()}");
-            byte[] signDate = SignHmac256(dateString, secret, Encoding.UTF8);
-            byte[] signNonce = SignHmac256(nonce, signDate, Encoding.UTF8);
-            byte[] signTerminator = SignHmac256(IDTerminator, signNonce, Encoding.UTF8);
-            byte[] signature = SignHmac256(stringToSign, signTerminator, Encoding.UTF8);
+            var secretFormat = $"{AuthenticationScheme}{apiKey.GetSecret()}";
+            byte[] secret = Encoding.UTF8.GetBytes(secretFormat);
+            byte[] signedDate = SignHmac256(dateStamp, secret, Encoding.UTF8);
+            byte[] signedNonce = SignHmac256(nonce, signedDate, Encoding.UTF8);
+            byte[] signedTerminator = SignHmac256(IDTerminator, signedNonce, Encoding.UTF8);
+            byte[] signature = SignHmac256(stringToSign, signedTerminator, Encoding.UTF8);
+            var signatureHex = ToHex(signature);
 
-            var authorizationHeader = new StringBuilder()
-                .Append(AuthenticationScheme)
-                .Append(SAUTHC1Id)
-                .Append("=")
-                .Append(id)
-                .Append(", ")
-                .Append(SAUTHC1SignedHeaders)
-                .Append("=")
-                .Append(signedHeadersString)
-                .Append(", ")
-                .Append(SAUTHC1Signature)
-                .Append("=")
-                .Append(ToHex(signature))
+            var authorizationHeaderValue = new StringBuilder()
+                .Append(SAUTHC1Id).Append("=").Append(id).Append(", ")
+                .Append(SAUTHC1SignedHeaders).Append("=").Append(sortedHeaderKeys).Append(", ")
+                .Append(SAUTHC1Signature).Append("=").Append(signatureHex)
                 .ToString();
-            request.Headers.Add("Authorization", authorizationHeader);
+            request.Headers.Authorization = new AuthenticationHeaderValue(AuthenticationScheme, authorizationHeaderValue);
         }
 
         private static string ToHex(byte[] bytes)
@@ -150,28 +167,56 @@ namespace Stormpath.SDK.Impl.Http.Authentication
 
         // Return all lowercase header names (keys) separated by semicolon
         // e.g. header1;header2;header3
-        private static string GetSortedHeaderKeys(HttpRequestHeaders headers)
+        private static string GetSortedHeaderNames(HttpRequestHeaders headers)
         {
             var sortedKeys = headers
-                .Select(x => x.Key.ToLower())
-                .OrderBy(x => x, StringComparer.OrdinalIgnoreCase);
+                .OrderBy(x => x.Key, StringComparer.OrdinalIgnoreCase)
+                .Select(x => x.Key.ToLower());
 
             return string.Join(";", sortedKeys);
         }
 
         private static string CanonicalizeQueryString(HttpRequestMessage request)
         {
-            return new QueryString(request.RequestUri.Query).ToString(true);
+            return new QueryString(request.RequestUri.Query)
+                .ToString(canonical: true);
         }
 
-        private static string CanonicalizeResourcePath(HttpRequestMessage request)
+        private static string CanonicalizeResourcePath(string relativeResourcePath)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(relativeResourcePath))
+                return "/";
+            return RequestHelper.UrlEncode(relativeResourcePath, isPath: true, canonicalize: true);
         }
 
         private static string CanonicalizeHeaders(HttpRequestMessage request)
         {
-            throw new NotImplementedException();
+            var buffer = new StringBuilder();
+
+            var sortedHeaders = request.Headers
+                .OrderBy(x => x.Key, StringComparer.OrdinalIgnoreCase);
+
+            foreach (var header in sortedHeaders)
+            {
+                buffer.Append(header.Key.ToLower());
+                buffer.Append(":");
+
+                if (header.Value.Any())
+                {
+                    var first = true;
+                    foreach (var value in header.Value)
+                    {
+                        if (!first)
+                            buffer.Append(",");
+                        buffer.Append(value);
+                        first = false;
+                    }
+                }
+
+                buffer.Append(Newline);
+            }
+
+            return buffer.ToString();
         }
     }
 }

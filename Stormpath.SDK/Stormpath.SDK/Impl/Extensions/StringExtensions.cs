@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Stormpath.SDK.Impl.Extensions
@@ -43,6 +44,18 @@ namespace Stormpath.SDK.Impl.Extensions
                 return null;
 
             return encoding.GetString(Convert.FromBase64String(base64Source));
+        }
+
+        public static KeyValuePair<string, string> SplitToKeyValuePair(this string source, char separator)
+        {
+            if (string.IsNullOrEmpty(source) || !source.Contains(separator.ToString()))
+                throw new FormatException($"Input string is not a '{separator}'-separated string.");
+
+            var pair = source.Split(separator);
+            if (pair.Length != 2)
+                throw new FormatException($"Input string is not a key-value pair.");
+
+            return new KeyValuePair<string, string>(pair[0], pair[1]);
         }
     }
 }

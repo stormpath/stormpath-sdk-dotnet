@@ -26,19 +26,17 @@ namespace Stormpath.SDK.Tests.Integration
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Reviewed.")]
         protected readonly IntegrationHarness harness;
 
-        public Integration_tests()
+        public Integration_tests(IClient client)
+        {
+            harness = new IntegrationHarness(client);
+        }
+
+        protected static IClientApiKey GetApiKey()
         {
             // Expect that API keys are in environment variables. (works with travis-ci)
             var apiKey = ClientApiKeys.Builder().Build();
             apiKey.IsValid().ShouldBe(true);
-
-            var client = Clients
-                .Builder()
-                .SetApiKey(apiKey)
-                .SetAuthenticationScheme(AuthenticationScheme.Basic) // TODO
-                .Build();
-
-            harness = new IntegrationHarness(client);
+            return apiKey;
         }
     }
 

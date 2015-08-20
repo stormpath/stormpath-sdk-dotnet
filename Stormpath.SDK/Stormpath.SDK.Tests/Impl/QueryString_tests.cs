@@ -43,11 +43,11 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
-        public void Keys_and_values_are_lowercase()
+        public void Keys_and_value_case_is_preserved()
         {
             var qs = new QueryString(new Uri("http://foo.bar/baz?TEST=foo&bar=BAZ"));
 
-            qs.ToString().ShouldBe("bar=baz&test=foo");
+            qs.ToString().ShouldBe("bar=BAZ&TEST=foo");
         }
 
         [Fact]

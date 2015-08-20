@@ -78,6 +78,7 @@
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\CollectionTestHarness.cs" />
     <Compile Include="Helpers\LinqAssertExtensions.cs" />
+    <Compile Include="Impl\Authentication\SAuthc1RequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\BasicRequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\DefaultRequestAuthenticatorFactory_tests.cs" />
     <Compile Include="Impl\CollectionResourceQueryable_iteration_tests.cs" />

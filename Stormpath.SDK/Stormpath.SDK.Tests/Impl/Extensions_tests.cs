@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using Shouldly;
 using Stormpath.SDK.Impl.Extensions;
 using Xunit;
@@ -83,6 +84,45 @@ namespace Stormpath.SDK.Tests.Impl
             public void Returns_Zm9vYmFy_for_foobar()
             {
                 "Zm9vYmFy".FromBase64(System.Text.Encoding.UTF8).ShouldBe("foobar");
+            }
+        }
+
+        public class String_SplitToKeyValuePair
+        {
+            [Fact]
+            public void Throws_when_string_is_null()
+            {
+                Should.Throw<FormatException>(() =>
+                {
+                    var bad = ((string)null).SplitToKeyValuePair('=');
+                });
+            }
+
+            [Fact]
+            public void Throws_when_string_does_not_contain_separator()
+            {
+                Should.Throw<FormatException>(() =>
+                {
+                    var bad = "one,two".SplitToKeyValuePair('=');
+                });
+            }
+
+            [Fact]
+            public void Throws_when_string_does_not_have_two_sub_items()
+            {
+                Should.Throw<FormatException>(() =>
+                {
+                    var bad = "one=two=three".SplitToKeyValuePair('=');
+                });
+            }
+
+            [Fact]
+            public void Returns_split_items_as_key_value_pair()
+            {
+                var args = "foo=bar".SplitToKeyValuePair('=');
+
+                args.Key.ShouldBe("foo");
+                args.Value.ShouldBe("bar");
             }
         }
     }

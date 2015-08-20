@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
 {
     public class BasicRequestAuthenticator_tests
     {
-        private readonly IRequestAuthenticator authenticator;
+        private readonly BasicRequestAuthenticator authenticator;
         private readonly IClientApiKey apiKey;
 
         private readonly string fakeApiKeyId = "foo-api-key";
@@ -44,20 +44,27 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         }
 
         [Fact]
-        public void Authenticates_request_with_basic_scheme()
+        public void Adds_XStormpathDate_header()
         {
             var myRequest = new HttpRequestMessage();
+            var now = new DateTimeOffset(2015, 08, 01, 06, 30, 00, TimeSpan.Zero);
 
-            authenticator.Authenticate(myRequest, apiKey);
+            authenticator.AuthenticateCore(myRequest, apiKey, now);
 
-            // X-Stormpath-Date -> now in UTC
+            // X-Stormpath-Date -> current time in UTC
             var XStormpathDateHeader = Iso8601.Parse(myRequest.Headers.GetValues("X-Stormpath-Date").Single());
-            XStormpathDateHeader.Year.ShouldBe(DateTimeOffset.UtcNow.Year);
-            XStormpathDateHeader.Month.ShouldBe(DateTimeOffset.UtcNow.Month);
-            XStormpathDateHeader.Day.ShouldBe(DateTimeOffset.UtcNow.Day);
-            XStormpathDateHeader.Offset.ShouldBe(TimeSpan.Zero);
+            XStormpathDateHeader.ShouldBe(now);
+        }
 
-            // Authorization -> Basic [base64 stuff]
+        [Fact]
+        public void Adds_Basic_authorization_header()
+        {
+            var myRequest = new HttpRequestMessage();
+            var now = new DateTimeOffset(2015, 08, 01, 06, 30, 00, TimeSpan.Zero);
+
+            authenticator.AuthenticateCore(myRequest, apiKey, now);
+
+            // Authorization: "Basic [base64 stuff]"
             var authenticationHeader = myRequest.Headers.Authorization;
             authenticationHeader.Scheme.ShouldBe("Basic");
             authenticationHeader.Parameter.FromBase64(Encoding.UTF8).ShouldBe($"{fakeApiKeyId}:{fakeApiKeySecret}");

@@ -22,20 +22,26 @@ namespace Stormpath.SDK.Impl.Utility
 {
     internal static class Iso8601
     {
-        public static string Format(DateTimeOffset dto)
+        private static readonly string FormatWithSeparators = "yyyy-MM-ddTHH:mm:ssZ";
+        private static readonly string FormatWithoutSeparators = "yyyyMMddTHHmmssZ";
+
+        private static readonly string ParsePatternWithSeparators = "yyyy-MM-dd'T'HH:mm:ss.FFFK";
+        private static readonly string ParsePatternWithoutSeparators = "yyyyMMdd'T'HHmmssFFFK";
+
+        public static string Format(DateTimeOffset dto, bool withSeparators = true)
         {
             return dto.UtcDateTime.ToString(
-                "yyyy-MM-ddTHH:mm:ssZ",
+                withSeparators ? FormatWithSeparators : FormatWithoutSeparators,
                 CultureInfo.InvariantCulture);
         }
 
         public static DateTimeOffset Parse(string iso8601String)
         {
-            string pattern = "yyyy-MM-dd'T'HH:mm:ss.FFFK";
             return DateTimeOffset.ParseExact(
                 iso8601String,
-                pattern,
-                CultureInfo.InvariantCulture);
+                new string[] { ParsePatternWithSeparators, ParsePatternWithoutSeparators },
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None);
         }
     }
 }

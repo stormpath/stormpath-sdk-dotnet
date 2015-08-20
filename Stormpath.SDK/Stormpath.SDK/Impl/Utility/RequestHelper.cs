@@ -26,11 +26,12 @@ namespace Stormpath.SDK.Impl.Utility
             if (string.IsNullOrEmpty(value))
                 return string.Empty;
 
-            var encoded = WebUtility.UrlEncode(value.ToLower());
+            var encoded = WebUtility.UrlEncode(value);
 
             if (canonicalize)
             {
                 encoded = encoded
+                    .Replace("%2B", "+")
                     .Replace("+", "%20")
                     .Replace("*", "%2A")
                     .Replace("%7E", "~");

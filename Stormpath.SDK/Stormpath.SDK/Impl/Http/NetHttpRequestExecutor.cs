@@ -112,7 +112,7 @@ namespace Stormpath.SDK.Impl.Http
                 response.StatusCode == HttpStatusCode.MovedPermanently || // 301
                 response.StatusCode == HttpStatusCode.Redirect || // 302
                 response.StatusCode == HttpStatusCode.TemporaryRedirect; // 307
-            bool hasNewLocation = !string.IsNullOrEmpty(response.Headers.Location?.AbsolutePath);
+            bool hasNewLocation = !string.IsNullOrEmpty(response.Headers.Location?.AbsoluteUri);
 
             return moved && hasNewLocation;
         }

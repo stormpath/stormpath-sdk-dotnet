@@ -60,6 +60,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SAuthc1_integration_tests.cs" />
+    <Compile Include="BasicAuth_integration_tests.cs" />
     <Compile Include="DefaultClient_tests.cs" />
     <Compile Include="Integration_tests.cs" />
     <Compile Include="NamespaceExtensions.cs" />
