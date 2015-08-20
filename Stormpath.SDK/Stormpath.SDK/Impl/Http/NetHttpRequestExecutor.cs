@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Impl.Http
         private readonly int connectionTimeout;
 
         private readonly IRequestAuthenticator requestAuthenticator;
-        private readonly HttpClient client;
+        private HttpClient client;
 
         private bool disposed = false; // To detect redundant calls
 
@@ -51,7 +51,6 @@ namespace Stormpath.SDK.Impl.Http
             IRequestAuthenticatorFactory requestAuthenticatorFactory = new DefaultRequestAuthenticatorFactory();
             requestAuthenticator = requestAuthenticatorFactory.Create(authenticationScheme);
 
-            client = new HttpClient();
             SetupClient();
         }
 
@@ -61,10 +60,18 @@ namespace Stormpath.SDK.Impl.Http
 
         private void SetupClient()
         {
+            var clientSettings = new HttpClientHandler()
+            {
+                AllowAutoRedirect = false,
+
+                // Proxy...
+            };
+
+            client = new HttpClient(clientSettings);
             client.Timeout = TimeSpan.FromMilliseconds(connectionTimeout);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             // client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(UserAgentBuilder.GetUserAgent()));
-            client.DefaultRequestHeaders.Add("UserAgent", UserAgentBuilder.GetUserAgent());
+            client.DefaultRequestHeaders.Add("User-Agent", UserAgentBuilder.GetUserAgent());
         }
 
         async Task<string> IRequestExecutor.GetAsync(Uri href, CancellationToken cancellationToken)
@@ -73,7 +80,7 @@ namespace Stormpath.SDK.Impl.Http
 
             while (true)
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, href);
+                var request = new HttpRequestMessage(HttpMethod.Get, currentUri);
                 requestAuthenticator.Authenticate(request, apiKey);
                 var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
