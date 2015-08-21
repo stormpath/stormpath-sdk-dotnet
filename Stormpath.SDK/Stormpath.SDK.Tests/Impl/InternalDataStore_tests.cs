@@ -21,7 +21,9 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Account;
+using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Tenant;
@@ -29,8 +31,6 @@ using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
-using Stormpath.SDK.Application;
-using Stormpath.SDK.Impl.Application;
 
 namespace Stormpath.SDK.Tests.Impl
 {
@@ -135,7 +135,6 @@ namespace Stormpath.SDK.Tests.Impl
             (application as DefaultApplication).PasswordResetToken.Href.ShouldBe("https://api.stormpath.com/v1/applications/foobarApplication/passwordResetTokens");
             (application as DefaultApplication).Tenant.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foobarTenant");
             (application as DefaultApplication).VerificationEmails.Href.ShouldBe("https://api.stormpath.com/v1/applications/foobarApplication/verificationEmails");
-
         }
 
         [Fact]

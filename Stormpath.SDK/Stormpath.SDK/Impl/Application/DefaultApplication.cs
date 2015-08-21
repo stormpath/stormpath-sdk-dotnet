@@ -15,15 +15,10 @@
 // limitations under the License.
 // </remarks>
 
+using System.Collections;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Impl.Application
 {

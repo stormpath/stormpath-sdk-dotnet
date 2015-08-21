@@ -32,7 +32,6 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Impl.Resource
 {
     internal class CollectionResourceQueryable<T> : QueryableBase<T>, ICollectionResourceQueryable<T>
-        //where T : class, IResource
     {
         private readonly Expression expression;
 

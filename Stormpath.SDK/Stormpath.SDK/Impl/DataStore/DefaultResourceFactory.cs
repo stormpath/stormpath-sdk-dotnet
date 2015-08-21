@@ -20,12 +20,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Account;
+using Stormpath.SDK.Impl.Application;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Tenant;
-using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Application;
-using Stormpath.SDK.Impl.Application;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -136,7 +136,7 @@ namespace Stormpath.SDK.Impl.DataStore
             }
             catch (Exception e)
             {
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: failed to add items to collection.");
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: failed to add items to collection.", e);
             }
         }
     }

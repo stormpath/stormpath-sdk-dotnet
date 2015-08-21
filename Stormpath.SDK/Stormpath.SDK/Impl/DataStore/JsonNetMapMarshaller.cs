@@ -15,12 +15,12 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore

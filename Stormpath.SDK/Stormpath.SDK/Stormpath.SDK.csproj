@@ -101,7 +101,6 @@
     <Compile Include="Impl\DataStore\IDataStore.cs" />
     <Compile Include="Impl\DataStore\InternalDataStore.cs" />
     <Compile Include="Impl\DataStore\JsonNetMapMarshaller.cs" />
-    <Compile Include="Impl\DataStore\StormpathJsonConverter.cs" />
     <Compile Include="Impl\Extensions\StringExtensions.cs" />
     <Compile Include="Impl\Http\Authentication\BasicRequestAuthenticator.cs" />
     <Compile Include="Impl\Http\Authentication\IRequestAuthenticator.cs" />
