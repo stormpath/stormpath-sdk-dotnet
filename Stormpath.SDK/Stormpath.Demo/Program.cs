@@ -13,9 +13,6 @@ namespace Stormpath.Demo
     {
         static void Main(string[] args)
         {
-            bool isConfigurationPresent = !string.IsNullOrEmpty(Config.ApiKeyFileLocation);
-            if (!isConfigurationPresent) throw new ArgumentNullException("Please add an ApiKeyFileLocation item to app.config!");
-
             // Wire up the console cancel event (Ctrl+C) to cancel async tasks
             var cts = new CancellationTokenSource();
             Console.CancelKeyPress += (source, evt) =>
@@ -24,19 +21,19 @@ namespace Stormpath.Demo
                 cts.Cancel();
             };
 
-            MainAsync(cts.Token).GetAwaiter().GetResult();
             // Logically equivalent to MainAsync(...).Wait() but allows exceptions to bubble up unwrapped
+            MainAsync(cts.Token).GetAwaiter().GetResult();
+
+            Console.WriteLine("Finished! Press any key to exit...");
+            Console.ReadKey(false);
         }
 
         static async Task MainAsync(CancellationToken ct)
         {
             var apiKey = ClientApiKeys.Builder()
-                .SetFileLocation(Config.ApiKeyFileLocation)
+                // This is actually unnecessary, because this is the default search path
+                .SetFileLocation("~\\.stormpath\\apiKey.properties")
                 .Build();
-
-            if (!apiKey.IsValid()) throw new ArgumentException("The provided API key is not valid.");
-            if (apiKey.GetId() == "<your API key ID here>") throw new ArgumentException("Please insert your real Stormpath API key ID.");
-            if (apiKey.GetSecret() == "<your API key secret here>") throw new ArgumentException("Please insert your real Stormpath API key secret.");
 
             // Create an IClient object. Everything starts here!
             var client = Clients.Builder()
@@ -46,14 +43,16 @@ namespace Stormpath.Demo
             // Get current tenant
             var tenant = await client.GetCurrentTenantAsync();
             Console.WriteLine($"Current tenant is: {tenant.Name}");
+            if (!SpacebarToContinue(ct)) return;
 
             // List applications
             Console.WriteLine("Tenant applications:");
             var applications = await tenant.GetApplications().ToListAsync();
             foreach (var app in applications)
             {
-                Console.WriteLine("{0}\t{1}", app.Name, app.Status == ApplicationStatus.Enabled ? "enabled" : "disabled");
+                Console.WriteLine("{0} ({1})", app.Name, app.Status == ApplicationStatus.Enabled ? "enabled" : "disabled");
             }
+            if (!SpacebarToContinue(ct)) return;
 
             //// Add some users
             //Console.WriteLine("\nAdding users to '{0}'...", myApp.Name);
@@ -105,18 +104,14 @@ namespace Stormpath.Demo
             //Console.ReadKey(false);
         }
 
-        // TODO
-        static Task<bool> SpacebarToContinue(CancellationToken cancelToken)
+        private static bool SpacebarToContinue(CancellationToken cancelToken)
         {
-            do
-            {
-                if (cancelToken.IsCancellationRequested) return Task.FromResult(false);
+            if (cancelToken.IsCancellationRequested)
+                return false;
 
-                var key = Console.ReadKey(true);
-
-                if (key.KeyChar == ' ') return Task.FromResult(true);
-
-            } while (true);
+            Console.WriteLine("\nPress spacebar to continue...\n");
+            var key = Console.ReadKey(true);
+            return (key.KeyChar == ' ');
         }
     }
 }

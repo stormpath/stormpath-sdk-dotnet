@@ -29,6 +29,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             public void Null_string_returns_empty_dictionary()
             {
                 var props = new Properties(null);
+
                 props.Count().ShouldBe(0);
             }
 
@@ -36,6 +37,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             public void Empty_string_returns_empty_dictionary()
             {
                 var props = new Properties(string.Empty);
+
                 props.Count().ShouldBe(0);
             }
 
@@ -47,6 +49,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                     "! so = is this one";
 
                 var props = new Properties(input);
+
                 props.Count().ShouldBe(0);
             }
 
@@ -56,6 +59,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                 var input = "key1 = value1";
 
                 var props = new Properties(input);
+
                 props.Count().ShouldBe(1);
                 props.GetProperty("key1").ShouldBe("value1");
             }
@@ -66,8 +70,33 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                 var input = "key1=value1";
 
                 var props = new Properties(input);
+
                 props.Count().ShouldBe(1);
                 props.GetProperty("key1").ShouldBe("value1");
+            }
+
+            [Fact]
+            public void Windows_newlines_can_separate_items()
+            {
+                var input = "foo=bar\r\nbar=baz";
+
+                var props = new Properties(input);
+
+                props.Count().ShouldBe(2);
+                props.GetProperty("foo").ShouldBe("bar");
+                props.GetProperty("bar").ShouldBe("baz");
+            }
+
+            [Fact]
+            public void Unix_newlines_can_separate_items()
+            {
+                var input = "foo=bar\nbar=baz";
+
+                var props = new Properties(input);
+
+                props.Count().ShouldBe(2);
+                props.GetProperty("foo").ShouldBe("bar");
+                props.GetProperty("bar").ShouldBe("baz");
             }
         }
 
@@ -77,6 +106,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             public void Returns_null_for_missing_property()
             {
                 var props = new Properties(string.Empty);
+
                 props.GetProperty("foo").ShouldBe(null);
             }
 
@@ -84,6 +114,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             public void Returns_default_value_for_missing_property()
             {
                 var props = new Properties(string.Empty);
+
                 props.GetProperty("foo", defaultValue: "bar").ShouldBe("bar");
             }
 
@@ -91,6 +122,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             public void Returns_value()
             {
                 var props = new Properties("foo=baz");
+
                 props.GetProperty("foo").ShouldBe("baz");
             }
         }

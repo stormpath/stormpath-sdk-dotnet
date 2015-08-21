@@ -60,15 +60,12 @@ namespace Stormpath.SDK.Impl.Utility
 
         private static IDictionary<string, string> Parse(string input)
         {
-            // TODO Future: support the Java .properties spec better (this will work for now)
             input = input?.Trim();
             if (string.IsNullOrEmpty(input))
-            {
                 return new Dictionary<string, string>();
-            }
 
             var goodLines = input
-                .Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+                .Split(PossibleNewlines(), StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => x.Trim())
                 .Where(x => !IgnoreLinesStartingWith.Contains(x.First()));
 
@@ -76,7 +73,15 @@ namespace Stormpath.SDK.Impl.Utility
                 .Select(x => x.Split('='))
                 .Where(x => x.Length == 2);
 
-            return pairs.ToDictionary(pair => pair[0].Trim(), pair => pair[1].Trim());
+            return pairs.ToDictionary(
+                pair => pair[0].Trim(),
+                pair => pair[1].Trim());
+        }
+
+        private static string[] PossibleNewlines()
+        {
+            // Windows thinks newlines are \r\n, but Unix swears it's just \n
+            return new string[] { "\r\n", "\n" };
         }
     }
 }

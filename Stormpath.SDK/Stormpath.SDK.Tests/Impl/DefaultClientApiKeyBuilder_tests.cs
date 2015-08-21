@@ -434,31 +434,6 @@ namespace Stormpath.SDK.Tests.Impl
             }
         }
 
-        public class Building_with_explicit_values
-        {
-            private IClientApiKeyBuilder builder;
-
-            public Building_with_explicit_values()
-            {
-                this.builder = new DefaultClientApiKeyBuilder(
-                    Substitute.For<IConfigurationManager>(),
-                    Substitute.For<IEnvironment>(),
-                    Substitute.For<IFile>());
-            }
-
-            [Fact]
-            public void Uses_expicit_values()
-            {
-                var clientApiKey = this.builder
-                    .SetId("foo")
-                    .SetSecret("bar")
-                    .Build();
-
-                clientApiKey.GetId().ShouldBe("foo");
-                clientApiKey.GetSecret().ShouldBe("bar");
-            }
-        }
-
         public class Building_with_properties_file
         {
             private readonly string testLocation = "test.properties";
@@ -472,7 +447,8 @@ namespace Stormpath.SDK.Tests.Impl
             public Building_with_properties_file()
             {
                 this.file = Substitute.For<IFile>();
-                this.file.ReadAllText(testLocation).Returns(fileContents);
+                this.file.ReadAllText(testLocation)
+                    .Returns(fileContents);
 
                 this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), file);
             }
@@ -516,6 +492,54 @@ namespace Stormpath.SDK.Tests.Impl
                     .Build();
                 clientApiKey.GetId().ShouldBe("foobar");
                 clientApiKey.GetSecret().ShouldBe("bazsecret!");
+            }
+
+            [Fact]
+            public void File_location_interprets_tilde_as_home_directory_on_windows()
+            {
+                var homeDir = Environment.ExpandEnvironmentVariables("%homedrive%%homepath%");
+
+                this.file = Substitute.For<IFile>();
+                this.file.ReadAllText($"{homeDir}\\test.properties")
+                    .Returns(fileContents);
+
+                var env = Substitute.For<IEnvironment>();
+                env.ExpandEnvironmentVariables(Arg.Any<string>())
+                    .Returns(call => Environment.ExpandEnvironmentVariables(call.Arg<string>()));
+
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), env, file);
+
+                var clientApiKey = this.builder
+                    .SetFileLocation("~\\test.properties")
+                    .Build();
+
+                clientApiKey.GetId().ShouldBe("foobar");
+                clientApiKey.GetSecret().ShouldBe("bazsecret!");
+            }
+        }
+
+        public class Building_with_explicit_values
+        {
+            private IClientApiKeyBuilder builder;
+
+            public Building_with_explicit_values()
+            {
+                this.builder = new DefaultClientApiKeyBuilder(
+                    Substitute.For<IConfigurationManager>(),
+                    Substitute.For<IEnvironment>(),
+                    Substitute.For<IFile>());
+            }
+
+            [Fact]
+            public void Uses_expicit_values()
+            {
+                var clientApiKey = this.builder
+                    .SetId("foo")
+                    .SetSecret("bar")
+                    .Build();
+
+                clientApiKey.GetId().ShouldBe("foo");
+                clientApiKey.GetSecret().ShouldBe("bar");
             }
         }
     }

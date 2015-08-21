@@ -99,6 +99,7 @@ namespace Stormpath.SDK.Impl.Api
 
             // 2. Try file location specified by environment variables
             var envFileLocation = this.env.GetEnvironmentVariable("STORMPATH_API_KEY_FILE");
+            envFileLocation = ExpandWindowsHomePath(envFileLocation);
             if (!string.IsNullOrEmpty(envFileLocation))
             {
                 var envProperties = GetPropertiesFromEnvironmentVariableFileLocation(envFileLocation);
@@ -118,6 +119,7 @@ namespace Stormpath.SDK.Impl.Api
 
             // 4. Try file location specified by web.config/app.config
             var appConfigFileLocation = this.config.AppSettings?["STORMPATH_API_KEY_FILE"];
+            appConfigFileLocation = ExpandWindowsHomePath(appConfigFileLocation);
             if (!string.IsNullOrEmpty(appConfigFileLocation))
             {
                 var appConfigProperties = GetPropertiesFromAppConfigFileLocation(appConfigFileLocation);
@@ -138,6 +140,7 @@ namespace Stormpath.SDK.Impl.Api
             // 6. Try configured property file
             if (!string.IsNullOrEmpty(this.apiKeyFilePath))
             {
+                this.apiKeyFilePath = ExpandWindowsHomePath(apiKeyFilePath);
                 var fileProperties = GetPropertiesFromFile();
                 id = fileProperties?.GetProperty(this.apiKeyIdPropertyName ?? DefaultFileIdPropertyName, defaultValue: id);
                 secret = fileProperties?.GetProperty(this.apiKeySecretPropertyName ?? DefaultFileSecretPropertyName, defaultValue: secret);
@@ -264,6 +267,21 @@ namespace Stormpath.SDK.Impl.Api
             {
                 throw new ApplicationException("Unable to read properties from specified input stream.", ex);
             }
+        }
+
+        private string ExpandWindowsHomePath(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            if (PlatformHelper.IsRunningOnMono())
+                return input;
+
+            if (!input.StartsWith("~"))
+                return input;
+
+            var homePath = env.ExpandEnvironmentVariables("%homedrive%%homepath%");
+            return homePath + input.TrimStart('~');
         }
     }
 }
