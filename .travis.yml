@@ -1,7 +1,7 @@
 language: csharp
 solution: "./Stormpath.SDK/Stormpath.SDK.sln"
 install:
-- nuget restore ./Stormpath.SDK/Stormpath.SDK.sln -verbosity detailed
+- nuget restore -source "https://www.nuget.org/api/v2;https://www.myget.org/F/xunit" ./Stormpath.SDK/Stormpath.SDK.sln - verbosity detailed
 script:
 - xbuild /p:Configuration=Release ./Stormpath.SDK/Stormpath.SDK.sln
 - mono ./packages/xunit.runner.console*/tools/xunit.console.exe ./Stormpath.SDK/Stormpath.SDK.Tests/bin/Release/Stormpath.SDK.Tests.dll
