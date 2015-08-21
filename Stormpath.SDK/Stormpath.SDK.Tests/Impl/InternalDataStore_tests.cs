@@ -29,6 +29,8 @@ using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
+using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.Application;
 
 namespace Stormpath.SDK.Tests.Impl
 {
@@ -101,6 +103,55 @@ namespace Stormpath.SDK.Tests.Impl
             (tenant as DefaultTenant).Groups.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foo-bar/groups");
             (tenant as DefaultTenant).IdSites.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foo-bar/idSites");
             (tenant as DefaultTenant).Organizations.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foo-bar/organizations");
+        }
+
+        [Fact]
+        public async Task Instantiating_Application_from_JSON()
+        {
+            var href = "http://foobar/application";
+            fakeRequestExecutor.GetAsync(new Uri(href))
+                .Returns(Task.FromResult(FakeJson.Application));
+
+            var application = await dataStore.GetResourceAsync<IApplication>(href);
+
+            // Verify against data from FakeJson.Application
+            application.CreatedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.563Z"));
+            application.Href.ShouldBe("https://api.stormpath.com/v1/applications/foobarApplication");
+            application.Description.ShouldBe("This application is so awesome, you don't even know.");
+            application.ModifiedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.622Z"));
+            application.Name.ShouldBe("Lightsabers Galore");
+            application.Status.ShouldBe(ApplicationStatus.Enabled);
+
+            (application as DefaultApplication).AccountStoreMappings.Href.ShouldBe("https://api.stormpath.com/v1/applications/foobarApplication/accountStoreMappings");
+            (application as DefaultApplication).Accounts.Href.ShouldBe("https://api.stormpath.com/v1/applications/foobarApplication/accounts");
+            (application as DefaultApplication).ApiKeys.Href.ShouldBe("https://api.stormpath.com/v1/applications/foobarApplication/apiKeys");
+            (application as DefaultApplication).AuthTokens.Href.ShouldBe("https://api.stormpath.com/v1/applications/foobarApplication/authTokens");
+            (application as DefaultApplication).CustomData.Href.ShouldBe("https://api.stormpath.com/v1/applications/foobarApplication/customData");
+            (application as DefaultApplication).DefaultAccountStoreMapping.Href.ShouldBe("https://api.stormpath.com/v1/accountStoreMappings/foobarASM");
+            (application as DefaultApplication).DefaultGroupStoreMapping.Href.ShouldBe("https://api.stormpath.com/v1/accountStoreMappings/foobarASM");
+            (application as DefaultApplication).Groups.Href.ShouldBe("https://api.stormpath.com/v1/applications/foobarApplication/groups");
+            (application as DefaultApplication).LoginAttempts.Href.ShouldBe("https://api.stormpath.com/v1/applications/foobarApplication/loginAttempts");
+            (application as DefaultApplication).OAuthPolicy.Href.ShouldBe("https://api.stormpath.com/v1/oAuthPolicies/foobarApplication");
+            (application as DefaultApplication).PasswordResetToken.Href.ShouldBe("https://api.stormpath.com/v1/applications/foobarApplication/passwordResetTokens");
+            (application as DefaultApplication).Tenant.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foobarTenant");
+            (application as DefaultApplication).VerificationEmails.Href.ShouldBe("https://api.stormpath.com/v1/applications/foobarApplication/verificationEmails");
+
+        }
+
+        [Fact]
+        public async Task Instantiating_application_list_from_JSON()
+        {
+            var href = "http://foobar/applications";
+            fakeRequestExecutor.GetAsync(new Uri(href))
+                .Returns(Task.FromResult(FakeJson.ApplicationList));
+
+            var applicationList = await dataStore.GetCollectionAsync<IApplication>(href);
+
+            applicationList.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foobarTenant/applications");
+            applicationList.Size.ShouldBe(2);
+            applicationList.Offset.ShouldBe(0);
+            applicationList.Limit.ShouldBe(25);
+            applicationList.Items.Count.ShouldBe(2);
         }
     }
 }

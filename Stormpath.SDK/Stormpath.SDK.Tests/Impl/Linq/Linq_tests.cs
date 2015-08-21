@@ -23,29 +23,23 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 {
     public class Linq_tests
     {
-        private readonly string url = "http://f.oo";
-        private readonly string resource = "bar";
+        private static string href = "http://f.oo/bar";
         private CollectionTestHarness<IAccount> harness;
 
         public Linq_tests()
         {
             // Default test harness. Child classes can overwrite
-            harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource);
+            harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href);
         }
 
         internal Linq_tests(IDataStore ds)
         {
-            harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, ds);
+            harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href, ds);
         }
 
-        protected string Url
+        protected string Href
         {
-            get { return url; }
-        }
-
-        protected string Resource
-        {
-            get { return resource; }
+            get { return href; }
         }
 
         protected CollectionTestHarness<IAccount> Harness

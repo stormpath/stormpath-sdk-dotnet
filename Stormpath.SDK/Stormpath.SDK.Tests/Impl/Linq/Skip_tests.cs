@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Skip(10);
 
-            query.GeneratedArgumentsWere(Url, Resource, "offset=10");
+            query.GeneratedArgumentsWere(Href, "offset=10");
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Skip(offset);
 
-            query.GeneratedArgumentsWere(Url, Resource, "offset=20");
+            query.GeneratedArgumentsWere(Href, "offset=20");
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Skip(offsetFunc());
 
-            query.GeneratedArgumentsWere(Url, Resource, "offset=25");
+            query.GeneratedArgumentsWere(Href, "offset=25");
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Skip(10).Skip(5);
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(Url, Resource, "offset=5");
+            query.GeneratedArgumentsWere(Href, "offset=5");
         }
     }
 }

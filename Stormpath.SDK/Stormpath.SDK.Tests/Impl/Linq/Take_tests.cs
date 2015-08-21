@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Take(10);
 
-            query.GeneratedArgumentsWere(Url, Resource, "limit=10");
+            query.GeneratedArgumentsWere(Href, "limit=10");
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Take(limit);
 
-            query.GeneratedArgumentsWere(Url, Resource, "limit=20");
+            query.GeneratedArgumentsWere(Href, "limit=20");
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Take(limitFunc());
 
-            query.GeneratedArgumentsWere(Url, Resource, "limit=25");
+            query.GeneratedArgumentsWere(Href, "limit=25");
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Take(10).Take(5);
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(Url, Resource, "limit=5");
+            query.GeneratedArgumentsWere(Href, "limit=5");
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Take(101);
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(Url, Resource, "limit=100");
+            query.GeneratedArgumentsWere(Href, "limit=100");
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task ToListAsync_returns_empty_list_for_no_items()
         {
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href, fakeDataStore);
 
             var empty = await harness.Queryable.ToListAsync();
 
@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task ToListAsync_retrieves_all_items()
         {
             var fakeDataStore = new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance);
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href, fakeDataStore);
 
             var alliance = await harness.Queryable.ToListAsync();
 
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             // will make another call to the server, just to make sure another item hasn't been added
             // to the end while we were enumerating.
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 51));
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href, fakeDataStore);
 
             var longList = await harness.Queryable.ToListAsync();
 
@@ -75,7 +75,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             // in Stormpath, even though that's what it translates to. .Take() represents an
             // upper limit to the items that are returned. Take(5) returns 5 items, Take(500) returns 500.
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 51));
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href, fakeDataStore);
 
             var longList = await harness.Queryable
                 .Take(7)
@@ -92,7 +92,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             // in Stormpath, even though that's what it translates to. .Take() represents an
             // upper limit to the items that are returned. Take(5) returns 5 items, Take(500) returns 500.
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 750));
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href, fakeDataStore);
 
             var longList = await harness.Queryable
                 .Take(500)
@@ -105,7 +105,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task ForEachAsync_operates_on_every_item()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource,
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
+                Href,
                 new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance));
             var gmailAlliance = new List<string>();
 
@@ -120,7 +121,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task ForEachAsync_indexes_every_item()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource,
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
+                Href,
                 new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
             var empireFirstNameLookup = new Dictionary<int, string>();
 
@@ -135,7 +137,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task ForEachAsync_can_be_cancelled()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Url, Resource,
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
+                Href,
                 new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
             var cts = new CancellationTokenSource();
             var reachedIndex = -1;

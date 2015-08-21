@@ -55,11 +55,6 @@ namespace Stormpath.SDK.Account
         {
         }
 
-        public static explicit operator AccountStatus(string status)
-        {
-            throw new NotImplementedException();
-        }
-
         public static AccountStatus Parse(string status)
         {
             AccountStatus found;

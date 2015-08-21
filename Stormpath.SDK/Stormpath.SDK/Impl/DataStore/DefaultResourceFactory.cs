@@ -18,10 +18,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Tenant;
+using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.Application;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -30,7 +34,8 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly Dictionary<Type, Type> typeMap = new Dictionary<Type, Type>()
         {
             { typeof(IAccount), typeof(DefaultAccount) },
-            { typeof(ITenant), typeof(DefaultTenant) }
+            { typeof(IApplication), typeof(DefaultApplication) },
+            { typeof(ITenant), typeof(DefaultTenant) },
         };
 
         private readonly IDataStore dataStore;
@@ -41,10 +46,7 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element must begin with upper-case letter", Justification = "Reviewed")]
-        private IResourceFactory _this
-        {
-            get { return this; }
-        }
+        private IResourceFactory _this => this;
 
         T IResourceFactory.Instantiate<T>()
         {
@@ -53,9 +55,24 @@ namespace Stormpath.SDK.Impl.DataStore
 
         T IResourceFactory.Instantiate<T>(Hashtable properties)
         {
+            bool isCollection = typeof(T).IsGenericType
+                && typeof(T).GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
+            if (isCollection)
+                return InstantiateCollection<T>(properties);
+
+            return InstantiateSingle<T>(properties);
+        }
+
+        private T InstantiateSingle<T>(Hashtable properties)
+        {
+            return (T)InstantiateSingle(properties, typeof(T));
+        }
+
+        private object InstantiateSingle(Hashtable properties, Type type)
+        {
             Type targetType;
-            if (!typeMap.TryGetValue(typeof(T), out targetType))
-                throw new ApplicationException($"Unknown resource type {typeof(T).Name}");
+            if (!typeMap.TryGetValue(type, out targetType))
+                throw new ApplicationException($"Unknown resource type {type.Name}");
 
             object targetObject;
             try
@@ -70,11 +87,57 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ApplicationException($"Error creating resource type {targetType.Name}", e);
             }
 
-            var targetObjectAsT = targetObject as T;
-            if (targetObjectAsT == null)
-                throw new ApplicationException($"Unable to create resource type {targetType.Name}");
+            return targetObject;
+        }
 
-            return targetObjectAsT;
+        private T InstantiateCollection<T>(Hashtable properties)
+        {
+            var outerType = typeof(T); // CollectionResponsePage<TInner>
+
+            Type innerType = outerType.GetGenericArguments().SingleOrDefault();
+            if (innerType == null || !typeMap.ContainsKey(innerType))
+                throw new ApplicationException($"Error creating collection resource: unknown inner type {outerType.GetGenericArguments().SingleOrDefault()?.Name}.");
+
+            if (properties == null)
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: no properties to materialize with.");
+
+            int offset, limit, size;
+            if (!int.TryParse(properties["offset"]?.ToString(), out offset))
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'offset' value.");
+            if (!int.TryParse(properties["limit"]?.ToString(), out limit))
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'limit' value.");
+            if (!int.TryParse(properties["size"]?.ToString(), out size))
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'size' value.");
+
+            var href = properties["href"]?.ToString();
+            if (string.IsNullOrEmpty(href))
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'href' value.");
+
+            var items = properties["items"] as List<Hashtable>;
+            if (items == null)
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: items subcollection is invalid.");
+
+            try
+            {
+                Type listOfInnerType = typeof(List<>).MakeGenericType(innerType);
+                var materializedItems = listOfInnerType.GetConstructor(Type.EmptyTypes).Invoke(Type.EmptyTypes);
+                var addMethod = listOfInnerType.GetMethod("Add", new Type[] { innerType });
+
+                foreach (var item in items)
+                {
+                    var materialized = InstantiateSingle(item, innerType);
+                    addMethod.Invoke(materializedItems, new object[] { materialized });
+                }
+
+                object targetObject;
+                targetObject = Activator.CreateInstance(outerType, new object[] { href, offset, limit, size, materializedItems });
+
+                return (T)targetObject;
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: failed to add items to collection.");
+            }
         }
     }
 }

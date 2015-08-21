@@ -48,7 +48,7 @@ namespace Stormpath.SDK.Tests.Fakes
             return calls;
         }
 
-        async Task<CollectionResponsePageDto<T>> IDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
+        async Task<CollectionResponsePage<T>> IDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
         {
             bool typesMatch = typeof(T) == typeof(TType);
             if (!typesMatch)
@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Tests.Fakes
             var limit = GetLimitFromUrlString(href) ?? defaultLimit;
             var offset = GetOffsetFromUrlString(href) ?? defaultOffset;
 
-            return new CollectionResponsePageDto<T>()
+            return new CollectionResponsePage<T>()
             {
                 Href = href,
                 Items = this.Items.OfType<T>().Skip(offset).Take(limit).ToList(),

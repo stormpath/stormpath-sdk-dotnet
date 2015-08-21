@@ -29,31 +29,29 @@ namespace Stormpath.SDK.Tests.Helpers
     {
         internal IDataStore DataStore { get; private set; }
 
-        public string Url { get; private set; }
-
-        public string Resource { get; private set; }
+        public string Href { get; set; }
 
         public ICollectionResourceQueryable<T> Queryable { get; private set; }
 
-        internal static CollectionTestHarness<TType> Create<TType>(string url, string resource, IDataStore mockDataStore = null)
-            where TType : IResource
+        internal static CollectionTestHarness<TType> Create<TType>(string collectionHref, IDataStore mockDataStore = null)
+            where TType : class, IResource
         {
             var ds = mockDataStore ?? MockEmptyDataStore<TType>();
 
             return new CollectionTestHarness<TType>()
             {
                 DataStore = ds,
-                Resource = resource,
-                Url = url,
-                Queryable = new CollectionResourceQueryable<TType>(url, resource, ds)
+                Href = collectionHref,
+                Queryable = new CollectionResourceQueryable<TType>(collectionHref, ds)
             };
         }
 
         private static IDataStore MockEmptyDataStore<TType>()
+            where TType : class, IResource
         {
             var emptyMock = Substitute.For<IDataStore>();
             emptyMock.GetCollectionAsync<TType>(Arg.Any<string>()).Returns(
-                    Task.FromResult(new CollectionResponsePageDto<TType>()
+                    Task.FromResult(new CollectionResponsePage<TType>()
                     {
                         Limit = 0,
                         Offset = 0,

@@ -23,27 +23,25 @@ using Remotion.Linq;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Linq.RequestModel;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Linq
 {
     internal sealed class CollectionResourceQueryExecutor : IQueryExecutor
     {
-        public CollectionResourceQueryExecutor(string url, string resource, IDataStore dataStore)
+        public CollectionResourceQueryExecutor(string href, IDataStore dataStore)
         {
-            this.Url = url;
-            this.Resource = resource;
+            this.Href = href;
             this.DataStore = dataStore;
         }
 
-        public string Url { get; private set; }
-
-        public string Resource { get; private set; }
+        public string Href { get; private set; }
 
         public IDataStore DataStore { get; private set; }
 
         public IEnumerable<T> ExecuteCollection<T>(CollectionResourceRequestModel requestModel)
         {
-            var asyncCollection = new CollectionResourceQueryable<T>(this.Url, this.Resource, this.DataStore, requestModel);
+            var asyncCollection = new CollectionResourceQueryable<T>(this.Href, this.DataStore, requestModel);
             var adapter = new Sync.SyncCollectionEnumeratorAdapter<T>(asyncCollection);
 
             return adapter;

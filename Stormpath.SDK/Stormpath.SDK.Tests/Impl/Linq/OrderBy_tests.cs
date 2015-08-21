@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .OrderBy(x => x.GivenName);
 
-            query.GeneratedArgumentsWere(Url, Resource, "orderBy=givenName");
+            query.GeneratedArgumentsWere(Href, "orderBy=givenName");
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .OrderByDescending(x => x.Email);
 
-            query.GeneratedArgumentsWere(Url, Resource, "orderBy=email desc");
+            query.GeneratedArgumentsWere(Href, "orderBy=email desc");
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .OrderBy(x => x.GivenName)
                 .ThenByDescending(x => x.Username);
 
-            query.GeneratedArgumentsWere(Url, Resource, "orderBy=givenName,username desc");
+            query.GeneratedArgumentsWere(Href, "orderBy=givenName,username desc");
         }
 
         [Fact]

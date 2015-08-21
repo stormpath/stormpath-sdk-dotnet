@@ -15,18 +15,47 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections.Generic;
+using Stormpath.SDK.Shared;
+
 namespace Stormpath.SDK.Application
 {
-    public enum ApplicationStatus
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Public enumeration elements")]
+    public sealed class ApplicationStatus : Enumeration
     {
+        /// <summary>
+        /// Accounts can log into this application.
+        /// </summary>
+        public static ApplicationStatus Enabled = new ApplicationStatus(0, "ENABLED");
+
         /// <summary>
         /// Accounts are prevented from logging into this application.
         /// </summary>
-        Disabled = 0,
+        public static ApplicationStatus Disabled = new ApplicationStatus(1, "DISABLED");
 
-        /// <summary>
-        /// Accounts are allowed to log into this application.
-        /// </summary>
-        Enabled = 1
+        private static readonly Dictionary<string, ApplicationStatus> LookupMap = new Dictionary<string, ApplicationStatus>()
+        {
+            { Enabled.DisplayName, Enabled },
+            { Disabled.DisplayName, Disabled },
+        };
+
+        private ApplicationStatus()
+        {
+        }
+
+        private ApplicationStatus(int value, string displayName)
+            : base(value, displayName)
+        {
+        }
+
+        public static ApplicationStatus Parse(string status)
+        {
+            ApplicationStatus found;
+            if (!LookupMap.TryGetValue(status.ToUpper(), out found))
+                throw new ApplicationException($"Could not parse status value '{status.ToUpper()}'");
+
+            return found;
+        }
     }
 }

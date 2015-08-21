@@ -32,6 +32,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Impl.Resource
 {
     internal class CollectionResourceQueryable<T> : QueryableBase<T>, ICollectionResourceQueryable<T>
+        //where T : class, IResource
     {
         private readonly Expression expression;
 
@@ -51,17 +52,17 @@ namespace Stormpath.SDK.Impl.Resource
 
         private IEnumerable<T> currentItems;
 
-        public CollectionResourceQueryable(string url, string resource, IDataStore dataStore)
-            : base(ExtendedQueryParser.Create(), CreateQueryExecutor(url, resource, dataStore))
+        public CollectionResourceQueryable(string collectionHref, IDataStore dataStore)
+            : base(ExtendedQueryParser.Create(), CreateQueryExecutor(collectionHref, dataStore))
         {
-            this.baseHref = $"{url}/{resource}";
+            this.baseHref = collectionHref;
             this.dataStore = dataStore;
         }
 
         // This constructor is used for a synchronous wrapper via CollectionResourceQueryExecutor
         // TODO make this more SOLID and have an actual synchronous execution path that isn't a hack or wrapper
-        public CollectionResourceQueryable(string url, string resource, IDataStore dataStore, CollectionResourceRequestModel existingRequestModel)
-            : this(url, resource, dataStore)
+        public CollectionResourceQueryable(string collectionHref, IDataStore dataStore, CollectionResourceRequestModel existingRequestModel)
+            : this(collectionHref, dataStore)
         {
             this.compiledModel = existingRequestModel;
         }
@@ -75,14 +76,14 @@ namespace Stormpath.SDK.Impl.Resource
             if (relinqProvider == null || executor == null)
                 throw new InvalidOperationException("LINQ queries must start from a supported ICollectionResourceQueryable.");
 
-            this.baseHref = $"{executor.Url}/{executor.Resource}";
+            this.baseHref = executor.Href;
             this.dataStore = executor.DataStore;
             this.expression = expression;
         }
 
-        private static IQueryExecutor CreateQueryExecutor(string url, string resource, IDataStore dataStore)
+        private static IQueryExecutor CreateQueryExecutor(string href, IDataStore dataStore)
         {
-            return new CollectionResourceQueryExecutor(url, resource, dataStore);
+            return new CollectionResourceQueryExecutor(href, dataStore);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements must appear in the correct order", Justification = "Grouping internal methods above")]

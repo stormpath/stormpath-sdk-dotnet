@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015));
 
-            query.GeneratedArgumentsWere(Url, Resource, "createdAt=2015");
+            query.GeneratedArgumentsWere(Href, "createdAt=2015");
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01));
 
-            query.GeneratedArgumentsWere(Url, Resource, "createdAt=2015-01");
+            query.GeneratedArgumentsWere(Href, "createdAt=2015-01");
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01, 01));
 
-            query.GeneratedArgumentsWere(Url, Resource, "createdAt=2015-01-01");
+            query.GeneratedArgumentsWere(Href, "createdAt=2015-01-01");
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01, 01, 12));
 
-            query.GeneratedArgumentsWere(Url, Resource, "createdAt=2015-01-01T12");
+            query.GeneratedArgumentsWere(Href, "createdAt=2015-01-01T12");
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30));
 
-            query.GeneratedArgumentsWere(Url, Resource, "createdAt=2015-01-01T12:30");
+            query.GeneratedArgumentsWere(Href, "createdAt=2015-01-01T12:30");
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30, 31));
 
-            query.GeneratedArgumentsWere(Url, Resource, "createdAt=2015-01-01T12:30:31");
+            query.GeneratedArgumentsWere(Href, "createdAt=2015-01-01T12:30:31");
         }
     }
 }

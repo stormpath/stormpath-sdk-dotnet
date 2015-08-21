@@ -19,8 +19,10 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Tenant
@@ -70,9 +72,9 @@ namespace Stormpath.SDK.Impl.Tenant
             throw new NotImplementedException();
         }
 
-        IApplicationAsyncList ITenantActions.GetApplications()
+        ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()
         {
-            throw new NotImplementedException();
+            return new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetDataStore());
         }
     }
 }

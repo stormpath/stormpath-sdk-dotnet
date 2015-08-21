@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Filter("Joe");
 
             // Assert
-            query.GeneratedArgumentsWere(Url, Resource, "q=Joe");
+            query.GeneratedArgumentsWere(Href, "q=Joe");
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Filter("Joey");
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(Url, Resource, "q=Joey");
+            query.GeneratedArgumentsWere(Href, "q=Joey");
         }
     }
 }

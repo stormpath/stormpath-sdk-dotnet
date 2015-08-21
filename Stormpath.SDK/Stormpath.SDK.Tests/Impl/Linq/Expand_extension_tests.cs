@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Expand(x => x.GetDirectoryAsync());
 
-            query.GeneratedArgumentsWere(Url, Resource, "expand=directory");
+            query.GeneratedArgumentsWere(Href, "expand=directory");
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetDirectoryAsync())
                 .Expand(x => x.GetTenantAsync());
 
-            query.GeneratedArgumentsWere(Url, Resource, "expand=directory,tenant");
+            query.GeneratedArgumentsWere(Href, "expand=directory,tenant");
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Expand(x => x.GetGroupsAsync(), offset: 10);
 
-            query.GeneratedArgumentsWere(Url, Resource, "expand=groups(offset:10)");
+            query.GeneratedArgumentsWere(Href, "expand=groups(offset:10)");
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Expand(x => x.GetGroupsAsync(), limit: 20);
 
-            query.GeneratedArgumentsWere(Url, Resource, "expand=groups(limit:20)");
+            query.GeneratedArgumentsWere(Href, "expand=groups(limit:20)");
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Expand(x => x.GetGroupsAsync(), 5, 15);
 
-            query.GeneratedArgumentsWere(Url, Resource, "expand=groups(offset:5,limit:15)");
+            query.GeneratedArgumentsWere(Href, "expand=groups(offset:5,limit:15)");
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroupsAsync(), 10, 20)
                 .Expand(x => x.GetDirectoryAsync());
 
-            query.GeneratedArgumentsWere(Url, Resource, "expand=tenant,groups(offset:10,limit:20),directory");
+            query.GeneratedArgumentsWere(Href, "expand=tenant,groups(offset:10,limit:20),directory");
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = Harness.Queryable.Expand(x => x.Email);
-                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Href, "<not evaluated>");
             });
         }
 
@@ -97,7 +97,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = Harness.Queryable.Expand(x => x.GetDirectoryAsync(), limit: 10);
-                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Href, "<not evaluated>");
             });
         }
 
@@ -107,7 +107,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = Harness.Queryable.Expand(x => x.GetTenantAsync().GetAwaiter());
-                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Href, "<not evaluated>");
             });
         }
     }

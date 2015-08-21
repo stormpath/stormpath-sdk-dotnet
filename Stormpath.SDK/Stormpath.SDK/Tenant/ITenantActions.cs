@@ -17,6 +17,7 @@
 
 using System.Threading.Tasks;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tenant
 {
@@ -24,6 +25,6 @@ namespace Stormpath.SDK.Tenant
     {
         Task<IApplication> CreateApplicationAsync(IApplication application);
 
-        IApplicationAsyncList GetApplications();
+        ICollectionResourceQueryable<IApplication> GetApplications();
     }
 }

@@ -31,13 +31,13 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = Harness.Queryable.Where(x => true);
-                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Href, "<not evaluated>");
             });
 
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = Harness.Queryable.Where(x => false);
-                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Href, "<not evaluated>");
             });
         }
 
@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = Harness.Queryable.Where(x => x.Email != "foo");
-                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Href, "<not evaluated>");
             });
         }
 
@@ -57,13 +57,13 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = Harness.Queryable.Where(x => x.Email.Equals("bar", StringComparison.CurrentCulture));
-                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Href, "<not evaluated>");
             });
 
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = Harness.Queryable.Where(x => x.Email.StartsWith("foo", StringComparison.OrdinalIgnoreCase));
-                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Href, "<not evaluated>");
             });
         }
 
@@ -73,7 +73,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = Harness.Queryable.Where(x => x.Email.ToUpper() == "FOO");
-                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Href, "<not evaluated>");
             });
         }
 
@@ -83,7 +83,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = Harness.Queryable.Where(x => x.Email == "foo" || x.Email == "bar");
-                query.GeneratedArgumentsWere(Url, Resource, "<not evaluated>");
+                query.GeneratedArgumentsWere(Href, "<not evaluated>");
             });
         }
 
@@ -93,7 +93,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.Email == "tk421@deathstar.co");
 
-            query.GeneratedArgumentsWere(Url, Resource, "email=tk421@deathstar.co");
+            query.GeneratedArgumentsWere(Href, "email=tk421@deathstar.co");
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.Email.Equals("tk421@deathstar.co"));
 
-            query.GeneratedArgumentsWere(Url, Resource, "email=tk421@deathstar.co");
+            query.GeneratedArgumentsWere(Href, "email=tk421@deathstar.co");
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.Email.StartsWith("tk421"));
 
-            query.GeneratedArgumentsWere(Url, Resource, "email=tk421*");
+            query.GeneratedArgumentsWere(Href, "email=tk421*");
         }
 
         [Fact]
@@ -120,7 +120,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.Email.EndsWith("deathstar.co"));
 
-            query.GeneratedArgumentsWere(Url, Resource, "email=*deathstar.co");
+            query.GeneratedArgumentsWere(Href, "email=*deathstar.co");
         }
 
         [Fact]
@@ -129,7 +129,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.Email.Contains("421"));
 
-            query.GeneratedArgumentsWere(Url, Resource, "email=*421*");
+            query.GeneratedArgumentsWere(Href, "email=*421*");
         }
 
         [Fact]
@@ -138,7 +138,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.Email == "tk421@deathstar.co" && x.Username == "tk421");
 
-            query.GeneratedArgumentsWere(Url, Resource, "email=tk421@deathstar.co&username=tk421");
+            query.GeneratedArgumentsWere(Href, "email=tk421@deathstar.co&username=tk421");
         }
 
         [Fact]
@@ -148,7 +148,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.Email == "tk421@deathstar.co")
                 .Where(x => x.Username.StartsWith("tk421"));
 
-            query.GeneratedArgumentsWere(Url, Resource, "email=tk421@deathstar.co&username=tk421*");
+            query.GeneratedArgumentsWere(Href, "email=tk421@deathstar.co&username=tk421*");
         }
 
         [Fact]
@@ -158,7 +158,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.CreatedAt > testDate);
 
-            query.GeneratedArgumentsWere(Url, Resource, "createdAt=(2015-01-01T06:00:00Z,]");
+            query.GeneratedArgumentsWere(Href, "createdAt=(2015-01-01T06:00:00Z,]");
         }
 
         [Fact]
@@ -168,7 +168,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.CreatedAt >= testDate);
 
-            query.GeneratedArgumentsWere(Url, Resource, "createdAt=[2015-01-01T06:00:00Z,]");
+            query.GeneratedArgumentsWere(Href, "createdAt=[2015-01-01T06:00:00Z,]");
         }
 
         [Fact]
@@ -178,7 +178,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.ModifiedAt < testDate);
 
-            query.GeneratedArgumentsWere(Url, Resource, "modifiedAt=[,2016-01-01T12:00:00Z)");
+            query.GeneratedArgumentsWere(Href, "modifiedAt=[,2016-01-01T12:00:00Z)");
         }
 
         [Fact]
@@ -188,7 +188,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.ModifiedAt <= testDate);
 
-            query.GeneratedArgumentsWere(Url, Resource, "modifiedAt=[,2016-01-01T12:00:00Z]");
+            query.GeneratedArgumentsWere(Href, "modifiedAt=[,2016-01-01T12:00:00Z]");
         }
 
         [Fact]
@@ -199,7 +199,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = Harness.Queryable
                 .Where(x => x.CreatedAt > testStartDate && x.CreatedAt <= testEndDate);
 
-            query.GeneratedArgumentsWere(Url, Resource, "createdAt=(2015-01-01T00:00:00Z,2015-12-31T23:59:59Z]");
+            query.GeneratedArgumentsWere(Href, "createdAt=(2015-01-01T00:00:00Z,2015-12-31T23:59:59Z]");
         }
     }
 }

@@ -19,9 +19,11 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Application
 {
-    public interface IApplication : IResource
+    public interface IApplication : IResource, ISaveable, IExtendable, IAuditable
     {
         string Name { get; }
+
+        string Description { get; }
 
         ApplicationStatus Status { get; }
     }

@@ -23,6 +23,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
@@ -69,7 +70,7 @@ namespace Stormpath.SDK.Impl.Client
             throw new NotImplementedException();
         }
 
-        IApplicationAsyncList ITenantActions.GetApplications()
+        ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()
         {
             // return new CollectionResourceQueryable()
             throw new NotImplementedException();

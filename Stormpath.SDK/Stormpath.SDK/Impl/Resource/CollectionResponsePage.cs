@@ -1,4 +1,4 @@
-﻿// <copyright file="CollectionResponsePageDto.cs" company="Stormpath, Inc.">
+﻿// <copyright file="CollectionResponsePage.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,11 +16,25 @@
 // </remarks>
 
 using System.Collections.Generic;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal sealed class CollectionResponsePageDto<T>
+    internal sealed class CollectionResponsePage<T> : IResource
     {
+        public CollectionResponsePage()
+        {
+        }
+
+        public CollectionResponsePage(string href, int offset, int limit, int size, List<T> items)
+        {
+            this.Href = href;
+            this.Offset = offset;
+            this.Limit = limit;
+            this.Size = size;
+            this.Items = items;
+        }
+
         public string Href { get; set; }
 
         public int Offset { get; set; }

@@ -83,6 +83,7 @@
     <Compile Include="Directory\IDirectoryList.cs" />
     <Compile Include="Group\IGroup.cs" />
     <Compile Include="Group\IGroupList.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\DataStore\IMapSerializer.cs" />
     <Compile Include="Impl\Http\Authentication\DefaultRequestAuthenticatorFactory.cs" />
@@ -138,7 +139,7 @@
     <Compile Include="Impl\Resource\AbstractExtendableInstanceResource.cs" />
     <Compile Include="Impl\Resource\AbstractInstanceResource.cs" />
     <Compile Include="Impl\Resource\CollectionResourceQueryable.cs" />
-    <Compile Include="Impl\Resource\CollectionResponsePageDto.cs" />
+    <Compile Include="Impl\Resource\CollectionResponsePage.cs" />
     <Compile Include="Impl\Resource\LinkProperty.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.cs" />
     <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />

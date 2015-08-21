@@ -43,6 +43,9 @@ namespace Stormpath.SDK.Impl.DataStore
             this.resourceFactory = new DefaultResourceFactory(this);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element must begin with upper-case letter", Justification = "Reviewed")]
+        private IInternalDataStore _this => this;
+
         IRequestExecutor IInternalDataStore.RequestExecutor => this.requestExecutor;
 
         string IInternalDataStore.BaseUrl => this.baseUrl;
@@ -64,9 +67,9 @@ namespace Stormpath.SDK.Impl.DataStore
             return resource;
         }
 
-        Task<CollectionResponsePageDto<T>> IDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
+        Task<CollectionResponsePage<T>> IDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return _this.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
         }
 
         Task IDataStore.Save(IResource resource)

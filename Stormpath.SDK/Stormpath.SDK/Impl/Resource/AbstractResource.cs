@@ -63,10 +63,14 @@ namespace Stormpath.SDK.Impl.Resource
         {
             var value = GetProperty(name);
 
-            // Todo add a converter list to handle multiple target types
+            // TODO add a converter list to handle multiple target types
             if (typeof(T) == typeof(SDK.Account.AccountStatus))
             {
                 return (T)(SDK.Account.AccountStatus.Parse(value.ToString()) as object);
+            }
+            else if (typeof(T) == typeof(SDK.Application.ApplicationStatus))
+            {
+                return (T)(SDK.Application.ApplicationStatus.Parse(value.ToString()) as object);
             }
 
             return (T)value;

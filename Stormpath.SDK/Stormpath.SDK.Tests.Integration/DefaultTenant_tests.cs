@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultClient_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultTenant_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -22,29 +22,26 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single class", Justification = "Reviewed.")]
-    public class DefaultClient_tests
+    public class DefaultTenant_tests
     {
-        private static async Task Impl_Getting_current_tenant(IntegrationHarness harness)
+        private static async Task Impl_Getting_tenant_applications(IntegrationHarness harness)
         {
             var tenant = await harness.Client.GetCurrentTenantAsync();
+            var applications = await tenant.GetApplications().ToListAsync();
 
-            tenant.ShouldNotBe(null);
-            tenant.Href.ShouldNotBe(null);
-            tenant.Name.ShouldNotBe(null);
-
-            // TODO - verify actual tenant data?
+            applications.Count.ShouldNotBe(0);
         }
 
         public class DefaultClient_Basic_tests : BasicAuth_integration_tests
         {
             [Fact]
-            public async Task Getting_current_tenant() => await Impl_Getting_current_tenant(harness);
+            public async Task Getting_tenant_applications() => await Impl_Getting_tenant_applications(harness);
         }
 
         public class DefaultClient_SAuthc1_tests : SAuthc1_integration_tests
         {
             [Fact]
-            public async Task Getting_current_tenant() => await Impl_Getting_current_tenant(harness);
+            public async Task Getting_tenant_applications() => await Impl_Getting_tenant_applications(harness);
         }
     }
 }

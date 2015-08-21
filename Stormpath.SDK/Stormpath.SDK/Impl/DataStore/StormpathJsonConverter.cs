@@ -19,6 +19,7 @@ using System;
 using System.Collections;
 using Newtonsoft.Json;
 using Stormpath.SDK.Impl.Resource;
+using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -44,6 +45,19 @@ namespace Stormpath.SDK.Impl.DataStore
 
             while (reader.Read())
             {
+                ReadObjectAtCurrentDepth(reader);
+            }
+
+            return resultMap;
+        }
+
+        private Hashtable ReadObjectAtCurrentDepth(JsonReader reader)
+        {
+            var resultProperties = new Hashtable();
+            int startingDepth = reader.Depth;
+
+            while (reader.Read() && reader.Depth >= startingDepth)
+            {
                 if (reader.TokenType == JsonToken.PropertyName)
                 {
                     var propertyName = reader.Value.ToString();
@@ -53,24 +67,53 @@ namespace Stormpath.SDK.Impl.DataStore
                     switch (reader.TokenType)
                     {
                         case JsonToken.StartObject:
-                            reader.Read();
-                            if (reader.TokenType == JsonToken.PropertyName
-                                && reader.Value.ToString().Equals("href", StringComparison.OrdinalIgnoreCase))
+                            if (reader.Depth == 1)
                             {
-                                propertyValue = new LinkProperty(reader.ReadAsString());
+                                reader.Read();
+                                if (reader.TokenType == JsonToken.PropertyName
+                                    && reader.Value.ToString().Equals("href", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    propertyValue = new LinkProperty(reader.ReadAsString());
+                                }
+                            }
+                            else
+                            {
+                                propertyValue = ReadObjectAtCurrentDepth(reader);
                             }
 
                             break;
-                        default:
+                        case JsonToken.Boolean:
+                        case JsonToken.Bytes:
+                        case JsonToken.Date:
+                        case JsonToken.Float:
+                        case JsonToken.Integer:
+                        case JsonToken.String:
                             propertyValue = reader.Value;
                             break;
+                        default:
+                            continue;
                     }
 
-                    resultMap.Add(propertyName, propertyValue);
+                    resultProperties.Add(propertyName, propertyValue);
                 }
             }
 
-            return resultMap;
+            return resultProperties;
+        }
+
+        private List<Hashtable> ReadMultipleObjectsAtCurrentDepth(JsonReader reader)
+        {
+            var resultObjects = new List<Hashtable>();
+            var startingDepth = reader.Depth;
+
+            while (reader.Read()
+                && reader.Depth == startingDepth
+                && reader.TokenType == JsonToken.StartObject)
+            {
+                resultObjects.Add(ReadObjectAtCurrentDepth(reader));
+            }
+
+            return resultObjects;
         }
     }
 }

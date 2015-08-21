@@ -26,34 +26,35 @@ namespace Stormpath.SDK.Tests.Helpers
 {
     public static class LinqAssertExtensions
     {
-        public static void GeneratedArgumentsWere<T>(this IQueryable<T> queryable, string url, string resource, string arguments)
+        public static void GeneratedArgumentsWere<T>(this IQueryable<T> queryable, string href, string arguments)
         {
             var resourceQueryable = queryable as ICollectionResourceQueryable<T>;
             if (resourceQueryable == null)
                 Assertly.Fail("This queryable is not an ICollectionResourceQueryable.");
 
-            resourceQueryable.CurrentHref.ShouldBe($"{url}/{resource}?{arguments}");
+            resourceQueryable.CurrentHref.ShouldBe($"{href}?{arguments}");
         }
 
         // The same thing as above, but for testing whether a FakeDataStore received a particular URL call
-        internal static void WasCalledWithArguments<T>(this IDataStore ds, string url, string resource, string arguments)
+        internal static void WasCalledWithArguments<T>(this IDataStore ds, string href, string arguments)
+            where T : class, IResource
         {
             var asFake = ds as FakeDataStore<T>;
             if (asFake != null)
             {
                 if (string.IsNullOrEmpty(arguments))
-                    asFake.GetCalls().ShouldContain($"{url}/{resource}");
+                    asFake.GetCalls().ShouldContain($"{href}");
                 else
-                    asFake.GetCalls().ShouldContain($"{url}/{resource}?{arguments}");
+                    asFake.GetCalls().ShouldContain($"{href}?{arguments}");
                 return;
             }
             else
             {
                 // Maybe it's an NSubstitute mock
                 if (string.IsNullOrEmpty(arguments))
-                    ds.Received().GetCollectionAsync<T>($"{url}/{resource}");
+                    ds.Received().GetCollectionAsync<T>($"{href}");
                 else
-                    ds.Received().GetCollectionAsync<T>($"{url}/{resource}?{arguments}");
+                    ds.Received().GetCollectionAsync<T>($"{href}?{arguments}");
                 return;
             }
         }

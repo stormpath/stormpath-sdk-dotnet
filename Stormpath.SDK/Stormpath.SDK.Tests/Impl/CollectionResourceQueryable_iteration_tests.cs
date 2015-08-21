@@ -27,13 +27,13 @@ namespace Stormpath.SDK.Tests.Impl
 {
     public class CollectionResourceQueryable_iteration_tests
     {
-        private static string url = "http://f.oo";
-        private static string resource = "bar";
+        private static string href = "http://f.oo/bar";
 
         [Fact]
         public async Task First_iteration_does_not_modify_pagination_arguments()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource,
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
+                href,
                 new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance));
 
             var query = harness.Queryable
@@ -41,25 +41,27 @@ namespace Stormpath.SDK.Tests.Impl
                 .Skip(10);
 
             await (query as ICollectionResourceQueryable<IAccount>).MoveNextAsync();
-            harness.DataStore.WasCalledWithArguments<IAccount>(url, resource, "limit=5&offset=10");
+            harness.DataStore.WasCalledWithArguments<IAccount>(href, "limit=5&offset=10");
         }
 
         [Fact]
         public async Task First_iteration_does_not_add_pagination_arguments()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource,
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
+                href,
                 new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance));
 
             var query = harness.Queryable;
 
             await query.MoveNextAsync();
-            harness.DataStore.WasCalledWithArguments<IAccount>(url, resource, string.Empty);
+            harness.DataStore.WasCalledWithArguments<IAccount>(href, string.Empty);
         }
 
         [Fact]
         public async Task Subsequent_iterations_add_pagination_arguments_if_none_exist()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(url, resource,
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
+                href,
                 new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 50)));
 
             var query = harness.Queryable;
@@ -67,7 +69,7 @@ namespace Stormpath.SDK.Tests.Impl
             await query.MoveNextAsync();
             var firstPageCount = query.CurrentPage.Count();
             await query.MoveNextAsync();
-            harness.DataStore.WasCalledWithArguments<IAccount>(url, resource, $"offset={firstPageCount}");
+            harness.DataStore.WasCalledWithArguments<IAccount>(href, $"offset={firstPageCount}");
         }
     }
 }
