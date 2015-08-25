@@ -20,21 +20,31 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Stormpath.SDK.Impl.DataStore.Converters;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class JsonNetMapMarshaller : IMapSerializer
     {
         private readonly JsonSerializerSettings serializerSettings;
-        private readonly FieldConverterList fieldConverters;
+
+        private static readonly FieldConverterList ConverterChain =
+            new FieldConverterList(
+                DefaultFieldConverters.LinkPropertyConverter,
+                DefaultFieldConverters.DateTimeOffsetConverter,
+                DefaultFieldConverters.AccountStatusConverter,
+                DefaultFieldConverters.ApplicationStatusConverter,
+                DefaultFieldConverters.DirectoryStatusConverter,
+                DefaultFieldConverters.GroupStatusConverter,
+                DefaultFieldConverters.StringConverter,
+                DefaultFieldConverters.NullConverter,
+                DefaultFieldConverters.FallbackConverter);
 
         public JsonNetMapMarshaller()
         {
             serializerSettings = new JsonSerializerSettings();
             serializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
             serializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-
-            fieldConverters = DefaultFieldConverters.All;
         }
 
         Hashtable IMapSerializer.Deserialize(string json, Type type)
@@ -73,7 +83,9 @@ namespace Stormpath.SDK.Impl.DataStore
                 }
                 else
                 {
-                    fieldConverters.TryConvertField(prop.Value, type, out value);
+                    var convertResult = ConverterChain.TryConvertField(prop, type);
+                    if (convertResult.Success)
+                        value = convertResult.Result;
                 }
 
                 result.Add(name, value);

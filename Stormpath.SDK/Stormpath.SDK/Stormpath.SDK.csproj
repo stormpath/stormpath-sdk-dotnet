@@ -82,9 +82,10 @@
     <Compile Include="Group\GroupStatus.cs" />
     <Compile Include="Group\IGroup.cs" />
     <Compile Include="Impl\Application\DefaultApplication.cs" />
-    <Compile Include="Impl\DataStore\DefaultFieldConverters.cs" />
-    <Compile Include="Impl\DataStore\FieldConverter.cs" />
-    <Compile Include="Impl\DataStore\FieldConverterList.cs" />
+    <Compile Include="Impl\DataStore\Converters\ConverterResult.cs" />
+    <Compile Include="Impl\DataStore\Converters\DefaultFieldConverters.cs" />
+    <Compile Include="Impl\DataStore\Converters\FieldConverter.cs" />
+    <Compile Include="Impl\DataStore\Converters\FieldConverterList.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\DataStore\IMapSerializer.cs" />
     <Compile Include="Impl\Directory\DefaultDirectory.cs" />

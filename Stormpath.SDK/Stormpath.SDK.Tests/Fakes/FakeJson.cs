@@ -739,13 +739,13 @@ namespace Stormpath.SDK.Tests.Fakes
             ""customData"": {
                 ""href"": ""https://api.stormpath.com/v1/groups/group2/customData""
             },
-            ""description"": null,
+            ""description"": ""The members of the Rebel Alliance."",
             ""directory"": {
                 ""href"": ""https://api.stormpath.com/v1/directories/directory1""
             },
             ""href"": ""https://api.stormpath.com/v1/groups/group2"",
             ""modifiedAt"": ""2015-08-24T17:02:42.755Z"",
-            ""description"": ""The members of the Rebel Alliance."",
+            ""name"": ""Rebels"",
             ""status"": ""ENABLED"",
             ""tenant"": {
                 ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""

@@ -19,7 +19,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.DataStore.Converters;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -30,13 +30,13 @@ namespace Stormpath.SDK.Tests.Impl
         public void Returns_null_and_false_if_no_converter_can_handle_field()
         {
             var converterList = new FieldConverterList();
-            var dummyField = JToken.FromObject(new { foo = "bar" });
+            var dummyField = JToken.FromObject(new { foo = "bar" }) as JProperty;
             var testTarget = Type.GetType(nameof(IAccount));
 
-            object converted = null;
-            bool result = converterList.TryConvertField(dummyField, testTarget, out converted);
-            converted.ShouldBe(null);
-            result.ShouldBe(false);
+            var result = converterList.TryConvertField(dummyField, testTarget);
+
+            result.Success.ShouldBe(false);
+            result.Result.ShouldBe(null);
         }
     }
 }

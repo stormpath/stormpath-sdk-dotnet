@@ -17,9 +17,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Impl.DataStore.Converters
 {
     internal sealed class FieldConverterList
     {
@@ -42,6 +43,11 @@ namespace Stormpath.SDK.Impl.DataStore
             this.converters.AddRange(initialConverters);
         }
 
+        public FieldConverterList(params FieldConverter[] converters)
+            : this(converters.AsEnumerable())
+        {
+        }
+
         public int Count => this.converters.Count;
 
         public void Add(FieldConverter converter)
@@ -49,19 +55,18 @@ namespace Stormpath.SDK.Impl.DataStore
             this.converters.Add(converter);
         }
 
-        public bool TryConvertField(JToken token, Type targetType, out object converted)
+        public ConverterResult TryConvertField(JProperty token, Type targetType)
         {
-            bool didSucceed = false;
-            converted = null;
+            var result = ConverterResult.Failed; // presumed failed until proven successful
 
             foreach (var converter in this.converters)
             {
-                didSucceed = converter.TryConvertField(token, targetType, out converted);
-                if (didSucceed)
+                result = converter.TryConvertField(token, targetType);
+                if (result.Success)
                     break;
             }
 
-            return didSucceed;
+            return result;
         }
     }
 }

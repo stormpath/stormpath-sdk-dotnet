@@ -21,7 +21,7 @@ using Newtonsoft.Json.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.DataStore.Converters;
 using Stormpath.SDK.Impl.Resource;
 using Xunit;
 
@@ -36,28 +36,26 @@ namespace Stormpath.SDK.Tests
             {
                 var fakeAccountFieldConverter = new FieldConverter(
                     appliesToTargetType: typeof(IAccount),
-                    convertAction: (JToken t) => new object());
-                var dummyField = JToken.FromObject(new { foo = "bar" });
+                    convertAction: _ => new ConverterResult(true, new object()));
+                var dummyField = new JProperty("foo", "bar");
 
-                object converted = null;
-                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IApplication), out converted);
+                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IApplication));
 
-                converted.ShouldBe(null);
-                result.ShouldBe(false);
+                result.Success.ShouldBe(false);
+                result.Result.ShouldBe(null);
             }
 
             [Fact]
             public void Returns_value_when_any_type_is_supported()
             {
-                var stringFieldConverter = new FieldConverter((JToken t) => t.First.Values().First().ToString());
-                var dummyField = JToken.FromObject(new { foo = "bar" });
+                var stringFieldConverter = new FieldConverter(t => new ConverterResult(true, t.First.ToString()));
+                var dummyField = new JProperty("foo", "bar");
                 var applicationTarget = Type.GetType(nameof(IApplication));
 
-                object converted = null;
-                var result = stringFieldConverter.TryConvertField(dummyField, applicationTarget, out converted);
+                var result = stringFieldConverter.TryConvertField(dummyField, applicationTarget);
 
-                converted.ShouldBe("bar");
-                result.ShouldBe(true);
+                result.Success.ShouldBe(true);
+                result.Result.ShouldBe("bar");
             }
 
             [Fact]
@@ -65,27 +63,25 @@ namespace Stormpath.SDK.Tests
             {
                 var fakeAccountFieldConverter = new FieldConverter(
                     appliesToTargetType: typeof(IAccount),
-                    convertAction: (JToken t) => "good!");
-                var dummyField = JToken.FromObject(new { foo = "bar" });
+                    convertAction: _ => new ConverterResult(true, "good!"));
+                var dummyField = new JProperty("foo", "bar");
 
-                object converted = null;
-                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IAccount), out converted);
+                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IAccount));
 
-                converted.ShouldBe("good!");
-                result.ShouldBe(true);
+                result.Success.ShouldBe(true);
+                result.Result.ShouldBe("good!");
             }
 
             [Fact]
             public void Returns_false_when_converter_fails()
             {
-                var failingConverter = new FieldConverter(t => null);
-                var dummyField = JToken.FromObject(new { foo = "bar" });
+                var failingConverter = new FieldConverter(_ => ConverterResult.Failed);
+                var dummyField = new JProperty("foo", "bar");
 
-                object converted = null;
-                var result = failingConverter.TryConvertField(dummyField, typeof(IAccount), out converted);
+                var result = failingConverter.TryConvertField(dummyField, typeof(IAccount));
 
-                converted.ShouldBe(null);
-                result.ShouldBe(false);
+                result.Success.ShouldBe(false);
+                result.Result.ShouldBe(null);
             }
         }
 
@@ -94,17 +90,13 @@ namespace Stormpath.SDK.Tests
             [Fact]
             public void Link_property_is_materialized()
             {
-                var propertyField = JToken.FromObject(new
-                {
-                    href = "http://foobar/myprop"
-                });
+                var jsonObject = JObject.Parse(@"{ link: { href: ""http://foobar/myprop"" } }");
                 var converter = DefaultFieldConverters.LinkPropertyConverter;
 
-                object converted = null;
-                var result = converter.TryConvertField(propertyField, FieldConverter.AnyType, out converted);
+                var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
 
-                converted.ShouldBe(new LinkProperty("http://foobar/myprop"));
-                result.ShouldBe(true);
+                result.Result.ShouldBe(new LinkProperty("http://foobar/myprop"));
+                result.Success.ShouldBe(true);
             }
         }
     }

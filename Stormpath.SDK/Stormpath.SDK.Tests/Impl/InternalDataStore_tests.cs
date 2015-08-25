@@ -191,7 +191,7 @@ namespace Stormpath.SDK.Tests.Impl
             application.Status.ShouldBe(GroupStatus.Disabled);
 
             (application as DefaultGroup).AccountMemberships.Href.ShouldBe("https://api.stormpath.com/v1/groups/group1/accountMemberships");
-            (application as DefaultGroup).Accounts.Href.ShouldBe("https://api.stormpath.com/v1/groups/group1/accountMemberships");
+            (application as DefaultGroup).Accounts.Href.ShouldBe("https://api.stormpath.com/v1/groups/group1/accounts");
             (application as DefaultGroup).Applications.Href.ShouldBe("https://api.stormpath.com/v1/groups/group1/applications");
             (application as DefaultGroup).CustomData.Href.ShouldBe("https://api.stormpath.com/v1/groups/group1/customData");
             (application as DefaultGroup).Directory.Href.ShouldBe("https://api.stormpath.com/v1/directories/directory1");

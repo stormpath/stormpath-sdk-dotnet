@@ -18,41 +18,39 @@
 using System;
 using Newtonsoft.Json.Linq;
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Impl.DataStore.Converters
 {
     internal sealed class FieldConverter
     {
         public const Type AnyType = null;
 
-        private readonly Func<JToken, object> convertAction;
+        private readonly Func<JProperty, ConverterResult> convertAction;
         private readonly Type appliesToTargetType;
         private readonly JTokenType? appliesToTokenType;
 
-        public FieldConverter(Func<JToken, object> convertAction, Type appliesToTargetType = AnyType, JTokenType? appliesToTokenType = null)
+        public FieldConverter(Func<JProperty, ConverterResult> convertAction, Type appliesToTargetType = AnyType, JTokenType? appliesToTokenType = null)
         {
             this.convertAction = convertAction;
             this.appliesToTargetType = appliesToTargetType;
             this.appliesToTokenType = appliesToTokenType;
         }
 
-        public bool TryConvertField(JToken token, Type targetType, out object converted)
+        public ConverterResult TryConvertField(JProperty token, Type targetType)
         {
-            converted = null;
-
             bool isSupportedTokenType = true;
             if (appliesToTokenType.HasValue)
-                isSupportedTokenType = appliesToTokenType == token.Type;
+                isSupportedTokenType = appliesToTokenType == token.Value.Type;
             if (!isSupportedTokenType)
-                return false;
+                return ConverterResult.Failed;
 
             bool isSupportedTargetType = this.appliesToTargetType == AnyType
                 ? true
                 : (targetType == this.appliesToTargetType);
             if (!isSupportedTargetType)
-                return false;
+                return ConverterResult.Failed;
 
-            converted = convertAction(token);
-            return converted != null;
+            var result = convertAction(token);
+            return result;
         }
     }
 }
