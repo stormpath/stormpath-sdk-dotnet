@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -34,7 +35,15 @@ namespace Stormpath.SDK.Impl.Client
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "Reviewed.")]
     internal sealed class DefaultClient : IClient
     {
-        private IInternalDataStore dataStore;
+        internal const int DefaultConnectionTimeout = 20 * 1000;
+        internal const string DefaultBaseUrl = "https://api.stormpath.com/v1";
+        private static readonly AuthenticationScheme DefaultAuthenticationScheme = AuthenticationScheme.SAuthc1;
+
+        private readonly string baseUrl;
+        private readonly AuthenticationScheme authenticationScheme;
+        private readonly int connectionTimeout;
+        private readonly IInternalDataStore dataStore;
+
         private string currentTenantHref;
 
         public DefaultClient(IClientApiKey apiKey, string baseUrl, AuthenticationScheme authenticationScheme, int connectionTimeout)
@@ -47,6 +56,12 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentException("Timeout cannot be negative.");
 
             var factory = new InternalFactory();
+
+            this.baseUrl = baseUrl;
+            this.connectionTimeout = connectionTimeout;
+            this.authenticationScheme = authenticationScheme == null
+                ? DefaultAuthenticationScheme
+                : authenticationScheme;
 
             var requestExecutor = factory.CreateRequestExecutor(apiKey, authenticationScheme, connectionTimeout);
             this.dataStore = factory.CreateDataStore(requestExecutor, baseUrl);

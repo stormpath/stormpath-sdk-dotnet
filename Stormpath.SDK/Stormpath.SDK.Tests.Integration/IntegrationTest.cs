@@ -1,4 +1,4 @@
-﻿// <copyright file="SAuthc1_integration_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IntegrationTest.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,27 +15,26 @@
 // limitations under the License.
 // </remarks>
 
+using System.Collections.Generic;
+using Shouldly;
 using Stormpath.SDK.Api;
-using Stormpath.SDK.Client;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    // TODO make this much more clean with xUnit 2 theories
-    public class SAuthc1_integration_tests : Integration_tests
+    public abstract class IntegrationTest
     {
-        public SAuthc1_integration_tests()
-            : base(BuildClient(GetApiKey()))
+        public static IEnumerable<object[]> GetClients()
         {
+            yield return new object[] { new TestClientBuilder("Basic") };
+            yield return new object[] { new TestClientBuilder("SAuthc1") };
         }
 
-        private static IClient BuildClient(IClientApiKey apiKey)
+        public static IClientApiKey GetApiKey()
         {
-            var client = Clients
-                .Builder()
-                .SetApiKey(apiKey)
-                .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
-                .Build();
-            return client;
+            // Expect that API keys are in environment variables. (works with travis-ci)
+            var apiKey = ClientApiKeys.Builder().Build();
+            apiKey.IsValid().ShouldBe(true, "These integration tests look for a valid API Key and Secret in your local environment variables.");
+            return apiKey;
         }
     }
 }

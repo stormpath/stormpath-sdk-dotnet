@@ -15,15 +15,22 @@
 // limitations under the License.
 // </remarks>
 
-using System;
 using Shouldly;
 using Stormpath.SDK.Impl.Http;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Stormpath.SDK.Tests.Impl
 {
     public class UserAgentBuilder_tests
     {
+        private readonly ITestOutputHelper output;
+
+        public UserAgentBuilder_tests(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+
         [Fact]
         public void UserAgent_is_known()
         {
@@ -31,8 +38,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             userAgent.ShouldNotContain("unknown");
 
-            // TODO change this when moving to xUnit 2.0+
-            Console.WriteLine($"UserAgent: {userAgent}");
+            output.WriteLine($"UserAgent: {userAgent}");
         }
     }
 }

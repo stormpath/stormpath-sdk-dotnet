@@ -23,12 +23,10 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class DefaultClientBuilder : IClientBuilder
     {
-        private static readonly int DefaultConnectionTimeout = 20 * 1000;
-
-        private string baseUrl = "https://api.stormpath.com/v1";
-        private IClientApiKey apiKey;
+        private string baseUrl = DefaultClient.DefaultBaseUrl;
+        private int connectionTimeout = DefaultClient.DefaultConnectionTimeout;
         private AuthenticationScheme authenticationScheme;
-        private int connectionTimeout = DefaultConnectionTimeout;
+        private IClientApiKey apiKey;
 
         IClientBuilder IClientBuilder.SetApiKey(IClientApiKey apiKey)
         {

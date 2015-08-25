@@ -72,10 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultTenant_tests.cs" />
-    <Compile Include="SAuthc1_integration_tests.cs" />
-    <Compile Include="BasicAuth_integration_tests.cs" />
+    <Compile Include="TestClientBuilder.cs" />
+    <Compile Include="IntegrationTest.cs" />
     <Compile Include="DefaultClient_tests.cs" />
-    <Compile Include="Integration_tests.cs" />
     <Compile Include="NamespaceExtensions.cs" />
     <Compile Include="Namespace_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

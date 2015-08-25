@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
 using Stormpath.SDK.Impl.Http.Authentication;
 using Stormpath.SDK.Shared;
 
@@ -29,6 +30,12 @@ namespace Stormpath.SDK.Client
 
         private readonly Type authenticatorType;
 
+        private static readonly Dictionary<string, AuthenticationScheme> LookupMap = new Dictionary<string, AuthenticationScheme>()
+        {
+            { Basic.DisplayName, Basic },
+            { SAuthc1.DisplayName, SAuthc1 },
+        };
+
         private AuthenticationScheme()
         {
         }
@@ -36,6 +43,15 @@ namespace Stormpath.SDK.Client
         private AuthenticationScheme(int value, string displayName, Type authenticatorType) : base(value, displayName)
         {
             this.authenticatorType = authenticatorType;
+        }
+
+        public static AuthenticationScheme Parse(string status)
+        {
+            AuthenticationScheme found;
+            if (!LookupMap.TryGetValue(status.ToUpper(), out found))
+                throw new ApplicationException($"Could not parse status value '{status.ToUpper()}'");
+
+            return found;
         }
     }
 }

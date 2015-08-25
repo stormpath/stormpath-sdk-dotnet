@@ -21,30 +21,20 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single class", Justification = "Reviewed.")]
-    public class DefaultClient_tests
+    public class DefaultClient_tests : IntegrationTest
     {
-        private static async Task Impl_Getting_current_tenant(IntegrationHarness harness)
+        [Theory]
+        [MemberData(nameof(GetClients))]
+        private async Task Impl_Getting_current_tenant(TestClientBuilder clientBuilder)
         {
-            var tenant = await harness.Client.GetCurrentTenantAsync();
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
 
             tenant.ShouldNotBe(null);
             tenant.Href.ShouldNotBe(null);
             tenant.Name.ShouldNotBe(null);
 
             // TODO - verify actual tenant data?
-        }
-
-        public class DefaultClient_Basic_tests : BasicAuth_integration_tests
-        {
-            [Fact]
-            public async Task Getting_current_tenant() => await Impl_Getting_current_tenant(harness);
-        }
-
-        public class DefaultClient_SAuthc1_tests : SAuthc1_integration_tests
-        {
-            [Fact]
-            public async Task Getting_current_tenant() => await Impl_Getting_current_tenant(harness);
         }
     }
 }
