@@ -25,6 +25,17 @@ namespace Stormpath.SDK.Tests.Integration
     {
         [Theory]
         [MemberData(nameof(GetClients))]
+        public async Task Getting_tenant_accounts(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+            var accounts = await tenant.GetAccounts().ToListAsync();
+
+            accounts.Count.ShouldNotBe(0);
+        }
+
+        [Theory]
+        [MemberData(nameof(GetClients))]
         public async Task Getting_tenant_applications(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
@@ -32,6 +43,28 @@ namespace Stormpath.SDK.Tests.Integration
             var applications = await tenant.GetApplications().ToListAsync();
 
             applications.Count.ShouldNotBe(0);
+        }
+
+        [Theory]
+        [MemberData(nameof(GetClients))]
+        public async Task Getting_tenant_directories(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+            var directories = await tenant.GetDirectories().ToListAsync();
+
+            directories.Count.ShouldNotBe(0);
+        }
+
+        [Theory]
+        [MemberData(nameof(GetClients))]
+        public async Task Getting_tenant_groups(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+            var groups = await tenant.GetGroups().ToListAsync();
+
+            groups.Count.ShouldNotBe(0);
         }
     }
 }
