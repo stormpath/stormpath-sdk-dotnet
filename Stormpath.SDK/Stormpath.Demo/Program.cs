@@ -30,7 +30,7 @@ namespace Stormpath.Demo
         static async Task MainAsync(CancellationToken ct)
         {
             var apiKey = ClientApiKeys.Builder()
-                // This is actually unnecessary, because this is the default search path
+                // This is actually unnecessary, because this is already the default search path
                 .SetFileLocation("~\\.stormpath\\apiKey.properties")
                 .Build();
 

@@ -45,15 +45,23 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void FirstAsync_throws_when_no_items_exist()
+        public async Task FirstAsync_throws_when_no_items_exist()
         {
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href, fakeDataStore);
 
-            Should.Throw<InvalidOperationException>(async () =>
+            try
             {
                 var jabba = await harness.Queryable.FirstAsync();
-            });
+            }
+            catch (InvalidOperationException)
+            {
+                Assert.True(true); // pass
+            }
+            catch (Exception e)
+            {
+                Assert.True(false, $"{e.GetType().Name}: '{e.Message}'. InnerException: {(e.InnerException != null ? e.InnerException.Message : "none")}. StackTrace: {e.StackTrace}");
+            }
         }
 
         [Fact]
