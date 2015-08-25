@@ -16,7 +16,6 @@
 // </remarks>
 
 using System.Collections;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {

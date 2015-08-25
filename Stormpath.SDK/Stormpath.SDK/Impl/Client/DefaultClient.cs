@@ -18,9 +18,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Resource;
@@ -28,6 +31,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "Reviewed.")]
     internal sealed class DefaultClient : IClient
     {
         private IInternalDataStore dataStore;
@@ -48,6 +52,8 @@ namespace Stormpath.SDK.Impl.Client
             this.dataStore = factory.CreateDataStore(requestExecutor, baseUrl);
         }
 
+        private IClient This => this;
+
         private string CurrentTenantHref => currentTenantHref.Nullable() ?? "tenants/current";
 
         AuthenticationScheme IClient.AuthenticationScheme
@@ -65,17 +71,6 @@ namespace Stormpath.SDK.Impl.Client
             get { return this.dataStore.RequestExecutor.ConnectionTimeout; }
         }
 
-        Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application)
-        {
-            throw new NotImplementedException();
-        }
-
-        ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()
-        {
-            // return new CollectionResourceQueryable()
-            throw new NotImplementedException();
-        }
-
         async Task<ITenant> IClient.GetCurrentTenantAsync(CancellationToken cancellationToken)
         {
             var tenant = await dataStore
@@ -87,5 +82,64 @@ namespace Stormpath.SDK.Impl.Client
 
             return tenant;
         }
+
+        #region ITenantActions (pass-thru to Tenant)
+
+        async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application)
+        {
+            var tenant = await This.GetCurrentTenantAsync()
+                .ConfigureAwait(false);
+
+            return await tenant.CreateApplicationAsync(application)
+                .ConfigureAwait(false);
+        }
+
+        ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()
+        {
+            var tenant = This.GetCurrentTenantAsync().Result;
+
+            return tenant.GetApplications();
+        }
+
+        async Task<IDirectory> ITenantActions.CreateDirectory(IDirectory directory)
+        {
+            var tenant = await This.GetCurrentTenantAsync()
+                .ConfigureAwait(false);
+
+            return await tenant.CreateDirectory(directory)
+                .ConfigureAwait(false);
+        }
+
+        ICollectionResourceQueryable<IDirectory> ITenantActions.GetDirectories()
+        {
+            var tenant = This.GetCurrentTenantAsync().Result;
+
+            return tenant.GetDirectories();
+        }
+
+        async Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token)
+        {
+            var tenant = await This.GetCurrentTenantAsync()
+                .ConfigureAwait(false);
+
+            return await tenant.VerifyAccountEmailAsync(token)
+                .ConfigureAwait(false);
+        }
+
+        ICollectionResourceQueryable<IAccount> ITenantActions.GetAccounts()
+        {
+            var tenant = This.GetCurrentTenantAsync().Result;
+
+            return tenant.GetAccounts();
+        }
+
+        ICollectionResourceQueryable<IGroup> ITenantActions.GetGroups()
+        {
+            var tenant = This.GetCurrentTenantAsync().Result;
+
+            return tenant.GetGroups();
+        }
+
+        #endregion
     }
 }

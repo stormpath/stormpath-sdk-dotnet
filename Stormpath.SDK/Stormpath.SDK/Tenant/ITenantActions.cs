@@ -16,7 +16,10 @@
 // </remarks>
 
 using System.Threading.Tasks;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tenant
@@ -26,5 +29,15 @@ namespace Stormpath.SDK.Tenant
         Task<IApplication> CreateApplicationAsync(IApplication application);
 
         ICollectionResourceQueryable<IApplication> GetApplications();
+
+        Task<IDirectory> CreateDirectory(IDirectory directory);
+
+        ICollectionResourceQueryable<IDirectory> GetDirectories();
+
+        Task<IAccount> VerifyAccountEmailAsync(string token);
+
+        ICollectionResourceQueryable<IAccount> GetAccounts();
+
+        ICollectionResourceQueryable<IGroup> GetGroups();
     }
 }

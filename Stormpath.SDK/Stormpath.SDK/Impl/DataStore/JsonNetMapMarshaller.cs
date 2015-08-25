@@ -18,28 +18,29 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class JsonNetMapMarshaller : IMapSerializer
     {
         private readonly JsonSerializerSettings serializerSettings;
+        private readonly FieldConverterList fieldConverters;
 
         public JsonNetMapMarshaller()
         {
             serializerSettings = new JsonSerializerSettings();
             serializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
             serializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+
+            fieldConverters = DefaultFieldConverters.All;
         }
 
-        Hashtable IMapSerializer.Deserialize(string json)
+        Hashtable IMapSerializer.Deserialize(string json, Type type)
         {
             var deserializedMap = (JObject)JsonConvert.DeserializeObject(json, serializerSettings);
-            var sanitizedMap = Sanitize(deserializedMap);
+            var sanitizedMap = Sanitize(deserializedMap, type);
 
             return sanitizedMap;
         }
@@ -48,8 +49,9 @@ namespace Stormpath.SDK.Impl.DataStore
         /// JSON.NET deserializes everything into nested JObjects. We want Hashtables all the way down.
         /// </summary>
         /// <param name="map">Deserialized JObject from JSON.NET</param>
+        /// <param name="type">Target resource type (as an interface)</param>
         /// <returns>Hashtable of primitive items, and embedded objects as Hashtables</returns>
-        private Hashtable Sanitize(JObject map)
+        private Hashtable Sanitize(JObject map, Type type)
         {
             // TODO there is probably a cleaner way of doing all of this. IDictionaries in the AbstractResource constructor?
             var result = new Hashtable(map.Count);
@@ -64,40 +66,14 @@ namespace Stormpath.SDK.Impl.DataStore
                     var nested = new List<Hashtable>();
                     foreach (var child in prop.Value.Children())
                     {
-                        nested.Add(Sanitize((JObject)child));
+                        nested.Add(Sanitize((JObject)child, type));
                     }
 
                     value = nested;
                 }
-                else if (prop.Value.Type == JTokenType.Object)
-                {
-                    var firstChild = prop.Value.First as JProperty;
-
-                    bool isLinkProperty = prop.Value.Children().Count() == 1
-                        && firstChild?.Name == "href";
-                    if (isLinkProperty)
-                    {
-                        value = new LinkProperty(firstChild.Value.ToString());
-                    }
-                    else
-                    {
-                        // Unknown object type
-                        value = null;
-                    }
-                }
                 else
                 {
-                    if (prop.Value.Type == JTokenType.Date)
-                    {
-                        value = prop.Value.Value<DateTimeOffset>();
-                    }
-                    else
-                    {
-                        var asString = prop.Value.ToString();
-                        value = string.IsNullOrEmpty(asString)
-                        ? null
-                        : asString;
-                    }
+                    fieldConverters.TryConvertField(prop.Value, type, out value);
                 }
 
                 result.Add(name, value);

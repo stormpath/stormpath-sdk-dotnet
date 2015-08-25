@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System;
 using Shouldly;
 using Stormpath.SDK.Impl.Utility;
 using Xunit;

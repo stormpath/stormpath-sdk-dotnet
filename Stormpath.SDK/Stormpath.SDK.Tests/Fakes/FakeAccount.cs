@@ -18,6 +18,8 @@
 using System;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Group;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
@@ -43,7 +45,7 @@ namespace Stormpath.SDK.Tests.Fakes
 
         public AccountStatus Status { get; set; }
 
-        public Task<Group.IGroupList> GetGroupsAsync()
+        public Task<ICollectionResourceQueryable<IGroup>> GetGroupsAsync()
         {
             throw new NotImplementedException();
         }

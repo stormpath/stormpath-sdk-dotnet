@@ -22,9 +22,13 @@ using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Impl.Utility;
@@ -77,6 +81,22 @@ namespace Stormpath.SDK.Tests.Impl
             (account as DefaultAccount).ProviderData.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/providerData");
             (account as DefaultAccount).RefreshTokens.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/refreshTokens");
             (account as DefaultAccount).Tenant.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foobarTenant");
+        }
+
+        [Fact]
+        public async Task Instantiating_Account_list_from_JSON()
+        {
+            var href = "http://foobar/accounts";
+            fakeRequestExecutor.GetAsync(new Uri(href))
+                .Returns(Task.FromResult(FakeJson.AccountList));
+
+            var accountList = await dataStore.GetCollectionAsync<IApplication>(href);
+
+            accountList.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foobarTenant/accounts");
+            accountList.Size.ShouldBe(6);
+            accountList.Offset.ShouldBe(0);
+            accountList.Limit.ShouldBe(25);
+            accountList.Items.Count.ShouldBe(6);
         }
 
         [Fact]
@@ -138,7 +158,7 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
-        public async Task Instantiating_application_list_from_JSON()
+        public async Task Instantiating_Application_list_from_JSON()
         {
             var href = "http://foobar/applications";
             fakeRequestExecutor.GetAsync(new Uri(href))
@@ -151,6 +171,91 @@ namespace Stormpath.SDK.Tests.Impl
             applicationList.Offset.ShouldBe(0);
             applicationList.Limit.ShouldBe(25);
             applicationList.Items.Count.ShouldBe(2);
+        }
+
+        [Fact]
+        public async Task Instantiating_Group_from_JSON()
+        {
+            var href = "http://foobar/group1";
+            fakeRequestExecutor.GetAsync(new Uri(href))
+                .Returns(Task.FromResult(FakeJson.Group));
+
+            var application = await dataStore.GetResourceAsync<IGroup>(href);
+
+            // Verify against data from FakeJson.Application
+            application.CreatedAt.ShouldBe(Iso8601.Parse("2015-08-24T17:02:52.915Z"));
+            application.Href.ShouldBe("https://api.stormpath.com/v1/groups/group1");
+            application.Description.ShouldBe("Those loyal to the Galactic Empire.");
+            application.ModifiedAt.ShouldBe(Iso8601.Parse("2015-08-24T17:02:52.915Z"));
+            application.Name.ShouldBe("Imperials");
+            application.Status.ShouldBe(GroupStatus.Disabled);
+
+            (application as DefaultGroup).AccountMemberships.Href.ShouldBe("https://api.stormpath.com/v1/groups/group1/accountMemberships");
+            (application as DefaultGroup).Accounts.Href.ShouldBe("https://api.stormpath.com/v1/groups/group1/accountMemberships");
+            (application as DefaultGroup).Applications.Href.ShouldBe("https://api.stormpath.com/v1/groups/group1/applications");
+            (application as DefaultGroup).CustomData.Href.ShouldBe("https://api.stormpath.com/v1/groups/group1/customData");
+            (application as DefaultGroup).Directory.Href.ShouldBe("https://api.stormpath.com/v1/directories/directory1");
+            (application as DefaultGroup).Tenant.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foobarTenant");
+        }
+
+        [Fact]
+        public async Task Instantiating_Group_list_from_JSON()
+        {
+            var href = "http://foobar/groups";
+            fakeRequestExecutor.GetAsync(new Uri(href))
+                .Returns(Task.FromResult(FakeJson.GroupList));
+
+            var groupList = await dataStore.GetCollectionAsync<IGroup>(href);
+
+            groupList.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foobarTenant/groups");
+            groupList.Size.ShouldBe(2);
+            groupList.Offset.ShouldBe(0);
+            groupList.Limit.ShouldBe(25);
+            groupList.Items.Count.ShouldBe(2);
+        }
+
+        [Fact]
+        public async Task Instantiating_Directory_from_JSON()
+        {
+            var href = "http://foobar/directory";
+            fakeRequestExecutor.GetAsync(new Uri(href))
+                .Returns(Task.FromResult(FakeJson.Directory));
+
+            var directory = await dataStore.GetResourceAsync<IDirectory>(href);
+
+            // Verify against data from FakeJson.Application
+            directory.CreatedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.569Z"));
+            directory.Href.ShouldBe("https://api.stormpath.com/v1/directories/directory1");
+            directory.Description.ShouldBe("The members of the Jedi Council.");
+            directory.ModifiedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.569Z"));
+            directory.Name.ShouldBe("Jedi Council Directory");
+            directory.Status.ShouldBe(DirectoryStatus.Enabled);
+
+            (directory as DefaultDirectory).AccountCreationPolicy.Href.ShouldBe("https://api.stormpath.com/v1/accountCreationPolicies/directory1");
+            (directory as DefaultDirectory).Accounts.Href.ShouldBe("https://api.stormpath.com/v1/directories/directory1/accounts");
+            (directory as DefaultDirectory).ApplicationMappings.Href.ShouldBe("https://api.stormpath.com/v1/directories/directory1/applicationMappings");
+            (directory as DefaultDirectory).Applications.Href.ShouldBe("https://api.stormpath.com/v1/directories/directory1/applications");
+            (directory as DefaultDirectory).CustomData.Href.ShouldBe("https://api.stormpath.com/v1/directories/directory1/customData");
+            (directory as DefaultDirectory).Groups.Href.ShouldBe("https://api.stormpath.com/v1/directories/directory1/groups");
+            (directory as DefaultDirectory).PasswordPolicy.Href.ShouldBe("https://api.stormpath.com/v1/passwordPolicies/directory1");
+            (directory as DefaultDirectory).Provider.Href.ShouldBe("https://api.stormpath.com/v1/directories/directory1/provider");
+            (directory as DefaultDirectory).Tenant.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foobarTenant");
+        }
+
+        [Fact]
+        public async Task Instantiating_Directory_list_from_JSON()
+        {
+            var href = "http://foobar/directories";
+            fakeRequestExecutor.GetAsync(new Uri(href))
+                .Returns(Task.FromResult(FakeJson.DirectoryList));
+
+            var directoryList = await dataStore.GetCollectionAsync<IDirectory>(href);
+
+            directoryList.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foobarTenant/directories");
+            directoryList.Size.ShouldBe(2);
+            directoryList.Offset.ShouldBe(0);
+            directoryList.Limit.ShouldBe(25);
+            directoryList.Items.Count.ShouldBe(2);
         }
     }
 }

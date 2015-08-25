@@ -15,12 +15,13 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal interface IMapSerializer
     {
-        Hashtable Deserialize(string json);
+        Hashtable Deserialize(string json, Type type);
     }
 }

@@ -15,15 +15,19 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using Stormpath.SDK.Impl.Utility;
+
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal sealed class LinkProperty
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements must appear in the correct order", Justification = "Reviewed.")]
+    internal sealed class LinkProperty : ImmutableValueObject<LinkProperty>
     {
-        public LinkProperty()
-        {
-        }
+        private static Func<LinkProperty, LinkProperty, bool> EqualityFunction =>
+            (a, b) => string.Equals(a?.Href, b?.Href, StringComparison.OrdinalIgnoreCase);
 
         public LinkProperty(string href)
+            : base(EqualityFunction)
         {
             this.Href = href;
         }

@@ -23,5 +23,10 @@ namespace Stormpath.SDK.Tests.Helpers
         {
             Xunit.Assert.True(false, message);
         }
+
+        public static void Todo()
+        {
+            Xunit.Assert.True(false, "TODO");
+        }
     }
 }

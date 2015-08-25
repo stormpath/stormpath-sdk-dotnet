@@ -23,6 +23,7 @@ using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
@@ -96,7 +97,7 @@ namespace Stormpath.SDK.Impl.Account
             throw new NotImplementedException();
         }
 
-        Task<IGroupList> IAccount.GetGroupsAsync()
+        Task<ICollectionResourceQueryable<IGroup>> IAccount.GetGroupsAsync()
         {
             throw new NotImplementedException();
         }

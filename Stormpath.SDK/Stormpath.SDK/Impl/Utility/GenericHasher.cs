@@ -1,4 +1,4 @@
-﻿// <copyright file="GenericEqualityComparer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="GenericHasher.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,42 +16,41 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    internal sealed class GenericEqualityComparerDeprecated<T> : IEqualityComparer<T>
+    internal sealed class GenericHasherDeprecated<T>
     {
-        private readonly Func<T, T, bool> equalityAction;
         private readonly Func<T, int> hashAction;
 
-        public GenericEqualityComparerDeprecated(Func<T, T, bool> equalityAction, Func<T, int> hashAction)
+        public GenericHasherDeprecated(Func<T, int> hashAction)
         {
-            this.equalityAction = equalityAction;
             this.hashAction = hashAction;
         }
 
-        public bool Equals(T x, T y)
+        public Func<T, int> HashFunction =>
+            t =>
+            {
+                if (!Valid(t))
+                    return 0;
+
+                return hashAction(t);
+            };
+
+        public static implicit operator Func<T, int>(GenericHasherDeprecated<T> hasher)
         {
-            bool areSameReference = ReferenceEquals(x, y);
-            if (areSameReference)
-            {
-                return true;
-            }
-
-            bool eitherIsNull = ReferenceEquals(x, null) || ReferenceEquals(y, null);
-            if (eitherIsNull)
-            {
-                return false;
-            }
-
-            var result = equalityAction(x, y);
-            return result;
+            return hasher.HashFunction;
         }
 
         public int GetHashCode(T obj)
         {
-            return hashAction(obj);
+            return HashFunction(obj);
+        }
+
+        private bool Valid(T obj)
+        {
+            bool objectIsNull = ReferenceEquals(obj, null);
+            return !objectIsNull;
         }
     }
 }

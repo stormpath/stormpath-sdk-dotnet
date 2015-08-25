@@ -18,8 +18,10 @@
 using System;
 using System.Collections;
 using System.Threading.Tasks;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Impl.Application;
+using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
@@ -75,6 +77,31 @@ namespace Stormpath.SDK.Impl.Tenant
         ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()
         {
             return new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetDataStore());
+        }
+
+        Task<IDirectory> ITenantActions.CreateDirectory(IDirectory directory)
+        {
+            throw new NotImplementedException();
+        }
+
+        ICollectionResourceQueryable<IDirectory> ITenantActions.GetDirectories()
+        {
+            return new CollectionResourceQueryable<IDirectory>(this.Directories.Href, this.GetDataStore());
+        }
+
+        Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        ICollectionResourceQueryable<IAccount> ITenantActions.GetAccounts()
+        {
+            return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetDataStore());
+        }
+
+        ICollectionResourceQueryable<IGroup> ITenantActions.GetGroups()
+        {
+            return new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetDataStore());
         }
     }
 }

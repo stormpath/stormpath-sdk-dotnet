@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Account
 
         AccountStatus Status { get; }
 
-        Task<IGroupList> GetGroupsAsync();
+        Task<ICollectionResourceQueryable<IGroup>> GetGroupsAsync();
 
         Task<IDirectory> GetDirectoryAsync();
 

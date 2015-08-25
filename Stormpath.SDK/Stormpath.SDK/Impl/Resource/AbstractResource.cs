@@ -56,7 +56,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         public LinkProperty GetLinkProperty(string name)
         {
-            return GetProperty<LinkProperty>(name) ?? new LinkProperty();
+            return GetProperty<LinkProperty>(name) ?? new LinkProperty(null);
         }
 
         public T GetProperty<T>(string name)
@@ -71,6 +71,10 @@ namespace Stormpath.SDK.Impl.Resource
             else if (typeof(T) == typeof(SDK.Application.ApplicationStatus))
             {
                 return (T)(SDK.Application.ApplicationStatus.Parse(value.ToString()) as object);
+            }
+            else if (typeof(T) == typeof(SDK.Directory.DirectoryStatus))
+            {
+                return (T)(SDK.Directory.DirectoryStatus.Parse(value.ToString()) as object);
             }
 
             return (T)value;

@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var json = await requestExecutor.GetAsync(hrefUri, cancellationToken);
 
-            var map = mapMarshaller.Deserialize(json);
+            var map = mapMarshaller.Deserialize(json, typeof(T));
             var resource = resourceFactory.Instantiate<T>(map);
 
             return resource;

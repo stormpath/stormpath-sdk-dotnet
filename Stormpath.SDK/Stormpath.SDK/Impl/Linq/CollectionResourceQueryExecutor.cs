@@ -23,7 +23,6 @@ using Remotion.Linq;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Linq.RequestModel;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Linq
 {

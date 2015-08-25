@@ -21,8 +21,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Application;
+using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Tenant;
@@ -36,6 +40,8 @@ namespace Stormpath.SDK.Impl.DataStore
             { typeof(IAccount), typeof(DefaultAccount) },
             { typeof(IApplication), typeof(DefaultApplication) },
             { typeof(ITenant), typeof(DefaultTenant) },
+            { typeof(IDirectory), typeof(DefaultDirectory) },
+            { typeof(IGroup), typeof(DefaultGroup) }
         };
 
         private readonly IDataStore dataStore;

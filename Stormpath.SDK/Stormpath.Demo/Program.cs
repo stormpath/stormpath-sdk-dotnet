@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Linq;
 using Stormpath.SDK;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;

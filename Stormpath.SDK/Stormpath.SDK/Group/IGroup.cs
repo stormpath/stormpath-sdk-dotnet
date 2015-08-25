@@ -19,7 +19,12 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Group
 {
-    public interface IGroup : IResource
+    public interface IGroup : IResource, ISaveable, IExtendable, IAuditable
     {
+        string Name { get; }
+
+        string Description { get; }
+
+        GroupStatus Status { get; }
     }
 }

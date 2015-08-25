@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Impl.Api
     /// <summary>
     /// Main body of ClientApiKey class. (documentation todo)
     /// </summary>
-    internal partial class ClientApiKey : IClientApiKey
+    internal sealed class ClientApiKey : ImmutableValueObject<ClientApiKey>, IClientApiKey
     {
         private readonly string id;
         private readonly string secret;
@@ -59,54 +59,6 @@ namespace Stormpath.SDK.Impl.Api
         {
             return !string.IsNullOrEmpty(this.id)
                 && !string.IsNullOrEmpty(this.secret);
-        }
-    }
-
-    /// <summary>
-    /// Equality-related code for ClientApiKey
-    /// </summary>
-    internal partial class ClientApiKey : IEquatable<ClientApiKey>
-    {
-        private static readonly GenericEqualityComparer<ClientApiKey> Comparer = new GenericEqualityComparer<ClientApiKey>(
-            (ClientApiKey x, ClientApiKey y) =>
-            {
-                return x.id == y.id && x.secret == y.secret;
-            },
-            (ClientApiKey x) =>
-            {
-                return HashCode.Start
-                    .Hash(x.id);
-            });
-
-        public static bool operator ==(ClientApiKey x, ClientApiKey y)
-        {
-            return Comparer.Equals(x, y);
-        }
-
-        public static bool operator !=(ClientApiKey x, ClientApiKey y)
-        {
-            return !(x == y);
-        }
-
-        public bool Equals(ClientApiKey other)
-        {
-            return Equals((object)other);
-        }
-
-        public override bool Equals(object obj)
-        {
-            var other = obj as ClientApiKey;
-            if (obj == null)
-            {
-                return false;
-            }
-
-            return Comparer.Equals(this, other);
-        }
-
-        public override int GetHashCode()
-        {
-            return Comparer.GetHashCode(this);
         }
     }
 }
