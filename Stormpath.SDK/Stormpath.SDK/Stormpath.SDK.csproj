@@ -98,7 +98,7 @@
     <Compile Include="Impl\DataStore\IResourceFactory.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceFactory.cs" />
     <Compile Include="Impl\Account\DefaultAccount.cs" />
-    <Compile Include="Impl\Api\ClientApiKey.cs" />
+    <Compile Include="Impl\Api\DefaultClientApiKey.cs" />
     <Compile Include="Impl\Api\DefaultClientApiKeyBuilder.cs" />
     <Compile Include="Impl\Client\DefaultClient.cs" />
     <Compile Include="Impl\Client\DefaultClientBuilder.cs" />

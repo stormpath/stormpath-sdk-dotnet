@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Throws_for_empty_request_URI()
         {
-            var apiKey = new ClientApiKey("foo", "bar");
+            var apiKey = new DefaultClientApiKey("foo", "bar");
             var myRequest = new HttpRequestMessage(HttpMethod.Get, string.Empty);
 
             Should.Throw<RequestAuthenticationException>(() =>
@@ -56,7 +56,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Adds_XStormpathDate_header()
         {
-            var apiKey = new ClientApiKey("foo", "bar");
+            var apiKey = new DefaultClientApiKey("foo", "bar");
             var myRequest = new HttpRequestMessage(HttpMethod.Get, "https://api.foo.bar/stuff");
 
             authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Adds_Host_header()
         {
-            var apiKey = new ClientApiKey("foo", "bar");
+            var apiKey = new DefaultClientApiKey("foo", "bar");
             var myRequest = new HttpRequestMessage(HttpMethod.Get, "https://api.foo.bar/stuff");
 
             authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
@@ -81,7 +81,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Adds_Host_header_with_nondefault_port()
         {
-            var apiKey = new ClientApiKey("foo", "bar");
+            var apiKey = new DefaultClientApiKey("foo", "bar");
             var myRequest = new HttpRequestMessage(HttpMethod.Get, "https://api.foo.bar:8088");
 
             authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
@@ -93,7 +93,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Adds_SAuthc1_authorization_header()
         {
-            IClientApiKey apiKey = new ClientApiKey("myAppId", "super-secret");
+            IClientApiKey apiKey = new DefaultClientApiKey("myAppId", "super-secret");
             var myRequest = new HttpRequestMessage(HttpMethod.Get, "https://api.stormpath.com/v1/accounts");
 
             authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
@@ -123,7 +123,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Should_authenticate_request_without_query_params()
         {
-            IClientApiKey apiKey = new ClientApiKey("MyId", "Shush!");
+            IClientApiKey apiKey = new DefaultClientApiKey("MyId", "Shush!");
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api.stormpath.com/v1/");
             var now = new DateTimeOffset(2013, 7, 1, 0, 0, 0, TimeSpan.Zero);
             var nonce = "a43a9d25-ab06-421e-8605-33fd1e760825";
@@ -143,7 +143,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Should_authenticate_request_with_query_params()
         {
-            IClientApiKey apiKey = new ClientApiKey("MyId", "Shush!");
+            IClientApiKey apiKey = new DefaultClientApiKey("MyId", "Shush!");
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api.stormpath.com/v1/directories?orderBy=name+asc");
             var now = new DateTimeOffset(2013, 7, 1, 0, 0, 0, TimeSpan.Zero);
             var nonce = "a43a9d25-ab06-421e-8605-33fd1e760825";
@@ -163,7 +163,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Should_authenticate_request_with_multiple_query_params()
         {
-            IClientApiKey apiKey = new ClientApiKey("MyId", "Shush!");
+            IClientApiKey apiKey = new DefaultClientApiKey("MyId", "Shush!");
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api.stormpath.com/v1/applications/77JnfFiREjdfQH0SObMfjI/groups?q=group&limit=25&offset=25");
             var now = new DateTimeOffset(2013, 7, 1, 0, 0, 0, TimeSpan.Zero);
             var nonce = "a43a9d25-ab06-421e-8605-33fd1e760825";

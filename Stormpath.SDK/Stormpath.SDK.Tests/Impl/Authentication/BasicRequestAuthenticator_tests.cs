@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         public BasicRequestAuthenticator_tests()
         {
             authenticator = new BasicRequestAuthenticator();
-            apiKey = new ClientApiKey(fakeApiKeyId, fakeApiKeySecret);
+            apiKey = new DefaultClientApiKey(fakeApiKeyId, fakeApiKeySecret);
         }
 
         [Fact]

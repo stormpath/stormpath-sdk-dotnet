@@ -1,4 +1,4 @@
-﻿// <copyright file="ClientApiKey.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultClientApiKey.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -21,15 +21,12 @@ using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Api
 {
-    /// <summary>
-    /// Main body of ClientApiKey class. (documentation todo)
-    /// </summary>
-    internal sealed class ClientApiKey : ImmutableValueObject<ClientApiKey>, IClientApiKey
+    internal sealed class DefaultClientApiKey : ImmutableValueObject<DefaultClientApiKey>, IClientApiKey
     {
         private readonly string id;
         private readonly string secret;
 
-        internal ClientApiKey(string id, string secret)
+        internal DefaultClientApiKey(string id, string secret)
         {
             if (string.IsNullOrEmpty(id))
             {

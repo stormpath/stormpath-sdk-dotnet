@@ -174,7 +174,7 @@ namespace Stormpath.SDK.Impl.Api
                 throw new ApplicationException(message);
             }
 
-            return new ClientApiKey(id, secret);
+            return new DefaultClientApiKey(id, secret);
         }
 
         private Properties GetDefaultApiKeyFileProperties()
