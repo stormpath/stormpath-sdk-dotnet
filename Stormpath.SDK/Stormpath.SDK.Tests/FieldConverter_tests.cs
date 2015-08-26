@@ -21,7 +21,7 @@ using Newtonsoft.Json.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Impl.DataStore.Converters;
+using Stormpath.SDK.Impl.DataStore.FieldConverters;
 using Stormpath.SDK.Impl.Resource;
 using Xunit;
 

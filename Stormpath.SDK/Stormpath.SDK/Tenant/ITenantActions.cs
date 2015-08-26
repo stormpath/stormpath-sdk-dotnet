@@ -28,6 +28,8 @@ namespace Stormpath.SDK.Tenant
     {
         Task<IApplication> CreateApplicationAsync(IApplication application);
 
+        Task<IApplication> CreateApplicationAsync(string name);
+
         ICollectionResourceQueryable<IApplication> GetApplications();
 
         Task<IDirectory> CreateDirectory(IDirectory directory);

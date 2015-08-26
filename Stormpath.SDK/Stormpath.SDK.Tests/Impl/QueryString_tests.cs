@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
 using Shouldly;
 using Stormpath.SDK.Impl.Http.Support;
 using Xunit;
@@ -24,55 +25,167 @@ namespace Stormpath.SDK.Tests.Impl
 {
     public class QueryString_tests
     {
-        [Fact]
-        public void With_no_parameters()
+        public class Construction_tests
         {
-            var uri = new Uri("http://foo/bar");
-            var qs = new QueryString(uri);
+            [Fact]
+            public void With_no_parameters()
+            {
+                var uri = new Uri("http://foo/bar");
+                var qs = new QueryString(uri);
 
-            qs.ToString().ShouldBe(string.Empty);
-            qs.ToString(canonical: true).ShouldBe(string.Empty);
+                qs.ToString().ShouldBe(string.Empty);
+                qs.ToString(canonical: true).ShouldBe(string.Empty);
+            }
+
+            [Fact]
+            public void Creating_from_string()
+            {
+                var qs = new QueryString("http://foo.bar/baz/?test1=2&foo=bar");
+
+                qs.ToString().ShouldBe("foo=bar&test1=2");
+            }
+
+            [Fact]
+            public void Creating_from_empty_string()
+            {
+                var qs = new QueryString(string.Empty);
+
+                qs.ToString().ShouldBe(string.Empty);
+            }
+
+            [Fact]
+            public void Creating_from_map()
+            {
+                var args = new Dictionary<string, string>()
+            {
+                { "foo", "bar" },
+                { "abc", "123" },
+            };
+                var qs = new QueryString(args);
+
+                qs.ToString().ShouldBe("abc=123&foo=bar");
+            }
+
+            [Fact]
+            public void Creating_from_null_map()
+            {
+                var qs = new QueryString((Dictionary<string, string>)null);
+
+                qs.ToString().ShouldBe(string.Empty);
+            }
+
+            [Fact]
+            public void Creating_from_empty_map()
+            {
+                var args = new Dictionary<string, string>();
+                var qs = new QueryString(args);
+
+                qs.ToString().ShouldBe(string.Empty);
+            }
         }
 
-        [Fact]
-        public void Creating_from_string()
+        public class ToString_tests
         {
-            var qs = new QueryString("http://foo.bar/baz/?test1=2&foo=bar");
+            [Fact]
+            public void Keys_and_value_case_is_preserved()
+            {
+                var qs = new QueryString(new Uri("http://foo.bar/baz?TEST=foo&bar=BAZ"));
 
-            qs.ToString().ShouldBe("foo=bar&test1=2");
+                qs.ToString().ShouldBe("bar=BAZ&TEST=foo");
+            }
+
+            [Fact]
+            public void Keys_are_sorted()
+            {
+                var qs = new QueryString(new Uri("https://foo.bar/?zulu=5&beta=foo&alpha=9"));
+
+                qs.ToString(canonical: true).ShouldBe("alpha=9&beta=foo&zulu=5");
+            }
+
+            [Fact]
+            public void Keys_with_no_values_are_ok()
+            {
+                var qs = new QueryString(new Uri("https://foo.bar?foo=bar&baz=&three"));
+
+                qs.ToString().ShouldBe("baz=&foo=bar&three=");
+            }
+
+            [Fact]
+            public void Canonicalize_flag_is_observed()
+            {
+                var qs = new QueryString("search=start*&test=one two&tilde=~");
+
+                qs.ToString().ShouldBe("search=start*&test=one+two&tilde=%7E");
+                qs.ToString(canonical: true).ShouldBe("search=start%2A&test=one%20two&tilde=~");
+            }
         }
 
-        [Fact]
-        public void Keys_and_value_case_is_preserved()
+        public class Merge_tests
         {
-            var qs = new QueryString(new Uri("http://foo.bar/baz?TEST=foo&bar=BAZ"));
+            [Fact]
+            public void Merging_with_null_is_idempotent()
+            {
+                var qs1 = new QueryString("foo=bar");
 
-            qs.ToString().ShouldBe("bar=BAZ&TEST=foo");
+                var merged = qs1.Merge(null);
+
+                merged.ShouldBe(qs1);
+            }
+
+            [Fact]
+            public void Merging_with_empty_list_is_idempotent()
+            {
+                var qs1 = new QueryString("foo=bar");
+
+                var merged = qs1.Merge(new QueryString(string.Empty));
+
+                merged.ShouldBe(qs1);
+            }
+
+            [Fact]
+            public void Merging_with_no_conflicts_is_additive()
+            {
+                var qs1 = new QueryString("foo=bar");
+                var qs2 = new QueryString("bar=baz");
+
+                var merged = qs1.Merge(qs2);
+
+                merged.ToString().ShouldBe("bar=baz&foo=bar");
+            }
+
+            [Fact]
+            public void Merging_with_conflicts_keeps_original_items()
+            {
+                var qs1 = new QueryString("foo=bar&abc=123");
+                var qs2 = new QueryString("foo=baz");
+
+                var merged = qs1.Merge(qs2);
+
+                merged.ToString().ShouldBe("abc=123&foo=bar");
+            }
         }
 
-        [Fact]
-        public void Keys_are_sorted()
+        public class Equality_tests
         {
-            var qs = new QueryString(new Uri("https://foo.bar/?zulu=5&beta=foo&alpha=9"));
+            [Fact]
+            public void Same_items_are_equal()
+            {
+                var qs1 = new QueryString("foo=bar&baz=123");
+                var qs2 = new QueryString("foo=bar&baz=123");
 
-            qs.ToString(canonical: true).ShouldBe("alpha=9&beta=foo&zulu=5");
-        }
+                qs1.ShouldBe(qs2);
+                (qs1 == qs2).ShouldBe(true);
+            }
 
-        [Fact]
-        public void Keys_with_no_values_are_ok()
-        {
-            var qs = new QueryString(new Uri("https://foo.bar?foo=bar&baz=&three"));
+            [Fact]
+            public void Different_items_are_equal()
+            {
+                var qs1 = new QueryString("foo=bar&baz=123");
+                var qs2 = new QueryString("foo=bar&baz=abc");
 
-            qs.ToString().ShouldBe("baz=&foo=bar&three=");
-        }
-
-        [Fact]
-        public void Canonicalize_flag_is_observed()
-        {
-            var qs = new QueryString("search=start*&test=one two&tilde=~");
-
-            qs.ToString().ShouldBe("search=start*&test=one+two&tilde=%7E");
-            qs.ToString(canonical: true).ShouldBe("search=start%2A&test=one%20two&tilde=~");
+                qs1.ShouldNotBe(qs2);
+                (qs1 != qs2).ShouldBe(true);
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
@@ -31,6 +32,9 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly IRequestExecutor requestExecutor;
         private readonly IMapSerializer mapMarshaller;
         private readonly IResourceFactory resourceFactory;
+        private readonly IResourceConverter resourceConverter;
+
+        private readonly UriCanonicalizer uriCanonicalizer;
 
         private bool disposed = false;
 
@@ -41,10 +45,12 @@ namespace Stormpath.SDK.Impl.DataStore
 
             this.mapMarshaller = new JsonNetMapMarshaller();
             this.resourceFactory = new DefaultResourceFactory(this);
+            this.resourceConverter = new DefaultResourceConverter();
+
+            this.uriCanonicalizer = new UriCanonicalizer(baseUrl);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element must begin with upper-case letter", Justification = "Reviewed")]
-        private IInternalDataStore _this => this;
+        private IInternalDataStore This => this;
 
         IRequestExecutor IInternalDataStore.RequestExecutor => this.requestExecutor;
 
@@ -69,11 +75,36 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<CollectionResponsePage<T>> IDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
         {
-            return _this.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
+            return This.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
+        }
+
+        Task<T> IDataStore.Save<T>(T resource)
+        {
+            throw new NotImplementedException();
         }
 
         Task IDataStore.Save(IResource resource)
         {
+            var href = resource?.Href;
+            return Save(resource, href, null);
+        }
+
+        private Task<AbstractResource> Save(IResource resource, string href, QueryString queryParams)
+        {
+            if (string.IsNullOrEmpty(href))
+                throw new ArgumentNullException(nameof(href));
+
+            var abstractResource = resource as AbstractResource;
+            if (resource == null)
+                throw new ArgumentNullException(nameof(resource));
+
+            var uri = uriCanonicalizer.Canonicalize(href, queryParams);
+            var properties = resourceConverter.Convert(abstractResource);
+
+            // TODO move the following into filter chain?
+            var body = mapMarshaller.Serialize(properties);
+
+            // var response = await requestExecutor.ExecuteAsync(request);
             throw new NotImplementedException();
         }
 

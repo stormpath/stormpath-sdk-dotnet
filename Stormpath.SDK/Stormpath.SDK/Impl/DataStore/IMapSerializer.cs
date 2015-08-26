@@ -17,11 +17,14 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal interface IMapSerializer
     {
+        string Serialize(Dictionary<string, object> map);
+
         Hashtable Deserialize(string json, Type type);
     }
 }

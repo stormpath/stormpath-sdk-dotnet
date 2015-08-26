@@ -1,4 +1,4 @@
-﻿// <copyright file="IDataStore.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultResourceConverter.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,22 +15,17 @@
 // limitations under the License.
 // </remarks>
 
-using System.Threading;
-using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal interface IDataStore
+    internal sealed class DefaultResourceConverter : IResourceConverter
     {
-        Task<T> GetResourceAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
-
-        Task<CollectionResponsePage<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
-
-        Task Save(IResource resource);
-
-        Task<T> Save<T>(T resource)
-            where T : IResource, ISaveable;
+        Dictionary<string, object> IResourceConverter.Convert(AbstractResource resource)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

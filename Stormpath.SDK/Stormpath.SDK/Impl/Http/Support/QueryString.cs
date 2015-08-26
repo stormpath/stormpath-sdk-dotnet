@@ -22,11 +22,15 @@ using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Http.Support
 {
-    internal class QueryString
+    internal class QueryString : ImmutableValueObject<QueryString>
     {
-        private readonly IList<KeyValuePair<string, string>> queryStringItems;
+        private static Func<QueryString, QueryString, bool> compareFunction = new Func<QueryString, QueryString, bool>(
+            (a, b) => a.queryStringItems.SequenceEqual(b.queryStringItems));
+
+        private readonly Dictionary<string, string> queryStringItems;
 
         public QueryString()
+            : base(compareFunction)
         {
             queryStringItems = null;
         }
@@ -40,6 +44,13 @@ namespace Stormpath.SDK.Impl.Http.Support
             : this()
         {
             queryStringItems = Parse(queryString);
+        }
+
+        public QueryString(Dictionary<string, string> queryParams)
+            : this()
+        {
+            if (queryParams != null)
+                queryStringItems = ToSortedDictionary(queryParams);
         }
 
         public string ToString(bool canonical)
@@ -63,9 +74,31 @@ namespace Stormpath.SDK.Impl.Http.Support
             return ToString(false);
         }
 
-        private static List<KeyValuePair<string, string>> Parse(string queryString)
+        public QueryString Merge(QueryString replacementParams)
         {
-            var resultItems = new List<KeyValuePair<string, string>>();
+            if (replacementParams == null)
+                return this;
+
+            if (!replacementParams.queryStringItems.Any())
+                return this;
+
+            var mergedItems = new List<KeyValuePair<string, string>>(this.queryStringItems);
+            foreach (var param in replacementParams.queryStringItems)
+            {
+                // The values in the actual queryString are explicit and take precedence over any values passed in
+                bool duplicateExists = this.queryStringItems.ContainsKey(param.Key);
+                if (!duplicateExists)
+                {
+                    mergedItems.Add(param);
+                }
+            }
+
+            return new QueryString(ToSortedDictionary(mergedItems));
+        }
+
+        private static Dictionary<string, string> Parse(string queryString)
+        {
+            var resultItems = new Dictionary<string, string>();
 
             if (queryString.Contains("?"))
                 queryString = queryString.Split('?')?[1];
@@ -78,19 +111,23 @@ namespace Stormpath.SDK.Impl.Http.Support
                 var pair = token.Split('=');
 
                 if (pair == null)
-                    resultItems.Add(new KeyValuePair<string, string>(token, null));
+                    resultItems.Add(token, null);
 
                 var key = pair[0];
                 var value = string.Empty;
                 if (pair.Length > 1 && !string.IsNullOrEmpty(pair[1]))
                     value = pair[1];
-                resultItems.Add(new KeyValuePair<string, string>(key, value));
+                resultItems.Add(key, value);
             }
 
-            resultItems = resultItems
+            return ToSortedDictionary(resultItems);
+        }
+
+        private static Dictionary<string, string> ToSortedDictionary(IEnumerable<KeyValuePair<string, string>> queryParams)
+        {
+            return queryParams
                 .OrderBy(x => x.Key, StringComparer.OrdinalIgnoreCase)
-                .ToList();
-            return resultItems;
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
     }
 }

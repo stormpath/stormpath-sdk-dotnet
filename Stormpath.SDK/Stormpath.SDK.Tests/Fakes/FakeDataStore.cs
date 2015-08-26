@@ -106,5 +106,10 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             throw new NotImplementedException();
         }
+
+        Task<T> IDataStore.Save<T>(T resource)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

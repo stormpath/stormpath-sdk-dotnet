@@ -109,6 +109,15 @@ namespace Stormpath.SDK.Impl.Client
                 .ConfigureAwait(false);
         }
 
+        async Task<IApplication> ITenantActions.CreateApplicationAsync(string name)
+        {
+            var tenant = await This.GetCurrentTenantAsync()
+                .ConfigureAwait(false);
+
+            return await tenant.CreateApplicationAsync(name)
+                .ConfigureAwait(false);
+        }
+
         ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()
         {
             var tenant = This.GetCurrentTenantAsync().Result;

@@ -74,6 +74,11 @@ namespace Stormpath.SDK.Impl.Tenant
             throw new NotImplementedException();
         }
 
+        Task<IApplication> ITenantActions.CreateApplicationAsync(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()
         {
             return new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetDataStore());

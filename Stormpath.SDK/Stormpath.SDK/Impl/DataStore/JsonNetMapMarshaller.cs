@@ -20,7 +20,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Stormpath.SDK.Impl.DataStore.Converters;
+using Stormpath.SDK.Impl.DataStore.FieldConverters;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -45,6 +45,11 @@ namespace Stormpath.SDK.Impl.DataStore
             serializerSettings = new JsonSerializerSettings();
             serializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
             serializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+        }
+
+        string IMapSerializer.Serialize(Dictionary<string, object> map)
+        {
+            throw new NotImplementedException();
         }
 
         Hashtable IMapSerializer.Deserialize(string json, Type type)

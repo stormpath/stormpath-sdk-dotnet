@@ -18,7 +18,7 @@
 using System;
 using Stormpath.SDK.Impl.Utility;
 
-namespace Stormpath.SDK.Impl.DataStore.Converters
+namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Reviewed.")]
     internal sealed class ConverterResult : ImmutableValueObject<ConverterResult>

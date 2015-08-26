@@ -20,7 +20,7 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using Stormpath.SDK.Impl.Resource;
 
-namespace Stormpath.SDK.Impl.DataStore.Converters
+namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Reviewed.")]
     internal static class DefaultFieldConverters
