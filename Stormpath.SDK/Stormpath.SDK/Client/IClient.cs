@@ -17,6 +17,7 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Client
@@ -30,5 +31,8 @@ namespace Stormpath.SDK.Client
         int ConnectionTimeout { get; }
 
         Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<T> GetResourceAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IResource;
     }
 }

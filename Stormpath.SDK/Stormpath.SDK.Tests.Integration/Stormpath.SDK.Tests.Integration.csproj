@@ -71,6 +71,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Error_tests.cs" />
     <Compile Include="DefaultTenant_tests.cs" />
     <Compile Include="TestClientBuilder.cs" />
     <Compile Include="IntegrationTest.cs" />

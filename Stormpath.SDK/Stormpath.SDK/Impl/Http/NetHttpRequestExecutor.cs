@@ -90,18 +90,10 @@ namespace Stormpath.SDK.Impl.Http
                     continue;
                 }
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    var headers = httpAdapter.ToHttpHeaders(response.Headers);
-                    var returnedResponse = new DefaultResponse((int)response.StatusCode, headers, body);
-                    return returnedResponse;
-                }
-                else
-                {
-                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    throw new RequestException($"Unable to execute HTTP request. Message: '{content}'");
-                }
+                var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var headers = httpAdapter.ToHttpHeaders(response.Headers);
+                var returnedResponse = new DefaultResponse((int)response.StatusCode, headers, body);
+                return returnedResponse;
             }
         }
 

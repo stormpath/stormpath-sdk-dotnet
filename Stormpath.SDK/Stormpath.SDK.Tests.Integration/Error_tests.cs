@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultClient_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Error_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -17,24 +17,33 @@
 
 using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Error;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    public class DefaultClient_tests : IntegrationTest
+    public class Error_tests : IntegrationTest
     {
         [Theory]
         [MemberData(nameof(GetClients))]
-        public async Task Getting_current_tenant(TestClientBuilder clientBuilder)
+        public async Task When_resource_does_not_exist(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var tenant = await client.GetCurrentTenantAsync();
 
-            tenant.ShouldNotBe(null);
-            tenant.Href.ShouldNotBe(null);
-            tenant.Name.ShouldNotBe(null);
-
-            // TODO - verify actual tenant data?
+            try
+            {
+                var bad = await client.GetResourceAsync<IAccount>(tenant.Href + "/foobar");
+            }
+            catch (ResourceException rex)
+            {
+                rex.Code.ShouldBe(404);
+                rex.DeveloperMessage.ShouldBe("The requested resource does not exist.");
+                rex.Message.ShouldNotBe(null);
+                rex.MoreInfo.ShouldNotBe(null);
+                rex.Status.ShouldBe(404);
+            }
         }
     }
 }

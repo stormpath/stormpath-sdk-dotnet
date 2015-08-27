@@ -97,6 +97,11 @@ namespace Stormpath.SDK.Impl.Client
             return tenant;
         }
 
+        Task<T> IClient.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
+        {
+            return dataStore.GetResourceAsync<T>(href);
+        }
+
         #region ITenantActions (pass-thru to Tenant)
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application)

@@ -53,14 +53,6 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
                 return new ConverterResult(true, token.Value.Value<DateTimeOffset>());
             });
 
-        public static readonly FieldConverter StringConverter =
-            new FieldConverter(
-                appliesToTokenType: JTokenType.String,
-                convertAction: token =>
-            {
-                return new ConverterResult(true, token?.Value?.ToString());
-            });
-
         public static readonly FieldConverter AccountStatusConverter =
             new FieldConverter(
                 appliesToTokenType: JTokenType.String,
@@ -120,6 +112,26 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 
                             return new ConverterResult(true, SDK.Group.GroupStatus.Parse(value));
                         });
+
+        public static readonly FieldConverter StringConverter =
+            new FieldConverter(
+                appliesToTokenType: JTokenType.String,
+                convertAction: token =>
+                {
+                    return new ConverterResult(true, token?.Value?.ToString());
+                });
+
+        public static readonly FieldConverter IntConverter =
+            new FieldConverter(
+                appliesToTokenType: JTokenType.Integer,
+                convertAction: token =>
+                {
+                    int result;
+                    if (int.TryParse(token?.Value?.ToString(), out result))
+                        return new ConverterResult(true, result);
+                    else
+                        return ConverterResult.Failed;
+                });
 
         public static readonly FieldConverter NullConverter =
             new FieldConverter(

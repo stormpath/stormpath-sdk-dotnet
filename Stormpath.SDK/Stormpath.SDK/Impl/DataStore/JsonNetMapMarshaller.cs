@@ -36,6 +36,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 DefaultFieldConverters.ApplicationStatusConverter,
                 DefaultFieldConverters.DirectoryStatusConverter,
                 DefaultFieldConverters.GroupStatusConverter,
+                DefaultFieldConverters.IntConverter,
                 DefaultFieldConverters.StringConverter,
                 DefaultFieldConverters.NullConverter,
                 DefaultFieldConverters.FallbackConverter);
