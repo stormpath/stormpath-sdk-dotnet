@@ -1,4 +1,4 @@
-﻿// <copyright file="IntegrationTest.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IntegrationTestClients.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -19,9 +19,9 @@ using System.Collections.Generic;
 using Shouldly;
 using Stormpath.SDK.Api;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Integration.Helpers
 {
-    public abstract class IntegrationTest
+    public static class IntegrationTestClients
     {
         public static IEnumerable<object[]> GetClients()
         {

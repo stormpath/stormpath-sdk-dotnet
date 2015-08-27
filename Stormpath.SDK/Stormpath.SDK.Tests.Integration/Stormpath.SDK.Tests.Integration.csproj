@@ -71,12 +71,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account_tests.cs" />
+    <Compile Include="Application_tests.cs" />
+    <Compile Include="Helpers\IntegrationTestClients.cs" />
+    <Compile Include="IntegrationTestCollection.cs" />
+    <Compile Include="IntegrationTestFixture.cs" />
+    <Compile Include="Directory_tests.cs" />
     <Compile Include="Error_tests.cs" />
-    <Compile Include="DefaultTenant_tests.cs" />
-    <Compile Include="TestClientBuilder.cs" />
-    <Compile Include="IntegrationTest.cs" />
-    <Compile Include="DefaultClient_tests.cs" />
-    <Compile Include="NamespaceExtensions.cs" />
+    <Compile Include="Group_tests.cs" />
+    <Compile Include="Helpers\TestClientBuilder.cs" />
+    <Compile Include="Tenant_tests.cs" />
+    <Compile Include="Helpers\NamespaceExtensions.cs" />
     <Compile Include="Namespace_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

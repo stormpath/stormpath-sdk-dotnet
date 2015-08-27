@@ -19,7 +19,7 @@ using System;
 using Stormpath.SDK.Client;
 using Xunit.Abstractions;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Integration.Helpers
 {
     [Serializable]
     public class TestClientBuilder : IXunitSerializable
@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Tests.Integration
         public IClient Build()
         {
             var authentication = AuthenticationScheme.Parse(authSchemeName);
-            var apiKey = IntegrationTest.GetApiKey();
+            var apiKey = IntegrationTestClients.GetApiKey();
             return Clients.Builder()
                 .SetApiKey(apiKey)
                 .SetAuthenticationScheme(authentication)

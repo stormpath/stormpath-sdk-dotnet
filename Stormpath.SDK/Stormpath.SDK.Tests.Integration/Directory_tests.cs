@@ -1,4 +1,4 @@
-﻿// <copyright file="Namespace_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Directory_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,28 +15,25 @@
 // limitations under the License.
 // </remarks>
 
-using System.Linq;
-using System.Reflection;
+using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    public class Namespace_tests
+    [CollectionDefinition("LiveTenantTests")]
+    public class Directory_tests
     {
-        [Fact]
-        public void Impl_members_are_hidden()
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Getting_tenant_directories(TestClientBuilder clientBuilder)
         {
-            var typesInNamespace = Assembly
-                .GetAssembly(typeof(Stormpath.SDK.Client.IClient))
-                .GetAllTypesInNamespace("Stormpath.SDK.Impl")
-                .ToList();
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+            var directories = await tenant.GetDirectories().ToListAsync();
 
-            typesInNamespace.Count.ShouldBe(0, customMessage: () =>
-            {
-                return $"These types are visible: {string.Join(", ", typesInNamespace)}";
-            });
+            directories.Count.ShouldNotBe(0);
         }
     }
 }

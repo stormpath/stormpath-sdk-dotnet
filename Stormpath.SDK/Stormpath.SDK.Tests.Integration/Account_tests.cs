@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultClient_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Account_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,26 +15,29 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    public class DefaultClient_tests : IntegrationTest
+    [CollectionDefinition("LiveTenantTests")]
+    public class Account_tests
     {
         [Theory]
-        [MemberData(nameof(GetClients))]
-        public async Task Getting_current_tenant(TestClientBuilder clientBuilder)
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Getting_tenant_accounts(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var tenant = await client.GetCurrentTenantAsync();
+            var accounts = await tenant.GetAccounts().ToListAsync();
 
-            tenant.ShouldNotBe(null);
-            tenant.Href.ShouldNotBe(null);
-            tenant.Name.ShouldNotBe(null);
-
-            // TODO - verify actual tenant data?
+            accounts.Count.ShouldNotBe(0);
         }
     }
 }

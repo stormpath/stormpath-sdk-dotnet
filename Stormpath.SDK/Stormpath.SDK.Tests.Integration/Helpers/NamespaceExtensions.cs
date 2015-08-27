@@ -1,4 +1,4 @@
-﻿// <copyright file="Namespace_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="NamespaceExtensions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,28 +15,24 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Shouldly;
-using Stormpath.SDK.Tests.Integration.Helpers;
-using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Integration.Helpers
 {
-    public class Namespace_tests
+    public static class NamespaceExtensions
     {
-        [Fact]
-        public void Impl_members_are_hidden()
+        public static IEnumerable<Type> GetAllTypesInNamespace(this Assembly assembly, string namespaceRoot, bool onlyPublic = true)
         {
-            var typesInNamespace = Assembly
-                .GetAssembly(typeof(Stormpath.SDK.Client.IClient))
-                .GetAllTypesInNamespace("Stormpath.SDK.Impl")
-                .ToList();
+            var types = assembly.GetTypes()
+                .Where(x => x.Namespace.StartsWith(namespaceRoot, StringComparison.OrdinalIgnoreCase));
+            if (onlyPublic)
+                types = types.Where(x => x.IsPublic);
 
-            typesInNamespace.Count.ShouldBe(0, customMessage: () =>
-            {
-                return $"These types are visible: {string.Join(", ", typesInNamespace)}";
-            });
+            foreach (var type in types)
+                yield return type;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="Namespace_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IntegrationTestFixture.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,28 +15,30 @@
 // limitations under the License.
 // </remarks>
 
-using System.Linq;
-using System.Reflection;
-using Shouldly;
-using Stormpath.SDK.Tests.Integration.Helpers;
-using Xunit;
+using System;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    public class Namespace_tests
+    public class IntegrationTestFixture : IDisposable
     {
-        [Fact]
-        public void Impl_members_are_hidden()
+        public IntegrationTestFixture()
         {
-            var typesInNamespace = Assembly
-                .GetAssembly(typeof(Stormpath.SDK.Client.IClient))
-                .GetAllTypesInNamespace("Stormpath.SDK.Impl")
-                .ToList();
+            AddObjectsToTenant();
+        }
 
-            typesInNamespace.Count.ShouldBe(0, customMessage: () =>
-            {
-                return $"These types are visible: {string.Join(", ", typesInNamespace)}";
-            });
+        public void Dispose()
+        {
+            RemoveObjectsFromTenant();
+        }
+
+        private void AddObjectsToTenant()
+        {
+            // add stuff to tenant
+        }
+
+        private void RemoveObjectsFromTenant()
+        {
+            // clean everything up
         }
     }
 }

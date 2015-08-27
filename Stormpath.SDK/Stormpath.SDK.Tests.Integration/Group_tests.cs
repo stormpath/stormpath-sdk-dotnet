@@ -1,4 +1,4 @@
-﻿// <copyright file="NamespaceExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Group_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,24 +15,25 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using System.Threading.Tasks;
+using Shouldly;
+using Stormpath.SDK.Tests.Integration.Helpers;
+using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    public static class NamespaceExtensions
+    [CollectionDefinition("LiveTenantTests")]
+    public class Group_tests
     {
-        public static IEnumerable<Type> GetAllTypesInNamespace(this Assembly assembly, string namespaceRoot, bool onlyPublic = true)
+        [Theory(Skip = "Tenant has no groups yet")]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Getting_tenant_groups(TestClientBuilder clientBuilder)
         {
-            var types = assembly.GetTypes()
-                .Where(x => x.Namespace.StartsWith(namespaceRoot, StringComparison.OrdinalIgnoreCase));
-            if (onlyPublic)
-                types = types.Where(x => x.IsPublic);
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+            var groups = await tenant.GetGroups().ToListAsync();
 
-            foreach (var type in types)
-                yield return type;
+            groups.Count.ShouldNotBe(0);
         }
     }
 }
