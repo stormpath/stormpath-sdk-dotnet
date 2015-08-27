@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         public void Throws_for_empty_request_URI()
         {
             var apiKey = new DefaultClientApiKey("foo", "bar");
-            var myRequest = new DefaultRequest(HttpMethod.Get, null);
+            var myRequest = new DefaultHttpRequest(HttpMethod.Get, null);
 
             Should.Throw<RequestAuthenticationException>(() =>
             {
@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         {
             var apiKey = new DefaultClientApiKey("foo", "bar");
             var uriQualifier = new UriQualifier("http://api.foo.bar");
-            var myRequest = new DefaultRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/stuff")));
+            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/stuff")));
 
             authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
 
@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         {
             var apiKey = new DefaultClientApiKey("foo", "bar");
             var uriQualifier = new UriQualifier("http://api.foo.bar");
-            var myRequest = new DefaultRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/stuff")));
+            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/stuff")));
 
             authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
 
@@ -85,7 +85,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         {
             var apiKey = new DefaultClientApiKey("foo", "bar");
             var uriQualifier = new UriQualifier("https://api.foo.bar:8088");
-            var myRequest = new DefaultRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/baz")));
+            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/baz")));
 
             authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
 
@@ -98,7 +98,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         {
             IClientApiKey apiKey = new DefaultClientApiKey("myAppId", "super-secret");
             var uriQualifier = new UriQualifier("http://api.stormpath.com/v1");
-            var myRequest = new DefaultRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/accounts")));
+            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/accounts")));
 
             authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
 
@@ -129,7 +129,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         {
             IClientApiKey apiKey = new DefaultClientApiKey("MyId", "Shush!");
             var uriQualifier = new UriQualifier("http://api.stormpath.com/v1");
-            var request = new DefaultRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/")));
+            var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/")));
             var now = new DateTimeOffset(2013, 7, 1, 0, 0, 0, TimeSpan.Zero);
             var nonce = "a43a9d25-ab06-421e-8605-33fd1e760825";
 
@@ -150,7 +150,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         {
             IClientApiKey apiKey = new DefaultClientApiKey("MyId", "Shush!");
             var uriQualifier = new UriQualifier("http://api.stormpath.com/v1");
-            var request = new DefaultRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/directories?orderBy=name+asc")));
+            var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/directories?orderBy=name+asc")));
             var now = new DateTimeOffset(2013, 7, 1, 0, 0, 0, TimeSpan.Zero);
             var nonce = "a43a9d25-ab06-421e-8605-33fd1e760825";
 
@@ -171,7 +171,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         {
             IClientApiKey apiKey = new DefaultClientApiKey("MyId", "Shush!");
             var uriQualifier = new UriQualifier("http://api.stormpath.com/v1");
-            var request = new DefaultRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/applications/77JnfFiREjdfQH0SObMfjI/groups?q=group&limit=25&offset=25")));
+            var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/applications/77JnfFiREjdfQH0SObMfjI/groups?q=group&limit=25&offset=25")));
             var now = new DateTimeOffset(2013, 7, 1, 0, 0, 0, TimeSpan.Zero);
             var nonce = "a43a9d25-ab06-421e-8605-33fd1e760825";
 

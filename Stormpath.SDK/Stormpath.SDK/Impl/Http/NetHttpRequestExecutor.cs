@@ -79,7 +79,7 @@ namespace Stormpath.SDK.Impl.Http
 
             while (true)
             {
-                var currentRequest = new DefaultRequest(request, overrideUri: currentUri);
+                var currentRequest = new DefaultHttpRequest(request, overrideUri: currentUri);
                 requestAuthenticator.Authenticate(currentRequest, apiKey);
 
                 var requestMessage = httpAdapter.ToHttpRequestMessage(currentRequest);
@@ -92,7 +92,7 @@ namespace Stormpath.SDK.Impl.Http
 
                 var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var headers = httpAdapter.ToHttpHeaders(response.Headers);
-                var returnedResponse = new DefaultResponse((int)response.StatusCode, headers, body);
+                var returnedResponse = new DefaultHttpResponse((int)response.StatusCode, headers, body);
                 return returnedResponse;
             }
         }

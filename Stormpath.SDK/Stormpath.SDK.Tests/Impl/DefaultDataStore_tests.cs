@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var href = "http://foobar/account";
             fakeRequestExecutor.ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultResponse(200, new HttpHeaders(), body: FakeJson.Account) as IHttpResponse));
+                .Returns(Task.FromResult(new DefaultHttpResponse(200, new HttpHeaders(), body: FakeJson.Account) as IHttpResponse));
 
             var account = await dataStore.GetResourceAsync<IAccount>(href);
 
@@ -57,7 +57,7 @@ namespace Stormpath.SDK.Tests.Impl
         public async Task ContentType_header_is_added_to_requests_with_body()
         {
             fakeRequestExecutor.ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultResponse(200, new HttpHeaders(), body: FakeJson.Account) as IHttpResponse));
+                .Returns(Task.FromResult(new DefaultHttpResponse(200, new HttpHeaders(), body: FakeJson.Account) as IHttpResponse));
 
             var account = await dataStore.SaveAsync<IAccount>(new DefaultAccount(dataStore));
 

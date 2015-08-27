@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultResponse.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultHttpResponse.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -19,13 +19,13 @@ using Stormpath.SDK.Impl.Extensions;
 
 namespace Stormpath.SDK.Impl.Http
 {
-    internal sealed class DefaultResponse : HttpMessageBase, IHttpResponse
+    internal sealed class DefaultHttpResponse : HttpMessageBase, IHttpResponse
     {
         private readonly int httpStatus;
         private readonly HttpHeaders headers;
         private readonly string body;
 
-        public DefaultResponse(int httpStatus, HttpHeaders headers, string body)
+        public DefaultHttpResponse(int httpStatus, HttpHeaders headers, string body)
         {
             this.httpStatus = httpStatus;
             this.headers = headers;

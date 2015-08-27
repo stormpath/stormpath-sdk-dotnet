@@ -100,8 +100,8 @@
     <Compile Include="Impl\Group\DefaultGroup.cs" />
     <Compile Include="Impl\Http\Authentication\DefaultRequestAuthenticatorFactory.cs" />
     <Compile Include="Impl\Http\Authentication\IRequestAuthenticatorFactory.cs" />
-    <Compile Include="Impl\Http\DefaultRequest.cs" />
-    <Compile Include="Impl\Http\DefaultResponse.cs" />
+    <Compile Include="Impl\Http\DefaultHttpRequest.cs" />
+    <Compile Include="Impl\Http\DefaultHttpResponse.cs" />
     <Compile Include="Impl\Http\HttpHeaders.cs" />
     <Compile Include="Impl\Http\HttpMessageBase.cs" />
     <Compile Include="Impl\Http\IHttpResponse.cs" />

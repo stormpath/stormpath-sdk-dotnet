@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultRequest.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultHttpRequest.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -20,7 +20,7 @@ using Stormpath.SDK.Impl.Http.Support;
 
 namespace Stormpath.SDK.Impl.Http
 {
-    internal sealed class DefaultRequest : IHttpRequest
+    internal sealed class DefaultHttpRequest : IHttpRequest
     {
         private readonly HttpMethod method;
         private readonly CanonicalUri canonicalUri;
@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Impl.Http
         private readonly string body;
 
         // Copy constructor
-        public DefaultRequest(IHttpRequest existingRequest, Uri overrideUri = null)
+        public DefaultHttpRequest(IHttpRequest existingRequest, Uri overrideUri = null)
         {
             this.body = existingRequest.Body;
             this.headers = new HttpHeaders(existingRequest.Headers);
@@ -36,12 +36,12 @@ namespace Stormpath.SDK.Impl.Http
             this.canonicalUri = new CanonicalUri(existingRequest.CanonicalUri, overrideResourcePath: overrideUri);
         }
 
-        public DefaultRequest(HttpMethod method, CanonicalUri canonicalUri)
+        public DefaultHttpRequest(HttpMethod method, CanonicalUri canonicalUri)
             : this(method, canonicalUri, null, null, string.Empty)
         {
         }
 
-        public DefaultRequest(HttpMethod method, CanonicalUri canonicalUri, QueryString queryParams, HttpHeaders headers, string body)
+        public DefaultHttpRequest(HttpMethod method, CanonicalUri canonicalUri, QueryString queryParams, HttpHeaders headers, string body)
         {
             this.method = method;
             this.canonicalUri = canonicalUri;

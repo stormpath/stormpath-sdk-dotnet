@@ -62,7 +62,7 @@ namespace Stormpath.SDK.Impl.DataStore
         async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
         {
             var canonicalUri = new CanonicalUri(uriQualifier.EnsureFullyQualified(resourcePath));
-            var request = new DefaultRequest(HttpMethod.Get, canonicalUri);
+            var request = new DefaultHttpRequest(HttpMethod.Get, canonicalUri);
             var response = await SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
             var json = response.Body;
 
@@ -103,7 +103,7 @@ namespace Stormpath.SDK.Impl.DataStore
             // TODO move the following into filter chain?
             var body = serializer.Serialize(properties);
 
-            var request = new DefaultRequest(HttpMethod.Post, uri, null, null, body);
+            var request = new DefaultHttpRequest(HttpMethod.Post, uri, null, null, body);
 
             // var response = await requestExecutor.ExecuteAsync(request);
             throw new NotImplementedException();

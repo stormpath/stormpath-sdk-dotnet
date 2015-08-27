@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Adds_XStormpathDate_header()
         {
-            var myRequest = new DefaultRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/bar")));
+            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/bar")));
             var now = new DateTimeOffset(2015, 08, 01, 06, 30, 00, TimeSpan.Zero);
 
             authenticator.AuthenticateCore(myRequest, apiKey, now);
@@ -62,7 +62,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Adds_Basic_authorization_header()
         {
-            var myRequest = new DefaultRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/bar")));
+            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/bar")));
             var now = new DateTimeOffset(2015, 08, 01, 06, 30, 00, TimeSpan.Zero);
 
             authenticator.AuthenticateCore(myRequest, apiKey, now);
