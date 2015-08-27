@@ -16,11 +16,10 @@
 // </remarks>
 
 using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Http.Authentication
@@ -29,19 +28,19 @@ namespace Stormpath.SDK.Impl.Http.Authentication
     {
         private static readonly string StormpathDateHeaderName = "X-Stormpath-Date";
 
-        void IRequestAuthenticator.Authenticate(HttpRequestMessage request, IClientApiKey apiKey)
+        void IRequestAuthenticator.Authenticate(IHttpRequest request, IClientApiKey apiKey)
         {
             var now = DateTimeOffset.UtcNow;
             AuthenticateCore(request, apiKey, now);
         }
 
-        internal void AuthenticateCore(HttpRequestMessage request, IClientApiKey apiKey, DateTimeOffset now)
+        internal void AuthenticateCore(IHttpRequest request, IClientApiKey apiKey, DateTimeOffset now)
         {
             request.Headers.Add(StormpathDateHeaderName, Iso8601.Format(now, withSeparators: false));
 
             var authorizationHeaderContent = $"{apiKey.GetId()}:{apiKey.GetSecret()}";
-            var authorizationHeader = authorizationHeaderContent.ToBase64(Encoding.UTF8);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Basic", authorizationHeader);
+            var authorizationHeaderEncrypted = authorizationHeaderContent.ToBase64(Encoding.UTF8);
+            request.Headers.Authorization = new AuthorizationHeaderValue("Basic", authorizationHeaderEncrypted);
         }
     }
 }

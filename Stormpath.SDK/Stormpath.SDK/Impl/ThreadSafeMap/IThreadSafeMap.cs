@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultResourceConverter.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IThreadSafeMap.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,17 +15,9 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.Resource;
-
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Impl.ThreadSafeMap
 {
-    internal sealed class DefaultResourceConverter : IResourceConverter
+    internal interface IThreadSafeMap
     {
-        Dictionary<string, object> IResourceConverter.Convert(AbstractResource resource)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

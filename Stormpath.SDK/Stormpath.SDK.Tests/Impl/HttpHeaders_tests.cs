@@ -1,4 +1,4 @@
-﻿// <copyright file="UriCanonicalizer_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="HttpHeaders_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,33 +16,31 @@
 // </remarks>
 
 using Shouldly;
-using Stormpath.SDK.Impl.Http.Support;
+using Stormpath.SDK.Impl.Http;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class UriCanonicalizer_tests
+    public class HttpHeaders_tests
     {
-        private readonly string fakeBaseUrl = @"http://api.foo.bar";
-
         [Fact]
-        public void Relative_paths_are_fully_qualified()
+        public void Getting_nonexistent_header_returns_default()
         {
-            var uc = new UriCanonicalizer(fakeBaseUrl);
+            var headers = new HttpHeaders();
 
-            var uri = uc.Create("path/to/resource");
+            var nonexistent = headers.GetFirst<string>("nope");
 
-            uri.ToString().ShouldBe($"{fakeBaseUrl}/path/to/resource");
+            nonexistent.ShouldBe(null);
         }
 
         [Fact]
-        public void Relative_paths_with_leading_slash_are_fully_qualified()
+        public void Adding_nonstandard_header_name_is_ok()
         {
-            var uc = new UriCanonicalizer(fakeBaseUrl);
+            var headers = new HttpHeaders();
 
-            var uri = uc.Create("/path/to/resource");
+            headers.Add("FOOBAR", "123");
 
-            uri.ToString().ShouldBe($"{fakeBaseUrl}/path/to/resource");
+            headers.GetFirst<string>("FOOBAR").ShouldBe("123");
         }
     }
 }

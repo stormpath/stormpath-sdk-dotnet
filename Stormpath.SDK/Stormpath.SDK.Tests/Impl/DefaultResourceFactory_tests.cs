@@ -29,13 +29,13 @@ namespace Stormpath.SDK.Tests.Impl
     public class DefaultResourceFactory_tests
     {
         private readonly IDataStore fakeDataStore;
-        private readonly IResourceFactory factory;
+        private readonly IResourceConstructor factory;
 
         public DefaultResourceFactory_tests()
         {
             fakeDataStore = Substitute.For<IDataStore>();
 
-            factory = new DefaultResourceFactory(fakeDataStore);
+            factory = new DefaultResourceConstructor(fakeDataStore);
         }
 
         [Fact]
@@ -43,14 +43,14 @@ namespace Stormpath.SDK.Tests.Impl
         {
             Should.Throw<ApplicationException>(() =>
             {
-                var bad = factory.Instantiate<IResource>();
+                var bad = factory.Create<IResource>();
             });
         }
 
         [Fact]
         public void Creating_IAccount_returns_DefaultAccount()
         {
-            IAccount account = factory.Instantiate<IAccount>();
+            IAccount account = factory.Create<IAccount>();
             account.ShouldBeOfType<DefaultAccount>();
         }
     }

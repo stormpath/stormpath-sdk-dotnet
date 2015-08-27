@@ -18,7 +18,6 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Api;
@@ -28,14 +27,15 @@ using Stormpath.SDK.Impl.Http.Authentication;
 namespace Stormpath.SDK.Impl.Http
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:DoNotUseRegions", Justification = "Reviewed.")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements must appear in the correct order", Justification = "Reviewed.")]
     internal sealed class NetHttpRequestExecutor : IRequestExecutor
     {
         private readonly IClientApiKey apiKey;
         private readonly AuthenticationScheme authScheme;
         private readonly int connectionTimeout;
-
         private readonly IRequestAuthenticator requestAuthenticator;
-        private HttpClient client;
+        private readonly NetHttpAdapter httpAdapter;
+        private readonly HttpClient client;
 
         private bool disposed = false; // To detect redundant calls
 
@@ -50,15 +50,11 @@ namespace Stormpath.SDK.Impl.Http
 
             IRequestAuthenticatorFactory requestAuthenticatorFactory = new DefaultRequestAuthenticatorFactory();
             requestAuthenticator = requestAuthenticatorFactory.Create(authenticationScheme);
-
-            SetupClient();
+            httpAdapter = new NetHttpAdapter();
+            client = BuildClient(connectionTimeout);
         }
 
-        AuthenticationScheme IRequestExecutor.AuthenticationScheme => authScheme;
-
-        int IRequestExecutor.ConnectionTimeout => connectionTimeout;
-
-        private void SetupClient()
+        private static HttpClient BuildClient(int connectionTimeout)
         {
             var clientSettings = new HttpClientHandler()
             {
@@ -67,22 +63,27 @@ namespace Stormpath.SDK.Impl.Http
                 // Proxy...
             };
 
-            client = new HttpClient(clientSettings);
+            var client = new HttpClient(clientSettings);
             client.Timeout = TimeSpan.FromMilliseconds(connectionTimeout);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("User-Agent", UserAgentBuilder.GetUserAgent());
+
+            return client;
         }
 
-        async Task<string> IRequestExecutor.GetAsync(Uri href, CancellationToken cancellationToken)
+        AuthenticationScheme IRequestExecutor.AuthenticationScheme => authScheme;
+
+        int IRequestExecutor.ConnectionTimeout => connectionTimeout;
+
+        async Task<IHttpResponse> IRequestExecutor.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
         {
-            Uri currentUri = href;
+            Uri currentUri = request.CanonicalUri.ToUri();
 
             while (true)
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, currentUri);
-                requestAuthenticator.Authenticate(request, apiKey);
-                var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                var currentRequest = new DefaultRequest(request, overrideUri: currentUri);
+                requestAuthenticator.Authenticate(currentRequest, apiKey);
 
+                var requestMessage = httpAdapter.ToHttpRequestMessage(currentRequest);
+                var response = await client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
                 if (IsRedirect(response))
                 {
                     currentUri = response.Headers.Location;
@@ -91,7 +92,10 @@ namespace Stormpath.SDK.Impl.Http
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var headers = httpAdapter.ToHttpHeaders(response.Headers);
+                    var returnedResponse = new DefaultResponse((int)response.StatusCode, headers, body);
+                    return returnedResponse;
                 }
                 else
                 {
@@ -101,7 +105,7 @@ namespace Stormpath.SDK.Impl.Http
             }
         }
 
-        string IRequestExecutor.GetSync(Uri href)
+        IHttpResponse IRequestExecutor.ExecuteSync(IHttpRequest request)
         {
             throw new NotImplementedException();
         }

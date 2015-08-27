@@ -1,4 +1,4 @@
-﻿// <copyright file="IRequest.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IHttpMessage.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -17,7 +17,12 @@
 
 namespace Stormpath.SDK.Impl.Http
 {
-    internal interface IRequest
+    internal interface IHttpMessage
     {
+        HttpHeaders Headers { get; }
+
+        bool HasBody { get; }
+
+        string Body { get; }
     }
 }

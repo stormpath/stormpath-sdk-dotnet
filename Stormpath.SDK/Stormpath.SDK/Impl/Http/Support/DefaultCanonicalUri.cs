@@ -17,27 +17,35 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Stormpath.SDK.Impl.Extensions;
 
 namespace Stormpath.SDK.Impl.Http.Support
 {
     internal sealed class DefaultCanonicalUri : ICanonicalUri
     {
-        private readonly Uri uri;
+        private readonly Uri resourcePath;
         private readonly QueryString query;
 
-        public DefaultCanonicalUri(string absoluteUri, QueryString query)
+        public DefaultCanonicalUri(string href, Dictionary<string, string> queryParams)
+            : this(href, new QueryString(queryParams))
         {
-            if (string.IsNullOrEmpty(absoluteUri))
-                throw new ArgumentNullException(nameof(absoluteUri));
-
-            if (!Uri.TryCreate(absoluteUri, UriKind.Absolute, out uri))
-                throw new ArgumentException("URI is invalid.", nameof(absoluteUri));
-
-            this.query = query;
         }
 
-        public DefaultCanonicalUri(string href, Dictionary<string, string> queryParams)
+        public DefaultCanonicalUri(string href, QueryString queryParams)
+            : this(href)
+        {
+            if (HasQueryParameters(href))
+            {
+                var queryParamsFromHref = GetQueryParametersFromHref(href);
+
+                // Explicit parameters from href string are not replaced
+                queryParams = new QueryString(queryParamsFromHref).Merge(queryParams);
+            }
+
+            this.query = queryParams ?? new QueryString();
+        }
+
+        public DefaultCanonicalUri(string href)
         {
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
@@ -46,26 +54,49 @@ namespace Stormpath.SDK.Impl.Http.Support
             if (!Uri.TryCreate(href, UriKind.Absolute, out parsedUri))
                 throw new ArgumentException("URI is invalid.", nameof(href));
 
-            var finalHref = $"{parsedUri.Scheme}://{parsedUri.Host}{parsedUri.AbsolutePath}"; // chop off query and fragment
-            var finalQuery = new QueryString(queryParams);
-
-            bool hrefIncludesQueryParams = !string.IsNullOrEmpty(parsedUri.Query);
-            if (hrefIncludesQueryParams)
-            {
-                var queryParamsFromHref = parsedUri.Query;
-                finalQuery.Merge(new QueryString(queryParamsFromHref));
-            }
-
-            this.uri = new Uri(finalHref, UriKind.Absolute);
-            this.query = finalQuery;
+            this.resourcePath = parsedUri.WithoutQueryAndFragment();
+            var queryPart = GetQueryParametersFromHref(href) ?? string.Empty;
+            this.query = new QueryString(queryPart);
         }
 
-        string ICanonicalUri.AbsoluteUri => ToString();
+        // Copy-ish constructor
+        public DefaultCanonicalUri(ICanonicalUri existing, Uri overrideResourcePath = null)
+        {
+            this.resourcePath = overrideResourcePath == null
+                ? new Uri(existing.ResourcePath.WithoutQueryAndFragment().ToString())
+                : overrideResourcePath.WithoutQueryAndFragment();
 
-        bool ICanonicalUri.HasQuery => query == null;
+            this.query = new QueryString(existing.QueryString);
+        }
 
-        QueryString ICanonicalUri.QueryString => query;
+        public Uri ResourcePath => resourcePath;
 
-        public override string ToString() => $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}";
+        public bool HasQuery => query == null;
+
+        public QueryString QueryString => query;
+
+        public override string ToString()
+        {
+            if (query.Any())
+                return $"{resourcePath}?{query}";
+            else
+                return resourcePath.ToString();
+        }
+
+        public Uri ToUri() => new Uri(ToString(), UriKind.Absolute);
+
+        private static bool HasQueryParameters(string href)
+        {
+            return href.Contains("?");
+        }
+
+        private static string GetQueryParametersFromHref(string href)
+        {
+            var segments = href.Split(new char[] { '?' }, 2);
+
+            return segments.Length > 1
+                ? segments[1]
+                : null;
+        }
     }
 }

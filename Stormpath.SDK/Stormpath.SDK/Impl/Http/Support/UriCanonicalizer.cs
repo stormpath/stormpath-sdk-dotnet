@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Stormpath.SDK.Impl.Http.Support
@@ -33,7 +32,7 @@ namespace Stormpath.SDK.Impl.Http.Support
             this.baseUrl = baseUrl;
         }
 
-        public ICanonicalUri Canonicalize(string href, QueryString queryParams = null)
+        public ICanonicalUri Create(string href, QueryString queryParams = null)
         {
             var finalHref = MakeFullyQualified(href);
 

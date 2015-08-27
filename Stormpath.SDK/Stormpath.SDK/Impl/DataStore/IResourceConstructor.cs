@@ -1,4 +1,4 @@
-﻿// <copyright file="IRequestExecutor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IResourceConstructor.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,21 +15,14 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Client;
+using System.Collections;
 
-namespace Stormpath.SDK.Impl.Http
+namespace Stormpath.SDK.Impl.DataStore
 {
-    internal interface IRequestExecutor : IDisposable
+    internal interface IResourceConstructor
     {
-        AuthenticationScheme AuthenticationScheme { get; }
+        T Create<T>();
 
-        int ConnectionTimeout { get; }
-
-        IHttpResponse ExecuteSync(IHttpRequest request);
-
-        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken = default(CancellationToken));
+        T Create<T>(Hashtable properties);
     }
 }

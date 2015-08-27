@@ -1,4 +1,4 @@
-﻿// <copyright file="IRequestExecutor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ICanonicalUri.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,20 +16,19 @@
 // </remarks>
 
 using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Client;
 
-namespace Stormpath.SDK.Impl.Http
+namespace Stormpath.SDK.Impl.Http.Support
 {
-    internal interface IRequestExecutor : IDisposable
+    internal interface ICanonicalUri
     {
-        AuthenticationScheme AuthenticationScheme { get; }
+        Uri ResourcePath { get; }
 
-        int ConnectionTimeout { get; }
+        bool HasQuery { get; }
 
-        IHttpResponse ExecuteSync(IHttpRequest request);
+        QueryString QueryString { get; }
 
-        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken = default(CancellationToken));
+        string ToString();
+
+        Uri ToUri();
     }
 }

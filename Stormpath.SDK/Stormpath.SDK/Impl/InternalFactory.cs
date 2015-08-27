@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Impl
     {
         public IInternalDataStore CreateDataStore(IRequestExecutor requestExecutor, string baseUrl)
         {
-            return new InternalDataStore(requestExecutor, baseUrl);
+            return new DefaultDataStore(requestExecutor, baseUrl);
         }
 
         public IRequestExecutor CreateRequestExecutor(IClientApiKey apiKey, AuthenticationScheme authenticationScheme, int connectionTimeout)

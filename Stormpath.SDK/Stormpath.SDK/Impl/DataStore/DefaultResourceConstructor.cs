@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultResourceFactory.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultResourceConstructor.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -33,7 +33,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal sealed class DefaultResourceFactory : IResourceFactory
+    internal sealed class DefaultResourceConstructor : IResourceConstructor
     {
         private readonly Dictionary<Type, Type> typeMap = new Dictionary<Type, Type>()
         {
@@ -41,25 +41,25 @@ namespace Stormpath.SDK.Impl.DataStore
             { typeof(IApplication), typeof(DefaultApplication) },
             { typeof(ITenant), typeof(DefaultTenant) },
             { typeof(IDirectory), typeof(DefaultDirectory) },
-            { typeof(IGroup), typeof(DefaultGroup) }
+            { typeof(IGroup), typeof(DefaultGroup) },
         };
 
         private readonly IDataStore dataStore;
 
-        public DefaultResourceFactory(IDataStore dataStore)
+        public DefaultResourceConstructor(IDataStore dataStore)
         {
             this.dataStore = dataStore;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element must begin with upper-case letter", Justification = "Reviewed")]
-        private IResourceFactory _this => this;
+        private IResourceConstructor _this => this;
 
-        T IResourceFactory.Instantiate<T>()
+        T IResourceConstructor.Create<T>()
         {
-            return _this.Instantiate<T>(null);
+            return _this.Create<T>(null);
         }
 
-        T IResourceFactory.Instantiate<T>(Hashtable properties)
+        T IResourceConstructor.Create<T>(Hashtable properties)
         {
             bool isCollection = typeof(T).IsGenericType
                 && typeof(T).GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);

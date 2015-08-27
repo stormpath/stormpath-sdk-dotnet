@@ -53,6 +53,17 @@ namespace Stormpath.SDK.Impl.Http.Support
                 queryStringItems = ToSortedDictionary(queryParams);
         }
 
+        // Copy constructor
+        public QueryString(QueryString existing)
+            : this(existing.queryStringItems)
+        {
+        }
+
+        public bool Any()
+        {
+            return queryStringItems?.Any() ?? false;
+        }
+
         public string ToString(bool canonical)
         {
             bool isEmpty = queryStringItems == null || queryStringItems.Count == 0;

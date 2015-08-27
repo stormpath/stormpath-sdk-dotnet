@@ -1,4 +1,4 @@
-﻿// <copyright file="IRequestExecutor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IError.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,21 +15,18 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Client;
-
-namespace Stormpath.SDK.Impl.Http
+namespace Stormpath.SDK.Error
 {
-    internal interface IRequestExecutor : IDisposable
+    public interface IError
     {
-        AuthenticationScheme AuthenticationScheme { get; }
+        int Status { get; }
 
-        int ConnectionTimeout { get; }
+        int Code { get; }
 
-        IHttpResponse ExecuteSync(IHttpRequest request);
+        string Message { get; }
 
-        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken = default(CancellationToken));
+        string DeveloperMessage { get; }
+
+        string MoreInfo { get; }
     }
 }

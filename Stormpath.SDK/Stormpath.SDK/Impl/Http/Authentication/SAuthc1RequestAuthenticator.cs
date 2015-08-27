@@ -17,11 +17,10 @@
 
 using System;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.Utility;
 
@@ -38,19 +37,22 @@ namespace Stormpath.SDK.Impl.Http.Authentication
         private static readonly string SAUTHC1Signature = "sauthc1Signature";
         private static readonly string Newline = "\n";
 
-        void IRequestAuthenticator.Authenticate(HttpRequestMessage request, IClientApiKey apiKey)
+        void IRequestAuthenticator.Authenticate(IHttpRequest request, IClientApiKey apiKey)
         {
             var now = DateTimeOffset.UtcNow;
             var nonce = Guid.NewGuid().ToString();
             AuthenticateCore(request, apiKey, now, nonce);
         }
 
-        internal void AuthenticateCore(HttpRequestMessage request, IClientApiKey apiKey, DateTimeOffset now, string nonce)
+        internal void AuthenticateCore(IHttpRequest request, IClientApiKey apiKey, DateTimeOffset now, string nonce)
         {
-            if (string.IsNullOrEmpty(request?.RequestUri?.AbsoluteUri))
+            if (request == null)
+                throw new RequestAuthenticationException("Request must not be null.");
+
+            if (string.IsNullOrEmpty(request.CanonicalUri?.ToString()))
                 throw new RequestAuthenticationException("URL must not be empty.");
 
-            var uri = request.RequestUri;
+            var uri = request.CanonicalUri.ToUri();
             if (!uri.IsAbsoluteUri)
                 throw new RequestAuthenticationException("URL must be an absolute path.");
 
@@ -68,18 +70,16 @@ namespace Stormpath.SDK.Impl.Http.Authentication
             // Add X-Stormpath-Date before signing
             request.Headers.Add(StormpathDateHeaderName, timestamp);
 
-            var requestBody = string.Empty;
-            if (request.Content != null)
-                requestBody = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var requestBody = request.Body.Nullable() ?? string.Empty;
             var requestBodyHash = ToHex(Hash(requestBody, Encoding.UTF8));
             var sortedHeaderKeys = GetSortedHeaderNames(request.Headers);
 
             var canonicalRequest = new StringBuilder()
-                .Append(request.Method.Method.ToUpper())
+                .Append(request.Method.ToString().ToUpper())
                 .Append(Newline)
                 .Append(CanonicalizeResourcePath(relativeResourcePath))
                 .Append(Newline)
-                .Append(CanonicalizeQueryString(request))
+                .Append(request.CanonicalUri.QueryString.ToString(canonical: true))
                 .Append(Newline)
                 .Append(CanonicalizeHeaders(request))
                 .Append(Newline)
@@ -119,7 +119,7 @@ namespace Stormpath.SDK.Impl.Http.Authentication
                 .Append(SAUTHC1SignedHeaders).Append("=").Append(sortedHeaderKeys).Append(", ")
                 .Append(SAUTHC1Signature).Append("=").Append(signatureHex)
                 .ToString();
-            request.Headers.Authorization = new AuthenticationHeaderValue(AuthenticationScheme, authorizationHeaderValue);
+            request.Headers.Authorization = new AuthorizationHeaderValue(AuthenticationScheme, authorizationHeaderValue);
         }
 
         private static string ToHex(byte[] bytes)
@@ -166,19 +166,13 @@ namespace Stormpath.SDK.Impl.Http.Authentication
 
         // Return all lowercase header names (keys) separated by semicolon
         // e.g. header1;header2;header3
-        private static string GetSortedHeaderNames(HttpRequestHeaders headers)
+        private static string GetSortedHeaderNames(HttpHeaders headers)
         {
             var sortedKeys = headers
                 .OrderBy(x => x.Key, StringComparer.OrdinalIgnoreCase)
                 .Select(x => x.Key.ToLower());
 
             return string.Join(";", sortedKeys);
-        }
-
-        private static string CanonicalizeQueryString(HttpRequestMessage request)
-        {
-            return new QueryString(request.RequestUri.Query)
-                .ToString(canonical: true);
         }
 
         private static string CanonicalizeResourcePath(string relativeResourcePath)
@@ -188,7 +182,7 @@ namespace Stormpath.SDK.Impl.Http.Authentication
             return RequestHelper.UrlEncode(relativeResourcePath, isPath: true, canonicalize: true);
         }
 
-        private static string CanonicalizeHeaders(HttpRequestMessage request)
+        private static string CanonicalizeHeaders(IHttpRequest request)
         {
             var buffer = new StringBuilder();
 

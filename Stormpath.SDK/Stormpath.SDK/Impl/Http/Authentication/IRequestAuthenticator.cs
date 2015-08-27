@@ -15,13 +15,12 @@
 // limitations under the License.
 // </remarks>
 
-using System.Net.Http;
 using Stormpath.SDK.Api;
 
 namespace Stormpath.SDK.Impl.Http.Authentication
 {
     internal interface IRequestAuthenticator
     {
-        void Authenticate(HttpRequestMessage request, IClientApiKey apiKey);
+        void Authenticate(IHttpRequest request, IClientApiKey apiKey);
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="ICanonicalUri.cs" company="Stormpath, Inc.">
+﻿// <copyright file="UriExtensions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,16 +15,19 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Impl.Http.Support;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Stormpath.SDK.Impl.Http
+namespace Stormpath.SDK.Impl.Extensions
 {
-    internal interface ICanonicalUri
+    internal static class UriExtensions
     {
-        string AbsoluteUri { get; }
-
-        bool HasQuery { get; }
-
-        QueryString QueryString { get; }
+        public static Uri WithoutQueryAndFragment(this Uri source)
+        {
+            return new Uri(source.GetLeftPart(UriPartial.Path), UriKind.Absolute);
+        }
     }
 }

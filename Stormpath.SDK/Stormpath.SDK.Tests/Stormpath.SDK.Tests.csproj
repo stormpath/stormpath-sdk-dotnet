@@ -103,9 +103,9 @@
     <Compile Include="Impl\DefaultResourceFactory_tests.cs" />
     <Compile Include="Impl\Extensions_tests.cs" />
     <Compile Include="Impl\FieldConverterList_tests.cs" />
+    <Compile Include="Impl\HttpHeaders_tests.cs" />
     <Compile Include="Impl\UriCanonicalizer_tests.cs" />
     <Compile Include="Impl\Utility\ImmutableValueObject_tests.cs" />
-    <Compile Include="Impl\InternalDataStore_tests.cs" />
     <Compile Include="Impl\LinkProperty_tests.cs" />
     <Compile Include="Impl\Linq\CountAsync_tests.cs" />
     <Compile Include="Impl\Linq\Expand_extension_tests.cs" />

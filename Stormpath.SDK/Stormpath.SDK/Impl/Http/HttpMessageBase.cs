@@ -1,4 +1,4 @@
-﻿// <copyright file="IResourceConverter.cs" company="Stormpath, Inc.">
+﻿// <copyright file="HttpMessageBase.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,13 +15,14 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.Resource;
-
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Impl.Http
 {
-    internal interface IResourceConverter
+    internal abstract class HttpMessageBase : IHttpMessage
     {
-        Dictionary<string, object> Convert(AbstractResource resource);
+        public abstract string Body { get; }
+
+        public bool HasBody => !string.IsNullOrEmpty(Body);
+
+        public abstract HttpHeaders Headers { get; }
     }
 }

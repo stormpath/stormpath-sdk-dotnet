@@ -125,5 +125,35 @@ namespace Stormpath.SDK.Tests.Impl
                 args.Value.ShouldBe("bar");
             }
         }
+
+        public class Uri_WithoutQueryAndFragment
+        {
+            [Fact]
+            public void Idempotent_when_no_query_or_fragment_exists()
+            {
+                var test = new Uri("http://foobar.com/foo");
+
+                test.WithoutQueryAndFragment().ToString()
+                    .ShouldBe("http://foobar.com/foo");
+            }
+
+            [Fact]
+            public void Removes_query_part()
+            {
+                var test = new Uri("http://foobar.com/foo?bar=123");
+
+                test.WithoutQueryAndFragment().ToString()
+                    .ShouldBe("http://foobar.com/foo");
+            }
+
+            [Fact]
+            public void Removes_query_and_fragment_parts()
+            {
+                var test = new Uri("http://foobar.com/foo?bar=123#section1");
+
+                test.WithoutQueryAndFragment().ToString()
+                    .ShouldBe("http://foobar.com/foo");
+            }
+        }
     }
 }

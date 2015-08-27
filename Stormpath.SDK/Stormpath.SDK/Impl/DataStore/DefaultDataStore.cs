@@ -1,4 +1,4 @@
-﻿// <copyright file="InternalDataStore.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultDataStore.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,8 +16,11 @@
 // </remarks>
 
 using System;
+using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Error;
+using Stormpath.SDK.Impl.Error;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.Resource;
@@ -26,26 +29,26 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Impl.DataStore
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:DoNotUseRegions", Justification = "Reviewed.")]
-    internal sealed class InternalDataStore : IInternalDataStore, IDisposable
+    internal sealed class DefaultDataStore : IInternalDataStore, IDisposable
     {
         private readonly string baseUrl;
         private readonly IRequestExecutor requestExecutor;
-        private readonly IMapSerializer mapMarshaller;
-        private readonly IResourceFactory resourceFactory;
-        private readonly IResourceConverter resourceConverter;
+        private readonly IMapSerializer serializer;
+        private readonly IResourceConstructor resourceFactory;
+        private readonly IResourceDeconstructor resourceConverter;
 
         private readonly UriCanonicalizer uriCanonicalizer;
 
         private bool disposed = false;
 
-        internal InternalDataStore(IRequestExecutor requestExecutor, string baseUrl)
+        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl)
         {
             this.baseUrl = baseUrl;
             this.requestExecutor = requestExecutor;
 
-            this.mapMarshaller = new JsonNetMapMarshaller();
-            this.resourceFactory = new DefaultResourceFactory(this);
-            this.resourceConverter = new DefaultResourceConverter();
+            this.serializer = new JsonNetMapMarshaller();
+            this.resourceFactory = new DefaultResourceConstructor(this);
+            this.resourceConverter = new DefaultResourceDeconstructor();
 
             this.uriCanonicalizer = new UriCanonicalizer(baseUrl);
         }
@@ -56,19 +59,15 @@ namespace Stormpath.SDK.Impl.DataStore
 
         string IInternalDataStore.BaseUrl => this.baseUrl;
 
-        async Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
+        async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
         {
-            if (!href.StartsWith("http"))
-                href = $"{baseUrl}/{href}";
+            var canonicalUri = uriCanonicalizer.Create(resourcePath);
+            var request = new DefaultRequest(HttpMethod.Get, canonicalUri);
+            var response = await SendToExecutorAsync(request, cancellationToken);
+            var json = response.Body;
 
-            var hrefUri = new Uri(href);
-            if (!hrefUri.IsWellFormedOriginalString())
-                throw new RequestException($"The URI is not valid: {href}");
-
-            var json = await requestExecutor.GetAsync(hrefUri, cancellationToken);
-
-            var map = mapMarshaller.Deserialize(json, typeof(T));
-            var resource = resourceFactory.Instantiate<T>(map);
+            var map = serializer.Deserialize(json, typeof(T));
+            var resource = resourceFactory.Create<T>(map);
 
             return resource;
         }
@@ -98,14 +97,51 @@ namespace Stormpath.SDK.Impl.DataStore
             if (resource == null)
                 throw new ArgumentNullException(nameof(resource));
 
-            var uri = uriCanonicalizer.Canonicalize(href, queryParams);
-            var properties = resourceConverter.Convert(abstractResource);
+            var uri = uriCanonicalizer.Create(href, queryParams);
+            var properties = resourceConverter.ToMap(abstractResource);
 
             // TODO move the following into filter chain?
-            var body = mapMarshaller.Serialize(properties);
+            var body = serializer.Serialize(properties);
+
+            var request = new DefaultRequest(HttpMethod.Post, uri, null, null, body);
 
             // var response = await requestExecutor.ExecuteAsync(request);
             throw new NotImplementedException();
+        }
+
+        private async Task<IHttpResponse> SendToExecutorAsync(IHttpRequest request, CancellationToken cancellationToken)
+        {
+            ApplyDefaultRequestHeaders(request);
+
+            var response = await requestExecutor.ExecuteAsync(request, cancellationToken);
+
+            if (response.IsError)
+            {
+                var error = new DefaultError(GetBody<IError>(response));
+                throw new ResourceException(error);
+            }
+
+            return response;
+        }
+
+        private void ApplyDefaultRequestHeaders(IHttpRequest request)
+        {
+            request.Headers.Accept = "application/json";
+            request.Headers.UserAgent = UserAgentBuilder.GetUserAgent();
+
+            if (request.HasBody)
+                request.Headers.ContentType = "application/json";
+        }
+
+        private Hashtable GetBody<T>(IHttpResponse response)
+        {
+            if (response == null)
+                throw new ArgumentNullException(nameof(response));
+
+            if (response.HasBody)
+                return serializer.Deserialize(response.Body, typeof(T));
+            else
+                return new Hashtable();
         }
 
         #region IDisposable implementation

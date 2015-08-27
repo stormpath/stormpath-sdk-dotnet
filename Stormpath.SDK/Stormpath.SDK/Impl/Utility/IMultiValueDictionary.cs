@@ -1,4 +1,4 @@
-﻿// <copyright file="IResourceFactory.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IMultiValueDictionary.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,14 +15,20 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections;
+using System.Collections.Generic;
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Impl.Utility
 {
-    internal interface IResourceFactory
+    internal interface IMultiValueDictionary<TKey, TValue> : IDictionary<TKey, IList<TValue>>
     {
-        T Instantiate<T>();
+        TValue GetFirst(TKey key);
 
-        T Instantiate<T>(Hashtable properties);
+        void Add(TKey key, TValue value);
+
+        void Set(TKey key, TValue value);
+
+        void SetAll(Dictionary<TKey, TValue> values);
+
+        IDictionary<TKey, TValue> ToSingleValueDictionary();
     }
 }

@@ -16,14 +16,14 @@
 // </remarks>
 
 using System;
-using System.Linq;
-using System.Net.Http;
 using System.Text;
 using Shouldly;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Impl.Api;
 using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Authentication;
+using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.Utility;
 using Xunit;
 
@@ -31,14 +31,17 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
 {
     public class BasicRequestAuthenticator_tests
     {
+        private readonly UriCanonicalizer uriCanonicalizer;
         private readonly BasicRequestAuthenticator authenticator;
         private readonly IClientApiKey apiKey;
 
+        private readonly string fakeBaseHref = "http://foobar";
         private readonly string fakeApiKeyId = "foo-api-key";
         private readonly string fakeApiKeySecret = "super-secret!1";
 
         public BasicRequestAuthenticator_tests()
         {
+            uriCanonicalizer = new UriCanonicalizer(fakeBaseHref);
             authenticator = new BasicRequestAuthenticator();
             apiKey = new DefaultClientApiKey(fakeApiKeyId, fakeApiKeySecret);
         }
@@ -46,20 +49,20 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Adds_XStormpathDate_header()
         {
-            var myRequest = new HttpRequestMessage();
+            var myRequest = new DefaultRequest(HttpMethod.Get, uriCanonicalizer.Create("/bar"));
             var now = new DateTimeOffset(2015, 08, 01, 06, 30, 00, TimeSpan.Zero);
 
             authenticator.AuthenticateCore(myRequest, apiKey, now);
 
             // X-Stormpath-Date -> current time in UTC
-            var XStormpathDateHeader = Iso8601.Parse(myRequest.Headers.GetValues("X-Stormpath-Date").Single());
+            var XStormpathDateHeader = Iso8601.Parse(myRequest.Headers.GetFirst<string>("X-Stormpath-Date"));
             XStormpathDateHeader.ShouldBe(now);
         }
 
         [Fact]
         public void Adds_Basic_authorization_header()
         {
-            var myRequest = new HttpRequestMessage();
+            var myRequest = new DefaultRequest(HttpMethod.Get, uriCanonicalizer.Create("/bar"));
             var now = new DateTimeOffset(2015, 08, 01, 06, 30, 00, TimeSpan.Zero);
 
             authenticator.AuthenticateCore(myRequest, apiKey, now);
