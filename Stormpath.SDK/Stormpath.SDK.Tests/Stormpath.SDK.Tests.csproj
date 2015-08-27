@@ -92,6 +92,7 @@
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\CollectionTestHarness.cs" />
     <Compile Include="Helpers\LinqAssertExtensions.cs" />
+    <Compile Include="Helpers\NSubstituteHelper.cs" />
     <Compile Include="Impl\Authentication\SAuthc1RequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\BasicRequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\DefaultRequestAuthenticatorFactory_tests.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Impl\CollectionResourceRequestModel_validation_tests.cs" />
     <Compile Include="Impl\DefaultClientApiKeyBuilder_tests.cs" />
     <Compile Include="Impl\DefaultClientBuilder_tests.cs" />
+    <Compile Include="Impl\DefaultDataStore_tests.cs" />
     <Compile Include="Impl\DefaultResourceFactory_tests.cs" />
     <Compile Include="Impl\Extensions_tests.cs" />
     <Compile Include="Impl\FieldConverterList_tests.cs" />
