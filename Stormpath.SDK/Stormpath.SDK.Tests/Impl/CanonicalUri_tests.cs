@@ -1,4 +1,4 @@
-﻿// <copyright file="UriCanonicalizer_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="CanonicalUri_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,34 +15,38 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using Shouldly;
 using Stormpath.SDK.Impl.Http.Support;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class UriCanonicalizer_tests
+    public class CanonicalUri_tests
     {
-        private readonly string fakeBaseUrl = @"http://api.foo.bar";
-
         [Fact]
-        public void Relative_paths_are_fully_qualified()
+        public void Throws_when_URI_is_empty()
         {
-            var uc = new UriCanonicalizer(fakeBaseUrl);
-
-            var uri = uc.Create("path/to/resource");
-
-            uri.ToString().ShouldBe($"{fakeBaseUrl}/path/to/resource");
+            Should.Throw<ArgumentNullException>(() =>
+            {
+                var bad = new CanonicalUri(string.Empty);
+            });
         }
 
         [Fact]
-        public void Relative_paths_with_leading_slash_are_fully_qualified()
+        public void Throws_when_URI_is_not_fully_qualified()
         {
-            var uc = new UriCanonicalizer(fakeBaseUrl);
+            var notFullyQualified = "/path/to/resource";
 
-            var uri = uc.Create("/path/to/resource");
+            Should.Throw<ArgumentException>(() =>
+            {
+                var bad = new CanonicalUri(notFullyQualified);
+            });
 
-            uri.ToString().ShouldBe($"{fakeBaseUrl}/path/to/resource");
+            Should.Throw<ArgumentException>(() =>
+            {
+                var bad = new CanonicalUri(notFullyQualified, new QueryString("foo=bar&baz=123"));
+            });
         }
     }
 }

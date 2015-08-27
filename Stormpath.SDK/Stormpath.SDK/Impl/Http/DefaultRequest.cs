@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Impl.Http
     internal sealed class DefaultRequest : IHttpRequest
     {
         private readonly HttpMethod method;
-        private readonly ICanonicalUri canonicalUri;
+        private readonly CanonicalUri canonicalUri;
         private readonly HttpHeaders headers;
         private readonly string body;
 
@@ -33,15 +33,15 @@ namespace Stormpath.SDK.Impl.Http
             this.body = existingRequest.Body;
             this.headers = new HttpHeaders(existingRequest.Headers);
             this.method = HttpMethod.Parse(existingRequest.Method);
-            this.canonicalUri = new DefaultCanonicalUri(existingRequest.CanonicalUri, overrideResourcePath: overrideUri);
+            this.canonicalUri = new CanonicalUri(existingRequest.CanonicalUri, overrideResourcePath: overrideUri);
         }
 
-        public DefaultRequest(HttpMethod method, ICanonicalUri canonicalUri)
+        public DefaultRequest(HttpMethod method, CanonicalUri canonicalUri)
             : this(method, canonicalUri, null, null, string.Empty)
         {
         }
 
-        public DefaultRequest(HttpMethod method, ICanonicalUri canonicalUri, QueryString queryParams, HttpHeaders headers, string body)
+        public DefaultRequest(HttpMethod method, CanonicalUri canonicalUri, QueryString queryParams, HttpHeaders headers, string body)
         {
             this.method = method;
             this.canonicalUri = canonicalUri;
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Impl.Http
             if (queryParamsWerePassed)
             {
                 var mergedQueryString = this.canonicalUri.QueryString.Merge(queryParams);
-                this.canonicalUri = new DefaultCanonicalUri(this.canonicalUri.ResourcePath.ToString(), mergedQueryString);
+                this.canonicalUri = new CanonicalUri(this.canonicalUri.ResourcePath.ToString(), mergedQueryString);
             }
 
             this.headers = headers;
@@ -68,6 +68,6 @@ namespace Stormpath.SDK.Impl.Http
 
         public HttpMethod Method => method;
 
-        public ICanonicalUri CanonicalUri => canonicalUri;
+        public CanonicalUri CanonicalUri => canonicalUri;
     }
 }

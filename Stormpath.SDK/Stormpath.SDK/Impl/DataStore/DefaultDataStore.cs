@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly IResourceConstructor resourceFactory;
         private readonly IResourceDeconstructor resourceConverter;
 
-        private readonly UriCanonicalizer uriCanonicalizer;
+        private readonly UriQualifier uriQualifier;
 
         private bool disposed = false;
 
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.resourceFactory = new DefaultResourceConstructor(this);
             this.resourceConverter = new DefaultResourceDeconstructor();
 
-            this.uriCanonicalizer = new UriCanonicalizer(baseUrl);
+            this.uriQualifier = new UriQualifier(baseUrl);
         }
 
         private IInternalDataStore This => this;
@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
         {
-            var canonicalUri = uriCanonicalizer.Create(resourcePath);
+            var canonicalUri = new CanonicalUri(uriQualifier.EnsureFullyQualified(resourcePath));
             var request = new DefaultRequest(HttpMethod.Get, canonicalUri);
             var response = await SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
             var json = response.Body;
@@ -97,7 +97,7 @@ namespace Stormpath.SDK.Impl.DataStore
             if (resource == null)
                 throw new ArgumentNullException(nameof(resource));
 
-            var uri = uriCanonicalizer.Create(href, queryParams);
+            var uri = new CanonicalUri(uriQualifier.EnsureFullyQualified(href), queryParams);
             var properties = resourceConverter.ToMap(abstractResource);
 
             // TODO move the following into filter chain?

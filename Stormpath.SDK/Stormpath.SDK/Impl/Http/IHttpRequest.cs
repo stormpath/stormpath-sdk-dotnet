@@ -23,6 +23,6 @@ namespace Stormpath.SDK.Impl.Http
     {
         HttpMethod Method { get; }
 
-        ICanonicalUri CanonicalUri { get; }
+        CanonicalUri CanonicalUri { get; }
     }
 }

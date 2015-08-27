@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultCanonicalUri.cs" company="Stormpath, Inc.">
+﻿// <copyright file="CanonicalUri.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -21,17 +21,17 @@ using Stormpath.SDK.Impl.Extensions;
 
 namespace Stormpath.SDK.Impl.Http.Support
 {
-    internal sealed class DefaultCanonicalUri : ICanonicalUri
+    internal sealed class CanonicalUri
     {
         private readonly Uri resourcePath;
         private readonly QueryString query;
 
-        public DefaultCanonicalUri(string href, Dictionary<string, string> queryParams)
+        public CanonicalUri(string href, Dictionary<string, string> queryParams)
             : this(href, new QueryString(queryParams))
         {
         }
 
-        public DefaultCanonicalUri(string href, QueryString queryParams)
+        public CanonicalUri(string href, QueryString queryParams)
             : this(href)
         {
             if (HasQueryParameters(href))
@@ -45,10 +45,13 @@ namespace Stormpath.SDK.Impl.Http.Support
             this.query = queryParams ?? new QueryString();
         }
 
-        public DefaultCanonicalUri(string href)
+        public CanonicalUri(string href)
         {
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
+
+            if (!UriQualifier.IsFullyQualified(href))
+                throw new ArgumentException("URI must be fully-qualified.", nameof(href));
 
             Uri parsedUri = null;
             if (!Uri.TryCreate(href, UriKind.Absolute, out parsedUri))
@@ -60,7 +63,7 @@ namespace Stormpath.SDK.Impl.Http.Support
         }
 
         // Copy-ish constructor
-        public DefaultCanonicalUri(ICanonicalUri existing, Uri overrideResourcePath = null)
+        public CanonicalUri(CanonicalUri existing, Uri overrideResourcePath = null)
         {
             this.resourcePath = overrideResourcePath == null
                 ? new Uri(existing.ResourcePath.WithoutQueryAndFragment().ToString())

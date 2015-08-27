@@ -1,4 +1,4 @@
-﻿// <copyright file="UriCanonicalizer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="UriQualifier.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -20,11 +20,11 @@ using System.Text;
 
 namespace Stormpath.SDK.Impl.Http.Support
 {
-    internal sealed class UriCanonicalizer
+    internal sealed class UriQualifier
     {
         private readonly string baseUrl;
 
-        public UriCanonicalizer(string baseUrl)
+        public UriQualifier(string baseUrl)
         {
             if (string.IsNullOrEmpty(baseUrl))
                 throw new ArgumentNullException("baseUrl");
@@ -32,14 +32,7 @@ namespace Stormpath.SDK.Impl.Http.Support
             this.baseUrl = baseUrl;
         }
 
-        public ICanonicalUri Create(string href, QueryString queryParams = null)
-        {
-            var finalHref = MakeFullyQualified(href);
-
-            return new DefaultCanonicalUri(finalHref, queryParams);
-        }
-
-        private string MakeFullyQualified(string href)
+        public string EnsureFullyQualified(string href)
         {
             if (IsFullyQualified(href))
                 return href;
@@ -52,7 +45,7 @@ namespace Stormpath.SDK.Impl.Http.Support
             return fullyQualified.ToString();
         }
 
-        private bool IsFullyQualified(string href)
+        public static bool IsFullyQualified(string href)
         {
             bool tooShort = string.IsNullOrEmpty(href) || href.Length < 5;
             if (tooShort)

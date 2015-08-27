@@ -107,12 +107,11 @@
     <Compile Include="Impl\Http\IHttpResponse.cs" />
     <Compile Include="Impl\Http\NetHttpAdapter.cs" />
     <Compile Include="Impl\Http\Support\AuthorizationHeaderValue.cs" />
-    <Compile Include="Impl\Http\Support\ICanonicalUri.cs" />
     <Compile Include="Impl\Http\IHttpMessage.cs" />
-    <Compile Include="Impl\Http\Support\DefaultCanonicalUri.cs" />
+    <Compile Include="Impl\Http\Support\CanonicalUri.cs" />
     <Compile Include="Impl\Http\Support\HttpMethod.cs" />
     <Compile Include="Impl\Http\Support\QueryString.cs" />
-    <Compile Include="Impl\Http\Support\UriCanonicalizer.cs" />
+    <Compile Include="Impl\Http\Support\UriQualifier.cs" />
     <Compile Include="Impl\Http\UserAgentBuilder.cs" />
     <Compile Include="Impl\Http\IRequestExecutor.cs" />
     <Compile Include="Impl\DataStore\IResourceConstructor.cs" />
