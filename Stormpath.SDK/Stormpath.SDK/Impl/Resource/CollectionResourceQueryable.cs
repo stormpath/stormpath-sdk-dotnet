@@ -166,7 +166,7 @@ namespace Stormpath.SDK.Impl.Resource
             }
 
             var url = GenerateRequestUrlFromModel();
-            var result = await dataStore.GetCollectionAsync<T>(url, cancellationToken);
+            var result = await dataStore.GetCollectionAsync<T>(url, cancellationToken).ConfigureAwait(false);
 
             bool anyNewItems = result?.Items?.Any() ?? false;
             if (!anyNewItems)

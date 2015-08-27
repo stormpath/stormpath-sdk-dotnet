@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             var canonicalUri = uriCanonicalizer.Create(resourcePath);
             var request = new DefaultRequest(HttpMethod.Get, canonicalUri);
-            var response = await SendToExecutorAsync(request, cancellationToken);
+            var response = await SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
             var json = response.Body;
 
             var map = serializer.Deserialize(json, typeof(T));
@@ -77,18 +77,18 @@ namespace Stormpath.SDK.Impl.DataStore
             return This.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
         }
 
-        Task<T> IDataStore.Save<T>(T resource)
+        Task<T> IDataStore.SaveAsync<T>(T resource)
         {
             throw new NotImplementedException();
         }
 
-        Task IDataStore.Save(IResource resource)
+        Task IDataStore.SaveAsync(IResource resource)
         {
             var href = resource?.Href;
-            return Save(resource, href, null);
+            return SaveAsync(resource, href, null);
         }
 
-        private Task<AbstractResource> Save(IResource resource, string href, QueryString queryParams)
+        private Task<AbstractResource> SaveAsync(IResource resource, string href, QueryString queryParams)
         {
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
@@ -113,7 +113,9 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             ApplyDefaultRequestHeaders(request);
 
-            var response = await requestExecutor.ExecuteAsync(request, cancellationToken);
+            var response = await requestExecutor
+                .ExecuteAsync(request, cancellationToken)
+                .ConfigureAwait(false);
 
             if (response.IsError)
             {

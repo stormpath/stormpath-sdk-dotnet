@@ -43,6 +43,6 @@ namespace Stormpath.SDK.Impl.Resource
 
         DateTimeOffset IAuditable.ModifiedAt => GetProperty<DateTimeOffset>(ModifiedAtPropertyName);
 
-        Task ISaveable.SaveAsync() => GetDataStore().Save(this);
+        Task ISaveable.SaveAsync() => GetDataStore().SaveAsync(this);
     }
 }

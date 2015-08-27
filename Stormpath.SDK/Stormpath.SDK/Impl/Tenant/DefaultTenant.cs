@@ -84,7 +84,7 @@ namespace Stormpath.SDK.Impl.Tenant
             return new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetDataStore());
         }
 
-        Task<IDirectory> ITenantActions.CreateDirectory(IDirectory directory)
+        Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory)
         {
             throw new NotImplementedException();
         }

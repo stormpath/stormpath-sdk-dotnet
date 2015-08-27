@@ -28,9 +28,9 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<CollectionResponsePage<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task Save(IResource resource);
+        Task SaveAsync(IResource resource);
 
-        Task<T> Save<T>(T resource)
+        Task<T> SaveAsync<T>(T resource)
             where T : IResource, ISaveable;
     }
 }

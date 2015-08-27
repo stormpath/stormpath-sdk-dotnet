@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Tenant
 
         ICollectionResourceQueryable<IApplication> GetApplications();
 
-        Task<IDirectory> CreateDirectory(IDirectory directory);
+        Task<IDirectory> CreateDirectoryAsync(IDirectory directory);
 
         ICollectionResourceQueryable<IDirectory> GetDirectories();
 

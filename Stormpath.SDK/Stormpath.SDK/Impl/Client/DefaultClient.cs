@@ -124,12 +124,12 @@ namespace Stormpath.SDK.Impl.Client
             return tenant.GetApplications();
         }
 
-        async Task<IDirectory> ITenantActions.CreateDirectory(IDirectory directory)
+        async Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory)
         {
             var tenant = await This.GetCurrentTenantAsync()
                 .ConfigureAwait(false);
 
-            return await tenant.CreateDirectory(directory)
+            return await tenant.CreateDirectoryAsync(directory)
                 .ConfigureAwait(false);
         }
 

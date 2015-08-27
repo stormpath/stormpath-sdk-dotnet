@@ -99,7 +99,7 @@ namespace Stormpath.SDK.Impl.Http
                 }
                 else
                 {
-                    var content = await response.Content.ReadAsStringAsync();
+                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     throw new RequestException($"Unable to execute HTTP request. Message: '{content}'");
                 }
             }
