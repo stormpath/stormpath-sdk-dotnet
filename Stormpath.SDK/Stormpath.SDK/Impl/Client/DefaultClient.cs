@@ -107,24 +107,20 @@ namespace Stormpath.SDK.Impl.Client
             return dataStore.GetResourceAsync<T>(href);
         }
 
-        #region ITenantActions (pass-thru to Tenant)
+        #region ITenantActions (pass-through to Tenant)
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, CancellationToken cancellationToken)
         {
-            var tenant = await This.GetCurrentTenantAsync()
-                .ConfigureAwait(false);
+            var tenant = await This.GetCurrentTenantAsync().ConfigureAwait(false);
 
-            return await tenant.CreateApplicationAsync(application)
-                .ConfigureAwait(false);
+            return await tenant.CreateApplicationAsync(application).ConfigureAwait(false);
         }
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(string name, CancellationToken cancellationToken)
         {
-            var tenant = await This.GetCurrentTenantAsync()
-                .ConfigureAwait(false);
+            var tenant = await This.GetCurrentTenantAsync().ConfigureAwait(false);
 
-            return await tenant.CreateApplicationAsync(name)
-                .ConfigureAwait(false);
+            return await tenant.CreateApplicationAsync(name).ConfigureAwait(false);
         }
 
         ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()
@@ -136,11 +132,16 @@ namespace Stormpath.SDK.Impl.Client
 
         async Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken)
         {
-            var tenant = await This.GetCurrentTenantAsync()
-                .ConfigureAwait(false);
+            var tenant = await This.GetCurrentTenantAsync().ConfigureAwait(false);
 
-            return await tenant.CreateDirectoryAsync(directory)
-                .ConfigureAwait(false);
+            return await tenant.CreateDirectoryAsync(directory).ConfigureAwait(false);
+        }
+
+        async Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, CancellationToken cancellationToken)
+        {
+            var tenant = await This.GetCurrentTenantAsync().ConfigureAwait(false);
+
+            return await tenant.CreateDirectoryAsync(name, cancellationToken).ConfigureAwait(false);
         }
 
         ICollectionResourceQueryable<IDirectory> ITenantActions.GetDirectories()
@@ -152,11 +153,9 @@ namespace Stormpath.SDK.Impl.Client
 
         async Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
         {
-            var tenant = await This.GetCurrentTenantAsync()
-                .ConfigureAwait(false);
+            var tenant = await This.GetCurrentTenantAsync().ConfigureAwait(false);
 
-            return await tenant.VerifyAccountEmailAsync(token)
-                .ConfigureAwait(false);
+            return await tenant.VerifyAccountEmailAsync(token).ConfigureAwait(false);
         }
 
         ICollectionResourceQueryable<IAccount> ITenantActions.GetAccounts()
@@ -171,11 +170,6 @@ namespace Stormpath.SDK.Impl.Client
             var tenant = This.GetCurrentTenantAsync().Result;
 
             return tenant.GetGroups();
-        }
-
-        Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
 
         #endregion

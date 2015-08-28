@@ -197,7 +197,6 @@
     <Compile Include="Resource\IResource.cs" />
     <Compile Include="Tenant\ITenant.cs" />
     <Compile Include="Tenant\ITenantActions.cs" />
-    <Compile Include="Tenant\TenantActionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
