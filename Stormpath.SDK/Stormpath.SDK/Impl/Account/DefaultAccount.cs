@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
@@ -41,6 +42,7 @@ namespace Stormpath.SDK.Impl.Account
         private static readonly string GroupMembershipsPropertyName = "groupMemberships";
         private static readonly string GroupsPropertyName = "groups";
         private static readonly string MiddleNamePropertyName = "middleName";
+        private static readonly string PasswordPropertyName = "password";
         private static readonly string ProviderDataPropertyName = "providerData";
         private static readonly string RefreshTokensPropertyName = "refreshTokens";
         private static readonly string StatusPropertyName = "status";
@@ -48,12 +50,12 @@ namespace Stormpath.SDK.Impl.Account
         private static readonly string TenantPropertyName = "tenant";
         private static readonly string UsernamePropertyName = "username";
 
-        public DefaultAccount(IDataStore dataStore)
+        public DefaultAccount(IInternalDataStore dataStore)
             : base(dataStore)
         {
         }
 
-        public DefaultAccount(IDataStore dataStore, Hashtable properties)
+        public DefaultAccount(IInternalDataStore dataStore, Hashtable properties)
             : base(dataStore, properties)
         {
         }
@@ -92,6 +94,63 @@ namespace Stormpath.SDK.Impl.Account
 
         string IAccount.Username => GetProperty<string>(UsernamePropertyName);
 
+        IAccount IAccount.SetEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                throw new ArgumentNullException(nameof(email));
+
+            SetProperty(EmailPropertyName, email);
+            return this;
+        }
+
+        IAccount IAccount.SetGivenName(string givenName)
+        {
+            if (string.IsNullOrEmpty(givenName))
+                throw new ArgumentNullException(nameof(givenName));
+
+            SetProperty(GivenNamePropertyName, givenName);
+            return this;
+        }
+
+        IAccount IAccount.SetMiddleName(string middleName)
+        {
+            SetProperty(MiddleNamePropertyName, middleName);
+            return this;
+        }
+
+        IAccount IAccount.SetPassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentNullException(nameof(password));
+
+            SetProperty(PasswordPropertyName, password);
+            return this;
+        }
+
+        IAccount IAccount.SetStatus(AccountStatus status)
+        {
+            SetProperty(StatusPropertyName, status);
+            return this;
+        }
+
+        IAccount IAccount.SetSurname(string surname)
+        {
+            if (string.IsNullOrEmpty(surname))
+                throw new ArgumentNullException(nameof(surname));
+
+            SetProperty(SurnamePropertyName, surname);
+            return this;
+        }
+
+        IAccount IAccount.SetUsername(string username)
+        {
+            if (string.IsNullOrEmpty(username))
+                throw new ArgumentNullException(nameof(username));
+
+            SetProperty(username, username);
+            return this;
+        }
+
         Task<IDirectory> IAccount.GetDirectoryAsync()
         {
             throw new NotImplementedException();
@@ -105,6 +164,16 @@ namespace Stormpath.SDK.Impl.Account
         Task<ITenant> IAccount.GetTenantAsync()
         {
             throw new NotImplementedException();
+        }
+
+        Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
+        {
+            return GetInternalDataStore().DeleteAsync(this, cancellationToken);
+        }
+
+        Task<IAccount> ISaveable<IAccount>.SaveAsync(CancellationToken cancellationToken)
+        {
+            return GetInternalDataStore().SaveAsync<IAccount>(this, cancellationToken);
         }
     }
 }

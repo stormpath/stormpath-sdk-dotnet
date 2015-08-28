@@ -34,8 +34,8 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly string baseUrl;
         private readonly IRequestExecutor requestExecutor;
         private readonly IMapSerializer serializer;
-        private readonly IResourceConstructor resourceFactory;
-        private readonly IResourceDeconstructor resourceConverter;
+        private readonly IResourceFactory resourceFactory;
+        private readonly IResourceConverter resourceConverter;
 
         private readonly UriQualifier uriQualifier;
 
@@ -47,8 +47,8 @@ namespace Stormpath.SDK.Impl.DataStore
             this.requestExecutor = requestExecutor;
 
             this.serializer = new JsonNetMapMarshaller();
-            this.resourceFactory = new DefaultResourceConstructor(this);
-            this.resourceConverter = new DefaultResourceDeconstructor();
+            this.resourceFactory = new DefaultResourceFactory(this);
+            this.resourceConverter = new DefaultResourceConverter();
 
             this.uriQualifier = new UriQualifier(baseUrl);
         }
@@ -58,6 +58,11 @@ namespace Stormpath.SDK.Impl.DataStore
         IRequestExecutor IInternalDataStore.RequestExecutor => this.requestExecutor;
 
         string IInternalDataStore.BaseUrl => this.baseUrl;
+
+        T IDataStore.Instantiate<T>()
+        {
+            return resourceFactory.Create<T>();
+        }
 
         async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
         {
@@ -77,18 +82,29 @@ namespace Stormpath.SDK.Impl.DataStore
             return This.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
         }
 
-        Task<T> IDataStore.SaveAsync<T>(T resource)
+        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
+        {
+            return SaveCoreAsync(
+                resource, parentHref,
+                queryParams: null,
+                cancellationToken: cancellationToken);
+        }
+
+        Task<T> IInternalDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
+
+            // var href = resource?.Href;
+            // return SaveCoreAsync(resource, href, null);
         }
 
-        Task IDataStore.SaveAsync(IResource resource)
+        Task<bool> IInternalDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
         {
-            var href = resource?.Href;
-            return SaveAsync(resource, href, null);
+            return DeleteCoreAsync(resource, cancellationToken);
         }
 
-        private Task<AbstractResource> SaveAsync(IResource resource, string href, QueryString queryParams)
+        private async Task<T> SaveCoreAsync<T>(T resource, string href, QueryString queryParams, CancellationToken cancellationToken)
+            where T : IResource
         {
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
@@ -98,15 +114,33 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ArgumentNullException(nameof(resource));
 
             var uri = new CanonicalUri(uriQualifier.EnsureFullyQualified(href), queryParams);
-            var properties = resourceConverter.ToMap(abstractResource);
+            var propertiesMap = resourceConverter.ToMap(abstractResource, partialUpdate: false);
+            var body = serializer.Serialize(propertiesMap);
 
-            // TODO move the following into filter chain?
-            var body = serializer.Serialize(properties);
+            var request = new DefaultHttpRequest(HttpMethod.Post, uri, null, null, body, "application/json");
 
-            var request = new DefaultHttpRequest(HttpMethod.Post, uri, null, null, body);
+            var response = await SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
+            var map = GetBody<T>(response);
+            var createdResource = resourceFactory.Create<T>(map);
 
-            // var response = await requestExecutor.ExecuteAsync(request);
-            throw new NotImplementedException();
+            return createdResource;
+        }
+
+        private async Task<bool> DeleteCoreAsync<T>(T resource, CancellationToken cancellationToken)
+            where T : IResource, IDeletable
+        {
+            var abstractResource = resource as AbstractResource;
+            if (resource == null)
+                throw new ArgumentNullException(nameof(resource));
+
+            if (string.IsNullOrEmpty(resource.Href))
+                throw new ArgumentNullException(nameof(resource.Href));
+
+            var uri = new CanonicalUri(uriQualifier.EnsureFullyQualified(resource.Href));
+            var request = new DefaultHttpRequest(HttpMethod.Delete, uri);
+
+            var response = await SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
+            return response.HttpStatus == 204;
         }
 
         private async Task<IHttpResponse> SendToExecutorAsync(IHttpRequest request, CancellationToken cancellationToken)
@@ -130,9 +164,6 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             request.Headers.Accept = "application/json";
             request.Headers.UserAgent = UserAgentBuilder.GetUserAgent();
-
-            if (request.HasBody)
-                request.Headers.ContentType = "application/json";
         }
 
         private Hashtable GetBody<T>(IHttpResponse response)

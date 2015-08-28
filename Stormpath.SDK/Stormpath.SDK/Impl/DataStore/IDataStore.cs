@@ -24,13 +24,11 @@ namespace Stormpath.SDK.Impl.DataStore
 {
     internal interface IDataStore
     {
+        T Instantiate<T>()
+            where T : IResource;
+
         Task<T> GetResourceAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<CollectionResponsePage<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
-
-        Task SaveAsync(IResource resource);
-
-        Task<T> SaveAsync<T>(T resource)
-            where T : IResource, ISaveable;
     }
 }

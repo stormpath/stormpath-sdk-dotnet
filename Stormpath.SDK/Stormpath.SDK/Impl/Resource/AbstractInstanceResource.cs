@@ -17,24 +17,23 @@
 
 using System;
 using System.Collections;
-using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Reviewed")]
-    internal abstract class AbstractInstanceResource : AbstractResource, ISaveable, IAuditable
+    internal abstract class AbstractInstanceResource : AbstractResource, IAuditable // TODO ISaveable
     {
         protected static readonly string CreatedAtPropertyName = "createdAt";
         protected static readonly string ModifiedAtPropertyName = "modifiedAt";
 
-        protected AbstractInstanceResource(IDataStore dataStore)
+        protected AbstractInstanceResource(IInternalDataStore dataStore)
             : base(dataStore)
         {
         }
 
-        protected AbstractInstanceResource(IDataStore dataStore, Hashtable properties)
+        protected AbstractInstanceResource(IInternalDataStore dataStore, Hashtable properties)
             : base(dataStore, properties)
         {
         }
@@ -42,7 +41,5 @@ namespace Stormpath.SDK.Impl.Resource
         DateTimeOffset IAuditable.CreatedAt => GetProperty<DateTimeOffset>(CreatedAtPropertyName);
 
         DateTimeOffset IAuditable.ModifiedAt => GetProperty<DateTimeOffset>(ModifiedAtPropertyName);
-
-        Task ISaveable.SaveAsync() => GetDataStore().SaveAsync(this);
     }
 }

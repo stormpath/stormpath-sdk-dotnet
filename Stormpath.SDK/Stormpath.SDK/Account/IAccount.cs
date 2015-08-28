@@ -23,7 +23,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Account
 {
-    public interface IAccount : IResource, ISaveable, IExtendable, IAuditable
+    public interface IAccount : IResource, ISaveable<IAccount>, IDeletable, IExtendable, IAuditable
     {
         string Username { get; }
 
@@ -38,6 +38,20 @@ namespace Stormpath.SDK.Account
         string Surname { get; }
 
         AccountStatus Status { get; }
+
+        IAccount SetEmail(string email);
+
+        IAccount SetGivenName(string givenName);
+
+        IAccount SetMiddleName(string middleName);
+
+        IAccount SetPassword(string password);
+
+        IAccount SetStatus(AccountStatus status);
+
+        IAccount SetSurname(string surname);
+
+        IAccount SetUsername(string username);
 
         Task<ICollectionResourceQueryable<IGroup>> GetGroupsAsync();
 

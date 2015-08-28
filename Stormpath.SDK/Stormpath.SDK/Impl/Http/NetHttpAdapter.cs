@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Stormpath.SDK.Impl.Http
 {
@@ -40,17 +41,21 @@ namespace Stormpath.SDK.Impl.Http
                 throw new ArgumentException($"Unknown method type {request.Method.DisplayName}", nameof(request));
 
             var httpRequestMessage = new System.Net.Http.HttpRequestMessage(httpMethod, request.CanonicalUri.ToString());
-            CopyHttpHeaders(request.Headers, httpRequestMessage.Headers);
+
+            if (request.HasBody)
+                httpRequestMessage.Content = new System.Net.Http.StringContent(request.Body, System.Text.Encoding.UTF8, request.BodyContentType);
+
+            CopyHeadersToRequestMessage(request.Headers, httpRequestMessage);
 
             return httpRequestMessage;
         }
 
-        public void CopyHttpHeaders(HttpHeaders source, System.Net.Http.Headers.HttpHeaders destination)
+        public void CopyHeadersToRequestMessage(HttpHeaders source, System.Net.Http.HttpRequestMessage destination)
         {
             foreach (var header in source)
             {
-                if (!destination.TryAddWithoutValidation(header.Key, header.Value))
-                    throw new ArgumentException($"Header '{header.Key}' or contained values '{string.Join("','", header.Value)}' is not valid", nameof(source));
+                if (!destination.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                    throw new ArgumentException($"Header '{header.Key}' or contained value(s) '{string.Join("','", header.Value)}' is not valid", nameof(source));
             }
         }
 

@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Directory
 {
-    public interface IDirectory : IResource, ISaveable, IExtendable, IAuditable
+    public interface IDirectory : IResource, ISaveable<IDirectory>, IExtendable, IAuditable
     {
         string Name { get; }
 

@@ -19,23 +19,31 @@ using System;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
+using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
+using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Impl.Group;
+using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
     public class DefaultResourceFactory_tests
     {
-        private readonly IDataStore fakeDataStore;
-        private readonly IResourceConstructor factory;
+        private readonly IInternalDataStore fakeDataStore;
+        private readonly IResourceFactory factory;
 
         public DefaultResourceFactory_tests()
         {
-            fakeDataStore = Substitute.For<IDataStore>();
+            fakeDataStore = Substitute.For<IInternalDataStore>();
 
-            factory = new DefaultResourceConstructor(fakeDataStore);
+            factory = new DefaultResourceFactory(fakeDataStore);
         }
 
         [Fact]
@@ -52,6 +60,34 @@ namespace Stormpath.SDK.Tests.Impl
         {
             IAccount account = factory.Create<IAccount>();
             account.ShouldBeOfType<DefaultAccount>();
+        }
+
+        [Fact]
+        public void Creating_IApplication_returns_DefaultApplication()
+        {
+            IApplication account = factory.Create<IApplication>();
+            account.ShouldBeOfType<DefaultApplication>();
+        }
+
+        [Fact]
+        public void Creating_ITenant_returns_DefaultTenant()
+        {
+            ITenant account = factory.Create<ITenant>();
+            account.ShouldBeOfType<DefaultTenant>();
+        }
+
+        [Fact]
+        public void Creating_IDirectory_returns_DefaultDirectory()
+        {
+            IDirectory account = factory.Create<IDirectory>();
+            account.ShouldBeOfType<DefaultDirectory>();
+        }
+
+        [Fact]
+        public void Creating_IGroup_returns_DefaultGroup()
+        {
+            IGroup account = factory.Create<IGroup>();
+            account.ShouldBeOfType<DefaultGroup>();
         }
     }
 }

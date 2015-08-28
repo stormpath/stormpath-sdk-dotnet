@@ -1,4 +1,4 @@
-﻿// <copyright file="IResourceConstructor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="RandomString.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,14 +15,23 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Tests.Integration.Helpers
 {
-    internal interface IResourceConstructor
+    public static class RandomString
     {
-        T Create<T>();
-
-        T Create<T>(Hashtable properties);
+        public static string Create()
+        {
+            return Guid
+                .NewGuid()
+                .ToString()
+                .ToLower()
+                .Replace("-", string.Empty);
+        }
     }
 }

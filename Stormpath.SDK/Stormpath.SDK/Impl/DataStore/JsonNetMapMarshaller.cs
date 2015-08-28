@@ -50,7 +50,9 @@ namespace Stormpath.SDK.Impl.DataStore
 
         string IMapSerializer.Serialize(Dictionary<string, object> map)
         {
-            throw new NotImplementedException();
+            var serialized = JsonConvert.SerializeObject(map);
+
+            return serialized;
         }
 
         Hashtable IMapSerializer.Deserialize(string json, Type type)

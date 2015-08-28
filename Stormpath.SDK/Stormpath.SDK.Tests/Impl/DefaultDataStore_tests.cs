@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Tests.Impl
     public class DefaultDataStore_tests
     {
         private readonly IRequestExecutor fakeRequestExecutor;
-        private readonly IDataStore dataStore;
+        private readonly IInternalDataStore dataStore;
 
         public DefaultDataStore_tests()
         {
@@ -44,22 +44,9 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var href = "http://foobar/account";
             fakeRequestExecutor.ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(200, new HttpHeaders(), body: FakeJson.Account) as IHttpResponse));
+                .Returns(Task.FromResult(new DefaultHttpResponse(200, new HttpHeaders(), body: FakeJson.Account, bodyContentType: "application/json") as IHttpResponse));
 
             var account = await dataStore.GetResourceAsync<IAccount>(href);
-
-            // Verify the default headers
-            fakeRequestExecutor.Received().ExecuteAsync(Arg.Is<IHttpRequest>(request =>
-                 request.Headers.Accept == "application/json")).IgnoreAwait();
-        }
-
-        [Fact(Skip ="TODO Saving")]
-        public async Task ContentType_header_is_added_to_requests_with_body()
-        {
-            fakeRequestExecutor.ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(200, new HttpHeaders(), body: FakeJson.Account) as IHttpResponse));
-
-            var account = await dataStore.SaveAsync<IAccount>(new DefaultAccount(dataStore));
 
             // Verify the default headers
             fakeRequestExecutor.Received().ExecuteAsync(Arg.Is<IHttpRequest>(request =>

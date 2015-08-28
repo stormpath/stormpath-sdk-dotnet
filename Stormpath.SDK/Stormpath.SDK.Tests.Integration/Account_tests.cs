@@ -15,29 +15,61 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    [CollectionDefinition("LiveTenantTests")]
+    [Collection("Live tenant tests")]
     public class Account_tests
     {
+        private readonly IntegrationTestFixture fixture;
+
+        public Account_tests(IntegrationTestFixture fixture)
+        {
+            this.fixture = fixture;
+        }
+
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Getting_tenant_accounts(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var tenant = await client.GetCurrentTenantAsync();
+
             var accounts = await tenant.GetAccounts().ToListAsync();
 
             accounts.Count.ShouldNotBe(0);
+        }
+
+        [Theory]
+        public void Getting_tenant_accounts_with_search()
+        {
+
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_and_deleting_account(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(fixture.ApplicationHref);
+
+            var randomEmail = new RandomEmail(at: "integrationtestingrocks.co");
+            var account = await application.CreateAccountAsync("Luke", "Skywalker", randomEmail, new RandomPassword(12));
+
+            account.Href.ShouldNotBeNullOrEmpty();
+            account.FullName.ShouldBe("Luke Skywalker");
+            account.Email.ShouldBe(randomEmail);
+            account.Username.ShouldBe(randomEmail);
+            account.Status.ShouldBe(AccountStatus.Enabled);
+
+            var deleteResult = await account.DeleteAsync();
+            deleteResult.ShouldBe(true);
         }
     }
 }

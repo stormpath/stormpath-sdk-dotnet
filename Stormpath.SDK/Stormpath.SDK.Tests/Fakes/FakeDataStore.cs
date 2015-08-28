@@ -102,12 +102,7 @@ namespace Stormpath.SDK.Tests.Fakes
             return int.Parse(match.Groups[1].Value);
         }
 
-        Task IDataStore.SaveAsync(IResource resource)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<T> IDataStore.SaveAsync<T>(T resource)
+        T IDataStore.Instantiate<T>()
         {
             throw new NotImplementedException();
         }

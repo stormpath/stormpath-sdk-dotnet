@@ -18,6 +18,7 @@
 using System.Collections.Generic;
 using Shouldly;
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Client;
 
 namespace Stormpath.SDK.Tests.Integration.Helpers
 {
@@ -27,6 +28,11 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
         {
             yield return new object[] { new TestClientBuilder("Basic") };
             yield return new object[] { new TestClientBuilder("SAuthc1") };
+        }
+
+        public static IClient GetSAuthc1Client()
+        {
+            return new TestClientBuilder("SAuthc1").Build();
         }
 
         public static IClientApiKey GetApiKey()

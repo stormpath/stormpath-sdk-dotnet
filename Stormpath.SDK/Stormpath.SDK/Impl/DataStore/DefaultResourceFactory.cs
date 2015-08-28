@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultResourceConstructor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultResourceFactory.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -33,7 +33,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal sealed class DefaultResourceConstructor : IResourceConstructor
+    internal sealed class DefaultResourceFactory : IResourceFactory
     {
         private readonly Dictionary<Type, Type> typeMap = new Dictionary<Type, Type>()
         {
@@ -44,22 +44,22 @@ namespace Stormpath.SDK.Impl.DataStore
             { typeof(IGroup), typeof(DefaultGroup) },
         };
 
-        private readonly IDataStore dataStore;
+        private readonly IInternalDataStore dataStore;
 
-        public DefaultResourceConstructor(IDataStore dataStore)
+        public DefaultResourceFactory(IInternalDataStore dataStore)
         {
             this.dataStore = dataStore;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element must begin with upper-case letter", Justification = "Reviewed")]
-        private IResourceConstructor _this => this;
+        private IResourceFactory _this => this;
 
-        T IResourceConstructor.Create<T>()
+        T IResourceFactory.Create<T>()
         {
             return _this.Create<T>(null);
         }
 
-        T IResourceConstructor.Create<T>(Hashtable properties)
+        T IResourceFactory.Create<T>(Hashtable properties)
         {
             bool isCollection = typeof(T).IsGenericType
                 && typeof(T).GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);

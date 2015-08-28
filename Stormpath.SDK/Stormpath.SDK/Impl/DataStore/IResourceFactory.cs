@@ -1,4 +1,4 @@
-﻿// <copyright file="IResourceDeconstructor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IResourceFactory.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,13 +15,14 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.Resource;
+using System.Collections;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal interface IResourceDeconstructor
+    internal interface IResourceFactory
     {
-        Dictionary<string, object> ToMap(AbstractResource resource);
+        T Create<T>();
+
+        T Create<T>(Hashtable properties);
     }
 }

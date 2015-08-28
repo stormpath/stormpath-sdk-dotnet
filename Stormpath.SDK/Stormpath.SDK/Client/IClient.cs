@@ -30,6 +30,9 @@ namespace Stormpath.SDK.Client
 
         int ConnectionTimeout { get; }
 
+        T Instantiate<T>()
+            where T : IResource;
+
         Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         Task<T> GetResourceAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken))

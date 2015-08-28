@@ -92,7 +92,7 @@ namespace Stormpath.SDK.Impl.Http
 
                 var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var headers = httpAdapter.ToHttpHeaders(response.Headers);
-                var returnedResponse = new DefaultHttpResponse((int)response.StatusCode, headers, body);
+                var returnedResponse = new DefaultHttpResponse((int)response.StatusCode, headers, body, response.Content?.Headers?.ContentType?.MediaType);
                 return returnedResponse;
             }
         }

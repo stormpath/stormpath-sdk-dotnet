@@ -15,16 +15,27 @@
 // limitations under the License.
 // </remarks>
 
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Application
 {
-    public interface IApplication : IResource, ISaveable, IExtendable, IAuditable
+    public interface IApplication : IResource, ISaveable<IApplication>, IDeletable, IExtendable, IAuditable
     {
         string Name { get; }
 
         string Description { get; }
 
         ApplicationStatus Status { get; }
+
+        IApplication SetDescription(string description);
+
+        IApplication SetName(string name);
+
+        IApplication SetStatus(ApplicationStatus status);
+
+        Task<IAccount> CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

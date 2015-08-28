@@ -15,12 +15,13 @@
 // limitations under the License.
 // </remarks>
 
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Resource
 {
     public interface IExtendable
     {
-        Task<ICustomData> GetCustomDataAsync();
+        Task<ICustomData> GetCustomDataAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

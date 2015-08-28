@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Group;
@@ -60,12 +61,52 @@ namespace Stormpath.SDK.Tests.Fakes
             throw new NotImplementedException();
         }
 
-        public Task<Resource.ICustomData> GetCustomDataAsync()
+        public Task<bool> DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public Task SaveAsync()
+        public Task<IAccount> SaveAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICustomData> GetCustomDataAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAccount SetEmail(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAccount SetGivenName(string givenName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAccount SetMiddleName(string middleName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAccount SetPassword(string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAccount SetStatus(AccountStatus status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAccount SetSurname(string surname)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAccount SetUsername(string username)
         {
             throw new NotImplementedException();
         }

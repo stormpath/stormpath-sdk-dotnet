@@ -15,10 +15,14 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections;
+using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Directory
 {
@@ -36,12 +40,12 @@ namespace Stormpath.SDK.Impl.Directory
         private static readonly string StatusPropertyName = "status";
         private static readonly string TenantPropertyName = "tenant";
 
-        public DefaultDirectory(IDataStore dataStore)
+        public DefaultDirectory(IInternalDataStore dataStore)
             : base(dataStore)
         {
         }
 
-        public DefaultDirectory(IDataStore dataStore, Hashtable properties)
+        public DefaultDirectory(IInternalDataStore dataStore, Hashtable properties)
             : base(dataStore, properties)
         {
         }
@@ -67,5 +71,10 @@ namespace Stormpath.SDK.Impl.Directory
         DirectoryStatus IDirectory.Status => GetProperty<DirectoryStatus>(StatusPropertyName);
 
         internal LinkProperty Tenant => GetLinkProperty(TenantPropertyName);
+
+        Task<IDirectory> ISaveable<IDirectory>.SaveAsync(CancellationToken cancellationToken)
+        {
+            return GetInternalDataStore().SaveAsync<IDirectory>(this, cancellationToken);
+        }
     }
 }

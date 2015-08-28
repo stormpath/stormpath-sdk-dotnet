@@ -26,6 +26,7 @@ using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
+using System.Threading;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
@@ -41,23 +42,31 @@ namespace Stormpath.SDK.Impl.Tenant
         private static readonly string NamePropertyName = "name";
         private static readonly string OrganizationsPropertyName = "organizations";
 
-        public DefaultTenant(IDataStore dataStore)
+        public DefaultTenant(IInternalDataStore dataStore)
             : base(dataStore)
         {
         }
 
-        public DefaultTenant(IDataStore dataStore, Hashtable properties)
+        public DefaultTenant(IInternalDataStore dataStore, Hashtable properties)
              : base(dataStore, properties)
         {
         }
+
+        private ITenant This => this;
 
         internal LinkProperty Accounts => GetLinkProperty(AccountsPropertyName);
 
         internal LinkProperty Agents => GetLinkProperty(AgentsPropertyName);
 
+        internal string ApplicationResourceBase = "applications";
+
         internal LinkProperty Applications => GetLinkProperty(ApplicationsPropertyName);
 
+        internal string DirectoriesResourceBase = "directories";
+
         internal LinkProperty Directories => GetLinkProperty(DirectoriesPropertyName);
+
+        internal string GroupsResourceBase = "groups";
 
         internal LinkProperty Groups => GetLinkProperty(GroupsPropertyName);
 
@@ -69,44 +78,52 @@ namespace Stormpath.SDK.Impl.Tenant
 
         internal LinkProperty Organizations => GetLinkProperty(OrganizationsPropertyName);
 
-        Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application)
+        Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return GetInternalDataStore().CreateAsync(ApplicationResourceBase, application, cancellationToken);
         }
 
-        Task<IApplication> ITenantActions.CreateApplicationAsync(string name)
+        Task<IApplication> ITenantActions.CreateApplicationAsync(string name, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var application = new Application.DefaultApplication(GetInternalDataStore());
+            application.SetProperty("name", name); //todo
+
+            return This.CreateApplicationAsync(application, cancellationToken);
         }
 
         ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()
         {
-            return new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetDataStore());
+            return new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetInternalDataStore());
         }
 
-        Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory)
+        Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
         ICollectionResourceQueryable<IDirectory> ITenantActions.GetDirectories()
         {
-            return new CollectionResourceQueryable<IDirectory>(this.Directories.Href, this.GetDataStore());
+            return new CollectionResourceQueryable<IDirectory>(this.Directories.Href, this.GetInternalDataStore());
         }
 
-        Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token)
+        Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
         ICollectionResourceQueryable<IAccount> ITenantActions.GetAccounts()
         {
-            return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetDataStore());
+            return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
         }
 
         ICollectionResourceQueryable<IGroup> ITenantActions.GetGroups()
         {
-            return new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetDataStore());
+            return new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalDataStore());
+        }
+
+        Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -15,10 +15,15 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections;
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -40,12 +45,12 @@ namespace Stormpath.SDK.Impl.Application
         private static readonly string TenantPropertyName = "tenant";
         private static readonly string VerificationEmailsPropertyName = "verificationEmails";
 
-        public DefaultApplication(IDataStore dataStore)
+        public DefaultApplication(IInternalDataStore dataStore)
             : base(dataStore)
         {
         }
 
-        public DefaultApplication(IDataStore dataStore, Hashtable properties)
+        public DefaultApplication(IInternalDataStore dataStore, Hashtable properties)
             : base(dataStore, properties)
         {
         }
@@ -79,5 +84,50 @@ namespace Stormpath.SDK.Impl.Application
         internal LinkProperty Tenant => GetLinkProperty(TenantPropertyName);
 
         internal LinkProperty VerificationEmails => GetLinkProperty(VerificationEmailsPropertyName);
+
+        IApplication IApplication.SetDescription(string description)
+        {
+            if (string.IsNullOrEmpty(description))
+                throw new ArgumentNullException(nameof(description));
+
+            SetProperty(DescriptionPropertyName, description);
+            return this;
+        }
+
+        IApplication IApplication.SetName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+
+            SetProperty(NamePropertyName, name);
+            return this;
+        }
+
+        IApplication IApplication.SetStatus(ApplicationStatus status)
+        {
+            SetProperty(StatusPropertyName, status);
+            return this;
+        }
+
+        Task<IAccount> IApplication.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
+        {
+            var account = new Account.DefaultAccount(GetInternalDataStore());
+            account.SetProperty("givenName", givenName);
+            account.SetProperty("surname", surname);
+            account.SetProperty("email", email);
+            account.SetProperty("password", password);
+
+            return (GetInternalDataStore() as IInternalDataStore).CreateAsync<IAccount>(Accounts.Href, account, cancellationToken);
+        }
+
+        Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
+        {
+            return GetInternalDataStore().DeleteAsync(this, cancellationToken);
+        }
+
+        Task<IApplication> ISaveable<IApplication>.SaveAsync(CancellationToken cancellationToken)
+        {
+            return GetInternalDataStore().SaveAsync<IApplication>(this, cancellationToken);
+        }
     }
 }

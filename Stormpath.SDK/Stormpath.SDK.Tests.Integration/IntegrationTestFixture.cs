@@ -16,6 +16,12 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Shouldly;
+using Stormpath.SDK.Application;
+using Stormpath.SDK.Tests.Integration.Helpers;
+using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
@@ -23,22 +29,61 @@ namespace Stormpath.SDK.Tests.Integration
     {
         public IntegrationTestFixture()
         {
-            AddObjectsToTenant();
+            Assert.False(true, "Todo");
+
+            AddObjectsToTenantAsync()
+                .GetAwaiter().GetResult();
         }
+
+        public string TenantHref { get; private set; }
+
+        public string ApplicationHref { get; private set; }
+
+        public List<string> CreatedHrefs { get; private set; }
 
         public void Dispose()
         {
-            RemoveObjectsFromTenant();
+            RemoveObjectsFromTenantAsync()
+                .GetAwaiter().GetResult();
         }
 
-        private void AddObjectsToTenant()
+        private async Task AddObjectsToTenantAsync()
         {
-            // add stuff to tenant
+            var client = IntegrationTestClients.GetSAuthc1Client();
+
+            var tenant = await client.GetCurrentTenantAsync();
+            TenantHref = tenant.Href;
+
+            //// Create application
+            //try
+            //{
+            //    //var application = await tenant.CreateApplicationAsync($".NET ITs {DateTimeOffset.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}");
+            //    ApplicationHref = application.Href;
+            //    if (string.IsNullOrEmpty(ApplicationHref))
+            //        throw new ApplicationException("Returned href is empty");
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new InvalidOperationException("Could not create application", e);
+            //}
         }
 
-        private void RemoveObjectsFromTenant()
+        private async Task RemoveObjectsFromTenantAsync()
         {
-            // clean everything up
+            var client = IntegrationTestClients.GetSAuthc1Client();
+
+            // Delete application
+            try
+            {
+                var application = await client.GetResourceAsync<IApplication>(ApplicationHref);
+                var deleteSuccessful = await application.DeleteAsync();
+                if (!deleteSuccessful)
+                    throw new ApplicationException("Delete result was false");
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException($"Could not delete application at {ApplicationHref}", e);
+            }
         }
     }
 }

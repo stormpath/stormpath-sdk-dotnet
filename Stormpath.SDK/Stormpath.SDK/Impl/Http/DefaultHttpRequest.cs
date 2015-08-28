@@ -20,28 +20,30 @@ using Stormpath.SDK.Impl.Http.Support;
 
 namespace Stormpath.SDK.Impl.Http
 {
-    internal sealed class DefaultHttpRequest : IHttpRequest
+    internal sealed class DefaultHttpRequest : HttpMessageBase, IHttpRequest
     {
         private readonly HttpMethod method;
         private readonly CanonicalUri canonicalUri;
         private readonly HttpHeaders headers;
         private readonly string body;
+        private readonly string bodyContentType;
 
         // Copy constructor
         public DefaultHttpRequest(IHttpRequest existingRequest, Uri overrideUri = null)
         {
             this.body = existingRequest.Body;
+            this.bodyContentType = existingRequest.BodyContentType;
             this.headers = new HttpHeaders(existingRequest.Headers);
             this.method = HttpMethod.Parse(existingRequest.Method);
             this.canonicalUri = new CanonicalUri(existingRequest.CanonicalUri, overrideResourcePath: overrideUri);
         }
 
         public DefaultHttpRequest(HttpMethod method, CanonicalUri canonicalUri)
-            : this(method, canonicalUri, null, null, string.Empty)
+            : this(method, canonicalUri, null, null, null, null)
         {
         }
 
-        public DefaultHttpRequest(HttpMethod method, CanonicalUri canonicalUri, QueryString queryParams, HttpHeaders headers, string body)
+        public DefaultHttpRequest(HttpMethod method, CanonicalUri canonicalUri, QueryString queryParams, HttpHeaders headers, string body, string bodyContentType)
         {
             this.method = method;
             this.canonicalUri = canonicalUri;
@@ -58,13 +60,14 @@ namespace Stormpath.SDK.Impl.Http
                 this.headers = new HttpHeaders();
 
             this.body = body;
+            this.bodyContentType = bodyContentType;
         }
 
-        public string Body => body;
+        public override string Body => body;
 
-        public bool HasBody => !string.IsNullOrEmpty(body);
+        public override string BodyContentType => bodyContentType;
 
-        public HttpHeaders Headers => headers;
+        public override HttpHeaders Headers => headers;
 
         public HttpMethod Method => method;
 

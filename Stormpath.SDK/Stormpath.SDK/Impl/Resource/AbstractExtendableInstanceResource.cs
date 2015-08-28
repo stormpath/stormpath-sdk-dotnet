@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
@@ -27,19 +28,19 @@ namespace Stormpath.SDK.Impl.Resource
     {
         private static readonly string CustomDataPropertyName = "customData";
 
-        protected AbstractExtendableInstanceResource(IDataStore dataStore)
+        protected AbstractExtendableInstanceResource(IInternalDataStore dataStore)
             : base(dataStore)
         {
         }
 
-        protected AbstractExtendableInstanceResource(IDataStore dataStore, Hashtable properties)
+        protected AbstractExtendableInstanceResource(IInternalDataStore dataStore, Hashtable properties)
             : base(dataStore, properties)
         {
         }
 
         internal LinkProperty CustomData => GetProperty<LinkProperty>(CustomDataPropertyName);
 
-        Task<ICustomData> IExtendable.GetCustomDataAsync()
+        Task<ICustomData> IExtendable.GetCustomDataAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

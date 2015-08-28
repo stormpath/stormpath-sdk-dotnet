@@ -24,5 +24,7 @@ namespace Stormpath.SDK.Impl.Http
         bool HasBody { get; }
 
         string Body { get; }
+
+        string BodyContentType { get; }
     }
 }

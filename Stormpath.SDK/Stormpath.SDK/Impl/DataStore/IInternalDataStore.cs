@@ -15,7 +15,10 @@
 // limitations under the License.
 // </remarks>
 
+using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -24,5 +27,14 @@ namespace Stormpath.SDK.Impl.DataStore
         IRequestExecutor RequestExecutor { get; }
 
         string BaseUrl { get; }
+
+        Task<T> CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
+            where T : IResource;
+
+        Task<T> SaveAsync<T>(T resource, CancellationToken cancellationToken)
+            where T : IResource, ISaveable<T>;
+
+        Task<bool> DeleteAsync<T>(T resource, CancellationToken cancellationToken)
+            where T : IResource, IDeletable;
     }
 }

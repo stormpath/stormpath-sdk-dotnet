@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultResourceDeconstructor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="RandomEmail.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,17 +15,32 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.Resource;
-
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Tests.Integration.Helpers
 {
-    internal sealed class DefaultResourceDeconstructor : IResourceDeconstructor
+    public class RandomEmail
     {
-        Dictionary<string, object> IResourceDeconstructor.ToMap(AbstractResource resource)
+        private readonly string domain;
+        private readonly string generated;
+
+        public RandomEmail(string at)
         {
-            throw new NotImplementedException();
+            this.domain = at;
+            this.generated = Generate();
+        }
+
+        public static implicit operator string(RandomEmail obj)
+        {
+            return obj.ToString();
+        }
+
+        public override string ToString()
+        {
+            return generated;
+        }
+
+        private string Generate()
+        {
+            return $"{RandomString.Create()}@{domain}";
         }
     }
 }

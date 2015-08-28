@@ -1,4 +1,4 @@
-﻿// <copyright file="IDeletable.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IResourceConverter.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,13 +15,13 @@
 // limitations under the License.
 // </remarks>
 
-using System.Threading;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using Stormpath.SDK.Impl.Resource;
 
-namespace Stormpath.SDK.Resource
+namespace Stormpath.SDK.Impl.DataStore
 {
-    public interface IDeletable
+    internal interface IResourceConverter
     {
-        Task<bool> DeleteAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Dictionary<string, object> ToMap(AbstractResource resource, bool partialUpdate);
     }
 }

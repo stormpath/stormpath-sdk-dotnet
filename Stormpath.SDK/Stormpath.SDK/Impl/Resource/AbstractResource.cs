@@ -17,6 +17,8 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
 
@@ -28,13 +30,13 @@ namespace Stormpath.SDK.Impl.Resource
 
         private readonly object writeLock = new object();
 
-        private readonly IDataStore dataStore;
+        private readonly IInternalDataStore dataStore;
         private readonly Hashtable properties;
         private readonly Hashtable dirtyProperties;
 
         private bool isDirty = false;
 
-        public AbstractResource(IDataStore dataStore)
+        public AbstractResource(IInternalDataStore dataStore)
         {
             this.dataStore = dataStore;
 
@@ -42,7 +44,7 @@ namespace Stormpath.SDK.Impl.Resource
             dirtyProperties = new Hashtable();
         }
 
-        public AbstractResource(IDataStore dataStore, Hashtable properties)
+        public AbstractResource(IInternalDataStore dataStore, Hashtable properties)
         {
             this.dataStore = dataStore;
 
@@ -52,7 +54,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         string IResource.Href => GetProperty<string>(HrefPropertyName);
 
-        protected IDataStore GetDataStore() => dataStore;
+        protected IInternalDataStore GetInternalDataStore() => dataStore;
 
         public LinkProperty GetLinkProperty(string name)
         {
@@ -79,13 +81,16 @@ namespace Stormpath.SDK.Impl.Resource
 
         public void SetProperty<T>(string name, T value)
         {
-            SetProperty(name, value);
+            SetProperty(name, (object)value);
         }
 
         public void SetProperty(string name, object value)
         {
             lock (writeLock)
             {
+                if (!properties.ContainsKey(name))
+                    properties.Add(name, value);
+
                 dirtyProperties[name] = value;
                 isDirty = true;
             }
@@ -109,6 +114,20 @@ namespace Stormpath.SDK.Impl.Resource
             {
                 throw new ApplicationException("Could not load properties into resource item.", e);
             }
+        }
+
+        public List<string> GetPropertyNames()
+        {
+            return this.properties.Keys
+                .OfType<string>()
+                .ToList();
+        }
+
+        public List<string> GetUpdatedPropertyNames()
+        {
+            return this.dirtyProperties.Keys
+                .OfType<string>()
+                .ToList();
         }
     }
 }

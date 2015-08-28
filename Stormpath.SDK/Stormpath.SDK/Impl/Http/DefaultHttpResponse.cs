@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using Stormpath.SDK.Impl.Extensions;
 
 namespace Stormpath.SDK.Impl.Http
@@ -24,15 +25,19 @@ namespace Stormpath.SDK.Impl.Http
         private readonly int httpStatus;
         private readonly HttpHeaders headers;
         private readonly string body;
+        private readonly string bodyContentType;
 
-        public DefaultHttpResponse(int httpStatus, HttpHeaders headers, string body)
+        public DefaultHttpResponse(int httpStatus, HttpHeaders headers, string body, string bodyContentType)
         {
             this.httpStatus = httpStatus;
             this.headers = headers;
-            this.body = body.Nullable() ?? string.Empty;
+            this.body = body;
+            this.bodyContentType = bodyContentType;
         }
 
         public override string Body => body;
+
+        public override string BodyContentType => bodyContentType;
 
         public override HttpHeaders Headers => headers;
 

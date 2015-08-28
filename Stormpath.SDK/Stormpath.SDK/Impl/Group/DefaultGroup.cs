@@ -15,10 +15,14 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections;
+using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Group
 {
@@ -33,12 +37,12 @@ namespace Stormpath.SDK.Impl.Group
         private static readonly string StatusPropertyName = "status";
         private static readonly string TenantPropertyName = "tenant";
 
-        public DefaultGroup(IDataStore dataStore)
+        public DefaultGroup(IInternalDataStore dataStore)
             : base(dataStore)
         {
         }
 
-        public DefaultGroup(IDataStore dataStore, Hashtable properties)
+        public DefaultGroup(IInternalDataStore dataStore, Hashtable properties)
             : base(dataStore, properties)
         {
         }
@@ -58,5 +62,10 @@ namespace Stormpath.SDK.Impl.Group
         GroupStatus IGroup.Status => GetProperty<GroupStatus>(StatusPropertyName);
 
         internal LinkProperty Tenant => GetLinkProperty(TenantPropertyName);
+
+        Task<IGroup> ISaveable<IGroup>.SaveAsync(CancellationToken cancellationToken)
+        {
+            return GetInternalDataStore().SaveAsync<IGroup>(this, cancellationToken);
+        }
     }
 }

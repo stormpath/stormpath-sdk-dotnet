@@ -85,7 +85,7 @@
     <Compile Include="Group\GroupStatus.cs" />
     <Compile Include="Group\IGroup.cs" />
     <Compile Include="Impl\Application\DefaultApplication.cs" />
-    <Compile Include="Impl\DataStore\DefaultResourceDeconstructor.cs" />
+    <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\ConverterResult.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\DefaultFieldConverters.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\FieldConverter.cs" />
@@ -93,7 +93,7 @@
     <Compile Include="Impl\DataStore\IDataStore.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\DataStore\IMapSerializer.cs" />
-    <Compile Include="Impl\DataStore\IResourceDeconstructor.cs" />
+    <Compile Include="Impl\DataStore\IResourceConverter.cs" />
     <Compile Include="Impl\Directory\DefaultDirectory.cs" />
     <Compile Include="Impl\Error\DefaultError.cs" />
     <Compile Include="Impl\Extensions\UriExtensions.cs" />
@@ -114,8 +114,8 @@
     <Compile Include="Impl\Http\Support\UriQualifier.cs" />
     <Compile Include="Impl\Http\UserAgentBuilder.cs" />
     <Compile Include="Impl\Http\IRequestExecutor.cs" />
-    <Compile Include="Impl\DataStore\IResourceConstructor.cs" />
-    <Compile Include="Impl\DataStore\DefaultResourceConstructor.cs" />
+    <Compile Include="Impl\DataStore\IResourceFactory.cs" />
+    <Compile Include="Impl\DataStore\DefaultResourceFactory.cs" />
     <Compile Include="Impl\Account\DefaultAccount.cs" />
     <Compile Include="Impl\Api\DefaultClientApiKey.cs" />
     <Compile Include="Impl\Api\DefaultClientApiKeyBuilder.cs" />
@@ -197,6 +197,7 @@
     <Compile Include="Resource\IResource.cs" />
     <Compile Include="Tenant\ITenant.cs" />
     <Compile Include="Tenant\ITenantActions.cs" />
+    <Compile Include="Tenant\TenantActionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

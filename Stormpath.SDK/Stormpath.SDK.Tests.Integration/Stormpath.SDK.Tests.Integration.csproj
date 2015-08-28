@@ -74,7 +74,12 @@
     <Compile Include="Account_tests.cs" />
     <Compile Include="Application_tests.cs" />
     <Compile Include="Helpers\IntegrationTestClients.cs" />
+    <Compile Include="Helpers\RandomPassword.cs" />
+    <Compile Include="Helpers\RandomEmail.cs" />
+    <Compile Include="Helpers\RandomPassword_tests.cs" />
+    <Compile Include="Helpers\RandomString.cs" />
     <Compile Include="IntegrationTestCollection.cs" />
+    <Compile Include="IntegrationTestData.cs" />
     <Compile Include="IntegrationTestFixture.cs" />
     <Compile Include="Directory_tests.cs" />
     <Compile Include="Error_tests.cs" />
