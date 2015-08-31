@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Impl.Utility
         {
             unchecked
             {
-                existingHash += hashCode * 31;
+                existingHash += this.hashCode * 31;
             }
 
             return new HashCode(existingHash);
@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Impl.Utility
             var h = obj != null ? obj.GetHashCode() : 0;
             unchecked
             {
-                h += hashCode * 31;
+                h += this.hashCode * 31;
             }
 
             return new HashCode(h);
@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Impl.Utility
 
         public override int GetHashCode()
         {
-            return hashCode;
+            return this.hashCode;
         }
     }
 }

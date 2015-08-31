@@ -43,9 +43,9 @@ namespace Stormpath.SDK.Impl.DataStore
 
         public JsonNetMapMarshaller()
         {
-            serializerSettings = new JsonSerializerSettings();
-            serializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
-            serializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+            this.serializerSettings = new JsonSerializerSettings();
+            this.serializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+            this.serializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
         }
 
         string IMapSerializer.Serialize(Dictionary<string, object> map)
@@ -57,8 +57,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Hashtable IMapSerializer.Deserialize(string json, Type type)
         {
-            var deserializedMap = (JObject)JsonConvert.DeserializeObject(json, serializerSettings);
-            var sanitizedMap = Sanitize(deserializedMap, type);
+            var deserializedMap = (JObject)JsonConvert.DeserializeObject(json, this.serializerSettings);
+            var sanitizedMap = this.Sanitize(deserializedMap, type);
 
             return sanitizedMap;
         }
@@ -84,7 +84,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     var nested = new List<Hashtable>();
                     foreach (var child in prop.Value.Children())
                     {
-                        nested.Add(Sanitize((JObject)child, type));
+                        nested.Add(this.Sanitize((JObject)child, type));
                     }
 
                     value = nested;

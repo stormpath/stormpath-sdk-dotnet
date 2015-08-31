@@ -22,7 +22,6 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Reviewed")]
     internal abstract class AbstractInstanceResource : AbstractResource, IAuditable // TODO ISaveable
     {
         protected static readonly string CreatedAtPropertyName = "createdAt";

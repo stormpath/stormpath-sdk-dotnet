@@ -22,7 +22,6 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Reviewed.")]
     internal static class DefaultFieldConverters
     {
         public static readonly FieldConverter LinkPropertyConverter =

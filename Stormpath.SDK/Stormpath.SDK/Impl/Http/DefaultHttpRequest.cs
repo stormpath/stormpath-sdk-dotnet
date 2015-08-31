@@ -63,14 +63,14 @@ namespace Stormpath.SDK.Impl.Http
             this.bodyContentType = bodyContentType;
         }
 
-        public override string Body => body;
+        public override string Body => this.body;
 
-        public override string BodyContentType => bodyContentType;
+        public override string BodyContentType => this.bodyContentType;
 
-        public override HttpHeaders Headers => headers;
+        public override HttpHeaders Headers => this.headers;
 
-        public HttpMethod Method => method;
+        public HttpMethod Method => this.method;
 
-        public CanonicalUri CanonicalUri => canonicalUri;
+        public CanonicalUri CanonicalUri => this.canonicalUri;
     }
 }

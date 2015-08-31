@@ -30,14 +30,14 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = Harness.Queryable.Where(x => true);
-                query.GeneratedArgumentsWere(Href, "<not evaluated>");
+                var query = this.Harness.Queryable.Where(x => true);
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
             });
 
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = Harness.Queryable.Where(x => false);
-                query.GeneratedArgumentsWere(Href, "<not evaluated>");
+                var query = this.Harness.Queryable.Where(x => false);
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
             });
         }
 
@@ -46,8 +46,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = Harness.Queryable.Where(x => x.Email != "foo");
-                query.GeneratedArgumentsWere(Href, "<not evaluated>");
+                var query = this.Harness.Queryable.Where(x => x.Email != "foo");
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
             });
         }
 
@@ -56,14 +56,14 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = Harness.Queryable.Where(x => x.Email.Equals("bar", StringComparison.CurrentCulture));
-                query.GeneratedArgumentsWere(Href, "<not evaluated>");
+                var query = this.Harness.Queryable.Where(x => x.Email.Equals("bar", StringComparison.CurrentCulture));
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
             });
 
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = Harness.Queryable.Where(x => x.Email.StartsWith("foo", StringComparison.OrdinalIgnoreCase));
-                query.GeneratedArgumentsWere(Href, "<not evaluated>");
+                var query = this.Harness.Queryable.Where(x => x.Email.StartsWith("foo", StringComparison.OrdinalIgnoreCase));
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
             });
         }
 
@@ -72,8 +72,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = Harness.Queryable.Where(x => x.Email.ToUpper() == "FOO");
-                query.GeneratedArgumentsWere(Href, "<not evaluated>");
+                var query = this.Harness.Queryable.Where(x => x.Email.ToUpper() == "FOO");
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
             });
         }
 
@@ -82,113 +82,113 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = Harness.Queryable.Where(x => x.Email == "foo" || x.Email == "bar");
-                query.GeneratedArgumentsWere(Href, "<not evaluated>");
+                var query = this.Harness.Queryable.Where(x => x.Email == "foo" || x.Email == "bar");
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
             });
         }
 
         [Fact]
         public void Where_attribute_equals()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Where(x => x.Email == "tk421@deathstar.co");
 
-            query.GeneratedArgumentsWere(Href, "email=tk421@deathstar.co");
+            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co");
         }
 
         [Fact]
         public void Where_attribute_equals_using_helper_method()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Where(x => x.Email.Equals("tk421@deathstar.co"));
 
-            query.GeneratedArgumentsWere(Href, "email=tk421@deathstar.co");
+            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co");
         }
 
         [Fact]
         public void Where_attribute_starts_with()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Where(x => x.Email.StartsWith("tk421"));
 
-            query.GeneratedArgumentsWere(Href, "email=tk421*");
+            query.GeneratedArgumentsWere(this.Href, "email=tk421*");
         }
 
         [Fact]
         public void Where_attribute_ends_with()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Where(x => x.Email.EndsWith("deathstar.co"));
 
-            query.GeneratedArgumentsWere(Href, "email=*deathstar.co");
+            query.GeneratedArgumentsWere(this.Href, "email=*deathstar.co");
         }
 
         [Fact]
         public void Where_attribute_contains()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Where(x => x.Email.Contains("421"));
 
-            query.GeneratedArgumentsWere(Href, "email=*421*");
+            query.GeneratedArgumentsWere(this.Href, "email=*421*");
         }
 
         [Fact]
         public void Where_multiple_attributes_with_and()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Where(x => x.Email == "tk421@deathstar.co" && x.Username == "tk421");
 
-            query.GeneratedArgumentsWere(Href, "email=tk421@deathstar.co&username=tk421");
+            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co&username=tk421");
         }
 
         [Fact]
         public void Where_multiple_wheres()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Where(x => x.Email == "tk421@deathstar.co")
                 .Where(x => x.Username.StartsWith("tk421"));
 
-            query.GeneratedArgumentsWere(Href, "email=tk421@deathstar.co&username=tk421*");
+            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co&username=tk421*");
         }
 
         [Fact]
         public void Where_date_attribute_greater_than()
         {
             var testDate = new DateTimeOffset(2015, 01, 01, 06, 00, 00, TimeSpan.Zero);
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Where(x => x.CreatedAt > testDate);
 
-            query.GeneratedArgumentsWere(Href, "createdAt=(2015-01-01T06:00:00Z,]");
+            query.GeneratedArgumentsWere(this.Href, "createdAt=(2015-01-01T06:00:00Z,]");
         }
 
         [Fact]
         public void Where_date_attribute_greater_than_or_equalto()
         {
             var testDate = new DateTimeOffset(2015, 01, 01, 06, 00, 00, TimeSpan.Zero);
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Where(x => x.CreatedAt >= testDate);
 
-            query.GeneratedArgumentsWere(Href, "createdAt=[2015-01-01T06:00:00Z,]");
+            query.GeneratedArgumentsWere(this.Href, "createdAt=[2015-01-01T06:00:00Z,]");
         }
 
         [Fact]
         public void Where_date_attribute_less_than()
         {
             var testDate = new DateTimeOffset(2016, 01, 01, 12, 00, 00, TimeSpan.Zero);
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Where(x => x.ModifiedAt < testDate);
 
-            query.GeneratedArgumentsWere(Href, "modifiedAt=[,2016-01-01T12:00:00Z)");
+            query.GeneratedArgumentsWere(this.Href, "modifiedAt=[,2016-01-01T12:00:00Z)");
         }
 
         [Fact]
         public void Where_date_attribute_less_than_or_equalto()
         {
             var testDate = new DateTimeOffset(2016, 01, 01, 12, 00, 00, TimeSpan.Zero);
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Where(x => x.ModifiedAt <= testDate);
 
-            query.GeneratedArgumentsWere(Href, "modifiedAt=[,2016-01-01T12:00:00Z]");
+            query.GeneratedArgumentsWere(this.Href, "modifiedAt=[,2016-01-01T12:00:00Z]");
         }
 
         [Fact]
@@ -196,10 +196,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var testStartDate = new DateTimeOffset(2015, 01, 01, 00, 00, 00, TimeSpan.Zero);
             var testEndDate = new DateTimeOffset(2015, 12, 31, 23, 59, 59, TimeSpan.Zero);
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Where(x => x.CreatedAt > testStartDate && x.CreatedAt <= testEndDate);
 
-            query.GeneratedArgumentsWere(Href, "createdAt=(2015-01-01T00:00:00Z,2015-12-31T23:59:59Z]");
+            query.GeneratedArgumentsWere(this.Href, "createdAt=(2015-01-01T00:00:00Z,2015-12-31T23:59:59Z]");
         }
     }
 }

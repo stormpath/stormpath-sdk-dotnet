@@ -85,16 +85,15 @@ namespace Stormpath.SDK.Impl.Resource
             return new CollectionResourceQueryExecutor(href, dataStore);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements must appear in the correct order", Justification = "Grouping internal methods above")]
         int ICollectionResourceQueryable<T>.Offset
         {
             get
             {
-                bool atLeastOnePageRetrieved = totalItemsRetrieved > 0;
+                bool atLeastOnePageRetrieved = this.totalItemsRetrieved > 0;
                 if (!atLeastOnePageRetrieved)
                     throw new InvalidOperationException("Call MoveNextAsync() first to retrieve the collection.");
 
-                return currentOffset;
+                return this.currentOffset;
             }
         }
 
@@ -102,11 +101,11 @@ namespace Stormpath.SDK.Impl.Resource
         {
             get
             {
-                bool atLeastOnePageRetrieved = totalItemsRetrieved > 0;
+                bool atLeastOnePageRetrieved = this.totalItemsRetrieved > 0;
                 if (!atLeastOnePageRetrieved)
                     throw new InvalidOperationException("Call MoveNextAsync() first to retrieve the collection.");
 
-                return currentLimit;
+                return this.currentLimit;
             }
         }
 
@@ -114,11 +113,11 @@ namespace Stormpath.SDK.Impl.Resource
         {
             get
             {
-                bool atLeastOnePageRetrieved = totalItemsRetrieved > 0;
+                bool atLeastOnePageRetrieved = this.totalItemsRetrieved > 0;
                 if (!atLeastOnePageRetrieved)
                     throw new InvalidOperationException("Call MoveNextAsync() first to retrieve the collection.");
 
-                return currentSize;
+                return this.currentSize;
             }
         }
 
@@ -126,11 +125,11 @@ namespace Stormpath.SDK.Impl.Resource
         {
             get
             {
-                bool atLeastOnePageRetrieved = totalItemsRetrieved > 0;
+                bool atLeastOnePageRetrieved = this.totalItemsRetrieved > 0;
                 if (!atLeastOnePageRetrieved)
                     throw new InvalidOperationException("Call MoveNextAsync() first to retrieve the collection.");
 
-                return currentItems; // TODO ?? Enumerable.Empty<T> ?
+                return this.currentItems; // TODO ?? Enumerable.Empty<T> ?
             }
         }
 
@@ -138,7 +137,7 @@ namespace Stormpath.SDK.Impl.Resource
         {
             get
             {
-                return GenerateRequestUrlFromModel();
+                return this.GenerateRequestUrlFromModel();
             }
         }
 
@@ -146,18 +145,18 @@ namespace Stormpath.SDK.Impl.Resource
         {
             if (this.compiledModel == null)
             {
-                if (!CompileExpressionToRequestModel())
+                if (!this.CompileExpressionToRequestModel())
                 {
                     // Use default model values
                     this.compiledModel = new CollectionResourceRequestModel();
                 }
             }
 
-            bool retrievedEnoughItems = totalItemsRetrieved >= compiledModel.ExecutionPlan.MaxItems;
+            bool retrievedEnoughItems = this.totalItemsRetrieved >= this.compiledModel.ExecutionPlan.MaxItems;
             if (retrievedEnoughItems)
                 return false;
 
-            bool atLeastOnePageRetrieved = totalItemsRetrieved > 0;
+            bool atLeastOnePageRetrieved = this.totalItemsRetrieved > 0;
             if (atLeastOnePageRetrieved)
             {
                 if (!this.compiledModel.Offset.HasValue)
@@ -165,8 +164,8 @@ namespace Stormpath.SDK.Impl.Resource
                 this.compiledModel.Offset += this.currentItems.Count();
             }
 
-            var url = GenerateRequestUrlFromModel();
-            var result = await dataStore.GetCollectionAsync<T>(url, cancellationToken).ConfigureAwait(false);
+            var url = this.GenerateRequestUrlFromModel();
+            var result = await this.dataStore.GetCollectionAsync<T>(url, cancellationToken).ConfigureAwait(false);
 
             bool anyNewItems = result?.Items?.Any() ?? false;
             if (!anyNewItems)
@@ -202,14 +201,14 @@ namespace Stormpath.SDK.Impl.Resource
         private string GenerateRequestUrlFromModel()
         {
             if (this.compiledModel == null)
-                CompileExpressionToRequestModel();
+                this.CompileExpressionToRequestModel();
 
             var argumentList = CollectionResourceRequestModelCompiler.GetArguments(this.compiledModel);
             if (!argumentList.Any())
-                return baseHref;
+                return this.baseHref;
 
             var arguments = string.Join("&", argumentList);
-            return $"{baseHref}?{arguments}";
+            return $"{this.baseHref}?{arguments}";
         }
     }
 }

@@ -36,6 +36,7 @@
     <CodeAnalysisRuleSet>Stormpath.SDK.Tests.Integration.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Shouldly, Version=2.5.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
       <HintPath>..\packages\Shouldly.2.5.0\lib\net40\Shouldly.dll</HintPath>
       <Private>True</Private>
@@ -73,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Account_tests.cs" />
     <Compile Include="Application_tests.cs" />
+    <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\IntegrationTestClients.cs" />
     <Compile Include="Helpers\RandomPassword.cs" />
     <Compile Include="Helpers\RandomEmail.cs" />

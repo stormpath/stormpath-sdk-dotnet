@@ -31,7 +31,6 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "Reviewed.")]
     internal sealed class DefaultClient : IClient
     {
         internal const int DefaultConnectionTimeout = 20 * 1000;
@@ -68,7 +67,7 @@ namespace Stormpath.SDK.Impl.Client
 
         private IClient This => this;
 
-        private string CurrentTenantHref => currentTenantHref.Nullable() ?? "tenants/current";
+        private string CurrentTenantHref => this.currentTenantHref.Nullable() ?? "tenants/current";
 
         AuthenticationScheme IClient.AuthenticationScheme
         {
@@ -87,12 +86,12 @@ namespace Stormpath.SDK.Impl.Client
 
         T IClient.Instantiate<T>()
         {
-            return dataStore.Instantiate<T>();
+            return this.dataStore.Instantiate<T>();
         }
 
         async Task<ITenant> IClient.GetCurrentTenantAsync(CancellationToken cancellationToken)
         {
-            var tenant = await dataStore
+            var tenant = await this.dataStore
                 .GetResourceAsync<ITenant>(this.CurrentTenantHref, cancellationToken)
                 .ConfigureAwait(false);
 
@@ -104,74 +103,70 @@ namespace Stormpath.SDK.Impl.Client
 
         Task<T> IClient.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
         {
-            return dataStore.GetResourceAsync<T>(href);
+            return this.dataStore.GetResourceAsync<T>(href);
         }
-
-        #region ITenantActions (pass-through to Tenant)
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, CancellationToken cancellationToken)
         {
-            var tenant = await This.GetCurrentTenantAsync().ConfigureAwait(false);
+            var tenant = await this.This.GetCurrentTenantAsync().ConfigureAwait(false);
 
             return await tenant.CreateApplicationAsync(application).ConfigureAwait(false);
         }
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(string name, CancellationToken cancellationToken)
         {
-            var tenant = await This.GetCurrentTenantAsync().ConfigureAwait(false);
+            var tenant = await this.This.GetCurrentTenantAsync().ConfigureAwait(false);
 
             return await tenant.CreateApplicationAsync(name).ConfigureAwait(false);
         }
 
         ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()
         {
-            var tenant = This.GetCurrentTenantAsync().Result;
+            var tenant = this.This.GetCurrentTenantAsync().Result;
 
             return tenant.GetApplications();
         }
 
         async Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken)
         {
-            var tenant = await This.GetCurrentTenantAsync().ConfigureAwait(false);
+            var tenant = await this.This.GetCurrentTenantAsync().ConfigureAwait(false);
 
             return await tenant.CreateDirectoryAsync(directory).ConfigureAwait(false);
         }
 
         async Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, CancellationToken cancellationToken)
         {
-            var tenant = await This.GetCurrentTenantAsync().ConfigureAwait(false);
+            var tenant = await this.This.GetCurrentTenantAsync().ConfigureAwait(false);
 
             return await tenant.CreateDirectoryAsync(name, cancellationToken).ConfigureAwait(false);
         }
 
         ICollectionResourceQueryable<IDirectory> ITenantActions.GetDirectories()
         {
-            var tenant = This.GetCurrentTenantAsync().Result;
+            var tenant = this.This.GetCurrentTenantAsync().Result;
 
             return tenant.GetDirectories();
         }
 
         async Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
         {
-            var tenant = await This.GetCurrentTenantAsync().ConfigureAwait(false);
+            var tenant = await this.This.GetCurrentTenantAsync().ConfigureAwait(false);
 
             return await tenant.VerifyAccountEmailAsync(token).ConfigureAwait(false);
         }
 
         ICollectionResourceQueryable<IAccount> ITenantActions.GetAccounts()
         {
-            var tenant = This.GetCurrentTenantAsync().Result;
+            var tenant = this.This.GetCurrentTenantAsync().Result;
 
             return tenant.GetAccounts();
         }
 
         ICollectionResourceQueryable<IGroup> ITenantActions.GetGroups()
         {
-            var tenant = This.GetCurrentTenantAsync().Result;
+            var tenant = this.This.GetCurrentTenantAsync().Result;
 
             return tenant.GetGroups();
         }
-
-        #endregion
     }
 }

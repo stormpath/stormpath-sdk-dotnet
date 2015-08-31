@@ -22,10 +22,9 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Utility
 {
-    // Adapted from an example at http://www.mechonomics.com/generic-value-object-equality-updated/
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements must appear in the correct order", Justification = "Reviewed.")]
     public class ImmutableValueObject_tests
     {
+        // Adapted from an example at http://www.mechonomics.com/generic-value-object-equality-updated/
         private class Address : ImmutableValueObject<Address>
         {
             private readonly string address1;
@@ -39,11 +38,11 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                 this.state = state;
             }
 
-            public string Address1 => address1;
+            public string Address1 => this.address1;
 
-            public string City => city;
+            public string City => this.city;
 
-            public string State => state;
+            public string State => this.state;
         }
 
         private class ExpandedAddress : Address
@@ -56,7 +55,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                 this.address2 = address2;
             }
 
-            public string Address2 => address2;
+            public string Address2 => this.address2;
         }
 
         private class CaseInsensitiveAddress : ImmutableValueObject<CaseInsensitiveAddress>
@@ -81,11 +80,11 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                 this.state = state;
             }
 
-            public string Address1 => address1;
+            public string Address1 => this.address1;
 
-            public string City => city;
+            public string City => this.city;
 
-            public string State => state;
+            public string State => this.state;
         }
 
         public class Default_comparer_tests

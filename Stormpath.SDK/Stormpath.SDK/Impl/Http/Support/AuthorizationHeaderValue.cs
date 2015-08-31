@@ -41,13 +41,13 @@ namespace Stormpath.SDK.Impl.Http.Support
             this.parameter = segments[1];
         }
 
-        public string Scheme => scheme;
+        public string Scheme => this.scheme;
 
-        public string Parameter => parameter;
+        public string Parameter => this.parameter;
 
         public override string ToString()
         {
-            return $"{scheme} {parameter}";
+            return $"{this.scheme} {this.parameter}";
         }
     }
 }

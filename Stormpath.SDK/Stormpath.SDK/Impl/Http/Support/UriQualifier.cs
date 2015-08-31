@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Impl.Http.Support
             if (IsFullyQualified(href))
                 return href;
 
-            var fullyQualified = new StringBuilder(baseUrl);
+            var fullyQualified = new StringBuilder(this.baseUrl);
             if (!href.StartsWith("/"))
                 fullyQualified.Append("/");
 

@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Impl.Http.Authentication
         {
             var now = DateTimeOffset.UtcNow;
             var nonce = Guid.NewGuid().ToString();
-            AuthenticateCore(request, apiKey, now, nonce);
+            this.AuthenticateCore(request, apiKey, now, nonce);
         }
 
         internal void AuthenticateCore(IHttpRequest request, IClientApiKey apiKey, DateTimeOffset now, string nonce)

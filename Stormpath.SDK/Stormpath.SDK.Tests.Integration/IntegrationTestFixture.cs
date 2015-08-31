@@ -17,9 +17,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
@@ -27,63 +30,110 @@ namespace Stormpath.SDK.Tests.Integration
 {
     public class IntegrationTestFixture : IDisposable
     {
+        private ITenant tenant;
+        private IApplication application;
+
         public IntegrationTestFixture()
         {
-            Assert.False(true, "Todo");
-
-            AddObjectsToTenantAsync()
+            this.AddObjectsToTenantAsync()
                 .GetAwaiter().GetResult();
         }
 
-        public string TenantHref { get; private set; }
+        public ITenant Tenant
+        {
+            get
+            {
+                return this.tenant;
+            }
+        }
 
-        public string ApplicationHref { get; private set; }
-
-        public List<string> CreatedHrefs { get; private set; }
+        public IApplication Application
+        {
+            get
+            {
+                return this.application;
+            }
+        }
 
         public void Dispose()
         {
-            RemoveObjectsFromTenantAsync()
+            this.RemoveObjectsFromTenantAsync()
                 .GetAwaiter().GetResult();
         }
 
         private async Task AddObjectsToTenantAsync()
         {
+            // Get client and tenant
             var client = IntegrationTestClients.GetSAuthc1Client();
 
             var tenant = await client.GetCurrentTenantAsync();
-            TenantHref = tenant.Href;
+            tenant.ShouldNotBe(null);
+            tenant.Href.ShouldNotBeNullOrEmpty();
+            this.tenant = tenant;
 
-            //// Create application
-            //try
-            //{
-            //    //var application = await tenant.CreateApplicationAsync($".NET ITs {DateTimeOffset.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}");
-            //    ApplicationHref = application.Href;
-            //    if (string.IsNullOrEmpty(ApplicationHref))
-            //        throw new ApplicationException("Returned href is empty");
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new InvalidOperationException("Could not create application", e);
-            //}
+            // Create application
+            try
+            {
+                var application = IntegrationTestData.GetTestApplication(client);
+                var createResult = await tenant.CreateApplicationAsync(application);
+                createResult.ShouldNotBe(null);
+                createResult.Href.ShouldNotBeNullOrEmpty();
+
+                this.application = createResult;
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException("Could not create application", e);
+            }
+
+            // Create accounts
+            try
+            {
+                var accountsToCreate = IntegrationTestData.GetTestAccounts(client);
+
+                var accountCreationTasks = accountsToCreate.Select(acct =>
+                    this.Application.CreateAccountAsync(acct));
+
+                await Task.WhenAll(accountCreationTasks);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException("Could not create account", e);
+            }
         }
 
         private async Task RemoveObjectsFromTenantAsync()
         {
-            var client = IntegrationTestClients.GetSAuthc1Client();
-
-            // Delete application
+            // Delete accounts
+            bool accountDeletesSuccessful = false;
             try
             {
-                var application = await client.GetResourceAsync<IApplication>(ApplicationHref);
-                var deleteSuccessful = await application.DeleteAsync();
-                if (!deleteSuccessful)
-                    throw new ApplicationException("Delete result was false");
+                var allAccounts = await this.Tenant.GetAccounts().ToListAsync();
+                var accountDeleteTasks = allAccounts.Select(acct => acct.DeleteAsync());
+
+                accountDeletesSuccessful =
+                    (await Task.WhenAll(accountDeleteTasks))
+                    .All(result => result == true);
             }
             catch (Exception e)
             {
-                throw new InvalidOperationException($"Could not delete application at {ApplicationHref}", e);
+                throw new ApplicationException("Error deleting account", e);
             }
+
+            accountDeletesSuccessful.ShouldBe(true, "At least one account delete result was false");
+
+            // Delete application
+            bool deleteApplicationSuccessful = false;
+            try
+            {
+                deleteApplicationSuccessful = await this.Application.DeleteAsync();
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException($"Could not delete application at {this.Application}", e);
+            }
+
+            deleteApplicationSuccessful.ShouldBe(true, "Application delete result was false");
         }
     }
 }

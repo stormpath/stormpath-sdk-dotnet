@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                     FakeAccounts.LukeSkywalker,
                     FakeAccounts.HanSolo
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
             var luke = await harness.Queryable.FirstAsync();
 
@@ -48,7 +48,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public void FirstAsync_throws_when_no_items_exist()
         {
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
             // TODO This should be InvalidOperationException, but under Mono it throws NullReferenceException for some undetermined reason
             Should.Throw<Exception>(async () =>
@@ -65,7 +65,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                     FakeAccounts.LukeSkywalker,
                     FakeAccounts.HanSolo
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
             var luke = await harness.Queryable.FirstOrDefaultAsync();
 
@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task FirstOrDefaultAsync_returns_null_when_no_items_exist()
         {
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href, fakeDataStore);
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
             var notLuke = await harness.Queryable.FirstOrDefaultAsync();
 

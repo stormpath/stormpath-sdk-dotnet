@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
             this.minimumLength = minimumLength;
             this.rnd = new Random(Environment.TickCount);
 
-            this.generated = Generate();
+            this.generated = this.Generate();
         }
 
         public static implicit operator string(RandomPassword obj)
@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
 
         public override string ToString()
         {
-            return generated;
+            return this.generated;
         }
 
         private string Generate()
@@ -68,27 +68,27 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
             while (!meetsRequirements)
             {
                 char next = char.MinValue;
-                var typeSuggestion = rnd.Next(4);
+                var typeSuggestion = this.rnd.Next(4);
 
                 if (typeSuggestion == 0 && !enoughUppercase)
                 {
-                    next = GetRandomChar(Uppercase);
+                    next = this.GetRandomChar(Uppercase);
                 }
                 else if (typeSuggestion == 1 && !enoughLowercase)
                 {
-                    next = GetRandomChar(Lowercase);
+                    next = this.GetRandomChar(Lowercase);
                 }
                 else if (typeSuggestion == 2 && !enoughSymbols)
                 {
-                    next = GetRandomChar(Symbols);
+                    next = this.GetRandomChar(Symbols);
                 }
                 else if (typeSuggestion == 3 && !enoughNumbers)
                 {
-                    next = GetRandomChar(Numbers);
+                    next = this.GetRandomChar(Numbers);
                 }
                 else
                 {
-                    next = GetRandomChar(Uppercase + Lowercase + Numbers + Symbols);
+                    next = this.GetRandomChar(Uppercase + Lowercase + Numbers + Symbols);
                 }
 
                 generated.Append(next);
@@ -106,7 +106,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
                     enoughUppercase &&
                     enoughLowercase &&
                     enoughSymbols &&
-                    test.Length >= minimumLength;
+                    test.Length >= this.minimumLength;
             }
 
             return generated.ToString();
@@ -114,7 +114,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
 
         private char GetRandomChar(string source)
         {
-            var charSelector = rnd.Next(source.Length);
+            var charSelector = this.rnd.Next(source.Length);
             return source[charSelector];
         }
     }

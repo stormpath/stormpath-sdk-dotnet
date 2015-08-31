@@ -28,27 +28,27 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Relative_paths_are_fully_qualified()
         {
-            var qualifier = new UriQualifier(fakeBaseUrl);
+            var qualifier = new UriQualifier(this.fakeBaseUrl);
 
             var uri = qualifier.EnsureFullyQualified("path/to/resource");
 
-            uri.ShouldBe($"{fakeBaseUrl}/path/to/resource");
+            uri.ShouldBe($"{this.fakeBaseUrl}/path/to/resource");
         }
 
         [Fact]
         public void Relative_paths_with_leading_slash_are_fully_qualified()
         {
-            var qualifier = new UriQualifier(fakeBaseUrl);
+            var qualifier = new UriQualifier(this.fakeBaseUrl);
 
             var uri = qualifier.EnsureFullyQualified("/path/to/resource");
 
-            uri.ShouldBe($"{fakeBaseUrl}/path/to/resource");
+            uri.ShouldBe($"{this.fakeBaseUrl}/path/to/resource");
         }
 
         [Fact]
         public void Idempotent_on_already_fully_qualified_paths()
         {
-            var qualifier = new UriQualifier(fakeBaseUrl);
+            var qualifier = new UriQualifier(this.fakeBaseUrl);
 
             var alreadyQualified = qualifier.EnsureFullyQualified("http://api.foo.bar/foo/bar");
 

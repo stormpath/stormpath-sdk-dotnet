@@ -20,7 +20,6 @@ using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements must appear in the correct order", Justification = "Reviewed.")]
     internal sealed class LinkProperty : ImmutableValueObject<LinkProperty>
     {
         private static Func<LinkProperty, LinkProperty, bool> EqualityFunction =>
@@ -34,6 +33,6 @@ namespace Stormpath.SDK.Impl.Resource
 
         public string Href { get; }
 
-        public override string ToString() => Href;
+        public override string ToString() => this.Href;
     }
 }

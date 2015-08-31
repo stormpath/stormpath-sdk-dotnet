@@ -22,7 +22,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Application
 {
-    public interface IApplication : IResource, ISaveable<IApplication>, IDeletable, IExtendable, IAuditable
+    public interface IApplication : IResource, ISaveable<IApplication>, IDeletable, IExtendable, IAuditable, IAccountCreation
     {
         string Name { get; }
 
@@ -35,7 +35,5 @@ namespace Stormpath.SDK.Application
         IApplication SetName(string name);
 
         IApplication SetStatus(ApplicationStatus status);
-
-        Task<IAccount> CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
         public RandomEmail(string at)
         {
             this.domain = at;
-            this.generated = Generate();
+            this.generated = this.Generate();
         }
 
         public static implicit operator string(RandomEmail obj)
@@ -35,12 +35,12 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
 
         public override string ToString()
         {
-            return generated;
+            return this.generated;
         }
 
         private string Generate()
         {
-            return $"{RandomString.Create()}@{domain}";
+            return $"{RandomString.Create()}@{this.domain}";
         }
     }
 }

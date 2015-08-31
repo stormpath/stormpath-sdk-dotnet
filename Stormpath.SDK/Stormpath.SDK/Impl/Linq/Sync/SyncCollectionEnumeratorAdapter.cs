@@ -35,9 +35,9 @@ namespace Stormpath.SDK.Impl.Linq.Sync
 
         public IEnumerator<T> GetEnumerator()
         {
-            while (asyncCollection.MoveNextAsync(cancellationToken).GetAwaiter().GetResult())
+            while (this.asyncCollection.MoveNextAsync(this.cancellationToken).GetAwaiter().GetResult())
             {
-                foreach (var item in asyncCollection.CurrentPage)
+                foreach (var item in this.asyncCollection.CurrentPage)
                 {
                     yield return item;
                 }
@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Impl.Linq.Sync
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }

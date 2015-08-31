@@ -21,7 +21,6 @@ using System.Runtime.InteropServices;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter", Justification = "Reviewed.")]
     internal static class WindowsVersionHelper
     {
         // List from https://msdn.microsoft.com/en-us/library/windows/desktop/ms724833(v=vs.85).aspx

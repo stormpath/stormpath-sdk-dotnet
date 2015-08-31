@@ -21,7 +21,6 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Http.Support
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Public enumeration elements")]
     internal sealed class HttpMethod : Enumeration
     {
         public static HttpMethod Get = new HttpMethod(0, "GET");

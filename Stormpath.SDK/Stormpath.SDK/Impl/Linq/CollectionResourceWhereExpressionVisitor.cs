@@ -42,32 +42,32 @@ namespace Stormpath.SDK.Impl.Linq
         {
             var visited = base.VisitExpression(expression);
 
-            if (inProgress.IsStringTermComplete())
+            if (this.inProgress.IsStringTermComplete())
             {
-                this.GeneratedModels.Add(new StringAttributeTermModel(inProgress.Field, inProgress.StringValue, inProgress.StringMatchType.Value));
-                inProgress = new WhereAttributeTermInProgressModel();
+                this.GeneratedModels.Add(new StringAttributeTermModel(this.inProgress.Field, this.inProgress.StringValue, this.inProgress.StringMatchType.Value));
+                this.inProgress = new WhereAttributeTermInProgressModel();
             }
 
-            if (inProgress.IsDateTermComplete())
+            if (this.inProgress.IsDateTermComplete())
             {
                 DatetimeAttributeTermModel model = null;
-                if (inProgress.DateGreaterThan.Value)
+                if (this.inProgress.DateGreaterThan.Value)
                 {
                     model = new DatetimeAttributeTermModel(
-                        inProgress.Field,
-                        start: inProgress.DateValue.Value,
-                        startInclusive: inProgress.DateOrEqual.Value);
+                        this.inProgress.Field,
+                        start: this.inProgress.DateValue.Value,
+                        startInclusive: this.inProgress.DateOrEqual.Value);
                 }
                 else
                 {
                     model = new DatetimeAttributeTermModel(
-                        inProgress.Field,
-                        end: inProgress.DateValue.Value,
-                        endInclusive: inProgress.DateOrEqual.Value);
+                        this.inProgress.Field,
+                        end: this.inProgress.DateValue.Value,
+                        endInclusive: this.inProgress.DateOrEqual.Value);
                 }
 
                 this.GeneratedModels.Add(model);
-                inProgress = new WhereAttributeTermInProgressModel();
+                this.inProgress = new WhereAttributeTermInProgressModel();
             }
 
             return visited;
@@ -75,7 +75,7 @@ namespace Stormpath.SDK.Impl.Linq
 
         protected override Expression VisitBinaryExpression(BinaryExpression expression)
         {
-            if (!IsSupportedBinaryComparisonOperator(expression.NodeType))
+            if (!this.IsSupportedBinaryComparisonOperator(expression.NodeType))
                 throw new NotSupportedException("One or more comparison operators are currently unsupported.");
 
             if (expression.NodeType == ExpressionType.AndAlso)
@@ -93,12 +93,12 @@ namespace Stormpath.SDK.Impl.Linq
             if (isInequalityComparison)
             {
                 // Only supported on dates right now
-                inProgress.DateGreaterThan = expression.NodeType == ExpressionType.GreaterThan || expression.NodeType == ExpressionType.GreaterThanOrEqual;
-                inProgress.DateOrEqual = expression.NodeType == ExpressionType.GreaterThanOrEqual || expression.NodeType == ExpressionType.LessThanOrEqual;
+                this.inProgress.DateGreaterThan = expression.NodeType == ExpressionType.GreaterThan || expression.NodeType == ExpressionType.GreaterThanOrEqual;
+                this.inProgress.DateOrEqual = expression.NodeType == ExpressionType.GreaterThanOrEqual || expression.NodeType == ExpressionType.LessThanOrEqual;
             }
 
-            VisitExpression(expression.Left);
-            VisitExpression(expression.Right);
+            this.VisitExpression(expression.Left);
+            this.VisitExpression(expression.Right);
 
             return expression;
         }
@@ -130,10 +130,10 @@ namespace Stormpath.SDK.Impl.Linq
                 if (expression.Arguments.Count > 1)
                     throw new NotSupportedException("Only simple overloads of helper methods may be used inside the Where clause.");
 
-                inProgress.StringMatchType = matchingType;
+                this.inProgress.StringMatchType = matchingType;
 
-                VisitMemberExpression((MemberExpression)expression.Object);
-                VisitConstantExpression((ConstantExpression)expression.Arguments[0]);
+                this.VisitMemberExpression((MemberExpression)expression.Object);
+                this.VisitConstantExpression((ConstantExpression)expression.Arguments[0]);
                 return expression;
             }
 
@@ -146,15 +146,15 @@ namespace Stormpath.SDK.Impl.Linq
 
             if (DatetimeFieldNameTranslator.TryGetValue(expression.Member.Name, out fieldName))
             {
-                inProgress.TargetType = typeof(DatetimeAttributeTermModel);
-                inProgress.Field = fieldName;
+                this.inProgress.TargetType = typeof(DatetimeAttributeTermModel);
+                this.inProgress.Field = fieldName;
                 return expression; // done
             }
 
             if (FieldNameTranslator.TryGetValue(expression.Member.Name, out fieldName))
             {
-                inProgress.TargetType = typeof(StringAttributeTermModel);
-                inProgress.Field = fieldName;
+                this.inProgress.TargetType = typeof(StringAttributeTermModel);
+                this.inProgress.Field = fieldName;
                 return expression; // done
             }
 
@@ -165,13 +165,13 @@ namespace Stormpath.SDK.Impl.Linq
         {
             if (expression.Type == typeof(string))
             {
-                inProgress.StringValue = expression.Value.ToString();
+                this.inProgress.StringValue = expression.Value.ToString();
                 return expression; // done
             }
 
             if (expression.Type == typeof(DateTimeOffset))
             {
-                inProgress.DateValue = (DateTimeOffset)expression.Value;
+                this.inProgress.DateValue = (DateTimeOffset)expression.Value;
                 return expression; // done
             }
 

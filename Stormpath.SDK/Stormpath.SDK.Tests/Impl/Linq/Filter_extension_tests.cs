@@ -26,22 +26,22 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public void Filter_with_simple_parameter()
         {
             // Act
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Filter("Joe");
 
             // Assert
-            query.GeneratedArgumentsWere(Href, "q=Joe");
+            query.GeneratedArgumentsWere(this.Href, "q=Joe");
         }
 
         [Fact]
         public void Filter_multiple_calls_are_LIFO()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Filter("Joe")
                 .Filter("Joey");
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(Href, "q=Joey");
+            query.GeneratedArgumentsWere(this.Href, "q=Joey");
         }
     }
 }

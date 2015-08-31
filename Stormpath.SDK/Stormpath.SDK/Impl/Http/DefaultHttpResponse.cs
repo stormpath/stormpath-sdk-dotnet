@@ -35,15 +35,15 @@ namespace Stormpath.SDK.Impl.Http
             this.bodyContentType = bodyContentType;
         }
 
-        public override string Body => body;
+        public override string Body => this.body;
 
-        public override string BodyContentType => bodyContentType;
+        public override string BodyContentType => this.bodyContentType;
 
-        public override HttpHeaders Headers => headers;
+        public override HttpHeaders Headers => this.headers;
 
-        public int HttpStatus => httpStatus;
+        public int HttpStatus => this.httpStatus;
 
-        public bool IsError => IsServerError(HttpStatus) || IsClientError(HttpStatus);
+        public bool IsError => IsServerError(this.HttpStatus) || IsClientError(this.HttpStatus);
 
         private static bool IsServerError(int code) => code >= 500 && code < 600;
 

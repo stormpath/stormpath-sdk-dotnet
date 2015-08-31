@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
 
         public IClient Build()
         {
-            var authentication = AuthenticationScheme.Parse(authSchemeName);
+            var authentication = AuthenticationScheme.Parse(this.authSchemeName);
             var apiKey = IntegrationTestClients.GetApiKey();
             return Clients.Builder()
                 .SetApiKey(apiKey)
@@ -48,17 +48,17 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
 
         public void Deserialize(IXunitSerializationInfo info)
         {
-            authSchemeName = info.GetValue<string>("authSchemeName");
+            this.authSchemeName = info.GetValue<string>("authSchemeName");
         }
 
         public void Serialize(IXunitSerializationInfo info)
         {
-            info.AddValue("authSchemeName", authSchemeName, typeof(string));
+            info.AddValue("authSchemeName", this.authSchemeName, typeof(string));
         }
 
         public override string ToString()
         {
-            return $"Auth = {authSchemeName}";
+            return $"Auth = {this.authSchemeName}";
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="IntegrationTestCollection.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IntegrationTestData.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -20,22 +20,18 @@ using System.Collections.Generic;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Tests.Integration.Helpers;
 
 namespace Stormpath.SDK.Tests.Integration
 {
     public static class IntegrationTestData
     {
-        public static List<IApplication> GetTestApplications(IClient client)
+        public static IApplication GetTestApplication(IClient client)
         {
-            return new List<IApplication>()
-            {
-                {
-                    client.Instantiate<IApplication>()
+            return client.Instantiate<IApplication>()
                         .SetName($".NET ITs {DateTimeOffset.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}")
                         .SetDescription("The Battle of Endor")
-                        .SetStatus(ApplicationStatus.Enabled)
-                }
-            };
+                        .SetStatus(ApplicationStatus.Enabled);
         }
 
         public static List<IAccount> GetTestAccounts(IClient client)
@@ -47,48 +43,52 @@ namespace Stormpath.SDK.Tests.Integration
                         .SetGivenName("Luke")
                         .SetSurname("Skywalker")
                         .SetEmail("lskywalker@tattooine.rim")
+                        .SetPassword(new RandomPassword(12))
+                        .SetUsername("sonofthesuns")
                 },
                 {
                     client.Instantiate<IAccount>()
                         .SetGivenName("Han")
                         .SetSurname("Solo")
                         .SetEmail("han.solo@corellia.core")
+                        .SetPassword(new RandomPassword(12))
                 },
                 {
                     client.Instantiate<IAccount>()
                         .SetGivenName("Leia")
                         .SetSurname("Organa")
-                        .SetEmail("princessleia@alderaan.core")
+                        .SetEmail("leia.organa@alderaan.core")
+                        .SetPassword(new RandomPassword(12))
+                        .SetUsername("princessleia")
                 },
                 {
                     client.Instantiate<IAccount>()
                         .SetGivenName("Chewbacca")
                         .SetSurname("the Wookie")
                         .SetEmail("chewie@kashyyyk.rim")
+                        .SetPassword(new RandomPassword(12))
+                        .SetUsername("rrwwwggg")
                 },
                 {
                     client.Instantiate<IAccount>()
                         .SetGivenName("Lando")
                         .SetSurname("Calrissian")
                         .SetEmail("lcalrissian@socorro.rim")
-                },
-                {
-                    client.Instantiate<IAccount>()
-                        .SetGivenName("Gial")
-                        .SetSurname("Ackbar")
-                        .SetEmail("ackbar@dac.rim")
+                        .SetPassword(new RandomPassword(12))
                 },
                 {
                     client.Instantiate<IAccount>()
                         .SetGivenName("Darth")
                         .SetSurname("Vader")
                         .SetEmail("vader@empire.co")
+                        .SetPassword(new RandomPassword(12))
                 },
                 {
                     client.Instantiate<IAccount>()
-                        .SetGivenName("Emporer")
+                        .SetGivenName("Emperor")
                         .SetSurname("Palpatine")
-                        .SetEmail("emporer@empire.co")
+                        .SetEmail("emperor@empire.co")
+                        .SetPassword(new RandomPassword(12))
                 },
             };
         }

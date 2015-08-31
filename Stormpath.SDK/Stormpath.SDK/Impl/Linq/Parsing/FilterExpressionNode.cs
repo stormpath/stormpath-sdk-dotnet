@@ -43,12 +43,12 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         public override Expression Resolve(ParameterExpression inputParameter, Expression expressionToBeResolved, ClauseGenerationContext clauseGenerationContext)
         {
-            return Source.Resolve(inputParameter, expressionToBeResolved, clauseGenerationContext);
+            return this.Source.Resolve(inputParameter, expressionToBeResolved, clauseGenerationContext);
         }
 
         protected override QueryModel ApplyNodeSpecificSemantics(QueryModel queryModel, ClauseGenerationContext clauseGenerationContext)
         {
-            queryModel.BodyClauses.Add(new FilterClause(filterTerm));
+            queryModel.BodyClauses.Add(new FilterClause(this.filterTerm));
             return queryModel;
         }
     }

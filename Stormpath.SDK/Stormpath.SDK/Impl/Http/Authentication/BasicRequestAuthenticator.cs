@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Http.Authentication
         void IRequestAuthenticator.Authenticate(IHttpRequest request, IClientApiKey apiKey)
         {
             var now = DateTimeOffset.UtcNow;
-            AuthenticateCore(request, apiKey, now);
+            this.AuthenticateCore(request, apiKey, now);
         }
 
         internal void AuthenticateCore(IHttpRequest request, IClientApiKey apiKey, DateTimeOffset now)

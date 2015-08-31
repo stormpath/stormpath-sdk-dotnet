@@ -20,7 +20,6 @@ using Stormpath.SDK.Account;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Just for testing")]
     public static class FakeAccounts
     {
         public static IAccount LukeSkywalker = new FakeAccount()

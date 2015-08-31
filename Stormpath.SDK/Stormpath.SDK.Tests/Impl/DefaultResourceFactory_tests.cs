@@ -41,9 +41,9 @@ namespace Stormpath.SDK.Tests.Impl
 
         public DefaultResourceFactory_tests()
         {
-            fakeDataStore = Substitute.For<IInternalDataStore>();
+            this.fakeDataStore = Substitute.For<IInternalDataStore>();
 
-            factory = new DefaultResourceFactory(fakeDataStore);
+            this.factory = new DefaultResourceFactory(this.fakeDataStore);
         }
 
         [Fact]
@@ -51,42 +51,42 @@ namespace Stormpath.SDK.Tests.Impl
         {
             Should.Throw<ApplicationException>(() =>
             {
-                var bad = factory.Create<IResource>();
+                var bad = this.factory.Create<IResource>();
             });
         }
 
         [Fact]
         public void Creating_IAccount_returns_DefaultAccount()
         {
-            IAccount account = factory.Create<IAccount>();
+            IAccount account = this.factory.Create<IAccount>();
             account.ShouldBeOfType<DefaultAccount>();
         }
 
         [Fact]
         public void Creating_IApplication_returns_DefaultApplication()
         {
-            IApplication account = factory.Create<IApplication>();
+            IApplication account = this.factory.Create<IApplication>();
             account.ShouldBeOfType<DefaultApplication>();
         }
 
         [Fact]
         public void Creating_ITenant_returns_DefaultTenant()
         {
-            ITenant account = factory.Create<ITenant>();
+            ITenant account = this.factory.Create<ITenant>();
             account.ShouldBeOfType<DefaultTenant>();
         }
 
         [Fact]
         public void Creating_IDirectory_returns_DefaultDirectory()
         {
-            IDirectory account = factory.Create<IDirectory>();
+            IDirectory account = this.factory.Create<IDirectory>();
             account.ShouldBeOfType<DefaultDirectory>();
         }
 
         [Fact]
         public void Creating_IGroup_returns_DefaultGroup()
         {
-            IGroup account = factory.Create<IGroup>();
+            IGroup account = this.factory.Create<IGroup>();
             account.ShouldBeOfType<DefaultGroup>();
         }
     }

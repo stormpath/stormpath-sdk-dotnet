@@ -55,42 +55,42 @@ namespace Stormpath.SDK.Impl.Application
         {
         }
 
-        internal LinkProperty AccountStoreMappings => GetLinkProperty(AccountStoreMappingsPropertyName);
+        internal LinkProperty AccountStoreMappings => this.GetLinkProperty(AccountStoreMappingsPropertyName);
 
-        internal LinkProperty Accounts => GetLinkProperty(AccountsPropertyName);
+        internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
-        internal LinkProperty ApiKeys => GetLinkProperty(ApiKeysPropertyName);
+        internal LinkProperty ApiKeys => this.GetLinkProperty(ApiKeysPropertyName);
 
-        internal LinkProperty AuthTokens => GetLinkProperty(AuthTokensPropertyName);
+        internal LinkProperty AuthTokens => this.GetLinkProperty(AuthTokensPropertyName);
 
-        internal LinkProperty DefaultAccountStoreMapping => GetLinkProperty(DefaultAccountStoreMappingPropertyName);
+        internal LinkProperty DefaultAccountStoreMapping => this.GetLinkProperty(DefaultAccountStoreMappingPropertyName);
 
-        internal LinkProperty DefaultGroupStoreMapping => GetLinkProperty(DefaultGroupStoreMappingPropertyName);
+        internal LinkProperty DefaultGroupStoreMapping => this.GetLinkProperty(DefaultGroupStoreMappingPropertyName);
 
         string IApplication.Description => GetProperty<string>(DescriptionPropertyName);
 
-        internal LinkProperty Groups => GetLinkProperty(GroupsPropertyName);
+        internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
         string IApplication.Name => GetProperty<string>(NamePropertyName);
 
-        internal LinkProperty LoginAttempts => GetLinkProperty(LoginAttemptsPropertyName);
+        internal LinkProperty LoginAttempts => this.GetLinkProperty(LoginAttemptsPropertyName);
 
-        internal LinkProperty OAuthPolicy => GetLinkProperty(OAuthPolicyPropertyName);
+        internal LinkProperty OAuthPolicy => this.GetLinkProperty(OAuthPolicyPropertyName);
 
-        internal LinkProperty PasswordResetToken => GetLinkProperty(PasswordResetTokensPropertyName);
+        internal LinkProperty PasswordResetToken => this.GetLinkProperty(PasswordResetTokensPropertyName);
 
         ApplicationStatus IApplication.Status => GetProperty<ApplicationStatus>(StatusPropertyName);
 
-        internal LinkProperty Tenant => GetLinkProperty(TenantPropertyName);
+        internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
-        internal LinkProperty VerificationEmails => GetLinkProperty(VerificationEmailsPropertyName);
+        internal LinkProperty VerificationEmails => this.GetLinkProperty(VerificationEmailsPropertyName);
 
         IApplication IApplication.SetDescription(string description)
         {
             if (string.IsNullOrEmpty(description))
                 throw new ArgumentNullException(nameof(description));
 
-            SetProperty(DescriptionPropertyName, description);
+            this.SetProperty(DescriptionPropertyName, description);
             return this;
         }
 
@@ -99,35 +99,40 @@ namespace Stormpath.SDK.Impl.Application
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
 
-            SetProperty(NamePropertyName, name);
+            this.SetProperty(NamePropertyName, name);
             return this;
         }
 
         IApplication IApplication.SetStatus(ApplicationStatus status)
         {
-            SetProperty(StatusPropertyName, status);
+            this.SetProperty(StatusPropertyName, status);
             return this;
         }
 
-        Task<IAccount> IApplication.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
+        Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptions, CancellationToken cancellationToken)
         {
-            var account = new Account.DefaultAccount(GetInternalDataStore());
-            account.SetProperty("givenName", givenName);
-            account.SetProperty("surname", surname);
-            account.SetProperty("email", email);
-            account.SetProperty("password", password);
+            throw new NotImplementedException();
+        }
 
-            return (GetInternalDataStore() as IInternalDataStore).CreateAsync<IAccount>(Accounts.Href, account, cancellationToken);
+        Task<IAccount> IAccountCreation.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
+        {
+            var account = this.GetInternalDataStore().Instantiate<IAccount>();
+            account.SetGivenName(givenName);
+            account.SetSurname(surname);
+            account.SetEmail(email);
+            account.SetPassword(password);
+
+            return (this.GetInternalDataStore() as IInternalDataStore).CreateAsync(this.Accounts.Href, account, cancellationToken);
         }
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
         {
-            return GetInternalDataStore().DeleteAsync(this, cancellationToken);
+            return this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
         }
 
         Task<IApplication> ISaveable<IApplication>.SaveAsync(CancellationToken cancellationToken)
         {
-            return GetInternalDataStore().SaveAsync<IApplication>(this, cancellationToken);
+            return this.GetInternalDataStore().SaveAsync<IApplication>(this, cancellationToken);
         }
     }
 }

@@ -29,12 +29,12 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public Linq_tests()
         {
             // Default test harness. Child classes can overwrite
-            harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href);
+            this.harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href);
         }
 
         internal Linq_tests(IDataStore ds)
         {
-            harness = CollectionTestHarness<IAccount>.Create<IAccount>(Href, ds);
+            this.harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, ds);
         }
 
         protected string Href
@@ -46,12 +46,12 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             get
             {
-                return harness;
+                return this.harness;
             }
 
             set
             {
-                harness = value;
+                this.harness = value;
             }
         }
     }

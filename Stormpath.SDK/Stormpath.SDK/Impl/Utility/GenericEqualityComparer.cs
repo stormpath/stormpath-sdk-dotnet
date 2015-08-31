@@ -45,13 +45,13 @@ namespace Stormpath.SDK.Impl.Utility
                 return false;
             }
 
-            var result = equalityAction(x, y);
+            var result = this.equalityAction(x, y);
             return result;
         }
 
         public int GetHashCode(T obj)
         {
-            return hashAction(obj);
+            return this.hashAction(obj);
         }
     }
 }

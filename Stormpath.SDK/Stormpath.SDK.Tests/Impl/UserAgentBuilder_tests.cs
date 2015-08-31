@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             userAgent.ShouldNotContain("unknown");
 
-            output.WriteLine($"UserAgent: {userAgent}");
+            this.output.WriteLine($"UserAgent: {userAgent}");
         }
     }
 }

@@ -72,21 +72,21 @@ namespace Stormpath.SDK.Impl.Http.Support
             this.query = new QueryString(existing.QueryString);
         }
 
-        public Uri ResourcePath => resourcePath;
+        public Uri ResourcePath => this.resourcePath;
 
-        public bool HasQuery => query == null;
+        public bool HasQuery => this.query == null;
 
-        public QueryString QueryString => query;
+        public QueryString QueryString => this.query;
 
         public override string ToString()
         {
-            if (query.Any())
-                return $"{resourcePath}?{query}";
+            if (this.query.Any())
+                return $"{this.resourcePath}?{this.query}";
             else
-                return resourcePath.ToString();
+                return this.resourcePath.ToString();
         }
 
-        public Uri ToUri() => new Uri(ToString(), UriKind.Absolute);
+        public Uri ToUri() => new Uri(this.ToString(), UriKind.Absolute);
 
         private static bool HasQueryParameters(string href)
         {

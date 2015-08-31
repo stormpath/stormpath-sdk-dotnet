@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
@@ -26,7 +27,6 @@ using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
-using System.Threading;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
@@ -42,6 +42,10 @@ namespace Stormpath.SDK.Impl.Tenant
         private static readonly string NamePropertyName = "name";
         private static readonly string OrganizationsPropertyName = "organizations";
 
+        private string applicationsResourceBase = "applications";
+        private string directoriesResourceBase = "directories";
+        private string groupsResourceBase = "groups";
+
         public DefaultTenant(IInternalDataStore dataStore)
             : base(dataStore)
         {
@@ -54,41 +58,35 @@ namespace Stormpath.SDK.Impl.Tenant
 
         private ITenant This => this;
 
-        internal LinkProperty Accounts => GetLinkProperty(AccountsPropertyName);
+        internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
-        internal LinkProperty Agents => GetLinkProperty(AgentsPropertyName);
+        internal LinkProperty Agents => this.GetLinkProperty(AgentsPropertyName);
 
-        internal string ApplicationResourceBase = "applications";
+        internal LinkProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
-        internal LinkProperty Applications => GetLinkProperty(ApplicationsPropertyName);
+        internal LinkProperty Directories => this.GetLinkProperty(DirectoriesPropertyName);
 
-        internal string DirectoriesResourceBase = "directories";
+        internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        internal LinkProperty Directories => GetLinkProperty(DirectoriesPropertyName);
-
-        internal string GroupsResourceBase = "groups";
-
-        internal LinkProperty Groups => GetLinkProperty(GroupsPropertyName);
-
-        internal LinkProperty IdSites => GetLinkProperty(IdSitesPropertyName);
+        internal LinkProperty IdSites => this.GetLinkProperty(IdSitesPropertyName);
 
         string ITenant.Key => GetProperty<string>(KeyPropertyName);
 
         string ITenant.Name => GetProperty<string>(NamePropertyName);
 
-        internal LinkProperty Organizations => GetLinkProperty(OrganizationsPropertyName);
+        internal LinkProperty Organizations => this.GetLinkProperty(OrganizationsPropertyName);
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, CancellationToken cancellationToken)
         {
-            return GetInternalDataStore().CreateAsync(ApplicationResourceBase, application, cancellationToken);
+            return this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, cancellationToken);
         }
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(string name, CancellationToken cancellationToken)
         {
-            var application = new Application.DefaultApplication(GetInternalDataStore());
-            application.SetProperty("name", name); //todo
+            var application = this.GetInternalDataStore().Instantiate<IApplication>();
+            application.SetName(name);
 
-            return This.CreateApplicationAsync(application, cancellationToken);
+            return this.This.CreateApplicationAsync(application, cancellationToken);
         }
 
         ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()

@@ -1,4 +1,4 @@
-﻿// <copyright file="HttpMessageBase.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAccountCreation.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,16 +15,18 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.Http
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Resource;
+
+namespace Stormpath.SDK.Account
 {
-    internal abstract class HttpMessageBase : IHttpMessage
+    public interface IAccountCreation
     {
-        public abstract string Body { get; }
+        Task<IAccount> CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptions = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        public abstract string BodyContentType { get; }
-
-        public bool HasBody => !string.IsNullOrEmpty(this.Body) && !string.IsNullOrEmpty(this.BodyContentType);
-
-        public abstract HttpHeaders Headers { get; }
+        Task<IAccount> CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

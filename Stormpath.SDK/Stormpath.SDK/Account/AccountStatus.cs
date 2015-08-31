@@ -21,7 +21,6 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Account
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Public enumeration elements")]
     public sealed class AccountStatus : Enumeration
     {
         /// <summary>

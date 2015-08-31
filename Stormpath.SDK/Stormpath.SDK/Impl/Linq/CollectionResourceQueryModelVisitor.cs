@@ -44,14 +44,14 @@ namespace Stormpath.SDK.Impl.Linq
         {
             // Used to store the original type the query is executing against
             // (see ExecuteScalar in CollectionResourceQueryExecutor for why we need this)
-            ParsedModel.CollectionType = fromClause.ItemType;
+            this.ParsedModel.CollectionType = fromClause.ItemType;
 
             base.VisitMainFromClause(fromClause, queryModel);
         }
 
         public override void VisitResultOperator(ResultOperatorBase resultOperator, QueryModel queryModel, int index)
         {
-            if (IsUnsupportedResultOperator(resultOperator))
+            if (this.IsUnsupportedResultOperator(resultOperator))
                 throw new NotSupportedException("One or more LINQ operators are not supported.");
 
             bool isScalar =
@@ -60,21 +60,21 @@ namespace Stormpath.SDK.Impl.Linq
                 resultOperator is SingleResultOperator;
             if (isScalar)
             {
-                ParsedModel.Limit = 1;
-                ParsedModel.ExecutionPlan.MaxItems = 1;
+                this.ParsedModel.Limit = 1;
+                this.ParsedModel.ExecutionPlan.MaxItems = 1;
                 return;
             }
 
             // TODO Count/LongCount
             // Todo DefaultIfEmpty
             // Todo ElementAt[OrDefault]
-            if (HandleTakeResultOperator(resultOperator))
+            if (this.HandleTakeResultOperator(resultOperator))
                 return; // done
 
-            if (HandleSkipResultOperator(resultOperator))
+            if (this.HandleSkipResultOperator(resultOperator))
                 return; // done
 
-            if (HandleExpandExtensionResultOperator(resultOperator))
+            if (this.HandleExpandExtensionResultOperator(resultOperator))
                 return; // done
 
             base.VisitResultOperator(resultOperator, queryModel, index);
@@ -113,11 +113,11 @@ namespace Stormpath.SDK.Impl.Linq
             if (expression.NodeType == ExpressionType.Constant)
             {
                 var limit = (int)((ConstantExpression)expression).Value;
-                ParsedModel.ExecutionPlan.MaxItems = limit;
+                this.ParsedModel.ExecutionPlan.MaxItems = limit;
 
-                ParsedModel.Limit = limit;
+                this.ParsedModel.Limit = limit;
                 if (limit > DefaultApiPageLimit)
-                    ParsedModel.Limit = DefaultApiPageLimit;
+                    this.ParsedModel.Limit = DefaultApiPageLimit;
             }
             else
             {
@@ -137,7 +137,7 @@ namespace Stormpath.SDK.Impl.Linq
             if (expression == null)
                 throw new NotSupportedException("Unsupported expression in Skip clause.");
 
-            ParsedModel.Offset = (int)expression.Value;
+            this.ParsedModel.Offset = (int)expression.Value;
 
             return true;
         }
@@ -161,13 +161,13 @@ namespace Stormpath.SDK.Impl.Linq
                 if (paginationParametersPresent)
                     throw new NotSupportedException("Pagination options cannot be used on link-only properties.");
 
-                ParsedModel.Expansions.Add(new ExpansionTerm(expandField));
+                this.ParsedModel.Expansions.Add(new ExpansionTerm(expandField));
                 return true; // done
             }
 
             if (CollectionLinkMethodNameTranslator.TryGetValue(methodCallExpression.Method.Name, out expandField))
             {
-                ParsedModel.Expansions.Add(
+                this.ParsedModel.Expansions.Add(
                     new ExpansionTerm(
                         expandField,
                         (int?)expandResultOperator.Offset.Value,
@@ -181,9 +181,9 @@ namespace Stormpath.SDK.Impl.Linq
         public override void VisitWhereClause(WhereClause whereClause, QueryModel queryModel, int index)
         {
             // Handle simple cases
-            if (HandleWhereFilterExtensionMethod(whereClause))
+            if (this.HandleWhereFilterExtensionMethod(whereClause))
                 return; // done
-            if (HandleWhereWithinDateExtensionMethod(whereClause))
+            if (this.HandleWhereWithinDateExtensionMethod(whereClause))
                 return; // done
 
             this.ParsedModel.AddAttributeTerms(
@@ -198,7 +198,7 @@ namespace Stormpath.SDK.Impl.Linq
             if (filterClause == null)
                 return false;
 
-            ParsedModel.FilterTerm = filterClause.Term;
+            this.ParsedModel.FilterTerm = filterClause.Term;
             return true;
         }
 

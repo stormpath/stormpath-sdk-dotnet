@@ -101,15 +101,15 @@ namespace Stormpath.SDK.Shared
                 return false;
             }
 
-            var typeMatches = GetType().Equals(obj.GetType());
-            var valueMatches = value.Equals(otherValue.Value);
+            var typeMatches = this.GetType().Equals(obj.GetType());
+            var valueMatches = this.value.Equals(otherValue.Value);
 
             return typeMatches && valueMatches;
         }
 
         public override int GetHashCode()
         {
-            return value.GetHashCode();
+            return this.value.GetHashCode();
         }
 
         public static int AbsoluteDifference(Enumeration firstValue, Enumeration secondValue)
@@ -148,7 +148,7 @@ namespace Stormpath.SDK.Shared
 
         public int CompareTo(object other)
         {
-            return Value.CompareTo(((Enumeration)other).Value);
+            return this.Value.CompareTo(((Enumeration)other).Value);
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Impl.Http
             if (request.HasBody)
                 httpRequestMessage.Content = new System.Net.Http.StringContent(request.Body, System.Text.Encoding.UTF8, request.BodyContentType);
 
-            CopyHeadersToRequestMessage(request.Headers, httpRequestMessage);
+            this.CopyHeadersToRequestMessage(request.Headers, httpRequestMessage);
 
             return httpRequestMessage;
         }

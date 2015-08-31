@@ -22,7 +22,6 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Client
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "<Pending>")]
     public sealed class AuthenticationScheme : Enumeration
     {
         public static AuthenticationScheme Basic = new AuthenticationScheme(0, "BASIC", typeof(BasicRequestAuthenticator));

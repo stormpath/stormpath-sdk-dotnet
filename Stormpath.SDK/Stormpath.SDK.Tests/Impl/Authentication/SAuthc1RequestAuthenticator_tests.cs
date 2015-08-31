@@ -37,8 +37,8 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
 
         public SAuthc1RequestAuthenticator_tests()
         {
-            authenticator = new SAuthc1RequestAuthenticator();
-            fakeNow = new DateTimeOffset(2015, 08, 02, 12, 30, 59, TimeSpan.Zero);
+            this.authenticator = new SAuthc1RequestAuthenticator();
+            this.fakeNow = new DateTimeOffset(2015, 08, 02, 12, 30, 59, TimeSpan.Zero);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
 
             Should.Throw<RequestAuthenticationException>(() =>
             {
-                authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
+                this.authenticator.AuthenticateCore(myRequest, apiKey, this.fakeNow, this.fakeNonce);
             });
         }
 
@@ -60,11 +60,11 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
             var uriQualifier = new UriQualifier("http://api.foo.bar");
             var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/stuff")));
 
-            authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
+            this.authenticator.AuthenticateCore(myRequest, apiKey, this.fakeNow, this.fakeNonce);
 
             // X-Stormpath-Date -> current time in UTC
             var XStormpathDateHeader = Iso8601.Parse(myRequest.Headers.GetFirst<string>("X-Stormpath-Date"));
-            XStormpathDateHeader.ShouldBe(fakeNow);
+            XStormpathDateHeader.ShouldBe(this.fakeNow);
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
             var uriQualifier = new UriQualifier("http://api.foo.bar");
             var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/stuff")));
 
-            authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
+            this.authenticator.AuthenticateCore(myRequest, apiKey, this.fakeNow, this.fakeNonce);
 
             // Host: [hostname]
             myRequest.Headers.Host.ShouldBe("api.foo.bar");
@@ -87,7 +87,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
             var uriQualifier = new UriQualifier("https://api.foo.bar:8088");
             var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/baz")));
 
-            authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
+            this.authenticator.AuthenticateCore(myRequest, apiKey, this.fakeNow, this.fakeNonce);
 
             // Host: [hostname]
             myRequest.Headers.Host.ShouldBe("api.foo.bar:8088");
@@ -100,7 +100,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
             var uriQualifier = new UriQualifier("http://api.stormpath.com/v1");
             var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/accounts")));
 
-            authenticator.AuthenticateCore(myRequest, apiKey, fakeNow, fakeNonce);
+            this.authenticator.AuthenticateCore(myRequest, apiKey, this.fakeNow, this.fakeNonce);
 
             // Authorization: "SAuthc1 [signed hash]"
             var authenticationHeader = myRequest.Headers.Authorization;
@@ -112,10 +112,10 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
             var sauthc1Id = parts[0].TrimEnd(',').SplitToKeyValuePair('=');
             var sauthc1SignedHeaders = parts[1].TrimEnd(',').SplitToKeyValuePair('=');
             var sauthc1Signature = parts[2].SplitToKeyValuePair('=');
-            var dateString = fakeNow.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
+            var dateString = this.fakeNow.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
 
             sauthc1Id.Key.ShouldBe("sauthc1Id");
-            sauthc1Id.Value.ShouldBe($"{apiKey.GetId()}/{dateString}/{fakeNonce}/sauthc1_request");
+            sauthc1Id.Value.ShouldBe($"{apiKey.GetId()}/{dateString}/{this.fakeNonce}/sauthc1_request");
 
             sauthc1SignedHeaders.Key.ShouldBe("sauthc1SignedHeaders");
             sauthc1SignedHeaders.Value.ShouldBe("host;x-stormpath-date");
@@ -133,7 +133,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
             var now = new DateTimeOffset(2013, 7, 1, 0, 0, 0, TimeSpan.Zero);
             var nonce = "a43a9d25-ab06-421e-8605-33fd1e760825";
 
-            authenticator.AuthenticateCore(request, apiKey, now, nonce);
+            this.authenticator.AuthenticateCore(request, apiKey, now, nonce);
 
             var sauthc1Id = request.Headers.Authorization.Parameter.Split(' ')[0];
             var sauthc1SignedHeaders = request.Headers.Authorization.Parameter.Split(' ')[1];
@@ -154,7 +154,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
             var now = new DateTimeOffset(2013, 7, 1, 0, 0, 0, TimeSpan.Zero);
             var nonce = "a43a9d25-ab06-421e-8605-33fd1e760825";
 
-            authenticator.AuthenticateCore(request, apiKey, now, nonce);
+            this.authenticator.AuthenticateCore(request, apiKey, now, nonce);
 
             var sauthc1Id = request.Headers.Authorization.Parameter.Split(' ')[0];
             var sauthc1SignedHeaders = request.Headers.Authorization.Parameter.Split(' ')[1];
@@ -175,7 +175,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
             var now = new DateTimeOffset(2013, 7, 1, 0, 0, 0, TimeSpan.Zero);
             var nonce = "a43a9d25-ab06-421e-8605-33fd1e760825";
 
-            authenticator.AuthenticateCore(request, apiKey, now, nonce);
+            this.authenticator.AuthenticateCore(request, apiKey, now, nonce);
 
             var sauthc1Id = request.Headers.Authorization.Parameter.Split(' ')[0];
             var sauthc1SignedHeaders = request.Headers.Authorization.Parameter.Split(' ')[1];

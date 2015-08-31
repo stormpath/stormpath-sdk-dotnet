@@ -27,40 +27,40 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Skip_becomes_offset()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Skip(10);
 
-            query.GeneratedArgumentsWere(Href, "offset=10");
+            query.GeneratedArgumentsWere(this.Href, "offset=10");
         }
 
         [Fact]
         public void Skip_with_variable_becomes_offset()
         {
             var offset = 20;
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Skip(offset);
 
-            query.GeneratedArgumentsWere(Href, "offset=20");
+            query.GeneratedArgumentsWere(this.Href, "offset=20");
         }
 
         [Fact]
         public void Skip_with_function_becomes_offset()
         {
             var offsetFunc = new Func<int>(() => 25);
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Skip(offsetFunc());
 
-            query.GeneratedArgumentsWere(Href, "offset=25");
+            query.GeneratedArgumentsWere(this.Href, "offset=25");
         }
 
         [Fact]
         public void Skip_multiple_calls_are_LIFO()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Skip(10).Skip(5);
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(Href, "offset=5");
+            query.GeneratedArgumentsWere(this.Href, "offset=5");
         }
     }
 }

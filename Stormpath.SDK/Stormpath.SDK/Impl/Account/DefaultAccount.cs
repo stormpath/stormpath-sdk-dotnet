@@ -60,37 +60,37 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-        internal LinkProperty AccessTokens => GetLinkProperty(AccessTokensPropertyName);
+        internal LinkProperty AccessTokens => this.GetLinkProperty(AccessTokensPropertyName);
 
-        internal LinkProperty ApiKeys => GetLinkProperty(ApiKeysPropertyName);
+        internal LinkProperty ApiKeys => this.GetLinkProperty(ApiKeysPropertyName);
 
-        internal LinkProperty Applications => GetLinkProperty(ApplicationsPropertyName);
+        internal LinkProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
-        internal LinkProperty Directory => GetLinkProperty(DirectoryPropertyName);
+        internal LinkProperty Directory => this.GetLinkProperty(DirectoryPropertyName);
 
         string IAccount.Email => GetProperty<string>(EmailPropertyName);
 
-        internal LinkProperty EmailVerificationToken => GetLinkProperty(EmailVerificationTokenPropertyName);
+        internal LinkProperty EmailVerificationToken => this.GetLinkProperty(EmailVerificationTokenPropertyName);
 
         string IAccount.FullName => GetProperty<string>(FullNamePropertyName);
 
         string IAccount.GivenName => GetProperty<string>(GivenNamePropertyName);
 
-        internal LinkProperty GroupMemberships => GetLinkProperty(GroupMembershipsPropertyName);
+        internal LinkProperty GroupMemberships => this.GetLinkProperty(GroupMembershipsPropertyName);
 
-        internal LinkProperty Groups => GetLinkProperty(GroupsPropertyName);
+        internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
         string IAccount.MiddleName => GetProperty<string>(MiddleNamePropertyName);
 
-        internal LinkProperty ProviderData => GetLinkProperty(ProviderDataPropertyName);
+        internal LinkProperty ProviderData => this.GetLinkProperty(ProviderDataPropertyName);
 
-        internal LinkProperty RefreshTokens => GetLinkProperty(RefreshTokensPropertyName);
+        internal LinkProperty RefreshTokens => this.GetLinkProperty(RefreshTokensPropertyName);
 
         AccountStatus IAccount.Status => GetProperty<AccountStatus>(StatusPropertyName);
 
         string IAccount.Surname => GetProperty<string>(SurnamePropertyName);
 
-        internal LinkProperty Tenant => GetLinkProperty(TenantPropertyName);
+        internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
         string IAccount.Username => GetProperty<string>(UsernamePropertyName);
 
@@ -99,7 +99,7 @@ namespace Stormpath.SDK.Impl.Account
             if (string.IsNullOrEmpty(email))
                 throw new ArgumentNullException(nameof(email));
 
-            SetProperty(EmailPropertyName, email);
+            this.SetProperty(EmailPropertyName, email);
             return this;
         }
 
@@ -108,13 +108,13 @@ namespace Stormpath.SDK.Impl.Account
             if (string.IsNullOrEmpty(givenName))
                 throw new ArgumentNullException(nameof(givenName));
 
-            SetProperty(GivenNamePropertyName, givenName);
+            this.SetProperty(GivenNamePropertyName, givenName);
             return this;
         }
 
         IAccount IAccount.SetMiddleName(string middleName)
         {
-            SetProperty(MiddleNamePropertyName, middleName);
+            this.SetProperty(MiddleNamePropertyName, middleName);
             return this;
         }
 
@@ -123,13 +123,13 @@ namespace Stormpath.SDK.Impl.Account
             if (string.IsNullOrEmpty(password))
                 throw new ArgumentNullException(nameof(password));
 
-            SetProperty(PasswordPropertyName, password);
+            this.SetProperty(PasswordPropertyName, password);
             return this;
         }
 
         IAccount IAccount.SetStatus(AccountStatus status)
         {
-            SetProperty(StatusPropertyName, status);
+            this.SetProperty(StatusPropertyName, status);
             return this;
         }
 
@@ -138,7 +138,7 @@ namespace Stormpath.SDK.Impl.Account
             if (string.IsNullOrEmpty(surname))
                 throw new ArgumentNullException(nameof(surname));
 
-            SetProperty(SurnamePropertyName, surname);
+            this.SetProperty(SurnamePropertyName, surname);
             return this;
         }
 
@@ -147,7 +147,7 @@ namespace Stormpath.SDK.Impl.Account
             if (string.IsNullOrEmpty(username))
                 throw new ArgumentNullException(nameof(username));
 
-            SetProperty(username, username);
+            this.SetProperty(username, username);
             return this;
         }
 
@@ -168,12 +168,12 @@ namespace Stormpath.SDK.Impl.Account
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
         {
-            return GetInternalDataStore().DeleteAsync(this, cancellationToken);
+            return this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
         }
 
         Task<IAccount> ISaveable<IAccount>.SaveAsync(CancellationToken cancellationToken)
         {
-            return GetInternalDataStore().SaveAsync<IAccount>(this, cancellationToken);
+            return this.GetInternalDataStore().SaveAsync<IAccount>(this, cancellationToken);
         }
     }
 }

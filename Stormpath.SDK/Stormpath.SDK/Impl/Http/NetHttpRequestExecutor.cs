@@ -26,8 +26,6 @@ using Stormpath.SDK.Impl.Http.Authentication;
 
 namespace Stormpath.SDK.Impl.Http
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:DoNotUseRegions", Justification = "Reviewed.")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements must appear in the correct order", Justification = "Reviewed.")]
     internal sealed class NetHttpRequestExecutor : IRequestExecutor
     {
         private readonly IClientApiKey apiKey;
@@ -49,9 +47,9 @@ namespace Stormpath.SDK.Impl.Http
             this.connectionTimeout = connectionTimeout;
 
             IRequestAuthenticatorFactory requestAuthenticatorFactory = new DefaultRequestAuthenticatorFactory();
-            requestAuthenticator = requestAuthenticatorFactory.Create(authenticationScheme);
-            httpAdapter = new NetHttpAdapter();
-            client = BuildClient(connectionTimeout);
+            this.requestAuthenticator = requestAuthenticatorFactory.Create(authenticationScheme);
+            this.httpAdapter = new NetHttpAdapter();
+            this.client = BuildClient(connectionTimeout);
         }
 
         private static HttpClient BuildClient(int connectionTimeout)
@@ -69,9 +67,9 @@ namespace Stormpath.SDK.Impl.Http
             return client;
         }
 
-        AuthenticationScheme IRequestExecutor.AuthenticationScheme => authScheme;
+        AuthenticationScheme IRequestExecutor.AuthenticationScheme => this.authScheme;
 
-        int IRequestExecutor.ConnectionTimeout => connectionTimeout;
+        int IRequestExecutor.ConnectionTimeout => this.connectionTimeout;
 
         async Task<IHttpResponse> IRequestExecutor.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
         {
@@ -80,18 +78,18 @@ namespace Stormpath.SDK.Impl.Http
             while (true)
             {
                 var currentRequest = new DefaultHttpRequest(request, overrideUri: currentUri);
-                requestAuthenticator.Authenticate(currentRequest, apiKey);
+                this.requestAuthenticator.Authenticate(currentRequest, this.apiKey);
 
-                var requestMessage = httpAdapter.ToHttpRequestMessage(currentRequest);
-                var response = await client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
-                if (IsRedirect(response))
+                var requestMessage = this.httpAdapter.ToHttpRequestMessage(currentRequest);
+                var response = await this.client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
+                if (this.IsRedirect(response))
                 {
                     currentUri = response.Headers.Location;
                     continue;
                 }
 
                 var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                var headers = httpAdapter.ToHttpHeaders(response.Headers);
+                var headers = this.httpAdapter.ToHttpHeaders(response.Headers);
                 var returnedResponse = new DefaultHttpResponse((int)response.StatusCode, headers, body, response.Content?.Headers?.ContentType?.MediaType);
                 return returnedResponse;
             }
@@ -113,26 +111,22 @@ namespace Stormpath.SDK.Impl.Http
             return moved && hasNewLocation;
         }
 
-        #region IDisposable implementation
-
         private void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!this.disposed)
             {
                 if (disposing)
                 {
-                    client.Dispose();
+                    this.client.Dispose();
                 }
 
-                disposed = true;
+                this.disposed = true;
             }
         }
 
         void IDisposable.Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
         }
-
-        #endregion
     }
 }

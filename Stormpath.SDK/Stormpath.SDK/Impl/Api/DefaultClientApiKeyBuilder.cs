@@ -93,16 +93,16 @@ namespace Stormpath.SDK.Impl.Api
         IClientApiKey IClientApiKeyBuilder.Build()
         {
             // 1. Try to load default API key properties file. Lowest priority
-            var defaultProperties = GetDefaultApiKeyFileProperties();
+            var defaultProperties = this.GetDefaultApiKeyFileProperties();
             string id = defaultProperties?.GetProperty(this.apiKeyIdPropertyName ?? DefaultFileIdPropertyName);
             string secret = defaultProperties?.GetProperty(this.apiKeySecretPropertyName ?? DefaultFileSecretPropertyName);
 
             // 2. Try file location specified by environment variables
             var envFileLocation = this.env.GetEnvironmentVariable("STORMPATH_API_KEY_FILE");
-            envFileLocation = ExpandWindowsHomePath(envFileLocation);
+            envFileLocation = this.ExpandWindowsHomePath(envFileLocation);
             if (!string.IsNullOrEmpty(envFileLocation))
             {
-                var envProperties = GetPropertiesFromEnvironmentVariableFileLocation(envFileLocation);
+                var envProperties = this.GetPropertiesFromEnvironmentVariableFileLocation(envFileLocation);
                 id = envProperties?.GetProperty(this.apiKeyIdPropertyName ?? DefaultFileIdPropertyName, defaultValue: id);
                 secret = envProperties?.GetProperty(this.apiKeySecretPropertyName ?? DefaultFileSecretPropertyName, defaultValue: secret);
             }
@@ -119,10 +119,10 @@ namespace Stormpath.SDK.Impl.Api
 
             // 4. Try file location specified by web.config/app.config
             var appConfigFileLocation = this.config.AppSettings?["STORMPATH_API_KEY_FILE"];
-            appConfigFileLocation = ExpandWindowsHomePath(appConfigFileLocation);
+            appConfigFileLocation = this.ExpandWindowsHomePath(appConfigFileLocation);
             if (!string.IsNullOrEmpty(appConfigFileLocation))
             {
-                var appConfigProperties = GetPropertiesFromAppConfigFileLocation(appConfigFileLocation);
+                var appConfigProperties = this.GetPropertiesFromAppConfigFileLocation(appConfigFileLocation);
                 id = appConfigProperties?.GetProperty(this.apiKeyIdPropertyName ?? DefaultFileIdPropertyName, defaultValue: id);
                 secret = appConfigProperties?.GetProperty(this.apiKeySecretPropertyName ?? DefaultFileSecretPropertyName, defaultValue: secret);
             }
@@ -140,8 +140,8 @@ namespace Stormpath.SDK.Impl.Api
             // 6. Try configured property file
             if (!string.IsNullOrEmpty(this.apiKeyFilePath))
             {
-                this.apiKeyFilePath = ExpandWindowsHomePath(apiKeyFilePath);
-                var fileProperties = GetPropertiesFromFile();
+                this.apiKeyFilePath = this.ExpandWindowsHomePath(this.apiKeyFilePath);
+                var fileProperties = this.GetPropertiesFromFile();
                 id = fileProperties?.GetProperty(this.apiKeyIdPropertyName ?? DefaultFileIdPropertyName, defaultValue: id);
                 secret = fileProperties?.GetProperty(this.apiKeySecretPropertyName ?? DefaultFileSecretPropertyName, defaultValue: secret);
             }
@@ -149,7 +149,7 @@ namespace Stormpath.SDK.Impl.Api
             // 7. Try an input stream that was passed to us
             if (this.apiKeyFileInputStream != null)
             {
-                var streamProperties = GetPropertiesFromStream();
+                var streamProperties = this.GetPropertiesFromStream();
                 id = streamProperties?.GetProperty(this.apiKeyIdPropertyName ?? DefaultFileIdPropertyName, defaultValue: id);
                 secret = streamProperties?.GetProperty(this.apiKeySecretPropertyName ?? DefaultFileSecretPropertyName, defaultValue: secret);
             }
@@ -280,7 +280,7 @@ namespace Stormpath.SDK.Impl.Api
             if (!input.StartsWith("~"))
                 return input;
 
-            var homePath = env.ExpandEnvironmentVariables("%homedrive%%homepath%");
+            var homePath = this.env.ExpandEnvironmentVariables("%homedrive%%homepath%");
             return homePath + input.TrimStart('~');
         }
     }

@@ -35,21 +35,21 @@ namespace Stormpath.SDK.Tests.Impl
 
         public DefaultDataStore_tests()
         {
-            fakeRequestExecutor = Substitute.For<IRequestExecutor>();
-            dataStore = new DefaultDataStore(fakeRequestExecutor, "http://foobar");
+            this.fakeRequestExecutor = Substitute.For<IRequestExecutor>();
+            this.dataStore = new DefaultDataStore(this.fakeRequestExecutor, "http://foobar");
         }
 
         [Fact]
         public async Task Default_headers_are_applied_to_all_requests()
         {
             var href = "http://foobar/account";
-            fakeRequestExecutor.ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
+            this.fakeRequestExecutor.ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(new DefaultHttpResponse(200, new HttpHeaders(), body: FakeJson.Account, bodyContentType: "application/json") as IHttpResponse));
 
-            var account = await dataStore.GetResourceAsync<IAccount>(href);
+            var account = await this.dataStore.GetResourceAsync<IAccount>(href);
 
             // Verify the default headers
-            fakeRequestExecutor.Received().ExecuteAsync(Arg.Is<IHttpRequest>(request =>
+            this.fakeRequestExecutor.Received().ExecuteAsync(Arg.Is<IHttpRequest>(request =>
                  request.Headers.Accept == "application/json")).IgnoreAwait();
         }
     }

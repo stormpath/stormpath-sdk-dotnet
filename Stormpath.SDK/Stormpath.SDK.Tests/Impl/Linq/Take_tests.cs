@@ -27,50 +27,50 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Take_with_constant_becomes_limit()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Take(10);
 
-            query.GeneratedArgumentsWere(Href, "limit=10");
+            query.GeneratedArgumentsWere(this.Href, "limit=10");
         }
 
         [Fact]
         public void Take_with_variable_becomes_limit()
         {
             var limit = 20;
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Take(limit);
 
-            query.GeneratedArgumentsWere(Href, "limit=20");
+            query.GeneratedArgumentsWere(this.Href, "limit=20");
         }
 
         [Fact]
         public void Take_with_function_becomes_limit()
         {
             var limitFunc = new Func<int>(() => 25);
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Take(limitFunc());
 
-            query.GeneratedArgumentsWere(Href, "limit=25");
+            query.GeneratedArgumentsWere(this.Href, "limit=25");
         }
 
         [Fact]
         public void Take_multiple_calls_are_LIFO()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Take(10).Take(5);
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(Href, "limit=5");
+            query.GeneratedArgumentsWere(this.Href, "limit=5");
         }
 
         [Fact]
         public void Take_limit_is_100()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Take(101);
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(Href, "limit=100");
+            query.GeneratedArgumentsWere(this.Href, "limit=100");
         }
     }
 }

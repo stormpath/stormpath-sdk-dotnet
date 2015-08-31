@@ -38,8 +38,8 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
         public ConverterResult TryConvertField(JProperty token, Type targetType)
         {
             bool isSupportedTokenType = true;
-            if (appliesToTokenType.HasValue)
-                isSupportedTokenType = appliesToTokenType == token.Value.Type;
+            if (this.appliesToTokenType.HasValue)
+                isSupportedTokenType = this.appliesToTokenType == token.Value.Type;
             if (!isSupportedTokenType)
                 return ConverterResult.Failed;
 
@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
             if (!isSupportedTargetType)
                 return ConverterResult.Failed;
 
-            var result = convertAction(token);
+            var result = this.convertAction(token);
             return result;
         }
     }

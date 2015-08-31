@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Impl.Http.Support
         public QueryString()
             : base(compareFunction)
         {
-            queryStringItems = null;
+            this.queryStringItems = null;
         }
 
         public QueryString(Uri uri)
@@ -43,14 +43,14 @@ namespace Stormpath.SDK.Impl.Http.Support
         public QueryString(string queryString)
             : this()
         {
-            queryStringItems = Parse(queryString);
+            this.queryStringItems = Parse(queryString);
         }
 
         public QueryString(Dictionary<string, string> queryParams)
             : this()
         {
             if (queryParams != null)
-                queryStringItems = ToSortedDictionary(queryParams);
+                this.queryStringItems = ToSortedDictionary(queryParams);
         }
 
         // Copy constructor
@@ -61,16 +61,16 @@ namespace Stormpath.SDK.Impl.Http.Support
 
         public bool Any()
         {
-            return queryStringItems?.Any() ?? false;
+            return this.queryStringItems?.Any() ?? false;
         }
 
         public string ToString(bool canonical)
         {
-            bool isEmpty = queryStringItems == null || queryStringItems.Count == 0;
+            bool isEmpty = this.queryStringItems == null || this.queryStringItems.Count == 0;
             if (isEmpty)
                 return string.Empty;
 
-            var items = queryStringItems.Select(x =>
+            var items = this.queryStringItems.Select(x =>
             {
                 var key = RequestHelper.UrlEncode(x.Key, false, canonical);
                 var value = RequestHelper.UrlEncode(x.Value, false, canonical);
@@ -82,7 +82,7 @@ namespace Stormpath.SDK.Impl.Http.Support
 
         public override string ToString()
         {
-            return ToString(false);
+            return this.ToString(false);
         }
 
         public QueryString Merge(QueryString replacementParams)

@@ -39,20 +39,20 @@ namespace Stormpath.SDK.Error
             this.constructedErrorMessage = BuildExceptionMessage(error);
         }
 
-        public int Code => error.Code;
+        public int Code => this.error.Code;
 
-        public string DeveloperMessage => error.DeveloperMessage;
+        public string DeveloperMessage => this.error.DeveloperMessage;
 
-        public string MoreInfo => error.MoreInfo;
+        public string MoreInfo => this.error.MoreInfo;
 
-        public int Status => error.Status;
+        public int Status => this.error.Status;
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("code", Code);
-            info.AddValue("developerMessage", DeveloperMessage, typeof(string));
-            info.AddValue("moreInfo", MoreInfo, typeof(string));
-            info.AddValue("status", Status);
+            info.AddValue("code", this.Code);
+            info.AddValue("developerMessage", this.DeveloperMessage, typeof(string));
+            info.AddValue("moreInfo", this.MoreInfo, typeof(string));
+            info.AddValue("status", this.Status);
 
             base.GetObjectData(info, context);
         }

@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Impl.Utility
 
         public string GetProperty(string key, string defaultValue)
         {
-            var value = GetProperty(key);
+            var value = this.GetProperty(key);
             if (value != null)
             {
                 return value;

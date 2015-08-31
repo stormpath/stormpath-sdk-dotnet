@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 Assert.Throws<ApplicationException>(() =>
                 {
-                    var clientApiKey = builder
+                    var clientApiKey = this.builder
                         .SetSecret("foo")
                         .Build();
                 });
@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 Assert.Throws<ApplicationException>(() =>
                 {
-                    var clientApiKey = builder
+                    var clientApiKey = this.builder
                         .SetId("foo")
                         .Build();
                 });
@@ -77,9 +77,9 @@ namespace Stormpath.SDK.Tests.Impl
             public With_default_properties_file()
             {
                 this.file = Substitute.For<IFile>();
-                this.file.ReadAllText(defaultLocation).Returns(fileContents);
+                this.file.ReadAllText(this.defaultLocation).Returns(this.fileContents);
 
-                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), file);
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), this.file);
             }
 
             [Fact]
@@ -106,10 +106,10 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Observes_property_name_settings()
             {
-                var modifiedFile = fileContents
+                var modifiedFile = this.fileContents
                     .Replace("apiKey.id", "myProps.ID")
                     .Replace("apiKey.secret", "myProps.SECRET");
-                this.file.ReadAllText(defaultLocation).Returns(modifiedFile);
+                this.file.ReadAllText(this.defaultLocation).Returns(modifiedFile);
 
                 var clientApiKey = this.builder
                     .SetIdPropertyName("myProps.ID")
@@ -135,12 +135,12 @@ namespace Stormpath.SDK.Tests.Impl
             public With_environment_variable_file()
             {
                 this.env = Substitute.For<IEnvironment>();
-                this.env.GetEnvironmentVariable(envVariableName).Returns(testLocation);
+                this.env.GetEnvironmentVariable(this.envVariableName).Returns(this.testLocation);
 
                 this.file = Substitute.For<IFile>();
-                this.file.ReadAllText(testLocation).Returns(fileContents);
+                this.file.ReadAllText(this.testLocation).Returns(this.fileContents);
 
-                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), env, file);
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), this.env, this.file);
             }
 
             [Fact]
@@ -167,10 +167,10 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Observes_property_name_settings()
             {
-                var modifiedFile = fileContents
+                var modifiedFile = this.fileContents
                     .Replace("apiKey.id", "env.ID")
                     .Replace("apiKey.secret", "env.SECRET");
-                this.file.ReadAllText(testLocation).Returns(modifiedFile);
+                this.file.ReadAllText(this.testLocation).Returns(modifiedFile);
 
                 var clientApiKey = this.builder
                     .SetIdPropertyName("env.ID")
@@ -194,10 +194,10 @@ namespace Stormpath.SDK.Tests.Impl
             public Building_with_environment_variable_values()
             {
                 this.env = Substitute.For<IEnvironment>();
-                this.env.GetEnvironmentVariable(idVariableName).Returns(fakeApiKeyId);
-                this.env.GetEnvironmentVariable(secretVariableName).Returns(fakeApiSecretId);
+                this.env.GetEnvironmentVariable(this.idVariableName).Returns(this.fakeApiKeyId);
+                this.env.GetEnvironmentVariable(this.secretVariableName).Returns(this.fakeApiSecretId);
 
-                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), env, Substitute.For<IFile>());
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), this.env, Substitute.For<IFile>());
             }
 
             [Fact]
@@ -205,8 +205,8 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var clientApiKey = this.builder.Build();
 
-                clientApiKey.GetId().ShouldBe(fakeApiKeyId);
-                clientApiKey.GetSecret().ShouldBe(fakeApiSecretId);
+                clientApiKey.GetId().ShouldBe(this.fakeApiKeyId);
+                clientApiKey.GetSecret().ShouldBe(this.fakeApiSecretId);
             }
 
             [Fact]
@@ -228,16 +228,16 @@ namespace Stormpath.SDK.Tests.Impl
                 var newSecretName = "different_env_secret";
 
                 this.env = Substitute.For<IEnvironment>();
-                this.env.GetEnvironmentVariable(newKeyName).Returns(fakeApiKeyId);
-                this.env.GetEnvironmentVariable(newSecretName).Returns(fakeApiSecretId);
-                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), env, Substitute.For<IFile>());
+                this.env.GetEnvironmentVariable(newKeyName).Returns(this.fakeApiKeyId);
+                this.env.GetEnvironmentVariable(newSecretName).Returns(this.fakeApiSecretId);
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), this.env, Substitute.For<IFile>());
 
                 var clientApiKey = this.builder
                     .SetIdPropertyName(newKeyName)
                     .SetSecretPropertyName(newSecretName)
                     .Build();
-                clientApiKey.GetId().ShouldBe(fakeApiKeyId);
-                clientApiKey.GetSecret().ShouldBe(fakeApiSecretId);
+                clientApiKey.GetId().ShouldBe(this.fakeApiKeyId);
+                clientApiKey.GetSecret().ShouldBe(this.fakeApiSecretId);
             }
         }
 
@@ -258,13 +258,13 @@ namespace Stormpath.SDK.Tests.Impl
                 this.config = Substitute.For<IConfigurationManager>();
                 this.config.AppSettings.Returns(new System.Collections.Specialized.NameValueCollection()
                 {
-                    { configVariableName, testLocation }
+                    { this.configVariableName, this.testLocation }
                 });
 
                 this.file = Substitute.For<IFile>();
-                this.file.ReadAllText(testLocation).Returns(fileContents);
+                this.file.ReadAllText(this.testLocation).Returns(this.fileContents);
 
-                this.builder = new DefaultClientApiKeyBuilder(config, Substitute.For<IEnvironment>(), file);
+                this.builder = new DefaultClientApiKeyBuilder(this.config, Substitute.For<IEnvironment>(), this.file);
             }
 
             [Fact]
@@ -291,10 +291,10 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Observes_property_name_settings()
             {
-                var modifiedFile = fileContents
+                var modifiedFile = this.fileContents
                     .Replace("apiKey.id", "appConfigFile.ID")
                     .Replace("apiKey.secret", "appConfigFile.secret");
-                this.file.ReadAllText(testLocation).Returns(modifiedFile);
+                this.file.ReadAllText(this.testLocation).Returns(modifiedFile);
 
                 var clientApiKey = this.builder
                     .SetIdPropertyName("appConfigFile.ID")
@@ -320,11 +320,11 @@ namespace Stormpath.SDK.Tests.Impl
                 this.config = Substitute.For<IConfigurationManager>();
                 this.config.AppSettings.Returns(new System.Collections.Specialized.NameValueCollection()
                 {
-                    { idVariableName, fakeApiKeyId },
-                    { secretVariableName, fakeApiSecretId }
+                    { this.idVariableName, this.fakeApiKeyId },
+                    { this.secretVariableName, this.fakeApiSecretId }
                 });
 
-                this.builder = new DefaultClientApiKeyBuilder(config, Substitute.For<IEnvironment>(), Substitute.For<IFile>());
+                this.builder = new DefaultClientApiKeyBuilder(this.config, Substitute.For<IEnvironment>(), Substitute.For<IFile>());
             }
 
             [Fact]
@@ -332,8 +332,8 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var clientApiKey = this.builder.Build();
 
-                clientApiKey.GetId().ShouldBe(fakeApiKeyId);
-                clientApiKey.GetSecret().ShouldBe(fakeApiSecretId);
+                clientApiKey.GetId().ShouldBe(this.fakeApiKeyId);
+                clientApiKey.GetSecret().ShouldBe(this.fakeApiSecretId);
             }
 
             [Fact]
@@ -357,18 +357,18 @@ namespace Stormpath.SDK.Tests.Impl
                 this.config = Substitute.For<IConfigurationManager>();
                 this.config.AppSettings.Returns(new System.Collections.Specialized.NameValueCollection()
                 {
-                    { newKeyIdName, fakeApiKeyId },
-                    { newKeySecretName, fakeApiSecretId }
+                    { newKeyIdName, this.fakeApiKeyId },
+                    { newKeySecretName, this.fakeApiSecretId }
                 });
-                this.builder = new DefaultClientApiKeyBuilder(config, Substitute.For<IEnvironment>(), Substitute.For<IFile>());
+                this.builder = new DefaultClientApiKeyBuilder(this.config, Substitute.For<IEnvironment>(), Substitute.For<IFile>());
 
                 var clientApiKey = this.builder
                     .SetIdPropertyName(newKeyIdName)
                     .SetSecretPropertyName(newKeySecretName)
                     .Build();
 
-                clientApiKey.GetId().ShouldBe(fakeApiKeyId);
-                clientApiKey.GetSecret().ShouldBe(fakeApiSecretId);
+                clientApiKey.GetId().ShouldBe(this.fakeApiKeyId);
+                clientApiKey.GetSecret().ShouldBe(this.fakeApiSecretId);
             }
         }
 
@@ -391,7 +391,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Loads_values_from_stream()
             {
-                using (var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(streamContents)))
+                using (var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(this.streamContents)))
                 {
                     var clientApiKey = this.builder
                         .SetInputStream(stream)
@@ -416,7 +416,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Stream_values_observe_property_name_settings()
             {
-                var modifiedContents = streamContents
+                var modifiedContents = this.streamContents
                     .Replace("apiKey.id", "my.id")
                     .Replace("apiKey.secret", "my.secret");
 
@@ -447,17 +447,17 @@ namespace Stormpath.SDK.Tests.Impl
             public Building_with_properties_file()
             {
                 this.file = Substitute.For<IFile>();
-                this.file.ReadAllText(testLocation)
-                    .Returns(fileContents);
+                this.file.ReadAllText(this.testLocation)
+                    .Returns(this.fileContents);
 
-                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), file);
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), this.file);
             }
 
             [Fact]
             public void With_properties_file()
             {
                 var clientApiKey = this.builder
-                    .SetFileLocation(testLocation)
+                    .SetFileLocation(this.testLocation)
                     .Build();
 
                 clientApiKey.GetId().ShouldBe("foobar");
@@ -468,7 +468,7 @@ namespace Stormpath.SDK.Tests.Impl
             public void Properties_file_is_lower_priority_than_explicit()
             {
                 var clientApiKey = this.builder
-                    .SetFileLocation(testLocation)
+                    .SetFileLocation(this.testLocation)
                     .SetId("different")
                     .SetSecret("also_different")
                     .Build();
@@ -480,13 +480,13 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Properties_file_observes_property_name_settings()
             {
-                var modifiedFile = fileContents
+                var modifiedFile = this.fileContents
                     .Replace("apiKey.id", "myfile.Id")
                     .Replace("apiKey.secret", "myfile.Secret");
-                this.file.ReadAllText(testLocation).Returns(modifiedFile);
+                this.file.ReadAllText(this.testLocation).Returns(modifiedFile);
 
                 var clientApiKey = this.builder
-                    .SetFileLocation(testLocation)
+                    .SetFileLocation(this.testLocation)
                     .SetIdPropertyName("myfile.Id")
                     .SetSecretPropertyName("myfile.Secret")
                     .Build();
@@ -504,13 +504,13 @@ namespace Stormpath.SDK.Tests.Impl
 
                 this.file = Substitute.For<IFile>();
                 this.file.ReadAllText($"{homeDir}\\test.properties")
-                    .Returns(fileContents);
+                    .Returns(this.fileContents);
 
                 var env = Substitute.For<IEnvironment>();
                 env.ExpandEnvironmentVariables(Arg.Any<string>())
                     .Returns(call => Environment.ExpandEnvironmentVariables(call.Arg<string>()));
 
-                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), env, file);
+                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), env, this.file);
 
                 var clientApiKey = this.builder
                     .SetFileLocation("~\\test.properties")

@@ -43,13 +43,13 @@ namespace Stormpath.SDK.Tests.Integration
 
             var accounts = await tenant.GetAccounts().ToListAsync();
 
-            accounts.Count.ShouldNotBe(0);
+            accounts.Count.ShouldNotBe(7);
         }
 
         [Theory]
         public void Getting_tenant_accounts_with_search()
         {
-
+            Assertly.Todo();
         }
 
         [Theory]
@@ -57,18 +57,17 @@ namespace Stormpath.SDK.Tests.Integration
         public async Task Creating_and_deleting_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var application = await client.GetResourceAsync<IApplication>(fixture.ApplicationHref);
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.Application.Href);
 
-            var randomEmail = new RandomEmail(at: "integrationtestingrocks.co");
-            var account = await application.CreateAccountAsync("Luke", "Skywalker", randomEmail, new RandomPassword(12));
+            var account = await application.CreateAccountAsync("Gial", "Ackbar", "admiralackbar@dac.rim", new RandomPassword(12));
 
             account.Href.ShouldNotBeNullOrEmpty();
-            account.FullName.ShouldBe("Luke Skywalker");
-            account.Email.ShouldBe(randomEmail);
-            account.Username.ShouldBe(randomEmail);
+            account.FullName.ShouldBe("Gial Ackbar");
+            account.Email.ShouldBe("admiralackbar@dac.rim");
+            account.Username.ShouldBe("admiralackbar@dac.rim");
             account.Status.ShouldBe(AccountStatus.Enabled);
 
-            var deleteResult = await account.DeleteAsync();
+            var deleteResult = await account.DeleteAsync(); // It's a trap! :(
             deleteResult.ShouldBe(true);
         }
     }

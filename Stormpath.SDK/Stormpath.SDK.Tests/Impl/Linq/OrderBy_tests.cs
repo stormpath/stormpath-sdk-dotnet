@@ -30,29 +30,29 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Order_by_a_field()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .OrderBy(x => x.GivenName);
 
-            query.GeneratedArgumentsWere(Href, "orderBy=givenName");
+            query.GeneratedArgumentsWere(this.Href, "orderBy=givenName");
         }
 
         [Fact]
         public void Order_by_a_field_descending()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .OrderByDescending(x => x.Email);
 
-            query.GeneratedArgumentsWere(Href, "orderBy=email desc");
+            query.GeneratedArgumentsWere(this.Href, "orderBy=email desc");
         }
 
         [Fact]
         public void Order_by_multiple_fields()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .OrderBy(x => x.GivenName)
                 .ThenByDescending(x => x.Username);
 
-            query.GeneratedArgumentsWere(Href, "orderBy=givenName,username desc");
+            query.GeneratedArgumentsWere(this.Href, "orderBy=givenName,username desc");
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                Harness.Queryable.OrderBy(x => x.GivenName, Substitute.For<IComparer<string>>()).ToList();
+                this.Harness.Queryable.OrderBy(x => x.GivenName, Substitute.For<IComparer<string>>()).ToList();
             });
         }
     }

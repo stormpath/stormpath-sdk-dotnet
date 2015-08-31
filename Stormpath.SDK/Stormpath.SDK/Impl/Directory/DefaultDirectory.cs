@@ -50,31 +50,31 @@ namespace Stormpath.SDK.Impl.Directory
         {
         }
 
-        internal LinkProperty AccountCreationPolicy => GetLinkProperty(AccountCreationPolicyPropertyName);
+        internal LinkProperty AccountCreationPolicy => this.GetLinkProperty(AccountCreationPolicyPropertyName);
 
-        internal LinkProperty Accounts => GetLinkProperty(AccountsPropertyName);
+        internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
-        internal LinkProperty ApplicationMappings => GetLinkProperty(ApplicationMappingsPropertyName);
+        internal LinkProperty ApplicationMappings => this.GetLinkProperty(ApplicationMappingsPropertyName);
 
-        internal LinkProperty Applications => GetLinkProperty(ApplicationsPropertyName);
+        internal LinkProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
         string IDirectory.Description => GetProperty<string>(DescriptionPropertyName);
 
-        internal LinkProperty Groups => GetLinkProperty(GroupsPropertyName);
+        internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
         string IDirectory.Name => GetProperty<string>(NamePropertyName);
 
-        internal LinkProperty PasswordPolicy => GetLinkProperty(PasswordPolicyPropertyName);
+        internal LinkProperty PasswordPolicy => this.GetLinkProperty(PasswordPolicyPropertyName);
 
-        internal LinkProperty Provider => GetLinkProperty(ProviderPropertyName);
+        internal LinkProperty Provider => this.GetLinkProperty(ProviderPropertyName);
 
         DirectoryStatus IDirectory.Status => GetProperty<DirectoryStatus>(StatusPropertyName);
 
-        internal LinkProperty Tenant => GetLinkProperty(TenantPropertyName);
+        internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
         Task<IDirectory> ISaveable<IDirectory>.SaveAsync(CancellationToken cancellationToken)
         {
-            return GetInternalDataStore().SaveAsync<IDirectory>(this, cancellationToken);
+            return this.GetInternalDataStore().SaveAsync<IDirectory>(this, cancellationToken);
         }
     }
 }

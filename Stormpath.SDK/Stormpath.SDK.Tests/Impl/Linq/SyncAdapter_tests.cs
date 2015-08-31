@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public void ToList_synchronously_iterates_thru_collection()
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                Href,
+                this.Href,
                 new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.DarthVader, 52)));
 
             var items = harness.Queryable
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public void Take_limit_is_observed()
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                Href,
+                this.Href,
                 new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.DarthVader, 52)));
 
             var items = harness.Queryable

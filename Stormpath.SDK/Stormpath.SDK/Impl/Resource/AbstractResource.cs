@@ -40,8 +40,8 @@ namespace Stormpath.SDK.Impl.Resource
         {
             this.dataStore = dataStore;
 
-            properties = new Hashtable();
-            dirtyProperties = new Hashtable();
+            this.properties = new Hashtable();
+            this.dirtyProperties = new Hashtable();
         }
 
         public AbstractResource(IInternalDataStore dataStore, Hashtable properties)
@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         string IResource.Href => GetProperty<string>(HrefPropertyName);
 
-        protected IInternalDataStore GetInternalDataStore() => dataStore;
+        protected IInternalDataStore GetInternalDataStore() => this.dataStore;
 
         public LinkProperty GetLinkProperty(string name)
         {
@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         public T GetProperty<T>(string name)
         {
-            var value = GetProperty(name);
+            var value = this.GetProperty(name);
 
             return (T)value;
         }
@@ -72,27 +72,27 @@ namespace Stormpath.SDK.Impl.Resource
         {
             object value;
 
-            value = dirtyProperties[name];
+            value = this.dirtyProperties[name];
             if (value != null)
                 return value;
 
-            return properties[name];
+            return this.properties[name];
         }
 
         public void SetProperty<T>(string name, T value)
         {
-            SetProperty(name, (object)value);
+            this.SetProperty(name, (object)value);
         }
 
         public void SetProperty(string name, object value)
         {
-            lock (writeLock)
+            lock (this.writeLock)
             {
-                if (!properties.ContainsKey(name))
-                    properties.Add(name, value);
+                if (!this.properties.ContainsKey(name))
+                    this.properties.Add(name, value);
 
-                dirtyProperties[name] = value;
-                isDirty = true;
+                this.dirtyProperties[name] = value;
+                this.isDirty = true;
             }
         }
 
@@ -100,14 +100,14 @@ namespace Stormpath.SDK.Impl.Resource
         {
             try
             {
-                lock (writeLock)
+                lock (this.writeLock)
                 {
                     foreach (DictionaryEntry item in newProperties)
                     {
                         this.properties[item.Key] = item.Value;
                     }
 
-                    isDirty = false;
+                    this.isDirty = false;
                 }
             }
             catch (Exception e)

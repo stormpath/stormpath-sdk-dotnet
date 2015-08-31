@@ -39,17 +39,17 @@ namespace Stormpath.SDK.Impl.Linq.RequestModel
 
         public bool IsStringTermComplete()
         {
-            return TargetType == typeof(StringAttributeTermModel) &&
-                !string.IsNullOrEmpty(StringValue) &&
-                StringMatchType.HasValue;
+            return this.TargetType == typeof(StringAttributeTermModel) &&
+                !string.IsNullOrEmpty(this.StringValue) &&
+                this.StringMatchType.HasValue;
         }
 
         public bool IsDateTermComplete()
         {
-            return TargetType == typeof(DatetimeAttributeTermModel) &&
-                DateValue.HasValue &&
-                DateGreaterThan.HasValue &&
-                DateOrEqual.HasValue;
+            return this.TargetType == typeof(DatetimeAttributeTermModel) &&
+                this.DateValue.HasValue &&
+                this.DateGreaterThan.HasValue &&
+                this.DateOrEqual.HasValue;
         }
     }
 }

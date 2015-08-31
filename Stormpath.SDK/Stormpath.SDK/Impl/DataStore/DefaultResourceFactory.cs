@@ -51,12 +51,11 @@ namespace Stormpath.SDK.Impl.DataStore
             this.dataStore = dataStore;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element must begin with upper-case letter", Justification = "Reviewed")]
-        private IResourceFactory _this => this;
+        private IResourceFactory IThis => this;
 
         T IResourceFactory.Create<T>()
         {
-            return _this.Create<T>(null);
+            return this.IThis.Create<T>(null);
         }
 
         T IResourceFactory.Create<T>(Hashtable properties)
@@ -71,22 +70,22 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private T InstantiateSingle<T>(Hashtable properties)
         {
-            return (T)InstantiateSingle(properties, typeof(T));
+            return (T)this.InstantiateSingle(properties, typeof(T));
         }
 
         private object InstantiateSingle(Hashtable properties, Type type)
         {
             Type targetType;
-            if (!typeMap.TryGetValue(type, out targetType))
+            if (!this.typeMap.TryGetValue(type, out targetType))
                 throw new ApplicationException($"Unknown resource type {type.Name}");
 
             object targetObject;
             try
             {
                 if (properties == null)
-                    targetObject = Activator.CreateInstance(targetType, new object[] { dataStore });
+                    targetObject = Activator.CreateInstance(targetType, new object[] { this.dataStore });
                 else
-                    targetObject = Activator.CreateInstance(targetType, new object[] { dataStore, properties });
+                    targetObject = Activator.CreateInstance(targetType, new object[] { this.dataStore, properties });
             }
             catch (Exception e)
             {
@@ -101,7 +100,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var outerType = typeof(T); // CollectionResponsePage<TInner>
 
             Type innerType = outerType.GetGenericArguments().SingleOrDefault();
-            if (innerType == null || !typeMap.ContainsKey(innerType))
+            if (innerType == null || !this.typeMap.ContainsKey(innerType))
                 throw new ApplicationException($"Error creating collection resource: unknown inner type {outerType.GetGenericArguments().SingleOrDefault()?.Name}.");
 
             if (properties == null)
@@ -131,7 +130,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
                 foreach (var item in items)
                 {
-                    var materialized = InstantiateSingle(item, innerType);
+                    var materialized = this.InstantiateSingle(item, innerType);
                     addMethod.Invoke(materializedItems, new object[] { materialized });
                 }
 

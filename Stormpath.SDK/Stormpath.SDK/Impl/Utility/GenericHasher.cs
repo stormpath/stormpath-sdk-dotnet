@@ -31,10 +31,10 @@ namespace Stormpath.SDK.Impl.Utility
         public Func<T, int> HashFunction =>
             t =>
             {
-                if (!Valid(t))
+                if (!this.Valid(t))
                     return 0;
 
-                return hashAction(t);
+                return this.hashAction(t);
             };
 
         public static implicit operator Func<T, int>(GenericHasherDeprecated<T> hasher)
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Impl.Utility
 
         public int GetHashCode(T obj)
         {
-            return HashFunction(obj);
+            return this.HashFunction(obj);
         }
 
         private bool Valid(T obj)

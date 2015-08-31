@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                var client = builder
+                var client = this.builder
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetBaseUrl("http://foobar")
                 .SetConnectionTimeout(10)
@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var fakeKey = Substitute.For<IClientApiKey>();
                 fakeKey.IsValid().Returns(false);
 
-                builder
+                this.builder
                     .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                     .SetBaseUrl("http://foobar")
                     .SetConnectionTimeout(10)
@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Tests.Impl
             var fakeKey = Substitute.For<IClientApiKey>();
             fakeKey.IsValid().Returns(true);
 
-            var client = builder
+            var client = this.builder
                 .SetApiKey(fakeKey)
                 .SetBaseUrl("http://foobar")
                 .SetConnectionTimeout(10)
@@ -85,7 +85,7 @@ namespace Stormpath.SDK.Tests.Impl
             var fakeKey = Substitute.For<IClientApiKey>();
             fakeKey.IsValid().Returns(true);
 
-            var client = builder
+            var client = this.builder
                 .SetApiKey(fakeKey)
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetConnectionTimeout(10)
@@ -101,7 +101,7 @@ namespace Stormpath.SDK.Tests.Impl
             var fakeKey = Substitute.For<IClientApiKey>();
             fakeKey.IsValid().Returns(true);
 
-            var client = builder
+            var client = this.builder
                 .SetApiKey(fakeKey)
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetBaseUrl("http://foobar")
@@ -116,7 +116,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                var client = builder
+                var client = this.builder
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetBaseUrl(string.Empty)
                 .SetConnectionTimeout(10)
@@ -129,7 +129,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                var client = builder
+                var client = this.builder
                     .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                     .SetBaseUrl("foobar")
                     .SetConnectionTimeout(-1)

@@ -1,4 +1,4 @@
-﻿// <copyright file="HttpMessageBase.cs" company="Stormpath, Inc.">
+﻿// <copyright file="AccountCreationOptionsBuilder.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,16 +15,21 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.Http
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Stormpath.SDK.Account
 {
-    internal abstract class HttpMessageBase : IHttpMessage
+    public sealed class AccountCreationOptionsBuilder
     {
-        public abstract string Body { get; }
+        public bool? RegistrationWorkflowEnabled { get; set; }
 
-        public abstract string BodyContentType { get; }
-
-        public bool HasBody => !string.IsNullOrEmpty(this.Body) && !string.IsNullOrEmpty(this.BodyContentType);
-
-        public abstract HttpHeaders Headers { get; }
+        public IAccountCreationOptions Build()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

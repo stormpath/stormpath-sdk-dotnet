@@ -47,12 +47,12 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         public override Expression Resolve(ParameterExpression inputParameter, Expression expressionToBeResolved, ClauseGenerationContext clauseGenerationContext)
         {
-            return Source.Resolve(inputParameter, expressionToBeResolved, clauseGenerationContext);
+            return this.Source.Resolve(inputParameter, expressionToBeResolved, clauseGenerationContext);
         }
 
         protected override ResultOperatorBase CreateResultOperator(ClauseGenerationContext clauseGenerationContext)
         {
-            var resolvedParameter = Source
+            var resolvedParameter = this.Source
                 .Resolve(this.keySelectorLambda.Parameters[0], this.keySelectorLambda.Body, clauseGenerationContext);
             return new ExpandResultOperator(resolvedParameter, this.offset, this.limit);
         }

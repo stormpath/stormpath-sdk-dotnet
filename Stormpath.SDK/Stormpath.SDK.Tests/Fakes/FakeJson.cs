@@ -17,12 +17,10 @@
 
 namespace Stormpath.SDK.Tests.Fakes
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Reviewed")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "Reviewed")]
+#pragma warning disable SA1124 // Do not use regions
     public static class FakeJson
     {
         #region Tenant foo-bar
-
         public static readonly string Tenant = @"
 {
     ""accounts"": {
@@ -759,4 +757,5 @@ namespace Stormpath.SDK.Tests.Fakes
 
         #endregion
     }
+#pragma warning restore SA1124 // Do not use regions
 }

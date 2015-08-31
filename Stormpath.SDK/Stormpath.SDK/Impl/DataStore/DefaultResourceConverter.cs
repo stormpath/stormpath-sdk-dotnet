@@ -17,6 +17,10 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
+using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
@@ -57,6 +61,16 @@ namespace Stormpath.SDK.Impl.DataStore
             if (asLinkProperty != null)
             {
                 return null;
+            }
+
+            bool isStatusProperty =
+                rawValue is AccountStatus ||
+                rawValue is ApplicationStatus ||
+                rawValue is DirectoryStatus ||
+                rawValue is GroupStatus;
+            if (isStatusProperty)
+            {
+                return rawValue.ToString().ToLower();
             }
 
             return rawValue;

@@ -1,4 +1,4 @@
-﻿// <copyright file="HttpMessageBase.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Assertly.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,16 +15,18 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.Http
+namespace Stormpath.SDK.Tests.Integration.Helpers
 {
-    internal abstract class HttpMessageBase : IHttpMessage
+    public static class Assertly
     {
-        public abstract string Body { get; }
+        public static void Fail(string message)
+        {
+            Xunit.Assert.True(false, message);
+        }
 
-        public abstract string BodyContentType { get; }
-
-        public bool HasBody => !string.IsNullOrEmpty(this.Body) && !string.IsNullOrEmpty(this.BodyContentType);
-
-        public abstract HttpHeaders Headers { get; }
+        public static void Todo()
+        {
+            Xunit.Assert.True(false, "TODO");
+        }
     }
 }

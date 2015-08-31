@@ -22,8 +22,6 @@ using System.Reflection;
 namespace Stormpath.SDK.Impl.Utility
 {
     // Adapted from an example at http://www.mechonomics.com/generic-value-object-equality-updated/
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements must appear in the correct order", Justification = "Reviewed.")]
-
     internal abstract class ImmutableValueObject<T> : IEquatable<T>
         where T : ImmutableValueObject<T>
     {

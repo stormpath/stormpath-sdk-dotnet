@@ -20,7 +20,6 @@ using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "Reviewed.")]
     internal sealed class ConverterResult : ImmutableValueObject<ConverterResult>
     {
         private readonly bool success = false;
@@ -49,19 +48,19 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
             this.type = type;
         }
 
-        public bool Success => success;
+        public bool Success => this.success;
 
-        public object Result => result;
+        public object Result => this.result;
 
-        public Type Type => type;
+        public Type Type => this.type;
 
         public T ResultAs<T>()
             where T : class
         {
-            if (typeof(T) != type)
-                throw new InvalidCastException($"Result is of type '{type?.Name}', not '{typeof(T).Name}'");
+            if (typeof(T) != this.type)
+                throw new InvalidCastException($"Result is of type '{this.type?.Name}', not '{typeof(T).Name}'");
 
-            return result as T;
+            return this.result as T;
         }
     }
 }

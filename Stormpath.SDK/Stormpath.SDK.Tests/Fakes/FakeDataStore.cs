@@ -28,7 +28,6 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Tests.Fakes
 {
     // TODO: Make this an actual server with valid responses
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements must appear in the correct order", Justification = "Compiled regex fields near methods that use them")]
     public class FakeDataStore<TType> : IDataStore
     {
         private static int defaultLimit = 25;
@@ -45,7 +44,7 @@ namespace Stormpath.SDK.Tests.Fakes
 
         public IEnumerable<string> GetCalls()
         {
-            return calls;
+            return this.calls;
         }
 
         async Task<CollectionResponsePage<T>> IDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
@@ -56,7 +55,7 @@ namespace Stormpath.SDK.Tests.Fakes
 
             cancellationToken.ThrowIfCancellationRequested();
             await Task.Yield();
-            calls.Add(href);
+            this.calls.Add(href);
 
             var limit = GetLimitFromUrlString(href) ?? defaultLimit;
             var offset = GetOffsetFromUrlString(href) ?? defaultOffset;

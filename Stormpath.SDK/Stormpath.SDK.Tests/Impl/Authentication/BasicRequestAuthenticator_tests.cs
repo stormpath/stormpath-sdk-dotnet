@@ -41,18 +41,18 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
 
         public BasicRequestAuthenticator_tests()
         {
-            uriQualifier = new UriQualifier(fakeBaseHref);
-            authenticator = new BasicRequestAuthenticator();
-            apiKey = new DefaultClientApiKey(fakeApiKeyId, fakeApiKeySecret);
+            this.uriQualifier = new UriQualifier(this.fakeBaseHref);
+            this.authenticator = new BasicRequestAuthenticator();
+            this.apiKey = new DefaultClientApiKey(this.fakeApiKeyId, this.fakeApiKeySecret);
         }
 
         [Fact]
         public void Adds_XStormpathDate_header()
         {
-            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/bar")));
+            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(this.uriQualifier.EnsureFullyQualified("/bar")));
             var now = new DateTimeOffset(2015, 08, 01, 06, 30, 00, TimeSpan.Zero);
 
-            authenticator.AuthenticateCore(myRequest, apiKey, now);
+            this.authenticator.AuthenticateCore(myRequest, this.apiKey, now);
 
             // X-Stormpath-Date -> current time in UTC
             var XStormpathDateHeader = Iso8601.Parse(myRequest.Headers.GetFirst<string>("X-Stormpath-Date"));
@@ -62,15 +62,15 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Adds_Basic_authorization_header()
         {
-            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/bar")));
+            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(this.uriQualifier.EnsureFullyQualified("/bar")));
             var now = new DateTimeOffset(2015, 08, 01, 06, 30, 00, TimeSpan.Zero);
 
-            authenticator.AuthenticateCore(myRequest, apiKey, now);
+            this.authenticator.AuthenticateCore(myRequest, this.apiKey, now);
 
             // Authorization: "Basic [base64 stuff]"
             var authenticationHeader = myRequest.Headers.Authorization;
             authenticationHeader.Scheme.ShouldBe("Basic");
-            authenticationHeader.Parameter.FromBase64(Encoding.UTF8).ShouldBe($"{fakeApiKeyId}:{fakeApiKeySecret}");
+            authenticationHeader.Parameter.FromBase64(Encoding.UTF8).ShouldBe($"{this.fakeApiKeyId}:{this.fakeApiKeySecret}");
         }
     }
 }

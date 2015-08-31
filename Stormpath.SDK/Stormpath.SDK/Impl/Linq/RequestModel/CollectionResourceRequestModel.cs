@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Impl.Linq.RequestModel
         {
             foreach (var model in models)
             {
-                AddAttributeTerm(model);
+                this.AddAttributeTerm(model);
             }
         }
 

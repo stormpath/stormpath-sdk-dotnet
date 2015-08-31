@@ -28,13 +28,13 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
 
         public DefaultRequestAuthenticatorFactory_tests()
         {
-            factory = new DefaultRequestAuthenticatorFactory();
+            this.factory = new DefaultRequestAuthenticatorFactory();
         }
 
         [Fact]
         public void Returns_SAuthc1_authenticator_for_null_scheme()
         {
-            var authenticator = factory.Create(null);
+            var authenticator = this.factory.Create(null);
 
             authenticator.ShouldBeOfType<SAuthc1RequestAuthenticator>();
         }
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Returns_SAuthc1_authenticator()
         {
-            var authenticator = factory.Create(AuthenticationScheme.SAuthc1);
+            var authenticator = this.factory.Create(AuthenticationScheme.SAuthc1);
 
             authenticator.ShouldBeOfType<SAuthc1RequestAuthenticator>();
         }
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Returns_Basic_authenticator()
         {
-            var authenticator = factory.Create(AuthenticationScheme.Basic);
+            var authenticator = this.factory.Create(AuthenticationScheme.Basic);
 
             authenticator.ShouldBeOfType<BasicRequestAuthenticator>();
         }

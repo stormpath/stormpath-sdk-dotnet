@@ -66,8 +66,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\AccountCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountStatus.cs" />
     <Compile Include="Account\IAccount.cs" />
+    <Compile Include="Account\IAccountCreation.cs" />
+    <Compile Include="Account\IAccountCreationOptions.cs" />
     <Compile Include="Api\ClientApiKeys.cs" />
     <Compile Include="Api\IClientApiKey.cs" />
     <Compile Include="Api\IClientApiKeyBuilder.cs" />
@@ -175,7 +178,9 @@
     <Compile Include="Impl\Utility\PlatformHelper.cs" />
     <Compile Include="Impl\Utility\WindowsVersion.cs" />
     <Compile Include="Linq\AsyncQueryableExtensions.cs" />
-    <Compile Include="Linq\CollectionResourceQueryableExtensions.cs" />
+    <Compile Include="Linq\CollectionResourceQueryableExpandExtensions.cs" />
+    <Compile Include="Linq\CollectionResourceQueryableFilterExtensions.cs" />
+    <Compile Include="Linq\CollectionResourceQueryableWithinExtensions.cs" />
     <Compile Include="Linq\IAsyncQueryable.cs" />
     <Compile Include="Impl\Resource\AbstractResource.cs" />
     <Compile Include="Resource\IAuditable.cs" />

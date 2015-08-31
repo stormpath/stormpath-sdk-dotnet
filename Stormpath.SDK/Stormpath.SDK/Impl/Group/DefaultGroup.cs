@@ -47,25 +47,25 @@ namespace Stormpath.SDK.Impl.Group
         {
         }
 
-        internal LinkProperty AccountMemberships => GetLinkProperty(AccountMembershipsPropertyName);
+        internal LinkProperty AccountMemberships => this.GetLinkProperty(AccountMembershipsPropertyName);
 
-        internal LinkProperty Accounts => GetLinkProperty(AccountsPropertyName);
+        internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
-        internal LinkProperty Applications => GetLinkProperty(ApplicationsPropertyName);
+        internal LinkProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
         string IGroup.Description => GetProperty<string>(DescriptionPropertyName);
 
-        internal LinkProperty Directory => GetLinkProperty(DirectoryPropertyName);
+        internal LinkProperty Directory => this.GetLinkProperty(DirectoryPropertyName);
 
         string IGroup.Name => GetProperty<string>(NamePropertyName);
 
         GroupStatus IGroup.Status => GetProperty<GroupStatus>(StatusPropertyName);
 
-        internal LinkProperty Tenant => GetLinkProperty(TenantPropertyName);
+        internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
         Task<IGroup> ISaveable<IGroup>.SaveAsync(CancellationToken cancellationToken)
         {
-            return GetInternalDataStore().SaveAsync<IGroup>(this, cancellationToken);
+            return this.GetInternalDataStore().SaveAsync<IGroup>(this, cancellationToken);
         }
     }
 }

@@ -28,7 +28,6 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:DoNotUseRegions", Justification = "Reviewed.")]
     internal sealed class DefaultDataStore : IInternalDataStore, IDisposable
     {
         private readonly string baseUrl;
@@ -61,30 +60,30 @@ namespace Stormpath.SDK.Impl.DataStore
 
         T IDataStore.Instantiate<T>()
         {
-            return resourceFactory.Create<T>();
+            return this.resourceFactory.Create<T>();
         }
 
         async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
         {
-            var canonicalUri = new CanonicalUri(uriQualifier.EnsureFullyQualified(resourcePath));
+            var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
             var request = new DefaultHttpRequest(HttpMethod.Get, canonicalUri);
-            var response = await SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
+            var response = await this.SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
             var json = response.Body;
 
-            var map = serializer.Deserialize(json, typeof(T));
-            var resource = resourceFactory.Create<T>(map);
+            var map = this.serializer.Deserialize(json, typeof(T));
+            var resource = this.resourceFactory.Create<T>(map);
 
             return resource;
         }
 
         Task<CollectionResponsePage<T>> IDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
         {
-            return This.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
+            return this.This.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
         }
 
         Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
         {
-            return SaveCoreAsync(
+            return this.SaveCoreAsync(
                 resource, parentHref,
                 queryParams: null,
                 cancellationToken: cancellationToken);
@@ -100,7 +99,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<bool> IInternalDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
         {
-            return DeleteCoreAsync(resource, cancellationToken);
+            return this.DeleteCoreAsync(resource, cancellationToken);
         }
 
         private async Task<T> SaveCoreAsync<T>(T resource, string href, QueryString queryParams, CancellationToken cancellationToken)
@@ -113,15 +112,15 @@ namespace Stormpath.SDK.Impl.DataStore
             if (resource == null)
                 throw new ArgumentNullException(nameof(resource));
 
-            var uri = new CanonicalUri(uriQualifier.EnsureFullyQualified(href), queryParams);
-            var propertiesMap = resourceConverter.ToMap(abstractResource, partialUpdate: false);
-            var body = serializer.Serialize(propertiesMap);
+            var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
+            var propertiesMap = this.resourceConverter.ToMap(abstractResource, partialUpdate: false);
+            var body = this.serializer.Serialize(propertiesMap);
 
             var request = new DefaultHttpRequest(HttpMethod.Post, uri, null, null, body, "application/json");
 
-            var response = await SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
+            var response = await this.SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
             var map = GetBody<T>(response);
-            var createdResource = resourceFactory.Create<T>(map);
+            var createdResource = this.resourceFactory.Create<T>(map);
 
             return createdResource;
         }
@@ -136,18 +135,18 @@ namespace Stormpath.SDK.Impl.DataStore
             if (string.IsNullOrEmpty(resource.Href))
                 throw new ArgumentNullException(nameof(resource.Href));
 
-            var uri = new CanonicalUri(uriQualifier.EnsureFullyQualified(resource.Href));
+            var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resource.Href));
             var request = new DefaultHttpRequest(HttpMethod.Delete, uri);
 
-            var response = await SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
+            var response = await this.SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
             return response.HttpStatus == 204;
         }
 
         private async Task<IHttpResponse> SendToExecutorAsync(IHttpRequest request, CancellationToken cancellationToken)
         {
-            ApplyDefaultRequestHeaders(request);
+            this.ApplyDefaultRequestHeaders(request);
 
-            var response = await requestExecutor
+            var response = await this.requestExecutor
                 .ExecuteAsync(request, cancellationToken)
                 .ConfigureAwait(false);
 
@@ -172,32 +171,28 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ArgumentNullException(nameof(response));
 
             if (response.HasBody)
-                return serializer.Deserialize(response.Body, typeof(T));
+                return this.serializer.Deserialize(response.Body, typeof(T));
             else
                 return new Hashtable();
         }
 
-        #region IDisposable implementation
-
         private void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!this.disposed)
             {
                 if (disposing)
                 {
-                    requestExecutor.Dispose();
+                    this.requestExecutor.Dispose();
                 }
 
-                disposed = true;
+                this.disposed = true;
             }
         }
 
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
+            this.Dispose(true);
         }
-
-        #endregion
     }
 }

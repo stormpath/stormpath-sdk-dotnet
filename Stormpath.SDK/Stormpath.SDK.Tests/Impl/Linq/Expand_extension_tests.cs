@@ -27,58 +27,58 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Expand_one_link()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Expand(x => x.GetDirectoryAsync());
 
-            query.GeneratedArgumentsWere(Href, "expand=directory");
+            query.GeneratedArgumentsWere(this.Href, "expand=directory");
         }
 
         [Fact]
         public void Expand_multiple_links()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Expand(x => x.GetDirectoryAsync())
                 .Expand(x => x.GetTenantAsync());
 
-            query.GeneratedArgumentsWere(Href, "expand=directory,tenant");
+            query.GeneratedArgumentsWere(this.Href, "expand=directory,tenant");
         }
 
         [Fact]
         public void Expand_collection_query_with_offset()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Expand(x => x.GetGroupsAsync(), offset: 10);
 
-            query.GeneratedArgumentsWere(Href, "expand=groups(offset:10)");
+            query.GeneratedArgumentsWere(this.Href, "expand=groups(offset:10)");
         }
 
         [Fact]
         public void Expand_collection_query_with_limit()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Expand(x => x.GetGroupsAsync(), limit: 20);
 
-            query.GeneratedArgumentsWere(Href, "expand=groups(limit:20)");
+            query.GeneratedArgumentsWere(this.Href, "expand=groups(limit:20)");
         }
 
         [Fact]
         public void Expand_collection_query_with_both_parameters()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Expand(x => x.GetGroupsAsync(), 5, 15);
 
-            query.GeneratedArgumentsWere(Href, "expand=groups(offset:5,limit:15)");
+            query.GeneratedArgumentsWere(this.Href, "expand=groups(offset:5,limit:15)");
         }
 
         [Fact]
         public void Expand_all_the_things()
         {
-            var query = Harness.Queryable
+            var query = this.Harness.Queryable
                 .Expand(x => x.GetTenantAsync())
                 .Expand(x => x.GetGroupsAsync(), 10, 20)
                 .Expand(x => x.GetDirectoryAsync());
 
-            query.GeneratedArgumentsWere(Href, "expand=tenant,groups(offset:10,limit:20),directory");
+            query.GeneratedArgumentsWere(this.Href, "expand=tenant,groups(offset:10,limit:20),directory");
         }
 
         [Fact]
@@ -86,8 +86,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = Harness.Queryable.Expand(x => x.Email);
-                query.GeneratedArgumentsWere(Href, "<not evaluated>");
+                var query = this.Harness.Queryable.Expand(x => x.Email);
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
             });
         }
 
@@ -96,8 +96,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = Harness.Queryable.Expand(x => x.GetDirectoryAsync(), limit: 10);
-                query.GeneratedArgumentsWere(Href, "<not evaluated>");
+                var query = this.Harness.Queryable.Expand(x => x.GetDirectoryAsync(), limit: 10);
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
             });
         }
 
@@ -106,8 +106,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = Harness.Queryable.Expand(x => x.GetTenantAsync().GetAwaiter());
-                query.GeneratedArgumentsWere(Href, "<not evaluated>");
+                var query = this.Harness.Queryable.Expand(x => x.GetTenantAsync().GetAwaiter());
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
             });
         }
     }
