@@ -27,6 +27,7 @@ using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Group;
+using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -41,8 +42,8 @@ namespace Stormpath.SDK.Tests.Impl
 
         public DefaultResourceFactory_tests()
         {
-            this.fakeDataStore = Substitute.For<IInternalDataStore>();
-
+            var fakeRequestExecutor = Substitute.For<IRequestExecutor>();
+            this.fakeDataStore = new DefaultDataStore(fakeRequestExecutor, "http://api.foobar.com");
             this.factory = new DefaultResourceFactory(this.fakeDataStore);
         }
 

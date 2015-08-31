@@ -21,6 +21,8 @@ namespace Stormpath.SDK.Impl.Http
     {
         int HttpStatus { get; }
 
+        string ResponsePhrase { get; }
+
         bool IsError { get; }
     }
 }

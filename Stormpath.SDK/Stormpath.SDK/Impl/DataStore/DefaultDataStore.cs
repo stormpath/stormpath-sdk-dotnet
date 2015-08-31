@@ -161,7 +161,21 @@ namespace Stormpath.SDK.Impl.DataStore
 
             if (response.IsError)
             {
-                var error = new DefaultError(GetBody<IError>(response));
+                DefaultError error = null;
+                if (response.HasBody)
+                {
+                    error = new DefaultError(GetBody<IError>(response));
+                }
+                else
+                {
+                    var properties = new Hashtable();
+                    properties.Add("status", response.HttpStatus);
+                    properties.Add("code", response.HttpStatus);
+                    properties.Add("moreInfo", "HTTP error");
+                    properties.Add("developerMessage", response.ResponsePhrase);
+                    error = new DefaultError(properties);
+                }
+
                 throw new ResourceException(error);
             }
 

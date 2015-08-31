@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var href = "http://foobar/account";
             this.fakeRequestExecutor.ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(200, new HttpHeaders(), body: FakeJson.Account, bodyContentType: "application/json") as IHttpResponse));
+                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), body: FakeJson.Account, bodyContentType: "application/json") as IHttpResponse));
 
             var account = await this.dataStore.GetResourceAsync<IAccount>(href);
 
