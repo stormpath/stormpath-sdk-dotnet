@@ -19,7 +19,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Tests.Fakes;

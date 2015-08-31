@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.uriQualifier = new UriQualifier(baseUrl);
         }
 
-        private IInternalDataStore This => this;
+        private IInternalDataStore IThis => this;
 
         IRequestExecutor IInternalDataStore.RequestExecutor => this.requestExecutor;
 
@@ -78,14 +78,23 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<CollectionResponsePage<T>> IDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
         {
-            return this.This.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
+            return this.IThis.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
         }
 
         Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
         {
+            return this.IThis.CreateAsync(parentHref, resource, options: null, cancellationToken: cancellationToken);
+        }
+
+        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
+        {
+            QueryString queryParams = null;
+            if (options != null)
+                queryParams = new QueryString(options.GetQueryString());
+
             return this.SaveCoreAsync(
                 resource, parentHref,
-                queryParams: null,
+                queryParams: queryParams,
                 cancellationToken: cancellationToken);
         }
 

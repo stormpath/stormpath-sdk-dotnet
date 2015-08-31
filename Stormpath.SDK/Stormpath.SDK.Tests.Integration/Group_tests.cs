@@ -22,7 +22,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    [CollectionDefinition("LiveTenantTests")]
+    [Collection("Live tenant tests")]
     public class Group_tests
     {
         [Theory(Skip = "Tenant has no groups yet")]

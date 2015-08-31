@@ -18,6 +18,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Application
@@ -35,5 +36,13 @@ namespace Stormpath.SDK.Application
         IApplication SetName(string name);
 
         IApplication SetStatus(ApplicationStatus status);
+
+        ICollectionResourceQueryable<IAccount> GetAccounts();
+
+        ICollectionResourceQueryable<IAccountStoreMapping> GetAccountStoreMappings(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<IAccountStore> GetDefaultAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<IAccountStore> GetDefaultGroupStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

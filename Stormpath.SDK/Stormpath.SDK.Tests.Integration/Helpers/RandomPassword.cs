@@ -106,6 +106,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
                     enoughUppercase &&
                     enoughLowercase &&
                     enoughSymbols &&
+                    enoughNumbers &&
                     test.Length >= this.minimumLength;
             }
 

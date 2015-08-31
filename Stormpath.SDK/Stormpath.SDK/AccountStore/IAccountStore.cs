@@ -1,4 +1,4 @@
-﻿// <copyright file="RandomString.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAccountStore.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,19 +15,11 @@
 // limitations under the License.
 // </remarks>
 
-using System;
+using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Tests.Integration.Helpers
+namespace Stormpath.SDK.AccountStore
 {
-    public static class RandomString
+    public interface IAccountStore : IResource
     {
-        public static string Create()
-        {
-            return Guid
-                .NewGuid()
-                .ToString()
-                .ToLower()
-                .Replace("-", string.Empty);
-        }
     }
 }

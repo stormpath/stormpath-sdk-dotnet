@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -27,9 +28,13 @@ namespace Stormpath.SDK.Tenant
 {
     public interface ITenantActions
     {
+        Task<IApplication> CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<IApplication> CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken));
+
         Task<IApplication> CreateApplicationAsync(IApplication application, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<IApplication> CreateApplicationAsync(string name, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IApplication> CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<IDirectory> CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken = default(CancellationToken));
 

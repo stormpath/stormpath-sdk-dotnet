@@ -1,4 +1,4 @@
-﻿// <copyright file="RandomString.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultAccountStore.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,19 +15,24 @@
 // limitations under the License.
 // </remarks>
 
-using System;
+using System.Collections;
+using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 
-namespace Stormpath.SDK.Tests.Integration.Helpers
+namespace Stormpath.SDK.Impl.AccountStore
 {
-    public static class RandomString
+    // TODO deprecate this in favor of ResourceFactory creating an actual IDirectory or IGroup
+    internal sealed class DefaultAccountStore : AbstractInstanceResource, IAccountStore
     {
-        public static string Create()
+        public DefaultAccountStore(IInternalDataStore dataStore)
+            : base(dataStore)
         {
-            return Guid
-                .NewGuid()
-                .ToString()
-                .ToLower()
-                .Replace("-", string.Empty);
+        }
+
+        public DefaultAccountStore(IInternalDataStore dataStore, Hashtable properties)
+            : base(dataStore, properties)
+        {
         }
     }
 }

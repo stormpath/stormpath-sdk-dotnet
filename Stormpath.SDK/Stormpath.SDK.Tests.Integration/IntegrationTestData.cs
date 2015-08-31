@@ -24,17 +24,24 @@ using Stormpath.SDK.Tests.Integration.Helpers;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    public static class IntegrationTestData
+    public class IntegrationTestData
     {
-        public static IApplication GetTestApplication(IClient client)
+        public IntegrationTestData()
+        {
+            this.Nonce = RandomString.Create().Substring(0, 6);
+        }
+
+        public string Nonce { get; private set; }
+
+        public IApplication GetTestApplication(IClient client)
         {
             return client.Instantiate<IApplication>()
-                        .SetName($".NET ITs {DateTimeOffset.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}")
+                        .SetName($".NET ITs {this.Nonce} - {DateTimeOffset.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}")
                         .SetDescription("The Battle of Endor")
                         .SetStatus(ApplicationStatus.Enabled);
         }
 
-        public static List<IAccount> GetTestAccounts(IClient client)
+        public List<IAccount> GetTestAccounts(IClient client)
         {
             return new List<IAccount>()
             {
@@ -44,7 +51,7 @@ namespace Stormpath.SDK.Tests.Integration
                         .SetSurname("Skywalker")
                         .SetEmail("lskywalker@tattooine.rim")
                         .SetPassword(new RandomPassword(12))
-                        .SetUsername("sonofthesuns")
+                        .SetUsername($"sonofthesuns-{this.Nonce}")
                 },
                 {
                     client.Instantiate<IAccount>()
@@ -52,6 +59,7 @@ namespace Stormpath.SDK.Tests.Integration
                         .SetSurname("Solo")
                         .SetEmail("han.solo@corellia.core")
                         .SetPassword(new RandomPassword(12))
+                        .SetUsername($"cptsolo-{this.Nonce}")
                 },
                 {
                     client.Instantiate<IAccount>()
@@ -59,7 +67,7 @@ namespace Stormpath.SDK.Tests.Integration
                         .SetSurname("Organa")
                         .SetEmail("leia.organa@alderaan.core")
                         .SetPassword(new RandomPassword(12))
-                        .SetUsername("princessleia")
+                        .SetUsername($"princessleia-{this.Nonce}")
                 },
                 {
                     client.Instantiate<IAccount>()
@@ -67,7 +75,7 @@ namespace Stormpath.SDK.Tests.Integration
                         .SetSurname("the Wookie")
                         .SetEmail("chewie@kashyyyk.rim")
                         .SetPassword(new RandomPassword(12))
-                        .SetUsername("rrwwwggg")
+                        .SetUsername($"rrwwwggg-{this.Nonce}")
                 },
                 {
                     client.Instantiate<IAccount>()
@@ -75,6 +83,7 @@ namespace Stormpath.SDK.Tests.Integration
                         .SetSurname("Calrissian")
                         .SetEmail("lcalrissian@socorro.rim")
                         .SetPassword(new RandomPassword(12))
+                        .SetUsername($"lottanerve-{this.Nonce}")
                 },
                 {
                     client.Instantiate<IAccount>()
@@ -82,6 +91,7 @@ namespace Stormpath.SDK.Tests.Integration
                         .SetSurname("Vader")
                         .SetEmail("vader@empire.co")
                         .SetPassword(new RandomPassword(12))
+                        .SetUsername($"lordvader-{this.Nonce}")
                 },
                 {
                     client.Instantiate<IAccount>()
@@ -89,6 +99,7 @@ namespace Stormpath.SDK.Tests.Integration
                         .SetSurname("Palpatine")
                         .SetEmail("emperor@empire.co")
                         .SetPassword(new RandomPassword(12))
+                        .SetUsername($"rulethegalaxy-{this.Nonce}")
                 },
             };
         }

@@ -23,7 +23,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Fakes
 {

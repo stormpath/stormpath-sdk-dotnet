@@ -1,4 +1,4 @@
-﻿// <copyright file="RandomString.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IApplicationCreationOptions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,19 +15,14 @@
 // limitations under the License.
 // </remarks>
 
-using System;
+using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Tests.Integration.Helpers
+namespace Stormpath.SDK.Application
 {
-    public static class RandomString
+    public interface IApplicationCreationOptions : ICreationOptions
     {
-        public static string Create()
-        {
-            return Guid
-                .NewGuid()
-                .ToString()
-                .ToLower()
-                .Replace("-", string.Empty);
-        }
+        bool CreateDirectory { get; }
+
+        string DirectoryName { get; }
     }
 }

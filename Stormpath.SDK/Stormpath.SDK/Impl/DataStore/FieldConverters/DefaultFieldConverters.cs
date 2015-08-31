@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
                 if (string.IsNullOrEmpty(token?.Value?.ToString()))
                     return ConverterResult.Failed;
 
-                return new ConverterResult(true, token.Value.Value<DateTimeOffset>());
+                return new ConverterResult(true, token.Value.ToObject<DateTimeOffset>());
             });
 
         public static readonly FieldConverter AccountStatusConverter =
@@ -127,6 +127,18 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
                 {
                     int result;
                     if (int.TryParse(token?.Value?.ToString(), out result))
+                        return new ConverterResult(true, result);
+                    else
+                        return ConverterResult.Failed;
+                });
+
+        public static readonly FieldConverter BoolConverter =
+            new FieldConverter(
+                appliesToTokenType: JTokenType.Boolean,
+                convertAction: token =>
+                {
+                    bool result;
+                    if (bool.TryParse(token?.Value?.ToString(), out result))
                         return new ConverterResult(true, result);
                     else
                         return ConverterResult.Failed;

@@ -20,6 +20,7 @@ using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
@@ -54,6 +55,8 @@ namespace Stormpath.SDK.Impl.Application
             : base(dataStore, properties)
         {
         }
+
+        private IApplication IThis => this;
 
         internal LinkProperty AccountStoreMappings => this.GetLinkProperty(AccountStoreMappingsPropertyName);
 
@@ -111,7 +114,10 @@ namespace Stormpath.SDK.Impl.Application
 
         Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptions, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (creationOptions != null)
+                throw new NotImplementedException();
+
+            return this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, cancellationToken);
         }
 
         Task<IAccount> IAccountCreation.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
@@ -122,7 +128,7 @@ namespace Stormpath.SDK.Impl.Application
             account.SetEmail(email);
             account.SetPassword(password);
 
-            return (this.GetInternalDataStore() as IInternalDataStore).CreateAsync(this.Accounts.Href, account, cancellationToken);
+            return this.IThis.CreateAccountAsync(account, creationOptions: null, cancellationToken: cancellationToken);
         }
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
@@ -133,6 +139,28 @@ namespace Stormpath.SDK.Impl.Application
         Task<IApplication> ISaveable<IApplication>.SaveAsync(CancellationToken cancellationToken)
         {
             return this.GetInternalDataStore().SaveAsync<IApplication>(this, cancellationToken);
+        }
+
+        ICollectionResourceQueryable<IAccount> IApplication.GetAccounts()
+        {
+            return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
+        }
+
+        ICollectionResourceQueryable<IAccountStoreMapping> IApplication.GetAccountStoreMappings(CancellationToken cancellationToken)
+        {
+            return new CollectionResourceQueryable<IAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalDataStore());
+        }
+
+        async Task<IAccountStore> IApplication.GetDefaultAccountStoreAsync(CancellationToken cancellationToken)
+        {
+            var accountStoreMapping = await this.GetInternalDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken).ConfigureAwait(false);
+            return await accountStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
+        }
+
+        async Task<IAccountStore> IApplication.GetDefaultGroupStoreAsync(CancellationToken cancellationToken)
+        {
+            var accountStoreMapping = await this.GetInternalDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultGroupStoreMapping.Href, cancellationToken).ConfigureAwait(false);
+            return await accountStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
         }
     }
 }

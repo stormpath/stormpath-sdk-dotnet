@@ -147,7 +147,7 @@ namespace Stormpath.SDK.Impl.Account
             if (string.IsNullOrEmpty(username))
                 throw new ArgumentNullException(nameof(username));
 
-            this.SetProperty(username, username);
+            this.SetProperty(UsernamePropertyName, username);
             return this;
         }
 

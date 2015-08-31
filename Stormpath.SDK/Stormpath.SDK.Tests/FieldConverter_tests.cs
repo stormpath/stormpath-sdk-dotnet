@@ -21,8 +21,11 @@ using Newtonsoft.Json.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore.FieldConverters;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Utility;
 using Xunit;
 
 namespace Stormpath.SDK.Tests
@@ -85,6 +88,74 @@ namespace Stormpath.SDK.Tests
             }
         }
 
+        public class PrimitiveConverters
+        {
+            [Fact]
+            public void DateTimeOffset_is_materialized()
+            {
+                var fakeDate = new DateTimeOffset(2015, 06, 01, 12, 30, 00, TimeSpan.Zero);
+                var jsonObject = JObject.Parse(@"{ createdAt: '" + Iso8601.Format(fakeDate) + "' }");
+                var converter = DefaultFieldConverters.DateTimeOffsetConverter;
+
+                var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
+
+                result.Result.ShouldBe(fakeDate);
+                result.Result.ShouldBeOfType<DateTimeOffset>();
+                result.Success.ShouldBe(true);
+            }
+
+            [Fact]
+            public void String_is_materialized()
+            {
+                var jsonObject = JObject.Parse(@"{ name: 'foobar' }");
+                var converter = DefaultFieldConverters.StringConverter;
+
+                var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
+
+                result.Result.ShouldBe("foobar");
+                result.Result.ShouldBeOfType<string>();
+                result.Success.ShouldBe(true);
+            }
+
+            [Fact]
+            public void Int_is_materialized()
+            {
+                var jsonObject = JObject.Parse(@"{ items: 12 }");
+                var converter = DefaultFieldConverters.IntConverter;
+
+                var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
+
+                result.Result.ShouldBe(12);
+                result.Result.ShouldBeOfType<int>();
+                result.Success.ShouldBe(true);
+            }
+
+            [Fact]
+            public void Bool_is_materialized()
+            {
+                var jsonObject = JObject.Parse(@"{ isFoo: true }");
+                var converter = DefaultFieldConverters.BoolConverter;
+
+                var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
+
+                result.Result.ShouldBe(true);
+                result.Result.ShouldBeOfType<bool>();
+                result.Success.ShouldBe(true);
+            }
+
+            [Fact]
+            public void Null_is_materialized()
+            {
+                var jsonObject = JObject.Parse(@"{ items: null }");
+                var converter = DefaultFieldConverters.NullConverter;
+
+                var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
+
+                result.Result.ShouldBe(null);
+                result.Success.ShouldBe(true);
+            }
+        }
+
         public class LinkPropertyConverter
         {
             [Fact]
@@ -96,6 +167,57 @@ namespace Stormpath.SDK.Tests
                 var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
 
                 result.Result.ShouldBe(new LinkProperty("http://foobar/myprop"));
+                result.Success.ShouldBe(true);
+            }
+        }
+
+        public class StatusConverters
+        {
+            [Fact]
+            public void AccountStatus_is_materialized()
+            {
+                var jsonObject = JObject.Parse(@"{ status: 'unverified' }");
+                var converter = DefaultFieldConverters.AccountStatusConverter;
+
+                var result = converter.TryConvertField(jsonObject.Properties().First(), typeof(IAccount));
+
+                result.Result.ShouldBe(AccountStatus.Unverified);
+                result.Success.ShouldBe(true);
+            }
+
+            [Fact]
+            public void ApplicationStatus_is_materialized()
+            {
+                var jsonObject = JObject.Parse(@"{ status: 'disabled' }");
+                var converter = DefaultFieldConverters.ApplicationStatusConverter;
+
+                var result = converter.TryConvertField(jsonObject.Properties().First(), typeof(IApplication));
+
+                result.Result.ShouldBe(ApplicationStatus.Disabled);
+                result.Success.ShouldBe(true);
+            }
+
+            [Fact]
+            public void DirectoryStatus_is_materialized()
+            {
+                var jsonObject = JObject.Parse(@"{ status: 'enabled' }");
+                var converter = DefaultFieldConverters.DirectoryStatusConverter;
+
+                var result = converter.TryConvertField(jsonObject.Properties().First(), typeof(IDirectory));
+
+                result.Result.ShouldBe(DirectoryStatus.Enabled);
+                result.Success.ShouldBe(true);
+            }
+
+            [Fact]
+            public void GroupStatus_is_materialized()
+            {
+                var jsonObject = JObject.Parse(@"{ status: 'disabled' }");
+                var converter = DefaultFieldConverters.GroupStatusConverter;
+
+                var result = converter.TryConvertField(jsonObject.Properties().First(), typeof(IGroup));
+
+                result.Result.ShouldBe(AccountStatus.Disabled);
                 result.Success.ShouldBe(true);
             }
         }

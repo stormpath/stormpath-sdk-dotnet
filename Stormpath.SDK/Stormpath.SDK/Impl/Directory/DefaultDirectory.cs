@@ -15,10 +15,10 @@
 // limitations under the License.
 // </remarks>
 
-using System;
 using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
@@ -75,6 +75,16 @@ namespace Stormpath.SDK.Impl.Directory
         Task<IDirectory> ISaveable<IDirectory>.SaveAsync(CancellationToken cancellationToken)
         {
             return this.GetInternalDataStore().SaveAsync<IDirectory>(this, cancellationToken);
+        }
+
+        ICollectionResourceQueryable<IAccount> IDirectory.GetAccounts()
+        {
+            return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
+        }
+
+        Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
+        {
+            return this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
         }
     }
 }

@@ -15,9 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using Stormpath.SDK.Impl.Extensions;
-
 namespace Stormpath.SDK.Impl.Http
 {
     internal sealed class DefaultHttpResponse : HttpMessageBase, IHttpResponse

@@ -1,4 +1,4 @@
-﻿// <copyright file="IDirectory.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAccountStoreMapping.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,19 +15,23 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Account;
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Directory
+namespace Stormpath.SDK.AccountStore
 {
-    public interface IDirectory : IResource, ISaveable<IDirectory>, IDeletable, IExtendable, IAuditable
+    public interface IAccountStoreMapping : IResource, ISaveable<IAccountStoreMapping>, IDeletable
     {
-        string Name { get; }
+        bool IsDefaultAccountStore { get; }
 
-        string Description { get; }
+        bool IsDefaultGroupStore { get; }
 
-        DirectoryStatus Status { get; }
+        int ListIndex { get; }
 
-        ICollectionResourceQueryable<IAccount> GetAccounts();
+        Task<IAccountStore> GetAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

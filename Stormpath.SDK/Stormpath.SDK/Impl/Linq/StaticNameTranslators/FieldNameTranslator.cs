@@ -27,7 +27,9 @@ namespace Stormpath.SDK.Impl.Linq.StaticNameTranslators
                 { "GivenName", "givenName" },
                 { "MiddleName", "middleName" },
                 { "Surname", "surname" },
-                { "Username", "username" }
+                { "Username", "username" },
+                { "Name", "name" },
+                { "Description", "description" },
             };
 
         public static bool TryGetValue(string methodName, out string fieldName)

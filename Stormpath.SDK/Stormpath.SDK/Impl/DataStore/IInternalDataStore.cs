@@ -31,6 +31,9 @@ namespace Stormpath.SDK.Impl.DataStore
         Task<T> CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
             where T : IResource;
 
+        Task<T> CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
+            where T : IResource;
+
         Task<T> SaveAsync<T>(T resource, CancellationToken cancellationToken)
             where T : IResource, ISaveable<T>;
 

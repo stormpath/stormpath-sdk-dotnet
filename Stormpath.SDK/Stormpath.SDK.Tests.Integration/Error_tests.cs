@@ -24,7 +24,6 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    [CollectionDefinition("LiveTenantTests")]
     public class Error_tests
     {
         [Theory]

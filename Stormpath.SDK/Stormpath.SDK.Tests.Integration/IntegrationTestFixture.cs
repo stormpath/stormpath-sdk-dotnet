@@ -16,43 +16,27 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
-using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Directory;
 using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Integration.Helpers;
-using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
     public class IntegrationTestFixture : IDisposable
     {
-        private ITenant tenant;
-        private IApplication application;
+        private IntegrationTestData testData;
 
         public IntegrationTestFixture()
         {
+            this.testData = new IntegrationTestData();
+            this.TestIdentifier = this.testData.Nonce;
+
             this.AddObjectsToTenantAsync()
                 .GetAwaiter().GetResult();
-        }
-
-        public ITenant Tenant
-        {
-            get
-            {
-                return this.tenant;
-            }
-        }
-
-        public IApplication Application
-        {
-            get
-            {
-                return this.application;
-            }
         }
 
         public void Dispose()
@@ -60,6 +44,14 @@ namespace Stormpath.SDK.Tests.Integration
             this.RemoveObjectsFromTenantAsync()
                 .GetAwaiter().GetResult();
         }
+
+        public ITenant Tenant { get; private set; }
+
+        public IApplication Application { get; private set; }
+
+        public IDirectory Directory { get; private set; }
+
+        public string TestIdentifier { get; private set; }
 
         private async Task AddObjectsToTenantAsync()
         {
@@ -69,27 +61,29 @@ namespace Stormpath.SDK.Tests.Integration
             var tenant = await client.GetCurrentTenantAsync();
             tenant.ShouldNotBe(null);
             tenant.Href.ShouldNotBeNullOrEmpty();
-            this.tenant = tenant;
+            this.Tenant = tenant;
 
             // Create application
             try
             {
-                var application = IntegrationTestData.GetTestApplication(client);
-                var createResult = await tenant.CreateApplicationAsync(application);
+                var application = this.testData.GetTestApplication(client);
+                var createResult = await tenant.CreateApplicationAsync(application, opt => opt.CreateDirectory = true);
                 createResult.ShouldNotBe(null);
                 createResult.Href.ShouldNotBeNullOrEmpty();
 
-                this.application = createResult;
+                this.Application = createResult;
+                this.Directory = await client.GetResourceAsync<IDirectory>((await createResult.GetDefaultAccountStoreAsync()).Href);
             }
             catch (Exception e)
             {
+                await this.RemoveObjectsFromTenantAsync();
                 throw new ApplicationException("Could not create application", e);
             }
 
             // Create accounts
             try
             {
-                var accountsToCreate = IntegrationTestData.GetTestAccounts(client);
+                var accountsToCreate = this.testData.GetTestAccounts(client);
 
                 var accountCreationTasks = accountsToCreate.Select(acct =>
                     this.Application.CreateAccountAsync(acct));
@@ -98,29 +92,36 @@ namespace Stormpath.SDK.Tests.Integration
             }
             catch (Exception e)
             {
+                await this.RemoveObjectsFromTenantAsync();
                 throw new ApplicationException("Could not create account", e);
             }
         }
 
         private async Task RemoveObjectsFromTenantAsync()
         {
+            var errors = string.Empty;
+
             // Delete accounts
-            bool accountDeletesSuccessful = false;
+            bool deleteAccountsSuccessful = false;
             try
             {
-                var allAccounts = await this.Tenant.GetAccounts().ToListAsync();
+                var allAccounts = await this.Directory
+                    .GetAccounts()
+                    .ToListAsync();
                 var accountDeleteTasks = allAccounts.Select(acct => acct.DeleteAsync());
 
-                accountDeletesSuccessful =
+                deleteAccountsSuccessful =
                     (await Task.WhenAll(accountDeleteTasks))
                     .All(result => result == true);
             }
             catch (Exception e)
             {
-                throw new ApplicationException("Error deleting account", e);
+                errors += "- Error deleting account: "
+                    + e.Message + Environment.NewLine;
             }
 
-            accountDeletesSuccessful.ShouldBe(true, "At least one account delete result was false");
+            if (!deleteAccountsSuccessful)
+                errors += "- At least one account delete result was false";
 
             // Delete application
             bool deleteApplicationSuccessful = false;
@@ -130,10 +131,31 @@ namespace Stormpath.SDK.Tests.Integration
             }
             catch (Exception e)
             {
-                throw new ApplicationException($"Could not delete application at {this.Application}", e);
+                errors += $"- Could not delete application at {this.Application.Href}: "
+                    + e.Message + Environment.NewLine;
             }
 
-            deleteApplicationSuccessful.ShouldBe(true, "Application delete result was false");
+            if (!deleteApplicationSuccessful)
+                errors += "- The application was not removed successfully";
+
+            // Delete directory
+            bool deleteDirectorySuccessful = false;
+            try
+            {
+                deleteDirectorySuccessful = await this.Directory.DeleteAsync();
+            }
+            catch (Exception e)
+            {
+                errors += $"Could not delete directory at {this.Directory.Href}: "
+                    + e.Message + Environment.NewLine;
+            }
+
+            if (!deleteDirectorySuccessful)
+                errors += "- The directory was not removed successfully";
+
+            // All done! Throw errors if any occurred
+            if (!string.IsNullOrEmpty(errors))
+                throw new ApplicationException("Errors occurred during object cleanup:" + Environment.NewLine + errors);
         }
     }
 }

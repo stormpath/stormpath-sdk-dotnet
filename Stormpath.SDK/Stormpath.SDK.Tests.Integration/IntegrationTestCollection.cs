@@ -22,6 +22,6 @@ namespace Stormpath.SDK.Tests.Integration
     [CollectionDefinition("Live tenant tests")]
     public class IntegrationTestCollection : ICollectionFixture<IntegrationTestFixture>
     {
-        // Intentionally left blank. This class only serves as a definition for CollectionDefinition.
+        // Intentionally left blank. This class only serves as an anchor for CollectionDefinition.
     }
 }

@@ -22,7 +22,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    [CollectionDefinition("LiveTenantTests")]
+    [CollectionDefinition("Live tenant tests")]
     public class Tenant_tests
     {
         [Theory]
@@ -35,8 +35,6 @@ namespace Stormpath.SDK.Tests.Integration
             tenant.ShouldNotBe(null);
             tenant.Href.ShouldNotBe(null);
             tenant.Name.ShouldNotBe(null);
-
-            // TODO - verify actual tenant data?
         }
     }
 }

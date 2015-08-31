@@ -76,17 +76,36 @@ namespace Stormpath.SDK.Impl.Tenant
 
         internal LinkProperty Organizations => this.GetLinkProperty(OrganizationsPropertyName);
 
+        Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
+        {
+            var creationOptionsBuilder = new ApplicationCreationOptionsBuilder();
+            creationOptionsAction(creationOptionsBuilder);
+            var options = creationOptionsBuilder.Build();
+
+            return this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, options, cancellationToken);
+        }
+
+        Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken)
+        {
+            return this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, creationOptions, cancellationToken);
+        }
+
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, CancellationToken cancellationToken)
         {
             return this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, cancellationToken);
         }
 
-        Task<IApplication> ITenantActions.CreateApplicationAsync(string name, CancellationToken cancellationToken)
+        Task<IApplication> ITenantActions.CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken)
         {
             var application = this.GetInternalDataStore().Instantiate<IApplication>();
             application.SetName(name);
 
-            return this.This.CreateApplicationAsync(application, cancellationToken);
+            var options = new ApplicationCreationOptionsBuilder()
+            {
+                CreateDirectory = createDirectory
+            }.Build();
+
+            return this.This.CreateApplicationAsync(application, options, cancellationToken);
         }
 
         ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()

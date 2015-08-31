@@ -15,6 +15,8 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
@@ -43,13 +45,56 @@ namespace Stormpath.SDK.Tests.Integration
 
             var accounts = await tenant.GetAccounts().ToListAsync();
 
-            accounts.Count.ShouldNotBe(7);
+            accounts.Any().ShouldBe(true);
         }
 
         [Theory]
-        public void Getting_tenant_accounts_with_search()
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Getting_application_accounts(TestClientBuilder clientBuilder)
         {
-            Assertly.Todo();
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.Application.Href);
+
+            var accounts = await application.GetAccounts().ToListAsync();
+
+            // Verify data from IntegrationTestData
+            accounts.Count.ShouldBe(7);
+
+            var luke = accounts.Where(x => x.GivenName == "Luke").Single();
+            luke.FullName.ShouldBe("Luke Skywalker");
+            luke.Email.ShouldBe("lskywalker@tattooine.rim");
+            luke.Username.ShouldStartWith("sonofthesuns");
+
+            var vader = accounts.Where(x => x.Surname == "Vader").Single();
+            vader.FullName.ShouldBe("Darth Vader");
+            vader.Email.ShouldStartWith("vader@empire.co");
+            vader.Username.ShouldStartWith("lordvader");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Searching_application_accounts_by_email(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.Application.Href);
+
+            var coreCitizens = await application
+                .GetAccounts()
+                .Where(acct => acct.Email.EndsWith(".core"))
+                .ToListAsync();
+
+            // Verify data from IntegrationTestData
+            coreCitizens.Count.ShouldBe(2);
+
+            var han = coreCitizens.Where(x => x.GivenName == "Han").Single();
+            han.FullName.ShouldBe("Han Solo");
+            han.Email.ShouldBe("han.solo@corellia.core");
+            han.Username.ShouldStartWith("cptsolo");
+
+            var leia = coreCitizens.Where(x => x.GivenName == "Leia").Single();
+            leia.FullName.ShouldBe("Leia Organa");
+            leia.Email.ShouldStartWith("leia.organa@alderaan.core");
+            leia.Username.ShouldStartWith("princessleia");
         }
 
         [Theory]
@@ -66,6 +111,8 @@ namespace Stormpath.SDK.Tests.Integration
             account.Email.ShouldBe("admiralackbar@dac.rim");
             account.Username.ShouldBe("admiralackbar@dac.rim");
             account.Status.ShouldBe(AccountStatus.Enabled);
+            account.CreatedAt.ShouldBe(DateTimeOffset.Now, TimeSpan.FromSeconds(10));
+            account.ModifiedAt.ShouldBe(DateTimeOffset.Now, TimeSpan.FromSeconds(10));
 
             var deleteResult = await account.DeleteAsync(); // It's a trap! :(
             deleteResult.ShouldBe(true);

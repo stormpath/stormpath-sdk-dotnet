@@ -66,6 +66,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountStore\IAccountStore.cs" />
+    <Compile Include="AccountStore\IAccountStoreMapping.cs" />
+    <Compile Include="Application\ApplicationCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountStatus.cs" />
     <Compile Include="Account\IAccount.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="Api\IClientApiKey.cs" />
     <Compile Include="Api\IClientApiKeyBuilder.cs" />
     <Compile Include="Application\ApplicationStatus.cs" />
+    <Compile Include="Application\IApplicationCreationOptions.cs" />
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Application\ICreateApplicationRequest.cs" />
     <Compile Include="Client\AuthenticationScheme.cs" />
@@ -87,7 +91,10 @@
     <Compile Include="Error\ResourceException.cs" />
     <Compile Include="Group\GroupStatus.cs" />
     <Compile Include="Group\IGroup.cs" />
+    <Compile Include="Impl\AccountStore\DefaultAccountStore.cs" />
+    <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
     <Compile Include="Impl\Application\DefaultApplication.cs" />
+    <Compile Include="Impl\Application\DefaultApplicationCreationOptions.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\ConverterResult.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\DefaultFieldConverters.cs" />
@@ -184,6 +191,7 @@
     <Compile Include="Linq\IAsyncQueryable.cs" />
     <Compile Include="Impl\Resource\AbstractResource.cs" />
     <Compile Include="Resource\IAuditable.cs" />
+    <Compile Include="Resource\ICreationOptions.cs" />
     <Compile Include="Resource\ICustomData.cs" />
     <Compile Include="Resource\IDeletable.cs" />
     <Compile Include="Resource\IExtendable.cs" />
