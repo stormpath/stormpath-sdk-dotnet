@@ -147,7 +147,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
         public static readonly FieldConverter NullConverter =
             new FieldConverter(
                 appliesToTokenType: JTokenType.Null,
-                convertAction: x => new ConverterResult(true, null));
+                convertAction: unused_ => new ConverterResult(true, null));
 
         public static readonly FieldConverter FallbackConverter =
             new FieldConverter(token =>
