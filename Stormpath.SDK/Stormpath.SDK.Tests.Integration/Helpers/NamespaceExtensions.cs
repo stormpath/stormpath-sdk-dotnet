@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
         {
             var types = assembly.GetTypes().Where(x =>
                 x.Namespace != null &&
-                x.Namespace.StartsWith(namespaceRoot, StringComparison.OrdinalIgnoreCase));
+                x.Namespace.StartsWith(namespaceRoot, StringComparison.InvariantCultureIgnoreCase));
 
             if (onlyPublic)
                 types = types.Where(x => x.IsPublic);

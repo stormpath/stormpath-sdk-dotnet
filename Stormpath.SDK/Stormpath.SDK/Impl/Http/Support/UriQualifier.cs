@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Impl.Http.Support
             if (tooShort)
                 return false;
 
-            bool startsWithHttp = href.Substring(0, 4).Equals("http", StringComparison.OrdinalIgnoreCase);
+            bool startsWithHttp = href.Substring(0, 4).Equals("http", StringComparison.InvariantCultureIgnoreCase);
             return startsWithHttp;
         }
     }

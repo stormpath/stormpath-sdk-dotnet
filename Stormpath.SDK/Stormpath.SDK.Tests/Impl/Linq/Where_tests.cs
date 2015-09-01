@@ -62,7 +62,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                var query = this.Harness.Queryable.Where(x => x.Email.StartsWith("foo", StringComparison.OrdinalIgnoreCase));
+                var query = this.Harness.Queryable.Where(x => x.Email.StartsWith("foo", StringComparison.InvariantCultureIgnoreCase));
                 query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
             });
         }

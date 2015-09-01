@@ -137,7 +137,7 @@ namespace Stormpath.SDK.Impl.Http.Support
         private static Dictionary<string, string> ToSortedDictionary(IEnumerable<KeyValuePair<string, string>> queryParams)
         {
             return queryParams
-                .OrderBy(x => x.Key, StringComparer.OrdinalIgnoreCase)
+                .OrderBy(x => x.Key, StringComparer.InvariantCultureIgnoreCase)
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
     }

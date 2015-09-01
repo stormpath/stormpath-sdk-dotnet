@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Impl.Resource
     internal sealed class LinkProperty : ImmutableValueObject<LinkProperty>
     {
         private static Func<LinkProperty, LinkProperty, bool> EqualityFunction =>
-            (a, b) => string.Equals(a?.Href, b?.Href, StringComparison.OrdinalIgnoreCase);
+            (a, b) => string.Equals(a?.Href, b?.Href, StringComparison.InvariantCultureIgnoreCase);
 
         public LinkProperty(string href)
             : base(EqualityFunction)

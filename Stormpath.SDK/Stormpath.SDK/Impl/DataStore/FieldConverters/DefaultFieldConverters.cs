@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 
                 bool isLinkProperty = token?.Value?.Children().Count() == 1
                     && !string.IsNullOrEmpty(firstChild?.Value?.ToString())
-                    && string.Equals(firstChild?.Name, "href", StringComparison.OrdinalIgnoreCase);
+                    && string.Equals(firstChild?.Name, "href", StringComparison.InvariantCultureIgnoreCase);
 
                 if (!isLinkProperty)
                     return null;
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
                 {
                     var value = token?.Value?.ToString();
 
-                    if (!string.Equals(token?.Name, "status", StringComparison.OrdinalIgnoreCase)
+                    if (!string.Equals(token?.Name, "status", StringComparison.InvariantCultureIgnoreCase)
                         || string.IsNullOrEmpty(value))
                         return ConverterResult.Failed;
 
@@ -75,7 +75,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
                 {
                     var value = token?.Value?.ToString();
 
-                    if (!string.Equals(token?.Name, "status", StringComparison.OrdinalIgnoreCase)
+                    if (!string.Equals(token?.Name, "status", StringComparison.InvariantCultureIgnoreCase)
                         || string.IsNullOrEmpty(value))
                         return ConverterResult.Failed;
 
@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
                 {
                     var value = token?.Value?.ToString();
 
-                    if (!string.Equals(token?.Name, "status", StringComparison.OrdinalIgnoreCase)
+                    if (!string.Equals(token?.Name, "status", StringComparison.InvariantCultureIgnoreCase)
                         || string.IsNullOrEmpty(value))
                         return ConverterResult.Failed;
 
@@ -105,7 +105,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
                         {
                             var value = token?.Value?.ToString();
 
-                            if (!string.Equals(token?.Name, "status", StringComparison.OrdinalIgnoreCase)
+                            if (!string.Equals(token?.Name, "status", StringComparison.InvariantCultureIgnoreCase)
                                 || string.IsNullOrEmpty(value))
                                 return ConverterResult.Failed;
 

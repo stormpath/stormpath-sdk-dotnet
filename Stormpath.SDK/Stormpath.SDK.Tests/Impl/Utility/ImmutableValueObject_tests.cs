@@ -63,9 +63,9 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             private static Func<CaseInsensitiveAddress, CaseInsensitiveAddress, bool> EqualityFunction =>
                 (a, b) =>
                 {
-                    return string.Equals(a?.Address1, b?.Address1, StringComparison.OrdinalIgnoreCase)
-                        && string.Equals(a?.City, b?.City, StringComparison.OrdinalIgnoreCase)
-                        && string.Equals(a?.State, b?.State, StringComparison.OrdinalIgnoreCase);
+                    return string.Equals(a?.Address1, b?.Address1, StringComparison.InvariantCultureIgnoreCase)
+                        && string.Equals(a?.City, b?.City, StringComparison.InvariantCultureIgnoreCase)
+                        && string.Equals(a?.State, b?.State, StringComparison.InvariantCultureIgnoreCase);
                 };
 
             private readonly string address1;
