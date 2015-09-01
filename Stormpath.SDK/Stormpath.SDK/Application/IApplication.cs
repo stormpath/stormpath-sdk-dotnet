@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Application
 
         Task<IAuthenticationResult> AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<bool> TryAuthenticateAccountAsync(string username, string password, out IAccount account, CancellationToken cancellationToken = default(CancellationToken));
+        Task<bool> TryAuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
 
         ICollectionResourceQueryable<IAccount> GetAccounts();
 

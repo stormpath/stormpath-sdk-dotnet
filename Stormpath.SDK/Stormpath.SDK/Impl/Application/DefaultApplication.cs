@@ -127,9 +127,17 @@ namespace Stormpath.SDK.Impl.Application
             return this.IThis.AuthenticateAccountAsync(request, cancellationToken);
         }
 
-        Task<bool> IApplication.TryAuthenticateAccountAsync(string username, string password, out IAccount account, CancellationToken cancellationToken)
+        async Task<bool> IApplication.TryAuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var loginResult = await this.IThis.AuthenticateAccountAsync(username, password, cancellationToken).ConfigureAwait(false);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)

@@ -126,7 +126,7 @@ namespace Stormpath.SDK.Tests.Integration
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Authenticating_account(TestClientBuilder clientBuilder)
+        public async Task Authenticating_good_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
@@ -139,11 +139,20 @@ namespace Stormpath.SDK.Tests.Integration
             account.FullName.ShouldBe("Luke Skywalker");
         }
 
-        [Theory(Skip = "TODO")]
+        [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void TryAuthenticating_account()
+        public async Task TryAuthenticating_accounts(TestClientBuilder clientBuilder)
         {
-            Assertly.Todo();
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
+
+            var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
+
+            (await application.TryAuthenticateAccountAsync(username, "whataPieceofjunk$1138"))
+                .ShouldBe(true);
+
+            (await application.TryAuthenticateAccountAsync(username, "notLukesPassword?"))
+                .ShouldBe(false);
         }
 
         [Theory]
