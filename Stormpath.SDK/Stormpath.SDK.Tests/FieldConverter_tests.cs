@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Tests
             {
                 var fakeAccountFieldConverter = new FieldConverter(
                     appliesToTargetType: typeof(IAccount),
-                    convertAction: _ => new ConverterResult(true, new object()));
+                    convertAction: x => new ConverterResult(true, new object()));
                 var dummyField = new JProperty("foo", "bar");
 
                 var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IApplication));
@@ -66,7 +66,7 @@ namespace Stormpath.SDK.Tests
             {
                 var fakeAccountFieldConverter = new FieldConverter(
                     appliesToTargetType: typeof(IAccount),
-                    convertAction: _ => new ConverterResult(true, "good!"));
+                    convertAction: x => new ConverterResult(true, "good!"));
                 var dummyField = new JProperty("foo", "bar");
 
                 var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IAccount));
@@ -78,7 +78,7 @@ namespace Stormpath.SDK.Tests
             [Fact]
             public void Returns_false_when_converter_fails()
             {
-                var failingConverter = new FieldConverter(_ => ConverterResult.Failed);
+                var failingConverter = new FieldConverter(x => ConverterResult.Failed);
                 var dummyField = new JProperty("foo", "bar");
 
                 var result = failingConverter.TryConvertField(dummyField, typeof(IAccount));

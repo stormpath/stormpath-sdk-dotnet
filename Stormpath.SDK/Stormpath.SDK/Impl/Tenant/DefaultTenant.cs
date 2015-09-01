@@ -43,8 +43,10 @@ namespace Stormpath.SDK.Impl.Tenant
         private static readonly string OrganizationsPropertyName = "organizations";
 
         private string applicationsResourceBase = "applications";
+#pragma warning disable CS0414 // Assigned but value is never used
         private string directoriesResourceBase = "directories";
         private string groupsResourceBase = "groups";
+#pragma warning restore CS0414 // Assigned but value is never used
 
         public DefaultTenant(IInternalDataStore dataStore)
             : base(dataStore)

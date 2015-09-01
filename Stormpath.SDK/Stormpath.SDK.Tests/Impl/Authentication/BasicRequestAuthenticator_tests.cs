@@ -55,8 +55,8 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
             this.authenticator.AuthenticateCore(myRequest, this.apiKey, now);
 
             // X-Stormpath-Date -> current time in UTC
-            var XStormpathDateHeader = Iso8601.Parse(myRequest.Headers.GetFirst<string>("X-Stormpath-Date"));
-            XStormpathDateHeader.ShouldBe(now);
+            var xStormpathDateHeader = Iso8601.Parse(myRequest.Headers.GetFirst<string>("X-Stormpath-Date"));
+            xStormpathDateHeader.ShouldBe(now);
         }
 
         [Fact]

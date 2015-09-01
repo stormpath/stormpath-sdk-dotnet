@@ -93,7 +93,7 @@ namespace Stormpath.SDK
 
         public static Task ForEachAsync<T>(this IQueryable<T> source, Action<T> @delegate, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return source.ForEachAsync((item, _) => @delegate(item), cancellationToken);
+            return source.ForEachAsync((item, x) => @delegate(item), cancellationToken);
         }
 
         public static async Task ForEachAsync<T>(this IQueryable<T> source, Action<T, int> @delegate, CancellationToken cancellationToken = default(CancellationToken))
