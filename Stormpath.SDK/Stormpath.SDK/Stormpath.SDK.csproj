@@ -81,6 +81,9 @@
     <Compile Include="Application\IApplicationCreationOptions.cs" />
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Application\ICreateApplicationRequest.cs" />
+    <Compile Include="Auth\IAuthenticationResult.cs" />
+    <Compile Include="Auth\IAuthenticationRequest.cs" />
+    <Compile Include="Auth\UsernamePasswordRequest.cs" />
     <Compile Include="Client\AuthenticationScheme.cs" />
     <Compile Include="Client\Clients.cs" />
     <Compile Include="Client\IClient.cs" />
@@ -96,6 +99,13 @@
     <Compile Include="Impl\Account\DefaultAccountCreationOptions.cs" />
     <Compile Include="Impl\Application\DefaultApplication.cs" />
     <Compile Include="Impl\Application\DefaultApplicationCreationOptions.cs" />
+    <Compile Include="Impl\Auth\AbstractLoginAttempt.cs" />
+    <Compile Include="Impl\Auth\AuthenticationRequestDispatcher.cs" />
+    <Compile Include="Impl\Auth\BasicAuthenticator.cs" />
+    <Compile Include="Impl\Auth\DefaultAuthenticationResult.cs" />
+    <Compile Include="Impl\Auth\DefaultBasicLoginAttempt.cs" />
+    <Compile Include="Impl\Auth\IBasicLoginAttempt.cs" />
+    <Compile Include="Impl\Auth\ILoginAttempt.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\ConverterResult.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\DefaultFieldConverters.cs" />

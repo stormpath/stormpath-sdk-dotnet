@@ -33,15 +33,13 @@ namespace Stormpath.SDK.Impl.Resource
         private readonly IInternalDataStore dataStore;
         private readonly Hashtable properties;
         private readonly Hashtable dirtyProperties;
+        protected readonly InternalFactory internalFactory;
 
         private bool isDirty = false;
 
         public AbstractResource(IInternalDataStore dataStore)
+            : this(dataStore, new Hashtable())
         {
-            this.dataStore = dataStore;
-
-            this.properties = new Hashtable();
-            this.dirtyProperties = new Hashtable();
         }
 
         public AbstractResource(IInternalDataStore dataStore, Hashtable properties)
@@ -50,6 +48,7 @@ namespace Stormpath.SDK.Impl.Resource
 
             this.properties = new Hashtable(properties);
             this.dirtyProperties = new Hashtable(properties.Count);
+            this.internalFactory = new InternalFactory();
         }
 
         string IResource.Href => GetProperty<string>(HrefPropertyName);

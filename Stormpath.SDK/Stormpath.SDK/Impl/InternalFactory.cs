@@ -17,6 +17,7 @@
 
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 
@@ -32,6 +33,11 @@ namespace Stormpath.SDK.Impl
         public IRequestExecutor CreateRequestExecutor(IClientApiKey apiKey, AuthenticationScheme authenticationScheme, int connectionTimeout)
         {
             return new NetHttpRequestExecutor(apiKey, authenticationScheme, connectionTimeout);
+        }
+
+        public AuthenticationRequestDispatcher GetAuthenticationDispatcher()
+        {
+            return new AuthenticationRequestDispatcher();
         }
     }
 }

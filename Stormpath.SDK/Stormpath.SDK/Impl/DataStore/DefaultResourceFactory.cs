@@ -22,11 +22,13 @@ using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Auth;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Application;
+using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Resource;
@@ -45,7 +47,9 @@ namespace Stormpath.SDK.Impl.DataStore
             { typeof(IDirectory), typeof(DefaultDirectory) },
             { typeof(IGroup), typeof(DefaultGroup) },
             { typeof(IAccountStoreMapping), typeof(DefaultAccountStoreMapping) },
-            { typeof(IAccountStore), typeof(DefaultAccountStore) }
+            { typeof(IAccountStore), typeof(DefaultAccountStore) },
+            { typeof(IBasicLoginAttempt), typeof(DefaultBasicLoginAttempt) },
+            { typeof(IAuthenticationResult), typeof(DefaultAuthenticationResult) },
         };
 
         private readonly IInternalDataStore dataStore;

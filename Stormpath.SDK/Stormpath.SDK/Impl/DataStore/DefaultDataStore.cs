@@ -83,16 +83,38 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
         {
-            return this.IThis.CreateAsync(parentHref, resource, options: null, cancellationToken: cancellationToken);
+            return this.IThis.CreateAsync<T, T>(
+                parentHref,
+                resource,
+                options: null,
+                cancellationToken: cancellationToken);
         }
 
         Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
+        {
+            return this.IThis.CreateAsync<T, T>(
+                parentHref,
+                resource,
+                options: options,
+                cancellationToken: cancellationToken);
+        }
+
+        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
+        {
+            return this.IThis.CreateAsync<T, TReturned>(
+                parentHref,
+                resource,
+                options: null,
+                cancellationToken: cancellationToken);
+        }
+
+        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
         {
             QueryString queryParams = null;
             if (options != null)
                 queryParams = new QueryString(options.GetQueryString());
 
-            return this.SaveCoreAsync(
+            return this.SaveCoreAsync<T, TReturned>(
                 resource, parentHref,
                 queryParams: queryParams,
                 cancellationToken: cancellationToken);
@@ -111,8 +133,9 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.DeleteCoreAsync(resource, cancellationToken);
         }
 
-        private async Task<T> SaveCoreAsync<T>(T resource, string href, QueryString queryParams, CancellationToken cancellationToken)
+        private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, CancellationToken cancellationToken)
             where T : IResource
+            where TReturned : IResource
         {
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
@@ -129,7 +152,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var response = await this.SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
             var map = GetBody<T>(response);
-            var createdResource = this.resourceFactory.Create<T>(map);
+            var createdResource = this.resourceFactory.Create<TReturned>(map);
 
             return createdResource;
         }

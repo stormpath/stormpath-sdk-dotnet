@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
@@ -110,6 +111,25 @@ namespace Stormpath.SDK.Impl.Application
         {
             this.SetProperty(StatusPropertyName, status);
             return this;
+        }
+
+        Task<IAuthenticationResult> IApplication.AuthenticateAccountAsync(IAuthenticationRequest request, CancellationToken cancellationToken)
+        {
+            var dispatcher = this.internalFactory.GetAuthenticationDispatcher();
+
+            return dispatcher.AuthenticateAsync(this.GetInternalDataStore(), this, request, cancellationToken);
+        }
+
+        Task<IAuthenticationResult> IApplication.AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken)
+        {
+            var request = new UsernamePasswordRequest(username, password) as IAuthenticationRequest;
+
+            return this.IThis.AuthenticateAccountAsync(request, cancellationToken);
+        }
+
+        Task<bool> IApplication.TryAuthenticateAccountAsync(string username, string password, out IAccount account, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)

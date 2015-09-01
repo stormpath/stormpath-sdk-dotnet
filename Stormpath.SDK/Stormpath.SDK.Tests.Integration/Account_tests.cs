@@ -21,6 +21,8 @@ using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Auth;
+using Stormpath.SDK.Error;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
@@ -120,6 +122,44 @@ namespace Stormpath.SDK.Tests.Integration
             if (deleted)
                 this.fixture.CreatedAccountHrefs.Remove(account.Href);
             deleted.ShouldBe(true);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Authenticating_account(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
+
+            var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
+            var result = await application.AuthenticateAccountAsync(username, "whataPieceofjunk$1138");
+            result.ShouldBeAssignableTo<IAuthenticationResult>();
+
+            var account = await result.GetAccountAsync();
+            account.FullName.ShouldBe("Luke Skywalker");
+        }
+
+        [Theory(Skip = "TODO")]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void TryAuthenticating_account()
+        {
+            Assertly.Todo();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Authenticating_throws_for_invalid_credentials(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
+
+            var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
+            var password = "notLukesPassword?";
+
+            Should.Throw<ResourceException>(async () =>
+            {
+                var result = await application.AuthenticateAccountAsync(username, password);
+            });
         }
     }
 }

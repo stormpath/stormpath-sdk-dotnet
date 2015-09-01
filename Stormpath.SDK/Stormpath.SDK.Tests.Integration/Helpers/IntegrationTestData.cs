@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
                         .SetGivenName("Luke")
                         .SetSurname("Skywalker")
                         .SetEmail("lskywalker@tattooine.rim")
-                        .SetPassword(new RandomPassword(12))
+                        .SetPassword("whataPieceofjunk$1138")
                         .SetUsername($"sonofthesuns-{this.Nonce}")
                 },
                 {
