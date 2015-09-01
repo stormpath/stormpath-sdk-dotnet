@@ -153,13 +153,25 @@ namespace Stormpath.SDK.Impl.Application
 
         async Task<IAccountStore> IApplication.GetDefaultAccountStoreAsync(CancellationToken cancellationToken)
         {
+            if (this.DefaultAccountStoreMapping.Href == null)
+                return null;
+
             var accountStoreMapping = await this.GetInternalDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken).ConfigureAwait(false);
+            if (accountStoreMapping == null)
+                return null;
+
             return await accountStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
         }
 
         async Task<IAccountStore> IApplication.GetDefaultGroupStoreAsync(CancellationToken cancellationToken)
         {
+            if (this.DefaultAccountStoreMapping.Href == null)
+                return null;
+
             var accountStoreMapping = await this.GetInternalDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultGroupStoreMapping.Href, cancellationToken).ConfigureAwait(false);
+            if (accountStoreMapping == null)
+                return null;
+
             return await accountStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
         }
     }

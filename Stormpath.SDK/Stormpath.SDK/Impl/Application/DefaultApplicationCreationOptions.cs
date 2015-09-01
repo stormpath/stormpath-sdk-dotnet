@@ -39,8 +39,13 @@ namespace Stormpath.SDK.Impl.Application
 
         public string GetQueryString()
         {
-            var argument = "createDirectory=" +
-                (this.IsDirectoryNameSpecified ? this.directoryName : "true");
+            var argument = string.Empty;
+
+            if (this.createDirectory)
+            {
+                argument = "createDirectory=" +
+                    (this.IsDirectoryNameSpecified ? this.directoryName : "true");
+            }
 
             return argument;
         }

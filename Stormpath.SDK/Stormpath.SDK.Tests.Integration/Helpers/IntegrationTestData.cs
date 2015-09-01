@@ -20,9 +20,8 @@ using System.Collections.Generic;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
-using Stormpath.SDK.Tests.Integration.Helpers;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Integration.Helpers
 {
     public class IntegrationTestData
     {
@@ -36,7 +35,7 @@ namespace Stormpath.SDK.Tests.Integration
         public IApplication GetTestApplication(IClient client)
         {
             return client.Instantiate<IApplication>()
-                        .SetName($".NET ITs {this.Nonce} - {DateTimeOffset.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}")
+                        .SetName($".NET IT {this.Nonce} - {DateTimeOffset.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}")
                         .SetDescription("The Battle of Endor")
                         .SetStatus(ApplicationStatus.Enabled);
         }

@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Tests.Integration
         public async Task Getting_application_accounts(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var application = await client.GetResourceAsync<IApplication>(this.fixture.Application.Href);
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
 
             var accounts = await application.GetAccounts().ToListAsync();
 
@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Tests.Integration
         public async Task Searching_application_accounts_by_email(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var application = await client.GetResourceAsync<IApplication>(this.fixture.Application.Href);
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
 
             var coreCitizens = await application
                 .GetAccounts()
@@ -102,11 +102,13 @@ namespace Stormpath.SDK.Tests.Integration
         public async Task Creating_and_deleting_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var application = await client.GetResourceAsync<IApplication>(this.fixture.Application.Href);
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
 
             var account = await application.CreateAccountAsync("Gial", "Ackbar", "admiralackbar@dac.rim", new RandomPassword(12));
 
             account.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
             account.FullName.ShouldBe("Gial Ackbar");
             account.Email.ShouldBe("admiralackbar@dac.rim");
             account.Username.ShouldBe("admiralackbar@dac.rim");
@@ -114,8 +116,10 @@ namespace Stormpath.SDK.Tests.Integration
             account.CreatedAt.ShouldBe(DateTimeOffset.Now, TimeSpan.FromSeconds(10));
             account.ModifiedAt.ShouldBe(DateTimeOffset.Now, TimeSpan.FromSeconds(10));
 
-            var deleteResult = await account.DeleteAsync(); // It's a trap! :(
-            deleteResult.ShouldBe(true);
+            var deleted = await account.DeleteAsync(); // It's a trap! :(
+            if (deleted)
+                this.fixture.CreatedAccountHrefs.Remove(account.Href);
+            deleted.ShouldBe(true);
         }
     }
 }

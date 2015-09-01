@@ -68,8 +68,8 @@ namespace Stormpath.SDK.Impl.DataStore
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
             var request = new DefaultHttpRequest(HttpMethod.Get, canonicalUri);
             var response = await this.SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
-            var json = response.Body;
 
+            var json = response.Body;
             var map = this.serializer.Deserialize(json, typeof(T));
             var resource = this.resourceFactory.Create<T>(map);
 

@@ -18,6 +18,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
@@ -46,16 +47,57 @@ namespace Stormpath.SDK.Tests.Integration
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_application_without_directory(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var newApplicationName = $".NET IT {this.fixture.TestRunIdentifier} Application #2";
+            var createdApplication = await tenant.CreateApplicationAsync(newApplicationName, createDirectory: false);
+
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+            createdApplication.Name.ShouldBe(newApplicationName);
+            createdApplication.Status.ShouldBe(ApplicationStatus.Enabled);
+
+            var defaultAccountStore = await createdApplication.GetDefaultAccountStoreAsync();
+            if (!string.IsNullOrEmpty(defaultAccountStore?.Href))
+                this.fixture.CreatedDirectoryHrefs.Add(defaultAccountStore.Href);
+
+            defaultAccountStore.ShouldBe(null); // no auto-created directory = no default account store
+
+            // Clean up
+            var deleted = await createdApplication.DeleteAsync();
+            if (deleted)
+                this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Searching_by_name(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var tenant = await client.GetCurrentTenantAsync();
 
             var application = await tenant.GetApplications()
-                .Where(app => app.Name.StartsWith($".NET ITs {this.fixture.TestIdentifier}"))
+                .Where(app => app.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}"))
                 .FirstAsync();
 
             application.Description.ShouldBe("The Battle of Endor");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Searching_by_description(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var application = await tenant.GetApplications()
+                .Where(app => app.Description == "The Battle Of Endor")
+                .FirstAsync();
+
+            application.Name.ShouldStartWith($".NET IT {this.fixture.TestRunIdentifier}");
         }
     }
 }

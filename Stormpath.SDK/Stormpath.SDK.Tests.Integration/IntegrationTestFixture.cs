@@ -16,11 +16,16 @@
 // </remarks>
 
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Error;
 using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Integration.Helpers;
 
@@ -33,7 +38,10 @@ namespace Stormpath.SDK.Tests.Integration
         public IntegrationTestFixture()
         {
             this.testData = new IntegrationTestData();
-            this.TestIdentifier = this.testData.Nonce;
+            this.TestRunIdentifier = this.testData.Nonce;
+            this.CreatedAccountHrefs = new List<string>();
+            this.CreatedApplicationHrefs = new List<string>();
+            this.CreatedDirectoryHrefs = new List<string>();
 
             this.AddObjectsToTenantAsync()
                 .GetAwaiter().GetResult();
@@ -45,13 +53,19 @@ namespace Stormpath.SDK.Tests.Integration
                 .GetAwaiter().GetResult();
         }
 
-        public ITenant Tenant { get; private set; }
+        public string TenantHref { get; private set; }
 
-        public IApplication Application { get; private set; }
+        public string ApplicationHref { get; private set; }
 
-        public IDirectory Directory { get; private set; }
+        public string DirectoryHref { get; private set; }
 
-        public string TestIdentifier { get; private set; }
+        public string TestRunIdentifier { get; private set; }
+
+        public List<string> CreatedApplicationHrefs { get; private set; }
+
+        public List<string> CreatedAccountHrefs { get; private set; }
+
+        public List<string> CreatedDirectoryHrefs { get; private set; }
 
         private async Task AddObjectsToTenantAsync()
         {
@@ -61,18 +75,21 @@ namespace Stormpath.SDK.Tests.Integration
             var tenant = await client.GetCurrentTenantAsync();
             tenant.ShouldNotBe(null);
             tenant.Href.ShouldNotBeNullOrEmpty();
-            this.Tenant = tenant;
 
             // Create application
+            IApplication createdApplication = null;
             try
             {
-                var application = this.testData.GetTestApplication(client);
-                var createResult = await tenant.CreateApplicationAsync(application, opt => opt.CreateDirectory = true);
-                createResult.ShouldNotBe(null);
-                createResult.Href.ShouldNotBeNullOrEmpty();
+                var appData = this.testData.GetTestApplication(client);
+                createdApplication = await tenant.CreateApplicationAsync(appData, opt => opt.CreateDirectory = true);
+                createdApplication.ShouldNotBe(null);
+                createdApplication.Href.ShouldNotBeNullOrEmpty();
 
-                this.Application = createResult;
-                this.Directory = await client.GetResourceAsync<IDirectory>((await createResult.GetDefaultAccountStoreAsync()).Href);
+                this.ApplicationHref = createdApplication.Href;
+                this.DirectoryHref = (await createdApplication.GetDefaultAccountStoreAsync()).Href;
+
+                this.CreatedApplicationHrefs.Add(this.ApplicationHref);
+                this.CreatedDirectoryHrefs.Add(this.DirectoryHref);
             }
             catch (Exception e)
             {
@@ -86,9 +103,10 @@ namespace Stormpath.SDK.Tests.Integration
                 var accountsToCreate = this.testData.GetTestAccounts(client);
 
                 var accountCreationTasks = accountsToCreate.Select(acct =>
-                    this.Application.CreateAccountAsync(acct));
+                    createdApplication.CreateAccountAsync(acct));
 
-                await Task.WhenAll(accountCreationTasks);
+                var resultingAccounts = await Task.WhenAll(accountCreationTasks);
+                this.CreatedAccountHrefs.AddRange(resultingAccounts.Select(x => x.Href));
             }
             catch (Exception e)
             {
@@ -99,63 +117,91 @@ namespace Stormpath.SDK.Tests.Integration
 
         private async Task RemoveObjectsFromTenantAsync()
         {
-            var errors = string.Empty;
+            var client = IntegrationTestClients.GetSAuthc1Client();
+            var results = new ConcurrentDictionary<string, Exception>();
 
             // Delete accounts
-            bool deleteAccountsSuccessful = false;
-            try
+            var deleteAccountTasks = this.CreatedAccountHrefs.Select(async href =>
             {
-                var allAccounts = await this.Directory
-                    .GetAccounts()
-                    .ToListAsync();
-                var accountDeleteTasks = allAccounts.Select(acct => acct.DeleteAsync());
+                try
+                {
+                    var account = await client.GetResourceAsync<IAccount>(href);
+                    var deleteResult = await account.DeleteAsync();
+                    results.TryAdd(href, null);
+                }
+                catch (ResourceException rex)
+                {
+                    if (rex.Code == 404)
+                    {
+                        // Already deleted
+                        results.TryAdd(href, null);
+                    }
+                }
+                catch (Exception e)
+                {
+                    results.TryAdd(href, e);
+                }
+            });
 
-                deleteAccountsSuccessful =
-                    (await Task.WhenAll(accountDeleteTasks))
-                    .All(result => result == true);
-            }
-            catch (Exception e)
+            // Delete applications
+            var deleteApplicationTasks = this.CreatedApplicationHrefs.Select(async href =>
             {
-                errors += "- Error deleting account: "
-                    + e.Message + Environment.NewLine;
-            }
+                try
+                {
+                    var application = await client.GetResourceAsync<IApplication>(href);
+                    var deleteResult = await application.DeleteAsync();
+                    results.TryAdd(href, null);
+                }
+                catch (ResourceException rex)
+                {
+                    if (rex.Code == 404)
+                    {
+                        // Already deleted
+                        results.TryAdd(href, null);
+                    }
+                }
+                catch (Exception e)
+                {
+                    results.TryAdd(href, e);
+                }
+            });
 
-            if (!deleteAccountsSuccessful)
-                errors += "- At least one account delete result was false";
-
-            // Delete application
-            bool deleteApplicationSuccessful = false;
-            try
+            // Delete directories
+            var deleteDirectoryTasks = this.CreatedDirectoryHrefs.Select(async href =>
             {
-                deleteApplicationSuccessful = await this.Application.DeleteAsync();
-            }
-            catch (Exception e)
-            {
-                errors += $"- Could not delete application at {this.Application.Href}: "
-                    + e.Message + Environment.NewLine;
-            }
+                try
+                {
+                    var directory = await client.GetResourceAsync<IDirectory>(href);
+                    var deleteResult = await directory.DeleteAsync();
+                    results.TryAdd(href, null);
+                }
+                catch (ResourceException rex)
+                {
+                    if (rex.Code == 404)
+                    {
+                        // Already deleted
+                        results.TryAdd(href, null);
+                    }
+                }
+                catch (Exception e)
+                {
+                    results.TryAdd(href, e);
+                }
+            });
 
-            if (!deleteApplicationSuccessful)
-                errors += "- The application was not removed successfully";
-
-            // Delete directory
-            bool deleteDirectorySuccessful = false;
-            try
-            {
-                deleteDirectorySuccessful = await this.Directory.DeleteAsync();
-            }
-            catch (Exception e)
-            {
-                errors += $"Could not delete directory at {this.Directory.Href}: "
-                    + e.Message + Environment.NewLine;
-            }
-
-            if (!deleteDirectorySuccessful)
-                errors += "- The directory was not removed successfully";
+            await Task.WhenAll(
+                Task.WhenAll(deleteAccountTasks),
+                Task.WhenAll(deleteApplicationTasks),
+                Task.WhenAll(deleteDirectoryTasks));
 
             // All done! Throw errors if any occurred
-            if (!string.IsNullOrEmpty(errors))
-                throw new ApplicationException("Errors occurred during object cleanup:" + Environment.NewLine + errors);
+            bool anyErrors = results.Any(kvp => kvp.Value != null);
+            if (anyErrors)
+            {
+                throw new ApplicationException(
+                    "Errors occurred during test cleanup. Full log: " + Environment.NewLine
+                    + string.Join(Environment.NewLine, results.Select(kvp => $"{kvp.Key} : '{(kvp.Value == null ? "Good" : kvp.Value.Message)}'")));
+            }
         }
     }
 }
