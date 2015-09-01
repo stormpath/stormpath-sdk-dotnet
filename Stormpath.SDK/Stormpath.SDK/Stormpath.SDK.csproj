@@ -93,6 +93,7 @@
     <Compile Include="Group\IGroup.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
+    <Compile Include="Impl\Account\DefaultAccountCreationOptions.cs" />
     <Compile Include="Impl\Application\DefaultApplication.cs" />
     <Compile Include="Impl\Application\DefaultApplicationCreationOptions.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />

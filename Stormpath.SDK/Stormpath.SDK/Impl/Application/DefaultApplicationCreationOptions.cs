@@ -16,11 +16,10 @@
 // </remarks>
 
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Application
 {
-    internal sealed class DefaultApplicationCreationOptions : IApplicationCreationOptions, ICreationOptions
+    internal sealed class DefaultApplicationCreationOptions : IApplicationCreationOptions
     {
         private readonly bool createDirectory;
         private readonly string directoryName;

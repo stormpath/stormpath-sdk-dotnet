@@ -112,11 +112,22 @@ namespace Stormpath.SDK.Impl.Application
             return this;
         }
 
-        Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptions, CancellationToken cancellationToken)
+        Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
-            if (creationOptions != null)
-                throw new NotImplementedException();
+            var builder = new AccountCreationOptionsBuilder();
+            creationOptionsAction(builder);
+            var options = builder.Build();
 
+            return this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, options, cancellationToken);
+        }
+
+        Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken)
+        {
+            return this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, creationOptions, cancellationToken);
+        }
+
+        Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, CancellationToken cancellationToken)
+        {
             return this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, cancellationToken);
         }
 
@@ -128,7 +139,7 @@ namespace Stormpath.SDK.Impl.Application
             account.SetEmail(email);
             account.SetPassword(password);
 
-            return this.IThis.CreateAccountAsync(account, creationOptions: null, cancellationToken: cancellationToken);
+            return this.IThis.CreateAccountAsync(account, cancellationToken: cancellationToken);
         }
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)

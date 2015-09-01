@@ -56,7 +56,7 @@ namespace Stormpath.SDK.Impl.Tenant
         {
         }
 
-        private ITenant This => this;
+        private ITenant IThis => this;
 
         internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
@@ -78,9 +78,9 @@ namespace Stormpath.SDK.Impl.Tenant
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
-            var creationOptionsBuilder = new ApplicationCreationOptionsBuilder();
-            creationOptionsAction(creationOptionsBuilder);
-            var options = creationOptionsBuilder.Build();
+            var builder = new ApplicationCreationOptionsBuilder();
+            creationOptionsAction(builder);
+            var options = builder.Build();
 
             return this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, options, cancellationToken);
         }
@@ -105,7 +105,7 @@ namespace Stormpath.SDK.Impl.Tenant
                 CreateDirectory = createDirectory
             }.Build();
 
-            return this.This.CreateApplicationAsync(application, options, cancellationToken);
+            return this.IThis.CreateApplicationAsync(application, options, cancellationToken);
         }
 
         ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()

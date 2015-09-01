@@ -15,9 +15,11 @@
 // limitations under the License.
 // </remarks>
 
+using Stormpath.SDK.Resource;
+
 namespace Stormpath.SDK.Account
 {
-    public interface IAccountCreationOptions
+    public interface IAccountCreationOptions : ICreationOptions
     {
         bool? RegistrationWorkflowEnabled { get; }
     }

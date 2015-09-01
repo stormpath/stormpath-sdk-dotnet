@@ -15,7 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System;
+using Stormpath.SDK.Impl.Account;
 
 namespace Stormpath.SDK.Account
 {
@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Account
 
         public IAccountCreationOptions Build()
         {
-            throw new NotImplementedException();
+            return new DefaultAccountCreationOptions(this.RegistrationWorkflowEnabled);
         }
     }
 }

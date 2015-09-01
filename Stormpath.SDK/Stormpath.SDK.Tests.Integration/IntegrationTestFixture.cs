@@ -101,9 +101,13 @@ namespace Stormpath.SDK.Tests.Integration
             try
             {
                 var accountsToCreate = this.testData.GetTestAccounts(client);
+                var createOptions = new AccountCreationOptionsBuilder()
+                {
+                    RegistrationWorkflowEnabled = false
+                }.Build();
 
                 var accountCreationTasks = accountsToCreate.Select(acct =>
-                    createdApplication.CreateAccountAsync(acct));
+                    createdApplication.CreateAccountAsync(acct, createOptions));
 
                 var resultingAccounts = await Task.WhenAll(accountCreationTasks);
                 this.CreatedAccountHrefs.AddRange(resultingAccounts.Select(x => x.Href));
@@ -200,7 +204,12 @@ namespace Stormpath.SDK.Tests.Integration
             {
                 throw new ApplicationException(
                     "Errors occurred during test cleanup. Full log: " + Environment.NewLine
+
+#pragma warning disable SA1119 // Statement must not use unnecessary parenthesis
+#pragma warning disable SA1008 // Opening parenthesis must be spaced correctly
                     + string.Join(Environment.NewLine, results.Select(kvp => $"{kvp.Key} : '{(kvp.Value == null ? "Good" : kvp.Value.Message)}'")));
+#pragma warning restore SA1008 // Opening parenthesis must be spaced correctly
+#pragma warning restore SA1119 // Statement must not use unnecessary parenthesis
             }
         }
     }

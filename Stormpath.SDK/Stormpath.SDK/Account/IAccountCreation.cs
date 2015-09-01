@@ -23,7 +23,11 @@ namespace Stormpath.SDK.Account
 {
     public interface IAccountCreation
     {
-        Task<IAccount> CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptions = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IAccount> CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<IAccount> CreateAccountAsync(IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<IAccount> CreateAccountAsync(IAccount account, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<IAccount> CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken = default(CancellationToken));
     }

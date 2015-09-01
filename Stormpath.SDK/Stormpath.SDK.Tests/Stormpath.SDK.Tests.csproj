@@ -88,6 +88,7 @@
     <Compile Include="Fakes\FakeAccounts.cs" />
     <Compile Include="Fakes\FakeDataStore.cs" />
     <Compile Include="Fakes\FakeJson.cs" />
+    <Compile Include="Fakes\FakeRequestExecutor.cs" />
     <Compile Include="FieldConverter_tests.cs" />
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\CollectionTestHarness.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Impl\ClientApiKey_tests.cs" />
     <Compile Include="Impl\CollectionResourceQueryable_iteration_tests.cs" />
     <Compile Include="Impl\CollectionResourceRequestModel_validation_tests.cs" />
+    <Compile Include="Impl\CreationOptions_tests.cs" />
     <Compile Include="Impl\DefaultClientApiKeyBuilder_tests.cs" />
     <Compile Include="Impl\DefaultClientBuilder_tests.cs" />
     <Compile Include="Impl\DefaultDataStore_tests.cs" />
