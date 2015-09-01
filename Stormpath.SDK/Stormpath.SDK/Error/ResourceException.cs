@@ -45,14 +45,14 @@ namespace Stormpath.SDK.Error
 
         public string MoreInfo => this.error.MoreInfo;
 
-        public int Status => this.error.Status;
+        public int HttpStatus => this.error.HttpStatus;
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("code", this.Code);
             info.AddValue("developerMessage", this.DeveloperMessage, typeof(string));
             info.AddValue("moreInfo", this.MoreInfo, typeof(string));
-            info.AddValue("status", this.Status);
+            info.AddValue("status", this.HttpStatus);
 
             base.GetObjectData(info, context);
         }
@@ -62,7 +62,7 @@ namespace Stormpath.SDK.Error
             if (error == null)
                 throw new ArgumentNullException(nameof(error));
 
-            return $"HTTP {error.Status}, Stormpath {error.Code} ({error.MoreInfo}): {error.DeveloperMessage}";
+            return $"HTTP {error.HttpStatus}, Stormpath {error.Code} ({error.MoreInfo}): {error.DeveloperMessage}";
         }
     }
 }

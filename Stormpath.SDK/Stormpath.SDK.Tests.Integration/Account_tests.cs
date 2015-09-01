@@ -156,10 +156,21 @@ namespace Stormpath.SDK.Tests.Integration
             var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
             var password = "notLukesPassword?";
 
-            Should.Throw<ResourceException>(async () =>
+            bool didFailCorrectly = false;
+            try
             {
                 var result = await application.AuthenticateAccountAsync(username, password);
-            });
+            }
+            catch (ResourceException rex)
+            {
+                didFailCorrectly = rex.HttpStatus == 400;
+            }
+            catch
+            {
+                didFailCorrectly = false;
+            }
+
+            Assert.True(didFailCorrectly);
         }
     }
 }

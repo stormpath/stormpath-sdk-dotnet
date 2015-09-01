@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Integration
                 rex.DeveloperMessage.ShouldBe("The requested resource does not exist.");
                 rex.Message.ShouldNotBe(null);
                 rex.MoreInfo.ShouldNotBe(null);
-                rex.Status.ShouldBe(404);
+                rex.HttpStatus.ShouldBe(404);
             }
         }
     }

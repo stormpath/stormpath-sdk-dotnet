@@ -19,7 +19,7 @@ namespace Stormpath.SDK.Error
 {
     public interface IError
     {
-        int Status { get; }
+        int HttpStatus { get; }
 
         int Code { get; }
 

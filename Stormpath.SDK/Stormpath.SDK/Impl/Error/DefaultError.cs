@@ -44,6 +44,6 @@ namespace Stormpath.SDK.Impl.Error
 
         public string MoreInfo => GetProperty<string>(MoreInfoPropertyName);
 
-        public int Status => GetProperty<int>(StatusPropertyName);
+        public int HttpStatus => GetProperty<int>(StatusPropertyName);
     }
 }
