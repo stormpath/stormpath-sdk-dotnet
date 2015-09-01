@@ -93,11 +93,13 @@ namespace Stormpath.SDK.Tests.Integration
             var client = clientBuilder.Build();
             var tenant = await client.GetCurrentTenantAsync();
 
-            var application = await tenant.GetApplications()
+            var applications = await tenant.GetApplications()
                 .Where(app => app.Description == "The Battle Of Endor")
-                .FirstAsync();
+                .ToListAsync();
 
-            application.Name.ShouldStartWith($".NET IT {this.fixture.TestRunIdentifier}");
+            applications
+                .Any(app => app.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}"))
+                .ShouldBe(true);
         }
     }
 }
