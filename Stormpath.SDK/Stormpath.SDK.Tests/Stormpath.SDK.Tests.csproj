@@ -97,6 +97,7 @@
     <Compile Include="Impl\Authentication\SAuthc1RequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\BasicRequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\DefaultRequestAuthenticatorFactory_tests.cs" />
+    <Compile Include="Impl\BackoffStrategy_tests.cs" />
     <Compile Include="Impl\CanonicalUri_tests.cs" />
     <Compile Include="Impl\ClientApiKey_tests.cs" />
     <Compile Include="Impl\CollectionResourceQueryable_iteration_tests.cs" />

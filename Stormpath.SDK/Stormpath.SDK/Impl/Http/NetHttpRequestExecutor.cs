@@ -23,17 +23,26 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.Http.Authentication;
+using Stormpath.SDK.Impl.Http.Support;
 
 namespace Stormpath.SDK.Impl.Http
 {
     internal sealed class NetHttpRequestExecutor : IRequestExecutor
     {
+        private static readonly int MaxBackoffMilliseconds = 20 * 1000;
+        private static readonly int DefaultMaxRetries = 4;
+
         private readonly IClientApiKey apiKey;
         private readonly AuthenticationScheme authScheme;
         private readonly int connectionTimeout;
+
         private readonly IRequestAuthenticator requestAuthenticator;
         private readonly NetHttpAdapter httpAdapter;
         private readonly HttpClient client;
+
+        private readonly IBackoffStrategy defaultBackoffStrategy;
+        private readonly IBackoffStrategy throttlingBackoffStrategy;
+        private readonly int maxRetriesPerRequest = DefaultMaxRetries;
 
         private bool disposed = false; // To detect redundant calls
 
@@ -50,6 +59,9 @@ namespace Stormpath.SDK.Impl.Http
             this.requestAuthenticator = requestAuthenticatorFactory.Create(authenticationScheme);
             this.httpAdapter = new NetHttpAdapter();
             this.client = BuildClient(connectionTimeout);
+
+            this.defaultBackoffStrategy = new DefaultBackoffStrategy(MaxBackoffMilliseconds);
+            this.throttlingBackoffStrategy = new ThrottlingBackoffStrategy(MaxBackoffMilliseconds);
         }
 
         private static HttpClient BuildClient(int connectionTimeout)
@@ -58,7 +70,7 @@ namespace Stormpath.SDK.Impl.Http
             {
                 AllowAutoRedirect = false,
 
-                // Proxy...
+                // TODO Proxy...
             };
 
             var client = new HttpClient(clientSettings);
@@ -73,25 +85,57 @@ namespace Stormpath.SDK.Impl.Http
 
         async Task<IHttpResponse> IRequestExecutor.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
         {
+            var retryCount = 0;
+            bool throttling = false;
+
             Uri currentUri = request.CanonicalUri.ToUri();
 
             while (true)
             {
                 var currentRequest = new DefaultHttpRequest(request, overrideUri: currentUri);
+
+                // Sign and build request
                 this.requestAuthenticator.Authenticate(currentRequest, this.apiKey);
-
                 var requestMessage = this.httpAdapter.ToHttpRequestMessage(currentRequest);
-                var response = await this.client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
-                if (this.IsRedirect(response))
-                {
-                    currentUri = response.Headers.Location;
-                    continue;
-                }
 
-                var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                var headers = this.httpAdapter.ToHttpHeaders(response.Headers);
-                var returnedResponse = new DefaultHttpResponse((int)response.StatusCode, response.ReasonPhrase, headers, body, response.Content?.Headers?.ContentType?.MediaType);
-                return returnedResponse;
+                try
+                {
+                    if (retryCount > 0)
+                        await this.PauseAsync(retryCount, throttling).ConfigureAwait(false);
+
+                    retryCount++;
+
+                    var response = await this.client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
+                    if (this.IsRedirect(response))
+                    {
+                        currentUri = response.Headers.Location;
+                        continue;
+                    }
+
+                    var statusCode = (int)response.StatusCode;
+                    if (statusCode == 429)
+                    {
+                        throttling = true;
+                        continue; // retry request
+                    }
+
+                    if ((statusCode == 503 || statusCode == 504) && retryCount <= this.maxRetriesPerRequest)
+                    {
+                        continue; // retry request
+                    }
+
+                    var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var headers = this.httpAdapter.ToHttpHeaders(response.Headers);
+                    var returnedResponse = new DefaultHttpResponse(statusCode, response.ReasonPhrase, headers, body, response.Content?.Headers?.ContentType?.MediaType);
+                    return returnedResponse;
+                }
+                catch (Exception ex)
+                {
+                    if (!this.ShouldRetryForError(requestMessage, ex, cancellationToken, retryCount))
+                    {
+                        throw new RequestException("Unable to execute HTTP request.", ex);
+                    }
+                }
             }
         }
 
@@ -109,6 +153,43 @@ namespace Stormpath.SDK.Impl.Http
             bool hasNewLocation = !string.IsNullOrEmpty(response.Headers.Location?.AbsoluteUri);
 
             return moved && hasNewLocation;
+        }
+
+        private Task PauseAsync(int retryCount, bool isThrottling)
+        {
+            var delayMilliseconds = 0;
+
+            if (isThrottling)
+                delayMilliseconds = this.throttlingBackoffStrategy.GetDelayMilliseconds(retryCount);
+            else
+                delayMilliseconds = this.defaultBackoffStrategy.GetDelayMilliseconds(retryCount);
+
+            return Task.Delay(delayMilliseconds);
+        }
+
+        private bool ShouldRetryForError(HttpRequestMessage request, Exception exception, CancellationToken cancellationToken, int currentRetries)
+        {
+            if (currentRetries > this.maxRetriesPerRequest)
+                return false;
+
+            var asTaskCanceledException = exception as TaskCanceledException;
+            if (asTaskCanceledException != null)
+            {
+                bool wasCanceledByUser = asTaskCanceledException.CancellationToken == cancellationToken;
+                return !wasCanceledByUser;
+            }
+
+            var webException = exception.InnerException as WebException;
+            if (webException != null)
+            {
+                if (webException.Status == WebExceptionStatus.ConnectFailure ||
+                    webException.Status == WebExceptionStatus.ConnectionClosed ||
+                    webException.Status == WebExceptionStatus.RequestCanceled ||
+                    webException.Status == WebExceptionStatus.Timeout)
+                    return true;
+            }
+
+            return false;
         }
 
         private void Dispose(bool disposing)

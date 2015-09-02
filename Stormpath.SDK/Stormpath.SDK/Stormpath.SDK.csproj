@@ -130,7 +130,10 @@
     <Compile Include="Impl\Http\Support\AuthorizationHeaderValue.cs" />
     <Compile Include="Impl\Http\IHttpMessage.cs" />
     <Compile Include="Impl\Http\Support\CanonicalUri.cs" />
+    <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
+    <Compile Include="Impl\Http\Support\DefaultBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\HttpMethod.cs" />
+    <Compile Include="Impl\Http\Support\IBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\QueryString.cs" />
     <Compile Include="Impl\Http\Support\UriQualifier.cs" />
     <Compile Include="Impl\Http\UserAgentBuilder.cs" />
