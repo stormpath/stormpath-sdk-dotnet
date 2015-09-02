@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="AccountStore\IAccountStore.cs" />
     <Compile Include="AccountStore\IAccountStoreMapping.cs" />
+    <Compile Include="Account\IPasswordResetToken.cs" />
     <Compile Include="Application\ApplicationCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountStatus.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Impl\AccountStore\DefaultAccountStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
     <Compile Include="Impl\Account\DefaultAccountCreationOptions.cs" />
+    <Compile Include="Impl\Account\DefaultPasswordResetToken.cs" />
     <Compile Include="Impl\Application\DefaultApplication.cs" />
     <Compile Include="Impl\Application\DefaultApplicationCreationOptions.cs" />
     <Compile Include="Impl\Auth\AbstractLoginAttempt.cs" />

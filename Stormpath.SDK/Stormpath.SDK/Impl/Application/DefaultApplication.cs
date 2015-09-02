@@ -23,6 +23,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
+using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
@@ -178,6 +179,37 @@ namespace Stormpath.SDK.Impl.Application
         Task<IApplication> ISaveable<IApplication>.SaveAsync(CancellationToken cancellationToken)
         {
             return this.GetInternalDataStore().SaveAsync<IApplication>(this, cancellationToken);
+        }
+
+        Task<IPasswordResetToken> IApplication.SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken)
+        {
+            var token = this.GetInternalDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;
+            token.SetEmail(email);
+
+            return this.GetInternalDataStore().CreateAsync(this.PasswordResetToken.Href, (IPasswordResetToken)token, cancellationToken);
+        }
+
+        async Task<IAccount> IApplication.VerifyPasswordResetTokenAsync(string token, CancellationToken cancellationToken)
+        {
+            string href = $"{this.PasswordResetToken.Href}/{token}";
+
+            var validTokenResponse = await this.GetInternalDataStore().GetResourceAsync<IPasswordResetToken>(href, cancellationToken).ConfigureAwait(false);
+            return await validTokenResponse.GetAccountAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        async Task<IAccount> IApplication.ResetPasswordAsync(string token, string newPassword, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(token))
+                throw new ArgumentNullException(nameof(token));
+            if (string.IsNullOrEmpty(newPassword))
+                throw new ArgumentNullException(nameof(newPassword));
+
+            var href = $"{this.PasswordResetToken.Href}/{token}";
+            var passwordResetToken = this.GetInternalDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;
+            passwordResetToken.SetPassword(newPassword);
+
+            var responseToken = await this.GetInternalDataStore().CreateAsync(href, (IPasswordResetToken)passwordResetToken, cancellationToken).ConfigureAwait(false);
+            return await responseToken.GetAccountAsync(cancellationToken).ConfigureAwait(false);
         }
 
         ICollectionResourceQueryable<IAccount> IApplication.GetAccounts()

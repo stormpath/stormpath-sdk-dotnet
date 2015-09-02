@@ -50,6 +50,7 @@ namespace Stormpath.SDK.Impl.DataStore
             { typeof(IAccountStore), typeof(DefaultAccountStore) },
             { typeof(IBasicLoginAttempt), typeof(DefaultBasicLoginAttempt) },
             { typeof(IAuthenticationResult), typeof(DefaultAuthenticationResult) },
+            { typeof(IPasswordResetToken), typeof(DefaultPasswordResetToken) },
         };
 
         private readonly IInternalDataStore dataStore;

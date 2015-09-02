@@ -88,7 +88,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
                     client.Instantiate<IAccount>()
                         .SetGivenName("Darth")
                         .SetSurname("Vader")
-                        .SetEmail("vader@empire.co")
+                        .SetEmail("vader@galacticempire.co")
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"lordvader-{this.Nonce}")
                 },
@@ -96,7 +96,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
                     client.Instantiate<IAccount>()
                         .SetGivenName("Emperor")
                         .SetSurname("Palpatine")
-                        .SetEmail("emperor@empire.co")
+                        .SetEmail("emperor@galacticempire.co")
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"rulethegalaxy-{this.Nonce}")
                 },

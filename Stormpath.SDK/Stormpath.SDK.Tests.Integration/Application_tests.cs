@@ -101,5 +101,21 @@ namespace Stormpath.SDK.Tests.Integration
                 .Any(app => app.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}"))
                 .ShouldBe(true);
         }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Reset_password_for_valid_account(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
+
+            var token = await application.SendPasswordResetEmailAsync("vader@galacticempire.co");
+
+            var validTokenResponse = await application.VerifyPasswordResetTokenAsync(token.GetValue());
+            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+
+            var resetPasswordResponse = await application.ResetPasswordAsync(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
+            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+        }
     }
 }

@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Tests.Integration
 
             var vader = accounts.Where(x => x.Surname == "Vader").Single();
             vader.FullName.ShouldBe("Darth Vader");
-            vader.Email.ShouldStartWith("vader@empire.co");
+            vader.Email.ShouldStartWith("vader@galacticempire.co");
             vader.Username.ShouldStartWith("lordvader");
         }
 
