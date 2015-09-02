@@ -109,7 +109,7 @@ namespace Stormpath.SDK.Tests.Impl
                  */
 
                 var createdAtSearch = new QueryString("createdAt=[2015-06-01T12:00:59Z,)");
-                createdAtSearch.ToString(canonical: true).ShouldBe("createdAt=%5B2015-06-01T12%3A00%3A59Z%2C)");
+                createdAtSearch.ToString(canonical: true).ShouldBe("createdAt=%5B2015-06-01T12%3A00%3A59Z%2C%29");
             }
         }
 

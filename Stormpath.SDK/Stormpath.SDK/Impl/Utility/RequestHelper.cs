@@ -28,13 +28,16 @@ namespace Stormpath.SDK.Impl.Utility
 
             var encoded = WebUtility.UrlEncode(value);
 
+            // Perform some custom Stormpath encoding
             if (canonicalize)
             {
                 encoded = encoded
                     .Replace("%2B", "+")
                     .Replace("+", "%20")
                     .Replace("*", "%2A")
-                    .Replace("%7E", "~");
+                    .Replace("%7E", "~")
+                    .Replace("(", "%28")
+                    .Replace(")", "%29");
 
                 if (isPath)
                     encoded = encoded.Replace("%2F", "/");

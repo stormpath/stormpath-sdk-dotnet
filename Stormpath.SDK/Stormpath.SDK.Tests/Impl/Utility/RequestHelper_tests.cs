@@ -54,6 +54,22 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                 canonicalized.ShouldBe("%2F");
                 canonicalizedWithPath.ShouldBe("/");
             }
+
+            [Fact]
+            public void Does_not_escape_parenthesis()
+            {
+                var escaped = RequestHelper.UrlEncode("()");
+
+                escaped.ShouldBe("()");
+            }
+
+            [Fact]
+            public void Canonicalizes_parenthesis()
+            {
+                var canonicalized = RequestHelper.UrlEncode("()", canonicalize: true);
+
+                canonicalized.ShouldBe("%28%29");
+            }
         }
     }
 }

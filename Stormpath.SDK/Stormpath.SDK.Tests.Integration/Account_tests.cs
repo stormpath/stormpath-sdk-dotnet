@@ -270,10 +270,10 @@ namespace Stormpath.SDK.Tests.Integration
                 .OrderByDescending(x => x.Surname)
                 .ToListAsync();
 
-            var luke = accountsSortedByMultiple.First();
+            var tarkin = accountsSortedByMultiple.First();
+            tarkin.FullName.ShouldBe("Wilhuff Tarkin");
+            var luke = accountsSortedByMultiple.ElementAt(1);
             luke.FullName.ShouldBe("Luke Skywalker");
-            var palpatine = accountsSortedByMultiple.ElementAt(1);
-            palpatine.FullName.ShouldBe("Emperor Palpatine");
         }
 
         [Theory]
