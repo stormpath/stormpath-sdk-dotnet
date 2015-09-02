@@ -21,12 +21,25 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Resource;
 
 // Placed in the base library namespace so that these extension methods are available without any extra usings
 namespace Stormpath.SDK
 {
     public static class AsyncQueryableExtensions
     {
+        public static async Task<int> CountAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var collection = source as ICollectionResourceQueryable<T>;
+            if (collection == null)
+                throw new InvalidOperationException("This queryable is not a supported collection resource.");
+
+            if (!await collection.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                return 0;
+
+            return collection.Size;
+        }
+
         public static async Task<T> FirstAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
         {
             var asyncSource = source as IAsyncQueryable<T>;

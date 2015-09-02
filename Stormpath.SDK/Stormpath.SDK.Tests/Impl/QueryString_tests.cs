@@ -82,6 +82,35 @@ namespace Stormpath.SDK.Tests.Impl
 
                 qs.ToString().ShouldBe(string.Empty);
             }
+
+            [Fact]
+            public void Datetime_search_strings_are_not_escaped()
+            {
+                /* Special case: when createdAt=[] or modifiedAt=[] terms
+                 * appear in query string they should not be urlEncoded
+                 */
+
+                var notApplicable = new QueryString("foo=[bar:baz]");
+                notApplicable.ToString().ShouldBe("foo=%5Bbar%3Abaz%5D");
+
+                var createdAtSearch = new QueryString("createdAt=[2015-06-01T12:00:59Z,)");
+                createdAtSearch.ToString().ShouldBe("createdAt=[2015-06-01T12:00:59Z,)");
+
+                var modifiedAtSearch = new QueryString("modifiedAt=(2015-01-01T06:01:59Z,2016-01-01T22:30:59Z]");
+                modifiedAtSearch.ToString().ShouldBe("modifiedAt=(2015-01-01T06:01:59Z,2016-01-01T22:30:59Z]");
+            }
+
+            [Fact]
+            public void Datetime_search_strings_are_escaped_when_canonical_flag_is_set()
+            {
+                /* If the canonical flag is set, the above special case does not apply.
+                 * The SAuthc1 algorithm expects that the entire string is URLEncoded,
+                 * even if pieces of the actual request are not.
+                 */
+
+                var createdAtSearch = new QueryString("createdAt=[2015-06-01T12:00:59Z,)");
+                createdAtSearch.ToString(canonical: true).ShouldBe("createdAt=%5B2015-06-01T12%3A00%3A59Z%2C)");
+            }
         }
 
         public class ToString_tests

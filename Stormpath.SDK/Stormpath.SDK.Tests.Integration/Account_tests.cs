@@ -52,15 +52,15 @@ namespace Stormpath.SDK.Tests.Integration
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_application_accounts(TestClientBuilder clientBuilder)
+        public async Task Getting_accounts(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var accounts = await application.GetAccounts().ToListAsync();
 
             // Verify data from IntegrationTestData
-            accounts.Count.ShouldBe(7);
+            accounts.Count.ShouldBe(8);
 
             var luke = accounts.Where(x => x.GivenName == "Luke").Single();
             luke.FullName.ShouldBe("Luke Skywalker");
@@ -75,10 +75,10 @@ namespace Stormpath.SDK.Tests.Integration
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_application_accounts_by_email(TestClientBuilder clientBuilder)
+        public async Task Searching_accounts_by_email(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var coreCitizens = await application
                 .GetAccounts()
@@ -94,9 +94,212 @@ namespace Stormpath.SDK.Tests.Integration
             han.Username.ShouldStartWith("cptsolo");
 
             var leia = coreCitizens.Where(x => x.GivenName == "Leia").Single();
-            leia.FullName.ShouldBe("Leia Organa");
+            leia.FullName.ShouldBe("Leia Organa Solo");
             leia.Email.ShouldStartWith("leia.organa@alderaan.core");
             leia.Username.ShouldStartWith("princessleia");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Searching_accounts_by_firstname(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var chewie = await application
+                .GetAccounts()
+                .Where(a => a.GivenName == "Chewbacca")
+                .SingleAsync();
+
+            // Verify data from IntegrationTestData
+            chewie.FullName.ShouldBe("Chewbacca the Wookiee");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Searching_accounts_by_lastname(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var palpatine = await application
+                .GetAccounts()
+                .Where(a => a.Surname == "Palpatine")
+                .SingleAsync();
+
+            // Verify data from IntegrationTestData
+            palpatine.FullName.ShouldBe("Emperor Palpatine");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Searching_accounts_by_middle_name(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var leia = await application
+                .GetAccounts()
+                .Where(a => a.MiddleName == "Organa")
+                .SingleAsync();
+
+            // Verify data from IntegrationTestData
+            leia.FullName.ShouldBe("Leia Organa Solo");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Searching_accounts_by_username(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var vader = await application
+                .GetAccounts()
+                .Where(a => a.Username.Equals($"lordvader-{this.fixture.TestRunIdentifier}"))
+                .SingleAsync();
+
+            // Verify data from IntegrationTestData
+            vader.Email.ShouldBe("vader@galacticempire.co");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Searching_accounts_by_status(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var tarkin = await application
+                .GetAccounts()
+                .Where(x => x.Status == AccountStatus.Disabled)
+                .SingleAsync();
+
+            // Verify data from IntegrationTestData
+            tarkin.FullName.ShouldBe("Wilhuff Tarkin");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Searching_accounts_by_creation_date(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            // Make a new account that's created now
+            var createdAfter = DateTime.Now.Subtract(TimeSpan.FromSeconds(10));
+            var newAccount = await application.CreateAccountAsync("Wedge", "Antilles", "wedge@gus-treta.corellia.core", new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(newAccount.Href);
+
+            var rightBeforeCreation = newAccount.CreatedAt.Subtract(TimeSpan.FromSeconds(1));
+            var createdRecently = await application
+                .GetAccounts()
+                .Where(x => x.CreatedAt >= rightBeforeCreation)
+                .ToListAsync();
+            var wedge = createdRecently.Where(x => x.Email == "wedge@gus-treta.corellia.core").Single();
+            wedge.FullName.ShouldBe("Wedge Antilles");
+
+            // Clean up
+            var didDelete = await newAccount.DeleteAsync();
+            if (didDelete)
+                this.fixture.CreatedAccountHrefs.Remove(newAccount.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Searching_accounts_by_creation_date_within_shorthand(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var firstAccount = await application.GetAccounts().FirstAsync();
+            var created = firstAccount.CreatedAt;
+
+            var createdToday = await application
+                .GetAccounts()
+                .Where(x => x.CreatedAt.Within(created.Year, created.Month, created.Day))
+                .CountAsync();
+            createdToday.ShouldNotBe(0);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Searching_accounts_using_filter(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var filtered = await application
+                .GetAccounts()
+                .Filter("lo")
+                .ToListAsync();
+
+            filtered.Count.ShouldBe(4);
+            filtered.ShouldContain(acct => acct.FullName == "Han Solo");
+            filtered.ShouldContain(acct => acct.FullName == "Leia Organa Solo");
+            filtered.ShouldContain(acct => acct.Username.StartsWith("lottanerve"));
+            filtered.ShouldContain(acct => acct.Username.StartsWith("lordvader"));
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Sorting_accounts_by_lastname(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var accountsSortedByLastName = await application
+                .GetAccounts()
+                .OrderBy(x => x.Surname)
+                .ToListAsync();
+
+            var lando = accountsSortedByLastName.First();
+            lando.FullName.ShouldBe("Lando Calrissian");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Sorting_accounts_by_username_and_lastname(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var accountsSortedByMultiple = await application
+                .GetAccounts()
+                .OrderByDescending(x => x.Username)
+                .OrderByDescending(x => x.Surname)
+                .ToListAsync();
+
+            var luke = accountsSortedByMultiple.First();
+            luke.FullName.ShouldBe("Luke Skywalker");
+            var palpatine = accountsSortedByMultiple.ElementAt(1);
+            palpatine.FullName.ShouldBe("Emperor Palpatine");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Taking_only_two_accounts(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var firstTwo = await application
+                .GetAccounts()
+                .Take(2)
+                .ToListAsync();
+
+            firstTwo.Count.ShouldBe(2);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Counting_accounts(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var count = await application.GetAccounts().CountAsync();
+            count.ShouldBe(8);
         }
 
         [Theory]
@@ -104,7 +307,7 @@ namespace Stormpath.SDK.Tests.Integration
         public async Task Creating_and_deleting_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var account = await application.CreateAccountAsync("Gial", "Ackbar", "admiralackbar@dac.rim", new RandomPassword(12));
 
@@ -126,10 +329,10 @@ namespace Stormpath.SDK.Tests.Integration
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Authenticating_good_account(TestClientBuilder clientBuilder)
+        public async Task Authenticating_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
             var result = await application.AuthenticateAccountAsync(username, "whataPieceofjunk$1138");
@@ -141,10 +344,10 @@ namespace Stormpath.SDK.Tests.Integration
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task TryAuthenticating_accounts(TestClientBuilder clientBuilder)
+        public async Task TryAuthenticating_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
 
@@ -160,7 +363,7 @@ namespace Stormpath.SDK.Tests.Integration
         public async Task Authenticating_throws_for_invalid_credentials(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
             var password = "notLukesPassword?";

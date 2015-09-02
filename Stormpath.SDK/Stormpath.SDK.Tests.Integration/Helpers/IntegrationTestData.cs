@@ -32,12 +32,25 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
 
         public string Nonce { get; private set; }
 
-        public IApplication GetTestApplication(IClient client)
+        public List<IApplication> GetTestApplications(IClient client)
         {
-            return client.Instantiate<IApplication>()
-                        .SetName($".NET IT {this.Nonce} - {DateTimeOffset.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}")
+            var timeString = DateTimeOffset.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+
+            return new List<IApplication>()
+            {
+                {
+                    client.Instantiate<IApplication>()
+                        .SetName($".NET IT (disabled) {this.Nonce} - {timeString}")
+                        .SetDescription("The Battle of Yavin")
+                        .SetStatus(ApplicationStatus.Disabled)
+                },
+                {
+                    client.Instantiate<IApplication>()
+                        .SetName($".NET IT (primary) {this.Nonce} - {timeString}")
                         .SetDescription("The Battle of Endor")
-                        .SetStatus(ApplicationStatus.Enabled);
+                        .SetStatus(ApplicationStatus.Enabled)
+                },
+            };
         }
 
         public List<IAccount> GetTestAccounts(IClient client)
@@ -63,7 +76,8 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
                 {
                     client.Instantiate<IAccount>()
                         .SetGivenName("Leia")
-                        .SetSurname("Organa")
+                        .SetMiddleName("Organa")
+                        .SetSurname("Solo")
                         .SetEmail("leia.organa@alderaan.core")
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"princessleia-{this.Nonce}")
@@ -71,7 +85,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
                 {
                     client.Instantiate<IAccount>()
                         .SetGivenName("Chewbacca")
-                        .SetSurname("the Wookie")
+                        .SetSurname("the Wookiee")
                         .SetEmail("chewie@kashyyyk.rim")
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"rrwwwggg-{this.Nonce}")
@@ -100,6 +114,15 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"rulethegalaxy-{this.Nonce}")
                 },
+                {
+                    client.Instantiate<IAccount>()
+                        .SetGivenName("Wilhuff")
+                        .SetSurname("Tarkin")
+                        .SetEmail("grandmofftarkin@galacticempire.co")
+                        .SetStatus(AccountStatus.Disabled)
+                        .SetPassword(new RandomPassword(12))
+                        .SetUsername($"tarkin-{this.Nonce}")
+                }
             };
         }
     }

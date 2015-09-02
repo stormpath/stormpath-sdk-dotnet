@@ -80,7 +80,7 @@ namespace Stormpath.SDK.Tests.Integration
             var tenant = await client.GetCurrentTenantAsync();
 
             var application = await tenant.GetApplications()
-                .Where(app => app.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}"))
+                .Where(app => app.Name.StartsWith($".NET IT (primary) {this.fixture.TestRunIdentifier}"))
                 .FirstAsync();
 
             application.Description.ShouldBe("The Battle of Endor");
@@ -98,7 +98,23 @@ namespace Stormpath.SDK.Tests.Integration
                 .ToListAsync();
 
             applications
-                .Any(app => app.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}"))
+                .Any(app => app.Name.StartsWith($".NET IT (primary) {this.fixture.TestRunIdentifier}"))
+                .ShouldBe(true);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Searching_by_status(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var applications = await tenant.GetApplications()
+                .Where(app => app.Status == ApplicationStatus.Disabled)
+                .ToListAsync();
+
+            applications
+                .Any(app => app.Name.StartsWith($".NET IT (disabled) {this.fixture.TestRunIdentifier}"))
                 .ShouldBe(true);
         }
 
@@ -107,7 +123,7 @@ namespace Stormpath.SDK.Tests.Integration
         public async Task Reset_password_for_valid_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var application = await client.GetResourceAsync<IApplication>(this.fixture.ApplicationHref);
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var token = await application.SendPasswordResetEmailAsync("vader@galacticempire.co");
 

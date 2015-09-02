@@ -74,6 +74,10 @@ namespace Stormpath.SDK.Impl.Http.Support
             {
                 var key = RequestHelper.UrlEncode(x.Key, false, canonical);
                 var value = RequestHelper.UrlEncode(x.Value, false, canonical);
+
+                if (IsDatetimeSearchCriteria(key) && !canonical)
+                    value = FixDatetimeSearchEncoding(value);
+
                 return $"{key}={value}";
             });
 
@@ -132,6 +136,27 @@ namespace Stormpath.SDK.Impl.Http.Support
             }
 
             return ToSortedDictionary(resultItems);
+        }
+
+        private static bool IsDatetimeSearchCriteria(string key)
+        {
+            return
+                key.Equals("createdAt", StringComparison.InvariantCultureIgnoreCase) ||
+                key.Equals("modifiedAt", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        /// <summary>
+        /// The URLEncoded version of a datetime search criteria string is over-encoded; we need to leave some symbols unencoded.
+        /// </summary>
+        /// <param name="encodedValue">URLEncoded datetime search criteria string</param>
+        /// <returns>Properly encoded Stormpath datetime search criteria string</returns>
+        private static string FixDatetimeSearchEncoding(string encodedValue)
+        {
+            return encodedValue
+                .Replace("%5B", "[")
+                .Replace("%5D", "]")
+                .Replace("%3A", ":")
+                .Replace("%2C", ",");
         }
 
         private static Dictionary<string, string> ToSortedDictionary(IEnumerable<KeyValuePair<string, string>> queryParams)

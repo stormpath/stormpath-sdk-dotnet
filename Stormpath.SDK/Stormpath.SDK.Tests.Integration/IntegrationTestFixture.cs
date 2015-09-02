@@ -19,14 +19,12 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
-using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Integration.Helpers;
 
 namespace Stormpath.SDK.Tests.Integration
@@ -55,7 +53,7 @@ namespace Stormpath.SDK.Tests.Integration
 
         public string TenantHref { get; private set; }
 
-        public string ApplicationHref { get; private set; }
+        public string PrimaryApplicationHref { get; private set; }
 
         public string DirectoryHref { get; private set; }
 
@@ -76,25 +74,34 @@ namespace Stormpath.SDK.Tests.Integration
             tenant.ShouldNotBe(null);
             tenant.Href.ShouldNotBeNullOrEmpty();
 
-            // Create application
-            IApplication createdApplication = null;
+            // Create applications
+            IApplication primaryApplication = null;
             try
             {
-                var appData = this.testData.GetTestApplication(client);
-                createdApplication = await tenant.CreateApplicationAsync(appData, opt => opt.CreateDirectory = true);
-                createdApplication.ShouldNotBe(null);
-                createdApplication.Href.ShouldNotBeNullOrEmpty();
+                // Create and verify applications
+                var applicationsToCreate = this.testData.GetTestApplications(client);
+                var applicationCreationTasks = applicationsToCreate.Select(app =>
+                    tenant.CreateApplicationAsync(app, opt => opt.CreateDirectory = true));
+                var resultingApplications = await Task.WhenAll(applicationCreationTasks);
+                resultingApplications.ShouldNotContain(x => string.IsNullOrEmpty(x.Href));
 
-                this.ApplicationHref = createdApplication.Href;
-                this.DirectoryHref = (await createdApplication.GetDefaultAccountStoreAsync()).Href;
+                // Verify that directories were created, too
+                var getDirectoryTasks = resultingApplications.Select(x => x.GetDefaultAccountStoreAsync());
+                var resultingDirectories = await Task.WhenAll(getDirectoryTasks);
+                resultingDirectories.ShouldNotContain(x => string.IsNullOrEmpty(x.Href));
 
-                this.CreatedApplicationHrefs.Add(this.ApplicationHref);
-                this.CreatedDirectoryHrefs.Add(this.DirectoryHref);
+                // Add them all to the teardown list
+                this.CreatedApplicationHrefs.AddRange(resultingApplications.Select(x => x.Href));
+                this.CreatedDirectoryHrefs.AddRange(resultingDirectories.Select(x => x.Href));
+
+                // Grab the one marked as primary
+                primaryApplication = resultingApplications.Where(x => x.Name.Contains("primary")).Single();
+                this.PrimaryApplicationHref = primaryApplication.Href;
             }
             catch (Exception e)
             {
                 await this.RemoveObjectsFromTenantAsync();
-                throw new ApplicationException("Could not create application", e);
+                throw new ApplicationException("Could not create applications", e);
             }
 
             // Create accounts
@@ -107,7 +114,7 @@ namespace Stormpath.SDK.Tests.Integration
                 }.Build();
 
                 var accountCreationTasks = accountsToCreate.Select(acct =>
-                    createdApplication.CreateAccountAsync(acct, createOptions));
+                    primaryApplication.CreateAccountAsync(acct, createOptions));
 
                 var resultingAccounts = await Task.WhenAll(accountCreationTasks);
                 this.CreatedAccountHrefs.AddRange(resultingAccounts.Select(x => x.Href));
@@ -115,7 +122,7 @@ namespace Stormpath.SDK.Tests.Integration
             catch (Exception e)
             {
                 await this.RemoveObjectsFromTenantAsync();
-                throw new ApplicationException("Could not create account", e);
+                throw new ApplicationException("Could not create accounts", e);
             }
         }
 

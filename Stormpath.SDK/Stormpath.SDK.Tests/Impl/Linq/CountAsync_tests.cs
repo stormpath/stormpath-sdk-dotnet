@@ -15,10 +15,27 @@
 // limitations under the License.
 // </remarks>
 
+using System.Linq;
+using System.Threading.Tasks;
+using Shouldly;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
+using Xunit;
+
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class CountAsync_tests
+    public class CountAsync_tests : Linq_tests
     {
-        // TODO
+        [Fact]
+        public async Task CountAsync_returns_count()
+        {
+            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.C3PO, 73));
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+
+            var count = await harness.Queryable.CountAsync();
+
+            count.ShouldBe(73);
+        }
     }
 }

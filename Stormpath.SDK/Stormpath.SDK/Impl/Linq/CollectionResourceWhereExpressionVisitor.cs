@@ -22,6 +22,7 @@ using Remotion.Linq.Clauses.ExpressionTreeVisitors;
 using Remotion.Linq.Parsing;
 using Stormpath.SDK.Impl.Linq.RequestModel;
 using Stormpath.SDK.Impl.Linq.StaticNameTranslators;
+using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Linq
 {
@@ -172,6 +173,12 @@ namespace Stormpath.SDK.Impl.Linq
             if (expression.Type == typeof(DateTimeOffset))
             {
                 this.inProgress.DateValue = (DateTimeOffset)expression.Value;
+                return expression; // done
+            }
+
+            if (expression.Type.IsSubclassOf(typeof(Enumeration)))
+            {
+                this.inProgress.StringValue = expression.Value.ToString();
                 return expression; // done
             }
 

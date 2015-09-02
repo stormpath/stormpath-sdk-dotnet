@@ -34,6 +34,9 @@ namespace Stormpath.SDK.Impl.Http.Support
 
         public string EnsureFullyQualified(string href)
         {
+            if (string.IsNullOrEmpty(href))
+                return href;
+
             if (IsFullyQualified(href))
                 return href;
 
