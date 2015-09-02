@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Tests.Impl
         [InlineData(2000, 2)]
         [InlineData(4000, 3)]
         [InlineData(8000, 4)]
-        [InlineData(16200, 5)]
+        [InlineData(16000, 5)]
         [InlineData(20000, 6)]
         [InlineData(20000, 7)]
         public void Throttling_strategy_is(int expectedDelay, int forRetry)
