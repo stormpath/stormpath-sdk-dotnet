@@ -17,10 +17,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Stormpath.SDK.Account;
-using Stormpath.SDK.Application;
-using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Shared;
 

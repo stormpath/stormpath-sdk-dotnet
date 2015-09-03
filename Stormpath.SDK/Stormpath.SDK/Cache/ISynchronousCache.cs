@@ -1,4 +1,4 @@
-﻿// <copyright file="IThreadSafeMap.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ISynchronousCache.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,9 +15,14 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.ThreadSafeMap
+namespace Stormpath.SDK.Cache
 {
-    internal interface IThreadSafeMap<K, V>
+    public interface ISynchronousCache<K, V> : ICache<K, V>
     {
+        V Get(K key);
+
+        V Put(K key, V value);
+
+        V Remove(K key);
     }
 }

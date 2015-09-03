@@ -19,7 +19,10 @@ using System;
 using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Cache;
 using Stormpath.SDK.Error;
+using Stormpath.SDK.Impl.Cache;
+using Stormpath.SDK.Impl.DataStore.Cache;
 using Stormpath.SDK.Impl.Error;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
@@ -35,6 +38,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private readonly string baseUrl;
         private readonly IRequestExecutor requestExecutor;
+        private readonly ICacheManager cacheManager;
+        private readonly ICacheResolver cacheResolver;
         private readonly IMapSerializer serializer;
         private readonly IResourceFactory resourceFactory;
         private readonly IResourceConverter resourceConverter;
@@ -43,9 +48,25 @@ namespace Stormpath.SDK.Impl.DataStore
         private bool disposed = false;
 
         internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, ILogger logger)
+            : this(requestExecutor, baseUrl, logger, new NullCacheManager())
         {
+        }
+
+        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, ILogger logger, ICacheManager cacheManager)
+        {
+            if (requestExecutor == null)
+                throw new ArgumentNullException(nameof(requestExecutor));
+            if (string.IsNullOrEmpty(baseUrl))
+                throw new ArgumentNullException(nameof(baseUrl));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
+            if (cacheManager == null)
+                throw new ArgumentNullException(nameof(cacheManager), "Use NullCacheManager is you wish to turn off caching.");
+
             this.baseUrl = baseUrl;
             this.requestExecutor = requestExecutor;
+            this.cacheManager = cacheManager;
+            this.cacheResolver = new DefaultCacheResolver(this.cacheManager, new DefaultCacheRegionNameResolver());
 
             this.serializer = new JsonNetMapMarshaller();
             this.resourceFactory = new DefaultResourceFactory(this);

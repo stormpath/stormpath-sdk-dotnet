@@ -85,6 +85,12 @@
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
     <Compile Include="Auth\UsernamePasswordRequest.cs" />
+    <Compile Include="Cache\IAsynchronousCache.cs" />
+    <Compile Include="Cache\ICache.cs" />
+    <Compile Include="Cache\ICacheManager.cs" />
+    <Compile Include="Cache\ISynchronousCache.cs" />
+    <Compile Include="Cache\IAsynchronousCacheManager.cs" />
+    <Compile Include="Cache\ISynchronousCacheManager.cs" />
     <Compile Include="Client\AuthenticationScheme.cs" />
     <Compile Include="Client\Clients.cs" />
     <Compile Include="Client\IClient.cs" />
@@ -108,6 +114,15 @@
     <Compile Include="Impl\Auth\DefaultBasicLoginAttempt.cs" />
     <Compile Include="Impl\Auth\IBasicLoginAttempt.cs" />
     <Compile Include="Impl\Auth\ILoginAttempt.cs" />
+    <Compile Include="Impl\Cache\DefaultCache.cs" />
+    <Compile Include="Impl\Cache\DefaultCacheEntry.cs" />
+    <Compile Include="Impl\Cache\DefaultCacheManager.cs" />
+    <Compile Include="Impl\Cache\NullCache.cs" />
+    <Compile Include="Impl\Cache\NullCacheManager.cs" />
+    <Compile Include="Impl\DataStore\Cache\DefaultCacheRegionNameResolver.cs" />
+    <Compile Include="Impl\DataStore\Cache\DefaultCacheResolver.cs" />
+    <Compile Include="Impl\DataStore\Cache\ICacheRegionNameResolver.cs" />
+    <Compile Include="Impl\DataStore\Cache\ICacheResolver.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\ConverterResult.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\DefaultFieldConverters.cs" />
@@ -119,6 +134,7 @@
     <Compile Include="Impl\DataStore\IResourceConverter.cs" />
     <Compile Include="Impl\Directory\DefaultDirectory.cs" />
     <Compile Include="Impl\Error\DefaultError.cs" />
+    <Compile Include="Impl\Extensions\DateExtensions.cs" />
     <Compile Include="Impl\Extensions\UriExtensions.cs" />
     <Compile Include="Impl\Group\DefaultGroup.cs" />
     <Compile Include="Impl\Http\Authentication\DefaultRequestAuthenticatorFactory.cs" />

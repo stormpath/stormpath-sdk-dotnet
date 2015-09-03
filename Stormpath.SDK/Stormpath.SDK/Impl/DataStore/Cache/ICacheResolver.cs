@@ -1,4 +1,4 @@
-﻿// <copyright file="IThreadSafeMap.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ICacheResolver.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,9 +15,20 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.ThreadSafeMap
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.Cache;
+using Stormpath.SDK.Impl.ThreadSafeMap;
+using Stormpath.SDK.Resource;
+
+namespace Stormpath.SDK.Impl.DataStore.Cache
 {
-    internal interface IThreadSafeMap<K, V>
+    internal interface ICacheResolver
     {
+        ISynchronousCache<string, IThreadSafeMap<string, object>> GetCache<T>()
+            where T : IResource;
+
+        Task<IAsynchronousCache<string, IThreadSafeMap<string, object>>> GetCacheAsync<T>(CancellationToken cancellationToken)
+            where T : IResource;
     }
 }

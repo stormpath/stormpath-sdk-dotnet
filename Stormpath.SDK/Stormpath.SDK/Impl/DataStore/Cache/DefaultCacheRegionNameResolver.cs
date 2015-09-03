@@ -1,4 +1,4 @@
-﻿// <copyright file="IThreadSafeMap.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultCacheRegionNameResolver.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,9 +15,21 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.ThreadSafeMap
+namespace Stormpath.SDK.Impl.DataStore.Cache
 {
-    internal interface IThreadSafeMap<K, V>
+    internal sealed class DefaultCacheRegionNameResolver : ICacheRegionNameResolver
     {
+        private readonly DefaultResourceFactory resourceFactory;
+
+        public DefaultCacheRegionNameResolver()
+        {
+            this.resourceFactory = new DefaultResourceFactory(null);
+        }
+
+        string ICacheRegionNameResolver.GetCacheRegionName<T>()
+        {
+            var iface = this.resourceFactory.GetInterface<T>();
+            return iface.Name;
+        }
     }
 }

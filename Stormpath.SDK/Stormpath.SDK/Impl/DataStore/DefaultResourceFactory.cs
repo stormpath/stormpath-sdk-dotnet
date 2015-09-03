@@ -33,13 +33,14 @@ using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class DefaultResourceFactory : IResourceFactory
     {
-        private readonly Dictionary<Type, Type> typeMap = new Dictionary<Type, Type>()
+        private static readonly Dictionary<Type, Type> TypeMap = new Dictionary<Type, Type>()
         {
             { typeof(IAccount), typeof(DefaultAccount) },
             { typeof(IApplication), typeof(DefaultApplication) },
@@ -58,6 +59,47 @@ namespace Stormpath.SDK.Impl.DataStore
         public DefaultResourceFactory(IInternalDataStore dataStore)
         {
             this.dataStore = dataStore;
+        }
+
+        public Type GetInterface<T>()
+            where T : IResource
+        {
+            return this.GetInterface(typeof(T));
+        }
+
+        public Type GetInterface(Type possibleConcrete)
+        {
+            bool alreadyIsInterface = TypeMap.ContainsKey(possibleConcrete);
+            if (alreadyIsInterface)
+                return possibleConcrete;
+
+            bool isUnsupportedConcreteType = !TypeMap.ContainsValue(possibleConcrete);
+            if (isUnsupportedConcreteType)
+                return null;
+
+            var mapped = TypeMap
+                .Where(x => x.Value == possibleConcrete)
+                .Single();
+            return mapped.Key;
+        }
+
+        public Type GetConcrete<T>()
+            where T : IResource
+        {
+            return this.GetConcrete(typeof(T));
+        }
+
+        public Type GetConcrete(Type possibleInterface)
+        {
+            bool alreadyIsConcrete = TypeMap.ContainsValue(possibleInterface);
+            if (alreadyIsConcrete)
+                return possibleInterface;
+
+            Type concrete = null;
+            if (!TypeMap.TryGetValue(possibleInterface, out concrete))
+                return null;
+
+            return concrete;
         }
 
         private IResourceFactory IThis => this;
@@ -84,8 +126,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private object InstantiateSingle(Hashtable properties, Type type)
         {
-            Type targetType;
-            if (!this.typeMap.TryGetValue(type, out targetType))
+            var targetType = this.GetConcrete(type);
+            if (targetType == null)
                 throw new ApplicationException($"Unknown resource type {type.Name}");
 
             object targetObject;
@@ -109,8 +151,9 @@ namespace Stormpath.SDK.Impl.DataStore
             var outerType = typeof(T); // CollectionResponsePage<TInner>
 
             Type innerType = outerType.GetGenericArguments().SingleOrDefault();
-            if (innerType == null || !this.typeMap.ContainsKey(innerType))
-                throw new ApplicationException($"Error creating collection resource: unknown inner type {outerType.GetGenericArguments().SingleOrDefault()?.Name}.");
+            var targetType = this.GetConcrete(innerType);
+            if (innerType == null || targetType == null)
+                throw new ApplicationException($"Error creating collection resource: unknown inner type '{innerType?.Name}'.");
 
             if (properties == null)
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: no properties to materialize with.");

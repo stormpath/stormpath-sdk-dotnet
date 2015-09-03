@@ -1,4 +1,4 @@
-﻿// <copyright file="IThreadSafeMap.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ICacheRegionNameResolver.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,9 +15,13 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.ThreadSafeMap
+using Stormpath.SDK.Resource;
+
+namespace Stormpath.SDK.Impl.DataStore.Cache
 {
-    internal interface IThreadSafeMap<K, V>
+    internal interface ICacheRegionNameResolver
     {
+        string GetCacheRegionName<T>()
+            where T : IResource;
     }
 }

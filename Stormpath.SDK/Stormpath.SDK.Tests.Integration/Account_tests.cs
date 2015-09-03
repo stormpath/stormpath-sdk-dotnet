@@ -252,7 +252,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .Filter("lo")
                 .ToListAsync();
 
-            filtered.Count.ShouldBe(3);
+            filtered.Count.ShouldBeGreaterThanOrEqualTo(3);
             filtered.ShouldContain(acct => acct.FullName == "Han Solo");
             filtered.ShouldContain(acct => acct.Username.StartsWith("lottanerve"));
             filtered.ShouldContain(acct => acct.Username.StartsWith("lordvader"));

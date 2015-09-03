@@ -1,4 +1,4 @@
-﻿// <copyright file="IThreadSafeMap.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAsynchronousCache.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,9 +15,17 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.ThreadSafeMap
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Stormpath.SDK.Cache
 {
-    internal interface IThreadSafeMap<K, V>
+    public interface IAsynchronousCache<K, V> : ICache<K, V>
     {
+        Task<V> GetAsync(K key, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<V> PutAsync(K key, V value, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<V> RemoveAsync(K key, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
