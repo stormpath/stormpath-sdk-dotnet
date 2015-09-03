@@ -15,9 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using NSubstitute;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
