@@ -16,6 +16,7 @@
 // </remarks>
 
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
 using Stormpath.SDK.Impl.DataStore;
@@ -50,7 +51,7 @@ namespace Stormpath.SDK.Tests.Helpers
             where TType : class, IResource
         {
             var emptyMock = Substitute.For<IDataStore>();
-            emptyMock.GetCollectionAsync<TType>(Arg.Any<string>()).Returns(
+            emptyMock.GetCollectionAsync<TType>(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(
                     Task.FromResult(new CollectionResponsePage<TType>()
                     {
                         Limit = 0,

@@ -16,6 +16,7 @@
 // </remarks>
 
 using System.Linq;
+using System.Threading;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Impl.DataStore;
@@ -52,9 +53,9 @@ namespace Stormpath.SDK.Tests.Helpers
             {
                 // Maybe it's an NSubstitute mock
                 if (string.IsNullOrEmpty(arguments))
-                    ds.Received().GetCollectionAsync<T>($"{href}");
+                    ds.Received().GetCollectionAsync<T>($"{href}", CancellationToken.None);
                 else
-                    ds.Received().GetCollectionAsync<T>($"{href}?{arguments}");
+                    ds.Received().GetCollectionAsync<T>($"{href}?{arguments}", CancellationToken.None);
                 return;
             }
         }

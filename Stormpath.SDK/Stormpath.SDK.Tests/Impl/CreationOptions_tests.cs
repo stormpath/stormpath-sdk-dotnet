@@ -45,8 +45,10 @@ namespace Stormpath.SDK.Tests.Impl
         private static void VerifyRequestContents(IRequestExecutor reqex, string queryString)
         {
             reqex.Received()
-                .ExecuteAsync(Arg.Is<IHttpRequest>(request =>
-                    request.CanonicalUri.ToString().EndsWith(queryString))).IgnoreAwait();
+                .ExecuteAsync(
+                    Arg.Is<IHttpRequest>(request =>
+                        request.CanonicalUri.ToString().EndsWith(queryString)),
+                    Arg.Any<CancellationToken>()).IgnoreAwait();
         }
 
         public class Application_options

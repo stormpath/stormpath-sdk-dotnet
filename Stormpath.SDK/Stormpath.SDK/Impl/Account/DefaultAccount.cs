@@ -151,17 +151,17 @@ namespace Stormpath.SDK.Impl.Account
             return this;
         }
 
-        Task<IDirectory> IAccount.GetDirectoryAsync()
+        Task<IDirectory> IAccount.GetDirectoryAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        Task<ICollectionResourceQueryable<IGroup>> IAccount.GetGroupsAsync()
+        Task<ICollectionResourceQueryable<IGroup>> IAccount.GetGroupsAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        Task<ITenant> IAccount.GetTenantAsync()
+        Task<ITenant> IAccount.GetTenantAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

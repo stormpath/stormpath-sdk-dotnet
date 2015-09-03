@@ -109,7 +109,7 @@ namespace Stormpath.SDK.Impl.Client
 
         Task<T> IClient.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
         {
-            return this.dataStore.GetResourceAsync<T>(href);
+            return this.dataStore.GetResourceAsync<T>(href, cancellationToken);
         }
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)

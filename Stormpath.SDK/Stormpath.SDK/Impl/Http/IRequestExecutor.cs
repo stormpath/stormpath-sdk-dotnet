@@ -30,6 +30,6 @@ namespace Stormpath.SDK.Impl.Http
 
         IHttpResponse ExecuteSync(IHttpRequest request);
 
-        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken);
     }
 }

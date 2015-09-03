@@ -46,17 +46,17 @@ namespace Stormpath.SDK.Tests.Fakes
 
         public AccountStatus Status { get; set; }
 
-        public Task<ICollectionResourceQueryable<IGroup>> GetGroupsAsync()
+        public Task<ICollectionResourceQueryable<IGroup>> GetGroupsAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Directory.IDirectory> GetDirectoryAsync()
+        public Task<Directory.IDirectory> GetDirectoryAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Tenant.ITenant> GetTenantAsync()
+        public Task<Tenant.ITenant> GetTenantAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

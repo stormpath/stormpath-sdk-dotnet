@@ -106,7 +106,7 @@ namespace Stormpath.SDK.Impl.Http
                 try
                 {
                     if (retryCount > 0)
-                        await this.PauseAsync(retryCount, throttling).ConfigureAwait(false);
+                        await this.PauseAsync(retryCount, throttling, cancellationToken).ConfigureAwait(false);
 
                     retryCount++;
 
@@ -170,8 +170,10 @@ namespace Stormpath.SDK.Impl.Http
             return moved && hasNewLocation;
         }
 
-        private Task PauseAsync(int retryCount, bool isThrottling)
+        private Task PauseAsync(int retryCount, bool isThrottling, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var delayMilliseconds = 0;
 
             if (isThrottling)

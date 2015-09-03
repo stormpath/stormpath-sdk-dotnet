@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
@@ -53,10 +54,10 @@ namespace Stormpath.SDK.Account
 
         IAccount SetUsername(string username);
 
-        Task<ICollectionResourceQueryable<IGroup>> GetGroupsAsync();
+        Task<ICollectionResourceQueryable<IGroup>> GetGroupsAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<IDirectory> GetDirectoryAsync();
+        Task<IDirectory> GetDirectoryAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<ITenant> GetTenantAsync();
+        Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

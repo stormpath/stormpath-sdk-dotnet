@@ -27,8 +27,8 @@ namespace Stormpath.SDK.Impl.DataStore
         T Instantiate<T>()
             where T : IResource;
 
-        Task<T> GetResourceAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> GetResourceAsync<T>(string href, CancellationToken cancellationToken);
 
-        Task<CollectionResponsePage<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
+        Task<CollectionResponsePage<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken);
     }
 }

@@ -87,8 +87,7 @@
     <Compile Include="Error_tests.cs" />
     <Compile Include="Helpers\TestClientBuilder.cs" />
     <Compile Include="Tenant_tests.cs" />
-    <Compile Include="Helpers\NamespaceExtensions.cs" />
-    <Compile Include="Namespace_tests.cs" />
+    <Compile Include="Sanity_checks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

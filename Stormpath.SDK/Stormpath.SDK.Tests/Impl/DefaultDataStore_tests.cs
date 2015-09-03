@@ -48,11 +48,13 @@ namespace Stormpath.SDK.Tests.Impl
             this.fakeRequestExecutor.ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), body: FakeJson.Account, bodyContentType: "application/json") as IHttpResponse));
 
-            var account = await this.dataStore.GetResourceAsync<IAccount>(href);
+            var account = await this.dataStore.GetResourceAsync<IAccount>(href, CancellationToken.None);
 
             // Verify the default headers
-            this.fakeRequestExecutor.Received().ExecuteAsync(Arg.Is<IHttpRequest>(request =>
-                 request.Headers.Accept == "application/json")).IgnoreAwait();
+            this.fakeRequestExecutor.Received().ExecuteAsync(
+                Arg.Is<IHttpRequest>(request =>
+                    request.Headers.Accept == "application/json"),
+                Arg.Any<CancellationToken>()).IgnoreAwait();
         }
 
         [Fact]
@@ -69,7 +71,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             IInternalDataStore ds = new DefaultDataStore(fakeRequestExecutor.Object, "http://api.foo.bar", stubLogger);
 
-            var account = await ds.GetResourceAsync<IAccount>("account");
+            var account = await ds.GetResourceAsync<IAccount>("account", CancellationToken.None);
             await account.DeleteAsync();
 
             fakeLog.Count.ShouldBeGreaterThanOrEqualTo(2);
