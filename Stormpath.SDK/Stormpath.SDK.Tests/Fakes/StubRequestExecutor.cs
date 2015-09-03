@@ -1,4 +1,4 @@
-﻿// <copyright file="FakeRequestExecutor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="StubRequestExecutor.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -23,12 +23,12 @@ using Stormpath.SDK.Impl.Http.Support;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
-    public class FakeRequestExecutor<T>
+    public class StubRequestExecutor<T>
     {
         private readonly IRequestExecutor fakeRequestExecutor;
         private readonly string resourceJson;
 
-        public FakeRequestExecutor(string resourceJson)
+        public StubRequestExecutor(string resourceJson)
         {
             this.resourceJson = resourceJson;
             this.fakeRequestExecutor = Substitute.For<IRequestExecutor>();

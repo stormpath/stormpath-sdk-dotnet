@@ -46,14 +46,34 @@ namespace Stormpath.SDK.Impl.Resource
         {
             this.dataStore = dataStore;
 
-            this.properties = new Hashtable(properties);
-            this.dirtyProperties = new Hashtable(properties.Count);
-            this.internalFactory = new InternalFactory();
+            lock (this.writeLock)
+            {
+                this.properties = new Hashtable(properties);
+                this.dirtyProperties = new Hashtable(properties.Count);
+                this.internalFactory = new InternalFactory();
+                this.isDirty = false;
+            }
         }
 
         string IResource.Href => GetProperty<string>(HrefPropertyName);
 
         protected IInternalDataStore GetInternalDataStore() => this.dataStore;
+
+        internal bool IsDirty => this.isDirty;
+
+        public List<string> GetPropertyNames()
+        {
+            return this.properties.Keys
+                .OfType<string>()
+                .ToList();
+        }
+
+        public List<string> GetUpdatedPropertyNames()
+        {
+            return this.dirtyProperties.Keys
+                .OfType<string>()
+                .ToList();
+        }
 
         public LinkProperty GetLinkProperty(string name)
         {
@@ -93,40 +113,6 @@ namespace Stormpath.SDK.Impl.Resource
                 this.dirtyProperties[name] = value;
                 this.isDirty = true;
             }
-        }
-
-        public void SetProperties(Hashtable newProperties)
-        {
-            try
-            {
-                lock (this.writeLock)
-                {
-                    foreach (DictionaryEntry item in newProperties)
-                    {
-                        this.properties[item.Key] = item.Value;
-                    }
-
-                    this.isDirty = false;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new ApplicationException("Could not load properties into resource item.", e);
-            }
-        }
-
-        public List<string> GetPropertyNames()
-        {
-            return this.properties.Keys
-                .OfType<string>()
-                .ToList();
-        }
-
-        public List<string> GetUpdatedPropertyNames()
-        {
-            return this.dirtyProperties.Keys
-                .OfType<string>()
-                .ToList();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="Namespace_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Sanity_checks.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>

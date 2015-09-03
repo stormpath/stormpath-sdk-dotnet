@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Tests.Impl
 
         private static IInternalDataStore GetFakeDataStore<T>(string resourceJson)
         {
-            var fakeRequestExecutor = new FakeRequestExecutor<T>(resourceJson);
+            var fakeRequestExecutor = new StubRequestExecutor<T>(resourceJson);
             return new DefaultDataStore(fakeRequestExecutor.Object, BaseHref, new SDK.Impl.NullLogger());
         }
 

@@ -76,8 +76,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
                 {
                     client.Instantiate<IAccount>()
                         .SetGivenName("Leia")
-                        .SetMiddleName("Organa")
-                        .SetSurname("Solo")
+                        .SetSurname("Organa")
                         .SetEmail("leia.organa@alderaan.core")
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"princessleia-{this.Nonce}")
@@ -85,7 +84,8 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
                 {
                     client.Instantiate<IAccount>()
                         .SetGivenName("Chewbacca")
-                        .SetSurname("the Wookiee")
+                        .SetMiddleName("the")
+                        .SetSurname("Wookiee")
                         .SetEmail("chewie@kashyyyk.rim")
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"rrwwwggg-{this.Nonce}")

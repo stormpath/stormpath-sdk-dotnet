@@ -22,6 +22,6 @@ namespace Stormpath.SDK.Impl.DataStore
 {
     internal interface IResourceConverter
     {
-        Dictionary<string, object> ToMap(AbstractResource resource, bool partialUpdate);
+        Dictionary<string, object> ToMap(AbstractResource resource);
     }
 }

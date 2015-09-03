@@ -22,33 +22,29 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class DefaultResourceConverter : IResourceConverter
     {
-        Dictionary<string, object> IResourceConverter.ToMap(AbstractResource resource, bool partialUpdate)
+        Dictionary<string, object> IResourceConverter.ToMap(AbstractResource resource)
         {
-            var propertyNames = new List<string>();
-
-            if (partialUpdate)
-                propertyNames = resource.GetUpdatedPropertyNames();
-            else
-                propertyNames = resource.GetPropertyNames();
+            var propertyNames = resource.GetUpdatedPropertyNames();
 
             var resultMap = propertyNames.Select(name =>
             {
                 var rawValue = resource.GetProperty(name);
-                var value = SanitizeValue(resource, name, rawValue, partialUpdate);
+                var value = SanitizeValue(resource, name, rawValue);
                 return new { name, value };
             }).ToDictionary(
-                result => result.name,
-                result => result.value);
+                map => map.name,
+                map => map.value);
 
             return resultMap;
         }
 
-        private static object SanitizeValue(AbstractResource resource, string propertyName, object rawValue, bool partialUpdate)
+        private static object SanitizeValue(AbstractResource resource, string propertyName, object rawValue)
         {
             // TODO Handle CustomData: no sanitization
 
@@ -63,12 +59,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 return null;
             }
 
-            bool isStatusProperty =
-                rawValue is AccountStatus ||
-                rawValue is ApplicationStatus ||
-                rawValue is DirectoryStatus ||
-                rawValue is GroupStatus;
-            if (isStatusProperty)
+            bool isEnumeration = rawValue.GetType().IsSubclassOf(typeof(Enumeration));
+            if (isEnumeration)
             {
                 return rawValue.ToString().ToLower();
             }

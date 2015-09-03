@@ -129,10 +129,15 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<T> IInternalDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var href = resource?.Href;
+            if (string.IsNullOrEmpty(href))
+                throw new ArgumentNullException("Resource href must not be null.");
 
-            // var href = resource?.Href;
-            // return SaveCoreAsync(resource, href, null);
+            return SaveCoreAsync<T, T>(
+                resource,
+                href,
+                queryParams: null,
+                cancellationToken: cancellationToken);
         }
 
         Task<bool> IInternalDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
@@ -154,7 +159,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
             this.logger.Trace($"Saving resource of type {typeof(T).Name} to {href}", "DefaultDataStore.SaveCoreAsync");
 
-            var propertiesMap = this.resourceConverter.ToMap(abstractResource, partialUpdate: false);
+            var propertiesMap = this.resourceConverter.ToMap(abstractResource);
             var body = this.serializer.Serialize(propertiesMap);
 
             var request = new DefaultHttpRequest(HttpMethod.Post, uri, null, null, body, "application/json");

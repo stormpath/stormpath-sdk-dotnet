@@ -75,6 +75,26 @@ namespace Stormpath.SDK.Tests.Integration
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Updating_account(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var leia = await application
+                .GetAccounts()
+                .Where(a => a.Email == "leia.organa@alderaan.core")
+                .SingleAsync();
+
+            leia.SetMiddleName("Organa");
+            leia.SetSurname("Solo");
+            var saveResult = await leia.SaveAsync();
+
+            // In 8 ABY of course
+            saveResult.FullName.ShouldBe("Leia Organa Solo");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Searching_accounts_by_email(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
@@ -89,12 +109,10 @@ namespace Stormpath.SDK.Tests.Integration
             coreCitizens.Count.ShouldBe(2);
 
             var han = coreCitizens.Where(x => x.GivenName == "Han").Single();
-            han.FullName.ShouldBe("Han Solo");
             han.Email.ShouldBe("han.solo@corellia.core");
             han.Username.ShouldStartWith("cptsolo");
 
             var leia = coreCitizens.Where(x => x.GivenName == "Leia").Single();
-            leia.FullName.ShouldBe("Leia Organa Solo");
             leia.Email.ShouldStartWith("leia.organa@alderaan.core");
             leia.Username.ShouldStartWith("princessleia");
         }
@@ -138,13 +156,13 @@ namespace Stormpath.SDK.Tests.Integration
             var client = clientBuilder.Build();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var leia = await application
+            var chewie = await application
                 .GetAccounts()
-                .Where(a => a.MiddleName == "Organa")
+                .Where(a => a.MiddleName == "the")
                 .SingleAsync();
 
             // Verify data from IntegrationTestData
-            leia.FullName.ShouldBe("Leia Organa Solo");
+            chewie.FullName.ShouldBe("Chewbacca the Wookiee");
         }
 
         [Theory]
@@ -236,7 +254,7 @@ namespace Stormpath.SDK.Tests.Integration
 
             filtered.Count.ShouldBe(4);
             filtered.ShouldContain(acct => acct.FullName == "Han Solo");
-            filtered.ShouldContain(acct => acct.FullName == "Leia Organa Solo");
+            filtered.ShouldContain(acct => acct.Email == "leia.organa@alderaan.core");
             filtered.ShouldContain(acct => acct.Username.StartsWith("lottanerve"));
             filtered.ShouldContain(acct => acct.Username.StartsWith("lordvader"));
         }
