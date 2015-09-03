@@ -183,6 +183,7 @@
     <Compile Include="Impl\Linq\StaticNameTranslators\LinkMethodNameTranslator.cs" />
     <Compile Include="Impl\Linq\StaticNameTranslators\StringHelperMethodNameTranslator.cs" />
     <Compile Include="Impl\Linq\Sync\SyncCollectionEnumeratorAdapter.cs" />
+    <Compile Include="Impl\NullLogger.cs" />
     <Compile Include="Impl\Resource\AbstractExtendableInstanceResource.cs" />
     <Compile Include="Impl\Resource\AbstractInstanceResource.cs" />
     <Compile Include="Impl\Resource\CollectionResourceQueryable.cs" />
@@ -224,6 +225,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\ICollectionResourceQueryable.cs" />
     <Compile Include="Resource\IResource.cs" />
+    <Compile Include="Shared\ILogger.cs" />
+    <Compile Include="Shared\LogEntry.cs" />
+    <Compile Include="Shared\LoggerExtensions.cs" />
+    <Compile Include="Shared\LogLevel.cs" />
     <Compile Include="Tenant\ITenant.cs" />
     <Compile Include="Tenant\ITenantActions.cs" />
   </ItemGroup>

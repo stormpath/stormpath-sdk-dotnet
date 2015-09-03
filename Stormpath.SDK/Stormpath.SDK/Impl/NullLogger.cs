@@ -1,4 +1,4 @@
-﻿// <copyright file="IClientBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="NullLogger.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,25 +15,15 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Api;
 using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Client
+namespace Stormpath.SDK.Impl
 {
-    public interface IClientBuilder
+    internal sealed class NullLogger : ILogger
     {
-        IClientBuilder SetApiKey(IClientApiKey apiKey);
-
-        // TODO IClientBuilder SetProxy(Proxy proxy);
-        // TODO IClientBuilder SetCacheManager(CacheManager manager);
-        IClientBuilder SetAuthenticationScheme(AuthenticationScheme scheme);
-
-        IClientBuilder SetConnectionTimeout(int timeout);
-
-        IClientBuilder SetBaseUrl(string baseUrl);
-
-        IClientBuilder SetLogger(ILogger logger);
-
-        IClient Build();
+        void ILogger.Log(LogEntry entry)
+        {
+            // noop.
+        }
     }
 }

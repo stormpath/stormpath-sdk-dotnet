@@ -40,12 +40,19 @@ namespace Stormpath.SDK.Tests.Fakes
                 .Returns(
                     Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), resourceJson, "application/json") as IHttpResponse));
 
-            // All POSTs return 204 Created
+            // All POSTs return 201 Created
             this.fakeRequestExecutor
                 .ExecuteAsync(
                     Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
                 .Returns(
-                    Task.FromResult(new DefaultHttpResponse(204, "Created", new HttpHeaders(), resourceJson, "application/json") as IHttpResponse));
+                    Task.FromResult(new DefaultHttpResponse(201, "Created", new HttpHeaders(), resourceJson, "application/json") as IHttpResponse));
+
+            // All DELETEs return 204 No Content
+            this.fakeRequestExecutor
+                .ExecuteAsync(
+                    Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Delete), Arg.Any<CancellationToken>())
+                .Returns(
+                    Task.FromResult(new DefaultHttpResponse(204, "No Content", new HttpHeaders(), null, null) as IHttpResponse));
         }
 
         internal IRequestExecutor Object => this.fakeRequestExecutor;

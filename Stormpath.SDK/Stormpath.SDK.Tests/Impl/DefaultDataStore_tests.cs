@@ -15,12 +15,15 @@
 // limitations under the License.
 // </remarks>
 
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
+using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Shared;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
@@ -35,7 +38,7 @@ namespace Stormpath.SDK.Tests.Impl
         public DefaultDataStore_tests()
         {
             this.fakeRequestExecutor = Substitute.For<IRequestExecutor>();
-            this.dataStore = new DefaultDataStore(this.fakeRequestExecutor, "http://foobar");
+            this.dataStore = new DefaultDataStore(this.fakeRequestExecutor, "http://foobar", new SDK.Impl.NullLogger());
         }
 
         [Fact]
@@ -50,6 +53,26 @@ namespace Stormpath.SDK.Tests.Impl
             // Verify the default headers
             this.fakeRequestExecutor.Received().ExecuteAsync(Arg.Is<IHttpRequest>(request =>
                  request.Headers.Accept == "application/json")).IgnoreAwait();
+        }
+
+        [Fact]
+        public async Task Trace_log_is_sent_to_logger()
+        {
+            var fakeRequestExecutor = new FakeRequestExecutor<IAccount>(FakeJson.Account);
+
+            var fakeLog = new List<LogEntry>();
+            var stubLogger = Substitute.For<ILogger>();
+            stubLogger.When(x => x.Log(Arg.Any<LogEntry>())).Do(call =>
+            {
+                fakeLog.Add(call.Arg<LogEntry>());
+            });
+
+            IInternalDataStore ds = new DefaultDataStore(fakeRequestExecutor.Object, "http://api.foo.bar", stubLogger);
+
+            var account = await ds.GetResourceAsync<IAccount>("account");
+            await account.DeleteAsync();
+
+            fakeLog.Count.ShouldBeGreaterThanOrEqualTo(2);
         }
     }
 }

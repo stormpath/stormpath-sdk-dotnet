@@ -136,6 +136,7 @@
     <Compile Include="Impl\Utility\RequestHelper_tests.cs" />
     <Compile Include="Impl\Utility\WindowsVersion_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LoggerExtensions_tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -156,6 +157,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta009\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

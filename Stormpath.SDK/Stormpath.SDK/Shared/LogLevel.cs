@@ -1,4 +1,4 @@
-﻿// <copyright file="IClientBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="LogLevel.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,25 +15,14 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Api;
-using Stormpath.SDK.Shared;
-
-namespace Stormpath.SDK.Client
+namespace Stormpath.SDK.Shared
 {
-    public interface IClientBuilder
+    public enum LogLevel
     {
-        IClientBuilder SetApiKey(IClientApiKey apiKey);
-
-        // TODO IClientBuilder SetProxy(Proxy proxy);
-        // TODO IClientBuilder SetCacheManager(CacheManager manager);
-        IClientBuilder SetAuthenticationScheme(AuthenticationScheme scheme);
-
-        IClientBuilder SetConnectionTimeout(int timeout);
-
-        IClientBuilder SetBaseUrl(string baseUrl);
-
-        IClientBuilder SetLogger(ILogger logger);
-
-        IClient Build();
+        Trace,
+        Info,
+        Warn,
+        Error,
+        Fatal
     }
 }

@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Impl
         public DefaultResourceFactory_tests()
         {
             var fakeRequestExecutor = Substitute.For<IRequestExecutor>();
-            this.fakeDataStore = new DefaultDataStore(fakeRequestExecutor, "http://api.foobar.com");
+            this.fakeDataStore = new DefaultDataStore(fakeRequestExecutor, "http://api.foobar.com", new SDK.Impl.NullLogger());
             this.factory = new DefaultResourceFactory(this.fakeDataStore);
         }
 

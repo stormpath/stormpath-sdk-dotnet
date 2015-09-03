@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void GetValue_returns_token_value()
         {
-            var ds = new DefaultDataStore(Substitute.For<IRequestExecutor>(), "http://api.foo.bar");
+            var ds = new DefaultDataStore(Substitute.For<IRequestExecutor>(), "http://api.foo.bar", new SDK.Impl.NullLogger());
             var href = "https://api.foobar.com/v1/applications/WpM9nyZ2TbaEzfbRvLk9KA/passwordResetTokens/my-token-value-here";
             var properties = new Hashtable();
             properties.Add("href", href);

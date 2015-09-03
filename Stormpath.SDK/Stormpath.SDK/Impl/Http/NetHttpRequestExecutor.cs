@@ -24,6 +24,7 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.Http.Authentication;
 using Stormpath.SDK.Impl.Http.Support;
+using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Http
 {
@@ -31,6 +32,8 @@ namespace Stormpath.SDK.Impl.Http
     {
         private static readonly int MaxBackoffMilliseconds = 20 * 1000;
         private static readonly int DefaultMaxRetries = 4;
+
+        private readonly ILogger logger;
 
         private readonly IClientApiKey apiKey;
         private readonly AuthenticationScheme authScheme;
@@ -46,7 +49,7 @@ namespace Stormpath.SDK.Impl.Http
 
         private bool disposed = false; // To detect redundant calls
 
-        public NetHttpRequestExecutor(IClientApiKey apiKey, AuthenticationScheme authenticationScheme, int connectionTimeout)
+        public NetHttpRequestExecutor(IClientApiKey apiKey, AuthenticationScheme authenticationScheme, int connectionTimeout, ILogger logger)
         {
             if (!apiKey.IsValid())
                 throw new ApplicationException("API Key is invalid.");
@@ -62,6 +65,8 @@ namespace Stormpath.SDK.Impl.Http
 
             this.defaultBackoffStrategy = new DefaultBackoffStrategy(MaxBackoffMilliseconds);
             this.throttlingBackoffStrategy = new ThrottlingBackoffStrategy(MaxBackoffMilliseconds);
+
+            this.logger = logger;
         }
 
         private static HttpClient BuildClient(int connectionTimeout)
@@ -109,6 +114,8 @@ namespace Stormpath.SDK.Impl.Http
                     if (this.IsRedirect(response))
                     {
                         currentUri = response.Headers.Location;
+                        this.logger.Trace($"Redirected to {currentUri}", "NetHttpRequestExecutor.ExecuteAsync");
+
                         continue;
                     }
 
@@ -116,11 +123,15 @@ namespace Stormpath.SDK.Impl.Http
                     if (statusCode == 429)
                     {
                         throttling = true;
+                        this.logger.Warn($"Got HTTP 429, throttling retry request", "NetHttpRequestExecutor.ExecuteAsync");
+
                         continue; // retry request
                     }
 
                     if ((statusCode == 503 || statusCode == 504) && retryCount <= this.maxRetriesPerRequest)
                     {
+                        this.logger.Warn($"Got HTTP {statusCode}, retrying", "NetHttpRequestExecutor.ExecuteAsync");
+
                         continue; // retry request
                     }
 
@@ -131,7 +142,11 @@ namespace Stormpath.SDK.Impl.Http
                 }
                 catch (Exception ex)
                 {
-                    if (!this.ShouldRetryForError(requestMessage, ex, cancellationToken, retryCount))
+                    if (this.ShouldRetryForError(requestMessage, ex, cancellationToken, retryCount))
+                    {
+                        this.logger.Warn(ex, "Error during request, retrying", "NetHttpRequestExecutor.ExecuteAsync");
+                    }
+                    else
                     {
                         throw new RequestException("Unable to execute HTTP request.", ex);
                     }
@@ -163,6 +178,7 @@ namespace Stormpath.SDK.Impl.Http
                 delayMilliseconds = this.throttlingBackoffStrategy.GetDelayMilliseconds(retryCount);
             else
                 delayMilliseconds = this.defaultBackoffStrategy.GetDelayMilliseconds(retryCount);
+            this.logger.Trace($"Pausing for {delayMilliseconds}", "NetHttpRequestExecutor.PauseAsync");
 
             return Task.Delay(delayMilliseconds);
         }

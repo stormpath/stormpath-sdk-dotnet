@@ -18,6 +18,7 @@
 using System;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Client
 {
@@ -27,6 +28,7 @@ namespace Stormpath.SDK.Impl.Client
         private int connectionTimeout = DefaultClient.DefaultConnectionTimeout;
         private AuthenticationScheme authenticationScheme;
         private IClientApiKey apiKey;
+        private ILogger logger;
 
         IClientBuilder IClientBuilder.SetApiKey(IClientApiKey apiKey)
         {
@@ -61,12 +63,18 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
+        IClientBuilder IClientBuilder.SetLogger(ILogger logger)
+        {
+            this.logger = logger;
+            return this;
+        }
+
         IClient IClientBuilder.Build()
         {
             if (this.apiKey == null || !this.apiKey.IsValid())
                 throw new ArgumentException("API Key is not valid or has not been set. Use ClientApiKeys.Builder() to construct one.");
 
-            return new DefaultClient(this.apiKey, this.baseUrl, this.authenticationScheme, this.connectionTimeout);
+            return new DefaultClient(this.apiKey, this.baseUrl, this.authenticationScheme, this.connectionTimeout, this.logger);
         }
     }
 }

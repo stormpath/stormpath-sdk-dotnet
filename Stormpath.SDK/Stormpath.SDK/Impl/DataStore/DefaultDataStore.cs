@@ -25,22 +25,24 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class DefaultDataStore : IInternalDataStore, IDisposable
     {
+        private readonly ILogger logger;
+
         private readonly string baseUrl;
         private readonly IRequestExecutor requestExecutor;
         private readonly IMapSerializer serializer;
         private readonly IResourceFactory resourceFactory;
         private readonly IResourceConverter resourceConverter;
-
         private readonly UriQualifier uriQualifier;
 
         private bool disposed = false;
 
-        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl)
+        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, ILogger logger)
         {
             this.baseUrl = baseUrl;
             this.requestExecutor = requestExecutor;
@@ -50,6 +52,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.resourceConverter = new DefaultResourceConverter();
 
             this.uriQualifier = new UriQualifier(baseUrl);
+            this.logger = logger;
         }
 
         private IInternalDataStore IThis => this;
@@ -66,6 +69,8 @@ namespace Stormpath.SDK.Impl.DataStore
         async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
         {
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
+            this.logger.Trace($"Getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResourceAsync<T>");
+
             var request = new DefaultHttpRequest(HttpMethod.Get, canonicalUri);
             var response = await this.SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
 
@@ -78,6 +83,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<CollectionResponsePage<T>> IDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
         {
+            this.logger.Trace($"Getting collection page of type {typeof(T).Name} from: {href}", "DefaultDataStore.GetCollectionAsync<T>");
+
             return this.IThis.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
         }
 
@@ -145,6 +152,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ArgumentNullException(nameof(resource));
 
             var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
+            this.logger.Trace($"Saving resource of type {typeof(T).Name} to {href}", "DefaultDataStore.SaveCoreAsync");
+
             var propertiesMap = this.resourceConverter.ToMap(abstractResource, partialUpdate: false);
             var body = this.serializer.Serialize(propertiesMap);
 
@@ -168,6 +177,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ArgumentNullException(nameof(resource.Href));
 
             var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resource.Href));
+            this.logger.Trace($"Deleting resource {uri.ToString()}", "DefaultDataStore.DeleteCoreAsync");
+
             var request = new DefaultHttpRequest(HttpMethod.Delete, uri);
 
             var response = await this.SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);

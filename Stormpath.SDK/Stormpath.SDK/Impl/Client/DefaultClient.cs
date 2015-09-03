@@ -27,6 +27,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Shared;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
@@ -41,10 +42,11 @@ namespace Stormpath.SDK.Impl.Client
         private readonly AuthenticationScheme authenticationScheme;
         private readonly int connectionTimeout;
         private readonly IInternalDataStore dataStore;
+        private readonly ILogger logger;
 
         private string currentTenantHref;
 
-        public DefaultClient(IClientApiKey apiKey, string baseUrl, AuthenticationScheme authenticationScheme, int connectionTimeout)
+        public DefaultClient(IClientApiKey apiKey, string baseUrl, AuthenticationScheme authenticationScheme, int connectionTimeout, ILogger logger)
         {
             if (apiKey == null || !apiKey.IsValid())
                 throw new ArgumentException("API Key is not valid.");
@@ -52,6 +54,10 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentNullException("Base URL cannot be empty.");
             if (connectionTimeout < 0)
                 throw new ArgumentException("Timeout cannot be negative.");
+
+            this.logger = logger == null
+                ? new NullLogger()
+                : logger;
 
             var factory = new InternalFactory();
 
@@ -61,8 +67,8 @@ namespace Stormpath.SDK.Impl.Client
                 ? DefaultAuthenticationScheme
                 : authenticationScheme;
 
-            var requestExecutor = factory.CreateRequestExecutor(apiKey, authenticationScheme, connectionTimeout);
-            this.dataStore = factory.CreateDataStore(requestExecutor, baseUrl);
+            var requestExecutor = factory.CreateRequestExecutor(apiKey, authenticationScheme, connectionTimeout, this.logger);
+            this.dataStore = factory.CreateDataStore(requestExecutor, baseUrl, this.logger);
         }
 
         private IClient This => this;
