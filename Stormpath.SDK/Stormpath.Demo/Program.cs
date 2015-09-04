@@ -66,7 +66,7 @@ namespace Stormpath.Demo
                 .ToListAsync(cancellationToken);
             foreach (var app in applications)
             {
-                Console.WriteLine($"{app.Name} ({(app.Status == ApplicationStatus.Enabled ? "enabled" : "disabled")})");
+                Console.WriteLine($"{TrimWithEllipse(app.Name, 15), -15} {(app.Status == ApplicationStatus.Enabled ? "enabled" : "disabled")}");
             }
             if (!SpacebarToContinue(cancellationToken)) return;
 
@@ -91,16 +91,16 @@ namespace Stormpath.Demo
 
             // List all accounts (this time with an asynchronous foreach)
             Console.WriteLine("\nApplication accounts:");
-            await myApp.GetAccounts().ForEachAsync(account => Console.WriteLine($"{account.Email} {account.FullName} - {account.Status}"), cancellationToken);
+            await myApp.GetAccounts().ForEachAsync(account => Console.WriteLine($"{TrimWithEllipse(account.Email, 25), -25} {TrimWithEllipse(account.FullName, 20), -20} {account.Status.ToString().ToLower()}"), cancellationToken);
             if (!SpacebarToContinue(cancellationToken)) return;
 
             // Authenticate a user
-            var loginAs = addedUsers.First();
-            Console.WriteLine($"\nLogging in as lando@bespin.co...");
+            Console.WriteLine($"\nLogging in as vader@galacticempire.co");
             try
             {
-                var loginSuccessful = await myApp.AuthenticateAccountAsync("lando@bespin.co", "Changeme123!", cancellationToken);
-                Console.WriteLine($"Success! {loginAs.FullName} logged in.");
+                var result = await myApp.AuthenticateAccountAsync("vader@galacticempire.co", "1Findyourlackofsecuritydisturbing!", cancellationToken);
+                var returnedAccount = await result.GetAccountAsync();
+                Console.WriteLine($"Success! {returnedAccount.FullName} logged in.");
             }
             catch (ResourceException rex)
             {
@@ -117,7 +117,7 @@ namespace Stormpath.Demo
                 try
                 {
                     await account.DeleteAsync();
-                    Console.WriteLine($"Deleted {account.Email}!");
+                    Console.WriteLine($"Deleted {account.Email}");
                 }
                 catch (ResourceException rex)
                 {
@@ -137,8 +137,17 @@ namespace Stormpath.Demo
             if (cancelToken.IsCancellationRequested)
                 return false;
 
-            ClearCurrentLine(Console.CursorTop - 1);
+            ClearCurrentLine(Console.CursorTop);
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
             return (key.KeyChar == ' ');
+        }
+
+        private static string TrimWithEllipse(string input, int maxLength)
+        {
+            if (input.Length <= maxLength)
+                return input;
+
+            return input.Substring(0, maxLength - 3) + "...";
         }
 
         private static void ClearCurrentLine(int line)
