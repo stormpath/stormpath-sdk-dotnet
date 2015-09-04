@@ -33,8 +33,11 @@ namespace Stormpath.Demo
             MainAsync(cts.Token).GetAwaiter().GetResult();
 
             // Clean up
-            Console.WriteLine("\nCleaning up!");
-            CleanupAsync().GetAwaiter().GetResult();
+            if (addedUsers.Any())
+            {
+                Console.WriteLine("\nCleaning up!");
+                CleanupAsync().GetAwaiter().GetResult();
+            }
 
             Console.WriteLine("\nFinished! Press any key to exit...");
             Console.ReadKey(false);
@@ -57,7 +60,7 @@ namespace Stormpath.Demo
             Console.WriteLine($"Current tenant is: {tenant.Name}");
 
             // List applications
-            Console.WriteLine("Tenant applications:");
+            Console.WriteLine("\nTenant applications:");
             var applications = await tenant
                 .GetApplications()
                 .ToListAsync(cancellationToken);
@@ -71,21 +74,20 @@ namespace Stormpath.Demo
             var myApp = applications.First();
             Console.WriteLine($"\nAdding users to '{myApp.Name}'...");
             addedUsers.Add(
-                await myApp.CreateAccountAsync("tk421@galacticempire.co", "Joe", "Stormtrooper", "Changeme123!", cancellationToken));
+                await myApp.CreateAccountAsync("Joe", "Stormtrooper", "tk421@galacticempire.co", "Changeme123!", cancellationToken));
             addedUsers.Add(
-                await myApp.CreateAccountAsync("lando@bespin.co", "Lando", "Calrissian", "Changeme123!", cancellationToken));
+                await myApp.CreateAccountAsync("Lando", "Calrissian", "lando@bespin.co", "Changeme123!", cancellationToken));
 
             // Another way to add users. Disable the default registration email workflow
             var vader = client.Instantiate<IAccount>();
             vader.SetEmail("vader@galacticempire.co");
             vader.SetGivenName("Darth");
             vader.SetSurname("Vader");
-            vader.SetPassword("1findyourlackofsecuritydisturbing!");
+            vader.SetPassword("1Findyourlackofsecuritydisturbing!");
             addedUsers.Add(
                 await myApp.CreateAccountAsync(vader,
                 options => options.RegistrationWorkflowEnabled = false,
                 cancellationToken));
-            if (!SpacebarToContinue(cancellationToken)) return;
 
             // List all accounts (this time with an asynchronous foreach)
             Console.WriteLine("\nApplication accounts:");
@@ -129,9 +131,24 @@ namespace Stormpath.Demo
             if (cancelToken.IsCancellationRequested)
                 return false;
 
-            Console.WriteLine("Press spacebar to continue...\n");
+            Console.Write("\nPress spacebar to continue");
             var key = Console.ReadKey(true);
+
+            if (cancelToken.IsCancellationRequested)
+                return false;
+
+            ClearCurrentLine(Console.CursorTop - 1);
             return (key.KeyChar == ' ');
+        }
+
+        private static void ClearCurrentLine(int line)
+        {
+            Console.SetCursorPosition(0, line);
+            for (int i = 0; i < Console.WindowWidth; i++)
+            {
+                Console.Write(" ");
+            }
+            Console.SetCursorPosition(0, line);
         }
     }
 }
