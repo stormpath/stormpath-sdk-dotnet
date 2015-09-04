@@ -5,11 +5,17 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using System.Threading;
 using Stormpath.SDK.Application;
+using System.Linq;
+using System.Collections.Generic;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Error;
 
 namespace Stormpath.Demo
 {
     class Program
     {
+        private static List<IAccount> addedUsers;
+
         static void Main(string[] args)
         {
             // Wire up the console cancel event (Ctrl+C) to cancel async tasks
@@ -20,14 +26,21 @@ namespace Stormpath.Demo
                 cts.Cancel();
             };
 
+            // Keep track of the accounts we've created so we can clean them up later
+            addedUsers = new List<IAccount>();
+
             // Logically equivalent to MainAsync(...).Wait() but allows exceptions to bubble up unwrapped
             MainAsync(cts.Token).GetAwaiter().GetResult();
 
-            Console.WriteLine("Finished! Press any key to exit...");
+            // Clean up
+            Console.WriteLine("\nCleaning up!");
+            CleanupAsync().GetAwaiter().GetResult();
+
+            Console.WriteLine("\nFinished! Press any key to exit...");
             Console.ReadKey(false);
         }
 
-        static async Task MainAsync(CancellationToken ct)
+        static async Task MainAsync(CancellationToken cancellationToken)
         {
             var apiKey = ClientApiKeys.Builder()
                 // This is actually unnecessary, because this is already the default search path
@@ -40,67 +53,75 @@ namespace Stormpath.Demo
                 .Build();
             
             // Get current tenant
-            var tenant = await client.GetCurrentTenantAsync();
+            var tenant = await client.GetCurrentTenantAsync(cancellationToken);
             Console.WriteLine($"Current tenant is: {tenant.Name}");
-            if (!SpacebarToContinue(ct)) return;
 
             // List applications
             Console.WriteLine("Tenant applications:");
-            var applications = await tenant.GetApplications().ToListAsync();
+            var applications = await tenant
+                .GetApplications()
+                .ToListAsync(cancellationToken);
             foreach (var app in applications)
             {
-                Console.WriteLine("{0} ({1})", app.Name, app.Status == ApplicationStatus.Enabled ? "enabled" : "disabled");
+                Console.WriteLine($"{app.Name} ({(app.Status == ApplicationStatus.Enabled ? "enabled" : "disabled")})");
             }
-            if (!SpacebarToContinue(ct)) return;
+            if (!SpacebarToContinue(cancellationToken)) return;
 
-            //// Add some users
-            //Console.WriteLine("\nAdding users to '{0}'...", myApp.Name);
-            //var addedUsers = new List<string>();
-            //var result = await myApp.CreateAccountAsync("tk421@stormpath.com", "Joe", "Stormtrooper", "tk421", "Changeme1");
-            //if (result.Status == AccountStatus.Enabled)
-            //    addedUsers.Add(result.Email);
+            // Add some users
+            var myApp = applications.First();
+            Console.WriteLine($"\nAdding users to '{myApp.Name}'...");
+            addedUsers.Add(
+                await myApp.CreateAccountAsync("tk421@galacticempire.co", "Joe", "Stormtrooper", "Changeme123!", cancellationToken));
+            addedUsers.Add(
+                await myApp.CreateAccountAsync("lando@bespin.co", "Lando", "Calrissian", "Changeme123!", cancellationToken));
 
-            //result = await myApp.CreateAccountAsync("lando@bespin.co", "Lando", "Calrissian", "lcalrissian", "Changeme1", new
-            //{
-            //    quote = "You got a lotta nerve showin' your face around here, after what you pulled."
-            //});
-            //if (result.Status == AccountStatus.Enabled)
-            //    addedUsers.Add(result.Email);
+            // Another way to add users. Disable the default registration email workflow
+            var vader = client.Instantiate<IAccount>();
+            vader.SetEmail("vader@galacticempire.co");
+            vader.SetGivenName("Darth");
+            vader.SetSurname("Vader");
+            vader.SetPassword("1findyourlackofsecuritydisturbing!");
+            addedUsers.Add(
+                await myApp.CreateAccountAsync(vader,
+                options => options.RegistrationWorkflowEnabled = false,
+                cancellationToken));
+            if (!SpacebarToContinue(cancellationToken)) return;
 
-            //// Print them
-            //Console.WriteLine("\nApplication accounts:");
-            //var accounts = await myApp.GetAccountsAsync();
-            //foreach (var account in accounts)
-            //{
-            //    Console.WriteLine("{0} {1} - {2}", account.Email, account.FullName, account.Status.ToString());
-            //}
+            // List all accounts (this time with an asynchronous foreach)
+            Console.WriteLine("\nApplication accounts:");
+            await myApp.GetAccounts().ForEachAsync(account => Console.WriteLine($"{account.Email} {account.FullName} - {account.Status}"), cancellationToken);
+            if (!SpacebarToContinue(cancellationToken)) return;
 
-            //// Authenticate a user
-            //var loginAs = accounts.First();
-            //Console.WriteLine("\nLogging in as {0}...", loginAs.UserName);
-            //var didLogin = await myApp.AuthenticateAccountAsync(loginAs.UserName, "Changeme1");
-            //Console.WriteLine("{0}", didLogin ? "Success!" : "Error :(");
+            // Authenticate a user
+            var loginAs = addedUsers.First();
+            Console.WriteLine($"\nLogging in as lando@bespin.co...");
+            try
+            {
+                var loginSuccessful = await myApp.AuthenticateAccountAsync("lando@bespin.co", "Changeme123!", cancellationToken);
+                Console.WriteLine($"Success! {loginAs.FullName} logged in.");
+            }
+            catch (ResourceException rex)
+            {
+                Console.WriteLine($"Could not log in. Error: {rex.Message}");
+            }
+            if (!SpacebarToContinue(cancellationToken)) return;
+        }
 
-            //// Create a group
-            //// todo
-
-            //// Assign user to group
-            //// todo
-
-            //// Clean up!
-            //Console.WriteLine("\nCleaning up!");
-            //Console.WriteLine("Deleting accounts:");
-            //foreach (var email in addedUsers)
-            //{
-            //    var account = accounts
-            //        .Where(x => x.Email == email)
-            //        .Single();
-            //    var deleted = await account.DeleteAsync();
-            //    Console.WriteLine("Deleted {0} - {1}", account.Email, deleted ? "done" : "error");
-            //}
-
-            //Console.Write("\nPress any key to exit...");
-            //Console.ReadKey(false);
+        static async Task CleanupAsync()
+        {
+            Console.WriteLine("Deleting accounts:");
+            foreach (var account in addedUsers)
+            {
+                try
+                {
+                    await account.DeleteAsync();
+                    Console.WriteLine($"Deleted {account.Email}!");
+                }
+                catch (ResourceException rex)
+                {
+                    Console.WriteLine($"Could not delete {account.Email}. Error: {rex.Message}");
+                }
+            }
         }
 
         private static bool SpacebarToContinue(CancellationToken cancelToken)
@@ -108,7 +129,7 @@ namespace Stormpath.Demo
             if (cancelToken.IsCancellationRequested)
                 return false;
 
-            Console.WriteLine("\nPress spacebar to continue...\n");
+            Console.WriteLine("Press spacebar to continue...\n");
             var key = Console.ReadKey(true);
             return (key.KeyChar == ' ');
         }

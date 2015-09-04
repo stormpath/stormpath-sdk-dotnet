@@ -89,7 +89,7 @@
     <Compile Include="Fakes\FakeDataStore.cs" />
     <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
-    <Compile Include="FieldConverter_tests.cs" />
+    <Compile Include="Impl\FieldConverter_tests.cs" />
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\CollectionTestHarness.cs" />
     <Compile Include="Helpers\LinqAssertExtensions.cs" />

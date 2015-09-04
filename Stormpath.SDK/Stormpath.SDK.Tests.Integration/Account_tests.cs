@@ -66,6 +66,7 @@ namespace Stormpath.SDK.Tests.Integration
             luke.FullName.ShouldBe("Luke Skywalker");
             luke.Email.ShouldBe("lskywalker@tattooine.rim");
             luke.Username.ShouldStartWith("sonofthesuns");
+            luke.Status.ShouldBe(AccountStatus.Enabled);
 
             var vader = accounts.Where(x => x.Surname == "Vader").Single();
             vader.FullName.ShouldBe("Darth Vader");

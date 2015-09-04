@@ -20,13 +20,12 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Stormpath.SDK.Impl.DataStore.FieldConverters;
+using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class JsonNetMapMarshaller : IMapSerializer
     {
-        private readonly JsonSerializerSettings serializerSettings;
-
         private static readonly FieldConverterList ConverterChain =
             new FieldConverterList(
                 DefaultFieldConverters.LinkPropertyConverter,
@@ -41,11 +40,15 @@ namespace Stormpath.SDK.Impl.DataStore
                 DefaultFieldConverters.NullConverter,
                 DefaultFieldConverters.FallbackConverter);
 
+        private readonly JsonSerializerSettings serializerSettings;
+        private readonly ResourceTypeLookup typeLookup;
+
         public JsonNetMapMarshaller()
         {
             this.serializerSettings = new JsonSerializerSettings();
             this.serializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
             this.serializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+            this.typeLookup = new ResourceTypeLookup();
         }
 
         string IMapSerializer.Serialize(IDictionary<string, object> map)
@@ -64,14 +67,13 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         /// <summary>
-        /// JSON.NET deserializes everything into nested JObjects. We want Hashtables all the way down.
+        /// JSON.NET deserializes everything into nested JObjects. We want IDictionaries all the way down.
         /// </summary>
-        /// <param name="map">Deserialized JObject from JSON.NET</param>
+        /// <param name="map">Deserialized <see cref="JObject"/> from JSON.NET</param>
         /// <param name="type">Target resource type (as an interface)</param>
-        /// <returns>Hashtable of primitive items, and embedded objects as Hashtables</returns>
+        /// <returns><see cref="IDictionary{string, object}"/> of primitive items, and embedded objects as nested <see cref="IDictionary{string, object}"/></returns>
         private IDictionary<string, object> Sanitize(JObject map, Type type)
         {
-            // TODO there is probably a cleaner way of doing all of this. IDictionaries in the AbstractResource constructor?
             var result = new Dictionary<string, object>(map.Count);
 
             foreach (var prop in map.Properties())
@@ -79,7 +81,10 @@ namespace Stormpath.SDK.Impl.DataStore
                 var name = prop.Name;
                 object value = null;
 
-                if (prop.Value.Type == JTokenType.Array)
+                bool isSupportedCollectionItems =
+                    prop.Value.Type == JTokenType.Array &&
+                    this.typeLookup.GetInnerCollectionInterface(type) != null;
+                if (isSupportedCollectionItems)
                 {
                     var nested = new List<IDictionary<string, object>>();
                     foreach (var child in prop.Value.Children())

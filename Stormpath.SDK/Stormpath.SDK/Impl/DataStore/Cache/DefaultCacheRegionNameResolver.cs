@@ -19,16 +19,16 @@ namespace Stormpath.SDK.Impl.DataStore.Cache
 {
     internal sealed class DefaultCacheRegionNameResolver : ICacheRegionNameResolver
     {
-        private readonly DefaultResourceFactory resourceFactory;
+        private readonly ResourceTypeLookup typeLookup;
 
         public DefaultCacheRegionNameResolver()
         {
-            this.resourceFactory = new DefaultResourceFactory(null);
+            this.typeLookup = new ResourceTypeLookup();
         }
 
         string ICacheRegionNameResolver.GetCacheRegionName<T>()
         {
-            var iface = this.resourceFactory.GetInterface<T>();
+            var iface = this.typeLookup.GetInterface<T>();
             return iface.Name;
         }
     }

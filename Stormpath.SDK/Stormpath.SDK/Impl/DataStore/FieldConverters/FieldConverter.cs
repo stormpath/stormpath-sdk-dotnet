@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 
 namespace Stormpath.SDK.Impl.DataStore.FieldConverters
@@ -24,15 +25,19 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
     {
         public const Type AnyType = null;
 
+        private readonly string name;
         private readonly Func<JProperty, ConverterResult> convertAction;
         private readonly Type appliesToTargetType;
         private readonly JTokenType? appliesToTokenType;
+        private readonly ResourceTypeLookup typeLookup;
 
-        public FieldConverter(Func<JProperty, ConverterResult> convertAction, Type appliesToTargetType = AnyType, JTokenType? appliesToTokenType = null)
+        public FieldConverter(Func<JProperty, ConverterResult> convertAction, Type appliesToTargetType = AnyType, JTokenType? appliesToTokenType = null, string name = null)
         {
             this.convertAction = convertAction;
             this.appliesToTargetType = appliesToTargetType;
             this.appliesToTokenType = appliesToTokenType;
+            this.name = name;
+            this.typeLookup = new ResourceTypeLookup();
         }
 
         public ConverterResult TryConvertField(JProperty token, Type targetType)
@@ -43,14 +48,23 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
             if (!isSupportedTokenType)
                 return ConverterResult.Failed;
 
-            bool isSupportedTargetType = this.appliesToTargetType == AnyType
+            bool isSupportedTargetType = targetType == this.appliesToTargetType;
+            bool isSupportedGenericTargetType = targetType.IsGenericType && this.typeLookup.GetInnerCollectionInterface(targetType) == this.appliesToTargetType;
+            bool isSupported = this.appliesToTargetType == AnyType
                 ? true
-                : (targetType == this.appliesToTargetType);
-            if (!isSupportedTargetType)
+                : isSupportedTargetType || isSupportedGenericTargetType;
+            if (!isSupported)
                 return ConverterResult.Failed;
 
             var result = this.convertAction(token);
             return result;
+        }
+
+        public override string ToString()
+        {
+            return string.IsNullOrEmpty(this.name)
+                ? this.GetType().Name
+                : this.name;
         }
     }
 }

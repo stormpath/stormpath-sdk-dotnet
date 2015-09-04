@@ -17,88 +17,19 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Stormpath.SDK.Account;
-using Stormpath.SDK.AccountStore;
-using Stormpath.SDK.Application;
-using Stormpath.SDK.Auth;
-using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
-using Stormpath.SDK.Impl.Account;
-using Stormpath.SDK.Impl.AccountStore;
-using Stormpath.SDK.Impl.Application;
-using Stormpath.SDK.Impl.Auth;
-using Stormpath.SDK.Impl.Directory;
-using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Impl.Tenant;
-using Stormpath.SDK.Resource;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class DefaultResourceFactory : IResourceFactory
     {
-        private static readonly Dictionary<Type, Type> TypeMap = new Dictionary<Type, Type>()
-        {
-            { typeof(IAccount), typeof(DefaultAccount) },
-            { typeof(IApplication), typeof(DefaultApplication) },
-            { typeof(ITenant), typeof(DefaultTenant) },
-            { typeof(IDirectory), typeof(DefaultDirectory) },
-            { typeof(IGroup), typeof(DefaultGroup) },
-            { typeof(IAccountStoreMapping), typeof(DefaultAccountStoreMapping) },
-            { typeof(IAccountStore), typeof(DefaultAccountStore) },
-            { typeof(IBasicLoginAttempt), typeof(DefaultBasicLoginAttempt) },
-            { typeof(IAuthenticationResult), typeof(DefaultAuthenticationResult) },
-            { typeof(IPasswordResetToken), typeof(DefaultPasswordResetToken) },
-        };
-
         private readonly IInternalDataStore dataStore;
+        private readonly ResourceTypeLookup typeLookup;
 
         public DefaultResourceFactory(IInternalDataStore dataStore)
         {
             this.dataStore = dataStore;
-        }
-
-        public Type GetInterface<T>()
-            where T : IResource
-        {
-            return this.GetInterface(typeof(T));
-        }
-
-        public Type GetInterface(Type possibleConcrete)
-        {
-            bool alreadyIsInterface = TypeMap.ContainsKey(possibleConcrete);
-            if (alreadyIsInterface)
-                return possibleConcrete;
-
-            bool isUnsupportedConcreteType = !TypeMap.ContainsValue(possibleConcrete);
-            if (isUnsupportedConcreteType)
-                return null;
-
-            var mapped = TypeMap
-                .Where(x => x.Value == possibleConcrete)
-                .Single();
-            return mapped.Key;
-        }
-
-        public Type GetConcrete<T>()
-            where T : IResource
-        {
-            return this.GetConcrete(typeof(T));
-        }
-
-        public Type GetConcrete(Type possibleInterface)
-        {
-            bool alreadyIsConcrete = TypeMap.ContainsValue(possibleInterface);
-            if (alreadyIsConcrete)
-                return possibleInterface;
-
-            Type concrete = null;
-            if (!TypeMap.TryGetValue(possibleInterface, out concrete))
-                return null;
-
-            return concrete;
+            this.typeLookup = new ResourceTypeLookup();
         }
 
         private IResourceFactory IThis => this;
@@ -125,7 +56,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private object InstantiateSingle(IDictionary<string, object> properties, Type type)
         {
-            var targetType = this.GetConcrete(type);
+            var targetType = this.typeLookup.GetConcrete(type);
             if (targetType == null)
                 throw new ApplicationException($"Unknown resource type {type.Name}");
 
@@ -149,8 +80,8 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             var outerType = typeof(T); // CollectionResponsePage<TInner>
 
-            Type innerType = outerType.GetGenericArguments().SingleOrDefault();
-            var targetType = this.GetConcrete(innerType);
+            Type innerType = this.typeLookup.GetInnerCollectionInterface(outerType);
+            var targetType = this.typeLookup.GetConcrete(innerType);
             if (innerType == null || targetType == null)
                 throw new ApplicationException($"Error creating collection resource: unknown inner type '{innerType?.Name}'.");
 

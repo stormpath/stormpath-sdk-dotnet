@@ -43,6 +43,9 @@ namespace Stormpath.SDK.Tests.Integration
             var applications = await tenant.GetApplications().ToListAsync();
 
             applications.Count.ShouldNotBe(0);
+            applications
+                .Any(app => app.Status == ApplicationStatus.Enabled)
+                .ShouldBe(true);
         }
 
         [Theory]
@@ -101,6 +104,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .SingleAsync();
 
             application.Description.ShouldBe("The Battle of Endor");
+            application.Status.ShouldBe(ApplicationStatus.Enabled);
         }
 
         [Theory]

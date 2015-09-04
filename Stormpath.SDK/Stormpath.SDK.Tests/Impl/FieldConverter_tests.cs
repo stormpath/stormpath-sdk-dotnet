@@ -28,7 +28,7 @@ using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Utility;
 using Xunit;
 
-namespace Stormpath.SDK.Tests
+namespace Stormpath.SDK.Tests.Impl
 {
     public class FieldConverter_tests
     {
@@ -70,6 +70,20 @@ namespace Stormpath.SDK.Tests
                 var dummyField = new JProperty("foo", "bar");
 
                 var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IAccount));
+
+                result.Success.ShouldBe(true);
+                result.Result.ShouldBe("good!");
+            }
+
+            [Fact]
+            public void Returns_value_when_expected_type_matches_inside_collection_type()
+            {
+                var fakeAccountFieldConverter = new FieldConverter(
+                    appliesToTargetType: typeof(IAccount),
+                    convertAction: unused_ => new ConverterResult(true, "good!"));
+                var dummyField = new JProperty("foo", "bar");
+
+                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(CollectionResponsePage<IAccount>));
 
                 result.Success.ShouldBe(true);
                 result.Result.ShouldBe("good!");

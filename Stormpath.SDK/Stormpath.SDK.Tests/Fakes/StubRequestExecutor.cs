@@ -23,7 +23,7 @@ using Stormpath.SDK.Impl.Http.Support;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
-    public class StubRequestExecutor<T>
+    public class StubRequestExecutor
     {
         private readonly IRequestExecutor fakeRequestExecutor;
         private readonly string resourceJson;

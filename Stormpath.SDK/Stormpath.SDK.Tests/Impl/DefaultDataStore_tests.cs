@@ -15,7 +15,10 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
@@ -24,7 +27,9 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Shared;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
@@ -35,9 +40,9 @@ namespace Stormpath.SDK.Tests.Impl
     public class DefaultDataStore_tests
     {
         [Fact]
-        public async Task Json_is_deserialized_properly()
+        public async Task Single_item_Json_is_deserialized_properly()
         {
-            var stubRequestExecutor = new StubRequestExecutor<IAccount>(FakeJson.Account);
+            var stubRequestExecutor = new StubRequestExecutor(FakeJson.Account);
             IInternalDataStore dataStore = new DefaultDataStore(stubRequestExecutor.Object, "http://api.foo.bar", new SDK.Impl.NullLogger());
 
             var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
@@ -68,9 +73,49 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
+        public async Task Collection_resource_Json_is_deserialized_properly()
+        {
+            var stubRequestExecutor = new StubRequestExecutor(FakeJson.AccountList);
+            IInternalDataStore dataStore = new DefaultDataStore(stubRequestExecutor.Object, "http://api.foo.bar", new SDK.Impl.NullLogger());
+
+            ICollectionResourceQueryable<IAccount> accounts = new CollectionResourceQueryable<IAccount>("/accounts", dataStore);
+            await accounts.MoveNextAsync();
+
+            // Verify against data from FakeJson.AccountList
+            accounts.Size.ShouldBe(6);
+            accounts.Offset.ShouldBe(0);
+            accounts.Limit.ShouldBe(25);
+            accounts.CurrentPage.Count().ShouldBe(6);
+
+            var account = accounts.CurrentPage.First();
+            account.CreatedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.078Z"));
+            account.Email.ShouldBe("han.solo@corellia.core");
+            account.FullName.ShouldBe("Han Solo");
+            account.GivenName.ShouldBe("Han");
+            account.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1");
+            account.MiddleName.ShouldBe(null);
+            account.ModifiedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.078Z"));
+            account.Status.ShouldBe(AccountStatus.Enabled);
+            account.Surname.ShouldBe("Solo");
+            account.Username.ShouldBe("han.solo@corellia.core");
+
+            (account as DefaultAccount).AccessTokens.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/accessTokens");
+            (account as DefaultAccount).ApiKeys.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/apiKeys");
+            (account as DefaultAccount).Applications.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/applications");
+            (account as DefaultAccount).CustomData.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/customData");
+            (account as DefaultAccount).Directory.Href.ShouldBe("https://api.stormpath.com/v1/directories/directory1");
+            (account as DefaultAccount).EmailVerificationToken.Href.ShouldBe(null);
+            (account as DefaultAccount).GroupMemberships.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/groupMemberships");
+            (account as DefaultAccount).Groups.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/groups");
+            (account as DefaultAccount).ProviderData.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/providerData");
+            (account as DefaultAccount).RefreshTokens.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/refreshTokens");
+            (account as DefaultAccount).Tenant.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foobarTenant");
+        }
+
+        [Fact]
         public async Task Default_headers_are_applied_to_all_requests()
         {
-            var stubRequestExecutor = new StubRequestExecutor<IAccount>(FakeJson.Account);
+            var stubRequestExecutor = new StubRequestExecutor(FakeJson.Account);
             IInternalDataStore dataStore = new DefaultDataStore(stubRequestExecutor.Object, "http://api.foo.bar", new SDK.Impl.NullLogger());
 
             var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
@@ -85,7 +130,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task Trace_log_is_sent_to_logger()
         {
-            var stubRequestExecutor = new StubRequestExecutor<IAccount>(FakeJson.Account);
+            var stubRequestExecutor = new StubRequestExecutor(FakeJson.Account);
 
             var fakeLog = new List<LogEntry>();
             var stubLogger = Substitute.For<ILogger>();
@@ -108,7 +153,7 @@ namespace Stormpath.SDK.Tests.Impl
             string savedHref = null;
             string savedJson = null;
 
-            var stubRequestExecutor = new StubRequestExecutor<IAccount>(FakeJson.Account);
+            var stubRequestExecutor = new StubRequestExecutor(FakeJson.Account);
             stubRequestExecutor.Object
                 .When(x => x.ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>()))
                 .Do(call =>
@@ -129,6 +174,43 @@ namespace Stormpath.SDK.Tests.Impl
             savedMap.Count.ShouldBe(2);
             savedMap["middleName"].ShouldBe("Test");
             savedMap["username"].ShouldBe("newusername");
+        }
+
+        [Fact]
+        public async Task Cancellation_token_is_passed_down_to_low_level_operations()
+        {
+            var fakeRequestExecutor = Substitute.For<IRequestExecutor>();
+            fakeRequestExecutor
+                .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
+                .Returns(async callInfo =>
+                {
+                    // Will pause for 1 second, unless CancellationToken has been passed through to us
+                    await Task.Delay(1000, callInfo.Arg<CancellationToken>());
+                    return new DefaultHttpResponse(204, "No Content", new HttpHeaders(), null, null) as IHttpResponse;
+                });
+
+            IInternalDataStore ds = new DefaultDataStore(fakeRequestExecutor, "http://api.foo.bar", new SDK.Impl.NullLogger());
+            IAccount fakeAccount = new DefaultAccount(
+                ds,
+                new Dictionary<string, object>() { { "href", "http://api.foo.bar/accounts/1" } });
+
+            var alreadyCanceledSource = new CancellationTokenSource();
+            alreadyCanceledSource.Cancel();
+
+            var stopwatch = Stopwatch.StartNew();
+            var deleted = false;
+            try
+            {
+                await ds.DeleteAsync(fakeAccount, alreadyCanceledSource.Token);
+            }
+            catch (TaskCanceledException)
+            {
+                deleted = true;
+            }
+
+            stopwatch.Stop();
+            stopwatch.ElapsedMilliseconds.ShouldBeLessThan(1000);
+            deleted.ShouldBe(true);
         }
     }
 }

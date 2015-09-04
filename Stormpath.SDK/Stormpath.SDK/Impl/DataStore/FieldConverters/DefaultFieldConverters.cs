@@ -26,6 +26,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
     {
         public static readonly FieldConverter LinkPropertyConverter =
             new FieldConverter(
+                name: nameof(LinkPropertyConverter),
                 appliesToTokenType: JTokenType.Object,
                 convertAction: token =>
             {
@@ -43,6 +44,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 
         public static readonly FieldConverter DateTimeOffsetConverter =
             new FieldConverter(
+                name: nameof(DateTimeOffsetConverter),
                 appliesToTokenType: JTokenType.Date,
                 convertAction: token =>
             {
@@ -54,6 +56,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 
         public static readonly FieldConverter AccountStatusConverter =
             new FieldConverter(
+                name: nameof(AccountStatusConverter),
                 appliesToTokenType: JTokenType.String,
                 appliesToTargetType: typeof(SDK.Account.IAccount),
                 convertAction: token =>
@@ -69,6 +72,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 
         public static readonly FieldConverter ApplicationStatusConverter =
             new FieldConverter(
+                name: nameof(ApplicationStatusConverter),
                 appliesToTokenType: JTokenType.String,
                 appliesToTargetType: typeof(SDK.Application.IApplication),
                 convertAction: token =>
@@ -84,6 +88,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 
         public static readonly FieldConverter DirectoryStatusConverter =
             new FieldConverter(
+                name: nameof(DirectoryStatusConverter),
                 appliesToTokenType: JTokenType.String,
                 appliesToTargetType: typeof(SDK.Directory.IDirectory),
                 convertAction: token =>
@@ -98,22 +103,24 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
                 });
 
         public static readonly FieldConverter GroupStatusConverter =
-                    new FieldConverter(
-                        appliesToTokenType: JTokenType.String,
-                        appliesToTargetType: typeof(SDK.Group.IGroup),
-                        convertAction: token =>
-                        {
-                            var value = token?.Value?.ToString();
+            new FieldConverter(
+                name: nameof(GroupStatusConverter),
+                appliesToTokenType: JTokenType.String,
+                appliesToTargetType: typeof(SDK.Group.IGroup),
+                convertAction: token =>
+                {
+                    var value = token?.Value?.ToString();
 
-                            if (!string.Equals(token?.Name, "status", StringComparison.InvariantCultureIgnoreCase)
-                                || string.IsNullOrEmpty(value))
-                                return ConverterResult.Failed;
+                    if (!string.Equals(token?.Name, "status", StringComparison.InvariantCultureIgnoreCase)
+                        || string.IsNullOrEmpty(value))
+                        return ConverterResult.Failed;
 
-                            return new ConverterResult(true, SDK.Group.GroupStatus.Parse(value));
-                        });
+                    return new ConverterResult(true, SDK.Group.GroupStatus.Parse(value));
+                });
 
         public static readonly FieldConverter StringConverter =
             new FieldConverter(
+                name: nameof(StringConverter),
                 appliesToTokenType: JTokenType.String,
                 convertAction: token =>
                 {
@@ -122,6 +129,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 
         public static readonly FieldConverter IntConverter =
             new FieldConverter(
+                name: nameof(IntConverter),
                 appliesToTokenType: JTokenType.Integer,
                 convertAction: token =>
                 {
@@ -134,6 +142,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 
         public static readonly FieldConverter BoolConverter =
             new FieldConverter(
+                name: nameof(BoolConverter),
                 appliesToTokenType: JTokenType.Boolean,
                 convertAction: token =>
                 {
@@ -146,11 +155,14 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 
         public static readonly FieldConverter NullConverter =
             new FieldConverter(
+                name: nameof(NullConverter),
                 appliesToTokenType: JTokenType.Null,
                 convertAction: unused_ => new ConverterResult(true, null));
 
         public static readonly FieldConverter FallbackConverter =
-            new FieldConverter(token =>
+            new FieldConverter(
+                name: nameof(FallbackConverter),
+                convertAction: token =>
             {
                 return new ConverterResult(true, token?.Value?.ToString());
             });
