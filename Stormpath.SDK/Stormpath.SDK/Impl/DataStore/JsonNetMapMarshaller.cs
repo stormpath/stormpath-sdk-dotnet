@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -49,14 +48,14 @@ namespace Stormpath.SDK.Impl.DataStore
             this.serializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
         }
 
-        string IMapSerializer.Serialize(Dictionary<string, object> map)
+        string IMapSerializer.Serialize(IDictionary<string, object> map)
         {
             var serialized = JsonConvert.SerializeObject(map);
 
             return serialized;
         }
 
-        Hashtable IMapSerializer.Deserialize(string json, Type type)
+        IDictionary<string, object> IMapSerializer.Deserialize(string json, Type type)
         {
             var deserializedMap = (JObject)JsonConvert.DeserializeObject(json, this.serializerSettings);
             var sanitizedMap = this.Sanitize(deserializedMap, type);
@@ -70,10 +69,10 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="map">Deserialized JObject from JSON.NET</param>
         /// <param name="type">Target resource type (as an interface)</param>
         /// <returns>Hashtable of primitive items, and embedded objects as Hashtables</returns>
-        private Hashtable Sanitize(JObject map, Type type)
+        private IDictionary<string, object> Sanitize(JObject map, Type type)
         {
             // TODO there is probably a cleaner way of doing all of this. IDictionaries in the AbstractResource constructor?
-            var result = new Hashtable(map.Count);
+            var result = new Dictionary<string, object>(map.Count);
 
             foreach (var prop in map.Properties())
             {
@@ -82,7 +81,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
                 if (prop.Value.Type == JTokenType.Array)
                 {
-                    var nested = new List<Hashtable>();
+                    var nested = new List<IDictionary<string, object>>();
                     foreach (var child in prop.Value.Children())
                     {
                         nested.Add(this.Sanitize((JObject)child, type));

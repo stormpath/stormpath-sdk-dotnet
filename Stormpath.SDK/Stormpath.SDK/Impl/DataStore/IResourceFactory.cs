@@ -15,7 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -23,6 +23,6 @@ namespace Stormpath.SDK.Impl.DataStore
     {
         T Create<T>();
 
-        T Create<T>(Hashtable properties);
+        T Create<T>(IDictionary<string, object> properties);
     }
 }

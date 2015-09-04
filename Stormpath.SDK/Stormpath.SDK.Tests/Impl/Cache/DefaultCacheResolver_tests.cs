@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
@@ -24,8 +25,6 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.DataStore.Cache;
-using Stormpath.SDK.Impl.ThreadSafeMap;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Cache
@@ -86,13 +85,13 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .IsSynchronousSupported
                 .Returns(true);
             fakeCacheManager
-                .GetCache<string, IThreadSafeMap<string, object>>(Arg.Any<string>())
-                .Returns(new NullCache<string, IThreadSafeMap<string, object>>());
+                .GetCache<string, ConcurrentDictionary<string, object>>(Arg.Any<string>())
+                .Returns(new NullCache<string, ConcurrentDictionary<string, object>>());
 
             ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager, Substitute.For<ICacheRegionNameResolver>());
 
             var cache = cacheResolver.GetCache<IAccount>();
-            cache.ShouldBeOfType<NullCache<string, IThreadSafeMap<string, object>>>();
+            cache.ShouldBeOfType<NullCache<string, ConcurrentDictionary<string, object>>>();
         }
 
         [Fact]
@@ -103,19 +102,19 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .IsAsynchronousSupported
                 .Returns(true);
             fakeCacheManager
-                .GetCacheAsync<string, IThreadSafeMap<string, object>>(
+                .GetCacheAsync<string, ConcurrentDictionary<string, object>>(
                     Arg.Any<string>(),
                     Arg.Any<CancellationToken>())
                 .Returns(async unused_ =>
                 {
                     await Task.Yield();
-                    return (IAsynchronousCache<string, IThreadSafeMap<string, object>>)new NullCache<string, IThreadSafeMap<string, object>>();
+                    return (IAsynchronousCache<string, ConcurrentDictionary<string, object>>)new NullCache<string, ConcurrentDictionary<string, object>>();
                 });
 
             ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager, Substitute.For<ICacheRegionNameResolver>());
 
             var cache = await cacheResolver.GetCacheAsync<IAccount>(CancellationToken.None);
-            cache.ShouldBeOfType<NullCache<string, IThreadSafeMap<string, object>>>();
+            cache.ShouldBeOfType<NullCache<string, ConcurrentDictionary<string, object>>>();
         }
     }
 }

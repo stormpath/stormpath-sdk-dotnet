@@ -16,7 +16,7 @@
 // </remarks>
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
@@ -228,7 +228,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }
                 else
                 {
-                    var properties = new Hashtable();
+                    var properties = new Dictionary<string, object>();
                     properties.Add("status", response.HttpStatus);
                     properties.Add("code", response.HttpStatus);
                     properties.Add("moreInfo", "HTTP error");
@@ -248,7 +248,7 @@ namespace Stormpath.SDK.Impl.DataStore
             request.Headers.UserAgent = UserAgentBuilder.GetUserAgent();
         }
 
-        private Hashtable GetBody<T>(IHttpResponse response)
+        private IDictionary<string, object> GetBody<T>(IHttpResponse response)
         {
             if (response == null)
                 throw new ArgumentNullException(nameof(response));
@@ -256,7 +256,7 @@ namespace Stormpath.SDK.Impl.DataStore
             if (response.HasBody)
                 return this.serializer.Deserialize(response.Body, typeof(T));
             else
-                return new Hashtable();
+                return new Dictionary<string, object>();
         }
 
         private void Dispose(bool disposing)

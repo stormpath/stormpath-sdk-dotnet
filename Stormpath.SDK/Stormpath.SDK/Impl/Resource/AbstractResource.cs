@@ -15,7 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Impl.DataStore;
@@ -27,31 +27,26 @@ namespace Stormpath.SDK.Impl.Resource
     {
         private static readonly string HrefPropertyName = "href";
 
-        private readonly object writeLock = new object();
-
         private readonly IInternalDataStore dataStore;
-        private readonly Hashtable properties;
-        private readonly Hashtable dirtyProperties;
+        private readonly ConcurrentDictionary<string, object> properties;
+        private readonly ConcurrentDictionary<string, object> dirtyProperties;
         protected readonly InternalFactory internalFactory;
 
         private bool isDirty = false;
 
         public AbstractResource(IInternalDataStore dataStore)
-            : this(dataStore, new Hashtable())
+            : this(dataStore, new Dictionary<string, object>())
         {
         }
 
-        public AbstractResource(IInternalDataStore dataStore, Hashtable properties)
+        public AbstractResource(IInternalDataStore dataStore, IDictionary<string, object> properties)
         {
             this.dataStore = dataStore;
 
-            lock (this.writeLock)
-            {
-                this.properties = new Hashtable(properties);
-                this.dirtyProperties = new Hashtable(properties.Count);
-                this.internalFactory = new InternalFactory();
-                this.isDirty = false;
-            }
+            this.properties = new ConcurrentDictionary<string, object>(properties);
+            this.dirtyProperties = new ConcurrentDictionary<string, object>();
+            this.internalFactory = new InternalFactory();
+            this.isDirty = false;
         }
 
         string IResource.Href => GetProperty<string>(HrefPropertyName);
@@ -90,11 +85,13 @@ namespace Stormpath.SDK.Impl.Resource
         {
             object value;
 
-            value = this.dirtyProperties[name];
-            if (value != null)
+            if (this.dirtyProperties.TryGetValue(name, out value))
                 return value;
 
-            return this.properties[name];
+            if (this.properties.TryGetValue(name, out value))
+                return value;
+
+            return null;
         }
 
         public void SetProperty<T>(string name, T value)
@@ -104,14 +101,8 @@ namespace Stormpath.SDK.Impl.Resource
 
         public void SetProperty(string name, object value)
         {
-            lock (this.writeLock)
-            {
-                if (!this.properties.ContainsKey(name))
-                    this.properties.Add(name, value);
-
-                this.dirtyProperties[name] = value;
-                this.isDirty = true;
-            }
+            this.dirtyProperties.AddOrUpdate(name, value, (key, oldValue) => value);
+            this.isDirty = true;
         }
     }
 }

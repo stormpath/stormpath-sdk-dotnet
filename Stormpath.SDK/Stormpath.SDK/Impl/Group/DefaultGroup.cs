@@ -15,7 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Group;
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Impl.Group
         {
         }
 
-        public DefaultGroup(IInternalDataStore dataStore, Hashtable properties)
+        public DefaultGroup(IInternalDataStore dataStore, IDictionary<string, object> properties)
             : base(dataStore, properties)
         {
         }

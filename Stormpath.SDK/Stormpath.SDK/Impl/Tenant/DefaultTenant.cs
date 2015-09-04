@@ -16,7 +16,7 @@
 // </remarks>
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Impl.Tenant
         {
         }
 
-        public DefaultTenant(IInternalDataStore dataStore, Hashtable properties)
+        public DefaultTenant(IInternalDataStore dataStore, IDictionary<string, object> properties)
              : base(dataStore, properties)
         {
         }

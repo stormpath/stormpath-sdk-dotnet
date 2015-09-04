@@ -15,7 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections;
+using System.Collections.Generic;
 using Stormpath.SDK.Impl.DataStore;
 
 namespace Stormpath.SDK.Impl.Auth
@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Impl.Auth
         {
         }
 
-        public DefaultBasicLoginAttempt(IInternalDataStore dataStore, Hashtable properties)
+        public DefaultBasicLoginAttempt(IInternalDataStore dataStore, IDictionary<string, object> properties)
             : base(dataStore, properties)
         {
         }

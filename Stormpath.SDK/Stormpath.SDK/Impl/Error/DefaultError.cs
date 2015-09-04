@@ -16,7 +16,7 @@
 // </remarks>
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Impl.Resource;
 
@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Error
         private static readonly string DevMessagePropertyName = "developerMessage";
         private static readonly string MoreInfoPropertyName = "moreInfo";
 
-        public DefaultError(Hashtable properties)
+        public DefaultError(IDictionary<string, object> properties)
             : base(null, properties)
         {
         }

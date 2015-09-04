@@ -15,7 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Impl.Directory
         {
         }
 
-        public DefaultDirectory(IInternalDataStore dataStore, Hashtable properties)
+        public DefaultDirectory(IInternalDataStore dataStore, IDictionary<string, object> properties)
             : base(dataStore, properties)
         {
         }

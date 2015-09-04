@@ -15,20 +15,20 @@
 // limitations under the License.
 // </remarks>
 
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
-using Stormpath.SDK.Impl.ThreadSafeMap;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore.Cache
 {
     internal interface ICacheResolver
     {
-        ISynchronousCache<string, IThreadSafeMap<string, object>> GetCache<T>()
+        ISynchronousCache<string, ConcurrentDictionary<string, object>> GetCache<T>()
             where T : IResource;
 
-        Task<IAsynchronousCache<string, IThreadSafeMap<string, object>>> GetCacheAsync<T>(CancellationToken cancellationToken)
+        Task<IAsynchronousCache<string, ConcurrentDictionary<string, object>>> GetCacheAsync<T>(CancellationToken cancellationToken)
             where T : IResource;
     }
 }

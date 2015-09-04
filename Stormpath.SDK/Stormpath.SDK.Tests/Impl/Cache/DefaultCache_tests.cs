@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultCache.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultCache_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>

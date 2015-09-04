@@ -206,7 +206,6 @@
     <Compile Include="Impl\Resource\CollectionResponsePage.cs" />
     <Compile Include="Impl\Resource\LinkProperty.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.cs" />
-    <Compile Include="Impl\ThreadSafeMap\IThreadSafeMap.cs" />
     <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />
     <Compile Include="Impl\Utility\GenericHasher.cs" />
     <Compile Include="Impl\Utility\ImmutableValueObject.cs" />

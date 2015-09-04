@@ -16,10 +16,10 @@
 // </remarks>
 
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
-using Stormpath.SDK.Impl.ThreadSafeMap;
 
 namespace Stormpath.SDK.Impl.DataStore.Cache
 {
@@ -43,24 +43,24 @@ namespace Stormpath.SDK.Impl.DataStore.Cache
             this.cacheRegionNameResolver = cacheRegionNameResolver;
         }
 
-        ISynchronousCache<string, IThreadSafeMap<string, object>> ICacheResolver.GetCache<T>()
+        ISynchronousCache<string, ConcurrentDictionary<string, object>> ICacheResolver.GetCache<T>()
         {
             if (!this.cacheManager.IsSynchronousSupported || this.syncCacheManager == null)
                 throw new ApplicationException($"A synchronous caching path is not supported in {this.cacheManager.GetType().Name}");
 
             var cacheRegionName = this.cacheRegionNameResolver.GetCacheRegionName<T>();
 
-            return this.syncCacheManager.GetCache<string, IThreadSafeMap<string, object>>(cacheRegionName);
+            return this.syncCacheManager.GetCache<string, ConcurrentDictionary<string, object>>(cacheRegionName);
         }
 
-        Task<IAsynchronousCache<string, IThreadSafeMap<string, object>>> ICacheResolver.GetCacheAsync<T>(CancellationToken cancellationToken)
+        Task<IAsynchronousCache<string, ConcurrentDictionary<string, object>>> ICacheResolver.GetCacheAsync<T>(CancellationToken cancellationToken)
         {
             if (!this.cacheManager.IsAsynchronousSupported || this.asyncCacheManager == null)
                 throw new ApplicationException($"An asynchronous caching path is not supported in {this.cacheManager.GetType().Name}");
 
             var cacheRegionName = this.cacheRegionNameResolver.GetCacheRegionName<T>();
 
-            return this.asyncCacheManager.GetCacheAsync<string, IThreadSafeMap<string, object>>(cacheRegionName, cancellationToken);
+            return this.asyncCacheManager.GetCacheAsync<string, ConcurrentDictionary<string, object>>(cacheRegionName, cancellationToken);
         }
     }
 }

@@ -15,7 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections;
+using System.Collections.Generic;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var ds = new DefaultDataStore(Substitute.For<IRequestExecutor>(), "http://api.foo.bar", new SDK.Impl.NullLogger());
             var href = "https://api.foobar.com/v1/applications/WpM9nyZ2TbaEzfbRvLk9KA/passwordResetTokens/my-token-value-here";
-            var properties = new Hashtable();
+            var properties = new Dictionary<string, object>();
             properties.Add("href", href);
             IPasswordResetToken passwordResetToken = new DefaultPasswordResetToken(ds, properties);
 

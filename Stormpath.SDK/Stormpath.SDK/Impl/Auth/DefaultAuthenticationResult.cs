@@ -15,7 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Impl.Auth
         {
         }
 
-        public DefaultAuthenticationResult(IInternalDataStore dataStore, Hashtable properties)
+        public DefaultAuthenticationResult(IInternalDataStore dataStore, IDictionary<string, object> properties)
             : base(dataStore, properties)
         {
         }

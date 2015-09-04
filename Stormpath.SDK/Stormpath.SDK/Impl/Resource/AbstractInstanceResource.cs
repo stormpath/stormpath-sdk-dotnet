@@ -16,7 +16,7 @@
 // </remarks>
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
 
@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Impl.Resource
         {
         }
 
-        protected AbstractInstanceResource(IInternalDataStore dataStore, Hashtable properties)
+        protected AbstractInstanceResource(IInternalDataStore dataStore, IDictionary<string, object> properties)
             : base(dataStore, properties)
         {
         }

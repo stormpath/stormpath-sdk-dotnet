@@ -15,7 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections;
+using System.Collections.Generic;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         {
         }
 
-        public DefaultAccountStore(IInternalDataStore dataStore, Hashtable properties)
+        public DefaultAccountStore(IInternalDataStore dataStore, IDictionary<string, object> properties)
             : base(dataStore, properties)
         {
         }

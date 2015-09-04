@@ -21,8 +21,10 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Shared;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
@@ -33,19 +35,48 @@ namespace Stormpath.SDK.Tests.Impl
     public class DefaultDataStore_tests
     {
         [Fact]
+        public async Task Json_is_deserialized_properly()
+        {
+            var stubRequestExecutor = new StubRequestExecutor<IAccount>(FakeJson.Account);
+            IInternalDataStore dataStore = new DefaultDataStore(stubRequestExecutor.Object, "http://api.foo.bar", new SDK.Impl.NullLogger());
+
+            var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
+
+            // Verify against data from FakeJson.Account
+            account.CreatedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.078Z"));
+            account.Email.ShouldBe("han.solo@corellia.core");
+            account.FullName.ShouldBe("Han Solo");
+            account.GivenName.ShouldBe("Han");
+            account.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount");
+            account.MiddleName.ShouldBe(null);
+            account.ModifiedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.078Z"));
+            account.Status.ShouldBe(AccountStatus.Enabled);
+            account.Surname.ShouldBe("Solo");
+            account.Username.ShouldBe("han.solo@corellia.core");
+
+            (account as DefaultAccount).AccessTokens.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/accessTokens");
+            (account as DefaultAccount).ApiKeys.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/apiKeys");
+            (account as DefaultAccount).Applications.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/applications");
+            (account as DefaultAccount).CustomData.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/customData");
+            (account as DefaultAccount).Directory.Href.ShouldBe("https://api.stormpath.com/v1/directories/foobarDirectory");
+            (account as DefaultAccount).EmailVerificationToken.Href.ShouldBe(null);
+            (account as DefaultAccount).GroupMemberships.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/groupMemberships");
+            (account as DefaultAccount).Groups.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/groups");
+            (account as DefaultAccount).ProviderData.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/providerData");
+            (account as DefaultAccount).RefreshTokens.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/refreshTokens");
+            (account as DefaultAccount).Tenant.Href.ShouldBe("https://api.stormpath.com/v1/tenants/foobarTenant");
+        }
+
+        [Fact]
         public async Task Default_headers_are_applied_to_all_requests()
         {
-            var stubRequestExecutor = Substitute.For<IRequestExecutor>();
-            IInternalDataStore dataStore = new DefaultDataStore(stubRequestExecutor, "http://api.foo.bar", new SDK.Impl.NullLogger());
+            var stubRequestExecutor = new StubRequestExecutor<IAccount>(FakeJson.Account);
+            IInternalDataStore dataStore = new DefaultDataStore(stubRequestExecutor.Object, "http://api.foo.bar", new SDK.Impl.NullLogger());
 
-            var href = "http://foobar/account";
-            stubRequestExecutor.ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), body: FakeJson.Account, bodyContentType: "application/json") as IHttpResponse));
-
-            var account = await dataStore.GetResourceAsync<IAccount>(href, CancellationToken.None);
+            var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
 
             // Verify the default headers
-            stubRequestExecutor.Received().ExecuteAsync(
+            stubRequestExecutor.Object.Received().ExecuteAsync(
                 Arg.Is<IHttpRequest>(request =>
                     request.Headers.Accept == "application/json"),
                 Arg.Any<CancellationToken>()).IgnoreAwait();

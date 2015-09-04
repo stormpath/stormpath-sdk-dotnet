@@ -16,7 +16,7 @@
 // </remarks>
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.AccountStore;
@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         {
         }
 
-        public DefaultAccountStoreMapping(IInternalDataStore dataStore, Hashtable properties)
+        public DefaultAccountStoreMapping(IInternalDataStore dataStore, IDictionary<string, object> properties)
             : base(dataStore, properties)
         {
         }

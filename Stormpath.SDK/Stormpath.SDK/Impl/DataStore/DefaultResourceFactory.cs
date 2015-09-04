@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Account;
@@ -109,7 +108,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.IThis.Create<T>(null);
         }
 
-        T IResourceFactory.Create<T>(Hashtable properties)
+        T IResourceFactory.Create<T>(IDictionary<string, object> properties)
         {
             bool isCollection = typeof(T).IsGenericType
                 && typeof(T).GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
@@ -119,12 +118,12 @@ namespace Stormpath.SDK.Impl.DataStore
             return InstantiateSingle<T>(properties);
         }
 
-        private T InstantiateSingle<T>(Hashtable properties)
+        private T InstantiateSingle<T>(IDictionary<string, object> properties)
         {
             return (T)this.InstantiateSingle(properties, typeof(T));
         }
 
-        private object InstantiateSingle(Hashtable properties, Type type)
+        private object InstantiateSingle(IDictionary<string, object> properties, Type type)
         {
             var targetType = this.GetConcrete(type);
             if (targetType == null)
@@ -146,7 +145,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return targetObject;
         }
 
-        private T InstantiateCollection<T>(Hashtable properties)
+        private T InstantiateCollection<T>(IDictionary<string, object> properties)
         {
             var outerType = typeof(T); // CollectionResponsePage<TInner>
 
@@ -170,7 +169,7 @@ namespace Stormpath.SDK.Impl.DataStore
             if (string.IsNullOrEmpty(href))
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'href' value.");
 
-            var items = properties["items"] as List<Hashtable>;
+            var items = properties["items"] as List<IDictionary<string, object>>;
             if (items == null)
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: items subcollection is invalid.");
 
