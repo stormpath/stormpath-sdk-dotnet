@@ -34,9 +34,9 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class DefaultClient : IClient
     {
-        internal const int DefaultConnectionTimeout = 20 * 1000;
-        internal const string DefaultBaseUrl = "https://api.stormpath.com/v1";
-        private static readonly AuthenticationScheme DefaultAuthenticationScheme = AuthenticationScheme.SAuthc1;
+        public static readonly int DefaultConnectionTimeout = 20 * 1000;
+        public static readonly string DefaultBaseUrl = "https://api.stormpath.com/v1";
+        public static readonly AuthenticationScheme DefaultAuthenticationScheme = AuthenticationScheme.SAuthc1;
 
         private readonly string baseUrl;
         private readonly AuthenticationScheme authenticationScheme;
