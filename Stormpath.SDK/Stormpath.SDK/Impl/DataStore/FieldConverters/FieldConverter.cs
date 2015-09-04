@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
                 return ConverterResult.Failed;
 
             bool isSupportedTargetType = targetType == this.appliesToTargetType;
-            bool isSupportedGenericTargetType = targetType.IsGenericType && this.typeLookup.GetInnerCollectionInterface(targetType) == this.appliesToTargetType;
+            bool isSupportedGenericTargetType = (targetType?.IsGenericType ?? false) && this.typeLookup.GetInnerCollectionInterface(targetType) == this.appliesToTargetType;
             bool isSupported = this.appliesToTargetType == AnyType
                 ? true
                 : isSupportedTargetType || isSupportedGenericTargetType;
