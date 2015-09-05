@@ -105,7 +105,7 @@
     <Compile Include="Impl\CollectionResourceQueryable_iteration_tests.cs" />
     <Compile Include="Impl\CollectionResourceRequestModel_validation_tests.cs" />
     <Compile Include="Impl\CreationOptions_tests.cs" />
-    <Compile Include="Impl\Cache\DefaultCache_tests.cs" />
+    <Compile Include="Impl\Cache\InMemoryCache_tests.cs" />
     <Compile Include="Impl\DefaultClientApiKeyBuilder_tests.cs" />
     <Compile Include="Impl\DefaultClientBuilder_tests.cs" />
     <Compile Include="Impl\DefaultDataStore_tests.cs" />

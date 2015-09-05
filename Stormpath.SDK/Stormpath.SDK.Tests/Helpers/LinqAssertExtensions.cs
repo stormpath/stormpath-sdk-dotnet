@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Tests.Helpers
         }
 
         // The same thing as above, but for testing whether a FakeDataStore received a particular URL call
-        internal static void WasCalledWithArguments<T>(this IDataStore ds, string href, string arguments)
+        internal static void WasCalledWithArguments<T>(this IInternalDataStore ds, string href, string arguments)
             where T : class, IResource
         {
             var asFake = ds as FakeDataStore<T>;

@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultCacheManager.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IDataStore.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,14 +15,17 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Cache;
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Impl.Cache
+namespace Stormpath.SDK.DataStore
 {
-    internal class DefaultCacheManager : ICacheManager
+    public interface IDataStore
     {
-        bool ICacheManager.IsAsynchronousSupported => false; // todo
+        T Instantiate<T>()
+            where T : IResource;
 
-        bool ICacheManager.IsSynchronousSupported => false;
+        Task<T> GetResourceAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

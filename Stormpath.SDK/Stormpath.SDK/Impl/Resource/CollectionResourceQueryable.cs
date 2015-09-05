@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Impl.Resource
     {
         private readonly Expression expression;
 
-        private readonly IDataStore dataStore;
+        private readonly IInternalDataStore dataStore;
 
         private readonly string baseHref;
 
@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         private IEnumerable<T> currentItems;
 
-        public CollectionResourceQueryable(string collectionHref, IDataStore dataStore)
+        public CollectionResourceQueryable(string collectionHref, IInternalDataStore dataStore)
             : base(ExtendedQueryParser.Create(), CreateQueryExecutor(collectionHref, dataStore))
         {
             this.baseHref = collectionHref;
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         // This constructor is used for a synchronous wrapper via CollectionResourceQueryExecutor
         // TODO make this more SOLID and have an actual synchronous execution path that isn't a hack or wrapper
-        public CollectionResourceQueryable(string collectionHref, IDataStore dataStore, CollectionResourceRequestModel existingRequestModel)
+        public CollectionResourceQueryable(string collectionHref, IInternalDataStore dataStore, CollectionResourceRequestModel existingRequestModel)
             : this(collectionHref, dataStore)
         {
             this.compiledModel = existingRequestModel;
@@ -80,7 +80,7 @@ namespace Stormpath.SDK.Impl.Resource
             this.expression = expression;
         }
 
-        private static IQueryExecutor CreateQueryExecutor(string href, IDataStore dataStore)
+        private static IQueryExecutor CreateQueryExecutor(string href, IInternalDataStore dataStore)
         {
             return new CollectionResourceQueryExecutor(href, dataStore);
         }

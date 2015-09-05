@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Stormpath.SDK.Impl.DataStore.FieldConverters;
-using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {

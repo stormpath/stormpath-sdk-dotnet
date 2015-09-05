@@ -17,7 +17,9 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
@@ -27,6 +29,8 @@ namespace Stormpath.SDK.Impl.DataStore
         IRequestExecutor RequestExecutor { get; }
 
         string BaseUrl { get; }
+
+        Task<CollectionResponsePage<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken);
 
         Task<T> CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
             where T : IResource;

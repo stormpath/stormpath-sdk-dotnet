@@ -58,6 +58,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -114,9 +115,9 @@
     <Compile Include="Impl\Auth\DefaultBasicLoginAttempt.cs" />
     <Compile Include="Impl\Auth\IBasicLoginAttempt.cs" />
     <Compile Include="Impl\Auth\ILoginAttempt.cs" />
-    <Compile Include="Impl\Cache\DefaultCache.cs" />
-    <Compile Include="Impl\Cache\DefaultCacheEntry.cs" />
-    <Compile Include="Impl\Cache\DefaultCacheManager.cs" />
+    <Compile Include="Impl\Cache\InMemoryCache.cs" />
+    <Compile Include="Impl\Cache\InMemoryCacheProvider.cs" />
+    <Compile Include="Impl\Cache\InMemoryCacheManager.cs" />
     <Compile Include="Impl\Cache\NullCache.cs" />
     <Compile Include="Impl\Cache\NullCacheManager.cs" />
     <Compile Include="Impl\DataStore\Cache\DefaultCacheRegionNameResolver.cs" />
@@ -128,7 +129,7 @@
     <Compile Include="Impl\DataStore\FieldConverters\DefaultFieldConverters.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\FieldConverter.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\FieldConverterList.cs" />
-    <Compile Include="Impl\DataStore\IDataStore.cs" />
+    <Compile Include="DataStore\IDataStore.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\DataStore\IMapSerializer.cs" />
     <Compile Include="Impl\DataStore\IResourceConverter.cs" />
@@ -255,9 +256,7 @@
     <None Include="Stormpath.SDK.ruleset" />
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataStore\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta009\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />

@@ -28,13 +28,13 @@ namespace Stormpath.SDK.Tests.Helpers
     public sealed class CollectionTestHarness<T>
         where T : IResource
     {
-        internal IDataStore DataStore { get; private set; }
+        internal IInternalDataStore DataStore { get; private set; }
 
         public string Href { get; set; }
 
         public ICollectionResourceQueryable<T> Queryable { get; private set; }
 
-        internal static CollectionTestHarness<TType> Create<TType>(string collectionHref, IDataStore mockDataStore = null)
+        internal static CollectionTestHarness<TType> Create<TType>(string collectionHref, IInternalDataStore mockDataStore = null)
             where TType : class, IResource
         {
             var ds = mockDataStore ?? MockEmptyDataStore<TType>();
@@ -47,10 +47,10 @@ namespace Stormpath.SDK.Tests.Helpers
             };
         }
 
-        private static IDataStore MockEmptyDataStore<TType>()
+        private static IInternalDataStore MockEmptyDataStore<TType>()
             where TType : class, IResource
         {
-            var emptyMock = Substitute.For<IDataStore>();
+            var emptyMock = Substitute.For<IInternalDataStore>();
             emptyMock.GetCollectionAsync<TType>(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(
                     Task.FromResult(new CollectionResponsePage<TType>()
                     {

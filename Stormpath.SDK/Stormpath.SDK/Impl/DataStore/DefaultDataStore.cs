@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
+using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.DataStore.Cache;
@@ -102,7 +103,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return resource;
         }
 
-        Task<CollectionResponsePage<T>> IDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
+        Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
         {
             this.logger.Trace($"Getting collection page of type {typeof(T).Name} from: {href}", "DefaultDataStore.GetCollectionAsync<T>");
 

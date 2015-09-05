@@ -17,12 +17,12 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Resource;
+using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Client
 {
-    public interface IClient : ITenantActions
+    public interface IClient : ITenantActions, IDataStore
     {
         string BaseUrl { get; }
 
@@ -30,12 +30,6 @@ namespace Stormpath.SDK.Client
 
         int ConnectionTimeout { get; }
 
-        T Instantiate<T>()
-            where T : IResource;
-
         Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        Task<T> GetResourceAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IResource;
     }
 }

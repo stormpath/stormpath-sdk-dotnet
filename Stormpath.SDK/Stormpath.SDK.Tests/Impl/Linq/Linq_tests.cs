@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             this.harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href);
         }
 
-        internal Linq_tests(IDataStore ds)
+        internal Linq_tests(IInternalDataStore ds)
         {
             this.harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, ds);
         }

@@ -21,13 +21,16 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
     // TODO: Make this an actual server with valid responses
-    public class FakeDataStore<TType> : IDataStore
+    public class FakeDataStore<TType> : IInternalDataStore
     {
         private static int defaultLimit = 25;
         private static int defaultOffset = 0;
@@ -41,12 +44,28 @@ namespace Stormpath.SDK.Tests.Fakes
 
         public List<TType> Items { get; private set; }
 
+        IRequestExecutor IInternalDataStore.RequestExecutor
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string IInternalDataStore.BaseUrl
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public IEnumerable<string> GetCalls()
         {
             return this.calls;
         }
 
-        async Task<CollectionResponsePage<T>> IDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
+        async Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
         {
             bool typesMatch = typeof(T) == typeof(TType);
             if (!typesMatch)
@@ -101,6 +120,36 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         T IDataStore.Instantiate<T>()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<T> IInternalDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IInternalDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Linq;
 using Newtonsoft.Json.Linq;
 
 namespace Stormpath.SDK.Impl.DataStore.FieldConverters

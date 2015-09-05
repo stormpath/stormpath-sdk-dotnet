@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Impl.Linq
 {
     internal sealed class CollectionResourceQueryExecutor : IQueryExecutor
     {
-        public CollectionResourceQueryExecutor(string href, IDataStore dataStore)
+        public CollectionResourceQueryExecutor(string href, IInternalDataStore dataStore)
         {
             this.Href = href;
             this.DataStore = dataStore;
@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Impl.Linq
 
         public string Href { get; private set; }
 
-        public IDataStore DataStore { get; private set; }
+        public IInternalDataStore DataStore { get; private set; }
 
         public IEnumerable<T> ExecuteCollection<T>(CollectionResourceRequestModel requestModel)
         {

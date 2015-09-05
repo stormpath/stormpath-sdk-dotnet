@@ -22,6 +22,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
@@ -90,7 +91,7 @@ namespace Stormpath.SDK.Impl.Client
             get { return this.dataStore.RequestExecutor.ConnectionTimeout; }
         }
 
-        T IClient.Instantiate<T>()
+        T IDataStore.Instantiate<T>()
         {
             return this.dataStore.Instantiate<T>();
         }
@@ -107,7 +108,7 @@ namespace Stormpath.SDK.Impl.Client
             return tenant;
         }
 
-        Task<T> IClient.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
+        Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
         {
             return this.dataStore.GetResourceAsync<T>(href, cancellationToken);
         }
