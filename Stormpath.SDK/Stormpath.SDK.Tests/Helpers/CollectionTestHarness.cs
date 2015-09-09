@@ -22,6 +22,7 @@ using NSubstitute;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tests.Fakes;
 
 namespace Stormpath.SDK.Tests.Helpers
 {
@@ -37,7 +38,7 @@ namespace Stormpath.SDK.Tests.Helpers
         internal static CollectionTestHarness<TType> Create<TType>(string collectionHref, IInternalDataStore mockDataStore = null)
             where TType : class, IResource
         {
-            var ds = mockDataStore ?? MockEmptyDataStore<TType>();
+            var ds = mockDataStore ?? new FakeDataStore<TType>(Enumerable.Empty<TType>());
 
             return new CollectionTestHarness<TType>()
             {
@@ -45,21 +46,6 @@ namespace Stormpath.SDK.Tests.Helpers
                 Href = collectionHref,
                 Queryable = new CollectionResourceQueryable<TType>(collectionHref, ds)
             };
-        }
-
-        private static IInternalDataStore MockEmptyDataStore<TType>()
-            where TType : class, IResource
-        {
-            var emptyMock = Substitute.For<IInternalDataStore>();
-            emptyMock.GetCollectionAsync<TType>(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(
-                    Task.FromResult(new CollectionResponsePage<TType>()
-                    {
-                        Limit = 0,
-                        Offset = 0,
-                        Size = 0,
-                        Items = Enumerable.Empty<TType>().ToList()
-                    }));
-            return emptyMock;
         }
     }
 }
