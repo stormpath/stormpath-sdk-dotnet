@@ -130,6 +130,8 @@
     <Compile Include="Impl\DataStore\FieldConverters\FieldConverter.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\FieldConverterList.cs" />
     <Compile Include="DataStore\IDataStore.cs" />
+    <Compile Include="Impl\DataStore\FilterChain\DefaultSynchronousFilter.cs" />
+    <Compile Include="Impl\DataStore\FilterChain\DefaultAsynchronousFilter.cs" />
     <Compile Include="Impl\DataStore\FilterChain\DefaultSynchronousFilterChain.cs" />
     <Compile Include="Impl\DataStore\FilterChain\DefaultAsynchronousFilterChain.cs" />
     <Compile Include="Impl\DataStore\FilterChain\IAsynchronousFilter.cs" />

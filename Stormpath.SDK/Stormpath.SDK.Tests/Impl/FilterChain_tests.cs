@@ -67,6 +67,29 @@ namespace Stormpath.SDK.Tests.Impl
                 result.HttpStatus.ShouldBe(204);
                 result.Body.ShouldBe(null);
             }
+
+            [Fact]
+            public void Sync_with_inline_filter()
+            {
+                ISynchronousFilterChain defaultFilterChain = new DefaultSynchronousFilterChain()
+                    .Add(new DeleteInterceptorFilter());
+
+                var request = new DefaultHttpRequest(HttpMethod.Post, new CanonicalUri("http://api.foo.bar"), null, null, "{ data }", "text/plain");
+
+                ISynchronousFilterChain finalChain = new DefaultSynchronousFilterChain(defaultFilterChain as DefaultSynchronousFilterChain)
+                    .Add(new DefaultSynchronousFilter((req, chain, logger) =>
+                    {
+                        if (request.Method == HttpMethod.Post)
+                            return new DefaultHttpResponse(200, "OK", null, request.Body, request.BodyContentType);
+                        else
+                            return chain.Execute(request, logger);
+                    }));
+
+                var result = finalChain.Execute(request, Substitute.For<ILogger>());
+
+                result.HttpStatus.ShouldBe(200);
+                result.Body.ShouldBe("{ data }");
+            }
         }
 
         public class Async_tests
@@ -76,7 +99,7 @@ namespace Stormpath.SDK.Tests.Impl
                 Task<IHttpResponse> IAsynchronousFilter.ExecuteAsync(IHttpRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
                 {
                     if (request.Method == HttpMethod.Post)
-                        return Task.FromResult(new DefaultHttpResponse(200, "OK", null, request.Body, request.BodyContentType) as IHttpResponse);
+                        return Task.FromResult<IHttpResponse>(new DefaultHttpResponse(200, "OK", null, request.Body, request.BodyContentType));
                     else
                         return chain.ExecuteAsync(request, logger, cancellationToken);
                 }
@@ -119,6 +142,29 @@ namespace Stormpath.SDK.Tests.Impl
 
                 result.HttpStatus.ShouldBe(204);
                 result.Body.ShouldBe(null);
+            }
+
+            [Fact]
+            public async Task Async_with_inline_filter()
+            {
+                IAsynchronousFilterChain defaultFilterChain = new DefaultAsynchronousFilterChain()
+                    .Add(new DeleteInterceptorFilter());
+
+                var request = new DefaultHttpRequest(HttpMethod.Post, new CanonicalUri("http://api.foo.bar"), null, null, "{ data }", "text/plain");
+
+                IAsynchronousFilterChain finalChain = new DefaultAsynchronousFilterChain(defaultFilterChain as DefaultAsynchronousFilterChain)
+                    .Add(new DefaultAsynchronousFilter((req, chain, logger, ct) =>
+                    {
+                        if (request.Method == HttpMethod.Post)
+                            return Task.FromResult<IHttpResponse>(new DefaultHttpResponse(200, "OK", null, request.Body, request.BodyContentType));
+                        else
+                            return chain.ExecuteAsync(request, logger, ct);
+                    }));
+
+                var result = await finalChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
+
+                result.HttpStatus.ShouldBe(200);
+                result.Body.ShouldBe("{ data }");
             }
         }
     }
