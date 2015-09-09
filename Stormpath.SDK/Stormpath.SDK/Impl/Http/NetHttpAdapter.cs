@@ -16,27 +16,15 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.Http
 {
     internal sealed class NetHttpAdapter
     {
-        private static Dictionary<Support.HttpMethod, System.Net.Http.HttpMethod> httpMethodLookup = new Dictionary<Support.HttpMethod, System.Net.Http.HttpMethod>()
-        {
-            { Support.HttpMethod.Get, System.Net.Http.HttpMethod.Get },
-            { Support.HttpMethod.Head, System.Net.Http.HttpMethod.Head },
-            { Support.HttpMethod.Post, System.Net.Http.HttpMethod.Post },
-            { Support.HttpMethod.Put, System.Net.Http.HttpMethod.Put },
-            { Support.HttpMethod.Delete, System.Net.Http.HttpMethod.Delete },
-            { Support.HttpMethod.Options, System.Net.Http.HttpMethod.Options },
-            { Support.HttpMethod.Trace, System.Net.Http.HttpMethod.Trace },
-        };
-
         public System.Net.Http.HttpRequestMessage ToHttpRequestMessage(IHttpRequest request)
         {
             System.Net.Http.HttpMethod httpMethod = null;
-            if (!httpMethodLookup.TryGetValue(request.Method, out httpMethod))
+            if (!TryConvertHttpMethod(request.Method, out httpMethod))
                 throw new ArgumentException($"Unknown method type {request.Method.DisplayName}", nameof(request));
 
             var httpRequestMessage = new System.Net.Http.HttpRequestMessage(httpMethod, request.CanonicalUri.ToString());
@@ -72,6 +60,41 @@ namespace Stormpath.SDK.Impl.Http
             }
 
             return result;
+        }
+
+        private static bool TryConvertHttpMethod(Support.HttpMethod abstractMethod, out System.Net.Http.HttpMethod netHttpMethod)
+        {
+            bool found = true;
+            switch (abstractMethod.DisplayName.ToUpper())
+            {
+                case "GET":
+                    netHttpMethod = System.Net.Http.HttpMethod.Get;
+                    break;
+                case "HEAD":
+                    netHttpMethod = System.Net.Http.HttpMethod.Head;
+                    break;
+                case "POST":
+                    netHttpMethod = System.Net.Http.HttpMethod.Post;
+                    break;
+                case "PUT":
+                    netHttpMethod = System.Net.Http.HttpMethod.Put;
+                    break;
+                case "DELETE":
+                    netHttpMethod = System.Net.Http.HttpMethod.Delete;
+                    break;
+                case "OPTIONS":
+                    netHttpMethod = System.Net.Http.HttpMethod.Options;
+                    break;
+                case "TRACE":
+                    netHttpMethod = System.Net.Http.HttpMethod.Trace;
+                    break;
+                default:
+                    netHttpMethod = null;
+                    found = false;
+                    break;
+            }
+
+            return found;
         }
     }
 }

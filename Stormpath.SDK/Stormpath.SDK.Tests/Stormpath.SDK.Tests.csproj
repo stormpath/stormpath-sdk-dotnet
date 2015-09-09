@@ -115,6 +115,7 @@
     <Compile Include="Impl\FilterChain_tests.cs" />
     <Compile Include="Impl\HttpHeaders_tests.cs" />
     <Compile Include="Impl\PasswordResetToken_tests.cs" />
+    <Compile Include="Impl\ResourceTypeLookup_tests.cs" />
     <Compile Include="Impl\UriQualifier_tests.cs" />
     <Compile Include="Impl\Utility\ImmutableValueObject_tests.cs" />
     <Compile Include="Impl\LinkProperty_tests.cs" />

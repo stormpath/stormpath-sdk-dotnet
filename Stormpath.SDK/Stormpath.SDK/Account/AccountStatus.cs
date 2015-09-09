@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Account
@@ -38,13 +37,6 @@ namespace Stormpath.SDK.Account
         /// </summary>
         public static AccountStatus Unverified = new AccountStatus(2, "UNVERIFIED");
 
-        private static readonly Dictionary<string, AccountStatus> LookupMap = new Dictionary<string, AccountStatus>()
-        {
-            { Enabled.DisplayName, Enabled },
-            { Disabled.DisplayName, Disabled },
-            { Unverified.DisplayName, Unverified }
-        };
-
         private AccountStatus()
         {
         }
@@ -56,11 +48,17 @@ namespace Stormpath.SDK.Account
 
         public static AccountStatus Parse(string status)
         {
-            AccountStatus found;
-            if (!LookupMap.TryGetValue(status.ToUpper(), out found))
-                throw new ApplicationException($"Could not parse status value '{status.ToUpper()}'");
-
-            return found;
+            switch (status.ToUpper())
+            {
+                case "ENABLED":
+                    return Enabled;
+                case "DISABLED":
+                    return Disabled;
+                case "UNVERIFIED":
+                    return Unverified;
+                default:
+                    throw new ApplicationException($"Could not parse account status value '{status.ToUpper()}'");
+            }
         }
     }
 }

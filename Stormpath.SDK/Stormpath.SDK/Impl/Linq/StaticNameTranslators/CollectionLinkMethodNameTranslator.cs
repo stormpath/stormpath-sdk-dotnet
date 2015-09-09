@@ -15,20 +15,25 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-
 namespace Stormpath.SDK.Impl.Linq.StaticNameTranslators
 {
     internal static class CollectionLinkMethodNameTranslator
     {
-        private static readonly Dictionary<string, string> ValidNames = new Dictionary<string, string>()
-            {
-                { "GetGroupsAsync", "groups" },
-            };
-
         public static bool TryGetValue(string methodName, out string fieldName)
         {
-            return ValidNames.TryGetValue(methodName, out fieldName);
+            bool found = false;
+            switch (methodName)
+            {
+                case "GetGroupsAsync":
+                    fieldName = "groups";
+                    found = true;
+                    break;
+                default:
+                    fieldName = null;
+                    break;
+            }
+
+            return found;
         }
     }
 }

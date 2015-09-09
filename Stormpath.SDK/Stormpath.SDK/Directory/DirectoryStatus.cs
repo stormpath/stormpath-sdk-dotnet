@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Directory
@@ -33,12 +32,6 @@ namespace Stormpath.SDK.Directory
         /// </summary>
         public static DirectoryStatus Disabled = new DirectoryStatus(1, "DISABLED");
 
-        private static readonly Dictionary<string, DirectoryStatus> LookupMap = new Dictionary<string, DirectoryStatus>()
-        {
-            { Enabled.DisplayName, Enabled },
-            { Disabled.DisplayName, Disabled },
-        };
-
         private DirectoryStatus()
         {
         }
@@ -50,11 +43,13 @@ namespace Stormpath.SDK.Directory
 
         public static DirectoryStatus Parse(string status)
         {
-            DirectoryStatus found;
-            if (!LookupMap.TryGetValue(status.ToUpper(), out found))
-                throw new ApplicationException($"Could not parse status value '{status.ToUpper()}'");
-
-            return found;
+            switch (status.ToUpper())
+            {
+                case "ENABLED": return Enabled;
+                case "DISABLED": return Disabled;
+                default:
+                    throw new ApplicationException($"Could not parse directory status value '{status.ToUpper()}'");
+            }
         }
     }
 }

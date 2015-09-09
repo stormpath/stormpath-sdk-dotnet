@@ -15,27 +15,53 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-
 namespace Stormpath.SDK.Impl.Linq.StaticNameTranslators
 {
     internal static class FieldNameTranslator
     {
-        private static readonly Dictionary<string, string> ValidNames = new Dictionary<string, string>()
-            {
-                { "Email", "email" },
-                { "GivenName", "givenName" },
-                { "MiddleName", "middleName" },
-                { "Surname", "surname" },
-                { "Username", "username" },
-                { "Name", "name" },
-                { "Description", "description" },
-                { "Status", "status" },
-            };
-
         public static bool TryGetValue(string methodName, out string fieldName)
         {
-            return ValidNames.TryGetValue(methodName, out fieldName);
+            bool found = false;
+            switch (methodName)
+            {
+                case "Email":
+                    fieldName = "email";
+                    found = true;
+                    break;
+                case "GivenName":
+                    fieldName = "givenName";
+                    found = true;
+                    break;
+                case "MiddleName":
+                    fieldName = "middleName";
+                    found = true;
+                    break;
+                case "Surname":
+                    fieldName = "surname";
+                    found = true;
+                    break;
+                case "Username":
+                    fieldName = "username";
+                    found = true;
+                    break;
+                case "Name":
+                    fieldName = "name";
+                    found = true;
+                    break;
+                case "Description":
+                    fieldName = "description";
+                    found = true;
+                    break;
+                case "Status":
+                    fieldName = "status";
+                    found = true;
+                    break;
+                default:
+                    fieldName = null;
+                    break;
+            }
+
+            return found;
         }
     }
 }

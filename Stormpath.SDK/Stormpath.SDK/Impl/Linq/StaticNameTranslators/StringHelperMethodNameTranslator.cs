@@ -15,25 +15,39 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
 using Stormpath.SDK.Impl.Linq.RequestModel;
 
 namespace Stormpath.SDK.Impl.Linq.StaticNameTranslators
 {
     internal static class StringHelperMethodNameTranslator
     {
-        private static readonly Dictionary<string, StringAttributeMatchingType>
-            ValidNames = new Dictionary<string, StringAttributeMatchingType>()
-            {
-                { "Equals", StringAttributeMatchingType.Equals },
-                { "StartsWith", StringAttributeMatchingType.StartsWith },
-                { "EndsWith", StringAttributeMatchingType.EndsWith },
-                { "Contains", StringAttributeMatchingType.Contains }
-            };
-
         public static bool TryGetValue(string methodName, out StringAttributeMatchingType matchingType)
         {
-            return ValidNames.TryGetValue(methodName, out matchingType);
+            bool found = false;
+            switch (methodName)
+            {
+                case "Equals":
+                    matchingType = StringAttributeMatchingType.Equals;
+                    found = true;
+                    break;
+                case "StartsWith":
+                    matchingType = StringAttributeMatchingType.StartsWith;
+                    found = true;
+                    break;
+                case "EndsWith":
+                    matchingType = StringAttributeMatchingType.EndsWith;
+                    found = true;
+                    break;
+                case "Contains":
+                    matchingType = StringAttributeMatchingType.Contains;
+                    found = true;
+                    break;
+                default:
+                    matchingType = default(StringAttributeMatchingType);
+                    break;
+            }
+
+            return found;
         }
     }
 }

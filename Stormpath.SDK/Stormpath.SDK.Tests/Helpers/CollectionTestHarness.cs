@@ -16,9 +16,6 @@
 // </remarks>
 
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using NSubstitute;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;

@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Group
@@ -33,12 +32,6 @@ namespace Stormpath.SDK.Group
         /// </summary>
         public static GroupStatus Disabled = new GroupStatus(1, "DISABLED");
 
-        private static readonly Dictionary<string, GroupStatus> LookupMap = new Dictionary<string, GroupStatus>()
-        {
-            { Enabled.DisplayName, Enabled },
-            { Disabled.DisplayName, Disabled },
-        };
-
         private GroupStatus()
         {
         }
@@ -50,11 +43,13 @@ namespace Stormpath.SDK.Group
 
         public static GroupStatus Parse(string status)
         {
-            GroupStatus found;
-            if (!LookupMap.TryGetValue(status.ToUpper(), out found))
-                throw new ApplicationException($"Could not parse status value '{status.ToUpper()}'");
-
-            return found;
+            switch (status.ToUpper())
+            {
+                case "ENABLED": return Enabled;
+                case "DISABLED": return Disabled;
+                default:
+                    throw new ApplicationException($"Could not parse group status value '{status.ToUpper()}'");
+            }
         }
     }
 }

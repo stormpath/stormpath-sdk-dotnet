@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Application
@@ -33,12 +32,6 @@ namespace Stormpath.SDK.Application
         /// </summary>
         public static ApplicationStatus Disabled = new ApplicationStatus(1, "DISABLED");
 
-        private static readonly Dictionary<string, ApplicationStatus> LookupMap = new Dictionary<string, ApplicationStatus>()
-        {
-            { Enabled.DisplayName, Enabled },
-            { Disabled.DisplayName, Disabled },
-        };
-
         private ApplicationStatus()
         {
         }
@@ -50,11 +43,13 @@ namespace Stormpath.SDK.Application
 
         public static ApplicationStatus Parse(string status)
         {
-            ApplicationStatus found;
-            if (!LookupMap.TryGetValue(status.ToUpper(), out found))
-                throw new ApplicationException($"Could not parse status value '{status.ToUpper()}'");
-
-            return found;
+            switch (status.ToUpper())
+            {
+                case "ENABLED": return Enabled;
+                case "DISABLED": return Disabled;
+                default:
+                    throw new ApplicationException($"Could not parse application status value '{status.ToUpper()}'");
+            }
         }
     }
 }

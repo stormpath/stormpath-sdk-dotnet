@@ -40,14 +40,10 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             switch (action.ToUpper())
             {
-                case "CREATE":
-                    return Create;
-                case "READ":
-                    return Read;
-                case "UPDATE":
-                    return Update;
-                case "DELETE":
-                    return Delete;
+                case "CREATE": return Create;
+                case "READ": return Read;
+                case "UPDATE": return Update;
+                case "DELETE": return Delete;
                 default:
                     throw new ApplicationException($"Could not parse HTTP method value '{action.ToUpper()}'");
             }

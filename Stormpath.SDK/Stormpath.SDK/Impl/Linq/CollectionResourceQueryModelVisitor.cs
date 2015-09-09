@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using Remotion.Linq;
 using Remotion.Linq.Clauses;
@@ -31,6 +32,16 @@ namespace Stormpath.SDK.Impl.Linq
     {
         private static readonly int DefaultApiPageLimit = 100;
 
+        private static readonly List<Type> SupportedResultOperators = new List<Type>()
+        {
+            typeof(AnyResultOperator),
+            typeof(FirstResultOperator),
+            typeof(SingleResultOperator),
+            typeof(TakeResultOperator),
+            typeof(SkipResultOperator),
+            typeof(ExpandResultOperator),
+        };
+
         public CollectionResourceRequestModel ParsedModel { get; private set; } = new CollectionResourceRequestModel();
 
         public static CollectionResourceRequestModel GenerateRequestModel(QueryModel queryModel)
@@ -38,6 +49,11 @@ namespace Stormpath.SDK.Impl.Linq
             var visitor = new CollectionResourceQueryModelVisitor();
             visitor.VisitQueryModel(queryModel);
             return visitor.ParsedModel;
+        }
+
+        private static bool IsSupportedResultOperator(ResultOperatorBase resultOperator)
+        {
+            return SupportedResultOperators.Contains(resultOperator.GetType());
         }
 
         public override void VisitMainFromClause(MainFromClause fromClause, QueryModel queryModel)
@@ -51,7 +67,7 @@ namespace Stormpath.SDK.Impl.Linq
 
         public override void VisitResultOperator(ResultOperatorBase resultOperator, QueryModel queryModel, int index)
         {
-            if (this.IsUnsupportedResultOperator(resultOperator))
+            if (!IsSupportedResultOperator(resultOperator))
                 throw new NotSupportedException("One or more LINQ operators are not supported.");
 
             bool isScalar =
@@ -78,29 +94,6 @@ namespace Stormpath.SDK.Impl.Linq
                 return; // done
 
             base.VisitResultOperator(resultOperator, queryModel, index);
-        }
-
-        private bool IsUnsupportedResultOperator(ResultOperatorBase resultOperator)
-        {
-            // TODO make this a dictionary lookup
-            return resultOperator is AllResultOperator ||
-                resultOperator is AggregateResultOperator ||
-                resultOperator is AggregateFromSeedResultOperator ||
-                resultOperator is AverageResultOperator ||
-                resultOperator is CastResultOperator ||
-                resultOperator is ContainsResultOperator ||
-                resultOperator is DefaultIfEmptyResultOperator ||
-                resultOperator is DistinctResultOperator ||
-                resultOperator is ExceptResultOperator ||
-                resultOperator is GroupResultOperator ||
-                resultOperator is IntersectResultOperator ||
-                resultOperator is LastResultOperator ||
-                resultOperator is MaxResultOperator ||
-                resultOperator is MinResultOperator ||
-                resultOperator is OfTypeResultOperator ||
-                resultOperator is ReverseResultOperator ||
-                resultOperator is SumResultOperator ||
-                resultOperator is UnionResultOperator;
         }
 
         private bool HandleTakeResultOperator(ResultOperatorBase resultOperator)

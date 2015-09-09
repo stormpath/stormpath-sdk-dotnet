@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Http.Support
@@ -33,19 +32,6 @@ namespace Stormpath.SDK.Impl.Http.Support
         public static HttpMethod Trace = new HttpMethod(70, "TRACE");
         public static HttpMethod Connect = new HttpMethod(80, "CONNECT");
 
-        private static readonly Dictionary<string, HttpMethod> LookupMap = new Dictionary<string, HttpMethod>()
-        {
-            { Get.DisplayName, Get },
-            { Head.DisplayName, Head },
-            { Post.DisplayName, Post },
-            { Put.DisplayName, Put },
-            { Patch.DisplayName, Patch },
-            { Delete.DisplayName, Delete },
-            { Options.DisplayName, Options },
-            { Trace.DisplayName, Trace },
-            { Connect.DisplayName, Connect },
-        };
-
         private HttpMethod()
         {
         }
@@ -57,11 +43,20 @@ namespace Stormpath.SDK.Impl.Http.Support
 
         public static HttpMethod Parse(string method)
         {
-            HttpMethod found;
-            if (!LookupMap.TryGetValue(method.ToUpper(), out found))
-                throw new ApplicationException($"Could not parse HTTP method value '{method.ToUpper()}'");
-
-            return found;
+            switch (method.ToUpper())
+            {
+                case "GET": return Get;
+                case "HEAD": return Head;
+                case "POST": return Post;
+                case "PUT": return Put;
+                case "PATCH": return Patch;
+                case "DELETE": return Delete;
+                case "OPTIONS": return Options;
+                case "TRACE": return Trace;
+                case "CONNECT": return Connect;
+                default:
+                    throw new ApplicationException($"Could not parse HTTP method value '{method.ToUpper()}'");
+            }
         }
 
         public static HttpMethod Parse(HttpMethod existing)
