@@ -24,6 +24,7 @@ using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.DataStore.Cache;
+using Stormpath.SDK.Impl.DataStore.FilterChain;
 using Stormpath.SDK.Impl.Error;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
@@ -44,6 +45,8 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly IMapSerializer serializer;
         private readonly IResourceFactory resourceFactory;
         private readonly IResourceConverter resourceConverter;
+        private readonly IAsynchronousFilterChain defaultAsyncFilters;
+        private readonly ISynchronousFilterChain defaultSyncFilters;
         private readonly UriQualifier uriQualifier;
 
         private bool disposed = false;
@@ -62,7 +65,7 @@ namespace Stormpath.SDK.Impl.DataStore
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
             if (cacheManager == null)
-                throw new ArgumentNullException(nameof(cacheManager), "Use NullCacheManager is you wish to turn off caching.");
+                throw new ArgumentNullException(nameof(cacheManager), "Use NullCacheManager if you wish to turn off caching.");
 
             this.baseUrl = baseUrl;
             this.requestExecutor = requestExecutor;
@@ -75,6 +78,23 @@ namespace Stormpath.SDK.Impl.DataStore
 
             this.uriQualifier = new UriQualifier(baseUrl);
             this.logger = logger;
+
+            this.defaultAsyncFilters = this.BuildDefaultAsyncFilterChain();
+            this.defaultSyncFilters = this.BuildDefaultSyncFilterChain();
+        }
+
+        private IAsynchronousFilterChain BuildDefaultAsyncFilterChain()
+        {
+            var asyncFilterChain = new DefaultAsynchronousFilterChain();
+
+            return asyncFilterChain;
+        }
+
+        private ISynchronousFilterChain BuildDefaultSyncFilterChain()
+        {
+            var syncFilterChain = new DefaultSynchronousFilterChain();
+
+            return syncFilterChain;
         }
 
         private IInternalDataStore IThis => this;
