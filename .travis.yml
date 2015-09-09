@@ -1,6 +1,6 @@
 language: csharp
 mono:
-- nightly
+- alpha
 solution: "./Stormpath.SDK/Stormpath.SDK.sln"
 install:
 - nuget restore -source "https://www.nuget.org/api/v2;https://www.myget.org/F/xunit" ./Stormpath.SDK/Stormpath.SDK.sln -verbosity detailed
