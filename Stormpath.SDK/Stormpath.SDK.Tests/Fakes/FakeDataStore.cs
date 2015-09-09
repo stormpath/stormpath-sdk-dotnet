@@ -153,5 +153,45 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             throw new NotImplementedException();
         }
+
+        T IInternalDataStore.GetResource<T>(string href)
+        {
+            throw new NotImplementedException();
+        }
+
+        CollectionResponsePage<T> IInternalDataStore.GetCollection<T>(string href)
+        {
+            throw new NotImplementedException();
+        }
+
+        T IInternalDataStore.Create<T>(string parentHref, T resource)
+        {
+            throw new NotImplementedException();
+        }
+
+        T IInternalDataStore.Create<T>(string parentHref, T resource, ICreationOptions options)
+        {
+            throw new NotImplementedException();
+        }
+
+        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource)
+        {
+            throw new NotImplementedException();
+        }
+
+        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
+        {
+            throw new NotImplementedException();
+        }
+
+        T IInternalDataStore.Save<T>(T resource)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IInternalDataStore.Delete<T>(T resource)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

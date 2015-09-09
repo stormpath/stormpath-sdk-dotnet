@@ -51,6 +51,16 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private bool disposed = false;
 
+        private IInternalDataStore AsInterface => this;
+
+        IRequestExecutor IInternalDataStore.RequestExecutor => this.requestExecutor;
+
+        string IInternalDataStore.BaseUrl => this.baseUrl;
+
+#pragma warning disable SA1124 // Do not use regions
+        #region Constructor and setup
+#pragma warning restore SA1124 // Do not use regions
+
         internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, ILogger logger)
             : this(requestExecutor, baseUrl, logger, new NullCacheManager())
         {
@@ -97,16 +107,44 @@ namespace Stormpath.SDK.Impl.DataStore
             return syncFilterChain;
         }
 
-        private IInternalDataStore IThis => this;
-
-        IRequestExecutor IInternalDataStore.RequestExecutor => this.requestExecutor;
-
-        string IInternalDataStore.BaseUrl => this.baseUrl;
+        #endregion
 
         T IDataStore.Instantiate<T>()
         {
             return this.resourceFactory.Create<T>();
         }
+
+#pragma warning disable SA1124 // Do not use regions
+        #region Helper methods
+#pragma warning restore SA1124 // Do not use regions
+
+        private void ApplyDefaultRequestHeaders(IHttpRequest request)
+        {
+            request.Headers.Accept = "application/json";
+            request.Headers.UserAgent = UserAgentBuilder.GetUserAgent();
+        }
+
+        private IDictionary<string, object> GetBody<T>(IHttpResponse response)
+        {
+            if (response == null)
+                throw new ArgumentNullException(nameof(response));
+
+            if (response.HasBody)
+                return this.serializer.Deserialize(response.Body, typeof(T));
+            else
+                return new Dictionary<string, object>();
+        }
+
+        private bool IsCachingEnabled()
+        {
+            return this.cacheManager != null && !(this.cacheManager is NullCacheManager);
+        }
+
+        #endregion
+
+#pragma warning disable SA1124 // Do not use regions
+        #region Asynchronous path
+#pragma warning restore SA1124 // Do not use regions
 
         async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
         {
@@ -127,12 +165,12 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             this.logger.Trace($"Getting collection page of type {typeof(T).Name} from: {href}", "DefaultDataStore.GetCollectionAsync<T>");
 
-            return this.IThis.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
+            return this.AsInterface.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
         }
 
         Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
         {
-            return this.IThis.CreateAsync<T, T>(
+            return this.AsInterface.CreateAsync<T, T>(
                 parentHref,
                 resource,
                 options: null,
@@ -141,7 +179,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
         {
-            return this.IThis.CreateAsync<T, T>(
+            return this.AsInterface.CreateAsync<T, T>(
                 parentHref,
                 resource,
                 options: options,
@@ -150,7 +188,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
         {
-            return this.IThis.CreateAsync<T, TReturned>(
+            return this.AsInterface.CreateAsync<T, TReturned>(
                 parentHref,
                 resource,
                 options: null,
@@ -263,22 +301,57 @@ namespace Stormpath.SDK.Impl.DataStore
             return response;
         }
 
-        private void ApplyDefaultRequestHeaders(IHttpRequest request)
+        #endregion
+
+#pragma warning disable SA1124 // Do not use regions
+        #region Synchronous path
+#pragma warning restore SA1124 // Do not use regions
+
+        T IInternalDataStore.GetResource<T>(string href)
         {
-            request.Headers.Accept = "application/json";
-            request.Headers.UserAgent = UserAgentBuilder.GetUserAgent();
+            throw new NotImplementedException();
         }
 
-        private IDictionary<string, object> GetBody<T>(IHttpResponse response)
+        CollectionResponsePage<T> IInternalDataStore.GetCollection<T>(string href)
         {
-            if (response == null)
-                throw new ArgumentNullException(nameof(response));
-
-            if (response.HasBody)
-                return this.serializer.Deserialize(response.Body, typeof(T));
-            else
-                return new Dictionary<string, object>();
+            throw new NotImplementedException();
         }
+
+        T IInternalDataStore.Create<T>(string parentHref, T resource)
+        {
+            throw new NotImplementedException();
+        }
+
+        T IInternalDataStore.Create<T>(string parentHref, T resource, ICreationOptions options)
+        {
+            throw new NotImplementedException();
+        }
+
+        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource)
+        {
+            throw new NotImplementedException();
+        }
+
+        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
+        {
+            throw new NotImplementedException();
+        }
+
+        T IInternalDataStore.Save<T>(T resource)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IInternalDataStore.Delete<T>(T resource)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+#pragma warning disable SA1124 // Do not use regions
+        #region IDisposable
+#pragma warning restore SA1124 // Do not use regions
 
         private void Dispose(bool disposing)
         {
@@ -298,5 +371,7 @@ namespace Stormpath.SDK.Impl.DataStore
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
         }
+
+        #endregion
     }
 }
