@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Error;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
@@ -173,6 +174,55 @@ namespace Stormpath.SDK.Tests.Impl
             savedMap.Count.ShouldBe(2);
             savedMap["middleName"].ShouldBe("Test");
             savedMap["username"].ShouldBe("newusername");
+        }
+
+        [Fact]
+        public async Task When_saving_returns_empty_response_without_status_202_throws_error()
+        {
+            // Expected behavior: Saving should always return the updated data unless we get back HTTP 202 (Accepted for Processing).
+            var stubRequestExecutor = new StubRequestExecutor(FakeJson.Account);
+            stubRequestExecutor.Object
+                .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(200, "OK", null, null, null)));
+
+            IInternalDataStore ds = new DefaultDataStore(stubRequestExecutor.Object, "http://api.foo.bar", new SDK.Impl.NullLogger());
+
+            var account = ds.Instantiate<IAccount>();
+            account.SetMiddleName("Test");
+            account.SetUsername("newusername");
+
+            bool erroredAsExpected = false;
+            try
+            {
+                await ds.CreateAsync("http://api.foo.bar/accounts", account, CancellationToken.None);
+            }
+            catch (ResourceException rex)
+            {
+                rex.DeveloperMessage.ShouldBe("Unable to obtain resource data from the API server.");
+                erroredAsExpected = true;
+            }
+
+            erroredAsExpected.ShouldBe(true);
+        }
+
+        [Fact]
+        public async Task When_saving_returns_empty_response_with_status_202()
+        {
+            // Expected behavior: Saving should always return the updated data unless we get back HTTP 202 (Accepted for Processing).
+            var stubRequestExecutor = new StubRequestExecutor(FakeJson.Account);
+            stubRequestExecutor.Object
+                .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(202, "Accepted", null, null, null)));
+
+            IInternalDataStore ds = new DefaultDataStore(stubRequestExecutor.Object, "http://api.foo.bar", new SDK.Impl.NullLogger());
+
+            var account = ds.Instantiate<IAccount>();
+            account.SetMiddleName("Test");
+            account.SetUsername("newusername");
+
+            var result = await ds.CreateAsync("http://api.foo.bar/accounts", account, CancellationToken.None);
+            bool isEmpty = (result as AbstractResource).GetPropertyNames().Count == 0;
+            isEmpty.ShouldBe(true);
         }
 
         [Fact]

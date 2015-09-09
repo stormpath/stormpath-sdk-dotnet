@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
@@ -155,6 +156,21 @@ namespace Stormpath.SDK.Impl.DataStore
                 return ResourceAction.Create;
 
             return request.Action;
+        }
+
+        private IHttpResponse HandleResponseOrError(IHttpResponse response)
+        {
+            if (response.IsError)
+            {
+                DefaultError error = null;
+                error = response.HasBody
+                    ? new DefaultError(GetBody<IError>(response))
+                    : DefaultError.FromHttpResponse(response);
+
+                throw new ResourceException(error);
+            }
+
+            return response;
         }
 
         #endregion
@@ -352,6 +368,10 @@ namespace Stormpath.SDK.Impl.DataStore
                     var responseBody = this.GetBody<T>(response);
                     var responseAction = this.GetPostAction(req, response);
 
+                    bool responseHasExpectedData = responseBody.Any() || response.HttpStatus == 202;
+                    if (!responseHasExpectedData)
+                        throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
+
                     return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.HttpStatus, responseBody);
                 }));
 
@@ -392,6 +412,10 @@ namespace Stormpath.SDK.Impl.DataStore
                     var response = this.Execute(httpRequest);
                     var responseBody = this.GetBody<T>(response);
                     var responseAction = this.GetPostAction(req, response);
+
+                    bool responseHasExpectedData = responseBody.Any() || response.HttpStatus == 202;
+                    if (!responseHasExpectedData)
+                        throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
 
                     return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.HttpStatus, responseBody);
                 }));
@@ -482,31 +506,6 @@ namespace Stormpath.SDK.Impl.DataStore
             var response = this.requestExecutor.Execute(request);
 
             return this.HandleResponseOrError(response);
-        }
-
-        private IHttpResponse HandleResponseOrError(IHttpResponse response)
-        {
-            if (response.IsError)
-            {
-                DefaultError error = null;
-                if (response.HasBody)
-                {
-                    error = new DefaultError(GetBody<IError>(response));
-                }
-                else
-                {
-                    var properties = new Dictionary<string, object>();
-                    properties.Add("status", response.HttpStatus);
-                    properties.Add("code", response.HttpStatus);
-                    properties.Add("moreInfo", "HTTP error");
-                    properties.Add("developerMessage", response.ResponsePhrase);
-                    error = new DefaultError(properties);
-                }
-
-                throw new ResourceException(error);
-            }
-
-            return response;
         }
 
 #pragma warning disable SA1124 // Do not use regions

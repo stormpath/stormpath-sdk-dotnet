@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Error;
+using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Error
@@ -45,5 +46,26 @@ namespace Stormpath.SDK.Impl.Error
         public string MoreInfo => GetProperty<string>(MoreInfoPropertyName);
 
         public int HttpStatus => GetProperty<int>(StatusPropertyName);
+
+        public static DefaultError FromHttpResponse(IHttpResponse response)
+        {
+            var properties = new Dictionary<string, object>();
+            properties.Add("status", response.HttpStatus);
+            properties.Add("code", response.HttpStatus);
+            properties.Add("moreInfo", "HTTP error");
+            properties.Add("developerMessage", response.ResponsePhrase);
+            return new DefaultError(properties);
+        }
+
+        public static DefaultError WithMessage(string developerMessage)
+        {
+            return new DefaultError(new Dictionary<string, object>()
+            {
+                { "status", 0 },
+                { "code", 0 },
+                { "moreInfo", "HTTP error" },
+                { "developerMessage", developerMessage }
+            });
+        }
     }
 }
