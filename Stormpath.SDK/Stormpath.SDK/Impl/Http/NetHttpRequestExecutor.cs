@@ -154,7 +154,7 @@ namespace Stormpath.SDK.Impl.Http
             }
         }
 
-        IHttpResponse IRequestExecutor.ExecuteSync(IHttpRequest request)
+        IHttpResponse IRequestExecutor.Execute(IHttpRequest request)
         {
             throw new NotImplementedException();
         }

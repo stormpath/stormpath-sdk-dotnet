@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Impl.DataStore
             where T : IResource, IDeletable;
 
         // Synchronous path
-        T GetResource<T>(string href);
+        T GetResource<T>(string resourcePath);
 
         CollectionResponsePage<T> GetCollection<T>(string href);
 

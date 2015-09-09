@@ -16,10 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore

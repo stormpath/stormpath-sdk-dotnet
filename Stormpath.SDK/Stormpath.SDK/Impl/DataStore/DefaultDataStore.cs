@@ -140,16 +140,29 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.cacheManager != null && !(this.cacheManager is NullCacheManager);
         }
 
-        #endregion
+        private QueryString CreateQueryStringFromCreationOptions(ICreationOptions options)
+        {
+            QueryString queryParams = null;
+            if (options != null)
+                queryParams = new QueryString(options.GetQueryString());
 
-#pragma warning disable SA1124 // Do not use regions
-        #region Asynchronous path
-#pragma warning restore SA1124 // Do not use regions
+            return queryParams;
+        }
+
+        private ResourceAction GetPostAction(IResourceDataRequest request, IHttpResponse httpResponse)
+        {
+            if (httpResponse.HttpStatus == 201)
+                return ResourceAction.Create;
+
+            return request.Action;
+        }
+
+        #endregion
 
         async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
         {
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
-            this.logger.Trace($"Getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResourceAsync<T>");
+            this.logger.Trace($"Asynchronously getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResourceAsync<T>");
 
             IAsynchronousFilterChain chain = new DefaultAsynchronousFilterChain(this.defaultAsyncFilters as DefaultAsynchronousFilterChain)
                 .Add(new DefaultAsynchronousFilter(async (req, next, logger, ct) =>
@@ -157,9 +170,9 @@ namespace Stormpath.SDK.Impl.DataStore
                     var httpRequest = new DefaultHttpRequest(HttpMethod.Get, req.Uri);
 
                     var response = await this.ExecuteAsync(httpRequest, ct).ConfigureAwait(false);
-                    var body = GetBody<T>(response);
+                    var body = this.GetBody<T>(response);
 
-                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, body);
+                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.HttpStatus, body);
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Read, canonicalUri);
@@ -168,11 +181,40 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create<T>(result.Body);
         }
 
+        T IInternalDataStore.GetResource<T>(string resourcePath)
+        {
+            var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
+            this.logger.Trace($"Synchronously getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResource<T>");
+
+            ISynchronousFilterChain chain = new DefaultSynchronousFilterChain(this.defaultSyncFilters as DefaultSynchronousFilterChain)
+                .Add(new DefaultSynchronousFilter((req, next, logger) =>
+                {
+                    var httpRequest = new DefaultHttpRequest(HttpMethod.Get, req.Uri);
+
+                    var response = this.Execute(httpRequest);
+                    var body = this.GetBody<T>(response);
+
+                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.HttpStatus, body);
+                }));
+
+            var request = new DefaultResourceDataRequest(ResourceAction.Read, canonicalUri);
+            var result = chain.Execute(request, this.logger);
+
+            return this.resourceFactory.Create<T>(result.Body);
+        }
+
         Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
         {
-            this.logger.Trace($"Getting collection page of type {typeof(T).Name} from: {href}", "DefaultDataStore.GetCollectionAsync<T>");
+            this.logger.Trace($"Asynchronously getting collection page of type {typeof(T).Name} from: {href}", "DefaultDataStore.GetCollectionAsync<T>");
 
             return this.AsInterface.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
+        }
+
+        CollectionResponsePage<T> IInternalDataStore.GetCollection<T>(string href)
+        {
+            this.logger.Trace($"Synchronously getting collection page of type {typeof(T).Name} from: {href}", "DefaultDataStore.GetCollection<T>");
+
+            return this.AsInterface.GetResource<CollectionResponsePage<T>>(href);
         }
 
         Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
@@ -184,6 +226,14 @@ namespace Stormpath.SDK.Impl.DataStore
                 cancellationToken: cancellationToken);
         }
 
+        T IInternalDataStore.Create<T>(string parentHref, T resource)
+        {
+            return this.AsInterface.Create<T, T>(
+                parentHref,
+                resource,
+                options: null);
+        }
+
         Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
         {
             return this.AsInterface.CreateAsync<T, T>(
@@ -191,6 +241,14 @@ namespace Stormpath.SDK.Impl.DataStore
                 resource,
                 options: options,
                 cancellationToken: cancellationToken);
+        }
+
+        T IInternalDataStore.Create<T>(string parentHref, T resource, ICreationOptions options)
+        {
+            return this.AsInterface.Create<T, T>(
+                parentHref,
+                resource,
+                options: options);
         }
 
         Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
@@ -202,29 +260,56 @@ namespace Stormpath.SDK.Impl.DataStore
                 cancellationToken: cancellationToken);
         }
 
+        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource)
+        {
+            return this.AsInterface.Create<T, TReturned>(
+                parentHref,
+                resource,
+                options: null);
+        }
+
         Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
         {
-            QueryString queryParams = null;
-            if (options != null)
-                queryParams = new QueryString(options.GetQueryString());
-
             return this.SaveCoreAsync<T, TReturned>(
                 resource, parentHref,
-                queryParams: queryParams,
+                queryParams: this.CreateQueryStringFromCreationOptions(options),
+                create: true,
                 cancellationToken: cancellationToken);
+        }
+
+        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
+        {
+            return this.SaveCore<T, TReturned>(
+                resource, parentHref,
+                create: true,
+                queryParams: this.CreateQueryStringFromCreationOptions(options));
         }
 
         Task<T> IInternalDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
         {
             var href = resource?.Href;
             if (string.IsNullOrEmpty(href))
-                throw new ArgumentNullException("Resource href must not be null.");
+                throw new ArgumentNullException(nameof(resource.Href));
 
             return SaveCoreAsync<T, T>(
                 resource,
                 href,
                 queryParams: null,
+                create: false,
                 cancellationToken: cancellationToken);
+        }
+
+        T IInternalDataStore.Save<T>(T resource)
+        {
+            var href = resource?.Href;
+            if (string.IsNullOrEmpty(href))
+                throw new ArgumentNullException(nameof(resource.Href));
+
+            return SaveCore<T, T>(
+                resource,
+                href,
+                create: false,
+                queryParams: null);
         }
 
         Task<bool> IInternalDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
@@ -232,7 +317,12 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.DeleteCoreAsync(resource, cancellationToken);
         }
 
-        private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, CancellationToken cancellationToken)
+        bool IInternalDataStore.Delete<T>(T resource)
+        {
+            return this.DeleteCore(resource);
+        }
+
+        private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, bool create, CancellationToken cancellationToken)
             where T : IResource
             where TReturned : IResource
         {
@@ -243,19 +333,77 @@ namespace Stormpath.SDK.Impl.DataStore
             if (resource == null)
                 throw new ArgumentNullException(nameof(resource));
 
-            var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
-            this.logger.Trace($"Saving resource of type {typeof(T).Name} to {href}", "DefaultDataStore.SaveCoreAsync");
+            var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
+            this.logger.Trace($"Asynchronously saving resource of type {typeof(T).Name} to {href}", "DefaultDataStore.SaveCoreAsync");
+
+            IAsynchronousFilterChain chain = new DefaultAsynchronousFilterChain(this.defaultAsyncFilters as DefaultAsynchronousFilterChain)
+                .Add(new DefaultAsynchronousFilter(async (req, next, logger, ct) =>
+                {
+                    var postBody = this.serializer.Serialize(req.Properties);
+                    var httpRequest = new DefaultHttpRequest(
+                        HttpMethod.Post,
+                        req.Uri,
+                        queryParams: null,
+                        headers: null,
+                        body: postBody,
+                        bodyContentType: "application/json");
+
+                    var response = await this.ExecuteAsync(httpRequest, ct).ConfigureAwait(false);
+                    var responseBody = this.GetBody<T>(response);
+                    var responseAction = this.GetPostAction(req, response);
+
+                    return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.HttpStatus, responseBody);
+                }));
 
             var propertiesMap = this.resourceConverter.ToMap(abstractResource);
-            var body = this.serializer.Serialize(propertiesMap);
+            var requestAction = create
+                ? ResourceAction.Create
+                : ResourceAction.Update;
+            var request = new DefaultResourceDataRequest(requestAction, canonicalUri, propertiesMap);
 
-            var request = new DefaultHttpRequest(HttpMethod.Post, uri, null, null, body, "application/json");
+            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
+            return this.resourceFactory.Create<TReturned>(result.Body);
+        }
 
-            var response = await this.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
-            var map = GetBody<T>(response);
-            var createdResource = this.resourceFactory.Create<TReturned>(map);
+        private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, bool create)
+        {
+            if (string.IsNullOrEmpty(href))
+                throw new ArgumentNullException(nameof(href));
 
-            return createdResource;
+            var abstractResource = resource as AbstractResource;
+            if (resource == null)
+                throw new ArgumentNullException(nameof(resource));
+
+            var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
+            this.logger.Trace($"Synchronously saving resource of type {typeof(T).Name} to {href}", "DefaultDataStore.SaveCore");
+
+            ISynchronousFilterChain chain = new DefaultSynchronousFilterChain(this.defaultSyncFilters as DefaultSynchronousFilterChain)
+                .Add(new DefaultSynchronousFilter((req, next, logger) =>
+                {
+                    var postBody = this.serializer.Serialize(req.Properties);
+                    var httpRequest = new DefaultHttpRequest(
+                        HttpMethod.Post,
+                        req.Uri,
+                        queryParams: null,
+                        headers: null,
+                        body: postBody,
+                        bodyContentType: "application/json");
+
+                    var response = this.Execute(httpRequest);
+                    var responseBody = this.GetBody<T>(response);
+                    var responseAction = this.GetPostAction(req, response);
+
+                    return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.HttpStatus, responseBody);
+                }));
+
+            var propertiesMap = this.resourceConverter.ToMap(abstractResource);
+            var requestAction = create
+                ? ResourceAction.Create
+                : ResourceAction.Update;
+            var request = new DefaultResourceDataRequest(requestAction, canonicalUri, propertiesMap);
+
+            var result = chain.Execute(request, this.logger);
+            return this.resourceFactory.Create<TReturned>(result.Body);
         }
 
         private async Task<bool> DeleteCoreAsync<T>(T resource, CancellationToken cancellationToken)
@@ -269,12 +417,51 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ArgumentNullException(nameof(resource.Href));
 
             var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resource.Href));
-            this.logger.Trace($"Deleting resource {uri.ToString()}", "DefaultDataStore.DeleteCoreAsync");
+            this.logger.Trace($"Asynchronously deleting resource {uri.ToString()}", "DefaultDataStore.DeleteCoreAsync");
 
-            var request = new DefaultHttpRequest(HttpMethod.Delete, uri);
+            IAsynchronousFilterChain chain = new DefaultAsynchronousFilterChain(this.defaultAsyncFilters as DefaultAsynchronousFilterChain)
+                .Add(new DefaultAsynchronousFilter(async (req, next, logger, ct) =>
+                {
+                    var httpRequest = new DefaultHttpRequest(HttpMethod.Delete, req.Uri);
+                    var response = await this.ExecuteAsync(httpRequest, ct).ConfigureAwait(false);
 
-            var response = await this.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
-            return response.HttpStatus == 204;
+                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.HttpStatus, body: null);
+                }));
+
+            var request = new DefaultResourceDataRequest(ResourceAction.Delete, uri);
+            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
+
+            bool successfullyDeleted = result.HttpStatus == 204;
+            return successfullyDeleted;
+        }
+
+        private bool DeleteCore<T>(T resource)
+            where T : IResource, IDeletable
+        {
+            var abstractResource = resource as AbstractResource;
+            if (resource == null)
+                throw new ArgumentNullException(nameof(resource));
+
+            if (string.IsNullOrEmpty(resource.Href))
+                throw new ArgumentNullException(nameof(resource.Href));
+
+            var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resource.Href));
+            this.logger.Trace($"Synchronously deleting resource {uri.ToString()}", "DefaultDataStore.DeleteCore");
+
+            ISynchronousFilterChain chain = new DefaultSynchronousFilterChain(this.defaultSyncFilters as DefaultSynchronousFilterChain)
+                .Add(new DefaultSynchronousFilter((req, next, logger) =>
+                {
+                    var httpRequest = new DefaultHttpRequest(HttpMethod.Delete, req.Uri);
+                    var response = this.Execute(httpRequest);
+
+                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.HttpStatus, body: null);
+                }));
+
+            var request = new DefaultResourceDataRequest(ResourceAction.Delete, uri);
+            var result = chain.Execute(request, this.logger);
+
+            bool successfullyDeleted = result.HttpStatus == 204;
+            return successfullyDeleted;
         }
 
         private async Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
@@ -285,6 +472,20 @@ namespace Stormpath.SDK.Impl.DataStore
                 .ExecuteAsync(request, cancellationToken)
                 .ConfigureAwait(false);
 
+            return this.HandleResponseOrError(response);
+        }
+
+        private IHttpResponse Execute(IHttpRequest request)
+        {
+            this.ApplyDefaultRequestHeaders(request);
+
+            var response = this.requestExecutor.Execute(request);
+
+            return this.HandleResponseOrError(response);
+        }
+
+        private IHttpResponse HandleResponseOrError(IHttpResponse response)
+        {
             if (response.IsError)
             {
                 DefaultError error = null;
@@ -307,54 +508,6 @@ namespace Stormpath.SDK.Impl.DataStore
 
             return response;
         }
-
-        #endregion
-
-#pragma warning disable SA1124 // Do not use regions
-        #region Synchronous path
-#pragma warning restore SA1124 // Do not use regions
-
-        T IInternalDataStore.GetResource<T>(string href)
-        {
-            throw new NotImplementedException();
-        }
-
-        CollectionResponsePage<T> IInternalDataStore.GetCollection<T>(string href)
-        {
-            throw new NotImplementedException();
-        }
-
-        T IInternalDataStore.Create<T>(string parentHref, T resource)
-        {
-            throw new NotImplementedException();
-        }
-
-        T IInternalDataStore.Create<T>(string parentHref, T resource, ICreationOptions options)
-        {
-            throw new NotImplementedException();
-        }
-
-        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource)
-        {
-            throw new NotImplementedException();
-        }
-
-        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
-        {
-            throw new NotImplementedException();
-        }
-
-        T IInternalDataStore.Save<T>(T resource)
-        {
-            throw new NotImplementedException();
-        }
-
-        bool IInternalDataStore.Delete<T>(T resource)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
 
 #pragma warning disable SA1124 // Do not use regions
         #region IDisposable

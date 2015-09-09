@@ -28,8 +28,8 @@ namespace Stormpath.SDK.Impl.Http
 
         int ConnectionTimeout { get; }
 
-        IHttpResponse ExecuteSync(IHttpRequest request);
-
         Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken);
+
+        IHttpResponse Execute(IHttpRequest request);
     }
 }
