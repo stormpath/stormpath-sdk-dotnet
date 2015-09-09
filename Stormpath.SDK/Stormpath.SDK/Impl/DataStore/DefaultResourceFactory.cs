@@ -32,11 +32,11 @@ namespace Stormpath.SDK.Impl.DataStore
             this.typeLookup = new ResourceTypeLookup();
         }
 
-        private IResourceFactory IThis => this;
+        private IResourceFactory AsInterface => this;
 
         T IResourceFactory.Create<T>()
         {
-            return this.IThis.Create<T>(null);
+            return this.AsInterface.Create<T>(null);
         }
 
         T IResourceFactory.Create<T>(IDictionary<string, object> properties)

@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Impl.Tenant
         {
         }
 
-        private ITenant IThis => this;
+        private ITenant AsInterface => this;
 
         internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
@@ -107,7 +107,7 @@ namespace Stormpath.SDK.Impl.Tenant
                 CreateDirectory = createDirectory
             }.Build();
 
-            return this.IThis.CreateApplicationAsync(application, options, cancellationToken);
+            return this.AsInterface.CreateApplicationAsync(application, options, cancellationToken);
         }
 
         ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()

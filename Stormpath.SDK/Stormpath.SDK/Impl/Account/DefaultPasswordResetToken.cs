@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-        private IPasswordResetToken IThis => this;
+        private IPasswordResetToken AsInterface => this;
 
         string IPasswordResetToken.Email => GetProperty<string>(EmailPropertyName);
 
@@ -67,7 +67,7 @@ namespace Stormpath.SDK.Impl.Account
 
         string IPasswordResetToken.GetValue()
         {
-            var thisHref = this.IThis.Href;
+            var thisHref = this.AsInterface.Href;
 
             if (string.IsNullOrEmpty(thisHref))
                 return null;

@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Impl.Application
         {
         }
 
-        private IApplication IThis => this;
+        private IApplication AsInterface => this;
 
         internal LinkProperty AccountStoreMappings => this.GetLinkProperty(AccountStoreMappingsPropertyName);
 
@@ -125,14 +125,14 @@ namespace Stormpath.SDK.Impl.Application
         {
             var request = new UsernamePasswordRequest(username, password) as IAuthenticationRequest;
 
-            return this.IThis.AuthenticateAccountAsync(request, cancellationToken);
+            return this.AsInterface.AuthenticateAccountAsync(request, cancellationToken);
         }
 
         async Task<bool> IApplication.TryAuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken)
         {
             try
             {
-                var loginResult = await this.IThis.AuthenticateAccountAsync(username, password, cancellationToken).ConfigureAwait(false);
+                var loginResult = await this.AsInterface.AuthenticateAccountAsync(username, password, cancellationToken).ConfigureAwait(false);
                 return true;
             }
             catch
@@ -168,7 +168,7 @@ namespace Stormpath.SDK.Impl.Application
             account.SetEmail(email);
             account.SetPassword(password);
 
-            return this.IThis.CreateAccountAsync(account, cancellationToken: cancellationToken);
+            return this.AsInterface.CreateAccountAsync(account, cancellationToken: cancellationToken);
         }
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)

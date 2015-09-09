@@ -67,7 +67,7 @@ namespace Stormpath.SDK.Impl.Cache
             return $"{this.region}-{key}";
         }
 
-        private ISynchronousCache<K, V> ThisSync => this;
+        private ISynchronousCache<K, V> AsSyncInterface => this;
 
         string ICache<K, V>.Name => this.region;
 
@@ -140,7 +140,7 @@ namespace Stormpath.SDK.Impl.Cache
             cancellationToken.ThrowIfCancellationRequested();
 
             await Task.Yield();
-            return this.ThisSync.Get(key);
+            return this.AsSyncInterface.Get(key);
         }
 
         async Task<V> IAsynchronousCache<K, V>.PutAsync(K key, V value, CancellationToken cancellationToken)
@@ -148,7 +148,7 @@ namespace Stormpath.SDK.Impl.Cache
             cancellationToken.ThrowIfCancellationRequested();
 
             await Task.Yield();
-            return this.ThisSync.Put(key, value);
+            return this.AsSyncInterface.Put(key, value);
         }
 
         async Task<V> IAsynchronousCache<K, V>.RemoveAsync(K key, CancellationToken cancellationToken)
@@ -156,7 +156,7 @@ namespace Stormpath.SDK.Impl.Cache
             cancellationToken.ThrowIfCancellationRequested();
 
             await Task.Yield();
-            return this.ThisSync.Remove(key);
+            return this.AsSyncInterface.Remove(key);
         }
 
         public double GetHitRatio()
