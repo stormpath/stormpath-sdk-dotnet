@@ -100,7 +100,7 @@ namespace Stormpath.SDK.Impl.DataStore
             if (string.IsNullOrEmpty(href))
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'href' value.");
 
-            var items = properties["items"] as List<IDictionary<string, object>>;
+            var items = properties["items"] as IEnumerable<IDictionary<string, object>>;
             if (items == null)
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: items subcollection is invalid.");
 

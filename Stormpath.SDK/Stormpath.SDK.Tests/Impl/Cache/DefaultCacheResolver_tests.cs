@@ -24,7 +24,6 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Impl.Cache;
-using Stormpath.SDK.Impl.DataStore.Cache;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Cache

@@ -24,7 +24,6 @@ using Stormpath.SDK.Cache;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Impl.Cache;
-using Stormpath.SDK.Impl.DataStore.Cache;
 using Stormpath.SDK.Impl.DataStore.FilterChain;
 using Stormpath.SDK.Impl.Error;
 using Stormpath.SDK.Impl.Http;

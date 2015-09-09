@@ -120,10 +120,10 @@
     <Compile Include="Impl\Cache\InMemoryCacheManager.cs" />
     <Compile Include="Impl\Cache\NullCache.cs" />
     <Compile Include="Impl\Cache\NullCacheManager.cs" />
-    <Compile Include="Impl\DataStore\Cache\DefaultCacheRegionNameResolver.cs" />
-    <Compile Include="Impl\DataStore\Cache\DefaultCacheResolver.cs" />
-    <Compile Include="Impl\DataStore\Cache\ICacheRegionNameResolver.cs" />
-    <Compile Include="Impl\DataStore\Cache\ICacheResolver.cs" />
+    <Compile Include="Impl\Cache\DefaultCacheRegionNameResolver.cs" />
+    <Compile Include="Impl\Cache\DefaultCacheResolver.cs" />
+    <Compile Include="Impl\Cache\ICacheRegionNameResolver.cs" />
+    <Compile Include="Impl\Cache\ICacheResolver.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataRequest.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataResult.cs" />
@@ -269,7 +269,9 @@
     <None Include="Stormpath.SDK.ruleset" />
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Impl\DataStore\Cache\" />
+  </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta009\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />

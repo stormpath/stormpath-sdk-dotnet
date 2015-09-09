@@ -1,4 +1,4 @@
-﻿// <copyright file="ICacheResolver.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultCacheRegionNameResolver.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,20 +15,23 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Cache;
-using Stormpath.SDK.Resource;
+using Stormpath.SDK.Impl.DataStore;
 
-namespace Stormpath.SDK.Impl.DataStore.Cache
+namespace Stormpath.SDK.Impl.Cache
 {
-    internal interface ICacheResolver
+    internal sealed class DefaultCacheRegionNameResolver : ICacheRegionNameResolver
     {
-        ISynchronousCache<string, ConcurrentDictionary<string, object>> GetCache<T>()
-            where T : IResource;
+        private readonly ResourceTypeLookup typeLookup;
 
-        Task<IAsynchronousCache<string, ConcurrentDictionary<string, object>>> GetCacheAsync<T>(CancellationToken cancellationToken)
-            where T : IResource;
+        public DefaultCacheRegionNameResolver()
+        {
+            this.typeLookup = new ResourceTypeLookup();
+        }
+
+        string ICacheRegionNameResolver.GetCacheRegionName<T>()
+        {
+            var iface = this.typeLookup.GetInterface<T>();
+            return iface.Name;
+        }
     }
 }

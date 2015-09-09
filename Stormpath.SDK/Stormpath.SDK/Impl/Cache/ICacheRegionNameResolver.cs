@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultCacheRegionNameResolver.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ICacheRegionNameResolver.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,21 +15,13 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.DataStore.Cache
+using Stormpath.SDK.Resource;
+
+namespace Stormpath.SDK.Impl.Cache
 {
-    internal sealed class DefaultCacheRegionNameResolver : ICacheRegionNameResolver
+    internal interface ICacheRegionNameResolver
     {
-        private readonly ResourceTypeLookup typeLookup;
-
-        public DefaultCacheRegionNameResolver()
-        {
-            this.typeLookup = new ResourceTypeLookup();
-        }
-
-        string ICacheRegionNameResolver.GetCacheRegionName<T>()
-        {
-            var iface = this.typeLookup.GetInterface<T>();
-            return iface.Name;
-        }
+        string GetCacheRegionName<T>()
+            where T : IResource;
     }
 }

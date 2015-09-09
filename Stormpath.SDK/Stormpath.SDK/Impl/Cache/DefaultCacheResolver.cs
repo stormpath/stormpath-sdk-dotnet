@@ -21,7 +21,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
 
-namespace Stormpath.SDK.Impl.DataStore.Cache
+namespace Stormpath.SDK.Impl.Cache
 {
     internal class DefaultCacheResolver : ICacheResolver
     {
