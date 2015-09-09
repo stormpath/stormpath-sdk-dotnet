@@ -18,10 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore.FilterChain
@@ -53,7 +51,7 @@ namespace Stormpath.SDK.Impl.DataStore.FilterChain
             return this;
         }
 
-        Task<IHttpResponse> IAsynchronousFilterChain.ExecuteAsync(IHttpRequest request, ILogger logger, CancellationToken cancellationToken)
+        Task<IResourceDataResult> IAsynchronousFilterChain.ExecuteAsync(IResourceDataRequest request, ILogger logger, CancellationToken cancellationToken)
         {
             bool hasFilters = this.filters?.Any() ?? false;
             if (!hasFilters)

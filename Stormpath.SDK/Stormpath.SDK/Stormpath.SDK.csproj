@@ -125,6 +125,8 @@
     <Compile Include="Impl\DataStore\Cache\ICacheRegionNameResolver.cs" />
     <Compile Include="Impl\DataStore\Cache\ICacheResolver.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
+    <Compile Include="Impl\DataStore\DefaultResourceDataRequest.cs" />
+    <Compile Include="Impl\DataStore\DefaultResourceDataResult.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\ConverterResult.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\DefaultFieldConverters.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\FieldConverter.cs" />
@@ -141,6 +143,9 @@
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\DataStore\IMapSerializer.cs" />
     <Compile Include="Impl\DataStore\IResourceConverter.cs" />
+    <Compile Include="Impl\DataStore\IResourceDataRequest.cs" />
+    <Compile Include="Impl\DataStore\IResourceDataResult.cs" />
+    <Compile Include="Impl\DataStore\ResourceAction.cs" />
     <Compile Include="Impl\DataStore\ResourceTypeLookup.cs" />
     <Compile Include="Impl\Directory\DefaultDirectory.cs" />
     <Compile Include="Impl\Error\DefaultError.cs" />

@@ -151,14 +151,21 @@ namespace Stormpath.SDK.Impl.DataStore
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
             this.logger.Trace($"Getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResourceAsync<T>");
 
-            var request = new DefaultHttpRequest(HttpMethod.Get, canonicalUri);
-            var response = await this.SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
+            IAsynchronousFilterChain chain = new DefaultAsynchronousFilterChain(this.defaultAsyncFilters as DefaultAsynchronousFilterChain)
+                .Add(new DefaultAsynchronousFilter(async (req, next, logger, ct) =>
+                {
+                    var httpRequest = new DefaultHttpRequest(HttpMethod.Get, req.Uri);
 
-            var json = response.Body;
-            var map = this.serializer.Deserialize(json, typeof(T));
-            var resource = this.resourceFactory.Create<T>(map);
+                    var response = await this.ExecuteAsync(httpRequest, ct).ConfigureAwait(false);
+                    var body = GetBody<T>(response);
 
-            return resource;
+                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, body);
+                }));
+
+            var request = new DefaultResourceDataRequest(ResourceAction.Read, canonicalUri);
+            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
+
+            return this.resourceFactory.Create<T>(result.Body);
         }
 
         Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
@@ -244,7 +251,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var request = new DefaultHttpRequest(HttpMethod.Post, uri, null, null, body, "application/json");
 
-            var response = await this.SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
+            var response = await this.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
             var map = GetBody<T>(response);
             var createdResource = this.resourceFactory.Create<TReturned>(map);
 
@@ -266,11 +273,11 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var request = new DefaultHttpRequest(HttpMethod.Delete, uri);
 
-            var response = await this.SendToExecutorAsync(request, cancellationToken).ConfigureAwait(false);
+            var response = await this.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
             return response.HttpStatus == 204;
         }
 
-        private async Task<IHttpResponse> SendToExecutorAsync(IHttpRequest request, CancellationToken cancellationToken)
+        private async Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
         {
             this.ApplyDefaultRequestHeaders(request);
 

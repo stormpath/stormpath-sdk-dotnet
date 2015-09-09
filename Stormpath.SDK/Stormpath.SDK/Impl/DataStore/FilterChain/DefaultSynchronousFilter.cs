@@ -16,21 +16,20 @@
 // </remarks>
 
 using System;
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore.FilterChain
 {
     internal sealed class DefaultSynchronousFilter : ISynchronousFilter
     {
-        private readonly Func<IHttpRequest, ISynchronousFilterChain, ILogger, IHttpResponse> filterFunc;
+        private readonly Func<IResourceDataRequest, ISynchronousFilterChain, ILogger, IResourceDataResult> filterFunc;
 
-        public DefaultSynchronousFilter(Func<IHttpRequest, ISynchronousFilterChain, ILogger, IHttpResponse> filterFunc)
+        public DefaultSynchronousFilter(Func<IResourceDataRequest, ISynchronousFilterChain, ILogger, IResourceDataResult> filterFunc)
         {
             this.filterFunc = filterFunc;
         }
 
-        IHttpResponse ISynchronousFilter.Execute(IHttpRequest request, ISynchronousFilterChain chain, ILogger logger)
+        IResourceDataResult ISynchronousFilter.Execute(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
         {
             return this.filterFunc(request, chain, logger);
         }

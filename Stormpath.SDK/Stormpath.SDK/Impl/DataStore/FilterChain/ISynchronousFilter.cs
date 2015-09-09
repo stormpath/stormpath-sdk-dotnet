@@ -15,13 +15,12 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore.FilterChain
 {
     internal interface ISynchronousFilter
     {
-        IHttpResponse Execute(IHttpRequest request, ISynchronousFilterChain chain, ILogger logger);
+        IResourceDataResult Execute(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger);
     }
 }

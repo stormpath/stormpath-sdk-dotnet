@@ -17,13 +17,12 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore.FilterChain
 {
     internal interface IAsynchronousFilterChain
     {
-        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, ILogger logger, CancellationToken cancellationToken);
+        Task<IResourceDataResult> ExecuteAsync(IResourceDataRequest request, ILogger logger, CancellationToken cancellationToken);
     }
 }

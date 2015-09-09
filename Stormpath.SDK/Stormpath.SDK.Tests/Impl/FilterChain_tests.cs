@@ -6,8 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.DataStore.FilterChain;
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Shared;
 using Xunit;
@@ -20,21 +20,29 @@ namespace Stormpath.SDK.Tests.Impl
         {
             internal class CreateInterceptorFilter : ISynchronousFilter
             {
-                IHttpResponse ISynchronousFilter.Execute(IHttpRequest request, ISynchronousFilterChain chain, ILogger logger)
+                IResourceDataResult ISynchronousFilter.Execute(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
                 {
-                    if (request.Method == HttpMethod.Post)
-                        return new DefaultHttpResponse(200, "OK", null, request.Body, request.BodyContentType);
+                    if (request.Action == ResourceAction.Create)
+                    {
+                        return new DefaultResourceDataResult(
+                            ResourceAction.Create,
+                            typeof(IDictionary<string, object>),
+                            request.Uri,
+                            new Dictionary<string, object>() { { "Foo", "bar" } });
+                    }
                     else
+                    {
                         return chain.Execute(request, logger);
+                    }
                 }
             }
 
             internal class DeleteInterceptorFilter : ISynchronousFilter
             {
-                IHttpResponse ISynchronousFilter.Execute(IHttpRequest request, ISynchronousFilterChain chain, ILogger logger)
+                IResourceDataResult ISynchronousFilter.Execute(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
                 {
-                    if (request.Method == HttpMethod.Delete)
-                        return new DefaultHttpResponse(204, "No Content", null, null, null);
+                    if (request.Action == ResourceAction.Delete)
+                        return new DefaultResourceDataResult(ResourceAction.Delete, null, null, null);
                     else
                         return chain.Execute(request, logger);
                 }
@@ -47,11 +55,11 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultHttpRequest(HttpMethod.Post, new CanonicalUri("http://api.foo.bar"), null, null, "{ data }", "text/plain");
+                var request = new DefaultResourceDataRequest(ResourceAction.Create, new CanonicalUri("http://api.foo.bar"));
                 var result = filterChain.Execute(request, Substitute.For<ILogger>());
 
-                result.HttpStatus.ShouldBe(200);
-                result.Body.ShouldBe("{ data }");
+                result.Action.ShouldBe(ResourceAction.Create);
+                result.Body.ShouldContainKeyAndValue("Foo", "bar");
             }
 
             [Fact]
@@ -61,10 +69,10 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar"), null, null, null, null);
+                var request = new DefaultResourceDataRequest(ResourceAction.Delete, new CanonicalUri("http://api.foo.bar"));
                 var result = filterChain.Execute(request, Substitute.For<ILogger>());
 
-                result.HttpStatus.ShouldBe(204);
+                result.Action.ShouldBe(ResourceAction.Delete);
                 result.Body.ShouldBe(null);
             }
 
@@ -74,21 +82,21 @@ namespace Stormpath.SDK.Tests.Impl
                 ISynchronousFilterChain defaultFilterChain = new DefaultSynchronousFilterChain()
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultHttpRequest(HttpMethod.Post, new CanonicalUri("http://api.foo.bar"), null, null, "{ data }", "text/plain");
-
                 ISynchronousFilterChain finalChain = new DefaultSynchronousFilterChain(defaultFilterChain as DefaultSynchronousFilterChain)
-                    .Add(new DefaultSynchronousFilter((req, chain, logger) =>
+                    .Add(new DefaultSynchronousFilter((req, next, logger) =>
                     {
-                        if (request.Method == HttpMethod.Post)
-                            return new DefaultHttpResponse(200, "OK", null, request.Body, request.BodyContentType);
-                        else
-                            return chain.Execute(request, logger);
+                        return new DefaultResourceDataResult(
+                            ResourceAction.Create,
+                            typeof(IDictionary<string, object>),
+                            req.Uri,
+                            new Dictionary<string, object>() { { "Foo", "bar" } });
                     }));
 
+                var request = new DefaultResourceDataRequest(ResourceAction.Create, new CanonicalUri("http://api.foo.bar"));
                 var result = finalChain.Execute(request, Substitute.For<ILogger>());
 
-                result.HttpStatus.ShouldBe(200);
-                result.Body.ShouldBe("{ data }");
+                result.Action.ShouldBe(ResourceAction.Create);
+                result.Body.ShouldContainKeyAndValue("Foo", "bar");
             }
         }
 
@@ -96,23 +104,37 @@ namespace Stormpath.SDK.Tests.Impl
         {
             internal class CreateInterceptorFilter : IAsynchronousFilter
             {
-                Task<IHttpResponse> IAsynchronousFilter.ExecuteAsync(IHttpRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
+                Task<IResourceDataResult> IAsynchronousFilter.ExecuteAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
                 {
-                    if (request.Method == HttpMethod.Post)
-                        return Task.FromResult<IHttpResponse>(new DefaultHttpResponse(200, "OK", null, request.Body, request.BodyContentType));
+                    if (request.Action == ResourceAction.Create)
+                    {
+                        return Task.FromResult<IResourceDataResult>(new DefaultResourceDataResult(
+                            ResourceAction.Create,
+                            typeof(IDictionary<string, object>),
+                            request.Uri,
+                            new Dictionary<string, object>() { { "Foo", "bar" } }));
+                    }
                     else
+                    {
                         return chain.ExecuteAsync(request, logger, cancellationToken);
+                    }
                 }
             }
 
             internal class DeleteInterceptorFilter : IAsynchronousFilter
             {
-                Task<IHttpResponse> IAsynchronousFilter.ExecuteAsync(IHttpRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
+                Task<IResourceDataResult> IAsynchronousFilter.ExecuteAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
                 {
-                    if (request.Method == HttpMethod.Delete)
-                        return Task.FromResult(new DefaultHttpResponse(204, "No Content", null, null, null) as IHttpResponse);
+                    if (request.Action == ResourceAction.Delete)
+                    {
+                        return Task.FromResult<IResourceDataResult>(new DefaultResourceDataResult(
+                            ResourceAction.Delete,
+                            null, null, null));
+                    }
                     else
+                    {
                         return chain.ExecuteAsync(request, logger, cancellationToken);
+                    }
                 }
             }
 
@@ -123,11 +145,11 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultHttpRequest(HttpMethod.Post, new CanonicalUri("http://api.foo.bar"), null, null, "{ data }", "text/plain");
+                var request = new DefaultResourceDataRequest(ResourceAction.Create, new CanonicalUri("http://api.foo.bar"));
                 var result = await filterChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
-                result.HttpStatus.ShouldBe(200);
-                result.Body.ShouldBe("{ data }");
+                result.Action.ShouldBe(ResourceAction.Create);
+                result.Body.ShouldContainKeyAndValue("Foo", "bar");
             }
 
             [Fact]
@@ -137,10 +159,10 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar"), null, null, null, null);
+                var request = new DefaultResourceDataRequest(ResourceAction.Delete, new CanonicalUri("http://api.foo.bar"));
                 var result = await filterChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
-                result.HttpStatus.ShouldBe(204);
+                result.Action.ShouldBe(ResourceAction.Delete);
                 result.Body.ShouldBe(null);
             }
 
@@ -150,21 +172,21 @@ namespace Stormpath.SDK.Tests.Impl
                 IAsynchronousFilterChain defaultFilterChain = new DefaultAsynchronousFilterChain()
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultHttpRequest(HttpMethod.Post, new CanonicalUri("http://api.foo.bar"), null, null, "{ data }", "text/plain");
-
                 IAsynchronousFilterChain finalChain = new DefaultAsynchronousFilterChain(defaultFilterChain as DefaultAsynchronousFilterChain)
-                    .Add(new DefaultAsynchronousFilter((req, chain, logger, ct) =>
+                    .Add(new DefaultAsynchronousFilter((req, next, logger, ct) =>
                     {
-                        if (request.Method == HttpMethod.Post)
-                            return Task.FromResult<IHttpResponse>(new DefaultHttpResponse(200, "OK", null, request.Body, request.BodyContentType));
-                        else
-                            return chain.ExecuteAsync(request, logger, ct);
+                        return Task.FromResult<IResourceDataResult>(new DefaultResourceDataResult(
+                            ResourceAction.Create,
+                            typeof(IDictionary<string, object>),
+                            req.Uri,
+                            new Dictionary<string, object>() { { "Foo", "bar" } }));
                     }));
 
+                var request = new DefaultResourceDataRequest(ResourceAction.Create, new CanonicalUri("http://api.foo.bar"));
                 var result = await finalChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
-                result.HttpStatus.ShouldBe(200);
-                result.Body.ShouldBe("{ data }");
+                result.Action.ShouldBe(ResourceAction.Create);
+                result.Body.ShouldContainKeyAndValue("Foo", "bar");
             }
         }
     }
