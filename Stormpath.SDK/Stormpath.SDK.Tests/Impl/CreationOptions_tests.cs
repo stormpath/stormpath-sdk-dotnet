@@ -34,12 +34,6 @@ namespace Stormpath.SDK.Tests.Impl
     {
         private static readonly string BaseHref = "http://api.foobar.com";
 
-        private static IInternalDataStore GetFakeDataStore<T>(string resourceJson)
-        {
-            var fakeRequestExecutor = new StubRequestExecutor(resourceJson);
-            return new DefaultDataStore(fakeRequestExecutor.Object, BaseHref, new SDK.Impl.NullLogger());
-        }
-
         private static void VerifyRequestContents(IRequestExecutor reqex, string queryString)
         {
             reqex.Received()
@@ -55,7 +49,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             public Application_options()
             {
-                this.dataStore = GetFakeDataStore<IApplication>(FakeJson.Application);
+                this.dataStore = new StubDataStore(FakeJson.Application, BaseHref);
             }
 
             private void VerifyThat(ICreationOptions options, string resultsInQueryString)
@@ -107,7 +101,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             public Account_options()
             {
-                this.dataStore = GetFakeDataStore<IAccount>(FakeJson.Account);
+                this.dataStore = new StubDataStore(FakeJson.Account, BaseHref);
             }
 
             private void VerifyThat(ICreationOptions options, string resultsInQueryString)

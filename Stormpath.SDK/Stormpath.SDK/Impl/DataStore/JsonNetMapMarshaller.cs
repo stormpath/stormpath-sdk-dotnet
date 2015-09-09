@@ -20,10 +20,11 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Stormpath.SDK.Impl.DataStore.FieldConverters;
+using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal sealed class JsonNetMapMarshaller : IMapSerializer
+    internal sealed class JsonNetMapMarshaller : IJsonSerializer
     {
         private static readonly FieldConverterList ConverterChain =
             new FieldConverterList(
@@ -50,14 +51,14 @@ namespace Stormpath.SDK.Impl.DataStore
             this.typeLookup = new ResourceTypeLookup();
         }
 
-        string IMapSerializer.Serialize(IDictionary<string, object> map)
+        string IJsonSerializer.Serialize(IDictionary<string, object> map)
         {
             var serialized = JsonConvert.SerializeObject(map);
 
             return serialized;
         }
 
-        IDictionary<string, object> IMapSerializer.Deserialize(string json, Type type)
+        IDictionary<string, object> IJsonSerializer.Deserialize(string json, Type type)
         {
             var deserializedMap = (JObject)JsonConvert.DeserializeObject(json, this.serializerSettings);
             var sanitizedMap = this.Sanitize(deserializedMap, type);

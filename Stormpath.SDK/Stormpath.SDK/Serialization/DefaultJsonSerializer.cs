@@ -1,4 +1,4 @@
-﻿// <copyright file="IMapSerializer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultJsonSerializer.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,15 +15,18 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Collections.Generic;
+using Stormpath.SDK.Impl.DataStore;
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Serialization
 {
-    internal interface IMapSerializer
+    public static class DefaultJsonSerializer
     {
-        string Serialize(IDictionary<string, object> map);
+        public static bool TryLoad(out IJsonSerializer serializer)
+        {
+            // TODO load by runtime assembly binding
+            serializer = new JsonNetMapMarshaller();
 
-        IDictionary<string, object> Deserialize(string json, Type type);
+            return true;
+        }
     }
 }

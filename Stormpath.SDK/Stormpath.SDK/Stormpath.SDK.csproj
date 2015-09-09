@@ -141,7 +141,8 @@
     <Compile Include="Impl\DataStore\FilterChain\IAsynchronousFilterChain.cs" />
     <Compile Include="Impl\DataStore\FilterChain\ISynchronousFilter.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
-    <Compile Include="Impl\DataStore\IMapSerializer.cs" />
+    <Compile Include="Serialization\DefaultJsonSerializer.cs" />
+    <Compile Include="Serialization\IJsonSerializer.cs" />
     <Compile Include="Impl\DataStore\IResourceConverter.cs" />
     <Compile Include="Impl\DataStore\IResourceDataRequest.cs" />
     <Compile Include="Impl\DataStore\IResourceDataResult.cs" />

@@ -20,15 +20,16 @@ using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl
 {
     internal sealed class InternalFactory
     {
-        public IInternalDataStore CreateDataStore(IRequestExecutor requestExecutor, string baseUrl, ILogger logger)
+        public IInternalDataStore CreateDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger)
         {
-            return new DefaultDataStore(requestExecutor, baseUrl, logger);
+            return new DefaultDataStore(requestExecutor, baseUrl, serializer, logger);
         }
 
         public IRequestExecutor CreateRequestExecutor(IClientApiKey apiKey, AuthenticationScheme authenticationScheme, int connectionTimeout, ILogger logger)

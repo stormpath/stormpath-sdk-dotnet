@@ -16,6 +16,7 @@
 // </remarks>
 
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Client
@@ -31,6 +32,8 @@ namespace Stormpath.SDK.Client
         IClientBuilder SetConnectionTimeout(int timeout);
 
         IClientBuilder SetBaseUrl(string baseUrl);
+
+        IClientBuilder SetJsonSerializer(IJsonSerializer serializer);
 
         IClientBuilder SetLogger(ILogger logger);
 

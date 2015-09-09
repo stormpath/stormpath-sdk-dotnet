@@ -28,6 +28,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
 using Stormpath.SDK.Tenant;
 
@@ -43,11 +44,12 @@ namespace Stormpath.SDK.Impl.Client
         private readonly AuthenticationScheme authenticationScheme;
         private readonly int connectionTimeout;
         private readonly IInternalDataStore dataStore;
+        private readonly IJsonSerializer serializer;
         private readonly ILogger logger;
 
         private string currentTenantHref;
 
-        public DefaultClient(IClientApiKey apiKey, string baseUrl, AuthenticationScheme authenticationScheme, int connectionTimeout, ILogger logger)
+        public DefaultClient(IClientApiKey apiKey, string baseUrl, AuthenticationScheme authenticationScheme, int connectionTimeout, IJsonSerializer serializer, ILogger logger)
         {
             if (apiKey == null || !apiKey.IsValid())
                 throw new ArgumentException("API Key is not valid.");
@@ -56,6 +58,7 @@ namespace Stormpath.SDK.Impl.Client
             if (connectionTimeout < 0)
                 throw new ArgumentException("Timeout cannot be negative.");
 
+            this.serializer = serializer;
             this.logger = logger == null
                 ? new NullLogger()
                 : logger;
@@ -69,7 +72,7 @@ namespace Stormpath.SDK.Impl.Client
                 : authenticationScheme;
 
             var requestExecutor = factory.CreateRequestExecutor(apiKey, authenticationScheme, connectionTimeout, this.logger);
-            this.dataStore = factory.CreateDataStore(requestExecutor, baseUrl, this.logger);
+            this.dataStore = factory.CreateDataStore(requestExecutor, baseUrl, this.serializer, this.logger);
         }
 
         private IClient AsInterface => this;

@@ -30,6 +30,7 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore
@@ -42,7 +43,7 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly IRequestExecutor requestExecutor;
         private readonly ICacheManager cacheManager;
         private readonly ICacheResolver cacheResolver;
-        private readonly IMapSerializer serializer;
+        private readonly IJsonSerializer serializer;
         private readonly IResourceFactory resourceFactory;
         private readonly IResourceConverter resourceConverter;
         private readonly IAsynchronousFilterChain defaultAsyncFilters;
@@ -61,12 +62,12 @@ namespace Stormpath.SDK.Impl.DataStore
         #region Constructor and setup
 #pragma warning restore SA1124 // Do not use regions
 
-        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, ILogger logger)
-            : this(requestExecutor, baseUrl, logger, new NullCacheManager())
+        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger)
+            : this(requestExecutor, baseUrl, serializer, logger, new NullCacheManager())
         {
         }
 
-        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, ILogger logger, ICacheManager cacheManager)
+        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheManager cacheManager)
         {
             if (requestExecutor == null)
                 throw new ArgumentNullException(nameof(requestExecutor));
@@ -82,7 +83,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.cacheManager = cacheManager;
             this.cacheResolver = new DefaultCacheResolver(this.cacheManager, new DefaultCacheRegionNameResolver());
 
-            this.serializer = new JsonNetMapMarshaller();
+            this.serializer = serializer;
             this.resourceFactory = new DefaultResourceFactory(this);
             this.resourceConverter = new DefaultResourceConverter();
 

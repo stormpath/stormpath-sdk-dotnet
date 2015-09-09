@@ -36,25 +36,31 @@ namespace Stormpath.SDK.Impl.DataStore
 
         T IResourceFactory.Create<T>()
         {
-            return this.AsInterface.Create<T>(null);
+            return (T)this.AsInterface.Create(typeof(T), null);
+        }
+
+        object IResourceFactory.Create(Type type)
+        {
+            return this.AsInterface.Create(type, null);
         }
 
         T IResourceFactory.Create<T>(IDictionary<string, object> properties)
         {
-            bool isCollection = typeof(T).IsGenericType
-                && typeof(T).GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
-            if (isCollection)
-                return InstantiateCollection<T>(properties);
-
-            return InstantiateSingle<T>(properties);
+            return (T)this.AsInterface.Create(typeof(T), properties);
         }
 
-        private T InstantiateSingle<T>(IDictionary<string, object> properties)
+        object IResourceFactory.Create(Type type, IDictionary<string, object> properties)
         {
-            return (T)this.InstantiateSingle(properties, typeof(T));
+            bool isCollection =
+                type.IsGenericType &&
+                type.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
+            if (isCollection)
+                return this.InstantiateCollection(type, properties);
+
+            return this.InstantiateSingle(type, properties);
         }
 
-        private object InstantiateSingle(IDictionary<string, object> properties, Type type)
+        private object InstantiateSingle(Type type, IDictionary<string, object> properties)
         {
             var targetType = this.typeLookup.GetConcrete(type);
             if (targetType == null)
@@ -76,11 +82,9 @@ namespace Stormpath.SDK.Impl.DataStore
             return targetObject;
         }
 
-        private T InstantiateCollection<T>(IDictionary<string, object> properties)
+        private object InstantiateCollection(Type collectionType, IDictionary<string, object> properties)
         {
-            var outerType = typeof(T); // CollectionResponsePage<TInner>
-
-            Type innerType = this.typeLookup.GetInnerCollectionInterface(outerType);
+            Type innerType = this.typeLookup.GetInnerCollectionInterface(collectionType);
             var targetType = this.typeLookup.GetConcrete(innerType);
             if (innerType == null || targetType == null)
                 throw new ApplicationException($"Error creating collection resource: unknown inner type '{innerType?.Name}'.");
@@ -110,16 +114,16 @@ namespace Stormpath.SDK.Impl.DataStore
                 var materializedItems = listOfInnerType.GetConstructor(Type.EmptyTypes).Invoke(Type.EmptyTypes);
                 var addMethod = listOfInnerType.GetMethod("Add", new Type[] { innerType });
 
-                foreach (var item in items)
+                foreach (var itemMap in items)
                 {
-                    var materialized = this.InstantiateSingle(item, innerType);
+                    var materialized = this.InstantiateSingle(innerType, itemMap);
                     addMethod.Invoke(materializedItems, new object[] { materialized });
                 }
 
                 object targetObject;
-                targetObject = Activator.CreateInstance(outerType, new object[] { href, offset, limit, size, materializedItems });
+                targetObject = Activator.CreateInstance(collectionType, new object[] { href, offset, limit, size, materializedItems });
 
-                return (T)targetObject;
+                return targetObject;
             }
             catch (Exception e)
             {

@@ -1,0 +1,85 @@
+﻿// <copyright file="StubDataStore.cs" company="Stormpath, Inc.">
+//      Copyright (c) 2015 Stormpath, Inc.
+// </copyright>
+// <remarks>
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </remarks>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.DataStore;
+using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
+using Stormpath.SDK.Shared;
+
+namespace Stormpath.SDK.Tests.Fakes
+{
+    public class StubDataStore : IInternalDataStore
+    {
+        private readonly IInternalDataStore fakeDataStore;
+
+        public StubDataStore(string resourceJson, string baseHref, ILogger logger = null)
+        {
+            var fakeRequestExecutor = new StubRequestExecutor(resourceJson);
+            var useLogger = logger == null
+                ? new SDK.Impl.NullLogger()
+                : logger;
+
+            this.fakeDataStore = new DefaultDataStore(fakeRequestExecutor.Object, baseHref, new JsonNetMapMarshaller(), useLogger);
+        }
+
+        string IInternalDataStore.BaseUrl => this.fakeDataStore.BaseUrl;
+
+        IRequestExecutor IInternalDataStore.RequestExecutor => this.fakeDataStore.RequestExecutor;
+
+        T IInternalDataStore.Create<T>(string parentHref, T resource) => this.fakeDataStore.Create(parentHref, resource);
+
+        T IInternalDataStore.Create<T>(string parentHref, T resource, ICreationOptions options) => this.fakeDataStore.Create(parentHref, resource, options);
+
+        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource) => this.fakeDataStore.Create<T, TReturned>(parentHref, resource);
+
+        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options) => this.fakeDataStore.Create<T, TReturned>(parentHref, resource);
+
+        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken) => this.fakeDataStore.CreateAsync(parentHref, resource, cancellationToken);
+
+        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken) => this.fakeDataStore.CreateAsync(parentHref, resource, options, cancellationToken);
+
+        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken) => this.fakeDataStore.CreateAsync<T, TReturned>(parentHref, resource, cancellationToken);
+
+        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken) => this.fakeDataStore.CreateAsync<T, TReturned>(parentHref, resource, options, cancellationToken);
+
+        bool IInternalDataStore.Delete<T>(T resource) => this.fakeDataStore.Delete(resource);
+
+        Task<bool> IInternalDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken) => this.fakeDataStore.DeleteAsync(resource, cancellationToken);
+
+        CollectionResponsePage<T> IInternalDataStore.GetCollection<T>(string href) => this.fakeDataStore.GetCollection<T>(href);
+
+        Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken) => this.fakeDataStore.GetCollectionAsync<T>(href, cancellationToken);
+
+        T IInternalDataStore.GetResource<T>(string resourcePath) => this.fakeDataStore.GetResource<T>(resourcePath);
+
+        Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken) => this.fakeDataStore.GetResourceAsync<T>(href, cancellationToken);
+
+        T IDataStore.Instantiate<T>() => this.fakeDataStore.Instantiate<T>();
+
+        T IInternalDataStore.Save<T>(T resource) => this.fakeDataStore.Save(resource);
+
+        Task<T> IInternalDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken) => this.fakeDataStore.SaveAsync(resource, cancellationToken);
+    }
+}

@@ -22,6 +22,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -31,11 +32,12 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void GetValue_returns_token_value()
         {
-            var ds = new DefaultDataStore(Substitute.For<IRequestExecutor>(), "http://api.foo.bar", new SDK.Impl.NullLogger());
+            var dataStore = new StubDataStore(null, "https://api.foo.bar");
+
             var href = "https://api.foobar.com/v1/applications/WpM9nyZ2TbaEzfbRvLk9KA/passwordResetTokens/my-token-value-here";
             var properties = new Dictionary<string, object>();
             properties.Add("href", href);
-            IPasswordResetToken passwordResetToken = new DefaultPasswordResetToken(ds, properties);
+            IPasswordResetToken passwordResetToken = new DefaultPasswordResetToken(dataStore, properties);
 
             passwordResetToken.GetValue().ShouldBe("my-token-value-here");
         }

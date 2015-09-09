@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
@@ -31,20 +32,19 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
+using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
     public class DefaultResourceFactory_tests
     {
-        private readonly IInternalDataStore fakeDataStore;
         private readonly IResourceFactory factory;
 
         public DefaultResourceFactory_tests()
         {
-            var fakeRequestExecutor = Substitute.For<IRequestExecutor>();
-            this.fakeDataStore = new DefaultDataStore(fakeRequestExecutor, "http://api.foobar.com", new SDK.Impl.NullLogger());
-            this.factory = new DefaultResourceFactory(this.fakeDataStore);
+            var dataStore = new StubDataStore(null, "http://api.foo.bar");
+            this.factory = new DefaultResourceFactory(dataStore);
         }
 
         [Fact]
@@ -57,38 +57,37 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
-        public void Creating_IAccount_returns_DefaultAccount()
+        public void Create_with_type_parameter_returns_concrete_type()
         {
-            IAccount account = this.factory.Create<IAccount>();
-            account.ShouldBeOfType<DefaultAccount>();
+            this.factory.Create<IAccount>().ShouldBeOfType<DefaultAccount>();
         }
 
         [Fact]
-        public void Creating_IApplication_returns_DefaultApplication()
+        public void Create_with_properties_passes_properties_into_object()
         {
-            IApplication account = this.factory.Create<IApplication>();
-            account.ShouldBeOfType<DefaultApplication>();
+            var properties = new Dictionary<string, object>()
+            {
+                { "href", "https://secure.api.foo.bar/baz" }
+            };
+            var instance = this.factory.Create<IAccount>(properties);
+
+            instance.Href.ShouldBe("https://secure.api.foo.bar/baz");
         }
 
-        [Fact]
-        public void Creating_ITenant_returns_DefaultTenant()
+        [Theory]
+        [MemberData(nameof(ResourceTypes))]
+        public void Create_returns_concrete_type(Type @interface, Type expected)
         {
-            ITenant account = this.factory.Create<ITenant>();
-            account.ShouldBeOfType<DefaultTenant>();
+            this.factory.Create(@interface).ShouldBeOfType(expected);
         }
 
-        [Fact]
-        public void Creating_IDirectory_returns_DefaultDirectory()
+        public static IEnumerable<object[]> ResourceTypes()
         {
-            IDirectory account = this.factory.Create<IDirectory>();
-            account.ShouldBeOfType<DefaultDirectory>();
-        }
-
-        [Fact]
-        public void Creating_IGroup_returns_DefaultGroup()
-        {
-            IGroup account = this.factory.Create<IGroup>();
-            account.ShouldBeOfType<DefaultGroup>();
+            yield return new object[] { typeof(IAccount), typeof(DefaultAccount) };
+            yield return new object[] { typeof(IApplication), typeof(DefaultApplication) };
+            yield return new object[] { typeof(ITenant), typeof(DefaultTenant) };
+            yield return new object[] { typeof(IDirectory), typeof(DefaultDirectory) };
+            yield return new object[] { typeof(IGroup), typeof(DefaultGroup) };
         }
     }
 }

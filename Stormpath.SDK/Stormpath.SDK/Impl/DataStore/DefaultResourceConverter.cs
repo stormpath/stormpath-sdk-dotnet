@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class DefaultResourceConverter : IResourceConverter
     {
-        Dictionary<string, object> IResourceConverter.ToMap(AbstractResource resource)
+        IDictionary<string, object> IResourceConverter.ToMap(AbstractResource resource)
         {
             var propertyNames = resource.GetUpdatedPropertyNames();
 

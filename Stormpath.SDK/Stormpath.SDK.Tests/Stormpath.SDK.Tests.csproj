@@ -88,6 +88,7 @@
     <Compile Include="Fakes\FakeAccounts.cs" />
     <Compile Include="Fakes\FakeDataStore.cs" />
     <Compile Include="Fakes\FakeJson.cs" />
+    <Compile Include="Fakes\StubDataStore.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
     <Compile Include="Impl\FieldConverter_tests.cs" />
     <Compile Include="Helpers\Assertly.cs" />

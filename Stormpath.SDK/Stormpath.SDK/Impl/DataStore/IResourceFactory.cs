@@ -15,13 +15,18 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal interface IResourceFactory
     {
+        object Create(Type type);
+
         T Create<T>();
+
+        object Create(Type type, IDictionary<string, object> properties);
 
         T Create<T>(IDictionary<string, object> properties);
     }
