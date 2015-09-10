@@ -32,7 +32,8 @@ namespace Stormpath.SDK.Client
         {
         }
 
-        private AuthenticationScheme(int value, string displayName, Type authenticatorType) : base(value, displayName)
+        private AuthenticationScheme(int value, string displayName, Type authenticatorType)
+            : base(value, displayName)
         {
             this.authenticatorType = authenticatorType;
         }
