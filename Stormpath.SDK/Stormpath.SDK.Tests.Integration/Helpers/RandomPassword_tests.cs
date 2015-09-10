@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
         {
             string password = new RandomPassword(12);
 
-            password.Length.ShouldBe(12);
+            password.Length.ShouldBeGreaterThanOrEqualTo(12);
         }
 
         [Fact]

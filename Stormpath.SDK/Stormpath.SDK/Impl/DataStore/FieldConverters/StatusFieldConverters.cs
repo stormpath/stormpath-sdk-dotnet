@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 {
-    public static class StatusFieldConverters
+    internal static class StatusFieldConverters
     {
         private static bool IsStatusField(KeyValuePair<string, object> token)
         {
