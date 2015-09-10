@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Serialization
         public static bool TryLoad(out IJsonSerializer serializer)
         {
             // TODO load by runtime assembly binding
-            serializer = new JsonNetMapMarshaller();
+            serializer = new JsonNetSerializer();
 
             return true;
         }

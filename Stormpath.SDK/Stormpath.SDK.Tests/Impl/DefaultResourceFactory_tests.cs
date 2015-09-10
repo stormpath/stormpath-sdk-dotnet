@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
@@ -28,7 +27,6 @@ using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Group;
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;

@@ -16,12 +16,9 @@
 // </remarks>
 
 using System.Collections.Generic;
-using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.Account;
-using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 

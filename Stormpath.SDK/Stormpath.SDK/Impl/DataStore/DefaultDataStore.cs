@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly IRequestExecutor requestExecutor;
         private readonly ICacheManager cacheManager;
         private readonly ICacheResolver cacheResolver;
-        private readonly IJsonSerializer serializer;
+        private readonly JsonSerializationProvider serializer;
         private readonly IResourceFactory resourceFactory;
         private readonly IResourceConverter resourceConverter;
         private readonly IAsynchronousFilterChain defaultAsyncFilters;
@@ -83,7 +83,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.cacheManager = cacheManager;
             this.cacheResolver = new DefaultCacheResolver(this.cacheManager, new DefaultCacheRegionNameResolver());
 
-            this.serializer = serializer;
+            this.serializer = new JsonSerializationProvider(serializer);
             this.resourceFactory = new DefaultResourceFactory(this);
             this.resourceConverter = new DefaultResourceConverter();
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="FieldConverter.cs" company="Stormpath, Inc.">
+﻿// <copyright file="AbstractFieldConverter.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,54 +16,48 @@
 // </remarks>
 
 using System;
-using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 {
-    internal sealed class FieldConverter
+    internal abstract class AbstractFieldConverter
     {
         public const Type AnyType = null;
 
         private readonly string name;
-        private readonly Func<JProperty, ConverterResult> convertAction;
         private readonly Type appliesToTargetType;
-        private readonly JTokenType? appliesToTokenType;
         private readonly ResourceTypeLookup typeLookup;
 
-        public FieldConverter(Func<JProperty, ConverterResult> convertAction, Type appliesToTargetType = AnyType, JTokenType? appliesToTokenType = null, string name = null)
+        public AbstractFieldConverter(string converterName, Type appliesToTargetType = AnyType)
         {
-            this.convertAction = convertAction;
             this.appliesToTargetType = appliesToTargetType;
-            this.appliesToTokenType = appliesToTokenType;
-            this.name = name;
+            this.name = converterName;
             this.typeLookup = new ResourceTypeLookup();
         }
 
-        public ConverterResult TryConvertField(JProperty token, Type targetType)
+        public FieldConverterResult TryConvertField(KeyValuePair<string, object> token, Type targetType)
         {
-            bool isSupportedTokenType = true;
-            if (this.appliesToTokenType.HasValue)
-                isSupportedTokenType = this.appliesToTokenType == token.Value.Type;
-            if (!isSupportedTokenType)
-                return ConverterResult.Failed;
-
             bool isSupportedTargetType = targetType == this.appliesToTargetType;
             bool isSupportedGenericTargetType = (targetType?.IsGenericType ?? false) && this.typeLookup.GetInnerCollectionInterface(targetType) == this.appliesToTargetType;
-            bool isSupported = this.appliesToTargetType == AnyType
-                ? true
-                : isSupportedTargetType || isSupportedGenericTargetType;
-            if (!isSupported)
-                return ConverterResult.Failed;
 
-            var result = this.convertAction(token);
+            bool isSupported = false;
+            if (this.appliesToTargetType == AnyType)
+                isSupported = true;
+            else
+                isSupported = isSupportedTargetType || isSupportedGenericTargetType;
+
+            if (!isSupported)
+                return FieldConverterResult.Failed;
+
+            var result = this.ConvertImpl(token);
             return result;
         }
 
+        protected abstract FieldConverterResult ConvertImpl(KeyValuePair<string, object> token);
+
         public override string ToString()
         {
-            return string.IsNullOrEmpty(this.name)
-                ? this.GetType().Name
-                : this.name;
+            return this.name;
         }
     }
 }

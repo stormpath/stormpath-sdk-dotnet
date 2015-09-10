@@ -15,10 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.DataStore;
@@ -41,7 +37,7 @@ namespace Stormpath.SDK.Tests.Fakes
                 ? new SDK.Impl.NullLogger()
                 : logger;
 
-            this.fakeDataStore = new DefaultDataStore(fakeRequestExecutor.Object, baseHref, new JsonNetMapMarshaller(), useLogger);
+            this.fakeDataStore = new DefaultDataStore(fakeRequestExecutor.Object, baseHref, new JsonNetSerializer(), useLogger);
         }
 
         string IInternalDataStore.BaseUrl => this.fakeDataStore.BaseUrl;

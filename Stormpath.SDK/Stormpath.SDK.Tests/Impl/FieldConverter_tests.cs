@@ -16,8 +16,7 @@
 // </remarks>
 
 using System;
-using System.Linq;
-using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
@@ -25,7 +24,6 @@ using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore.FieldConverters;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Impl.Utility;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -37,150 +35,96 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Returns_null_and_false_when_expected_type_does_not_match()
             {
-                var fakeAccountFieldConverter = new FieldConverter(
+                var fakeAccountFieldConverter = new FuncFieldConverter(
                     appliesToTargetType: typeof(IAccount),
-                    convertAction: unused_ => new ConverterResult(true, new object()));
-                var dummyField = new JProperty("foo", "bar");
+                    convertAction: unused_ => new FieldConverterResult(true, new object()),
+                    converterName: "Test");
+
+                var dummyField = new KeyValuePair<string, object>("foo", "bar");
 
                 var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IApplication));
 
                 result.Success.ShouldBe(false);
-                result.Result.ShouldBe(null);
+                result.Value.ShouldBe(null);
             }
 
             [Fact]
             public void Returns_value_when_any_type_is_supported()
             {
-                var stringFieldConverter = new FieldConverter(t => new ConverterResult(true, t.First.ToString()));
-                var dummyField = new JProperty("foo", "bar");
+                var stringFieldConverter = new FuncFieldConverter(
+                    t => new FieldConverterResult(true, t.Value.ToString()),
+                    converterName: "Test");
+
+                var dummyField = new KeyValuePair<string, object>("foo", "bar");
                 var applicationTarget = Type.GetType(nameof(IApplication));
 
                 var result = stringFieldConverter.TryConvertField(dummyField, applicationTarget);
 
                 result.Success.ShouldBe(true);
-                result.Result.ShouldBe("bar");
+                result.Value.ShouldBe("bar");
             }
 
             [Fact]
             public void Returns_value_when_expected_type_matches()
             {
-                var fakeAccountFieldConverter = new FieldConverter(
+                var fakeAccountFieldConverter = new FuncFieldConverter(
                     appliesToTargetType: typeof(IAccount),
-                    convertAction: unused_ => new ConverterResult(true, "good!"));
-                var dummyField = new JProperty("foo", "bar");
+                    convertAction: unused_ => new FieldConverterResult(true, "good!"),
+                    converterName: "Test");
+
+                var dummyField = new KeyValuePair<string, object>("foo", "bar");
 
                 var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IAccount));
 
                 result.Success.ShouldBe(true);
-                result.Result.ShouldBe("good!");
+                result.Value.ShouldBe("good!");
             }
 
             [Fact]
             public void Returns_value_when_expected_type_matches_inside_collection_type()
             {
-                var fakeAccountFieldConverter = new FieldConverter(
+                var fakeAccountFieldConverter = new FuncFieldConverter(
                     appliesToTargetType: typeof(IAccount),
-                    convertAction: unused_ => new ConverterResult(true, "good!"));
-                var dummyField = new JProperty("foo", "bar");
+                    convertAction: unused_ => new FieldConverterResult(true, "good!"),
+                    converterName: "Test");
+
+                var dummyField = new KeyValuePair<string, object>("foo", "bar");
 
                 var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(CollectionResponsePage<IAccount>));
 
                 result.Success.ShouldBe(true);
-                result.Result.ShouldBe("good!");
+                result.Value.ShouldBe("good!");
             }
 
             [Fact]
             public void Returns_false_when_converter_fails()
             {
-                var failingConverter = new FieldConverter(unused_ => ConverterResult.Failed);
-                var dummyField = new JProperty("foo", "bar");
+                var failingConverter = new FuncFieldConverter(
+                    unused_ => FieldConverterResult.Failed,
+                    converterName: "Test");
+
+                var dummyField = new KeyValuePair<string, object>("foo", "bar");
 
                 var result = failingConverter.TryConvertField(dummyField, typeof(IAccount));
 
                 result.Success.ShouldBe(false);
-                result.Result.ShouldBe(null);
+                result.Value.ShouldBe(null);
             }
         }
 
-        public class PrimitiveConverters
-        {
-            [Fact]
-            public void DateTimeOffset_is_materialized()
-            {
-                var fakeDate = new DateTimeOffset(2015, 06, 01, 12, 30, 00, TimeSpan.Zero);
-                var jsonObject = JObject.Parse(@"{ createdAt: '" + Iso8601.Format(fakeDate) + "' }");
-                var converter = DefaultFieldConverters.DateTimeOffsetConverter;
-
-                var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
-
-                result.Result.ShouldBe(fakeDate);
-                result.Result.ShouldBeOfType<DateTimeOffset>();
-                result.Success.ShouldBe(true);
-            }
-
-            [Fact]
-            public void String_is_materialized()
-            {
-                var jsonObject = JObject.Parse(@"{ name: 'foobar' }");
-                var converter = DefaultFieldConverters.StringConverter;
-
-                var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
-
-                result.Result.ShouldBe("foobar");
-                result.Result.ShouldBeOfType<string>();
-                result.Success.ShouldBe(true);
-            }
-
-            [Fact]
-            public void Int_is_materialized()
-            {
-                var jsonObject = JObject.Parse(@"{ items: 12 }");
-                var converter = DefaultFieldConverters.IntConverter;
-
-                var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
-
-                result.Result.ShouldBe(12);
-                result.Result.ShouldBeOfType<int>();
-                result.Success.ShouldBe(true);
-            }
-
-            [Fact]
-            public void Bool_is_materialized()
-            {
-                var jsonObject = JObject.Parse(@"{ isFoo: true }");
-                var converter = DefaultFieldConverters.BoolConverter;
-
-                var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
-
-                result.Result.ShouldBe(true);
-                result.Result.ShouldBeOfType<bool>();
-                result.Success.ShouldBe(true);
-            }
-
-            [Fact]
-            public void Null_is_materialized()
-            {
-                var jsonObject = JObject.Parse(@"{ items: null }");
-                var converter = DefaultFieldConverters.NullConverter;
-
-                var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
-
-                result.Result.ShouldBe(null);
-                result.Success.ShouldBe(true);
-            }
-        }
-
-        public class LinkPropertyConverter
+        public class LinkPropertyConverter_tests
         {
             [Fact]
             public void Link_property_is_materialized()
             {
-                var jsonObject = JObject.Parse(@"{ link: { href: ""http://foobar/myprop"" } }");
-                var converter = DefaultFieldConverters.LinkPropertyConverter;
+                var token = new KeyValuePair<string, object>(
+                    "link",
+                    new Dictionary<string, object>() { { "href", "http://foobar/myprop" } });
+                var converter = new LinkPropertyConverter();
 
-                var result = converter.TryConvertField(jsonObject.Properties().First(), FieldConverter.AnyType);
+                var result = converter.TryConvertField(token, AbstractFieldConverter.AnyType);
 
-                result.Result.ShouldBe(new LinkProperty("http://foobar/myprop"));
+                result.Value.ShouldBe(new LinkProperty("http://foobar/myprop"));
                 result.Success.ShouldBe(true);
             }
         }
@@ -190,48 +134,48 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void AccountStatus_is_materialized()
             {
-                var jsonObject = JObject.Parse(@"{ status: 'unverified' }");
-                var converter = DefaultFieldConverters.AccountStatusConverter;
+                var token = new KeyValuePair<string, object>("status", "unverified");
+                var converter = new StatusFieldConverters.AccountStatusConverter();
 
-                var result = converter.TryConvertField(jsonObject.Properties().First(), typeof(IAccount));
+                var result = converter.TryConvertField(token, typeof(IAccount));
 
-                result.Result.ShouldBe(AccountStatus.Unverified);
+                result.Value.ShouldBe(AccountStatus.Unverified);
                 result.Success.ShouldBe(true);
             }
 
             [Fact]
             public void ApplicationStatus_is_materialized()
             {
-                var jsonObject = JObject.Parse(@"{ status: 'disabled' }");
-                var converter = DefaultFieldConverters.ApplicationStatusConverter;
+                var token = new KeyValuePair<string, object>("status", "disabled");
+                var converter = new StatusFieldConverters.ApplicationStatusConverter();
 
-                var result = converter.TryConvertField(jsonObject.Properties().First(), typeof(IApplication));
+                var result = converter.TryConvertField(token, typeof(IApplication));
 
-                result.Result.ShouldBe(ApplicationStatus.Disabled);
+                result.Value.ShouldBe(ApplicationStatus.Disabled);
                 result.Success.ShouldBe(true);
             }
 
             [Fact]
             public void DirectoryStatus_is_materialized()
             {
-                var jsonObject = JObject.Parse(@"{ status: 'enabled' }");
-                var converter = DefaultFieldConverters.DirectoryStatusConverter;
+                var token = new KeyValuePair<string, object>("status", "enabled");
+                var converter = new StatusFieldConverters.DirectoryStatusConverter();
 
-                var result = converter.TryConvertField(jsonObject.Properties().First(), typeof(IDirectory));
+                var result = converter.TryConvertField(token, typeof(IDirectory));
 
-                result.Result.ShouldBe(DirectoryStatus.Enabled);
+                result.Value.ShouldBe(DirectoryStatus.Enabled);
                 result.Success.ShouldBe(true);
             }
 
             [Fact]
             public void GroupStatus_is_materialized()
             {
-                var jsonObject = JObject.Parse(@"{ status: 'disabled' }");
-                var converter = DefaultFieldConverters.GroupStatusConverter;
+                var token = new KeyValuePair<string, object>("status", "disabled");
+                var converter = new StatusFieldConverters.GroupStatusConverter();
 
-                var result = converter.TryConvertField(jsonObject.Properties().First(), typeof(IGroup));
+                var result = converter.TryConvertField(token, typeof(IGroup));
 
-                result.Result.ShouldBe(AccountStatus.Disabled);
+                result.Value.ShouldBe(AccountStatus.Disabled);
                 result.Success.ShouldBe(true);
             }
         }

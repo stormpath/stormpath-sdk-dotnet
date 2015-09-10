@@ -18,46 +18,45 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 {
     internal sealed class FieldConverterList
     {
-        private readonly List<FieldConverter> converters;
+        private readonly List<AbstractFieldConverter> converters;
 
         public FieldConverterList()
         {
-            this.converters = new List<FieldConverter>();
+            this.converters = new List<AbstractFieldConverter>();
         }
 
-        public FieldConverterList(FieldConverter initialConverter)
+        public FieldConverterList(AbstractFieldConverter initialConverter)
             : this()
         {
             this.converters.Add(initialConverter);
         }
 
-        public FieldConverterList(IEnumerable<FieldConverter> initialConverters)
+        public FieldConverterList(IEnumerable<AbstractFieldConverter> initialConverters)
             : this()
         {
             this.converters.AddRange(initialConverters);
         }
 
-        public FieldConverterList(params FieldConverter[] converters)
+        public FieldConverterList(params AbstractFieldConverter[] converters)
             : this(converters.AsEnumerable())
         {
         }
 
         public int Count => this.converters.Count;
 
-        public void Add(FieldConverter converter)
+        public void Add(AbstractFieldConverter converter)
         {
             this.converters.Add(converter);
         }
 
-        public ConverterResult TryConvertField(JProperty token, Type targetType)
+        public FieldConverterResult TryConvertField(KeyValuePair<string, object> token, Type targetType)
         {
-            var result = ConverterResult.Failed; // presumed failed until proven successful
+            var result = FieldConverterResult.Failed; // presumed failed until proven successful
 
             foreach (var converter in this.converters)
             {

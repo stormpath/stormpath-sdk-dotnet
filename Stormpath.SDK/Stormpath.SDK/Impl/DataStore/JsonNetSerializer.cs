@@ -1,4 +1,4 @@
-﻿// <copyright file="JsonNetMapMarshaller.cs" company="Stormpath, Inc.">
+﻿// <copyright file="JsonNetSerializer.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -19,36 +19,19 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Stormpath.SDK.Impl.DataStore.FieldConverters;
 using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal sealed class JsonNetMapMarshaller : IJsonSerializer
+    internal sealed class JsonNetSerializer : IJsonSerializer
     {
-        private static readonly FieldConverterList ConverterChain =
-            new FieldConverterList(
-                DefaultFieldConverters.LinkPropertyConverter,
-                DefaultFieldConverters.DateTimeOffsetConverter,
-                DefaultFieldConverters.AccountStatusConverter,
-                DefaultFieldConverters.ApplicationStatusConverter,
-                DefaultFieldConverters.DirectoryStatusConverter,
-                DefaultFieldConverters.GroupStatusConverter,
-                DefaultFieldConverters.IntConverter,
-                DefaultFieldConverters.StringConverter,
-                DefaultFieldConverters.BoolConverter,
-                DefaultFieldConverters.NullConverter,
-                DefaultFieldConverters.FallbackConverter);
-
         private readonly JsonSerializerSettings serializerSettings;
-        private readonly ResourceTypeLookup typeLookup;
 
-        public JsonNetMapMarshaller()
+        public JsonNetSerializer()
         {
             this.serializerSettings = new JsonSerializerSettings();
             this.serializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
             this.serializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-            this.typeLookup = new ResourceTypeLookup();
         }
 
         string IJsonSerializer.Serialize(IDictionary<string, object> map)
@@ -58,10 +41,10 @@ namespace Stormpath.SDK.Impl.DataStore
             return serialized;
         }
 
-        IDictionary<string, object> IJsonSerializer.Deserialize(string json, Type type)
+        IDictionary<string, object> IJsonSerializer.Deserialize(string json)
         {
             var deserializedMap = (JObject)JsonConvert.DeserializeObject(json, this.serializerSettings);
-            var sanitizedMap = this.Sanitize(deserializedMap, type);
+            var sanitizedMap = this.Sanitize(deserializedMap);
 
             return sanitizedMap;
         }
@@ -70,9 +53,8 @@ namespace Stormpath.SDK.Impl.DataStore
         /// JSON.NET deserializes everything into nested JObjects. We want IDictionaries all the way down.
         /// </summary>
         /// <param name="map">Deserialized <see cref="JObject"/> from JSON.NET</param>
-        /// <param name="type">Target resource type (as an interface)</param>
         /// <returns><see cref="IDictionary{string, object}"/> of primitive items, and embedded objects as nested <see cref="IDictionary{string, object}"/></returns>
-        private IDictionary<string, object> Sanitize(JObject map, Type type)
+        private IDictionary<string, object> Sanitize(JObject map)
         {
             var result = new Dictionary<string, object>(map.Count);
 
@@ -81,24 +63,41 @@ namespace Stormpath.SDK.Impl.DataStore
                 var name = prop.Name;
                 object value = null;
 
-                bool isSupportedCollectionItems =
-                    prop.Value.Type == JTokenType.Array &&
-                    this.typeLookup.GetInnerCollectionInterface(type) != null;
-                if (isSupportedCollectionItems)
+                switch (prop.Value.Type)
                 {
-                    var nested = new List<IDictionary<string, object>>();
-                    foreach (var child in prop.Value.Children())
-                    {
-                        nested.Add(this.Sanitize((JObject)child, type));
-                    }
+                    case JTokenType.Array:
+                        var nested = new List<IDictionary<string, object>>();
+                        foreach (var child in prop.Value.Children())
+                        {
+                            nested.Add(this.Sanitize((JObject)child));
+                        }
 
-                    value = nested;
-                }
-                else
-                {
-                    var convertResult = ConverterChain.TryConvertField(prop, type);
-                    if (convertResult.Success)
-                        value = convertResult.Result;
+                        value = nested;
+                        break;
+
+                    case JTokenType.Object:
+                        value = this.Sanitize((JObject)prop.Value);
+                        break;
+
+                    case JTokenType.Date:
+                        value = prop.Value.ToObject<DateTimeOffset>();
+                        break;
+
+                    case JTokenType.Integer:
+                        value = int.Parse(prop.Value.ToString());
+                        break;
+
+                    case JTokenType.Boolean:
+                        value = bool.Parse(prop.Value.ToString());
+                        break;
+
+                    case JTokenType.Null:
+                        value = null;
+                        break;
+
+                    default:
+                        value = prop.Value.ToString();
+                        break;
                 }
 
                 result.Add(name, value);

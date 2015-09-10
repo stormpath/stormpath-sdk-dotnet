@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System;
 using System.Collections.Generic;
 
 namespace Stormpath.SDK.Serialization
@@ -24,6 +23,6 @@ namespace Stormpath.SDK.Serialization
     {
         string Serialize(IDictionary<string, object> map);
 
-        IDictionary<string, object> Deserialize(string json, Type type);
+        IDictionary<string, object> Deserialize(string json);
     }
 }

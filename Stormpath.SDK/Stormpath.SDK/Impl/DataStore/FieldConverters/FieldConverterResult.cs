@@ -1,4 +1,4 @@
-﻿// <copyright file="ConverterResult.cs" company="Stormpath, Inc.">
+﻿// <copyright file="FieldConverterResult.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -20,15 +20,15 @@ using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 {
-    internal sealed class ConverterResult : ImmutableValueObject<ConverterResult>
+    internal sealed class FieldConverterResult : ImmutableValueObject<FieldConverterResult>
     {
         private readonly bool success = false;
-        private readonly object result = null;
+        private readonly object value = null;
         private readonly Type type = null;
 
-        public static readonly ConverterResult Failed = new ConverterResult(false);
+        public static readonly FieldConverterResult Failed = new FieldConverterResult(false);
 
-        private ConverterResult(bool success)
+        private FieldConverterResult(bool success)
         {
             if (success == true)
                 throw new ApplicationException("Use this constructor only for failed results. For successful results, use ConverterResult(success: true, result: object)");
@@ -36,13 +36,13 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
             this.success = success;
         }
 
-        public ConverterResult(bool success, object result)
+        public FieldConverterResult(bool success, object result)
         {
             this.success = success;
-            this.result = result;
+            this.value = result;
         }
 
-        public ConverterResult(bool success, object result, Type type)
+        public FieldConverterResult(bool success, object result, Type type)
             : this(success, result)
         {
             this.type = type;
@@ -50,17 +50,8 @@ namespace Stormpath.SDK.Impl.DataStore.FieldConverters
 
         public bool Success => this.success;
 
-        public object Result => this.result;
+        public object Value => this.value;
 
         public Type Type => this.type;
-
-        public T ResultAs<T>()
-            where T : class
-        {
-            if (typeof(T) != this.type)
-                throw new InvalidCastException($"Result is of type '{this.type?.Name}', not '{typeof(T).Name}'");
-
-            return this.result as T;
-        }
     }
 }

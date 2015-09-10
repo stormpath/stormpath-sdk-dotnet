@@ -127,11 +127,13 @@
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataRequest.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataResult.cs" />
-    <Compile Include="Impl\DataStore\FieldConverters\ConverterResult.cs" />
-    <Compile Include="Impl\DataStore\FieldConverters\DefaultFieldConverters.cs" />
-    <Compile Include="Impl\DataStore\FieldConverters\FieldConverter.cs" />
+    <Compile Include="Impl\DataStore\FieldConverters\FieldConverterResult.cs" />
+    <Compile Include="Impl\DataStore\FieldConverters\AbstractFieldConverter.cs" />
     <Compile Include="Impl\DataStore\FieldConverters\FieldConverterList.cs" />
     <Compile Include="DataStore\IDataStore.cs" />
+    <Compile Include="Impl\DataStore\FieldConverters\FuncFieldConverter.cs" />
+    <Compile Include="Impl\DataStore\FieldConverters\LinkPropertyConverter.cs" />
+    <Compile Include="Impl\DataStore\FieldConverters\StatusFieldConverters.cs" />
     <Compile Include="Impl\DataStore\FilterChain\DefaultSynchronousFilter.cs" />
     <Compile Include="Impl\DataStore\FilterChain\DefaultAsynchronousFilter.cs" />
     <Compile Include="Impl\DataStore\FilterChain\DefaultSynchronousFilterChain.cs" />
@@ -141,6 +143,7 @@
     <Compile Include="Impl\DataStore\FilterChain\IAsynchronousFilterChain.cs" />
     <Compile Include="Impl\DataStore\FilterChain\ISynchronousFilter.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
+    <Compile Include="Impl\DataStore\JsonSerializationProvider.cs" />
     <Compile Include="Serialization\DefaultJsonSerializer.cs" />
     <Compile Include="Serialization\IJsonSerializer.cs" />
     <Compile Include="Impl\DataStore\IResourceConverter.cs" />
@@ -180,7 +183,7 @@
     <Compile Include="Impl\Client\DefaultClient.cs" />
     <Compile Include="Impl\Client\DefaultClientBuilder.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.cs" />
-    <Compile Include="Impl\DataStore\JsonNetMapMarshaller.cs" />
+    <Compile Include="Impl\DataStore\JsonNetSerializer.cs" />
     <Compile Include="Impl\Extensions\StringExtensions.cs" />
     <Compile Include="Impl\Http\Authentication\BasicRequestAuthenticator.cs" />
     <Compile Include="Impl\Http\Authentication\IRequestAuthenticator.cs" />
