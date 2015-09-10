@@ -17,8 +17,9 @@
 
 using System;
 using System.Collections.Generic;
+using Stormpath.SDK.Impl.DataStore;
 
-namespace Stormpath.SDK.Impl.DataStore.FieldConverters
+namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 {
     internal abstract class AbstractFieldConverter
     {

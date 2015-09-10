@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Threading;
 using NSubstitute;
 using Stormpath.SDK.Account;
@@ -43,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl
                     Arg.Any<CancellationToken>()).IgnoreAwait();
         }
 
-        public class Application_options
+        public class Application_options : IDisposable
         {
             private readonly IInternalDataStore dataStore;
 
@@ -93,9 +94,31 @@ namespace Stormpath.SDK.Tests.Impl
 
                 this.VerifyThat(options, resultsInQueryString: "?createDirectory=Foobar+Directory");
             }
+
+            private bool isDisposed = false; // To detect redundant calls
+
+            protected virtual void Dispose(bool disposing)
+            {
+                if (!this.isDisposed)
+                {
+                    if (disposing)
+                    {
+                        (this.dataStore as StubDataStore).Dispose();
+                    }
+
+                    this.isDisposed = true;
+                }
+            }
+
+            // This code added to correctly implement the disposable pattern.
+            public void Dispose()
+            {
+                // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+                this.Dispose(true);
+            }
         }
 
-        public class Account_options
+        public class Account_options : IDisposable
         {
             private readonly IInternalDataStore dataStore;
 
@@ -142,6 +165,28 @@ namespace Stormpath.SDK.Tests.Impl
                 }.Build();
 
                 this.VerifyThat(options, resultsInQueryString: "?registrationWorkflowEnabled=false");
+            }
+
+            private bool isDisposed = false; // To detect redundant calls
+
+            protected virtual void Dispose(bool disposing)
+            {
+                if (!this.isDisposed)
+                {
+                    if (disposing)
+                    {
+                        (this.dataStore as StubDataStore).Dispose();
+                    }
+
+                    this.isDisposed = true;
+                }
+            }
+
+            // This code added to correctly implement the disposable pattern.
+            public void Dispose()
+            {
+                // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+                this.Dispose(true);
             }
         }
     }

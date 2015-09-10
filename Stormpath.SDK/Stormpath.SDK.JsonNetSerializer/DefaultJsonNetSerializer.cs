@@ -1,4 +1,4 @@
-﻿// <copyright file="JsonNetSerializer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultJsonNetSerializer.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -21,13 +21,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Stormpath.SDK.Serialization;
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.JsonNetSerializer
 {
-    internal sealed class JsonNetSerializer : IJsonSerializer
+    public sealed class DefaultJsonNetSerializer : IJsonSerializer
     {
         private readonly JsonSerializerSettings serializerSettings;
 
-        public JsonNetSerializer()
+        public DefaultJsonNetSerializer()
         {
             this.serializerSettings = new JsonSerializerSettings();
             this.serializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;

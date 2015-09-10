@@ -18,6 +18,7 @@
 using System;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Impl.Serialization;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
 
@@ -25,12 +26,24 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class DefaultClientBuilder : IClientBuilder
     {
+        private readonly IJsonSerializerLoader serializerLoader;
+
         private string baseUrl = DefaultClient.DefaultBaseUrl;
         private int connectionTimeout = DefaultClient.DefaultConnectionTimeout;
         private AuthenticationScheme authenticationScheme;
         private IClientApiKey apiKey;
         private IJsonSerializer jsonSerializer;
         private ILogger logger;
+
+        public DefaultClientBuilder()
+            : this(new DefaultJsonSerializerLoader())
+        {
+        }
+
+        internal DefaultClientBuilder(IJsonSerializerLoader serializerLoader)
+        {
+            this.serializerLoader = serializerLoader;
+        }
 
         IClientBuilder IClientBuilder.SetApiKey(IClientApiKey apiKey)
         {
@@ -85,10 +98,10 @@ namespace Stormpath.SDK.Impl.Client
             var useSerializer = this.jsonSerializer;
             bool isValidSerializer =
                 this.jsonSerializer != null ||
-                DefaultJsonSerializer.TryLoad(out useSerializer);
+                this.serializerLoader.TryLoad(out useSerializer);
 
             if (!isValidSerializer)
-                throw new ApplicationException("Could not find a valid JSON serializer.");
+                throw new ApplicationException("Could not find a valid JSON serializer. Include Stormpath.SDK.JsonNetSerializer.dll in the application path.");
 
             return new DefaultClient(this.apiKey, this.baseUrl, this.authenticationScheme, this.connectionTimeout, useSerializer, this.logger);
         }

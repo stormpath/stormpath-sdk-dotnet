@@ -33,6 +33,8 @@ namespace Stormpath.SDK.Tests.Integration
     {
         private IntegrationTestData testData;
 
+        private bool isDisposed = false;
+
         public IntegrationTestFixture()
         {
             this.testData = new IntegrationTestData();
@@ -45,10 +47,25 @@ namespace Stormpath.SDK.Tests.Integration
                 .GetAwaiter().GetResult();
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.isDisposed)
+            {
+                if (disposing)
+                {
+                    this.RemoveObjectsFromTenantAsync()
+                        .GetAwaiter().GetResult();
+                }
+
+                this.isDisposed = true;
+            }
+        }
+
+        // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
-            this.RemoveObjectsFromTenantAsync()
-                .GetAwaiter().GetResult();
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            this.Dispose(true);
         }
 
         public string TenantHref { get; private set; }

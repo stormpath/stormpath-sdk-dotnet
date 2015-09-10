@@ -29,18 +29,34 @@ namespace Stormpath.SDK.Tests.Impl.Cache
     public class InMemoryCache_tests : IDisposable
     {
         private readonly IDisposable dummyCache;
+        private bool isDisposed = false;
 
         public InMemoryCache_tests()
         {
             this.dummyCache = new InMemoryCache<string, string>("dummy");
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.isDisposed)
+            {
+                if (disposing)
+                {
+                    // This is done for testing because the Dispose() method tears down the
+                    // backing memory cache. This will be executed after each test run
+                    // to ensure that each test is idempotent.
+                    this.dummyCache.Dispose();
+                }
+
+                this.isDisposed = true;
+            }
+        }
+
+        // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
-            // This is done for testing because the Dispose() method tears down the
-            // backing memory cache. This will be executed after each test run
-            // to ensure that each test is idempotent.
-            this.dummyCache.Dispose();
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            this.Dispose(true);
         }
 
         public class SynchronousCache

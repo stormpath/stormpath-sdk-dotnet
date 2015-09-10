@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Impl.Resource;
 
-namespace Stormpath.SDK.Impl.DataStore.FieldConverters
+namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 {
     internal sealed class LinkPropertyConverter : AbstractFieldConverter
     {

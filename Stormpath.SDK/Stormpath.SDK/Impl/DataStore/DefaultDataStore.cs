@@ -29,6 +29,7 @@ using Stormpath.SDK.Impl.Error;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Serialization;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;

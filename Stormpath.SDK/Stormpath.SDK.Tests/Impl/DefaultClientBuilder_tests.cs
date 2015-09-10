@@ -21,6 +21,8 @@ using Shouldly;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.Client;
+using Stormpath.SDK.Impl.Serialization;
+using Stormpath.SDK.Serialization;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -133,6 +135,30 @@ namespace Stormpath.SDK.Tests.Impl
                     .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                     .SetBaseUrl("foobar")
                     .SetConnectionTimeout(-1)
+                    .Build();
+            });
+        }
+
+        [Fact]
+        public void Throws_when_no_JSON_serializer_can_be_found()
+        {
+            IJsonSerializer dummy = null;
+            var fakeLoader = Substitute.For<IJsonSerializerLoader>();
+            fakeLoader
+                .TryLoad(out dummy)
+                .Returns(false);
+
+            var fakeKey = Substitute.For<IClientApiKey>();
+            fakeKey.IsValid().Returns(true);
+
+            IClientBuilder builder = new DefaultClientBuilder(fakeLoader);
+
+            Assert.Throws<ApplicationException>(() =>
+            {
+                var client = builder
+                    .SetApiKey(fakeKey)
+                    .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
+                    .SetConnectionTimeout(10)
                     .Build();
             });
         }

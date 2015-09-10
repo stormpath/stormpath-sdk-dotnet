@@ -22,8 +22,8 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Impl.DataStore.FieldConverters;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Serialization.FieldConverters;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl

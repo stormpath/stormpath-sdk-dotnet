@@ -1,4 +1,4 @@
-﻿// <copyright file="FieldConverterList_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultJsonSerializerLoader_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,28 +15,26 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Collections.Generic;
 using Shouldly;
-using Stormpath.SDK.Account;
-using Stormpath.SDK.Impl.Serialization.FieldConverters;
+using Stormpath.SDK.Impl.Serialization;
+using Stormpath.SDK.Serialization;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class FieldConverterList_tests
+    public class DefaultJsonSerializerLoader_tests
     {
         [Fact]
-        public void Returns_null_and_false_if_no_converter_can_handle_field()
+        public void Default_library_is_loaded()
         {
-            var converterList = new FieldConverterList();
-            var dummyField = new KeyValuePair<string, object>("foo", "bar");
-            var testTarget = Type.GetType(nameof(IAccount));
+            IJsonSerializerLoader loader = new DefaultJsonSerializerLoader();
 
-            var result = converterList.TryConvertField(dummyField, testTarget);
+            // This test project has a reference to Stormpath.SDK.JsonNetSerializer, so the file lookup will succeed
+            IJsonSerializer serializer = null;
+            bool loadResult = loader.TryLoad(out serializer);
 
-            result.Success.ShouldBe(false);
-            result.Value.ShouldBe(null);
+            loadResult.ShouldBe(true);
+            serializer.ShouldNotBe(null);
         }
     }
 }

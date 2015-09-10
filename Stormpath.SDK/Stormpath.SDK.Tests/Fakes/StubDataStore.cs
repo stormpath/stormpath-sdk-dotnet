@@ -15,18 +15,20 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.JsonNetSerializer;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
-    public class StubDataStore : IInternalDataStore
+    public sealed class StubDataStore : IInternalDataStore, IDisposable
     {
         private readonly IInternalDataStore fakeDataStore;
 
@@ -37,7 +39,7 @@ namespace Stormpath.SDK.Tests.Fakes
                 ? new SDK.Impl.NullLogger()
                 : logger;
 
-            this.fakeDataStore = new DefaultDataStore(fakeRequestExecutor.Object, baseHref, new JsonNetSerializer(), useLogger);
+            this.fakeDataStore = new DefaultDataStore(fakeRequestExecutor.Object, baseHref, new DefaultJsonNetSerializer(), useLogger);
         }
 
         string IInternalDataStore.BaseUrl => this.fakeDataStore.BaseUrl;
@@ -77,5 +79,33 @@ namespace Stormpath.SDK.Tests.Fakes
         T IInternalDataStore.Save<T>(T resource) => this.fakeDataStore.Save(resource);
 
         Task<T> IInternalDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken) => this.fakeDataStore.SaveAsync(resource, cancellationToken);
+
+#pragma warning disable SA1124 // Do not use regions
+        #region IDisposable Support
+#pragma warning restore SA1124 // Do not use regions
+
+        private bool isDisposed = false; // To detect redundant calls
+
+        private void Dispose(bool disposing)
+        {
+            if (!this.isDisposed)
+            {
+                if (disposing)
+                {
+                    (this.fakeDataStore as DefaultDataStore).Dispose();
+                }
+
+                this.isDisposed = true;
+            }
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            this.Dispose(true);
+        }
+
+        #endregion
     }
 }

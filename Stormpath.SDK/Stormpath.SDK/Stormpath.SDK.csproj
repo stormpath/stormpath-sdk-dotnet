@@ -38,10 +38,6 @@
     <CodeAnalysisRuleSet>stormpath.sdk.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Remotion.Linq, Version=1.15.15.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\packages\Remotion.Linq.1.15.15.0\lib\portable-net45+wp80+wpa81+win\Remotion.Linq.dll</HintPath>
       <Private>True</Private>
@@ -127,13 +123,13 @@
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataRequest.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataResult.cs" />
-    <Compile Include="Impl\DataStore\FieldConverters\FieldConverterResult.cs" />
-    <Compile Include="Impl\DataStore\FieldConverters\AbstractFieldConverter.cs" />
-    <Compile Include="Impl\DataStore\FieldConverters\FieldConverterList.cs" />
+    <Compile Include="Impl\Serialization\FieldConverters\FieldConverterResult.cs" />
+    <Compile Include="Impl\Serialization\FieldConverters\AbstractFieldConverter.cs" />
+    <Compile Include="Impl\Serialization\FieldConverters\FieldConverterList.cs" />
     <Compile Include="DataStore\IDataStore.cs" />
-    <Compile Include="Impl\DataStore\FieldConverters\FuncFieldConverter.cs" />
-    <Compile Include="Impl\DataStore\FieldConverters\LinkPropertyConverter.cs" />
-    <Compile Include="Impl\DataStore\FieldConverters\StatusFieldConverters.cs" />
+    <Compile Include="Impl\Serialization\FieldConverters\FuncFieldConverter.cs" />
+    <Compile Include="Impl\Serialization\FieldConverters\LinkPropertyConverter.cs" />
+    <Compile Include="Impl\Serialization\FieldConverters\StatusFieldConverters.cs" />
     <Compile Include="Impl\DataStore\FilterChain\DefaultSynchronousFilter.cs" />
     <Compile Include="Impl\DataStore\FilterChain\DefaultAsynchronousFilter.cs" />
     <Compile Include="Impl\DataStore\FilterChain\DefaultSynchronousFilterChain.cs" />
@@ -143,8 +139,9 @@
     <Compile Include="Impl\DataStore\FilterChain\IAsynchronousFilterChain.cs" />
     <Compile Include="Impl\DataStore\FilterChain\ISynchronousFilter.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
-    <Compile Include="Impl\DataStore\JsonSerializationProvider.cs" />
-    <Compile Include="Serialization\DefaultJsonSerializer.cs" />
+    <Compile Include="Impl\Serialization\JsonSerializationProvider.cs" />
+    <Compile Include="Impl\Serialization\DefaultJsonSerializerLoader.cs" />
+    <Compile Include="Impl\Serialization\IJsonSerializerLoader.cs" />
     <Compile Include="Serialization\IJsonSerializer.cs" />
     <Compile Include="Impl\DataStore\IResourceConverter.cs" />
     <Compile Include="Impl\DataStore\IResourceDataRequest.cs" />
@@ -183,7 +180,6 @@
     <Compile Include="Impl\Client\DefaultClient.cs" />
     <Compile Include="Impl\Client\DefaultClientBuilder.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.cs" />
-    <Compile Include="Impl\DataStore\JsonNetSerializer.cs" />
     <Compile Include="Impl\Extensions\StringExtensions.cs" />
     <Compile Include="Impl\Http\Authentication\BasicRequestAuthenticator.cs" />
     <Compile Include="Impl\Http\Authentication\IRequestAuthenticator.cs" />

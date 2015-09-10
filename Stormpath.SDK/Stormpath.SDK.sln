@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stormpath.SDK.Tests", "Stor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stormpath.SDK.Tests.Integration", "Stormpath.SDK.Tests.Integration\Stormpath.SDK.Tests.Integration.csproj", "{09B79235-D67F-4FCA-9991-5AE30838EECE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stormpath.SDK.JsonNetSerializer", "Stormpath.SDK.JsonNetSerializer\Stormpath.SDK.JsonNetSerializer.csproj", "{4011B5EA-CEB5-4212-B8E6-D18C63AB6ACF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stormpath.SDK.JsonNetSerializer.Tests", "Stormpath.SDK.JsonNetSerializer.Tests\Stormpath.SDK.JsonNetSerializer.Tests.csproj", "{0B3F40E7-83A9-481B-A694-78D02D735ACF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{09B79235-D67F-4FCA-9991-5AE30838EECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09B79235-D67F-4FCA-9991-5AE30838EECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09B79235-D67F-4FCA-9991-5AE30838EECE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4011B5EA-CEB5-4212-B8E6-D18C63AB6ACF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4011B5EA-CEB5-4212-B8E6-D18C63AB6ACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4011B5EA-CEB5-4212-B8E6-D18C63AB6ACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4011B5EA-CEB5-4212-B8E6-D18C63AB6ACF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B3F40E7-83A9-481B-A694-78D02D735ACF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B3F40E7-83A9-481B-A694-78D02D735ACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B3F40E7-83A9-481B-A694-78D02D735ACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B3F40E7-83A9-481B-A694-78D02D735ACF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultJsonSerializer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IJsonSerializerLoader.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,18 +15,12 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Serialization;
 
-namespace Stormpath.SDK.Serialization
+namespace Stormpath.SDK.Impl.Serialization
 {
-    public static class DefaultJsonSerializer
+    internal interface IJsonSerializerLoader
     {
-        public static bool TryLoad(out IJsonSerializer serializer)
-        {
-            // TODO load by runtime assembly binding
-            serializer = new JsonNetSerializer();
-
-            return true;
-        }
+        bool TryLoad(out IJsonSerializer serializer);
     }
 }

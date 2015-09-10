@@ -17,10 +17,11 @@
 
 using System;
 using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore.FieldConverters;
+using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Serialization.FieldConverters;
 using Stormpath.SDK.Serialization;
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Impl.Serialization
 {
     internal sealed class JsonSerializationProvider
     {

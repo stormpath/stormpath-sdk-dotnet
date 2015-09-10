@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Stormpath.SDK.Impl.DataStore.FieldConverters
+namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 {
     internal static class StatusFieldConverters
     {
