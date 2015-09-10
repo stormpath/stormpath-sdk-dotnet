@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Impl.DataStore.FilterChain
+namespace Stormpath.SDK.Impl.DataStore.Filters
 {
     internal sealed class DefaultSynchronousFilterChain : ISynchronousFilterChain
     {
@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Impl.DataStore.FilterChain
             return this;
         }
 
-        IResourceDataResult ISynchronousFilterChain.Execute(IResourceDataRequest request, ILogger logger)
+        IResourceDataResult ISynchronousFilterChain.Filter(IResourceDataRequest request, ILogger logger)
         {
             bool hasFilters = this.filters?.Any() ?? false;
             if (!hasFilters)
@@ -57,14 +57,14 @@ namespace Stormpath.SDK.Impl.DataStore.FilterChain
 
             if (this.filters.Count == 1)
             {
-                return this.filters.Single().Execute(
+                return this.filters.Single().Filter(
                     request,
                     chain: null,
                     logger: logger);
             }
 
             var remainingChain = new DefaultSynchronousFilterChain(this.filters.Skip(1).ToList());
-            return this.filters.First().Execute(request, remainingChain, logger);
+            return this.filters.First().Filter(request, remainingChain, logger);
         }
     }
 }

@@ -16,7 +16,7 @@
 // </remarks>
 
 using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
@@ -25,42 +25,46 @@ namespace Stormpath.SDK.Impl.Cache
 {
     internal class DefaultCacheResolver : ICacheResolver
     {
-        private readonly ICacheManager cacheManager;
-        private readonly ISynchronousCacheManager syncCacheManager;
-        private readonly IAsynchronousCacheManager asyncCacheManager;
+        private readonly ICacheProvider cacheProvider;
+        private readonly ISynchronousCacheProvider syncCacheProvider;
+        private readonly IAsynchronousCacheProvider asyncCacheProvider;
         private readonly ICacheRegionNameResolver cacheRegionNameResolver;
 
-        public DefaultCacheResolver(ICacheManager cacheManager, ICacheRegionNameResolver cacheRegionNameResolver)
+        bool ICacheResolver.IsSynchronousSupported => this.cacheProvider.IsAsynchronousSupported;
+
+        bool ICacheResolver.IsAsynchronousSupported => this.cacheProvider.IsSynchronousSupported;
+
+        public DefaultCacheResolver(ICacheProvider cacheProvider, ICacheRegionNameResolver cacheRegionNameResolver)
         {
-            if (cacheManager == null)
-                throw new ArgumentNullException(nameof(cacheManager));
+            if (cacheProvider == null)
+                throw new ArgumentNullException(nameof(cacheProvider));
             if (cacheRegionNameResolver == null)
                 throw new ArgumentNullException(nameof(cacheRegionNameResolver));
 
-            this.cacheManager = cacheManager;
-            this.syncCacheManager = cacheManager as ISynchronousCacheManager;
-            this.asyncCacheManager = cacheManager as IAsynchronousCacheManager;
+            this.cacheProvider = cacheProvider;
+            this.syncCacheProvider = cacheProvider as ISynchronousCacheProvider;
+            this.asyncCacheProvider = cacheProvider as IAsynchronousCacheProvider;
             this.cacheRegionNameResolver = cacheRegionNameResolver;
         }
 
-        ISynchronousCache<string, ConcurrentDictionary<string, object>> ICacheResolver.GetCache<T>()
+        ISynchronousCache<string, IDictionary<string, object>> ICacheResolver.GetCache<T>()
         {
-            if (!this.cacheManager.IsSynchronousSupported || this.syncCacheManager == null)
-                throw new ApplicationException($"A synchronous caching path is not supported in {this.cacheManager.GetType().Name}");
+            if (!this.cacheProvider.IsSynchronousSupported || this.syncCacheProvider == null)
+                throw new ApplicationException($"A synchronous caching path is not supported in {this.cacheProvider.GetType().Name}");
 
             var cacheRegionName = this.cacheRegionNameResolver.GetCacheRegionName<T>();
 
-            return this.syncCacheManager.GetCache<string, ConcurrentDictionary<string, object>>(cacheRegionName);
+            return this.syncCacheProvider.GetCache<string, IDictionary<string, object>>(cacheRegionName);
         }
 
-        Task<IAsynchronousCache<string, ConcurrentDictionary<string, object>>> ICacheResolver.GetCacheAsync<T>(CancellationToken cancellationToken)
+        Task<IAsynchronousCache<string, IDictionary<string, object>>> ICacheResolver.GetCacheAsync<T>(CancellationToken cancellationToken)
         {
-            if (!this.cacheManager.IsAsynchronousSupported || this.asyncCacheManager == null)
-                throw new ApplicationException($"An asynchronous caching path is not supported in {this.cacheManager.GetType().Name}");
+            if (!this.cacheProvider.IsAsynchronousSupported || this.asyncCacheProvider == null)
+                throw new ApplicationException($"An asynchronous caching path is not supported in {this.cacheProvider.GetType().Name}");
 
             var cacheRegionName = this.cacheRegionNameResolver.GetCacheRegionName<T>();
 
-            return this.asyncCacheManager.GetCacheAsync<string, ConcurrentDictionary<string, object>>(cacheRegionName, cancellationToken);
+            return this.asyncCacheProvider.GetCacheAsync<string, IDictionary<string, object>>(cacheRegionName, cancellationToken);
         }
     }
 }

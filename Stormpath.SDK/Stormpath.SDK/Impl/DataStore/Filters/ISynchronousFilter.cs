@@ -1,4 +1,4 @@
-﻿// <copyright file="IAsynchronousFilter.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ISynchronousFilter.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,14 +15,12 @@
 // limitations under the License.
 // </remarks>
 
-using System.Threading;
-using System.Threading.Tasks;
 using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Impl.DataStore.FilterChain
+namespace Stormpath.SDK.Impl.DataStore.Filters
 {
-    internal interface IAsynchronousFilter
+    internal interface ISynchronousFilter
     {
-        Task<IResourceDataResult> ExecuteAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken);
+        IResourceDataResult Filter(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger);
     }
 }

@@ -19,6 +19,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.DataStore;
+using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
@@ -39,7 +40,7 @@ namespace Stormpath.SDK.Tests.Fakes
                 ? new SDK.Impl.NullLogger()
                 : logger;
 
-            this.fakeDataStore = new DefaultDataStore(fakeRequestExecutor.Object, baseHref, new DefaultJsonNetSerializer(), useLogger);
+            this.fakeDataStore = new DefaultDataStore(fakeRequestExecutor.Object, baseHref, new DefaultJsonNetSerializer(), useLogger, new NullCacheProvider());
         }
 
         string IInternalDataStore.BaseUrl => this.fakeDataStore.BaseUrl;

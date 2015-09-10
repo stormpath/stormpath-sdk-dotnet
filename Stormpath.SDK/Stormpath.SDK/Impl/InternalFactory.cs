@@ -16,6 +16,7 @@
 // </remarks>
 
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.DataStore;
@@ -27,9 +28,9 @@ namespace Stormpath.SDK.Impl
 {
     internal sealed class InternalFactory
     {
-        public IInternalDataStore CreateDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger)
+        public IInternalDataStore CreateDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheManager)
         {
-            return new DefaultDataStore(requestExecutor, baseUrl, serializer, logger);
+            return new DefaultDataStore(requestExecutor, baseUrl, serializer, logger, cacheManager);
         }
 
         public IRequestExecutor CreateRequestExecutor(IClientApiKey apiKey, AuthenticationScheme authenticationScheme, int connectionTimeout, ILogger logger)

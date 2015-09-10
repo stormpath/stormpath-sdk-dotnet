@@ -1,4 +1,4 @@
-﻿// <copyright file="ICacheManager.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAsynchronousFilter.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,12 +15,14 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Cache
-{
-    public interface ICacheManager
-    {
-        bool IsSynchronousSupported { get; }
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.Shared;
 
-        bool IsAsynchronousSupported { get; }
+namespace Stormpath.SDK.Impl.DataStore.Filters
+{
+    internal interface IAsynchronousFilter
+    {
+        Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken);
     }
 }

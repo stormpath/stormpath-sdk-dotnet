@@ -20,7 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Impl.DataStore.FilterChain
+namespace Stormpath.SDK.Impl.DataStore.Filters
 {
     internal sealed class DefaultAsynchronousFilter : IAsynchronousFilter
     {
@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.DataStore.FilterChain
             this.filterFunc = filterFunc;
         }
 
-        Task<IResourceDataResult> IAsynchronousFilter.ExecuteAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
+        Task<IResourceDataResult> IAsynchronousFilter.FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
         {
             return this.filterFunc(request, chain, logger, cancellationToken);
         }

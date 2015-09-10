@@ -1,4 +1,4 @@
-﻿// <copyright file="ISynchronousFilterChain.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultCacheProviderResolver.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,12 +15,26 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Cache;
+using Stormpath.SDK.Impl.Cache;
 
-namespace Stormpath.SDK.Impl.DataStore.FilterChain
+namespace Stormpath.SDK.Impl.Client
 {
-    internal interface ISynchronousFilterChain
+    internal class DefaultCacheProviderResolver
     {
-        IResourceDataResult Execute(IResourceDataRequest request, ILogger logger);
+        public bool UseCache { get; set; } = false;
+
+        public ICacheProvider CustomProvider { get; set; } = null;
+
+        public ICacheProvider GetProvider()
+        {
+            if (!this.UseCache)
+                return new NullCacheProvider();
+
+            if (this.CustomProvider == null)
+                return new InMemoryCacheProvider();
+
+            return this.CustomProvider;
+        }
     }
 }

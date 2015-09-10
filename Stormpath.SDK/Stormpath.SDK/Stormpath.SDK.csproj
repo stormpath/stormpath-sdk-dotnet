@@ -84,10 +84,10 @@
     <Compile Include="Auth\UsernamePasswordRequest.cs" />
     <Compile Include="Cache\IAsynchronousCache.cs" />
     <Compile Include="Cache\ICache.cs" />
-    <Compile Include="Cache\ICacheManager.cs" />
+    <Compile Include="Cache\ICacheProvider.cs" />
     <Compile Include="Cache\ISynchronousCache.cs" />
-    <Compile Include="Cache\IAsynchronousCacheManager.cs" />
-    <Compile Include="Cache\ISynchronousCacheManager.cs" />
+    <Compile Include="Cache\IAsynchronousCacheProvider.cs" />
+    <Compile Include="Cache\ISynchronousCacheProvider.cs" />
     <Compile Include="Client\AuthenticationScheme.cs" />
     <Compile Include="Client\Clients.cs" />
     <Compile Include="Client\IClient.cs" />
@@ -112,17 +112,20 @@
     <Compile Include="Impl\Auth\IBasicLoginAttempt.cs" />
     <Compile Include="Impl\Auth\ILoginAttempt.cs" />
     <Compile Include="Impl\Cache\InMemoryCache.cs" />
-    <Compile Include="Impl\Cache\InMemoryCacheProvider.cs" />
     <Compile Include="Impl\Cache\InMemoryCacheManager.cs" />
+    <Compile Include="Impl\Cache\InMemoryCacheProvider.cs" />
     <Compile Include="Impl\Cache\NullCache.cs" />
-    <Compile Include="Impl\Cache\NullCacheManager.cs" />
+    <Compile Include="Impl\Cache\NullCacheProvider.cs" />
     <Compile Include="Impl\Cache\DefaultCacheRegionNameResolver.cs" />
     <Compile Include="Impl\Cache\DefaultCacheResolver.cs" />
     <Compile Include="Impl\Cache\ICacheRegionNameResolver.cs" />
     <Compile Include="Impl\Cache\ICacheResolver.cs" />
+    <Compile Include="Impl\Client\DefaultCacheProviderResolver.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataRequest.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataResult.cs" />
+    <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
+    <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterResult.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\AbstractFieldConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterList.cs" />
@@ -130,14 +133,14 @@
     <Compile Include="Impl\Serialization\FieldConverters\FuncFieldConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\LinkPropertyConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\StatusFieldConverters.cs" />
-    <Compile Include="Impl\DataStore\FilterChain\DefaultSynchronousFilter.cs" />
-    <Compile Include="Impl\DataStore\FilterChain\DefaultAsynchronousFilter.cs" />
-    <Compile Include="Impl\DataStore\FilterChain\DefaultSynchronousFilterChain.cs" />
-    <Compile Include="Impl\DataStore\FilterChain\DefaultAsynchronousFilterChain.cs" />
-    <Compile Include="Impl\DataStore\FilterChain\IAsynchronousFilter.cs" />
-    <Compile Include="Impl\DataStore\FilterChain\ISynchronousFilterChain.cs" />
-    <Compile Include="Impl\DataStore\FilterChain\IAsynchronousFilterChain.cs" />
-    <Compile Include="Impl\DataStore\FilterChain\ISynchronousFilter.cs" />
+    <Compile Include="Impl\DataStore\Filters\DefaultSynchronousFilter.cs" />
+    <Compile Include="Impl\DataStore\Filters\DefaultAsynchronousFilter.cs" />
+    <Compile Include="Impl\DataStore\Filters\DefaultSynchronousFilterChain.cs" />
+    <Compile Include="Impl\DataStore\Filters\DefaultAsynchronousFilterChain.cs" />
+    <Compile Include="Impl\DataStore\Filters\IAsynchronousFilter.cs" />
+    <Compile Include="Impl\DataStore\Filters\ISynchronousFilterChain.cs" />
+    <Compile Include="Impl\DataStore\Filters\IAsynchronousFilterChain.cs" />
+    <Compile Include="Impl\DataStore\Filters\ISynchronousFilter.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\Serialization\JsonSerializationProvider.cs" />
     <Compile Include="Impl\Serialization\DefaultJsonSerializerLoader.cs" />
@@ -269,9 +272,7 @@
     <None Include="Stormpath.SDK.ruleset" />
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Impl\DataStore\Cache\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta010\analyzers\dotnet\cs\Newtonsoft.Json.dll" />

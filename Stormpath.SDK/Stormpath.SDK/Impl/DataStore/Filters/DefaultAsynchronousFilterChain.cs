@@ -22,7 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Impl.DataStore.FilterChain
+namespace Stormpath.SDK.Impl.DataStore.Filters
 {
     internal sealed class DefaultAsynchronousFilterChain : IAsynchronousFilterChain
     {
@@ -59,7 +59,7 @@ namespace Stormpath.SDK.Impl.DataStore.FilterChain
 
             if (this.filters.Count == 1)
             {
-                return this.filters.Single().ExecuteAsync(
+                return this.filters.Single().FilterAsync(
                     request,
                     chain: null,
                     logger: logger,
@@ -67,7 +67,7 @@ namespace Stormpath.SDK.Impl.DataStore.FilterChain
             }
 
             var remainingChain = new DefaultAsynchronousFilterChain(this.filters.Skip(1).ToList());
-            return this.filters.First().ExecuteAsync(request, remainingChain, logger, cancellationToken);
+            return this.filters.First().FilterAsync(request, remainingChain, logger, cancellationToken);
         }
     }
 }

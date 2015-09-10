@@ -1,4 +1,4 @@
-﻿// <copyright file="InMemoryCacheProvider.cs" company="Stormpath, Inc.">
+﻿// <copyright file="WriteCacheFilter.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -18,22 +18,27 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Cache;
+using Stormpath.SDK.Impl.Cache;
+using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Impl.Cache
+namespace Stormpath.SDK.Impl.DataStore.Filters
 {
-    internal class InMemoryCacheProvider : ISynchronousCacheProvider, IAsynchronousCacheProvider
+    internal sealed class WriteCacheFilter : IAsynchronousFilter, ISynchronousFilter
     {
-        bool ICacheProvider.IsAsynchronousSupported => false; // todo
+        private readonly ICacheResolver cacheResolver;
 
-        bool ICacheProvider.IsSynchronousSupported => false;
-
-        ISynchronousCache<K, V> ISynchronousCacheProvider.GetCache<K, V>(string name)
+        public WriteCacheFilter(ICacheResolver cacheResolver)
         {
+            this.cacheResolver = cacheResolver;
+        }
+
+        IResourceDataResult ISynchronousFilter.Filter(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
+        {
+            // TODO
             throw new NotImplementedException();
         }
 
-        Task<IAsynchronousCache<K, V>> IAsynchronousCacheProvider.GetCacheAsync<K, V>(string name, CancellationToken cancellationToken)
+        Task<IResourceDataResult> IAsynchronousFilter.FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

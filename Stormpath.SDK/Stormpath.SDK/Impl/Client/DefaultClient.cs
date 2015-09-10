@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Directory;
@@ -49,7 +50,7 @@ namespace Stormpath.SDK.Impl.Client
 
         private string currentTenantHref;
 
-        public DefaultClient(IClientApiKey apiKey, string baseUrl, AuthenticationScheme authenticationScheme, int connectionTimeout, IJsonSerializer serializer, ILogger logger)
+        public DefaultClient(IClientApiKey apiKey, string baseUrl, AuthenticationScheme authenticationScheme, int connectionTimeout, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider)
         {
             if (apiKey == null || !apiKey.IsValid())
                 throw new ArgumentException("API Key is not valid.");
@@ -72,7 +73,7 @@ namespace Stormpath.SDK.Impl.Client
                 : authenticationScheme;
 
             var requestExecutor = factory.CreateRequestExecutor(apiKey, authenticationScheme, connectionTimeout, this.logger);
-            this.dataStore = factory.CreateDataStore(requestExecutor, baseUrl, this.serializer, this.logger);
+            this.dataStore = factory.CreateDataStore(requestExecutor, baseUrl, this.serializer, this.logger, cacheProvider);
         }
 
         private IClient AsInterface => this;
@@ -84,20 +85,11 @@ namespace Stormpath.SDK.Impl.Client
             get { return this.dataStore.RequestExecutor.AuthenticationScheme; }
         }
 
-        string IClient.BaseUrl
-        {
-            get { return this.dataStore.BaseUrl; }
-        }
+        string IClient.BaseUrl => this.dataStore.BaseUrl;
 
-        int IClient.ConnectionTimeout
-        {
-            get { return this.dataStore.RequestExecutor.ConnectionTimeout; }
-        }
+        int IClient.ConnectionTimeout => this.dataStore.RequestExecutor.ConnectionTimeout;
 
-        T IDataStore.Instantiate<T>()
-        {
-            return this.dataStore.Instantiate<T>();
-        }
+        T IDataStore.Instantiate<T>() => this.dataStore.Instantiate<T>();
 
         async Task<ITenant> IClient.GetCurrentTenantAsync(CancellationToken cancellationToken)
         {

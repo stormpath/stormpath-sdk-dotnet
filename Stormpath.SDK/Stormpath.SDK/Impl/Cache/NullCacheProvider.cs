@@ -1,4 +1,4 @@
-﻿// <copyright file="NullCacheManager.cs" company="Stormpath, Inc.">
+﻿// <copyright file="NullCacheProvider.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -21,18 +21,18 @@ using Stormpath.SDK.Cache;
 
 namespace Stormpath.SDK.Impl.Cache
 {
-    internal sealed class NullCacheManager : ISynchronousCacheManager, IAsynchronousCacheManager
+    internal sealed class NullCacheProvider : ISynchronousCacheProvider, IAsynchronousCacheProvider
     {
-        bool ICacheManager.IsAsynchronousSupported => true;
+        bool ICacheProvider.IsAsynchronousSupported => true;
 
-        bool ICacheManager.IsSynchronousSupported => true;
+        bool ICacheProvider.IsSynchronousSupported => true;
 
-        ISynchronousCache<K, V> ISynchronousCacheManager.GetCache<K, V>(string name)
+        ISynchronousCache<K, V> ISynchronousCacheProvider.GetCache<K, V>(string name)
         {
             return new NullCache<K, V>();
         }
 
-        Task<IAsynchronousCache<K, V>> IAsynchronousCacheManager.GetCacheAsync<K, V>(string name, CancellationToken cancellationToken)
+        Task<IAsynchronousCache<K, V>> IAsynchronousCacheProvider.GetCacheAsync<K, V>(string name, CancellationToken cancellationToken)
         {
             return Task.FromResult<IAsynchronousCache<K, V>>(new NullCache<K, V>());
         }

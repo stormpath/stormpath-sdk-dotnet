@@ -1,4 +1,4 @@
-﻿// <copyright file="ICacheResolver.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ICacheProvider.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,24 +15,12 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Cache;
-using Stormpath.SDK.Resource;
-
-namespace Stormpath.SDK.Impl.Cache
+namespace Stormpath.SDK.Cache
 {
-    internal interface ICacheResolver
+    public interface ICacheProvider
     {
         bool IsSynchronousSupported { get; }
 
         bool IsAsynchronousSupported { get; }
-
-        ISynchronousCache<string, IDictionary<string, object>> GetCache<T>()
-            where T : IResource;
-
-        Task<IAsynchronousCache<string, IDictionary<string, object>>> GetCacheAsync<T>(CancellationToken cancellationToken)
-            where T : IResource;
     }
 }

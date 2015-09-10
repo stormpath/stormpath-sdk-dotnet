@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Impl.Http.Support;
 
@@ -25,6 +26,8 @@ namespace Stormpath.SDK.Impl.DataStore
         ResourceAction Action { get; }
 
         CanonicalUri Uri { get; }
+
+        Type ResourceType { get; }
 
         IDictionary<string, object> Properties { get; }
     }

@@ -1,4 +1,4 @@
-﻿// <copyright file="IAsynchronousCacheManager.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ISynchronousCacheProvider.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,22 +15,18 @@
 // limitations under the License.
 // </remarks>
 
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace Stormpath.SDK.Cache
 {
-    public interface IAsynchronousCacheManager : ICacheManager
+    public interface ISynchronousCacheProvider : ICacheProvider
     {
         /// <summary>
         /// Acquires the cache with the specified <code>name</code>. If a cache does not yet exist with that name,
         /// a new one will be created with that name and returned.
         /// </summary>
         /// <param name="name">The name of the cache to acquire.</param>
-        /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <typeparam name="K">The key type of the cache.</typeparam>
         /// <typeparam name="V">The value type of the cache.</typeparam>
         /// <returns>The cache with the given name.</returns>
-        Task<IAsynchronousCache<K, V>> GetCacheAsync<K, V>(string name, CancellationToken cancellationToken = default(CancellationToken));
+        ISynchronousCache<K, V> GetCache<K, V>(string name);
     }
 }

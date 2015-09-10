@@ -26,7 +26,6 @@ namespace Stormpath.SDK.Client
         IClientBuilder SetApiKey(IClientApiKey apiKey);
 
         // TODO IClientBuilder SetProxy(Proxy proxy);
-        // TODO IClientBuilder SetCacheManager(CacheManager manager);
         IClientBuilder SetAuthenticationScheme(AuthenticationScheme scheme);
 
         IClientBuilder SetConnectionTimeout(int timeout);

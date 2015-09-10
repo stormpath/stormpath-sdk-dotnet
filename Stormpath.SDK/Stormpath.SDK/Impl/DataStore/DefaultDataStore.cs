@@ -24,7 +24,7 @@ using Stormpath.SDK.Cache;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Impl.Cache;
-using Stormpath.SDK.Impl.DataStore.FilterChain;
+using Stormpath.SDK.Impl.DataStore.Filters;
 using Stormpath.SDK.Impl.Error;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private readonly string baseUrl;
         private readonly IRequestExecutor requestExecutor;
-        private readonly ICacheManager cacheManager;
+        private readonly ICacheProvider cacheProvider;
         private readonly ICacheResolver cacheResolver;
         private readonly JsonSerializationProvider serializer;
         private readonly IResourceFactory resourceFactory;
@@ -59,16 +59,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         string IInternalDataStore.BaseUrl => this.baseUrl;
 
-#pragma warning disable SA1124 // Do not use regions
-        #region Constructor and setup
-#pragma warning restore SA1124 // Do not use regions
-
-        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger)
-            : this(requestExecutor, baseUrl, serializer, logger, new NullCacheManager())
-        {
-        }
-
-        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheManager cacheManager)
+        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider)
         {
             if (requestExecutor == null)
                 throw new ArgumentNullException(nameof(requestExecutor));
@@ -76,13 +67,13 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ArgumentNullException(nameof(baseUrl));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
-            if (cacheManager == null)
-                throw new ArgumentNullException(nameof(cacheManager), "Use NullCacheManager if you wish to turn off caching.");
+            if (cacheProvider == null)
+                throw new ArgumentNullException(nameof(cacheProvider), "Use NullCacheManager if you wish to turn off caching.");
 
             this.baseUrl = baseUrl;
             this.requestExecutor = requestExecutor;
-            this.cacheManager = cacheManager;
-            this.cacheResolver = new DefaultCacheResolver(this.cacheManager, new DefaultCacheRegionNameResolver());
+            this.cacheProvider = cacheProvider;
+            this.cacheResolver = new DefaultCacheResolver(cacheProvider, new DefaultCacheRegionNameResolver());
 
             this.serializer = new JsonSerializationProvider(serializer);
             this.resourceFactory = new DefaultResourceFactory(this);
@@ -95,9 +86,16 @@ namespace Stormpath.SDK.Impl.DataStore
             this.defaultSyncFilters = this.BuildDefaultSyncFilterChain();
         }
 
+        // *** Helper methods ***
         private IAsynchronousFilterChain BuildDefaultAsyncFilterChain()
         {
             var asyncFilterChain = new DefaultAsynchronousFilterChain();
+
+            if (this.IsCachingEnabled())
+            {
+                asyncFilterChain.Add(new ReadCacheFilter(this.baseUrl, this.cacheResolver));
+                asyncFilterChain.Add(new WriteCacheFilter(this.cacheResolver));
+            }
 
             return asyncFilterChain;
         }
@@ -106,19 +104,19 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             var syncFilterChain = new DefaultSynchronousFilterChain();
 
+            if (this.IsCachingEnabled())
+            {
+                syncFilterChain.Add(new ReadCacheFilter(this.baseUrl, this.cacheResolver));
+                syncFilterChain.Add(new WriteCacheFilter(this.cacheResolver));
+            }
+
             return syncFilterChain;
         }
-
-        #endregion
 
         T IDataStore.Instantiate<T>()
         {
             return this.resourceFactory.Create<T>();
         }
-
-#pragma warning disable SA1124 // Do not use regions
-        #region Helper methods
-#pragma warning restore SA1124 // Do not use regions
 
         private void ApplyDefaultRequestHeaders(IHttpRequest request)
         {
@@ -139,7 +137,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private bool IsCachingEnabled()
         {
-            return this.cacheManager != null && !(this.cacheManager is NullCacheManager);
+            return this.cacheProvider != null && !(this.cacheProvider is NullCacheProvider);
         }
 
         private QueryString CreateQueryStringFromCreationOptions(ICreationOptions options)
@@ -174,8 +172,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return response;
         }
 
-        #endregion
-
+        // DataStore methods
         async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
         {
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
@@ -192,7 +189,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.HttpStatus, body);
                 }));
 
-            var request = new DefaultResourceDataRequest(ResourceAction.Read, canonicalUri);
+            var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri);
             var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
 
             return this.resourceFactory.Create<T>(result.Body);
@@ -214,8 +211,8 @@ namespace Stormpath.SDK.Impl.DataStore
                     return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.HttpStatus, body);
                 }));
 
-            var request = new DefaultResourceDataRequest(ResourceAction.Read, canonicalUri);
-            var result = chain.Execute(request, this.logger);
+            var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri);
+            var result = chain.Filter(request, this.logger);
 
             return this.resourceFactory.Create<T>(result.Body);
         }
@@ -380,7 +377,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var requestAction = create
                 ? ResourceAction.Create
                 : ResourceAction.Update;
-            var request = new DefaultResourceDataRequest(requestAction, canonicalUri, propertiesMap);
+            var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
 
             var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
             return this.resourceFactory.Create<TReturned>(result.Body);
@@ -425,9 +422,9 @@ namespace Stormpath.SDK.Impl.DataStore
             var requestAction = create
                 ? ResourceAction.Create
                 : ResourceAction.Update;
-            var request = new DefaultResourceDataRequest(requestAction, canonicalUri, propertiesMap);
+            var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
 
-            var result = chain.Execute(request, this.logger);
+            var result = chain.Filter(request, this.logger);
             return this.resourceFactory.Create<TReturned>(result.Body);
         }
 
@@ -453,7 +450,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.HttpStatus, body: null);
                 }));
 
-            var request = new DefaultResourceDataRequest(ResourceAction.Delete, uri);
+            var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri);
             var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
 
             bool successfullyDeleted = result.HttpStatus == 204;
@@ -482,8 +479,8 @@ namespace Stormpath.SDK.Impl.DataStore
                     return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.HttpStatus, body: null);
                 }));
 
-            var request = new DefaultResourceDataRequest(ResourceAction.Delete, uri);
-            var result = chain.Execute(request, this.logger);
+            var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri);
+            var result = chain.Filter(request, this.logger);
 
             bool successfullyDeleted = result.HttpStatus == 204;
             return successfullyDeleted;

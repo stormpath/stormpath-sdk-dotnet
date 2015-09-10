@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Impl.Http.Support;
 
@@ -23,24 +24,28 @@ namespace Stormpath.SDK.Impl.DataStore
     internal sealed class DefaultResourceDataRequest : IResourceDataRequest
     {
         private readonly ResourceAction action;
+        private readonly Type resourceType;
         private readonly CanonicalUri uri;
         private readonly IDictionary<string, object> properties;
 
-        public DefaultResourceDataRequest(ResourceAction action, CanonicalUri uri)
-            : this(action, uri, null)
+        public DefaultResourceDataRequest(ResourceAction action, Type resourceType, CanonicalUri uri)
+            : this(action, resourceType, uri, null)
         {
         }
 
-        public DefaultResourceDataRequest(ResourceAction action, CanonicalUri uri, IDictionary<string, object> properties)
+        public DefaultResourceDataRequest(ResourceAction action, Type resourceType, CanonicalUri uri, IDictionary<string, object> properties)
         {
             this.action = action;
             this.uri = uri;
+            this.resourceType = resourceType;
             this.properties = properties;
         }
 
         ResourceAction IResourceDataRequest.Action => this.action;
 
         IDictionary<string, object> IResourceDataRequest.Properties => this.properties;
+
+        Type IResourceDataRequest.ResourceType => this.resourceType;
 
         CanonicalUri IResourceDataRequest.Uri => this.uri;
     }

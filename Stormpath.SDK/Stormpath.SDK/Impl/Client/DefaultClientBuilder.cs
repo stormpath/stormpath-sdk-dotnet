@@ -17,6 +17,7 @@
 
 using System;
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.Serialization;
 using Stormpath.SDK.Serialization;
@@ -27,6 +28,7 @@ namespace Stormpath.SDK.Impl.Client
     internal sealed class DefaultClientBuilder : IClientBuilder
     {
         private readonly IJsonSerializerLoader serializerLoader;
+        private readonly DefaultCacheProviderResolver cacheProviderResolver;
 
         private string baseUrl = DefaultClient.DefaultBaseUrl;
         private int connectionTimeout = DefaultClient.DefaultConnectionTimeout;
@@ -43,6 +45,7 @@ namespace Stormpath.SDK.Impl.Client
         internal DefaultClientBuilder(IJsonSerializerLoader serializerLoader)
         {
             this.serializerLoader = serializerLoader;
+            this.cacheProviderResolver = new DefaultCacheProviderResolver();
         }
 
         IClientBuilder IClientBuilder.SetApiKey(IClientApiKey apiKey)
@@ -90,6 +93,24 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
+        internal IClientBuilder SetCache(bool cacheEnabled)
+        {
+            this.cacheProviderResolver.UseCache = cacheEnabled;
+
+            return this;
+        }
+
+        internal IClientBuilder SetCache(ICacheProvider cacheProvider)
+        {
+            if (cacheProvider == null)
+                throw new ArgumentNullException(nameof(cacheProvider));
+
+            this.cacheProviderResolver.UseCache = true;
+            this.cacheProviderResolver.CustomProvider = cacheProvider;
+
+            return this;
+        }
+
         IClient IClientBuilder.Build()
         {
             if (this.apiKey == null || !this.apiKey.IsValid())
@@ -103,7 +124,9 @@ namespace Stormpath.SDK.Impl.Client
             if (!isValidSerializer)
                 throw new ApplicationException("Could not find a valid JSON serializer. Include Stormpath.SDK.JsonNetSerializer.dll in the application path.");
 
-            return new DefaultClient(this.apiKey, this.baseUrl, this.authenticationScheme, this.connectionTimeout, useSerializer, this.logger);
+            var useCacheProvider = this.cacheProviderResolver.GetProvider();
+
+            return new DefaultClient(this.apiKey, this.baseUrl, this.authenticationScheme, this.connectionTimeout, useSerializer, this.logger, useCacheProvider);
         }
     }
 }

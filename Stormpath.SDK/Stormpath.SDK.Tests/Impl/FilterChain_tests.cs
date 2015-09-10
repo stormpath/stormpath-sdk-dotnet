@@ -20,8 +20,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.DataStore.FilterChain;
+using Stormpath.SDK.Impl.DataStore.Filters;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Shared;
 using Xunit;
@@ -34,7 +35,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             internal class CreateInterceptorFilter : ISynchronousFilter
             {
-                IResourceDataResult ISynchronousFilter.Execute(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
+                IResourceDataResult ISynchronousFilter.Filter(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
                 {
                     if (request.Action == ResourceAction.Create)
                     {
@@ -47,19 +48,19 @@ namespace Stormpath.SDK.Tests.Impl
                     }
                     else
                     {
-                        return chain.Execute(request, logger);
+                        return chain.Filter(request, logger);
                     }
                 }
             }
 
             internal class DeleteInterceptorFilter : ISynchronousFilter
             {
-                IResourceDataResult ISynchronousFilter.Execute(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
+                IResourceDataResult ISynchronousFilter.Filter(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
                 {
                     if (request.Action == ResourceAction.Delete)
                         return new DefaultResourceDataResult(ResourceAction.Delete, null, null, 204, null);
                     else
-                        return chain.Execute(request, logger);
+                        return chain.Filter(request, logger);
                 }
             }
 
@@ -70,8 +71,8 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultResourceDataRequest(ResourceAction.Create, new CanonicalUri("http://api.foo.bar"));
-                var result = filterChain.Execute(request, Substitute.For<ILogger>());
+                var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
+                var result = filterChain.Filter(request, Substitute.For<ILogger>());
 
                 result.Action.ShouldBe(ResourceAction.Create);
                 result.Body.ShouldContainKeyAndValue("Foo", "bar");
@@ -84,8 +85,8 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultResourceDataRequest(ResourceAction.Delete, new CanonicalUri("http://api.foo.bar"));
-                var result = filterChain.Execute(request, Substitute.For<ILogger>());
+                var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
+                var result = filterChain.Filter(request, Substitute.For<ILogger>());
 
                 result.Action.ShouldBe(ResourceAction.Delete);
                 result.Body.ShouldBe(null);
@@ -108,8 +109,8 @@ namespace Stormpath.SDK.Tests.Impl
                             body: new Dictionary<string, object>() { { "Foo", "bar" } });
                     }));
 
-                var request = new DefaultResourceDataRequest(ResourceAction.Create, new CanonicalUri("http://api.foo.bar"));
-                var result = finalChain.Execute(request, Substitute.For<ILogger>());
+                var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
+                var result = finalChain.Filter(request, Substitute.For<ILogger>());
 
                 result.Action.ShouldBe(ResourceAction.Create);
                 result.Body.ShouldContainKeyAndValue("Foo", "bar");
@@ -120,7 +121,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             internal class CreateInterceptorFilter : IAsynchronousFilter
             {
-                Task<IResourceDataResult> IAsynchronousFilter.ExecuteAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
+                Task<IResourceDataResult> IAsynchronousFilter.FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
                 {
                     if (request.Action == ResourceAction.Create)
                     {
@@ -140,7 +141,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             internal class DeleteInterceptorFilter : IAsynchronousFilter
             {
-                Task<IResourceDataResult> IAsynchronousFilter.ExecuteAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
+                Task<IResourceDataResult> IAsynchronousFilter.FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
                 {
                     if (request.Action == ResourceAction.Delete)
                     {
@@ -161,7 +162,7 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultResourceDataRequest(ResourceAction.Create, new CanonicalUri("http://api.foo.bar"));
+                var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
                 var result = await filterChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Create);
@@ -175,7 +176,7 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultResourceDataRequest(ResourceAction.Delete, new CanonicalUri("http://api.foo.bar"));
+                var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
                 var result = await filterChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Delete);
@@ -199,7 +200,7 @@ namespace Stormpath.SDK.Tests.Impl
                             body: new Dictionary<string, object>() { { "Foo", "bar" } }));
                     }));
 
-                var request = new DefaultResourceDataRequest(ResourceAction.Create, new CanonicalUri("http://api.foo.bar"));
+                var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
                 var result = await finalChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Create);

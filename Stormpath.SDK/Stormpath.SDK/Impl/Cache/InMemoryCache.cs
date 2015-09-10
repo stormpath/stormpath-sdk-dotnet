@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Cache
         private readonly TimeSpan? timeToLive;
         private readonly TimeSpan? timeToIdle;
 
-        private InMemoryCacheProvider<V> cacheProvider;
+        private InMemoryCacheManager<V> cacheManager;
         private bool alreadyDisposed = false;
 
         private long accessCount;
@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Impl.Cache
             if (timeToIdle.HasValue && timeToIdle.Value.TotalMilliseconds <= 0)
                 throw new ArgumentException("TTI duration must be greater than zero.", nameof(timeToIdle));
 
-            this.cacheProvider = new InMemoryCacheProvider<V>();
+            this.cacheManager = new InMemoryCacheManager<V>();
             this.region = region;
             this.timeToLive = timeToLive;
             this.timeToIdle = timeToIdle;
@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Impl.Cache
         /// <summary>
         /// The number of items stored in all regions of the cache.
         /// </summary>
-        public long TotalSize => this.cacheProvider.Count;
+        public long TotalSize => this.cacheManager.Count;
 
         public TimeSpan? TimeToLive => this.timeToLive;
 
@@ -88,8 +88,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         public void Clear()
         {
-            this.cacheProvider.Dispose();
-            this.cacheProvider = new InMemoryCacheProvider<V>();
+            this.cacheManager.Dispose();
+            this.cacheManager = new InMemoryCacheManager<V>();
         }
 
         V ISynchronousCache<K, V>.Get(K key)
@@ -97,7 +97,7 @@ namespace Stormpath.SDK.Impl.Cache
             Interlocked.Increment(ref this.accessCount);
 
             var compositeKey = this.CreateCompositeKey(key);
-            V value = this.cacheProvider.Get(compositeKey);
+            V value = this.cacheManager.Get(compositeKey);
 
             if (value == null)
                 Interlocked.Increment(ref this.missCount);
@@ -117,7 +117,7 @@ namespace Stormpath.SDK.Impl.Cache
                 ? this.timeToIdle.Value
                 : ObjectCache.NoSlidingExpiration;
 
-            return this.cacheProvider.Put(compositeKey, value, absoluteExpiration, slidingExpiration);
+            return this.cacheManager.Put(compositeKey, value, absoluteExpiration, slidingExpiration);
         }
 
         V ISynchronousCache<K, V>.Remove(K key)
@@ -125,7 +125,7 @@ namespace Stormpath.SDK.Impl.Cache
             Interlocked.Increment(ref this.accessCount);
 
             var compositeKey = this.CreateCompositeKey(key);
-            var value = this.cacheProvider.Remove(compositeKey);
+            var value = this.cacheManager.Remove(compositeKey);
 
             if (value == null)
                 Interlocked.Increment(ref this.missCount);
@@ -186,7 +186,7 @@ namespace Stormpath.SDK.Impl.Cache
             {
                 if (disposing)
                 {
-                    this.cacheProvider.Dispose();
+                    this.cacheManager.Dispose();
                 }
 
                 this.alreadyDisposed = true;

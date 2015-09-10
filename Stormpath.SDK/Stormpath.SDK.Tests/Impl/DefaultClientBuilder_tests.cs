@@ -157,8 +157,22 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var client = builder
                     .SetApiKey(fakeKey)
-                    .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
-                    .SetConnectionTimeout(10)
+                    .Build();
+            });
+        }
+
+        [Fact]
+        public void Throws_when_passed_cache_provider_is_null()
+        {
+            var fakeKey = Substitute.For<IClientApiKey>();
+            fakeKey.IsValid().Returns(true);
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                var client = this.builder
+                    .SetApiKey(fakeKey);
+                (this.builder as DefaultClientBuilder)
+                    .SetCache(null)
                     .Build();
             });
         }

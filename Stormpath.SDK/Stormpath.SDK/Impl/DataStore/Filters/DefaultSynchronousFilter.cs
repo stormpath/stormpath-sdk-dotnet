@@ -18,7 +18,7 @@
 using System;
 using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Impl.DataStore.FilterChain
+namespace Stormpath.SDK.Impl.DataStore.Filters
 {
     internal sealed class DefaultSynchronousFilter : ISynchronousFilter
     {
@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Impl.DataStore.FilterChain
             this.filterFunc = filterFunc;
         }
 
-        IResourceDataResult ISynchronousFilter.Execute(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
+        IResourceDataResult ISynchronousFilter.Filter(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
         {
             return this.filterFunc(request, chain, logger);
         }
