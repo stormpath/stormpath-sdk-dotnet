@@ -160,7 +160,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private IHttpResponse HandleResponseOrError(IHttpResponse response)
         {
-            if (response.IsError)
+            if (response.ErrorType > ResponseErrorType.None)
             {
                 DefaultError error = null;
                 error = response.HasBody

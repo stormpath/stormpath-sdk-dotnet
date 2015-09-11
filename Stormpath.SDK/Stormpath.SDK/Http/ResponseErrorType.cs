@@ -1,4 +1,4 @@
-﻿// <copyright file="IHttpResponse.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ResponseErrorType.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -17,12 +17,10 @@
 
 namespace Stormpath.SDK.Http
 {
-    public interface IHttpResponse : IHttpMessage
+    public enum ResponseErrorType
     {
-        int HttpStatus { get; }
-
-        string ResponsePhrase { get; }
-
-        ResponseErrorType ErrorType { get; }
+        None = 0,
+        Recoverable = 1,
+        Fatal = 2
     }
 }

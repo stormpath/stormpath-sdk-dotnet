@@ -30,6 +30,7 @@ namespace Stormpath.SDK.Http
         private static readonly string HeaderContentLengthName = "Content-Length";
         private static readonly string HeaderContentTypeName = "Content-Type";
         private static readonly string HeaderHostName = "Host";
+        private static readonly string LocationName = "Location";
         private static readonly string HeaderUserAgentName = "User-Agent";
 
         private readonly Dictionary<string, List<object>> headers;
@@ -78,6 +79,12 @@ namespace Stormpath.SDK.Http
         {
             get { return GetFirst<string>(HeaderHostName); }
             set { this.Add(HeaderHostName, value); }
+        }
+
+        public Uri Location
+        {
+            get { return new Uri(GetFirst<string>(LocationName), UriKind.Absolute); }
+            set { this.Add(LocationName, value.AbsoluteUri); }
         }
 
         public string UserAgent

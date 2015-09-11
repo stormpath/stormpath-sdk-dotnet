@@ -1,4 +1,4 @@
-﻿// <copyright file="IHttpResponse.cs" company="Stormpath, Inc.">
+﻿// <copyright file="FakeApiKey.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,14 +15,19 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Http
+using NSubstitute;
+using Stormpath.SDK.Api;
+
+namespace Stormpath.SDK.Tests.Fakes
 {
-    public interface IHttpResponse : IHttpMessage
+    public static class FakeApiKey
     {
-        int HttpStatus { get; }
+        public static IClientApiKey Create(bool valid)
+        {
+            var apiKey = Substitute.For<IClientApiKey>();
+            apiKey.IsValid().Returns(valid);
 
-        string ResponsePhrase { get; }
-
-        ResponseErrorType ErrorType { get; }
+            return apiKey;
+        }
     }
 }

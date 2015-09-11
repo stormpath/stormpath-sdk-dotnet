@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultRequestExecutorLoader_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultRequestExecutor_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,30 +15,28 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Http;
-using Stormpath.SDK.Impl.Utility;
-using Stormpath.SDK.Shared;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class DefaultRequestExecutorLoader_tests
+    public class DefaultRequestExecutor_tests
     {
         [Fact]
-        public void Default_library_is_loaded()
+        public void Throws_error_when_no_async_path_is_available_for_async_request()
         {
-            ITypeLoader<IHttpClient> loader = new DefaultHttpClientLoader();
+            var fakeHttpClient = Substitute.For<IHttpClient>();
+            fakeHttpClient.IsAsynchronousSupported.Returns(false);
 
-            // This test project has a reference to Stormpath.SDK.RestSharpClient, so the file lookup will succeed
-            IHttpClient instance = null;
-            var constructorArgs = new object[] { 100, Substitute.For<ILogger>() };
-            bool loadResult = loader.TryLoad(out instance, constructorArgs);
-
-            loadResult.ShouldBe(true);
-            instance.ShouldNotBe(null);
+            // var requestExecutor = new DefaultRequestExecutor(fakeHttpClient, )
         }
     }
 }

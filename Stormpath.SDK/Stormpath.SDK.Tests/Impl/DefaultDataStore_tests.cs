@@ -178,7 +178,7 @@ namespace Stormpath.SDK.Tests.Impl
             IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
             dataStore.RequestExecutor
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(200, "OK", null, null, null)));
+                .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(200, "OK", null, null, null, ResponseErrorType.None)));
 
             var account = dataStore.Instantiate<IAccount>();
             account.SetMiddleName("Test");
@@ -205,7 +205,7 @@ namespace Stormpath.SDK.Tests.Impl
             IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
             dataStore.RequestExecutor
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(202, "Accepted", null, null, null)));
+                .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(202, "Accepted", null, null, null, ResponseErrorType.None)));
 
             var account = dataStore.Instantiate<IAccount>();
             account.SetMiddleName("Test");
@@ -226,7 +226,7 @@ namespace Stormpath.SDK.Tests.Impl
                 {
                     // Will pause for 1 second, unless CancellationToken has been passed through to us
                     await Task.Delay(1000, callInfo.Arg<CancellationToken>());
-                    return new DefaultHttpResponse(204, "No Content", new HttpHeaders(), null, null) as IHttpResponse;
+                    return new DefaultHttpResponse(204, "No Content", new HttpHeaders(), null, null, ResponseErrorType.None) as IHttpResponse;
                 });
 
             IAccount fakeAccount =

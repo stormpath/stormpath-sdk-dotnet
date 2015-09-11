@@ -56,6 +56,7 @@ namespace Stormpath.SDK.Tests.Impl
                 fakeKey.IsValid().Returns(false);
 
                 this.builder
+                    .SetApiKey(fakeKey)
                     .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                     .SetBaseUrl("http://foobar")
                     .SetConnectionTimeout(10)

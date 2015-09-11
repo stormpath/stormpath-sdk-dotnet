@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.Http
@@ -26,14 +27,16 @@ namespace Stormpath.SDK.Impl.Http
         private readonly HttpHeaders headers;
         private readonly string body;
         private readonly string bodyContentType;
+        private readonly ResponseErrorType errorType;
 
-        public DefaultHttpResponse(int httpStatus, string responsePhrase, HttpHeaders headers, string body, string bodyContentType)
+        public DefaultHttpResponse(int httpStatus, string responsePhrase, HttpHeaders headers, string body, string bodyContentType, ResponseErrorType errorType)
         {
             this.httpStatus = httpStatus;
             this.responsePhrase = responsePhrase;
             this.headers = headers;
             this.body = body;
             this.bodyContentType = bodyContentType;
+            this.errorType = errorType;
         }
 
         public override string Body => this.body;
@@ -46,10 +49,6 @@ namespace Stormpath.SDK.Impl.Http
 
         public string ResponsePhrase => this.responsePhrase;
 
-        public bool IsError => IsServerError(this.HttpStatus) || IsClientError(this.HttpStatus);
-
-        private static bool IsServerError(int code) => code >= 500 && code < 600;
-
-        private static bool IsClientError(int code) => code >= 400 && code < 500;
+        public ResponseErrorType ErrorType => this.errorType;
     }
 }

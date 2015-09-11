@@ -21,35 +21,209 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
+using Stormpath.SDK.Impl.Http.Authentication;
+using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Http
 {
     internal sealed class DefaultRequestExecutor : IRequestExecutor
     {
-        private IHttpClient httpClient;
-        private IClientApiKey apiKey;
-        private AuthenticationScheme authenticationScheme;
-        private ILogger logger;
+        private static readonly int MaxBackoffMilliseconds = 20 * 1000;
+        private static readonly int DefaultMaxRetries = 4;
+        private static readonly Task CompletedTask = Task.FromResult(false);
+
+        private readonly IHttpClient httpClient;
+        private readonly ISynchronousHttpClient syncHttpClient;
+        private readonly IAsynchronousHttpClient asyncHttpClient;
+
+        private readonly IClientApiKey apiKey;
+        private readonly AuthenticationScheme authenticationScheme;
+        private readonly ILogger logger;
+
+        private readonly IRequestAuthenticator requestAuthenticator;
+        private readonly IBackoffStrategy defaultBackoffStrategy;
+        private readonly IBackoffStrategy throttlingBackoffStrategy;
+        private readonly int maxRetriesPerRequest = DefaultMaxRetries;
 
         private bool alreadyDisposed = false;
 
         public DefaultRequestExecutor(IHttpClient httpClient, IClientApiKey apiKey, AuthenticationScheme authenticationScheme, ILogger logger)
         {
+            if (!apiKey.IsValid())
+                throw new ApplicationException("API Key is invalid.");
+
             this.httpClient = httpClient;
+            this.syncHttpClient = httpClient as ISynchronousHttpClient;
+            this.asyncHttpClient = httpClient as IAsynchronousHttpClient;
+
             this.apiKey = apiKey;
             this.authenticationScheme = authenticationScheme;
-            this.logger = logger;
-        }
 
-        IHttpResponse IRequestExecutor.Execute(IHttpRequest request)
-        {
-            throw new NotImplementedException();
+            IRequestAuthenticatorFactory requestAuthenticatorFactory = new DefaultRequestAuthenticatorFactory();
+            this.requestAuthenticator = requestAuthenticatorFactory.Create(authenticationScheme);
+
+            this.defaultBackoffStrategy = new DefaultBackoffStrategy(MaxBackoffMilliseconds);
+            this.throttlingBackoffStrategy = new ThrottlingBackoffStrategy(MaxBackoffMilliseconds);
+
+            this.logger = logger;
         }
 
         Task<IHttpResponse> IRequestExecutor.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (!this.httpClient.IsAsynchronousSupported || this.asyncHttpClient == null)
+                throw new ApplicationException("This HTTP client does not support asynchronous requests.");
+
+            return this.CoreRequestLoopAsync(
+                request,
+                (IHttpRequest req, CancellationToken ct) => this.asyncHttpClient.ExecuteAsync(req, ct),
+                (int count, bool throttle, CancellationToken ct) => this.PauseAsync(count, throttle, ct),
+                cancellationToken);
+        }
+
+        IHttpResponse IRequestExecutor.Execute(IHttpRequest request)
+        {
+            if (!this.httpClient.IsSynchronousSupported || this.syncHttpClient == null)
+                throw new ApplicationException("This HTTP client does not support synchronous requests.");
+
+            // We know what we're doing here, even though this looks like async-over-sync.
+            // The synchronous path will only ever create completed tasks, so awaiting
+            // these tasks will continue to execute synchronously.
+            return this.CoreRequestLoopAsync(
+                request,
+                (IHttpRequest req, CancellationToken unused_) =>
+                {
+                    return Task.FromResult(this.syncHttpClient.Execute(req));
+                },
+                (int count, bool throttle, CancellationToken unused_) =>
+                {
+                    this.PauseSync(count, throttle);
+                    return CompletedTask;
+                },
+                CancellationToken.None).Result;
+        }
+
+        private async Task<IHttpResponse> CoreRequestLoopAsync(
+            IHttpRequest request,
+            Func<IHttpRequest, CancellationToken, Task<IHttpResponse>> executeAction,
+            Func<int, bool, CancellationToken, Task> pauseAction,
+            CancellationToken cancellationToken)
+        {
+            var retryCount = 0;
+            bool throttling = false;
+
+            Uri currentUri = request.CanonicalUri.ToUri();
+
+            while (true)
+            {
+                var currentRequest = new DefaultHttpRequest(request, overrideUri: currentUri);
+
+                // Sign and build request
+                this.requestAuthenticator.Authenticate(currentRequest, this.apiKey);
+
+                try
+                {
+                    if (retryCount > 0)
+                        await pauseAction(retryCount, throttling, cancellationToken).ConfigureAwait(false);
+
+                    retryCount++;
+
+                    var response = await executeAction(currentRequest, cancellationToken).ConfigureAwait(false);
+                    if (this.IsRedirect(response))
+                    {
+                        currentUri = response.Headers.Location;
+                        this.logger.Trace($"Redirected to {currentUri}", "DefaultRequestExecutor.CoreRequestLoopAsync");
+
+                        continue; // reexecute request
+                    }
+
+                    var statusCode = response.HttpStatus;
+                    if (statusCode == 429)
+                    {
+                        throttling = true;
+                        this.logger.Warn($"Got HTTP 429, throttling retry request", "DefaultRequestExecutor.CoreRequestLoopAsync");
+
+                        continue; // retry request
+                    }
+
+                    if ((statusCode == 503 || statusCode == 504) && retryCount <= this.maxRetriesPerRequest)
+                    {
+                        this.logger.Warn($"Got HTTP {statusCode}, retrying", "DefaultRequestExecutor.CoreRequestLoopAsync");
+
+                        continue; // retry request
+                    }
+
+                    if (response.ErrorType == ResponseErrorType.Recoverable && retryCount <= this.maxRetriesPerRequest)
+                    {
+                        this.logger.Warn($"Error during request, retrying", "DefaultRequestExecutor.CoreRequestLoopAsync");
+
+                        continue; // retry request
+                    }
+
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    if (this.WasCanceled(ex, cancellationToken))
+                    {
+                        this.logger.Trace("Request task was canceled. Rethrowing TaskCanceledException", "DefaultRequestExecutor.CoreRequestLoopAsync");
+                        throw;
+                    }
+                    else
+                    {
+                        throw new RequestException("Unable to execute HTTP request.", ex);
+                    }
+                }
+            }
+        }
+
+        private bool IsRedirect(IHttpResponse response)
+        {
+            bool moved =
+                response.HttpStatus == (int)HttpStatusCode.MovedPermanently || // 301
+                response.HttpStatus == (int)HttpStatusCode.Redirect || // 302
+                response.HttpStatus == (int)HttpStatusCode.TemporaryRedirect; // 307
+            bool hasNewLocation = !string.IsNullOrEmpty(response.Headers.Location?.AbsoluteUri);
+
+            return moved && hasNewLocation;
+        }
+
+        private Task PauseAsync(int retryCount, bool isThrottling, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var delayMilliseconds = this.GetDelayMilliseconds(retryCount, isThrottling);
+            this.logger.Trace($"Pausing for {delayMilliseconds}", "DefaultRequestExecutor.PauseAsync");
+
+            return Task.Delay(delayMilliseconds);
+        }
+
+        private void PauseSync(int retryCount, bool isThrottling)
+        {
+            var delayMilliseconds = this.GetDelayMilliseconds(retryCount, isThrottling);
+            this.logger.Trace($"Pausing for {delayMilliseconds}", "DefaultRequestExecutor.PauseSync");
+
+            Thread.Sleep(delayMilliseconds);
+        }
+
+        private int GetDelayMilliseconds(int retryCount, bool isThrottling)
+        {
+            var delayMilliseconds = 0;
+
+            if (isThrottling)
+                delayMilliseconds = this.throttlingBackoffStrategy.GetDelayMilliseconds(retryCount);
+            else
+                delayMilliseconds = this.defaultBackoffStrategy.GetDelayMilliseconds(retryCount);
+
+            return delayMilliseconds;
+        }
+
+        private bool WasCanceled(Exception exception, CancellationToken cancellationToken)
+        {
+            bool wasCanceledByUser =
+                (exception as TaskCanceledException)?.CancellationToken == cancellationToken;
+
+            return wasCanceledByUser;
         }
 
         private void Dispose(bool disposing)
