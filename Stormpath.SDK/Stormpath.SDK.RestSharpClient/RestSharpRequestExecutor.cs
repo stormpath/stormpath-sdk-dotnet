@@ -32,6 +32,8 @@ namespace Stormpath.SDK.Extensions.Http.RestSharp
         private readonly int connectionTimeout;
         private readonly ILogger logger;
 
+        private bool alreadyDisposed = false;
+
         public RestSharpRequestExecutor(IClientApiKey apiKey, AuthenticationScheme authenticationScheme, int connectionTimeout, ILogger logger)
         {
             this.apiKey = apiKey;
@@ -50,9 +52,7 @@ namespace Stormpath.SDK.Extensions.Http.RestSharp
             throw new NotImplementedException();
         }
 
-        private bool alreadyDisposed = false; // To detect redundant calls
-
-        public void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!this.alreadyDisposed)
             {
@@ -65,10 +65,8 @@ namespace Stormpath.SDK.Extensions.Http.RestSharp
             }
         }
 
-        // This code added to correctly implement the disposable pattern.
-        void IDisposable.Dispose()
+        public void Dispose()
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
         }
     }
