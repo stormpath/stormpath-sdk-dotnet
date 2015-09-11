@@ -20,7 +20,7 @@ using Shouldly;
 using Stormpath.SDK.Serialization;
 using Xunit;
 
-namespace Stormpath.SDK.JsonNetSerializer.Tests
+namespace Stormpath.SDK.Extensions.Serialization.JsonNet.Tests
 {
     public class Serialization_tests
     {
@@ -28,7 +28,7 @@ namespace Stormpath.SDK.JsonNetSerializer.Tests
 
         public Serialization_tests()
         {
-            this.serializer = new DefaultJsonNetSerializer();
+            this.serializer = new JsonNetSerializer();
         }
 
         [Fact]

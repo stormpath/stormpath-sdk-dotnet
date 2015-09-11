@@ -7,7 +7,7 @@
     <ProjectGuid>{4011B5EA-CEB5-4212-B8E6-D18C63AB6ACF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Stormpath.SDK.JsonNetSerializer</RootNamespace>
+    <RootNamespace>Stormpath.SDK.Extensions.Serialization.JsonNet</RootNamespace>
     <AssemblyName>Stormpath.SDK.JsonNetSerializer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultJsonNetSerializer.cs" />
+    <Compile Include="JsonNetSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

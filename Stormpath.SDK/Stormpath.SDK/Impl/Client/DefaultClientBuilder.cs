@@ -85,9 +85,9 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
-        IClientBuilder IClientBuilder.SetRequestExecutor(Type requestExecutorType)
+        IClientBuilder IClientBuilder.SetHttpClient(Type httpClientType)
         {
-            this.requestExecutorBuilder.SetRequestExecutorType(requestExecutorType);
+            this.requestExecutorBuilder.SetRequestExecutorType(httpClientType);
 
             return this;
         }

@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Client
 
         IClientBuilder SetJsonSerializer(IJsonSerializer serializer);
 
-        IClientBuilder SetRequestExecutor(Type requestExecutorType);
+        IClientBuilder SetHttpClient(Type httpClientType);
 
         IClientBuilder SetLogger(ILogger logger);
 

@@ -19,7 +19,7 @@ using System;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Impl.Client;
-using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Impl.Serialization;
 using Stormpath.SDK.Serialization;
 using Xunit;
 
@@ -27,10 +27,10 @@ namespace Stormpath.SDK.Tests.Impl
 {
     public class DefaultJsonSerializerBuilder_tests
     {
-        private ITypeLoader<IJsonSerializer> GetFailingLoader()
+        private IJsonSerializerLoader GetFailingLoader()
         {
             IJsonSerializer dummy = null;
-            var failingLoader = Substitute.For<ITypeLoader<IJsonSerializer>>();
+            var failingLoader = Substitute.For<IJsonSerializerLoader>();
             failingLoader.TryLoad(out dummy).Returns(false);
 
             return failingLoader;
@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Tests.Impl
             IJsonSerializer fakeSerializer = Substitute.For<IJsonSerializer>();
             IJsonSerializer dummy = null;
 
-            var fakeLoader = Substitute.For<ITypeLoader<IJsonSerializer>>();
+            var fakeLoader = Substitute.For<IJsonSerializerLoader>();
             fakeLoader.TryLoad(out dummy).Returns(call =>
             {
                 call[0] = fakeSerializer;
@@ -66,13 +66,13 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
-        public void Throws_when_no_JSON_serializer_can_be_found()
+        public void Throws_when_no_supported_type_can_be_found()
         {
             IJsonSerializerBuilder builder = new DefaultJsonSerializerBuilder(this.GetFailingLoader());
 
             Assert.Throws<ApplicationException>(() =>
             {
-                var serializer = builder.Build();
+                var instance = builder.Build();
             });
         }
     }

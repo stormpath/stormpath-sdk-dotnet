@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultJsonSerializerLoader_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultRequestExecutorLoader_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,26 +15,26 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using Shouldly;
-using Stormpath.SDK.Impl.Serialization;
-using Stormpath.SDK.Serialization;
+using Stormpath.SDK.Impl.Http;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class DefaultJsonSerializerLoader_tests
+    public class DefaultRequestExecutorLoader_tests
     {
         [Fact]
         public void Default_library_is_loaded()
         {
-            IJsonSerializerLoader loader = new DefaultJsonSerializerLoader();
+            IRequestExecutorLoader loader = new DefaultRequestExecutorLoader();
 
-            // This test project has a reference to Stormpath.SDK.JsonNetSerializer, so the file lookup will succeed
-            IJsonSerializer instance = null;
-            bool loadResult = loader.TryLoad(out instance);
+            // This test project has a reference to Stormpath.SDK.RestSharpClient, so the file lookup will succeed
+            Type instanceType = null;
+            bool loadResult = loader.TryLoad(out instanceType);
 
             loadResult.ShouldBe(true);
-            instance.ShouldNotBe(null);
+            instanceType.ShouldNotBe(null);
         }
     }
 }

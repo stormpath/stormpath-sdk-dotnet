@@ -15,19 +15,34 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Impl.Serialization
 {
-    internal sealed class DefaultJsonSerializerLoader : TypeLoader<IJsonSerializer>
+    internal sealed class DefaultJsonSerializerLoader : TypeLoader<IJsonSerializer>, IJsonSerializerLoader
     {
         private static readonly string FileName = "Stormpath.SDK.JsonNetSerializer.dll";
-        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Serialization.JsonNetSerializer";
+        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Serialization.JsonNet.JsonNetSerializer";
 
         public DefaultJsonSerializerLoader()
             : base(FileName, FullyQualifiedType)
         {
+        }
+
+        bool IJsonSerializerLoader.TryLoad(out IJsonSerializer instance)
+        {
+            Type loadedType = null;
+            if (!this.TryLoadType(out loadedType))
+            {
+                instance = null;
+                return false;
+            }
+
+            instance = Activator.CreateInstance(loadedType) as IJsonSerializer;
+
+            return instance != null;
         }
     }
 }

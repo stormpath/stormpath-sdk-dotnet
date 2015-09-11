@@ -123,7 +123,8 @@
     <Compile Include="Impl\DataStore\DefaultResourceDataResult.cs" />
     <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
-    <Compile Include="Impl\Http\DefaultHttpClientLoader.cs" />
+    <Compile Include="Impl\Http\DefaultRequestExecutorLoader.cs" />
+    <Compile Include="Impl\Http\IRequestExecutorLoader.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterResult.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\AbstractFieldConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterList.cs" />
@@ -140,9 +141,9 @@
     <Compile Include="Impl\DataStore\Filters\IAsynchronousFilterChain.cs" />
     <Compile Include="Impl\DataStore\Filters\ISynchronousFilter.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
+    <Compile Include="Impl\Serialization\IJsonSerializerLoader.cs" />
     <Compile Include="Impl\Serialization\JsonSerializationProvider.cs" />
     <Compile Include="Impl\Serialization\DefaultJsonSerializerLoader.cs" />
-    <Compile Include="Impl\Utility\ITypeLoader.cs" />
     <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Serialization\IJsonSerializer.cs" />
     <Compile Include="Impl\DataStore\IResourceConverter.cs" />

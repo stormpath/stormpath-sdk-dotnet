@@ -7,7 +7,7 @@
     <ProjectGuid>{21F7A025-7BB1-49B0-8AD3-CEE8A3B1D542}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Stormpath.SDK.RestSharpClient</RootNamespace>
+    <RootNamespace>Stormpath.SDK.Extensions.Http.RestSharp</RootNamespace>
     <AssemblyName>Stormpath.SDK.RestSharpClient</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

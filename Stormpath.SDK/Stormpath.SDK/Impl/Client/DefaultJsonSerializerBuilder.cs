@@ -17,14 +17,13 @@
 
 using System;
 using Stormpath.SDK.Impl.Serialization;
-using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class DefaultJsonSerializerBuilder : IJsonSerializerBuilder
     {
-        private readonly ITypeLoader<IJsonSerializer> defaultLibraryLoader;
+        private readonly IJsonSerializerLoader defaultLibraryLoader;
         private IJsonSerializer serializer;
 
         public DefaultJsonSerializerBuilder()
@@ -32,7 +31,7 @@ namespace Stormpath.SDK.Impl.Client
         {
         }
 
-        internal DefaultJsonSerializerBuilder(ITypeLoader<IJsonSerializer> defaultLibraryLoader)
+        internal DefaultJsonSerializerBuilder(IJsonSerializerLoader defaultLibraryLoader)
         {
             this.defaultLibraryLoader = defaultLibraryLoader;
         }

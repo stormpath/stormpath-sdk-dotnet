@@ -15,12 +15,13 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.IO;
 using System.Reflection;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    internal abstract class TypeLoader<T> : ITypeLoader<T>
+    internal abstract class TypeLoader<T>
         where T : class
     {
         private readonly string fileName;
@@ -32,20 +33,20 @@ namespace Stormpath.SDK.Impl.Utility
             this.fullyQualifiedTypeName = fullyQualifiedTypeName;
         }
 
-        bool ITypeLoader<T>.TryLoad(out T loaded)
+        protected bool TryLoadType(out Type loadedType)
         {
             var absolutePath = Path.GetFullPath(this.fileName);
 
             if (!File.Exists(absolutePath))
             {
-                loaded = null;
+                loadedType = null;
                 return false;
             }
 
             Assembly assembly = Assembly.LoadFile(absolutePath);
-            loaded = assembly.CreateInstance(this.fullyQualifiedTypeName) as T;
+            loadedType = assembly.GetType(this.fullyQualifiedTypeName);
 
-            return loaded != null;
+            return loadedType != null;
         }
     }
 }

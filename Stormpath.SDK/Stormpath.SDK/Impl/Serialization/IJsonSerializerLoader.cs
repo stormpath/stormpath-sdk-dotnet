@@ -1,4 +1,4 @@
-﻿// <copyright file="ITypeLoader.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IJsonSerializerLoader.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,10 +15,12 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.Utility
+using Stormpath.SDK.Serialization;
+
+namespace Stormpath.SDK.Impl.Serialization
 {
-    internal interface ITypeLoader<T>
+    internal interface IJsonSerializerLoader
     {
-        bool TryLoad(out T loaded);
+        bool TryLoad(out IJsonSerializer instance);
     }
 }

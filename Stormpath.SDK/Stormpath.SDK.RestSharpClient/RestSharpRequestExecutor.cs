@@ -15,9 +15,61 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.RestSharpClient
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.Api;
+using Stormpath.SDK.Client;
+using Stormpath.SDK.Http;
+using Stormpath.SDK.Shared;
+
+namespace Stormpath.SDK.Extensions.Http.RestSharp
 {
-    public class RestSharpRequestExecutor
+    public sealed class RestSharpRequestExecutor : IRequestExecutor
     {
+        private readonly IClientApiKey apiKey;
+        private readonly AuthenticationScheme authScheme;
+        private readonly int connectionTimeout;
+        private readonly ILogger logger;
+
+        public RestSharpRequestExecutor(IClientApiKey apiKey, AuthenticationScheme authenticationScheme, int connectionTimeout, ILogger logger)
+        {
+            this.apiKey = apiKey;
+            this.authScheme = authenticationScheme;
+            this.connectionTimeout = connectionTimeout;
+            this.logger = logger;
+        }
+
+        IHttpResponse IRequestExecutor.Execute(IHttpRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IHttpResponse> IRequestExecutor.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool alreadyDisposed = false; // To detect redundant calls
+
+        public void Dispose(bool disposing)
+        {
+            if (!this.alreadyDisposed)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
+
+                this.alreadyDisposed = true;
+            }
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        void IDisposable.Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            this.Dispose(true);
+        }
     }
 }

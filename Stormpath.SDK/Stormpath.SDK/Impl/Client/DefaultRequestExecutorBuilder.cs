@@ -19,17 +19,30 @@ using System;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
+using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class DefaultRequestExecutorBuilder : IRequestExecutorBuilder
     {
+        private readonly IRequestExecutorLoader defaultLibraryLoader;
+
         private Type requestExecutorType;
         private IClientApiKey apiKey;
         private AuthenticationScheme authScheme;
         private int connectionTimeout;
         private ILogger logger;
+
+        public DefaultRequestExecutorBuilder()
+            : this(new DefaultRequestExecutorLoader())
+        {
+        }
+
+        internal DefaultRequestExecutorBuilder(IRequestExecutorLoader defaultLibraryLoader)
+        {
+            this.defaultLibraryLoader = defaultLibraryLoader;
+        }
 
         IRequestExecutorBuilder IRequestExecutorBuilder.SetRequestExecutorType(Type requestExecutorType)
         {
@@ -63,14 +76,36 @@ namespace Stormpath.SDK.Impl.Client
 
         IRequestExecutor IRequestExecutorBuilder.Build()
         {
-            // if type is set, use that, then construct
-            throw new NotImplementedException();
+            Type requestExecutorType = null;
+
+            if (this.requestExecutorType != null)
+            {
+                requestExecutorType = this.requestExecutorType;
+            }
+            else
+            {
+                bool foundDefaultLibrary = this.defaultLibraryLoader.TryLoad(out requestExecutorType);
+                if (!foundDefaultLibrary)
+                    throw new ApplicationException("Could not find a valid HTTP client. Include Stormpath.SDK.RestSharpClient.dll in the application path.");
+            }
+
+            try
+            {
+                var instance = this.Instantiate(requestExecutorType);
+                if (instance == null)
+                    throw new ApplicationException("Created instance was null");
+
+                return instance;
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException("Could not create a valid HTTP client. See the inner exception for details.", e);
+            }
         }
 
         private IRequestExecutor Instantiate(Type targetType)
         {
-            // match parameters up and create object
-            throw new NotImplementedException();
+            return Activator.CreateInstance(targetType, this.apiKey, this.authScheme, this.connectionTimeout, this.logger) as IRequestExecutor;
         }
     }
 }
