@@ -19,6 +19,7 @@ using System;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
 
@@ -26,12 +27,15 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class DefaultClientBuilder : IClientBuilder
     {
+        public static readonly int DefaultConnectionTimeout = 20 * 1000;
+        public static readonly string DefaultBaseUrl = "https://api.stormpath.com/v1";
+
         private readonly IJsonSerializerBuilder serializerBuilder;
-        private readonly IRequestExecutorBuilder requestExecutorBuilder;
+        private readonly IHttpClientBuilder httpClientBuilder;
         private readonly ICacheProviderBuilder cacheProviderBuilder;
 
-        private string baseUrl = DefaultClient.DefaultBaseUrl;
-        private int connectionTimeout = DefaultClient.DefaultConnectionTimeout;
+        private string baseUrl = DefaultBaseUrl;
+        private int connectionTimeout = DefaultConnectionTimeout;
         private AuthenticationScheme authenticationScheme;
         private IClientApiKey apiKey;
         private ILogger logger;
@@ -40,7 +44,7 @@ namespace Stormpath.SDK.Impl.Client
         {
             this.serializerBuilder = new DefaultJsonSerializerBuilder();
             this.cacheProviderBuilder = new DefaultCacheProviderBuilder();
-            this.requestExecutorBuilder = new DefaultRequestExecutorBuilder();
+            this.httpClientBuilder = new DefaultHttpClientBuilder();
         }
 
         IClientBuilder IClientBuilder.SetApiKey(IClientApiKey apiKey)
@@ -78,16 +82,16 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
-        IClientBuilder IClientBuilder.SetJsonSerializer(IJsonSerializer serializer)
+        IClientBuilder IClientBuilder.UseJsonSerializer(IJsonSerializer serializer)
         {
             this.serializerBuilder.UseSerializer(serializer);
 
             return this;
         }
 
-        IClientBuilder IClientBuilder.SetHttpClient(Type httpClientType)
+        IClientBuilder IClientBuilder.UseHttpClient(IHttpClient httpClient)
         {
-            this.requestExecutorBuilder.SetRequestExecutorType(httpClientType);
+            this.httpClientBuilder.UseHttpClient(httpClient);
 
             return this;
         }
@@ -122,12 +126,15 @@ namespace Stormpath.SDK.Impl.Client
             if (this.apiKey == null || !this.apiKey.IsValid())
                 throw new ArgumentException("API Key is not valid or has not been set. Use ClientApiKeys.Builder() to construct one.");
 
+            this.httpClientBuilder
+                .SetConnectionTimeout(this.connectionTimeout);
+
             return new DefaultClient(
                 this.apiKey,
                 this.baseUrl,
                 this.authenticationScheme,
                 this.connectionTimeout,
-                this.requestExecutorBuilder,
+                this.httpClientBuilder,
                 this.cacheProviderBuilder,
                 this.serializerBuilder,
                 this.logger);

@@ -21,7 +21,7 @@ using System.Reflection;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    internal abstract class TypeLoader<T>
+    internal abstract class TypeLoader<T> : ITypeLoader<T>
         where T : class
     {
         private readonly string fileName;
@@ -33,20 +33,21 @@ namespace Stormpath.SDK.Impl.Utility
             this.fullyQualifiedTypeName = fullyQualifiedTypeName;
         }
 
-        protected bool TryLoadType(out Type loadedType)
+        public bool TryLoad(out T instance, object[] constructorArguments = null)
         {
             var absolutePath = Path.GetFullPath(this.fileName);
 
             if (!File.Exists(absolutePath))
             {
-                loadedType = null;
+                instance = null;
                 return false;
             }
 
             Assembly assembly = Assembly.LoadFile(absolutePath);
-            loadedType = assembly.GetType(this.fullyQualifiedTypeName);
+            var type = assembly.GetType(this.fullyQualifiedTypeName);
+            instance = Activator.CreateInstance(type, constructorArguments) as T;
 
-            return loadedType != null;
+            return instance != null;
         }
     }
 }

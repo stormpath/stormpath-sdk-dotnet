@@ -24,6 +24,7 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;

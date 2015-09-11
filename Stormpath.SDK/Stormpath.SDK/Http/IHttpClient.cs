@@ -1,4 +1,4 @@
-﻿// <copyright file="IRequestExecutor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IHttpClient.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,15 +16,13 @@
 // </remarks>
 
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Http
 {
-    public interface IRequestExecutor : IDisposable
+    public interface IHttpClient : IDisposable
     {
-        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken = default(CancellationToken));
+        bool IsSynchronousSupported { get; }
 
-        IHttpResponse Execute(IHttpRequest request);
+        bool IsAsynchronousSupported { get; }
     }
 }

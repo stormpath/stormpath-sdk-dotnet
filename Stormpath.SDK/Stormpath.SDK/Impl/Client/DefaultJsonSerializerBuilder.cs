@@ -17,35 +17,37 @@
 
 using System;
 using Stormpath.SDK.Impl.Serialization;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class DefaultJsonSerializerBuilder : IJsonSerializerBuilder
     {
-        private readonly IJsonSerializerLoader defaultLibraryLoader;
-        private IJsonSerializer serializer;
+        private readonly ITypeLoader<IJsonSerializer> defaultLibraryLoader;
+
+        private IJsonSerializer instance;
 
         public DefaultJsonSerializerBuilder()
             : this(new DefaultJsonSerializerLoader())
         {
         }
 
-        internal DefaultJsonSerializerBuilder(IJsonSerializerLoader defaultLibraryLoader)
+        internal DefaultJsonSerializerBuilder(ITypeLoader<IJsonSerializer> defaultLibraryLoader)
         {
             this.defaultLibraryLoader = defaultLibraryLoader;
         }
 
         IJsonSerializerBuilder IJsonSerializerBuilder.UseSerializer(IJsonSerializer serializer)
         {
-            this.serializer = serializer;
+            this.instance = serializer;
             return this;
         }
 
         IJsonSerializer IJsonSerializerBuilder.Build()
         {
-            if (this.serializer != null)
-                return this.serializer;
+            if (this.instance != null)
+                return this.instance;
 
             IJsonSerializer defaultSerializer = null;
             bool foundDefaultLibrary = this.defaultLibraryLoader.TryLoad(out defaultSerializer);

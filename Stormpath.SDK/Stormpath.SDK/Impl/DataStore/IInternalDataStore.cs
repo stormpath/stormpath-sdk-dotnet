@@ -18,7 +18,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.DataStore;
-using Stormpath.SDK.Http;
+using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 

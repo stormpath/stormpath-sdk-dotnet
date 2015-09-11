@@ -1,4 +1,4 @@
-﻿// <copyright file="RestSharpRequestExecutor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="RestSharpClient.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -18,36 +18,39 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Api;
-using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Extensions.Http.RestSharp
 {
-    public sealed class RestSharpRequestExecutor : IRequestExecutor
+    public sealed class RestSharpClient : ISynchronousHttpClient, IAsynchronousHttpClient
     {
-        private readonly IClientApiKey apiKey;
-        private readonly AuthenticationScheme authScheme;
         private readonly int connectionTimeout;
         private readonly ILogger logger;
 
         private bool alreadyDisposed = false;
 
-        public RestSharpRequestExecutor(IClientApiKey apiKey, AuthenticationScheme authenticationScheme, int connectionTimeout, ILogger logger)
+        bool IHttpClient.IsSynchronousSupported => false; // TODO
+
+        bool IHttpClient.IsAsynchronousSupported => false; // TODO
+
+        public RestSharpClient()
+            : this(0, null)
         {
-            this.apiKey = apiKey;
-            this.authScheme = authenticationScheme;
+        }
+
+        public RestSharpClient(int connectionTimeout, ILogger logger)
+        {
             this.connectionTimeout = connectionTimeout;
             this.logger = logger;
         }
 
-        IHttpResponse IRequestExecutor.Execute(IHttpRequest request)
+        IHttpResponse ISynchronousHttpClient.Execute(IHttpRequest request)
         {
             throw new NotImplementedException();
         }
 
-        Task<IHttpResponse> IRequestExecutor.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
+        Task<IHttpResponse> IAsynchronousHttpClient.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultRequestExecutorBuilder_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultHttpClientBuilder_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -18,23 +18,21 @@
 using System;
 using NSubstitute;
 using Shouldly;
-using Stormpath.SDK.Api;
-using Stormpath.SDK.Client;
 using Stormpath.SDK.Extensions.Http.RestSharp;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Client;
-using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Shared;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class DefaultRequestExecutorBuilder_tests
+    public class DefaultHttpClientBuilder_tests
     {
-        private IRequestExecutorLoader GetFailingLoader()
+        private ITypeLoader<IHttpClient> GetFailingLoader()
         {
-            Type dummy = null;
-            var failingLoader = Substitute.For<IRequestExecutorLoader>();
+            IHttpClient dummy = null;
+            var failingLoader = Substitute.For<ITypeLoader<IHttpClient>>();
             failingLoader.TryLoad(out dummy).Returns(false);
 
             return failingLoader;
@@ -43,38 +41,32 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Constructs_instance_from_specified_type()
         {
-            IRequestExecutorBuilder builder = new DefaultRequestExecutorBuilder(this.GetFailingLoader());
+            IHttpClientBuilder builder = new DefaultHttpClientBuilder(this.GetFailingLoader());
 
-            builder.SetRequestExecutorType(typeof(RestSharpRequestExecutor));
-            builder.SetApiKey(Substitute.For<IClientApiKey>());
-            builder.SetAuthenticationScheme(AuthenticationScheme.Basic);
-            builder.SetConnectionTimeout(0);
-            builder.SetLogger(Substitute.For<ILogger>());
+            builder.UseHttpClient(new RestSharpClient());
 
             var instance = builder.Build();
-            instance.ShouldBeAssignableTo<IRequestExecutor>();
+            instance.ShouldBeAssignableTo<IHttpClient>();
             instance.ShouldNotBeNull();
         }
 
         [Fact]
         public void Constructs_instance_from_default_library()
         {
-            IRequestExecutorBuilder builder = new DefaultRequestExecutorBuilder();
+            IHttpClientBuilder builder = new DefaultHttpClientBuilder();
 
-            builder.SetApiKey(Substitute.For<IClientApiKey>());
-            builder.SetAuthenticationScheme(AuthenticationScheme.Basic);
             builder.SetConnectionTimeout(0);
             builder.SetLogger(Substitute.For<ILogger>());
 
             var instance = builder.Build();
-            instance.ShouldBeAssignableTo<IRequestExecutor>();
+            instance.ShouldBeAssignableTo<IHttpClient>();
             instance.ShouldNotBeNull();
         }
 
         [Fact]
         public void Throws_when_no_supported_type_can_be_found()
         {
-            IRequestExecutorBuilder builder = new DefaultRequestExecutorBuilder(this.GetFailingLoader());
+            IHttpClientBuilder builder = new DefaultHttpClientBuilder(this.GetFailingLoader());
 
             Assert.Throws<ApplicationException>(() =>
             {

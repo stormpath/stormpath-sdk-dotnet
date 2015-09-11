@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultJsonSerializerLoader.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAsynchronousHttpClient.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,19 +15,13 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Impl.Utility;
-using Stormpath.SDK.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Stormpath.SDK.Impl.Serialization
+namespace Stormpath.SDK.Http
 {
-    internal sealed class DefaultJsonSerializerLoader : TypeLoader<IJsonSerializer>
+    public interface IAsynchronousHttpClient : IHttpClient
     {
-        private static readonly string FileName = "Stormpath.SDK.JsonNetSerializer.dll";
-        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Serialization.JsonNet.JsonNetSerializer";
-
-        public DefaultJsonSerializerLoader()
-            : base(FileName, FullyQualifiedType)
-        {
-        }
+        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken);
     }
 }

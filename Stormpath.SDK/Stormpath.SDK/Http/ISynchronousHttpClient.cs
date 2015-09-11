@@ -1,4 +1,4 @@
-﻿// <copyright file="IJsonSerializerLoader.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ISynchronousHttpClient.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,12 +15,10 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Serialization;
-
-namespace Stormpath.SDK.Impl.Serialization
+namespace Stormpath.SDK.Http
 {
-    internal interface IJsonSerializerLoader
+    public interface ISynchronousHttpClient : IHttpClient
     {
-        bool TryLoad(out IJsonSerializer instance);
+        IHttpResponse Execute(IHttpRequest request);
     }
 }

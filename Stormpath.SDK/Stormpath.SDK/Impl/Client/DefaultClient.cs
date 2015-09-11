@@ -27,6 +27,7 @@ using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
@@ -36,8 +37,6 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class DefaultClient : IClient
     {
-        public static readonly int DefaultConnectionTimeout = 20 * 1000;
-        public static readonly string DefaultBaseUrl = "https://api.stormpath.com/v1";
         public static readonly AuthenticationScheme DefaultAuthenticationScheme = AuthenticationScheme.SAuthc1;
 
         private readonly string baseUrl;
@@ -55,7 +54,7 @@ namespace Stormpath.SDK.Impl.Client
             string baseUrl,
             AuthenticationScheme authenticationScheme,
             int connectionTimeout,
-            IRequestExecutorBuilder requestExecutorBuilder,
+            IHttpClientBuilder httpClientBuilder,
             ICacheProviderBuilder cacheProviderBuilder,
             IJsonSerializerBuilder serializerBuilder,
             ILogger logger)
@@ -82,12 +81,12 @@ namespace Stormpath.SDK.Impl.Client
 
             var cacheProvider = cacheProviderBuilder.Build();
 
-            var requestExecutor = requestExecutorBuilder
-                .SetApiKey(apiKey)
-                .SetAuthenticationScheme(authenticationScheme)
+            var httpClient = httpClientBuilder
                 .SetConnectionTimeout(connectionTimeout)
                 .SetLogger(this.logger)
                 .Build();
+
+            var requestExecutor = new DefaultRequestExecutor(httpClient, apiKey, authenticationScheme, this.logger);
 
             this.dataStore = new DefaultDataStore(requestExecutor, baseUrl, this.serializer, this.logger, cacheProvider);
         }

@@ -15,8 +15,8 @@
 // limitations under the License.
 // </remarks>
 
-using System;
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
 
@@ -33,9 +33,9 @@ namespace Stormpath.SDK.Client
 
         IClientBuilder SetBaseUrl(string baseUrl);
 
-        IClientBuilder SetJsonSerializer(IJsonSerializer serializer);
+        IClientBuilder UseJsonSerializer(IJsonSerializer serializer);
 
-        IClientBuilder SetHttpClient(Type httpClientType);
+        IClientBuilder UseHttpClient(IHttpClient httpClient);
 
         IClientBuilder SetLogger(ILogger logger);
 

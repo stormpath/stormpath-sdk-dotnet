@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultRequestExecutorLoader.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IRequestExecutor.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,24 +16,16 @@
 // </remarks>
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Http;
-using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Http
 {
-    internal sealed class DefaultRequestExecutorLoader : TypeLoader<IRequestExecutor>, IRequestExecutorLoader
+    public interface IRequestExecutor : IDisposable
     {
-        private static readonly string FileName = "Stormpath.SDK.RestSharpClient.dll";
-        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Http.RestSharp.RestSharpRequestExecutor";
+        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken);
 
-        public DefaultRequestExecutorLoader()
-            : base(FileName, FullyQualifiedType)
-        {
-        }
-
-        bool IRequestExecutorLoader.TryLoad(out Type clientType)
-        {
-            return this.TryLoadType(out clientType);
-        }
+        IHttpResponse Execute(IHttpRequest request);
     }
 }

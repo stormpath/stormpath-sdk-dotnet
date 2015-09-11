@@ -1,4 +1,4 @@
-﻿// <copyright file="IRequestExecutorBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IHttpClientBuilder.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,26 +15,19 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using Stormpath.SDK.Api;
-using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    internal interface IRequestExecutorBuilder
+    internal interface IHttpClientBuilder
     {
-        IRequestExecutorBuilder SetRequestExecutorType(Type requestExecutorType);
+        IHttpClientBuilder UseHttpClient(IHttpClient client);
 
-        IRequestExecutorBuilder SetApiKey(IClientApiKey apiKey);
+        IHttpClientBuilder SetConnectionTimeout(int connectionTimeout);
 
-        IRequestExecutorBuilder SetAuthenticationScheme(AuthenticationScheme authScheme);
+        IHttpClientBuilder SetLogger(ILogger logger);
 
-        IRequestExecutorBuilder SetConnectionTimeout(int connectionTimeout);
-
-        IRequestExecutorBuilder SetLogger(ILogger logger);
-
-        IRequestExecutor Build();
+        IHttpClient Build();
     }
 }

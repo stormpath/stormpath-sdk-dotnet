@@ -19,7 +19,7 @@ using System;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Impl.Client;
-using Stormpath.SDK.Impl.Serialization;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Serialization;
 using Xunit;
 
@@ -27,10 +27,10 @@ namespace Stormpath.SDK.Tests.Impl
 {
     public class DefaultJsonSerializerBuilder_tests
     {
-        private IJsonSerializerLoader GetFailingLoader()
+        private ITypeLoader<IJsonSerializer> GetFailingLoader()
         {
             IJsonSerializer dummy = null;
-            var failingLoader = Substitute.For<IJsonSerializerLoader>();
+            var failingLoader = Substitute.For<ITypeLoader<IJsonSerializer>>();
             failingLoader.TryLoad(out dummy).Returns(false);
 
             return failingLoader;
@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Tests.Impl
             IJsonSerializer fakeSerializer = Substitute.For<IJsonSerializer>();
             IJsonSerializer dummy = null;
 
-            var fakeLoader = Substitute.For<IJsonSerializerLoader>();
+            var fakeLoader = Substitute.For<ITypeLoader<IJsonSerializer>>();
             fakeLoader.TryLoad(out dummy).Returns(call =>
             {
                 call[0] = fakeSerializer;

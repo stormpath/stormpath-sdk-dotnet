@@ -15,22 +15,12 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Cache;
-using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Auth;
-using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Serialization;
-using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl
 {
     internal sealed class InternalFactory
     {
-        public IInternalDataStore CreateDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheManager)
-        {
-            return new DefaultDataStore(requestExecutor, baseUrl, serializer, logger, cacheManager);
-        }
-
         public AuthenticationRequestDispatcher GetAuthenticationDispatcher()
         {
             return new AuthenticationRequestDispatcher();

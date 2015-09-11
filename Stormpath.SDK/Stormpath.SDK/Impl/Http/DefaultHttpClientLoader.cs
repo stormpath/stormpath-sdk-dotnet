@@ -1,4 +1,4 @@
-﻿// <copyright file="IRequestExecutorLoader.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultHttpClientLoader.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,12 +15,19 @@
 // limitations under the License.
 // </remarks>
 
-using System;
+using Stormpath.SDK.Http;
+using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Http
 {
-    internal interface IRequestExecutorLoader
+    internal sealed class DefaultHttpClientLoader : TypeLoader<IHttpClient>
     {
-        bool TryLoad(out Type clientType);
+        private static readonly string FileName = "Stormpath.SDK.RestSharpClient.dll";
+        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Http.RestSharp.RestSharpClient";
+
+        public DefaultHttpClientLoader()
+            : base(FileName, FullyQualifiedType)
+        {
+        }
     }
 }
