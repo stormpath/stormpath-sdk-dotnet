@@ -44,11 +44,28 @@ namespace Stormpath.SDK.Impl.Http
         private readonly IRequestAuthenticator requestAuthenticator;
         private readonly IBackoffStrategy defaultBackoffStrategy;
         private readonly IBackoffStrategy throttlingBackoffStrategy;
-        private readonly int maxRetriesPerRequest = DefaultMaxRetries;
+        private readonly int maxAttemptsPerRequest = DefaultMaxRetries + 1;
 
         private bool alreadyDisposed = false;
 
-        public DefaultRequestExecutor(IHttpClient httpClient, IClientApiKey apiKey, AuthenticationScheme authenticationScheme, ILogger logger)
+        public DefaultRequestExecutor(
+            IHttpClient httpClient,
+            IClientApiKey apiKey,
+            AuthenticationScheme authenticationScheme,
+            ILogger logger)
+            : this(httpClient, apiKey, authenticationScheme, logger,
+                  new DefaultBackoffStrategy(MaxBackoffMilliseconds),
+                  new ThrottlingBackoffStrategy(MaxBackoffMilliseconds))
+        {
+        }
+
+        public DefaultRequestExecutor(
+            IHttpClient httpClient,
+            IClientApiKey apiKey,
+            AuthenticationScheme authenticationScheme,
+            ILogger logger,
+            IBackoffStrategy defaultBackoffStrategy,
+            IBackoffStrategy throttlingBackoffStrategy)
         {
             if (!apiKey.IsValid())
                 throw new ApplicationException("API Key is invalid.");
@@ -63,10 +80,9 @@ namespace Stormpath.SDK.Impl.Http
             IRequestAuthenticatorFactory requestAuthenticatorFactory = new DefaultRequestAuthenticatorFactory();
             this.requestAuthenticator = requestAuthenticatorFactory.Create(authenticationScheme);
 
-            this.defaultBackoffStrategy = new DefaultBackoffStrategy(MaxBackoffMilliseconds);
-            this.throttlingBackoffStrategy = new ThrottlingBackoffStrategy(MaxBackoffMilliseconds);
-
             this.logger = logger;
+            this.defaultBackoffStrategy = defaultBackoffStrategy;
+            this.throttlingBackoffStrategy = throttlingBackoffStrategy;
         }
 
         Task<IHttpResponse> IRequestExecutor.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
@@ -100,7 +116,7 @@ namespace Stormpath.SDK.Impl.Http
                     this.PauseSync(count, throttle);
                     return CompletedTask;
                 },
-                CancellationToken.None).Result;
+                CancellationToken.None).GetAwaiter().GetResult();
         }
 
         private async Task<IHttpResponse> CoreRequestLoopAsync(
@@ -109,7 +125,7 @@ namespace Stormpath.SDK.Impl.Http
             Func<int, bool, CancellationToken, Task> pauseAction,
             CancellationToken cancellationToken)
         {
-            var retryCount = 0;
+            var attempts = 0;
             bool throttling = false;
 
             Uri currentUri = request.CanonicalUri.ToUri();
@@ -123,10 +139,16 @@ namespace Stormpath.SDK.Impl.Http
 
                 try
                 {
-                    if (retryCount > 0)
-                        await pauseAction(retryCount, throttling, cancellationToken).ConfigureAwait(false);
+                    attempts++;
 
-                    retryCount++;
+                    if (attempts > this.maxAttemptsPerRequest)
+                        throw new ApplicationException("Reached maximum number of request retries.");
+
+                    if (attempts > 1)
+                    {
+                        this.logger.Trace("Retrying request", "DefaultRequestExecutor.CoreRequestLoopAsync");
+                        await pauseAction(attempts - 1, throttling, cancellationToken).ConfigureAwait(false);
+                    }
 
                     var response = await executeAction(currentRequest, cancellationToken).ConfigureAwait(false);
                     if (this.IsRedirect(response))
@@ -138,24 +160,27 @@ namespace Stormpath.SDK.Impl.Http
                     }
 
                     var statusCode = response.HttpStatus;
+
+                    // 429 Too Many Requests
                     if (statusCode == 429)
                     {
                         throttling = true;
-                        this.logger.Warn($"Got HTTP 429, throttling retry request", "DefaultRequestExecutor.CoreRequestLoopAsync");
+                        this.logger.Warn($"Got HTTP 429, throttling", "DefaultRequestExecutor.CoreRequestLoopAsync");
 
                         continue; // retry request
                     }
 
-                    if ((statusCode == 503 || statusCode == 504) && retryCount <= this.maxRetriesPerRequest)
+                    // 503/504 Currently Unavailable
+                    if (statusCode == 503 || statusCode == 504)
                     {
-                        this.logger.Warn($"Got HTTP {statusCode}, retrying", "DefaultRequestExecutor.CoreRequestLoopAsync");
+                        this.logger.Warn($"Got HTTP {statusCode}", "DefaultRequestExecutor.CoreRequestLoopAsync");
 
                         continue; // retry request
                     }
 
-                    if (response.ErrorType == ResponseErrorType.Recoverable && retryCount <= this.maxRetriesPerRequest)
+                    if (response.ErrorType == ResponseErrorType.Recoverable)
                     {
-                        this.logger.Warn($"Error during request, retrying", "DefaultRequestExecutor.CoreRequestLoopAsync");
+                        this.logger.Warn($"Recoverable error during request", "DefaultRequestExecutor.CoreRequestLoopAsync");
 
                         continue; // retry request
                     }
@@ -221,7 +246,7 @@ namespace Stormpath.SDK.Impl.Http
         private bool WasCanceled(Exception exception, CancellationToken cancellationToken)
         {
             bool wasCanceledByUser =
-                (exception as TaskCanceledException)?.CancellationToken == cancellationToken;
+                (exception as OperationCanceledException)?.CancellationToken == cancellationToken;
 
             return wasCanceledByUser;
         }

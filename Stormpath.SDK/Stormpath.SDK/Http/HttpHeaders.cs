@@ -83,8 +83,19 @@ namespace Stormpath.SDK.Http
 
         public Uri Location
         {
-            get { return new Uri(GetFirst<string>(LocationName), UriKind.Absolute); }
-            set { this.Add(LocationName, value.AbsoluteUri); }
+            get
+            {
+                var location = GetFirst<string>(LocationName);
+                if (string.IsNullOrEmpty(location))
+                    return null;
+
+                return new Uri(location, UriKind.Absolute);
+            }
+
+            set
+            {
+                this.Add(LocationName, value.AbsoluteUri);
+            }
         }
 
         public string UserAgent

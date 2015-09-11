@@ -21,6 +21,7 @@ using Shouldly;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.Client;
+using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -52,11 +53,8 @@ namespace Stormpath.SDK.Tests.Impl
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                var fakeKey = Substitute.For<IClientApiKey>();
-                fakeKey.IsValid().Returns(false);
-
                 this.builder
-                    .SetApiKey(fakeKey)
+                    .SetApiKey(FakeApiKey.Create(valid: false))
                     .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                     .SetBaseUrl("http://foobar")
                     .SetConnectionTimeout(10)
@@ -67,11 +65,8 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void AuthenticationScheme_is_optional()
         {
-            var fakeKey = Substitute.For<IClientApiKey>();
-            fakeKey.IsValid().Returns(true);
-
             var client = this.builder
-                .SetApiKey(fakeKey)
+                .SetApiKey(FakeApiKey.Create(valid: true))
                 .SetBaseUrl("http://foobar")
                 .SetConnectionTimeout(10)
                 .Build();
@@ -83,11 +78,8 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void BaseUrl_is_optional()
         {
-            var fakeKey = Substitute.For<IClientApiKey>();
-            fakeKey.IsValid().Returns(true);
-
             var client = this.builder
-                .SetApiKey(fakeKey)
+                .SetApiKey(FakeApiKey.Create(valid: true))
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetConnectionTimeout(10)
                 .Build();
@@ -99,11 +91,8 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void ConnectionTimeout_is_optional()
         {
-            var fakeKey = Substitute.For<IClientApiKey>();
-            fakeKey.IsValid().Returns(true);
-
             var client = this.builder
-                .SetApiKey(fakeKey)
+                .SetApiKey(FakeApiKey.Create(valid: true))
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetBaseUrl("http://foobar")
                 .Build();
