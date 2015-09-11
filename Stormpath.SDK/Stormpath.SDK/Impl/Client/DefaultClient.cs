@@ -98,6 +98,10 @@ namespace Stormpath.SDK.Impl.Client
 
         string IClient.BaseUrl => this.dataStore.BaseUrl;
 
+        AuthenticationScheme IClient.AuthenticationScheme => this.authenticationScheme;
+
+        int IClient.ConnectionTimeout => this.connectionTimeout;
+
         T IDataStore.Instantiate<T>() => this.dataStore.Instantiate<T>();
 
         async Task<ITenant> IClient.GetCurrentTenantAsync(CancellationToken cancellationToken)
