@@ -15,6 +15,8 @@
 // limitations under the License.
 // </remarks>
 
+using Stormpath.SDK.Shared;
+
 namespace Stormpath.SDK.Impl.Utility
 {
     internal class WindowsVersion : ImmutableValueObject<WindowsVersion>

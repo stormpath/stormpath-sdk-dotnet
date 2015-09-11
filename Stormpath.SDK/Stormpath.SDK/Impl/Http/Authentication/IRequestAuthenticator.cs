@@ -16,6 +16,7 @@
 // </remarks>
 
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.Http.Authentication
 {

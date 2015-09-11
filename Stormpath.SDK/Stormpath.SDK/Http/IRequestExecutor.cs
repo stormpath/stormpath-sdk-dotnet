@@ -1,4 +1,4 @@
-﻿// <copyright file="IHttpResponse.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IRequestExecutor.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,14 +15,16 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.Http
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Stormpath.SDK.Http
 {
-    internal interface IHttpResponse : IHttpMessage
+    public interface IRequestExecutor : IDisposable
     {
-        int HttpStatus { get; }
+        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken);
 
-        string ResponsePhrase { get; }
-
-        bool IsError { get; }
+        IHttpResponse Execute(IHttpRequest request);
     }
 }

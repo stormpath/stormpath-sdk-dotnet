@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultCacheProviderResolver.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ICacheProviderBuilder.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,25 +16,15 @@
 // </remarks>
 
 using Stormpath.SDK.Cache;
-using Stormpath.SDK.Impl.Cache;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    internal class DefaultCacheProviderResolver
+    internal interface ICacheProviderBuilder
     {
-        public bool UseCache { get; set; } = false;
+        ICacheProviderBuilder UseCache(bool useCache);
 
-        public ICacheProvider CustomProvider { get; set; } = null;
+        ICacheProviderBuilder UseProvider(ICacheProvider cacheProvider);
 
-        public ICacheProvider GetProvider()
-        {
-            if (!this.UseCache)
-                return new NullCacheProvider();
-
-            if (this.CustomProvider == null)
-                return new InMemoryCacheProvider();
-
-            return this.CustomProvider;
-        }
+        ICacheProvider Build();
     }
 }

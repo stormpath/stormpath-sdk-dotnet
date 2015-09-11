@@ -1,4 +1,4 @@
-﻿// <copyright file="HttpMessageBase.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IRequestExecutorBuilder.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,18 +15,26 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using Stormpath.SDK.Api;
+using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
+using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Impl.Http
+namespace Stormpath.SDK.Impl.Client
 {
-    internal abstract class HttpMessageBase : IHttpMessage
+    internal interface IRequestExecutorBuilder
     {
-        public abstract string Body { get; }
+        IRequestExecutorBuilder SetRequestExecutorType(Type requestExecutorType);
 
-        public abstract string BodyContentType { get; }
+        IRequestExecutorBuilder SetApiKey(IClientApiKey apiKey);
 
-        public bool HasBody => !string.IsNullOrEmpty(this.Body) && !string.IsNullOrEmpty(this.BodyContentType);
+        IRequestExecutorBuilder SetAuthenticationScheme(AuthenticationScheme authScheme);
 
-        public abstract HttpHeaders Headers { get; }
+        IRequestExecutorBuilder SetConnectionTimeout(int connectionTimeout);
+
+        IRequestExecutorBuilder SetLogger(ILogger logger);
+
+        IRequestExecutor Build();
     }
 }

@@ -19,12 +19,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Stormpath.SDK.Impl.Http.Support;
 
-namespace Stormpath.SDK.Impl.Http
+namespace Stormpath.SDK.Http
 {
     // TODO this class needs a lot of TLC
-    internal sealed class HttpHeaders : IEnumerable<KeyValuePair<string, IEnumerable<string>>>
+    public sealed class HttpHeaders : IEnumerable<KeyValuePair<string, IEnumerable<string>>>
     {
         private static readonly string HeaderAcceptName = "Accept";
         private static readonly string HeaderAuthorizationName = "Authorization";

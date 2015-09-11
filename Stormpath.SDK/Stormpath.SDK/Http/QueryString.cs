@@ -19,10 +19,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Impl.Http.Support
+namespace Stormpath.SDK.Http
 {
-    internal class QueryString : ImmutableValueObject<QueryString>
+    public class QueryString : ImmutableValueObject<QueryString>
     {
         private static Func<QueryString, QueryString, bool> compareFunction = new Func<QueryString, QueryString, bool>(
             (a, b) => a.queryStringItems.SequenceEqual(b.queryStringItems));

@@ -1,4 +1,4 @@
-﻿// <copyright file="IRequestExecutor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="RestSharpRequestExecutor.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,21 +15,9 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Client;
-
-namespace Stormpath.SDK.Impl.Http
+namespace Stormpath.SDK.RestSharpClient
 {
-    internal interface IRequestExecutor : IDisposable
+    public class RestSharpRequestExecutor
     {
-        AuthenticationScheme AuthenticationScheme { get; }
-
-        int ConnectionTimeout { get; }
-
-        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken);
-
-        IHttpResponse Execute(IHttpRequest request);
     }
 }

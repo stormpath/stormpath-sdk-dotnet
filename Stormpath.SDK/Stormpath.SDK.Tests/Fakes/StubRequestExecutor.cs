@@ -18,8 +18,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Http;
-using Stormpath.SDK.Impl.Http.Support;
 
 namespace Stormpath.SDK.Tests.Fakes
 {

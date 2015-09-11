@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Error;
-using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Error

@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultJsonSerializerLoader.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ITypeLoader.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,19 +15,10 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Impl.Utility;
-using Stormpath.SDK.Serialization;
-
-namespace Stormpath.SDK.Impl.Serialization
+namespace Stormpath.SDK.Impl.Utility
 {
-    internal sealed class DefaultJsonSerializerLoader : TypeLoader<IJsonSerializer>
+    internal interface ITypeLoader<T>
     {
-        private static readonly string FileName = "Stormpath.SDK.JsonNetSerializer.dll";
-        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Serialization.JsonNetSerializer";
-
-        public DefaultJsonSerializerLoader()
-            : base(FileName, FullyQualifiedType)
-        {
-        }
+        bool TryLoad(out T loaded);
     }
 }

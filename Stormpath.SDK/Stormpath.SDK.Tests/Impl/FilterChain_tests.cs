@@ -21,9 +21,9 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.DataStore.Filters;
-using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Shared;
 using Xunit;
 

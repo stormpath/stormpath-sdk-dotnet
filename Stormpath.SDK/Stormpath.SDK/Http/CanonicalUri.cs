@@ -18,10 +18,11 @@
 using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Impl.Http.Support;
 
-namespace Stormpath.SDK.Impl.Http.Support
+namespace Stormpath.SDK.Http
 {
-    internal sealed class CanonicalUri
+    public sealed class CanonicalUri
     {
         private readonly Uri resourcePath;
         private readonly QueryString query;

@@ -19,7 +19,6 @@ using System;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
-using Stormpath.SDK.Impl.Serialization;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
 
@@ -27,25 +26,21 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class DefaultClientBuilder : IClientBuilder
     {
-        private readonly IJsonSerializerLoader serializerLoader;
-        private readonly DefaultCacheProviderResolver cacheProviderResolver;
+        private readonly IJsonSerializerBuilder serializerBuilder;
+        private readonly IRequestExecutorBuilder requestExecutorBuilder;
+        private readonly ICacheProviderBuilder cacheProviderBuilder;
 
         private string baseUrl = DefaultClient.DefaultBaseUrl;
         private int connectionTimeout = DefaultClient.DefaultConnectionTimeout;
         private AuthenticationScheme authenticationScheme;
         private IClientApiKey apiKey;
-        private IJsonSerializer jsonSerializer;
         private ILogger logger;
 
         public DefaultClientBuilder()
-            : this(new DefaultJsonSerializerLoader())
         {
-        }
-
-        internal DefaultClientBuilder(IJsonSerializerLoader serializerLoader)
-        {
-            this.serializerLoader = serializerLoader;
-            this.cacheProviderResolver = new DefaultCacheProviderResolver();
+            this.serializerBuilder = new DefaultJsonSerializerBuilder();
+            this.cacheProviderBuilder = new DefaultCacheProviderBuilder();
+            this.requestExecutorBuilder = new DefaultRequestExecutorBuilder();
         }
 
         IClientBuilder IClientBuilder.SetApiKey(IClientApiKey apiKey)
@@ -69,6 +64,7 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentNullException("Base URL cannot be empty.");
 
             this.baseUrl = baseUrl;
+
             return this;
         }
 
@@ -78,24 +74,34 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentOutOfRangeException("Timeout cannot be negative.");
 
             this.connectionTimeout = timeout;
+
             return this;
         }
 
         IClientBuilder IClientBuilder.SetJsonSerializer(IJsonSerializer serializer)
         {
-            this.jsonSerializer = serializer;
+            this.serializerBuilder.UseSerializer(serializer);
+
+            return this;
+        }
+
+        IClientBuilder IClientBuilder.SetRequestExecutor(Type requestExecutorType)
+        {
+            this.requestExecutorBuilder.SetRequestExecutorType(requestExecutorType);
+
             return this;
         }
 
         IClientBuilder IClientBuilder.SetLogger(ILogger logger)
         {
             this.logger = logger;
+
             return this;
         }
 
         internal IClientBuilder SetCache(bool cacheEnabled)
         {
-            this.cacheProviderResolver.UseCache = cacheEnabled;
+            this.cacheProviderBuilder.UseCache(cacheEnabled);
 
             return this;
         }
@@ -105,8 +111,8 @@ namespace Stormpath.SDK.Impl.Client
             if (cacheProvider == null)
                 throw new ArgumentNullException(nameof(cacheProvider));
 
-            this.cacheProviderResolver.UseCache = true;
-            this.cacheProviderResolver.CustomProvider = cacheProvider;
+            this.cacheProviderBuilder.UseCache(true);
+            this.cacheProviderBuilder.UseProvider(cacheProvider);
 
             return this;
         }
@@ -116,17 +122,15 @@ namespace Stormpath.SDK.Impl.Client
             if (this.apiKey == null || !this.apiKey.IsValid())
                 throw new ArgumentException("API Key is not valid or has not been set. Use ClientApiKeys.Builder() to construct one.");
 
-            var useSerializer = this.jsonSerializer;
-            bool isValidSerializer =
-                this.jsonSerializer != null ||
-                this.serializerLoader.TryLoad(out useSerializer);
-
-            if (!isValidSerializer)
-                throw new ApplicationException("Could not find a valid JSON serializer. Include Stormpath.SDK.JsonNetSerializer.dll in the application path.");
-
-            var useCacheProvider = this.cacheProviderResolver.GetProvider();
-
-            return new DefaultClient(this.apiKey, this.baseUrl, this.authenticationScheme, this.connectionTimeout, useSerializer, this.logger, useCacheProvider);
+            return new DefaultClient(
+                this.apiKey,
+                this.baseUrl,
+                this.authenticationScheme,
+                this.connectionTimeout,
+                this.requestExecutorBuilder,
+                this.cacheProviderBuilder,
+                this.serializerBuilder,
+                this.logger);
         }
     }
 }

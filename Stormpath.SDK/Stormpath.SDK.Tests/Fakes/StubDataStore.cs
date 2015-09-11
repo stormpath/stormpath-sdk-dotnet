@@ -19,9 +19,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.DataStore;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.JsonNetSerializer;
 using Stormpath.SDK.Resource;
@@ -93,7 +93,7 @@ namespace Stormpath.SDK.Tests.Fakes
             {
                 if (disposing)
                 {
-                    (this.fakeDataStore as DefaultDataStore).Dispose();
+                    this.fakeDataStore.Dispose();
                 }
 
                 this.isDisposed = true;

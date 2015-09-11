@@ -16,11 +16,11 @@
 // </remarks>
 
 using System;
-using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Impl.Http.Support
+namespace Stormpath.SDK.Http
 {
-    internal sealed class AuthorizationHeaderValue : ImmutableValueObject<AuthorizationHeaderValue>
+    public sealed class AuthorizationHeaderValue : ImmutableValueObject<AuthorizationHeaderValue>
     {
         private readonly string scheme;
         private readonly string parameter;

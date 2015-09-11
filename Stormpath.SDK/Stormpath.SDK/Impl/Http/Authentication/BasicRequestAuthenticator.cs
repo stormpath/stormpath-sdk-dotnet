@@ -18,8 +18,8 @@
 using System;
 using System.Text;
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Extensions;
-using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Http.Authentication

@@ -1,4 +1,4 @@
-﻿// <copyright file="RequestException.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IHttpMessage.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,21 +15,16 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-
-namespace Stormpath.SDK.Impl.Http
+namespace Stormpath.SDK.Http
 {
-    [Serializable]
-    internal class RequestException : ApplicationException
+    public interface IHttpMessage
     {
-        public RequestException(string message)
-            : base(message)
-        {
-        }
+        HttpHeaders Headers { get; }
 
-        public RequestException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
+        bool HasBody { get; }
+
+        string Body { get; }
+
+        string BodyContentType { get; }
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultJsonSerializerLoader.cs" company="Stormpath, Inc.">
+﻿// <copyright file="RequestException.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,18 +15,20 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Impl.Utility;
-using Stormpath.SDK.Serialization;
+using System;
 
-namespace Stormpath.SDK.Impl.Serialization
+namespace Stormpath.SDK.Http
 {
-    internal sealed class DefaultJsonSerializerLoader : TypeLoader<IJsonSerializer>
+    [Serializable]
+    public class RequestException : ApplicationException
     {
-        private static readonly string FileName = "Stormpath.SDK.JsonNetSerializer.dll";
-        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Serialization.JsonNetSerializer";
+        public RequestException(string message)
+            : base(message)
+        {
+        }
 
-        public DefaultJsonSerializerLoader()
-            : base(FileName, FullyQualifiedType)
+        public RequestException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
     }

@@ -26,10 +26,6 @@ namespace Stormpath.SDK.Client
     {
         string BaseUrl { get; }
 
-        AuthenticationScheme AuthenticationScheme { get; }
-
-        int ConnectionTimeout { get; }
-
         Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

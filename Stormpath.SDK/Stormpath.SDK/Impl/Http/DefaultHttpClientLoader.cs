@@ -1,4 +1,4 @@
-﻿// <copyright file="IJsonSerializerLoader.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultHttpClientLoader.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,12 +15,19 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Serialization;
+using Stormpath.SDK.Http;
+using Stormpath.SDK.Impl.Utility;
 
-namespace Stormpath.SDK.Impl.Serialization
+namespace Stormpath.SDK.Impl.Http
 {
-    internal interface IJsonSerializerLoader
+    internal sealed class DefaultHttpClientLoader : TypeLoader<IRequestExecutor>
     {
-        bool TryLoad(out IJsonSerializer serializer);
+        private static readonly string FileName = "Stormpath.SDK.RestSharpClient.dll";
+        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Http.RestSharpRequestExecutor";
+
+        public DefaultHttpClientLoader()
+            : base(FileName, FullyQualifiedType)
+        {
+        }
     }
 }

@@ -18,9 +18,9 @@
 using System;
 using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Impl.Http.Support
+namespace Stormpath.SDK.Http
 {
-    internal sealed class HttpMethod : Enumeration
+    public sealed class HttpMethod : Enumeration
     {
         public static HttpMethod Get = new HttpMethod(0, "GET");
         public static HttpMethod Head = new HttpMethod(10, "HEAD");

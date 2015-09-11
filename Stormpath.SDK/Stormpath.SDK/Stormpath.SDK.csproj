@@ -45,14 +45,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
@@ -120,12 +112,18 @@
     <Compile Include="Impl\Cache\DefaultCacheResolver.cs" />
     <Compile Include="Impl\Cache\ICacheRegionNameResolver.cs" />
     <Compile Include="Impl\Cache\ICacheResolver.cs" />
-    <Compile Include="Impl\Client\DefaultCacheProviderResolver.cs" />
+    <Compile Include="Impl\Client\DefaultCacheProviderBuilder.cs" />
+    <Compile Include="Impl\Client\DefaultJsonSerializerBuilder.cs" />
+    <Compile Include="Impl\Client\DefaultRequestExecutorBuilder.cs" />
+    <Compile Include="Impl\Client\ICacheProviderBuilder.cs" />
+    <Compile Include="Impl\Client\IJsonSerializerBuilder.cs" />
+    <Compile Include="Impl\Client\IRequestExecutorBuilder.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataRequest.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataResult.cs" />
     <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
+    <Compile Include="Impl\Http\DefaultHttpClientLoader.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterResult.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\AbstractFieldConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterList.cs" />
@@ -144,7 +142,8 @@
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\Serialization\JsonSerializationProvider.cs" />
     <Compile Include="Impl\Serialization\DefaultJsonSerializerLoader.cs" />
-    <Compile Include="Impl\Serialization\IJsonSerializerLoader.cs" />
+    <Compile Include="Impl\Utility\ITypeLoader.cs" />
+    <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Serialization\IJsonSerializer.cs" />
     <Compile Include="Impl\DataStore\IResourceConverter.cs" />
     <Compile Include="Impl\DataStore\IResourceDataRequest.cs" />
@@ -160,21 +159,20 @@
     <Compile Include="Impl\Http\Authentication\IRequestAuthenticatorFactory.cs" />
     <Compile Include="Impl\Http\DefaultHttpRequest.cs" />
     <Compile Include="Impl\Http\DefaultHttpResponse.cs" />
-    <Compile Include="Impl\Http\HttpHeaders.cs" />
+    <Compile Include="Http\HttpHeaders.cs" />
     <Compile Include="Impl\Http\HttpMessageBase.cs" />
-    <Compile Include="Impl\Http\IHttpResponse.cs" />
-    <Compile Include="Impl\Http\NetHttpAdapter.cs" />
-    <Compile Include="Impl\Http\Support\AuthorizationHeaderValue.cs" />
-    <Compile Include="Impl\Http\IHttpMessage.cs" />
-    <Compile Include="Impl\Http\Support\CanonicalUri.cs" />
+    <Compile Include="Http\IHttpResponse.cs" />
+    <Compile Include="Http\AuthorizationHeaderValue.cs" />
+    <Compile Include="Http\IHttpMessage.cs" />
+    <Compile Include="Http\CanonicalUri.cs" />
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\DefaultBackoffStrategy.cs" />
-    <Compile Include="Impl\Http\Support\HttpMethod.cs" />
+    <Compile Include="Http\HttpMethod.cs" />
     <Compile Include="Impl\Http\Support\IBackoffStrategy.cs" />
-    <Compile Include="Impl\Http\Support\QueryString.cs" />
+    <Compile Include="Http\QueryString.cs" />
     <Compile Include="Impl\Http\Support\UriQualifier.cs" />
     <Compile Include="Impl\Http\UserAgentBuilder.cs" />
-    <Compile Include="Impl\Http\IRequestExecutor.cs" />
+    <Compile Include="Http\IRequestExecutor.cs" />
     <Compile Include="Impl\DataStore\IResourceFactory.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceFactory.cs" />
     <Compile Include="Impl\Account\DefaultAccount.cs" />
@@ -187,10 +185,9 @@
     <Compile Include="Impl\Http\Authentication\BasicRequestAuthenticator.cs" />
     <Compile Include="Impl\Http\Authentication\IRequestAuthenticator.cs" />
     <Compile Include="Impl\Http\Authentication\SAuthc1RequestAuthenticator.cs" />
-    <Compile Include="Impl\Http\IHttpRequest.cs" />
-    <Compile Include="Impl\Http\NetHttpRequestExecutor.cs" />
+    <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Impl\Http\Authentication\RequestAuthenticationException.cs" />
-    <Compile Include="Impl\Http\RequestException.cs" />
+    <Compile Include="Http\RequestException.cs" />
     <Compile Include="Impl\InternalFactory.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryExecutor.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryModelVisitor.cs" />
@@ -226,7 +223,7 @@
     <Compile Include="Impl\Tenant\DefaultTenant.cs" />
     <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />
     <Compile Include="Impl\Utility\GenericHasher.cs" />
-    <Compile Include="Impl\Utility\ImmutableValueObject.cs" />
+    <Compile Include="Shared\ImmutableValueObject.cs" />
     <Compile Include="Impl\Utility\Iso8601.cs" />
     <Compile Include="Impl\Utility\IMultiValueDictionary.cs" />
     <Compile Include="Impl\Utility\RequestHelper.cs" />
@@ -279,18 +276,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta010\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
-    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
-  </Target>
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

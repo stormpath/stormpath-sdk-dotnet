@@ -1,4 +1,4 @@
-﻿// <copyright file="IHttpRequest.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IHttpResponse.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,14 +15,14 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Impl.Http.Support;
-
-namespace Stormpath.SDK.Impl.Http
+namespace Stormpath.SDK.Http
 {
-    internal interface IHttpRequest : IHttpMessage
+    public interface IHttpResponse : IHttpMessage
     {
-        HttpMethod Method { get; }
+        int HttpStatus { get; }
 
-        CanonicalUri CanonicalUri { get; }
+        string ResponsePhrase { get; }
+
+        bool IsError { get; }
     }
 }

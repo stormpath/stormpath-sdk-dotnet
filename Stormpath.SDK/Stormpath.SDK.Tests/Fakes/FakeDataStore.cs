@@ -22,8 +22,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.DataStore;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
@@ -192,6 +192,28 @@ namespace Stormpath.SDK.Tests.Fakes
         bool IInternalDataStore.Delete<T>(T resource)
         {
             throw new NotImplementedException();
+        }
+
+        private bool disposedValue = false; // To detect redundant calls
+
+        private void Dispose(bool disposing)
+        {
+            if (!this.disposedValue)
+            {
+                if (disposing)
+                {
+                    // dispose managed state (managed objects).
+                }
+
+                this.disposedValue = true;
+            }
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            this.Dispose(true);
         }
     }
 }

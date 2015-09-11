@@ -17,6 +17,7 @@
 
 using Shouldly;
 using Stormpath.SDK.Impl.Serialization;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Serialization;
 using Xunit;
 
@@ -27,7 +28,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Default_library_is_loaded()
         {
-            IJsonSerializerLoader loader = new DefaultJsonSerializerLoader();
+            ITypeLoader<IJsonSerializer> loader = new DefaultJsonSerializerLoader();
 
             // This test project has a reference to Stormpath.SDK.JsonNetSerializer, so the file lookup will succeed
             IJsonSerializer serializer = null;

@@ -17,7 +17,7 @@
 
 using System;
 using System.Collections.Generic;
-using Stormpath.SDK.Impl.Http.Support;
+using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.DataStore
 {

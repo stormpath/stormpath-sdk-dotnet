@@ -16,7 +16,7 @@
 // </remarks>
 
 using System;
-using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 {

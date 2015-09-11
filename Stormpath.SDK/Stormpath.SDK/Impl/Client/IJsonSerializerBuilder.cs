@@ -1,4 +1,4 @@
-﻿// <copyright file="IHttpMessage.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IJsonSerializerBuilder.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,16 +15,14 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.Http
+using Stormpath.SDK.Serialization;
+
+namespace Stormpath.SDK.Impl.Client
 {
-    internal interface IHttpMessage
+    internal interface IJsonSerializerBuilder
     {
-        HttpHeaders Headers { get; }
+        IJsonSerializerBuilder UseSerializer(IJsonSerializer serializer);
 
-        bool HasBody { get; }
-
-        string Body { get; }
-
-        string BodyContentType { get; }
+        IJsonSerializer Build();
     }
 }

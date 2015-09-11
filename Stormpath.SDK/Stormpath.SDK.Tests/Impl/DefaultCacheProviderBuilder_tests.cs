@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultCacheProviderResolver_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultCacheProviderBuilder_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -24,25 +24,25 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class DefaultCacheProviderResolver_tests
+    public class DefaultCacheProviderBuilder_tests
     {
         [Fact]
         public void Caching_is_disabled_by_default()
         {
-            var resolver = new DefaultCacheProviderResolver();
+            var resolver = new DefaultCacheProviderBuilder();
 
             resolver.UseCache.ShouldBe(false);
-            resolver.CustomProvider.ShouldBeNull();
+            resolver.Provider.ShouldBeNull();
         }
 
         [Fact]
         public void Provides_NullCacheProvider_when_cache_is_disabled()
         {
-            var resolver = new DefaultCacheProviderResolver();
+            ICacheProviderBuilder resolver = new DefaultCacheProviderBuilder();
 
-            resolver.UseCache = false;
+            resolver.UseCache(false);
 
-            var provider = resolver.GetProvider();
+            var provider = resolver.Build();
             provider.ShouldBeOfType<NullCacheProvider>();
             provider.ShouldNotBeNull();
         }
@@ -50,11 +50,11 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Provides_InMemoryCacheProvider_when_cache_is_enabled()
         {
-            var resolver = new DefaultCacheProviderResolver();
+            ICacheProviderBuilder resolver = new DefaultCacheProviderBuilder();
 
-            resolver.UseCache = true;
+            resolver.UseCache(true);
 
-            var provider = resolver.GetProvider();
+            var provider = resolver.Build();
             provider.ShouldBeOfType<InMemoryCacheProvider>();
             provider.ShouldNotBeNull();
         }
@@ -62,14 +62,14 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Provides_custom_provider()
         {
-            var resolver = new DefaultCacheProviderResolver();
-            var customProvider = Substitute.For<ICacheProvider>();
+            ICacheProviderBuilder resolver = new DefaultCacheProviderBuilder();
+            var cacheProvider = Substitute.For<ICacheProvider>();
 
-            resolver.UseCache = true;
-            resolver.CustomProvider = customProvider;
+            resolver.UseCache(true);
+            resolver.UseProvider(cacheProvider);
 
-            var provider = resolver.GetProvider();
-            provider.ShouldBe(customProvider);
+            var provider = resolver.Build();
+            provider.ShouldBe(cacheProvider);
         }
     }
 }

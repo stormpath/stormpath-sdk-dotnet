@@ -18,11 +18,12 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Stormpath.SDK.Impl.Utility;
 
-namespace Stormpath.SDK.Impl.Utility
+namespace Stormpath.SDK.Shared
 {
     // Adapted from an example at http://www.mechonomics.com/generic-value-object-equality-updated/
-    internal abstract class ImmutableValueObject<T> : IEquatable<T>
+    public abstract class ImmutableValueObject<T> : IEquatable<T>
         where T : ImmutableValueObject<T>
     {
         private readonly Func<T, T, bool> customEqualityFunction;

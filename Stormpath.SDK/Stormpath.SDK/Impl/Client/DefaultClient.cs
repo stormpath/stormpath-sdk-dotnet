@@ -21,7 +21,6 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Directory;
@@ -48,9 +47,18 @@ namespace Stormpath.SDK.Impl.Client
         private readonly IJsonSerializer serializer;
         private readonly ILogger logger;
 
+        private bool alreadyDisposed = false;
         private string currentTenantHref;
 
-        public DefaultClient(IClientApiKey apiKey, string baseUrl, AuthenticationScheme authenticationScheme, int connectionTimeout, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider)
+        public DefaultClient(
+            IClientApiKey apiKey,
+            string baseUrl,
+            AuthenticationScheme authenticationScheme,
+            int connectionTimeout,
+            IRequestExecutorBuilder requestExecutorBuilder,
+            ICacheProviderBuilder cacheProviderBuilder,
+            IJsonSerializerBuilder serializerBuilder,
+            ILogger logger)
         {
             if (apiKey == null || !apiKey.IsValid())
                 throw new ArgumentException("API Key is not valid.");
@@ -59,35 +67,36 @@ namespace Stormpath.SDK.Impl.Client
             if (connectionTimeout < 0)
                 throw new ArgumentException("Timeout cannot be negative.");
 
-            this.serializer = serializer;
             this.logger = logger == null
                 ? new NullLogger()
                 : logger;
 
-            var factory = new InternalFactory();
-
             this.baseUrl = baseUrl;
             this.connectionTimeout = connectionTimeout;
+
             this.authenticationScheme = authenticationScheme == null
                 ? DefaultAuthenticationScheme
                 : authenticationScheme;
 
-            var requestExecutor = factory.CreateRequestExecutor(apiKey, authenticationScheme, connectionTimeout, this.logger);
-            this.dataStore = factory.CreateDataStore(requestExecutor, baseUrl, this.serializer, this.logger, cacheProvider);
+            this.serializer = serializerBuilder.Build();
+
+            var cacheProvider = cacheProviderBuilder.Build();
+
+            var requestExecutor = requestExecutorBuilder
+                .SetApiKey(apiKey)
+                .SetAuthenticationScheme(authenticationScheme)
+                .SetConnectionTimeout(connectionTimeout)
+                .SetLogger(this.logger)
+                .Build();
+
+            this.dataStore = new DefaultDataStore(requestExecutor, baseUrl, this.serializer, this.logger, cacheProvider);
         }
 
         private IClient AsInterface => this;
 
         private string CurrentTenantHref => this.currentTenantHref.Nullable() ?? "tenants/current";
 
-        AuthenticationScheme IClient.AuthenticationScheme
-        {
-            get { return this.dataStore.RequestExecutor.AuthenticationScheme; }
-        }
-
         string IClient.BaseUrl => this.dataStore.BaseUrl;
-
-        int IClient.ConnectionTimeout => this.dataStore.RequestExecutor.ConnectionTimeout;
 
         T IDataStore.Instantiate<T>() => this.dataStore.Instantiate<T>();
 
@@ -183,6 +192,26 @@ namespace Stormpath.SDK.Impl.Client
             var tenant = this.AsInterface.GetCurrentTenantAsync().Result;
 
             return tenant.GetGroups();
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!this.alreadyDisposed)
+            {
+                if (disposing)
+                {
+                    this.dataStore.Dispose();
+                }
+
+                this.alreadyDisposed = true;
+            }
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        void IDisposable.Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            this.Dispose(true);
         }
     }
 }

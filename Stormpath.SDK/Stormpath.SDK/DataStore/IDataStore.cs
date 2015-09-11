@@ -15,13 +15,14 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.DataStore
 {
-    public interface IDataStore
+    public interface IDataStore : IDisposable
     {
         T Instantiate<T>()
             where T : IResource;

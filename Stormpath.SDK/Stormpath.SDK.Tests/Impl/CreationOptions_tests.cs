@@ -20,10 +20,10 @@ using System.Threading;
 using NSubstitute;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
@@ -103,7 +103,7 @@ namespace Stormpath.SDK.Tests.Impl
                 {
                     if (disposing)
                     {
-                        (this.dataStore as StubDataStore).Dispose();
+                        this.dataStore.Dispose();
                     }
 
                     this.isDisposed = true;
@@ -175,7 +175,7 @@ namespace Stormpath.SDK.Tests.Impl
                 {
                     if (disposing)
                     {
-                        (this.dataStore as StubDataStore).Dispose();
+                        this.dataStore.Dispose();
                     }
 
                     this.isDisposed = true;
