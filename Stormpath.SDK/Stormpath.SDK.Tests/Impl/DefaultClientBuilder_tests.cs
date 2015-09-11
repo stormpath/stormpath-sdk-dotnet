@@ -75,8 +75,8 @@ namespace Stormpath.SDK.Tests.Impl
                 .SetConnectionTimeout(10)
                 .Build();
 
-            // Null is ok! (a default is selected in DefaultRequestAuthenticatorFactory)
-            client.AuthenticationScheme.ShouldBe(null);
+            // Defaults to SAuthc1
+            client.AuthenticationScheme.ShouldBe(AuthenticationScheme.SAuthc1);
         }
 
         [Fact]
