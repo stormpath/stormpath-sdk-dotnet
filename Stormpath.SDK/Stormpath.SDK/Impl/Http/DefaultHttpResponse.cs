@@ -15,14 +15,14 @@
 // limitations under the License.
 // </remarks>
 
-using System;
+using System.Net;
 using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.Http
 {
     internal sealed class DefaultHttpResponse : HttpMessageBase, IHttpResponse
     {
-        private readonly int httpStatus;
+        private readonly int statusCode;
         private readonly string responsePhrase;
         private readonly HttpHeaders headers;
         private readonly string body;
@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Http
 
         public DefaultHttpResponse(int httpStatus, string responsePhrase, HttpHeaders headers, string body, string bodyContentType, ResponseErrorType errorType)
         {
-            this.httpStatus = httpStatus;
+            this.statusCode = httpStatus;
             this.responsePhrase = responsePhrase;
             this.headers = headers;
             this.body = body;
@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Impl.Http
 
         public override HttpHeaders Headers => this.headers;
 
-        public int HttpStatus => this.httpStatus;
+        public int StatusCode => this.statusCode;
 
         public string ResponsePhrase => this.responsePhrase;
 

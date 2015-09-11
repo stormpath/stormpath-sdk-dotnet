@@ -18,7 +18,7 @@
 using System;
 using NSubstitute;
 using Shouldly;
-using Stormpath.SDK.Extensions.Http.RestSharp;
+using Stormpath.SDK.Extensions.Http;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.Utility;

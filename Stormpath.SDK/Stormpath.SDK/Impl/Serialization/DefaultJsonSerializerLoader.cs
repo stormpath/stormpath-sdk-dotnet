@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Impl.Serialization
     internal sealed class DefaultJsonSerializerLoader : TypeLoader<IJsonSerializer>
     {
         private static readonly string FileName = "Stormpath.SDK.JsonNetSerializer.dll";
-        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Serialization.JsonNet.JsonNetSerializer";
+        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Serialization.JsonNetSerializer";
 
         public DefaultJsonSerializerLoader()
             : base(FileName, FullyQualifiedType)

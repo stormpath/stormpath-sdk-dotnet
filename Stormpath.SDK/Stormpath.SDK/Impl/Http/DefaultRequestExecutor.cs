@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Api;
@@ -29,6 +30,13 @@ namespace Stormpath.SDK.Impl.Http
 {
     internal sealed class DefaultRequestExecutor : IRequestExecutor
     {
+        private const int MovedPermanently = 301;
+        private const int Redirect = 302;
+        private const int TemporaryRedirect = 307;
+        private const int TooManyRequests = 429;
+        private const int ServerUnavailable = 503;
+        private const int NoGatewayResponse = 504;
+
         private static readonly int MaxBackoffMilliseconds = 20 * 1000;
         private static readonly int DefaultMaxRetries = 4;
         private static readonly Task CompletedTask = Task.FromResult(false);
@@ -159,10 +167,9 @@ namespace Stormpath.SDK.Impl.Http
                         continue; // reexecute request
                     }
 
-                    var statusCode = response.HttpStatus;
+                    var statusCode = response.StatusCode;
 
-                    // 429 Too Many Requests
-                    if (statusCode == 429)
+                    if (statusCode == TooManyRequests)
                     {
                         throttling = true;
                         this.logger.Warn($"Got HTTP 429, throttling", "DefaultRequestExecutor.CoreRequestLoopAsync");
@@ -170,8 +177,7 @@ namespace Stormpath.SDK.Impl.Http
                         continue; // retry request
                     }
 
-                    // 503/504 Currently Unavailable
-                    if (statusCode == 503 || statusCode == 504)
+                    if (statusCode == ServerUnavailable || statusCode == NoGatewayResponse)
                     {
                         this.logger.Warn($"Got HTTP {statusCode}", "DefaultRequestExecutor.CoreRequestLoopAsync");
 
@@ -205,9 +211,9 @@ namespace Stormpath.SDK.Impl.Http
         private bool IsRedirect(IHttpResponse response)
         {
             bool moved =
-                response.HttpStatus == (int)HttpStatusCode.MovedPermanently || // 301
-                response.HttpStatus == (int)HttpStatusCode.Redirect || // 302
-                response.HttpStatus == (int)HttpStatusCode.TemporaryRedirect; // 307
+                response.StatusCode == MovedPermanently ||
+                response.StatusCode == Redirect ||
+                response.StatusCode == TemporaryRedirect;
             bool hasNewLocation = !string.IsNullOrEmpty(response.Headers.Location?.AbsoluteUri);
 
             return moved && hasNewLocation;

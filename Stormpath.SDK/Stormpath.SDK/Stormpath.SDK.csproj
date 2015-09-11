@@ -88,7 +88,6 @@
     <Compile Include="Error\ResourceException.cs" />
     <Compile Include="Group\GroupStatus.cs" />
     <Compile Include="Group\IGroup.cs" />
-    <Compile Include="Http\HttpStatusCode.cs" />
     <Compile Include="Http\IAsynchronousHttpClient.cs" />
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Http\ISynchronousHttpClient.cs" />

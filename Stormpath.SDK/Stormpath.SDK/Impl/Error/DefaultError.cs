@@ -50,8 +50,8 @@ namespace Stormpath.SDK.Impl.Error
         public static DefaultError FromHttpResponse(IHttpResponse response)
         {
             var properties = new Dictionary<string, object>();
-            properties.Add("status", response.HttpStatus);
-            properties.Add("code", response.HttpStatus);
+            properties.Add("status", response.StatusCode);
+            properties.Add("code", response.StatusCode);
             properties.Add("moreInfo", "HTTP error");
             properties.Add("developerMessage", response.ResponsePhrase);
             return new DefaultError(properties);

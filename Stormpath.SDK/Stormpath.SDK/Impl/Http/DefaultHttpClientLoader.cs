@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Impl.Http
     internal sealed class DefaultHttpClientLoader : TypeLoader<IHttpClient>
     {
         private static readonly string FileName = "Stormpath.SDK.RestSharpClient.dll";
-        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Http.RestSharp.RestSharpClient";
+        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Http.RestSharpClient";
 
         public DefaultHttpClientLoader()
             : base(FileName, FullyQualifiedType)

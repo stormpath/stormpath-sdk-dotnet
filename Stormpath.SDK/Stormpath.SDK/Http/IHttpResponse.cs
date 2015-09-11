@@ -19,7 +19,7 @@ namespace Stormpath.SDK.Http
 {
     public interface IHttpResponse : IHttpMessage
     {
-        int HttpStatus { get; }
+        int StatusCode { get; }
 
         string ResponsePhrase { get; }
 

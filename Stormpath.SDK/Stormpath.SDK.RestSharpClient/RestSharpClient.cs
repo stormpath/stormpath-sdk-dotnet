@@ -16,23 +16,26 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Http;
 using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Extensions.Http.RestSharp
+namespace Stormpath.SDK.Extensions.Http
 {
-    public sealed class RestSharpClient : ISynchronousHttpClient, IAsynchronousHttpClient
+    public sealed class RestSharpClient : SDK.Http.ISynchronousHttpClient, SDK.Http.IAsynchronousHttpClient
     {
+        private readonly RestSharpAdapter adapter;
         private readonly int connectionTimeout;
         private readonly ILogger logger;
 
         private bool alreadyDisposed = false;
 
-        bool IHttpClient.IsSynchronousSupported => false; // TODO
+        bool SDK.Http.IHttpClient.IsSynchronousSupported => false; // TODO
 
-        bool IHttpClient.IsAsynchronousSupported => false; // TODO
+        bool SDK.Http.IHttpClient.IsAsynchronousSupported => false; // TODO
 
         public RestSharpClient()
             : this(0, null)
@@ -41,18 +44,41 @@ namespace Stormpath.SDK.Extensions.Http.RestSharp
 
         public RestSharpClient(int connectionTimeout, ILogger logger)
         {
+            this.adapter = new RestSharpAdapter();
             this.connectionTimeout = connectionTimeout;
             this.logger = logger;
         }
 
-        IHttpResponse ISynchronousHttpClient.Execute(IHttpRequest request)
+        private RestSharp.IRestClient GetClient()
         {
-            throw new NotImplementedException();
+            var client = new RestSharp.RestClient();
+
+            // Configure default settings
+            client.Encoding = Encoding.UTF8;
+            client.FollowRedirects = false;
+            client.Timeout = this.connectionTimeout;
+
+            return client;
         }
 
-        Task<IHttpResponse> IAsynchronousHttpClient.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
+        SDK.Http.IHttpResponse SDK.Http.ISynchronousHttpClient.Execute(SDK.Http.IHttpRequest request)
         {
-            throw new NotImplementedException();
+            var client = this.GetClient();
+            var restRequest = this.adapter.ToRestRequest(request);
+
+            var response = client.Execute(restRequest);
+
+            return this.adapter.ToHttpResponse(response);
+        }
+
+        async Task<SDK.Http.IHttpResponse> SDK.Http.IAsynchronousHttpClient.ExecuteAsync(SDK.Http.IHttpRequest request, CancellationToken cancellationToken)
+        {
+            var client = this.GetClient();
+            var restRequest = this.adapter.ToRestRequest(request);
+
+            var response = await client.ExecuteTaskAsync(restRequest, cancellationToken).ConfigureAwait(false);
+
+            return this.adapter.ToHttpResponse(response);
         }
 
         private void Dispose(bool disposing)
@@ -61,7 +87,8 @@ namespace Stormpath.SDK.Extensions.Http.RestSharp
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
+                    // Currently there's nothing to dispose
+                    // noop.
                 }
 
                 this.alreadyDisposed = true;

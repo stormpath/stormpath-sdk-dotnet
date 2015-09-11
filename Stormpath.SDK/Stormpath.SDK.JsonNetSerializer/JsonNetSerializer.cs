@@ -21,7 +21,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Stormpath.SDK.Serialization;
 
-namespace Stormpath.SDK.Extensions.Serialization.JsonNet
+namespace Stormpath.SDK.Extensions.Serialization
 {
     public sealed class JsonNetSerializer : IJsonSerializer
     {

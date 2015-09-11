@@ -152,7 +152,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private ResourceAction GetPostAction(IResourceDataRequest request, IHttpResponse httpResponse)
         {
-            if (httpResponse.HttpStatus == 201)
+            if (httpResponse.StatusCode == 201)
                 return ResourceAction.Create;
 
             return request.Action;
@@ -187,7 +187,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     var response = await this.ExecuteAsync(httpRequest, ct).ConfigureAwait(false);
                     var body = this.GetBody<T>(response);
 
-                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.HttpStatus, body);
+                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.StatusCode, body);
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri);
@@ -209,7 +209,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     var response = this.Execute(httpRequest);
                     var body = this.GetBody<T>(response);
 
-                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.HttpStatus, body);
+                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.StatusCode, body);
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri);
@@ -367,11 +367,11 @@ namespace Stormpath.SDK.Impl.DataStore
                     var responseBody = this.GetBody<T>(response);
                     var responseAction = this.GetPostAction(req, response);
 
-                    bool responseHasExpectedData = responseBody.Any() || response.HttpStatus == 202;
+                    bool responseHasExpectedData = responseBody.Any() || response.StatusCode == 202;
                     if (!responseHasExpectedData)
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
 
-                    return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.HttpStatus, responseBody);
+                    return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.StatusCode, responseBody);
                 }));
 
             var propertiesMap = this.resourceConverter.ToMap(abstractResource);
@@ -412,11 +412,11 @@ namespace Stormpath.SDK.Impl.DataStore
                     var responseBody = this.GetBody<T>(response);
                     var responseAction = this.GetPostAction(req, response);
 
-                    bool responseHasExpectedData = responseBody.Any() || response.HttpStatus == 202;
+                    bool responseHasExpectedData = responseBody.Any() || response.StatusCode == 202;
                     if (!responseHasExpectedData)
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
 
-                    return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.HttpStatus, responseBody);
+                    return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.StatusCode, responseBody);
                 }));
 
             var propertiesMap = this.resourceConverter.ToMap(abstractResource);
@@ -448,7 +448,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     var httpRequest = new DefaultHttpRequest(HttpMethod.Delete, req.Uri);
                     var response = await this.ExecuteAsync(httpRequest, ct).ConfigureAwait(false);
 
-                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.HttpStatus, body: null);
+                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.StatusCode, body: null);
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri);
@@ -477,7 +477,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     var httpRequest = new DefaultHttpRequest(HttpMethod.Delete, req.Uri);
                     var response = this.Execute(httpRequest);
 
-                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.HttpStatus, body: null);
+                    return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.StatusCode, body: null);
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri);

@@ -22,7 +22,7 @@ using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.Http
 {
-    public interface IRequestExecutor : IDisposable
+    internal interface IRequestExecutor : IDisposable
     {
         Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken);
 

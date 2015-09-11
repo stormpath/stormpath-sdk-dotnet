@@ -19,7 +19,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.DataStore;
-using Stormpath.SDK.Extensions.Serialization.JsonNet;
+using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
