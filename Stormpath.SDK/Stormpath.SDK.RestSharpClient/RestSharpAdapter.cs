@@ -75,7 +75,13 @@ namespace Stormpath.SDK.Extensions.Http
 
         private void CopyHeaders(SDK.Http.HttpHeaders httpHeaders, RestSharp.IRestRequest restRequest)
         {
-            throw new NotImplementedException();
+            foreach (var header in httpHeaders)
+            {
+                foreach (var value in header.Value)
+                {
+                    restRequest.AddHeader(header.Key, value);
+                }
+            }
         }
 
         private SDK.Http.HttpHeaders ToHttpHeaders(IList<RestSharp.Parameter> restSharpHeaders)
@@ -92,8 +98,25 @@ namespace Stormpath.SDK.Extensions.Http
 
         private RestSharp.Method ConvertMethod(SDK.Http.HttpMethod httpMethod)
         {
-            // TODO
-            throw new NotImplementedException();
+            if (httpMethod == SDK.Http.HttpMethod.Delete)
+                return RestSharp.Method.DELETE;
+
+            if (httpMethod == SDK.Http.HttpMethod.Get)
+                return RestSharp.Method.GET;
+
+            if (httpMethod == SDK.Http.HttpMethod.Head)
+                return RestSharp.Method.HEAD;
+
+            if (httpMethod == SDK.Http.HttpMethod.Options)
+                return RestSharp.Method.OPTIONS;
+
+            if (httpMethod == SDK.Http.HttpMethod.Post)
+                return RestSharp.Method.POST;
+
+            if (httpMethod == SDK.Http.HttpMethod.Put)
+                return RestSharp.Method.PUT;
+
+            throw new ArgumentException($"Unknown method type {httpMethod.DisplayName}", nameof(httpMethod));
         }
     }
 }

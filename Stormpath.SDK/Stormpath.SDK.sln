@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stormpath.SDK.JsonNetSerial
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stormpath.SDK.RestSharpClient", "Stormpath.SDK.RestSharpClient\Stormpath.SDK.RestSharpClient.csproj", "{21F7A025-7BB1-49B0-8AD3-CEE8A3B1D542}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stormpath.SDK.RestSharpClient.Tests", "Stormpath.SDK.RestSharpClient.Tests\Stormpath.SDK.RestSharpClient.Tests.csproj", "{64893BF7-F4AA-4374-B81B-4572989852EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{21F7A025-7BB1-49B0-8AD3-CEE8A3B1D542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21F7A025-7BB1-49B0-8AD3-CEE8A3B1D542}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21F7A025-7BB1-49B0-8AD3-CEE8A3B1D542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64893BF7-F4AA-4374-B81B-4572989852EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64893BF7-F4AA-4374-B81B-4572989852EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64893BF7-F4AA-4374-B81B-4572989852EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64893BF7-F4AA-4374-B81B-4572989852EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
