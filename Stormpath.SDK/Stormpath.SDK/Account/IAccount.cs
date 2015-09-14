@@ -23,7 +23,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Account
 {
-    public interface IAccount : IResource, ISaveable<IAccount>, IDeletable, IExtendable, IAuditable
+    public interface IAccount : IResource, ISaveable<IAccount>, IDeletable, IAuditable
     {
         string Username { get; }
 

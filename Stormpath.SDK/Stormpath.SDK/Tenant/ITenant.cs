@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tenant
 {
-    public interface ITenant : IResource, IAuditable, IExtendable, ITenantActions
+    public interface ITenant : IResource, IAuditable, ITenantActions
     {
         string Key { get; }
 

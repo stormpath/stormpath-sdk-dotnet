@@ -35,10 +35,6 @@ namespace Stormpath.SDK.Tenant
 
         Task<IApplication> CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<IDirectory> CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken = default(CancellationToken));
-
-        Task<IDirectory> CreateDirectoryAsync(string name, CancellationToken cancellationToken = default(CancellationToken));
-
         ICollectionResourceQueryable<IAccount> GetAccounts();
 
         ICollectionResourceQueryable<IApplication> GetApplications();

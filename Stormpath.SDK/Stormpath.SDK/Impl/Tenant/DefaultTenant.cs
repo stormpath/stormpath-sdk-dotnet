@@ -114,11 +114,6 @@ namespace Stormpath.SDK.Impl.Tenant
             return new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetInternalDataStore());
         }
 
-        Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         ICollectionResourceQueryable<IDirectory> ITenantActions.GetDirectories()
         {
             return new CollectionResourceQueryable<IDirectory>(this.Directories.Href, this.GetInternalDataStore());
@@ -132,11 +127,6 @@ namespace Stormpath.SDK.Impl.Tenant
         ICollectionResourceQueryable<IAccount> ITenantActions.GetAccounts()
         {
             return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
-        }
-
-        Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
     }
 }

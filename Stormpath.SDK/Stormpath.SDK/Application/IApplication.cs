@@ -24,7 +24,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Application
 {
-    public interface IApplication : IResource, ISaveable<IApplication>, IDeletable, IExtendable, IAuditable, IAccountCreation
+    public interface IApplication : IResource, ISaveable<IApplication>, IDeletable, IAuditable, IAccountCreation
     {
         string Name { get; }
 

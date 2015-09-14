@@ -35,5 +35,16 @@ namespace Stormpath.SDK.Tests.Integration
 
             directories.Count.ShouldNotBe(0);
         }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_a_directory_via_instantiation(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+            var directories = await tenant.GetDirectories().ToListAsync();
+
+            directories.Count.ShouldNotBe(0);
+        }
     }
 }

@@ -154,20 +154,6 @@ namespace Stormpath.SDK.Impl.Client
             return tenant.GetApplications();
         }
 
-        async Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken)
-        {
-            var tenant = await this.AsInterface.GetCurrentTenantAsync().ConfigureAwait(false);
-
-            return await tenant.CreateDirectoryAsync(directory).ConfigureAwait(false);
-        }
-
-        async Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, CancellationToken cancellationToken)
-        {
-            var tenant = await this.AsInterface.GetCurrentTenantAsync().ConfigureAwait(false);
-
-            return await tenant.CreateDirectoryAsync(name, cancellationToken).ConfigureAwait(false);
-        }
-
         ICollectionResourceQueryable<IDirectory> ITenantActions.GetDirectories()
         {
             var tenant = this.AsInterface.GetCurrentTenantAsync().Result;

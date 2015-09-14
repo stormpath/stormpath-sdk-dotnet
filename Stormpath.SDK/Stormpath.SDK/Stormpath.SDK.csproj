@@ -239,7 +239,6 @@
     <Compile Include="Resource\ICreationOptions.cs" />
     <Compile Include="Resource\ICustomData.cs" />
     <Compile Include="Resource\IDeletable.cs" />
-    <Compile Include="Resource\IExtendable.cs" />
     <Compile Include="Resource\ISaveable.cs" />
     <Compile Include="Shared\Enumeration.cs" />
     <Compile Include="Impl\Utility\EnvironmentWrapper.cs" />

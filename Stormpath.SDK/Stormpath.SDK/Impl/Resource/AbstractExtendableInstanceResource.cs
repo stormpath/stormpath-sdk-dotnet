@@ -24,7 +24,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal abstract class AbstractExtendableInstanceResource : AbstractInstanceResource, IExtendable
+    internal abstract class AbstractExtendableInstanceResource : AbstractInstanceResource
     {
         private static readonly string CustomDataPropertyName = "customData";
 
@@ -39,10 +39,5 @@ namespace Stormpath.SDK.Impl.Resource
         }
 
         internal LinkProperty CustomData => GetProperty<LinkProperty>(CustomDataPropertyName);
-
-        Task<ICustomData> IExtendable.GetCustomDataAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
