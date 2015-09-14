@@ -24,6 +24,8 @@ namespace Stormpath.SDK.Impl.Client
     {
         IHttpClientBuilder UseHttpClient(IHttpClient client);
 
+        IHttpClientBuilder SetBaseUrl(string baseUrl);
+
         IHttpClientBuilder SetConnectionTimeout(int connectionTimeout);
 
         IHttpClientBuilder SetLogger(ILogger logger);

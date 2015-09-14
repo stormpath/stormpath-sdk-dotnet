@@ -147,8 +147,6 @@ namespace Stormpath.SDK.Impl.Http
 
                 try
                 {
-                    attempts++;
-
                     if (attempts > this.maxAttemptsPerRequest)
                         throw new ApplicationException("Reached maximum number of request retries.");
 
@@ -164,7 +162,7 @@ namespace Stormpath.SDK.Impl.Http
                         currentUri = response.Headers.Location;
                         this.logger.Trace($"Redirected to {currentUri}", "DefaultRequestExecutor.CoreRequestLoopAsync");
 
-                        continue; // reexecute request
+                        continue; // reexecute request, not counted as a retry
                     }
 
                     var statusCode = response.StatusCode;
@@ -174,6 +172,7 @@ namespace Stormpath.SDK.Impl.Http
                         throttling = true;
                         this.logger.Warn($"Got HTTP 429, throttling", "DefaultRequestExecutor.CoreRequestLoopAsync");
 
+                        attempts++;
                         continue; // retry request
                     }
 
@@ -181,6 +180,7 @@ namespace Stormpath.SDK.Impl.Http
                     {
                         this.logger.Warn($"Got HTTP {statusCode}", "DefaultRequestExecutor.CoreRequestLoopAsync");
 
+                        attempts++;
                         continue; // retry request
                     }
 
@@ -188,6 +188,7 @@ namespace Stormpath.SDK.Impl.Http
                     {
                         this.logger.Warn($"Recoverable error during request", "DefaultRequestExecutor.CoreRequestLoopAsync");
 
+                        attempts++;
                         continue; // retry request
                     }
 

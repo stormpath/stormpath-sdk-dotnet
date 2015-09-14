@@ -127,6 +127,7 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentException("API Key is not valid or has not been set. Use ClientApiKeys.Builder() to construct one.");
 
             this.httpClientBuilder
+                .SetBaseUrl(this.baseUrl)
                 .SetConnectionTimeout(this.connectionTimeout);
 
             return new DefaultClient(

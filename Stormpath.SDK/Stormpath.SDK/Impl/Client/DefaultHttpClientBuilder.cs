@@ -28,6 +28,7 @@ namespace Stormpath.SDK.Impl.Client
         private readonly ITypeLoader<IHttpClient> defaultLibraryLoader;
 
         private IHttpClient instance;
+        private string baseUrl;
         private int connectionTimeout;
         private ILogger logger;
 
@@ -44,6 +45,12 @@ namespace Stormpath.SDK.Impl.Client
         IHttpClientBuilder IHttpClientBuilder.UseHttpClient(IHttpClient client)
         {
             this.instance = client;
+            return this;
+        }
+
+        IHttpClientBuilder IHttpClientBuilder.SetBaseUrl(string baseUrl)
+        {
+            this.baseUrl = baseUrl;
             return this;
         }
 
@@ -65,7 +72,7 @@ namespace Stormpath.SDK.Impl.Client
                 return this.instance;
 
             IHttpClient defaultClient = null;
-            bool foundDefaultLibrary = this.defaultLibraryLoader.TryLoad(out defaultClient, new object[] { this.connectionTimeout, this.logger });
+            bool foundDefaultLibrary = this.defaultLibraryLoader.TryLoad(out defaultClient, new object[] { this.baseUrl, this.connectionTimeout, this.logger });
             if (!foundDefaultLibrary)
                 throw new ApplicationException("Could not find a valid HTTP client. Include Stormpath.SDK.RestSharpClient.dll in the application path.");
 

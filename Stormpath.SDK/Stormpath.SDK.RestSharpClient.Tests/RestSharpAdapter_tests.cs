@@ -23,6 +23,8 @@ namespace Stormpath.SDK.Extensions.Http.RestSharpClient.Tests
 {
     public class RestSharpAdapter_tests
     {
+        private readonly string baseUrl = "http://api.foo.bar/v1";
+
         [Fact]
         public void Get_request_is_converted_properly()
         {
@@ -33,15 +35,16 @@ namespace Stormpath.SDK.Extensions.Http.RestSharpClient.Tests
             request.Method.Returns(SDK.Http.HttpMethod.Get);
             request.Body.Returns(string.Empty);
             request.BodyContentType.Returns(string.Empty);
-            request.CanonicalUri.Returns(new SDK.Http.CanonicalUri("http://api.foo.bar/baz"));
+            request.CanonicalUri.Returns(new SDK.Http.CanonicalUri("http://api.foo.bar/v1/baz"));
             request.Headers.Returns(headers);
 
             var adapter = new RestSharpAdapter();
-            var convertedRequest = adapter.ToRestRequest(request);
+            var convertedRequest = adapter.ToRestRequest(this.baseUrl, request);
 
             convertedRequest.Method.ShouldBe(RestSharp.Method.GET);
             convertedRequest.RequestFormat.ShouldBe(RestSharp.DataFormat.Json);
             convertedRequest.Resource.ShouldBe("/baz");
+
             convertedRequest.Parameters.ShouldContain(p =>
                 p.Type == RestSharp.ParameterType.HttpHeader &&
                 p.Name == "Authorization" &&
@@ -62,22 +65,37 @@ namespace Stormpath.SDK.Extensions.Http.RestSharpClient.Tests
             request.BodyContentType.Returns(string.Empty);
             request.HasBody.Returns(true);
 
-            request.CanonicalUri.Returns(new SDK.Http.CanonicalUri("http://api.foo.bar/baz"));
+            request.CanonicalUri.Returns(new SDK.Http.CanonicalUri("http://api.foo.bar/v1/baz"));
             request.Headers.Returns(headers);
 
             var adapter = new RestSharpAdapter();
-            var convertedRequest = adapter.ToRestRequest(request);
+            var convertedRequest = adapter.ToRestRequest(this.baseUrl, request);
 
             convertedRequest.Method.ShouldBe(RestSharp.Method.POST);
             convertedRequest.RequestFormat.ShouldBe(RestSharp.DataFormat.Json);
             convertedRequest.Resource.ShouldBe("/baz");
+
             convertedRequest.Parameters.ShouldContain(p =>
                 p.Type == RestSharp.ParameterType.HttpHeader &&
                 p.Name == "Authorization" &&
                 (string)p.Value == "Basic foobarabc123");
+
             convertedRequest.Parameters.ShouldContain(p =>
                 p.Type == RestSharp.ParameterType.RequestBody &&
                 (string)p.Value == fakeBody);
+        }
+
+        [Fact]
+        public void Resource_URLs_are_constructed_properly()
+        {
+            var request = Substitute.For<SDK.Http.IHttpRequest>();
+            request.Method.Returns(SDK.Http.HttpMethod.Put);
+            request.CanonicalUri.Returns(new SDK.Http.CanonicalUri("http://api.foo.bar/v1/baz"));
+
+            var adapter = new RestSharpAdapter();
+            var convertedRequest = adapter.ToRestRequest("http://api.foo.bar/v1", request);
+
+            convertedRequest.Resource.ShouldBe("/baz");
         }
     }
 }

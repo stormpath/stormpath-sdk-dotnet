@@ -22,6 +22,6 @@ namespace Stormpath.SDK.Http
 {
     public interface IAsynchronousHttpClient : IHttpClient
     {
-        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken);
+        Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

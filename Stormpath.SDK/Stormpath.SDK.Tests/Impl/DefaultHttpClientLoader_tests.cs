@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             // This test project has a reference to Stormpath.SDK.RestSharpClient, so the file lookup will succeed
             IHttpClient instance = null;
-            var constructorArgs = new object[] { 100, Substitute.For<ILogger>() };
+            var constructorArgs = new object[] { "http://api.foo.bar", 100, Substitute.For<ILogger>() };
             bool loadResult = loader.TryLoad(out instance, constructorArgs);
 
             loadResult.ShouldBe(true);

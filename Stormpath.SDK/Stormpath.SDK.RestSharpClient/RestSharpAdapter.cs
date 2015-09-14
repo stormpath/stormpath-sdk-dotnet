@@ -23,22 +23,17 @@ namespace Stormpath.SDK.Extensions.Http
 {
     internal class RestSharpAdapter
     {
-        public RestSharp.IRestRequest ToRestRequest(SDK.Http.IHttpRequest request)
+        public RestSharp.IRestRequest ToRestRequest(string baseUrl, SDK.Http.IHttpRequest request)
         {
+            var resourcePath = request.CanonicalUri.ToString().Replace(baseUrl, string.Empty);
             var method = this.ConvertMethod(request.Method);
-            var restRequest = new RestSharp.RestRequest(request.CanonicalUri.ToUri(), method);
+
+            var restRequest = new RestSharp.RestRequest(resourcePath, method);
             restRequest.RequestFormat = RestSharp.DataFormat.Json;
+            this.CopyHeaders(request.Headers, restRequest);
 
             if (request.HasBody)
-            {
-                restRequest.AddParameter(new RestSharp.Parameter()
-                {
-                    Type = RestSharp.ParameterType.RequestBody,
-                    Value = request.Body
-                });
-            }
-
-            this.CopyHeaders(request.Headers, restRequest);
+                restRequest.AddParameter(request.BodyContentType, request.Body, RestSharp.ParameterType.RequestBody);
 
             return restRequest;
         }
@@ -75,6 +70,9 @@ namespace Stormpath.SDK.Extensions.Http
 
         private void CopyHeaders(SDK.Http.HttpHeaders httpHeaders, RestSharp.IRestRequest restRequest)
         {
+            if (httpHeaders == null)
+                return;
+
             foreach (var header in httpHeaders)
             {
                 foreach (var value in header.Value)

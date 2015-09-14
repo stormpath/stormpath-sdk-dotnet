@@ -28,6 +28,7 @@ namespace Stormpath.SDK.Extensions.Http
     public sealed class RestSharpClient : SDK.Http.ISynchronousHttpClient, SDK.Http.IAsynchronousHttpClient
     {
         private readonly RestSharpAdapter adapter;
+        private readonly string baseUrl;
         private readonly int connectionTimeout;
         private readonly ILogger logger;
 
@@ -35,37 +36,45 @@ namespace Stormpath.SDK.Extensions.Http
 
         bool SDK.Http.IHttpClient.IsSynchronousSupported => false; // TODO
 
-        bool SDK.Http.IHttpClient.IsAsynchronousSupported => false; // TODO
+        bool SDK.Http.IHttpClient.IsAsynchronousSupported => true;
 
-        public RestSharpClient()
-            : this(0, null)
-        {
-        }
-
-        public RestSharpClient(int connectionTimeout, ILogger logger)
+        public RestSharpClient(string baseUrl, int connectionTimeout, ILogger logger)
         {
             this.adapter = new RestSharpAdapter();
+            this.baseUrl = baseUrl;
             this.connectionTimeout = connectionTimeout;
             this.logger = logger;
         }
 
-        private RestSharp.IRestClient GetClient()
+        private RestSharp.IRestClient CreateClientForRequest(SDK.Http.IHttpRequest request)
         {
             var client = new RestSharp.RestClient();
 
             // Configure default settings
+            client.BaseUrl = new Uri(this.baseUrl, UriKind.Absolute);
+            client.DefaultParameters.Clear();
             client.Encoding = Encoding.UTF8;
             client.FollowRedirects = false;
             client.Timeout = this.connectionTimeout;
+            client.UserAgent = request.Headers?.UserAgent;
 
             return client;
         }
 
+        private static bool IsValidBaseUrl(RestSharp.IRestClient client, SDK.Http.IHttpRequest request)
+        {
+            return request.CanonicalUri
+                .ToString()
+                .Contains(client.BaseUrl.ToString());
+        }
+
         SDK.Http.IHttpResponse SDK.Http.ISynchronousHttpClient.Execute(SDK.Http.IHttpRequest request)
         {
-            var client = this.GetClient();
-            var restRequest = this.adapter.ToRestRequest(request);
+            var client = this.CreateClientForRequest(request);
+            if (!IsValidBaseUrl(client, request))
+                throw new ApplicationException($"Request URI '{request.CanonicalUri.ToString()}' does not match client base URI '{client.BaseUrl}");
 
+            var restRequest = this.adapter.ToRestRequest(this.baseUrl, request);
             var response = client.Execute(restRequest);
 
             return this.adapter.ToHttpResponse(response);
@@ -73,9 +82,11 @@ namespace Stormpath.SDK.Extensions.Http
 
         async Task<SDK.Http.IHttpResponse> SDK.Http.IAsynchronousHttpClient.ExecuteAsync(SDK.Http.IHttpRequest request, CancellationToken cancellationToken)
         {
-            var client = this.GetClient();
-            var restRequest = this.adapter.ToRestRequest(request);
+            var client = this.CreateClientForRequest(request);
+            if (!IsValidBaseUrl(client, request))
+                throw new ApplicationException($"Request URI '{request.CanonicalUri.ToString()}' does not match client base URI '{client.BaseUrl}");
 
+            var restRequest = this.adapter.ToRestRequest(this.baseUrl, request);
             var response = await client.ExecuteTaskAsync(restRequest, cancellationToken).ConfigureAwait(false);
 
             return this.adapter.ToHttpResponse(response);
