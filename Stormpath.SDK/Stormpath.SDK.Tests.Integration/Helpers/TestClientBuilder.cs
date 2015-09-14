@@ -17,6 +17,8 @@
 
 using System;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Extensions.Http;
+using Stormpath.SDK.Extensions.Serialization;
 using Xunit.Abstractions;
 
 namespace Stormpath.SDK.Tests.Integration.Helpers
@@ -42,6 +44,8 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
             var apiKey = IntegrationTestClients.GetApiKey();
             return Clients.Builder()
                 .SetApiKey(apiKey)
+                .UseHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
+                .UseJsonSerializer(new JsonNetSerializer())
                 .SetAuthenticationScheme(authentication)
                 .Build();
         }

@@ -18,6 +18,8 @@
 using System;
 using Shouldly;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Extensions.Http;
+using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
@@ -31,6 +33,12 @@ namespace Stormpath.SDK.Tests.Impl
         public DefaultClientBuilder_tests()
         {
             this.builder = new DefaultClientBuilder();
+
+            // Providing these means the tests won't try to do a dynamic assembly lookup
+            // which tends to screw up parallel-running tests
+            this.builder
+                .UseHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
+                .UseJsonSerializer(new JsonNetSerializer());
         }
 
         [Fact]

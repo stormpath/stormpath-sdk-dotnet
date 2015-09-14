@@ -110,5 +110,12 @@ namespace Stormpath.SDK.Tests
 
             this.DidReceiveCall(logger, LogLevel.Fatal, exception);
         }
+
+        [Fact]
+        public void When_logger_is_null_logging_is_skipped()
+        {
+            ILogger logger = null;
+            logger.Info("Should not throw an error");
+        }
     }
 }

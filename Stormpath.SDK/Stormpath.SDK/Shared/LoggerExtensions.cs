@@ -25,48 +25,48 @@ namespace Stormpath.SDK
     {
         public static void Trace(this ILogger logger, string message, string source = null)
         {
-            logger.Log(new LogEntry(LogLevel.Trace, message, source, null));
+            logger?.Log(new LogEntry(LogLevel.Trace, message, source, null));
         }
 
         public static void Info(this ILogger logger, string message, string source = null)
         {
-            logger.Log(new LogEntry(LogLevel.Info, message, source, null));
+            logger?.Log(new LogEntry(LogLevel.Info, message, source, null));
         }
 
         public static void Warn(this ILogger logger, string message, string source = null)
         {
-            logger.Log(new LogEntry(LogLevel.Warn, message, source, null));
+            logger?.Log(new LogEntry(LogLevel.Warn, message, source, null));
         }
 
         public static void Error(this ILogger logger, string message, string source = null)
         {
-            logger.Log(new LogEntry(LogLevel.Error, message, source, null));
+            logger?.Log(new LogEntry(LogLevel.Error, message, source, null));
         }
 
         public static void Fatal(this ILogger logger, string message, string source = null)
         {
-            logger.Log(new LogEntry(LogLevel.Fatal, message, source, null));
+            logger?.Log(new LogEntry(LogLevel.Fatal, message, source, null));
         }
 
         public static void Warn(this ILogger logger, Exception exception, string message = null, string source = null)
         {
             var logMessage = message.Nullable() ?? exception.Message;
             var logSource = source.Nullable() ?? exception.Source;
-            logger.Log(new LogEntry(LogLevel.Warn, logMessage, source, exception));
+            logger?.Log(new LogEntry(LogLevel.Warn, logMessage, source, exception));
         }
 
         public static void Error(this ILogger logger, Exception exception, string message = null, string source = null)
         {
             var logMessage = message.Nullable() ?? exception.Message;
             var logSource = source.Nullable() ?? exception.Source;
-            logger.Log(new LogEntry(LogLevel.Error, logMessage, source, exception));
+            logger?.Log(new LogEntry(LogLevel.Error, logMessage, source, exception));
         }
 
         public static void Fatal(this ILogger logger, Exception exception, string message = null, string source = null)
         {
             var logMessage = message.Nullable() ?? exception.Message;
             var logSource = source.Nullable() ?? exception.Source;
-            logger.Log(new LogEntry(LogLevel.Fatal, logMessage, source, exception));
+            logger?.Log(new LogEntry(LogLevel.Fatal, logMessage, source, exception));
         }
     }
 }
