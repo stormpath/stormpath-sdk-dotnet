@@ -19,7 +19,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Fakes
@@ -45,11 +44,6 @@ namespace Stormpath.SDK.Tests.Fakes
         public string Surname { get; set; }
 
         public AccountStatus Status { get; set; }
-
-        public Task<ICollectionResourceQueryable<IGroup>> GetGroupsAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<Directory.IDirectory> GetDirectoryAsync(CancellationToken cancellationToken)
         {

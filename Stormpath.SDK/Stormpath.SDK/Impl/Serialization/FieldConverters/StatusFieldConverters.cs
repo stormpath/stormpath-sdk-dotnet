@@ -75,21 +75,5 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
                 return new FieldConverterResult(true, SDK.Directory.DirectoryStatus.Parse(token.Value.ToString()));
             }
         }
-
-        internal sealed class GroupStatusConverter : AbstractFieldConverter
-        {
-            public GroupStatusConverter()
-                : base(nameof(GroupStatusConverter), appliesToTargetType: typeof(SDK.Group.IGroup))
-            {
-            }
-
-            protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
-            {
-                if (!IsStatusField(token))
-                    return FieldConverterResult.Failed;
-
-                return new FieldConverterResult(true, SDK.Group.GroupStatus.Parse(token.Value.ToString()));
-            }
-        }
     }
 }

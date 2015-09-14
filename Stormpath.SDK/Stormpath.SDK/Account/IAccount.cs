@@ -18,7 +18,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
@@ -53,8 +52,6 @@ namespace Stormpath.SDK.Account
         IAccount SetSurname(string surname);
 
         IAccount SetUsername(string username);
-
-        Task<ICollectionResourceQueryable<IGroup>> GetGroupsAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         Task<IDirectory> GetDirectoryAsync(CancellationToken cancellationToken = default(CancellationToken));
 

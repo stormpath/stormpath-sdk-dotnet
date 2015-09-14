@@ -24,7 +24,6 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
@@ -188,13 +187,6 @@ namespace Stormpath.SDK.Impl.Client
             var tenant = this.AsInterface.GetCurrentTenantAsync().Result;
 
             return tenant.GetAccounts();
-        }
-
-        ICollectionResourceQueryable<IGroup> ITenantActions.GetGroups()
-        {
-            var tenant = this.AsInterface.GetCurrentTenantAsync().Result;
-
-            return tenant.GetGroups();
         }
 
         private void Dispose(bool disposing)

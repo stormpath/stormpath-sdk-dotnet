@@ -21,12 +21,10 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
-using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -85,7 +83,6 @@ namespace Stormpath.SDK.Tests.Impl
             yield return new object[] { typeof(IApplication), typeof(DefaultApplication) };
             yield return new object[] { typeof(ITenant), typeof(DefaultTenant) };
             yield return new object[] { typeof(IDirectory), typeof(DefaultDirectory) };
-            yield return new object[] { typeof(IGroup), typeof(DefaultGroup) };
         }
     }
 }

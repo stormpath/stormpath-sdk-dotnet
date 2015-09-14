@@ -21,7 +21,6 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tenant
@@ -45,8 +44,6 @@ namespace Stormpath.SDK.Tenant
         ICollectionResourceQueryable<IApplication> GetApplications();
 
         ICollectionResourceQueryable<IDirectory> GetDirectories();
-
-        ICollectionResourceQueryable<IGroup> GetGroups();
 
         Task<IAccount> VerifyAccountEmailAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
     }

@@ -21,7 +21,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
@@ -152,11 +151,6 @@ namespace Stormpath.SDK.Impl.Account
         }
 
         Task<IDirectory> IAccount.GetDirectoryAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<ICollectionResourceQueryable<IGroup>> IAccount.GetGroupsAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

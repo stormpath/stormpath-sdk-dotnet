@@ -122,7 +122,6 @@
     <Compile Include="Impl\Utility\ImmutableValueObject_tests.cs" />
     <Compile Include="Impl\LinkProperty_tests.cs" />
     <Compile Include="Impl\Linq\CountAsync_tests.cs" />
-    <Compile Include="Impl\Linq\Expand_extension_tests.cs" />
     <Compile Include="Impl\Linq\Filter_extension_tests.cs" />
     <Compile Include="Impl\Linq\FirstAsync_tests.cs" />
     <Compile Include="Impl\Linq\Take_tests.cs" />

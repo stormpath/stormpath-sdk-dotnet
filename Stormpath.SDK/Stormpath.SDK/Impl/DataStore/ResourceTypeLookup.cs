@@ -21,13 +21,11 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.Directory;
-using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Resource;
@@ -41,7 +39,6 @@ namespace Stormpath.SDK.Impl.DataStore
         private static readonly Type ApplicationInterface = typeof(IApplication);
         private static readonly Type TenantInterface = typeof(ITenant);
         private static readonly Type DirectoryInterface = typeof(IDirectory);
-        private static readonly Type GroupInterface = typeof(IGroup);
         private static readonly Type AccountStoreMappingInterface = typeof(IAccountStoreMapping);
         private static readonly Type AccountStoreInterface = typeof(IAccountStore);
         private static readonly Type BasicLoginAttemptInterface = typeof(IBasicLoginAttempt);
@@ -52,7 +49,6 @@ namespace Stormpath.SDK.Impl.DataStore
         private static readonly Type ApplicationConcrete = typeof(DefaultApplication);
         private static readonly Type TenantConcrete = typeof(DefaultTenant);
         private static readonly Type DirectoryConcrete = typeof(DefaultDirectory);
-        private static readonly Type GroupConcrete = typeof(DefaultGroup);
         private static readonly Type AccountStoreMappingConcrete = typeof(DefaultAccountStoreMapping);
         private static readonly Type AccountStoreConcrete = typeof(DefaultAccountStore);
         private static readonly Type BasicLoginAttemptConcrete = typeof(DefaultBasicLoginAttempt);
@@ -62,7 +58,6 @@ namespace Stormpath.SDK.Impl.DataStore
         private static readonly Type CollectionPageOfAccount = typeof(CollectionResponsePage<IAccount>);
         private static readonly Type CollectionPageOfApplication = typeof(CollectionResponsePage<IApplication>);
         private static readonly Type CollectionPageOfDirectory = typeof(CollectionResponsePage<IDirectory>);
-        private static readonly Type CollectionPageOfGroup = typeof(CollectionResponsePage<IGroup>);
 
         /// <summary>
         /// Fast lookups of concrete types from their interfaces.
@@ -82,9 +77,6 @@ namespace Stormpath.SDK.Impl.DataStore
 
             if (iface == DirectoryInterface)
                 return DirectoryConcrete;
-
-            if (iface == GroupInterface)
-                return GroupConcrete;
 
             if (iface == AccountStoreMappingInterface)
                 return AccountStoreMappingConcrete;
@@ -123,9 +115,6 @@ namespace Stormpath.SDK.Impl.DataStore
             if (concrete == DirectoryConcrete)
                 return DirectoryInterface;
 
-            if (concrete == GroupConcrete)
-                return GroupInterface;
-
             if (concrete == AccountStoreMappingConcrete)
                 return AccountStoreMappingInterface;
 
@@ -156,7 +145,6 @@ namespace Stormpath.SDK.Impl.DataStore
                 possiblyInterface == ApplicationInterface ||
                 possiblyInterface == TenantInterface ||
                 possiblyInterface == DirectoryInterface ||
-                possiblyInterface == GroupInterface ||
                 possiblyInterface == AccountStoreMappingInterface ||
                 possiblyInterface == AccountStoreInterface ||
                 possiblyInterface == BasicLoginAttemptInterface ||
@@ -176,7 +164,6 @@ namespace Stormpath.SDK.Impl.DataStore
                 possiblyConcrete == ApplicationConcrete ||
                 possiblyConcrete == TenantConcrete ||
                 possiblyConcrete == DirectoryConcrete ||
-                possiblyConcrete == GroupConcrete ||
                 possiblyConcrete == AccountStoreMappingConcrete ||
                 possiblyConcrete == AccountStoreConcrete ||
                 possiblyConcrete == BasicLoginAttemptConcrete ||
@@ -199,9 +186,6 @@ namespace Stormpath.SDK.Impl.DataStore
 
             if (collectionType == CollectionPageOfDirectory)
                 return DirectoryInterface;
-
-            if (collectionType == CollectionPageOfGroup)
-                return GroupInterface;
 
             return null; // unknown
         }

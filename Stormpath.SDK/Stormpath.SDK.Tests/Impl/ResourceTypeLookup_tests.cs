@@ -23,14 +23,12 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
-using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Tenant;
@@ -106,7 +104,6 @@ namespace Stormpath.SDK.Tests.Impl
             yield return new object[] { typeof(IApplication), typeof(DefaultApplication) };
             yield return new object[] { typeof(ITenant), typeof(DefaultTenant) };
             yield return new object[] { typeof(IDirectory), typeof(DefaultDirectory) };
-            yield return new object[] { typeof(IGroup), typeof(DefaultGroup) };
             yield return new object[] { typeof(IAccountStoreMapping), typeof(DefaultAccountStoreMapping) };
             yield return new object[] { typeof(IAccountStore), typeof(DefaultAccountStore) };
             yield return new object[] { typeof(IBasicLoginAttempt), typeof(DefaultBasicLoginAttempt) };
@@ -119,7 +116,6 @@ namespace Stormpath.SDK.Tests.Impl
             yield return new object[] { typeof(CollectionResponsePage<IAccount>), typeof(IAccount) };
             yield return new object[] { typeof(CollectionResponsePage<IApplication>), typeof(IApplication) };
             yield return new object[] { typeof(CollectionResponsePage<IDirectory>), typeof(IDirectory) };
-            yield return new object[] { typeof(CollectionResponsePage<IGroup>), typeof(IGroup) };
         }
     }
 }

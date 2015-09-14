@@ -22,7 +22,6 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
@@ -133,11 +132,6 @@ namespace Stormpath.SDK.Impl.Tenant
         ICollectionResourceQueryable<IAccount> ITenantActions.GetAccounts()
         {
             return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
-        }
-
-        ICollectionResourceQueryable<IGroup> ITenantActions.GetGroups()
-        {
-            return new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalDataStore());
         }
 
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, CancellationToken cancellationToken)

@@ -21,7 +21,6 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Serialization.FieldConverters;
 using Xunit;
@@ -164,18 +163,6 @@ namespace Stormpath.SDK.Tests.Impl
                 var result = converter.TryConvertField(token, typeof(IDirectory));
 
                 result.Value.ShouldBe(DirectoryStatus.Enabled);
-                result.Success.ShouldBe(true);
-            }
-
-            [Fact]
-            public void GroupStatus_is_materialized()
-            {
-                var token = new KeyValuePair<string, object>("status", "disabled");
-                var converter = new StatusFieldConverters.GroupStatusConverter();
-
-                var result = converter.TryConvertField(token, typeof(IGroup));
-
-                result.Value.ShouldBe(AccountStatus.Disabled);
                 result.Success.ShouldBe(true);
             }
         }
