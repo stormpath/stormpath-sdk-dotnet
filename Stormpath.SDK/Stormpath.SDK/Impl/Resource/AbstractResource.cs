@@ -30,7 +30,6 @@ namespace Stormpath.SDK.Impl.Resource
         private readonly IInternalDataStore dataStore;
         private readonly ConcurrentDictionary<string, object> properties;
         private readonly ConcurrentDictionary<string, object> dirtyProperties;
-        protected readonly InternalFactory internalFactory;
 
         private bool isDirty = false;
 
@@ -45,7 +44,6 @@ namespace Stormpath.SDK.Impl.Resource
 
             this.properties = new ConcurrentDictionary<string, object>(properties);
             this.dirtyProperties = new ConcurrentDictionary<string, object>();
-            this.internalFactory = new InternalFactory();
             this.isDirty = false;
         }
 

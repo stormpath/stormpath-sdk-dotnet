@@ -191,7 +191,6 @@
     <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Impl\Http\Authentication\RequestAuthenticationException.cs" />
     <Compile Include="Http\RequestException.cs" />
-    <Compile Include="Impl\InternalFactory.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryExecutor.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryModelVisitor.cs" />
     <Compile Include="Impl\Linq\CollectionResourceWhereExpressionVisitor.cs" />

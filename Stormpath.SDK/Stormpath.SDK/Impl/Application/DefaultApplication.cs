@@ -24,6 +24,7 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Impl.Account;
+using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
@@ -116,7 +117,7 @@ namespace Stormpath.SDK.Impl.Application
 
         Task<IAuthenticationResult> IApplication.AuthenticateAccountAsync(IAuthenticationRequest request, CancellationToken cancellationToken)
         {
-            var dispatcher = this.internalFactory.GetAuthenticationDispatcher();
+            var dispatcher = new AuthenticationRequestDispatcher();
 
             return dispatcher.AuthenticateAsync(this.GetInternalDataStore(), this, request, cancellationToken);
         }
