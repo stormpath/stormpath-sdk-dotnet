@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Net;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Utility;
@@ -30,6 +31,7 @@ namespace Stormpath.SDK.Impl.Client
         private IHttpClient instance;
         private string baseUrl;
         private int connectionTimeout;
+        private IWebProxy proxy;
         private ILogger logger;
 
         public DefaultHttpClientBuilder()
@@ -60,6 +62,12 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
+        IHttpClientBuilder IHttpClientBuilder.SetProxy(IWebProxy proxy)
+        {
+            this.proxy = proxy;
+            return this;
+        }
+
         IHttpClientBuilder IHttpClientBuilder.SetLogger(ILogger logger)
         {
             this.logger = logger;
@@ -72,7 +80,7 @@ namespace Stormpath.SDK.Impl.Client
                 return this.instance;
 
             IHttpClient defaultClient = null;
-            bool foundDefaultLibrary = this.defaultLibraryLoader.TryLoad(out defaultClient, new object[] { this.baseUrl, this.connectionTimeout, this.logger });
+            bool foundDefaultLibrary = this.defaultLibraryLoader.TryLoad(out defaultClient, new object[] { this.baseUrl, this.connectionTimeout, this.proxy, this.logger });
             if (!foundDefaultLibrary)
                 throw new ApplicationException("Could not find a valid HTTP client. Include Stormpath.SDK.RestSharpClient.dll in the application path.");
 

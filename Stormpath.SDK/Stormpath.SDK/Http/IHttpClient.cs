@@ -16,11 +16,18 @@
 // </remarks>
 
 using System;
+using System.Net;
 
 namespace Stormpath.SDK.Http
 {
     public interface IHttpClient : IDisposable
     {
+        string BaseUrl { get; }
+
+        int ConnectionTimeout { get; }
+
+        IWebProxy Proxy { get; }
+
         bool IsSynchronousSupported { get; }
 
         bool IsAsynchronousSupported { get; }

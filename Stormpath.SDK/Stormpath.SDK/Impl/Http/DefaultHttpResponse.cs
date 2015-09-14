@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System.Net;
 using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.Http

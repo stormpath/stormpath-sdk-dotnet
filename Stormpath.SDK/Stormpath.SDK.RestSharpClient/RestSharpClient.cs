@@ -16,8 +16,7 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,19 +29,27 @@ namespace Stormpath.SDK.Extensions.Http
         private readonly RestSharpAdapter adapter;
         private readonly string baseUrl;
         private readonly int connectionTimeout;
+        private readonly IWebProxy proxy;
         private readonly ILogger logger;
 
         private bool alreadyDisposed = false;
+
+        string SDK.Http.IHttpClient.BaseUrl => this.baseUrl;
+
+        int SDK.Http.IHttpClient.ConnectionTimeout => this.connectionTimeout;
+
+        IWebProxy SDK.Http.IHttpClient.Proxy => this.proxy;
 
         bool SDK.Http.IHttpClient.IsSynchronousSupported => false; // TODO
 
         bool SDK.Http.IHttpClient.IsAsynchronousSupported => true;
 
-        public RestSharpClient(string baseUrl, int connectionTimeout, ILogger logger)
+        public RestSharpClient(string baseUrl, int connectionTimeout, IWebProxy proxy, ILogger logger)
         {
             this.adapter = new RestSharpAdapter();
             this.baseUrl = baseUrl;
             this.connectionTimeout = connectionTimeout;
+            this.proxy = proxy;
             this.logger = logger;
         }
 
@@ -57,6 +64,9 @@ namespace Stormpath.SDK.Extensions.Http
             client.FollowRedirects = false;
             client.Timeout = this.connectionTimeout;
             client.UserAgent = request.Headers?.UserAgent;
+
+            if (this.proxy != null)
+                client.Proxy = this.proxy;
 
             return client;
         }

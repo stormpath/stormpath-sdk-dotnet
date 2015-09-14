@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System.Net;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Shared;
 
@@ -27,6 +28,8 @@ namespace Stormpath.SDK.Impl.Client
         IHttpClientBuilder SetBaseUrl(string baseUrl);
 
         IHttpClientBuilder SetConnectionTimeout(int connectionTimeout);
+
+        IHttpClientBuilder SetProxy(IWebProxy proxy);
 
         IHttpClientBuilder SetLogger(ILogger logger);
 

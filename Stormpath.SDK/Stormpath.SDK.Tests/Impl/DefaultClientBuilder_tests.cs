@@ -16,9 +16,7 @@
 // </remarks>
 
 using System;
-using NSubstitute;
 using Shouldly;
-using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Tests.Fakes;
