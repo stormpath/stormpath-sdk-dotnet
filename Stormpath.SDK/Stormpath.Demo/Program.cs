@@ -86,7 +86,7 @@ namespace Stormpath.Demo
             vader.SetPassword("1Findyourlackofsecuritydisturbing!");
             addedUsers.Add(
                 await myApp.CreateAccountAsync(vader,
-                options => options.RegistrationWorkflowEnabled = false,
+                    options => options.RegistrationWorkflowEnabled = false,
                 cancellationToken));
 
             // List all accounts (this time with an asynchronous foreach)
