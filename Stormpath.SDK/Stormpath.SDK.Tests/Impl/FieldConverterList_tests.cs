@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Tests.Impl
             var result = converterList.TryConvertField(dummyField, testTarget);
 
             result.Success.ShouldBe(false);
-            result.Value.ShouldBe(null);
+            result.Value.ShouldBeNull();
         }
     }
 }

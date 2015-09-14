@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             (link1 == null).ShouldBe(true);
             (null == link1).ShouldBe(true);
-            link1.ShouldBe(null);
+            link1.ShouldBeNull();
 
             (link2 == null).ShouldBe(false);
             (null == link2).ShouldBe(false);

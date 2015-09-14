@@ -130,7 +130,7 @@ namespace Stormpath.SDK.Extensions.Serialization.JsonNet.Tests
 
             result.Count.ShouldBe(1);
             result.Single().Key.ShouldBe("items");
-            result.Single().Value.ShouldBe(null);
+            result.Single().Value.ShouldBeNull();
         }
 
         [Fact]

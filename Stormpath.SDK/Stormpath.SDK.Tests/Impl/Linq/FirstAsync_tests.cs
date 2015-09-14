@@ -80,7 +80,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             var notLuke = await harness.Queryable.FirstOrDefaultAsync();
 
-            notLuke.ShouldBe(null);
+            notLuke.ShouldBeNull();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IApplication));
 
                 result.Success.ShouldBe(false);
-                result.Value.ShouldBe(null);
+                result.Value.ShouldBeNull();
             }
 
             [Fact]
@@ -108,7 +108,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var result = failingConverter.TryConvertField(dummyField, typeof(IAccount));
 
                 result.Success.ShouldBe(false);
-                result.Value.ShouldBe(null);
+                result.Value.ShouldBeNull();
             }
         }
 

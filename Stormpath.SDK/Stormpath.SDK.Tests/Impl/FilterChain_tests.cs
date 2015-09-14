@@ -89,7 +89,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var result = filterChain.Filter(request, Substitute.For<ILogger>());
 
                 result.Action.ShouldBe(ResourceAction.Delete);
-                result.Body.ShouldBe(null);
+                result.Body.ShouldBeNull();
             }
 
             [Fact]
@@ -180,7 +180,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var result = await filterChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Delete);
-                result.Body.ShouldBe(null);
+                result.Body.ShouldBeNull();
             }
 
             [Fact]

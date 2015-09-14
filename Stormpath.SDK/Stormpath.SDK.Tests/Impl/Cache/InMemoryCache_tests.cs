@@ -67,8 +67,8 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 var cache = new InMemoryCache<string, string>("fooCache");
 
                 (cache as ISynchronousCache<string, string>).Name.ShouldBe("fooCache");
-                cache.TimeToLive.ShouldBe(null);
-                cache.TimeToIdle.ShouldBe(null);
+                cache.TimeToLive.ShouldBeNull();
+                cache.TimeToIdle.ShouldBeNull();
                 cache.TotalSize.ShouldBe(0);
                 cache.AccessCount.ShouldBe(0);
                 cache.HitCount.ShouldBe(0);
@@ -100,7 +100,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 
                 iface.Put("foo", "bar");
 
-                iface.Get("baz").ShouldBe(null);
+                iface.Get("baz").ShouldBeNull();
                 cache.AccessCount.ShouldBe(1);
                 cache.HitCount.ShouldBe(0);
                 cache.MissCount.ShouldBe(1);
@@ -116,7 +116,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 iface.Put("foo", "bar");
                 iface.Remove("foo");
 
-                iface.Get("bar").ShouldBe(null);
+                iface.Get("bar").ShouldBeNull();
                 cache.AccessCount.ShouldBe(2);
             }
 
@@ -132,7 +132,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                     iface.Put(i.ToString(), $"loop{i}");
                     iface.Get(i.ToString()).ShouldBe($"loop{i}");
                     iface.Get("foo").ShouldBe("bar");
-                    iface.Get("baz").ShouldBe(null);
+                    iface.Get("baz").ShouldBeNull();
                 }
 
                 cache.TotalSize.ShouldBe(11);
@@ -154,7 +154,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                     iface.Put(i.ToString(), $"loop{i}");
                     iface.Get(i.ToString()).ShouldBe($"loop{i}");
                     iface.Get("foo").ShouldBe("bar");
-                    iface.Get("baz").ShouldBe(null);
+                    iface.Get("baz").ShouldBeNull();
                 });
 
                 cache.TotalSize.ShouldBe(11);
@@ -179,7 +179,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 iface.Get("foo").ShouldBe("bar");
 
                 Thread.Sleep(250);
-                iface.Get("foo").ShouldBe(null);
+                iface.Get("foo").ShouldBeNull();
             }
 
             [Fact]
@@ -200,7 +200,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 iface.Get("foo").ShouldBe("bar");
 
                 Thread.Sleep(2000);
-                iface.Get("foo").ShouldBe(null);
+                iface.Get("foo").ShouldBeNull();
             }
 
             [Fact]
@@ -224,7 +224,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 iface.Get("foo").ShouldBe("bar");
 
                 Thread.Sleep(1000);
-                iface.Get("foo").ShouldBe(null);
+                iface.Get("foo").ShouldBeNull();
             }
         }
 
@@ -236,8 +236,8 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 var cache = new InMemoryCache<string, string>("fooCache");
 
                 (cache as IAsynchronousCache<string, string>).Name.ShouldBe("fooCache");
-                cache.TimeToLive.ShouldBe(null);
-                cache.TimeToIdle.ShouldBe(null);
+                cache.TimeToLive.ShouldBeNull();
+                cache.TimeToIdle.ShouldBeNull();
                 cache.TotalSize.ShouldBe(0);
                 cache.AccessCount.ShouldBe(0);
                 cache.HitCount.ShouldBe(0);
@@ -269,7 +269,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 
                 await iface.PutAsync("foo", "bar");
 
-                (await iface.GetAsync("baz")).ShouldBe(null);
+                (await iface.GetAsync("baz")).ShouldBeNull();
                 cache.AccessCount.ShouldBe(1);
                 cache.HitCount.ShouldBe(0);
                 cache.MissCount.ShouldBe(1);
@@ -285,7 +285,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 await iface.PutAsync("foo", "bar");
                 await iface.RemoveAsync("foo");
 
-                (await iface.GetAsync("bar")).ShouldBe(null);
+                (await iface.GetAsync("bar")).ShouldBeNull();
                 cache.AccessCount.ShouldBe(2);
             }
 
@@ -301,7 +301,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                     await iface.PutAsync(i.ToString(), $"loop{i}");
                     (await iface.GetAsync(i.ToString())).ShouldBe($"loop{i}");
                     (await iface.GetAsync("foo")).ShouldBe("bar");
-                    (await iface.GetAsync("baz")).ShouldBe(null);
+                    (await iface.GetAsync("baz")).ShouldBeNull();
                 }
 
                 cache.TotalSize.ShouldBe(11);
@@ -324,7 +324,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                                 await iface.PutAsync(i.ToString(), $"loop{i}");
                                 (await iface.GetAsync(i.ToString())).ShouldBe($"loop{i}");
                                 (await iface.GetAsync("foo")).ShouldBe("bar");
-                                (await iface.GetAsync("baz")).ShouldBe(null);
+                                (await iface.GetAsync("baz")).ShouldBeNull();
                             });
                 await Task.WhenAll(tasks);
 
@@ -350,7 +350,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 (await iface.GetAsync("foo")).ShouldBe("bar");
 
                 Thread.Sleep(250);
-                (await iface.GetAsync("foo")).ShouldBe(null);
+                (await iface.GetAsync("foo")).ShouldBeNull();
             }
 
             [Fact]
@@ -371,7 +371,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 (await iface.GetAsync("foo")).ShouldBe("bar");
 
                 Thread.Sleep(2000);
-                (await iface.GetAsync("foo")).ShouldBe(null);
+                (await iface.GetAsync("foo")).ShouldBeNull();
             }
 
             [Fact]
@@ -395,7 +395,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 (await iface.GetAsync("foo")).ShouldBe("bar");
 
                 Thread.Sleep(1000);
-                (await iface.GetAsync("foo")).ShouldBe(null);
+                (await iface.GetAsync("foo")).ShouldBeNull();
             }
         }
     }

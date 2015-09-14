@@ -112,7 +112,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             var notHan = await harness.Queryable.SingleOrDefaultAsync();
 
-            notHan.ShouldBe(null);
+            notHan.ShouldBeNull();
         }
     }
 }

@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Tests.Impl
             account.FullName.ShouldBe("Han Solo");
             account.GivenName.ShouldBe("Han");
             account.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount");
-            account.MiddleName.ShouldBe(null);
+            account.MiddleName.ShouldBeNull();
             account.ModifiedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.078Z"));
             account.Status.ShouldBe(AccountStatus.Enabled);
             account.Surname.ShouldBe("Solo");
@@ -64,7 +64,7 @@ namespace Stormpath.SDK.Tests.Impl
             (account as DefaultAccount).Applications.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/applications");
             (account as DefaultAccount).CustomData.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/customData");
             (account as DefaultAccount).Directory.Href.ShouldBe("https://api.stormpath.com/v1/directories/foobarDirectory");
-            (account as DefaultAccount).EmailVerificationToken.Href.ShouldBe(null);
+            (account as DefaultAccount).EmailVerificationToken.Href.ShouldBeNull();
             (account as DefaultAccount).GroupMemberships.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/groupMemberships");
             (account as DefaultAccount).Groups.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/groups");
             (account as DefaultAccount).ProviderData.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/providerData");
@@ -92,7 +92,7 @@ namespace Stormpath.SDK.Tests.Impl
             account.FullName.ShouldBe("Han Solo");
             account.GivenName.ShouldBe("Han");
             account.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1");
-            account.MiddleName.ShouldBe(null);
+            account.MiddleName.ShouldBeNull();
             account.ModifiedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.078Z"));
             account.Status.ShouldBe(AccountStatus.Enabled);
             account.Surname.ShouldBe("Solo");
@@ -103,7 +103,7 @@ namespace Stormpath.SDK.Tests.Impl
             (account as DefaultAccount).Applications.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/applications");
             (account as DefaultAccount).CustomData.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/customData");
             (account as DefaultAccount).Directory.Href.ShouldBe("https://api.stormpath.com/v1/directories/directory1");
-            (account as DefaultAccount).EmailVerificationToken.Href.ShouldBe(null);
+            (account as DefaultAccount).EmailVerificationToken.Href.ShouldBeNull();
             (account as DefaultAccount).GroupMemberships.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/groupMemberships");
             (account as DefaultAccount).Groups.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/groups");
             (account as DefaultAccount).ProviderData.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/providerData");

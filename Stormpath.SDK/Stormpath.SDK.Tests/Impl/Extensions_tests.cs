@@ -29,13 +29,13 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Returns_null_when_string_is_null()
             {
-                ((string)null).Nullable().ShouldBe(null);
+                ((string)null).Nullable().ShouldBeNull();
             }
 
             [Fact]
             public void Returns_null_when_string_is_empty()
             {
-                string.Empty.Nullable().ShouldBe(null);
+                string.Empty.Nullable().ShouldBeNull();
             }
 
             [Fact]
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Returns_null_when_string_is_null()
             {
-                ((string)null).ToBase64(System.Text.Encoding.UTF8).ShouldBe(null);
+                ((string)null).ToBase64(System.Text.Encoding.UTF8).ShouldBeNull();
             }
 
             [Fact]
@@ -71,7 +71,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Returns_null_when_string_is_null()
             {
-                ((string)null).FromBase64(System.Text.Encoding.UTF8).ShouldBe(null);
+                ((string)null).FromBase64(System.Text.Encoding.UTF8).ShouldBeNull();
             }
 
             [Fact]

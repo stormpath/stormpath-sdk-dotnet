@@ -67,7 +67,7 @@ namespace Stormpath.SDK.Tests.Integration
             if (!string.IsNullOrEmpty(defaultAccountStore?.Href))
                 this.fixture.CreatedDirectoryHrefs.Add(defaultAccountStore.Href);
 
-            defaultAccountStore.ShouldBe(null); // no auto-created directory = no default account store
+            defaultAccountStore.ShouldBeNull(); // no auto-created directory = no default account store
 
             // Clean up
             var deleted = await createdApplication.DeleteAsync();

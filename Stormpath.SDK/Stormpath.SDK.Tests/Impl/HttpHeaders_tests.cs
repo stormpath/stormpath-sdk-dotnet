@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             var nonexistent = headers.GetFirst<string>("nope");
 
-            nonexistent.ShouldBe(null);
+            nonexistent.ShouldBeNull();
         }
 
         [Fact]

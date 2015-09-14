@@ -56,7 +56,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .FirstOrDefault();
 
             this.Harness.DataStore.WasCalledWithArguments<IAccount>(this.Href, "limit=1");
-            firstRebel.ShouldBe(null);
+            firstRebel.ShouldBeNull();
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .SingleOrDefault();
 
             this.Harness.DataStore.WasCalledWithArguments<IAccount>(this.Href, "limit=1");
-            boba.ShouldBe(null);
+            boba.ShouldBeNull();
         }
     }
 }

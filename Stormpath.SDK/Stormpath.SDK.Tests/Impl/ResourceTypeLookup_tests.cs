@@ -50,21 +50,21 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Returns_null_for_unknown_concrete_type()
         {
-            this.lookup.GetConcrete(typeof(ResourceTypeLookup)).ShouldBe(null);
+            this.lookup.GetConcrete(typeof(ResourceTypeLookup)).ShouldBeNull();
         }
 
         [Fact]
         public void Returns_null_for_unknown_interface_type()
         {
-            this.lookup.GetInterface(typeof(IAppDomainSetup)).ShouldBe(null);
+            this.lookup.GetInterface(typeof(IAppDomainSetup)).ShouldBeNull();
         }
 
         [Fact]
         public void Returns_null_for_unknown_collection_type()
         {
-            this.lookup.GetInnerCollectionInterface(typeof(ResourceTypeLookup)).ShouldBe(null);
-            this.lookup.GetInnerCollectionInterface(typeof(CollectionResponsePage<>)).ShouldBe(null);
-            this.lookup.GetInnerCollectionInterface(typeof(CollectionResponsePage<IBasicLoginAttempt>)).ShouldBe(null);
+            this.lookup.GetInnerCollectionInterface(typeof(ResourceTypeLookup)).ShouldBeNull();
+            this.lookup.GetInnerCollectionInterface(typeof(CollectionResponsePage<>)).ShouldBeNull();
+            this.lookup.GetInnerCollectionInterface(typeof(CollectionResponsePage<IBasicLoginAttempt>)).ShouldBeNull();
         }
 
         [Fact]

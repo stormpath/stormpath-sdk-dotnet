@@ -107,7 +107,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             {
                 var props = new Properties(string.Empty);
 
-                props.GetProperty("foo").ShouldBe(null);
+                props.GetProperty("foo").ShouldBeNull();
             }
 
             [Fact]
