@@ -24,6 +24,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
@@ -109,17 +110,17 @@ namespace Stormpath.SDK.Impl.Tenant
             return this.AsInterface.CreateApplicationAsync(application, options, cancellationToken);
         }
 
-        ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()
+        IAsyncQueryable<IApplication> ITenantActions.GetApplications()
         {
             return new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetInternalDataStore());
         }
 
-        ICollectionResourceQueryable<IDirectory> ITenantActions.GetDirectories()
+        IAsyncQueryable<IDirectory> ITenantActions.GetDirectories()
         {
             return new CollectionResourceQueryable<IDirectory>(this.Directories.Href, this.GetInternalDataStore());
         }
 
-        ICollectionResourceQueryable<IAccount> ITenantActions.GetAccounts()
+        IAsyncQueryable<IAccount> ITenantActions.GetAccounts()
         {
             return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
         }

@@ -22,6 +22,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Linq;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 
@@ -95,11 +96,11 @@ namespace Stormpath.SDK
 
         public static async Task<int> CountAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var collection = source as ICollectionResourceQueryable<T>;
+            var collection = source as CollectionResourceQueryable<T>;
             if (collection == null)
                 throw new InvalidOperationException("This queryable is not a supported collection resource.");
 
-            if (!await collection.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 return 0;
 
             return collection.Size;

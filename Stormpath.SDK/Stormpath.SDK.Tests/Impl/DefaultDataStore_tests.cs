@@ -30,6 +30,7 @@ using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Shared;
 using Stormpath.SDK.Tests.Fakes;
@@ -77,13 +78,13 @@ namespace Stormpath.SDK.Tests.Impl
         {
             IInternalDataStore dataStore = new StubDataStore(FakeJson.AccountList, "http://api.foo.bar");
 
-            ICollectionResourceQueryable<IAccount> accounts = new CollectionResourceQueryable<IAccount>("/accounts", dataStore);
+            IAsyncQueryable<IAccount> accounts = new CollectionResourceQueryable<IAccount>("/accounts", dataStore);
             await accounts.MoveNextAsync();
 
             // Verify against data from FakeJson.AccountList
-            accounts.Size.ShouldBe(6);
-            accounts.Offset.ShouldBe(0);
-            accounts.Limit.ShouldBe(25);
+            (accounts as CollectionResourceQueryable<IAccount>).Size.ShouldBe(6);
+            (accounts as CollectionResourceQueryable<IAccount>).Offset.ShouldBe(0);
+            (accounts as CollectionResourceQueryable<IAccount>).Limit.ShouldBe(25);
             accounts.CurrentPage.Count().ShouldBe(6);
 
             var account = accounts.CurrentPage.First();

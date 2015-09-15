@@ -18,6 +18,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
@@ -40,7 +41,7 @@ namespace Stormpath.SDK.Tests.Impl
                 .Take(5)
                 .Skip(10);
 
-            await (query as ICollectionResourceQueryable<IAccount>).MoveNextAsync();
+            await (query as IAsyncQueryable<IAccount>).MoveNextAsync();
             harness.DataStore.WasCalledWithArguments<IAccount>(href, "limit=5&offset=10");
         }
 

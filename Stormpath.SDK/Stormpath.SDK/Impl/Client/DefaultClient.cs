@@ -28,6 +28,7 @@ using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
@@ -150,21 +151,21 @@ namespace Stormpath.SDK.Impl.Client
             return await tenant.CreateApplicationAsync(name, createDirectory).ConfigureAwait(false);
         }
 
-        ICollectionResourceQueryable<IApplication> ITenantActions.GetApplications()
+        IAsyncQueryable<IApplication> ITenantActions.GetApplications()
         {
             var tenant = this.AsInterface.GetCurrentTenantAsync().Result;
 
             return tenant.GetApplications();
         }
 
-        ICollectionResourceQueryable<IDirectory> ITenantActions.GetDirectories()
+        IAsyncQueryable<IDirectory> ITenantActions.GetDirectories()
         {
             var tenant = this.AsInterface.GetCurrentTenantAsync().Result;
 
             return tenant.GetDirectories();
         }
 
-        ICollectionResourceQueryable<IAccount> ITenantActions.GetAccounts()
+        IAsyncQueryable<IAccount> ITenantActions.GetAccounts()
         {
             var tenant = this.AsInterface.GetCurrentTenantAsync().Result;
 

@@ -18,6 +18,7 @@
 using System.Linq;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tests.Fakes;
 
@@ -30,7 +31,7 @@ namespace Stormpath.SDK.Tests.Helpers
 
         public string Href { get; set; }
 
-        public ICollectionResourceQueryable<T> Queryable { get; private set; }
+        public IAsyncQueryable<T> Queryable { get; private set; }
 
         internal static CollectionTestHarness<TType> Create<TType>(string collectionHref, IInternalDataStore mockDataStore = null)
             where TType : class, IResource

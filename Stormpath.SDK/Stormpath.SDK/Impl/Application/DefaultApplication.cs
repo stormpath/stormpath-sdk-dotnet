@@ -27,6 +27,7 @@ using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Application
@@ -213,12 +214,12 @@ namespace Stormpath.SDK.Impl.Application
             return await responseToken.GetAccountAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        ICollectionResourceQueryable<IAccount> IApplication.GetAccounts()
+        IAsyncQueryable<IAccount> IApplication.GetAccounts()
         {
             return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
         }
 
-        ICollectionResourceQueryable<IAccountStoreMapping> IApplication.GetAccountStoreMappings(CancellationToken cancellationToken)
+        IAsyncQueryable<IAccountStoreMapping> IApplication.GetAccountStoreMappings(CancellationToken cancellationToken)
         {
             return new CollectionResourceQueryable<IAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalDataStore());
         }

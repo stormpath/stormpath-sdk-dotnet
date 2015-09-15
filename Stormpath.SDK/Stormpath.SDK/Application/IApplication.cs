@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Auth;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Application
@@ -44,9 +45,9 @@ namespace Stormpath.SDK.Application
 
         Task<bool> TryAuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
 
-        ICollectionResourceQueryable<IAccount> GetAccounts();
+        IAsyncQueryable<IAccount> GetAccounts();
 
-        ICollectionResourceQueryable<IAccountStoreMapping> GetAccountStoreMappings(CancellationToken cancellationToken = default(CancellationToken));
+        IAsyncQueryable<IAccountStoreMapping> GetAccountStoreMappings(CancellationToken cancellationToken = default(CancellationToken));
 
         Task<IAccountStore> GetDefaultAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
 

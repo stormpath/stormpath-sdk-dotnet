@@ -31,7 +31,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal sealed class CollectionResourceQueryable<T> : QueryableBase<T>, ICollectionResourceQueryable<T>, IAsyncQueryProvider<T>
+    internal sealed class CollectionResourceQueryable<T> : QueryableBase<T>, IOrderedAsyncQueryable<T>, IAsyncQueryProvider<T>
     {
         private readonly IQueryable<T> proxy;
 
@@ -104,7 +104,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         private IAsyncQueryable<T> AsAsyncQueryable => this;
 
-        int ICollectionResourceQueryable<T>.Offset
+        internal int Offset
         {
             get
             {
@@ -116,7 +116,7 @@ namespace Stormpath.SDK.Impl.Resource
             }
         }
 
-        int ICollectionResourceQueryable<T>.Limit
+        internal int Limit
         {
             get
             {
@@ -128,7 +128,7 @@ namespace Stormpath.SDK.Impl.Resource
             }
         }
 
-        int ICollectionResourceQueryable<T>.Size
+        internal int Size
         {
             get
             {
@@ -152,13 +152,7 @@ namespace Stormpath.SDK.Impl.Resource
             }
         }
 
-        string ICollectionResourceQueryable<T>.CurrentHref
-        {
-            get
-            {
-                return this.GenerateRequestUrlFromModel();
-            }
-        }
+        internal string CurrentHref => this.GenerateRequestUrlFromModel();
 
         Expression IAsyncQueryable<T>.Expression
         {

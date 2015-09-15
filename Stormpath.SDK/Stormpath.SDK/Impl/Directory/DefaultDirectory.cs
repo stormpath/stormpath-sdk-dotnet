@@ -22,6 +22,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Directory
@@ -77,7 +78,7 @@ namespace Stormpath.SDK.Impl.Directory
             return this.GetInternalDataStore().SaveAsync<IDirectory>(this, cancellationToken);
         }
 
-        ICollectionResourceQueryable<IAccount> IDirectory.GetAccounts()
+        IAsyncQueryable<IAccount> IDirectory.GetAccounts()
         {
             return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
         }

@@ -19,6 +19,7 @@ using System.Threading;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tests.Fakes;
@@ -29,9 +30,9 @@ namespace Stormpath.SDK.Tests.Helpers
     {
         public static void GeneratedArgumentsWere<T>(this IAsyncQueryable<T> queryable, string href, string arguments)
         {
-            var resourceQueryable = queryable as ICollectionResourceQueryable<T>;
+            var resourceQueryable = queryable as CollectionResourceQueryable<T>;
             if (resourceQueryable == null)
-                Assertly.Fail("This queryable is not an ICollectionResourceQueryable.");
+                Assertly.Fail("This queryable is not a CollectionResourceQueryable.");
 
             resourceQueryable.CurrentHref.ShouldBe($"{href}?{arguments}");
         }

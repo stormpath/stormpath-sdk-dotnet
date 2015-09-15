@@ -18,16 +18,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Linq.Sync
 {
     internal sealed class SyncCollectionEnumeratorAdapter<T> : IEnumerable<T>
     {
-        private readonly ICollectionResourceQueryable<T> asyncCollection;
+        private readonly IAsyncQueryable<T> asyncCollection;
         private readonly CancellationToken cancellationToken;
 
-        public SyncCollectionEnumeratorAdapter(ICollectionResourceQueryable<T> asyncCollection, CancellationToken cancellationToken = default(CancellationToken))
+        public SyncCollectionEnumeratorAdapter(IAsyncQueryable<T> asyncCollection, CancellationToken cancellationToken = default(CancellationToken))
         {
             this.asyncCollection = asyncCollection;
             this.cancellationToken = cancellationToken;

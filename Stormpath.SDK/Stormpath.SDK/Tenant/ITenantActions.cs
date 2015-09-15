@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tenant
@@ -35,10 +36,10 @@ namespace Stormpath.SDK.Tenant
 
         Task<IApplication> CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken = default(CancellationToken));
 
-        ICollectionResourceQueryable<IAccount> GetAccounts();
+        IAsyncQueryable<IAccount> GetAccounts();
 
-        ICollectionResourceQueryable<IApplication> GetApplications();
+        IAsyncQueryable<IApplication> GetApplications();
 
-        ICollectionResourceQueryable<IDirectory> GetDirectories();
+        IAsyncQueryable<IDirectory> GetDirectories();
     }
 }

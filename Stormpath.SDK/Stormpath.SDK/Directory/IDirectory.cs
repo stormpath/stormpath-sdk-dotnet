@@ -16,6 +16,7 @@
 // </remarks>
 
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Directory
@@ -28,6 +29,6 @@ namespace Stormpath.SDK.Directory
 
         DirectoryStatus Status { get; }
 
-        ICollectionResourceQueryable<IAccount> GetAccounts();
+        IAsyncQueryable<IAccount> GetAccounts();
     }
 }
