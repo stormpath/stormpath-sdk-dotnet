@@ -15,11 +15,11 @@
 // limitations under the License.
 // </remarks>
 
-using System.Linq;
 using System.Threading;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tests.Fakes;
 
@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Tests.Helpers
 {
     public static class LinqAssertExtensions
     {
-        public static void GeneratedArgumentsWere<T>(this IQueryable<T> queryable, string href, string arguments)
+        public static void GeneratedArgumentsWere<T>(this IAsyncQueryable<T> queryable, string href, string arguments)
         {
             var resourceQueryable = queryable as ICollectionResourceQueryable<T>;
             if (resourceQueryable == null)

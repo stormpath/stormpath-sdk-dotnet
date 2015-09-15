@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Linq;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 

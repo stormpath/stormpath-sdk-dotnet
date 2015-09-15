@@ -19,7 +19,7 @@ using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Resource
 {
-    public interface ICollectionResourceQueryable<T> : IAsyncQueryable<T>
+    public interface ICollectionResourceQueryable<T> : IOrderedAsyncQueryable<T>, IAsyncQueryable<T>
     {
         int Offset { get; }
 

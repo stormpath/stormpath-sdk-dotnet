@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +22,6 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {

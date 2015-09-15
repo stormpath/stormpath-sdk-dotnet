@@ -15,12 +15,8 @@
 // limitations under the License.
 // </remarks>
 
-using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {

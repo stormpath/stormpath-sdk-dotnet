@@ -16,16 +16,20 @@
 // </remarks>
 
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Linq
 {
-    public interface IAsyncQueryable<T> : IQueryable<T>
+    public interface IAsyncQueryable<T>
     {
         IEnumerable<T> CurrentPage { get; }
 
         Task<bool> MoveNextAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        Expression Expression { get; }
+
+        IAsyncQueryProvider<T> Provider { get; }
     }
 }

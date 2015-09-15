@@ -18,8 +18,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 
@@ -28,7 +30,70 @@ namespace Stormpath.SDK
 {
     public static class AsyncQueryableExtensions
     {
-        public static async Task<int> CountAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        public static IOrderedAsyncQueryable<TSource> OrderBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+        {
+            return (IOrderedAsyncQueryable<TSource>)source.Provider.CreateQuery(
+                LinqHelper.MethodCall(
+                    LinqHelper.GetMethodInfo(Queryable.OrderBy, (IQueryable<TSource>)null, keySelector),
+                    source.Expression,
+                    Expression.Quote(keySelector)));
+        }
+
+        public static IOrderedAsyncQueryable<TSource> OrderByDescending<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+        {
+            return (IOrderedAsyncQueryable<TSource>)source.Provider.CreateQuery(
+                LinqHelper.MethodCall(
+                    LinqHelper.GetMethodInfo(Queryable.OrderByDescending, (IQueryable<TSource>)null, keySelector),
+                    source.Expression,
+                    Expression.Quote(keySelector)));
+        }
+
+        public static IOrderedAsyncQueryable<TSource> ThenBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+        {
+            return (IOrderedAsyncQueryable<TSource>)source.Provider.CreateQuery(
+                LinqHelper.MethodCall(
+                    LinqHelper.GetMethodInfo(Queryable.ThenBy, (IOrderedQueryable<TSource>)null, keySelector),
+                    source.Expression,
+                    Expression.Quote(keySelector)));
+        }
+
+        public static IOrderedAsyncQueryable<TSource> ThenByDescending<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+        {
+            return (IOrderedAsyncQueryable<TSource>)source.Provider.CreateQuery(
+                LinqHelper.MethodCall(
+                    LinqHelper.GetMethodInfo(Queryable.ThenByDescending, (IOrderedQueryable<TSource>)null, keySelector),
+                    source.Expression,
+                    Expression.Quote(keySelector)));
+        }
+
+        public static IAsyncQueryable<TSource> Skip<TSource>(this IAsyncQueryable<TSource> source, int count)
+        {
+            return source.Provider.CreateQuery(
+                LinqHelper.MethodCall(
+                    LinqHelper.GetMethodInfo(Queryable.Skip, (IQueryable<TSource>)null, count),
+                    source.Expression,
+                    Expression.Constant(count)));
+        }
+
+        public static IAsyncQueryable<TSource> Take<TSource>(this IAsyncQueryable<TSource> source, int count)
+        {
+            return source.Provider.CreateQuery(
+                LinqHelper.MethodCall(
+                    LinqHelper.GetMethodInfo(Queryable.Take, (IQueryable<TSource>)null, count),
+                    source.Expression,
+                    Expression.Constant(count)));
+        }
+
+        public static IAsyncQueryable<TSource> Where<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, bool>> predicate)
+        {
+            return source.Provider.CreateQuery(
+                LinqHelper.MethodCall(
+                    LinqHelper.GetMethodInfo(Queryable.Where, (IQueryable<TSource>)null, predicate),
+                    source.Expression,
+                    Expression.Quote(predicate)));
+        }
+
+        public static async Task<int> CountAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
         {
             var collection = source as ICollectionResourceQueryable<T>;
             if (collection == null)
@@ -40,86 +105,62 @@ namespace Stormpath.SDK
             return collection.Size;
         }
 
-        public static async Task<T> FirstAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<T> FirstAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var asyncSource = source as IAsyncQueryable<T>;
-            if (asyncSource == null)
-                throw new InvalidOperationException("This queryable does not support asynchronous operations.");
-
-            if (!await asyncSource.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 throw new InvalidOperationException("The sequence has no elements.");
 
-            return asyncSource.CurrentPage.First();
+            return source.CurrentPage.First();
         }
 
-        public static async Task<T> FirstOrDefaultAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<T> FirstOrDefaultAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var asyncSource = source as IAsyncQueryable<T>;
-            if (asyncSource == null)
-                throw new InvalidOperationException("This queryable does not support asynchronous operations.");
-
-            if (!await asyncSource.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 return default(T);
 
-            return asyncSource.CurrentPage.FirstOrDefault();
+            return source.CurrentPage.FirstOrDefault();
         }
 
-        public static async Task<T> SingleAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<T> SingleAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var asyncSource = source as IAsyncQueryable<T>;
-            if (asyncSource == null)
-                throw new InvalidOperationException("This queryable does not support asynchronous operations.");
-
-            if (!await asyncSource.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 throw new InvalidOperationException("The sequence has no elements.");
 
-            return asyncSource.CurrentPage.Single();
+            return source.CurrentPage.Single();
         }
 
-        public static async Task<T> SingleOrDefaultAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<T> SingleOrDefaultAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var asyncSource = source as IAsyncQueryable<T>;
-            if (asyncSource == null)
-                throw new InvalidOperationException("This queryable does not support asynchronous operations.");
-
-            if (!await asyncSource.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 return default(T);
 
-            return asyncSource.CurrentPage.SingleOrDefault();
+            return source.CurrentPage.SingleOrDefault();
         }
 
-        public static async Task<List<T>> ToListAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<List<T>> ToListAsync<T>(this IAsyncQueryable<T> source, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var asyncSource = source as IAsyncQueryable<T>;
-            if (asyncSource == null)
-                throw new InvalidOperationException("This queryable does not support asynchronous operations.");
-
             var results = new List<T>();
 
-            while (await asyncSource.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            while (await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
             {
-                results.AddRange(asyncSource.CurrentPage);
+                results.AddRange(source.CurrentPage);
             }
 
             return results;
         }
 
-        public static Task ForEachAsync<T>(this IQueryable<T> source, Action<T> @delegate, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task ForEachAsync<T>(this IAsyncQueryable<T> source, Action<T> @delegate, CancellationToken cancellationToken = default(CancellationToken))
         {
             return source.ForEachAsync((item, unused_) => @delegate(item), cancellationToken);
         }
 
-        public static async Task ForEachAsync<T>(this IQueryable<T> source, Action<T, int> @delegate, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task ForEachAsync<T>(this IAsyncQueryable<T> source, Action<T, int> @delegate, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var asyncSource = source as IAsyncQueryable<T>;
-            if (asyncSource == null)
-                throw new InvalidOperationException("This queryable does not support asynchronous operations.");
-
             var index = 0;
 
-            while (await asyncSource.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            while (await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
             {
-                foreach (var item in asyncSource.CurrentPage)
+                foreach (var item in source.CurrentPage)
                 {
                     @delegate(item, index++);
                     cancellationToken.ThrowIfCancellationRequested();

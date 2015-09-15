@@ -18,7 +18,7 @@
 using System;
 
 // Placed in the base library namespace so that these extension methods are available without any extra usings
-namespace Stormpath
+namespace Stormpath.SDK
 {
     public static class CollectionResourceQueryableWithinExtensions
     {

@@ -15,23 +15,32 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
+using Stormpath.SDK.Impl.Linq;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 
 // Placed in the base library namespace so that these extension methods are available without any extra usings
-namespace Stormpath
+namespace Stormpath.SDK
 {
     public static class CollectionResourceQueryableFilterExtensions
     {
-        public static ICollectionResourceQueryable<T> Filter<T>(this ICollectionResourceQueryable<T> source, string caseInsensitiveMatch)
-            where T : IResource
+        public static IAsyncQueryable<TSource> Filter<TSource>(this IAsyncQueryable<TSource> source, string caseInsensitiveMatch)
+            where TSource : IResource
         {
-            return (ICollectionResourceQueryable<T>)source.Provider.CreateQuery<T>(
-                Expression.Call(
-                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(T)),
+            return source.Provider.CreateQuery(
+                LinqHelper.MethodCall(
+                    LinqHelper.GetMethodInfo(Filter, (IQueryable<TSource>)null, caseInsensitiveMatch),
                     source.Expression,
                     Expression.Constant(caseInsensitiveMatch)));
+        }
+
+        private static IQueryable<TSource> Filter<TSource>(IQueryable<TSource> source, string caseInsensitiveMatch)
+        {
+            // todo remove
+            throw new NotImplementedException("This method stub is just a proxy that is inserted into the expression tree.");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="Unsupported_filters_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IOrderedAsyncQueryable.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,10 +15,9 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Tests.Impl.Linq
+namespace Stormpath.SDK.Linq
 {
-    public class Unsupported_filters_tests : Linq_tests
+    public interface IOrderedAsyncQueryable<T> : IAsyncQueryable<T>
     {
-        // TODO
     }
 }

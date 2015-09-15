@@ -42,6 +42,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var luke = await harness.Queryable.FirstAsync();
 
             luke.Surname.ShouldBe("Skywalker");
+
+            // TODO check for limit=1
         }
 
         [Fact]

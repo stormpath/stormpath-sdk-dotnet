@@ -15,11 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using NSubstitute;
-using Shouldly;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
@@ -53,15 +48,6 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .ThenByDescending(x => x.Username);
 
             query.GeneratedArgumentsWere(this.Href, "orderBy=givenName,username desc");
-        }
-
-        [Fact]
-        public void Order_throws_for_complex_overloads()
-        {
-            Should.Throw<NotSupportedException>(() =>
-            {
-                this.Harness.Queryable.OrderBy(x => x.GivenName, Substitute.For<IComparer<string>>()).ToList();
-            });
         }
     }
 }
