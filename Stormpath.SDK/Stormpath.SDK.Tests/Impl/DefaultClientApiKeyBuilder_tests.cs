@@ -21,6 +21,7 @@ using Shouldly;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Impl.Api;
 using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Shared;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -36,7 +37,8 @@ namespace Stormpath.SDK.Tests.Impl
                 this.builder = new DefaultClientApiKeyBuilder(
                     Substitute.For<IConfigurationManager>(),
                     Substitute.For<IEnvironment>(),
-                    Substitute.For<IFile>());
+                    Substitute.For<IFile>(),
+                    Substitute.For<ILogger>());
             }
 
             [Fact]
@@ -79,7 +81,11 @@ namespace Stormpath.SDK.Tests.Impl
                 this.file = Substitute.For<IFile>();
                 this.file.ReadAllText(this.defaultLocation).Returns(this.fileContents);
 
-                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), this.file);
+                this.builder = new DefaultClientApiKeyBuilder(
+                    Substitute.For<IConfigurationManager>(),
+                    Substitute.For<IEnvironment>(),
+                    this.file,
+                    Substitute.For<ILogger>());
             }
 
             [Fact]
@@ -140,7 +146,11 @@ namespace Stormpath.SDK.Tests.Impl
                 this.file = Substitute.For<IFile>();
                 this.file.ReadAllText(this.testLocation).Returns(this.fileContents);
 
-                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), this.env, this.file);
+                this.builder = new DefaultClientApiKeyBuilder(
+                    Substitute.For<IConfigurationManager>(),
+                    this.env,
+                    this.file,
+                    Substitute.For<ILogger>());
             }
 
             [Fact]
@@ -197,7 +207,11 @@ namespace Stormpath.SDK.Tests.Impl
                 this.env.GetEnvironmentVariable(this.idVariableName).Returns(this.fakeApiKeyId);
                 this.env.GetEnvironmentVariable(this.secretVariableName).Returns(this.fakeApiSecretId);
 
-                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), this.env, Substitute.For<IFile>());
+                this.builder = new DefaultClientApiKeyBuilder(
+                    Substitute.For<IConfigurationManager>(),
+                    this.env,
+                    Substitute.For<IFile>(),
+                    Substitute.For<ILogger>());
             }
 
             [Fact]
@@ -230,7 +244,11 @@ namespace Stormpath.SDK.Tests.Impl
                 this.env = Substitute.For<IEnvironment>();
                 this.env.GetEnvironmentVariable(newKeyName).Returns(this.fakeApiKeyId);
                 this.env.GetEnvironmentVariable(newSecretName).Returns(this.fakeApiSecretId);
-                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), this.env, Substitute.For<IFile>());
+                this.builder = new DefaultClientApiKeyBuilder(
+                    Substitute.For<IConfigurationManager>(),
+                    this.env,
+                    Substitute.For<IFile>(),
+                    Substitute.For<ILogger>());
 
                 var clientApiKey = this.builder
                     .SetIdPropertyName(newKeyName)
@@ -264,7 +282,11 @@ namespace Stormpath.SDK.Tests.Impl
                 this.file = Substitute.For<IFile>();
                 this.file.ReadAllText(this.testLocation).Returns(this.fileContents);
 
-                this.builder = new DefaultClientApiKeyBuilder(this.config, Substitute.For<IEnvironment>(), this.file);
+                this.builder = new DefaultClientApiKeyBuilder(
+                    this.config,
+                    Substitute.For<IEnvironment>(),
+                    this.file,
+                    Substitute.For<ILogger>());
             }
 
             [Fact]
@@ -324,7 +346,11 @@ namespace Stormpath.SDK.Tests.Impl
                     { this.secretVariableName, this.fakeApiSecretId }
                 });
 
-                this.builder = new DefaultClientApiKeyBuilder(this.config, Substitute.For<IEnvironment>(), Substitute.For<IFile>());
+                this.builder = new DefaultClientApiKeyBuilder(
+                    this.config,
+                    Substitute.For<IEnvironment>(),
+                    Substitute.For<IFile>(),
+                    Substitute.For<ILogger>());
             }
 
             [Fact]
@@ -360,7 +386,11 @@ namespace Stormpath.SDK.Tests.Impl
                     { newKeyIdName, this.fakeApiKeyId },
                     { newKeySecretName, this.fakeApiSecretId }
                 });
-                this.builder = new DefaultClientApiKeyBuilder(this.config, Substitute.For<IEnvironment>(), Substitute.For<IFile>());
+                this.builder = new DefaultClientApiKeyBuilder(
+                    this.config,
+                    Substitute.For<IEnvironment>(),
+                    Substitute.For<IFile>(),
+                    Substitute.For<ILogger>());
 
                 var clientApiKey = this.builder
                     .SetIdPropertyName(newKeyIdName)
@@ -385,7 +415,8 @@ namespace Stormpath.SDK.Tests.Impl
                 this.builder = new DefaultClientApiKeyBuilder(
                     Substitute.For<IConfigurationManager>(),
                     Substitute.For<IEnvironment>(),
-                    Substitute.For<IFile>());
+                    Substitute.For<IFile>(),
+                    Substitute.For<ILogger>());
             }
 
             [Fact]
@@ -450,7 +481,11 @@ namespace Stormpath.SDK.Tests.Impl
                 this.file.ReadAllText(this.testLocation)
                     .Returns(this.fileContents);
 
-                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), Substitute.For<IEnvironment>(), this.file);
+                this.builder = new DefaultClientApiKeyBuilder(
+                    Substitute.For<IConfigurationManager>(),
+                    Substitute.For<IEnvironment>(),
+                    this.file,
+                    Substitute.For<ILogger>());
             }
 
             [Fact]
@@ -510,7 +545,11 @@ namespace Stormpath.SDK.Tests.Impl
                 env.ExpandEnvironmentVariables(Arg.Any<string>())
                     .Returns(call => Environment.ExpandEnvironmentVariables(call.Arg<string>()));
 
-                this.builder = new DefaultClientApiKeyBuilder(Substitute.For<IConfigurationManager>(), env, this.file);
+                this.builder = new DefaultClientApiKeyBuilder(
+                    Substitute.For<IConfigurationManager>(),
+                    env,
+                    this.file,
+                    Substitute.For<ILogger>());
 
                 var clientApiKey = this.builder
                     .SetFileLocation("~\\test.properties")
@@ -530,7 +569,8 @@ namespace Stormpath.SDK.Tests.Impl
                 this.builder = new DefaultClientApiKeyBuilder(
                     Substitute.For<IConfigurationManager>(),
                     Substitute.For<IEnvironment>(),
-                    Substitute.For<IFile>());
+                    Substitute.For<IFile>(),
+                    Substitute.For<ILogger>());
             }
 
             [Fact]

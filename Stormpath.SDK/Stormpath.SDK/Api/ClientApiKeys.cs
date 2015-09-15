@@ -15,16 +15,19 @@
 // limitations under the License.
 // </remarks>
 
+using Stormpath.SDK.Shared;
+
 namespace Stormpath.SDK.Api
 {
     public sealed class ClientApiKeys
     {
-        public static IClientApiKeyBuilder Builder()
+        public static IClientApiKeyBuilder Builder(ILogger logger = null)
         {
             return new Impl.Api.DefaultClientApiKeyBuilder(
                 new Impl.Utility.ConfigurationManagerWrapper(),
                 new Impl.Utility.EnvironmentWrapper(),
-                new Impl.Utility.FileWrapper());
+                new Impl.Utility.FileWrapper(),
+                logger);
         }
     }
 }
