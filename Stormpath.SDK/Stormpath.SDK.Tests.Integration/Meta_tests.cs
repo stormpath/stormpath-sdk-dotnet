@@ -26,9 +26,14 @@ namespace Stormpath.SDK.Tests.Integration
     public class Meta_tests
     {
         private readonly ITestOutputHelper output;
+        
+        public Meta_tests(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
 
         [Fact]
-        public void Integration_test_API_key_is_valid(ITestOutputHelper output)
+        public void Integration_test_API_key_is_valid()
         {
             var apiKey = IntegrationTestClients.GetApiKey();
 
