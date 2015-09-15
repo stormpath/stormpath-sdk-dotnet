@@ -73,6 +73,7 @@
     <Compile Include="Directory_tests.cs" />
     <Compile Include="Error_tests.cs" />
     <Compile Include="Helpers\TestClientBuilder.cs" />
+    <Compile Include="Meta_tests.cs" />
     <Compile Include="Tenant_tests.cs" />
     <Compile Include="Sanity_checks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
