@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Impl.Linq
 {
     internal sealed class CollectionResourceQueryExecutor : IQueryExecutor
     {
-        public CollectionResourceQueryExecutor(string href, IInternalDataStore dataStore)
+        internal CollectionResourceQueryExecutor(string href, IInternalDataStore dataStore)
         {
             this.Href = href;
             this.DataStore = dataStore;
@@ -40,12 +40,17 @@ namespace Stormpath.SDK.Impl.Linq
 
         public IEnumerable<T> ExecuteCollection<T>(CollectionResourceRequestModel requestModel)
         {
-            throw new NotSupportedException("Synchronous LINQ execution is not currently supported. Use async methods.");
+            var asyncCollection = new CollectionResourceQueryable<T>(this.Href, this.DataStore, requestModel);
+            var adapter = new Sync.SyncCollectionEnumeratorAdapter<T>(asyncCollection);
+
+            return adapter;
         }
 
         public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
         {
-            throw new NotSupportedException("Synchronous LINQ execution is not currently supported. Use async methods.");
+            var model = GenerateRequestModel(queryModel);
+
+            return ExecuteCollection<T>(model);
         }
 
         public T ExecuteScalar<T>(QueryModel queryModel)
