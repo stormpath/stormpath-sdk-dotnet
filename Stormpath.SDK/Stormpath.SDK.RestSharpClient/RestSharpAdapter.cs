@@ -40,18 +40,16 @@ namespace Stormpath.SDK.Extensions.Http
 
         public SDK.Http.IHttpResponse ToHttpResponse(RestSharp.IRestResponse response)
         {
-            var responseErrorType = SDK.Http.ResponseErrorType.None;
+            bool transportError = false;
             var responseMessages = new List<string>();
 
-            if (response.ResponseStatus == RestSharp.ResponseStatus.TimedOut ||
-                response.ResponseStatus == RestSharp.ResponseStatus.Aborted ||
-                response.ResponseStatus == RestSharp.ResponseStatus.Error)
-                responseErrorType = SDK.Http.ResponseErrorType.Recoverable;
+            transportError =
+                response.ResponseStatus == RestSharp.ResponseStatus.TimedOut ||
+                response.ResponseStatus == RestSharp.ResponseStatus.Aborted;
 
             if (response.ErrorException != null)
                 responseMessages.Add(response.ErrorException.Message);
-
-            if (!string.IsNullOrEmpty(response.ErrorMessage))
+            else if (!string.IsNullOrEmpty(response.ErrorMessage))
                 responseMessages.Add(response.ErrorMessage);
 
             if (!string.IsNullOrEmpty(response.StatusDescription))
@@ -65,7 +63,7 @@ namespace Stormpath.SDK.Extensions.Http
                 headers,
                 response.Content,
                 response.ContentType,
-                responseErrorType);
+                transportError);
         }
 
         private void CopyHeaders(SDK.Http.HttpHeaders httpHeaders, RestSharp.IRestRequest restRequest)

@@ -123,7 +123,6 @@
     <Compile Include="Impl\Linq\OrderBy_tests.cs" />
     <Compile Include="Impl\Linq\Result_operators_tests.cs" />
     <Compile Include="Impl\Linq\SingleAsync_tests.cs" />
-    <Compile Include="Impl\Linq\SyncAdapter_tests.cs" />
     <Compile Include="Impl\Linq\ToListAsync_tests.cs" />
     <Compile Include="Impl\Linq\Unsupported_filters_tests.cs" />
     <Compile Include="Impl\Linq\Where_tests.cs" />

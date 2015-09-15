@@ -21,8 +21,8 @@ namespace Stormpath.SDK.Http
     {
         int StatusCode { get; }
 
-        string ResponsePhrase { get; }
+        bool TransportError { get; }
 
-        ResponseErrorType ErrorType { get; }
+        string ResponsePhrase { get; }
     }
 }

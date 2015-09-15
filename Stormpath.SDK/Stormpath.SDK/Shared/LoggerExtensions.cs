@@ -19,6 +19,7 @@ using System;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Shared;
 
+// Placed in the base library namespace so that these extension methods are available without any extra usings
 namespace Stormpath.SDK
 {
     public static class LoggerExtensions

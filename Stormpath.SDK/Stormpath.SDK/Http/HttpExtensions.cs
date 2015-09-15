@@ -1,4 +1,4 @@
-﻿// <copyright file="ResponseErrorType.cs" company="Stormpath, Inc.">
+﻿// <copyright file="HttpExtensions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -17,10 +17,16 @@
 
 namespace Stormpath.SDK.Http
 {
-    public enum ResponseErrorType
+    public static class HttpExtensions
     {
-        None = 0,
-        Recoverable = 1,
-        Fatal = 2
+        public static bool IsClientError(this IHttpResponse response)
+        {
+            return response.StatusCode >= 400 && response.StatusCode < 500;
+        }
+
+        public static bool IsServerError(this IHttpResponse response)
+        {
+            return response.StatusCode >= 500 && response.StatusCode < 600;
+        }
     }
 }

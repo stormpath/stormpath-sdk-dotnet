@@ -160,9 +160,9 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private IHttpResponse HandleResponseOrError(IHttpResponse response)
         {
-            if (response.ErrorType > ResponseErrorType.None ||
-                IsClientError(response.StatusCode) ||
-                IsServerError(response.StatusCode))
+            if (response.TransportError ||
+                response.IsClientError() ||
+                response.IsServerError())
             {
                 DefaultError error = null;
                 error = response.HasBody
@@ -173,16 +173,6 @@ namespace Stormpath.SDK.Impl.DataStore
             }
 
             return response;
-        }
-
-        private static bool IsClientError(int statusCode)
-        {
-            return statusCode >= 400 && statusCode < 500;
-        }
-
-        private static bool IsServerError(int statusCode)
-        {
-            return statusCode >= 500 && statusCode < 600;
         }
 
         // DataStore methods

@@ -146,12 +146,9 @@ namespace Stormpath.SDK.Impl.Http
 
                 try
                 {
-                    if (attempts > this.maxAttemptsPerRequest)
-                        throw new ApplicationException("Reached maximum number of request retries.");
-
                     if (attempts > 1)
                     {
-                        this.logger.Trace("Retrying request", "DefaultRequestExecutor.CoreRequestLoopAsync");
+                        this.logger.Trace("Pausing before retry", "DefaultRequestExecutor.CoreRequestLoopAsync");
                         await pauseAction(attempts - 1, throttling, cancellationToken).ConfigureAwait(false);
                     }
 
@@ -166,26 +163,28 @@ namespace Stormpath.SDK.Impl.Http
 
                     var statusCode = response.StatusCode;
 
-                    if (statusCode == TooManyRequests)
+                    if (response.TransportError && attempts < this.maxAttemptsPerRequest)
+                    {
+                        this.logger.Warn($"Recoverable transport error during request, retrying", "DefaultRequestExecutor.CoreRequestLoopAsync");
+
+                        attempts++;
+                        continue; // retry request
+                    }
+
+                    // HTTP 429
+                    if (statusCode == TooManyRequests && attempts < this.maxAttemptsPerRequest)
                     {
                         throttling = true;
-                        this.logger.Warn($"Got HTTP 429, throttling", "DefaultRequestExecutor.CoreRequestLoopAsync");
+                        this.logger.Warn($"Got HTTP 429, throttling, retrying", "DefaultRequestExecutor.CoreRequestLoopAsync");
 
                         attempts++;
                         continue; // retry request
                     }
 
-                    if (statusCode == ServerUnavailable || statusCode == NoGatewayResponse)
+                    // HTTP 5xx
+                    if (response.IsServerError() && attempts < this.maxAttemptsPerRequest)
                     {
-                        this.logger.Warn($"Got HTTP {statusCode}", "DefaultRequestExecutor.CoreRequestLoopAsync");
-
-                        attempts++;
-                        continue; // retry request
-                    }
-
-                    if (response.ErrorType == ResponseErrorType.Recoverable)
-                    {
-                        this.logger.Warn($"Recoverable error during request", "DefaultRequestExecutor.CoreRequestLoopAsync");
+                        this.logger.Warn($"Got HTTP {statusCode}, retrying", "DefaultRequestExecutor.CoreRequestLoopAsync");
 
                         attempts++;
                         continue; // retry request

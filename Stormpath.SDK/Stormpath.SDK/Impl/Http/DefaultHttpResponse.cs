@@ -22,20 +22,21 @@ namespace Stormpath.SDK.Impl.Http
     internal sealed class DefaultHttpResponse : HttpMessageBase, IHttpResponse
     {
         private readonly int statusCode;
+        private readonly bool transportError;
+
         private readonly string responsePhrase;
         private readonly HttpHeaders headers;
         private readonly string body;
         private readonly string bodyContentType;
-        private readonly ResponseErrorType errorType;
 
-        public DefaultHttpResponse(int httpStatus, string responsePhrase, HttpHeaders headers, string body, string bodyContentType, ResponseErrorType errorType)
+        public DefaultHttpResponse(int httpStatus, string responsePhrase, HttpHeaders headers, string body, string bodyContentType, bool transportError)
         {
             this.statusCode = httpStatus;
             this.responsePhrase = responsePhrase;
             this.headers = headers;
             this.body = body;
             this.bodyContentType = bodyContentType;
-            this.errorType = errorType;
+            this.transportError = transportError;
         }
 
         public override string Body => this.body;
@@ -48,6 +49,6 @@ namespace Stormpath.SDK.Impl.Http
 
         public string ResponsePhrase => this.responsePhrase;
 
-        public ResponseErrorType ErrorType => this.errorType;
+        public bool TransportError => this.transportError;
     }
 }

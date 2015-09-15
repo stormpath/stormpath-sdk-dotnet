@@ -19,6 +19,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
+using Shouldly;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Http;
@@ -97,18 +98,17 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 // Set up a fake HttpClient that mysteriously always fails with recoverable errors
                 var failingHttpClient = GetSynchronousClient(
-                    new DefaultHttpResponse(0, null, new HttpHeaders(), null, null, ResponseErrorType.Recoverable));
+                    new DefaultHttpResponse(0, null, new HttpHeaders(), null, null, transportError: true));
 
                 var defaultBackoffStrategy = GetFakeBackoffStrategy();
                 var throttlingBackoffStrategy = GetFakeBackoffStrategy();
                 var requestExecutor = GetRequestExecutor(failingHttpClient, defaultBackoffStrategy, throttlingBackoffStrategy);
                 var dummyRequest = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar/foo"));
 
-                Assert.Throws<RequestException>(() =>
-                {
-                    requestExecutor.Execute(dummyRequest);
-                });
+                var response = requestExecutor.Execute(dummyRequest);
+                response.TransportError.ShouldBe(true);
 
+                // Used default backoff strategy to pause after each retry (4 times)
                 defaultBackoffStrategy.ReceivedWithAnyArgs(4).GetDelayMilliseconds(0);
                 throttlingBackoffStrategy.DidNotReceiveWithAnyArgs().GetDelayMilliseconds(0);
             }
@@ -118,18 +118,17 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 // Set up a fake HttpClient that always returns HTTP 429
                 var failingHttpClient = GetSynchronousClient(
-                    new DefaultHttpResponse(429, null, new HttpHeaders(), null, null, ResponseErrorType.None));
+                    new DefaultHttpResponse(429, null, new HttpHeaders(), null, null, transportError: false));
 
                 var defaultBackoffStrategy = GetFakeBackoffStrategy();
                 var throttlingBackoffStrategy = GetFakeBackoffStrategy();
                 var requestExecutor = GetRequestExecutor(failingHttpClient, defaultBackoffStrategy, throttlingBackoffStrategy);
                 var dummyRequest = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar/foo"));
 
-                Assert.Throws<RequestException>(() =>
-                {
-                    requestExecutor.Execute(dummyRequest);
-                });
+                var response = requestExecutor.Execute(dummyRequest);
+                response.IsClientError().ShouldBe(true);
 
+                // Used throttling backoff strategy to pause after each retry (4 times)
                 defaultBackoffStrategy.DidNotReceiveWithAnyArgs().GetDelayMilliseconds(0);
                 throttlingBackoffStrategy.ReceivedWithAnyArgs(4).GetDelayMilliseconds(0);
             }
@@ -139,18 +138,17 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 // Set up a fake HttpClient that awlays returns HTTP 503
                 var failingHttpClient = GetSynchronousClient(
-                    new DefaultHttpResponse(503, null, new HttpHeaders(), null, null, ResponseErrorType.None));
+                    new DefaultHttpResponse(503, null, new HttpHeaders(), null, null, transportError: false));
 
                 var defaultBackoffStrategy = GetFakeBackoffStrategy();
                 var throttlingBackoffStrategy = GetFakeBackoffStrategy();
                 var requestExecutor = GetRequestExecutor(failingHttpClient, defaultBackoffStrategy, throttlingBackoffStrategy);
                 var dummyRequest = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar/foo"));
 
-                Assert.Throws<RequestException>(() =>
-                {
-                    requestExecutor.Execute(dummyRequest);
-                });
+                var response = requestExecutor.Execute(dummyRequest);
+                response.IsServerError().ShouldBe(true);
 
+                // Used default backoff strategy to pause after each retry (4 times)
                 defaultBackoffStrategy.ReceivedWithAnyArgs(4).GetDelayMilliseconds(0);
                 throttlingBackoffStrategy.DidNotReceiveWithAnyArgs().GetDelayMilliseconds(0);
             }
@@ -206,18 +204,17 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 // Set up a fake HttpClient that mysteriously always fails with recoverable errors
                 var failingHttpClient = GetAsynchronousClient(
-                    new DefaultHttpResponse(0, null, new HttpHeaders(), null, null, ResponseErrorType.Recoverable));
+                    new DefaultHttpResponse(0, null, new HttpHeaders(), null, null, transportError: true));
 
                 var defaultBackoffStrategy = GetFakeBackoffStrategy();
                 var throttlingBackoffStrategy = GetFakeBackoffStrategy();
                 var requestExecutor = GetRequestExecutor(failingHttpClient, defaultBackoffStrategy, throttlingBackoffStrategy);
                 var dummyRequest = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar/foo"));
 
-                await Assert.ThrowsAsync<RequestException>(async () =>
-                {
-                    await requestExecutor.ExecuteAsync(dummyRequest, CancellationToken.None);
-                });
+                var response = await requestExecutor.ExecuteAsync(dummyRequest, CancellationToken.None);
+                response.TransportError.ShouldBe(true);
 
+                // Used default backoff strategy to pause after each retry (4 times)
                 defaultBackoffStrategy.ReceivedWithAnyArgs(4).GetDelayMilliseconds(0);
                 throttlingBackoffStrategy.DidNotReceiveWithAnyArgs().GetDelayMilliseconds(0);
             }
@@ -226,18 +223,17 @@ namespace Stormpath.SDK.Tests.Impl
             public async Task Retries_request_with_throttling_on_HTTP_429()
             {
                 // Set up a fake HttpClient that always returns HTTP 429
-                var failingHttpClient = GetAsynchronousClient(new DefaultHttpResponse(429, null, new HttpHeaders(), null, null, ResponseErrorType.None));
+                var failingHttpClient = GetAsynchronousClient(new DefaultHttpResponse(429, null, new HttpHeaders(), null, null, transportError: false));
 
                 var defaultBackoffStrategy = GetFakeBackoffStrategy();
                 var throttlingBackoffStrategy = GetFakeBackoffStrategy();
                 var requestExecutor = GetRequestExecutor(failingHttpClient, defaultBackoffStrategy, throttlingBackoffStrategy);
                 var dummyRequest = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar/foo"));
 
-                await Assert.ThrowsAsync<RequestException>(async () =>
-                {
-                    await requestExecutor.ExecuteAsync(dummyRequest, CancellationToken.None);
-                });
+                var response = await requestExecutor.ExecuteAsync(dummyRequest, CancellationToken.None);
+                response.IsClientError().ShouldBe(true);
 
+                // Used throttling backoff strategy to pause after each retry (4 times)
                 defaultBackoffStrategy.DidNotReceiveWithAnyArgs().GetDelayMilliseconds(0);
                 throttlingBackoffStrategy.ReceivedWithAnyArgs(4).GetDelayMilliseconds(0);
             }
@@ -246,18 +242,17 @@ namespace Stormpath.SDK.Tests.Impl
             public async Task Retries_request_on_HTTP_503()
             {
                 // Set up a fake HttpClient that awlays returns HTTP 503
-                var failingHttpClient = GetAsynchronousClient(new DefaultHttpResponse(503, null, new HttpHeaders(), null, null, ResponseErrorType.None));
+                var failingHttpClient = GetAsynchronousClient(new DefaultHttpResponse(503, null, new HttpHeaders(), null, null, transportError: false));
 
                 var defaultBackoffStrategy = GetFakeBackoffStrategy();
                 var throttlingBackoffStrategy = GetFakeBackoffStrategy();
                 var requestExecutor = GetRequestExecutor(failingHttpClient, defaultBackoffStrategy, throttlingBackoffStrategy);
                 var dummyRequest = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar/foo"));
 
-                await Assert.ThrowsAsync<RequestException>(async () =>
-                {
-                    await requestExecutor.ExecuteAsync(dummyRequest, CancellationToken.None);
-                });
+                var response = await requestExecutor.ExecuteAsync(dummyRequest, CancellationToken.None);
+                response.IsServerError().ShouldBe(true);
 
+                // Used default backoff strategy to pause after each retry (4 times)
                 defaultBackoffStrategy.ReceivedWithAnyArgs(4).GetDelayMilliseconds(0);
                 throttlingBackoffStrategy.DidNotReceiveWithAnyArgs().GetDelayMilliseconds(0);
             }
