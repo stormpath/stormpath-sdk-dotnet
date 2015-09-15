@@ -41,17 +41,11 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         private static object SanitizeValue(AbstractResource resource, string propertyName, object rawValue)
-        {
-            // TODO Handle CustomData: no sanitization
-
-            // TODO Handle ProviderData, Provider, etc as special cases
-
-            // TODO Convert all this to the converter/filter pattern used for FieldConverters?
-
-            // TODO for now we are just skipping link properties; no need to serialize
+        {            
             var asLinkProperty = rawValue as LinkProperty;
             if (asLinkProperty != null)
             {
+                // For now we are just skipping link properties; no need to serialize
                 return null;
             }
 

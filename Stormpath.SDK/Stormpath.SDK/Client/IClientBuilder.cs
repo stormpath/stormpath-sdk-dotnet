@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System.Net;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Serialization;
@@ -26,12 +27,13 @@ namespace Stormpath.SDK.Client
     {
         IClientBuilder SetApiKey(IClientApiKey apiKey);
 
-        // TODO IClientBuilder SetProxy(Proxy proxy);
         IClientBuilder SetAuthenticationScheme(AuthenticationScheme scheme);
 
         IClientBuilder SetConnectionTimeout(int timeout);
 
         IClientBuilder SetBaseUrl(string baseUrl);
+
+        IClientBuilder SetProxy(IWebProxy proxy);
 
         IClientBuilder UseJsonSerializer(IJsonSerializer serializer);
 

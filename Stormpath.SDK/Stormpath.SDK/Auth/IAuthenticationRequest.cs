@@ -26,7 +26,5 @@ namespace Stormpath.SDK.Auth
         P Principals { get; }
 
         C Credentials { get; }
-
-        // TODO AccountStore
     }
 }

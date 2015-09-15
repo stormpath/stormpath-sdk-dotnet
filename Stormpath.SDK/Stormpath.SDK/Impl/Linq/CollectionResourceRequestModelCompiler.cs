@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Impl.Linq
             // From .Where(x => [createdAt|modifiedAt] >= ??)
             if (model.DatetimeAttributeTerms.Count > 0)
             {
-                var aggregatedTerms = AggregateDatetimeTerms(model.DatetimeAttributeTerms);
+                var aggregatedTerms = ConsolidateDatetimeTerms(model.DatetimeAttributeTerms);
 
                 foreach (var term in aggregatedTerms)
                 {
@@ -214,7 +214,7 @@ namespace Stormpath.SDK.Impl.Linq
             return argumentList;
         }
 
-        private static List<DatetimeAttributeTermModel> AggregateDatetimeTerms(IEnumerable<DatetimeAttributeTermModel> terms)
+        private static List<DatetimeAttributeTermModel> ConsolidateDatetimeTerms(IEnumerable<DatetimeAttributeTermModel> terms)
         {
             // If a query has multiple terms, they'll be generated like so:
             //   ## a search with both starting and ending dates specified
@@ -224,7 +224,6 @@ namespace Stormpath.SDK.Impl.Linq
             //   [3] field: 'modifiedAt', start: DateTimeOffset, startInclusive: false, end: null, endInclusive: null
             //
             // We need to aggregate this down to 1 term for each field.
-            // TODO: refactor this to be less dumb and make this method unnecessary.
             var workingModels = new Dictionary<string, DatetimeAttributeTermWorkingModel>();
 
             foreach (var term in terms)

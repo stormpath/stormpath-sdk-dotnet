@@ -22,7 +22,6 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
-    // TODO deprecate this in favor of ResourceFactory creating an actual IDirectory or IGroup
     internal sealed class DefaultAccountStore : AbstractInstanceResource, IAccountStore
     {
         public DefaultAccountStore(IInternalDataStore dataStore)

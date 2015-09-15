@@ -40,23 +40,17 @@ namespace Stormpath.SDK.Impl.Linq
 
         public IEnumerable<T> ExecuteCollection<T>(CollectionResourceRequestModel requestModel)
         {
-            var asyncCollection = new CollectionResourceQueryable<T>(this.Href, this.DataStore, requestModel);
-            var adapter = new Sync.SyncCollectionEnumeratorAdapter<T>(asyncCollection);
-
-            return adapter;
+            throw new NotSupportedException("Synchronous LINQ execution is not currently supported. Use async methods.");
         }
 
         public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
         {
-            var model = GenerateRequestModel(queryModel);
-
-            return ExecuteCollection<T>(model);
+            throw new NotSupportedException("Synchronous LINQ execution is not currently supported. Use async methods.");
         }
 
         public T ExecuteScalar<T>(QueryModel queryModel)
         {
-            // TODO support a synchronous path for scalar result operators like Count, Any
-            throw new NotSupportedException("This operation is not supported. Use async methods.");
+            throw new NotSupportedException("Synchronous LINQ execution is not currently supported. Use async methods.");
         }
 
         public T ExecuteSingle<T>(QueryModel queryModel, bool returnDefaultWhenEmpty)

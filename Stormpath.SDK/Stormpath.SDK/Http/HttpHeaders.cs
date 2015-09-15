@@ -22,7 +22,6 @@ using System.Linq;
 
 namespace Stormpath.SDK.Http
 {
-    // TODO this class needs a lot of TLC
     public sealed class HttpHeaders : IEnumerable<KeyValuePair<string, IEnumerable<string>>>
     {
         private static readonly string HeaderAcceptName = "Accept";
@@ -49,7 +48,6 @@ namespace Stormpath.SDK.Http
             this.readOnly = existing.readOnly;
         }
 
-        // TODO MediaTypeQuery
         public string Accept
         {
             get { return GetFirst<string>(HeaderAcceptName); }
@@ -68,7 +66,6 @@ namespace Stormpath.SDK.Http
             set { this.Add(HeaderContentLengthName, value); }
         }
 
-        // TODO MediaTypeQuery
         public string ContentType
         {
             get { return GetFirst<string>(HeaderContentTypeName); }

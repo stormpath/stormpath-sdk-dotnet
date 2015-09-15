@@ -59,7 +59,6 @@ namespace Stormpath.SDK.Impl.Resource
         }
 
         // This constructor is used for a synchronous wrapper via CollectionResourceQueryExecutor
-        // TODO make this more SOLID and have an actual synchronous execution path that isn't a hack or wrapper
         public CollectionResourceQueryable(string collectionHref, IInternalDataStore dataStore, CollectionResourceRequestModel existingRequestModel)
             : this(collectionHref, dataStore)
         {
@@ -129,7 +128,7 @@ namespace Stormpath.SDK.Impl.Resource
                 if (!atLeastOnePageRetrieved)
                     throw new InvalidOperationException("Call MoveNextAsync() first to retrieve the collection.");
 
-                return this.currentItems; // TODO ?? Enumerable.Empty<T> ?
+                return this.currentItems;
             }
         }
 

@@ -185,7 +185,6 @@ namespace Stormpath.SDK.Impl.Linq
             throw new NotSupportedException($"The constant type {expression.Type.Name} is not currently supported in a Where clause.");
         }
 
-        // TODO
         // Called when a LINQ expression type is not handled above.
         protected override Exception CreateUnhandledItemException<T>(T unhandledItem, string visitMethod)
         {

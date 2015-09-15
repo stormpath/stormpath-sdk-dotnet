@@ -22,7 +22,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal abstract class AbstractInstanceResource : AbstractResource, IAuditable // TODO ISaveable
+    internal abstract class AbstractInstanceResource : AbstractResource, IAuditable
     {
         protected static readonly string CreatedAtPropertyName = "createdAt";
         protected static readonly string ModifiedAtPropertyName = "modifiedAt";

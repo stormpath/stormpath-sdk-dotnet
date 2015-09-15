@@ -29,7 +29,6 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
-    // TODO: Make this an actual server with valid responses
     public sealed class FakeDataStore<TType> : IInternalDataStore
     {
         private static int defaultLimit = 25;

@@ -30,7 +30,6 @@ namespace Stormpath.SDK.Auth
         {
         }
 
-        // TODO
         private UsernamePasswordRequest(string username, string password, IAccountStore accountStore)
         {
             this.username = username;

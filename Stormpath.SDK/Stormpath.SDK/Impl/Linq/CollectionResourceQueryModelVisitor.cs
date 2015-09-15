@@ -81,9 +81,6 @@ namespace Stormpath.SDK.Impl.Linq
                 return;
             }
 
-            // TODO Count/LongCount
-            // Todo DefaultIfEmpty
-            // Todo ElementAt[OrDefault]
             if (this.HandleTakeResultOperator(resultOperator))
                 return; // done
 
@@ -249,7 +246,6 @@ namespace Stormpath.SDK.Impl.Linq
         {
             // We have to determine if this Select is being called internally by a LINQ filter like Take
             // which essentially appends .Select(x => x) at the end of the query. If so, it's fine.
-            // TODO This also applies to LINQ query sytax: from x select x is fine
             bool isInternalSelect = queryModel.MainFromClause ==
                 (selectClause.Selector as QuerySourceReferenceExpression)?.ReferencedQuerySource as MainFromClause;
 

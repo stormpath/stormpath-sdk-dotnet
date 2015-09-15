@@ -40,7 +40,6 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             this.baseUrl = baseUrl;
             this.cacheResolver = cacheResolver;
 
-            // TODO
             throw new NotImplementedException();
         }
 

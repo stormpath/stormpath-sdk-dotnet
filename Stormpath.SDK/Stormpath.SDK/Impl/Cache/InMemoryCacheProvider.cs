@@ -24,9 +24,9 @@ namespace Stormpath.SDK.Impl.Cache
 {
     internal class InMemoryCacheProvider : ISynchronousCacheProvider, IAsynchronousCacheProvider
     {
-        bool ICacheProvider.IsAsynchronousSupported => false; // todo
+        bool ICacheProvider.IsAsynchronousSupported => false; // Currently unsupported
 
-        bool ICacheProvider.IsSynchronousSupported => false;
+        bool ICacheProvider.IsSynchronousSupported => false; // Currently unsupported
 
         ISynchronousCache<K, V> ISynchronousCacheProvider.GetCache<K, V>(string name)
         {

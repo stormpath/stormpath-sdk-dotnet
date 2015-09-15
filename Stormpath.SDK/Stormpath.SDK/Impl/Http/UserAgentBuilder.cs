@@ -45,7 +45,6 @@ namespace Stormpath.SDK.Impl.Http
 
         private static IEnumerable<string> GetInstalledIntegrationsInfo()
         {
-            // TODO
             return Enumerable.Empty<string>();
         }
 
