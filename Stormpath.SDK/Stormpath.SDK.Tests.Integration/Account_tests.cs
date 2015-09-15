@@ -96,6 +96,40 @@ namespace Stormpath.SDK.Tests.Integration
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Getting_account_directory(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var luke = await application
+                .GetAccounts()
+                .Filter("Luke")
+                .SingleAsync();
+
+            // Verify data from IntegrationTestData
+            var directoryHref = (await luke.GetDirectoryAsync()).Href;
+            directoryHref.ShouldBe(this.fixture.PrimaryDirectoryHref);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Getting_account_tenant(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var leia = await application
+                .GetAccounts()
+                .Filter("Leia")
+                .SingleAsync();
+
+            // Verify data from IntegrationTestData
+            var tenantHref = (await leia.GetTenantAsync()).Href;
+            tenantHref.ShouldBe(this.fixture.TenantHref);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Searching_accounts_by_email(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

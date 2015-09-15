@@ -55,11 +55,6 @@ namespace Stormpath.SDK.Impl.AccountStore
 
         int IAccountStoreMapping.ListIndex => GetProperty<int>(ListIndexPropertyName);
 
-        Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
-        }
-
         Task<IAccountStore> IAccountStoreMapping.GetAccountStoreAsync(CancellationToken cancellationToken)
         {
             return this.GetInternalDataStore().GetResourceAsync<IAccountStore>(this.AccountStore.Href, cancellationToken);
@@ -68,11 +63,6 @@ namespace Stormpath.SDK.Impl.AccountStore
         Task<IApplication> IAccountStoreMapping.GetApplicationAsync(CancellationToken cancellationToken)
         {
             return this.GetInternalDataStore().GetResourceAsync<IApplication>(this.Application.Href, cancellationToken);
-        }
-
-        Task<IAccountStoreMapping> ISaveable<IAccountStoreMapping>.SaveAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
     }
 }

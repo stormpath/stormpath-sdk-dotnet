@@ -161,13 +161,6 @@ namespace Stormpath.SDK.Impl.Client
             return tenant.GetDirectories();
         }
 
-        async Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
-        {
-            var tenant = await this.AsInterface.GetCurrentTenantAsync().ConfigureAwait(false);
-
-            return await tenant.VerifyAccountEmailAsync(token).ConfigureAwait(false);
-        }
-
         ICollectionResourceQueryable<IAccount> ITenantActions.GetAccounts()
         {
             var tenant = this.AsInterface.GetCurrentTenantAsync().Result;

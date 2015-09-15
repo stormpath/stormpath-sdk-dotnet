@@ -152,12 +152,12 @@ namespace Stormpath.SDK.Impl.Account
 
         Task<IDirectory> IAccount.GetDirectoryAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href);
         }
 
         Task<ITenant> IAccount.GetTenantAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return this.GetInternalDataStore().GetResourceAsync<ITenant>(this.Tenant.Href);
         }
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)

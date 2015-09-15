@@ -40,7 +40,5 @@ namespace Stormpath.SDK.Tenant
         ICollectionResourceQueryable<IApplication> GetApplications();
 
         ICollectionResourceQueryable<IDirectory> GetDirectories();
-
-        Task<IAccount> VerifyAccountEmailAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

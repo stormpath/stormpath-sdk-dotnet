@@ -119,11 +119,6 @@ namespace Stormpath.SDK.Impl.Tenant
             return new CollectionResourceQueryable<IDirectory>(this.Directories.Href, this.GetInternalDataStore());
         }
 
-        Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         ICollectionResourceQueryable<IAccount> ITenantActions.GetAccounts()
         {
             return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());

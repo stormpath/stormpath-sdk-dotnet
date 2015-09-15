@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Tests.Integration
 
         public string PrimaryApplicationHref { get; private set; }
 
-        public string DirectoryHref { get; private set; }
+        public string PrimaryDirectoryHref { get; private set; }
 
         public string TestRunIdentifier { get; private set; }
 
@@ -90,6 +90,7 @@ namespace Stormpath.SDK.Tests.Integration
             var tenant = await client.GetCurrentTenantAsync();
             tenant.ShouldNotBe(null);
             tenant.Href.ShouldNotBeNullOrEmpty();
+            this.TenantHref = tenant.Href;
 
             // Create applications
             IApplication primaryApplication = null;
@@ -114,6 +115,7 @@ namespace Stormpath.SDK.Tests.Integration
                 // Grab the one marked as primary
                 primaryApplication = resultingApplications.Where(x => x.Name.Contains("primary")).Single();
                 this.PrimaryApplicationHref = primaryApplication.Href;
+                this.PrimaryDirectoryHref = (await primaryApplication.GetDefaultAccountStoreAsync()).Href;
             }
             catch (Exception e)
             {

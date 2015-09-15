@@ -22,7 +22,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.AccountStore
 {
-    public interface IAccountStoreMapping : IResource, ISaveable<IAccountStoreMapping>, IDeletable
+    public interface IAccountStoreMapping : IResource
     {
         bool IsDefaultAccountStore { get; }
 
