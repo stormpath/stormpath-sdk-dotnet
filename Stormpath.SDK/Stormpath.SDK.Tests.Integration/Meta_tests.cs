@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Tests.Integration
     public class Meta_tests
     {
         private readonly ITestOutputHelper output;
-        
+
         public Meta_tests(ITestOutputHelper output)
         {
             this.output = output;
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Tests.Integration
             apiKey.GetId().ShouldNotBeNullOrEmpty();
             apiKey.GetSecret().ShouldNotBeNullOrEmpty();
 
-            output.WriteLine($"ITs running with API key {apiKey.GetId()}");
+            this.output.WriteLine($"ITs running with API key {apiKey.GetId()}");
         }
     }
 }

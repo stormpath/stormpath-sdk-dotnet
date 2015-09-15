@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         private static object SanitizeValue(AbstractResource resource, string propertyName, object rawValue)
-        {            
+        {
             var asLinkProperty = rawValue as LinkProperty;
             if (asLinkProperty != null)
             {
