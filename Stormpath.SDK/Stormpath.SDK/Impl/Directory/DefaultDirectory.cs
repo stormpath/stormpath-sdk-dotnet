@@ -73,11 +73,6 @@ namespace Stormpath.SDK.Impl.Directory
 
         internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
-        Task<IDirectory> ISaveable<IDirectory>.SaveAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().SaveAsync<IDirectory>(this, cancellationToken);
-        }
-
         IAsyncQueryable<IAccount> IDirectory.GetAccounts()
         {
             return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
