@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.DataStore;
@@ -29,6 +30,8 @@ namespace Stormpath.SDK.Client
         AuthenticationScheme AuthenticationScheme { get; }
 
         int ConnectionTimeout { get; }
+
+        IWebProxy Proxy { get; }
 
         Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
     }

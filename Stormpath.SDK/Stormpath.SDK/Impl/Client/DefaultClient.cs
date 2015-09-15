@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -41,6 +42,7 @@ namespace Stormpath.SDK.Impl.Client
         private readonly string baseUrl;
         private readonly AuthenticationScheme authenticationScheme;
         private readonly int connectionTimeout;
+        private readonly IWebProxy proxy;
         private readonly IInternalDataStore dataStore;
         private readonly IJsonSerializer serializer;
         private readonly ILogger logger;
@@ -53,6 +55,7 @@ namespace Stormpath.SDK.Impl.Client
             string baseUrl,
             AuthenticationScheme authenticationScheme,
             int connectionTimeout,
+            IWebProxy proxy,
             IHttpClientBuilder httpClientBuilder,
             ICacheProviderBuilder cacheProviderBuilder,
             IJsonSerializerBuilder serializerBuilder,
@@ -71,6 +74,7 @@ namespace Stormpath.SDK.Impl.Client
 
             this.baseUrl = baseUrl;
             this.connectionTimeout = connectionTimeout;
+            this.proxy = proxy;
 
             this.authenticationScheme = authenticationScheme == null
                 ? DefaultAuthenticationScheme
@@ -80,10 +84,7 @@ namespace Stormpath.SDK.Impl.Client
 
             var cacheProvider = cacheProviderBuilder.Build();
 
-            var httpClient = httpClientBuilder
-                .SetConnectionTimeout(connectionTimeout)
-                .SetLogger(this.logger)
-                .Build();
+            var httpClient = httpClientBuilder.Build();
 
             var requestExecutor = new DefaultRequestExecutor(httpClient, apiKey, authenticationScheme, this.logger);
 
@@ -99,6 +100,8 @@ namespace Stormpath.SDK.Impl.Client
         AuthenticationScheme IClient.AuthenticationScheme => this.authenticationScheme;
 
         int IClient.ConnectionTimeout => this.connectionTimeout;
+
+        IWebProxy IClient.Proxy => this.proxy;
 
         T IDataStore.Instantiate<T>() => this.dataStore.Instantiate<T>();
 

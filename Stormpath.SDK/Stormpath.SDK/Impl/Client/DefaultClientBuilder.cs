@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Net;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
@@ -36,6 +37,7 @@ namespace Stormpath.SDK.Impl.Client
 
         private string baseUrl = DefaultBaseUrl;
         private int connectionTimeout = DefaultConnectionTimeout;
+        private IWebProxy proxy;
         private AuthenticationScheme authenticationScheme;
         private IClientApiKey apiKey;
         private ILogger logger;
@@ -78,6 +80,13 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentOutOfRangeException("Timeout cannot be negative.");
 
             this.connectionTimeout = timeout;
+
+            return this;
+        }
+
+        IClientBuilder IClientBuilder.SetProxy(System.Net.IWebProxy proxy)
+        {
+            this.proxy = proxy;
 
             return this;
         }
@@ -128,13 +137,16 @@ namespace Stormpath.SDK.Impl.Client
 
             this.httpClientBuilder
                 .SetBaseUrl(this.baseUrl)
-                .SetConnectionTimeout(this.connectionTimeout);
+                .SetConnectionTimeout(this.connectionTimeout)
+                .SetProxy(this.proxy)
+                .SetLogger(this.logger);
 
             return new DefaultClient(
                 this.apiKey,
                 this.baseUrl,
                 this.authenticationScheme,
                 this.connectionTimeout,
+                this.proxy,
                 this.httpClientBuilder,
                 this.cacheProviderBuilder,
                 this.serializerBuilder,
