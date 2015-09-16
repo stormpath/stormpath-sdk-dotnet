@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Linq
         /// Gets the current page of results after a call to <see cref="MoveNextAsync(CancellationToken)"/>.
         /// </summary>
         /// <value>A list of items of type <typeparamref name="T"/>.</value>
-        /// <exception cref="System.InvalidOperationException">The collection has not yet been iterated once.</exception>
+        /// <exception cref="System.InvalidOperationException">The collection has not yet been iterated.</exception>
         IEnumerable<T> CurrentPage { get; }
 
         /// <summary>

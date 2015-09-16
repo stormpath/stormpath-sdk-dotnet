@@ -77,7 +77,7 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <param name="email">The account's email address.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="Error.ResourceException">if email is in use</exception>
+        /// <exception cref="Error.ResourceException">Email is in use.</exception>
         IAccount SetEmail(string email);
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <param name="username">The account's username.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="Error.ResourceException">if the username is in use</exception>
+        /// <exception cref="Error.ResourceException">The username is in use.</exception>
         IAccount SetUsername(string username);
 
         /// <summary>

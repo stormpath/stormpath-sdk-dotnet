@@ -195,7 +195,7 @@ namespace Stormpath.SDK
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the number of elements in the input sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        /// <exception cref="OverflowException">The number of elements in <paramref name="source"/> is larger than <see cref="int.MaxValue"/></exception>
+        /// <exception cref="OverflowException">The number of elements in <paramref name="source"/> is larger than <see cref="int.MaxValue"/>.</exception>
         /// <exception cref="InvalidOperationException">The underlying provider does not support this operation.</exception>
         public static async Task<int> CountAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
         {

@@ -87,7 +87,7 @@ namespace Stormpath.SDK.Application
         /// A Task whose result is the result of the authentication.
         /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
-        /// <exception cref="Error.ResourceException">if the authentication attempt fails.</exception>
+        /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
         ///     var loginRequest = new UsernamePasswordRequest("jsmith", "Password123#");
         ///     var result = await app.AuthenticateAccountAsync(loginRequest);
@@ -106,7 +106,7 @@ namespace Stormpath.SDK.Application
         /// A Task whose result is the result of the authentication.
         /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
-        /// <exception cref="Error.ResourceException">if the authentication attempt fails.</exception>
+        /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
         ///     var result = await app.AuthenticateAccountAsync("jsmith", "Password123#");
         /// </example>
@@ -163,7 +163,7 @@ namespace Stormpath.SDK.Application
         /// <param name="newPassword">The new password that will be set to the <see cref="IAccount"/> if the token is successfully validated.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the account matching the specified token.</returns>
-        /// <exception cref="Error.ResourceException">if the token is not valid</exception>
+        /// <exception cref="Error.ResourceException">The token is not valid.</exception>
         Task<IAccount> ResetPasswordAsync(string token, string newPassword, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the created <see cref="IPasswordResetToken"/>.
         /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
-        /// <exception cref="Error.ResourceException">if there is no account that matches the specified email address</exception>
+        /// <exception cref="Error.ResourceException">There is no account that matches the specified email address.</exception>
         Task<IPasswordResetToken> SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Stormpath.SDK.Application
         /// <param name="token">The verification token, usually obtained as a request paramter by your application.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the <see cref="IAccount"/> matching the specified token.</returns>
-        /// <exception cref="Error.ResourceException">if the token is not valid.</exception>
+        /// <exception cref="Error.ResourceException">The token is not valid.</exception>
         Task<IAccount> VerifyPasswordResetTokenAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

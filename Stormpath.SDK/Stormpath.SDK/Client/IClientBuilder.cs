@@ -103,7 +103,7 @@ namespace Stormpath.SDK.Client
         /// Constructs a new <see cref="IClient"/> instance based on the builder's current configuration state.
         /// </summary>
         /// <returns>A new <see cref="IClient"/> instance.</returns>
-        /// <exception cref="System.ApplicationException">if no valid API Key ID and Secret can be found</exception>
+        /// <exception cref="System.ApplicationException">No valid API Key ID and Secret can be found.</exception>
         IClient Build();
     }
 }

@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <param name="status">A string containing "enabled", "disabled", or "unverified" (matching is case-insensitive).</param>
         /// <returns>The <see cref="AccountStatus"/> with the specified name.</returns>
-        /// <exception cref="ApplicationException">if no match is found</exception>
+        /// <exception cref="ApplicationException">No match is found.</exception>
         public static AccountStatus Parse(string status)
         {
             switch (status.ToUpper())

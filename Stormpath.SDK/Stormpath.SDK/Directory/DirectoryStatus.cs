@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Directory
         /// </summary>
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
         /// <returns>The <see cref="DirectoryStatus"/> with the specified name.</returns>
-        /// <exception cref="ApplicationException">if no match is found</exception>
+        /// <exception cref="ApplicationException">No match is found.</exception>
         public static DirectoryStatus Parse(string status)
         {
             switch (status.ToUpper())

@@ -57,7 +57,7 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="scheme">A string containing "basic" or "sauthc1" (matching is case-insensitive).</param>
         /// <returns>The <see cref="AuthenticationScheme"/> with the specified name.</returns>
-        /// <exception cref="ApplicationException">if no match is found</exception>
+        /// <exception cref="ApplicationException">No match is found.</exception>
         public static AuthenticationScheme Parse(string scheme)
         {
             switch (scheme.ToUpper())

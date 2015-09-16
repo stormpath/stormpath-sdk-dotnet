@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Http
         /// with the specified <see cref="Scheme"/> and <see cref="Parameter"/>.
         /// </summary>
         /// <param name="schemeAndParameter">A combined scheme and paramter value.</param>
-        /// <exception cref="ArgumentException">if <paramref name="schemeAndParamter"/> cannot be parsed</exception>
+        /// <exception cref="ArgumentException"><paramref name="schemeAndParamter"/> cannot be parsed.</exception>
         internal AuthorizationHeaderValue(string schemeAndParameter)
         {
             var segments = schemeAndParameter.Split(' ');
