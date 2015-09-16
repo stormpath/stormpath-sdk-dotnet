@@ -125,14 +125,14 @@ namespace Stormpath.SDK.Account
         /// <summary>
         /// Gets the account's parent <see cref="IDirectory"/> (where the account is stored).
         /// </summary>
-        /// <param name="cancellationToken">An optional cancellation token.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the directory.</returns>
         Task<IDirectory> GetDirectoryAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
         /// </summary>
-        /// <param name="cancellationToken">An optional cancellation token.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the tenant.</returns>
         Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
     }

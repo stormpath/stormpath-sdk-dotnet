@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Account
         /// <summary>
         /// Gets the <see cref="IAccount"/> associated with this password reset token.
         /// </summary>
-        /// <param name="cancellationToken">An optional cancellation token.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the <see cref="IAccount"/> in the reset password workflow.</returns>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }

@@ -19,6 +19,9 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.AccountStore
 {
+    /// <summary>
+    /// An abstract representation of a <see cref="Directory.IDirectory"/> or Group.
+    /// </summary>
     public interface IAccountStore : IResource
     {
     }
