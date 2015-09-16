@@ -15,12 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
