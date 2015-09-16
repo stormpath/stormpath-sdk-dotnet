@@ -19,10 +19,23 @@ using System.Collections.Generic;
 
 namespace Stormpath.SDK.Serialization
 {
+    /// <summary>
+    /// A wrapper interface for JSON serialization plugins.
+    /// </summary>
     public interface IJsonSerializer
     {
+        /// <summary>
+        /// Serializes the specified properties to JSON.
+        /// </summary>
+        /// <param name="map">The property data to serialize.</param>
+        /// <returns>A JSON string representation of <paramref name="map"/></returns>
         string Serialize(IDictionary<string, object> map);
 
+        /// <summary>
+        /// Deserializes a JSON string to a property dictionary.
+        /// </summary>
+        /// <param name="json">The JSON string to deserialize.</param>
+        /// <returns>A tree of name-value pairs stored in an <see cref="IDictionary{string, object}"/>.</returns>
         IDictionary<string, object> Deserialize(string json);
     }
 }
