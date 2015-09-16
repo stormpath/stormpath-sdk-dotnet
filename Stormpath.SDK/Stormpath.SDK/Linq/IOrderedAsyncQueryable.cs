@@ -17,6 +17,10 @@
 
 namespace Stormpath.SDK.Linq
 {
+    /// <summary>
+    /// Represents an ordered collection of items in a data source that can be queried asynchronously.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the collection.</typeparam>
     public interface IOrderedAsyncQueryable<T> : IAsyncQueryable<T>
     {
     }

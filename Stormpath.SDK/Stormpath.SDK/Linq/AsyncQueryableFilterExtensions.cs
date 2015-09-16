@@ -22,14 +22,24 @@ using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 
-// Placed in the base library namespace so that these extension methods are available without any extra usings
 namespace Stormpath.SDK
 {
     public static class AsyncQueryableFilterExtensions
     {
+        /// <summary>
+        /// Filters the items in a collection by searching all fields for a string.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">A sequence of values to order.</param>
+        /// <param name="caseInsensitiveMatch">The string to search for. Matching is case-insensitive.</param>
+        /// <returns>An <see cref="IAsyncQueryable{T}"/> that contains elements from the input sequence that contain <paramref name="caseInsensitiveMatch"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="caseInsensitiveMatch"/> is null or empty.</exception>
         public static IAsyncQueryable<TSource> Filter<TSource>(this IAsyncQueryable<TSource> source, string caseInsensitiveMatch)
             where TSource : IResource
         {
+            if (string.IsNullOrEmpty(caseInsensitiveMatch))
+                throw new ArgumentNullException(nameof(caseInsensitiveMatch));
+
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
                     LinqHelper.GetMethodInfo(Filter, (IQueryable<TSource>)null, caseInsensitiveMatch),

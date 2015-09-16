@@ -19,8 +19,18 @@ using System.Linq.Expressions;
 
 namespace Stormpath.SDK.Linq
 {
+    /// <summary>
+    /// Represents a query provider for an asynchronous data source.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the collection.</typeparam>
     public interface IAsyncQueryProvider<T>
     {
+        /// <summary>
+        /// Appends an <see cref="System.Linq.Expressions.Expression"/> to the existing expression tree
+        /// for an <see cref="IAsyncQueryable{T}"/>.
+        /// </summary>
+        /// <param name="expression">The expression to add to the expression tree.</param>
+        /// <returns>A new <see cref="IAsyncQueryable{T}"/> instance with the new expression tree.</returns>
         IAsyncQueryable<T> CreateQuery(Expression expression);
     }
 }

@@ -22,14 +22,36 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Linq
 {
+    /// <summary>
+    /// Represents a collection of items in a data source that can be queried asynchronously.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the collection.</typeparam>
     public interface IAsyncQueryable<T>
     {
+        /// <summary>
+        /// Gets the current page of results after a call to <see cref="MoveNextAsync(CancellationToken)"/>.
+        /// </summary>
+        /// <value>A list of items of type <typeparamref name="T"/>.</value>
+        /// <exception cref="System.InvalidOperationException">The collection has not yet been iterated once.</exception>
         IEnumerable<T> CurrentPage { get; }
 
+        /// <summary>
+        /// Attempts to asynchronously retrieve the next page of items from the data source.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result represents whether the collection retrieved items.</returns>
         Task<bool> MoveNextAsync(CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Gets the expression tree that is associated with this instance of <see cref="IAsyncQueryable{T}"/>
+        /// </summary>
+        /// <value>The <see cref="System.Linq.Expressions.Expression"/> that is associated with this instance of <see cref="IAsyncQueryable{T}"/>.</value>
         Expression Expression { get; }
 
+        /// <summary>
+        /// Gets the asynchronous query provider that is associated with this data source.
+        /// </summary>
+        /// <value>The <see cref="IAsyncQueryProvider{T}"/> that is associated with this data source.</value>
         IAsyncQueryProvider<T> Provider { get; }
     }
 }
