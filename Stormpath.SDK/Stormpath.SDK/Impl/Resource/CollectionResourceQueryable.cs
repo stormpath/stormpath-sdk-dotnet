@@ -27,7 +27,6 @@ using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Linq.Parsing;
 using Stormpath.SDK.Impl.Linq.RequestModel;
 using Stormpath.SDK.Linq;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
@@ -62,10 +61,10 @@ namespace Stormpath.SDK.Impl.Resource
             this.expressionOverride = null;
         }
 
-        internal CollectionResourceQueryable(CollectionResourceQueryable<T> existing, IQueryable<T> updatedProxy)
+        internal CollectionResourceQueryable(CollectionResourceQueryable<T> existing, IQueryable<T> proxy)
             : this(existing.baseHref, existing.dataStore)
         {
-            this.proxy = updatedProxy;
+            this.proxy = proxy;
         }
 
         // This constructor is used for a synchronous wrapper via CollectionResourceQueryExecutor
@@ -169,6 +168,36 @@ namespace Stormpath.SDK.Impl.Resource
 
         async Task<bool> IAsyncQueryable<T>.MoveNextAsync(CancellationToken cancellationToken)
         {
+            this.CompileModelOrUseDefaultValues();
+
+            if (this.AlreadyRetrievedEnoughItems())
+                return false;
+
+            this.AdjustPagingOffset();
+
+            var url = this.GenerateRequestUrlFromModel();
+            var response = await this.dataStore.GetCollectionAsync<T>(url, cancellationToken).ConfigureAwait(false);
+
+            return this.DidUpdateWithNewResults(response);
+        }
+
+        internal bool MoveNext()
+        {
+            this.CompileModelOrUseDefaultValues();
+
+            if (this.AlreadyRetrievedEnoughItems())
+                return false;
+
+            this.AdjustPagingOffset();
+
+            var url = this.GenerateRequestUrlFromModel();
+            var response = this.dataStore.GetCollection<T>(url);
+
+            return this.DidUpdateWithNewResults(response);
+        }
+
+        private void CompileModelOrUseDefaultValues()
+        {
             if (this.compiledModel == null)
             {
                 if (!this.CompileExpressionToRequestModel())
@@ -177,11 +206,15 @@ namespace Stormpath.SDK.Impl.Resource
                     this.compiledModel = new CollectionResourceRequestModel();
                 }
             }
+        }
 
-            bool retrievedEnoughItems = this.totalItemsRetrieved >= this.compiledModel.ExecutionPlan.MaxItems;
-            if (retrievedEnoughItems)
-                return false;
+        private bool AlreadyRetrievedEnoughItems()
+        {
+            return this.totalItemsRetrieved >= this.compiledModel.ExecutionPlan.MaxItems;
+        }
 
+        private void AdjustPagingOffset()
+        {
             bool atLeastOnePageRetrieved = this.totalItemsRetrieved > 0;
             if (atLeastOnePageRetrieved)
             {
@@ -189,20 +222,20 @@ namespace Stormpath.SDK.Impl.Resource
                     this.compiledModel.Offset = 0;
                 this.compiledModel.Offset += this.currentItems.Count();
             }
+        }
 
-            var url = this.GenerateRequestUrlFromModel();
-            var result = await this.dataStore.GetCollectionAsync<T>(url, cancellationToken).ConfigureAwait(false);
-
-            bool anyNewItems = result?.Items?.Any() ?? false;
+        private bool DidUpdateWithNewResults(CollectionResponsePage<T> response)
+        {
+            bool anyNewItems = response?.Items?.Any() ?? false;
             if (!anyNewItems)
                 return false;
 
-            this.currentOffset = result.Offset;
-            this.currentLimit = result.Limit;
-            this.currentSize = result.Size;
-            this.currentItems = result.Items;
+            this.currentOffset = response.Offset;
+            this.currentLimit = response.Limit;
+            this.currentSize = response.Size;
+            this.currentItems = response.Items;
 
-            this.totalItemsRetrieved += result.Items.Count;
+            this.totalItemsRetrieved += response.Items.Count;
             return true;
         }
 

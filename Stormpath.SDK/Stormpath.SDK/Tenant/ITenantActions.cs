@@ -22,7 +22,6 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Linq;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tenant
 {

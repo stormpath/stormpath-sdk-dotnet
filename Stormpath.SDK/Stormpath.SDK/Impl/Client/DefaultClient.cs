@@ -29,7 +29,6 @@ using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Linq;
-using Stormpath.SDK.Resource;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
 using Stormpath.SDK.Tenant;

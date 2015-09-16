@@ -64,14 +64,23 @@ namespace Stormpath.SDK.Tests.Fakes
             return this.calls;
         }
 
+        private IInternalDataStore AsInterface => this;
+
         async Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            await Task.Yield();
+            this.calls.Add(href);
+
+            return this.AsInterface.GetCollection<T>(href);
+        }
+
+        CollectionResponsePage<T> IInternalDataStore.GetCollection<T>(string href)
         {
             bool typesMatch = typeof(T) == typeof(TType);
             if (!typesMatch)
                 throw new ArgumentException("Requested type must match type of fake data.");
 
-            cancellationToken.ThrowIfCancellationRequested();
-            await Task.Yield();
             this.calls.Add(href);
 
             var limit = GetLimitFromUrlString(href) ?? defaultLimit;
@@ -154,11 +163,6 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         T IInternalDataStore.GetResource<T>(string href)
-        {
-            throw new NotImplementedException();
-        }
-
-        CollectionResponsePage<T> IInternalDataStore.GetCollection<T>(string href)
         {
             throw new NotImplementedException();
         }

@@ -31,7 +31,6 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Linq;
-using Stormpath.SDK.Resource;
 using Stormpath.SDK.Shared;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
