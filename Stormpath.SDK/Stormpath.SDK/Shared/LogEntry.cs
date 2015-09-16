@@ -19,13 +19,39 @@ using System;
 
 namespace Stormpath.SDK.Shared
 {
+    /// <summary>
+    /// A log entry to be passed to a <see cref="ILogger"/>.
+    /// </summary>
     public sealed class LogEntry
     {
+        /// <summary>
+        /// The severity of the event.
+        /// </summary>
         public readonly LogLevel Severity;
+
+        /// <summary>
+        /// The log message.
+        /// </summary>
         public readonly string Message;
+
+        /// <summary>
+        /// The source of the event.
+        /// </summary>
         public readonly string Source;
+
+        /// <summary>
+        /// The exception associated with the event, or <c>null</c>.
+        /// </summary>
         public readonly Exception Exception;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogEntry"/> class
+        /// with the specified severity, message, source, and exception.
+        /// </summary>
+        /// <param name="severity">The severity of the event.</param>
+        /// <param name="message">The log message.</param>
+        /// <param name="source">The source of the event.</param>
+        /// <param name="exception">The exception associated with the event, or <c>null</c>.</param>
         public LogEntry(LogLevel severity, string message, string source, Exception exception)
         {
             if (string.IsNullOrEmpty(message))

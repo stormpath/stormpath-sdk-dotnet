@@ -17,8 +17,15 @@
 
 namespace Stormpath.SDK.Shared
 {
+    /// <summary>
+    /// A wrapper interface for logger plugins.
+    /// </summary>
     public interface ILogger
     {
+        /// <summary>
+        /// Send the specified log entry to the logger.
+        /// </summary>
+        /// <param name="entry">The log entry.</param>
         void Log(LogEntry entry);
     }
 }

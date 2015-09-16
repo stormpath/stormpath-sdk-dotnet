@@ -19,10 +19,29 @@ namespace Stormpath.SDK.Shared
 {
     public enum LogLevel
     {
+        /// <summary>
+        /// Trace (lowest) severity level.
+        /// </summary>
         Trace,
+
+        /// <summary>
+        /// Info severity level.
+        /// </summary>
         Info,
+
+        /// <summary>
+        /// Warn severity level.
+        /// </summary>
         Warn,
+
+        /// <summary>
+        /// Error severity level.
+        /// </summary>
         Error,
+
+        /// <summary>
+        /// Fatal (highest) severity level.
+        /// </summary>
         Fatal
     }
 }

@@ -24,6 +24,10 @@ namespace Stormpath.SDK.Shared
 {
     // Borrowed this excellent type-safe enum pattern from J. Bogard
     // https://lostechies.com/jimmybogard/2008/08/12/enumeration-classes/
+
+    /// <summary>
+    /// Base class for type-safe enumerations.
+    /// </summary>
     public abstract class Enumeration : IComparable
     {
         private readonly int value;

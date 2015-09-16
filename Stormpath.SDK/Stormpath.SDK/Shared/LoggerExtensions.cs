@@ -19,36 +19,72 @@ using System;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Shared;
 
-// Placed in the base library namespace so that these extension methods are available without any extra usings
 namespace Stormpath.SDK
 {
     public static class LoggerExtensions
     {
+        /// <summary>
+        /// Log an event at the Trace severity level, with the specified <paramref name="message"/> and <paramref name="source"/>.
+        /// </summary>
+        /// <param name="logger">The logger interface.</param>
+        /// <param name="message">The log message.</param>
+        /// <param name="source">The source of the event.</param>
         public static void Trace(this ILogger logger, string message, string source = null)
         {
             logger?.Log(new LogEntry(LogLevel.Trace, message, source, null));
         }
 
+        /// <summary>
+        /// Log an event at the Info severity level, with the specified <paramref name="message"/> and <paramref name="source"/>.
+        /// </summary>
+        /// <param name="logger">The logger interface.</param>
+        /// <param name="message">The log message.</param>
+        /// <param name="source">The source of the event.</param>
         public static void Info(this ILogger logger, string message, string source = null)
         {
             logger?.Log(new LogEntry(LogLevel.Info, message, source, null));
         }
 
+        /// <summary>
+        /// Log an event at the Warn severity level, with the specified <paramref name="message"/> and <paramref name="source"/>.
+        /// </summary>
+        /// <param name="logger">The logger interface.</param>
+        /// <param name="message">The log message.</param>
+        /// <param name="source">The source of the event.</param>
         public static void Warn(this ILogger logger, string message, string source = null)
         {
             logger?.Log(new LogEntry(LogLevel.Warn, message, source, null));
         }
 
+        /// <summary>
+        /// Log an event at the Error severity level, with the specified <paramref name="message"/> and <paramref name="source"/>.
+        /// </summary>
+        /// <param name="logger">The logger interface.</param>
+        /// <param name="message">The log message.</param>
+        /// <param name="source">The source of the event.</param>
         public static void Error(this ILogger logger, string message, string source = null)
         {
             logger?.Log(new LogEntry(LogLevel.Error, message, source, null));
         }
 
+        /// <summary>
+        /// Log an event at the Fatal severity level, with the specified <paramref name="message"/> and <paramref name="source"/>.
+        /// </summary>
+        /// <param name="logger">The logger interface.</param>
+        /// <param name="message">The log message.</param>
+        /// <param name="source">The source of the event.</param>
         public static void Fatal(this ILogger logger, string message, string source = null)
         {
             logger?.Log(new LogEntry(LogLevel.Fatal, message, source, null));
         }
 
+        /// <summary>
+        /// Log an event at the Warn severity level, with the specified <paramref name="exception"/> data, <paramref name="message"/>, and <paramref name="source"/>.
+        /// </summary>
+        /// <param name="logger">The logger interface.</param>
+        /// <param name="exception">The exception associated with this event.</param>
+        /// <param name="message">The log message; or <c>null</c> to use <see cref="Exception.Message"/>.</param>
+        /// <param name="source">The source of the event, or <c>null</c> to use <see cref="Exception.Source"/>.</param>
         public static void Warn(this ILogger logger, Exception exception, string message = null, string source = null)
         {
             var logMessage = message.Nullable() ?? exception.Message;
@@ -56,6 +92,13 @@ namespace Stormpath.SDK
             logger?.Log(new LogEntry(LogLevel.Warn, logMessage, source, exception));
         }
 
+        /// <summary>
+        /// Log an event at the Error severity level, with the specified <paramref name="exception"/> data, <paramref name="message"/>, and <paramref name="source"/>.
+        /// </summary>
+        /// <param name="logger">The logger interface.</param>
+        /// <param name="exception">The exception associated with this event.</param>
+        /// <param name="message">The log message; or <c>null</c> to use <see cref="Exception.Message"/>.</param>
+        /// <param name="source">The source of the event, or <c>null</c> to use <see cref="Exception.Source"/>.</param>
         public static void Error(this ILogger logger, Exception exception, string message = null, string source = null)
         {
             var logMessage = message.Nullable() ?? exception.Message;
@@ -63,6 +106,13 @@ namespace Stormpath.SDK
             logger?.Log(new LogEntry(LogLevel.Error, logMessage, source, exception));
         }
 
+        /// <summary>
+        /// Log an event at the Fatal severity level, with the specified <paramref name="exception"/> data, <paramref name="message"/>, and <paramref name="source"/>.
+        /// </summary>
+        /// <param name="logger">The logger interface.</param>
+        /// <param name="exception">The exception associated with this event.</param>
+        /// <param name="message">The log message; or <c>null</c> to use <see cref="Exception.Message"/>.</param>
+        /// <param name="source">The source of the event, or <c>null</c> to use <see cref="Exception.Source"/>.</param>
         public static void Fatal(this ILogger logger, Exception exception, string message = null, string source = null)
         {
             var logMessage = message.Nullable() ?? exception.Message;

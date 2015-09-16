@@ -23,6 +23,11 @@ using Stormpath.SDK.Impl.Utility;
 namespace Stormpath.SDK.Shared
 {
     // Adapted from an example at http://www.mechonomics.com/generic-value-object-equality-updated/
+
+    /// <summary>
+    /// Base class for simple immutable value objects.
+    /// </summary>
+    /// <typeparam name="T">The value object type.</typeparam>
     public abstract class ImmutableValueObject<T> : IEquatable<T>
         where T : ImmutableValueObject<T>
     {
