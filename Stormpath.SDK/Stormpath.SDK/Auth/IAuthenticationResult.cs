@@ -22,8 +22,17 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Auth
 {
+    /// <summary>
+    /// Represents the return value of an <see cref="Application.IApplication"/> authentication attempt.
+    /// The successfully authenticated account may be obtained via <see cref="GetAccountAsync(CancellationToken)"/>.
+    /// </summary>
     public interface IAuthenticationResult : IResource
     {
+        /// <summary>
+        /// Gets the successfully authenticated <see cref="IAccount"/>.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the <see cref="IAccount"/> that was successfully authenticated.</returns>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

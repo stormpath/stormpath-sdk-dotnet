@@ -19,14 +19,22 @@ using Stormpath.SDK.AccountStore;
 
 namespace Stormpath.SDK.Auth
 {
+    /// <summary>
+    /// Represents a username (or email) and password pair.
+    /// </summary>
     public sealed class UsernamePasswordRequest : IAuthenticationRequest
     {
         private readonly string username;
         private readonly string password;
         private readonly IAccountStore accountStore;
 
-        public UsernamePasswordRequest(string username, string password)
-            : this(username, password, null)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UsernamePasswordRequest"/> class with the specified username (or email) and password.
+        /// </summary>
+        /// <param name="usernameOrEmail">The account's username or email address</param>
+        /// <param name="password">The account's raw (plaintext) password</param>
+        public UsernamePasswordRequest(string usernameOrEmail, string password)
+            : this(usernameOrEmail, password, null)
         {
         }
 
