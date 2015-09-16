@@ -231,7 +231,7 @@
     <Compile Include="Impl\Utility\WindowsVersion.cs" />
     <Compile Include="Linq\AsyncQueryableExtensions.cs" />
     <Compile Include="Linq\AsyncQueryableFilterExtensions.cs" />
-    <Compile Include="Linq\WithinExtensions.cs" />
+    <Compile Include="Linq\WithinExpressionExtensions.cs" />
     <Compile Include="Linq\IAsyncQueryable.cs" />
     <Compile Include="Impl\Resource\AbstractResource.cs" />
     <Compile Include="Resource\IAuditable.cs" />

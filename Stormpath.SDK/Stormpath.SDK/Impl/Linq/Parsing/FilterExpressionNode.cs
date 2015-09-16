@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         {
             get
             {
-                return typeof(CollectionResourceQueryableFilterExtensions)
+                return typeof(AsyncQueryableFilterExtensions)
                     .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
                     .ToArray();
             }

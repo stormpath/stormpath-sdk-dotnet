@@ -195,7 +195,7 @@ namespace Stormpath.SDK.Impl.Linq
         private bool HandleWhereWithinDateExtensionMethod(WhereClause whereClause)
         {
             var methodCall = whereClause.Predicate as MethodCallExpression;
-            bool isWithinMethodCall = methodCall?.Method.DeclaringType == typeof(CollectionResourceQueryableWithinExtensions);
+            bool isWithinMethodCall = methodCall?.Method.DeclaringType == typeof(WithinExpressionExtensions);
             if (!isWithinMethodCall)
                 return false;
 

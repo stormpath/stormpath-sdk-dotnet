@@ -1,4 +1,4 @@
-﻿// <copyright file="CollectionResourceQueryableFilterExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="AsyncQueryableFilterExtensions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -25,7 +25,7 @@ using Stormpath.SDK.Resource;
 // Placed in the base library namespace so that these extension methods are available without any extra usings
 namespace Stormpath.SDK
 {
-    public static class CollectionResourceQueryableFilterExtensions
+    public static class AsyncQueryableFilterExtensions
     {
         public static IAsyncQueryable<TSource> Filter<TSource>(this IAsyncQueryable<TSource> source, string caseInsensitiveMatch)
             where TSource : IResource

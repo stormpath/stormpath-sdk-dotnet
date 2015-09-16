@@ -1,4 +1,4 @@
-﻿// <copyright file="CollectionResourceQueryableWithinExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="WithinExpressionExtensions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -20,7 +20,7 @@ using System;
 // Placed in the base library namespace so that these extension methods are available without any extra usings
 namespace Stormpath.SDK
 {
-    public static class CollectionResourceQueryableWithinExtensions
+    public static class WithinExpressionExtensions
     {
         public static bool Within(this DateTimeOffset field, int year)
         {
