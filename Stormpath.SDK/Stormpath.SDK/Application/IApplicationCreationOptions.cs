@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Application
     public interface IApplicationCreationOptions : ICreationOptions
     {
         /// <summary>
-        /// Gets a flag that determines whether to create a new <see cref="Directory.IDirectory"/> for the new application's needs.
+        /// Gets whether to create a new <see cref="Directory.IDirectory"/> for the new application's needs.
         /// </summary>
         /// <value>
         /// <para>

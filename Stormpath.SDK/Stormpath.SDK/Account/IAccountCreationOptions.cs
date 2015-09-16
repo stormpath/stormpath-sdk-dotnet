@@ -25,12 +25,12 @@ namespace Stormpath.SDK.Account
     public interface IAccountCreationOptions : ICreationOptions
     {
         /// <summary>
-        /// Gets a flag that represents an optional override of the registration workflow of the Login Source for new Accounts.
+        /// Gets whether to override the default registration workflow of the Login Source.
         /// </summary>
         /// <value>
-        /// <para>If set to <c>true</c>, the account registration workflow will be triggered no matter what the Login Source configuration is.</para>
-        /// <para>If set to <c>false</c>, the account registration workflow will <b>NOT</b> be triggered, no matter what the Login Source configuration is.</para>
-        /// <para>If you want to ensure the registration workflow behavior matches the Login Source default, leave this <c>null</c>.</para>
+        /// If set to <c>true</c>, the account registration workflow will be triggered no matter what the Login Source configuration is.
+        /// If set to <c>false</c>, the account registration workflow will <b>NOT</b> be triggered, no matter what the Login Source configuration is.
+        /// If you want to ensure the registration workflow behavior matches the Login Source default, leave this <c>null</c>.
         /// </value>
         bool? RegistrationWorkflowEnabled { get; }
     }

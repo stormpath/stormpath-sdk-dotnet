@@ -29,7 +29,7 @@ namespace Stormpath.SDK.AccountStore
     public interface IAccountStoreMapping : IResource
     {
         /// <summary>
-        /// Gets a flag that indicates whether the associated <see cref="IAccountStore"/> is designated as the application's default account store.
+        /// Gets whether the associated <see cref="IAccountStore"/> is designated as the application's default account store.
         /// </summary>
         /// <value>
         /// True if the associated <see cref="IAccountStore"/> is designated as the application's default account store, false otherwise.
@@ -38,7 +38,7 @@ namespace Stormpath.SDK.AccountStore
         bool IsDefaultAccountStore { get; }
 
         /// <summary>
-        /// Gets a flag that indicates whether the associated <see cref="IAccountStore"/> is designated as the application's default group store.
+        /// Gets whether the associated <see cref="IAccountStore"/> is designated as the application's default group store.
         /// </summary>
         /// <value>
         /// True if the associated <see cref="IAccountStore"/> is designated as the application's default group store, false otherwise.

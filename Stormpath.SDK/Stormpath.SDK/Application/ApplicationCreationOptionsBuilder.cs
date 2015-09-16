@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Application
     public sealed class ApplicationCreationOptionsBuilder
     {
         /// <summary>
-        /// Gets or sets a flag that determines whether to create a new <see cref="Directory.IDirectory"/> for the new application's needs.
+        /// Gets whether to create a new <see cref="Directory.IDirectory"/> for the new application's needs.
         /// </summary>
         /// <value>
         /// Default value: <c>false</c>.
