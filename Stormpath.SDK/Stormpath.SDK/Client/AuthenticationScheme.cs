@@ -21,9 +21,23 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Client
 {
+    /// <summary>
+    /// Enumeration that defines the available HTTP authentication schemes to be used when communicating with the Stormpath API server.
+    /// The Authentication Scheme setting is helpful in cases where the code is run in a platform where the header information for outgoing
+    /// HTTP requests is modified and thus causing communication issues. For example, for Google App Engine you need to set <see cref="Basic"/>
+    /// in order for your code to properly communicate with Stormpath API server.
+    /// There are currently two authentication schemes available: HTTP Basic Authentication (<see cref="Basic"/>) and Digest Authentication (<see cref="SAuthc1"/>).
+    /// </summary>
     public sealed class AuthenticationScheme : Enumeration
     {
+        /// <summary>
+        /// HTTP Basic Authentication
+        /// </summary>
         public static AuthenticationScheme Basic = new AuthenticationScheme(0, "BASIC", typeof(BasicRequestAuthenticator));
+
+        /// <summary>
+        /// Digest Authentication
+        /// </summary>
         public static AuthenticationScheme SAuthc1 = new AuthenticationScheme(1, "SAUTHC1", typeof(SAuthc1RequestAuthenticator));
 
         private readonly Type authenticatorType;
@@ -38,6 +52,12 @@ namespace Stormpath.SDK.Client
             this.authenticatorType = authenticatorType;
         }
 
+        /// <summary>
+        /// Parses a string to an <see cref="AuthenticationScheme"/>.
+        /// </summary>
+        /// <param name="scheme">A string containing "basic" or "sauthc1" (matching is case-insensitive).</param>
+        /// <returns>The <see cref="AuthenticationScheme"/> with the specified name.</returns>
+        /// <exception cref="ApplicationException">if no match is found</exception>
         public static AuthenticationScheme Parse(string scheme)
         {
             switch (scheme.ToUpper())

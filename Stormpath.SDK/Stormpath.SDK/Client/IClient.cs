@@ -23,16 +23,18 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Client
 {
+    /// <summary>
+    /// The main entry point into the Stormpath C# SDK. To communicate with the Stormpath REST API from your project,
+    /// you must first build a <see cref="IClient"/> instance. After obtaining an instance, the REST API may be
+    /// used by making simple calls on objects returned from the <see cref="IClient"/> (or any child objects).
+    /// </summary>
     public interface IClient : ITenantActions, IDataStore
     {
-        string BaseUrl { get; }
-
-        AuthenticationScheme AuthenticationScheme { get; }
-
-        int ConnectionTimeout { get; }
-
-        IWebProxy Proxy { get; }
-
+        /// <summary>
+        /// Gets the sole <see cref="ITenant"/> associated to this <see cref="IClient"/>.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the <see cref="ITenant"/> associated to this client.</returns>
         Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

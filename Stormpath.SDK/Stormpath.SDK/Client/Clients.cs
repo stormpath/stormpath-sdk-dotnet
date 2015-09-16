@@ -17,8 +17,22 @@
 
 namespace Stormpath.SDK.Client
 {
+    /// <summary>
+    /// Static entry point for working with <see cref="IClient"/> objects.
+    /// </summary>
     public sealed class Clients
     {
+        /// <summary>
+        /// Gets a new <see cref="IClientBuilder"/> instance, used to fluently construct <see cref="IClient"/> instances.
+        /// </summary>
+        /// <returns>A new <see cref="IClientBuilder"/> instance.</returns>
+        /// <example>
+        /// <code>
+        ///     IClient client = Clients.Builder()
+        ///         .SetApiKey(apiKey)
+        ///         .Build();
+        /// </code>
+        /// </example>
         public static IClientBuilder Builder()
         {
             return new Impl.Client.DefaultClientBuilder();

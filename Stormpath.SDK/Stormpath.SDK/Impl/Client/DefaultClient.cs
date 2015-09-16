@@ -95,13 +95,13 @@ namespace Stormpath.SDK.Impl.Client
 
         private string CurrentTenantHref => this.currentTenantHref.Nullable() ?? "tenants/current";
 
-        string IClient.BaseUrl => this.dataStore.BaseUrl;
+        internal string BaseUrl => this.dataStore.BaseUrl;
 
-        AuthenticationScheme IClient.AuthenticationScheme => this.authenticationScheme;
+        internal AuthenticationScheme AuthenticationScheme => this.authenticationScheme;
 
-        int IClient.ConnectionTimeout => this.connectionTimeout;
+        internal int ConnectionTimeout => this.connectionTimeout;
 
-        IWebProxy IClient.Proxy => this.proxy;
+        internal IWebProxy Proxy => this.proxy;
 
         T IDataStore.Instantiate<T>() => this.dataStore.Instantiate<T>();
 

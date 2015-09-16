@@ -78,7 +78,7 @@ namespace Stormpath.SDK.Tests.Impl
                 .Build();
 
             // Defaults to SAuthc1
-            client.AuthenticationScheme.ShouldBe(AuthenticationScheme.SAuthc1);
+            (client as DefaultClient).AuthenticationScheme.ShouldBe(AuthenticationScheme.SAuthc1);
         }
 
         [Fact]
@@ -91,7 +91,7 @@ namespace Stormpath.SDK.Tests.Impl
                 .Build();
 
             // Default value
-            client.BaseUrl.ShouldBe("https://api.stormpath.com/v1");
+            (client as DefaultClient).BaseUrl.ShouldBe("https://api.stormpath.com/v1");
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace Stormpath.SDK.Tests.Impl
                 .Build();
 
             // Default value
-            client.ConnectionTimeout.ShouldBe(20 * 1000);
+            (client as DefaultClient).ConnectionTimeout.ShouldBe(20 * 1000);
         }
 
         [Fact]
