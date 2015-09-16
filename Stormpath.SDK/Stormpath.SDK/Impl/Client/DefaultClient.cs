@@ -22,9 +22,11 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
@@ -37,8 +39,6 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class DefaultClient : IClient
     {
-        public static readonly AuthenticationScheme DefaultAuthenticationScheme = AuthenticationScheme.SAuthc1;
-
         private readonly string baseUrl;
         private readonly AuthenticationScheme authenticationScheme;
         private readonly int connectionTimeout;
@@ -56,9 +56,9 @@ namespace Stormpath.SDK.Impl.Client
             AuthenticationScheme authenticationScheme,
             int connectionTimeout,
             IWebProxy proxy,
-            IHttpClientBuilder httpClientBuilder,
-            ICacheProviderBuilder cacheProviderBuilder,
-            IJsonSerializerBuilder serializerBuilder,
+            IHttpClient httpClient,
+            IJsonSerializer serializer,
+            ICacheProvider cacheProvider,
             ILogger logger)
         {
             if (apiKey == null || !apiKey.IsValid())
@@ -68,23 +68,12 @@ namespace Stormpath.SDK.Impl.Client
             if (connectionTimeout < 0)
                 throw new ArgumentException("Timeout cannot be negative.");
 
-            this.logger = logger == null
-                ? new NullLogger()
-                : logger;
-
+            this.logger = logger;
             this.baseUrl = baseUrl;
             this.connectionTimeout = connectionTimeout;
             this.proxy = proxy;
-
-            this.authenticationScheme = authenticationScheme == null
-                ? DefaultAuthenticationScheme
-                : authenticationScheme;
-
-            this.serializer = serializerBuilder.Build();
-
-            var cacheProvider = cacheProviderBuilder.Build();
-
-            var httpClient = httpClientBuilder.Build();
+            this.authenticationScheme = authenticationScheme;
+            this.serializer = serializer;
 
             var requestExecutor = new DefaultRequestExecutor(httpClient, apiKey, authenticationScheme, this.logger);
 

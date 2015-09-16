@@ -30,6 +30,7 @@ namespace Stormpath.SDK.Impl.Client
     {
         public static readonly int DefaultConnectionTimeout = 20 * 1000;
         public static readonly string DefaultBaseUrl = "https://api.stormpath.com/v1";
+        public static readonly AuthenticationScheme DefaultAuthenticationScheme = AuthenticationScheme.SAuthc1;
 
         private readonly IJsonSerializerBuilder serializerBuilder;
         private readonly IHttpClientBuilder httpClientBuilder;
@@ -135,6 +136,9 @@ namespace Stormpath.SDK.Impl.Client
             if (this.apiKey == null || !this.apiKey.IsValid())
                 throw new ArgumentException("API Key is not valid or has not been set. Use ClientApiKeys.Builder() to construct one.");
 
+            if (this.logger == null)
+                this.logger = new NullLogger();
+
             this.httpClientBuilder
                 .SetBaseUrl(this.baseUrl)
                 .SetConnectionTimeout(this.connectionTimeout)
@@ -147,9 +151,9 @@ namespace Stormpath.SDK.Impl.Client
                 this.authenticationScheme,
                 this.connectionTimeout,
                 this.proxy,
-                this.httpClientBuilder,
-                this.cacheProviderBuilder,
-                this.serializerBuilder,
+                this.httpClientBuilder.Build(),
+                this.serializerBuilder.Build(),
+                this.cacheProviderBuilder.Build(),
                 this.logger);
         }
     }
