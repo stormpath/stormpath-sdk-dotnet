@@ -19,8 +19,23 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Api
 {
+    /// <summary>
+    /// Static entry point for working with <see cref="IClientApiKey"/> objects.
+    /// </summary>
     public sealed class ClientApiKeys
     {
+        /// <summary>
+        /// Gets a new <see cref="IClientApiKeyBuilder"/> instance, used to fluently construct <see cref="IClientApiKey"/> objects to authenticate calls to Stormpath.
+        /// </summary>
+        /// <param name="logger">A logger instance for capturing trace output; pass <c>null</c> to disable logging.</param>
+        /// <returns>A new <see cref="IClientApiKeyBuilder"/> instance.</returns>
+        /// <example>
+        /// <code>
+        ///     IClientApiKey apiKey = ClientApiKeys.Builder()
+        ///         .SetFileLocation("path\\to\\apiKey.properties")
+        ///         .Build();
+        /// </code>
+        /// </example>
         public static IClientApiKeyBuilder Builder(ILogger logger = null)
         {
             return new Impl.Api.DefaultClientApiKeyBuilder(
