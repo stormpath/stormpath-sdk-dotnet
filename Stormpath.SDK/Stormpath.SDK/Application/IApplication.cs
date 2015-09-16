@@ -33,22 +33,22 @@ namespace Stormpath.SDK.Application
         /// <summary>
         /// Gets the application's name.
         /// </summary>
-        /// <value>The application's name. An application's name must be unique across all other applications in the owning <see cref="Tenant.ITenant"/>.</value>
+        /// <value>This application's name. An application's name must be unique across all other applications in the owning <see cref="Tenant.ITenant"/>.</value>
         string Name { get; }
 
         /// <summary>
         /// Gets the application description.
         /// </summary>
-        /// <value>The application's description text.</value>
+        /// <value>This application's description text.</value>
         string Description { get; }
 
         /// <summary>
         /// Gets the application's status.
-        /// Application users may login to an <see cref="ApplicationStatus.Enabled"/> application.
-        /// They may not login to a <see cref="ApplicationStatus.Disabled"/> application.
         /// </summary>
         /// <value>
-        /// The application's status.
+        /// This application's status.
+        /// Application users may login to an <see cref="ApplicationStatus.Enabled"/> application.
+        /// They may not login to a <see cref="ApplicationStatus.Disabled"/> application.
         /// </value>
         ApplicationStatus Status { get; }
 

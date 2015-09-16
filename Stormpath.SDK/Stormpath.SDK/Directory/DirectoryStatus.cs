@@ -20,15 +20,18 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Directory
 {
+    /// <summary>
+    /// Represents the status of a <see cref="IDirectory"/>.
+    /// </summary>
     public sealed class DirectoryStatus : Enumeration
     {
         /// <summary>
-        /// The directory can be used as an account store.
+        /// Accounts in this directory may login to applications.
         /// </summary>
         public static DirectoryStatus Enabled = new DirectoryStatus(0, "ENABLED");
 
         /// <summary>
-        /// The directory cannot be used for login.
+        /// Accounts in this directory may not login to applications.
         /// </summary>
         public static DirectoryStatus Disabled = new DirectoryStatus(1, "DISABLED");
 
@@ -41,6 +44,12 @@ namespace Stormpath.SDK.Directory
         {
         }
 
+        /// <summary>
+        /// Parses a string to an <see cref="DirectoryStatus"/>.
+        /// </summary>
+        /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
+        /// <returns>The <see cref="DirectoryStatus"/> with the specified name.</returns>
+        /// <exception cref="ApplicationException">if no match is found</exception>
         public static DirectoryStatus Parse(string status)
         {
             switch (status.ToUpper())

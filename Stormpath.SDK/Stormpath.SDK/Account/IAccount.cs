@@ -29,20 +29,15 @@ namespace Stormpath.SDK.Account
     public interface IAccount : IResource, ISaveable<IAccount>, IDeletable, IAuditable
     {
         /// <summary>
-        /// Gets the account's username, guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.
-        /// <para>Unless otherwise specified, this is the same as <see cref="Email"/>.</para>
+        /// Gets the account's username. Unless otherwise specified, this is the same as <see cref="Email"/>.
         /// </summary>
-        /// <value>
-        /// The account's username. Guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.
-        /// </value>
+        /// <value>This account's username, guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.</value>
         string Username { get; }
 
         /// <summary>
-        /// Gets the account's email address, guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.
+        /// Gets the account's email address.
         /// </summary>
-        /// <value>
-        /// The account's email address. Guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.
-        /// </value>
+        /// <value>This account's email address, guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.</value>
         string Email { get; }
 
         /// <summary>
@@ -56,25 +51,25 @@ namespace Stormpath.SDK.Account
         /// <summary>
         /// Gets the account's given name (aka 'first name' in Western cultures).
         /// </summary>
-        /// <value>The account's given name (aka 'first name' in Western cultures).</value>
+        /// <value>This account's given name (aka 'first name' in Western cultures).</value>
         string GivenName { get; }
 
         /// <summary>
         /// Gets the account's middle name(s).
         /// </summary>
-        /// <value>The account's middle name(s).</value>
+        /// <value>This account's middle name(s).</value>
         string MiddleName { get; }
 
         /// <summary>
         /// Gets the account's surname (aka 'last name' in Western cultures).
         /// </summary>
-        /// <value>The account's surname (aka 'last name' in Western cultures).</value>
+        /// <value>This account's surname (aka 'last name' in Western cultures).</value>
         string Surname { get; }
 
         /// <summary>
-        /// Gets the account's status. Accounts that are not <see cref="AccountStatus.Enabled"/> may not login to applications.
+        /// Gets the account's status.
         /// </summary>
-        /// <value>The account's status.</value>
+        /// <value>This account's status. Accounts that are not <see cref="AccountStatus.Enabled"/> may not login to applications.</value>
         AccountStatus Status { get; }
 
         /// <summary>
