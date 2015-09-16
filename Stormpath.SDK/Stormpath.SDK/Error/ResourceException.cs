@@ -21,6 +21,9 @@ using Stormpath.SDK.Impl.Error;
 
 namespace Stormpath.SDK.Error
 {
+    /// <summary>
+    /// Represents an error that occurs during a resource request.
+    /// </summary>
     [Serializable]
     public sealed class ResourceException : ApplicationException, IError, ISerializable
     {
@@ -39,20 +42,36 @@ namespace Stormpath.SDK.Error
             this.constructedErrorMessage = BuildExceptionMessage(error);
         }
 
+        /// <summary>
+        /// Gets the Stormpath error code associated with the error.
+        /// </summary>
+        /// <value>The Stormpath error code associated with this error. May be identical to <see cref="HttpStatus"/>.</value>
         public int Code => this.error.Code;
 
+        /// <summary>
+        /// Gets a detailed developer error message.
+        /// </summary>
+        /// <value>Contains additional details that may be useful for debugging, if any.</value>
         public string DeveloperMessage => this.error.DeveloperMessage;
 
+        /// <summary>
+        /// Gets additional information related to the error from Stormpath.
+        /// </summary>
+        /// <value>Additional information related to this error, if any.</value>
         public string MoreInfo => this.error.MoreInfo;
 
+        /// <summary>
+        /// Gets the HTTP status code associated with the error.
+        /// </summary>
+        /// <value>The HTTP status code associated with this error.</value>
         public int HttpStatus => this.error.HttpStatus;
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("code", this.Code);
-            info.AddValue("developerMessage", this.DeveloperMessage, typeof(string));
-            info.AddValue("moreInfo", this.MoreInfo, typeof(string));
-            info.AddValue("status", this.HttpStatus);
+            info.AddValue("code", this.error.Code);
+            info.AddValue("developerMessage", this.error.DeveloperMessage, typeof(string));
+            info.AddValue("moreInfo", this.error.MoreInfo, typeof(string));
+            info.AddValue("status", this.error.HttpStatus);
 
             base.GetObjectData(info, context);
         }

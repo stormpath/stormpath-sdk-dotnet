@@ -17,16 +17,39 @@
 
 namespace Stormpath.SDK.Error
 {
+    /// <summary>
+    /// Represents a Stormpath error message.
+    /// </summary>
     public interface IError
     {
+        /// <summary>
+        /// Gets the HTTP status code associated with the error.
+        /// </summary>
+        /// <value>The HTTP status code associated with this error.</value>
         int HttpStatus { get; }
 
+        /// <summary>
+        /// Gets the Stormpath error code associated with the error.
+        /// </summary>
+        /// <value>The Stormpath error code associated with this error. May be identical to <see cref="HttpStatus"/>.</value>
         int Code { get; }
 
+        /// <summary>
+        /// Gets a user-friendly error message.
+        /// </summary>
+        /// <value>A user-friendly error message string.</value>
         string Message { get; }
 
+        /// <summary>
+        /// Gets a detailed developer error message.
+        /// </summary>
+        /// <value>Contains additional details that may be useful for debugging, if any.</value>
         string DeveloperMessage { get; }
 
+        /// <summary>
+        /// Gets additional information related to the error from Stormpath.
+        /// </summary>
+        /// <value>Additional information related to this error, if any.</value>
         string MoreInfo { get; }
     }
 }
