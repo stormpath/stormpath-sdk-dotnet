@@ -20,18 +20,33 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// Represents an HTTP Authorization header.
+    /// </summary>
     public sealed class AuthorizationHeaderValue : ImmutableValueObject<AuthorizationHeaderValue>
     {
         private readonly string scheme;
         private readonly string parameter;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthorizationHeaderValue"/> class
+        /// with the specified <see cref="Scheme"/> and <see cref="Parameter"/>.
+        /// </summary>
+        /// <param name="scheme">The authorization scheme (e.g. Basic).</param>
+        /// <param name="parameter">The authorization token.</param>
         public AuthorizationHeaderValue(string scheme, string parameter)
         {
             this.scheme = scheme;
             this.parameter = parameter;
         }
 
-        public AuthorizationHeaderValue(string schemeAndParameter)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthorizationHeaderValue"/> class
+        /// with the specified <see cref="Scheme"/> and <see cref="Parameter"/>.
+        /// </summary>
+        /// <param name="schemeAndParameter">A combined scheme and paramter value.</param>
+        /// <exception cref="ArgumentException">if <paramref name="schemeAndParamter"/> cannot be parsed</exception>
+        internal AuthorizationHeaderValue(string schemeAndParameter)
         {
             var segments = schemeAndParameter.Split(' ');
             if (segments.Length != 2)
@@ -41,8 +56,16 @@ namespace Stormpath.SDK.Http
             this.parameter = segments[1];
         }
 
+        /// <summary>
+        /// Gets the authorization scheme.
+        /// </summary>
+        /// <value>An authorization scheme name (e.g. Basic).</value>
         public string Scheme => this.scheme;
 
+        /// <summary>
+        /// Gets the authorization parameter.
+        /// </summary>
+        /// <value>The authorization token.</value>
         public string Parameter => this.parameter;
 
         public override string ToString()

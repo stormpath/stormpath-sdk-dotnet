@@ -19,11 +19,21 @@ namespace Stormpath.SDK.Http
 {
     public static class HttpExtensions
     {
+        /// <summary>
+        /// Determines whether an HTTP response resulted in a client-side (HTTP 4xx) error.
+        /// </summary>
+        /// <param name="response">The HTTP response to check.</param>
+        /// <returns>True if the response represents a client-side (HTTP 4xx) error.</returns>
         public static bool IsClientError(this IHttpResponse response)
         {
             return response.StatusCode >= 400 && response.StatusCode < 500;
         }
 
+        /// <summary>
+        /// Determines whether an HTTP response resulted in a server-side (HTTP 5xx) error.
+        /// </summary>
+        /// <param name="response">The HTTP response to check.</param>
+        /// <returns>True if the response represents a server-side (HTTP 5xx) error.</returns>
         public static bool IsServerError(this IHttpResponse response)
         {
             return response.StatusCode >= 500 && response.StatusCode < 600;

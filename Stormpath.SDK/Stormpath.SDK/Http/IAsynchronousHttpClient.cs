@@ -20,8 +20,17 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// An HTTP client that can execute asynchronous requests.
+    /// </summary>
     public interface IAsynchronousHttpClient : IHttpClient
     {
+        /// <summary>
+        /// Executes an HTTP request asynchronously.
+        /// </summary>
+        /// <param name="request">The HTTP request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the HTTP response.</returns>
         Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

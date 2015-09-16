@@ -23,6 +23,9 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// Represents the query string component of a URI.
+    /// </summary>
     public class QueryString : ImmutableValueObject<QueryString>
     {
         private static Func<QueryString, QueryString, bool> compareFunction = new Func<QueryString, QueryString, bool>(
@@ -30,36 +33,62 @@ namespace Stormpath.SDK.Http
 
         private readonly Dictionary<string, string> queryStringItems;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QueryString"/> class.
+        /// </summary>
         public QueryString()
             : base(compareFunction)
         {
             this.queryStringItems = null;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QueryString"/> class
+        /// by taking zero or more query parameters from a <see cref="Uri"/> instance.
+        /// </summary>
+        /// <param name="uri">An existing URI to copy.</param>
         public QueryString(Uri uri)
             : this(uri.Query)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QueryString"/> class
+        /// by parsing zero or more query parameters from a string.
+        /// </summary>
+        /// <param name="queryString">The string to parse.</param>
         public QueryString(string queryString)
             : this()
         {
             this.queryStringItems = Parse(queryString);
         }
 
-        public QueryString(Dictionary<string, string> queryParams)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QueryString"/> class
+        /// by copying the internal item dictionary from an existing instance.
+        /// </summary>
+        /// <param name="queryParams">The parameters to copy.</param>
+        internal QueryString(Dictionary<string, string> queryParams)
             : this()
         {
             if (queryParams != null)
                 this.queryStringItems = ToSortedDictionary(queryParams);
         }
 
-        // Copy constructor
-        public QueryString(QueryString existing)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QueryString"/> class
+        /// by copying an existing <see cref="QueryString"/> instance.
+        /// </summary>
+        /// <param name="existing">The existing instance to copy.</param>
+        internal QueryString(QueryString existing)
             : this(existing.queryStringItems)
         {
         }
 
+        /// <summary>
+        /// Returns whether the <see cref="QueryString"/> instance contains any query parameters.
+        /// </summary>
+        /// <returns><c>true</c> if this instance contains one or more query parameters.</returns>
         public bool Any()
         {
             return this.queryStringItems?.Any() ?? false;
@@ -90,7 +119,14 @@ namespace Stormpath.SDK.Http
             return this.ToString(false);
         }
 
-        public QueryString Merge(QueryString replacementParams)
+        /// <summary>
+        /// Merges the query parameters in this instance with
+        /// the parameters in another <see cref="QueryString"/> instance.
+        /// If there are merge conflicts, the values in this instance are always kept.
+        /// </summary>
+        /// <param name="replacementParams">Query parameters to copy and merge.</param>
+        /// <returns>A new <see cref="QueryString"/> instance containing the merged parameters.</returns>
+        internal QueryString Merge(QueryString replacementParams)
         {
             if (replacementParams == null)
                 return this;

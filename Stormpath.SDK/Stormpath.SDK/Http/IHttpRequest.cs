@@ -17,10 +17,21 @@
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// Represents an HTTP request message.
+    /// </summary>
     public interface IHttpRequest : IHttpMessage
     {
+        /// <summary>
+        /// Gets the HTTP method used in this request.
+        /// </summary>
+        /// <value>An HTTP verb (e.g. GET, POST, PUT).</value>
         HttpMethod Method { get; }
 
+        /// <summary>
+        /// Gets the target URL of this request.
+        /// </summary>
+        /// <value>The target URL represented by a <see cref="CanonicalUri"/> instance.</value>
         CanonicalUri CanonicalUri { get; }
     }
 }

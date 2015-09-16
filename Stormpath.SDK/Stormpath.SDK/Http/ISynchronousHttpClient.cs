@@ -17,8 +17,16 @@
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// An HTTP client that can execute synchronous requests.
+    /// </summary>
     public interface ISynchronousHttpClient : IHttpClient
     {
+        /// <summary>
+        /// Executes an HTTP request synchronously.
+        /// </summary>
+        /// <param name="request">The HTTP request.</param>
+        /// <returns>The HTTP response.</returns>
         IHttpResponse Execute(IHttpRequest request);
     }
 }

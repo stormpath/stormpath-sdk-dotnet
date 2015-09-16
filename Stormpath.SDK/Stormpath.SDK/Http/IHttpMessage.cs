@@ -17,14 +17,33 @@
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// Represents an HTTP request or response message.
+    /// </summary>
     public interface IHttpMessage
     {
+        /// <summary>
+        /// Gets the HTTP header collection associated with this message.
+        /// </summary>
+        /// <value>HTTP message headers.</value>
         HttpHeaders Headers { get; }
 
+        /// <summary>
+        /// Gets whether this HTTP message contains a body.
+        /// </summary>
+        /// <value><c>true</c> if <see cref="Body"/> is not null or empty.</value>
         bool HasBody { get; }
 
+        /// <summary>
+        /// Gets the message body, if any.
+        /// </summary>
+        /// <value>The HTTP message body. Can be null.</value>
         string Body { get; }
 
+        /// <summary>
+        /// Gets the message body content type, if any.
+        /// </summary>
+        /// <value>The HTTP message body content type (e.g. application/json). Null if <see cref="Body"/> is null or empty.</value>
         string BodyContentType { get; }
     }
 }

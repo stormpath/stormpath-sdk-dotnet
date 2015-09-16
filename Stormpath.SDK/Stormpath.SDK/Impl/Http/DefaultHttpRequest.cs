@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Impl.Http
             this.body = existingRequest.Body;
             this.bodyContentType = existingRequest.BodyContentType;
             this.headers = new HttpHeaders(existingRequest.Headers);
-            this.method = HttpMethod.Parse(existingRequest.Method);
+            this.method = existingRequest.Method.Clone();
             this.canonicalUri = new CanonicalUri(existingRequest.CanonicalUri, overrideResourcePath: overrideUri);
         }
 

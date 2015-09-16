@@ -20,16 +20,39 @@ using System.Net;
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// A wrapper interface for HTTP client plugins.
+    /// </summary>
     public interface IHttpClient : IDisposable
     {
+        /// <summary>
+        /// Gets the base URL that is used to make requests.
+        /// </summary>
+        /// <value>The base request URL.</value>
         string BaseUrl { get; }
 
+        /// <summary>
+        /// Gets the connection timeout (in milliseconds) that is observed when making requests.
+        /// </summary>
+        /// <value>The connection timeout value in milliseconds.</value>
         int ConnectionTimeout { get; }
 
+        /// <summary>
+        /// Gets the proxy server that is used when making requests.
+        /// </summary>
+        /// <value>The proxy server.</value>
         IWebProxy Proxy { get; }
 
+        /// <summary>
+        /// Gets whether this client instance is capable of making synchronous requests.
+        /// </summary>
+        /// <value>Should return <c>true</c> for clients implementing <see cref="ISynchronousHttpClient"/>.</value>
         bool IsSynchronousSupported { get; }
 
+        /// <summary>
+        /// Gets whether this client instance is capable of making asynchronous requests.
+        /// </summary>
+        /// <value>Should return <c>true</c> for clients implementing <see cref="IAsynchronousHttpClient"/>.</value>
         bool IsAsynchronousSupported { get; }
     }
 }
