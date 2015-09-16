@@ -20,8 +20,19 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Resource
 {
+    /// <summary>
+    /// Represents a resource that can be created or modified.
+    /// </summary>
+    /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
     public interface ISaveable<T>
+        where T : IResource
     {
+        /// <summary>
+        /// Creates or updates the resource.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The persisted resource data.</returns>
+        /// <exception cref="Error.ResourceException">The save operation failed.</exception>
         Task<T> SaveAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

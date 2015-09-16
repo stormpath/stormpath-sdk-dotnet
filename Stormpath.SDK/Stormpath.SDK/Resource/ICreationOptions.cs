@@ -17,8 +17,15 @@
 
 namespace Stormpath.SDK.Resource
 {
+    /// <summary>
+    /// Base interface for creation request options objects.
+    /// </summary>
     public interface ICreationOptions
     {
+        /// <summary>
+        /// Retrieves the query string arguments represented by this option configuration.
+        /// </summary>
+        /// <returns>The query string equivalent of this options instance.</returns>
         string GetQueryString();
     }
 }

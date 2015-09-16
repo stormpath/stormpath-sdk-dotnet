@@ -65,11 +65,6 @@ namespace Stormpath.SDK.Tests.Fakes
             throw new NotImplementedException();
         }
 
-        public Task<ICustomData> GetCustomDataAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            throw new NotImplementedException();
-        }
-
         public IAccount SetEmail(string email)
         {
             throw new NotImplementedException();

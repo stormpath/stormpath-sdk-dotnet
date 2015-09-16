@@ -19,10 +19,21 @@ using System;
 
 namespace Stormpath.SDK.Resource
 {
+    /// <summary>
+    /// Represents resources that have timestamp fields.
+    /// </summary>
     public interface IAuditable
     {
+        /// <summary>
+        /// Gets the creation date of the resource.
+        /// </summary>
+        /// <value>The creation <see cref="DateTimeOffset"/> of this resource.</value>
         DateTimeOffset CreatedAt { get; }
 
+        /// <summary>
+        /// Gets the last modification date of the resource.
+        /// </summary>
+        /// <value>The last modification <see cref="DateTimeOffset"/> of this resource.</value>
         DateTimeOffset ModifiedAt { get; }
     }
 }

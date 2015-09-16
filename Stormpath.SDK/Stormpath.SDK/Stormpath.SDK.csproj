@@ -235,7 +235,6 @@
     <Compile Include="Impl\Resource\AbstractResource.cs" />
     <Compile Include="Resource\IAuditable.cs" />
     <Compile Include="Resource\ICreationOptions.cs" />
-    <Compile Include="Resource\ICustomData.cs" />
     <Compile Include="Resource\IDeletable.cs" />
     <Compile Include="Resource\ISaveable.cs" />
     <Compile Include="Shared\Enumeration.cs" />

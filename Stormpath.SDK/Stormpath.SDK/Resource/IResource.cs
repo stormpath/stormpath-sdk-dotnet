@@ -17,8 +17,15 @@
 
 namespace Stormpath.SDK.Resource
 {
+    /// <summary>
+    /// Represents a resource stored in Stormpath.
+    /// </summary>
     public interface IResource
     {
+        /// <summary>
+        /// Gets the URL of the resource.
+        /// </summary>
+        /// <value>A resource URL.</value>
         string Href { get; }
     }
 }
