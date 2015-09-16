@@ -17,10 +17,25 @@
 
 namespace Stormpath.SDK.Cache
 {
+    /// <summary>
+    /// Base interface for <see cref="ISynchronousCacheProvider"/> and <see cref="IAsynchronousCacheProvider"/>.
+    /// </summary>
     public interface ICacheProvider
     {
+        /// <summary>
+        /// Gets a flag that determines whether this <see cref="ICacheProvider"/> instance supports synchronous operations.
+        /// </summary>
+        /// <value>
+        /// For any objects implementeing <see cref="ISynchronousCacheProvider"/>, this should return <c>true</c>.
+        /// </value>
         bool IsSynchronousSupported { get; }
 
+        /// <summary>
+        /// Gets a flag that determines whether this <see cref="ICacheProvider"/> instance supports asynchronous operations.
+        /// </summary>
+        /// <value>
+        /// For any objects implementeing <see cref="IAsynchronousCacheProvider"/>, this should return <c>true</c>.
+        /// </value>
         bool IsAsynchronousSupported { get; }
     }
 }

@@ -17,6 +17,9 @@
 
 namespace Stormpath.SDK.Cache
 {
+    /// <summary>
+    /// Provides and maintains the lifecycles of <see cref="ISynchronousCache{K, V}"/> instances.
+    /// </summary>
     public interface ISynchronousCacheProvider : ICacheProvider
     {
         /// <summary>
