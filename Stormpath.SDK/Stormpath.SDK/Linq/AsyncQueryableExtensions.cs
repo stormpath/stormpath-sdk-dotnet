@@ -328,7 +328,7 @@ namespace Stormpath.SDK
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return source.ForEachAsync((item, unused_) => action(item), cancellationToken);
+            return source.ForEachAsync((item, _) => action(item), cancellationToken);
         }
 
         /// <summary>

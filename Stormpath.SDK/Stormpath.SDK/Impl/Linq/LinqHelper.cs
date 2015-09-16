@@ -28,12 +28,12 @@ namespace Stormpath.SDK.Impl.Linq
             return Expression.Call(null, method, expressions);
         }
 
-        public static MethodInfo GetMethodInfo<T1, T2>(Func<T1, T2> func, T1 unused)
+        public static MethodInfo GetMethodInfo<T1, T2>(Func<T1, T2> func, T1 ignored)
         {
             return func.Method;
         }
 
-        public static MethodInfo GetMethodInfo<T1, T2, T3>(Func<T1, T2, T3> func, T1 unused1, T2 unused2)
+        public static MethodInfo GetMethodInfo<T1, T2, T3>(Func<T1, T2, T3> func, T1 ignored1, T2 ignored2)
         {
             return func.Method;
         }

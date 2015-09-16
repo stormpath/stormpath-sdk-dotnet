@@ -104,7 +104,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .GetCacheAsync<string, IDictionary<string, object>>(
                     Arg.Any<string>(),
                     Arg.Any<CancellationToken>())
-                .Returns(async unused_ =>
+                .Returns(async _ =>
                 {
                     await Task.Yield();
                     return (IAsynchronousCache<string, IDictionary<string, object>>)new NullCache<string, IDictionary<string, object>>();

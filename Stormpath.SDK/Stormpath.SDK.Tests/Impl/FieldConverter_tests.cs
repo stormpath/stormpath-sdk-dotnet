@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var fakeAccountFieldConverter = new FuncFieldConverter(
                     appliesToTargetType: typeof(IAccount),
-                    convertAction: unused_ => new FieldConverterResult(true, new object()),
+                    convertAction: _ => new FieldConverterResult(true, new object()),
                     converterName: "Test");
 
                 var dummyField = new KeyValuePair<string, object>("foo", "bar");
@@ -68,7 +68,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var fakeAccountFieldConverter = new FuncFieldConverter(
                     appliesToTargetType: typeof(IAccount),
-                    convertAction: unused_ => new FieldConverterResult(true, "good!"),
+                    convertAction: _ => new FieldConverterResult(true, "good!"),
                     converterName: "Test");
 
                 var dummyField = new KeyValuePair<string, object>("foo", "bar");
@@ -84,7 +84,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var fakeAccountFieldConverter = new FuncFieldConverter(
                     appliesToTargetType: typeof(IAccount),
-                    convertAction: unused_ => new FieldConverterResult(true, "good!"),
+                    convertAction: _ => new FieldConverterResult(true, "good!"),
                     converterName: "Test");
 
                 var dummyField = new KeyValuePair<string, object>("foo", "bar");
@@ -99,7 +99,7 @@ namespace Stormpath.SDK.Tests.Impl
             public void Returns_false_when_converter_fails()
             {
                 var failingConverter = new FuncFieldConverter(
-                    unused_ => FieldConverterResult.Failed,
+                    _ => FieldConverterResult.Failed,
                     converterName: "Test");
 
                 var dummyField = new KeyValuePair<string, object>("foo", "bar");

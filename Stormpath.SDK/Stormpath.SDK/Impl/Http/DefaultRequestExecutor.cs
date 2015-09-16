@@ -114,11 +114,11 @@ namespace Stormpath.SDK.Impl.Http
             // these tasks will continue to execute synchronously.
             return this.CoreRequestLoopAsync(
                 request,
-                (IHttpRequest req, CancellationToken unused_) =>
+                (IHttpRequest req, CancellationToken _) =>
                 {
                     return Task.FromResult(this.syncHttpClient.Execute(req));
                 },
-                (int count, bool throttle, CancellationToken unused_) =>
+                (int count, bool throttle, CancellationToken _) =>
                 {
                     this.PauseSync(count, throttle);
                     return CompletedTask;
