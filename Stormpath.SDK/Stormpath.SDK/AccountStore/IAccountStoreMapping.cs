@@ -29,21 +29,29 @@ namespace Stormpath.SDK.AccountStore
     public interface IAccountStoreMapping : IResource
     {
         /// <summary>
+        /// Gets a flag that indicates whether the associated <see cref="IAccountStore"/> is designated as the application's default account store.
+        /// </summary>
+        /// <value>
         /// True if the associated <see cref="IAccountStore"/> is designated as the application's default account store, false otherwise.
         /// <para>A <c>true</c> value indicates that any accounts created directly by the application will be dispatched to and saved in the associated <see cref="IAccountStore"/>, since an <see cref="IApplication"/> cannot store accounts directly.</para>
-        /// </summary>
+        /// </value>
         bool IsDefaultAccountStore { get; }
 
         /// <summary>
+        /// Gets a flag that indicates whether the associated <see cref="IAccountStore"/> is designated as the application's default group store.
+        /// </summary>
+        /// <value>
         /// True if the associated <see cref="IAccountStore"/> is designated as the application's default group store, false otherwise.
         /// <para>A <c>true</c> value indicates that any groups created directly by the application will be dispatched to and saved in the associated <see cref="IAccountStore"/>, since an <see cref="IApplication"/> cannot store accounts directly.</para>
-        /// </summary>
+        /// </value>
         bool IsDefaultGroupStore { get; }
 
         /// <summary>
-        /// The zero-based order in which the associated <see cref="IAccountStore"/> will be consulted by the linked <see cref="IApplication"/> during an account authentication attempt.
-        /// <para>The lower the index, the higher precedence (the earlier it will be accessed) during an authentication attempt. The higher the index, the lower the precedence (the later it will be accessed) during an authentication attempt.</para>
+        /// Gets the zero-based order in which the associated <see cref="IAccountStore"/> will be consulted by the linked <see cref="IApplication"/> during an account authentication attempt.
         /// </summary>
+        /// <value>
+        /// The lower the index, the higher precedence (the earlier it will be accessed) during an authentication attempt. The higher the index, the lower the precedence (the later it will be accessed) during an authentication attempt.
+        /// </value>
         int ListIndex { get; }
 
         /// <summary>

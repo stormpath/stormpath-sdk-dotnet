@@ -25,11 +25,13 @@ namespace Stormpath.SDK.Account
     public sealed class AccountCreationOptionsBuilder
     {
         /// <summary>
-        /// Explicitly override the registration workflow of the Login Source for new Accounts.
+        /// Gets or sets a flag that determines whether to explicitly override the registration workflow of the Login Source for new Accounts.
+        /// </summary>
+        /// <value>
         /// <para>If set to <c>true</c>, the account registration workflow will be triggered no matter what the Login Source configuration is.</para>
         /// <para>If set to <c>false</c>, the account registration workflow will <b>NOT</b> be triggered, no matter what the Login Source configuration is.</para>
         /// <para>If you want to ensure the registration workflow behavior matches the Login Source default, leave this <c>null</c>.</para>
-        /// </summary>
+        /// </value>
         public bool? RegistrationWorkflowEnabled { get; set; }
 
         /// <summary>

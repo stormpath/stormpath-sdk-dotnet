@@ -44,10 +44,11 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Gets the application's status.
-        /// </summary>
-        /// <value>
         /// Application users may login to an <see cref="ApplicationStatus.Enabled"/> application.
         /// They may not login to a <see cref="ApplicationStatus.Disabled"/> application.
+        /// </summary>
+        /// <value>
+        /// The application's status.
         /// </value>
         ApplicationStatus Status { get; }
 

@@ -27,8 +27,9 @@ namespace Stormpath.SDK.Account
     public interface IPasswordResetToken : IResource
     {
         /// <summary>
-        /// The email address associated with the <see cref="IAccount"/> in the reset password workflow.
+        /// Gets the email address associated with the <see cref="IAccount"/> in the reset password workflow.
         /// </summary>
+        /// <value>The account's email address.</value>
         string Email { get; }
 
         /// <summary>

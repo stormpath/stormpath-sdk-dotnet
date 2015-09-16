@@ -219,7 +219,7 @@ namespace Stormpath.SDK.Impl.Application
             return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
         }
 
-        IAsyncQueryable<IAccountStoreMapping> IApplication.GetAccountStoreMappings(CancellationToken cancellationToken)
+        IAsyncQueryable<IAccountStoreMapping> IApplication.GetAccountStoreMappings()
         {
             return new CollectionResourceQueryable<IAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalDataStore());
         }
@@ -230,18 +230,6 @@ namespace Stormpath.SDK.Impl.Application
                 return null;
 
             var accountStoreMapping = await this.GetInternalDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken).ConfigureAwait(false);
-            if (accountStoreMapping == null)
-                return null;
-
-            return await accountStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
-        }
-
-        async Task<IAccountStore> IApplication.GetDefaultGroupStoreAsync(CancellationToken cancellationToken)
-        {
-            if (this.DefaultAccountStoreMapping.Href == null)
-                return null;
-
-            var accountStoreMapping = await this.GetInternalDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultGroupStoreMapping.Href, cancellationToken).ConfigureAwait(false);
             if (accountStoreMapping == null)
                 return null;
 

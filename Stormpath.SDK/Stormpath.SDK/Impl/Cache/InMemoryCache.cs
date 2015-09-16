@@ -72,8 +72,9 @@ namespace Stormpath.SDK.Impl.Cache
         string ICache<K, V>.Name => this.region;
 
         /// <summary>
-        /// The number of items stored in all regions of the cache.
+        /// Gets the number of items stored in all regions of the cache.
         /// </summary>
+        /// <value>The total number of items stored in all regions of the cache.</value>
         public long TotalSize => this.cacheManager.Count;
 
         public TimeSpan? TimeToLive => this.timeToLive;

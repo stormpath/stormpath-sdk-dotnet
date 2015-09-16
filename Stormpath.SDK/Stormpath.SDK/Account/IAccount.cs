@@ -29,41 +29,52 @@ namespace Stormpath.SDK.Account
     public interface IAccount : IResource, ISaveable<IAccount>, IDeletable, IAuditable
     {
         /// <summary>
-        /// The account's username, guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.
+        /// Gets the account's username, guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.
         /// <para>Unless otherwise specified, this is the same as <see cref="Email"/>.</para>
         /// </summary>
+        /// <value>
+        /// The account's username. Guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.
+        /// </value>
         string Username { get; }
 
         /// <summary>
-        /// The account's email address, guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.
+        /// Gets the account's email address, guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.
         /// </summary>
+        /// <value>
+        /// The account's email address. Guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.
+        /// </value>
         string Email { get; }
 
         /// <summary>
-        /// The account's full name, per Western cultural conventions.
-        /// <para>This is a convenience <bcomputed</b> property combining the <see cref="GivenName"/> (aka 'first name' in Western cultures) followed by the <see cref="MiddleName"/> (if any) followed by the <see cref="Surname"/> (aka 'last name' in Western cultures).</para>
+        /// Gets the account's full name, per Western cultural conventions. This is a computed property.
         /// </summary>
+        /// <value>The result of combining the <see cref="GivenName"/> (aka 'first name' in Western cultures)
+        /// followed by the <see cref="MiddleName"/> (if any) followed by the <see cref="Surname"/>
+        /// (aka 'last name' in Western cultures).</value>
         string FullName { get; }
 
         /// <summary>
-        /// The account's given name (aka 'first name' in Western cultures).
+        /// Gets the account's given name (aka 'first name' in Western cultures).
         /// </summary>
+        /// <value>The account's given name (aka 'first name' in Western cultures).</value>
         string GivenName { get; }
 
         /// <summary>
-        /// The account's middle name(s).
+        /// Gets the account's middle name(s).
         /// </summary>
+        /// <value>The account's middle name(s).</value>
         string MiddleName { get; }
 
         /// <summary>
-        /// The account's surname (aka 'last name' in Western cultures).
+        /// Gets the account's surname (aka 'last name' in Western cultures).
         /// </summary>
+        /// <value>The account's surname (aka 'last name' in Western cultures).</value>
         string Surname { get; }
 
         /// <summary>
-        /// The account's status. Accounts that are not <see cref="AccountStatus.Enabled"/> may not login to applications.
-        /// <seealso cref="AccountStatus"/>
+        /// Gets the account's status. Accounts that are not <see cref="AccountStatus.Enabled"/> may not login to applications.
         /// </summary>
+        /// <value>The account's status.</value>
         AccountStatus Status { get; }
 
         /// <summary>
