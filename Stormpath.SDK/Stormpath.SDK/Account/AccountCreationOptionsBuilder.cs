@@ -20,7 +20,7 @@ using Stormpath.SDK.Impl.Account;
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// A fluent builder to construct <see cref="IAccountCreationOptions"/> objects.
+    /// A builder to construct <see cref="IAccountCreationOptions"/> objects.
     /// </summary>
     public sealed class AccountCreationOptionsBuilder
     {

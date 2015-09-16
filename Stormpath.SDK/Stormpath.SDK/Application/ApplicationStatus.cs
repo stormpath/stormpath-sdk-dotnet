@@ -20,6 +20,9 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Application
 {
+    /// <summary>
+    /// Represents the states an <see cref="IApplication"/> may be in.
+    /// </summary>
     public sealed class ApplicationStatus : Enumeration
     {
         /// <summary>
@@ -41,6 +44,11 @@ namespace Stormpath.SDK.Application
         {
         }
 
+        /// <summary>
+        /// Parses a string to an <see cref="ApplicationStatus"/>.
+        /// </summary>
+        /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
+        /// <returns>The <see cref="ApplicationStatus"/> with the specified name.</returns>
         public static ApplicationStatus Parse(string status)
         {
             switch (status.ToUpper())
