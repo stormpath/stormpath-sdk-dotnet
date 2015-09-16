@@ -19,10 +19,23 @@ using Stormpath.SDK.Impl.Account;
 
 namespace Stormpath.SDK.Account
 {
+    /// <summary>
+    /// A fluent builder to construct <see cref="IAccountCreationOptions"/> objects.
+    /// </summary>
     public sealed class AccountCreationOptionsBuilder
     {
+        /// <summary>
+        /// Explicitly override the registration workflow of the Login Source for new Accounts.
+        /// <para>If set to <c>true</c>, the account registration workflow will be triggered no matter what the Login Source configuration is.</para>
+        /// <para>If set to <c>false</c>, the account registration workflow will <b>NOT</b> be triggered, no matter what the Login Source configuration is.</para>
+        /// <para>If you want to ensure the registration workflow behavior matches the Login Source default, leave this <c>null</c>.</para>
+        /// </summary>
         public bool? RegistrationWorkflowEnabled { get; set; }
 
+        /// <summary>
+        /// Creates a new <see cref="IAccountCreationOptions"/> instance based on the current builder state.
+        /// </summary>
+        /// <returns>A new <see cref="IAccountCreationOptions"/> based on the current builder state.</returns>
         public IAccountCreationOptions Build()
         {
             return new DefaultAccountCreationOptions(this.RegistrationWorkflowEnabled);

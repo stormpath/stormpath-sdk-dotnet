@@ -20,20 +20,23 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Account
 {
+    /// <summary>
+    /// Respresents the various states an <see cref="IAccount"/> may be in.
+    /// </summary>
     public sealed class AccountStatus : Enumeration
     {
         /// <summary>
-        /// The account is able to log into assigned applications.
+        /// A disabled account may not login to applications.
         /// </summary>
         public static AccountStatus Enabled = new AccountStatus(0, "ENABLED");
 
         /// <summary>
-        /// The account cannot log into any applications.
+        /// An enabled account may login to applications.
         /// </summary>
         public static AccountStatus Disabled = new AccountStatus(1, "DISABLED");
 
         /// <summary>
-        /// The account is disabled and has not verified their email address.
+        /// An unverified account is a disabled account that does not have a verified email address.
         /// </summary>
         public static AccountStatus Unverified = new AccountStatus(2, "UNVERIFIED");
 
@@ -46,6 +49,12 @@ namespace Stormpath.SDK.Account
         {
         }
 
+        /// <summary>
+        /// Parses a string to an <see cref="AccountStatus"/>.
+        /// <para>Throws <see cref="ApplicationException"/> if no match is found.</para>
+        /// </summary>
+        /// <param name="status">A string containing "enabled", "disabled", or "unverified" (matching is case-insensitive).</param>
+        /// <returns>The <see cref="AccountStatus"/> with the specified name.</returns>
         public static AccountStatus Parse(string status)
         {
             switch (status.ToUpper())

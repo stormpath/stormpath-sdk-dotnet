@@ -19,8 +19,17 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Account
 {
+    /// <summary>
+    /// Represents options for an <see cref="IAccount"/> creation request.
+    /// </summary>
     public interface IAccountCreationOptions : ICreationOptions
     {
+        /// <summary>
+        /// Represents an optional override of the registration workflow of the Login Source for new Accounts.
+        /// <para>If set to <c>true</c>, the account registration workflow will be triggered no matter what the Login Source configuration is.</para>
+        /// <para>If set to <c>false</c>, the account registration workflow will <b>NOT</b> be triggered, no matter what the Login Source configuration is.</para>
+        /// <para>If <c>null</c>, the registration workflow behavior matches the Login Source default.</para>
+        /// </summary>
         bool? RegistrationWorkflowEnabled { get; }
     }
 }

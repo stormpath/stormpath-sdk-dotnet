@@ -21,12 +21,27 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Account
 {
+    /// <summary>
+    /// A token returned as part of the reset password workflow.
+    /// </summary>
     public interface IPasswordResetToken : IResource
     {
+        /// <summary>
+        /// The email address associated with the <see cref="IAccount"/> in the reset password workflow.
+        /// </summary>
         string Email { get; }
 
+        /// <summary>
+        /// Gets a string representation of the password reset token value.
+        /// </summary>
+        /// <returns>A string representing the token.</returns>
         string GetValue();
 
+        /// <summary>
+        /// Gets the <see cref="IAccount"/> associated with this password reset token.
+        /// </summary>
+        /// <param name="cancellationToken">An optional cancellation token.</param>
+        /// <returns>A Task whose result is the <see cref="IAccount"/> in the reset password workflow.</returns>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }
