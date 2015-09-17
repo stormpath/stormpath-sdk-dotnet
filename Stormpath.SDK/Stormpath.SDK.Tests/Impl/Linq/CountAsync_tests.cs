@@ -37,5 +37,16 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             count.ShouldBe(73);
         }
+
+        [Fact]
+        public async Task CountAsync_limits_result_to_one_item()
+        {
+            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.R2D2, 73));
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+
+            var count = await harness.Queryable.CountAsync();
+
+            fakeDataStore.WasCalledWithArguments<IAccount>(this.Href, "limit=1");
+        }
     }
 }

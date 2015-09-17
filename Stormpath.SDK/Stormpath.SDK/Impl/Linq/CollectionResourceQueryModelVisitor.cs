@@ -72,6 +72,7 @@ namespace Stormpath.SDK.Impl.Linq
 
             bool isScalar =
                 resultOperator is AnyResultOperator ||
+                resultOperator is CountResultOperator ||
                 resultOperator is FirstResultOperator ||
                 resultOperator is SingleResultOperator;
             if (isScalar)

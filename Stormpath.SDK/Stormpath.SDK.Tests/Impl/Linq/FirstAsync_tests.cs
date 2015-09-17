@@ -42,8 +42,21 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var luke = await harness.Queryable.FirstAsync();
 
             luke.Surname.ShouldBe("Skywalker");
+        }
 
-            // TODO check for limit=1
+        [Fact]
+        public async Task FirstAsync_limits_result_to_one_item()
+        {
+            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
+                {
+                    FakeAccounts.LukeSkywalker,
+                    FakeAccounts.HanSolo
+                });
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+
+            var luke = await harness.Queryable.FirstAsync();
+
+            fakeDataStore.WasCalledWithArguments<IAccount>(this.Href, "limit=1");
         }
 
         [Fact]

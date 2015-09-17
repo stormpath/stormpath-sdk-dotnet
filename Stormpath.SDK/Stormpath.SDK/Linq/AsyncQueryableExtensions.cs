@@ -202,12 +202,14 @@ namespace Stormpath.SDK
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            var collection = source as CollectionResourceQueryable<TSource>;
+            var sourceLimitQuery = source.Take(1);
+
+            if (!await sourceLimitQuery.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                return 0;
+
+            var collection = sourceLimitQuery as CollectionResourceQueryable<TSource>;
             if (collection == null)
                 throw new InvalidOperationException("This queryable is not a supported collection resource.");
-
-            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
-                return 0;
 
             return collection.Size;
         }
@@ -226,10 +228,11 @@ namespace Stormpath.SDK
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            var sourceLimitQuery = source.Take(1);
+            if (!await sourceLimitQuery.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 throw new InvalidOperationException("The sequence has no elements.");
 
-            return source.CurrentPage.First();
+            return sourceLimitQuery.CurrentPage.First();
         }
 
         /// <summary>
@@ -245,10 +248,11 @@ namespace Stormpath.SDK
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            var sourceLimitQuery = source.Take(1);
+            if (!await sourceLimitQuery.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 return default(TSource);
 
-            return source.CurrentPage.FirstOrDefault();
+            return sourceLimitQuery.CurrentPage.FirstOrDefault();
         }
 
         /// <summary>
