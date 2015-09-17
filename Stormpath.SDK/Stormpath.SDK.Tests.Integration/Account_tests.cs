@@ -356,6 +356,36 @@ namespace Stormpath.SDK.Tests.Integration
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Any_returns_false_for_empty_filtered_set(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var anyDroids = await application
+                .GetAccounts()
+                .Where(x => x.Email.EndsWith("droids.co"))
+                .AnyAsync();
+
+            anyDroids.ShouldBeFalse();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Any_returns_true_for_nonempty_filtered_set(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var anyWookiees = await application
+                .GetAccounts()
+                .Where(x => x.Email.EndsWith("kashyyyk.rim"))
+                .AnyAsync();
+
+            anyWookiees.ShouldBe(true);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Creating_and_deleting_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

@@ -44,20 +44,6 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public async Task SingleAsync_limits_result_to_only_one_item()
-        {
-            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
-                {
-                    FakeAccounts.HanSolo
-                });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
-
-            var han = await harness.Queryable.SingleAsync();
-
-            fakeDataStore.WasCalledWithArguments<IAccount>(this.Href, "limit=1");
-        }
-
-        [Fact]
         public void SingleAsync_throws_when_more_than_one_item_exists()
         {
             var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()

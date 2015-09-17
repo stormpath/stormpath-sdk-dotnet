@@ -188,6 +188,26 @@ namespace Stormpath.SDK
         }
 
         /// <summary>
+        /// Determines whether a sequence contains any elements.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">A sequence to check for being empty.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns><c>true</c> if the source sequence contains any elements; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static async Task<bool> AnyAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            var sourceLimitQuery = source.Take(1);
+            if (!await sourceLimitQuery.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                return false;
+
+            return sourceLimitQuery.CurrentPage.Any();
+        }
+
+        /// <summary>
         /// Asynchronously returns the number of elements in a sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
