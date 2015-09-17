@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
     public class Filter_extension_tests : Linq_tests
     {
         [Fact]
-        public void Filter_with_simple_parameter()
+        public void With_simple_parameter()
         {
             // Act
             var query = this.Harness.Queryable
@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Filter_multiple_calls_are_LIFO()
+        public void Multiple_calls_are_LIFO()
         {
             var query = this.Harness.Queryable
                 .Filter("Joe")

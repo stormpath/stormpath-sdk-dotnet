@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
     public class OrderBy_tests : Linq_tests
     {
         [Fact]
-        public void Order_by_a_field()
+        public void Sort_by_field()
         {
             var query = this.Harness.Queryable
                 .OrderBy(x => x.GivenName);
@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Order_by_a_field_descending()
+        public void Sort_by_field_descending()
         {
             var query = this.Harness.Queryable
                 .OrderByDescending(x => x.Email);
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Order_by_multiple_fields()
+        public void Sort_by_multiple_fields()
         {
             var query = this.Harness.Queryable
                 .OrderBy(x => x.GivenName)

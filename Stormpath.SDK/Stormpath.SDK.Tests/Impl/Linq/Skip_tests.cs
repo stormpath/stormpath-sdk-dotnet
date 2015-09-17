@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Skip_multiple_calls_are_LIFO()
+        public void Multiple_calls_are_LIFO()
         {
             var query = this.Harness.Queryable
                 .Skip(10).Skip(5);

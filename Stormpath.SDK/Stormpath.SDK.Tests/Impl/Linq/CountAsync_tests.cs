@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
     public class CountAsync_tests : Linq_tests
     {
         [Fact]
-        public async Task CountAsync_returns_count()
+        public async Task Returns_count()
         {
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.C3PO, 73));
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public async Task CountAsync_limits_result_to_one_item()
+        public async Task Limits_result_to_one_item()
         {
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.R2D2, 73));
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);

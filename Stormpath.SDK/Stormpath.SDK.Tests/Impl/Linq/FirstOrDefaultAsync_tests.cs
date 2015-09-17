@@ -1,4 +1,4 @@
-﻿// <copyright file="Sync_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="FirstOrDefaultAsync_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,7 +15,11 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
@@ -23,17 +27,32 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_tests : Linq_tests
+    public class FirstOrDefaultAsync_tests : Linq_tests
     {
-        [Fact(Skip = "Sync path is still TODO")]
-        public void ToList_returns_empty_list_for_no_items()
+        [Fact]
+        public async Task Returns_first_item()
+        {
+            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
+                {
+                    FakeAccounts.LukeSkywalker,
+                    FakeAccounts.HanSolo
+                });
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+
+            var luke = await harness.Queryable.FirstOrDefaultAsync();
+
+            luke.Surname.ShouldBe("Skywalker");
+        }
+
+        [Fact]
+        public async Task Returns_null_when_no_items_exist()
         {
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
-            // var empty = harness.Queryable.AsQueryable().ToList();
+            var notLuke = await harness.Queryable.FirstOrDefaultAsync();
 
-            // empty.ShouldBeEmpty();
+            notLuke.ShouldBeNull();
         }
     }
 }

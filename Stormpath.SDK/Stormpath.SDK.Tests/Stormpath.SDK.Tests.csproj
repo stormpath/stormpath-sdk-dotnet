@@ -110,7 +110,9 @@
     <Compile Include="Impl\FilterChain_tests.cs" />
     <Compile Include="Impl\HttpHeaders_tests.cs" />
     <Compile Include="Impl\Linq\AnyAsync_tests.cs" />
-    <Compile Include="Impl\Linq\Sync_tests.cs" />
+    <Compile Include="Impl\Linq\FirstOrDefaultAsync_tests.cs" />
+    <Compile Include="Impl\Linq\SingleOrDefaultAsync_tests.cs" />
+    <Compile Include="Impl\Linq\ForEachAsync_tests.cs" />
     <Compile Include="Impl\PasswordResetToken_tests.cs" />
     <Compile Include="Impl\ResourceTypeLookup_tests.cs" />
     <Compile Include="Impl\UriQualifier_tests.cs" />
@@ -123,7 +125,6 @@
     <Compile Include="Impl\Linq\Skip_tests.cs" />
     <Compile Include="Impl\Linq\Linq_tests.cs" />
     <Compile Include="Impl\Linq\OrderBy_tests.cs" />
-    <Compile Include="Impl\Linq\Result_operators_tests.cs" />
     <Compile Include="Impl\Linq\SingleAsync_tests.cs" />
     <Compile Include="Impl\Linq\ToListAsync_tests.cs" />
     <Compile Include="Impl\Linq\Unsupported_filters_tests.cs" />

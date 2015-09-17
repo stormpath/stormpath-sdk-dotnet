@@ -16,6 +16,11 @@
 // </remarks>
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Shouldly;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
@@ -53,7 +58,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Take_multiple_calls_are_LIFO()
+        public void Multiple_calls_are_LIFO()
         {
             var query = this.Harness.Queryable
                 .Take(10).Take(5);
@@ -63,13 +68,45 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Take_limit_is_100()
+        public async Task Observes_take_limit()
         {
-            var query = this.Harness.Queryable
-                .Take(101);
+            // Scenario: .Take() functions a little differently than the limit=? parameter
+            // in Stormpath, even though that's what it translates to. .Take() represents an
+            // upper limit to the items that are returned. Take(5) returns 5 items, Take(500) returns 500.
+            // In the underyling API, the limi=? parameter has a hard maximum of 100.
+            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 250));
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
-            // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(this.Href, "limit=100");
+            var longList = await harness.Queryable
+                .Take(7)
+                .ToListAsync();
+
+            longList.Count.ShouldBe(7);
+            fakeDataStore.GetCalls().Count().ShouldBe(1);
+
+            // When Taking(<= 100), the limit parameter should match
+            fakeDataStore.GetCalls().First().ShouldEndWith("?limit=7");
+        }
+
+        [Fact]
+        public async Task ToListAsync_pages_until_take_limit_is_reached()
+        {
+            // Scenario: .Take() functions a little differently than the limit=? parameter
+            // in Stormpath, even though that's what it translates to. .Take() represents an
+            // upper limit to the items that are returned. Take(5) returns 5 items, Take(500) returns 500.
+            // In the underyling API, the limi=? parameter has a hard maximum of 100.
+            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 750));
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+
+            var longList = await harness.Queryable
+                .Take(500)
+                .ToListAsync();
+
+            longList.Count.ShouldBe(500);
+            fakeDataStore.GetCalls().Count().ShouldBe(5); // Max 100 per call
+
+            // When Taking(> 100), the limit parameter should be 100
+            fakeDataStore.GetCalls().First().ShouldEndWith("?limit=100");
         }
     }
 }

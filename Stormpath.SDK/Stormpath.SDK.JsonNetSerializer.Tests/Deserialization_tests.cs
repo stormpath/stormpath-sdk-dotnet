@@ -120,7 +120,7 @@ namespace Stormpath.SDK.Extensions.Serialization.JsonNet.Tests
             result.Count.ShouldBe(1);
             result.Single().Key.ShouldBe("isFoo");
             result.Single().Value.ShouldBeOfType<bool>();
-            result.Single().Value.ShouldBeTrue();
+            result.Single().Value.ShouldBe(true);
         }
 
         [Fact]
