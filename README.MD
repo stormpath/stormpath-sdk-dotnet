@@ -144,7 +144,7 @@ var joe = await myApp.CreateAccountAsync("Joe", "Stormtrooper",
                                          "Changeme123!");
 ```
 
-Easy! :smile: The returned `IAccount` object will contain all the account's data.
+The returned `IAccount` object will contain all the account's data. Easy! :smile: 
 
 #### Logging in
 
@@ -182,7 +182,7 @@ try
 }
 catch (ResourceException rex)
 {
-    Console.WriteLine("Unexpected error when deleting" + joe.Email + ". Error: " + rex.Message);
+    Console.WriteLine("Unexpected error when deleting " + joe.Email + ". Error: " + rex.Message);
 }
 ```
 
