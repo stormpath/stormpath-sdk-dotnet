@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Impl.Resource
         {
         }
 
-        public CollectionResponsePage(string href, int offset, int limit, int size, List<T> items)
+        public CollectionResponsePage(string href, long offset, long limit, long size, List<T> items)
         {
             this.Href = href;
             this.Offset = offset;
@@ -37,11 +37,11 @@ namespace Stormpath.SDK.Impl.Resource
 
         public string Href { get; set; }
 
-        public int Offset { get; set; }
+        public long Offset { get; set; }
 
-        public int Limit { get; set; }
+        public long Limit { get; set; }
 
-        public int Size { get; set; }
+        public long Size { get; set; }
 
         public List<T> Items { get; set; }
     }

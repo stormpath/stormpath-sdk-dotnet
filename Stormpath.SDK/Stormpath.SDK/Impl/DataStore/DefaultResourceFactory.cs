@@ -92,13 +92,33 @@ namespace Stormpath.SDK.Impl.DataStore
             if (properties == null)
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: no properties to materialize with.");
 
-            int offset, limit, size;
-            if (!int.TryParse(properties["offset"]?.ToString(), out offset))
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'offset' value.");
-            if (!int.TryParse(properties["limit"]?.ToString(), out limit))
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'limit' value.");
-            if (!int.TryParse(properties["size"]?.ToString(), out size))
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'size' value.");
+            long offset, limit, size;
+            try
+            {
+                offset = Convert.ToInt64(properties["offset"]);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'offset' value.", ex);
+            }
+
+            try
+            {
+                limit = Convert.ToInt64(properties["limit"]);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'limit' value.", ex);
+            }
+
+            try
+            {
+                size = Convert.ToInt64(properties["size"]);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'size' value.", ex);
+            }
 
             var href = properties["href"]?.ToString();
             if (string.IsNullOrEmpty(href))

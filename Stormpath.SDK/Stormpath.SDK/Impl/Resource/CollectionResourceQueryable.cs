@@ -42,13 +42,13 @@ namespace Stormpath.SDK.Impl.Resource
 
         private CollectionResourceRequestModel compiledModel = null;
 
-        private int totalItemsRetrieved = 0;
+        private long totalItemsRetrieved = 0;
 
-        private int currentOffset;
+        private long currentOffset;
 
-        private int currentLimit;
+        private long currentLimit;
 
-        private int currentSize;
+        private long currentSize;
 
         private IEnumerable<T> currentItems;
 
@@ -103,7 +103,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         private IAsyncQueryable<T> AsAsyncQueryable => this;
 
-        internal int Offset
+        internal long Offset
         {
             get
             {
@@ -115,7 +115,7 @@ namespace Stormpath.SDK.Impl.Resource
             }
         }
 
-        internal int Limit
+        internal long Limit
         {
             get
             {
@@ -127,7 +127,7 @@ namespace Stormpath.SDK.Impl.Resource
             }
         }
 
-        internal int Size
+        internal long Size
         {
             get
             {

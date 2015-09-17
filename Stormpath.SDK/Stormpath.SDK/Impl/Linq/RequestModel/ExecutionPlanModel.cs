@@ -19,6 +19,6 @@ namespace Stormpath.SDK.Impl.Linq.RequestModel
 {
     internal sealed class ExecutionPlanModel
     {
-        public int? MaxItems { get; set; }
+        public long? MaxItems { get; set; }
     }
 }
