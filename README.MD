@@ -3,7 +3,7 @@
 *An advanced, reliable and easy-to-use user management API for .NET by security experts*
 
 [Stormpath](https://stormpath.com) is a complete user management API.  This
-library gives your ASP.NET web application access to all of Stormpath's features:
+library gives your ASP.NET or C# application access to all of Stormpath's features:
 
 - Robust authentication and authorization.
 - Schemaless user data and profiles.
@@ -21,7 +21,18 @@ This library is currently under active development. If you would like to be noti
 
 ## Installation instructions
 
-Coming soon.
+The Stormpath C# SDK consists of three packages: `Stormpath.SDK.Core`, `Stormpath.SDK.JsonNetSerializer`, and `Stormpath.SDK.RestSharpClient`. The latter two contain dependencies on external libraries ([JSON.NET](https://github.com/JamesNK/Newtonsoft.Json) and [RestSharp](https://github.com/restsharp/RestSharp)). These are required for the SDK to run properly.
+
+For convenience, the meta-package `Stormpath.SDK` contains **everything** you need to get up an running quickly. :thumbsup:
+
+#### Using the Nuget Package Manager
+
+ 1. Right-click on the new project in the Solution Explorer and choose **Manage Nuget Packages...**
+ 2. Search for Stormpath. Install the Stormpath.SDK package.
+
+#### Using the Package Manager Console
+
+Simply run `install-package Stormpath.SDK`. Done!
 
 ## Quickstart
 
@@ -138,7 +149,7 @@ Easy! :smile: The returned `IAccount` object will contain all the account's data
 Now that we have a valid user in the application, we can perform a login request.
 
 ```csharp
-// Let's imagine that we got these values from a web request.
+// Imagine that we got these values from a web request:
 var usernameOrEmail = "tk421@galacticempire.co";
 var password = "Changeme123!";
 
@@ -182,11 +193,11 @@ catch (ResourceException rex)
 
 ## Build Instructions
 
-#### Building under Windows
+#### Building with Visual Studio
 
 Coming soon.
 
-#### Building under Linux
+#### Building with Mono
 
 Coming soon.
 
