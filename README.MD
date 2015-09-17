@@ -56,7 +56,62 @@ The `apiKey.properties` file holds your API key information, and can be used to 
 
 Next, let's create a simple Visual Studio project and add the Stormpath SDK.
 
- 1. 
+ 1. Create a new Console Application project.
+ 2. Right-click on the new project in the Solution Explorer and choose **Manage Nuget Packages...**
+ 3. Search for Stormpath. Install the Stormpath SDK package.
+   * Alternatively, you can simply execute `install-package Stormpath.SDK` from the Pacakge Manager Console.
+ 4. Add the following using statements to the top of your `Program.cs` file:
+ 
+ ```
+ using Stormpath.SDK;
+ using Stormpath.SDK.Client;
+ using Stormpath.SDK.Account;
+ using Stormpath.SDK.Error
+ ```
+ 
+#### `await` a minute
+
+The Stormpath SDK performs `await`able asynchronous operations by default. This makes it possible to make requests to the Stormpath API without tying up a worker thread - super cool for ASP.NET projects!
+
+In the Console Application template, however, the entry point is `static void Main()`, so we can't use the `await` keyword. In an ASP.NET application, we could just change the method signature to `async Task`, but that doesn't work well in a console app. Let's get around that by writing a separate method instead:
+
+```
+static Task MainAsync(CancellationToken cancellationToken)
+{
+}
+```
+
+and calling it synchronously from `Main()`:
+
+````
+static void Main(string[] args)
+{
+    MainAsync(CancellationToken.None).GetAwaiter().GetResult();
+}
+````
+
+If you are confused by all this `async` business, check out Stephen Cleary's [excellent introductory blog post](http://blog.stephencleary.com/2012/02/async-and-await.html) on the subject.
+
+#### Let's make some requests!
+
+Alright, now for the fun stuff. The first thing we need to connect to the Stormpath API is a `Client` object. In our new `MainAsync` method, let's create one:
+
+````
+// If you put the apiKey.properties file in the default location
+// (%homedrive%%homepath\.stormpath\apiKey.properties), you can skip this!
+IClientApiKey myApiKey = ClientApiKeys.Builder()
+    .SetFileLocation("path\\to\\apiKey.properties")
+    .Build();
+
+// Create an IClient object. Everything starts here!
+IClient client = Clients.Builder()
+    .SetApiKey(myApiKey)
+    .Build();
+````
+
+You can skip building the `IClientApiKey` object and using `.SetApiKey()` if you put your `apiKey.properties` file in the default location, because calling `.Build()` without specifying an API Key is smart enough to look for one there. :smile:
+
+
 
 ## Build Instructions
 
