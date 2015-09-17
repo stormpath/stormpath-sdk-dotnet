@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl
             IJsonSerializer instance = null;
             bool loadResult = loader.TryLoad(out instance);
 
-            loadResult.ShouldBe(true);
+            loadResult.ShouldBeTrue();
             instance.ShouldNotBe(null);
         }
     }

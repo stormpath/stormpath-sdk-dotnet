@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var expansion = new ExpansionTerm("foo");
 
-                expansion.IsValid().ShouldBe(true);
+                expansion.IsValid().ShouldBeTrue();
             }
 
             [Fact]
@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var expansion = new ExpansionTerm("foo", 10, 10);
 
-                expansion.IsValid().ShouldBe(true);
+                expansion.IsValid().ShouldBeTrue();
             }
 
             [Fact]
@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var expansion = new ExpansionTerm(string.Empty);
 
-                expansion.IsValid().ShouldBe(false);
+                expansion.IsValid().ShouldBeFalse();
             }
 
             [Fact]
@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var expansion = new ExpansionTerm("foo", offset: 0);
 
-                expansion.IsValid().ShouldBe(true);
+                expansion.IsValid().ShouldBeTrue();
             }
 
             [Fact]
@@ -62,7 +62,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var expansion = new ExpansionTerm("foo", offset: -1);
 
-                expansion.IsValid().ShouldBe(false);
+                expansion.IsValid().ShouldBeFalse();
             }
 
             [Fact]
@@ -70,7 +70,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var expansion = new ExpansionTerm("foo", limit: 0);
 
-                expansion.IsValid().ShouldBe(false);
+                expansion.IsValid().ShouldBeFalse();
             }
 
             [Fact]
@@ -78,7 +78,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var expansion = new ExpansionTerm("foo", limit: -1);
 
-                expansion.IsValid().ShouldBe(false);
+                expansion.IsValid().ShouldBeFalse();
             }
         }
     }

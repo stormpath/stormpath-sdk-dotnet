@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Tests.Integration
         {
             var apiKey = IntegrationTestClients.GetApiKey();
 
-            apiKey.IsValid().ShouldBe(true);
+            apiKey.IsValid().ShouldBeTrue();
             apiKey.GetId().ShouldNotBeNullOrEmpty();
             apiKey.GetSecret().ShouldNotBeNullOrEmpty();
 

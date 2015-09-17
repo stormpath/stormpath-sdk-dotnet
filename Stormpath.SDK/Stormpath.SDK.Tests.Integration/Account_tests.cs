@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Tests.Integration
 
             var accounts = await tenant.GetAccounts().ToListAsync();
 
-            accounts.Any().ShouldBe(true);
+            accounts.Any().ShouldBeTrue();
         }
 
         [Theory]
@@ -381,7 +381,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .Where(x => x.Email.EndsWith("kashyyyk.rim"))
                 .AnyAsync();
 
-            anyWookiees.ShouldBe(true);
+            anyWookiees.ShouldBeTrue();
         }
 
         [Theory]
@@ -406,7 +406,7 @@ namespace Stormpath.SDK.Tests.Integration
             var deleted = await account.DeleteAsync(); // It's a trap! :(
             if (deleted)
                 this.fixture.CreatedAccountHrefs.Remove(account.Href);
-            deleted.ShouldBe(true);
+            deleted.ShouldBeTrue();
         }
 
         [Theory]
@@ -434,10 +434,10 @@ namespace Stormpath.SDK.Tests.Integration
             var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
 
             (await application.TryAuthenticateAccountAsync(username, "whataPieceofjunk$1138"))
-                .ShouldBe(true);
+                .ShouldBeTrue();
 
             (await application.TryAuthenticateAccountAsync(username, "notLukesPassword?"))
-                .ShouldBe(false);
+                .ShouldBeFalse();
         }
 
         [Theory]

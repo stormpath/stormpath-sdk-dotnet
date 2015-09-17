@@ -30,8 +30,8 @@ namespace Stormpath.SDK.Tests.Impl
             var link1 = new LinkProperty("http://foo");
             var link2 = new LinkProperty("http://bar");
 
-            (link1 == link2).ShouldBe(false);
-            (link1 != link2).ShouldBe(true);
+            (link1 == link2).ShouldBeFalse();
+            (link1 != link2).ShouldBeTrue();
         }
 
         [Fact]
@@ -50,12 +50,12 @@ namespace Stormpath.SDK.Tests.Impl
             LinkProperty link1 = null;
             LinkProperty link2 = new LinkProperty("http://foo");
 
-            (link1 == null).ShouldBe(true);
-            (null == link1).ShouldBe(true);
+            (link1 == null).ShouldBeTrue();
+            (null == link1).ShouldBeTrue();
             link1.ShouldBeNull();
 
-            (link2 == null).ShouldBe(false);
-            (null == link2).ShouldBe(false);
+            (link2 == null).ShouldBeFalse();
+            (null == link2).ShouldBeFalse();
 
             link2.ShouldNotBe(link1);
             link2.ShouldNotBe(null);

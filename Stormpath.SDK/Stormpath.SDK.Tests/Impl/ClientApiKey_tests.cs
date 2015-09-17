@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Tests.Impl
             var apiKey2 = new DefaultClientApiKey("fooId", "fooSecret");
 
             apiKey1.ShouldBe(apiKey2);
-            (apiKey1 == apiKey2).ShouldBe(true);
+            (apiKey1 == apiKey2).ShouldBeTrue();
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Tests.Impl
             var apiKey2 = new DefaultClientApiKey("barId", "barSecret");
 
             apiKey1.ShouldNotBe(apiKey2);
-            (apiKey1 != apiKey2).ShouldBe(true);
+            (apiKey1 != apiKey2).ShouldBeTrue();
         }
 
         [Fact]
@@ -52,8 +52,8 @@ namespace Stormpath.SDK.Tests.Impl
 
             apiKey1.ShouldNotBe(apiKey2);
             apiKey1.ShouldNotBe(apiKey3);
-            (apiKey1 == apiKey2).ShouldBe(false);
-            (apiKey2 == apiKey3).ShouldBe(false);
+            (apiKey1 == apiKey2).ShouldBeFalse();
+            (apiKey2 == apiKey3).ShouldBeFalse();
         }
     }
 }

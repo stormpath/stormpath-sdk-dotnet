@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var resolver = new DefaultCacheProviderBuilder();
 
-            resolver.UseCache.ShouldBe(false);
+            resolver.UseCache.ShouldBeFalse();
             resolver.Provider.ShouldBeNull();
         }
 

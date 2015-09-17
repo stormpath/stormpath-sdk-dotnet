@@ -203,7 +203,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var qs2 = new QueryString("foo=bar&baz=123");
 
                 qs1.ShouldBe(qs2);
-                (qs1 == qs2).ShouldBe(true);
+                (qs1 == qs2).ShouldBeTrue();
             }
 
             [Fact]
@@ -213,7 +213,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var qs2 = new QueryString("foo=bar&baz=abc");
 
                 qs1.ShouldNotBe(qs2);
-                (qs1 != qs2).ShouldBe(true);
+                (qs1 != qs2).ShouldBeTrue();
             }
         }
     }

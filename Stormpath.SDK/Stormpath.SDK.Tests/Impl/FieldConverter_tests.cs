@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Impl
 
                 var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IApplication));
 
-                result.Success.ShouldBe(false);
+                result.Success.ShouldBeFalse();
                 result.Value.ShouldBeNull();
             }
 
@@ -59,7 +59,7 @@ namespace Stormpath.SDK.Tests.Impl
 
                 var result = stringFieldConverter.TryConvertField(dummyField, applicationTarget);
 
-                result.Success.ShouldBe(true);
+                result.Success.ShouldBeTrue();
                 result.Value.ShouldBe("bar");
             }
 
@@ -75,7 +75,7 @@ namespace Stormpath.SDK.Tests.Impl
 
                 var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IAccount));
 
-                result.Success.ShouldBe(true);
+                result.Success.ShouldBeTrue();
                 result.Value.ShouldBe("good!");
             }
 
@@ -91,7 +91,7 @@ namespace Stormpath.SDK.Tests.Impl
 
                 var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(CollectionResponsePage<IAccount>));
 
-                result.Success.ShouldBe(true);
+                result.Success.ShouldBeTrue();
                 result.Value.ShouldBe("good!");
             }
 
@@ -106,7 +106,7 @@ namespace Stormpath.SDK.Tests.Impl
 
                 var result = failingConverter.TryConvertField(dummyField, typeof(IAccount));
 
-                result.Success.ShouldBe(false);
+                result.Success.ShouldBeFalse();
                 result.Value.ShouldBeNull();
             }
         }
@@ -124,7 +124,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var result = converter.TryConvertField(token, AbstractFieldConverter.AnyType);
 
                 result.Value.ShouldBe(new LinkProperty("http://foobar/myprop"));
-                result.Success.ShouldBe(true);
+                result.Success.ShouldBeTrue();
             }
         }
 
@@ -139,7 +139,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var result = converter.TryConvertField(token, typeof(IAccount));
 
                 result.Value.ShouldBe(AccountStatus.Unverified);
-                result.Success.ShouldBe(true);
+                result.Success.ShouldBeTrue();
             }
 
             [Fact]
@@ -151,7 +151,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var result = converter.TryConvertField(token, typeof(IApplication));
 
                 result.Value.ShouldBe(ApplicationStatus.Disabled);
-                result.Success.ShouldBe(true);
+                result.Success.ShouldBeTrue();
             }
 
             [Fact]
@@ -163,7 +163,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var result = converter.TryConvertField(token, typeof(IDirectory));
 
                 result.Value.ShouldBe(DirectoryStatus.Enabled);
-                result.Success.ShouldBe(true);
+                result.Success.ShouldBeTrue();
             }
         }
     }

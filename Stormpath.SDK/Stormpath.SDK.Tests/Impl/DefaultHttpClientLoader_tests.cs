@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Tests.Impl
             var constructorArgs = new object[] { "http://api.foo.bar", 100, null, Substitute.For<ILogger>() };
             bool loadResult = loader.TryLoad(out instance, constructorArgs);
 
-            loadResult.ShouldBe(true);
+            loadResult.ShouldBeTrue();
             instance.ShouldNotBe(null);
         }
     }

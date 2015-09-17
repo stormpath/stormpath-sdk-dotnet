@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
-            (await harness.Queryable.AnyAsync()).ShouldBe(false);
+            (await harness.Queryable.AnyAsync()).ShouldBeFalse();
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.R2D2, 73));
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
-            (await harness.Queryable.AnyAsync()).ShouldBe(true);
+            (await harness.Queryable.AnyAsync()).ShouldBeTrue();
         }
 
         [Fact]

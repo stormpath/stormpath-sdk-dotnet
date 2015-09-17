@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Tests.Integration
             applications.Count.ShouldNotBe(0);
             applications
                 .Any(app => app.Status == ApplicationStatus.Enabled)
-                .ShouldBe(true);
+                .ShouldBeTrue();
         }
 
         [Theory]
@@ -120,7 +120,7 @@ namespace Stormpath.SDK.Tests.Integration
 
             applications
                 .Any(app => app.Name.StartsWith($".NET IT (primary) {this.fixture.TestRunIdentifier}"))
-                .ShouldBe(true);
+                .ShouldBeTrue();
         }
 
         [Theory]
@@ -136,7 +136,7 @@ namespace Stormpath.SDK.Tests.Integration
 
             applications
                 .Any(app => app.Name.StartsWith($".NET IT (disabled) {this.fixture.TestRunIdentifier}"))
-                .ShouldBe(true);
+                .ShouldBeTrue();
         }
 
         [Theory]

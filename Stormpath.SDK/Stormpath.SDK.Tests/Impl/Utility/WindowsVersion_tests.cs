@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             var wv2 = new WindowsVersion(5, 2);
 
             wv1.ShouldBe(wv2);
-            (wv1 == wv2).ShouldBe(true);
+            (wv1 == wv2).ShouldBeTrue();
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             var wv2 = new WindowsVersion(5, 2, 3);
 
             wv1.ShouldBe(wv2);
-            (wv1 == wv2).ShouldBe(true);
+            (wv1 == wv2).ShouldBeTrue();
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             var wv2 = new WindowsVersion(5, 2);
 
             wv1.ShouldNotBe(wv2);
-            (wv1 != wv2).ShouldBe(true);
+            (wv1 != wv2).ShouldBeTrue();
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             var wv2 = new WindowsVersion(5, 2, 5);
 
             wv1.ShouldNotBe(wv2);
-            (wv1 != wv2).ShouldBe(true);
+            (wv1 != wv2).ShouldBeTrue();
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
             var wv2 = new WindowsVersion(5, 2, 5);
 
             wv1.ShouldNotBe(wv2);
-            (wv1 != wv2).ShouldBe(true);
+            (wv1 != wv2).ShouldBeTrue();
         }
     }
 }

@@ -195,7 +195,7 @@ namespace Stormpath.SDK.Tests.Impl
                 erroredAsExpected = true;
             }
 
-            erroredAsExpected.ShouldBe(true);
+            erroredAsExpected.ShouldBeTrue();
         }
 
         [Fact]
@@ -213,7 +213,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             var result = await dataStore.CreateAsync("http://api.foo.bar/accounts", account, CancellationToken.None);
             bool isEmpty = (result as AbstractResource).GetPropertyNames().Count == 0;
-            isEmpty.ShouldBe(true);
+            isEmpty.ShouldBeTrue();
         }
 
         [Fact]
@@ -248,7 +248,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             stopwatch.Stop();
             stopwatch.ElapsedMilliseconds.ShouldBeLessThan(1000);
-            deleted.ShouldBe(true);
+            deleted.ShouldBeTrue();
         }
     }
 }

@@ -162,8 +162,8 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                 Address address2 = new Address("Address1", "San Francisco", "CA");
                 Address address3 = new Address("Address2", "San Francisco", "CA");
 
-                (address == address2).ShouldBe(true);
-                (address2 != address3).ShouldBe(true);
+                (address == address2).ShouldBeTrue();
+                (address2 != address3).ShouldBeTrue();
             }
 
             [Fact]
@@ -173,7 +173,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                 ExpandedAddress address2 = new ExpandedAddress("Address1", "Apt 123", "San Francisco", "CA");
 
                 address.ShouldNotBe(address2);
-                (address == address2).ShouldBe(false);
+                (address == address2).ShouldBeFalse();
             }
 
             [Fact]
@@ -183,7 +183,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                 var address2 = new ExpandedAddress("Address1", "Apt 123", "San Francisco", "CA");
 
                 address.ShouldBe(address2);
-                (address == address2).ShouldBe(true);
+                (address == address2).ShouldBeTrue();
             }
 
             [Fact]
@@ -193,7 +193,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                 var address2 = new ExpandedAddress("Address1", "Apt 456", "San Francisco", "CA");
 
                 address.ShouldNotBe(address2);
-                (address == address2).ShouldBe(false);
+                (address == address2).ShouldBeFalse();
             }
 
             [Fact]
@@ -203,7 +203,7 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                 var address2 = new ExpandedAddress("Address2", "Apt 123", "Las Vegas", "NV");
 
                 address.ShouldNotBe(address2);
-                (address == address2).ShouldBe(false);
+                (address == address2).ShouldBeFalse();
             }
 
             [Fact]
@@ -331,8 +331,8 @@ namespace Stormpath.SDK.Tests.Impl.Utility
                 CaseInsensitiveAddress address2 = new CaseInsensitiveAddress("ADDRESS1", "SAN FRANCISCO", "CA");
                 CaseInsensitiveAddress address3 = new CaseInsensitiveAddress("Address2", "San Francisco", "CA");
 
-                (address == address2).ShouldBe(true);
-                (address2 != address3).ShouldBe(true);
+                (address == address2).ShouldBeTrue();
+                (address2 != address3).ShouldBeTrue();
             }
         }
     }

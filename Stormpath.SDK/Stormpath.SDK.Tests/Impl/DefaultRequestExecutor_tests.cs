@@ -106,7 +106,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var dummyRequest = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar/foo"));
 
                 var response = requestExecutor.Execute(dummyRequest);
-                response.TransportError.ShouldBe(true);
+                response.TransportError.ShouldBeTrue();
 
                 // Used default backoff strategy to pause after each retry (4 times)
                 defaultBackoffStrategy.ReceivedWithAnyArgs(4).GetDelayMilliseconds(0);
@@ -126,7 +126,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var dummyRequest = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar/foo"));
 
                 var response = requestExecutor.Execute(dummyRequest);
-                response.IsClientError().ShouldBe(true);
+                response.IsClientError().ShouldBeTrue();
 
                 // Used throttling backoff strategy to pause after each retry (4 times)
                 defaultBackoffStrategy.DidNotReceiveWithAnyArgs().GetDelayMilliseconds(0);
@@ -146,7 +146,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var dummyRequest = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar/foo"));
 
                 var response = requestExecutor.Execute(dummyRequest);
-                response.IsServerError().ShouldBe(true);
+                response.IsServerError().ShouldBeTrue();
 
                 // Used default backoff strategy to pause after each retry (4 times)
                 defaultBackoffStrategy.ReceivedWithAnyArgs(4).GetDelayMilliseconds(0);
@@ -212,7 +212,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var dummyRequest = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar/foo"));
 
                 var response = await requestExecutor.ExecuteAsync(dummyRequest, CancellationToken.None);
-                response.TransportError.ShouldBe(true);
+                response.TransportError.ShouldBeTrue();
 
                 // Used default backoff strategy to pause after each retry (4 times)
                 defaultBackoffStrategy.ReceivedWithAnyArgs(4).GetDelayMilliseconds(0);
@@ -231,7 +231,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var dummyRequest = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar/foo"));
 
                 var response = await requestExecutor.ExecuteAsync(dummyRequest, CancellationToken.None);
-                response.IsClientError().ShouldBe(true);
+                response.IsClientError().ShouldBeTrue();
 
                 // Used throttling backoff strategy to pause after each retry (4 times)
                 defaultBackoffStrategy.DidNotReceiveWithAnyArgs().GetDelayMilliseconds(0);
@@ -250,7 +250,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var dummyRequest = new DefaultHttpRequest(HttpMethod.Delete, new CanonicalUri("http://api.foo.bar/foo"));
 
                 var response = await requestExecutor.ExecuteAsync(dummyRequest, CancellationToken.None);
-                response.IsServerError().ShouldBe(true);
+                response.IsServerError().ShouldBeTrue();
 
                 // Used default backoff strategy to pause after each retry (4 times)
                 defaultBackoffStrategy.ReceivedWithAnyArgs(4).GetDelayMilliseconds(0);
