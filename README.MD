@@ -12,6 +12,13 @@ library gives your ASP.NET or C# application access to all of Stormpath's featur
 - Secure API key authentication for your service.
 - Servlet support for Java web applications.
 
+In addition to these core Stormpath features, this SDK provides:
+
+- Support for .NET 4.5 and later
+- Support for Mono on Linux
+- Easy installation using NuGet
+- Fully asynchronous design using the [TPL](https://msdn.microsoft.com/en-us/library/dd460717(v=vs.110).aspx)
+
 If you have feedback about this library, please get in touch and share your
 thoughts! support@stormpath.com
 
@@ -23,7 +30,7 @@ This library is currently under active development. If you would like to be noti
 
 The Stormpath C# SDK consists of three packages: `Stormpath.SDK.Core`, `Stormpath.SDK.JsonNetSerializer`, and `Stormpath.SDK.RestSharpClient`. The latter two contain dependencies on external libraries ([JSON.NET](https://github.com/JamesNK/Newtonsoft.Json) and [RestSharp](https://github.com/restsharp/RestSharp)). These are required for the SDK to run properly.
 
-For convenience, the meta-package `Stormpath.SDK` contains **everything** you need to get up an running quickly. :thumbsup:
+For convenience, the meta-package `Stormpath.SDK` contains everything you need to get up an running quickly. :thumbsup:
 
 #### Using the Nuget Package Manager
 
