@@ -25,6 +25,8 @@ namespace Stormpath.SDK.Tests.Fakes
         public static IClientApiKey Create(bool valid)
         {
             var apiKey = Substitute.For<IClientApiKey>();
+            apiKey.GetId().Returns("FooId");
+            apiKey.GetSecret().Returns("FooSecret");
             apiKey.IsValid().Returns(valid);
 
             return apiKey;

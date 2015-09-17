@@ -42,6 +42,8 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="apiKey">The API Key to use.</param>
         /// <returns>This instance for method chaining.</returns>
+        /// <exception cref="System.ArgumentNullException"><paramref name="apiKey"/> is null.</exception>
+        /// <exception cref="System.ArgumentException"><paramref name="apiKey"/> is not valid.</exception>
         IClientBuilder SetApiKey(IClientApiKey apiKey);
 
         /// <summary>
@@ -82,6 +84,7 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="serializer">A valid <see cref="IJsonSerializer"/> instance.</param>
         /// <returns>This instance for method chaining.</returns>
+        /// <exception cref="System.ArgumentNullException"><paramref name="serializer"/> is null.</exception>
         IClientBuilder UseJsonSerializer(IJsonSerializer serializer);
 
         /// <summary>
@@ -90,6 +93,7 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="httpClient">A valid <see cref="IHttpClient"/> instance.</param>
         /// <returns>This instance for method chaining.</returns>
+        /// <exception cref="System.ArgumentNullException"><paramref name="httpClient"/> is null.</exception>
         IClientBuilder UseHttpClient(IHttpClient httpClient);
 
         /// <summary>
@@ -103,7 +107,7 @@ namespace Stormpath.SDK.Client
         /// Constructs a new <see cref="IClient"/> instance based on the builder's current configuration state.
         /// </summary>
         /// <returns>A new <see cref="IClient"/> instance.</returns>
-        /// <exception cref="System.ApplicationException">No valid API Key ID and Secret can be found.</exception>
+        /// <exception cref="System.ApplicationException">No valid API Key ID and Secret could be found.</exception>
         IClient Build();
     }
 }

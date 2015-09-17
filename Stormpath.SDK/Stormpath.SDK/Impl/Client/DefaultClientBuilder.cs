@@ -21,6 +21,7 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
+using Stormpath.SDK.Impl.Api;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
 
@@ -32,6 +33,7 @@ namespace Stormpath.SDK.Impl.Client
         public static readonly string DefaultBaseUrl = "https://api.stormpath.com/v1";
         public static readonly AuthenticationScheme DefaultAuthenticationScheme = AuthenticationScheme.SAuthc1;
 
+        private readonly IClientApiKeyBuilder clientApiKeyBuilder;
         private readonly IJsonSerializerBuilder serializerBuilder;
         private readonly IHttpClientBuilder httpClientBuilder;
         private readonly ICacheProviderBuilder cacheProviderBuilder;
@@ -48,12 +50,21 @@ namespace Stormpath.SDK.Impl.Client
             this.serializerBuilder = new DefaultJsonSerializerBuilder();
             this.cacheProviderBuilder = new DefaultCacheProviderBuilder();
             this.httpClientBuilder = new DefaultHttpClientBuilder();
+            this.clientApiKeyBuilder = ClientApiKeys.Builder();
+        }
+
+        internal DefaultClientBuilder(IClientApiKeyBuilder clientApiKeyBuilder)
+            : this()
+        {
+            this.clientApiKeyBuilder = clientApiKeyBuilder;
         }
 
         IClientBuilder IClientBuilder.SetApiKey(IClientApiKey apiKey)
         {
             if (apiKey == null)
                 throw new ArgumentNullException("API Key cannot be null.");
+            if (!apiKey.IsValid())
+                throw new ArgumentException("API Key is not valid.");
 
             this.apiKey = apiKey;
             return this;
@@ -94,6 +105,9 @@ namespace Stormpath.SDK.Impl.Client
 
         IClientBuilder IClientBuilder.UseJsonSerializer(IJsonSerializer serializer)
         {
+            if (serializer == null)
+                throw new ArgumentNullException(nameof(serializer));
+
             this.serializerBuilder.UseSerializer(serializer);
 
             return this;
@@ -101,6 +115,9 @@ namespace Stormpath.SDK.Impl.Client
 
         IClientBuilder IClientBuilder.UseHttpClient(IHttpClient httpClient)
         {
+            if (httpClient == null)
+                throw new ArgumentNullException(nameof(httpClient));
+
             this.httpClientBuilder.UseHttpClient(httpClient);
 
             return this;
@@ -133,8 +150,13 @@ namespace Stormpath.SDK.Impl.Client
 
         IClient IClientBuilder.Build()
         {
-            if (this.apiKey == null || !this.apiKey.IsValid())
-                throw new ArgumentException("API Key is not valid or has not been set. Use ClientApiKeys.Builder() to construct one.");
+            if (this.apiKey == null)
+            {
+                if (this.clientApiKeyBuilder != null)
+                    this.apiKey = this.clientApiKeyBuilder.Build();
+                else
+                    throw new ApplicationException("No valid API Key and Secret could be found.");
+            }
 
             if (this.logger == null)
                 this.logger = new NullLogger();

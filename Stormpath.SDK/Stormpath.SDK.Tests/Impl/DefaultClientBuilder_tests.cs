@@ -16,7 +16,9 @@
 // </remarks>
 
 using System;
+using NSubstitute;
 using Shouldly;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Extensions.Http;
 using Stormpath.SDK.Extensions.Serialization;
@@ -44,12 +46,10 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Throws_for_missing_API_key()
         {
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 var client = this.builder
-                .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
-                .SetBaseUrl("http://foobar")
-                .SetConnectionTimeout(10)
+                .SetApiKey(null)
                 .Build();
             });
         }
@@ -61,11 +61,20 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 this.builder
                     .SetApiKey(FakeApiKey.Create(valid: false))
-                    .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
-                    .SetBaseUrl("http://foobar")
-                    .SetConnectionTimeout(10)
                     .Build();
             });
+        }
+
+        [Fact]
+        public void Looks_for_default_ClientApiKey_if_none_specified()
+        {
+            var fakeKey = FakeApiKey.Create(valid: true);
+            var fakeClientApiKeyBuilder = Substitute.For<IClientApiKeyBuilder>();
+            fakeClientApiKeyBuilder.Build().Returns(fakeKey);
+            IClientBuilder builder = new DefaultClientBuilder(fakeClientApiKeyBuilder);
+
+            var client = builder.Build();
+            (client as DefaultClient).ApiKey.ShouldBe(fakeKey);
         }
 
         [Fact]

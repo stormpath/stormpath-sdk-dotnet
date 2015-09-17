@@ -39,6 +39,7 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class DefaultClient : IClient
     {
+        private readonly IClientApiKey apiKey;
         private readonly string baseUrl;
         private readonly AuthenticationScheme authenticationScheme;
         private readonly int connectionTimeout;
@@ -69,6 +70,7 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentException("Timeout cannot be negative.");
 
             this.logger = logger;
+            this.apiKey = apiKey;
             this.baseUrl = baseUrl;
             this.connectionTimeout = connectionTimeout;
             this.proxy = proxy;
@@ -83,6 +85,8 @@ namespace Stormpath.SDK.Impl.Client
         private IClient AsInterface => this;
 
         private string CurrentTenantHref => this.currentTenantHref.Nullable() ?? "tenants/current";
+
+        internal IClientApiKey ApiKey => this.apiKey;
 
         internal string BaseUrl => this.dataStore.BaseUrl;
 
