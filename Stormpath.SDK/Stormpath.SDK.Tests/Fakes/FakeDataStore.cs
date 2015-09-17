@@ -70,7 +70,6 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             cancellationToken.ThrowIfCancellationRequested();
             await Task.Yield();
-            this.calls.Add(href);
 
             return this.AsInterface.GetCollection<T>(href);
         }

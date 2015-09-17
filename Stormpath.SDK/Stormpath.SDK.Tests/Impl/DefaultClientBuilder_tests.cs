@@ -73,8 +73,6 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var client = this.builder
                 .SetApiKey(FakeApiKey.Create(valid: true))
-                .SetBaseUrl("http://foobar")
-                .SetConnectionTimeout(10)
                 .Build();
 
             // Defaults to SAuthc1
@@ -86,8 +84,6 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var client = this.builder
                 .SetApiKey(FakeApiKey.Create(valid: true))
-                .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
-                .SetConnectionTimeout(10)
                 .Build();
 
             // Default value
@@ -99,8 +95,6 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var client = this.builder
                 .SetApiKey(FakeApiKey.Create(valid: true))
-                .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
-                .SetBaseUrl("http://foobar")
                 .Build();
 
             // Default value

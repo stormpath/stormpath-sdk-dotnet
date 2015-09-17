@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Impl.Client
         private string baseUrl = DefaultBaseUrl;
         private int connectionTimeout = DefaultConnectionTimeout;
         private IWebProxy proxy;
-        private AuthenticationScheme authenticationScheme;
+        private AuthenticationScheme authenticationScheme = DefaultAuthenticationScheme;
         private IClientApiKey apiKey;
         private ILogger logger;
 
