@@ -120,6 +120,8 @@ IClient client = Clients.Builder()
 
 You can skip building the `IClientApiKey` object and the call to `.SetApiKey()` if you put your `apiKey.properties` file in the default location. Calling `.Build()` without specifying an API Key will check the default location. :thumbsup:
 
+Once you have built a `IClient`, keep it around! You should only need to create it **once** per application. It's thread-safe, so you can safely reuse it, even in an ASP.NET application.
+
 #### Retrieving your application
 
 Now that we have a `IClient`, we need to get an `IApplication` object that represents an Application in Stormpath. You should have a default application called "My Application" in your Stormpath account. Let's retrieve it:
