@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Directory
         /// <summary>
         /// Gets a queryable list of all accounts in this directory.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be asynchronously consumed to list or search accounts.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
         /// <example>
         ///     var allDirectoryAccounts = await myDirectory.GetAccounts().ToListAsync();
         /// </example>

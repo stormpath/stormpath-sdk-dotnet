@@ -27,7 +27,8 @@ namespace Stormpath.SDK.Account
         /// Creates a new <see cref="IAccount"/> that may login to this application.
         /// </summary>
         /// <param name="account">The account to create/persist.</param>
-        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IAccountCreationOptions"/>, which will be used when buidling the request.</param>
+        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IAccountCreationOptions"/>,
+        /// which will be used when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <example>
         /// If you would like to force disabling the backing directory's account registration workflow:
@@ -43,7 +44,7 @@ namespace Stormpath.SDK.Account
         /// Creates a new <see cref="IAccount"/> that may login to this application.
         /// </summary>
         /// <param name="account">The account to create/persist.</param>
-        /// <param name="creationOptions">An <see cref="IAccountCreationOptions"/> instance to use when building the request.</param>
+        /// <param name="creationOptions">An <see cref="IAccountCreationOptions"/> instance to use when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
@@ -63,8 +64,7 @@ namespace Stormpath.SDK.Account
         Task<IAccount> CreateAccountAsync(IAccount account, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new <see cref="IAccount"/> that may login to this application.
-        /// This convenience overload creates a request with the default options.
+        /// Creates a new <see cref="IAccount"/> that may login to this application, with the default creation options.
         /// </summary>
         /// <param name="givenName">The given name (aka 'first name' in Western cultures).</param>
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>

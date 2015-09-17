@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Application
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
         ///     var loginRequest = new UsernamePasswordRequest("jsmith", "Password123#");
-        ///     var result = await app.AuthenticateAccountAsync(loginRequest);
+        ///     var result = await myApp.AuthenticateAccountAsync(loginRequest);
         /// </example>
         Task<IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -108,7 +108,7 @@ namespace Stormpath.SDK.Application
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
-        ///     var result = await app.AuthenticateAccountAsync("jsmith", "Password123#");
+        ///     var result = await myApp.AuthenticateAccountAsync("jsmith", "Password123#");
         /// </example>
         Task<IAuthenticationResult> AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -121,7 +121,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is <c>true</c> if the authentication attempt succeeded; <c>false</c> otherwise.</returns>
         /// <example>
-        ///     if (await app.TryAuthenticateAccountAsync("jsmith", "Password123#"))
+        ///     if (await myApp.TryAuthenticateAccountAsync("jsmith", "Password123#"))
         ///     {
         ///         // Login successful
         ///     }
@@ -131,16 +131,16 @@ namespace Stormpath.SDK.Application
         /// <summary>
         /// Gets a queryable list of all accounts in this application.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be asynchronously consumed to list or search accounts.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
         /// <example>
-        ///     var allAccounts = await app.GetAccounts().ToListAsync();
+        ///     var allAccounts = await myApp.GetAccounts().ToListAsync();
         /// </example>
         IAsyncQueryable<IAccount> GetAccounts();
 
         /// <summary>
         /// Gets a queryable list of all account store mappings accessible to the application.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccountStoreMapping}"/> that may be asynchronously consumed to list or search account store mappings.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IAccountStoreMapping}"/> that may be used to asynchronously list or search account store mappings.</returns>
         IAsyncQueryable<IAccountStoreMapping> GetAccountStoreMappings();
 
         /// <summary>

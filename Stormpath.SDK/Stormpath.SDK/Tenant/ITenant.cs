@@ -19,10 +19,22 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tenant
 {
+    /// <summary>
+    /// A tenant represents a customer's private data 'space' within Stormpath that contains all of the customer's Stormpath-stored resources, like <see cref="Application.IApplication"/>, <see cref="Directory.IDirectory"/>, and <see cref="Account.IAccount"/>.
+    /// </summary>
     public interface ITenant : IResource, IAuditable, ITenantActions
     {
+        /// <summary>
+        /// Gets the tenant's globally-unique human-readable key in Stormpath.
+        /// <para><b>This can change in the future. Do not rely on it as a permanent identifier.</b> If you need a permanent ID, use the href as the permanent ID (this is true for all resources, not just Tenant resources).</para>
+        /// </summary>
+        /// <value>This tenant's globally-unique key. <b>This can change. Do not rely on it as a permanent identifier.</b></value>
         string Key { get; }
 
+        /// <summary>
+        /// Gets the tenant's globally-unique name in Stormpath.
+        /// </summary>
+        /// <value>This tenant's globally-unique name. <b>This can change. Do not rely on it as a permanent identifier.</b></value>
         string Name { get; }
     }
 }
