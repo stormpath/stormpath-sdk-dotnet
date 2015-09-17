@@ -19,7 +19,7 @@ thoughts! support@stormpath.com
 
 This library is currently under active development. If you would like to be notified when we publish our first release candidate, watch this repository or send an email to nate@stormpath.com.
 
-## Installation Instructions
+## Installation instructions
 
 Coming soon.
 
@@ -39,7 +39,7 @@ In this quickstart, we'll use Visual Studio to make a simple console application
  apiKey.secret = lWxOiKqKPNwJmSldbiSkEbkNjgh2uRSNAb+AEXAMPLE
  ```
  
- Save this file in a secure location, such as in a `.stormpath` directory in your home directory. (You can save it anywhere you like, but `%homedrive%%homepath\.stormpath\` is the default location the SDK checks.)
+ Save this file in a secure location, such as a `.stormpath` directory in your home directory. (This is the default location the SDK checks, but you can specify a different location if you'd like.)
  
  For example:
  
@@ -57,16 +57,14 @@ The `apiKey.properties` file holds your API key information, and can be used to 
 Next, let's create a simple Visual Studio project and add the Stormpath SDK.
 
  1. Create a new Console Application project.
- 2. Right-click on the new project in the Solution Explorer and choose **Manage Nuget Packages...**
- 3. Search for Stormpath. Install the Stormpath SDK package.
-   * Alternatively, you can simply execute `install-package Stormpath.SDK` from the Pacakge Manager Console.
- 4. Add the following using statements to the top of your `Program.cs` file:
+ 2. Use the [instructions above](#installation-instructions) to install the Stormpath SDK into your project.
+ 3. Add the following using statements to the top of your `Program.cs` file:
  
- ```
+ ```csharp
  using Stormpath.SDK;
  using Stormpath.SDK.Client;
  using Stormpath.SDK.Account;
- using Stormpath.SDK.Error
+ using Stormpath.SDK.Error;
  ```
  
 #### `await` a minute
@@ -75,28 +73,28 @@ The Stormpath SDK performs `await`able asynchronous operations by default. This 
 
 In the Console Application template, however, the entry point is `static void Main()`, so we can't use the `await` keyword. In an ASP.NET application, we could just change the method signature to `async Task`, but that doesn't work well in a console app. Let's get around that by writing a separate method instead:
 
-```
-static Task MainAsync(CancellationToken cancellationToken)
+```csharp
+static Task MainAsync()
 {
 }
 ```
 
 and calling it synchronously from `Main()`:
 
-````
+```csharp
 static void Main(string[] args)
 {
-    MainAsync(CancellationToken.None).GetAwaiter().GetResult();
+    MainAsync().GetAwaiter().GetResult();
 }
-````
+```
 
 If you are confused by all this `async` business, check out Stephen Cleary's [excellent introductory blog post](http://blog.stephencleary.com/2012/02/async-and-await.html) on the subject.
 
-#### Let's make some requests!
+#### Creating a client
 
-Alright, now for the fun stuff. The first thing we need to connect to the Stormpath API is a `Client` object. In our new `MainAsync` method, let's create one:
+The first thing we need to connect to the Stormpath API is a `IClient` object. In our new `MainAsync` method, let's create one:
 
-````
+```csharp
 // If you put the apiKey.properties file in the default location
 // (%homedrive%%homepath\.stormpath\apiKey.properties), you can skip this!
 IClientApiKey myApiKey = ClientApiKeys.Builder()
@@ -107,11 +105,80 @@ IClientApiKey myApiKey = ClientApiKeys.Builder()
 IClient client = Clients.Builder()
     .SetApiKey(myApiKey)
     .Build();
-````
+```
 
-You can skip building the `IClientApiKey` object and using `.SetApiKey()` if you put your `apiKey.properties` file in the default location, because calling `.Build()` without specifying an API Key is smart enough to look for one there. :smile:
+You can skip building the `IClientApiKey` object and the call to `.SetApiKey()` if you put your `apiKey.properties` file in the default location. Calling `.Build()` without specifying an API Key will check the default location. :thumbsup:
 
+#### Retrieving your application
 
+Now that we have a `IClient`, we need to get an `IApplication` object that represents an Application in Stormpath. You should have a default application called "My Application" in your Stormpath account. Let's retrieve it:
+
+```csharp
+var myApp = await client.GetApplications()
+    .Where(x => x.Name == "My Application")
+    .SingleAsync();
+```
+
+We can use this `IApplication` object to create user accounts, log in user accounts, and all sorts of other cool stuff.
+
+#### Creating a user account
+
+Let's create a new user!
+
+```csharp
+var joe = await myApp.CreateAccountAsync("Joe", "Stormtrooper",
+                                         "tk421@galacticempire.co",
+                                         "Changeme123!");
+```
+
+Easy! :smile: The returned `IAccount` object will contain all the account's data.
+
+#### Logging in
+
+Now that we have a valid user in the application, we can perform a login request.
+
+```csharp
+// Let's imagine that we got these values from a web request.
+var usernameOrEmail = "tk421@galacticempire.co";
+var password = "Changeme123!";
+
+var wasLoginSuccessful = false;
+try
+{
+     var loggedInAccount = await myApp.AuthenticateAccountAsync(usernameOrEmail, password);
+     Console.WriteLine("User {0} logged in!", loggedInAccount.FullName);
+     wasLoginSuccessful = true;
+}
+catch (ResourceException rex)
+{
+    Console.WriteLine("Could not log in. Error: " + rex.Message);
+    wasLoginSuccessful = false;
+}
+```
+
+:bulb: You can also use the `TryAuthenticateAccountAsync(username, password)` overload to get a `bool` result if you don't need to access the account's data after login.
+
+#### Clean up
+
+Cleaning up your Stormpath application after our demo is easy:
+
+```csharp
+try
+{
+    await joe.DeleteAsync();
+}
+catch (ResourceException rex)
+{
+    Console.WriteLine("Unexpected error when deleting" + joe.Email + ". Error: " + rex.Message);
+}
+```
+
+#### Other things you can do with the SDK
+
+ * Create and delete entire applications
+ * Search for accounts using LINQ
+ * Modify and save account data
+ * Reset an account's password
 
 ## Build Instructions
 
