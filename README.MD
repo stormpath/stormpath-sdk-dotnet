@@ -148,6 +148,7 @@ Let's create a new user!
 var joe = await myApp.CreateAccountAsync("Joe", "Stormtrooper",
                                          "tk421@galacticempire.co",
                                          "Changeme123!");
+Console.WriteLine("User " + joe.FullName + " created");
 ```
 
 The returned `IAccount` object will contain all the account's data. Easy! :smile: 
@@ -165,7 +166,7 @@ try
 {
      var loginResult = await myApp.AuthenticateAccountAsync(usernameOrEmail, password);
      var loggedInAccount = await loginResult.GetAccountAsync();
-     Console.WriteLine("User {0} logged in!", loggedInAccount.FullName);
+     Console.WriteLine("User {0} logged in", loggedInAccount.FullName);
 }
 catch (ResourceException rex)
 {
@@ -188,6 +189,12 @@ catch (ResourceException rex)
 {
     Console.WriteLine("Unexpected error when deleting " + joe.Email + ". Error: " + rex.Message);
 }
+```
+
+As a final touch, we can add this line at the end so the console window doesn't disappear immediately:
+
+```csharp
+Console.ReadKey(false);
 ```
 
 #### Other things you can do with the SDK
