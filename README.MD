@@ -165,7 +165,8 @@ var password = "Changeme123!";
 var wasLoginSuccessful = false;
 try
 {
-     var loggedInAccount = await myApp.AuthenticateAccountAsync(usernameOrEmail, password);
+     var loginResult = await myApp.AuthenticateAccountAsync(usernameOrEmail, password);
+     var loggedInAccount = await loginResult.GetAccountAsync();
      Console.WriteLine("User {0} logged in!", loggedInAccount.FullName);
      wasLoginSuccessful = true;
 }
