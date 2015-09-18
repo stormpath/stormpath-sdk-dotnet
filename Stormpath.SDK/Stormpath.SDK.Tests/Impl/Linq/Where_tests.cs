@@ -200,5 +200,15 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             query.GeneratedArgumentsWere(this.Href, "createdAt=(2015-01-01T00:00:00Z,2015-12-31T23:59:59Z]");
         }
+
+        [Fact]
+        public void Alternate_query_syntax_is_okay()
+        {
+            var query = from account in this.Harness.Queryable
+                        where account.Email == "tk421@deathstar.co"
+                        select account;
+
+            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co");
+        }
     }
 }
