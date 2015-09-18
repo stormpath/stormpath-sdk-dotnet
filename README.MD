@@ -216,14 +216,20 @@ Building the SDK requires Visual Studio 2015.
 
 #### Building with MSBuild
 
- 1. Clone the branch you want to build: `git clone https://github.com/stormpath/stormpath-sdk-csharp.git`
+ 1. Clone the repository: `git clone https://github.com/stormpath/stormpath-sdk-csharp.git`
  2. `cd stormpath-sdk-csharp\Stormpath.SDK
  2. Assuming you have [nuget.exe](https://docs.nuget.org/consume/installing-nuget#command-line-utility) in your `PATH`: `nuget restore Stormpath.SDK.sln`
  3. `msbuild Stormpath.SDK.sln`
 
 #### Building with Mono
 
-Coming soon.
+Building with Mono requires Mono 4.0 or greater installed on your machine.
+
+ 1. Clone the repository: `git clone https://github.com/stormpath/stormpath-sdk-csharp.git`
+ 2. `cd stormpath-sdk-csharp\Stormpath.SDK`
+ 3. If you don't have NuGet available otherwise, use your favorite command line tool to download NuGet: `wget https://nuget.org/nuget.exe`
+ 4. `mono nuget.exe restore Stormpath.SDK.sln`
+ 5. `xbuild Stormpath.SDK.sln`
 
 ## Contributing
 
