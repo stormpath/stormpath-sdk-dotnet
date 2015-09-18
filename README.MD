@@ -43,7 +43,7 @@ Simply run `install-package Stormpath.SDK`. Done!
 
 #### Using Mono
 
-Simply run `mono nuget.exe install Stormpath.SDK`. Done!
+It's as easy as `mono nuget.exe install Stormpath.SDK`.
 
 ## Quickstart
 
