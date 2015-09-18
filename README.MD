@@ -41,6 +41,10 @@ For convenience, the meta-package `Stormpath.SDK` contains everything you need t
 
 Simply run `install-package Stormpath.SDK`. Done!
 
+#### Using Mono
+
+Simply run `mono nuget.exe install Stormpath.SDK`. Done!
+
 ## Quickstart
 
 In this quickstart, we'll use Visual Studio to make a simple console application that creates a user and logs them into an application.
