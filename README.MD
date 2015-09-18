@@ -162,18 +162,15 @@ Now that we have a valid user in the application, we can perform a login request
 var usernameOrEmail = "tk421@galacticempire.co";
 var password = "Changeme123!";
 
-var wasLoginSuccessful = false;
 try
 {
      var loginResult = await myApp.AuthenticateAccountAsync(usernameOrEmail, password);
      var loggedInAccount = await loginResult.GetAccountAsync();
      Console.WriteLine("User {0} logged in!", loggedInAccount.FullName);
-     wasLoginSuccessful = true;
 }
 catch (ResourceException rex)
 {
     Console.WriteLine("Could not log in. Error: " + rex.Message);
-    wasLoginSuccessful = false;
 }
 ```
 
