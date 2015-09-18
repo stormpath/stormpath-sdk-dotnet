@@ -1,0 +1,62 @@
+﻿// <copyright file="ApplicationCreationOptionsBuilder.cs" company="Stormpath, Inc.">
+//      Copyright (c) 2015 Stormpath, Inc.
+// </copyright>
+// <remarks>
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </remarks>
+
+using Stormpath.SDK.Impl.Application;
+
+namespace Stormpath.SDK.Application
+{
+    /// <summary>
+    /// A builder to construct <see cref="IApplicationCreationOptions"/> objects.
+    /// </summary>
+    public sealed class ApplicationCreationOptionsBuilder
+    {
+        /// <summary>
+        /// Gets whether to create a new <see cref="Directory.IDirectory"/> for the new application's needs.
+        /// </summary>
+        /// <value>
+        /// Default value: <c>false</c>.
+        /// <para>
+        /// If <c>true</c>, a new directory will be created. The new directory will automatically be assigned as the application's default login source.
+        /// The directory will be automatically named based on heuristics to ensure a guaranteed unique name based on the application.
+        /// If you want to specify the directory's name, set the <see cref="DirectoryName"/> property.
+        /// </para>
+        /// <para>
+        /// If <c>false</c>, no directory will be created.
+        /// </para>
+        /// </value>
+        public bool CreateDirectory { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets the name to use when creating a new <see cref="Directory.IDirectory"/>.
+        /// </summary>
+        /// <value>
+        /// Default value: <c>null</c>.
+        /// <para>The name to assign to the new directory. This only has an effect if <see cref="CreateDirectory"/> is <c>true</c>.</para>
+        /// <para>If you want to have a default name assigned automatically, set this to <see cref="string.Empty"/> or <c>null</c>.</para>
+        /// </value>
+        public string DirectoryName { get; set; } = null;
+
+        /// <summary>
+        /// Creates a new <see cref="IApplicationCreationOptions"/> instance based on the current builder state.
+        /// </summary>
+        /// <returns>A new <see cref="IApplicationCreationOptions"/> instance.</returns>
+        public IApplicationCreationOptions Build()
+        {
+            return new DefaultApplicationCreationOptions(this.CreateDirectory, this.DirectoryName);
+        }
+    }
+}
