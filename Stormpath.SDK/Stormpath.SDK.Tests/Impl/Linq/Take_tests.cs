@@ -68,6 +68,18 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
+        public void Throws_for_invalid_value()
+        {
+            Should.Throw<ArgumentOutOfRangeException>(() =>
+            {
+                var query = this.Harness.Queryable
+                    .Take(-1);
+
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+            });
+        }
+
+        [Fact]
         public async Task Observes_take_limit()
         {
             // Scenario: .Take() functions a little differently than the limit=? parameter

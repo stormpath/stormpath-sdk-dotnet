@@ -37,22 +37,13 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             this.harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, ds);
         }
 
-        protected string Href
-        {
-            get { return href; }
-        }
+        protected string Href => href;
 
         protected CollectionTestHarness<IAccount> Harness
         {
-            get
-            {
-                return this.harness;
-            }
+            get { return this.harness; }
 
-            set
-            {
-                this.harness = value;
-            }
+            set { this.harness = value; }
         }
     }
 }

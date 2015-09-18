@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using Shouldly;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
@@ -60,6 +61,18 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             // Expected behavior: the last call will be kept
             query.GeneratedArgumentsWere(this.Href, "offset=5");
+        }
+
+        [Fact]
+        public void Throws_for_invalid_value()
+        {
+            Should.Throw<ArgumentOutOfRangeException>(() =>
+            {
+                var query = this.Harness.Queryable
+                    .Skip(-1);
+
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+            });
         }
     }
 }

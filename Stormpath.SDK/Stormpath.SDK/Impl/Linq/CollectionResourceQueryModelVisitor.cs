@@ -100,20 +100,19 @@ namespace Stormpath.SDK.Impl.Linq
             if (takeResultOperator == null)
                 return false;
 
-            var expression = takeResultOperator.Count;
-            if (expression.NodeType == ExpressionType.Constant)
-            {
-                var limit = (int)((ConstantExpression)expression).Value;
-                this.ParsedModel.ExecutionPlan.MaxItems = limit;
-
-                this.ParsedModel.Limit = limit;
-                if (limit > DefaultApiPageLimit)
-                    this.ParsedModel.Limit = DefaultApiPageLimit;
-            }
-            else
-            {
+            var expression = takeResultOperator.Count as ConstantExpression;
+            if (expression == null)
                 throw new NotSupportedException("Unsupported expression in Take clause.");
-            }
+
+            var value = (int)expression.Value;
+            if (value < 1)
+                throw new ArgumentOutOfRangeException("Take must be greater than zero.");
+
+            this.ParsedModel.ExecutionPlan.MaxItems = value;
+            this.ParsedModel.Limit = value;
+
+            if (value > DefaultApiPageLimit)
+                this.ParsedModel.Limit = DefaultApiPageLimit;
 
             return true;
         }
@@ -128,7 +127,11 @@ namespace Stormpath.SDK.Impl.Linq
             if (expression == null)
                 throw new NotSupportedException("Unsupported expression in Skip clause.");
 
-            this.ParsedModel.Offset = (int)expression.Value;
+            var value = (int)expression.Value;
+            if (value < 1)
+                throw new ArgumentOutOfRangeException("Skip must be greater than zero.");
+
+            this.ParsedModel.Offset = value;
 
             return true;
         }
