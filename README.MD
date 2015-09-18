@@ -81,7 +81,6 @@ Next, let's create a simple Visual Studio project and add the Stormpath SDK.
  ```csharp
  using Stormpath.SDK;
  using Stormpath.SDK.Client;
- using Stormpath.SDK.Account;
  using Stormpath.SDK.Error;
  ```
  
