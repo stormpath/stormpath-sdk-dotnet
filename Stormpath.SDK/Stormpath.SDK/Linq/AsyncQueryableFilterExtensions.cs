@@ -42,15 +42,9 @@ namespace Stormpath.SDK
 
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
-                    LinqHelper.GetMethodInfo(Filter, (IQueryable<TSource>)null, caseInsensitiveMatch),
+                    LinqHelper.GetMethodInfo(Sync.FilterExtensions.Filter, (IQueryable<TSource>)null, caseInsensitiveMatch),
                     source.Expression,
                     Expression.Constant(caseInsensitiveMatch)));
-        }
-
-        private static IQueryable<TSource> Filter<TSource>(IQueryable<TSource> source, string caseInsensitiveMatch)
-        {
-            // todo remove
-            throw new NotImplementedException("This method stub is just a proxy that is inserted into the expression tree.");
         }
     }
 }

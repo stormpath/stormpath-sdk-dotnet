@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System.Linq;
 using System.Threading;
 using NSubstitute;
 using Shouldly;
@@ -29,6 +30,15 @@ namespace Stormpath.SDK.Tests.Helpers
     public static class LinqAssertExtensions
     {
         public static void GeneratedArgumentsWere<T>(this IAsyncQueryable<T> queryable, string href, string arguments)
+        {
+            var resourceQueryable = queryable as CollectionResourceQueryable<T>;
+            if (resourceQueryable == null)
+                Assertly.Fail("This queryable is not a CollectionResourceQueryable.");
+
+            resourceQueryable.CurrentHref.ShouldBe($"{href}?{arguments}");
+        }
+
+        public static void GeneratedSynchronousArgumentsWere<T>(this IQueryable<T> queryable, string href, string arguments)
         {
             var resourceQueryable = queryable as CollectionResourceQueryable<T>;
             if (resourceQueryable == null)

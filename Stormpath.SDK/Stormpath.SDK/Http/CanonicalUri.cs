@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http.Support;
 

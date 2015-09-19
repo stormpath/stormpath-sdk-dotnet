@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.DataStore;

@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Remotion.Linq;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Linq.RequestModel;
@@ -65,13 +64,6 @@ namespace Stormpath.SDK.Impl.Linq
             return returnDefaultWhenEmpty
                 ? ExecuteCollection<T>(queryModel).SingleOrDefault()
                 : ExecuteCollection<T>(queryModel).Single();
-        }
-
-        private static MethodInfo GetGenericExecuteCollectionMethod(Type innerType)
-        {
-            var method = typeof(CollectionResourceQueryExecutor).GetMethod(nameof(ExecuteCollection), new Type[] { typeof(CollectionResourceRequestModel) });
-            var generic = method.MakeGenericMethod(innerType);
-            return generic;
         }
 
         private static CollectionResourceRequestModel GenerateRequestModel(QueryModel queryModel)

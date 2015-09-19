@@ -147,6 +147,8 @@
     <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
+    <Compile Include="Sync\FilterExtensions.cs" />
+    <Compile Include="Sync\SyncQueryableExtensions.cs" />
     <Compile Include="Serialization\IJsonSerializer.cs" />
     <Compile Include="Impl\DataStore\IResourceConverter.cs" />
     <Compile Include="Impl\DataStore\IResourceDataRequest.cs" />

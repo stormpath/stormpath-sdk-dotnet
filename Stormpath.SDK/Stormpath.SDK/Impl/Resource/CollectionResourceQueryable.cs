@@ -83,11 +83,11 @@ namespace Stormpath.SDK.Impl.Resource
             var relinqProvider = provider as DefaultQueryProvider;
             var executor = relinqProvider?.Executor as CollectionResourceQueryExecutor;
             if (relinqProvider == null || executor == null)
-                throw new InvalidOperationException("LINQ queries must start from a supported ICollectionResourceQueryable.");
+                throw new InvalidOperationException("LINQ queries must start from a supported provider.");
 
             this.baseHref = executor.Href;
             this.dataStore = executor.DataStore;
-            this.proxy = CreateProxy();
+            this.proxy = null;
             this.expressionOverride = expression;
         }
 

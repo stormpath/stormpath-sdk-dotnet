@@ -80,7 +80,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public async Task Observes_take_limit()
+        public async Task ToListAsync_observes_take_limit()
         {
             // Scenario: .Take() functions a little differently than the limit=? parameter
             // in Stormpath, even though that's what it translates to. .Take() represents an
