@@ -45,10 +45,6 @@ namespace Stormpath.SDK.Impl.Resource
             this.InternalDataStore = dataStore;
             this.InternalDataStoreSync = dataStore as IInternalDataStoreSync;
 
-            if (this.InternalDataStore == null ||
-                this.InternalDataStoreSync == null)
-                throw new ApplicationException("Internal data store could not be initialized.");
-
             this.properties = new ConcurrentDictionary<string, object>(properties);
             this.dirtyProperties = new ConcurrentDictionary<string, object>();
             this.isDirty = false;
