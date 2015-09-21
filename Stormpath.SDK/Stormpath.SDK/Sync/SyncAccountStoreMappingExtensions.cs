@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Sync
     public static class SyncAccountStoreMappingExtensions
     {
         /// <summary>
-        /// Gets this mapping's <see cref="IAccountStore"/> (either a Group or <see cref="Directory.IDirectory"/>), to be assigned to the application.
+        /// Synchronously gets this mapping's <see cref="IAccountStore"/> (either a Group or <see cref="Directory.IDirectory"/>), to be assigned to the application.
         /// </summary>
         /// <param name="accountStoreMapping">The account store mapping.</param>
         /// <returns>The mapping's <see cref="IAccountStore"/>.</returns>
@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Sync
             => (accountStoreMapping as IAccountStoreMappingSync).GetAccountStore();
 
         /// <summary>
-        /// Gets the <see cref="IApplication"/> represented by this mapping.
+        /// Synchronously gets the <see cref="IApplication"/> represented by this mapping.
         /// </summary>
         /// <param name="accountStoreMapping">The account store mapping.</param>
         /// <returns>The mapping's <see cref="IApplication"/>.</returns>

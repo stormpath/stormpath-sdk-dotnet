@@ -21,10 +21,10 @@ using Stormpath.SDK.Impl.Account;
 
 namespace Stormpath.SDK.Sync
 {
-    public static class SyncAccountCreationExtensions
+    public static class SyncAccountCreationActionsExtensions
     {
         /// <summary>
-        /// Creates a new <see cref="IAccount"/> that may login to this application.
+        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="account">The account to create/persist.</param>
@@ -38,11 +38,11 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
-        public static IAccount CreateAccount(this IAccountCreation source, IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction)
-            => (source as IAccountCreationSync).CreateAccount(account, creationOptionsAction);
+        public static IAccount CreateAccount(this IAccountCreationActions source, IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction)
+            => (source as IAccountCreationActionsSync).CreateAccount(account, creationOptionsAction);
 
         /// <summary>
-        /// Creates a new <see cref="IAccount"/> that may login to this application.
+        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="account">The account to create/persist.</param>
@@ -51,11 +51,11 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
-        public static IAccount CreateAccount(this IAccountCreation source, IAccount account, IAccountCreationOptions creationOptions)
-            => (source as IAccountCreationSync).CreateAccount(account, creationOptions);
+        public static IAccount CreateAccount(this IAccountCreationActions source, IAccount account, IAccountCreationOptions creationOptions)
+            => (source as IAccountCreationActionsSync).CreateAccount(account, creationOptions);
 
         /// <summary>
-        /// Creates a new <see cref="IAccount"/> that may login to this application.
+        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="account">The account to create/persist.</param>
@@ -63,11 +63,11 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
-        public static IAccount CreateAccount(this IAccountCreation source, IAccount account)
-            => (source as IAccountCreationSync).CreateAccount(account);
+        public static IAccount CreateAccount(this IAccountCreationActions source, IAccount account)
+            => (source as IAccountCreationActionsSync).CreateAccount(account);
 
         /// <summary>
-        /// Creates a new <see cref="IAccount"/> that may login to this application, with the default creation options.
+        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application, with the default creation options.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="givenName">The given name (aka 'first name' in Western cultures).</param>
@@ -78,7 +78,7 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
-        public static IAccount CreateAccount(this IAccountCreation source, string givenName, string surname, string email, string password)
-            => (source as IAccountCreationSync).CreateAccount(givenName, surname, email, password);
+        public static IAccount CreateAccount(this IAccountCreationActions source, string givenName, string surname, string email, string password)
+            => (source as IAccountCreationActionsSync).CreateAccount(givenName, surname, email, password);
     }
 }

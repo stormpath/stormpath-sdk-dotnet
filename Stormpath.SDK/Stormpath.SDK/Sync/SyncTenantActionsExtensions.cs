@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Sync
     public static class SyncTenantActionsExtensions
     {
         /// <summary>
-        /// Creates a new <see cref="IApplication"/> resource in the current tenant.
+        /// Synchronously creates a new <see cref="IApplication"/> resource in the current tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="application">The <see cref="IApplication"/> to create.</param>
@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).CreateApplication(application, creationOptionsAction);
 
         /// <summary>
-        /// Creates a new <see cref="IApplication"/> resource in the current tenant.
+        /// Synchronously creates a new <see cref="IApplication"/> resource in the current tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="application">The <see cref="IApplication"/> to create.</param>
@@ -48,7 +48,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).CreateApplication(application, creationOptions);
 
         /// <summary>
-        /// Creates a new <see cref="IApplication"/> resource in the current tenant, with the default creation options.
+        /// Synchronously creates a new <see cref="IApplication"/> resource in the current tenant, with the default creation options.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="application">The <see cref="IApplication"/> to create.</param>
@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).CreateApplication(application);
 
         /// <summary>
-        /// Creates a new <see cref="IApplication"/> resource in the current tenant.
+        /// Synchronously creates a new <see cref="IApplication"/> resource in the current tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="name">The name of the application.</param>

@@ -23,11 +23,11 @@ namespace Stormpath.SDK.Sync
     public static class SyncDataStoreExtensions
     {
         /// <summary>
-        /// Retrieves the resource at the specified <paramref name="href"/> URL synchronously and returns the resource
+        /// Synchronously retrieves the resource at the specified <paramref name="href"/> URL synchronously and returns the resource
         /// as an instance of the specified class <typeparamref name="T"/>.
         /// </summary>
         /// <param name="dataStore">The object implementing the <see cref="IDataStore"/> interface.</param>
-        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <typeparam name="T">The type of the returned <see cref="Resource.IResource"/> value.</typeparam>
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
         public static T GetResource<T>(this IDataStore dataStore, string href)

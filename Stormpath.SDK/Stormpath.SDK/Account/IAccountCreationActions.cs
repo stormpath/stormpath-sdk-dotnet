@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountCreation.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAccountCreationActions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Account
 {
-    public interface IAccountCreation
+    public interface IAccountCreationActions
     {
         /// <summary>
         /// Creates a new <see cref="IAccount"/> that may login to this application.

@@ -24,10 +24,10 @@ namespace Stormpath.SDK.Sync
     public static class SyncClientExtensions
     {
         /// <summary>
-        /// Gets the sole <see cref="ITenant"/> associated to this <see cref="IClient"/> synchronously.
+        /// Synchronously gets the sole <see cref="ITenant"/> associated to this <see cref="IClient"/>.
         /// </summary>
         /// <param name="client">The client.</param>
-        /// <returns>A Task whose result is the <see cref="ITenant"/> associated to this client.</returns>
+        /// <returns>The <see cref="ITenant"/> associated to this client.</returns>
         public static ITenant GetCurrentTenant(this IClient client)
             => (client as IClientSync).GetCurrentTenant();
     }

@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Impl.Auth
     internal interface IAuthenticationResultSync
     {
         /// <summary>
-        /// Gets the successfully authenticated <see cref="IAccount"/>.
+        /// Synchronously gets the successfully authenticated <see cref="IAccount"/>.
         /// </summary>
         /// <returns>The <see cref="IAccount"/> that was successfully authenticated.</returns>
         IAccount GetAccount();

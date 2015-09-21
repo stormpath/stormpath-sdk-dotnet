@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Impl.Resource
     internal interface IDeletableSync
     {
         /// <summary>
-        /// Deletes the resource.
+        /// Synchronously deletes the resource.
         /// </summary>
         /// <returns>Whether the delete operation succeeded.</returns>
         /// <exception cref="Error.ResourceException">The delete operation failed.</exception>

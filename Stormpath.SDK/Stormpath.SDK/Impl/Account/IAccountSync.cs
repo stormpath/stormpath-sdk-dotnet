@@ -25,13 +25,13 @@ namespace Stormpath.SDK.Impl.Account
     internal interface IAccountSync : ISaveableSync<IAccount>, IDeletableSync
     {
         /// <summary>
-        /// Gets the account's parent <see cref="IDirectory"/> (where the account is stored).
+        /// Synchronously gets the account's parent <see cref="IDirectory"/> (where the account is stored).
         /// </summary>
         /// <returns>The directory.</returns>
         IDirectory GetDirectory();
 
         /// <summary>
-        /// Gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
+        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
         /// </summary>
         /// <returns>The tenant.</returns>
         ITenant GetTenant();

@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Sync
     public static class SyncResourceExtensions
     {
         /// <summary>
-        /// Creates or updates the resource.
+        /// Synchronously creates or updates the resource.
         /// </summary>
         /// <param name="resource">The resource.</param>
         /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Sync
             where T : IResource => (resource as ISaveableSync<T>).Save();
 
         /// <summary>
-        /// Deletes the resource.
+        /// Synchronously deletes the resource.
         /// </summary>
         /// <param name="resource">The resource.</param>
         /// <returns>Whether the delete operation succeeded.</returns>

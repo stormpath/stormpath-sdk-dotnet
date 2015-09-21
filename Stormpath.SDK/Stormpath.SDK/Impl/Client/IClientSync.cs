@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Impl.Client
     internal interface IClientSync : ITenantActionsSync, IDataStoreSync
     {
         /// <summary>
-        /// Gets the sole <see cref="ITenant"/> associated to this <see cref="IClient"/> synchronously.
+        /// Synchronously gets the sole <see cref="ITenant"/> associated to this <see cref="IClient"/>.
         /// </summary>
         /// <returns>The <see cref="ITenant"/> associated to this client.</returns>
         ITenant GetCurrentTenant();

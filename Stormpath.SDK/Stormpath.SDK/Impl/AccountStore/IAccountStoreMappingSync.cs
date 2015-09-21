@@ -21,19 +21,19 @@ using Stormpath.SDK.Application;
 namespace Stormpath.SDK.Impl.AccountStore
 {
     /// <summary>
-    /// Represents the assignment of an <see cref="IAccountStore"/> AccountStore (either a Group or <see cref="Directory.IDirectory"/>) to an <see cref="IApplication"/> that can be accessed synchronously.
+    /// Represents the assignment of an <see cref="IAccountStore"/> AccountStore (either a Group or <see cref="SDK.Directory.IDirectory"/>) to an <see cref="IApplication"/> that can be accessed synchronously.
     /// <para>When an <see cref="IAccountStoreMapping"/> is created, the accounts in the account store are granted access to become users of the linked <see cref="IApplication"/>. The order in which AccountStores are assigned to an application determines how login attempts work in Stormpath.</para>
     /// </summary>
     internal interface IAccountStoreMappingSync
     {
         /// <summary>
-        /// Gets this mapping's <see cref="IAccountStore"/> (either a Group or <see cref="Directory.IDirectory"/>), to be assigned to the application.
+        /// Synchronously gets this mapping's <see cref="IAccountStore"/> (either a Group or <see cref="SDK.Directory.IDirectory"/>), to be assigned to the application.
         /// </summary>
         /// <returns>The mapping's <see cref="IAccountStore"/>.</returns>
         IAccountStore GetAccountStore();
 
         /// <summary>
-        /// Gets the <see cref="IApplication"/> represented by this mapping.
+        /// Synchronously gets the <see cref="IApplication"/> represented by this mapping.
         /// </summary>
         /// <returns>The mapping's <see cref="IApplication"/>.</returns>
         IApplication GetApplication();

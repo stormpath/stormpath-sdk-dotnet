@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Sync
     public static class SyncApplicationExtensions
     {
         /// <summary>
-        /// Authenticates an account's submitted principals and credentials (e.g. username and password).
+        /// Synchronously authenticates an account's submitted principals and credentials (e.g. username and password).
         /// The account must be in one of the Application's assigned account stores.
         /// If not in an assigned account store, the authentication attempt will fail.
         /// </summary>
@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).AuthenticateAccount(request);
 
         /// <summary>
-        /// Authenticates an account's submitted principals and credentials (e.g. username and password).
+        /// Synchronously authenticates an account's submitted principals and credentials (e.g. username and password).
         /// The account must be in one of the Application's assigned account stores.
         /// If not in an assigned account store, the authentication attempt will fail.
         /// </summary>
@@ -64,8 +64,8 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).AuthenticateAccount(username, password);
 
         /// <summary>
-        /// Attempts to authenticate an account with the specified username and password.
-        /// <para>If you need to obtain the authenticated account details, use <see cref="AuthenticateAccount(string, string)"/> instead.</para>
+        /// Attempts to synchronously authenticate an account with the specified username and password.
+        /// <para>If you need to obtain the authenticated account details, use <see cref="AuthenticateAccount(IApplication, string, string)"/> instead.</para>
         /// </summary>
         /// <param name="application">The application.</param>
         /// <param name="username">The account's username.</param>
@@ -81,7 +81,7 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).TryAuthenticateAccount(username, password);
 
         /// <summary>
-        /// Gets the <see cref="IAccountStore"/> (either a Group or <see cref="Directory.IDirectory"/>)
+        /// Synchronously gets the <see cref="IAccountStore"/> (either a Group or <see cref="Directory.IDirectory"/>)
         /// used to persist new accounts created by the application.
         /// </summary>
         /// <param name="application">The application.</param>
@@ -91,11 +91,11 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).GetDefaultAccountStore();
 
         /// <summary>
-        /// Verifies the password reset token (received in the user's email) and immediately
+        /// Synchronously verifies the password reset token (received in the user's email) and immediately
         /// changes the password in the same request, if the token is valid.
         /// <para>Once the token has been successfully used, it is immediately invalidated and can't be used again.
         /// If you need to change the password again, you will previously need to execute
-        /// <see cref="SendPasswordResetEmailAsync(string, CancellationToken)"/> again in order to obtain a new password reset token.</para>
+        /// <see cref="SendPasswordResetEmail(IApplication, string)"/> again in order to obtain a new password reset token.</para>
         /// </summary>
         /// <param name="application">The application.</param>
         /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
@@ -106,7 +106,7 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).ResetPassword(token, newPassword);
 
         /// <summary>
-        /// Sends a password reset email for the specified account email address.
+        /// Synchronously sends a password reset email for the specified account email address.
         /// The email will contain a password reset link that the user can click or copy into their browser address bar.
         /// </summary>
         /// <param name="application">The application.</param>
@@ -118,7 +118,7 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).SendPasswordResetEmail(email);
 
         /// <summary>
-        /// Verifies a password reset token.
+        /// Synchronously verifies a password reset token.
         /// </summary>
         /// <param name="application">The application.</param>
         /// <param name="token">The verification token, usually obtained as a request paramter by your application.</param>

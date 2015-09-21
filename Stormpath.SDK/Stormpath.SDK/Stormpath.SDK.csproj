@@ -57,7 +57,7 @@
     <Compile Include="Account\AccountCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountStatus.cs" />
     <Compile Include="Account\IAccount.cs" />
-    <Compile Include="Account\IAccountCreation.cs" />
+    <Compile Include="Account\IAccountCreationActions.cs" />
     <Compile Include="Account\IAccountCreationOptions.cs" />
     <Compile Include="Api\ClientApiKeys.cs" />
     <Compile Include="Api\IClientApiKey.cs" />
@@ -91,7 +91,7 @@
     <Compile Include="Impl\AccountStore\IAccountStoreMappingSync.cs" />
     <Compile Include="Impl\Account\DefaultAccountCreationOptions.cs" />
     <Compile Include="Impl\Account\DefaultPasswordResetToken.cs" />
-    <Compile Include="Impl\Account\IAccountCreationSync.cs" />
+    <Compile Include="Impl\Account\IAccountCreationActionsSync.cs" />
     <Compile Include="Impl\Account\IAccountSync.cs" />
     <Compile Include="Impl\Account\IPasswordResetTokenSync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.cs" />
@@ -160,7 +160,7 @@
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
     <Compile Include="Sync\FilterExtensions.cs" />
-    <Compile Include="Sync\SyncAccountCreationExtensions.cs" />
+    <Compile Include="Sync\SyncAccountCreationActionsExtensions.cs" />
     <Compile Include="Sync\SyncAccountExtensions.cs" />
     <Compile Include="Sync\SyncAccountStoreMappingExtensions.cs" />
     <Compile Include="Sync\SyncApplicationExtensions.cs" />

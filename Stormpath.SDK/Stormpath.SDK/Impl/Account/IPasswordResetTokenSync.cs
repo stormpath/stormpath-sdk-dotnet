@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Impl.Account
     internal interface IPasswordResetTokenSync
     {
         /// <summary>
-        /// Gets the <see cref="IAccount"/> associated with this password reset token.
+        /// Synchronously gets the <see cref="IAccount"/> associated with this password reset token.
         /// </summary>
         /// <returns>The <see cref="IAccount"/> in the reset password workflow.</returns>
         IAccount GetAccount();

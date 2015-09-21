@@ -173,7 +173,7 @@ namespace Stormpath.SDK.Impl.Application
             }
         }
 
-        Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
+        Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
             var builder = new AccountCreationOptionsBuilder();
             creationOptionsAction(builder);
@@ -182,7 +182,7 @@ namespace Stormpath.SDK.Impl.Application
             return this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, options, cancellationToken);
         }
 
-        IAccount IAccountCreationSync.CreateAccount(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction)
+        IAccount IAccountCreationActionsSync.CreateAccount(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction)
         {
             var builder = new AccountCreationOptionsBuilder();
             creationOptionsAction(builder);
@@ -191,27 +191,27 @@ namespace Stormpath.SDK.Impl.Application
             return this.GetInternalDataStoreSync().Create(this.Accounts.Href, account, options);
         }
 
-        Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken)
+        Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken)
         {
             return this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, creationOptions, cancellationToken);
         }
 
-        IAccount IAccountCreationSync.CreateAccount(IAccount account, IAccountCreationOptions creationOptions)
+        IAccount IAccountCreationActionsSync.CreateAccount(IAccount account, IAccountCreationOptions creationOptions)
         {
             return this.GetInternalDataStoreSync().Create(this.Accounts.Href, account, creationOptions);
         }
 
-        Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, CancellationToken cancellationToken)
+        Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, CancellationToken cancellationToken)
         {
             return this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, cancellationToken);
         }
 
-        IAccount IAccountCreationSync.CreateAccount(IAccount account)
+        IAccount IAccountCreationActionsSync.CreateAccount(IAccount account)
         {
             return this.GetInternalDataStoreSync().Create(this.Accounts.Href, account);
         }
 
-        Task<IAccount> IAccountCreation.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
+        Task<IAccount> IAccountCreationActions.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
         {
             var account = this.GetInternalDataStore().Instantiate<IAccount>();
             account.SetGivenName(givenName);
@@ -222,7 +222,7 @@ namespace Stormpath.SDK.Impl.Application
             return this.AsInterface.CreateAccountAsync(account, cancellationToken: cancellationToken);
         }
 
-        IAccount IAccountCreationSync.CreateAccount(string givenName, string surname, string email, string password)
+        IAccount IAccountCreationActionsSync.CreateAccount(string givenName, string surname, string email, string password)
         {
             var account = this.GetInternalDataStore().Instantiate<IAccount>();
             account.SetGivenName(givenName);

@@ -25,14 +25,14 @@ namespace Stormpath.SDK.Sync
     public static class SyncAccountExtensions
     {
         /// <summary>
-        /// Gets the account's parent <see cref="IDirectory"/> (where the account is stored).
+        /// Synchronously gets the account's parent <see cref="IDirectory"/> (where the account is stored).
         /// </summary>
         /// <param name="account">The account</param>
         /// <returns>This account's directory.</returns>
         public static IDirectory GetDirectory(this IAccount account) => (account as IAccountSync).GetDirectory();
 
         /// <summary>
-        /// Gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
+        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
         /// </summary>
         /// <param name="account">The account</param>
         /// <returns>This account's tenant.</returns>

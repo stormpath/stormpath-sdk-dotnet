@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Impl.Tenant
     internal interface ITenantActionsSync
     {
         /// <summary>
-        /// Creates a new <see cref="IApplication"/> resource in the current tenant.
+        /// Synchronously creates a new <see cref="IApplication"/> resource in the current tenant.
         /// </summary>
         /// <param name="application">The <see cref="IApplication"/> to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="ApplicationCreationOptionsBuilder"/>,
@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Impl.Tenant
         IApplication CreateApplication(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction);
 
         /// <summary>
-        /// Creates a new <see cref="IApplication"/> resource in the current tenant.
+        /// Synchronously creates a new <see cref="IApplication"/> resource in the current tenant.
         /// </summary>
         /// <param name="application">The <see cref="IApplication"/> to create.</param>
         /// <param name="creationOptions">An <see cref="IApplicationCreationOptions"/> instance to use when sending the request.</param>
@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Impl.Tenant
         IApplication CreateApplication(IApplication application, IApplicationCreationOptions creationOptions);
 
         /// <summary>
-        /// Creates a new <see cref="IApplication"/> resource in the current tenant, with the default creation options.
+        /// Synchronously creates a new <see cref="IApplication"/> resource in the current tenant, with the default creation options.
         /// </summary>
         /// <param name="application">The <see cref="IApplication"/> to create.</param>
         /// <returns>The created <see cref="IApplication"/>.</returns>
@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Impl.Tenant
         IApplication CreateApplication(IApplication application);
 
         /// <summary>
-        /// Creates a new <see cref="IApplication"/> resource in the current tenant.
+        /// Synchronously creates a new <see cref="IApplication"/> resource in the current tenant.
         /// </summary>
         /// <param name="name">The name of the application.</param>
         /// <param name="createDirectory">Whether a default directory should be created automatically.</param>
