@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Impl.Resource
     {
         private static readonly string HrefPropertyName = "href";
 
-        private readonly IInternalDataStore dataStore;
+        internal readonly IInternalDataStore InternalDataStore;
         private readonly ConcurrentDictionary<string, object> properties;
         private readonly ConcurrentDictionary<string, object> dirtyProperties;
 
@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         public AbstractResource(IInternalDataStore dataStore, IDictionary<string, object> properties)
         {
-            this.dataStore = dataStore;
+            this.InternalDataStore = dataStore;
 
             this.properties = new ConcurrentDictionary<string, object>(properties);
             this.dirtyProperties = new ConcurrentDictionary<string, object>();
@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         string IResource.Href => GetProperty<string>(HrefPropertyName);
 
-        protected IInternalDataStore GetInternalDataStore() => this.dataStore;
+        protected IInternalDataStore GetInternalDataStore() => this.InternalDataStore;
 
         internal bool IsDirty => this.isDirty;
 

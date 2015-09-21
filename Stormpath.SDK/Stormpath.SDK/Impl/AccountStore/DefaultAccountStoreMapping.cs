@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
-    internal sealed class DefaultAccountStoreMapping : AbstractInstanceResource, IAccountStoreMapping
+    internal sealed class DefaultAccountStoreMapping : AbstractInstanceResource, IAccountStoreMapping, IAccountStoreMappingSync
     {
         private static readonly string AccountStorePropertyName = "accountStore";
         private static readonly string ApplicationPropertyName = "application";
@@ -54,13 +55,15 @@ namespace Stormpath.SDK.Impl.AccountStore
         int IAccountStoreMapping.ListIndex => GetProperty<int>(ListIndexPropertyName);
 
         Task<IAccountStore> IAccountStoreMapping.GetAccountStoreAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().GetResourceAsync<IAccountStore>(this.AccountStore.Href, cancellationToken);
-        }
+            => this.GetInternalDataStore().GetResourceAsync<IAccountStore>(this.AccountStore.Href, cancellationToken);
+
+        IAccountStore IAccountStoreMappingSync.GetAccountStore()
+            => this.GetInternalDataStore().GetResource<IAccountStore>(this.AccountStore.Href);
 
         Task<IApplication> IAccountStoreMapping.GetApplicationAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().GetResourceAsync<IApplication>(this.Application.Href, cancellationToken);
-        }
+            => this.GetInternalDataStore().GetResourceAsync<IApplication>(this.Application.Href, cancellationToken);
+
+        IApplication IAccountStoreMappingSync.GetApplication()
+            => this.GetInternalDataStore().GetResource<IApplication>(this.Application.Href);
     }
 }

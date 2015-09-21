@@ -88,10 +88,15 @@
     <Compile Include="Http\ISynchronousHttpClient.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
+    <Compile Include="Impl\AccountStore\IAccountStoreMappingSync.cs" />
     <Compile Include="Impl\Account\DefaultAccountCreationOptions.cs" />
     <Compile Include="Impl\Account\DefaultPasswordResetToken.cs" />
+    <Compile Include="Impl\Account\IAccountCreationSync.cs" />
+    <Compile Include="Impl\Account\IAccountSync.cs" />
+    <Compile Include="Impl\Account\IPasswordResetTokenSync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.cs" />
     <Compile Include="Impl\Application\DefaultApplicationCreationOptions.cs" />
+    <Compile Include="Impl\Application\IApplicationSync.cs" />
     <Compile Include="Impl\Auth\AbstractLoginAttempt.cs" />
     <Compile Include="Impl\Auth\AuthenticationRequestDispatcher.cs" />
     <Compile Include="Impl\Auth\BasicAuthenticator.cs" />
@@ -125,6 +130,8 @@
     <Compile Include="Impl\Http\Support\IBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
     <Compile Include="Impl\Linq\LinqHelper.cs" />
+    <Compile Include="Impl\Resource\IDeletableSync.cs" />
+    <Compile Include="Impl\Resource\ISaveableSync.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterResult.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\AbstractFieldConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterList.cs" />
@@ -148,6 +155,11 @@
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
     <Compile Include="Sync\FilterExtensions.cs" />
+    <Compile Include="Sync\SyncAccountCreationExtensions.cs" />
+    <Compile Include="Sync\SyncAccountExtensions.cs" />
+    <Compile Include="Sync\SyncAccountStoreMappingExtensions.cs" />
+    <Compile Include="Sync\SyncApplicationExtensions.cs" />
+    <Compile Include="Sync\SyncPasswordResetTokenExtensions.cs" />
     <Compile Include="Sync\SyncQueryableExtensions.cs" />
     <Compile Include="Serialization\IJsonSerializer.cs" />
     <Compile Include="Impl\DataStore\IResourceConverter.cs" />
@@ -255,6 +267,7 @@
     <Compile Include="Shared\LogEntry.cs" />
     <Compile Include="Shared\LoggerExtensions.cs" />
     <Compile Include="Shared\LogLevel.cs" />
+    <Compile Include="Sync\SyncResourceExtensions.cs" />
     <Compile Include="Tenant\ITenant.cs" />
     <Compile Include="Tenant\ITenantActions.cs" />
   </ItemGroup>

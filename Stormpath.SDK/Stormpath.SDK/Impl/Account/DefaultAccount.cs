@@ -28,7 +28,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
 {
-    internal sealed class DefaultAccount : AbstractExtendableInstanceResource, IAccount
+    internal sealed class DefaultAccount : AbstractExtendableInstanceResource, IAccount, IAccountSync
     {
         private static readonly string AccessTokensPropertyName = "accessTokens";
         private static readonly string ApiKeysPropertyName = "apiKeys";
@@ -155,9 +155,19 @@ namespace Stormpath.SDK.Impl.Account
             return this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href);
         }
 
+        IDirectory IAccountSync.GetDirectory()
+        {
+            return this.GetInternalDataStore().GetResource<IDirectory>(this.Directory.Href);
+        }
+
         Task<ITenant> IAccount.GetTenantAsync(CancellationToken cancellationToken)
         {
             return this.GetInternalDataStore().GetResourceAsync<ITenant>(this.Tenant.Href);
+        }
+
+        ITenant IAccountSync.GetTenant()
+        {
+            return this.GetInternalDataStore().GetResource<ITenant>(this.Tenant.Href);
         }
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
@@ -165,9 +175,19 @@ namespace Stormpath.SDK.Impl.Account
             return this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
         }
 
+        bool IDeletableSync.Delete()
+        {
+            return this.GetInternalDataStore().Delete(this);
+        }
+
         Task<IAccount> ISaveable<IAccount>.SaveAsync(CancellationToken cancellationToken)
         {
             return this.GetInternalDataStore().SaveAsync<IAccount>(this, cancellationToken);
+        }
+
+        IAccount ISaveableSync<IAccount>.Save()
+        {
+            return this.GetInternalDataStore().Save<IAccount>(this);
         }
     }
 }

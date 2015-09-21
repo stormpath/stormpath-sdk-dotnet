@@ -30,6 +30,7 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
@@ -49,7 +50,8 @@ namespace Stormpath.SDK.Impl.Client
         private readonly ILogger logger;
 
         private bool alreadyDisposed = false;
-        private string currentTenantHref;
+
+        private ITenant tenant;
 
         public DefaultClient(
             IClientApiKey apiKey,
@@ -84,7 +86,7 @@ namespace Stormpath.SDK.Impl.Client
 
         private IClient AsInterface => this;
 
-        private string CurrentTenantHref => this.currentTenantHref.Nullable() ?? "tenants/current";
+        private string CurrentTenantHref => this.tenant?.Href.Nullable() ?? "tenants/current";
 
         internal IClientApiKey ApiKey => this.apiKey;
 
@@ -100,14 +102,19 @@ namespace Stormpath.SDK.Impl.Client
 
         async Task<ITenant> IClient.GetCurrentTenantAsync(CancellationToken cancellationToken)
         {
-            var tenant = await this.dataStore
+            this.tenant = await this.dataStore
                 .GetResourceAsync<ITenant>(this.CurrentTenantHref, cancellationToken)
                 .ConfigureAwait(false);
 
-            cancellationToken.ThrowIfCancellationRequested();
-            this.currentTenantHref = tenant.Href;
+            return this.tenant;
+        }
 
-            return tenant;
+        internal ITenant GetCurrentTenant()
+        {
+            this.tenant = this.dataStore
+                .GetResource<ITenant>(this.CurrentTenantHref);
+
+            return this.tenant;
         }
 
         Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
@@ -115,53 +122,65 @@ namespace Stormpath.SDK.Impl.Client
             return this.dataStore.GetResourceAsync<T>(href, cancellationToken);
         }
 
+        internal T GetResource<T>(string href)
+        {
+            return this.dataStore.GetResource<T>(href);
+        }
+
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
-            var tenant = await this.AsInterface.GetCurrentTenantAsync().ConfigureAwait(false);
+            if (this.tenant == null)
+                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
 
-            return await tenant.CreateApplicationAsync(application, creationOptionsAction).ConfigureAwait(false);
+            return await this.tenant.CreateApplicationAsync(application, creationOptionsAction).ConfigureAwait(false);
         }
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken)
         {
-            var tenant = await this.AsInterface.GetCurrentTenantAsync().ConfigureAwait(false);
+            if (this.tenant == null)
+                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
 
-            return await tenant.CreateApplicationAsync(application, creationOptions).ConfigureAwait(false);
+            return await this.tenant.CreateApplicationAsync(application, creationOptions).ConfigureAwait(false);
         }
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, CancellationToken cancellationToken)
         {
-            var tenant = await this.AsInterface.GetCurrentTenantAsync().ConfigureAwait(false);
+            if (this.tenant == null)
+                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
 
-            return await tenant.CreateApplicationAsync(application).ConfigureAwait(false);
+            return await this.tenant.CreateApplicationAsync(application).ConfigureAwait(false);
         }
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken)
         {
-            var tenant = await this.AsInterface.GetCurrentTenantAsync().ConfigureAwait(false);
+            if (this.tenant == null)
+                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
 
-            return await tenant.CreateApplicationAsync(name, createDirectory).ConfigureAwait(false);
+            return await this.tenant.CreateApplicationAsync(name, createDirectory).ConfigureAwait(false);
         }
 
         IAsyncQueryable<IApplication> ITenantActions.GetApplications()
         {
-            var tenant = this.AsInterface.GetCurrentTenantAsync().Result;
+            if (this.tenant == null)
+                this.AsInterface.GetCurrentTenantAsync().Wait();
 
-            return tenant.GetApplications();
+            return this.tenant.GetApplications();
         }
 
         IAsyncQueryable<IDirectory> ITenantActions.GetDirectories()
         {
-            var tenant = this.AsInterface.GetCurrentTenantAsync().Result;
+            if (this.tenant == null)
+                this.AsInterface.GetCurrentTenantAsync().Wait();
 
-            return tenant.GetDirectories();
+            return this.tenant.GetDirectories();
         }
 
         IAsyncQueryable<IAccount> ITenantActions.GetAccounts()
         {
-            var tenant = this.AsInterface.GetCurrentTenantAsync().Result;
+            if (this.tenant == null)
+                this.AsInterface.GetCurrentTenantAsync().Wait();
 
-            return tenant.GetAccounts();
+            return this.tenant.GetAccounts();
         }
 
         private void Dispose(bool disposing)
