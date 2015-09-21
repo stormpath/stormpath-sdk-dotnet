@@ -161,7 +161,7 @@ namespace Stormpath.SDK.Tests.Fakes
             throw new NotImplementedException();
         }
 
-        T IInternalDataStore.GetResource<T>(string href)
+        T IDataStoreSync.GetResource<T>(string href)
         {
             throw new NotImplementedException();
         }

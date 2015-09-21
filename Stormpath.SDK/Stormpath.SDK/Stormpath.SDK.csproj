@@ -102,6 +102,7 @@
     <Compile Include="Impl\Auth\BasicAuthenticator.cs" />
     <Compile Include="Impl\Auth\DefaultAuthenticationResult.cs" />
     <Compile Include="Impl\Auth\DefaultBasicLoginAttempt.cs" />
+    <Compile Include="Impl\Auth\IAuthenticationResultSync.cs" />
     <Compile Include="Impl\Auth\IBasicLoginAttempt.cs" />
     <Compile Include="Impl\Auth\ILoginAttempt.cs" />
     <Compile Include="Impl\Cache\InMemoryCache.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Impl\Client\DefaultJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\DefaultHttpClientBuilder.cs" />
     <Compile Include="Impl\Client\ICacheProviderBuilder.cs" />
+    <Compile Include="Impl\Client\IClientSync.cs" />
     <Compile Include="Impl\Client\IJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\IHttpClientBuilder.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="Impl\DataStore\DefaultResourceDataResult.cs" />
     <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
+    <Compile Include="Impl\DataStore\IDataStoreSync.cs" />
     <Compile Include="Impl\Http\DefaultHttpClientLoader.cs" />
     <Compile Include="Impl\Http\DefaultRequestExecutor.cs" />
     <Compile Include="Impl\Http\Support\DefaultBackoffStrategy.cs" />
@@ -150,6 +153,7 @@
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\Serialization\JsonSerializationProvider.cs" />
     <Compile Include="Impl\Serialization\DefaultJsonSerializerLoader.cs" />
+    <Compile Include="Impl\Tenant\ITenantActionsSync.cs" />
     <Compile Include="Impl\Utility\ITypeLoader.cs" />
     <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
@@ -159,6 +163,9 @@
     <Compile Include="Sync\SyncAccountExtensions.cs" />
     <Compile Include="Sync\SyncAccountStoreMappingExtensions.cs" />
     <Compile Include="Sync\SyncApplicationExtensions.cs" />
+    <Compile Include="Sync\SyncAuthenticationResultExtensions.cs" />
+    <Compile Include="Sync\SyncClientExtensions.cs" />
+    <Compile Include="Sync\SyncDataStoreExtensions.cs" />
     <Compile Include="Sync\SyncPasswordResetTokenExtensions.cs" />
     <Compile Include="Sync\SyncQueryableExtensions.cs" />
     <Compile Include="Serialization\IJsonSerializer.cs" />
@@ -268,6 +275,7 @@
     <Compile Include="Shared\LoggerExtensions.cs" />
     <Compile Include="Shared\LogLevel.cs" />
     <Compile Include="Sync\SyncResourceExtensions.cs" />
+    <Compile Include="Sync\SyncTenantActionsExtensions.cs" />
     <Compile Include="Tenant\ITenant.cs" />
     <Compile Include="Tenant\ITenantActions.cs" />
   </ItemGroup>

@@ -24,7 +24,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal interface IInternalDataStore : IDataStore
+    internal interface IInternalDataStore : IDataStore, IDataStoreSync
     {
         IRequestExecutor RequestExecutor { get; }
 
@@ -54,8 +54,6 @@ namespace Stormpath.SDK.Impl.DataStore
             where T : IResource, IDeletable;
 
         // Synchronous path
-        T GetResource<T>(string resourcePath);
-
         CollectionResponsePage<T> GetCollection<T>(string href);
 
         T Create<T>(string parentHref, T resource)

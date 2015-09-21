@@ -34,11 +34,12 @@ using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
+using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    internal sealed class DefaultClient : IClient
+    internal sealed class DefaultClient : IClient, IClientSync
     {
         private readonly IClientApiKey apiKey;
         private readonly string baseUrl;
@@ -86,6 +87,8 @@ namespace Stormpath.SDK.Impl.Client
 
         private IClient AsInterface => this;
 
+        private IClientSync AsSyncInterface => this;
+
         private string CurrentTenantHref => this.tenant?.Href.Nullable() ?? "tenants/current";
 
         internal IClientApiKey ApiKey => this.apiKey;
@@ -109,10 +112,9 @@ namespace Stormpath.SDK.Impl.Client
             return this.tenant;
         }
 
-        internal ITenant GetCurrentTenant()
+        ITenant IClientSync.GetCurrentTenant()
         {
-            this.tenant = this.dataStore
-                .GetResource<ITenant>(this.CurrentTenantHref);
+            this.tenant = this.dataStore.GetResource<ITenant>(this.CurrentTenantHref);
 
             return this.tenant;
         }
@@ -122,7 +124,7 @@ namespace Stormpath.SDK.Impl.Client
             return this.dataStore.GetResourceAsync<T>(href, cancellationToken);
         }
 
-        internal T GetResource<T>(string href)
+        T IDataStoreSync.GetResource<T>(string href)
         {
             return this.dataStore.GetResource<T>(href);
         }
@@ -135,12 +137,28 @@ namespace Stormpath.SDK.Impl.Client
             return await this.tenant.CreateApplicationAsync(application, creationOptionsAction).ConfigureAwait(false);
         }
 
+        IApplication ITenantActionsSync.CreateApplication(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction)
+        {
+            if (this.tenant == null)
+                this.AsSyncInterface.GetCurrentTenant();
+
+            return this.tenant.CreateApplication(application, creationOptionsAction);
+        }
+
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken)
         {
             if (this.tenant == null)
                 await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.CreateApplicationAsync(application, creationOptions).ConfigureAwait(false);
+        }
+
+        IApplication ITenantActionsSync.CreateApplication(IApplication application, IApplicationCreationOptions creationOptions)
+        {
+            if (this.tenant == null)
+                this.AsSyncInterface.GetCurrentTenant();
+
+            return this.tenant.CreateApplication(application, creationOptions);
         }
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, CancellationToken cancellationToken)
@@ -151,12 +169,28 @@ namespace Stormpath.SDK.Impl.Client
             return await this.tenant.CreateApplicationAsync(application).ConfigureAwait(false);
         }
 
+        IApplication ITenantActionsSync.CreateApplication(IApplication application)
+        {
+            if (this.tenant == null)
+                this.AsSyncInterface.GetCurrentTenant();
+
+            return this.tenant.CreateApplication(application);
+        }
+
         async Task<IApplication> ITenantActions.CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken)
         {
             if (this.tenant == null)
                 await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.CreateApplicationAsync(name, createDirectory).ConfigureAwait(false);
+        }
+
+        IApplication ITenantActionsSync.CreateApplication(string name, bool createDirectory)
+        {
+            if (this.tenant == null)
+                this.AsSyncInterface.GetCurrentTenant();
+
+            return this.tenant.CreateApplication(name, createDirectory);
         }
 
         IAsyncQueryable<IApplication> ITenantActions.GetApplications()
@@ -196,7 +230,6 @@ namespace Stormpath.SDK.Impl.Client
             }
         }
 
-        // This code added to correctly implement the disposable pattern.
         void IDisposable.Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.

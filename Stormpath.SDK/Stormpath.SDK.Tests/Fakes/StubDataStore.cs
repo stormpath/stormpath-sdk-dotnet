@@ -71,7 +71,7 @@ namespace Stormpath.SDK.Tests.Fakes
 
         Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken) => this.fakeDataStore.GetCollectionAsync<T>(href, cancellationToken);
 
-        T IInternalDataStore.GetResource<T>(string resourcePath) => this.fakeDataStore.GetResource<T>(resourcePath);
+        T IDataStoreSync.GetResource<T>(string href) => this.fakeDataStore.GetResource<T>(href);
 
         Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken) => this.fakeDataStore.GetResourceAsync<T>(href, cancellationToken);
 
@@ -107,6 +107,10 @@ namespace Stormpath.SDK.Tests.Fakes
             this.Dispose(true);
         }
 
+        void IDisposable.Dispose()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

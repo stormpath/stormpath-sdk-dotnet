@@ -25,7 +25,7 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Auth
 {
-    internal sealed class DefaultAuthenticationResult : AbstractResource, IAuthenticationResult
+    internal sealed class DefaultAuthenticationResult : AbstractResource, IAuthenticationResult, IAuthenticationResultSync
     {
         private static readonly string AccountPropertyName = "account";
 
@@ -42,8 +42,9 @@ namespace Stormpath.SDK.Impl.Auth
         internal LinkProperty Account => this.GetLinkProperty(AccountPropertyName);
 
         Task<IAccount> IAuthenticationResult.GetAccountAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
-        }
+            => this.GetInternalDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
+
+        IAccount IAuthenticationResultSync.GetAccount()
+            => this.GetInternalDataStore().GetResource<IAccount>(this.Account.Href);
     }
 }

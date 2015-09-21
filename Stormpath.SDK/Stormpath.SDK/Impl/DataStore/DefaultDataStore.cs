@@ -37,7 +37,7 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal sealed class DefaultDataStore : IInternalDataStore, IDisposable
+    internal sealed class DefaultDataStore : IInternalDataStore, IDisposable // , TODO IInternalDataStoreSync
     {
         private readonly ILogger logger;
 
@@ -198,7 +198,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create<T>(result.Body);
         }
 
-        T IInternalDataStore.GetResource<T>(string resourcePath)
+        T IDataStoreSync.GetResource<T>(string resourcePath)
         {
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
             this.logger.Trace($"Synchronously getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResource<T>");
