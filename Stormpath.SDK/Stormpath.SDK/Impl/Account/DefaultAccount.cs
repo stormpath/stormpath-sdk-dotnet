@@ -157,7 +157,7 @@ namespace Stormpath.SDK.Impl.Account
 
         IDirectory IAccountSync.GetDirectory()
         {
-            return this.GetInternalDataStore().GetResource<IDirectory>(this.Directory.Href);
+            return this.GetInternalDataStoreSync().GetResource<IDirectory>(this.Directory.Href);
         }
 
         Task<ITenant> IAccount.GetTenantAsync(CancellationToken cancellationToken)
@@ -167,7 +167,7 @@ namespace Stormpath.SDK.Impl.Account
 
         ITenant IAccountSync.GetTenant()
         {
-            return this.GetInternalDataStore().GetResource<ITenant>(this.Tenant.Href);
+            return this.GetInternalDataStoreSync().GetResource<ITenant>(this.Tenant.Href);
         }
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
@@ -177,7 +177,7 @@ namespace Stormpath.SDK.Impl.Account
 
         bool IDeletableSync.Delete()
         {
-            return this.GetInternalDataStore().Delete(this);
+            return this.GetInternalDataStoreSync().Delete(this);
         }
 
         Task<IAccount> ISaveable<IAccount>.SaveAsync(CancellationToken cancellationToken)
@@ -187,7 +187,7 @@ namespace Stormpath.SDK.Impl.Account
 
         IAccount ISaveableSync<IAccount>.Save()
         {
-            return this.GetInternalDataStore().Save<IAccount>(this);
+            return this.GetInternalDataStoreSync().Save<IAccount>(this);
         }
     }
 }

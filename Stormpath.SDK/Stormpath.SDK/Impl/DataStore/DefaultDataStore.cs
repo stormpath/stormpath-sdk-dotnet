@@ -37,7 +37,7 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal sealed class DefaultDataStore : IInternalDataStore, IDisposable // , TODO IInternalDataStoreSync
+    internal sealed class DefaultDataStore : IInternalDataStore, IInternalDataStoreSync, IDisposable
     {
         private readonly ILogger logger;
 
@@ -55,6 +55,8 @@ namespace Stormpath.SDK.Impl.DataStore
         private bool disposed = false;
 
         private IInternalDataStore AsInterface => this;
+
+        private IInternalDataStoreSync AsSyncInterface => this;
 
         IRequestExecutor IInternalDataStore.RequestExecutor => this.requestExecutor;
 
@@ -227,11 +229,11 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.AsInterface.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
         }
 
-        CollectionResponsePage<T> IInternalDataStore.GetCollection<T>(string href)
+        CollectionResponsePage<T> IInternalDataStoreSync.GetCollection<T>(string href)
         {
             this.logger.Trace($"Synchronously getting collection page of type {typeof(T).Name} from: {href}", "DefaultDataStore.GetCollection<T>");
 
-            return this.AsInterface.GetResource<CollectionResponsePage<T>>(href);
+            return this.AsSyncInterface.GetResource<CollectionResponsePage<T>>(href);
         }
 
         Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
@@ -243,9 +245,9 @@ namespace Stormpath.SDK.Impl.DataStore
                 cancellationToken: cancellationToken);
         }
 
-        T IInternalDataStore.Create<T>(string parentHref, T resource)
+        T IInternalDataStoreSync.Create<T>(string parentHref, T resource)
         {
-            return this.AsInterface.Create<T, T>(
+            return this.AsSyncInterface.Create<T, T>(
                 parentHref,
                 resource,
                 options: null);
@@ -260,9 +262,9 @@ namespace Stormpath.SDK.Impl.DataStore
                 cancellationToken: cancellationToken);
         }
 
-        T IInternalDataStore.Create<T>(string parentHref, T resource, ICreationOptions options)
+        T IInternalDataStoreSync.Create<T>(string parentHref, T resource, ICreationOptions options)
         {
-            return this.AsInterface.Create<T, T>(
+            return this.AsSyncInterface.Create<T, T>(
                 parentHref,
                 resource,
                 options: options);
@@ -277,9 +279,9 @@ namespace Stormpath.SDK.Impl.DataStore
                 cancellationToken: cancellationToken);
         }
 
-        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource)
+        TReturned IInternalDataStoreSync.Create<T, TReturned>(string parentHref, T resource)
         {
-            return this.AsInterface.Create<T, TReturned>(
+            return this.AsSyncInterface.Create<T, TReturned>(
                 parentHref,
                 resource,
                 options: null);
@@ -294,7 +296,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 cancellationToken: cancellationToken);
         }
 
-        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
+        TReturned IInternalDataStoreSync.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
         {
             return this.SaveCore<T, TReturned>(
                 resource, parentHref,
@@ -316,7 +318,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 cancellationToken: cancellationToken);
         }
 
-        T IInternalDataStore.Save<T>(T resource)
+        T IInternalDataStoreSync.Save<T>(T resource)
         {
             var href = resource?.Href;
             if (string.IsNullOrEmpty(href))
@@ -334,7 +336,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.DeleteCoreAsync(resource, cancellationToken);
         }
 
-        bool IInternalDataStore.Delete<T>(T resource)
+        bool IInternalDataStoreSync.Delete<T>(T resource)
         {
             return this.DeleteCore(resource);
         }

@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,7 @@ namespace Stormpath.SDK.Impl.Resource
         private static readonly string HrefPropertyName = "href";
 
         internal readonly IInternalDataStore InternalDataStore;
+        internal readonly IInternalDataStoreSync InternalDataStoreSync;
         private readonly ConcurrentDictionary<string, object> properties;
         private readonly ConcurrentDictionary<string, object> dirtyProperties;
 
@@ -41,6 +43,11 @@ namespace Stormpath.SDK.Impl.Resource
         public AbstractResource(IInternalDataStore dataStore, IDictionary<string, object> properties)
         {
             this.InternalDataStore = dataStore;
+            this.InternalDataStoreSync = dataStore as IInternalDataStoreSync;
+
+            if (this.InternalDataStore == null ||
+                this.InternalDataStoreSync == null)
+                throw new ApplicationException("Internal data store could not be initialized.");
 
             this.properties = new ConcurrentDictionary<string, object>(properties);
             this.dirtyProperties = new ConcurrentDictionary<string, object>();
@@ -50,6 +57,8 @@ namespace Stormpath.SDK.Impl.Resource
         string IResource.Href => GetProperty<string>(HrefPropertyName);
 
         protected IInternalDataStore GetInternalDataStore() => this.InternalDataStore;
+
+        protected IInternalDataStoreSync GetInternalDataStoreSync() => this.InternalDataStoreSync;
 
         internal bool IsDirty => this.isDirty;
 

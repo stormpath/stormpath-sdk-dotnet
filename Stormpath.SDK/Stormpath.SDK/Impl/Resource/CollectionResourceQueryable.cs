@@ -38,6 +38,8 @@ namespace Stormpath.SDK.Impl.Resource
 
         private readonly IInternalDataStore dataStore;
 
+        private readonly IInternalDataStoreSync dataStoreSync;
+
         private readonly string baseHref;
 
         private CollectionResourceRequestModel compiledModel = null;
@@ -57,6 +59,7 @@ namespace Stormpath.SDK.Impl.Resource
         {
             this.baseHref = collectionHref;
             this.dataStore = dataStore;
+            this.dataStoreSync = dataStore as IInternalDataStoreSync;
             this.proxy = CreateProxy();
             this.expressionOverride = null;
         }
@@ -87,6 +90,7 @@ namespace Stormpath.SDK.Impl.Resource
 
             this.baseHref = executor.Href;
             this.dataStore = executor.DataStore;
+            this.dataStoreSync = executor.DataStore as IInternalDataStoreSync;
             this.proxy = null;
             this.expressionOverride = expression;
         }
@@ -191,7 +195,7 @@ namespace Stormpath.SDK.Impl.Resource
             this.AdjustPagingOffset();
 
             var url = this.GenerateRequestUrlFromModel();
-            var response = this.dataStore.GetCollection<T>(url);
+            var response = this.dataStoreSync.GetCollection<T>(url);
 
             return this.DidUpdateWithNewResults(response);
         }

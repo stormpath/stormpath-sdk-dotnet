@@ -28,13 +28,16 @@ namespace Stormpath.SDK.Impl.Auth
     internal sealed class BasicAuthenticator
     {
         private readonly IInternalDataStore dataStore;
+        private readonly IInternalDataStoreSync dataStoreSync;
 
         public BasicAuthenticator(IInternalDataStore dataStore)
         {
-            if (dataStore == null)
-                throw new ArgumentNullException(nameof(dataStore));
-
             this.dataStore = dataStore;
+            this.dataStoreSync = dataStore as IInternalDataStoreSync;
+
+            if (this.dataStore == null ||
+                this.dataStoreSync == null)
+                throw new ArgumentNullException("Internal data store could not be initialized.");
         }
 
         private static void Validate(string parentHref, IAuthenticationRequest request)
@@ -76,7 +79,7 @@ namespace Stormpath.SDK.Impl.Auth
             var attempt = this.BuildRequest(parentHref, request);
             var href = $"{parentHref}/loginAttempts";
 
-            return this.dataStore.Create<IBasicLoginAttempt, IAuthenticationResult>(href, attempt);
+            return this.dataStoreSync.Create<IBasicLoginAttempt, IAuthenticationResult>(href, attempt);
         }
     }
 }

@@ -188,7 +188,7 @@ namespace Stormpath.SDK.Impl.Application
             creationOptionsAction(builder);
             var options = builder.Build();
 
-            return this.GetInternalDataStore().Create(this.Accounts.Href, account, options);
+            return this.GetInternalDataStoreSync().Create(this.Accounts.Href, account, options);
         }
 
         Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken)
@@ -198,7 +198,7 @@ namespace Stormpath.SDK.Impl.Application
 
         IAccount IAccountCreationSync.CreateAccount(IAccount account, IAccountCreationOptions creationOptions)
         {
-            return this.GetInternalDataStore().Create(this.Accounts.Href, account, creationOptions);
+            return this.GetInternalDataStoreSync().Create(this.Accounts.Href, account, creationOptions);
         }
 
         Task<IAccount> IAccountCreation.CreateAccountAsync(IAccount account, CancellationToken cancellationToken)
@@ -208,7 +208,7 @@ namespace Stormpath.SDK.Impl.Application
 
         IAccount IAccountCreationSync.CreateAccount(IAccount account)
         {
-            return this.GetInternalDataStore().Create(this.Accounts.Href, account);
+            return this.GetInternalDataStoreSync().Create(this.Accounts.Href, account);
         }
 
         Task<IAccount> IAccountCreation.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
@@ -240,7 +240,7 @@ namespace Stormpath.SDK.Impl.Application
 
         bool IDeletableSync.Delete()
         {
-            return this.GetInternalDataStore().Delete(this);
+            return this.GetInternalDataStoreSync().Delete(this);
         }
 
         Task<IApplication> ISaveable<IApplication>.SaveAsync(CancellationToken cancellationToken)
@@ -250,7 +250,7 @@ namespace Stormpath.SDK.Impl.Application
 
         IApplication ISaveableSync<IApplication>.Save()
         {
-            return this.GetInternalDataStore().Save<IApplication>(this);
+            return this.GetInternalDataStoreSync().Save<IApplication>(this);
         }
 
         Task<IPasswordResetToken> IApplication.SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken)
@@ -266,7 +266,7 @@ namespace Stormpath.SDK.Impl.Application
             var token = this.GetInternalDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;
             token.SetEmail(email);
 
-            return this.GetInternalDataStore().Create(this.PasswordResetToken.Href, (IPasswordResetToken)token);
+            return this.GetInternalDataStoreSync().Create(this.PasswordResetToken.Href, (IPasswordResetToken)token);
         }
 
         async Task<IAccount> IApplication.VerifyPasswordResetTokenAsync(string token, CancellationToken cancellationToken)
@@ -311,7 +311,7 @@ namespace Stormpath.SDK.Impl.Application
             var passwordResetToken = this.GetInternalDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;
             passwordResetToken.SetPassword(newPassword);
 
-            var responseToken = this.GetInternalDataStore().Create(href, (IPasswordResetToken)passwordResetToken);
+            var responseToken = this.GetInternalDataStoreSync().Create(href, (IPasswordResetToken)passwordResetToken);
             return responseToken.GetAccount();
         }
 

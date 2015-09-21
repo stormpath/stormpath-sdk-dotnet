@@ -68,7 +68,7 @@ namespace Stormpath.SDK.Impl.Account
 
         IAccount IPasswordResetTokenSync.GetAccount()
         {
-            return this.GetInternalDataStore().GetResource<IAccount>(this.Account.Href);
+            return this.GetInternalDataStoreSync().GetResource<IAccount>(this.Account.Href);
         }
 
         string IPasswordResetToken.GetValue()

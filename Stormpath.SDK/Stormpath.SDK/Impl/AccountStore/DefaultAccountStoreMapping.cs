@@ -58,12 +58,12 @@ namespace Stormpath.SDK.Impl.AccountStore
             => this.GetInternalDataStore().GetResourceAsync<IAccountStore>(this.AccountStore.Href, cancellationToken);
 
         IAccountStore IAccountStoreMappingSync.GetAccountStore()
-            => this.GetInternalDataStore().GetResource<IAccountStore>(this.AccountStore.Href);
+            => this.GetInternalDataStoreSync().GetResource<IAccountStore>(this.AccountStore.Href);
 
         Task<IApplication> IAccountStoreMapping.GetApplicationAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().GetResourceAsync<IApplication>(this.Application.Href, cancellationToken);
 
         IApplication IAccountStoreMappingSync.GetApplication()
-            => this.GetInternalDataStore().GetResource<IApplication>(this.Application.Href);
+            => this.GetInternalDataStoreSync().GetResource<IApplication>(this.Application.Href);
     }
 }

@@ -24,7 +24,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal interface IInternalDataStore : IDataStore, IDataStoreSync
+    internal interface IInternalDataStore : IDataStore
     {
         IRequestExecutor RequestExecutor { get; }
 
@@ -51,29 +51,6 @@ namespace Stormpath.SDK.Impl.DataStore
             where T : IResource, ISaveable<T>;
 
         Task<bool> DeleteAsync<T>(T resource, CancellationToken cancellationToken)
-            where T : IResource, IDeletable;
-
-        // Synchronous path
-        CollectionResponsePage<T> GetCollection<T>(string href);
-
-        T Create<T>(string parentHref, T resource)
-            where T : IResource;
-
-        T Create<T>(string parentHref, T resource, ICreationOptions options)
-            where T : IResource;
-
-        TReturned Create<T, TReturned>(string parentHref, T resource)
-            where T : IResource
-            where TReturned : IResource;
-
-        TReturned Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
-            where T : IResource
-            where TReturned : IResource;
-
-        T Save<T>(T resource)
-            where T : IResource, ISaveable<T>;
-
-        bool Delete<T>(T resource)
             where T : IResource, IDeletable;
     }
 }

@@ -29,7 +29,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
-    public sealed class FakeDataStore<TType> : IInternalDataStore
+    public sealed class FakeDataStore<TType> : IInternalDataStore, IInternalDataStoreSync
     {
         private static int defaultLimit = 25;
         private static int defaultOffset = 0;
@@ -66,15 +66,17 @@ namespace Stormpath.SDK.Tests.Fakes
 
         private IInternalDataStore AsInterface => this;
 
+        private IInternalDataStoreSync AsSyncInterface => this;
+
         async Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             await Task.Yield();
 
-            return this.AsInterface.GetCollection<T>(href);
+            return this.AsSyncInterface.GetCollection<T>(href);
         }
 
-        CollectionResponsePage<T> IInternalDataStore.GetCollection<T>(string href)
+        CollectionResponsePage<T> IInternalDataStoreSync.GetCollection<T>(string href)
         {
             bool typesMatch = typeof(T) == typeof(TType);
             if (!typesMatch)
@@ -166,32 +168,32 @@ namespace Stormpath.SDK.Tests.Fakes
             throw new NotImplementedException();
         }
 
-        T IInternalDataStore.Create<T>(string parentHref, T resource)
+        T IInternalDataStoreSync.Create<T>(string parentHref, T resource)
         {
             throw new NotImplementedException();
         }
 
-        T IInternalDataStore.Create<T>(string parentHref, T resource, ICreationOptions options)
+        T IInternalDataStoreSync.Create<T>(string parentHref, T resource, ICreationOptions options)
         {
             throw new NotImplementedException();
         }
 
-        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource)
+        TReturned IInternalDataStoreSync.Create<T, TReturned>(string parentHref, T resource)
         {
             throw new NotImplementedException();
         }
 
-        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
+        TReturned IInternalDataStoreSync.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
         {
             throw new NotImplementedException();
         }
 
-        T IInternalDataStore.Save<T>(T resource)
+        T IInternalDataStoreSync.Save<T>(T resource)
         {
             throw new NotImplementedException();
         }
 
-        bool IInternalDataStore.Delete<T>(T resource)
+        bool IInternalDataStoreSync.Delete<T>(T resource)
         {
             throw new NotImplementedException();
         }

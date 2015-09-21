@@ -45,6 +45,6 @@ namespace Stormpath.SDK.Impl.Auth
             => this.GetInternalDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
 
         IAccount IAuthenticationResultSync.GetAccount()
-            => this.GetInternalDataStore().GetResource<IAccount>(this.Account.Href);
+            => this.GetInternalDataStoreSync().GetResource<IAccount>(this.Account.Href);
     }
 }
