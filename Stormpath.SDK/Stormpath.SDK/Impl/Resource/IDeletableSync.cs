@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Impl.Resource
         /// Synchronously deletes the resource.
         /// </summary>
         /// <returns>Whether the delete operation succeeded.</returns>
-        /// <exception cref="Error.ResourceException">The delete operation failed.</exception>
+        /// <exception cref="SDK.Error.ResourceException">The delete operation failed.</exception>
         bool Delete();
     }
 }

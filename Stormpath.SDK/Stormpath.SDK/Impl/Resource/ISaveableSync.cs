@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Impl.Resource
         /// Synchronously creates or updates the resource.
         /// </summary>
         /// <returns>The persisted resource data.</returns>
-        /// <exception cref="Error.ResourceException">The save operation failed.</exception>
+        /// <exception cref="SDK.Error.ResourceException">The save operation failed.</exception>
         T Save();
     }
 }
