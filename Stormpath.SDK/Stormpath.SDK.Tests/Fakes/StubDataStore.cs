@@ -97,7 +97,7 @@ namespace Stormpath.SDK.Tests.Fakes
             {
                 if (disposing)
                 {
-                    this.FakeDataStore.Dispose();
+                    this.instance.Dispose();
                 }
 
                 this.isDisposed = true;

@@ -32,9 +32,11 @@ namespace Stormpath.SDK.Impl.Linq
     {
         private static readonly int DefaultApiPageLimit = 100;
 
-        private static readonly List<Type> SupportedResultOperators = new List<Type>()
+        private static readonly List<Type> SupportedOperators = new List<Type>()
         {
             typeof(AnyResultOperator),
+            typeof(CountResultOperator),
+            typeof(LongCountResultOperator),
             typeof(FirstResultOperator),
             typeof(SingleResultOperator),
             typeof(TakeResultOperator),
@@ -51,9 +53,9 @@ namespace Stormpath.SDK.Impl.Linq
             return visitor.ParsedModel;
         }
 
-        private static bool IsSupportedResultOperator(ResultOperatorBase resultOperator)
+        private static bool IsSupportedOperator(ResultOperatorBase resultOperator)
         {
-            return SupportedResultOperators.Contains(resultOperator.GetType());
+            return SupportedOperators.Contains(resultOperator.GetType());
         }
 
         public override void VisitMainFromClause(MainFromClause fromClause, QueryModel queryModel)
@@ -67,19 +69,20 @@ namespace Stormpath.SDK.Impl.Linq
 
         public override void VisitResultOperator(ResultOperatorBase resultOperator, QueryModel queryModel, int index)
         {
-            if (!IsSupportedResultOperator(resultOperator))
+            if (!IsSupportedOperator(resultOperator))
                 throw new NotSupportedException("One or more LINQ operators are not supported.");
 
-            bool isScalar =
+            bool shouldReturnOnlyOne =
                 resultOperator is AnyResultOperator ||
                 resultOperator is CountResultOperator ||
-                resultOperator is FirstResultOperator ||
-                resultOperator is SingleResultOperator;
-            if (isScalar)
+                resultOperator is LongCountResultOperator ||
+                resultOperator is FirstResultOperator;
+            if (shouldReturnOnlyOne)
             {
                 this.ParsedModel.Limit = 1;
                 this.ParsedModel.ExecutionPlan.MaxItems = 1;
-                return;
+
+                return; // done
             }
 
             if (this.HandleTakeResultOperator(resultOperator))

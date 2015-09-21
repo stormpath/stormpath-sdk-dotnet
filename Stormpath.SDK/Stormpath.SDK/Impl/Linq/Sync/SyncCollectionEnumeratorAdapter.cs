@@ -38,6 +38,8 @@ namespace Stormpath.SDK.Impl.Linq.Sync
         {
             while (this.collection.MoveNext())
             {
+                this.cancellationToken.ThrowIfCancellationRequested();
+
                 foreach (var item in (this.collection as IAsyncQueryable<T>).CurrentPage)
                 {
                     yield return item;

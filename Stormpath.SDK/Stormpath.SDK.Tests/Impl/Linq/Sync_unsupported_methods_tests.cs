@@ -1,4 +1,4 @@
-﻿// <copyright file="Sync_unsupported_filters_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Sync_unsupported_methods_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -27,7 +27,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_unsupported_filters_tests : Linq_tests
+    public class Sync_unsupported_methods_tests : Linq_tests
     {
         [Fact]
         public void Aggregate_is_unsupported()

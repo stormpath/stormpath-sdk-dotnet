@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Sync
 {
     public static class FilterExtensions
     {
-        public static IQueryable<TSource> Filter<TSource>(IQueryable<TSource> source, string caseInsensitiveMatch)
+        public static IQueryable<TSource> Filter<TSource>(this IQueryable<TSource> source, string caseInsensitiveMatch)
         {
             return source.Provider.CreateQuery<TSource>(
                 LinqHelper.MethodCall(

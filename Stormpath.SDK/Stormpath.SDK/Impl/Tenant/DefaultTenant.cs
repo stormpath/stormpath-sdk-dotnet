@@ -29,7 +29,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
-    internal sealed class DefaultTenant : AbstractExtendableInstanceResource, ITenant
+    internal sealed class DefaultTenant : AbstractExtendableInstanceResource, ITenant, ITenantActionsSync
     {
         private static readonly string AccountsPropertyName = "accounts";
         private static readonly string AgentsPropertyName = "agents";
@@ -59,6 +59,8 @@ namespace Stormpath.SDK.Impl.Tenant
 
         private ITenant AsInterface => this;
 
+        private ITenantActionsSync AsTenantActionSyncInterface => this;
+
         internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
         internal LinkProperty Agents => this.GetLinkProperty(AgentsPropertyName);
@@ -86,14 +88,33 @@ namespace Stormpath.SDK.Impl.Tenant
             return this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, options, cancellationToken);
         }
 
+        IApplication ITenantActionsSync.CreateApplication(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction)
+        {
+            var builder = new ApplicationCreationOptionsBuilder();
+            creationOptionsAction(builder);
+            var options = builder.Build();
+
+            return this.GetInternalDataStoreSync().Create(this.applicationsResourceBase, application, options);
+        }
+
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken)
         {
             return this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, creationOptions, cancellationToken);
         }
 
+        IApplication ITenantActionsSync.CreateApplication(IApplication application, IApplicationCreationOptions creationOptions)
+        {
+            return this.GetInternalDataStoreSync().Create(this.applicationsResourceBase, application, creationOptions);
+        }
+
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, CancellationToken cancellationToken)
         {
             return this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, cancellationToken);
+        }
+
+        IApplication ITenantActionsSync.CreateApplication(IApplication application)
+        {
+            return this.GetInternalDataStoreSync().Create(this.applicationsResourceBase, application);
         }
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken)
@@ -107,6 +128,19 @@ namespace Stormpath.SDK.Impl.Tenant
             }.Build();
 
             return this.AsInterface.CreateApplicationAsync(application, options, cancellationToken);
+        }
+
+        IApplication ITenantActionsSync.CreateApplication(string name, bool createDirectory)
+        {
+            var application = this.GetInternalDataStore().Instantiate<IApplication>();
+            application.SetName(name);
+
+            var options = new ApplicationCreationOptionsBuilder()
+            {
+                CreateDirectory = createDirectory
+            }.Build();
+
+            return this.AsTenantActionSyncInterface.CreateApplication(application, options);
         }
 
         IAsyncQueryable<IApplication> ITenantActions.GetApplications()

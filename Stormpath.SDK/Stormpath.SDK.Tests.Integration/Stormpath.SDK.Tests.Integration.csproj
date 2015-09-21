@@ -74,6 +74,9 @@
     <Compile Include="Error_tests.cs" />
     <Compile Include="Helpers\TestClientBuilder.cs" />
     <Compile Include="Meta_tests.cs" />
+    <Compile Include="Sync\Sync_Application_tests.cs" />
+    <Compile Include="Sync\Sync_Directory_tests.cs" />
+    <Compile Include="Sync\Sync_Account_tests.cs" />
     <Compile Include="Sync\Sync_Error_tests.cs" />
     <Compile Include="Sync\Sync_Tenant_tests.cs" />
     <Compile Include="Tenant_tests.cs" />
@@ -107,6 +110,9 @@
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta011\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta011\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Async\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

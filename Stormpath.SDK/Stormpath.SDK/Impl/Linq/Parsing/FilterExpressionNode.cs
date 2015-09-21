@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Remotion.Linq;
