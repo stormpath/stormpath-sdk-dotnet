@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountCreation.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SyncAccountCreationExtensions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,65 +16,69 @@
 // </remarks>
 
 using System;
-using System.Threading;
-using System.Threading.Tasks;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Impl.Account;
 
-namespace Stormpath.SDK.Account
+namespace Stormpath.SDK.Sync
 {
-    public interface IAccountCreation
+    public static class SyncAccountCreationActionsExtensions
     {
         /// <summary>
-        /// Creates a new <see cref="IAccount"/> that may login to this application.
+        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application.
         /// </summary>
+        /// <param name="source">The source object.</param>
         /// <param name="account">The account to create/persist.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IAccountCreationOptions"/>,
         /// which will be used when sending the request.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
         /// <example>
         /// If you would like to force disabling the backing directory's account registration workflow:
-        /// <code>await IApplication.CreateAccountAsync(theAccount, options => options.RegistrationWorkflowEnabled = false, cancellationToken);</code>
+        /// <code>app.CreateAccount(theAccount, options => options.RegistrationWorkflowEnabled = false);</code>
         /// </example>
-        /// <returns>A Task whose result is the persisted account.</returns>
+        /// <returns>The persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
-        Task<IAccount> CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
+        public static IAccount CreateAccount(this IAccountCreationActions source, IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction)
+            => (source as IAccountCreationActionsSync).CreateAccount(account, creationOptionsAction);
 
         /// <summary>
-        /// Creates a new <see cref="IAccount"/> that may login to this application.
+        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application.
         /// </summary>
+        /// <param name="source">The source object.</param>
         /// <param name="account">The account to create/persist.</param>
         /// <param name="creationOptions">An <see cref="IAccountCreationOptions"/> instance to use when sending the request.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted account.</returns>
+        /// <returns>The persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
-        Task<IAccount> CreateAccountAsync(IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken));
+        public static IAccount CreateAccount(this IAccountCreationActions source, IAccount account, IAccountCreationOptions creationOptions)
+            => (source as IAccountCreationActionsSync).CreateAccount(account, creationOptions);
 
         /// <summary>
-        /// Creates a new <see cref="IAccount"/> that may login to this application.
+        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application.
         /// </summary>
+        /// <param name="source">The source object.</param>
         /// <param name="account">The account to create/persist.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted account.</returns>
+        /// <returns>The persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
-        Task<IAccount> CreateAccountAsync(IAccount account, CancellationToken cancellationToken = default(CancellationToken));
+        public static IAccount CreateAccount(this IAccountCreationActions source, IAccount account)
+            => (source as IAccountCreationActionsSync).CreateAccount(account);
 
         /// <summary>
-        /// Creates a new <see cref="IAccount"/> that may login to this application, with the default creation options.
+        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application, with the default creation options.
         /// </summary>
+        /// <param name="source">The source object.</param>
         /// <param name="givenName">The given name (aka 'first name' in Western cultures).</param>
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
         /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="IDirectory"/>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted account.</returns>
+        /// <returns>The persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
-        Task<IAccount> CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken = default(CancellationToken));
+        public static IAccount CreateAccount(this IAccountCreationActions source, string givenName, string surname, string email, string password)
+            => (source as IAccountCreationActionsSync).CreateAccount(givenName, surname, email, password);
     }
 }

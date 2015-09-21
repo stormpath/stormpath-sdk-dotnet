@@ -28,22 +28,28 @@ namespace Stormpath.SDK.Impl.Auth
     internal sealed class BasicAuthenticator
     {
         private readonly IInternalDataStore dataStore;
+        private readonly IInternalDataStoreSync dataStoreSync;
 
         public BasicAuthenticator(IInternalDataStore dataStore)
         {
-            if (dataStore == null)
-                throw new ArgumentNullException(nameof(dataStore));
-
             this.dataStore = dataStore;
+            this.dataStoreSync = dataStore as IInternalDataStoreSync;
+
+            if (this.dataStore == null ||
+                this.dataStoreSync == null)
+                throw new ArgumentNullException("Internal data store could not be initialized.");
         }
 
-        public Task<IAuthenticationResult> AuthenticateAsync(string parentHref, IAuthenticationRequest request, CancellationToken cancellationToken)
+        private static void Validate(string parentHref, IAuthenticationRequest request)
         {
             if (string.IsNullOrEmpty(parentHref))
                 throw new ArgumentNullException(nameof(parentHref));
             if (!(request is UsernamePasswordRequest))
                 throw new ArgumentException("Only UsernamePasswordRequest instances are supported by this by this authenticator.");
+        }
 
+        private IBasicLoginAttempt BuildRequest(string parentHref, IAuthenticationRequest request)
+        {
             var username = request.Principals.Nullable() ?? string.Empty;
             var password = request.Credentials.Nullable() ?? string.Empty;
             var value = $"{username}:{password}";
@@ -53,9 +59,27 @@ namespace Stormpath.SDK.Impl.Auth
             attempt.SetType("basic");
             attempt.SetValue(value);
 
+            return attempt;
+        }
+
+        public Task<IAuthenticationResult> AuthenticateAsync(string parentHref, IAuthenticationRequest request, CancellationToken cancellationToken)
+        {
+            Validate(parentHref, request);
+
+            var attempt = this.BuildRequest(parentHref, request);
             var href = $"{parentHref}/loginAttempts";
 
             return this.dataStore.CreateAsync<IBasicLoginAttempt, IAuthenticationResult>(href, attempt, cancellationToken);
+        }
+
+        public IAuthenticationResult Authenticate(string parentHref, IAuthenticationRequest request)
+        {
+            Validate(parentHref, request);
+
+            var attempt = this.BuildRequest(parentHref, request);
+            var href = $"{parentHref}/loginAttempts";
+
+            return this.dataStoreSync.Create<IBasicLoginAttempt, IAuthenticationResult>(href, attempt);
         }
     }
 }

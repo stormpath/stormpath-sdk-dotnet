@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Remotion.Linq;
@@ -37,9 +36,11 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         {
             get
             {
-                return typeof(AsyncQueryableFilterExtensions)
-                    .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
-                    .ToArray();
+                return new MethodInfo[]
+                {
+                    typeof(AsyncQueryableFilterExtensions).GetMethod("Filter"),
+                    typeof(SDK.Sync.FilterExtensions).GetMethod("Filter")
+                };
             }
         }
 

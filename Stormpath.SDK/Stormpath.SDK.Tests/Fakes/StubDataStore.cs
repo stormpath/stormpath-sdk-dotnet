@@ -29,9 +29,13 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
-    public sealed class StubDataStore : IInternalDataStore, IDisposable
+    public sealed class StubDataStore : IInternalDataStore, IInternalDataStoreSync, IDisposable
     {
-        private readonly IInternalDataStore fakeDataStore;
+        private readonly DefaultDataStore instance;
+
+        private IInternalDataStore FakeDataStore => this.instance;
+
+        private IInternalDataStoreSync FakeDataStoreSync => this.instance;
 
         public StubDataStore(string resourceJson, string baseHref, ILogger logger = null)
         {
@@ -40,46 +44,46 @@ namespace Stormpath.SDK.Tests.Fakes
                 ? new SDK.Impl.NullLogger()
                 : logger;
 
-            this.fakeDataStore = new DefaultDataStore(fakeRequestExecutor.Object, baseHref, new JsonNetSerializer(), useLogger, new NullCacheProvider());
+            this.instance = new DefaultDataStore(fakeRequestExecutor.Object, baseHref, new JsonNetSerializer(), useLogger, new NullCacheProvider());
         }
 
-        string IInternalDataStore.BaseUrl => this.fakeDataStore.BaseUrl;
+        string IInternalDataStore.BaseUrl => this.FakeDataStore.BaseUrl;
 
-        IRequestExecutor IInternalDataStore.RequestExecutor => this.fakeDataStore.RequestExecutor;
+        IRequestExecutor IInternalDataStore.RequestExecutor => this.FakeDataStore.RequestExecutor;
 
-        T IInternalDataStore.Create<T>(string parentHref, T resource) => this.fakeDataStore.Create(parentHref, resource);
+        T IInternalDataStoreSync.Create<T>(string parentHref, T resource) => this.FakeDataStoreSync.Create(parentHref, resource);
 
-        T IInternalDataStore.Create<T>(string parentHref, T resource, ICreationOptions options) => this.fakeDataStore.Create(parentHref, resource, options);
+        T IInternalDataStoreSync.Create<T>(string parentHref, T resource, ICreationOptions options) => this.FakeDataStoreSync.Create(parentHref, resource, options);
 
-        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource) => this.fakeDataStore.Create<T, TReturned>(parentHref, resource);
+        TReturned IInternalDataStoreSync.Create<T, TReturned>(string parentHref, T resource) => this.FakeDataStoreSync.Create<T, TReturned>(parentHref, resource);
 
-        TReturned IInternalDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options) => this.fakeDataStore.Create<T, TReturned>(parentHref, resource);
+        TReturned IInternalDataStoreSync.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options) => this.FakeDataStoreSync.Create<T, TReturned>(parentHref, resource);
 
-        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken) => this.fakeDataStore.CreateAsync(parentHref, resource, cancellationToken);
+        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken) => this.FakeDataStore.CreateAsync(parentHref, resource, cancellationToken);
 
-        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken) => this.fakeDataStore.CreateAsync(parentHref, resource, options, cancellationToken);
+        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken) => this.FakeDataStore.CreateAsync(parentHref, resource, options, cancellationToken);
 
-        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken) => this.fakeDataStore.CreateAsync<T, TReturned>(parentHref, resource, cancellationToken);
+        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken) => this.FakeDataStore.CreateAsync<T, TReturned>(parentHref, resource, cancellationToken);
 
-        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken) => this.fakeDataStore.CreateAsync<T, TReturned>(parentHref, resource, options, cancellationToken);
+        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken) => this.FakeDataStore.CreateAsync<T, TReturned>(parentHref, resource, options, cancellationToken);
 
-        bool IInternalDataStore.Delete<T>(T resource) => this.fakeDataStore.Delete(resource);
+        bool IInternalDataStoreSync.Delete<T>(T resource) => this.FakeDataStoreSync.Delete(resource);
 
-        Task<bool> IInternalDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken) => this.fakeDataStore.DeleteAsync(resource, cancellationToken);
+        Task<bool> IInternalDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken) => this.FakeDataStore.DeleteAsync(resource, cancellationToken);
 
-        CollectionResponsePage<T> IInternalDataStore.GetCollection<T>(string href) => this.fakeDataStore.GetCollection<T>(href);
+        CollectionResponsePage<T> IInternalDataStoreSync.GetCollection<T>(string href) => this.FakeDataStoreSync.GetCollection<T>(href);
 
-        Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken) => this.fakeDataStore.GetCollectionAsync<T>(href, cancellationToken);
+        Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken) => this.FakeDataStore.GetCollectionAsync<T>(href, cancellationToken);
 
-        T IInternalDataStore.GetResource<T>(string resourcePath) => this.fakeDataStore.GetResource<T>(resourcePath);
+        T IDataStoreSync.GetResource<T>(string href) => this.FakeDataStoreSync.GetResource<T>(href);
 
-        Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken) => this.fakeDataStore.GetResourceAsync<T>(href, cancellationToken);
+        Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken) => this.FakeDataStore.GetResourceAsync<T>(href, cancellationToken);
 
-        T IDataStore.Instantiate<T>() => this.fakeDataStore.Instantiate<T>();
+        T IDataStore.Instantiate<T>() => this.FakeDataStore.Instantiate<T>();
 
-        T IInternalDataStore.Save<T>(T resource) => this.fakeDataStore.Save(resource);
+        T IInternalDataStoreSync.Save<T>(T resource) => this.FakeDataStoreSync.Save(resource);
 
-        Task<T> IInternalDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken) => this.fakeDataStore.SaveAsync(resource, cancellationToken);
+        Task<T> IInternalDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken) => this.FakeDataStore.SaveAsync(resource, cancellationToken);
 
 #pragma warning disable SA1124 // Do not use regions
         #region IDisposable Support
@@ -93,7 +97,7 @@ namespace Stormpath.SDK.Tests.Fakes
             {
                 if (disposing)
                 {
-                    this.fakeDataStore.Dispose();
+                    this.instance.Dispose();
                 }
 
                 this.isDisposed = true;
@@ -106,7 +110,6 @@ namespace Stormpath.SDK.Tests.Fakes
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
         }
-
         #endregion
     }
 }

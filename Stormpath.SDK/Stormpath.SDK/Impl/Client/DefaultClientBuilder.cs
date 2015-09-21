@@ -21,7 +21,6 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
-using Stormpath.SDK.Impl.Api;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
 

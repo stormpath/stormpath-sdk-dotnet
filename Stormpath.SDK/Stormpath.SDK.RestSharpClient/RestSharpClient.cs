@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Extensions.Http
 
         IWebProxy SDK.Http.IHttpClient.Proxy => this.proxy;
 
-        bool SDK.Http.IHttpClient.IsSynchronousSupported => false; // TODO
+        bool SDK.Http.IHttpClient.IsSynchronousSupported => true;
 
         bool SDK.Http.IHttpClient.IsAsynchronousSupported => true;
 

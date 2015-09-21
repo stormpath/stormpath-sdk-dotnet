@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Remotion.Linq;
+using Remotion.Linq.Clauses.ResultOperators;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Linq.RequestModel;
 using Stormpath.SDK.Impl.Resource;
@@ -38,40 +39,68 @@ namespace Stormpath.SDK.Impl.Linq
 
         public IInternalDataStore DataStore { get; private set; }
 
-        public IEnumerable<T> ExecuteCollection<T>(CollectionResourceRequestModel requestModel)
-        {
-            var asyncCollection = new CollectionResourceQueryable<T>(this.Href, this.DataStore, requestModel);
-            var adapter = new Sync.SyncCollectionEnumeratorAdapter<T>(asyncCollection);
-
-            return adapter;
-        }
-
         public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
         {
             var model = GenerateRequestModel(queryModel);
 
-            return ExecuteCollection<T>(model);
+            return this.ExecuteCollection<T>(model);
+        }
+
+        public IEnumerable<T> ExecuteCollection<T>(CollectionResourceRequestModel requestModel)
+        {
+            return this.ExecuteCollection(requestModel, typeof(T)) as IEnumerable<T>;
+        }
+
+        private IEnumerable<object> ExecuteCollection(CollectionResourceRequestModel requestModel, Type collectionType)
+        {
+            var collectionResourceQueryableType = typeof(CollectionResourceQueryable<>).MakeGenericType(collectionType);
+            var syncAdapterType = typeof(Sync.SyncCollectionEnumeratorAdapter<>).MakeGenericType(collectionType);
+
+            var asyncCollection = Activator.CreateInstance(collectionResourceQueryableType, new object[] { this.Href, this.DataStore, requestModel });
+            var adapter = Activator.CreateInstance(syncAdapterType, new object[] { asyncCollection, null });
+
+            return adapter as IEnumerable<object>;
         }
 
         public T ExecuteScalar<T>(QueryModel queryModel)
         {
-            throw new NotSupportedException("Synchronous LINQ execution is not currently supported. Use async methods.");
+            var model = GenerateRequestModel(queryModel);
+
+            if (queryModel.ResultOperators.FirstOrDefault() is AnyResultOperator)
+                return (T)((object)this.ExecuteCollection(model, queryModel.MainFromClause.ItemType).Any());
+
+            if (queryModel.ResultOperators.FirstOrDefault() is CountResultOperator ||
+                queryModel.ResultOperators.FirstOrDefault() is LongCountResultOperator)
+            {
+                var iterator = this.ExecuteCollection(model, queryModel.MainFromClause.ItemType);
+                var collection = iterator
+                    .GetType()
+                    .GetField("collection", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .GetValue(iterator);
+                var collectionType = collection.GetType();
+
+                var moveNextResult = (bool)collectionType
+                    .GetMethod("MoveNext", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .Invoke(collection, null);
+
+                var count = collectionType
+                    .GetProperty("Size", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .GetValue(collection);
+
+                if (typeof(T) == typeof(int))
+                    return (T)(object)Convert.ToInt32(count);
+                else
+                    return (T)count;
+            }
+
+            throw new NotSupportedException("One or more scalar result operators are unsupported.");
         }
 
         public T ExecuteSingle<T>(QueryModel queryModel, bool returnDefaultWhenEmpty)
         {
-            var model = GenerateRequestModel(queryModel);
-
             return returnDefaultWhenEmpty
                 ? ExecuteCollection<T>(queryModel).SingleOrDefault()
                 : ExecuteCollection<T>(queryModel).Single();
-        }
-
-        private static MethodInfo GetGenericExecuteCollectionMethod(Type innerType)
-        {
-            var method = typeof(CollectionResourceQueryExecutor).GetMethod(nameof(ExecuteCollection), new Type[] { typeof(CollectionResourceRequestModel) });
-            var generic = method.MakeGenericMethod(innerType);
-            return generic;
         }
 
         private static CollectionResourceRequestModel GenerateRequestModel(QueryModel queryModel)
