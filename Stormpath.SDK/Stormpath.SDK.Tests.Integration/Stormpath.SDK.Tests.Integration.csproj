@@ -74,6 +74,8 @@
     <Compile Include="Error_tests.cs" />
     <Compile Include="Helpers\TestClientBuilder.cs" />
     <Compile Include="Meta_tests.cs" />
+    <Compile Include="Sync\Sync_Error_tests.cs" />
+    <Compile Include="Sync\Sync_Tenant_tests.cs" />
     <Compile Include="Tenant_tests.cs" />
     <Compile Include="Sanity_checks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
