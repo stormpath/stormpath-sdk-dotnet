@@ -1,4 +1,4 @@
-﻿// <copyright file="Sync_Async_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Sync_Any_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>

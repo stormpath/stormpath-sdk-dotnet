@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;

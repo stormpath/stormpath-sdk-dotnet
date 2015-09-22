@@ -1,4 +1,4 @@
-﻿// <copyright file="SyncAccountCreationExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SyncAccountCreationActionsExtensions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
