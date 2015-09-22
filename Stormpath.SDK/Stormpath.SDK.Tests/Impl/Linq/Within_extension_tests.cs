@@ -27,11 +27,88 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Within_throws_when_using_outside_LINQ()
         {
+            var dto = new DateTimeOffset(DateTime.Now);
+
             Should.Throw<NotSupportedException>(() =>
             {
-                var dto = new DateTimeOffset(DateTime.Now);
                 var test = dto.Within(2015);
             });
+        }
+
+        [Fact]
+        public void Throws_for_multiple_series_calls()
+        {
+            var query = this.Harness.Queryable
+                .Where(x => x.CreatedAt.Within(2015))
+                .Where(x => x.CreatedAt.Within(2015, 01, 01));
+
+            Should.Throw<NotSupportedException>(() =>
+            {
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+            });
+        }
+
+        [Fact]
+        public void Throws_for_multiple_parallel_calls()
+        {
+            var query = this.Harness.Queryable
+                .Where(x => x.CreatedAt.Within(2015) && x.CreatedAt.Within(2015, 01, 01));
+
+            Should.Throw<NotSupportedException>(() =>
+            {
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+            });
+        }
+
+        [Fact]
+        public void Throws_when_mixing_Within_and_date_comparison()
+        {
+            var query = this.Harness.Queryable
+                .Where(x => x.CreatedAt.Within(2015))
+                .Where(x => x.CreatedAt > DateTime.Now);
+
+            Should.Throw<NotSupportedException>(() =>
+            {
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+            });
+        }
+
+        [Fact]
+        public void Both_created_and_modified_fields_in_series()
+        {
+            var query = this.Harness.Queryable
+                .Where(x => x.CreatedAt.Within(2015))
+                .Where(x => x.ModifiedAt.Within(2015, 1));
+
+            query.GeneratedArgumentsWere(this.Href, "createdAt=2015&modifiedAt=2015-01");
+        }
+
+        [Fact]
+        public void Both_created_and_modified_fields_in_parallel()
+        {
+            var query = this.Harness.Queryable
+                .Where(x => x.CreatedAt.Within(2015) && x.ModifiedAt.Within(2015, 1));
+
+            query.GeneratedArgumentsWere(this.Href, "createdAt=2015&modifiedAt=2015-01");
+        }
+
+        [Fact]
+        public void With_other_Where_terms_in_series()
+        {
+            var query = this.Harness.Queryable
+                .Where(x => x.Email == "foo@bar.co")
+                .Where(x => x.CreatedAt.Within(2015));
+
+            query.GeneratedArgumentsWere(this.Href, "email=foo@bar.co&createdAt=2015");
+        }
+
+        [Fact]
+        public void With_other_Where_terms_in_parallel()
+        {
+            var query = this.Harness.Queryable
+                .Where(x => x.Email == "foo@bar.co" && x.CreatedAt.Within(2015, 1));
+
+            query.GeneratedArgumentsWere(this.Href, "email=foo@bar.co&createdAt=2015-01");
         }
 
         [Fact]

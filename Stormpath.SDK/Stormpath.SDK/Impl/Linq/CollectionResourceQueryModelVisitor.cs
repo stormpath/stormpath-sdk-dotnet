@@ -180,8 +180,6 @@ namespace Stormpath.SDK.Impl.Linq
             // Handle simple cases
             if (this.HandleWhereFilterExtensionMethod(whereClause))
                 return; // done
-            if (this.HandleWhereWithinDateExtensionMethod(whereClause))
-                return; // done
 
             this.ParsedModel.AddAttributeTerms(
                 CollectionResourceWhereExpressionVisitor.GenerateModels(whereClause.Predicate));
@@ -195,44 +193,10 @@ namespace Stormpath.SDK.Impl.Linq
             if (filterClause == null)
                 return false;
 
+            if (!string.IsNullOrEmpty(this.ParsedModel.FilterTerm))
+                throw new NotSupportedException("Multiple Filter terms are not supported");
+
             this.ParsedModel.FilterTerm = filterClause.Term;
-            return true;
-        }
-
-        private bool HandleWhereWithinDateExtensionMethod(WhereClause whereClause)
-        {
-            var methodCall = whereClause.Predicate as MethodCallExpression;
-            bool isWithinMethodCall = methodCall?.Method.DeclaringType == typeof(WithinExpressionExtensions);
-            if (!isWithinMethodCall)
-                return false;
-
-            var fieldName = string.Empty;
-            var methodCallMember = methodCall.Arguments[0] as MemberExpression;
-            bool validField = methodCallMember != null && DatetimeFieldNameTranslator.TryGetValue(methodCallMember.Member.Name, out fieldName);
-            if (!validField)
-                throw new NotSupportedException("Within must be used on a supported datetime field.");
-
-            var numberOfConstantArgs = methodCall.Arguments.Count - 1;
-            var yearArg = (int)(methodCall.Arguments[1] as ConstantExpression).Value;
-            int? monthArg = null,
-                dayArg = null,
-                hourArg = null,
-                minuteArg = null,
-                secondArg = null;
-
-            if (methodCall.Arguments.Count >= 3)
-                monthArg = (methodCall.Arguments?[2] as ConstantExpression)?.Value as int?;
-            if (methodCall.Arguments.Count >= 4)
-                dayArg = (methodCall.Arguments?[3] as ConstantExpression)?.Value as int?;
-            if (methodCall.Arguments.Count >= 5)
-                hourArg = (methodCall.Arguments?[4] as ConstantExpression)?.Value as int?;
-            if (methodCall.Arguments.Count >= 6)
-                minuteArg = (methodCall.Arguments?[5] as ConstantExpression)?.Value as int?;
-            if (methodCall.Arguments.Count == 7)
-                secondArg = (methodCall.Arguments?[6] as ConstantExpression)?.Value as int?;
-
-            this.ParsedModel.AddAttributeTerm(new DatetimeShorthandAttributeTermModel(fieldName, yearArg, monthArg, dayArg, hourArg, minuteArg, secondArg));
-
             return true;
         }
 

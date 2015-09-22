@@ -109,6 +109,7 @@
     <Compile Include="Impl\FieldConverterList_tests.cs" />
     <Compile Include="Impl\FilterChain_tests.cs" />
     <Compile Include="Impl\HttpHeaders_tests.cs" />
+    <Compile Include="Impl\Linq\Complicated_tests.cs" />
     <Compile Include="Impl\Linq\Sync_SingleOrDefault_tests.cs" />
     <Compile Include="Impl\Linq\Sync_Single_tests.cs" />
     <Compile Include="Impl\Linq\Sync_foreach_tests.cs" />

@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Impl.Linq
             if (this.inProgress.IsStringTermComplete())
             {
                 this.GeneratedModels.Add(new StringAttributeTermModel(this.inProgress.Field, this.inProgress.StringValue, this.inProgress.StringMatchType.Value));
-                this.inProgress = new WhereAttributeTermInProgressModel();
+                this.inProgress.ResetStringTerm();
             }
 
             if (this.inProgress.IsDateTermComplete())
@@ -68,7 +68,13 @@ namespace Stormpath.SDK.Impl.Linq
                 }
 
                 this.GeneratedModels.Add(model);
-                this.inProgress = new WhereAttributeTermInProgressModel();
+                this.inProgress.ResetDateTerm();
+            }
+
+            if (this.inProgress.IsShorthandDateTermComplete())
+            {
+                this.GeneratedModels.Add(this.inProgress.ShorthandModel);
+                this.inProgress.ResetShorthandDateTerm();
             }
 
             return visited;
@@ -118,6 +124,10 @@ namespace Stormpath.SDK.Impl.Linq
 
         protected override Expression VisitMethodCallExpression(MethodCallExpression expression)
         {
+            bool isWithinMethodCall = expression.Method.DeclaringType == typeof(WithinExpressionExtensions);
+            if (isWithinMethodCall)
+                return this.HandleWithinDateExtensionMethod(expression);
+
             StringAttributeMatchingType matchingType;
             bool isAChainedHelperMethodCall = StringHelperMethodNameTranslator.TryGetValue(expression.Method.Name, out matchingType);
             if (isAChainedHelperMethodCall)
@@ -191,6 +201,38 @@ namespace Stormpath.SDK.Impl.Linq
             string itemText = FormatUnhandledItem(unhandledItem);
             var message = string.Format("The expression '{0}' (type: {1}) is not supported by this LINQ provider.", itemText, typeof(T));
             return new NotSupportedException(message);
+        }
+
+        private Expression HandleWithinDateExtensionMethod(MethodCallExpression methodCall)
+        {
+            var fieldName = string.Empty;
+            var methodCallMember = methodCall.Arguments[0] as MemberExpression;
+            bool validField = methodCallMember != null && DatetimeFieldNameTranslator.TryGetValue(methodCallMember.Member.Name, out fieldName);
+            if (!validField)
+                throw new NotSupportedException("Within must be used on a supported datetime field.");
+
+            var numberOfConstantArgs = methodCall.Arguments.Count - 1;
+            var yearArg = (int)(methodCall.Arguments[1] as ConstantExpression).Value;
+            int? monthArg = null,
+                dayArg = null,
+                hourArg = null,
+                minuteArg = null,
+                secondArg = null;
+
+            if (methodCall.Arguments.Count >= 3)
+                monthArg = (methodCall.Arguments?[2] as ConstantExpression)?.Value as int?;
+            if (methodCall.Arguments.Count >= 4)
+                dayArg = (methodCall.Arguments?[3] as ConstantExpression)?.Value as int?;
+            if (methodCall.Arguments.Count >= 5)
+                hourArg = (methodCall.Arguments?[4] as ConstantExpression)?.Value as int?;
+            if (methodCall.Arguments.Count >= 6)
+                minuteArg = (methodCall.Arguments?[5] as ConstantExpression)?.Value as int?;
+            if (methodCall.Arguments.Count == 7)
+                secondArg = (methodCall.Arguments?[6] as ConstantExpression)?.Value as int?;
+
+            this.inProgress.ShorthandModel = new DatetimeShorthandAttributeTermModel(fieldName, yearArg, monthArg, dayArg, hourArg, minuteArg, secondArg);
+
+            return methodCall;
         }
 
         private static string FormatUnhandledItem<T>(T unhandledItem)

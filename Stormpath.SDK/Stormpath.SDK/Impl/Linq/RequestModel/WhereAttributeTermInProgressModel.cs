@@ -37,11 +37,21 @@ namespace Stormpath.SDK.Impl.Linq.RequestModel
 
         public bool? DateOrEqual { get; set; }
 
+        // Used when parsing a Within extension expression
+        public DatetimeShorthandAttributeTermModel ShorthandModel { get; set; }
+
         public bool IsStringTermComplete()
         {
             return this.TargetType == typeof(StringAttributeTermModel) &&
                 !string.IsNullOrEmpty(this.StringValue) &&
                 this.StringMatchType.HasValue;
+        }
+
+        public void ResetStringTerm()
+        {
+            this.TargetType = null;
+            this.StringValue = null;
+            this.StringMatchType = null;
         }
 
         public bool IsDateTermComplete()
@@ -50,6 +60,24 @@ namespace Stormpath.SDK.Impl.Linq.RequestModel
                 this.DateValue.HasValue &&
                 this.DateGreaterThan.HasValue &&
                 this.DateOrEqual.HasValue;
+        }
+
+        public void ResetDateTerm()
+        {
+            this.TargetType = null;
+            this.DateValue = null;
+            this.DateGreaterThan = null;
+            this.DateOrEqual = null;
+        }
+
+        public bool IsShorthandDateTermComplete()
+        {
+            return this.ShorthandModel != null;
+        }
+
+        public void ResetShorthandDateTerm()
+        {
+            this.ShorthandModel = null;
         }
     }
 }
