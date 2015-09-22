@@ -67,12 +67,12 @@ namespace Stormpath.SDK.Impl.Linq
             var model = GenerateRequestModel(queryModel);
 
             if (queryModel.ResultOperators.FirstOrDefault() is AnyResultOperator)
-                return (T)((object)this.ExecuteCollection(model, queryModel.MainFromClause.ItemType).Any());
+                return (T)((object)this.ExecuteCollection(model, model.CollectionType).Any());
 
             if (queryModel.ResultOperators.FirstOrDefault() is CountResultOperator ||
                 queryModel.ResultOperators.FirstOrDefault() is LongCountResultOperator)
             {
-                var iterator = this.ExecuteCollection(model, queryModel.MainFromClause.ItemType);
+                var iterator = this.ExecuteCollection(model, model.CollectionType);
                 var collection = iterator
                     .GetType()
                     .GetField("collection", BindingFlags.NonPublic | BindingFlags.Instance)

@@ -17,6 +17,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Linq.Expressions;
 using Remotion.Linq;
 using Remotion.Linq.Clauses;
@@ -64,6 +66,22 @@ namespace Stormpath.SDK.Impl.Linq
             // (see ExecuteScalar in CollectionResourceQueryExecutor for why we need this)
             this.ParsedModel.CollectionType = fromClause.ItemType;
 
+            var subQuery = fromClause.FromExpression as SubQueryExpression;
+
+            // Some expression trees will wrap earlier clauses into a FROM, and then
+            // tack on stuff after it. We need to unwrap the lower level.
+            bool anySubQueryResultOperators = subQuery?.QueryModel?.ResultOperators.Any() ?? false;
+            if (anySubQueryResultOperators)
+            {
+                this.VisitResultOperators(subQuery.QueryModel.ResultOperators, subQuery.QueryModel);
+            }
+
+            bool anySubQueryBodyClauses = subQuery?.QueryModel?.BodyClauses.Any() ?? false;
+            if (anySubQueryBodyClauses)
+            {
+                this.VisitBodyClauses(subQuery.QueryModel.BodyClauses, subQuery.QueryModel);
+            }
+
             base.VisitMainFromClause(fromClause, queryModel);
         }
 
@@ -108,14 +126,22 @@ namespace Stormpath.SDK.Impl.Linq
                 throw new NotSupportedException("Unsupported expression in Take clause.");
 
             var value = (int)expression.Value;
-            if (value < 1)
+            if (value < 0)
                 throw new ArgumentOutOfRangeException("Take must be greater than zero.");
 
-            this.ParsedModel.ExecutionPlan.MaxItems = value;
-            this.ParsedModel.Limit = value;
+            if (value == 0)
+            {
+                this.ParsedModel.ExecutionPlan.MaxItems = null;
+                this.ParsedModel.Limit = null;
+            }
+            else
+            {
+                this.ParsedModel.ExecutionPlan.MaxItems = value;
+                this.ParsedModel.Limit = value;
 
-            if (value > DefaultApiPageLimit)
-                this.ParsedModel.Limit = DefaultApiPageLimit;
+                if (value > DefaultApiPageLimit)
+                    this.ParsedModel.Limit = DefaultApiPageLimit;
+            }
 
             return true;
         }
@@ -131,10 +157,12 @@ namespace Stormpath.SDK.Impl.Linq
                 throw new NotSupportedException("Unsupported expression in Skip clause.");
 
             var value = (int)expression.Value;
-            if (value < 1)
+            if (value < 0)
                 throw new ArgumentOutOfRangeException("Skip must be greater than zero.");
 
-            this.ParsedModel.Offset = value;
+            this.ParsedModel.Offset = value == 0
+                ? (int?)null
+                : value;
 
             return true;
         }
@@ -201,6 +229,18 @@ namespace Stormpath.SDK.Impl.Linq
         }
 
         public override void VisitOrdering(Ordering ordering, QueryModel queryModel, OrderByClause orderByClause, int index)
+        {
+            // If this is idempotent ordering term like .OrderBy(x => x), ignore it
+            bool isInternalOrdering = queryModel.MainFromClause ==
+                (ordering.Expression as QuerySourceReferenceExpression)?.ReferencedQuerySource as MainFromClause;
+
+            if (isInternalOrdering)
+                return;
+
+            this.HandleOrderByClause(ordering);
+        }
+
+        public void HandleOrderByClause(Ordering ordering)
         {
             var memberAccessor = ordering.Expression as MemberExpression;
             if (memberAccessor == null)
