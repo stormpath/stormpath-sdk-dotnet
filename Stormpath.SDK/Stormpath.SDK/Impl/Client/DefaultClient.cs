@@ -192,7 +192,7 @@ namespace Stormpath.SDK.Impl.Client
         IAsyncQueryable<IApplication> ITenantActions.GetApplications()
         {
             if (this.tenant == null)
-                this.AsInterface.GetCurrentTenantAsync().Wait();
+                this.AsInterface.GetCurrentTenantAsync().GetAwaiter().GetResult();
 
             return this.tenant.GetApplications();
         }
@@ -200,7 +200,7 @@ namespace Stormpath.SDK.Impl.Client
         IAsyncQueryable<IDirectory> ITenantActions.GetDirectories()
         {
             if (this.tenant == null)
-                this.AsInterface.GetCurrentTenantAsync().Wait();
+                this.AsInterface.GetCurrentTenantAsync().GetAwaiter().GetResult();
 
             return this.tenant.GetDirectories();
         }
@@ -208,7 +208,7 @@ namespace Stormpath.SDK.Impl.Client
         IAsyncQueryable<IAccount> ITenantActions.GetAccounts()
         {
             if (this.tenant == null)
-                this.AsInterface.GetCurrentTenantAsync().Wait();
+                this.AsInterface.GetCurrentTenantAsync().GetAwaiter().GetResult();
 
             return this.tenant.GetAccounts();
         }
