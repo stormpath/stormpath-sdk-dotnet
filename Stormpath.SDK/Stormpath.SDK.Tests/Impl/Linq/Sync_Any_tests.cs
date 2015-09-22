@@ -25,7 +25,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_Async_tests : Linq_tests
+    public class Sync_Any_tests : Linq_tests
     {
         [Fact]
         public void Returns_false_for_empty_collection()
