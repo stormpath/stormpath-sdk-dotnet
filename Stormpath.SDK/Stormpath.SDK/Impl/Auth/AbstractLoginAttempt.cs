@@ -37,9 +37,6 @@ namespace Stormpath.SDK.Impl.Auth
 
         string ILoginAttempt.Type => this.GetProperty<string>(TypePropertyName);
 
-        void ILoginAttempt.SetType(string type)
-        {
-            this.SetProperty(TypePropertyName, type);
-        }
+        void ILoginAttempt.SetType(string type) => this.SetProperty(TypePropertyName, type);
     }
 }

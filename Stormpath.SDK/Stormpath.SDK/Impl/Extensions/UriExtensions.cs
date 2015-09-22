@@ -21,9 +21,6 @@ namespace Stormpath.SDK.Impl.Extensions
 {
     internal static class UriExtensions
     {
-        public static Uri WithoutQueryAndFragment(this Uri source)
-        {
-            return new Uri(source.GetLeftPart(UriPartial.Path), UriKind.Absolute);
-        }
+        public static Uri WithoutQueryAndFragment(this Uri source) => new Uri(source.GetLeftPart(UriPartial.Path), UriKind.Absolute);
     }
 }

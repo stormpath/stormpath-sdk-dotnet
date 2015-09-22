@@ -242,7 +242,6 @@
     <Compile Include="Impl\Resource\LinkProperty.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.cs" />
     <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />
-    <Compile Include="Impl\Utility\GenericHasher.cs" />
     <Compile Include="Shared\ImmutableValueObject.cs" />
     <Compile Include="Impl\Utility\Iso8601.cs" />
     <Compile Include="Impl\Utility\IMultiValueDictionary.cs" />

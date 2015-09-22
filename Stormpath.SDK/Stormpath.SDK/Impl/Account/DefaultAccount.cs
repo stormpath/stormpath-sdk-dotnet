@@ -151,43 +151,27 @@ namespace Stormpath.SDK.Impl.Account
         }
 
         Task<IDirectory> IAccount.GetDirectoryAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
-        }
+            => this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
 
         IDirectory IAccountSync.GetDirectory()
-        {
-            return this.GetInternalDataStoreSync().GetResource<IDirectory>(this.Directory.Href);
-        }
+            => this.GetInternalDataStoreSync().GetResource<IDirectory>(this.Directory.Href);
 
         Task<ITenant> IAccount.GetTenantAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().GetResourceAsync<ITenant>(this.Tenant.Href, cancellationToken);
-        }
+            => this.GetInternalDataStore().GetResourceAsync<ITenant>(this.Tenant.Href, cancellationToken);
 
         ITenant IAccountSync.GetTenant()
-        {
-            return this.GetInternalDataStoreSync().GetResource<ITenant>(this.Tenant.Href);
-        }
+            => this.GetInternalDataStoreSync().GetResource<ITenant>(this.Tenant.Href);
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
-        }
+            => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
 
         bool IDeletableSync.Delete()
-        {
-            return this.GetInternalDataStoreSync().Delete(this);
-        }
+             => this.GetInternalDataStoreSync().Delete(this);
 
         Task<IAccount> ISaveable<IAccount>.SaveAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().SaveAsync<IAccount>(this, cancellationToken);
-        }
+             => this.GetInternalDataStore().SaveAsync<IAccount>(this, cancellationToken);
 
         IAccount ISaveableSync<IAccount>.Save()
-        {
-            return this.GetInternalDataStoreSync().Save<IAccount>(this);
-        }
+             => this.GetInternalDataStoreSync().Save<IAccount>(this);
     }
 }

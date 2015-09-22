@@ -192,24 +192,16 @@ namespace Stormpath.SDK.Impl.Application
         }
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, creationOptions, cancellationToken);
-        }
+             => this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, creationOptions, cancellationToken);
 
         IAccount IAccountCreationActionsSync.CreateAccount(IAccount account, IAccountCreationOptions creationOptions)
-        {
-            return this.GetInternalDataStoreSync().Create(this.Accounts.Href, account, creationOptions);
-        }
+             => this.GetInternalDataStoreSync().Create(this.Accounts.Href, account, creationOptions);
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, cancellationToken);
-        }
+             => this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, cancellationToken);
 
         IAccount IAccountCreationActionsSync.CreateAccount(IAccount account)
-        {
-            return this.GetInternalDataStoreSync().Create(this.Accounts.Href, account);
-        }
+             => this.GetInternalDataStoreSync().Create(this.Accounts.Href, account);
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
         {
@@ -234,24 +226,16 @@ namespace Stormpath.SDK.Impl.Application
         }
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
-        }
+            => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
 
         bool IDeletableSync.Delete()
-        {
-            return this.GetInternalDataStoreSync().Delete(this);
-        }
+             => this.GetInternalDataStoreSync().Delete(this);
 
         Task<IApplication> ISaveable<IApplication>.SaveAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().SaveAsync<IApplication>(this, cancellationToken);
-        }
+             => this.GetInternalDataStore().SaveAsync<IApplication>(this, cancellationToken);
 
         IApplication ISaveableSync<IApplication>.Save()
-        {
-            return this.GetInternalDataStoreSync().Save<IApplication>(this);
-        }
+            => this.GetInternalDataStoreSync().Save<IApplication>(this);
 
         Task<IPasswordResetToken> IApplication.SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken)
         {
@@ -316,14 +300,10 @@ namespace Stormpath.SDK.Impl.Application
         }
 
         IAsyncQueryable<IAccount> IApplication.GetAccounts()
-        {
-            return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
-        }
+             => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
 
         IAsyncQueryable<IAccountStoreMapping> IApplication.GetAccountStoreMappings()
-        {
-            return new CollectionResourceQueryable<IAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalDataStore());
-        }
+             => new CollectionResourceQueryable<IAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalDataStore());
 
         async Task<IAccountStore> IApplication.GetDefaultAccountStoreAsync(CancellationToken cancellationToken)
         {

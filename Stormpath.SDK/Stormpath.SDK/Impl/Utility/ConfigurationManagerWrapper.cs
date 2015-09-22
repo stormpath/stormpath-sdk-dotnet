@@ -23,12 +23,6 @@ namespace Stormpath.SDK.Impl.Utility
     // A simple wrapper around ConfigurationManager, used for injecting an otherwise sadly static object
     internal sealed class ConfigurationManagerWrapper : IConfigurationManager
     {
-        public NameValueCollection AppSettings
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings;
-            }
-        }
+        public NameValueCollection AppSettings => ConfigurationManager.AppSettings;
     }
 }

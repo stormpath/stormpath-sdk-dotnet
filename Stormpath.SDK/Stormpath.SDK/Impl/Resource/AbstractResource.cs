@@ -72,9 +72,7 @@ namespace Stormpath.SDK.Impl.Resource
         }
 
         public LinkProperty GetLinkProperty(string name)
-        {
-            return GetProperty<LinkProperty>(name) ?? new LinkProperty(null);
-        }
+            => GetProperty<LinkProperty>(name) ?? new LinkProperty(null);
 
         public T GetProperty<T>(string name)
         {
@@ -97,9 +95,7 @@ namespace Stormpath.SDK.Impl.Resource
         }
 
         public void SetProperty<T>(string name, T value)
-        {
-            this.SetProperty(name, (object)value);
-        }
+            => this.SetProperty(name, (object)value);
 
         public void SetProperty(string name, object value)
         {

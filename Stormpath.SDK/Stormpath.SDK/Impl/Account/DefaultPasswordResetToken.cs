@@ -61,14 +61,10 @@ namespace Stormpath.SDK.Impl.Account
         }
 
         Task<IAccount> IPasswordResetToken.GetAccountAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
-        }
+             => this.GetInternalDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
 
         IAccount IPasswordResetTokenSync.GetAccount()
-        {
-            return this.GetInternalDataStoreSync().GetResource<IAccount>(this.Account.Href);
-        }
+            => this.GetInternalDataStoreSync().GetResource<IAccount>(this.Account.Href);
 
         string IPasswordResetToken.GetValue()
         {

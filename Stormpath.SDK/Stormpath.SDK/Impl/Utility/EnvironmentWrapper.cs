@@ -21,14 +21,8 @@ namespace Stormpath.SDK.Impl.Utility
 {
     internal sealed class EnvironmentWrapper : IEnvironment
     {
-        public string ExpandEnvironmentVariables(string name)
-        {
-            return Environment.ExpandEnvironmentVariables(name);
-        }
+        public string ExpandEnvironmentVariables(string name) => Environment.ExpandEnvironmentVariables(name);
 
-        public string GetEnvironmentVariable(string variable)
-        {
-            return Environment.GetEnvironmentVariable(variable);
-        }
+        public string GetEnvironmentVariable(string variable) => Environment.GetEnvironmentVariable(variable);
     }
 }

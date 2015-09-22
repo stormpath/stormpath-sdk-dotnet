@@ -53,10 +53,7 @@ namespace Stormpath.SDK.Impl.Utility
             return defaultValue;
         }
 
-        public int Count()
-        {
-            return this.props.Count;
-        }
+        public int Count() => this.props.Count;
 
         private static IDictionary<string, string> Parse(string input)
         {

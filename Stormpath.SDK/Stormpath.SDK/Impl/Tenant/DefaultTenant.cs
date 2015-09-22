@@ -98,24 +98,16 @@ namespace Stormpath.SDK.Impl.Tenant
         }
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, creationOptions, cancellationToken);
-        }
+            => this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, creationOptions, cancellationToken);
 
         IApplication ITenantActionsSync.CreateApplication(IApplication application, IApplicationCreationOptions creationOptions)
-        {
-            return this.GetInternalDataStoreSync().Create(this.applicationsResourceBase, application, creationOptions);
-        }
+            => this.GetInternalDataStoreSync().Create(this.applicationsResourceBase, application, creationOptions);
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, cancellationToken);
-        }
+            => this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, cancellationToken);
 
         IApplication ITenantActionsSync.CreateApplication(IApplication application)
-        {
-            return this.GetInternalDataStoreSync().Create(this.applicationsResourceBase, application);
-        }
+            => this.GetInternalDataStoreSync().Create(this.applicationsResourceBase, application);
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken)
         {
@@ -144,18 +136,12 @@ namespace Stormpath.SDK.Impl.Tenant
         }
 
         IAsyncQueryable<IApplication> ITenantActions.GetApplications()
-        {
-            return new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetInternalDataStore());
-        }
+            => new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetInternalDataStore());
 
         IAsyncQueryable<IDirectory> ITenantActions.GetDirectories()
-        {
-            return new CollectionResourceQueryable<IDirectory>(this.Directories.Href, this.GetInternalDataStore());
-        }
+            => new CollectionResourceQueryable<IDirectory>(this.Directories.Href, this.GetInternalDataStore());
 
         IAsyncQueryable<IAccount> ITenantActions.GetAccounts()
-        {
-            return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
-        }
+            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
     }
 }

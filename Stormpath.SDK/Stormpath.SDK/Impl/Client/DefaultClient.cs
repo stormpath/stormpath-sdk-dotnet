@@ -120,14 +120,10 @@ namespace Stormpath.SDK.Impl.Client
         }
 
         Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
-        {
-            return this.dataStore.GetResourceAsync<T>(href, cancellationToken);
-        }
+            => this.dataStore.GetResourceAsync<T>(href, cancellationToken);
 
         T IDataStoreSync.GetResource<T>(string href)
-        {
-            return this.dataStore.GetResource<T>(href);
-        }
+            => this.dataStore.GetResource<T>(href);
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {

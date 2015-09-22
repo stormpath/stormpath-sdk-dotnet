@@ -42,20 +42,12 @@ namespace Stormpath.SDK.Impl.Api
             this.secret = secret;
         }
 
-        string IClientApiKey.GetId()
-        {
-            return this.id;
-        }
+        string IClientApiKey.GetId() => this.id;
 
-        string IClientApiKey.GetSecret()
-        {
-            return this.secret;
-        }
+        string IClientApiKey.GetSecret() => this.secret;
 
-        bool IClientApiKey.IsValid()
-        {
-            return !string.IsNullOrEmpty(this.id)
-                && !string.IsNullOrEmpty(this.secret);
-        }
+        bool IClientApiKey.IsValid() =>
+            !string.IsNullOrEmpty(this.id) &&
+            !string.IsNullOrEmpty(this.secret);
     }
 }

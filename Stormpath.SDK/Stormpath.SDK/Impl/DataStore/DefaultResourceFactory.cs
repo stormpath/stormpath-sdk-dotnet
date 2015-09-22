@@ -35,19 +35,13 @@ namespace Stormpath.SDK.Impl.DataStore
         private IResourceFactory AsInterface => this;
 
         T IResourceFactory.Create<T>()
-        {
-            return (T)this.AsInterface.Create(typeof(T), null);
-        }
+            => (T)this.AsInterface.Create(typeof(T), null);
 
         object IResourceFactory.Create(Type type)
-        {
-            return this.AsInterface.Create(type, null);
-        }
+            => this.AsInterface.Create(type, null);
 
         T IResourceFactory.Create<T>(IDictionary<string, object> properties)
-        {
-            return (T)this.AsInterface.Create(typeof(T), properties);
-        }
+            => (T)this.AsInterface.Create(typeof(T), properties);
 
         object IResourceFactory.Create(Type type, IDictionary<string, object> properties)
         {
