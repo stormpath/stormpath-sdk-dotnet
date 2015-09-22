@@ -152,7 +152,7 @@ namespace Stormpath.SDK.Impl.Account
 
         Task<IDirectory> IAccount.GetDirectoryAsync(CancellationToken cancellationToken)
         {
-            return this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href);
+            return this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
         }
 
         IDirectory IAccountSync.GetDirectory()
@@ -162,7 +162,7 @@ namespace Stormpath.SDK.Impl.Account
 
         Task<ITenant> IAccount.GetTenantAsync(CancellationToken cancellationToken)
         {
-            return this.GetInternalDataStore().GetResourceAsync<ITenant>(this.Tenant.Href);
+            return this.GetInternalDataStore().GetResourceAsync<ITenant>(this.Tenant.Href, cancellationToken);
         }
 
         ITenant IAccountSync.GetTenant()

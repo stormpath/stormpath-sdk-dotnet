@@ -134,7 +134,7 @@ namespace Stormpath.SDK.Impl.Client
             if (this.tenant == null)
                 await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
 
-            return await this.tenant.CreateApplicationAsync(application, creationOptionsAction).ConfigureAwait(false);
+            return await this.tenant.CreateApplicationAsync(application, creationOptionsAction, cancellationToken).ConfigureAwait(false);
         }
 
         IApplication ITenantActionsSync.CreateApplication(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction)
@@ -150,7 +150,7 @@ namespace Stormpath.SDK.Impl.Client
             if (this.tenant == null)
                 await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
 
-            return await this.tenant.CreateApplicationAsync(application, creationOptions).ConfigureAwait(false);
+            return await this.tenant.CreateApplicationAsync(application, creationOptions, cancellationToken).ConfigureAwait(false);
         }
 
         IApplication ITenantActionsSync.CreateApplication(IApplication application, IApplicationCreationOptions creationOptions)
@@ -166,7 +166,7 @@ namespace Stormpath.SDK.Impl.Client
             if (this.tenant == null)
                 await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
 
-            return await this.tenant.CreateApplicationAsync(application).ConfigureAwait(false);
+            return await this.tenant.CreateApplicationAsync(application, cancellationToken).ConfigureAwait(false);
         }
 
         IApplication ITenantActionsSync.CreateApplication(IApplication application)
@@ -182,7 +182,7 @@ namespace Stormpath.SDK.Impl.Client
             if (this.tenant == null)
                 await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
 
-            return await this.tenant.CreateApplicationAsync(name, createDirectory).ConfigureAwait(false);
+            return await this.tenant.CreateApplicationAsync(name, createDirectory, cancellationToken).ConfigureAwait(false);
         }
 
         IApplication ITenantActionsSync.CreateApplication(string name, bool createDirectory)
