@@ -372,10 +372,11 @@ namespace Stormpath.SDK
             var index = 0;
             while (await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 foreach (var item in source.CurrentPage)
                 {
                     action(item, index++);
-                    cancellationToken.ThrowIfCancellationRequested();
                 }
             }
         }
