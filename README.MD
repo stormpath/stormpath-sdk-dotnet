@@ -24,7 +24,7 @@ thoughts! support@stormpath.com
 
 ## Current status
 
-This library is currently under active development. If you would like to be notified when we publish our first release candidate, watch this repository or send an email to nate@stormpath.com.
+This library is currently under active development. If you would like to be notified when we publish releases, watch this repository or send an email to support@stormpath.com.
 
 ## Installation instructions
 
