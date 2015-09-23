@@ -78,6 +78,7 @@
     <Compile Include="Client\Clients.cs" />
     <Compile Include="Client\IClient.cs" />
     <Compile Include="Client\IClientBuilder.cs" />
+    <Compile Include="CustomData\ICustomData.cs" />
     <Compile Include="Directory\DirectoryStatus.cs" />
     <Compile Include="Directory\IDirectory.cs" />
     <Compile Include="Error\IError.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Impl\Client\IClientSync.cs" />
     <Compile Include="Impl\Client\IJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\IHttpClientBuilder.cs" />
+    <Compile Include="Impl\CustomData\DefaultCustomData.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataRequest.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataResult.cs" />
