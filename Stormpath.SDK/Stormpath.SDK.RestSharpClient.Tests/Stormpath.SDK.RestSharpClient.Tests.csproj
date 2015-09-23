@@ -25,7 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\..\..\..\stormpath-sdk-csharp\Stormpath.SDK\Stormpath.SDK\Stormpath.SDK.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Stormpath.SDK\Stormpath.SDK.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
