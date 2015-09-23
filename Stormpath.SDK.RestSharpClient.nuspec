@@ -15,7 +15,7 @@
         <tags>Stormpath API Authentication Authorization REST</tags>
         <dependencies>
             <dependency id="RestSharp" version="105.2.2" />
-            <dependency id="Stormpath.SDK.Core" version="0.1.0-rc" />
+            <dependency id="Stormpath.SDK.Core" version="0.1.0" />
         </dependencies>
     </metadata>
     <files>

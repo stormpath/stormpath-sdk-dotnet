@@ -14,7 +14,7 @@
         <language>en-US</language>
         <tags>Stormpath API Authentication Authorization REST</tags>
         <dependencies>
-            <dependency id="Remotion.Linq" version="[1.15.15.0,2.0.0-alpha)" />
+            <dependency id="Remotion.Linq" version="[1.15.15.0]" />
         </dependencies>
     </metadata>
     <files>

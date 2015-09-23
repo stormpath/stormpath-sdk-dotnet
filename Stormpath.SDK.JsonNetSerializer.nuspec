@@ -15,7 +15,7 @@
         <tags>Stormpath API Authentication Authorization REST</tags>
         <dependencies>
             <dependency id="Newtonsoft.Json" version="7.0.1" />
-            <dependency id="Stormpath.SDK.Core" version="0.1.0-rc" />
+            <dependency id="Stormpath.SDK.Core" version="0.1.0" />
         </dependencies>
     </metadata>
     <files>
