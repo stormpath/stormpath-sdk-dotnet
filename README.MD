@@ -47,7 +47,7 @@ It's as easy as `mono nuget.exe install Stormpath.SDK`.
 
 ## Quickstart
 
-In this quickstart, we'll use Visual Studio to make a simple console application that creates a user and logs them into an application.
+In this quickstart, you'll use Visual Studio to make a simple console application that creates a user and logs them into an application.
 
 #### Get an API Key
 
@@ -76,7 +76,7 @@ The `apiKey.properties` file holds your API key information, and can be used to 
 
 #### Creating a project
 
-Next, let's create a simple Visual Studio project and add the Stormpath SDK.
+Next, create a simple Visual Studio project and add the Stormpath SDK.
 
  1. Create a new Console Application project.
  2. Use the [instructions above](#installation-instructions) to install the Stormpath SDK into your project.
@@ -92,7 +92,9 @@ Next, let's create a simple Visual Studio project and add the Stormpath SDK.
 
 The Stormpath SDK performs `await`able asynchronous operations by default. This makes it possible to make requests to the Stormpath API without tying up a worker thread - super cool for ASP.NET projects!
 
-In the Console Application template, however, the entry point is `static void Main()`, so we can't use the `await` keyword. In an ASP.NET application, we could just change the method signature to `async Task`, but that doesn't work well in a console app. Let's get around that by writing a separate method instead:
+In the Console Application template, however, the entry point is `static void Main()`, so you can't use the `await` keyword. (In an ASP.NET application, you could just change the method signature to `async Task`, but that doesn't work well in a console app.)
+
+You can work around this by writing a separate method instead:
 
 ```csharp
 static Task MainAsync()
@@ -113,7 +115,7 @@ If you are confused by all this `async` business, check out Stephen Cleary's [ex
 
 #### Creating a client
 
-The first thing we need to connect to the Stormpath API is a `IClient` object. In our new `MainAsync` method, let's create one:
+The first thing you need to connect to the Stormpath API is a `IClient` object. Create one in your new `MainAsync` method:
 
 ```csharp
 // If you put the apiKey.properties file in the default location
@@ -134,7 +136,7 @@ Once you have built a `IClient`, keep it around! You should only need to create 
 
 #### Retrieving your application
 
-Now that we have a `IClient`, we need to get an `IApplication` object that represents an Application in Stormpath. You should have a default application called "My Application" in your Stormpath account. Let's retrieve it:
+Now that you have a `IClient`, you need to get an `IApplication` object that represents an Application in Stormpath. You should have a default application called "My Application" in your Stormpath account. It's easy to retrieve:
 
 ```csharp
 var myApp = await client.GetApplications()
@@ -142,11 +144,11 @@ var myApp = await client.GetApplications()
     .SingleAsync();
 ```
 
-We can use this `IApplication` object to create user accounts, log in user accounts, and all sorts of other cool stuff.
+You can use this `IApplication` object to create user accounts, log in user accounts, and all sorts of other cool stuff.
 
 #### Creating a user account
 
-Let's create a new user!
+You can create a new user by calling `CreateAccountAsync`:
 
 ```csharp
 var joe = await myApp.CreateAccountAsync("Joe", "Stormtrooper",
@@ -159,7 +161,7 @@ The returned `IAccount` object will contain all the account's data. Easy! :smile
 
 #### Logging in
 
-Now that we have a valid user in the application, we can perform a login request.
+Now that you have a valid user in the Stormpath application, you can perform a login request.
 
 ```csharp
 // Imagine that we got these values from a web request:
@@ -182,7 +184,7 @@ catch (ResourceException rex)
 
 #### Clean up
 
-Cleaning up your Stormpath application after our demo is easy:
+Cleaning up your Stormpath application is easy:
 
 ```csharp
 try
@@ -193,12 +195,12 @@ catch (ResourceException rex)
 {
     Console.WriteLine("Unexpected error when deleting " + joe.Email + ". Error: " + rex.Message);
 }
+Console.WriteLine("Done!");
 ```
 
-As a final touch, we can add this line at the end so the console window doesn't disappear immediately:
+As a final touch, you can add this line at the end so the console window doesn't disappear immediately:
 
 ```csharp
-Console.WriteLine("Done!")
 Console.ReadKey(false);
 ```
 
