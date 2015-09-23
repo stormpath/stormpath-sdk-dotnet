@@ -198,6 +198,7 @@ catch (ResourceException rex)
 As a final touch, we can add this line at the end so the console window doesn't disappear immediately:
 
 ```csharp
+Console.WriteLine("Done!")
 Console.ReadKey(false);
 ```
 
@@ -214,14 +215,14 @@ Console.ReadKey(false);
 
 Building the SDK requires Visual Studio 2015.
 
- 1. Use `git clone` or the GitHub extension to clone the branch you want to build (`master` or `develop`).
+ 1. Use `git clone` or the Visual Studio GitHub extension to clone the branch you want to build (`master` or `develop`).
  2. Open `stormpath-sdk-csharp\Stormpath.SDK\Stormpath.SDK.sln` in Visual Studio.
  3. On first build, the required NuGet packages should resore. If not, [enable automatic package restore](http://stackoverflow.com/a/29708080/3191599).
 
 #### Building with MSBuild
 
  1. Clone the repository: `git clone https://github.com/stormpath/stormpath-sdk-csharp.git`
- 2. `cd stormpath-sdk-csharp\Stormpath.SDK
+ 2. `cd stormpath-sdk-csharp\Stormpath.SDK`
  2. Assuming you have [nuget.exe](https://docs.nuget.org/consume/installing-nuget#command-line-utility) in your `PATH`: `nuget restore Stormpath.SDK.sln`
  3. `msbuild Stormpath.SDK.sln`
 
