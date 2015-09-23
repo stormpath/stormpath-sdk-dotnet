@@ -28,9 +28,6 @@ namespace Stormpath.SDK.Impl.Extensions
         /// </summary>
         /// <param name="date">The date to convert.</param>
         /// <returns>Milliseconds since Unix epoch.</returns>
-        public static long ToUnixTimestamp(this DateTime date)
-        {
-            return (long)(date.ToUniversalTime() - UnixEpoch).TotalMilliseconds;
-        }
+        public static long ToUnixTimestamp(this DateTime date) => (long)(date.ToUniversalTime() - UnixEpoch).TotalMilliseconds;
     }
 }

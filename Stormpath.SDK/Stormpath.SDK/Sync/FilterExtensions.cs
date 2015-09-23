@@ -1,4 +1,4 @@
-﻿// <copyright file="Unsupported_filters_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="FilterExtensions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,10 +15,21 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Tests.Impl.Linq
+using System.Linq;
+using System.Linq.Expressions;
+using Stormpath.SDK.Impl.Linq;
+
+namespace Stormpath.SDK.Sync
 {
-    public class Unsupported_filters_tests : Linq_tests
+    public static class FilterExtensions
     {
-        // TODO
+        public static IQueryable<TSource> Filter<TSource>(this IQueryable<TSource> source, string caseInsensitiveMatch)
+        {
+            return source.Provider.CreateQuery<TSource>(
+                LinqHelper.MethodCall(
+                    LinqHelper.GetMethodInfo(Filter, source, caseInsensitiveMatch),
+                    source.Expression,
+                    Expression.Constant(caseInsensitiveMatch)));
+        }
     }
 }

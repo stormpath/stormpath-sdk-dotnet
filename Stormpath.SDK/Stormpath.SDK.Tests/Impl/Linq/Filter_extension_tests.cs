@@ -15,6 +15,8 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using Shouldly;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
@@ -34,14 +36,16 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Multiple_calls_are_LIFO()
+        public void Throws_for_multiple_serial_calls()
         {
             var query = this.Harness.Queryable
                 .Filter("Joe")
                 .Filter("Joey");
 
-            // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(this.Href, "q=Joey");
+            Should.Throw<NotSupportedException>(() =>
+            {
+                query.GeneratedArgumentsWere(this.Href, "q=Joey");
+            });
         }
     }
 }

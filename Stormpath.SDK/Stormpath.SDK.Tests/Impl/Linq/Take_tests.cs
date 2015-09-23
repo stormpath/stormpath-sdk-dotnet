@@ -68,6 +68,16 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
+        public void Zero_is_ignored()
+        {
+            var query = this.Harness.Queryable
+                .Take(0);
+
+            // Expected behavior: the last call will be kept
+            query.GeneratedArgumentsWere(this.Href, string.Empty);
+        }
+
+        [Fact]
         public void Throws_for_invalid_value()
         {
             Should.Throw<ArgumentOutOfRangeException>(() =>
@@ -80,7 +90,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public async Task Observes_take_limit()
+        public async Task ToListAsync_observes_take_limit()
         {
             // Scenario: .Take() functions a little differently than the limit=? parameter
             // in Stormpath, even though that's what it translates to. .Take() represents an

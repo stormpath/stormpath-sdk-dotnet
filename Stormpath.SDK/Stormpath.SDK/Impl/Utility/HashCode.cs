@@ -28,15 +28,9 @@ namespace Stormpath.SDK.Impl.Utility
             this.hashCode = hashCode;
         }
 
-        public static HashCode Start
-        {
-            get { return new HashCode(17); }
-        }
+        public static HashCode Start => new HashCode(17);
 
-        public static implicit operator int(HashCode hashCode)
-        {
-            return hashCode.GetHashCode();
-        }
+        public static implicit operator int(HashCode hashCode) => hashCode.GetHashCode();
 
         public HashCode Include(int existingHash)
         {
@@ -59,9 +53,6 @@ namespace Stormpath.SDK.Impl.Utility
             return new HashCode(h);
         }
 
-        public override int GetHashCode()
-        {
-            return this.hashCode;
-        }
+        public override int GetHashCode() => this.hashCode;
     }
 }

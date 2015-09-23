@@ -49,9 +49,6 @@ namespace Stormpath.SDK.Impl.Utility
             return result;
         }
 
-        public int GetHashCode(T obj)
-        {
-            return this.hashAction(obj);
-        }
+        public int GetHashCode(T obj) => this.hashAction(obj);
     }
 }

@@ -27,7 +27,8 @@ namespace Stormpath.SDK.Impl.Resource
     {
         private static readonly string HrefPropertyName = "href";
 
-        private readonly IInternalDataStore dataStore;
+        internal readonly IInternalDataStore InternalDataStore;
+        internal readonly IInternalDataStoreSync InternalDataStoreSync;
         private readonly ConcurrentDictionary<string, object> properties;
         private readonly ConcurrentDictionary<string, object> dirtyProperties;
 
@@ -40,7 +41,8 @@ namespace Stormpath.SDK.Impl.Resource
 
         public AbstractResource(IInternalDataStore dataStore, IDictionary<string, object> properties)
         {
-            this.dataStore = dataStore;
+            this.InternalDataStore = dataStore;
+            this.InternalDataStoreSync = dataStore as IInternalDataStoreSync;
 
             this.properties = new ConcurrentDictionary<string, object>(properties);
             this.dirtyProperties = new ConcurrentDictionary<string, object>();
@@ -49,7 +51,9 @@ namespace Stormpath.SDK.Impl.Resource
 
         string IResource.Href => GetProperty<string>(HrefPropertyName);
 
-        protected IInternalDataStore GetInternalDataStore() => this.dataStore;
+        protected IInternalDataStore GetInternalDataStore() => this.InternalDataStore;
+
+        protected IInternalDataStoreSync GetInternalDataStoreSync() => this.InternalDataStoreSync;
 
         internal bool IsDirty => this.isDirty;
 
@@ -68,9 +72,7 @@ namespace Stormpath.SDK.Impl.Resource
         }
 
         public LinkProperty GetLinkProperty(string name)
-        {
-            return GetProperty<LinkProperty>(name) ?? new LinkProperty(null);
-        }
+            => GetProperty<LinkProperty>(name) ?? new LinkProperty(null);
 
         public T GetProperty<T>(string name)
         {
@@ -93,9 +95,7 @@ namespace Stormpath.SDK.Impl.Resource
         }
 
         public void SetProperty<T>(string name, T value)
-        {
-            this.SetProperty(name, (object)value);
-        }
+            => this.SetProperty(name, (object)value);
 
         public void SetProperty(string name, object value)
         {

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Stormpath.SDK.Core</id>
-        <version>0.1.0-rc</version>
+        <version>0.1.0</version>
         <authors>Nate Barbettini</authors>
         <owners>Stormpath,Inc.</owners>
         <licenseUrl>https://github.com/stormpath/stormpath-sdk-csharp/blob/master/LICENSE</licenseUrl>
@@ -14,7 +14,7 @@
         <language>en-US</language>
         <tags>Stormpath API Authentication Authorization REST</tags>
         <dependencies>
-            <dependency id="Remotion.Linq" version="[1.15.15.0,2.0.0-alpha)" />
+            <dependency id="Remotion.Linq" version="[1.15.15.0]" />
         </dependencies>
     </metadata>
     <files>

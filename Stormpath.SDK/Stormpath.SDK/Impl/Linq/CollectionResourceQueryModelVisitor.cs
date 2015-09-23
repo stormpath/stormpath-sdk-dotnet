@@ -17,6 +17,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Linq.Expressions;
 using Remotion.Linq;
 using Remotion.Linq.Clauses;
@@ -32,9 +34,11 @@ namespace Stormpath.SDK.Impl.Linq
     {
         private static readonly int DefaultApiPageLimit = 100;
 
-        private static readonly List<Type> SupportedResultOperators = new List<Type>()
+        private static readonly List<Type> SupportedOperators = new List<Type>()
         {
             typeof(AnyResultOperator),
+            typeof(CountResultOperator),
+            typeof(LongCountResultOperator),
             typeof(FirstResultOperator),
             typeof(SingleResultOperator),
             typeof(TakeResultOperator),
@@ -51,9 +55,9 @@ namespace Stormpath.SDK.Impl.Linq
             return visitor.ParsedModel;
         }
 
-        private static bool IsSupportedResultOperator(ResultOperatorBase resultOperator)
+        private static bool IsSupportedOperator(ResultOperatorBase resultOperator)
         {
-            return SupportedResultOperators.Contains(resultOperator.GetType());
+            return SupportedOperators.Contains(resultOperator.GetType());
         }
 
         public override void VisitMainFromClause(MainFromClause fromClause, QueryModel queryModel)
@@ -62,24 +66,41 @@ namespace Stormpath.SDK.Impl.Linq
             // (see ExecuteScalar in CollectionResourceQueryExecutor for why we need this)
             this.ParsedModel.CollectionType = fromClause.ItemType;
 
+            var subQuery = fromClause.FromExpression as SubQueryExpression;
+
+            // Some expression trees will wrap earlier clauses into a FROM, and then
+            // tack on stuff after it. We need to unwrap the lower level.
+            bool anySubQueryResultOperators = subQuery?.QueryModel?.ResultOperators.Any() ?? false;
+            if (anySubQueryResultOperators)
+            {
+                this.VisitResultOperators(subQuery.QueryModel.ResultOperators, subQuery.QueryModel);
+            }
+
+            bool anySubQueryBodyClauses = subQuery?.QueryModel?.BodyClauses.Any() ?? false;
+            if (anySubQueryBodyClauses)
+            {
+                this.VisitBodyClauses(subQuery.QueryModel.BodyClauses, subQuery.QueryModel);
+            }
+
             base.VisitMainFromClause(fromClause, queryModel);
         }
 
         public override void VisitResultOperator(ResultOperatorBase resultOperator, QueryModel queryModel, int index)
         {
-            if (!IsSupportedResultOperator(resultOperator))
+            if (!IsSupportedOperator(resultOperator))
                 throw new NotSupportedException("One or more LINQ operators are not supported.");
 
-            bool isScalar =
+            bool shouldReturnOnlyOne =
                 resultOperator is AnyResultOperator ||
                 resultOperator is CountResultOperator ||
-                resultOperator is FirstResultOperator ||
-                resultOperator is SingleResultOperator;
-            if (isScalar)
+                resultOperator is LongCountResultOperator ||
+                resultOperator is FirstResultOperator;
+            if (shouldReturnOnlyOne)
             {
                 this.ParsedModel.Limit = 1;
                 this.ParsedModel.ExecutionPlan.MaxItems = 1;
-                return;
+
+                return; // done
             }
 
             if (this.HandleTakeResultOperator(resultOperator))
@@ -105,14 +126,22 @@ namespace Stormpath.SDK.Impl.Linq
                 throw new NotSupportedException("Unsupported expression in Take clause.");
 
             var value = (int)expression.Value;
-            if (value < 1)
+            if (value < 0)
                 throw new ArgumentOutOfRangeException("Take must be greater than zero.");
 
-            this.ParsedModel.ExecutionPlan.MaxItems = value;
-            this.ParsedModel.Limit = value;
+            if (value == 0)
+            {
+                this.ParsedModel.ExecutionPlan.MaxItems = null;
+                this.ParsedModel.Limit = null;
+            }
+            else
+            {
+                this.ParsedModel.ExecutionPlan.MaxItems = value;
+                this.ParsedModel.Limit = value;
 
-            if (value > DefaultApiPageLimit)
-                this.ParsedModel.Limit = DefaultApiPageLimit;
+                if (value > DefaultApiPageLimit)
+                    this.ParsedModel.Limit = DefaultApiPageLimit;
+            }
 
             return true;
         }
@@ -128,10 +157,12 @@ namespace Stormpath.SDK.Impl.Linq
                 throw new NotSupportedException("Unsupported expression in Skip clause.");
 
             var value = (int)expression.Value;
-            if (value < 1)
+            if (value < 0)
                 throw new ArgumentOutOfRangeException("Skip must be greater than zero.");
 
-            this.ParsedModel.Offset = value;
+            this.ParsedModel.Offset = value == 0
+                ? (int?)null
+                : value;
 
             return true;
         }
@@ -177,8 +208,6 @@ namespace Stormpath.SDK.Impl.Linq
             // Handle simple cases
             if (this.HandleWhereFilterExtensionMethod(whereClause))
                 return; // done
-            if (this.HandleWhereWithinDateExtensionMethod(whereClause))
-                return; // done
 
             this.ParsedModel.AddAttributeTerms(
                 CollectionResourceWhereExpressionVisitor.GenerateModels(whereClause.Predicate));
@@ -192,48 +221,26 @@ namespace Stormpath.SDK.Impl.Linq
             if (filterClause == null)
                 return false;
 
+            if (!string.IsNullOrEmpty(this.ParsedModel.FilterTerm))
+                throw new NotSupportedException("Multiple Filter terms are not supported");
+
             this.ParsedModel.FilterTerm = filterClause.Term;
             return true;
         }
 
-        private bool HandleWhereWithinDateExtensionMethod(WhereClause whereClause)
+        public override void VisitOrdering(Ordering ordering, QueryModel queryModel, OrderByClause orderByClause, int index)
         {
-            var methodCall = whereClause.Predicate as MethodCallExpression;
-            bool isWithinMethodCall = methodCall?.Method.DeclaringType == typeof(WithinExpressionExtensions);
-            if (!isWithinMethodCall)
-                return false;
+            // If this is idempotent ordering term like .OrderBy(x => x), ignore it
+            bool isInternalOrdering = queryModel.MainFromClause ==
+                (ordering.Expression as QuerySourceReferenceExpression)?.ReferencedQuerySource as MainFromClause;
 
-            var fieldName = string.Empty;
-            var methodCallMember = methodCall.Arguments[0] as MemberExpression;
-            bool validField = methodCallMember != null && DatetimeFieldNameTranslator.TryGetValue(methodCallMember.Member.Name, out fieldName);
-            if (!validField)
-                throw new NotSupportedException("Within must be used on a supported datetime field.");
+            if (isInternalOrdering)
+                return;
 
-            var numberOfConstantArgs = methodCall.Arguments.Count - 1;
-            var yearArg = (int)(methodCall.Arguments[1] as ConstantExpression).Value;
-            int? monthArg = null,
-                dayArg = null,
-                hourArg = null,
-                minuteArg = null,
-                secondArg = null;
-
-            if (methodCall.Arguments.Count >= 3)
-                monthArg = (methodCall.Arguments?[2] as ConstantExpression)?.Value as int?;
-            if (methodCall.Arguments.Count >= 4)
-                dayArg = (methodCall.Arguments?[3] as ConstantExpression)?.Value as int?;
-            if (methodCall.Arguments.Count >= 5)
-                hourArg = (methodCall.Arguments?[4] as ConstantExpression)?.Value as int?;
-            if (methodCall.Arguments.Count >= 6)
-                minuteArg = (methodCall.Arguments?[5] as ConstantExpression)?.Value as int?;
-            if (methodCall.Arguments.Count == 7)
-                secondArg = (methodCall.Arguments?[6] as ConstantExpression)?.Value as int?;
-
-            this.ParsedModel.AddAttributeTerm(new DatetimeShorthandAttributeTermModel(fieldName, yearArg, monthArg, dayArg, hourArg, minuteArg, secondArg));
-
-            return true;
+            this.HandleOrderByClause(ordering);
         }
 
-        public override void VisitOrdering(Ordering ordering, QueryModel queryModel, OrderByClause orderByClause, int index)
+        public void HandleOrderByClause(Ordering ordering)
         {
             var memberAccessor = ordering.Expression as MemberExpression;
             if (memberAccessor == null)

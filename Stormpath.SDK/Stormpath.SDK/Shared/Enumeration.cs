@@ -43,15 +43,9 @@ namespace Stormpath.SDK.Shared
             this.displayName = displayName;
         }
 
-        public int Value
-        {
-            get { return this.value; }
-        }
+        public int Value => this.value;
 
-        public string DisplayName
-        {
-            get { return this.displayName; }
-        }
+        public string DisplayName => this.displayName;
 
         public static bool operator ==(Enumeration a, Enumeration b)
         {
@@ -68,15 +62,9 @@ namespace Stormpath.SDK.Shared
             return a.Value == b.Value;
         }
 
-        public static bool operator !=(Enumeration a, Enumeration b)
-        {
-            return !(a == b);
-        }
+        public static bool operator !=(Enumeration a, Enumeration b) => !(a == b);
 
-        public override string ToString()
-        {
-            return this.DisplayName;
-        }
+        public override string ToString() => this.DisplayName;
 
         public static IEnumerable<T> GetAll<T>()
             where T : Enumeration, new()
@@ -111,10 +99,7 @@ namespace Stormpath.SDK.Shared
             return typeMatches && valueMatches;
         }
 
-        public override int GetHashCode()
-        {
-            return this.value.GetHashCode();
-        }
+        public override int GetHashCode() => this.value.GetHashCode();
 
         public static int AbsoluteDifference(Enumeration firstValue, Enumeration secondValue)
         {
@@ -150,9 +135,6 @@ namespace Stormpath.SDK.Shared
             return matchingItem;
         }
 
-        public int CompareTo(object other)
-        {
-            return this.Value.CompareTo(((Enumeration)other).Value);
-        }
+        public int CompareTo(object other) => this.Value.CompareTo(((Enumeration)other).Value);
     }
 }

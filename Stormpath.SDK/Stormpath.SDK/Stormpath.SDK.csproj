@@ -57,7 +57,7 @@
     <Compile Include="Account\AccountCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountStatus.cs" />
     <Compile Include="Account\IAccount.cs" />
-    <Compile Include="Account\IAccountCreation.cs" />
+    <Compile Include="Account\IAccountCreationActions.cs" />
     <Compile Include="Account\IAccountCreationOptions.cs" />
     <Compile Include="Api\ClientApiKeys.cs" />
     <Compile Include="Api\IClientApiKey.cs" />
@@ -88,15 +88,21 @@
     <Compile Include="Http\ISynchronousHttpClient.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
+    <Compile Include="Impl\AccountStore\IAccountStoreMappingSync.cs" />
     <Compile Include="Impl\Account\DefaultAccountCreationOptions.cs" />
     <Compile Include="Impl\Account\DefaultPasswordResetToken.cs" />
+    <Compile Include="Impl\Account\IAccountCreationActionsSync.cs" />
+    <Compile Include="Impl\Account\IAccountSync.cs" />
+    <Compile Include="Impl\Account\IPasswordResetTokenSync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.cs" />
     <Compile Include="Impl\Application\DefaultApplicationCreationOptions.cs" />
+    <Compile Include="Impl\Application\IApplicationSync.cs" />
     <Compile Include="Impl\Auth\AbstractLoginAttempt.cs" />
     <Compile Include="Impl\Auth\AuthenticationRequestDispatcher.cs" />
     <Compile Include="Impl\Auth\BasicAuthenticator.cs" />
     <Compile Include="Impl\Auth\DefaultAuthenticationResult.cs" />
     <Compile Include="Impl\Auth\DefaultBasicLoginAttempt.cs" />
+    <Compile Include="Impl\Auth\IAuthenticationResultSync.cs" />
     <Compile Include="Impl\Auth\IBasicLoginAttempt.cs" />
     <Compile Include="Impl\Auth\ILoginAttempt.cs" />
     <Compile Include="Impl\Cache\InMemoryCache.cs" />
@@ -112,6 +118,7 @@
     <Compile Include="Impl\Client\DefaultJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\DefaultHttpClientBuilder.cs" />
     <Compile Include="Impl\Client\ICacheProviderBuilder.cs" />
+    <Compile Include="Impl\Client\IClientSync.cs" />
     <Compile Include="Impl\Client\IJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\IHttpClientBuilder.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
@@ -119,12 +126,16 @@
     <Compile Include="Impl\DataStore\DefaultResourceDataResult.cs" />
     <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
+    <Compile Include="Impl\DataStore\IDataStoreSync.cs" />
+    <Compile Include="Impl\DataStore\IInternalDataStoreSync.cs" />
     <Compile Include="Impl\Http\DefaultHttpClientLoader.cs" />
     <Compile Include="Impl\Http\DefaultRequestExecutor.cs" />
     <Compile Include="Impl\Http\Support\DefaultBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\IBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
     <Compile Include="Impl\Linq\LinqHelper.cs" />
+    <Compile Include="Impl\Resource\IDeletableSync.cs" />
+    <Compile Include="Impl\Resource\ISaveableSync.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterResult.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\AbstractFieldConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterList.cs" />
@@ -143,10 +154,21 @@
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\Serialization\JsonSerializationProvider.cs" />
     <Compile Include="Impl\Serialization\DefaultJsonSerializerLoader.cs" />
+    <Compile Include="Impl\Tenant\ITenantActionsSync.cs" />
     <Compile Include="Impl\Utility\ITypeLoader.cs" />
     <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
+    <Compile Include="Sync\FilterExtensions.cs" />
+    <Compile Include="Sync\SyncAccountCreationActionsExtensions.cs" />
+    <Compile Include="Sync\SyncAccountExtensions.cs" />
+    <Compile Include="Sync\SyncAccountStoreMappingExtensions.cs" />
+    <Compile Include="Sync\SyncApplicationExtensions.cs" />
+    <Compile Include="Sync\SyncAuthenticationResultExtensions.cs" />
+    <Compile Include="Sync\SyncClientExtensions.cs" />
+    <Compile Include="Sync\SyncDataStoreExtensions.cs" />
+    <Compile Include="Sync\SyncPasswordResetTokenExtensions.cs" />
+    <Compile Include="Sync\SyncQueryableExtensions.cs" />
     <Compile Include="Serialization\IJsonSerializer.cs" />
     <Compile Include="Impl\DataStore\IResourceConverter.cs" />
     <Compile Include="Impl\DataStore\IResourceDataRequest.cs" />
@@ -220,7 +242,6 @@
     <Compile Include="Impl\Resource\LinkProperty.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.cs" />
     <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />
-    <Compile Include="Impl\Utility\GenericHasher.cs" />
     <Compile Include="Shared\ImmutableValueObject.cs" />
     <Compile Include="Impl\Utility\Iso8601.cs" />
     <Compile Include="Impl\Utility\IMultiValueDictionary.cs" />
@@ -253,6 +274,8 @@
     <Compile Include="Shared\LogEntry.cs" />
     <Compile Include="Shared\LoggerExtensions.cs" />
     <Compile Include="Shared\LogLevel.cs" />
+    <Compile Include="Sync\SyncResourceExtensions.cs" />
+    <Compile Include="Sync\SyncTenantActionsExtensions.cs" />
     <Compile Include="Tenant\ITenant.cs" />
     <Compile Include="Tenant\ITenantActions.cs" />
   </ItemGroup>
@@ -266,7 +289,8 @@
   <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta011\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta012\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta012\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

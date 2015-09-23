@@ -28,7 +28,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
 {
-    internal sealed class DefaultAccount : AbstractExtendableInstanceResource, IAccount
+    internal sealed class DefaultAccount : AbstractExtendableInstanceResource, IAccount, IAccountSync
     {
         private static readonly string AccessTokensPropertyName = "accessTokens";
         private static readonly string ApiKeysPropertyName = "apiKeys";
@@ -151,23 +151,27 @@ namespace Stormpath.SDK.Impl.Account
         }
 
         Task<IDirectory> IAccount.GetDirectoryAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href);
-        }
+            => this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
+
+        IDirectory IAccountSync.GetDirectory()
+            => this.GetInternalDataStoreSync().GetResource<IDirectory>(this.Directory.Href);
 
         Task<ITenant> IAccount.GetTenantAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().GetResourceAsync<ITenant>(this.Tenant.Href);
-        }
+            => this.GetInternalDataStore().GetResourceAsync<ITenant>(this.Tenant.Href, cancellationToken);
+
+        ITenant IAccountSync.GetTenant()
+            => this.GetInternalDataStoreSync().GetResource<ITenant>(this.Tenant.Href);
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
-        }
+            => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
+
+        bool IDeletableSync.Delete()
+             => this.GetInternalDataStoreSync().Delete(this);
 
         Task<IAccount> ISaveable<IAccount>.SaveAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().SaveAsync<IAccount>(this, cancellationToken);
-        }
+             => this.GetInternalDataStore().SaveAsync<IAccount>(this, cancellationToken);
+
+        IAccount ISaveableSync<IAccount>.Save()
+             => this.GetInternalDataStoreSync().Save<IAccount>(this);
     }
 }

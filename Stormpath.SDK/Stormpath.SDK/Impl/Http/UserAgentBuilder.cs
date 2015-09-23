@@ -38,15 +38,9 @@ namespace Stormpath.SDK.Impl.Http
             .Trim();
         }
 
-        public static string GetUserAgent()
-        {
-            return SdkUserAgentValue.Value;
-        }
+        public static string GetUserAgent() => SdkUserAgentValue.Value;
 
-        private static IEnumerable<string> GetInstalledIntegrationsInfo()
-        {
-            return Enumerable.Empty<string>();
-        }
+        private static IEnumerable<string> GetInstalledIntegrationsInfo() => Enumerable.Empty<string>();
 
         private static string GetSdkInfo()
         {
@@ -73,9 +67,6 @@ namespace Stormpath.SDK.Impl.Http
             return runtimeInfo;
         }
 
-        private static string GetPlatformInfo()
-        {
-            return $"{PlatformHelper.GetOSName()}/{PlatformHelper.GetOSVersion()}";
-        }
+        private static string GetPlatformInfo() => $"{PlatformHelper.GetOSName()}/{PlatformHelper.GetOSVersion()}";
     }
 }

@@ -74,13 +74,9 @@ namespace Stormpath.SDK.Impl.Directory
         internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
         IAsyncQueryable<IAccount> IDirectory.GetAccounts()
-        {
-            return new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
-        }
+            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
-        }
+            => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
     }
 }

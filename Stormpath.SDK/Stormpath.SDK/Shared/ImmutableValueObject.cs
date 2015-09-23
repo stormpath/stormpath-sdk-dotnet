@@ -75,24 +75,16 @@ namespace Stormpath.SDK.Shared
         }
 
         public static bool operator ==(ImmutableValueObject<T> x, ImmutableValueObject<T> y)
-        {
-            return EqualsImpl(x as T, y as T);
-        }
+            => EqualsImpl(x as T, y as T);
 
         public static bool operator !=(ImmutableValueObject<T> x, ImmutableValueObject<T> y)
-        {
-            return !(x == y);
-        }
+            => !(x == y);
 
         public override bool Equals(object obj)
-        {
-            return EqualsImpl(this as T, obj as T);
-        }
+            => EqualsImpl(this as T, obj as T);
 
         public virtual bool Equals(T other)
-        {
-            return EqualsImpl(this as T, other);
-        }
+            => EqualsImpl(this as T, other);
 
         public override int GetHashCode()
         {

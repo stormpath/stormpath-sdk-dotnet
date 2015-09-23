@@ -36,9 +36,6 @@ namespace Stormpath.SDK.Impl.Auth
 
         string IBasicLoginAttempt.Value => this.GetProperty<string>(ValuePropertyName);
 
-        void IBasicLoginAttempt.SetValue(string value)
-        {
-            this.SetProperty(ValuePropertyName, value);
-        }
+        void IBasicLoginAttempt.SetValue(string value) => this.SetProperty(ValuePropertyName, value);
     }
 }

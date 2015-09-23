@@ -24,7 +24,7 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Account
 {
-    internal sealed class DefaultPasswordResetToken : AbstractResource, IPasswordResetToken
+    internal sealed class DefaultPasswordResetToken : AbstractResource, IPasswordResetToken, IPasswordResetTokenSync
     {
         private static readonly string TokenDelimiter = "/passwordResetTokens/";
 
@@ -61,9 +61,10 @@ namespace Stormpath.SDK.Impl.Account
         }
 
         Task<IAccount> IPasswordResetToken.GetAccountAsync(CancellationToken cancellationToken)
-        {
-            return this.GetInternalDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
-        }
+             => this.GetInternalDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
+
+        IAccount IPasswordResetTokenSync.GetAccount()
+            => this.GetInternalDataStoreSync().GetResource<IAccount>(this.Account.Href);
 
         string IPasswordResetToken.GetValue()
         {

@@ -65,6 +65,9 @@ namespace Stormpath.SDK.Impl.Linq
 
                 foreach (var term in aggregatedTerms)
                 {
+                    if (arguments.ContainsKey(term.Field))
+                        throw new NotSupportedException($"Multiple date constraints on field {term.Field} are not supported");
+
                     var datetimeAttribute = new StringBuilder();
 
                     if (!term.Start.HasValue)
@@ -98,6 +101,9 @@ namespace Stormpath.SDK.Impl.Linq
             {
                 foreach (var term in model.DatetimeShorthandAttributeTerms)
                 {
+                    if (arguments.ContainsKey(term.Field))
+                        throw new NotSupportedException($"Multiple date constraints on field {term.Field} are not supported");
+
                     var shorthandAttribute = new StringBuilder();
 
                     shorthandAttribute.Append(term.Year);

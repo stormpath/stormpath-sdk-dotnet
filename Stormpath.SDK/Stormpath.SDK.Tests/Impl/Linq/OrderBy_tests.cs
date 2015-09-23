@@ -41,6 +41,26 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
+        public void Sort_with_additional_expressions_before()
+        {
+            var query = this.Harness.Queryable
+                .Take(10)
+                .OrderBy(x => x.GivenName);
+
+            query.GeneratedArgumentsWere(this.Href, "limit=10&orderBy=givenName");
+        }
+
+        [Fact]
+        public void Sort_with_additional_expressions_after()
+        {
+            var query = this.Harness.Queryable
+                .OrderByDescending(x => x.GivenName)
+                .Take(10);
+
+            query.GeneratedArgumentsWere(this.Href, "limit=10&orderBy=givenName desc");
+        }
+
+        [Fact]
         public void Sort_by_multiple_fields()
         {
             var query = this.Harness.Queryable

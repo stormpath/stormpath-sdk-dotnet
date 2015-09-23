@@ -374,8 +374,8 @@ namespace Stormpath.SDK
             {
                 foreach (var item in source.CurrentPage)
                 {
-                    action(item, index++);
                     cancellationToken.ThrowIfCancellationRequested();
+                    action(item, index++);
                 }
             }
         }

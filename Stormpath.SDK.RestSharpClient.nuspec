@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Stormpath.SDK.RestSharpClient</id>
-        <version>0.1.0-rc</version>
+        <version>0.1.0</version>
         <authors>Nate Barbettini</authors>
         <owners>Stormpath,Inc.</owners>
         <licenseUrl>https://github.com/stormpath/stormpath-sdk-csharp/blob/master/LICENSE</licenseUrl>
@@ -15,7 +15,7 @@
         <tags>Stormpath API Authentication Authorization REST</tags>
         <dependencies>
             <dependency id="RestSharp" version="105.2.2" />
-            <dependency id="Stormpath.SDK.Core" version="0.1.0-rc" />
+            <dependency id="Stormpath.SDK.Core" version="0.1.0" />
         </dependencies>
     </metadata>
     <files>
