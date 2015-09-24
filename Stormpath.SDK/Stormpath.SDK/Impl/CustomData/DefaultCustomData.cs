@@ -45,16 +45,18 @@ namespace Stormpath.SDK.Impl.CustomData
         // Matches any character in a-z, A-Z, 0-9, _, -  (but cannot start with -)
         private static readonly Regex ValidKeyCharactersRegex = new Regex("^[a-zA-Z0-9_]+[a-zA-Z0-9_-]*$", RegexOptions.Compiled);
 
-        private readonly ConcurrentBag<string> dirtyDeletedProperties;
+        private readonly ConcurrentBag<string> deletedPropertyNames;
 
         public DefaultCustomData(IInternalDataStore dataStore)
             : base(dataStore)
         {
+            this.deletedPropertyNames = new ConcurrentBag<string>();
         }
 
         public DefaultCustomData(IInternalDataStore dataStore, IDictionary<string, object> properties)
             : base(dataStore, properties)
         {
+            this.deletedPropertyNames = new ConcurrentBag<string>();
         }
 
         private ICustomData AsInterface => this;
@@ -81,7 +83,7 @@ namespace Stormpath.SDK.Impl.CustomData
             keys.AddRange(this.dirtyProperties.Keys);
             keys.AddRange(this.properties.Keys);
 
-            var deletedProperties = this.dirtyDeletedProperties.ToArray(); // static snapshot
+            var deletedProperties = this.deletedPropertyNames.ToArray(); // static snapshot
             keys.RemoveAll(x => deletedProperties.Contains(x));
 
             return keys;
@@ -89,15 +91,9 @@ namespace Stormpath.SDK.Impl.CustomData
 
         object ICustomData.this[string key]
         {
-            get
-            {
-                return this.AsInterface.Get(key);
-            }
+            get { return this.AsInterface.Get(key); }
 
-            set
-            {
-                this.AsInterface.Put(key, value);
-            }
+            set { this.AsInterface.Put(key, value); }
         }
 
         IReadOnlyCollection<string> ICustomData.Keys
@@ -117,13 +113,11 @@ namespace Stormpath.SDK.Impl.CustomData
         }
 
         bool ICustomData.ContainsKey(string key)
-        {
-            return this.GetAvailableKeys().Contains(key);
-        }
+            => this.GetAvailableKeys().Contains(key);
 
         object ICustomData.Get(string key)
         {
-            if (this.dirtyDeletedProperties.Contains(key))
+            if (this.deletedPropertyNames.Contains(key))
                 return null;
 
             return this.GetProperty(key);
@@ -146,9 +140,7 @@ namespace Stormpath.SDK.Impl.CustomData
         }
 
         void ICustomData.Put(KeyValuePair<string, object> keyValuePair)
-        {
-            this.AsInterface.Put(keyValuePair.Key, keyValuePair.Value);
-        }
+            => this.AsInterface.Put(keyValuePair.Key, keyValuePair.Value);
 
         object ICustomData.Remove(string key)
         {
@@ -161,7 +153,7 @@ namespace Stormpath.SDK.Impl.CustomData
             object removedFromDirtyProperties;
             this.dirtyProperties.TryRemove(key, out removedFromDirtyProperties);
 
-            this.dirtyDeletedProperties.Add(key);
+            this.deletedPropertyNames.Add(key);
             this.isDirty = true;
 
             return removedFromDirtyProperties ?? removedFromProperties;
@@ -175,9 +167,7 @@ namespace Stormpath.SDK.Impl.CustomData
         }
 
         bool ICustomData.IsEmptyOrDefault()
-        {
-            return this.GetAvailableKeys().All(x => ReservedKeys.Contains(x));
-        }
+            => this.GetAvailableKeys().All(x => ReservedKeys.Contains(x));
 
         IEnumerator<KeyValuePair<string, object>> IEnumerable<KeyValuePair<string, object>>.GetEnumerator()
         {
@@ -187,24 +177,31 @@ namespace Stormpath.SDK.Impl.CustomData
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator() => this.AsInterface.GetEnumerator();
+
+        public async Task<bool> DeleteRemovedPropertiesAsync(CancellationToken cancellationToken)
         {
-            return this.AsInterface.GetEnumerator();
+            var propertyDeletionTasks = this.deletedPropertyNames
+                .Select(async x =>
+                {
+                    var successful = await this.GetInternalDataStore().DeletePropertyAsync(this, x, cancellationToken).ConfigureAwait(false);
+                    if (successful)
+                    {
+                        string dummy;
+                        this.deletedPropertyNames.TryTake(out dummy);
+                    }
+                    return successful;
+                });
+
+            var results = await Task.WhenAll(propertyDeletionTasks).ConfigureAwait(false);
+
+            return results.All(x => x == true);
         }
 
         Task<ICustomData> ISaveable<ICustomData>.SaveAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+            => this.GetInternalDataStore().SaveAsync<ICustomData>(this, cancellationToken);
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteRemovedPropertiesAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+            => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
     }
 }

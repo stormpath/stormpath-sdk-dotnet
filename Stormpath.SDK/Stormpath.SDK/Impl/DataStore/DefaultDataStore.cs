@@ -336,6 +336,11 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.DeleteCoreAsync(resource, cancellationToken);
         }
 
+        Task<bool> IInternalDataStore.DeletePropertyAsync<T>(T resource, string propertyName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         bool IInternalDataStoreSync.Delete<T>(T resource)
         {
             return this.DeleteCore(resource);
@@ -532,6 +537,11 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
+        }
+
+        void IDisposable.Dispose()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

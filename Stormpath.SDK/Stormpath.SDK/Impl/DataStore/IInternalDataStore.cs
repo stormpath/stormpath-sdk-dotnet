@@ -52,5 +52,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<bool> DeleteAsync<T>(T resource, CancellationToken cancellationToken)
             where T : IResource, IDeletable;
+
+        Task<bool> DeletePropertyAsync<T>(T resource, string propertyName, CancellationToken cancellationToken)
+            where T : IResource;
     }
 }

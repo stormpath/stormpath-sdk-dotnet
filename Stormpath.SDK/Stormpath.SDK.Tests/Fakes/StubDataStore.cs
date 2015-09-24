@@ -110,6 +110,16 @@ namespace Stormpath.SDK.Tests.Fakes
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
         }
+
+        Task<bool> IInternalDataStore.DeletePropertyAsync<T>(T resource, string propertyName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IDisposable.Dispose()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

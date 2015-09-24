@@ -36,6 +36,11 @@ namespace Stormpath.SDK.Tests.Fakes
 
         private readonly List<string> calls = new List<string>();
 
+        public FakeDataStore()
+        {
+            this.Items = Enumerable.Empty<TType>().ToList();
+        }
+
         public FakeDataStore(IEnumerable<TType> items)
         {
             this.Items = items.ToList();
@@ -218,6 +223,16 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
+        }
+
+        Task<bool> IInternalDataStore.DeletePropertyAsync<T>(T resource, string propertyName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IDisposable.Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }
