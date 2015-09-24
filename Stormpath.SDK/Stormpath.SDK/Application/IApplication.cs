@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Application
     /// <summary>
     /// Represents a Stormpath registered application.
     /// </summary>
-    public interface IApplication : IResource, ISaveable<IApplication>, IDeletable, IAuditable, IAccountCreationActions
+    public interface IApplication : IResource, ISaveable<IApplication>, IDeletable, IAuditable, IExtendable, IAccountCreationActions
     {
         /// <summary>
         /// Gets the application's name.

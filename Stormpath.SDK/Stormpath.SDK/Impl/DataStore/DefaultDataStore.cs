@@ -333,12 +333,17 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<bool> IInternalDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
         {
-            return this.DeleteCoreAsync(resource, cancellationToken);
+            return this.DeleteCoreAsync<T>(resource.Href, cancellationToken);
         }
 
         Task<bool> IInternalDataStore.DeletePropertyAsync<T>(T resource, string propertyName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(propertyName))
+                throw new ArgumentNullException(nameof(propertyName));
+
+            var propertyHref = $"{resource.Href}/{propertyName}";
+
+            return this.DeleteCoreAsync<T>(propertyHref, cancellationToken);
         }
 
         bool IInternalDataStoreSync.Delete<T>(T resource)
@@ -438,17 +443,13 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create<TReturned>(result.Body);
         }
 
-        private async Task<bool> DeleteCoreAsync<T>(T resource, CancellationToken cancellationToken)
-            where T : IResource, IDeletable
+        private async Task<bool> DeleteCoreAsync<T>(string href, CancellationToken cancellationToken)
+            where T : IResource
         {
-            var abstractResource = resource as AbstractResource;
-            if (resource == null)
-                throw new ArgumentNullException(nameof(resource));
+            if (string.IsNullOrEmpty(href))
+                throw new ArgumentNullException(nameof(href));
 
-            if (string.IsNullOrEmpty(resource.Href))
-                throw new ArgumentNullException(nameof(resource.Href));
-
-            var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resource.Href));
+            var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href));
             this.logger.Trace($"Asynchronously deleting resource {uri.ToString()}", "DefaultDataStore.DeleteCoreAsync");
 
             IAsynchronousFilterChain chain = new DefaultAsynchronousFilterChain(this.defaultAsyncFilters as DefaultAsynchronousFilterChain)

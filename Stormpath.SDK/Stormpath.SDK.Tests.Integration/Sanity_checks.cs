@@ -18,6 +18,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
@@ -50,6 +51,7 @@ namespace Stormpath.SDK.Tests.Integration
             var methodsInAssembly = Assembly
                 .GetAssembly(typeof(Stormpath.SDK.Client.IClient))
                 .GetTypes()
+                .Where(x => !x.IsDefined(typeof(CompilerGeneratedAttribute), false))
                 .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
 
             var asyncMethods = methodsInAssembly

@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Directory
     /// You can map one or more directories (or groups within a directory) to an <see cref="Application.IApplication"/>.
     /// This forms the application's effective 'user base' of all <see cref="IAccount"/> that may use the application.</para>
     /// </summary>
-    public interface IDirectory : IResource, IDeletable, IAuditable
+    public interface IDirectory : IResource, IDeletable, IAuditable, IExtendable
     {
         /// <summary>
         /// Gets the directory's name.

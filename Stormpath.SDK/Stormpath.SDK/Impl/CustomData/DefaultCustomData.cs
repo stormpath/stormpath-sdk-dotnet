@@ -89,6 +89,12 @@ namespace Stormpath.SDK.Impl.CustomData
             return keys;
         }
 
+        private bool HasDeletedProperties()
+            => this.deletedPropertyNames.Any();
+
+        private bool HasNewProperties()
+            => this.dirtyProperties.Any();
+
         object ICustomData.this[string key]
         {
             get { return this.AsInterface.Get(key); }
@@ -198,8 +204,13 @@ namespace Stormpath.SDK.Impl.CustomData
             return results.All(x => x == true);
         }
 
-        Task<ICustomData> ISaveable<ICustomData>.SaveAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().SaveAsync<ICustomData>(this, cancellationToken);
+        async Task<ICustomData> ISaveable<ICustomData>.SaveAsync(CancellationToken cancellationToken)
+        {
+            if (this.HasDeletedProperties())
+                await this.DeleteRemovedPropertiesAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.GetInternalDataStore().SaveAsync<ICustomData>(this, cancellationToken).ConfigureAwait(false);
+        }
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);

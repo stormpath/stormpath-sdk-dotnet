@@ -20,11 +20,13 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
+using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.Auth;
+using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
@@ -44,6 +46,7 @@ namespace Stormpath.SDK.Impl.DataStore
         private static readonly Type BasicLoginAttemptInterface = typeof(IBasicLoginAttempt);
         private static readonly Type AuthenticationResultInterface = typeof(IAuthenticationResult);
         private static readonly Type PasswordResetTokenInterface = typeof(IPasswordResetToken);
+        private static readonly Type CustomDataInterface = typeof(ICustomData);
 
         private static readonly Type AccountConcrete = typeof(DefaultAccount);
         private static readonly Type ApplicationConcrete = typeof(DefaultApplication);
@@ -54,6 +57,7 @@ namespace Stormpath.SDK.Impl.DataStore
         private static readonly Type BasicLoginAttemptConcrete = typeof(DefaultBasicLoginAttempt);
         private static readonly Type AuthenticationResultConcrete = typeof(DefaultAuthenticationResult);
         private static readonly Type PasswordResetTokenConcrete = typeof(DefaultPasswordResetToken);
+        private static readonly Type CustomDataConcrete = typeof(DefaultCustomData);
 
         private static readonly Type CollectionPageOfAccount = typeof(CollectionResponsePage<IAccount>);
         private static readonly Type CollectionPageOfApplication = typeof(CollectionResponsePage<IApplication>);
@@ -93,6 +97,9 @@ namespace Stormpath.SDK.Impl.DataStore
             if (iface == PasswordResetTokenInterface)
                 return PasswordResetTokenConcrete;
 
+            if (iface == CustomDataInterface)
+                return CustomDataConcrete;
+
             return null; // unknown
         }
 
@@ -130,6 +137,9 @@ namespace Stormpath.SDK.Impl.DataStore
             if (concrete == PasswordResetTokenConcrete)
                 return PasswordResetTokenInterface;
 
+            if (concrete == CustomDataConcrete)
+                return CustomDataInterface;
+
             return null; // unknown
         }
 
@@ -149,7 +159,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 possiblyInterface == AccountStoreInterface ||
                 possiblyInterface == BasicLoginAttemptInterface ||
                 possiblyInterface == AuthenticationResultInterface ||
-                possiblyInterface == PasswordResetTokenInterface;
+                possiblyInterface == PasswordResetTokenInterface ||
+                possiblyInterface == CustomDataInterface;
         }
 
         /// <summary>
@@ -168,7 +179,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 possiblyConcrete == AccountStoreConcrete ||
                 possiblyConcrete == BasicLoginAttemptConcrete ||
                 possiblyConcrete == AuthenticationResultConcrete ||
-                possiblyConcrete == PasswordResetTokenConcrete;
+                possiblyConcrete == PasswordResetTokenConcrete ||
+                possiblyConcrete == CustomDataConcrete;
         }
 
         /// <summary>

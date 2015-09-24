@@ -115,11 +115,6 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             throw new NotImplementedException();
         }
-
-        void IDisposable.Dispose()
-        {
-            throw new NotImplementedException();
-        }
         #endregion
     }
 }

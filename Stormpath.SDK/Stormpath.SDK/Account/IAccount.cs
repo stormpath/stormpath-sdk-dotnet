@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Account
     /// <summary>
     /// An Account is a unique identity within a <see cref="IDirectory"/>. Accounts within a <see cref="IDirectory"/> or Group mapped to an <see cref="Application.IApplication"/> may log in to that Application.
     /// </summary>
-    public interface IAccount : IResource, ISaveable<IAccount>, IDeletable, IAuditable
+    public interface IAccount : IResource, ISaveable<IAccount>, IDeletable, IAuditable, IExtendable
     {
         /// <summary>
         /// Gets the account's username. Unless otherwise specified, this is the same as <see cref="Email"/>.

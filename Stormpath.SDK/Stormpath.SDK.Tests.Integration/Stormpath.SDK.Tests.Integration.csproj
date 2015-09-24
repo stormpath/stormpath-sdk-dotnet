@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Account_tests.cs" />
     <Compile Include="Application_tests.cs" />
+    <Compile Include="CustomData_tests.cs" />
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\IntegrationTestClients.cs" />
     <Compile Include="Helpers\RandomPassword.cs" />

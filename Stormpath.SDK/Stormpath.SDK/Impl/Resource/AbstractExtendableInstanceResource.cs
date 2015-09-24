@@ -16,11 +16,15 @@
 // </remarks>
 
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal abstract class AbstractExtendableInstanceResource : AbstractInstanceResource
+    internal abstract class AbstractExtendableInstanceResource : AbstractInstanceResource, IExtendable
     {
         private static readonly string CustomDataPropertyName = "customData";
 
@@ -35,5 +39,8 @@ namespace Stormpath.SDK.Impl.Resource
         }
 
         internal LinkProperty CustomData => GetProperty<LinkProperty>(CustomDataPropertyName);
+
+        Task<ICustomData> IExtendable.GetCustomDataAsync(CancellationToken cancellationToken)
+            => this.GetInternalDataStore().GetResourceAsync<ICustomData>(this.CustomData.Href, cancellationToken);
     }
 }

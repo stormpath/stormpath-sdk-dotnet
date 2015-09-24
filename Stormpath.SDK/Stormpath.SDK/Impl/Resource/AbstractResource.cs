@@ -27,7 +27,6 @@ namespace Stormpath.SDK.Impl.Resource
     {
         protected static readonly string HrefPropertyName = "href";
 
-        //make this protected?
         internal readonly IInternalDataStore InternalDataStore;
         internal readonly IInternalDataStoreSync InternalDataStoreSync;
         protected readonly ConcurrentDictionary<string, object> properties;
