@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Tests.Integration
             var accounts = await application.GetAccounts().ToListAsync();
 
             // Verify data from IntegrationTestData
-            accounts.Count.ShouldBe(8);
+            accounts.Count.ShouldBeGreaterThanOrEqualTo(8);
 
             var luke = accounts.Where(x => x.GivenName == "Luke").Single();
             luke.FullName.ShouldBe("Luke Skywalker");
@@ -351,7 +351,7 @@ namespace Stormpath.SDK.Tests.Integration
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var count = await application.GetAccounts().CountAsync();
-            count.ShouldBe(8);
+            count.ShouldBeGreaterThanOrEqualTo(8);
         }
 
         [Theory]

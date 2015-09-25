@@ -21,10 +21,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
+using Stormpath.SDK.CustomData;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Cache;
+using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.DataStore.Filters;
 using Stormpath.SDK.Impl.Error;
 using Stormpath.SDK.Impl.Http;
@@ -336,14 +338,14 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.DeleteCoreAsync<T>(resource.Href, cancellationToken);
         }
 
-        Task<bool> IInternalDataStore.DeletePropertyAsync<T>(T resource, string propertyName, CancellationToken cancellationToken)
+        Task<bool> IInternalDataStore.DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(propertyName))
                 throw new ArgumentNullException(nameof(propertyName));
 
-            var propertyHref = $"{resource.Href}/{propertyName}";
+            var propertyHref = $"{parentHref}/{propertyName}";
 
-            return this.DeleteCoreAsync<T>(propertyHref, cancellationToken);
+            return this.DeleteCoreAsync<IResource>(propertyHref, cancellationToken);
         }
 
         bool IInternalDataStoreSync.Delete<T>(T resource)
@@ -353,7 +355,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, bool create, CancellationToken cancellationToken)
             where T : IResource
-            where TReturned : IResource
+            where TReturned : class, IResource
         {
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
@@ -388,7 +390,38 @@ namespace Stormpath.SDK.Impl.DataStore
                     return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.StatusCode, responseBody);
                 }));
 
+            // Serialize properties
             var propertiesMap = this.resourceConverter.ToMap(abstractResource);
+
+            var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
+            bool includesCustomData = extendableInstanceResource != null;
+            if (includesCustomData)
+            {
+                var customDataProxy = (extendableInstanceResource as IExtendable).CustomData as DefaultEmbeddedCustomData;
+
+                // Apply custom data deletes
+                if (customDataProxy.HasDeletedProperties())
+                {
+                    if (customDataProxy.DeleteAll)
+                        await this.DeleteCoreAsync<ICustomData>(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
+                    else
+                        await customDataProxy.DeleteRemovedCustomDataPropertiesAsync(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
+                }
+
+                // Merge in custom data updates
+                if (customDataProxy.HasUpdatedCustomDataProperties())
+                    propertiesMap["customData"] = new Dictionary<string, object>(customDataProxy.UpdatedCustomDataProperties);
+
+                // Remove custom data updates from proxy
+                extendableInstanceResource.ResetCustomData();
+            }
+
+            // In some cases, all we need to save are custom data property deletions, which is taken care of above.
+            // So, we should just refresh with the latest data from the server.
+            bool nothingToPost = !propertiesMap.Any();
+            if (!create && nothingToPost)
+                return await this.AsInterface.GetResourceAsync<TReturned>(href, cancellationToken).ConfigureAwait(false);
+
             var requestAction = create
                 ? ResourceAction.Create
                 : ResourceAction.Update;

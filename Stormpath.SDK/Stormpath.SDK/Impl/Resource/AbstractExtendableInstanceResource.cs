@@ -15,10 +15,12 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.CustomData;
+using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
 
@@ -28,19 +30,30 @@ namespace Stormpath.SDK.Impl.Resource
     {
         private static readonly string CustomDataPropertyName = "customData";
 
+        private DefaultEmbeddedCustomData customDataProxy;
+
         protected AbstractExtendableInstanceResource(IInternalDataStore dataStore)
             : base(dataStore)
         {
+            this.ResetCustomData();
         }
 
         protected AbstractExtendableInstanceResource(IInternalDataStore dataStore, IDictionary<string, object> properties)
             : base(dataStore, properties)
         {
+            this.ResetCustomData();
         }
 
         internal LinkProperty CustomData => GetProperty<LinkProperty>(CustomDataPropertyName);
 
+        IEmbeddedCustomData IExtendable.CustomData => this.customDataProxy;
+
         Task<ICustomData> IExtendable.GetCustomDataAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().GetResourceAsync<ICustomData>(this.CustomData.Href, cancellationToken);
+
+        internal void ResetCustomData()
+        {
+            this.customDataProxy = new DefaultEmbeddedCustomData(this.InternalDataStore);
+        }
     }
 }

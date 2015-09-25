@@ -225,7 +225,7 @@ namespace Stormpath.SDK.Tests.Fakes
             this.Dispose(true);
         }
 
-        Task<bool> IInternalDataStore.DeletePropertyAsync<T>(T resource, string propertyName, CancellationToken cancellationToken)
+        Task<bool> IInternalDataStore.DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

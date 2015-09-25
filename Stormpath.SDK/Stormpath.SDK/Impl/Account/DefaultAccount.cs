@@ -169,7 +169,7 @@ namespace Stormpath.SDK.Impl.Account
              => this.GetInternalDataStoreSync().Delete(this);
 
         Task<IAccount> ISaveable<IAccount>.SaveAsync(CancellationToken cancellationToken)
-             => this.GetInternalDataStore().SaveAsync<IAccount>(this, cancellationToken);
+             => this.SaveAsync<IAccount>(cancellationToken);
 
         IAccount ISaveableSync<IAccount>.Save()
              => this.GetInternalDataStoreSync().Save<IAccount>(this);

@@ -79,6 +79,7 @@
     <Compile Include="Client\IClient.cs" />
     <Compile Include="Client\IClientBuilder.cs" />
     <Compile Include="CustomData\ICustomData.cs" />
+    <Compile Include="CustomData\IEmbeddedCustomData.cs" />
     <Compile Include="Directory\DirectoryStatus.cs" />
     <Compile Include="Directory\IDirectory.cs" />
     <Compile Include="Error\IError.cs" />
@@ -118,7 +119,7 @@
     <Compile Include="Impl\Client\DefaultCacheProviderBuilder.cs" />
     <Compile Include="Impl\Client\DefaultJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\DefaultHttpClientBuilder.cs" />
-    <Compile Include="Impl\Client\ICacheProviderBuilder.cs" />
+    <Compile Include="Impl\DataStore\ICacheProviderBuilder.cs" />
     <Compile Include="Impl\Client\IClientSync.cs" />
     <Compile Include="Impl\Client\IJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\IHttpClientBuilder.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Impl\Http\Support\IBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
     <Compile Include="Impl\Linq\LinqHelper.cs" />
+    <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
     <Compile Include="Impl\Resource\IDeletableSync.cs" />
     <Compile Include="Impl\Resource\ISaveableSync.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterResult.cs" />

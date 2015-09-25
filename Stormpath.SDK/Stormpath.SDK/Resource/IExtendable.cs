@@ -26,6 +26,8 @@ namespace Stormpath.SDK.Resource
     /// </summary>
     public interface IExtendable
     {
+        IEmbeddedCustomData CustomData { get; }
+
         /// <summary>
         /// Gets the custom data associated with this resource.
         /// </summary>

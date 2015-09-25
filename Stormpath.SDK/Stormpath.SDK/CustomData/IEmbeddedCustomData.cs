@@ -1,4 +1,4 @@
-﻿// <copyright file="ICustomData.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IEmbeddedCustomData.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,24 +16,12 @@
 // </remarks>
 
 using System.Collections.Generic;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.CustomData
 {
-    /// <summary>
-    /// A dictionary resource embedded within another resource
-    /// (such as an <see cref="Account.IAccount"/> or <see cref="Directory.IDirectory"/>)
-    /// that allows you to store arbitrary name/value pairs.
-    /// </summary>
-    public interface ICustomData : IResource, ISaveable<ICustomData>, IDeletable, IAuditable, IEnumerable<KeyValuePair<string, object>>
+    public interface IEmbeddedCustomData
     {
-        object this[string key] { get; set; }
-
         void Clear();
-
-        bool ContainsKey(string key);
-
-        object Get(string key);
 
         void Put(string key, object value);
 
@@ -41,14 +29,6 @@ namespace Stormpath.SDK.CustomData
 
         void Put(KeyValuePair<string, object> item);
 
-        object Remove(string key);
-
-        IReadOnlyCollection<string> Keys { get; }
-
-        bool TryGetValue(string key, out object value);
-
-        IReadOnlyCollection<object> Values { get; }
-
-        bool IsEmptyOrDefault();
+        void Remove(string key);
     }
 }

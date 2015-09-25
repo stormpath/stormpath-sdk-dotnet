@@ -19,6 +19,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -89,10 +90,10 @@ namespace Stormpath.SDK.Impl.CustomData
             return keys;
         }
 
-        private bool HasDeletedProperties()
+        internal bool HasDeletedProperties()
             => this.deletedPropertyNames.Any();
 
-        private bool HasNewProperties()
+        internal bool HasUpdatedProperties()
             => this.dirtyProperties.Any();
 
         object ICustomData.this[string key]
@@ -116,6 +117,18 @@ namespace Stormpath.SDK.Impl.CustomData
 
                 return values;
             }
+        }
+
+        internal IDictionary<string, object> UpdatedProperties => new Dictionary<string, object>(this.dirtyProperties);
+
+        void ICustomData.Clear()
+        {
+            var keysToClear = this
+                .GetAvailableKeys()
+                .Except(ReservedKeys)
+                .ToList();
+
+            keysToClear.ForEach(key => this.AsInterface.Remove(key));
         }
 
         bool ICustomData.ContainsKey(string key)
@@ -185,12 +198,12 @@ namespace Stormpath.SDK.Impl.CustomData
 
         IEnumerator IEnumerable.GetEnumerator() => this.AsInterface.GetEnumerator();
 
-        public async Task<bool> DeleteRemovedPropertiesAsync(CancellationToken cancellationToken)
+        public async Task<bool> DeleteRemovedPropertiesAsync(string parentHref, CancellationToken cancellationToken)
         {
             var propertyDeletionTasks = this.deletedPropertyNames
                 .Select(async x =>
                 {
-                    var successful = await this.GetInternalDataStore().DeletePropertyAsync(this, x, cancellationToken).ConfigureAwait(false);
+                    var successful = await this.GetInternalDataStore().DeletePropertyAsync(parentHref, x, cancellationToken).ConfigureAwait(false);
                     if (successful)
                     {
                         string dummy;
@@ -207,7 +220,7 @@ namespace Stormpath.SDK.Impl.CustomData
         async Task<ICustomData> ISaveable<ICustomData>.SaveAsync(CancellationToken cancellationToken)
         {
             if (this.HasDeletedProperties())
-                await this.DeleteRemovedPropertiesAsync(cancellationToken).ConfigureAwait(false);
+                await this.DeleteRemovedPropertiesAsync(this.AsInterface.Href, cancellationToken).ConfigureAwait(false);
 
             return await this.GetInternalDataStore().SaveAsync<ICustomData>(this, cancellationToken).ConfigureAwait(false);
         }

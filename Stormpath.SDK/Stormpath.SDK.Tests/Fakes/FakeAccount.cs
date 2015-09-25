@@ -45,6 +45,14 @@ namespace Stormpath.SDK.Tests.Fakes
 
         public AccountStatus Status { get; set; }
 
+        public IEmbeddedCustomData CustomData
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public Task<Directory.IDirectory> GetDirectoryAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
