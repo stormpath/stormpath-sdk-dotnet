@@ -26,6 +26,12 @@ namespace Stormpath.SDK.Resource
     /// </summary>
     public interface IExtendable
     {
+        /// <summary>
+        /// Provides access to convenience methods that can manipulate this resource's custom data.
+        /// </summary>
+        /// <value>
+        /// Access to convenience methods that can manipulate this resource's custom data.
+        /// </value>
         IEmbeddedCustomData CustomData { get; }
 
         /// <summary>
