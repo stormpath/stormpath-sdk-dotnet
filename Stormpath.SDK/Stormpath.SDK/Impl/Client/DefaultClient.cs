@@ -48,6 +48,7 @@ namespace Stormpath.SDK.Impl.Client
         private readonly IWebProxy proxy;
         private readonly IInternalDataStore dataStore;
         private readonly IJsonSerializer serializer;
+        private readonly IHttpClient httpClient;
         private readonly ILogger logger;
 
         private bool alreadyDisposed = false;
@@ -79,6 +80,7 @@ namespace Stormpath.SDK.Impl.Client
             this.proxy = proxy;
             this.authenticationScheme = authenticationScheme;
             this.serializer = serializer;
+            this.httpClient = httpClient;
 
             var requestExecutor = new DefaultRequestExecutor(httpClient, apiKey, authenticationScheme, this.logger);
 
@@ -100,6 +102,10 @@ namespace Stormpath.SDK.Impl.Client
         internal int ConnectionTimeout => this.connectionTimeout;
 
         internal IWebProxy Proxy => this.proxy;
+
+        internal IJsonSerializer Serializer => this.serializer;
+
+        internal IHttpClient HttpClient => this.httpClient;
 
         T IDataStore.Instantiate<T>() => this.dataStore.Instantiate<T>();
 

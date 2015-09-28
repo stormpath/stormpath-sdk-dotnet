@@ -89,6 +89,34 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
+        public void Passing_custom_HttpClient()
+        {
+            var fakeHttpClient = Substitute.For<Http.IHttpClient>();
+
+            var client = this.builder
+                .SetApiKey(FakeApiKey.Create(valid: true))
+                .UseHttpClient(fakeHttpClient)
+                .Build();
+
+            (client as DefaultClient).HttpClient.ShouldBe(fakeHttpClient);
+            (client as DefaultClient).Serializer.ShouldBeOfType<JsonNetSerializer>();
+        }
+
+        [Fact]
+        public void Passing_custom_JsonSerializer()
+        {
+            var fakeSerializer = Substitute.For<Serialization.IJsonSerializer>();
+
+            var client = this.builder
+                .SetApiKey(FakeApiKey.Create(valid: true))
+                .UseJsonSerializer(fakeSerializer)
+                .Build();
+
+            (client as DefaultClient).HttpClient.ShouldBeOfType<RestSharpClient>();
+            (client as DefaultClient).Serializer.ShouldBe(fakeSerializer);
+        }
+
+        [Fact]
         public void BaseUrl_is_optional()
         {
             var client = this.builder
