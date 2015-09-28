@@ -1,4 +1,4 @@
-﻿// <copyright file="Error_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Directory_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -17,34 +17,34 @@
 
 using System.Threading.Tasks;
 using Shouldly;
-using Stormpath.SDK.Account;
-using Stormpath.SDK.Error;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Integration.Async
 {
-    public class Error_tests
+    [Collection("Live tenant tests")]
+    public class Directory_tests
     {
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task When_resource_does_not_exist(TestClientBuilder clientBuilder)
+        public async Task Getting_tenant_directories(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var tenant = await client.GetCurrentTenantAsync();
+            var directories = await tenant.GetDirectories().ToListAsync();
 
-            try
-            {
-                var bad = await client.GetResourceAsync<IAccount>(tenant.Href + "/foobar");
-            }
-            catch (ResourceException rex)
-            {
-                rex.Code.ShouldBe(404);
-                rex.DeveloperMessage.ShouldBe("The requested resource does not exist.");
-                rex.Message.ShouldNotBe(null);
-                rex.MoreInfo.ShouldNotBe(null);
-                rex.HttpStatus.ShouldBe(404);
-            }
+            directories.Count.ShouldNotBe(0);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_a_directory_via_instantiation(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+            var directories = await tenant.GetDirectories().ToListAsync();
+
+            directories.Count.ShouldNotBe(0);
         }
     }
 }

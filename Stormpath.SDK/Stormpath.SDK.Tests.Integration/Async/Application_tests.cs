@@ -22,7 +22,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Integration.Async
 {
     [Collection("Live tenant tests")]
     public class Application_tests

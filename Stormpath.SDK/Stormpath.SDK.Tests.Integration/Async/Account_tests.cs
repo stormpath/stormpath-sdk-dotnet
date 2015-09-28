@@ -26,7 +26,7 @@ using Stormpath.SDK.Error;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Integration.Async
 {
     [Collection("Live tenant tests")]
     public class Account_tests

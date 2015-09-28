@@ -1,4 +1,4 @@
-﻿// <copyright file="Directory_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Tenant_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -20,31 +20,21 @@ using Shouldly;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Integration.Async
 {
-    [Collection("Live tenant tests")]
-    public class Directory_tests
+    [CollectionDefinition("Live tenant tests")]
+    public class Tenant_tests
     {
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_tenant_directories(TestClientBuilder clientBuilder)
+        public async Task Getting_current_tenant(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var tenant = await client.GetCurrentTenantAsync();
-            var directories = await tenant.GetDirectories().ToListAsync();
 
-            directories.Count.ShouldNotBe(0);
-        }
-
-        [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_a_directory_via_instantiation(TestClientBuilder clientBuilder)
-        {
-            var client = clientBuilder.Build();
-            var tenant = await client.GetCurrentTenantAsync();
-            var directories = await tenant.GetDirectories().ToListAsync();
-
-            directories.Count.ShouldNotBe(0);
+            tenant.ShouldNotBe(null);
+            tenant.Href.ShouldNotBe(null);
+            tenant.Name.ShouldNotBe(null);
         }
     }
 }

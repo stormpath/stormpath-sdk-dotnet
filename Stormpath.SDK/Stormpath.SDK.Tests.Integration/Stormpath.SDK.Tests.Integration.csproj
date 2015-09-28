@@ -59,10 +59,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account_tests.cs" />
-    <Compile Include="Application_tests.cs" />
-    <Compile Include="CustomData_embedded_tests.cs" />
-    <Compile Include="CustomData_tests.cs" />
+    <Compile Include="Async\Account_tests.cs" />
+    <Compile Include="Async\Application_tests.cs" />
+    <Compile Include="Async\CustomData_embedded_tests.cs" />
+    <Compile Include="Async\CustomData_tests.cs" />
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\IntegrationTestClients.cs" />
     <Compile Include="Helpers\RandomPassword.cs" />
@@ -72,8 +72,8 @@
     <Compile Include="IntegrationTestCollection.cs" />
     <Compile Include="Helpers\IntegrationTestData.cs" />
     <Compile Include="IntegrationTestFixture.cs" />
-    <Compile Include="Directory_tests.cs" />
-    <Compile Include="Error_tests.cs" />
+    <Compile Include="Async\Directory_tests.cs" />
+    <Compile Include="Async\Error_tests.cs" />
     <Compile Include="Helpers\TestClientBuilder.cs" />
     <Compile Include="Meta_tests.cs" />
     <Compile Include="Sync\Sync_CustomData_embedded_tests.cs" />
@@ -83,7 +83,7 @@
     <Compile Include="Sync\Sync_Account_tests.cs" />
     <Compile Include="Sync\Sync_Error_tests.cs" />
     <Compile Include="Sync\Sync_Tenant_tests.cs" />
-    <Compile Include="Tenant_tests.cs" />
+    <Compile Include="Async\Tenant_tests.cs" />
     <Compile Include="Sanity_checks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -111,9 +111,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Async\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta012\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta012\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />

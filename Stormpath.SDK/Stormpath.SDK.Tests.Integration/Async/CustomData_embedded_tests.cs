@@ -25,7 +25,7 @@ using Stormpath.SDK.Client;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Integration.Async
 {
     [Collection("Live tenant tests")]
     public class CustomData_embedded_tests
