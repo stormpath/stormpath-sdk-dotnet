@@ -162,6 +162,7 @@
     <Compile Include="Impl\Serialization\DefaultJsonSerializerLoader.cs" />
     <Compile Include="Impl\Tenant\ITenantActionsSync.cs" />
     <Compile Include="Impl\Tenant\ITenantSync.cs" />
+    <Compile Include="Impl\Utility\AnonymousType.cs" />
     <Compile Include="Impl\Utility\ITypeLoader.cs" />
     <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />

@@ -411,6 +411,30 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_account_with_custom_data(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var account = await application.CreateAccountAsync(
+                "Mara", "Jade", "mara.jade@test.async", new RandomPassword(12),
+                new { quote = "I'm a fighter. I've always been a fighter.", birth = -17, death = 40 });
+
+            account.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+            var customData = await account.GetCustomDataAsync();
+
+            account.FullName.ShouldBe("Mara Jade");
+            customData["quote"].ShouldBe("I'm a fighter. I've always been a fighter.");
+            customData["birth"].ShouldBe(-17);
+            customData["death"].ShouldBe(40);
+
+            // Clean up
+            await account.DeleteAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Authenticating_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

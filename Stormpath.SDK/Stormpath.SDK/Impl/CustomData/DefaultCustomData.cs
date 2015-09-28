@@ -27,6 +27,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.CustomData
@@ -150,12 +151,39 @@ namespace Stormpath.SDK.Impl.CustomData
             this.SetProperty(key, value);
         }
 
-        void ICustomData.Put(IDictionary<string, object> keyValuePairs)
+        void ICustomData.Put(IEnumerable<KeyValuePair<string, object>> keyValuePairs)
         {
             foreach (var kvp in keyValuePairs)
             {
                 this.AsInterface.Put(kvp.Key, kvp.Value);
             }
+        }
+
+        void ICustomData.Put(object customData)
+        {
+            // This is probably an anonymous type. But, a user could have passed
+            // a type meant for a different overload as an object, so
+            // we need to do a little investigation to find out
+            // (fail fast if it's just a null)
+            if (customData == null)
+                return;
+
+            var asEnumerable = customData as IEnumerable<KeyValuePair<object, string>>;
+            if (asEnumerable != null)
+            {
+                this.AsInterface.Put(asEnumerable);
+                return;
+            }
+
+            if (customData is KeyValuePair<string, object>)
+            {
+                this.AsInterface.Put((KeyValuePair<string, object>)customData);
+                return;
+            }
+
+            // Assume it's an anonymous type and convert
+            var anonymousAsDictionary = AnonymousType.ToDictionary(customData);
+            this.AsInterface.Put(anonymousAsDictionary);
         }
 
         void ICustomData.Put(KeyValuePair<string, object> keyValuePair)

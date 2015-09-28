@@ -38,17 +38,17 @@ namespace Stormpath.SDK.Impl.Utility
             // Try to load via AppDomain.CurrentDomain
             var appDomainPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", this.fileName);
             bool foundViaAppDomain = File.Exists(appDomainPath);
-            
+
             // Try to load via local working directory
             var naivePath = Path.GetFullPath(this.fileName);
             bool foundViaNaivePath = File.Exists(naivePath);
-            
+
             if (!foundViaAppDomain && !foundViaNaivePath)
             {
                 instance = null;
                 return false;
             }
-            
+
             var absolutePath = foundViaAppDomain
                 ? appDomainPath
                 : naivePath;

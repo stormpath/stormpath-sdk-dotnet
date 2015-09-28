@@ -58,8 +58,11 @@ namespace Stormpath.SDK.Impl.CustomData
         void IEmbeddedCustomData.Put(KeyValuePair<string, object> item)
             => (this.customDataProxy as ICustomData).Put(item);
 
-        void IEmbeddedCustomData.Put(IDictionary<string, object> values)
+        void IEmbeddedCustomData.Put(IEnumerable<KeyValuePair<string, object>> values)
             => (this.customDataProxy as ICustomData).Put(values);
+
+        void IEmbeddedCustomData.Put(object customData)
+            => (this.customDataProxy as ICustomData).Put(customData);
 
         void IEmbeddedCustomData.Put(string key, object value)
             => (this.customDataProxy as ICustomData).Put(key, value);

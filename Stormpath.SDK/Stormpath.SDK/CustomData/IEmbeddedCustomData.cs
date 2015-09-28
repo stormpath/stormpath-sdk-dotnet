@@ -40,13 +40,19 @@ namespace Stormpath.SDK.CustomData
         /// Adds one or more new custom data items when the resource is saved.
         /// </summary>
         /// <param name="values">The items to add.</param>
-        void Put(IDictionary<string, object> values);
+        void Put(IEnumerable<KeyValuePair<string, object>> values);
 
         /// <summary>
         /// Adds a new custom data item when the resource is saved.
         /// </summary>
         /// <param name="item">The custom data item to add.</param>
         void Put(KeyValuePair<string, object> item);
+
+        /// <summary>
+        /// Adds one or more new custom data items when the resource is saved.
+        /// </summary>
+        /// <param name="customData">An anonymous type containing the items to add.</param>
+        void Put(object customData);
 
         /// <summary>
         /// Removes a custom data item when the resource is saved.

@@ -428,6 +428,30 @@ namespace Stormpath.SDK.Tests.Integration
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_account_with_custom_data(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var account = application.CreateAccount(
+                "Mara", "Jade", "mara.jade@test.sync", new RandomPassword(12),
+                new { quote = "I'm a fighter. I've always been a fighter.", birth = -17, death = 40 });
+
+            account.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+            var customData = account.GetCustomData();
+
+            account.FullName.ShouldBe("Mara Jade");
+            customData["quote"].ShouldBe("I'm a fighter. I've always been a fighter.");
+            customData["birth"].ShouldBe(-17);
+            customData["death"].ShouldBe(40);
+
+            // Clean up
+            account.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Authenticating_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

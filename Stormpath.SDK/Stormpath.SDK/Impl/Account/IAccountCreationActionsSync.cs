@@ -66,10 +66,11 @@ namespace Stormpath.SDK.Impl.Account
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
         /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="SDK.Directory.IDirectory"/>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
+        /// <param name="customData">An anonymous type containing name/value pairs to be stored in this account's <see cref="SDK.CustomData.ICustomData"/>.</param>
         /// <returns>The persisted account.</returns>
         /// <exception cref="SDK.Error.ResourceException">The <see cref="SDK.Application.IApplication"/> does not have a dedicated
         ///  <see cref="SDK.AccountStore.IAccountStore"/> or if the designated <see cref="SDK.AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
-        IAccount CreateAccount(string givenName, string surname, string email, string password);
+        IAccount CreateAccount(string givenName, string surname, string email, string password, object customData = null);
     }
 }

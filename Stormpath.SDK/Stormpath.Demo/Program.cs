@@ -76,7 +76,8 @@ namespace Stormpath.Demo
             addedUsers.Add(
                 await myApp.CreateAccountAsync("Joe", "Stormtrooper", "tk421@galacticempire.co", "Changeme123!", cancellationToken));
             addedUsers.Add(
-                await myApp.CreateAccountAsync("Lando", "Calrissian", "lando@bespin.co", "Changeme123!", cancellationToken));
+                await myApp.CreateAccountAsync("Lando", "Calrissian", "lando@bespin.co", "Changeme123!", 
+                                                new { phrase = "You got a lotta nerve, showing your face after what you pulled." }, cancellationToken));
 
             // Another way to add users. Disable the default registration email workflow
             var vader = client.Instantiate<IAccount>();
@@ -84,6 +85,7 @@ namespace Stormpath.Demo
             vader.SetGivenName("Darth");
             vader.SetSurname("Vader");
             vader.SetPassword("1Findyourlackofsecuritydisturbing!");
+            vader.CustomData.Put("phrase", "I find your lack of faith disturbing.");
             addedUsers.Add(
                 await myApp.CreateAccountAsync(vader,
                     options => options.RegistrationWorkflowEnabled = false,
@@ -100,7 +102,8 @@ namespace Stormpath.Demo
             {
                 var result = await myApp.AuthenticateAccountAsync("vader@galacticempire.co", "1Findyourlackofsecuritydisturbing!", cancellationToken);
                 var returnedAccount = await result.GetAccountAsync();
-                Console.WriteLine($"Success! {returnedAccount.FullName} logged in.");
+                var customData = await returnedAccount.GetCustomDataAsync();
+                Console.WriteLine($"Success! {returnedAccount.FullName} logged in.\nFamous Phrase: '{customData["phrase"]}'");
             }
             catch (ResourceException rex)
             {

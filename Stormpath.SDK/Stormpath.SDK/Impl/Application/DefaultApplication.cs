@@ -27,6 +27,7 @@ using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
@@ -203,24 +204,26 @@ namespace Stormpath.SDK.Impl.Application
         IAccount IAccountCreationActionsSync.CreateAccount(IAccount account)
              => this.GetInternalDataStoreSync().Create(this.Accounts.Href, account);
 
-        Task<IAccount> IAccountCreationActions.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
+        Task<IAccount> IAccountCreationActions.CreateAccountAsync(string givenName, string surname, string email, string password, object customData, CancellationToken cancellationToken)
         {
             var account = this.GetInternalDataStore().Instantiate<IAccount>();
             account.SetGivenName(givenName);
             account.SetSurname(surname);
             account.SetEmail(email);
             account.SetPassword(password);
+            account.CustomData.Put(customData);
 
             return this.AsInterface.CreateAccountAsync(account, cancellationToken: cancellationToken);
         }
 
-        IAccount IAccountCreationActionsSync.CreateAccount(string givenName, string surname, string email, string password)
+        IAccount IAccountCreationActionsSync.CreateAccount(string givenName, string surname, string email, string password, object customData)
         {
             var account = this.GetInternalDataStore().Instantiate<IAccount>();
             account.SetGivenName(givenName);
             account.SetSurname(surname);
             account.SetEmail(email);
             account.SetPassword(password);
+            account.CustomData.Put(customData);
 
             return this.AsSyncInterface.CreateAccount(account);
         }

@@ -70,11 +70,12 @@ namespace Stormpath.SDK.Account
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
         /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="IDirectory"/>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
+        /// <param name="customData">An anonymous type containing name/value pairs to be stored in this account's <see cref="SDK.CustomData.ICustomData"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
-        Task<IAccount> CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IAccount> CreateAccountAsync(string givenName, string surname, string email, string password, object customData = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

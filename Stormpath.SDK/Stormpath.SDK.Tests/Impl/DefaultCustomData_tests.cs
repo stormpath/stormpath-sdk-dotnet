@@ -101,6 +101,17 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
+        public void Put_anonymous_items()
+        {
+            var customData = GetInstance();
+
+            customData.Put(new { foo = "bar", baz = 123 });
+
+            customData["foo"].ShouldBe("bar");
+            customData["baz"].ShouldBe(123);
+        }
+
+        [Fact]
         public void Put_throws_for_reserved_key_names()
         {
             var customData = GetInstance();

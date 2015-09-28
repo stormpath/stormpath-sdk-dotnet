@@ -63,7 +63,14 @@ namespace Stormpath.SDK.CustomData
         /// <para>You must call <see cref="ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/> to save the changes.</para>
         /// </summary>
         /// <param name="values">The items to add.</param>
-        void Put(IDictionary<string, object> values);
+        void Put(IEnumerable<KeyValuePair<string, object>> values);
+
+        /// <summary>
+        /// Adds one or more new custom data items.
+        /// <para>You must call <see cref="ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/> to save the changes.</para>
+        /// </summary>
+        /// <param name="customData">An anonymous type containing the items to add.</param>
+        void Put(object customData);
 
         /// <summary>
         /// Adds a new custom data item.
