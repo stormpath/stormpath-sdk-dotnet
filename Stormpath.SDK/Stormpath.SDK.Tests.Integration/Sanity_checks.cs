@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -28,11 +29,24 @@ namespace Stormpath.SDK.Tests.Integration
 {
     public class Sanity_checks
     {
+        private static string PrettyMethodOutput(IEnumerable<MethodInfo> methods)
+        {
+            if (!methods.Any())
+                return null;
+
+            var prettyMethods = methods.Select(m =>
+            {
+                return $"{m.Name} (in {m.DeclaringType.Name})";
+            });
+
+            return string.Join(Environment.NewLine, prettyMethods);
+        }
+
         [Fact]
         public void All_Impl_members_are_hidden()
         {
             var typesInNamespace = Assembly
-                .GetAssembly(typeof(Stormpath.SDK.Client.IClient))
+                .GetAssembly(typeof(Client.IClient))
                 .GetTypes()
                 .Where(x =>
                     x.Namespace != null &&
@@ -49,7 +63,7 @@ namespace Stormpath.SDK.Tests.Integration
         public void All_async_methods_have_CancellationToken_parameters()
         {
             var methodsInAssembly = Assembly
-                .GetAssembly(typeof(Stormpath.SDK.Client.IClient))
+                .GetAssembly(typeof(Client.IClient))
                 .GetTypes()
                 .Where(x => !x.IsDefined(typeof(CompilerGeneratedAttribute), false))
                 .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
@@ -66,14 +80,14 @@ namespace Stormpath.SDK.Tests.Integration
                 .Any()
                 .ShouldBe(
                     expected: false,
-                    customMessage: $"These methods do not have a CancellationToken parameter: {string.Join(", ", asyncMethodsWithoutCancellationToken.Select(m => m.Name))}");
+                    customMessage: "These methods do not have a CancellationToken parameter:" + Environment.NewLine + PrettyMethodOutput(asyncMethodsWithoutCancellationToken));
         }
 
         [Fact]
         public void All_Impl_async_methods_have_required_CancellationToken_parameters()
         {
             var methodsInAssembly = Assembly
-                .GetAssembly(typeof(Stormpath.SDK.Client.IClient))
+                .GetAssembly(typeof(Client.IClient))
                 .GetTypes()
                 .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
 
@@ -91,14 +105,14 @@ namespace Stormpath.SDK.Tests.Integration
                 .Any()
                 .ShouldBe(
                     expected: false,
-                    customMessage: $"These methods should not have an optional CancellationToken parameter: {string.Join(", ", asyncMethodsWithOptionalCT.Select(m => m.Name))}");
+                    customMessage: "These methods should not have an optional CancellationToken parameter:" + Environment.NewLine + PrettyMethodOutput(asyncMethodsWithOptionalCT));
         }
 
         [Fact]
         public void All_SDK_async_methods_have_optional_CancellationToken_parameters()
         {
             var methodsInAssembly = Assembly
-                .GetAssembly(typeof(Stormpath.SDK.Client.IClient))
+                .GetAssembly(typeof(Client.IClient))
                 .GetTypes()
                 .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
 
@@ -116,7 +130,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .Any()
                 .ShouldBe(
                     expected: false,
-                    customMessage: $"These methods must have an optional CancellationToken parameter: {string.Join(", ", asyncMethodsWithRequiredCT.Select(m => m.Name))}");
+                    customMessage: "These methods must have an optional CancellationToken parameter:" + Environment.NewLine + PrettyMethodOutput(asyncMethodsWithRequiredCT));
         }
     }
 }
