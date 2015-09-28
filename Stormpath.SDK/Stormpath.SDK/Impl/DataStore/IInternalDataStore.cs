@@ -34,23 +34,25 @@ namespace Stormpath.SDK.Impl.DataStore
         Task<CollectionResponsePage<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken);
 
         Task<T> CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
-            where T : IResource;
+            where T : class, IResource;
 
         Task<T> CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
-            where T : IResource;
+            where T : class, IResource;
 
         Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
-            where T : IResource
-            where TReturned : IResource;
+            where T : class, IResource
+            where TReturned : class, IResource;
 
         Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
-            where T : IResource
-            where TReturned : IResource;
+            where T : class, IResource
+            where TReturned : class, IResource;
 
         Task<T> SaveAsync<T>(T resource, CancellationToken cancellationToken)
-            where T : IResource, ISaveable<T>;
+            where T : class, IResource, ISaveable<T>;
 
         Task<bool> DeleteAsync<T>(T resource, CancellationToken cancellationToken)
-            where T : IResource, IDeletable;
+            where T : class, IResource, IDeletable;
+
+        Task<bool> DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken);
     }
 }

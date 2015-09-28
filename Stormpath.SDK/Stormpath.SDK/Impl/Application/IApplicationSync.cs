@@ -24,7 +24,7 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Application
 {
-    internal interface IApplicationSync : ISaveableSync<IApplication>, IDeletableSync, IAccountCreationActionsSync
+    internal interface IApplicationSync : ISaveableSync<IApplication>, IDeletableSync, IAccountCreationActionsSync, IExtendableSync
     {
         /// <summary>
         /// Synchronously authenticates an account's submitted principals and credentials (e.g. username and password).

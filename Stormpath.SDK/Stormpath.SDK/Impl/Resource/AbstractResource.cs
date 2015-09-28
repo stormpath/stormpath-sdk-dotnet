@@ -25,14 +25,14 @@ namespace Stormpath.SDK.Impl.Resource
 {
     internal abstract class AbstractResource : IResource
     {
-        private static readonly string HrefPropertyName = "href";
+        protected static readonly string HrefPropertyName = "href";
 
         internal readonly IInternalDataStore InternalDataStore;
         internal readonly IInternalDataStoreSync InternalDataStoreSync;
-        private readonly ConcurrentDictionary<string, object> properties;
-        private readonly ConcurrentDictionary<string, object> dirtyProperties;
+        protected readonly ConcurrentDictionary<string, object> properties;
+        protected readonly ConcurrentDictionary<string, object> dirtyProperties;
 
-        private bool isDirty = false;
+        protected bool isDirty = false;
 
         public AbstractResource(IInternalDataStore dataStore)
             : this(dataStore, new Dictionary<string, object>())
@@ -92,6 +92,13 @@ namespace Stormpath.SDK.Impl.Resource
                 return value;
 
             return null;
+        }
+
+        protected bool ContainsProperty(string name)
+        {
+            return
+                this.dirtyProperties.ContainsKey(name) ||
+                this.properties.ContainsKey(name);
         }
 
         public void SetProperty<T>(string name, T value)

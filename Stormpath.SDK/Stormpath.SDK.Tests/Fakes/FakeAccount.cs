@@ -19,6 +19,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.CustomData;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
@@ -43,6 +44,14 @@ namespace Stormpath.SDK.Tests.Fakes
         public string Surname { get; set; }
 
         public AccountStatus Status { get; set; }
+
+        public IEmbeddedCustomData CustomData
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public Task<Directory.IDirectory> GetDirectoryAsync(CancellationToken cancellationToken)
         {
@@ -95,6 +104,11 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         public IAccount SetUsername(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICustomData> GetCustomDataAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }

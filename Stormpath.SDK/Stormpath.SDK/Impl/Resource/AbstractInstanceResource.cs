@@ -17,6 +17,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
 
@@ -40,5 +42,11 @@ namespace Stormpath.SDK.Impl.Resource
         DateTimeOffset IAuditable.CreatedAt => GetProperty<DateTimeOffset>(CreatedAtPropertyName);
 
         DateTimeOffset IAuditable.ModifiedAt => GetProperty<DateTimeOffset>(ModifiedAtPropertyName);
+
+        protected virtual Task<T> SaveAsync<T>(CancellationToken cancellationToken)
+            where T : class, IResource, ISaveable<T>
+        {
+            return this.GetInternalDataStore().SaveAsync<T>(this as T, cancellationToken);
+        }
     }
 }

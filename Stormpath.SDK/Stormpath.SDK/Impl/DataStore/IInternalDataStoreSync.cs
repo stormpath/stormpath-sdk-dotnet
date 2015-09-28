@@ -25,23 +25,25 @@ namespace Stormpath.SDK.Impl.DataStore
         CollectionResponsePage<T> GetCollection<T>(string href);
 
         T Create<T>(string parentHref, T resource)
-            where T : IResource;
+            where T : class, IResource;
 
         T Create<T>(string parentHref, T resource, ICreationOptions options)
-            where T : IResource;
+            where T : class, IResource;
 
         TReturned Create<T, TReturned>(string parentHref, T resource)
-            where T : IResource
-            where TReturned : IResource;
+            where T : class, IResource
+            where TReturned : class, IResource;
 
         TReturned Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
-            where T : IResource
-            where TReturned : IResource;
+            where T : class, IResource
+            where TReturned : class, IResource;
 
         T Save<T>(T resource)
-            where T : IResource, ISaveable<T>;
+            where T : class, IResource, ISaveable<T>;
 
         bool Delete<T>(T resource)
-            where T : IResource, IDeletable;
+            where T : class, IResource, IDeletable;
+
+        bool DeleteProperty(string parentHref, string propertyName);
     }
 }

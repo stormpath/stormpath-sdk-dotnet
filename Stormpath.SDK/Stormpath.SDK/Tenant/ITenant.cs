@@ -22,7 +22,7 @@ namespace Stormpath.SDK.Tenant
     /// <summary>
     /// A tenant represents a customer's private data 'space' within Stormpath that contains all of the customer's Stormpath-stored resources, like <see cref="Application.IApplication"/>, <see cref="Directory.IDirectory"/>, and <see cref="Account.IAccount"/>.
     /// </summary>
-    public interface ITenant : IResource, IAuditable, ITenantActions
+    public interface ITenant : IResource, IAuditable, IExtendable, ITenantActions
     {
         /// <summary>
         /// Gets the tenant's globally-unique human-readable key in Stormpath.

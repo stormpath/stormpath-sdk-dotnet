@@ -71,6 +71,9 @@ namespace Stormpath.SDK.Tests.Fakes
 
         Task<bool> IInternalDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken) => this.FakeDataStore.DeleteAsync(resource, cancellationToken);
 
+        Task<bool> IInternalDataStore.DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken)
+            => this.FakeDataStore.DeletePropertyAsync(parentHref, propertyName, cancellationToken);
+
         CollectionResponsePage<T> IInternalDataStoreSync.GetCollection<T>(string href) => this.FakeDataStoreSync.GetCollection<T>(href);
 
         Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken) => this.FakeDataStore.GetCollectionAsync<T>(href, cancellationToken);
@@ -109,6 +112,11 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
+        }
+
+        bool IInternalDataStoreSync.DeleteProperty(string parentHref, string propertyName)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

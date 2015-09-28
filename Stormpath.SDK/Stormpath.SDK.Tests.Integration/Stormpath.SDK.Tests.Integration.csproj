@@ -61,6 +61,8 @@
   <ItemGroup>
     <Compile Include="Account_tests.cs" />
     <Compile Include="Application_tests.cs" />
+    <Compile Include="CustomData_embedded_tests.cs" />
+    <Compile Include="CustomData_tests.cs" />
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\IntegrationTestClients.cs" />
     <Compile Include="Helpers\RandomPassword.cs" />
@@ -74,6 +76,8 @@
     <Compile Include="Error_tests.cs" />
     <Compile Include="Helpers\TestClientBuilder.cs" />
     <Compile Include="Meta_tests.cs" />
+    <Compile Include="Sync\Sync_CustomData_embedded_tests.cs" />
+    <Compile Include="Sync\Sync_CustomData_tests.cs" />
     <Compile Include="Sync\Sync_Application_tests.cs" />
     <Compile Include="Sync\Sync_Directory_tests.cs" />
     <Compile Include="Sync\Sync_Account_tests.cs" />
