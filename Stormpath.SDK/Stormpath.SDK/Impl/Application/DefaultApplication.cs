@@ -232,7 +232,7 @@ namespace Stormpath.SDK.Impl.Application
              => this.GetInternalDataStoreSync().Delete(this);
 
         Task<IApplication> ISaveable<IApplication>.SaveAsync(CancellationToken cancellationToken)
-             => this.GetInternalDataStore().SaveAsync<IApplication>(this, cancellationToken);
+             => this.SaveAsync<IApplication>(cancellationToken);
 
         IApplication ISaveableSync<IApplication>.Save()
             => this.GetInternalDataStoreSync().Save<IApplication>(this);
