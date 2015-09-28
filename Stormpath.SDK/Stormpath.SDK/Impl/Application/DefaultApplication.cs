@@ -216,6 +216,9 @@ namespace Stormpath.SDK.Impl.Application
             return this.AsInterface.CreateAccountAsync(account, cancellationToken: cancellationToken);
         }
 
+        Task<IAccount> IAccountCreationActions.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
+            => this.AsInterface.CreateAccountAsync(givenName, surname, email, password, customData: null, cancellationToken: cancellationToken);
+
         IAccount IAccountCreationActionsSync.CreateAccount(string givenName, string surname, string email, string password, object customData)
         {
             var account = this.GetInternalDataStore().Instantiate<IAccount>();

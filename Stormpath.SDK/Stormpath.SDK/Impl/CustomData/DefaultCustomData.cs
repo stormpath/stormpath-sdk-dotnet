@@ -145,6 +145,9 @@ namespace Stormpath.SDK.Impl.CustomData
 
         void ICustomData.Put(string key, object value)
         {
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException(nameof(key));
+
             if (!IsValidKey(key))
                 throw new ArgumentOutOfRangeException($"{key} is not a valid key name.");
 
@@ -153,6 +156,10 @@ namespace Stormpath.SDK.Impl.CustomData
 
         void ICustomData.Put(IEnumerable<KeyValuePair<string, object>> keyValuePairs)
         {
+            bool isEmpty = keyValuePairs?.Any() ?? true;
+            if (isEmpty)
+                return;
+
             foreach (var kvp in keyValuePairs)
             {
                 this.AsInterface.Put(kvp.Key, kvp.Value);
