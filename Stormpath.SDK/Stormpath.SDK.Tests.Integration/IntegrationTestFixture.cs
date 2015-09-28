@@ -230,12 +230,7 @@ namespace Stormpath.SDK.Tests.Integration
             {
                 throw new ApplicationException(
                     "Errors occurred during test cleanup. Full log: " + Environment.NewLine
-
-#pragma warning disable SA1119 // Statement must not use unnecessary parenthesis
-#pragma warning disable SA1008 // Opening parenthesis must be spaced correctly
                     + string.Join(Environment.NewLine, results.Select(kvp => $"{kvp.Key} : '{(kvp.Value == null ? "Good" : kvp.Value.Message)}'")));
-#pragma warning restore SA1008 // Opening parenthesis must be spaced correctly
-#pragma warning restore SA1119 // Statement must not use unnecessary parenthesis
             }
         }
     }
