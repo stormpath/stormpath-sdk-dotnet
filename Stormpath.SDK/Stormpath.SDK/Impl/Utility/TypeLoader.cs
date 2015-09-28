@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Impl.Utility
 
         public bool TryLoad(out T instance, object[] constructorArguments = null)
         {
-            var absolutePath = Path.GetFullPath(this.fileName);
+            var absolutePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", this.fileName);
 
             if (!File.Exists(absolutePath))
             {
