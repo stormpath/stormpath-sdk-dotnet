@@ -58,6 +58,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Stormpath.SDK.JsonNetSerializer\Stormpath.SDK.JsonNetSerializer.csproj">
+      <Project>{4011b5ea-ceb5-4212-b8e6-d18c63ab6acf}</Project>
+      <Name>Stormpath.SDK.JsonNetSerializer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stormpath.SDK.RestSharpClient\Stormpath.SDK.RestSharpClient.csproj">
+      <Project>{21f7a025-7bb1-49b0-8ad3-cee8a3b1d542}</Project>
+      <Name>Stormpath.SDK.RestSharpClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Stormpath.SDK\Stormpath.SDK.csproj">
       <Project>{79a65c37-9db1-413a-ac23-708404530295}</Project>
       <Name>Stormpath.SDK</Name>
