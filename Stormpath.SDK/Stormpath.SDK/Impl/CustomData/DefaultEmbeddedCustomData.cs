@@ -46,6 +46,9 @@ namespace Stormpath.SDK.Impl.CustomData
         internal Task<bool> DeleteRemovedCustomDataPropertiesAsync(string parentHref, CancellationToken cancellationToken)
             => this.customDataProxy.DeleteRemovedPropertiesAsync(parentHref, cancellationToken);
 
+        internal bool DeleteRemovedCustomDataProperties(string parentHref)
+            => this.customDataProxy.DeleteRemovedProperties(parentHref);
+
         internal IDictionary<string, object> UpdatedCustomDataProperties
             => this.customDataProxy.UpdatedProperties;
 

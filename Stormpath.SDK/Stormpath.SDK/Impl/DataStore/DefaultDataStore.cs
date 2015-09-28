@@ -348,9 +348,19 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.DeleteCoreAsync<IResource>(propertyHref, cancellationToken);
         }
 
+        bool IInternalDataStoreSync.DeleteProperty(string parentHref, string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName))
+                throw new ArgumentNullException(nameof(propertyName));
+
+            var propertyHref = $"{parentHref}/{propertyName}";
+
+            return this.DeleteCore<IResource>(propertyHref);
+        }
+
         bool IInternalDataStoreSync.Delete<T>(T resource)
         {
-            return this.DeleteCore(resource);
+            return this.DeleteCore<T>(resource.Href);
         }
 
         private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, bool create, CancellationToken cancellationToken)
@@ -432,6 +442,8 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, bool create)
+            where T : IResource
+            where TReturned : class, IResource
         {
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
@@ -466,7 +478,38 @@ namespace Stormpath.SDK.Impl.DataStore
                     return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.StatusCode, responseBody);
                 }));
 
+            // Serialize properties
             var propertiesMap = this.resourceConverter.ToMap(abstractResource);
+
+            var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
+            bool includesCustomData = extendableInstanceResource != null;
+            if (includesCustomData)
+            {
+                var customDataProxy = (extendableInstanceResource as IExtendableSync).CustomData as DefaultEmbeddedCustomData;
+
+                // Apply custom data deletes
+                if (customDataProxy.HasDeletedProperties())
+                {
+                    if (customDataProxy.DeleteAll)
+                        this.DeleteCore<ICustomData>(extendableInstanceResource.CustomData.Href);
+                    else
+                        customDataProxy.DeleteRemovedCustomDataProperties(extendableInstanceResource.CustomData.Href);
+                }
+
+                // Merge in custom data updates
+                if (customDataProxy.HasUpdatedCustomDataProperties())
+                    propertiesMap["customData"] = new Dictionary<string, object>(customDataProxy.UpdatedCustomDataProperties);
+
+                // Remove custom data updates from proxy
+                extendableInstanceResource.ResetCustomData();
+            }
+
+            // In some cases, all we need to save are custom data property deletions, which is taken care of above.
+            // So, we should just refresh with the latest data from the server.
+            bool nothingToPost = !propertiesMap.Any();
+            if (!create && nothingToPost)
+                return this.AsSyncInterface.GetResource<TReturned>(href);
+
             var requestAction = create
                 ? ResourceAction.Create
                 : ResourceAction.Update;
@@ -501,17 +544,13 @@ namespace Stormpath.SDK.Impl.DataStore
             return successfullyDeleted;
         }
 
-        private bool DeleteCore<T>(T resource)
-            where T : IResource, IDeletable
+        private bool DeleteCore<T>(string href)
+            where T : IResource
         {
-            var abstractResource = resource as AbstractResource;
-            if (resource == null)
-                throw new ArgumentNullException(nameof(resource));
+            if (string.IsNullOrEmpty(href))
+                throw new ArgumentNullException(nameof(href));
 
-            if (string.IsNullOrEmpty(resource.Href))
-                throw new ArgumentNullException(nameof(resource.Href));
-
-            var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resource.Href));
+            var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href));
             this.logger.Trace($"Synchronously deleting resource {uri.ToString()}", "DefaultDataStore.DeleteCore");
 
             ISynchronousFilterChain chain = new DefaultSynchronousFilterChain(this.defaultSyncFilters as DefaultSynchronousFilterChain)

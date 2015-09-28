@@ -26,7 +26,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal abstract class AbstractExtendableInstanceResource : AbstractInstanceResource, IExtendable
+    internal abstract class AbstractExtendableInstanceResource : AbstractInstanceResource, IExtendable, IExtendableSync
     {
         private static readonly string CustomDataPropertyName = "customData";
 
@@ -48,8 +48,13 @@ namespace Stormpath.SDK.Impl.Resource
 
         IEmbeddedCustomData IExtendable.CustomData => this.customDataProxy;
 
+        IEmbeddedCustomData IExtendableSync.CustomData => this.customDataProxy;
+
         Task<ICustomData> IExtendable.GetCustomDataAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().GetResourceAsync<ICustomData>(this.CustomData.Href, cancellationToken);
+
+        ICustomData IExtendableSync.GetCustomData()
+            => this.GetInternalDataStoreSync().GetResource<ICustomData>(this.CustomData.Href);
 
         internal void ResetCustomData()
         {

@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SyncExtendableExtensions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,25 +15,21 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Account;
-using Stormpath.SDK.Directory;
+using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Tenant;
+using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Impl.Account
+namespace Stormpath.SDK.Sync
 {
-    internal interface IAccountSync : ISaveableSync<IAccount>, IDeletableSync, IExtendableSync
+    public static class SyncExtendableExtensions
     {
         /// <summary>
-        /// Synchronously gets the account's parent <see cref="IDirectory"/> (where the account is stored).
+        /// Synchronously gets the custom data associated with this resource.
         /// </summary>
-        /// <returns>The directory.</returns>
-        IDirectory GetDirectory();
-
-        /// <summary>
-        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
-        /// </summary>
-        /// <returns>The tenant.</returns>
-        ITenant GetTenant();
+        /// <param name="resource">The resource.</param>
+        /// <returns>The <see cref="ICustomData"/> associated with this resource.</returns>
+        /// <exception cref="Error.ResourceException">The custom data could not be loaded.</exception>
+        public static ICustomData GetCustomData(this IExtendable resource)
+            => (resource as IExtendableSync).GetCustomData();
     }
 }

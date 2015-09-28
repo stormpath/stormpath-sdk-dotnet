@@ -31,7 +31,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.CustomData
 {
-    internal sealed class DefaultCustomData : AbstractInstanceResource, ICustomData
+    internal sealed class DefaultCustomData : AbstractInstanceResource, ICustomData, ICustomDataSync
     {
         private static readonly List<string> ReservedKeys = new List<string>()
         {
@@ -217,6 +217,24 @@ namespace Stormpath.SDK.Impl.CustomData
             return results.All(x => x == true);
         }
 
+        public bool DeleteRemovedProperties(string parentHref)
+        {
+            var results = new List<bool>();
+            foreach (var propName in this.deletedPropertyNames)
+            {
+                var successful = this.GetInternalDataStoreSync().DeleteProperty(parentHref, propName);
+                if (successful)
+                {
+                    string dummy;
+                    this.deletedPropertyNames.TryTake(out dummy);
+                }
+
+                results.Add(successful);
+            }
+
+            return results.All(x => x == true);
+        }
+
         async Task<ICustomData> ISaveable<ICustomData>.SaveAsync(CancellationToken cancellationToken)
         {
             if (this.HasDeletedProperties())
@@ -225,7 +243,18 @@ namespace Stormpath.SDK.Impl.CustomData
             return await this.GetInternalDataStore().SaveAsync<ICustomData>(this, cancellationToken).ConfigureAwait(false);
         }
 
+        ICustomData ISaveableSync<ICustomData>.Save()
+        {
+            if (this.HasDeletedProperties())
+                this.DeleteRemovedProperties(this.AsInterface.Href);
+
+            return this.GetInternalDataStoreSync().Save<ICustomData>(this);
+        }
+
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
+
+        bool IDeletableSync.Delete()
+            => this.GetInternalDataStoreSync().Delete(this);
     }
 }

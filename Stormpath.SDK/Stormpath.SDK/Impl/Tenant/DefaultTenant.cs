@@ -29,7 +29,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
-    internal sealed class DefaultTenant : AbstractExtendableInstanceResource, ITenant, ITenantActionsSync
+    internal sealed class DefaultTenant : AbstractExtendableInstanceResource, ITenant, ITenantSync
     {
         private static readonly string AccountsPropertyName = "accounts";
         private static readonly string AgentsPropertyName = "agents";

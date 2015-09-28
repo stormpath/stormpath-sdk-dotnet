@@ -229,5 +229,10 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             throw new NotImplementedException();
         }
+
+        bool IInternalDataStoreSync.DeleteProperty(string parentHref, string propertyName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
