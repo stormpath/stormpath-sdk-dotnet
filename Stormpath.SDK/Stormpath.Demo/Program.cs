@@ -74,7 +74,7 @@ namespace Stormpath.Demo
             var myApp = applications.First();
             Console.WriteLine($"\nAdding users to '{myApp.Name}'...");
             addedUsers.Add(
-                await myApp.CreateAccountAsync("Joe", "Stormtrooper", "tk421@galacticempire.co", "Changeme123!", cancellationToken));
+                await myApp.CreateAccountAsync("Joe", "Stormtrooper", "tk421@galacticempire.co", "Changeme123!", customData: cancellationToken));
             addedUsers.Add(
                 await myApp.CreateAccountAsync("Lando", "Calrissian", "lando@bespin.co", "Changeme123!", 
                                                 new { phrase = "You got a lotta nerve, showing your face after what you pulled." }, cancellationToken));
@@ -84,7 +84,7 @@ namespace Stormpath.Demo
             vader.SetEmail("vader@galacticempire.co");
             vader.SetGivenName("Darth");
             vader.SetSurname("Vader");
-            vader.SetPassword("1Findyourlackofsecuritydisturbing!");
+            vader.SetPassword("Togetherw3willrulethegalaxy!");
             vader.CustomData.Put("phrase", "I find your lack of faith disturbing.");
             addedUsers.Add(
                 await myApp.CreateAccountAsync(vader,
@@ -100,10 +100,11 @@ namespace Stormpath.Demo
             Console.WriteLine($"\nLogging in as vader@galacticempire.co");
             try
             {
-                var result = await myApp.AuthenticateAccountAsync("vader@galacticempire.co", "1Findyourlackofsecuritydisturbing!", cancellationToken);
+                var result = await myApp.AuthenticateAccountAsync("vader@galacticempire.co", "Togetherw3willrulethegalaxy!", cancellationToken);
                 var returnedAccount = await result.GetAccountAsync();
                 var customData = await returnedAccount.GetCustomDataAsync();
-                Console.WriteLine($"Success! {returnedAccount.FullName} logged in.\nFamous Phrase: '{customData["phrase"]}'");
+                Console.WriteLine($"Success! {returnedAccount.FullName} logged in.");
+                Console.WriteLine($"Famous phrase: '{customData["phrase"]}'");
             }
             catch (ResourceException rex)
             {
