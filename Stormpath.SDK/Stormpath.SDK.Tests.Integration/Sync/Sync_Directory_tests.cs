@@ -21,7 +21,7 @@ using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
     public class Sync_Directory_tests

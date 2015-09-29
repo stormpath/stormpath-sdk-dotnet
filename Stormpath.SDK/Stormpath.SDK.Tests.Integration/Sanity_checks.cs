@@ -147,5 +147,43 @@ namespace Stormpath.SDK.Tests.Integration
                     expected: false,
                     customMessage: "These methods must have an optional CancellationToken parameter:" + Environment.NewLine + PrettyMethodOutput(asyncMethodsWithRequiredCT));
         }
+
+        [Fact]
+        public void Equal_numbers_of_sync_and_async_tests()
+        {
+            var asyncTests = this.GetType().Assembly
+                .GetTypes()
+                .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Async")
+                .SelectMany(x => x.GetMethods())
+                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
+                .ToList();
+
+            var syncTests = this.GetType().Assembly
+                .GetTypes()
+                .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Sync")
+                .SelectMany(x => x.GetMethods())
+                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
+                .ToList();
+
+            var asyncButNotSync = asyncTests
+                .Select(a => a.Name)
+                .Except(
+                    syncTests.Select(s => s.Name))
+                .ToList();
+
+            var syncButNotAsync = syncTests
+                .Select(a => a.Name)
+                .Except(
+                    asyncTests.Select(s => s.Name))
+                .ToList();
+
+            asyncButNotSync.Count.ShouldBe(
+                0,
+                $"These async tests do not have a corresponding sync test: {string.Join(", ", asyncButNotSync)}");
+
+            syncButNotAsync.Count.ShouldBe(
+                0,
+                $"These sync tests do not have a corresponding async test: {string.Join(", ", syncButNotAsync)}");
+        }
     }
 }
