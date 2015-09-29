@@ -78,11 +78,11 @@ namespace Stormpath.SDK.Impl.Application
 
         internal LinkProperty DefaultGroupStoreMapping => this.GetLinkProperty(DefaultGroupStoreMappingPropertyName);
 
-        string IApplication.Description => GetProperty<string>(DescriptionPropertyName);
+        string IApplication.Description => this.GetProperty<string>(DescriptionPropertyName);
 
         internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        string IApplication.Name => GetProperty<string>(NamePropertyName);
+        string IApplication.Name => this.GetProperty<string>(NamePropertyName);
 
         internal LinkProperty LoginAttempts => this.GetLinkProperty(LoginAttemptsPropertyName);
 
@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Impl.Application
 
         internal LinkProperty PasswordResetToken => this.GetLinkProperty(PasswordResetTokensPropertyName);
 
-        ApplicationStatus IApplication.Status => GetProperty<ApplicationStatus>(StatusPropertyName);
+        ApplicationStatus IApplication.Status => this.GetProperty<ApplicationStatus>(StatusPropertyName);
 
         internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 

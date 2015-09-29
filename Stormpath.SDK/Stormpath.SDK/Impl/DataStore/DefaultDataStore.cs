@@ -170,7 +170,7 @@ namespace Stormpath.SDK.Impl.DataStore
             {
                 DefaultError error = null;
                 error = response.HasBody
-                    ? new DefaultError(GetBody<IError>(response))
+                    ? new DefaultError(this.GetBody<IError>(response))
                     : DefaultError.FromHttpResponse(response);
 
                 throw new ResourceException(error);
@@ -292,7 +292,8 @@ namespace Stormpath.SDK.Impl.DataStore
         Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
         {
             return this.SaveCoreAsync<T, TReturned>(
-                resource, parentHref,
+                resource,
+                parentHref,
                 queryParams: this.CreateQueryStringFromCreationOptions(options),
                 create: true,
                 cancellationToken: cancellationToken);
@@ -301,7 +302,8 @@ namespace Stormpath.SDK.Impl.DataStore
         TReturned IInternalDataStoreSync.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
         {
             return this.SaveCore<T, TReturned>(
-                resource, parentHref,
+                resource,
+                parentHref,
                 create: true,
                 queryParams: this.CreateQueryStringFromCreationOptions(options));
         }
@@ -312,7 +314,7 @@ namespace Stormpath.SDK.Impl.DataStore
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(resource.Href));
 
-            return SaveCoreAsync<T, T>(
+            return this.SaveCoreAsync<T, T>(
                 resource,
                 href,
                 queryParams: null,
@@ -326,7 +328,7 @@ namespace Stormpath.SDK.Impl.DataStore
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(resource.Href));
 
-            return SaveCore<T, T>(
+            return this.SaveCore<T, T>(
                 resource,
                 href,
                 create: false,

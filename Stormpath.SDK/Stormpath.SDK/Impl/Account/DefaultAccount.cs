@@ -67,31 +67,31 @@ namespace Stormpath.SDK.Impl.Account
 
         internal LinkProperty Directory => this.GetLinkProperty(DirectoryPropertyName);
 
-        string IAccount.Email => GetProperty<string>(EmailPropertyName);
+        string IAccount.Email => this.GetProperty<string>(EmailPropertyName);
 
         internal LinkProperty EmailVerificationToken => this.GetLinkProperty(EmailVerificationTokenPropertyName);
 
-        string IAccount.FullName => GetProperty<string>(FullNamePropertyName);
+        string IAccount.FullName => this.GetProperty<string>(FullNamePropertyName);
 
-        string IAccount.GivenName => GetProperty<string>(GivenNamePropertyName);
+        string IAccount.GivenName => this.GetProperty<string>(GivenNamePropertyName);
 
         internal LinkProperty GroupMemberships => this.GetLinkProperty(GroupMembershipsPropertyName);
 
         internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        string IAccount.MiddleName => GetProperty<string>(MiddleNamePropertyName);
+        string IAccount.MiddleName => this.GetProperty<string>(MiddleNamePropertyName);
 
         internal LinkProperty ProviderData => this.GetLinkProperty(ProviderDataPropertyName);
 
         internal LinkProperty RefreshTokens => this.GetLinkProperty(RefreshTokensPropertyName);
 
-        AccountStatus IAccount.Status => GetProperty<AccountStatus>(StatusPropertyName);
+        AccountStatus IAccount.Status => this.GetProperty<AccountStatus>(StatusPropertyName);
 
-        string IAccount.Surname => GetProperty<string>(SurnamePropertyName);
+        string IAccount.Surname => this.GetProperty<string>(SurnamePropertyName);
 
         internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
-        string IAccount.Username => GetProperty<string>(UsernamePropertyName);
+        string IAccount.Username => this.GetProperty<string>(UsernamePropertyName);
 
         IAccount IAccount.SetEmail(string email)
         {

@@ -99,8 +99,8 @@ namespace Stormpath.SDK.Impl.Linq
         public T ExecuteSingle<T>(QueryModel queryModel, bool returnDefaultWhenEmpty)
         {
             return returnDefaultWhenEmpty
-                ? ExecuteCollection<T>(queryModel).SingleOrDefault()
-                : ExecuteCollection<T>(queryModel).Single();
+                ? this.ExecuteCollection<T>(queryModel).SingleOrDefault()
+                : this.ExecuteCollection<T>(queryModel).Single();
         }
 
         private static CollectionResourceRequestModel GenerateRequestModel(QueryModel queryModel)

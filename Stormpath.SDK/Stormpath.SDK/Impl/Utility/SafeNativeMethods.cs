@@ -20,7 +20,7 @@ using System.Security;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    [SuppressUnmanagedCodeSecurityAttribute]
+    [SuppressUnmanagedCodeSecurity]
     internal static class SafeNativeMethods
     {
         [DllImport("kernel32.dll")]

@@ -73,9 +73,9 @@ namespace Stormpath.SDK.Impl.Tenant
 
         internal LinkProperty IdSites => this.GetLinkProperty(IdSitesPropertyName);
 
-        string ITenant.Key => GetProperty<string>(KeyPropertyName);
+        string ITenant.Key => this.GetProperty<string>(KeyPropertyName);
 
-        string ITenant.Name => GetProperty<string>(NamePropertyName);
+        string ITenant.Name => this.GetProperty<string>(NamePropertyName);
 
         internal LinkProperty Organizations => this.GetLinkProperty(OrganizationsPropertyName);
 

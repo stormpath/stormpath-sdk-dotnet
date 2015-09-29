@@ -47,11 +47,11 @@ namespace Stormpath.SDK.Impl.AccountStore
 
         internal LinkProperty Application => this.GetLinkProperty(ApplicationPropertyName);
 
-        bool IAccountStoreMapping.IsDefaultAccountStore => GetProperty<bool>(IsDefaultAccountStorePropertyName);
+        bool IAccountStoreMapping.IsDefaultAccountStore => this.GetProperty<bool>(IsDefaultAccountStorePropertyName);
 
-        bool IAccountStoreMapping.IsDefaultGroupStore => GetProperty<bool>(IsDefaultGroupStorePropertyName);
+        bool IAccountStoreMapping.IsDefaultGroupStore => this.GetProperty<bool>(IsDefaultGroupStorePropertyName);
 
-        int IAccountStoreMapping.ListIndex => GetProperty<int>(ListIndexPropertyName);
+        int IAccountStoreMapping.ListIndex => this.GetProperty<int>(ListIndexPropertyName);
 
         Task<IAccountStore> IAccountStoreMapping.GetAccountStoreAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().GetResourceAsync<IAccountStore>(this.AccountStore.Href, cancellationToken);

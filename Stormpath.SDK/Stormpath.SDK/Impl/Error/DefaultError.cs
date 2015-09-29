@@ -37,15 +37,15 @@ namespace Stormpath.SDK.Impl.Error
         {
         }
 
-        public int Code => GetProperty<int>(CodePropertyName);
+        public int Code => this.GetProperty<int>(CodePropertyName);
 
-        public string DeveloperMessage => GetProperty<string>(DevMessagePropertyName);
+        public string DeveloperMessage => this.GetProperty<string>(DevMessagePropertyName);
 
-        public string Message => GetProperty<string>(MessagePropertyName);
+        public string Message => this.GetProperty<string>(MessagePropertyName);
 
-        public string MoreInfo => GetProperty<string>(MoreInfoPropertyName);
+        public string MoreInfo => this.GetProperty<string>(MoreInfoPropertyName);
 
-        public int HttpStatus => GetProperty<int>(StatusPropertyName);
+        public int HttpStatus => this.GetProperty<int>(StatusPropertyName);
 
         public static DefaultError FromHttpResponse(IHttpResponse response)
         {

@@ -59,17 +59,17 @@ namespace Stormpath.SDK.Impl.Directory
 
         internal LinkProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
-        string IDirectory.Description => GetProperty<string>(DescriptionPropertyName);
+        string IDirectory.Description => this.GetProperty<string>(DescriptionPropertyName);
 
         internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        string IDirectory.Name => GetProperty<string>(NamePropertyName);
+        string IDirectory.Name => this.GetProperty<string>(NamePropertyName);
 
         internal LinkProperty PasswordPolicy => this.GetLinkProperty(PasswordPolicyPropertyName);
 
         internal LinkProperty Provider => this.GetLinkProperty(ProviderPropertyName);
 
-        DirectoryStatus IDirectory.Status => GetProperty<DirectoryStatus>(StatusPropertyName);
+        DirectoryStatus IDirectory.Status => this.GetProperty<DirectoryStatus>(StatusPropertyName);
 
         internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 

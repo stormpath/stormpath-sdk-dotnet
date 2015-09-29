@@ -60,9 +60,7 @@ namespace Stormpath.SDK.Impl.Http
             IClientApiKey apiKey,
             AuthenticationScheme authenticationScheme,
             ILogger logger)
-            : this(httpClient, apiKey, authenticationScheme, logger,
-                  new DefaultBackoffStrategy(MaxBackoffMilliseconds),
-                  new ThrottlingBackoffStrategy(MaxBackoffMilliseconds))
+            : this(httpClient, apiKey, authenticationScheme, logger, new DefaultBackoffStrategy(MaxBackoffMilliseconds), new ThrottlingBackoffStrategy(MaxBackoffMilliseconds))
         {
         }
 

@@ -417,8 +417,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var account = await application.CreateAccountAsync(
-                "Mara", "Jade", "mara.jade@test.async", new RandomPassword(12),
-                new { quote = "I'm a fighter. I've always been a fighter.", birth = -17, death = 40 });
+                "Mara", "Jade", "mara.jade@test.async", new RandomPassword(12), new { quote = "I'm a fighter. I've always been a fighter.", birth = -17, death = 40 });
 
             account.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedAccountHrefs.Add(account.Href);

@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Impl.Resource
             this.isDirty = false;
         }
 
-        string IResource.Href => GetProperty<string>(HrefPropertyName);
+        string IResource.Href => this.GetProperty<string>(HrefPropertyName);
 
         protected IInternalDataStore GetInternalDataStore() => this.InternalDataStore;
 
@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Impl.Resource
         }
 
         public LinkProperty GetLinkProperty(string name)
-            => GetProperty<LinkProperty>(name) ?? new LinkProperty(null);
+            => this.GetProperty<LinkProperty>(name) ?? new LinkProperty(null);
 
         public T GetProperty<T>(string name)
         {

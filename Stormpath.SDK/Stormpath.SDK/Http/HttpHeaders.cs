@@ -64,7 +64,7 @@ namespace Stormpath.SDK.Http
         /// <value>Accept string (e.g. application/json).</value>
         public string Accept
         {
-            get { return GetFirst<string>(HeaderAcceptName); }
+            get { return this.GetFirst<string>(HeaderAcceptName); }
             set { this.Add(HeaderAcceptName, value); }
         }
 
@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Http
         /// <value>Authentication credentials represented by a <see cref="AuthorizationHeaderValue"/> instance.</value>
         public AuthorizationHeaderValue Authorization
         {
-            get { return GetFirst<AuthorizationHeaderValue>(HeaderAuthorizationName); }
+            get { return this.GetFirst<AuthorizationHeaderValue>(HeaderAuthorizationName); }
             set { this.Add(HeaderAuthorizationName, value); }
         }
 
@@ -84,7 +84,7 @@ namespace Stormpath.SDK.Http
         /// <value>The length of the body in bytes.</value>
         public long? ContentLength
         {
-            get { return GetFirst<long?>(HeaderContentLengthName); }
+            get { return this.GetFirst<long?>(HeaderContentLengthName); }
             set { this.Add(HeaderContentLengthName, value); }
         }
 
@@ -94,7 +94,7 @@ namespace Stormpath.SDK.Http
         /// <value>The MIME type of the body (e.g. application/json).</value>
         public string ContentType
         {
-            get { return GetFirst<string>(HeaderContentTypeName); }
+            get { return this.GetFirst<string>(HeaderContentTypeName); }
             set { this.Add(HeaderContentTypeName, value); }
         }
 
@@ -104,7 +104,7 @@ namespace Stormpath.SDK.Http
         /// <value>The host name (and optionally, port number).</value>
         public string Host
         {
-            get { return GetFirst<string>(HeaderHostName); }
+            get { return this.GetFirst<string>(HeaderHostName); }
             set { this.Add(HeaderHostName, value); }
         }
 
@@ -116,7 +116,7 @@ namespace Stormpath.SDK.Http
         {
             get
             {
-                var location = GetFirst<string>(LocationName);
+                var location = this.GetFirst<string>(LocationName);
                 if (string.IsNullOrEmpty(location))
                     return null;
 
@@ -135,7 +135,7 @@ namespace Stormpath.SDK.Http
         /// <value>The user agent string.</value>
         public string UserAgent
         {
-            get { return GetFirst<string>(HeaderUserAgentName); }
+            get { return this.GetFirst<string>(HeaderUserAgentName); }
             set { this.Add(HeaderUserAgentName, value); }
         }
 
