@@ -155,15 +155,15 @@ namespace Stormpath.SDK.Tests.Integration
             var whitelistedAsyncMethods = new List<string>()
             {
                 "IAsyncQueryable`1.MoveNext()",
-                "IAsynchronousHttpClient.Execute(Stormpath.SDK.Http.IHttpRequest request)",
-                "IAsynchronousCache`2.Get(K key)",
-                "IAsynchronousCache`2.Put(K key, V value)",
-                "IAsynchronousCache`2.Remove(K key)",
-                "IAsynchronousCacheProvider.GetCache(System.String name)"
+                "IAsynchronousHttpClient.Execute(IHttpRequest)",
+                "IAsynchronousCache`2.Get(K)",
+                "IAsynchronousCache`2.Put(K, V)",
+                "IAsynchronousCache`2.Remove(K)",
+                "IAsynchronousCacheProvider.GetCache(String)"
             };
             var whitelistedSyncMethods = new List<string>()
             {
-                "IQueryable`1.Filter(System.String caseInsensitiveMatch)",
+                "IQueryable`1.Filter(String)",
                 "IAsyncQueryable`1.Synchronously()"
             };
 
@@ -184,7 +184,8 @@ namespace Stormpath.SDK.Tests.Integration
 
                     var argList = m
                         .GetParameters()
-                        .Where(p => p.ParameterType != typeof(CancellationToken));
+                        .Where(p => p.ParameterType != typeof(CancellationToken))
+                        .Select(p => p.ParameterType.Name);
 
                     return $"{m.DeclaringType.Name}.{nameWithoutAsync}" +
                            $"({string.Join(", ", argList)})";
@@ -206,7 +207,8 @@ namespace Stormpath.SDK.Tests.Integration
                 {
                     var argList = m
                         .GetParameters()
-                        .Skip(1);
+                        .Skip(1)
+                        .Select(p => p.ParameterType.Name);
 
                     return $"{m.GetParameters()[0].ParameterType.Name}.{m.Name}" +
                            $"({string.Join(", ", argList)})";
