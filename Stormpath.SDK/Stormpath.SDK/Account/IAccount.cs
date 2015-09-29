@@ -67,6 +67,13 @@ namespace Stormpath.SDK.Account
         string Surname { get; }
 
         /// <summary>
+        /// Gets the account's email verification token. This will only be non-null if the account holder
+        /// has been asked to verify their email account by clicking a link in an email.
+        /// </summary>
+        /// <value>An <see cref="IEmailVerificationToken"/>, or <c>null</c> if this account does not need to verify its email address.</value>
+        IEmailVerificationToken EmailVerificationToken { get; }
+
+        /// <summary>
         /// Gets the account's status.
         /// </summary>
         /// <value>This account's status. Accounts that are not <see cref="AccountStatus.Enabled"/> may not login to applications.</value>
@@ -134,14 +141,6 @@ namespace Stormpath.SDK.Account
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is this account's directory.</returns>
         Task<IDirectory> GetDirectoryAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Returns the account's email verification token. This will only be non-null if the account holder
-        /// has been asked to verify their email account by clicking a link in an email.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>An <see cref="IEmailVerificationToken"/>, or <c>null</c> if this account does not need to verify its email address.</returns>
-        Task<IEmailVerificationToken> GetEmailVerificationTokenAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the Stormpath <see cref="ITenant"/> that owns this Account resource.

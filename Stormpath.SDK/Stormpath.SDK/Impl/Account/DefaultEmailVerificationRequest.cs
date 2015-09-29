@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultVerificationEmailRequest.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultEmailVerificationRequest.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -22,21 +22,27 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Account
 {
-    internal sealed class DefaultVerificationEmailRequest : AbstractResource, IVerificationEmailRequest
+    internal sealed class DefaultEmailVerificationRequest : AbstractResource, IEmailVerificationRequest
     {
         private static readonly string LoginPropertyName = "login";
 
-        public DefaultVerificationEmailRequest(IInternalDataStore dataStore)
+        public DefaultEmailVerificationRequest(IInternalDataStore dataStore)
             : base(dataStore)
         {
         }
 
-        public DefaultVerificationEmailRequest(IInternalDataStore dataStore, IDictionary<string, object> properties)
+        public DefaultEmailVerificationRequest(IInternalDataStore dataStore, IDictionary<string, object> properties)
             : base(dataStore, properties)
         {
         }
 
-        string IVerificationEmailRequest.Login
+        string IEmailVerificationRequest.Login
             => this.GetProperty<string>(LoginPropertyName);
+
+        public IEmailVerificationRequest SetLogin(string usernameOrEmail)
+        {
+            this.SetProperty(LoginPropertyName, usernameOrEmail);
+            return this;
+        }
     }
 }

@@ -52,10 +52,10 @@
   <ItemGroup>
     <Compile Include="AccountStore\IAccountStore.cs" />
     <Compile Include="AccountStore\IAccountStoreMapping.cs" />
-    <Compile Include="Account\VerificationEmailRequestBuilder.cs" />
+    <Compile Include="Account\EmailVerificationRequestBuilder.cs" />
     <Compile Include="Account\IEmailVerificationToken.cs" />
     <Compile Include="Account\IPasswordResetToken.cs" />
-    <Compile Include="Account\IVerificationEmailRequest.cs" />
+    <Compile Include="Account\IEmailVerificationRequest.cs" />
     <Compile Include="Application\ApplicationCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountStatus.cs" />
@@ -95,8 +95,9 @@
     <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreMappingSync.cs" />
     <Compile Include="Impl\Account\DefaultAccountCreationOptions.cs" />
+    <Compile Include="Impl\Account\DefaultEmailVerificationToken.cs" />
     <Compile Include="Impl\Account\DefaultPasswordResetToken.cs" />
-    <Compile Include="Impl\Account\DefaultVerificationEmailRequest.cs" />
+    <Compile Include="Impl\Account\DefaultEmailVerificationRequest.cs" />
     <Compile Include="Impl\Account\IAccountCreationActionsSync.cs" />
     <Compile Include="Impl\Account\IAccountSync.cs" />
     <Compile Include="Impl\Account\IPasswordResetTokenSync.cs" />

@@ -138,13 +138,27 @@ namespace Stormpath.SDK.Application
         /// </para>
         /// <para>This method re-sends the verification email and allows the user to verify the account.</para>
         /// <para>
-        /// The <see cref="IVerificationEmailRequest"/> must contain the username or email identifying the account.
+        /// The <see cref="IEmailVerificationRequest"/> must contain the username or email identifying the account.
         /// </para>
         /// </summary>
         /// <param name="requestBuilderAction">Sets the options required for the verification email request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task that determines when the operation is complete.</returns>
-        Task SendVerificationEmailAsync(Action<VerificationEmailRequestBuilder> requestBuilderAction, CancellationToken cancellationToken = default(CancellationToken));
+        Task SendVerificationEmailAsync(Action<EmailVerificationRequestBuilder> requestBuilderAction, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Triggers the delivery of a new verification email for the specified account.
+        /// <para>
+        /// This method is useful in scenarios where the Account Registration and Verification workflow
+        /// is enabled. If the welcome email has not been received by a newly registered account,
+        /// then the user will not be able to login until the account is verified.
+        /// </para>
+        /// <para>This method re-sends the verification email and allows the user to verify the account.</para>
+        /// </summary>
+        /// <param name="usernameOrEmail">The username or email identifying the account to send the verification email to.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task that determines when the operation is complete.</returns>
+        Task SendVerificationEmailAsync(string usernameOrEmail, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the <see cref="IAccountStore"/> (either a Group or <see cref="Directory.IDirectory"/>)

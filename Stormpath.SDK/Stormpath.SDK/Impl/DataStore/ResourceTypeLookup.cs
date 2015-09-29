@@ -47,6 +47,8 @@ namespace Stormpath.SDK.Impl.DataStore
         private static readonly Type AuthenticationResultInterface = typeof(IAuthenticationResult);
         private static readonly Type PasswordResetTokenInterface = typeof(IPasswordResetToken);
         private static readonly Type CustomDataInterface = typeof(ICustomData);
+        private static readonly Type EmailVerificationTokenInterface = typeof(IEmailVerificationToken);
+        private static readonly Type EmailVerificationRequestInterface = typeof(IEmailVerificationRequest);
 
         private static readonly Type AccountConcrete = typeof(DefaultAccount);
         private static readonly Type ApplicationConcrete = typeof(DefaultApplication);
@@ -58,6 +60,8 @@ namespace Stormpath.SDK.Impl.DataStore
         private static readonly Type AuthenticationResultConcrete = typeof(DefaultAuthenticationResult);
         private static readonly Type PasswordResetTokenConcrete = typeof(DefaultPasswordResetToken);
         private static readonly Type CustomDataConcrete = typeof(DefaultCustomData);
+        private static readonly Type EmailVerificationTokenConcrete = typeof(DefaultEmailVerificationToken);
+        private static readonly Type EmailVerificationRequestConcrete = typeof(DefaultEmailVerificationRequest);
 
         private static readonly Type CollectionPageOfAccount = typeof(CollectionResponsePage<IAccount>);
         private static readonly Type CollectionPageOfApplication = typeof(CollectionResponsePage<IApplication>);
@@ -100,6 +104,12 @@ namespace Stormpath.SDK.Impl.DataStore
             if (iface == CustomDataInterface)
                 return CustomDataConcrete;
 
+            if (iface == EmailVerificationTokenInterface)
+                return EmailVerificationTokenConcrete;
+
+            if (iface == EmailVerificationRequestInterface)
+                return EmailVerificationRequestConcrete;
+
             return null; // unknown
         }
 
@@ -140,6 +150,12 @@ namespace Stormpath.SDK.Impl.DataStore
             if (concrete == CustomDataConcrete)
                 return CustomDataInterface;
 
+            if (concrete == EmailVerificationTokenConcrete)
+                return EmailVerificationTokenInterface;
+
+            if (concrete == EmailVerificationRequestConcrete)
+                return EmailVerificationRequestInterface;
+
             return null; // unknown
         }
 
@@ -160,7 +176,9 @@ namespace Stormpath.SDK.Impl.DataStore
                 possiblyInterface == BasicLoginAttemptInterface ||
                 possiblyInterface == AuthenticationResultInterface ||
                 possiblyInterface == PasswordResetTokenInterface ||
-                possiblyInterface == CustomDataInterface;
+                possiblyInterface == CustomDataInterface ||
+                possiblyInterface == EmailVerificationTokenInterface ||
+                possiblyInterface == EmailVerificationRequestInterface;
         }
 
         /// <summary>
@@ -180,7 +198,9 @@ namespace Stormpath.SDK.Impl.DataStore
                 possiblyConcrete == BasicLoginAttemptConcrete ||
                 possiblyConcrete == AuthenticationResultConcrete ||
                 possiblyConcrete == PasswordResetTokenConcrete ||
-                possiblyConcrete == CustomDataConcrete;
+                possiblyConcrete == CustomDataConcrete ||
+                possiblyConcrete == EmailVerificationTokenConcrete ||
+                possiblyConcrete == EmailVerificationRequestConcrete;
         }
 
         /// <summary>

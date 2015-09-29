@@ -195,6 +195,22 @@ namespace Stormpath.SDK.Impl.Client
             return this.tenant.CreateApplication(name, createDirectory);
         }
 
+        async Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
+        {
+            if (this.tenant == null)
+                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.VerifyAccountEmailAsync(token, cancellationToken).ConfigureAwait(false);
+        }
+
+        IAccount ITenantActionsSync.VerifyAccountEmail(string token)
+        {
+            if (this.tenant == null)
+                this.AsSyncInterface.GetCurrentTenant();
+
+            return this.tenant.VerifyAccountEmail(token);
+        }
+
         IAsyncQueryable<IApplication> ITenantActions.GetApplications()
         {
             if (this.tenant == null)

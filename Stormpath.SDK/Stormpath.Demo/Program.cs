@@ -28,6 +28,10 @@ namespace Stormpath.Demo
                 cts.Cancel();
             };
 
+            // Email verification demo
+            var emailDemo = new EmailVerificationDemo();
+            emailDemo.RunAsync(cts.Token).GetAwaiter().GetResult();
+
             // Keep track of the accounts we've created so we can clean them up later
             addedUsers = new List<IAccount>();
 

@@ -31,13 +31,6 @@ namespace Stormpath.SDK.Impl.Account
         IDirectory GetDirectory();
 
         /// <summary>
-        /// Synchronously returns the account's email verification token. This will only be non-null if the account holder
-        /// has been asked to verify their email account by clicking a link in an email.
-        /// </summary>
-        /// <returns>An <see cref="IEmailVerificationToken"/>, or <c>null</c> if this account does not need to verify its email address.</returns>
-        IEmailVerificationToken GetEmailVerificationToken();
-
-        /// <summary>
         /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
         /// </summary>
         /// <returns>The tenant.</returns>

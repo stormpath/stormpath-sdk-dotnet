@@ -53,6 +53,14 @@ namespace Stormpath.SDK.Tests.Fakes
             }
         }
 
+        public IEmailVerificationToken EmailVerificationToken
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public Task<Directory.IDirectory> GetDirectoryAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -109,6 +117,11 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         public Task<ICustomData> GetCustomDataAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEmailVerificationToken> GetEmailVerificationTokenAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }

@@ -71,6 +71,17 @@ namespace Stormpath.SDK.Impl.Account
 
         internal LinkProperty EmailVerificationToken => this.GetLinkProperty(EmailVerificationTokenPropertyName);
 
+        IEmailVerificationToken IAccount.EmailVerificationToken
+        {
+            get
+            {
+                var emailVerificationToken = new DefaultEmailVerificationToken(
+                    this.GetInternalDataStore(),
+                    new Dictionary<string, object>() { { "href", this.EmailVerificationToken.Href } });
+                return emailVerificationToken;
+            }
+        }
+
         string IAccount.FullName => this.GetProperty<string>(FullNamePropertyName);
 
         string IAccount.GivenName => this.GetProperty<string>(GivenNamePropertyName);

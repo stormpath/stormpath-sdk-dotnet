@@ -1,4 +1,4 @@
-﻿// <copyright file="VerificationEmailRequestBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="EmailVerificationRequestBuilder.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,17 +15,21 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
 
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// A builder to construct <see cref="IVerificationEmailRequest"/> instances.
+    /// A builder to construct <see cref="IEmailVerificationRequest"/> instances.
     /// </summary>
-    public sealed class VerificationEmailRequestBuilder
+    public sealed class EmailVerificationRequestBuilder
     {
+        internal EmailVerificationRequestBuilder(IInternalDataStore dataStore)
+        {
+            this.InternalDataStore = dataStore;
+        }
+
         /// <summary>
         /// Gets or sets the account's login information. Either the username or email identifying the desired account can be used.
         /// </summary>
@@ -38,16 +42,18 @@ namespace Stormpath.SDK.Account
         /// Gets or sets the <see cref="IInternalDataStore"/> used to construct this request.
         /// </summary>
         /// <value>The internal data store used by this client.</value>
-        internal IInternalDataStore InternalDataStore { get; set; }
+        internal IInternalDataStore InternalDataStore { get; }
 
         /// <summary>
-        /// Creates a new <see cref="IVerificationEmailRequest"/> instance based on the current builder state.
+        /// Creates a new <see cref="IEmailVerificationRequest"/> instance based on the current builder state.
         /// </summary>
-        /// <returns>A new <see cref="IVerificationEmailRequest"/> based on the current builder state.</returns>
-        public IVerificationEmailRequest Build()
+        /// <returns>A new <see cref="IEmailVerificationRequest"/> based on the current builder state.</returns>
+        internal IEmailVerificationRequest Build()
         {
-            var properties = new Dictionary<string, object>() { { "login", this.Login } };
-            return new DefaultVerificationEmailRequest(this.InternalDataStore, properties);
+            var request = new DefaultEmailVerificationRequest(this.InternalDataStore);
+            request.SetLogin(this.Login);
+
+            return request;
         }
     }
 }

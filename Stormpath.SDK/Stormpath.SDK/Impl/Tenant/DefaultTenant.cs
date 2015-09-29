@@ -135,12 +135,22 @@ namespace Stormpath.SDK.Impl.Tenant
             return this.AsTenantActionSyncInterface.CreateApplication(application, options);
         }
 
-        Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
+        async Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
         {
             var href = $"/accounts/emailVerificationTokens/{token}";
 
             var emailVerificationToken = this.GetInternalDataStore().Instantiate<IEmailVerificationToken>();
-            return this.GetInternalDataStore().CreateAsync<IEmailVerificationToken, IAccount>(href, emailVerificationToken, cancellationToken);
+            var tokenResponse = await this.GetInternalDataStore().CreateAsync(href, emailVerificationToken, cancellationToken).ConfigureAwait(false);
+            return await this.GetInternalDataStore().GetResourceAsync<IAccount>(tokenResponse.Href, cancellationToken).ConfigureAwait(false);
+        }
+
+        IAccount ITenantActionsSync.VerifyAccountEmail(string token)
+        {
+            var href = $"/accounts/emailVerificationTokens/{token}";
+
+            var emailVerificationToken = this.GetInternalDataStore().Instantiate<IEmailVerificationToken>();
+            var tokenResponse = this.GetInternalDataStoreSync().Create(href, emailVerificationToken);
+            return this.GetInternalDataStoreSync().GetResource<IAccount>(tokenResponse.Href);
         }
 
         IAsyncQueryable<IApplication> ITenantActions.GetApplications()

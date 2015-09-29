@@ -1,4 +1,4 @@
-﻿// <copyright file="IVerificationEmailRequest.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IEmailVerificationRequest.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,12 +15,14 @@
 // limitations under the License.
 // </remarks>
 
+using Stormpath.SDK.Resource;
+
 namespace Stormpath.SDK.Account
 {
     /// <summary>
     /// Represents options for an <see cref="IAccount"/> verification email resend request.
     /// </summary>
-    public interface IVerificationEmailRequest
+    public interface IEmailVerificationRequest : IResource
     {
         /// <summary>
         /// Gets the username or email associated with this request.

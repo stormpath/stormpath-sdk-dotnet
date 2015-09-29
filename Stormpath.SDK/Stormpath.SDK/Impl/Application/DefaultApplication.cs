@@ -27,7 +27,6 @@ using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
@@ -303,6 +302,38 @@ namespace Stormpath.SDK.Impl.Application
 
             var responseToken = this.GetInternalDataStoreSync().Create(href, (IPasswordResetToken)passwordResetToken);
             return responseToken.GetAccount();
+        }
+
+        Task IApplication.SendVerificationEmailAsync(string usernameOrEmail, CancellationToken cancellationToken)
+            => this.AsInterface.SendVerificationEmailAsync(request => request.Login = usernameOrEmail, cancellationToken);
+
+        Task IApplication.SendVerificationEmailAsync(Action<EmailVerificationRequestBuilder> requestBuilderAction, CancellationToken cancellationToken)
+        {
+            var builder = new EmailVerificationRequestBuilder(this.GetInternalDataStore());
+            requestBuilderAction(builder);
+
+            if (string.IsNullOrEmpty(builder.Login))
+                throw new ArgumentNullException(nameof(builder.Login));
+
+            var href = $"{(this as IResource).Href}/verificationEmails";
+
+            return this.GetInternalDataStore().CreateAsync(href, builder.Build(), cancellationToken);
+        }
+
+        void IApplicationSync.SendVerificationEmail(string usernameOrEmail)
+            => this.AsSyncInterface.SendVerificationEmail(request => request.Login = usernameOrEmail);
+
+        void IApplicationSync.SendVerificationEmail(Action<EmailVerificationRequestBuilder> requestBuilderAction)
+        {
+            var builder = new EmailVerificationRequestBuilder(this.GetInternalDataStore());
+            requestBuilderAction(builder);
+
+            if (string.IsNullOrEmpty(builder.Login))
+                throw new ArgumentNullException(nameof(builder.Login));
+
+            var href = $"{(this as IResource).Href}/verificationEmails";
+
+            this.GetInternalDataStoreSync().Create(href, builder.Build());
         }
 
         IAsyncQueryable<IAccount> IApplication.GetAccounts()
