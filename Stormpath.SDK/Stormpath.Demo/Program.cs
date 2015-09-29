@@ -14,6 +14,8 @@ namespace Stormpath.Demo
 {
     class Program
     {
+        private static readonly string NL = Environment.NewLine;
+
         private static List<IAccount> addedUsers;
 
         static void Main(string[] args)
@@ -35,11 +37,11 @@ namespace Stormpath.Demo
             // Clean up
             if (addedUsers.Any())
             {
-                Console.WriteLine("\nCleaning up!");
+                Console.WriteLine($"{NL}Cleaning up!");
                 CleanupAsync().GetAwaiter().GetResult();
             }
 
-            Console.WriteLine("\nFinished! Press any key to exit...");
+            Console.WriteLine($"{NL}Finished! Press any key to exit...");
             Console.ReadKey(false);
         }
 
@@ -60,7 +62,7 @@ namespace Stormpath.Demo
             Console.WriteLine($"Current tenant is: {tenant.Name}");
 
             // List applications
-            Console.WriteLine("\nTenant applications:");
+            Console.WriteLine($"{NL}Tenant applications:");
             var applications = await tenant
                 .GetApplications()
                 .ToListAsync(cancellationToken);
@@ -72,7 +74,7 @@ namespace Stormpath.Demo
 
             // Add some users
             var myApp = applications.First();
-            Console.WriteLine($"\nAdding users to '{myApp.Name}'...");
+            Console.WriteLine($"{NL}Adding users to '{myApp.Name}'...");
             addedUsers.Add(
                 await myApp.CreateAccountAsync("Joe", "Stormtrooper", "tk421@galacticempire.co", "Changeme123!", customData: cancellationToken));
             addedUsers.Add(
@@ -92,12 +94,12 @@ namespace Stormpath.Demo
                 cancellationToken));
 
             // List all accounts (this time with an asynchronous foreach)
-            Console.WriteLine("\nApplication accounts:");
+            Console.WriteLine($"{NL}Application accounts:");
             await myApp.GetAccounts().ForEachAsync(account => Console.WriteLine($"{TrimWithEllipse(account.Email, 25), -25} {TrimWithEllipse(account.FullName, 20), -20} {account.Status.ToString().ToLower()}"), cancellationToken);
             if (!SpacebarToContinue(cancellationToken)) return;
 
             // Authenticate a user
-            Console.WriteLine($"\nLogging in as vader@galacticempire.co");
+            Console.WriteLine($"{NL}Logging in as vader@galacticempire.co");
             try
             {
                 var result = await myApp.AuthenticateAccountAsync("vader@galacticempire.co", "Togetherw3willrulethegalaxy!", cancellationToken);
@@ -135,7 +137,7 @@ namespace Stormpath.Demo
             if (cancelToken.IsCancellationRequested)
                 return false;
 
-            Console.Write("\nPress spacebar to continue");
+            Console.Write($"{NL}Press spacebar to continue");
             var key = Console.ReadKey(true);
 
             if (cancelToken.IsCancellationRequested)
