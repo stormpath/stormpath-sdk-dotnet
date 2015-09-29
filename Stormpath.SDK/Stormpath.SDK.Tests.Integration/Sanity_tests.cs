@@ -1,4 +1,4 @@
-﻿// <copyright file="Sanity_checks.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Sanity_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -27,7 +27,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    public class Sanity_checks
+    public class Sanity_tests
     {
         private static string PrettyMethodOutput(IEnumerable<MethodInfo> methods)
         {
@@ -146,6 +146,90 @@ namespace Stormpath.SDK.Tests.Integration
                 .ShouldBe(
                     expected: false,
                     customMessage: "These methods must have an optional CancellationToken parameter:" + Environment.NewLine + PrettyMethodOutput(asyncMethodsWithRequiredCT));
+        }
+
+        [Fact]
+        public void Everything_sync_can_do_async_can_do_better()
+        {
+            // Whitelist some methods that legitimately are asymmetrical
+            var whitelistedAsyncMethods = new List<string>()
+            {
+                "IAsyncQueryable`1.MoveNext()",
+                "IAsynchronousHttpClient.Execute(Stormpath.SDK.Http.IHttpRequest request)",
+                "IAsynchronousCache`2.Get(K key)",
+                "IAsynchronousCache`2.Put(K key, V value)",
+                "IAsynchronousCache`2.Remove(K key)",
+                "IAsynchronousCacheProvider.GetCache(System.String name)"
+            };
+            var whitelistedSyncMethods = new List<string>()
+            {
+                "IQueryable`1.Filter(System.String caseInsensitiveMatch)",
+                "IAsyncQueryable`1.Synchronously()"
+            };
+
+            // Get normal async API from interfaces
+            var asyncMethods = Assembly
+                .GetAssembly(typeof(Client.IClient))
+                .GetTypes()
+                .Where(t => t.IsPublic && t.IsInterface)
+                .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+                .Where(m => m.ReturnType == typeof(Task) ||
+                            (m.ReturnType.IsGenericType && m.ReturnType.GetGenericTypeDefinition() == typeof(Task<>)))
+                .ToList();
+
+            var asyncMethodsByName = asyncMethods
+                .Select(m =>
+                {
+                    var nameWithoutAsync = m.Name.Replace("Async", string.Empty);
+
+                    var argList = m
+                        .GetParameters()
+                        .Where(p => p.ParameterType != typeof(CancellationToken));
+
+                    return $"{m.DeclaringType.Name}.{nameWithoutAsync}" +
+                           $"({string.Join(", ", argList)})";
+                })
+                .ToList();
+
+            // Get extension methods in Stormpath.SDK.Sync
+            var syncMethods = Assembly
+                .GetAssembly(typeof(Client.IClient))
+                .GetTypes()
+                .Where(t => t.Namespace != null && t.Namespace == "Stormpath.SDK.Sync" &&
+                            t.IsSealed && !t.IsGenericType && !t.IsNested)
+                .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+                .Where(m => m.IsDefined(typeof(ExtensionAttribute), false))
+                .ToList();
+
+            var syncMethodsByName = syncMethods
+                .Select(m =>
+                {
+                    var argList = m
+                        .GetParameters()
+                        .Skip(1);
+
+                    return $"{m.GetParameters()[0].ParameterType.Name}.{m.Name}" +
+                           $"({string.Join(", ", argList)})";
+                })
+                .ToList();
+
+            var asyncButNotSync = asyncMethodsByName
+                .Except(whitelistedAsyncMethods)
+                .Except(syncMethodsByName)
+                .ToList();
+
+            var syncButNotAsync = syncMethodsByName
+                .Except(whitelistedSyncMethods)
+                .Except(asyncMethodsByName)
+                .ToList();
+
+            asyncButNotSync.Count.ShouldBe(
+                0,
+                $"These async method do not have a corresponding sync method: {string.Join(Environment.NewLine, asyncButNotSync)}");
+
+            syncButNotAsync.Count.ShouldBe(
+                0,
+                $"These sync methods do not have a corresponding async methods: {string.Join(Environment.NewLine, syncButNotAsync)}");
         }
 
         [Fact]

@@ -84,7 +84,7 @@
     <Compile Include="Sync\Sync_Error_tests.cs" />
     <Compile Include="Sync\Sync_Tenant_tests.cs" />
     <Compile Include="Async\Tenant_tests.cs" />
-    <Compile Include="Sanity_checks.cs" />
+    <Compile Include="Sanity_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
