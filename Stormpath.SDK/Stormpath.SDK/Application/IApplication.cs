@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -129,19 +130,21 @@ namespace Stormpath.SDK.Application
         Task<bool> TryAuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets a queryable list of all accounts in this application.
+        /// Triggers the delivery of a new verification email for the specified account.
+        /// <para>
+        /// This method is useful in scenarios where the Account Registration and Verification workflow
+        /// is enabled. If the welcome email has not been received by a newly registered account,
+        /// then the user will not be able to login until the account is verified.
+        /// </para>
+        /// <para>This method re-sends the verification email and allows the user to verify the account.</para>
+        /// <para>
+        /// The <see cref="IVerificationEmailRequest"/> must contain the username or email identifying the account.
+        /// </para>
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
-        /// <example>
-        ///     var allAccounts = await myApp.GetAccounts().ToListAsync();
-        /// </example>
-        IAsyncQueryable<IAccount> GetAccounts();
-
-        /// <summary>
-        /// Gets a queryable list of all account store mappings accessible to the application.
-        /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccountStoreMapping}"/> that may be used to asynchronously list or search account store mappings.</returns>
-        IAsyncQueryable<IAccountStoreMapping> GetAccountStoreMappings();
+        /// <param name="requestBuilderAction">Sets the options required for the verification email request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task that determines when the operation is complete.</returns>
+        Task SendVerificationEmailAsync(Action<VerificationEmailRequestBuilder> requestBuilderAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the <see cref="IAccountStore"/> (either a Group or <see cref="Directory.IDirectory"/>)
@@ -185,5 +188,20 @@ namespace Stormpath.SDK.Application
         /// <returns>A Task whose result is the <see cref="IAccount"/> matching the specified token.</returns>
         /// <exception cref="Error.ResourceException">The token is not valid.</exception>
         Task<IAccount> VerifyPasswordResetTokenAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Gets a queryable list of all accounts in this application.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
+        /// <example>
+        ///     var allAccounts = await myApp.GetAccounts().ToListAsync();
+        /// </example>
+        IAsyncQueryable<IAccount> GetAccounts();
+
+        /// <summary>
+        /// Gets a queryable list of all account store mappings accessible to the application.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IAccountStoreMapping}"/> that may be used to asynchronously list or search account store mappings.</returns>
+        IAsyncQueryable<IAccountStoreMapping> GetAccountStoreMappings();
     }
 }

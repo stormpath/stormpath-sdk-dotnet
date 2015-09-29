@@ -135,6 +135,14 @@ namespace Stormpath.SDK.Impl.Tenant
             return this.AsTenantActionSyncInterface.CreateApplication(application, options);
         }
 
+        Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
+        {
+            var href = $"/accounts/emailVerificationTokens/{token}";
+
+            var emailVerificationToken = this.GetInternalDataStore().Instantiate<IEmailVerificationToken>();
+            return this.GetInternalDataStore().CreateAsync<IEmailVerificationToken, IAccount>(href, emailVerificationToken, cancellationToken);
+        }
+
         IAsyncQueryable<IApplication> ITenantActions.GetApplications()
             => new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetInternalDataStore());
 

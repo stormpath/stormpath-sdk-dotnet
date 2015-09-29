@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 
 namespace Stormpath.SDK.Impl.Tenant
@@ -61,5 +62,26 @@ namespace Stormpath.SDK.Impl.Tenant
         /// <returns>The created <see cref="IApplication"/>.</returns>
         /// <exception cref="SDK.Error.ResourceException">There was a problem creating the application.</exception>
         IApplication CreateApplication(string name, bool createDirectory);
+
+        /// <summary>
+        /// Synchronously verifies an account's email address based on a <c>sptoken</c> parameter embedded in a clickable URL
+        /// found in an account's verification email.
+        /// <para>
+        /// For example:
+        /// <code>
+        /// https://my.company.com/email/verify?sptoken=ExAmPleEmAilVeRiFiCaTiOnTokEnHeRE
+        /// </code>
+        /// </para>
+        /// <para>
+        /// Based on this URL, the following should be invoked:
+        /// <code>
+        /// tenant.VerifyAccountEmailAsync("ExAmPleEmAilVeRiFiCaTiOnTokEnHeRE");
+        /// </code>
+        /// </para>
+        /// </summary>
+        /// <param name="token">The <c>sptoken</c> query parameter value.</param>
+        /// <returns>The verified account.</returns>
+        /// <exception cref="Error.ResourceException">The token was not valid.</exception>
+        IAccount VerifyAccountEmail(string token);
     }
 }

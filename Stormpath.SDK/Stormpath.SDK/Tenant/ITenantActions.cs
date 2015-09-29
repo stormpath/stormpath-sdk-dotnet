@@ -72,6 +72,28 @@ namespace Stormpath.SDK.Tenant
         Task<IApplication> CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Verifies an account's email address based on a <c>sptoken</c> parameter embedded in a clickable URL
+        /// found in an account's verification email.
+        /// <para>
+        /// For example:
+        /// <code>
+        /// https://my.company.com/email/verify?sptoken=ExAmPleEmAilVeRiFiCaTiOnTokEnHeRE
+        /// </code>
+        /// </para>
+        /// <para>
+        /// Based on this URL, the following should be invoked:
+        /// <code>
+        /// tenant.VerifyAccountEmailAsync("ExAmPleEmAilVeRiFiCaTiOnTokEnHeRE");
+        /// </code>
+        /// </para>
+        /// </summary>
+        /// <param name="token">The <c>sptoken</c> query parameter value.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The verified account.</returns>
+        /// <exception cref="Error.ResourceException">The token was not valid.</exception>
+        Task<IAccount> VerifyAccountEmailAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Gets a queryable list of all accounts in this tenant.
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>

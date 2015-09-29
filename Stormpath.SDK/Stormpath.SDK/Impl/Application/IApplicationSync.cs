@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
@@ -74,6 +75,21 @@ namespace Stormpath.SDK.Impl.Application
         ///     }
         /// </example>
         bool TryAuthenticateAccount(string username, string password);
+
+        /// <summary>
+        /// Synchronously triggers the delivery of a new verification email for the specified account.
+        /// <para>
+        /// This method is useful in scenarios where the Account Registration and Verification workflow
+        /// is enabled. If the welcome email has not been received by a newly registered account,
+        /// then the user will not be able to login until the account is verified.
+        /// </para>
+        /// <para>This method re-sends the verification email and allows the user to verify the account.</para>
+        /// <para>
+        /// The <see cref="IVerificationEmailRequest"/> must contain the username or email identifying the account.
+        /// </para>
+        /// </summary>
+        /// <param name="requestBuilderAction">Sets the options required for the verification email request.</param>
+        void SendVerificationEmail(Action<VerificationEmailRequestBuilder> requestBuilderAction);
 
         /// <summary>
         /// Synchronously gets the <see cref="IAccountStore"/> (either a Group or <see cref="SDK.Directory.IDirectory"/>)
