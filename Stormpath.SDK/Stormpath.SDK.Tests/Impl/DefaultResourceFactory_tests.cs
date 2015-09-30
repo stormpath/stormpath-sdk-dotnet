@@ -25,6 +25,7 @@ using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -40,7 +41,8 @@ namespace Stormpath.SDK.Tests.Impl
         public DefaultResourceFactory_tests()
         {
             var dataStore = new StubDataStore(null, "http://api.foo.bar");
-            this.factory = new DefaultResourceFactory(dataStore);
+            var identityMap = new IdentityMap<string, AbstractResource>();
+            this.factory = new DefaultResourceFactory(dataStore, identityMap);
         }
 
         [Fact]

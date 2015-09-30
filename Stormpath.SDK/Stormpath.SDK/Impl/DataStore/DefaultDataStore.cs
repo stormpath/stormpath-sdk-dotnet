@@ -50,6 +50,7 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly JsonSerializationProvider serializer;
         private readonly IResourceFactory resourceFactory;
         private readonly IResourceConverter resourceConverter;
+        private readonly IdentityMap<string, AbstractResource> identityMap;
         private readonly IAsynchronousFilterChain defaultAsyncFilters;
         private readonly ISynchronousFilterChain defaultSyncFilters;
         private readonly UriQualifier uriQualifier;
@@ -81,7 +82,8 @@ namespace Stormpath.SDK.Impl.DataStore
             this.cacheResolver = new DefaultCacheResolver(cacheProvider, new DefaultCacheRegionNameResolver());
 
             this.serializer = new JsonSerializationProvider(serializer);
-            this.resourceFactory = new DefaultResourceFactory(this);
+            this.identityMap = new IdentityMap<string, AbstractResource>();
+            this.resourceFactory = new DefaultResourceFactory(this, this.identityMap);
             this.resourceConverter = new DefaultResourceConverter();
 
             this.uriQualifier = new UriQualifier(baseUrl);

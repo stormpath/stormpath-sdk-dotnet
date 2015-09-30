@@ -24,11 +24,14 @@ namespace Stormpath.SDK.Impl.DataStore
     internal sealed class DefaultResourceFactory : IResourceFactory
     {
         private readonly IInternalDataStore dataStore;
+        private readonly IdentityMap<string, AbstractResource> identityMap;
         private readonly ResourceTypeLookup typeLookup;
 
-        public DefaultResourceFactory(IInternalDataStore dataStore)
+        public DefaultResourceFactory(IInternalDataStore dataStore, IdentityMap<string, AbstractResource> identityMap)
         {
             this.dataStore = dataStore;
+            this.identityMap = identityMap;
+
             this.typeLookup = new ResourceTypeLookup();
         }
 
@@ -63,10 +66,12 @@ namespace Stormpath.SDK.Impl.DataStore
             object targetObject;
             try
             {
-                if (properties == null)
-                    targetObject = Activator.CreateInstance(targetType, new object[] { this.dataStore });
-                else
-                    targetObject = Activator.CreateInstance(targetType, new object[] { this.dataStore, properties });
+                string id = RandomResourceId();
+                object href;
+                if (properties.TryGetValue("href", out href))
+                    id = href.ToString();
+
+                targetObject = this.identityMap.GetOrAdd(id, () => Activator.CreateInstance(targetType, new object[] { this, properties }) as AbstractResource);
             }
             catch (Exception e)
             {
@@ -144,5 +149,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: failed to add items to collection.", e);
             }
         }
+
+        private static string RandomResourceId()
+            => $"autogen://{Guid.NewGuid().ToString().ToLowerInvariant().Replace("-", string.Empty)}";
     }
 }
