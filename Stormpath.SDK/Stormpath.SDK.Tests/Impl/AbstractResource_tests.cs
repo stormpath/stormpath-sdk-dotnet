@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Tests.Impl
             var account1 = this.dataStore.Instantiate<IAccount>();
             var account2 = this.dataStore.Instantiate<IAccount>();
 
-            ReferenceEquals(account1, account2).ShouldBeFalse();
+            account1.ShouldBeSameAs(account2);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace Stormpath.SDK.Tests.Impl
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/foo");
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/foo");
 
-            ReferenceEquals(account1, account2).ShouldBeTrue();
+            account1.ShouldBeSameAs(account2);
         }
     }
 }
