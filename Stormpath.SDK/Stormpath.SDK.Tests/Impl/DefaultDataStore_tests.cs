@@ -229,8 +229,8 @@ namespace Stormpath.SDK.Tests.Impl
                     return new DefaultHttpResponse(204, "No Content", new HttpHeaders(), null, null, transportError: false) as IHttpResponse;
                 });
 
-            IAccount fakeAccount =
-                new DefaultAccount(dataStore, new Dictionary<string, object>() { { "href", "http://api.foo.bar/accounts/1" } });
+            IAccount fakeAccount = new DefaultAccount(dataStore);
+            (fakeAccount as DefaultAccount).ResetAndUpdate(new Dictionary<string, object>() { { "href", "http://api.foo.bar/accounts/1" } });
 
             var alreadyCanceledSource = new CancellationTokenSource();
             alreadyCanceledSource.Cancel();

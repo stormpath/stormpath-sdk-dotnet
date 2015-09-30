@@ -46,11 +46,6 @@ namespace Stormpath.SDK.Impl.Directory
         {
         }
 
-        public DefaultDirectory(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
-
         internal LinkProperty AccountCreationPolicy => this.GetLinkProperty(AccountCreationPolicyPropertyName);
 
         internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);

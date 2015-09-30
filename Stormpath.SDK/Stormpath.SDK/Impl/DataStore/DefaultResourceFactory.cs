@@ -63,15 +63,23 @@ namespace Stormpath.SDK.Impl.DataStore
             if (targetType == null)
                 throw new ApplicationException($"Unknown resource type {type.Name}");
 
-            object targetObject;
+            AbstractResource targetObject;
             try
             {
                 string id = RandomResourceId();
-                object href;
-                if (properties.TryGetValue("href", out href))
+
+                object href = null;
+                bool propertiesContainsHref =
+                    properties != null &&
+                    properties.TryGetValue("href", out href) &&
+                    href != null;
+                if (propertiesContainsHref)
                     id = href.ToString();
 
-                targetObject = this.identityMap.GetOrAdd(id, () => Activator.CreateInstance(targetType, new object[] { this, properties }) as AbstractResource);
+                targetObject = this.identityMap.GetOrAdd(id, () => Activator.CreateInstance(targetType, new object[] { this.dataStore }) as AbstractResource);
+
+                if (properties != null)
+                    targetObject.ResetAndUpdate(properties);
             }
             catch (Exception e)
             {

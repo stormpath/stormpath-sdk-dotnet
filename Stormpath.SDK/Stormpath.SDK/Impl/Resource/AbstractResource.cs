@@ -29,24 +29,34 @@ namespace Stormpath.SDK.Impl.Resource
 
         internal readonly IInternalDataStore InternalDataStore;
         internal readonly IInternalDataStoreSync InternalDataStoreSync;
-        protected readonly ConcurrentDictionary<string, object> properties;
-        protected readonly ConcurrentDictionary<string, object> dirtyProperties;
+
+        protected ConcurrentDictionary<string, object> properties;
+        protected ConcurrentDictionary<string, object> dirtyProperties;
 
         protected bool isDirty = false;
 
         public AbstractResource(IInternalDataStore dataStore)
-            : this(dataStore, new Dictionary<string, object>())
-        {
-        }
-
-        public AbstractResource(IInternalDataStore dataStore, IDictionary<string, object> properties)
         {
             this.InternalDataStore = dataStore;
             this.InternalDataStoreSync = dataStore as IInternalDataStoreSync;
 
+            this.ResetAndUpdate(properties: null);
+        }
+
+        public void ResetAndUpdate(IDictionary<string, object> properties)
+        {
+            if (properties == null)
+                properties = new Dictionary<string, object>();
+
+            this.ResetAndUpdateDerived(properties);
+
             this.properties = new ConcurrentDictionary<string, object>(properties);
             this.dirtyProperties = new ConcurrentDictionary<string, object>();
             this.isDirty = false;
+        }
+
+        protected virtual void ResetAndUpdateDerived(IDictionary<string, object> properties)
+        {
         }
 
         string IResource.Href => this.GetProperty<string>(HrefPropertyName);

@@ -30,11 +30,6 @@ namespace Stormpath.SDK.Impl.Auth
         {
         }
 
-        public AbstractLoginAttempt(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
-
         string ILoginAttempt.Type => this.GetProperty<string>(TypePropertyName);
 
         void ILoginAttempt.SetType(string type) => this.SetProperty(TypePropertyName, type);

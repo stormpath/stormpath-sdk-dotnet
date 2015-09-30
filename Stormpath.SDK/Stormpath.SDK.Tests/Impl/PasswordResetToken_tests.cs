@@ -32,9 +32,9 @@ namespace Stormpath.SDK.Tests.Impl
             var dataStore = new StubDataStore(null, "https://api.foo.bar");
 
             var href = "https://api.foobar.com/v1/applications/WpM9nyZ2TbaEzfbRvLk9KA/passwordResetTokens/my-token-value-here";
-            var properties = new Dictionary<string, object>();
-            properties.Add("href", href);
-            IPasswordResetToken passwordResetToken = new DefaultPasswordResetToken(dataStore, properties);
+            var properties = new Dictionary<string, object>() { { "href", href } };
+            IPasswordResetToken passwordResetToken = new DefaultPasswordResetToken(dataStore);
+            (passwordResetToken as DefaultPasswordResetToken).ResetAndUpdate(properties);
 
             passwordResetToken.GetValue().ShouldBe("my-token-value-here");
         }

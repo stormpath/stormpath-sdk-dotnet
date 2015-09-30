@@ -17,6 +17,7 @@
 
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using NSubstitute;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
@@ -54,38 +55,38 @@ namespace Stormpath.SDK.Tests.Impl
                 this.dataStore = new StubDataStore(FakeJson.Application, BaseHref);
             }
 
-            private void VerifyThat(ICreationOptions options, string resultsInQueryString)
+            private async Task VerifyThat(ICreationOptions options, string resultsInQueryString)
             {
                 var newApplication = new DefaultApplication(this.dataStore) as IApplication;
-                this.dataStore.CreateAsync("/application", newApplication, options, CancellationToken.None);
+                await this.dataStore.CreateAsync("/application", newApplication, options, CancellationToken.None);
 
                 VerifyRequestContents(this.dataStore.RequestExecutor, resultsInQueryString);
             }
 
             [Fact]
-            public void Create_without_directory()
+            public async Task Create_without_directory()
             {
                 var options = new ApplicationCreationOptionsBuilder()
                 {
                     CreateDirectory = false
                 }.Build();
 
-                this.VerifyThat(options, resultsInQueryString: string.Empty);
+                await this.VerifyThat(options, resultsInQueryString: string.Empty);
             }
 
             [Fact]
-            public void Create_application_request_with_default_directory()
+            public async Task Create_application_request_with_default_directory()
             {
                 var options = new ApplicationCreationOptionsBuilder()
                 {
                     CreateDirectory = true
                 }.Build();
 
-                this.VerifyThat(options, resultsInQueryString: "?createDirectory=true");
+                await this.VerifyThat(options, resultsInQueryString: "?createDirectory=true");
             }
 
             [Fact]
-            public void Create_application_request_with_named_directory()
+            public async Task Create_application_request_with_named_directory()
             {
                 var options = new ApplicationCreationOptionsBuilder()
                 {
@@ -93,7 +94,7 @@ namespace Stormpath.SDK.Tests.Impl
                     DirectoryName = "Foobar Directory"
                 }.Build();
 
-                this.VerifyThat(options, resultsInQueryString: "?createDirectory=Foobar+Directory");
+                await this.VerifyThat(options, resultsInQueryString: "?createDirectory=Foobar+Directory");
             }
 
             private bool isDisposed = false; // To detect redundant calls
@@ -128,44 +129,44 @@ namespace Stormpath.SDK.Tests.Impl
                 this.dataStore = new StubDataStore(FakeJson.Account, BaseHref);
             }
 
-            private void VerifyThat(ICreationOptions options, string resultsInQueryString)
+            private async Task VerifyThat(ICreationOptions options, string resultsInQueryString)
             {
                 var newAccount = new DefaultAccount(this.dataStore) as IAccount;
-                this.dataStore.CreateAsync("/account", newAccount, options, CancellationToken.None);
+                await this.dataStore.CreateAsync("/account", newAccount, options, CancellationToken.None);
 
                 VerifyRequestContents(this.dataStore.RequestExecutor, resultsInQueryString);
             }
 
             [Fact]
-            public void Create_without_workflow_option()
+            public async Task Create_without_workflow_option()
             {
                 var options = new AccountCreationOptionsBuilder()
                 {
                 }.Build();
 
-                this.VerifyThat(options, resultsInQueryString: string.Empty);
+                await this.VerifyThat(options, resultsInQueryString: string.Empty);
             }
 
             [Fact]
-            public void Create_with_workflow_override_enabled()
+            public async Task Create_with_workflow_override_enabled()
             {
                 var options = new AccountCreationOptionsBuilder()
                 {
                     RegistrationWorkflowEnabled = true
                 }.Build();
 
-                this.VerifyThat(options, resultsInQueryString: "?registrationWorkflowEnabled=true");
+                await this.VerifyThat(options, resultsInQueryString: "?registrationWorkflowEnabled=true");
             }
 
             [Fact]
-            public void Create_with_workflow_override_disabled()
+            public async Task Create_with_workflow_override_disabled()
             {
                 var options = new AccountCreationOptionsBuilder()
                 {
                     RegistrationWorkflowEnabled = false
                 }.Build();
 
-                this.VerifyThat(options, resultsInQueryString: "?registrationWorkflowEnabled=false");
+                await this.VerifyThat(options, resultsInQueryString: "?registrationWorkflowEnabled=false");
             }
 
             private bool isDisposed = false; // To detect redundant calls

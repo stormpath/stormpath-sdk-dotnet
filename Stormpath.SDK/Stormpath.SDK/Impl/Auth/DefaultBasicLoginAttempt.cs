@@ -29,11 +29,6 @@ namespace Stormpath.SDK.Impl.Auth
         {
         }
 
-        public DefaultBasicLoginAttempt(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
-
         string IBasicLoginAttempt.Value => this.GetProperty<string>(ValuePropertyName);
 
         void IBasicLoginAttempt.SetValue(string value) => this.SetProperty(ValuePropertyName, value);

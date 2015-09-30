@@ -33,8 +33,9 @@ namespace Stormpath.SDK.Impl.Error
         private static readonly string MoreInfoPropertyName = "moreInfo";
 
         public DefaultError(IDictionary<string, object> properties)
-            : base(null, properties)
+            : base(null)
         {
+            this.ResetAndUpdate(properties);
         }
 
         public int Code => this.GetProperty<int>(CodePropertyName);
