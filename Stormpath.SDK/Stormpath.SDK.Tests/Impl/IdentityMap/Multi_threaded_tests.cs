@@ -63,6 +63,7 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
             }
 
             Task.WhenAll(tasks).Wait();
+            foo.Count.ShouldBe(17);
         }
 
         [Theory]
