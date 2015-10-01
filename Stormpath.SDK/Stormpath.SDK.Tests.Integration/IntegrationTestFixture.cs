@@ -219,10 +219,9 @@ namespace Stormpath.SDK.Tests.Integration
                 }
             });
 
-            await Task.WhenAll(
-                Task.WhenAll(deleteAccountTasks),
-                Task.WhenAll(deleteApplicationTasks),
-                Task.WhenAll(deleteDirectoryTasks));
+            await Task.WhenAll(deleteAccountTasks);
+            await Task.WhenAll(deleteApplicationTasks);
+            await Task.WhenAll(deleteDirectoryTasks);
 
             // All done! Throw errors if any occurred
             bool anyErrors = results.Any(kvp => kvp.Value != null);

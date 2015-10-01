@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Multiple_instances_reference_same_object(TestClientBuilder clientBuilder)
+        public async Task Multiple_instances_reference_same_data(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Reference_is_updated_after_save(TestClientBuilder clientBuilder)
+        public async Task Reference_is_updated_after_saving(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Original_object_is_updated_after_create(TestClientBuilder clientBuilder)
+        public async Task Original_object_is_updated_after_creating(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);

@@ -1,4 +1,4 @@
-﻿// <copyright file="Entity_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Sync_Entity_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -26,26 +26,24 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
-    public class Basic_tests
+    public class Sync_Entity_tests
     {
         private readonly IntegrationTestFixture fixture;
 
-        public Basic_tests(IntegrationTestFixture fixture)
+        public Sync_Entity_tests(IntegrationTestFixture fixture)
         {
             this.fixture = fixture;
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Multiple_instances_reference_same_object(TestClientBuilder clientBuilder)
+        public void Multiple_instances_reference_same_data(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var account = application.GetAccounts().Synchronously().First();
             var anotherAccount = application.GetAccounts().Synchronously().First();
-
-            account.ShouldBeSameAs(anotherAccount);
 
             var updatedEmail = account.Email + "-foobar";
             account.SetEmail(updatedEmail);
@@ -54,12 +52,11 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Original_reference_is_updated_after_save(TestClientBuilder clientBuilder)
+        public void Reference_is_updated_after_saving(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            // TODO Holy Grail: This original un-linked object can haz link too?
             var newAccount = client.Instantiate<IAccount>();
             newAccount.SetEmail("identity-maps-are-useful@test.foo");
             newAccount.SetPassword("Changeme123!");
@@ -71,12 +68,33 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             created.SetMiddleName("these");
             var updated = created.Save();
-            created.ShouldBeSameAs(updated);
 
             updated.SetEmail("different");
             created.Email.ShouldBe("different");
 
-            updated.DeleteAsync();
+            updated.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Original_object_is_updated_after_creating(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var newAccount = client.Instantiate<IAccount>();
+            newAccount.SetEmail("super-smart-objects@test.foo");
+            newAccount.SetPassword("Changeme123!");
+            newAccount.SetGivenName("Testing");
+            newAccount.SetSurname("InitialProxy");
+
+            var created = application.CreateAccount(newAccount, opt => opt.RegistrationWorkflowEnabled = false);
+            this.fixture.CreatedAccountHrefs.Add(created.Href);
+
+            created.SetMiddleName("these");
+            newAccount.MiddleName.ShouldBe("these");
+
+            created.Delete();
         }
     }
 }

@@ -78,7 +78,7 @@
     <Compile Include="Async\Error_tests.cs" />
     <Compile Include="Helpers\TestClientBuilder.cs" />
     <Compile Include="Meta_tests.cs" />
-    <Compile Include="Sync\Entity_tests.cs" />
+    <Compile Include="Sync\Sync_Entity_tests.cs" />
     <Compile Include="Sync\Sync_CustomData_embedded_tests.cs" />
     <Compile Include="Sync\Sync_CustomData_tests.cs" />
     <Compile Include="Sync\Sync_Application_tests.cs" />
