@@ -90,23 +90,29 @@ namespace Stormpath.SDK.Impl.DataStore
             bool added = false;
 
             TItem item = null;
-            var reference = this.map.GetOrAdd(key, _ =>
-            {
-                added = true;
-                item = itemFactory();
-                return new WeakReference<TItem>(item);
-            });
+            this.map.AddOrUpdate(
+                key,
+                addValueFactory: _ =>
+                {
+                    added = true;
+                    item = itemFactory();
+                    return new WeakReference<TItem>(item);
+                },
+                updateValueFactory: (_, existing) =>
+                {
+                    if (!existing.TryGetTarget(out item))
+                    {
+                        added = true;
+                        item = itemFactory();
+                        existing.SetTarget(item);
+                    }
+                    return existing;
+                });
 
             if (added)
-            {
                 Interlocked.Increment(ref this.itemsAddedSinceLastCompact);
-                return item;
-            }
-            else
-            {
-                reference.TryGetTarget(out item);
-                return item;
-            }
+
+            return item;
         }
     }
 }
