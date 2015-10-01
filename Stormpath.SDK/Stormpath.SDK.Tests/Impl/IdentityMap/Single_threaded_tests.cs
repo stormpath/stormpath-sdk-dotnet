@@ -28,7 +28,9 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
 
         public Single_threaded_tests()
         {
-            this.identityMap = new IdentityMap<string, TestEntity>();
+            // Arbitrary expiration policy. We won't be validating expirations in these tests
+            // because it's tricky to do so with MemoryCache.
+            this.identityMap = new IdentityMap<string, TestEntity>(TimeSpan.FromSeconds(10));
         }
 
         private TestEntity CreateEntity(string id)
@@ -99,30 +101,11 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
                 foo.Count.ShouldBe(1337);
                 this.identityMap.GetOrAdd("foo", () => this.CreateEntity("foo")).Count.ShouldBe(1337);
             }
-
-            GCHelper.ForceGarbageCollection();
-            this.identityMap.Compact();
-
-            this.identityMap.Count.ShouldBe(1);
         }
 
         public void Dispose()
         {
-            GCHelper.ForceGarbageCollection();
-            this.identityMap.Compact();
-
-            // Ensure that shared map is empty
-            if (SDK.Impl.Utility.PlatformHelper.IsRunningOnMono())
-            {
-                // Mono's GC is a little fuzzier.
-                // We'll settle for <= 10 items left over.
-                this.identityMap.Count.ShouldBeLessThanOrEqualTo(10);
-            }
-            else
-            {
-                // Microsoft GC is pretty predictable.
-                this.identityMap.Count.ShouldBe(0);
-            }
+            this.identityMap.Dispose();
         }
     }
 }

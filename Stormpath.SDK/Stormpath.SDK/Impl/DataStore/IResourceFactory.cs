@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal interface IResourceFactory
+    internal interface IResourceFactory : IDisposable
     {
         object Create(Type type);
 

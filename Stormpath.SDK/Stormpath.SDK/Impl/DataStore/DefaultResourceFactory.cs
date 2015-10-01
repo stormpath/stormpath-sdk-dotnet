@@ -26,6 +26,7 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly IInternalDataStore dataStore;
         private readonly IdentityMap<string, AbstractResource> identityMap;
         private readonly ResourceTypeLookup typeLookup;
+        private bool isDisposed = false; // To detect redundant calls
 
         public DefaultResourceFactory(IInternalDataStore dataStore, IdentityMap<string, AbstractResource> identityMap)
         {
@@ -160,5 +161,25 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private static string RandomResourceId()
             => $"autogen://{Guid.NewGuid().ToString().ToLowerInvariant().Replace("-", string.Empty)}";
+
+        private void Dispose(bool disposing)
+        {
+            if (!this.isDisposed)
+            {
+                if (disposing)
+                {
+                    this.identityMap.Dispose();
+                }
+
+                this.isDisposed = true;
+            }
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            this.Dispose(true);
+        }
     }
 }

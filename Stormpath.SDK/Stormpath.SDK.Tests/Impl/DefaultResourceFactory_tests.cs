@@ -34,14 +34,14 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class DefaultResourceFactory_tests
+    public class DefaultResourceFactory_tests : IDisposable
     {
         private readonly IResourceFactory factory;
 
         public DefaultResourceFactory_tests()
         {
             var dataStore = new StubDataStore(null, "http://api.foo.bar");
-            var identityMap = new IdentityMap<string, AbstractResource>();
+            var identityMap = new IdentityMap<string, AbstractResource>(TimeSpan.FromSeconds(10)); // arbitrary
             this.factory = new DefaultResourceFactory(dataStore, identityMap);
         }
 
@@ -85,6 +85,11 @@ namespace Stormpath.SDK.Tests.Impl
             yield return new object[] { typeof(IApplication), typeof(DefaultApplication) };
             yield return new object[] { typeof(ITenant), typeof(DefaultTenant) };
             yield return new object[] { typeof(IDirectory), typeof(DefaultDirectory) };
+        }
+
+        public void Dispose()
+        {
+            this.factory.Dispose();
         }
     }
 }

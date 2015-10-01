@@ -41,13 +41,14 @@ namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class DefaultDataStore : IInternalDataStore, IInternalDataStoreSync, IDisposable
     {
-        private readonly ILogger logger;
+        private static readonly TimeSpan DefaultIdentityMapSlidingExpiration = TimeSpan.FromMinutes(10);
 
         private readonly string baseUrl;
         private readonly IRequestExecutor requestExecutor;
         private readonly ICacheProvider cacheProvider;
         private readonly ICacheResolver cacheResolver;
         private readonly JsonSerializationProvider serializer;
+        private readonly ILogger logger;
         private readonly IResourceFactory resourceFactory;
         private readonly IResourceConverter resourceConverter;
         private readonly IdentityMap<string, AbstractResource> identityMap;
@@ -82,7 +83,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.cacheResolver = new DefaultCacheResolver(cacheProvider, new DefaultCacheRegionNameResolver());
 
             this.serializer = new JsonSerializationProvider(serializer);
-            this.identityMap = new IdentityMap<string, AbstractResource>();
+            this.identityMap = new IdentityMap<string, AbstractResource>(DefaultIdentityMapSlidingExpiration);
             this.resourceFactory = new DefaultResourceFactory(this, this.identityMap);
             this.resourceConverter = new DefaultResourceConverter();
 
@@ -604,6 +605,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 if (disposing)
                 {
                     this.requestExecutor.Dispose();
+                    this.resourceFactory.Dispose();
                 }
 
                 this.disposed = true;

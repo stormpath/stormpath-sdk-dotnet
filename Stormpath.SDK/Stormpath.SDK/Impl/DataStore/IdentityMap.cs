@@ -16,103 +16,62 @@
 // </remarks>
 
 using System;
-using System.Collections.Concurrent;
+using System.Runtime.Caching;
 using System.Threading;
-using Stormpath.SDK.Impl.Extensions;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal class IdentityMap<TKey, TItem>
+    internal class IdentityMap<TKey, TItem> : IDisposable
         where TItem : class
     {
-        private static readonly int MinCompactThreshold = 100;
+        private readonly MemoryCache itemCache;
+        private readonly TimeSpan slidingExpiration;
+        private long lifetimeItemsAdded;
+        private bool isDisposed = false; // To detect redundant calls
 
-        private readonly object compactLock = new object();
-        private int itemsAliveDuringLastCompact;
-        private int itemsAddedSinceLastCompact;
-        private long compactedTimes;
-
-        private ConcurrentDictionary<TKey, WeakReference<TItem>> map;
-
-        public IdentityMap()
+        public IdentityMap(TimeSpan slidingExpiration)
         {
-            this.map = new ConcurrentDictionary<TKey, WeakReference<TItem>>();
+            this.itemCache = new MemoryCache("StormpathSDKIdentityMap");
+            this.slidingExpiration = slidingExpiration;
         }
 
-        private bool ShouldCompact()
-            => this.itemsAddedSinceLastCompact > Math.Max(MinCompactThreshold, this.itemsAliveDuringLastCompact + MinCompactThreshold);
+        private static string CreateKey(TKey key)
+            => $"idmap-{key.ToString()}";
 
-        public int Count => this.itemsAliveDuringLastCompact + this.itemsAddedSinceLastCompact;
-
-        public void Compact()
-        {
-            if (Monitor.TryEnter(this.compactLock, 0))
-            {
-                try
-                {
-                    var alive = 0;
-                    var itemsAddedBeforeCompact = this.itemsAddedSinceLastCompact;
-
-                    foreach (var kvp in this.map)
-                    {
-                        TItem item = null;
-
-                        bool valueIsEmpty =
-                            kvp.Value == null ||
-                            !kvp.Value.TryGetTarget(out item) ||
-                            item == null;
-
-                        bool removed = false;
-                        if (valueIsEmpty)
-                            removed = this.map.TryRemove(kvp.Key, kvp.Value);
-
-                        if (!removed)
-                            alive++;
-                    }
-
-                    this.itemsAliveDuringLastCompact = alive;
-                    this.compactedTimes++;
-
-                    Interlocked.Add(ref this.itemsAddedSinceLastCompact, -itemsAddedBeforeCompact);
-                }
-                finally
-                {
-                    Monitor.Exit(this.compactLock);
-                }
-            }
-        }
+        public long LifetimeItemsAdded => this.lifetimeItemsAdded;
 
         public TItem GetOrAdd(TKey key, Func<TItem> itemFactory)
         {
-            if (this.ShouldCompact())
-                this.Compact();
+            var lazyItem = new Lazy<TItem>(() => itemFactory());
+            var policy = new CacheItemPolicy() { SlidingExpiration = this.slidingExpiration };
+            var existing = this.itemCache.AddOrGetExisting(CreateKey(key), lazyItem, policy);
 
-            bool added = false;
-
-            TItem item = null;
-            this.map.AddOrUpdate(
-                key,
-                addValueFactory: _ =>
-                {
-                    added = true;
-                    item = itemFactory();
-                    return new WeakReference<TItem>(item);
-                },
-                updateValueFactory: (_, existing) =>
-                {
-                    if (!existing.TryGetTarget(out item))
-                    {
-                        added = true;
-                        item = itemFactory();
-                        existing.SetTarget(item);
-                    }
-                    return existing;
-                });
-
+            bool added = existing == null;
             if (added)
-                Interlocked.Increment(ref this.itemsAddedSinceLastCompact);
+                Interlocked.Increment(ref this.lifetimeItemsAdded);
 
-            return item;
+            return existing == null
+                ? lazyItem.Value
+                : (existing as Lazy<TItem>).Value;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.isDisposed)
+            {
+                if (disposing)
+                {
+                    this.itemCache.Dispose();
+                }
+
+                this.isDisposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Don't change this method. Change Dispose(bool disposing) instead
+            this.Dispose(true);
         }
     }
 }
