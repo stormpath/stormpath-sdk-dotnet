@@ -25,6 +25,7 @@ using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Impl.IdentityMap;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Resource;
@@ -41,7 +42,7 @@ namespace Stormpath.SDK.Tests.Impl
         public DefaultResourceFactory_tests()
         {
             var dataStore = new StubDataStore(null, "http://api.foo.bar");
-            var identityMap = new IdentityMap<string, AbstractResource>(TimeSpan.FromSeconds(10)); // arbitrary
+            var identityMap = new MemoryCacheIdentityMap<string, AbstractResource>(TimeSpan.FromSeconds(10)); // arbitrary
             this.factory = new DefaultResourceFactory(dataStore, identityMap);
         }
 

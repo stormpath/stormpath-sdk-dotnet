@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using Stormpath.SDK.Impl.IdentityMap;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
@@ -24,11 +25,11 @@ namespace Stormpath.SDK.Impl.DataStore
     internal sealed class DefaultResourceFactory : IResourceFactory
     {
         private readonly IInternalDataStore dataStore;
-        private readonly IdentityMap<string, AbstractResource> identityMap;
+        private readonly IIdentityMap<string, AbstractResource> identityMap;
         private readonly ResourceTypeLookup typeLookup;
         private bool isDisposed = false; // To detect redundant calls
 
-        public DefaultResourceFactory(IInternalDataStore dataStore, IdentityMap<string, AbstractResource> identityMap)
+        public DefaultResourceFactory(IInternalDataStore dataStore, IIdentityMap<string, AbstractResource> identityMap)
         {
             this.dataStore = dataStore;
             this.identityMap = identityMap;

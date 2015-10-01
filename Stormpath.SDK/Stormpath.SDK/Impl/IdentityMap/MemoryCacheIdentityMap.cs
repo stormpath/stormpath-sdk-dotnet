@@ -1,4 +1,4 @@
-﻿// <copyright file="IdentityMap.cs" company="Stormpath, Inc.">
+﻿// <copyright file="MemoryCacheIdentityMap.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -19,9 +19,9 @@ using System;
 using System.Runtime.Caching;
 using System.Threading;
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Impl.IdentityMap
 {
-    internal class IdentityMap<TKey, TItem> : IDisposable
+    internal class MemoryCacheIdentityMap<TKey, TItem> : IIdentityMap<TKey, TItem>, IDisposable
         where TItem : class
     {
         private readonly MemoryCache itemCache;
@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Impl.DataStore
         private long lifetimeItemsAdded;
         private bool isDisposed = false; // To detect redundant calls
 
-        public IdentityMap(TimeSpan slidingExpiration)
+        public MemoryCacheIdentityMap(TimeSpan slidingExpiration)
         {
             this.itemCache = new MemoryCache("StormpathSDKIdentityMap");
             this.slidingExpiration = slidingExpiration;
