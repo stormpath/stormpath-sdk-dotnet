@@ -20,19 +20,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.IdentityMap;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.IdentityMap
 {
     public class Multi_threaded_tests : IDisposable
     {
-        private readonly IdentityMap<string, TestEntity> identityMap;
+        private readonly IIdentityMap<string, TestEntity> identityMap;
 
         public Multi_threaded_tests()
         {
             // Arbitrary expiration policy. We won't be validating expirations in these tests
             // because it's tricky to do so with MemoryCache.
-            this.identityMap = new IdentityMap<string, TestEntity>(TimeSpan.FromSeconds(10));
+            this.identityMap = new MemoryCacheIdentityMap<string, TestEntity>(TimeSpan.FromSeconds(10));
         }
 
         private TestEntity CreateEntity(string id)
@@ -66,6 +67,7 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
 
             Task.WhenAll(tasks).Wait();
             foo.Count.ShouldBe(17);
+            this.identityMap.LifetimeItemsAdded.ShouldBe(6);
         }
 
         [Theory]
@@ -76,7 +78,8 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
         [InlineData(100000)]
         public void Making_many_items(int items)
         {
-            var foo = this.identityMap.GetOrAdd("foo", () => this.CreateEntity("foo"));
+            var persistentItemId = $"Making_many_items_{items}";
+            var foo = this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId));
             foo.SetCount(1337);
 
             Parallel.For(0, items, i =>
@@ -85,8 +88,30 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
                 this.identityMap.GetOrAdd(itemId, () => this.CreateEntity(itemId)).SetCount(i);
 
                 foo.Count.ShouldBe(1337);
-                this.identityMap.GetOrAdd("foo", () => this.CreateEntity("foo")).Count.ShouldBe(1337);
+                this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId)).Count.ShouldBe(1337);
             });
+
+            this.identityMap.LifetimeItemsAdded.ShouldBe(items + 1);
+        }
+
+        [Theory]
+        [InlineData(10)]
+        [InlineData(100)]
+        [InlineData(1000)]
+        [InlineData(10000)]
+        [InlineData(100000)]
+        public void Making_many_duplicates(int times)
+        {
+            var persistentItemId = $"Making_many_duplicates_{times}";
+            this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId)).SetCount(1337);
+
+            Parallel.For(0, times, i =>
+            {
+                var foo = this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId));
+                foo.Count.ShouldBe(1337);
+            });
+
+            this.identityMap.LifetimeItemsAdded.ShouldBe(1);
         }
 
         public void Dispose()

@@ -18,19 +18,20 @@
 using System;
 using Shouldly;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.IdentityMap;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.IdentityMap
 {
     public class Single_threaded_tests : IDisposable
     {
-        private readonly IdentityMap<string, TestEntity> identityMap;
+        private readonly IIdentityMap<string, TestEntity> identityMap;
 
         public Single_threaded_tests()
         {
             // Arbitrary expiration policy. We won't be validating expirations in these tests
             // because it's tricky to do so with MemoryCache.
-            this.identityMap = new IdentityMap<string, TestEntity>(TimeSpan.FromSeconds(10));
+            this.identityMap = new MemoryCacheIdentityMap<string, TestEntity>(TimeSpan.FromSeconds(10));
         }
 
         private TestEntity CreateEntity(string id)
@@ -49,6 +50,7 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
             bar.SetCount(5);
 
             bar.Count.ShouldBe(5);
+            this.identityMap.LifetimeItemsAdded.ShouldBe(1);
         }
 
         [Fact]
@@ -64,8 +66,8 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
 
             bar.Count.ShouldBe(5);
             baz.Count.ShouldBe(3);
-
-            ReferenceEquals(bar, baz).ShouldBeFalse();
+            bar.ShouldNotBeSameAs(baz);
+            this.identityMap.LifetimeItemsAdded.ShouldBe(2);
         }
 
         [Fact]
@@ -79,7 +81,8 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
             var bar2 = this.identityMap.GetOrAdd(id, () => this.CreateEntity(id));
             bar2.Count.ShouldBe(100);
 
-            ReferenceEquals(bar1, bar2).ShouldBeTrue();
+            bar1.ShouldBeSameAs(bar2);
+            this.identityMap.LifetimeItemsAdded.ShouldBe(1);
         }
 
         [Theory]
@@ -90,7 +93,8 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
         [InlineData(100000)]
         public void Making_many_items(int items)
         {
-            var foo = this.identityMap.GetOrAdd("foo", () => this.CreateEntity("foo"));
+            var persistentItemId = $"Making_many_items_{items}";
+            var foo = this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId));
             foo.SetCount(1337);
 
             for (var i = 0; i < items; i++)
@@ -99,8 +103,30 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
                 this.identityMap.GetOrAdd(itemId, () => this.CreateEntity(itemId)).SetCount(i);
 
                 foo.Count.ShouldBe(1337);
-                this.identityMap.GetOrAdd("foo", () => this.CreateEntity("foo")).Count.ShouldBe(1337);
+                this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId)).Count.ShouldBe(1337);
             }
+
+            this.identityMap.LifetimeItemsAdded.ShouldBe(items + 1);
+        }
+
+        [Theory]
+        [InlineData(10)]
+        [InlineData(100)]
+        [InlineData(1000)]
+        [InlineData(10000)]
+        [InlineData(100000)]
+        public void Making_many_duplicates(int times)
+        {
+            var persistentItemId = $"Making_many_duplicates_{times}";
+            this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId)).SetCount(1337);
+
+            for (var i = 0; i < times; i++)
+            {
+                var foo = this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId));
+                foo.Count.ShouldBe(1337);
+            }
+
+            this.identityMap.LifetimeItemsAdded.ShouldBe(1);
         }
 
         public void Dispose()
