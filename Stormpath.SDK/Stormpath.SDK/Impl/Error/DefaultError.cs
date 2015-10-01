@@ -24,7 +24,7 @@ using Stormpath.SDK.Impl.Resource;
 namespace Stormpath.SDK.Impl.Error
 {
     [Serializable]
-    internal sealed class DefaultError : AbstractResource, IError
+    internal sealed class DefaultError : IError
     {
         private static readonly string StatusPropertyName = "status";
         private static readonly string CodePropertyName = "code";
@@ -32,10 +32,20 @@ namespace Stormpath.SDK.Impl.Error
         private static readonly string DevMessagePropertyName = "developerMessage";
         private static readonly string MoreInfoPropertyName = "moreInfo";
 
+        private readonly IReadOnlyDictionary<string, object> properties;
+
         public DefaultError(IDictionary<string, object> properties)
-            : base(null)
         {
-            this.ResetAndUpdate(properties);
+            this.properties = new Dictionary<string, object>(properties);
+        }
+
+        private T GetProperty<T>(string propertyName)
+        {
+            object value = null;
+            if (!this.properties.TryGetValue(propertyName, out value))
+                return default(T);
+
+            return (T)value;
         }
 
         public int Code => this.GetProperty<int>(CodePropertyName);
@@ -50,12 +60,13 @@ namespace Stormpath.SDK.Impl.Error
 
         public static DefaultError FromHttpResponse(IHttpResponse response)
         {
-            var properties = new Dictionary<string, object>();
-            properties.Add("status", response.StatusCode);
-            properties.Add("code", response.StatusCode);
-            properties.Add("moreInfo", "HTTP error");
-            properties.Add("developerMessage", response.ResponsePhrase);
-            return new DefaultError(properties);
+            return new DefaultError(new Dictionary<string, object>()
+            {
+                { "status", response.StatusCode },
+                { "code", response.StatusCode },
+                { "moreInfo", "HTTP error" },
+                { "developerMessage", response.ResponsePhrase }
+            });
         }
 
         public static DefaultError WithMessage(string developerMessage)

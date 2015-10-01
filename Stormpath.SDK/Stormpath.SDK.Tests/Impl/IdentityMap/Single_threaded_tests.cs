@@ -17,7 +17,6 @@
 
 using System;
 using Shouldly;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.IdentityMap;
 using Xunit;
 

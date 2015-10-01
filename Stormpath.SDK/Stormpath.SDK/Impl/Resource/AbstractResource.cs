@@ -15,109 +15,66 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal abstract class AbstractResource : IResource
+    internal abstract class AbstractResource : IResource, ILinkable
     {
         protected static readonly string HrefPropertyName = "href";
 
-        internal readonly IInternalDataStore InternalDataStore;
-        internal readonly IInternalDataStoreSync InternalDataStoreSync;
+        private ResourceData resourceData;
 
-        protected ConcurrentDictionary<string, object> properties;
-        protected ConcurrentDictionary<string, object> dirtyProperties;
-
-        protected bool isDirty = false;
-
-        public AbstractResource(IInternalDataStore dataStore)
+        public AbstractResource(ResourceData data)
         {
-            this.InternalDataStore = dataStore;
-            this.InternalDataStoreSync = dataStore as IInternalDataStoreSync;
-
-            this.ResetAndUpdate(properties: null);
+            this.resourceData = data;
         }
 
-        public void ResetAndUpdate(IDictionary<string, object> properties)
+        void ILinkable.Link(ResourceData data)
         {
-            if (properties == null)
-                properties = new Dictionary<string, object>();
-
-            this.ResetAndUpdateDerived(properties);
-
-            this.properties = new ConcurrentDictionary<string, object>(properties);
-            this.dirtyProperties = new ConcurrentDictionary<string, object>();
-            this.isDirty = false;
+            Interlocked.Exchange(ref this.resourceData, data);
         }
 
-        protected virtual void ResetAndUpdateDerived(IDictionary<string, object> properties)
-        {
-        }
+        public ResourceData GetResourceData() => this.resourceData;
 
         string IResource.Href => this.GetProperty<string>(HrefPropertyName);
 
-        protected IInternalDataStore GetInternalDataStore() => this.InternalDataStore;
+        protected IInternalDataStore GetInternalDataStore()
+            => this.GetResourceData()?.InternalDataStore;
 
-        protected IInternalDataStoreSync GetInternalDataStoreSync() => this.InternalDataStoreSync;
+        protected IInternalAsyncDataStore GetInternalAsyncDataStore()
+            => this.GetResourceData()?.InternalAsyncDataStore;
 
-        internal bool IsDirty => this.isDirty;
+        protected IInternalSyncDataStore GetInternalSyncDataStore()
+            => this.GetResourceData()?.InternalSyncDataStore;
 
-        public List<string> GetPropertyNames()
-        {
-            return this.properties.Keys
-                .OfType<string>()
-                .ToList();
-        }
+        internal bool IsDirty => this.GetResourceData()?.IsDirty ?? true;
 
-        public List<string> GetUpdatedPropertyNames()
-        {
-            return this.dirtyProperties.Keys
-                .OfType<string>()
-                .ToList();
-        }
+        public IReadOnlyList<string> GetPropertyNames()
+            => this.GetResourceData()?.GetPropertyNames();
+
+        public IReadOnlyList<string> GetUpdatedPropertyNames()
+            => this.GetResourceData()?.GetUpdatedPropertyNames();
+
+        public object GetProperty(string name)
+            => this.GetResourceData()?.GetProperty(name);
+
+        public T GetProperty<T>(string name)
+            => (T)(this.GetProperty(name) ?? default(T));
 
         public LinkProperty GetLinkProperty(string name)
             => this.GetProperty<LinkProperty>(name) ?? new LinkProperty(null);
 
-        public T GetProperty<T>(string name)
-        {
-            var value = this.GetProperty(name);
+        public bool ContainsProperty(string name)
+            => this.GetResourceData()?.ContainsProperty(name) ?? false;
 
-            return (T)value;
-        }
-
-        public object GetProperty(string name)
-        {
-            object value;
-
-            if (this.dirtyProperties.TryGetValue(name, out value))
-                return value;
-
-            if (this.properties.TryGetValue(name, out value))
-                return value;
-
-            return null;
-        }
-
-        protected bool ContainsProperty(string name)
-        {
-            return
-                this.dirtyProperties.ContainsKey(name) ||
-                this.properties.ContainsKey(name);
-        }
+        public void SetProperty(string name, object value)
+            => this.GetResourceData()?.SetProperty(name, value);
 
         public void SetProperty<T>(string name, T value)
             => this.SetProperty(name, (object)value);
-
-        public void SetProperty(string name, object value)
-        {
-            this.dirtyProperties.AddOrUpdate(name, value, (key, oldValue) => value);
-            this.isDirty = true;
-        }
     }
 }

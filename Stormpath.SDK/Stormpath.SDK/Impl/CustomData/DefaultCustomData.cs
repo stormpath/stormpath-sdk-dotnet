@@ -17,14 +17,12 @@
 
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.CustomData;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Resource;
@@ -46,16 +44,9 @@ namespace Stormpath.SDK.Impl.CustomData
         // Matches any character in a-z, A-Z, 0-9, _, -  (but cannot start with -)
         private static readonly Regex ValidKeyCharactersRegex = new Regex("^[a-zA-Z0-9_]+[a-zA-Z0-9_-]*$", RegexOptions.Compiled);
 
-        private ConcurrentDictionary<string, object> deletedProperties;
-
-        public DefaultCustomData(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultCustomData(ResourceData data)
+            : base(data)
         {
-        }
-
-        protected override void ResetAndUpdateDerived(IDictionary<string, object> properties)
-        {
-            this.deletedProperties = new ConcurrentDictionary<string, object>();
         }
 
         private ICustomData AsInterface => this;
@@ -79,20 +70,20 @@ namespace Stormpath.SDK.Impl.CustomData
         private List<string> GetAvailableKeys()
         {
             var keys = new List<string>();
-            keys.AddRange(this.dirtyProperties.Keys);
-            keys.AddRange(this.properties.Keys);
+            keys.AddRange(this.GetResourceData()?.GetUpdatedPropertyNames());
+            keys.AddRange(this.GetResourceData()?.GetPropertyNames());
 
-            var deletedProperties = this.deletedProperties.Keys; // static snapshot
+            var deletedProperties = this.GetResourceData()?.GetDeletedPropertyNames();
             keys.RemoveAll(x => deletedProperties.Contains(x));
 
             return keys;
         }
 
         internal bool HasDeletedProperties()
-            => this.deletedProperties.Any();
+            => this.GetResourceData()?.GetDeletedPropertyNames().Any() ?? false;
 
         internal bool HasUpdatedProperties()
-            => this.dirtyProperties.Any();
+            => this.GetResourceData()?.GetUpdatedPropertyNames().Any() ?? false;
 
         object ICustomData.this[string key]
         {
@@ -117,7 +108,8 @@ namespace Stormpath.SDK.Impl.CustomData
             }
         }
 
-        internal IDictionary<string, object> UpdatedProperties => new Dictionary<string, object>(this.dirtyProperties);
+        internal IReadOnlyDictionary<string, object> GetUpdatedProperties()
+            => this.GetResourceData()?.GetUpdatedProperties();
 
         void ICustomData.Clear()
         {
@@ -133,12 +125,7 @@ namespace Stormpath.SDK.Impl.CustomData
             => this.GetAvailableKeys().Contains(key);
 
         object ICustomData.Get(string key)
-        {
-            if (this.deletedProperties.ContainsKey(key))
-                return null;
-
-            return this.GetProperty(key);
-        }
+            => this.GetProperty(key);
 
         void ICustomData.Put(string key, object value)
         {
@@ -147,9 +134,6 @@ namespace Stormpath.SDK.Impl.CustomData
 
             if (!IsValidKey(key))
                 throw new ArgumentOutOfRangeException($"{key} is not a valid key name.");
-
-            object dummy;
-            this.deletedProperties.TryRemove(key, out dummy);
 
             this.SetProperty(key, value);
         }
@@ -201,16 +185,7 @@ namespace Stormpath.SDK.Impl.CustomData
             if (ReservedKeys.Contains(key))
                 throw new ArgumentOutOfRangeException(nameof(key), $"{key} is a reserved key and cannot be removed.");
 
-            object removedFromProperties;
-            this.properties.TryRemove(key, out removedFromProperties);
-
-            object removedFromDirtyProperties;
-            this.dirtyProperties.TryRemove(key, out removedFromDirtyProperties);
-
-            this.deletedProperties.TryAdd(key, null);
-            this.isDirty = true;
-
-            return removedFromDirtyProperties ?? removedFromProperties;
+            return this.GetResourceData()?.RemoveProperty(key);
         }
 
         bool ICustomData.TryGetValue(string key, out object value)
@@ -235,15 +210,12 @@ namespace Stormpath.SDK.Impl.CustomData
 
         public async Task<bool> DeleteRemovedPropertiesAsync(string parentHref, CancellationToken cancellationToken)
         {
-            var propertyDeletionTasks = this.deletedProperties
+            var propertyDeletionTasks = this.GetResourceData()?.GetDeletedPropertyNames()
                 .Select(async x =>
                 {
-                    var successful = await this.GetInternalDataStore().DeletePropertyAsync(parentHref, x.Key, cancellationToken).ConfigureAwait(false);
-                    if (successful)
-                    {
-                        object dummy;
-                        this.deletedProperties.TryRemove(x.Key, out dummy);
-                    }
+                    var successful =
+                        await this.GetInternalAsyncDataStore().DeletePropertyAsync(parentHref, x, cancellationToken).ConfigureAwait(false)
+                        && (this.GetResourceData()?.OnDeletingRemovedProperty(x) ?? false);
                     return successful;
                 });
 
@@ -255,15 +227,10 @@ namespace Stormpath.SDK.Impl.CustomData
         public bool DeleteRemovedProperties(string parentHref)
         {
             var results = new List<bool>();
-            foreach (var propName in this.deletedProperties.Keys)
+            foreach (var propName in this.GetResourceData()?.GetDeletedPropertyNames())
             {
-                var successful = this.GetInternalDataStoreSync().DeleteProperty(parentHref, propName);
-                if (successful)
-                {
-                    object dummy;
-                    this.deletedProperties.TryRemove(propName, out dummy);
-                }
-
+                var successful = this.GetInternalSyncDataStore().DeleteProperty(parentHref, propName)
+                    && (this.GetResourceData()?.OnDeletingRemovedProperty(propName) ?? false);
                 results.Add(successful);
             }
 
@@ -275,7 +242,7 @@ namespace Stormpath.SDK.Impl.CustomData
             if (this.HasDeletedProperties())
                 await this.DeleteRemovedPropertiesAsync(this.AsInterface.Href, cancellationToken).ConfigureAwait(false);
 
-            return await this.GetInternalDataStore().SaveAsync<ICustomData>(this, cancellationToken).ConfigureAwait(false);
+            return await this.GetInternalAsyncDataStore().SaveAsync<ICustomData>(this, cancellationToken).ConfigureAwait(false);
         }
 
         ICustomData ISaveableSync<ICustomData>.Save()
@@ -283,13 +250,13 @@ namespace Stormpath.SDK.Impl.CustomData
             if (this.HasDeletedProperties())
                 this.DeleteRemovedProperties(this.AsInterface.Href);
 
-            return this.GetInternalDataStoreSync().Save<ICustomData>(this);
+            return this.GetInternalSyncDataStore().Save<ICustomData>(this);
         }
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
+            => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
 
         bool IDeletableSync.Delete()
-            => this.GetInternalDataStoreSync().Delete(this);
+            => this.GetInternalSyncDataStore().Delete(this);
     }
 }

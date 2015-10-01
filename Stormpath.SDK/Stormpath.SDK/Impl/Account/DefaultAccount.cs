@@ -16,12 +16,10 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -49,8 +47,8 @@ namespace Stormpath.SDK.Impl.Account
         private static readonly string TenantPropertyName = "tenant";
         private static readonly string UsernamePropertyName = "username";
 
-        public DefaultAccount(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultAccount(ResourceData data)
+            : base(data)
         {
         }
 
@@ -70,9 +68,8 @@ namespace Stormpath.SDK.Impl.Account
         {
             get
             {
-                var emailVerificationToken = new DefaultEmailVerificationToken(this.GetInternalDataStore());
-                emailVerificationToken.ResetAndUpdate(
-                    new Dictionary<string, object>() { { "href", this.EmailVerificationToken.Href } });
+                var emailVerificationToken = this.GetInternalDataStore()
+                    .InstantiateWithHref<IEmailVerificationToken>(this.EmailVerificationToken.Href);
                 return emailVerificationToken;
             }
         }
@@ -157,27 +154,27 @@ namespace Stormpath.SDK.Impl.Account
         }
 
         Task<IDirectory> IAccount.GetDirectoryAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
 
         IDirectory IAccountSync.GetDirectory()
-            => this.GetInternalDataStoreSync().GetResource<IDirectory>(this.Directory.Href);
+            => this.GetInternalSyncDataStore().GetResource<IDirectory>(this.Directory.Href);
 
         Task<ITenant> IAccount.GetTenantAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<ITenant>(this.Tenant.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(this.Tenant.Href, cancellationToken);
 
         ITenant IAccountSync.GetTenant()
-            => this.GetInternalDataStoreSync().GetResource<ITenant>(this.Tenant.Href);
+            => this.GetInternalSyncDataStore().GetResource<ITenant>(this.Tenant.Href);
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
+            => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
 
         bool IDeletableSync.Delete()
-             => this.GetInternalDataStoreSync().Delete(this);
+             => this.GetInternalSyncDataStore().Delete(this);
 
         Task<IAccount> ISaveable<IAccount>.SaveAsync(CancellationToken cancellationToken)
              => this.SaveAsync<IAccount>(cancellationToken);
 
         IAccount ISaveableSync<IAccount>.Save()
-             => this.GetInternalDataStoreSync().Save<IAccount>(this);
+             => this.GetInternalSyncDataStore().Save<IAccount>(this);
     }
 }

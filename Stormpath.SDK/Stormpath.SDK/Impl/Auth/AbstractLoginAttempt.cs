@@ -15,8 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Auth
@@ -25,8 +23,8 @@ namespace Stormpath.SDK.Impl.Auth
     {
         private static readonly string TypePropertyName = "type";
 
-        public AbstractLoginAttempt(IInternalDataStore dataStore)
-            : base(dataStore)
+        public AbstractLoginAttempt(ResourceData data)
+            : base(data)
         {
         }
 

@@ -15,11 +15,9 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
@@ -29,8 +27,8 @@ namespace Stormpath.SDK.Impl.Account
     {
         private static readonly string TokenDelimiter = "/emailVerificationTokens/";
 
-        public DefaultEmailVerificationToken(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultEmailVerificationToken(ResourceData data)
+            : base(data)
         {
         }
 

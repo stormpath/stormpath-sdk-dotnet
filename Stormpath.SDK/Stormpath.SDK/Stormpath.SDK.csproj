@@ -136,8 +136,9 @@
     <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
     <Compile Include="Impl\DataStore\IDataStoreSync.cs" />
+    <Compile Include="Impl\DataStore\IInternalAsyncDataStore.cs" />
     <Compile Include="Impl\IdentityMap\MemoryCacheIdentityMap.cs" />
-    <Compile Include="Impl\DataStore\IInternalDataStoreSync.cs" />
+    <Compile Include="Impl\DataStore\IInternalSyncDataStore.cs" />
     <Compile Include="Impl\Extensions\ConcurrentDictionaryExtensions.cs" />
     <Compile Include="Impl\Http\DefaultHttpClientLoader.cs" />
     <Compile Include="Impl\Http\DefaultRequestExecutor.cs" />
@@ -147,6 +148,8 @@
     <Compile Include="Impl\IdentityMap\IIdentityMap.cs" />
     <Compile Include="Impl\Linq\LinqHelper.cs" />
     <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
+    <Compile Include="Impl\Resource\ILinkable.cs" />
+    <Compile Include="Impl\Resource\ResourceData.cs" />
     <Compile Include="Impl\Resource\IExtendableSync.cs" />
     <Compile Include="Impl\Resource\IDeletableSync.cs" />
     <Compile Include="Impl\Resource\ISaveableSync.cs" />

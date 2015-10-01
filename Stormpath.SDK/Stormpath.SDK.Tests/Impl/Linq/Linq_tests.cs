@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
         internal Linq_tests(IInternalDataStore ds)
         {
-            this.harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, ds);
+            this.harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, ds as IInternalAsyncDataStore);
         }
 
         protected string Href => href;

@@ -36,9 +36,9 @@ namespace Stormpath.SDK.Impl.Resource
 
         private readonly Expression expressionOverride;
 
-        private readonly IInternalDataStore dataStore;
+        private readonly IInternalAsyncDataStore dataStoreAsync;
 
-        private readonly IInternalDataStoreSync dataStoreSync;
+        private readonly IInternalSyncDataStore dataStoreSync;
 
         private readonly string baseHref;
 
@@ -58,14 +58,14 @@ namespace Stormpath.SDK.Impl.Resource
             : base(ExtendedQueryParser.Create(), CreateQueryExecutor(collectionHref, dataStore))
         {
             this.baseHref = collectionHref;
-            this.dataStore = dataStore;
-            this.dataStoreSync = dataStore as IInternalDataStoreSync;
+            this.dataStoreAsync = dataStore as IInternalAsyncDataStore;
+            this.dataStoreSync = dataStore as IInternalSyncDataStore;
             this.proxy = CreateProxy();
             this.expressionOverride = null;
         }
 
         internal CollectionResourceQueryable(CollectionResourceQueryable<T> existing, IQueryable<T> proxy)
-            : this(existing.baseHref, existing.dataStore)
+            : this(existing.baseHref, existing.dataStoreAsync)
         {
             this.proxy = proxy;
         }
@@ -89,8 +89,8 @@ namespace Stormpath.SDK.Impl.Resource
                 throw new InvalidOperationException("LINQ queries must start from a supported provider.");
 
             this.baseHref = executor.Href;
-            this.dataStore = executor.DataStore;
-            this.dataStoreSync = executor.DataStore as IInternalDataStoreSync;
+            this.dataStoreAsync = executor.DataStore as IInternalAsyncDataStore;
+            this.dataStoreSync = executor.DataStore as IInternalSyncDataStore;
             this.proxy = null;
             this.expressionOverride = expression;
         }
@@ -180,7 +180,7 @@ namespace Stormpath.SDK.Impl.Resource
             this.AdjustPagingOffset();
 
             var url = this.GenerateRequestUrlFromModel();
-            var response = await this.dataStore.GetCollectionAsync<T>(url, cancellationToken).ConfigureAwait(false);
+            var response = await this.dataStoreAsync.GetCollectionAsync<T>(url, cancellationToken).ConfigureAwait(false);
 
             return this.DidUpdateWithNewResults(response);
         }

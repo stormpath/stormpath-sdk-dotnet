@@ -1,4 +1,4 @@
-﻿// <copyright file="IInternalDataStoreSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IInternalAsyncDataStore.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,35 +15,37 @@
 // limitations under the License.
 // </remarks>
 
+using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal interface IInternalDataStoreSync : IDataStoreSync
+    internal interface IInternalAsyncDataStore : IInternalDataStore
     {
-        CollectionResponsePage<T> GetCollection<T>(string href);
+        Task<CollectionResponsePage<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken);
 
-        T Create<T>(string parentHref, T resource)
+        Task<T> CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
             where T : class, IResource;
 
-        T Create<T>(string parentHref, T resource, ICreationOptions options)
+        Task<T> CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
             where T : class, IResource;
 
-        TReturned Create<T, TReturned>(string parentHref, T resource)
+        Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
             where T : class, IResource
             where TReturned : class, IResource;
 
-        TReturned Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
+        Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
             where T : class, IResource
             where TReturned : class, IResource;
 
-        T Save<T>(T resource)
+        Task<T> SaveAsync<T>(T resource, CancellationToken cancellationToken)
             where T : class, IResource, ISaveable<T>;
 
-        bool Delete<T>(T resource)
+        Task<bool> DeleteAsync<T>(T resource, CancellationToken cancellationToken)
             where T : class, IResource, IDeletable;
 
-        bool DeleteProperty(string parentHref, string propertyName);
+        Task<bool> DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken);
     }
 }

@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shouldly;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.IdentityMap;
 using Xunit;
 

@@ -175,7 +175,7 @@ namespace Stormpath.SDK.Tests.Impl
         public async Task When_saving_returns_empty_response_without_status_202_throws_error()
         {
             // Expected behavior: Saving should always return the updated data unless we get back HTTP 202 (Accepted for Processing).
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            IInternalAsyncDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
             dataStore.RequestExecutor
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(200, "OK", null, null, null, transportError: false)));
@@ -202,7 +202,7 @@ namespace Stormpath.SDK.Tests.Impl
         public async Task When_saving_returns_empty_response_with_status_202()
         {
             // Expected behavior: Saving should always return the updated data unless we get back HTTP 202 (Accepted for Processing).
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            IInternalAsyncDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
             dataStore.RequestExecutor
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(202, "Accepted", null, null, null, transportError: false)));
@@ -219,7 +219,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task Cancellation_token_is_passed_down_to_low_level_operations()
         {
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            IInternalAsyncDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
             dataStore.RequestExecutor
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
                 .Returns(async callInfo =>
@@ -229,8 +229,7 @@ namespace Stormpath.SDK.Tests.Impl
                     return new DefaultHttpResponse(204, "No Content", new HttpHeaders(), null, null, transportError: false) as IHttpResponse;
                 });
 
-            IAccount fakeAccount = new DefaultAccount(dataStore);
-            (fakeAccount as DefaultAccount).ResetAndUpdate(new Dictionary<string, object>() { { "href", "http://api.foo.bar/accounts/1" } });
+            var fakeAccount = dataStore.InstantiateWithHref<IAccount>("http://api.foo.bar/accounts/1");
 
             var alreadyCanceledSource = new CancellationTokenSource();
             alreadyCanceledSource.Cancel();

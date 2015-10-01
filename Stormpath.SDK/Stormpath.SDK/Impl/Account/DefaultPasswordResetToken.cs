@@ -15,11 +15,9 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Account
@@ -32,8 +30,8 @@ namespace Stormpath.SDK.Impl.Account
         private static readonly string PasswordPropertyName = "password";
         private static readonly string AccountPropertyName = "account";
 
-        public DefaultPasswordResetToken(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultPasswordResetToken(ResourceData data)
+            : base(data)
         {
         }
 
@@ -56,10 +54,10 @@ namespace Stormpath.SDK.Impl.Account
         }
 
         Task<IAccount> IPasswordResetToken.GetAccountAsync(CancellationToken cancellationToken)
-             => this.GetInternalDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
+             => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
 
         IAccount IPasswordResetTokenSync.GetAccount()
-            => this.GetInternalDataStoreSync().GetResource<IAccount>(this.Account.Href);
+            => this.GetInternalSyncDataStore().GetResource<IAccount>(this.Account.Href);
 
         string IPasswordResetToken.GetValue()
         {

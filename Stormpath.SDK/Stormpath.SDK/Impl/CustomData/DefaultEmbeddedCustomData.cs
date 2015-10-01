@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Impl.CustomData
 
         public DefaultEmbeddedCustomData(IInternalDataStore dataStore)
         {
-            this.customDataProxy = new DefaultCustomData(dataStore);
+            this.customDataProxy = dataStore.Instantiate<ICustomData>() as DefaultCustomData;
             this.deleteAll = false;
         }
 
@@ -49,8 +49,8 @@ namespace Stormpath.SDK.Impl.CustomData
         internal bool DeleteRemovedCustomDataProperties(string parentHref)
             => this.customDataProxy.DeleteRemovedProperties(parentHref);
 
-        internal IDictionary<string, object> UpdatedCustomDataProperties
-            => this.customDataProxy.UpdatedProperties;
+        internal IReadOnlyDictionary<string, object> UpdatedCustomDataProperties
+            => this.customDataProxy.GetUpdatedProperties();
 
         void IEmbeddedCustomData.Clear()
             => this.deleteAll = true;

@@ -34,21 +34,29 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
-        public void Instantiated_resources_are_different_references()
+        public void Instantiated_resources_are_not_linked()
         {
             var account1 = this.dataStore.Instantiate<IAccount>();
             var account2 = this.dataStore.Instantiate<IAccount>();
 
-            account1.ShouldNotBeSameAs(account2);
+            account1.MiddleName.ShouldBeNullOrEmpty();
+            account2.MiddleName.ShouldBeNullOrEmpty();
+
+            account1.SetMiddleName("hello world!");
+            account2.MiddleName.ShouldBeNullOrEmpty();
         }
 
         [Fact]
-        public async Task Loaded_resources_are_same_reference()
+        public async Task Loaded_resources_are_linked()
         {
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/foo");
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/foo");
 
-            account1.ShouldBeSameAs(account2);
+            account1.MiddleName.ShouldBeNullOrEmpty();
+            account2.MiddleName.ShouldBeNullOrEmpty();
+
+            account1.SetMiddleName("hello world!");
+            account2.MiddleName.ShouldBe("hello world!");
         }
     }
 }

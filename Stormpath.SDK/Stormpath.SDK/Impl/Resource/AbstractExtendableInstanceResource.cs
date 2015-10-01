@@ -15,12 +15,10 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Impl.CustomData;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
@@ -29,15 +27,10 @@ namespace Stormpath.SDK.Impl.Resource
     {
         private static readonly string CustomDataPropertyName = "customData";
 
-        private DefaultEmbeddedCustomData customDataProxy;
+        private IEmbeddedCustomData customDataProxy;
 
-        protected AbstractExtendableInstanceResource(IInternalDataStore dataStore)
-            : base(dataStore)
-        {
-            this.ResetCustomData();
-        }
-
-        protected override void ResetAndUpdateDerived(IDictionary<string, object> properties)
+        protected AbstractExtendableInstanceResource(ResourceData data)
+            : base(data)
         {
             this.ResetCustomData();
         }
@@ -49,14 +42,14 @@ namespace Stormpath.SDK.Impl.Resource
         IEmbeddedCustomData IExtendableSync.CustomData => this.customDataProxy;
 
         Task<ICustomData> IExtendable.GetCustomDataAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<ICustomData>(this.CustomData.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<ICustomData>(this.CustomData.Href, cancellationToken);
 
         ICustomData IExtendableSync.GetCustomData()
-            => this.GetInternalDataStoreSync().GetResource<ICustomData>(this.CustomData.Href);
+            => this.GetInternalSyncDataStore().GetResource<ICustomData>(this.CustomData.Href);
 
-        internal void ResetCustomData()
+        public void ResetCustomData()
         {
-            this.customDataProxy = new DefaultEmbeddedCustomData(this.InternalDataStore);
+            this.customDataProxy = new DefaultEmbeddedCustomData(this.GetInternalDataStore());
         }
     }
 }

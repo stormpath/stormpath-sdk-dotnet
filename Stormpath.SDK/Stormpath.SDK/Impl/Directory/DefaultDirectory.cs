@@ -15,12 +15,10 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
@@ -41,8 +39,8 @@ namespace Stormpath.SDK.Impl.Directory
         private static readonly string StatusPropertyName = "status";
         private static readonly string TenantPropertyName = "tenant";
 
-        public DefaultDirectory(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultDirectory(ResourceData data)
+            : base(data)
         {
         }
 
@@ -69,9 +67,9 @@ namespace Stormpath.SDK.Impl.Directory
         internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
         IAsyncQueryable<IAccount> IDirectory.GetAccounts()
-            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
+            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
+            => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
     }
 }

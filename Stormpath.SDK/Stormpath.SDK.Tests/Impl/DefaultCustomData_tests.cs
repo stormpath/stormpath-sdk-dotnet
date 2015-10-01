@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using Shouldly;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Impl.CustomData;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 
@@ -29,13 +30,11 @@ namespace Stormpath.SDK.Tests.Impl
     {
         private static ICustomData GetInstance(IDictionary<string, object> properties = null)
         {
-            if (properties == null)
-                properties = new Dictionary<string, object>();
+            var fakeId = Guid.NewGuid().ToString();
+            var fakeResourceData = new ResourceData(fakeId, new FakeDataStore<ICustomData>());
+            fakeResourceData.Update(properties);
 
-            var customData = new DefaultCustomData(new FakeDataStore<ICustomData>());
-            customData.ResetAndUpdate(properties);
-
-            return customData;
+            return new DefaultCustomData(fakeResourceData);
         }
 
         [Fact]
