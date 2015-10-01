@@ -112,9 +112,17 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
             this.identityMap.Compact();
 
             // Ensure that shared map is empty
-            // Sometimes on Mono, the last item is not garbage collected
-            // That's fine, as long as there aren't still 100,000 items in the map.
-            this.identityMap.Count.ShouldBeLessThanOrEqualTo(1);
+            if (SDK.Impl.Utility.PlatformHelper.IsRunningOnMono())
+            {
+                // Mono's GC is a little fuzzier.
+                // We'll settle for <= 10 items left over.
+                this.identityMap.Count.ShouldBeLessThanOrEqualTo(10);
+            }
+            else
+            {
+                // Microsoft GC is pretty predictable.
+                this.identityMap.Count.ShouldBe(0);
+            }
         }
     }
 }
