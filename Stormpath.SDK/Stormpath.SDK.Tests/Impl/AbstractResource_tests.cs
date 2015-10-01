@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Tests.Impl
             var account1 = this.dataStore.Instantiate<IAccount>();
             var account2 = this.dataStore.Instantiate<IAccount>();
 
-            account1.ShouldBeSameAs(account2);
+            account1.ShouldNotBeSameAs(account2);
         }
 
         [Fact]
