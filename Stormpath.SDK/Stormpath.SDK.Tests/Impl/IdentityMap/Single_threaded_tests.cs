@@ -97,7 +97,7 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
                 this.identityMap.GetOrAdd(itemId, () => this.CreateEntity(itemId)).SetCount(i);
 
                 foo.Count.ShouldBe(1337);
-                this.identityMap.GetOrAdd("foo").Count.ShouldBe(1337);
+                this.identityMap.GetOrAdd("foo", () => this.CreateEntity("foo")).Count.ShouldBe(1337);
             }
 
             GCHelper.ForceGarbageCollection();

@@ -82,7 +82,7 @@ namespace Stormpath.SDK.Impl.DataStore
             }
         }
 
-        public TItem GetOrAdd(TKey key, Func<TItem> itemFactory = null)
+        public TItem GetOrAdd(TKey key, Func<TItem> itemFactory)
         {
             if (this.ShouldCompact())
                 this.Compact();
