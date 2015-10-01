@@ -34,11 +34,6 @@ namespace Stormpath.SDK.Impl.Auth
         {
         }
 
-        public DefaultAuthenticationResult(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
-
         internal LinkProperty Account => this.GetLinkProperty(AccountPropertyName);
 
         Task<IAccount> IAuthenticationResult.GetAccountAsync(CancellationToken cancellationToken)

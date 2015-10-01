@@ -37,11 +37,6 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-        public DefaultPasswordResetToken(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
-
         private IPasswordResetToken AsInterface => this;
 
         string IPasswordResetToken.Email => this.GetProperty<string>(EmailPropertyName);

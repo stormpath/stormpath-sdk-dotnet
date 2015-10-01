@@ -136,7 +136,9 @@
     <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
     <Compile Include="Impl\DataStore\IDataStoreSync.cs" />
+    <Compile Include="Impl\DataStore\IdentityMap.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStoreSync.cs" />
+    <Compile Include="Impl\Extensions\ConcurrentDictionaryExtensions.cs" />
     <Compile Include="Impl\Http\DefaultHttpClientLoader.cs" />
     <Compile Include="Impl\Http\DefaultRequestExecutor.cs" />
     <Compile Include="Impl\Http\Support\DefaultBackoffStrategy.cs" />

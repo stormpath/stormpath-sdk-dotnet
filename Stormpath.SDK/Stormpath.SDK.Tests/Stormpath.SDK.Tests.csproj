@@ -26,7 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\Stormpath.SDK\Stormpath.SDK.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,7 +35,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>stormpath.sdk.tests.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Stormpath.SDK\Stormpath.SDK.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -78,6 +79,7 @@
     <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Fakes\StubDataStore.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
+    <Compile Include="Impl\AbstractResource_tests.cs" />
     <Compile Include="Impl\DefaultCacheProviderBuilder_tests.cs" />
     <Compile Include="Impl\DefaultCustomData_persistence_tests.cs" />
     <Compile Include="Impl\DefaultCustomData_tests.cs" />
@@ -111,6 +113,10 @@
     <Compile Include="Impl\FieldConverterList_tests.cs" />
     <Compile Include="Impl\FilterChain_tests.cs" />
     <Compile Include="Impl\HttpHeaders_tests.cs" />
+    <Compile Include="Impl\IdentityMap\GCHelper.cs" />
+    <Compile Include="Impl\IdentityMap\Multi_threaded_tests.cs" />
+    <Compile Include="Impl\IdentityMap\Single_threaded_tests.cs" />
+    <Compile Include="Impl\IdentityMap\TestEntity.cs" />
     <Compile Include="Impl\Linq\Complicated_tests.cs" />
     <Compile Include="Impl\Linq\Sync_SingleOrDefault_tests.cs" />
     <Compile Include="Impl\Linq\Sync_Single_tests.cs" />

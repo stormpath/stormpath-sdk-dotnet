@@ -24,11 +24,14 @@ namespace Stormpath.SDK.Impl.DataStore
     internal sealed class DefaultResourceFactory : IResourceFactory
     {
         private readonly IInternalDataStore dataStore;
+        private readonly IdentityMap<string, AbstractResource> identityMap;
         private readonly ResourceTypeLookup typeLookup;
 
-        public DefaultResourceFactory(IInternalDataStore dataStore)
+        public DefaultResourceFactory(IInternalDataStore dataStore, IdentityMap<string, AbstractResource> identityMap)
         {
             this.dataStore = dataStore;
+            this.identityMap = identityMap;
+
             this.typeLookup = new ResourceTypeLookup();
         }
 
@@ -60,13 +63,23 @@ namespace Stormpath.SDK.Impl.DataStore
             if (targetType == null)
                 throw new ApplicationException($"Unknown resource type {type.Name}");
 
-            object targetObject;
+            AbstractResource targetObject;
             try
             {
-                if (properties == null)
-                    targetObject = Activator.CreateInstance(targetType, new object[] { this.dataStore });
-                else
-                    targetObject = Activator.CreateInstance(targetType, new object[] { this.dataStore, properties });
+                string id = RandomResourceId();
+
+                object href = null;
+                bool propertiesContainsHref =
+                    properties != null &&
+                    properties.TryGetValue("href", out href) &&
+                    href != null;
+                if (propertiesContainsHref)
+                    id = href.ToString();
+
+                targetObject = this.identityMap.GetOrAdd(id, () => Activator.CreateInstance(targetType, new object[] { this.dataStore }) as AbstractResource);
+
+                if (properties != null)
+                    targetObject.ResetAndUpdate(properties);
             }
             catch (Exception e)
             {
@@ -144,5 +157,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: failed to add items to collection.", e);
             }
         }
+
+        private static string RandomResourceId()
+            => $"autogen://{Guid.NewGuid().ToString().ToLowerInvariant().Replace("-", string.Empty)}";
     }
 }

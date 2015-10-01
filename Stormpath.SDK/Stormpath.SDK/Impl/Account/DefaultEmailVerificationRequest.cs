@@ -31,11 +31,6 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-        public DefaultEmailVerificationRequest(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
-
         string IEmailVerificationRequest.Login
             => this.GetProperty<string>(LoginPropertyName);
 

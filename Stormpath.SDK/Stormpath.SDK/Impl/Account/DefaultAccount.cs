@@ -54,11 +54,6 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-        public DefaultAccount(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
-
         internal LinkProperty AccessTokens => this.GetLinkProperty(AccessTokensPropertyName);
 
         internal LinkProperty ApiKeys => this.GetLinkProperty(ApiKeysPropertyName);
@@ -75,8 +70,8 @@ namespace Stormpath.SDK.Impl.Account
         {
             get
             {
-                var emailVerificationToken = new DefaultEmailVerificationToken(
-                    this.GetInternalDataStore(),
+                var emailVerificationToken = new DefaultEmailVerificationToken(this.GetInternalDataStore());
+                emailVerificationToken.ResetAndUpdate(
                     new Dictionary<string, object>() { { "href", this.EmailVerificationToken.Href } });
                 return emailVerificationToken;
             }

@@ -34,11 +34,6 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-        public DefaultEmailVerificationToken(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
-
         private IEmailVerificationToken AsInterface => this;
 
         string IEmailVerificationToken.GetValue()

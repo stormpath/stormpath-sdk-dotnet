@@ -28,10 +28,5 @@ namespace Stormpath.SDK.Impl.AccountStore
             : base(dataStore)
         {
         }
-
-        public DefaultAccountStore(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
     }
 }

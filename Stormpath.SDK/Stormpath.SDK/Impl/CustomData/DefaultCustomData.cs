@@ -46,16 +46,14 @@ namespace Stormpath.SDK.Impl.CustomData
         // Matches any character in a-z, A-Z, 0-9, _, -  (but cannot start with -)
         private static readonly Regex ValidKeyCharactersRegex = new Regex("^[a-zA-Z0-9_]+[a-zA-Z0-9_-]*$", RegexOptions.Compiled);
 
-        private readonly ConcurrentDictionary<string, object> deletedProperties;
+        private ConcurrentDictionary<string, object> deletedProperties;
 
         public DefaultCustomData(IInternalDataStore dataStore)
             : base(dataStore)
         {
-            this.deletedProperties = new ConcurrentDictionary<string, object>();
         }
 
-        public DefaultCustomData(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
+        protected override void ResetAndUpdateDerived(IDictionary<string, object> properties)
         {
             this.deletedProperties = new ConcurrentDictionary<string, object>();
         }

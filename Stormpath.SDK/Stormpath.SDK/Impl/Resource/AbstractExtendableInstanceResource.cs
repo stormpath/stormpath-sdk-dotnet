@@ -37,8 +37,7 @@ namespace Stormpath.SDK.Impl.Resource
             this.ResetCustomData();
         }
 
-        protected AbstractExtendableInstanceResource(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
+        protected override void ResetAndUpdateDerived(IDictionary<string, object> properties)
         {
             this.ResetCustomData();
         }

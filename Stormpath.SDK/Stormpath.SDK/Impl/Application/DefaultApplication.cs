@@ -56,11 +56,6 @@ namespace Stormpath.SDK.Impl.Application
         {
         }
 
-        public DefaultApplication(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
-
         private IApplication AsInterface => this;
 
         private IApplicationSync AsSyncInterface => this;

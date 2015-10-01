@@ -1,4 +1,4 @@
-﻿// <copyright file="AbstractLoginAttempt.cs" company="Stormpath, Inc.">
+﻿// <copyright file="GCHelper.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,23 +15,16 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Resource;
+using System;
 
-namespace Stormpath.SDK.Impl.Auth
+namespace Stormpath.SDK.Tests.Impl.IdentityMap
 {
-    internal abstract class AbstractLoginAttempt : AbstractResource, ILoginAttempt
+    public static class GCHelper
     {
-        private static readonly string TypePropertyName = "type";
-
-        public AbstractLoginAttempt(IInternalDataStore dataStore)
-            : base(dataStore)
+        public static void ForceGarbageCollection()
         {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
-
-        string ILoginAttempt.Type => this.GetProperty<string>(TypePropertyName);
-
-        void ILoginAttempt.SetType(string type) => this.SetProperty(TypePropertyName, type);
     }
 }

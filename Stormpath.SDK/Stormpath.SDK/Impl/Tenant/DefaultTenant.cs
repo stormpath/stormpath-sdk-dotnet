@@ -52,11 +52,6 @@ namespace Stormpath.SDK.Impl.Tenant
         {
         }
 
-        public DefaultTenant(IInternalDataStore dataStore, IDictionary<string, object> properties)
-             : base(dataStore, properties)
-        {
-        }
-
         private ITenant AsInterface => this;
 
         private ITenantActionsSync AsTenantActionSyncInterface => this;

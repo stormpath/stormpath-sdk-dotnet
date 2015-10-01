@@ -38,11 +38,6 @@ namespace Stormpath.SDK.Impl.AccountStore
         {
         }
 
-        public DefaultAccountStoreMapping(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
-
         internal LinkProperty AccountStore => this.GetLinkProperty(AccountStorePropertyName);
 
         internal LinkProperty Application => this.GetLinkProperty(ApplicationPropertyName);

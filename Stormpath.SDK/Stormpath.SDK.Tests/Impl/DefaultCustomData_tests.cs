@@ -32,7 +32,10 @@ namespace Stormpath.SDK.Tests.Impl
             if (properties == null)
                 properties = new Dictionary<string, object>();
 
-            return new DefaultCustomData(new FakeDataStore<ICustomData>(), properties);
+            var customData = new DefaultCustomData(new FakeDataStore<ICustomData>());
+            customData.ResetAndUpdate(properties);
+
+            return customData;
         }
 
         [Fact]

@@ -34,11 +34,6 @@ namespace Stormpath.SDK.Impl.Resource
         {
         }
 
-        protected AbstractInstanceResource(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
-
         DateTimeOffset IAuditable.CreatedAt => this.GetProperty<DateTimeOffset>(CreatedAtPropertyName);
 
         DateTimeOffset IAuditable.ModifiedAt => this.GetProperty<DateTimeOffset>(ModifiedAtPropertyName);
