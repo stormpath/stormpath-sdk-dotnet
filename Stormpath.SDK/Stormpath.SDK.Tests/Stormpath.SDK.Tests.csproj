@@ -160,6 +160,7 @@
     <Compile Include="Impl\Utility\Iso8601_tests.cs" />
     <Compile Include="Impl\Utility\Properties_tests.cs" />
     <Compile Include="Impl\Utility\RequestHelper_tests.cs" />
+    <Compile Include="Impl\Utility\UnixDate_tests.cs" />
     <Compile Include="Impl\Utility\WindowsVersion_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LoggerExtensions_tests.cs" />

@@ -17,6 +17,8 @@
 
 using System;
 using System.Collections.Generic;
+using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
 
 namespace Stormpath.SDK.Impl.Jwt
@@ -54,7 +56,7 @@ namespace Stormpath.SDK.Impl.Jwt
 
         IJwtClaimsBuilder IJwtClaimsBuilder.SetExpiration(DateTimeOffset? exp)
         {
-            this.SetOrRemove(DefaultJwtClaims.Expiration, exp);
+            this.SetOrRemove(DefaultJwtClaims.Expiration, UnixDate.ToLong(exp));
             return this;
         }
 
@@ -66,7 +68,7 @@ namespace Stormpath.SDK.Impl.Jwt
 
         IJwtClaimsBuilder IJwtClaimsBuilder.SetIssuedAt(DateTimeOffset? iat)
         {
-            this.SetOrRemove(DefaultJwtClaims.IssuedAt, iat);
+            this.SetOrRemove(DefaultJwtClaims.IssuedAt, UnixDate.ToLong(iat));
             return this;
         }
 
@@ -78,7 +80,7 @@ namespace Stormpath.SDK.Impl.Jwt
 
         IJwtClaimsBuilder IJwtClaimsBuilder.SetNotBeforeDate(DateTimeOffset? nbf)
         {
-            this.SetOrRemove(DefaultJwtClaims.NotBefore, nbf);
+            this.SetOrRemove(DefaultJwtClaims.NotBefore, UnixDate.ToLong(nbf));
             return this;
         }
 

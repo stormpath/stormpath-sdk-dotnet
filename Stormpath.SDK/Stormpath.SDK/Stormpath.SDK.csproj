@@ -319,6 +319,7 @@
     <Compile Include="Impl\Utility\ITypeLoader.cs" />
     <Compile Include="Impl\Utility\SourceLanguage.cs" />
     <Compile Include="Impl\Utility\TypeLoader.cs" />
+    <Compile Include="Impl\Utility\UnixDate.cs" />
     <Compile Include="Linq\AsyncQueryableExpandExtensions.cs" />
     <Compile Include="Jwt\IJwtClaims.cs" />
     <Compile Include="Jwt\IJwtClaimsBuilder.cs" />
@@ -383,7 +384,6 @@
     <Compile Include="Impl\DataStore\ResourceTypes.cs" />
     <Compile Include="Impl\Directory\DefaultDirectory.cs" />
     <Compile Include="Impl\Error\DefaultError.cs" />
-    <Compile Include="Impl\Extensions\DateExtensions.cs" />
     <Compile Include="Impl\Extensions\UriExtensions.cs" />
     <Compile Include="Impl\Http\Authentication\DefaultRequestAuthenticatorFactory.cs" />
     <Compile Include="Impl\Http\Authentication\IRequestAuthenticatorFactory.cs" />

@@ -28,11 +28,11 @@ namespace Stormpath.SDK.Jwt
 
         string Audience { get; }
 
-        DateTimeOffset Expiration { get; }
+        DateTimeOffset? Expiration { get; }
 
-        DateTimeOffset NotBefore { get; }
+        DateTimeOffset? NotBefore { get; }
 
-        DateTimeOffset IssuedAt { get; }
+        DateTimeOffset? IssuedAt { get; }
 
         string Id { get; }
 

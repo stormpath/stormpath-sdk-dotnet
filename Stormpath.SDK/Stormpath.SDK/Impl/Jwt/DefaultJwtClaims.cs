@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
 
 namespace Stormpath.SDK.Impl.Jwt
@@ -38,28 +39,39 @@ namespace Stormpath.SDK.Impl.Jwt
             this.claims = claims;
         }
 
-        private T GetClaim<T>(string claim)
+        private object GetClaim(string claimName)
         {
-            object value;
-            if (!this.claims.TryGetValue(claim, out value) || value == null)
-                return default(T);
+            object value = null;
+            this.claims.TryGetValue(claimName, out value);
 
-            return (T)value;
+            return value;
         }
 
-        string IJwtClaims.Audience => this.GetClaim<string>(Audience);
+        private string GetStringClaim(string claimName)
+        {
+            return (string)this.GetClaim(claimName);
+        }
 
-        DateTimeOffset IJwtClaims.Expiration => this.GetClaim<DateTimeOffset>(Expiration);
+        private DateTimeOffset? GetDateClaim(string claimName)
+        {
+            var unixTimestamp = (long?)this.GetClaim(claimName);
 
-        string IJwtClaims.Id => this.GetClaim<string>(Id);
+            return UnixDate.FromLong(unixTimestamp);
+        }
 
-        DateTimeOffset IJwtClaims.IssuedAt => this.GetClaim<DateTimeOffset>(IssuedAt);
+        string IJwtClaims.Audience => this.GetStringClaim(Audience);
 
-        string IJwtClaims.Issuer => this.GetClaim<string>(Issuer);
+        DateTimeOffset? IJwtClaims.Expiration => this.GetDateClaim(Expiration);
 
-        DateTimeOffset IJwtClaims.NotBefore => this.GetClaim<DateTimeOffset>(NotBefore);
+        string IJwtClaims.Id => this.GetStringClaim(Id);
 
-        string IJwtClaims.Subject => this.GetClaim<string>(Subject);
+        DateTimeOffset? IJwtClaims.IssuedAt => this.GetDateClaim(IssuedAt);
+
+        string IJwtClaims.Issuer => this.GetStringClaim(Issuer);
+
+        DateTimeOffset? IJwtClaims.NotBefore => this.GetDateClaim(NotBefore);
+
+        string IJwtClaims.Subject => this.GetStringClaim(Subject);
 
         IDictionary<string, object> IJwtClaims.ToDictionary()
             => new Dictionary<string, object>(this.claims);
