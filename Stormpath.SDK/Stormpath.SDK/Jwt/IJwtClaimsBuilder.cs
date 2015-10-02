@@ -77,6 +77,14 @@ namespace Stormpath.SDK.Jwt
         IJwtClaimsBuilder SetId(string jti);
 
         /// <summary>
+        /// Sets a custom JWT Claims parameter value.  A <c>null</c> value will remove the property from the JSON map.
+        /// </summary>
+        /// <param name="claimName">The JWT Claims property name</param>
+        /// <param name="value">the value to set for the specified Claims property name</param>
+        /// <returns>This instance for method chaining.</returns>
+        IJwtClaimsBuilder SetClaim(string claimName, object value);
+
+        /// <summary>
         /// Constructs a new <see cref="IJwtClaims"/> instance based on the current builder state.
         /// </summary>
         /// <returns>A new <see cref="IJwtClaims"/> instance based on the current builder state.</returns>

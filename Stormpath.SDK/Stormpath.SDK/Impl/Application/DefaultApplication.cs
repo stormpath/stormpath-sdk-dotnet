@@ -26,6 +26,8 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Auth;
+using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.IdSite;
 using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Provider;
@@ -225,7 +227,7 @@ namespace Stormpath.SDK.Impl.Application
 
         IIdSiteUrlBuilder IApplication.NewIdSiteUrlBuilder()
         {
-            throw new NotImplementedException();
+            return new DefaultIdSiteUrlBuilder(this.InternalDataStore, this.AsInterface.Href);
         }
 
         IIdSiteCallbackHandler IApplication.NewIdSiteCallbackHandler(SDK.Http.IHttpRequest request)

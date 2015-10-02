@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
             this.builder = new DefaultJwtClaimsBuilder();
         }
 
-        private static IDictionary<string, object> GetJwt(IJwtClaimsBuilder builder)
+        private static IDictionary<string, object> GetClaims(IJwtClaimsBuilder builder)
         {
             return builder.Build().ToDictionary();
         }
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
         [Fact]
         public void Building_empty_jwt()
         {
-            var data = GetJwt(this.builder);
+            var data = GetClaims(this.builder);
 
             data.Any().ShouldBeFalse();
         }
@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
                 .SetAudience("Me!")
                 .SetAudience(null);
 
-            var data = GetJwt(this.builder);
+            var data = GetClaims(this.builder);
 
             data.Any().ShouldBeFalse();
         }
@@ -66,13 +66,13 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
                 .SetExpiration(DateTimeOffset.Now)
                 .SetExpiration(null);
 
-            var data = GetJwt(this.builder);
+            var data = GetClaims(this.builder);
 
             data.Any().ShouldBeFalse();
         }
 
         [Fact]
-        public void Setting_all_claims()
+        public void Setting_all_default_claims()
         {
             var fakeExpiration = new DateTimeOffset(2016, 01, 01, 12, 30, 00, TimeSpan.Zero);
             var fakeIssuedAt = new DateTimeOffset(2015, 01, 01, 12, 30, 00, TimeSpan.Zero);
@@ -87,7 +87,7 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
                 .SetNotBeforeDate(fakeNotBefore)
                 .SetSubject("Secret Plans");
 
-            var data = GetJwt(this.builder);
+            var data = GetClaims(this.builder);
 
             data.ShouldContain(kvp => kvp.Key == "aud" && (string)kvp.Value == "Count Dooku");
             data.ShouldContain(kvp => kvp.Key == "exp" && (DateTimeOffset)kvp.Value == fakeExpiration);
@@ -96,6 +96,17 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
             data.ShouldContain(kvp => kvp.Key == "iss" && (string)kvp.Value == "Lord Sidious");
             data.ShouldContain(kvp => kvp.Key == "nbf" && (DateTimeOffset)kvp.Value == fakeNotBefore);
             data.ShouldContain(kvp => kvp.Key == "sub" && (string)kvp.Value == "Secret Plans");
+        }
+
+        [Fact]
+        public void Setting_custom_claim()
+        {
+            this.builder
+                .SetClaim("foo", "bar!");
+
+            var data = GetClaims(this.builder);
+
+            data.ShouldContain(kvp => kvp.Key == "foo" && (string)kvp.Value == "bar!");
         }
     }
 }

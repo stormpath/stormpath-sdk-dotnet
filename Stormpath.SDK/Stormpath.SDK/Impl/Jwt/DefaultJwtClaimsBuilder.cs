@@ -88,6 +88,12 @@ namespace Stormpath.SDK.Impl.Jwt
             return this;
         }
 
+        IJwtClaimsBuilder IJwtClaimsBuilder.SetClaim(string claimName, object value)
+        {
+            this.SetOrRemove(claimName, value);
+            return this;
+        }
+
         IJwtClaims IJwtClaimsBuilder.Build() => new DefaultJwtClaims(this.claimsInProgress);
     }
 }

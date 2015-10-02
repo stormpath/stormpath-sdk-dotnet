@@ -16,8 +16,11 @@
 // </remarks>
 
 using System;
+using System.Text;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Jwt;
+using Stormpath.SDK.Jwt;
 
 namespace Stormpath.SDK.Impl.IdSite
 {
@@ -34,8 +37,8 @@ namespace Stormpath.SDK.Impl.IdSite
         private string path;
         private bool logout = false;
         private string organizationNameKey;
-        private bool useSubdomain;
-        private bool showOrganizationField;
+        private bool? useSubdomain;
+        private bool? showOrganizationField;
 
         public DefaultIdSiteUrlBuilder(IInternalDataStore internalDataStore, string applicationHref)
         {
@@ -137,7 +140,38 @@ namespace Stormpath.SDK.Impl.IdSite
             var now = DateTimeOffset.UtcNow;
             var apiKey = this.internalDataStore.ApiKey;
 
-            throw new NotImplementedException();
+            var jwtBuilder = Jwts.NewClaimsBuilder()
+                .SetId(jti)
+                .SetIssuedAt(DateTimeOffset.Now)
+                .SetIssuer(apiKey.GetId())
+                .SetSubject(this.applicationHref)
+                .SetClaim(IdSiteClaims.RedirectUri, this.callbackUri);
+
+            if (!string.IsNullOrEmpty(this.path))
+                jwtBuilder.SetClaim(IdSiteClaims.Path, this.path);
+
+            if (!string.IsNullOrEmpty(this.state))
+                jwtBuilder.SetClaim(IdSiteClaims.State, this.state);
+
+            if (!string.IsNullOrEmpty(this.organizationNameKey))
+                jwtBuilder.SetClaim(IdSiteClaims.OrganizationNameKey, this.organizationNameKey);
+
+            if (this.useSubdomain.HasValue)
+                jwtBuilder.SetClaim(IdSiteClaims.UseSubdomain, this.useSubdomain.Value);
+
+            if (this.showOrganizationField.HasValue)
+                jwtBuilder.SetClaim(IdSiteClaims.ShowOrganizationField, this.showOrganizationField.Value);
+
+            string jwt = JWT.JsonWebToken.Encode(jwtBuilder.Build().ToDictionary(), apiKey.GetSecret(), JWT.JwtHashAlgorithm.HS256);
+
+            var urlBuilder = new StringBuilder(this.ssoEndpoint);
+
+            if (this.logout)
+                urlBuilder.Append(logoutSuffix);
+
+            urlBuilder.Append($"?{IdSiteClaims.JwtRequest}={jwt}");
+
+            return urlBuilder.ToString();
         }
     }
 }
