@@ -97,9 +97,13 @@
     <Compile Include="Group\IGroup.cs" />
     <Compile Include="Group\IGroupMembership.cs" />
     <Compile Include="Http\HttpExtensions.cs" />
+    <Compile Include="Http\HttpRequests.cs" />
     <Compile Include="Http\IAsynchronousHttpClient.cs" />
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Http\ISynchronousHttpClient.cs" />
+    <Compile Include="IdSite\IAccountResult.cs" />
+    <Compile Include="IdSite\IIdSiteCallbackHandler.cs" />
+    <Compile Include="IdSite\IIdSiteUrlBuilder.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreMappingSync.cs" />
@@ -455,7 +459,9 @@
     <None Include="Stormpath.SDK.ruleset" />
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Impl\IdSite\" />
+  </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\Newtonsoft.Json.dll" />

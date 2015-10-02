@@ -22,6 +22,8 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Http;
+using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
@@ -392,6 +394,26 @@ namespace Stormpath.SDK.Application
         /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">There is no account that matches the specified email address.</exception>
         Task<IPasswordResetToken> SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Creates a new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your
+        /// application users to a hosted login/registration/forgot-password site - what Stormpath calls an 'Identity Site'
+        /// (or 'ID Site' for short) - for performing common user identity functionality.
+        /// When the user is done (logging in, registering, etc), they will be redirected back to a <c>callbackUri</c> of your choice.
+        /// </summary>
+        /// <returns>A new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your application users to a hosted login/registration/forgot-password 'ID Site'.</returns>
+        IIdSiteUrlBuilder NewIdSiteUrlBuilder();
+
+        /// <summary>
+        /// Creates a new <see cref="IIdSiteCallbackHandler"/> used the handle HTTP replies from your ID Site to your application's <c>callbackUri</c>,
+        /// as described in the <see cref="NewIdSiteUrlBuilder"/> method.
+        /// </summary>
+        /// <param name="request">
+        /// An instance of <see cref="IHttpRequest"/>.
+        /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
+        /// </param>
+        /// <returns>An <see cref="IIdSiteCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
+        IIdSiteCallbackHandler NewIdSiteCallbackHandler(IHttpRequest request);
 
         /// <summary>
         /// Sends a password reset email to an account in the specified <see cref="IAccountStore"/> matching
