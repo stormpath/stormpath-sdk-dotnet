@@ -117,6 +117,7 @@
     <Compile Include="Impl\IdentityMap\Multi_threaded_tests.cs" />
     <Compile Include="Impl\IdentityMap\Single_threaded_tests.cs" />
     <Compile Include="Impl\IdentityMap\TestEntity.cs" />
+    <Compile Include="Impl\Jwt\DefaultJwtClaimsBuilder_tests.cs" />
     <Compile Include="Impl\Linq\Complicated_tests.cs" />
     <Compile Include="Impl\Linq\Expand_resource_tests.cs" />
     <Compile Include="Impl\Linq\Sync_expand_extension_tests.cs" />

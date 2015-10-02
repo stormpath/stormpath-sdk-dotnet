@@ -239,6 +239,8 @@
     <Compile Include="Impl\Linq\QueryModel\CollectionResourceQueryModel.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryProvider.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteUrlBuilder.cs" />
+    <Compile Include="Impl\Jwt\DefaultJwtClaims.cs" />
+    <Compile Include="Impl\Jwt\DefaultJwtClaimsBuilder.cs" />
     <Compile Include="Impl\Linq\LinqHelper.cs" />
     <Compile Include="Impl\Linq\Parsing\QueryModelCompiler.cs" />
     <Compile Include="Impl\Linq\Parsing\RequestBuilder.cs" />
@@ -317,6 +319,9 @@
     <Compile Include="Impl\Utility\SourceLanguage.cs" />
     <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Linq\AsyncQueryableExpandExtensions.cs" />
+    <Compile Include="Jwt\IJwtClaims.cs" />
+    <Compile Include="Jwt\IJwtClaimsBuilder.cs" />
+    <Compile Include="Jwt\Jwts.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
     <Compile Include="Logging\InMemoryLogger.cs" />
