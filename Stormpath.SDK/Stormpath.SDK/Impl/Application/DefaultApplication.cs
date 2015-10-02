@@ -225,14 +225,14 @@ namespace Stormpath.SDK.Impl.Application
             this.GetInternalDataStoreSync().Create(href, builder.Build());
         }
 
-        IIdSiteUrlBuilder IApplication.NewIdSiteUrlBuilder()
+        SDK.IdSite.IIdSiteUrlBuilder IApplication.NewIdSiteUrlBuilder()
         {
             return new DefaultIdSiteUrlBuilder(this.InternalDataStore, this.AsInterface.Href);
         }
 
-        IIdSiteCallbackHandler IApplication.NewIdSiteCallbackHandler(SDK.Http.IHttpRequest request)
+        SDK.IdSite.IIdSiteAsyncCallbackHandler IApplication.NewIdSiteCallbackHandler(SDK.Http.IHttpRequest request)
         {
-            throw new NotImplementedException();
+            return new DefaultIdSiteCallbackHandler(this.InternalDataStore, this, request);
         }
 
         IAsyncQueryable<IAccount> IApplication.GetAccounts()

@@ -15,6 +15,10 @@
 // limitations under the License.
 // </remarks>
 
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.Account;
+
 namespace Stormpath.SDK.IdSite
 {
     /// <summary>
@@ -23,6 +27,31 @@ namespace Stormpath.SDK.IdSite
     /// </summary>
     public interface IAccountResult
     {
-        // TODO
+        /// <summary>
+        /// Returns any original application-specific state that was applied when the user was redirected to the ID Site, or
+        /// <c>null</c> if no state was specified.
+        /// </summary>
+        /// <seealso cref="Application.IApplication.NewIdSiteUrlBuilder"/>
+        /// <seealso cref="IIdSiteUrlBuilder.SetState(string)"/>
+        /// <value>Application-specific state that was applied to the ID Site redirect, or <c>null</c> if no state data was set.</value>
+        string State { get; }
+
+        /// <summary>
+        /// Determines whether the account returned by <see cref="GetAccountAsync(CancellationToken)"/> was
+        /// newly created (registered) on the ID Site, or was an existing account that logged in successfully.
+        /// </summary>
+        /// <value><c>true</c> if the returned <see cref="IAccount"/> was registered on the ID Site;
+        /// <c>false</c> if the account was an existing account that logged in successfully.</value>
+        bool IsNewAccount { get; }
+
+        /// <summary>
+        /// Returns the user account that either logged in or was created as a result of registration on the ID Site.
+        /// You can determine if the account is newly registered if <see cref="IsNewAccount"/> is <c>true</c>.
+        /// If <see cref="IsNewAccount"/> is <c>false</c>, the account reflects a previously-registered user
+        /// that has logged in.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the user's <see cref="IAccount"/> resource.</returns>
+        Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

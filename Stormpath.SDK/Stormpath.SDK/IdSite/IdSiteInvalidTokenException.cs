@@ -1,4 +1,4 @@
-﻿// <copyright file="IIdSiteCallbackHandler.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IdSiteInvalidTokenException.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,13 +15,23 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Stormpath.SDK.Error;
+using Stormpath.SDK.Impl.Error;
+
 namespace Stormpath.SDK.IdSite
 {
-    /// <summary>
-    /// Handles HTTP replies sent from your ID Site to your application's <c>callbackUri</c>
-    /// and returns an <see cref="IAccountResult"/>.
-    /// </summary>
-    public interface IIdSiteCallbackHandler
+    public sealed class IdSiteInvalidTokenException : ResourceException
     {
+        internal IdSiteInvalidTokenException(DefaultError error)
+            : base(error)
+        {
+        }
+
+        // TODO
     }
 }

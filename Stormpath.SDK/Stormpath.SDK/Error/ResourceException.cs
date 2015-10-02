@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Error
     /// Represents an error that occurs during a resource request.
     /// </summary>
     [Serializable]
-    public sealed class ResourceException : ApplicationException, IError, ISerializable
+    public class ResourceException : ApplicationException, IError, ISerializable
     {
         private readonly DefaultError error;
         private readonly string constructedErrorMessage;

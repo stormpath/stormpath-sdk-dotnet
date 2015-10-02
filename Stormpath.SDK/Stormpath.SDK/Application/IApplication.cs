@@ -102,7 +102,7 @@ namespace Stormpath.SDK.Application
         /// var result = await myApp.AuthenticateAccountAsync(loginRequest.Build());
         /// </code>
         /// </example>
-        Task<IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password).
@@ -199,7 +199,7 @@ namespace Stormpath.SDK.Application
         /// var result = await myApp.AuthenticateAccountAsync("jsmith", "Password123#");
         /// </code>
         /// </example>
-        Task<IAuthenticationResult> AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Attempts to authenticate an account with the specified username and password.
@@ -405,15 +405,15 @@ namespace Stormpath.SDK.Application
         IIdSiteUrlBuilder NewIdSiteUrlBuilder();
 
         /// <summary>
-        /// Creates a new <see cref="IIdSiteCallbackHandler"/> used the handle HTTP replies from your ID Site to your application's <c>callbackUri</c>,
+        /// Creates a new <see cref="IIdSiteAsyncCallbackHandler"/> used the handle HTTP replies from your ID Site to your application's <c>callbackUri</c>,
         /// as described in the <see cref="NewIdSiteUrlBuilder"/> method.
         /// </summary>
         /// <param name="request">
         /// An instance of <see cref="IHttpRequest"/>.
         /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
         /// </param>
-        /// <returns>An <see cref="IIdSiteCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
-        IIdSiteCallbackHandler NewIdSiteCallbackHandler(IHttpRequest request);
+        /// <returns>An <see cref="IIdSiteAsyncCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
+        IIdSiteAsyncCallbackHandler NewIdSiteCallbackHandler(IHttpRequest request);
 
         /// <summary>
         /// Sends a password reset email to an account in the specified <see cref="IAccountStore"/> matching

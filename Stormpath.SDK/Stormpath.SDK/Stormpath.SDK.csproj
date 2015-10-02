@@ -106,8 +106,17 @@
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Http\ISynchronousHttpClient.cs" />
     <Compile Include="IdSite\IAccountResult.cs" />
-    <Compile Include="IdSite\IIdSiteCallbackHandler.cs" />
+    <Compile Include="IdSite\IAsynchronousNonceStore.cs" />
+    <Compile Include="IdSite\IdSiteInvalidTokenException.cs" />
+    <Compile Include="IdSite\IdSiteSessionTimeoutException.cs" />
+    <Compile Include="IdSite\IIdSiteAsyncCallbackHandler.cs" />
+    <Compile Include="IdSite\IIdSiteResultAsyncListener.cs" />
     <Compile Include="IdSite\IIdSiteUrlBuilder.cs" />
+    <Compile Include="IdSite\INonceStore.cs" />
+    <Compile Include="IdSite\IAuthenticationResult.cs" />
+    <Compile Include="IdSite\ILogoutResult.cs" />
+    <Compile Include="IdSite\IRegistrationResult.cs" />
+    <Compile Include="IdSite\ISynchronousNonceStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreMappingSync.cs" />
@@ -238,6 +247,7 @@
     <Compile Include="Impl\Linq\Parsing\WhereComparison.cs" />
     <Compile Include="Impl\Linq\QueryModel\CollectionResourceQueryModel.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryProvider.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteCallbackHandler.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteUrlBuilder.cs" />
     <Compile Include="Impl\Jwt\DefaultJwtClaims.cs" />
     <Compile Include="Impl\Jwt\DefaultJwtClaimsBuilder.cs" />
@@ -323,6 +333,7 @@
     <Compile Include="Linq\AsyncQueryableExpandExtensions.cs" />
     <Compile Include="Jwt\IJwtClaims.cs" />
     <Compile Include="Jwt\IJwtClaimsBuilder.cs" />
+    <Compile Include="Jwt\InvalidJwtException.cs" />
     <Compile Include="Jwt\Jwts.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
