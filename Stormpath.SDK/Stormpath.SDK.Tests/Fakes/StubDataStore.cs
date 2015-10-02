@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Impl.Cache;
@@ -51,6 +52,9 @@ namespace Stormpath.SDK.Tests.Fakes
 
         string IInternalDataStore.BaseUrl => this.ProxyDataStore.BaseUrl;
 
+        IClientApiKey IInternalDataStore.ApiKey => this.FakeDataStore.ApiKey;
+
+        IRequestExecutor IInternalDataStore.RequestExecutor => this.FakeDataStore.RequestExecutor;
         IRequestExecutor IInternalDataStore.RequestExecutor
             => this.ProxyDataStore.RequestExecutor;
 

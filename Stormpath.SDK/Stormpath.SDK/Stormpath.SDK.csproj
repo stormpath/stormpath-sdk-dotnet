@@ -234,6 +234,7 @@
     <Compile Include="Impl\Linq\Parsing\WhereComparison.cs" />
     <Compile Include="Impl\Linq\QueryModel\CollectionResourceQueryModel.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryProvider.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteUrlBuilder.cs" />
     <Compile Include="Impl\Linq\LinqHelper.cs" />
     <Compile Include="Impl\Linq\Parsing\QueryModelCompiler.cs" />
     <Compile Include="Impl\Linq\Parsing\RequestBuilder.cs" />
@@ -459,9 +460,7 @@
     <None Include="Stormpath.SDK.ruleset" />
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Impl\IdSite\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\Newtonsoft.Json.dll" />

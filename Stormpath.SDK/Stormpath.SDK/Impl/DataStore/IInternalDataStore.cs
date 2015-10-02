@@ -14,6 +14,9 @@
 // limitations under the License.
 // </copyright>
 
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.Api;
 using System.Collections.Generic;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Impl.Http;
@@ -27,6 +30,10 @@ namespace Stormpath.SDK.Impl.DataStore
 
         string BaseUrl { get; }
 
+        IClientApiKey ApiKey { get; }
+
+        // Asynchronous path
+        Task<CollectionResponsePage<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken);
         T InstantiateWithHref<T>(string href)
             where T : IResource;
 

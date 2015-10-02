@@ -60,6 +60,37 @@ namespace Stormpath.SDK.IdSite
         IIdSiteUrlBuilder SetPath(string path);
 
         /// <summary>
+        /// Ensures the ID Site is customized for the <c>Organization</c> with the specified <paramref name="organizationNameKey"/>
+        /// This is useful for multi-tenant or white label scenarios where you know the user belongs to a specific <c>Organization</c>.
+        /// </summary>
+        /// <param name="organizationNameKey">The unique identifier of the <c>Organization</c> to use when customizing ID Site.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IIdSiteUrlBuilder SetOrganizationNameKey(string organizationNameKey);
+
+        /// <summary>
+        /// Ensures that the user will visit ID Site using a subdomain equal to the
+        /// <see cref="SetOrganizationNameKey(string)"/> instead of the standard base domain.
+        /// </summary>
+        /// <param name="useSubdomain">
+        /// <c>true</c> to ensure that the user will visit ID Site using a subdomain equal to the
+        /// <see cref="SetOrganizationNameKey(string)"/>, <c>false</c> to ensure that the standard ID Site domain.
+        /// </param>
+        /// <returns>This instance for method chaining.</returns>
+        IIdSiteUrlBuilder SetUseSubdomain(bool useSubdomain);
+
+        /// <summary>
+        /// Ensures that the ID Site will show the <see cref="SetOrganizationNameKey(string)"/> field to
+        /// the end-user in the ID Site user interface.
+        /// </summary>
+        /// <param name="showOrganizationField">
+        /// <c>true</c> the ID Site will show the
+        /// <see cref="SetOrganizationNameKey(string)"/> field to end-user in
+        /// the ID Site user interface, <c>false</c> otherwise.
+        /// </param>
+        /// <returns>This instance for method chaining.</returns>
+        IIdSiteUrlBuilder SetShowOrganizationField(bool showOrganizationField);
+
+        /// <summary>
         /// Sets application-specific state data that should be retained and made availabe to your <c>callbackUri</c>
         /// when the user returns from the ID Site.
         /// </summary>

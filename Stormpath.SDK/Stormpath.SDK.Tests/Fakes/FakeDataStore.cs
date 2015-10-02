@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
@@ -56,6 +57,14 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         string IInternalDataStore.BaseUrl
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        IClientApiKey IInternalDataStore.ApiKey
         {
             get
             {

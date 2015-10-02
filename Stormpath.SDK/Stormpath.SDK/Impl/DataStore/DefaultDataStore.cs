@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.DataStore;
@@ -65,6 +66,9 @@ namespace Stormpath.SDK.Impl.DataStore
 
         string IInternalDataStore.BaseUrl => this.baseUrl;
 
+        IClientApiKey IInternalDataStore.ApiKey => this.requestExecutor.ApiKey;
+
+        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider)
         internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider, TimeSpan identityMapExpiration)
         {
             if (requestExecutor == null)
@@ -547,31 +551,31 @@ namespace Stormpath.SDK.Impl.DataStore
             var abstractResource = resource as AbstractResource;
             if (abstractResource != null)
             {
-                // Serialize properties
+            // Serialize properties
                 propertiesMap = this.resourceConverter.ToMap(abstractResource);
 
-                var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
-                bool includesCustomData = extendableInstanceResource != null;
-                if (includesCustomData)
+            var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
+            bool includesCustomData = extendableInstanceResource != null;
+            if (includesCustomData)
+            {
+                var customDataProxy = (extendableInstanceResource as IExtendable).CustomData as DefaultEmbeddedCustomData;
+
+                // Apply custom data deletes
+                if (customDataProxy.HasDeletedProperties())
                 {
-                    var customDataProxy = (extendableInstanceResource as IExtendable).CustomData as DefaultEmbeddedCustomData;
+                    if (customDataProxy.DeleteAll)
+                        await this.DeleteCoreAsync<ICustomData>(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
+                    else
+                        await customDataProxy.DeleteRemovedCustomDataPropertiesAsync(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
+                }
 
-                    // Apply custom data deletes
-                    if (customDataProxy.HasDeletedProperties())
-                    {
-                        if (customDataProxy.DeleteAll)
-                            await this.DeleteCoreAsync<ICustomData>(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
-                        else
-                            await customDataProxy.DeleteRemovedCustomDataPropertiesAsync(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
-                    }
-
-                    // Merge in custom data updates
-                    if (customDataProxy.HasUpdatedCustomDataProperties())
+                // Merge in custom data updates
+                if (customDataProxy.HasUpdatedCustomDataProperties())
                         propertiesMap["customData"] = customDataProxy.UpdatedCustomDataProperties;
 
-                    // Remove custom data updates from proxy
-                    extendableInstanceResource.ResetCustomData();
-                }
+                // Remove custom data updates from proxy
+                extendableInstanceResource.ResetCustomData();
+            }
             }
 
             // In some cases, all we need to save are custom data property deletions, which is taken care of above.
@@ -637,31 +641,31 @@ namespace Stormpath.SDK.Impl.DataStore
             var abstractResource = resource as AbstractResource;
             if (abstractResource != null)
             {
-                // Serialize properties
+            // Serialize properties
                 propertiesMap = this.resourceConverter.ToMap(abstractResource);
 
-                var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
-                bool includesCustomData = extendableInstanceResource != null;
-                if (includesCustomData)
+            var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
+            bool includesCustomData = extendableInstanceResource != null;
+            if (includesCustomData)
+            {
+                var customDataProxy = (extendableInstanceResource as IExtendableSync).CustomData as DefaultEmbeddedCustomData;
+
+                // Apply custom data deletes
+                if (customDataProxy.HasDeletedProperties())
                 {
-                    var customDataProxy = (extendableInstanceResource as IExtendableSync).CustomData as DefaultEmbeddedCustomData;
+                    if (customDataProxy.DeleteAll)
+                        this.DeleteCore<ICustomData>(extendableInstanceResource.CustomData.Href);
+                    else
+                        customDataProxy.DeleteRemovedCustomDataProperties(extendableInstanceResource.CustomData.Href);
+                }
 
-                    // Apply custom data deletes
-                    if (customDataProxy.HasDeletedProperties())
-                    {
-                        if (customDataProxy.DeleteAll)
-                            this.DeleteCore<ICustomData>(extendableInstanceResource.CustomData.Href);
-                        else
-                            customDataProxy.DeleteRemovedCustomDataProperties(extendableInstanceResource.CustomData.Href);
-                    }
-
-                    // Merge in custom data updates
-                    if (customDataProxy.HasUpdatedCustomDataProperties())
+                // Merge in custom data updates
+                if (customDataProxy.HasUpdatedCustomDataProperties())
                         propertiesMap["customData"] = customDataProxy.UpdatedCustomDataProperties;
 
-                    // Remove custom data updates from proxy
-                    extendableInstanceResource.ResetCustomData();
-                }
+                // Remove custom data updates from proxy
+                extendableInstanceResource.ResetCustomData();
+            }
             }
 
             // In some cases, all we need to save are custom data property deletions, which is taken care of above.
