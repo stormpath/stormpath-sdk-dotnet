@@ -112,6 +112,7 @@
     <Compile Include="IdSite\IIdSiteAsyncCallbackHandler.cs" />
     <Compile Include="IdSite\IIdSiteResultAsyncListener.cs" />
     <Compile Include="IdSite\IIdSiteUrlBuilder.cs" />
+    <Compile Include="IdSite\INonce.cs" />
     <Compile Include="IdSite\INonceStore.cs" />
     <Compile Include="IdSite\IAuthenticationResult.cs" />
     <Compile Include="IdSite\ILogoutResult.cs" />
@@ -248,10 +249,13 @@
     <Compile Include="Impl\Linq\QueryModel\CollectionResourceQueryModel.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryProvider.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteCallbackHandler.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteUrlBuilder.cs" />
+    <Compile Include="Impl\IdSite\DefaultNonce.cs" />
+    <Compile Include="Impl\IdSite\DefaultNonceStore.cs" />
     <Compile Include="Impl\Jwt\DefaultJwtClaims.cs" />
     <Compile Include="Impl\Jwt\DefaultJwtClaimsBuilder.cs" />
-    <Compile Include="Impl\Jwt\IdSiteClaims.cs" />
+    <Compile Include="Impl\IdSite\IdSiteClaims.cs" />
     <Compile Include="Impl\Linq\LinqHelper.cs" />
     <Compile Include="Impl\Linq\Parsing\QueryModelCompiler.cs" />
     <Compile Include="Impl\Linq\Parsing\RequestBuilder.cs" />
@@ -303,6 +307,7 @@
     <Compile Include="Impl\Resource\IExtendableSync.cs" />
     <Compile Include="Impl\Resource\IDeletableSync.cs" />
     <Compile Include="Impl\Resource\ISaveableSync.cs" />
+    <Compile Include="Impl\Resource\IWithProperties.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterResult.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\AbstractFieldConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterList.cs" />

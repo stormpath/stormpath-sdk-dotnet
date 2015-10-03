@@ -1,4 +1,4 @@
-﻿// <copyright file="InvalidJwtException.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IWithProperties.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,18 +15,12 @@
 // limitations under the License.
 // </remarks>
 
-using System;
+using System.Collections.Generic;
 
-namespace Stormpath.SDK.Jwt
+namespace Stormpath.SDK.Impl.Resource
 {
-    /// <summary>
-    /// Represents an attempt to use a JSON Web Token with an invalid signature.
-    /// </summary>
-    public sealed class InvalidJwtException : ApplicationException
+    internal interface IWithProperties
     {
-        public InvalidJwtException(string message)
-            : base(message)
-        {
-        }
+        IDictionary<string, object> GetProperties();
     }
 }

@@ -95,6 +95,22 @@ namespace Stormpath.SDK.Http
         public bool ContainsKey(string key)
             => this.queryStringItems?.ContainsKey(key) ?? false;
 
+        /// <summary>
+        /// Gets a named parameter in the query string.
+        /// </summary>
+        /// <param name="parameter">The name of the parameter.</param>
+        /// <returns>The parameter value, or <c>null</c>.</returns>
+        public string this[string parameter]
+        {
+            get
+            {
+                string value = null;
+                this.queryStringItems.TryGetValue(parameter, out value);
+
+                return value;
+            }
+        }
+
         public string ToString(bool canonical)
         {
             bool isEmpty = this.queryStringItems == null || this.queryStringItems.Count == 0;

@@ -15,7 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-namespace Stormpath.SDK.Impl.Jwt
+namespace Stormpath.SDK.Impl.IdSite
 {
     internal static class IdSiteClaims
     {

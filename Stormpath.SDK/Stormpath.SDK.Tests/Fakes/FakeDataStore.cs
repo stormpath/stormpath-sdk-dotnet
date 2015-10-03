@@ -22,6 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.DataStore;
+using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
@@ -29,7 +30,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
-    public sealed class FakeDataStore<TType> : IInternalDataStore, IInternalAsyncDataStore, IInternalSyncDataStore
+    internal sealed class FakeDataStore<TType> : IInternalDataStore, IInternalDataStoreSync
     {
         private static int defaultLimit = 25;
         private static int defaultOffset = 0;
@@ -298,6 +299,11 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         T IInternalSyncDataStore.Save<T>(T resource, string queryString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICacheResolver GetCacheResolver()
         {
             throw new NotImplementedException();
         }

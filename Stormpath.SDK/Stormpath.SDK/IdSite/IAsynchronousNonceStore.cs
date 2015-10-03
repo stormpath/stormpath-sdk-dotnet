@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Stormpath.SDK.IdSite
@@ -25,15 +26,17 @@ namespace Stormpath.SDK.IdSite
         /// Determines whether this <see cref="INonceStore"/> contains the given nonce.
         /// </summary>
         /// <param name="nonce">The nonce to check.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is <c>true</c> if the specified nonce is present in this <see cref="INonceStore"/>, <c>false</c> otherwise.</returns>
-        Task<bool> ContainsNonceAsync(string nonce);
+        Task<bool> ContainsNonceAsync(string nonce, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Adds the specified nonce to the store.
         /// </summary>
         /// <param name="nonce">The nonce to add.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <seealso cref="ContainsNonceAsync(string)"/>
         /// <returns>A Task indicating the completion of the method.</returns>
-        Task PutNonceAsync(string nonce);
+        Task PutNonceAsync(string nonce, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

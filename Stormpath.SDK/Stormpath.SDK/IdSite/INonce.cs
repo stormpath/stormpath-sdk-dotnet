@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultIdSiteCallbackHandler.cs" company="Stormpath, Inc.">
+﻿// <copyright file="INonce.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,16 +15,20 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Stormpath.SDK.IdSite;
+using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Impl.IdSite
+namespace Stormpath.SDK.IdSite
 {
-    internal sealed class DefaultIdSiteCallbackHandler : IIdSiteAsyncCallbackHandler
+    /// <summary>
+    /// A cryptographic nonce representation for values that cannot be
+    /// used more than once.
+    /// </summary>
+    public interface INonce : IResource
     {
+        /// <summary>
+        /// Gets the value of this nonce.
+        /// </summary>
+        /// <value>The value of this instance.</value>
+        string Value { get; }
     }
 }

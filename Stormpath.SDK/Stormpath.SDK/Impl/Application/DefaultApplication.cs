@@ -232,7 +232,7 @@ namespace Stormpath.SDK.Impl.Application
 
         SDK.IdSite.IIdSiteAsyncCallbackHandler IApplication.NewIdSiteCallbackHandler(SDK.Http.IHttpRequest request)
         {
-            return new DefaultIdSiteCallbackHandler(this.InternalDataStore, this, request);
+            return new DefaultIdSiteAsyncCallbackHandler(this.InternalDataStore, this, request);
         }
 
         IAsyncQueryable<IAccount> IApplication.GetAccounts()

@@ -17,7 +17,7 @@
 
 namespace Stormpath.SDK.IdSite
 {
-    public interface ISsynchronousNonceStore : INonceStore
+    public interface ISynchronousNonceStore : INonceStore
     {
         /// <summary>
         /// Determines whether this <see cref="INonceStore"/> contains the given nonce.
