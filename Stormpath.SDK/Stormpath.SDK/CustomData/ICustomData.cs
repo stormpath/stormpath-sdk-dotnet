@@ -22,7 +22,7 @@ namespace Stormpath.SDK.CustomData
 {
     /// <summary>
     /// A dictionary resource embedded within another resource
-    /// (such as an <see cref="Account.IAccount"/> or <see cref="Directory.IDirectory"/>)
+    /// (such as an <see cref="Account.IAccount"/>, <see cref="Group.IGroup"/>, or <see cref="Directory.IDirectory"/>)
     /// that allows you to store arbitrary name/value pairs.
     /// </summary>
     public interface ICustomData : IResource, ISaveable<ICustomData>, IDeletable, IAuditable, IEnumerable<KeyValuePair<string, object>>

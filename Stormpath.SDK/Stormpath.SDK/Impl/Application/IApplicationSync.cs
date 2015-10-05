@@ -104,7 +104,7 @@ namespace Stormpath.SDK.Impl.Application
         void SendVerificationEmail(string usernameOrEmail);
 
         /// <summary>
-        /// Synchronously gets the <see cref="IAccountStore"/> (either a Group or <see cref="SDK.Directory.IDirectory"/>)
+        /// Synchronously gets the <see cref="IAccountStore"/> (either a <see cref="SDK.Group.IGroup"/> or <see cref="SDK.Directory.IDirectory"/>)
         /// used to persist new accounts created by the application.
         /// </summary>
         /// <returns>The default <see cref="IAccountStore"/>,

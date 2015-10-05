@@ -113,7 +113,7 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).SendVerificationEmail(usernameOrEmail);
 
         /// <summary>
-        /// Synchronously gets the <see cref="IAccountStore"/> (either a Group or <see cref="Directory.IDirectory"/>)
+        /// Synchronously gets the <see cref="IAccountStore"/> (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>)
         /// used to persist new accounts created by the application.
         /// </summary>
         /// <param name="application">The application.</param>
