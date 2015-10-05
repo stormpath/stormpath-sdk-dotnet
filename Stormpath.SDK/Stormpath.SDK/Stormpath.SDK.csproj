@@ -87,6 +87,9 @@
     <Compile Include="Directory\IDirectory.cs" />
     <Compile Include="Error\IError.cs" />
     <Compile Include="Error\ResourceException.cs" />
+    <Compile Include="Group\GroupStatus.cs" />
+    <Compile Include="Group\IGroup.cs" />
+    <Compile Include="Group\IGroupMembership.cs" />
     <Compile Include="Http\HttpExtensions.cs" />
     <Compile Include="Http\IAsynchronousHttpClient.cs" />
     <Compile Include="Http\IHttpClient.cs" />
