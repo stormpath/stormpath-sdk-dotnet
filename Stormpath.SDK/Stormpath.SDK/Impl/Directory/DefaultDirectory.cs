@@ -29,7 +29,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Directory
 {
-    internal sealed class DefaultDirectory : AbstractExtendableInstanceResource, IDirectory
+    internal sealed class DefaultDirectory : AbstractExtendableInstanceResource, IDirectory, IDirectorySync
     {
         private static readonly string AccountCreationPolicyPropertyName = "accountCreationPolicy";
         private static readonly string AccountsPropertyName = "accounts";
@@ -118,12 +118,17 @@ namespace Stormpath.SDK.Impl.Directory
         IAccount IAccountCreationActionsSync.CreateAccount(string givenName, string surname, string email, string password, object customData)
             => AccountCreationActionsShared.CreateAccount(this.GetInternalDataStoreSync(), this.Accounts.Href, givenName, surname, email, password, customData);
 
-
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
 
+        bool IDeletableSync.Delete()
+            => this.GetInternalDataStoreSync().Delete(this);
+
         Task<IDirectory> ISaveable<IDirectory>.SaveAsync(CancellationToken cancellationToken)
             => this.SaveAsync<IDirectory>(cancellationToken);
+
+        IDirectory ISaveableSync<IDirectory>.Save()
+            => this.GetInternalDataStoreSync().Save<IDirectory>(this);
 
         IAsyncQueryable<IAccount> IDirectory.GetAccounts()
             => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
