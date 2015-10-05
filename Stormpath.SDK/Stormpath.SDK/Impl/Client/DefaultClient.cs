@@ -195,6 +195,22 @@ namespace Stormpath.SDK.Impl.Client
             return this.tenant.CreateApplication(name, createDirectory);
         }
 
+        async Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken)
+        {
+            if (this.tenant == null)
+                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.CreateDirectoryAsync(directory, cancellationToken).ConfigureAwait(false);
+        }
+
+        async Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken)
+        {
+            if (this.tenant == null)
+                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.CreateDirectoryAsync(name, description, status, cancellationToken).ConfigureAwait(false);
+        }
+
         async Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
         {
             if (this.tenant == null)

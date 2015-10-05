@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -68,10 +69,34 @@ namespace Stormpath.SDK.Impl.Directory
 
         internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
-        IAsyncQueryable<IAccount> IDirectory.GetAccounts()
-            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
+        IDirectory IDirectory.SetDescription(string description)
+        {
+            this.SetProperty(DescriptionPropertyName, description);
+            return this;
+        }
+
+        IDirectory IDirectory.SetName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+
+            this.SetProperty(NamePropertyName, name);
+            return this;
+        }
+
+        IDirectory IDirectory.SetStatus(DirectoryStatus status)
+        {
+            this.SetProperty(StatusPropertyName, status);
+            return this;
+        }
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
+
+        Task<IDirectory> ISaveable<IDirectory>.SaveAsync(CancellationToken cancellationToken)
+            => this.SaveAsync<IDirectory>(cancellationToken);
+
+        IAsyncQueryable<IAccount> IDirectory.GetAccounts()
+            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
     }
 }

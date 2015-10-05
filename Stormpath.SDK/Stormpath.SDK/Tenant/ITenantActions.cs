@@ -72,6 +72,26 @@ namespace Stormpath.SDK.Tenant
         Task<IApplication> CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Creates a new Cloud Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="directory">The Directory resource to create.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        Task<IDirectory> CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Creates a new Cloud Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="name">The directory name.</param>
+        /// <param name="description">The directory description.</param>
+        /// <param name="status">The initial directory status.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        Task<IDirectory> CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Verifies an account's email address based on a <c>sptoken</c> parameter embedded in a clickable URL
         /// found in an account's verification email.
         /// <para>
