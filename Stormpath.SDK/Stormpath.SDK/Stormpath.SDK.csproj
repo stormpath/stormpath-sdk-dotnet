@@ -94,6 +94,7 @@
     <Compile Include="Impl\AccountStore\DefaultAccountStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreMappingSync.cs" />
+    <Compile Include="Impl\Account\AccountCreationActionsShared.cs" />
     <Compile Include="Impl\Account\DefaultAccountCreationOptions.cs" />
     <Compile Include="Impl\Account\DefaultEmailVerificationToken.cs" />
     <Compile Include="Impl\Account\DefaultPasswordResetToken.cs" />

@@ -169,61 +169,31 @@ namespace Stormpath.SDK.Impl.Application
         }
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-        {
-            var builder = new AccountCreationOptionsBuilder();
-            creationOptionsAction(builder);
-            var options = builder.Build();
-
-            return this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, options, cancellationToken);
-        }
+            => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalDataStore(), this.Accounts.Href, account, creationOptionsAction, cancellationToken);
 
         IAccount IAccountCreationActionsSync.CreateAccount(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction)
-        {
-            var builder = new AccountCreationOptionsBuilder();
-            creationOptionsAction(builder);
-            var options = builder.Build();
-
-            return this.GetInternalDataStoreSync().Create(this.Accounts.Href, account, options);
-        }
+            => AccountCreationActionsShared.CreateAccount(this.GetInternalDataStoreSync(), this.Accounts.Href, account, creationOptionsAction);
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken)
-             => this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, creationOptions, cancellationToken);
+             => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalDataStore(), this.Accounts.Href, account, creationOptions, cancellationToken);
 
         IAccount IAccountCreationActionsSync.CreateAccount(IAccount account, IAccountCreationOptions creationOptions)
-             => this.GetInternalDataStoreSync().Create(this.Accounts.Href, account, creationOptions);
+             => AccountCreationActionsShared.CreateAccount(this.GetInternalDataStoreSync(), this.Accounts.Href, account, creationOptions);
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, CancellationToken cancellationToken)
-             => this.GetInternalDataStore().CreateAsync(this.Accounts.Href, account, cancellationToken);
+             => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalDataStore(), this.Accounts.Href, account, cancellationToken);
 
         IAccount IAccountCreationActionsSync.CreateAccount(IAccount account)
-             => this.GetInternalDataStoreSync().Create(this.Accounts.Href, account);
+             => AccountCreationActionsShared.CreateAccount(this.GetInternalDataStoreSync(), this.Accounts.Href, account);
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(string givenName, string surname, string email, string password, object customData, CancellationToken cancellationToken)
-        {
-            var account = this.GetInternalDataStore().Instantiate<IAccount>();
-            account.SetGivenName(givenName);
-            account.SetSurname(surname);
-            account.SetEmail(email);
-            account.SetPassword(password);
-            account.CustomData.Put(customData);
-
-            return this.AsInterface.CreateAccountAsync(account, cancellationToken: cancellationToken);
-        }
+            => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalDataStore(), this.Accounts.Href, givenName, surname, email, password, customData, cancellationToken);
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
-            => this.AsInterface.CreateAccountAsync(givenName, surname, email, password, customData: null, cancellationToken: cancellationToken);
+            => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalDataStore(), this.Accounts.Href, givenName, surname, email, password, null, cancellationToken);
 
         IAccount IAccountCreationActionsSync.CreateAccount(string givenName, string surname, string email, string password, object customData)
-        {
-            var account = this.GetInternalDataStore().Instantiate<IAccount>();
-            account.SetGivenName(givenName);
-            account.SetSurname(surname);
-            account.SetEmail(email);
-            account.SetPassword(password);
-            account.CustomData.Put(customData);
-
-            return this.AsSyncInterface.CreateAccount(account);
-        }
+            => AccountCreationActionsShared.CreateAccount(this.GetInternalDataStoreSync(), this.Accounts.Href, givenName, surname, email, password, customData);
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
