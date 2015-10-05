@@ -18,6 +18,7 @@
 using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Tenant;
 
@@ -68,6 +69,28 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
         public static IApplication CreateApplication(this ITenantActions tenantActions, string name, bool createDirectory)
             => (tenantActions as ITenantActionsSync).CreateApplication(name, createDirectory);
+
+        /// <summary>
+        /// Synchronously creates a new Cloud Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="directory">The Directory resource to create.</param>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        public static IDirectory CreateDirectory(this ITenantActions tenantActions, IDirectory directory)
+            => (tenantActions as ITenantActionsSync).CreateDirectory(directory);
+
+        /// <summary>
+        /// Synchronously creates a new Cloud Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="name">The directory name.</param>
+        /// <param name="description">The directory description.</param>
+        /// <param name="status">The initial directory status.</param>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        public static IDirectory CreateDirectory(this ITenantActions tenantActions, string name, string description, DirectoryStatus status)
+            => (tenantActions as ITenantActionsSync).CreateDirectory(name, description, status);
 
         /// <summary>
         /// Synchronously verifies an account's email address based on a <c>sptoken</c> parameter embedded in a clickable URL

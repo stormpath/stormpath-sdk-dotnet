@@ -15,7 +15,9 @@
 // limitations under the License.
 // </remarks>
 
+using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 
@@ -28,7 +30,7 @@ namespace Stormpath.SDK.Directory
     /// You can map one or more directories (or groups within a directory) to an <see cref="Application.IApplication"/>.
     /// This forms the application's effective 'user base' of all <see cref="IAccount"/> that may use the application.</para>
     /// </summary>
-    public interface IDirectory : IResource, IDeletable, IAuditable
+    public interface IDirectory : IResource, ISaveable<IDirectory>, IDeletable, IAuditable, IExtendable, IAccountStore, IAccountCreationActions
     {
         /// <summary>
         /// Gets the directory's name.
@@ -51,6 +53,30 @@ namespace Stormpath.SDK.Directory
         /// A <see cref="DirectoryStatus.Disabled"/> directory prevents its accounts from being used to login to applications.
         /// </value>
         DirectoryStatus Status { get; }
+
+        /// <summary>
+        /// Sets the directory description.
+        /// </summary>
+        /// <param name="description">The directory's description. This is an optional property and may be <c>null</c> or empty.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IDirectory SetDescription(string description);
+
+        /// <summary>
+        /// Sets the directory's name.
+        /// </summary>
+        /// <param name="name">The directory's name. Directory names are required and must be unique within a <see cref="Tenant.ITenant"/>.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IDirectory SetName(string name);
+
+        /// <summary>
+        /// Sets the application's status.
+        /// </summary>
+        /// <param name="status">The directory's status.
+        /// An <see cref="DirectoryStatus.Enabled"/> directory may be used by applications to login accounts found within the directory.
+        /// A <see cref="DirectoryStatus.Disabled"/> directory prevents its accounts from being used to login to applications.
+        /// </param>
+        /// <returns>This instance for method chaining.</returns>
+        IDirectory SetStatus(DirectoryStatus status);
 
         /// <summary>
         /// Gets a queryable list of all accounts in this directory.

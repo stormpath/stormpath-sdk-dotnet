@@ -130,6 +130,32 @@ namespace Stormpath.SDK.Impl.Tenant
             return this.AsTenantActionSyncInterface.CreateApplication(application, options);
         }
 
+        Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken)
+            => this.GetInternalDataStore().CreateAsync(this.directoriesResourceBase, directory, cancellationToken);
+
+        IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory)
+            => this.GetInternalDataStoreSync().Create(this.directoriesResourceBase, directory);
+
+        Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken)
+        {
+            var directory = this.GetInternalDataStore().Instantiate<IDirectory>();
+            directory.SetName(name);
+            directory.SetDescription(description);
+            directory.SetStatus(status);
+
+            return this.AsInterface.CreateDirectoryAsync(directory, cancellationToken);
+        }
+
+        IDirectory ITenantActionsSync.CreateDirectory(string name, string description, DirectoryStatus status)
+        {
+            var directory = this.GetInternalDataStore().Instantiate<IDirectory>();
+            directory.SetName(name);
+            directory.SetDescription(description);
+            directory.SetStatus(status);
+
+            return this.AsTenantActionSyncInterface.CreateDirectory(directory);
+        }
+
         async Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
         {
             var href = $"/accounts/emailVerificationTokens/{token}";
