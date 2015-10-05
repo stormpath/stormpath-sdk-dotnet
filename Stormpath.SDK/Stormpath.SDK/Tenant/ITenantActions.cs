@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Tenant
@@ -139,5 +140,14 @@ namespace Stormpath.SDK.Tenant
         ///     var allDirectories = await myTenant.GetDirectories().ToListAsync();
         /// </example>
         IAsyncQueryable<IDirectory> GetDirectories();
+
+        /// <summary>
+        /// Gets a queryable list of all groups in this tenant.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
+        /// <example>
+        ///     var allGroups = await myTenant.GetGroups().ToListAsync();
+        /// </example>
+        IAsyncQueryable<IGroup> GetGroups();
     }
 }
