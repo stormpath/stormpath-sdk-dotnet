@@ -15,16 +15,18 @@
 // limitations under the License.
 // </remarks>
 
+using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Directory
 {
     /// <summary>
-    /// A directory is a top-level container of <see cref="IAccount"/>s and groups.
+    /// A directory is a top-level container of <see cref="IAccount"/>s and <see cref="IGroup"/>s.
     /// Accounts and groups are guaranteed to be unique within a directory, but not across multiple directories.
     /// <para>You can think of a <see cref="IDirectory"/> as an account 'store'.
     /// You can map one or more directories (or groups within a directory) to an <see cref="Application.IApplication"/>.
@@ -79,6 +81,14 @@ namespace Stormpath.SDK.Directory
         IDirectory SetStatus(DirectoryStatus status);
 
         /// <summary>
+        /// Creates a new <see cref="IGroup"/> instance in this directory.
+        /// </summary>
+        /// <param name="group">The group to create/persist.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the newly-created <see cref="IGroup"/>.</returns>
+        Task<IGroup> CreateGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Gets a queryable list of all accounts in this directory.
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
@@ -86,5 +96,11 @@ namespace Stormpath.SDK.Directory
         ///     var allDirectoryAccounts = await myDirectory.GetAccounts().ToListAsync();
         /// </example>
         IAsyncQueryable<IAccount> GetAccounts();
+
+        /// <summary>
+        /// Gets a queryable list of all groups in this directory.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
+        IAsyncQueryable<IGroup> GetGroups();
     }
 }
