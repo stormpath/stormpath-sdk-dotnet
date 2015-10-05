@@ -20,6 +20,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.CustomData;
+using Stormpath.SDK.Group;
+using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
@@ -122,6 +124,41 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         public Task<IEmailVerificationToken> GetEmailVerificationTokenAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IGroupMembership> AddGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IGroupMembership> AddGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RemoveGroupAsync(IGroup group)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RemoveGroupAsync(string hrefOrName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsMemberOfGroupAsync(string hrefOrName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncQueryable<IGroup> GetGroups()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncQueryable<IGroupMembership> GetGroupMemberships()
         {
             throw new NotImplementedException();
         }
