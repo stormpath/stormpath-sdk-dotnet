@@ -15,9 +15,12 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
@@ -148,5 +151,70 @@ namespace Stormpath.SDK.Account
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is this account's tenant.</returns>
         Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Assigns this account to the specified <see cref="IGroup"/>.
+        /// </summary>
+        /// <param name="group">The Group this account will be added to.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>
+        /// A Task whose result is the new <see cref="IGroupMembership"/> resource created reflecting
+        /// the account-to-group association.
+        /// </returns>
+        Task<IGroupMembership> AddGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Assigns this account to the specified <see cref="IGroup"/> represented
+        /// by its (case-insensitive) <c>name</c> or <c>href</c>.
+        /// </summary>
+        /// <param name="hrefOrName">The <c>href</c> or name of the group to add.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>
+        /// A Task whose result is the new <see cref="IGroupMembership"/> resource created reflecting
+        /// the account-to-group association.
+        /// </returns>
+        Task<IGroupMembership> AddGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Removes this <see cref="IAccount"/> from the specified <see cref="IGroup"/>.
+        /// </summary>
+        /// <param name="group">The group object from which the account must be removed.</param>
+        /// <returns>A Task whose result determines whether the operation succeeded.</returns>
+        /// <exception cref="InvalidOperationException">The account does not belong to the specified group.</exception>
+        Task<bool> RemoveGroupAsync(IGroup group);
+
+        /// <summary>
+        /// Removes this <see cref="IAccount"/> from the specified <see cref="IGroup"/>
+        /// represented by its (case-insensitive) <c>name</c> or <c>href</c>.
+        /// </summary>
+        /// <param name="hrefOrName">The <c>href</c> or name of the group object from which the account must be removed.</param>
+        /// <returns>A Task whose result determines whether the operation succeeded.</returns>
+        /// <exception cref="InvalidOperationException">The account does not belong to the specified group.</exception>
+        Task<bool> RemoveGroupAsync(string hrefOrName);
+
+        /// <summary>
+        /// Gets whether this account belongs to the group whose name or <c>href</c> is
+        /// (case-insensitive) equal to the specified value.
+        /// </summary>
+        /// <param name="hrefOrName">The <c>href</c> or name of the group to check.</param>
+        /// <returns>A Task whose result is <c>true</c> if the account belongs to the specified group.</returns>
+        Task<bool> IsMemberOfGroupAsync(string hrefOrName);
+
+        /// <summary>
+        /// Gets a queryable list of the account's assigned groups.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
+        /// <example>
+        ///     var allGroups = await account.GetGroups().ToListAsync();
+        /// </example>
+        IAsyncQueryable<IGroup> GetGroups();
+
+        /// <summary>
+        /// Returns all <see cref="IGroupMembership"/>s that reflect this account.
+        /// This method is an alternative to <see cref="GetGroups"/> that returns the actual
+        /// association entity representing the account and a group.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to asynchronously list or search group memberships.</returns>
+        IAsyncQueryable<IGroupMembership> GetGroupMemberships();
     }
 }

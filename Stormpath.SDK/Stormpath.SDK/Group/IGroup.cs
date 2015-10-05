@@ -78,8 +78,8 @@ namespace Stormpath.SDK.Group
         /// </summary>
         /// <param name="account">The <see cref="IAccount"/> object to disassociate.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is <c>true</c> if the operation succeeded; <c>false</c> otherwise.</returns>
-        /// <exception cref="ApplicationException">The specified account does not belong to this group.</exception>
+        /// <returns>A Task whose result determines whether the operation succeeded.</returns>
+        /// <exception cref="InvalidOperationException">The specified account does not belong to this group.</exception>
         Task<bool> RemoveAccountAsync(IAccount account, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -88,8 +88,8 @@ namespace Stormpath.SDK.Group
         /// </summary>
         /// <param name="hrefOrEmailOrUsername">The <see cref="IAccount"/> object to disassociate.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is <c>true</c> if the operation succeeded; <c>false</c> otherwise.</returns>
-        /// <exception cref="ApplicationException">The specified account does not belong to this group.</exception>
+        /// <returns>A Task whose result determines whether the operation succeeded.</returns>
+        /// <exception cref="InvalidOperationException">The specified account does not belong to this group.</exception>
         Task<bool> RemoveAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
