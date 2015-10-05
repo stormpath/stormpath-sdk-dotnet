@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Impl.Account
     /// </summary>
     internal static class AccountCreationActionsShared
     {
-        public static Task<IAccount> CreateAccountAsync(IInternalDataStore dataStore, string accountsHref, IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task<IAccount> CreateAccountAsync(IInternalDataStore dataStore, string accountsHref, IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
             var builder = new AccountCreationOptionsBuilder();
             creationOptionsAction(builder);
@@ -47,31 +47,19 @@ namespace Stormpath.SDK.Impl.Account
             return dataStoreSync.Create(accountsHref, account, options);
         }
 
-        public static Task<IAccount> CreateAccountAsync(IInternalDataStore dataStore, string accountsHref, IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task<IAccount> CreateAccountAsync(IInternalDataStore dataStore, string accountsHref, IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken)
             => dataStore.CreateAsync(accountsHref, account, creationOptions, cancellationToken);
 
         public static IAccount CreateAccount(IInternalDataStoreSync dataStoreSync, string accountsHref, IAccount account, IAccountCreationOptions creationOptions)
             => dataStoreSync.Create(accountsHref, account, creationOptions);
 
-        public static Task<IAccount> CreateAccountAsync(IInternalDataStore dataStore, string accountsHref, IAccount account, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task<IAccount> CreateAccountAsync(IInternalDataStore dataStore, string accountsHref, IAccount account, CancellationToken cancellationToken)
             => dataStore.CreateAsync(accountsHref, account, cancellationToken);
 
         public static IAccount CreateAccount(IInternalDataStoreSync dataStoreSync, string accountsHref, IAccount account)
             => dataStoreSync.Create(accountsHref, account);
 
-        private static IAccount CreateAccountWith(IInternalDataStore dataStore, string givenName, string surname, string email, string password, object customData)
-        {
-            var account = dataStore.Instantiate<IAccount>();
-            account.SetGivenName(givenName);
-            account.SetSurname(surname);
-            account.SetEmail(email);
-            account.SetPassword(password);
-            account.CustomData.Put(customData);
-
-            return account;
-        }
-
-        public static Task<IAccount> CreateAccountAsync(IInternalDataStore dataStore, string accountsHref, string givenName, string surname, string email, string password, object customData, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task<IAccount> CreateAccountAsync(IInternalDataStore dataStore, string accountsHref, string givenName, string surname, string email, string password, object customData, CancellationToken cancellationToken)
         {
             var account = CreateAccountWith(dataStore, givenName, surname, email, password, customData);
 
@@ -84,6 +72,18 @@ namespace Stormpath.SDK.Impl.Account
             var account = CreateAccountWith(dataStoreSync as IInternalDataStore, givenName, surname, email, password, customData);
 
             return CreateAccount(dataStoreSync, accountsHref, account);
+        }
+
+        private static IAccount CreateAccountWith(IInternalDataStore dataStore, string givenName, string surname, string email, string password, object customData)
+        {
+            var account = dataStore.Instantiate<IAccount>();
+            account.SetGivenName(givenName);
+            account.SetSurname(surname);
+            account.SetEmail(email);
+            account.SetPassword(password);
+            account.CustomData.Put(customData);
+
+            return account;
         }
     }
 }
