@@ -71,7 +71,7 @@ namespace Stormpath.SDK.Directory
         IDirectory SetName(string name);
 
         /// <summary>
-        /// Sets the application's status.
+        /// Sets the directory's status.
         /// </summary>
         /// <param name="status">The directory's status.
         /// An <see cref="DirectoryStatus.Enabled"/> directory may be used by applications to login accounts found within the directory.

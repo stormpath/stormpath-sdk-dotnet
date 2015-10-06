@@ -51,6 +51,31 @@ namespace Stormpath.SDK.Group
         GroupStatus Status { get; }
 
         /// <summary>
+        /// Sets the group's description.
+        /// </summary>
+        /// <param name="description">The group's description. This is an optional property and may be <c>null</c> or empty.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IGroup SetDescription(string description);
+
+        /// <summary>
+        /// Sets the group's name.
+        /// </summary>
+        /// <param name="name">The group's name. Group names are required and must be unique within a <see cref="IDirectory"/>.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IGroup SetName(string name);
+
+        /// <summary>
+        /// Sets the group's status.
+        /// </summary>
+        /// <param name="status">The group's status.
+        /// If a group is mapped to an <see cref="Application.IApplication"/> as an Account Store (for login purposes),
+        /// and the Group is disabled, the accounts within that Group cannot login to the application. Accounts in enabled
+        /// Groups mapped to an Application may login to that application.
+        /// </param>
+        /// <returns>This instance for method chaining.</returns>
+        IGroup SetStatus(GroupStatus status);
+
+        /// <summary>
         /// Assigns the specified <see cref="IAccount"/> to this <see cref="IGroup"/>.
         /// </summary>
         /// <param name="account">The account to assignt to this group.</param>
@@ -71,6 +96,7 @@ namespace Stormpath.SDK.Group
         /// A Task whose result is the new <see cref="IGroupMembership"/> resource created
         /// reflecting the group-to-account association.
         /// </returns>
+        /// <exception cref="InvalidOperationException">The specified account could not be found.</exception>
         Task<IGroupMembership> AddAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
