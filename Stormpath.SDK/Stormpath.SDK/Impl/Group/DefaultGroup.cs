@@ -84,18 +84,18 @@ namespace Stormpath.SDK.Impl.Group
         }
 
         Task<IGroupMembership> IGroup.AddAccountAsync(IAccount account, CancellationToken cancellationToken)
-            => DefaultGroupMembership.CreateAsync(account, this, this.GetInternalDataStore());
+            => DefaultGroupMembership.CreateAsync(account, this, this.GetInternalDataStore(), cancellationToken);
 
         async Task<IGroupMembership> IGroup.AddAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrEmailOrUsername))
                 throw new ArgumentNullException(nameof(hrefOrEmailOrUsername));
 
-            var account = this.FindAccountAsync(hrefOrEmailOrUsername, cancellationToken);
+            var account = await this.FindAccountAsync(hrefOrEmailOrUsername, cancellationToken).ConfigureAwait(false);
             if (account == null)
                 throw new InvalidOperationException($"No matching account for {nameof(hrefOrEmailOrUsername)} '{hrefOrEmailOrUsername}' found.");
 
-            return await DefaultGroupMembership.CreateAsync(account, this, this.GetInternalDataStore());
+            return await DefaultGroupMembership.CreateAsync(account, this, this.GetInternalDataStore(), cancellationToken).ConfigureAwait(false);
         }
 
         async Task<bool> IGroup.RemoveAccountAsync(IAccount account, CancellationToken cancellationToken)
@@ -107,7 +107,7 @@ namespace Stormpath.SDK.Impl.Group
             await this.AsInterface.GetAccountMemberships().ForEachAsync(
                 item =>
             {
-                if ((item as IInternalAccountGroupMembership.AccountHref).Equals(this.AsInterface.Href, StringComparison.InvariantCultureIgnoreCase))
+                if ((item as IInternalGroupMembership).AccountHref.Equals(this.AsInterface.Href, StringComparison.InvariantCultureIgnoreCase))
                     foundMembership = item;
 
                 return foundMembership != null;
@@ -116,7 +116,7 @@ namespace Stormpath.SDK.Impl.Group
             if (foundMembership == null)
                 throw new InvalidOperationException("The specified account does not belong to this group.");
 
-            await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
+            return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
         }
 
         Task<bool> IGroup.RemoveAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken)

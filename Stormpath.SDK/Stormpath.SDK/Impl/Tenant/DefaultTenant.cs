@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
@@ -182,5 +183,8 @@ namespace Stormpath.SDK.Impl.Tenant
 
         IAsyncQueryable<IAccount> ITenantActions.GetAccounts()
             => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
+
+        IAsyncQueryable<IGroup> ITenantActions.GetGroups()
+            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalDataStore());
     }
 }

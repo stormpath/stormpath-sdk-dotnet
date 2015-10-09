@@ -179,26 +179,29 @@ namespace Stormpath.SDK.Account
         /// Removes this <see cref="IAccount"/> from the specified <see cref="IGroup"/>.
         /// </summary>
         /// <param name="group">The group object from which the account must be removed.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result determines whether the operation succeeded.</returns>
         /// <exception cref="InvalidOperationException">The account does not belong to the specified group.</exception>
-        Task<bool> RemoveGroupAsync(IGroup group);
+        Task<bool> RemoveGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Removes this <see cref="IAccount"/> from the specified <see cref="IGroup"/>
         /// represented by its (case-insensitive) <c>name</c> or <c>href</c>.
         /// </summary>
         /// <param name="hrefOrName">The <c>href</c> or name of the group object from which the account must be removed.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result determines whether the operation succeeded.</returns>
         /// <exception cref="InvalidOperationException">The account does not belong to the specified group.</exception>
-        Task<bool> RemoveGroupAsync(string hrefOrName);
+        Task<bool> RemoveGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets whether this account belongs to the group whose name or <c>href</c> is
         /// (case-insensitive) equal to the specified value.
         /// </summary>
         /// <param name="hrefOrName">The <c>href</c> or name of the group to check.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is <c>true</c> if the account belongs to the specified group.</returns>
-        Task<bool> IsMemberOfGroupAsync(string hrefOrName);
+        Task<bool> IsMemberOfGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a queryable list of the account's assigned groups.

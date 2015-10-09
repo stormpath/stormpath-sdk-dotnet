@@ -21,6 +21,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
@@ -118,6 +119,9 @@ namespace Stormpath.SDK.Impl.Directory
         IAccount IAccountCreationActionsSync.CreateAccount(string givenName, string surname, string email, string password, object customData)
             => AccountCreationActionsShared.CreateAccount(this.GetInternalDataStoreSync(), this.Accounts.Href, givenName, surname, email, password, customData);
 
+        Task<IGroup> IDirectory.CreateGroupAsync(IGroup group, CancellationToken cancellationToken)
+            => this.GetInternalDataStore().CreateAsync(this.Groups.Href, group, cancellationToken);
+
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
 
@@ -132,5 +136,8 @@ namespace Stormpath.SDK.Impl.Directory
 
         IAsyncQueryable<IAccount> IDirectory.GetAccounts()
             => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
+
+        IAsyncQueryable<IGroup> IDirectory.GetGroups()
+            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalDataStore());
     }
 }

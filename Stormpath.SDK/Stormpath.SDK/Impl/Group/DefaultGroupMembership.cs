@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -25,7 +26,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Group
 {
-    internal sealed class DefaultGroupMembership : AbstractInstanceResource, IGroupMembership
+    internal sealed class DefaultGroupMembership : AbstractInstanceResource, IGroupMembership, IInternalGroupMembership
     {
         private static readonly string GroupPropertyName = "group";
         private static readonly string AccountPropertyName = "account";
@@ -39,6 +40,10 @@ namespace Stormpath.SDK.Impl.Group
         {
         }
 
+        string IInternalGroupMembership.AccountHref => this.Account?.Href;
+
+        string IInternalGroupMembership.GroupHref => this.Group?.Href;
+
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
 
@@ -47,5 +52,27 @@ namespace Stormpath.SDK.Impl.Group
 
         Task<IGroup> IGroupMembership.GetGroupAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().GetResourceAsync<IGroup>(this.Group.Href, cancellationToken);
+
+        private void SetGroup(IGroup group)
+            => this.SetProperty(GroupPropertyName, group.Href);
+
+        private void SetAccount(IAccount account)
+            => this.SetProperty(AccountPropertyName, account.Href);
+
+        public static Task<IGroupMembership> CreateAsync(IAccount account, IGroup group, IInternalDataStore dataStore, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(account.Href))
+                throw new ApplicationException("You must persist the account first before assigning it to a group.");
+            if (string.IsNullOrEmpty(group.Href))
+                throw new ApplicationException("You must persist the group first because assigning it to a group.");
+
+            var groupMembership = (DefaultGroupMembership)dataStore.Instantiate<IGroupMembership>();
+            groupMembership.SetGroup(group);
+            groupMembership.SetAccount(account);
+
+            var href = "/groupMemberships";
+
+            return dataStore.CreateAsync<IGroupMembership>(href, groupMembership, cancellationToken);
+        }
     }
 }

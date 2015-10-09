@@ -138,27 +138,27 @@ namespace Stormpath.SDK.Tests.Fakes
             throw new NotImplementedException();
         }
 
-        public Task<bool> RemoveGroupAsync(IGroup group)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> RemoveGroupAsync(string hrefOrName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> IsMemberOfGroupAsync(string hrefOrName)
-        {
-            throw new NotImplementedException();
-        }
-
         public IAsyncQueryable<IGroup> GetGroups()
         {
             throw new NotImplementedException();
         }
 
         public IAsyncQueryable<IGroupMembership> GetGroupMemberships()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RemoveGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RemoveGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsMemberOfGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }

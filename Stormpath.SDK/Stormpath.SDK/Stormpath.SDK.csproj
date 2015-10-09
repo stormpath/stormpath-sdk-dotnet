@@ -143,6 +143,7 @@
     <Compile Include="Impl\Directory\IDirectorySync.cs" />
     <Compile Include="Impl\Group\DefaultGroup.cs" />
     <Compile Include="Impl\Group\DefaultGroupMembership.cs" />
+    <Compile Include="Impl\Group\IInternalGroupMembership.cs" />
     <Compile Include="Impl\IdentityMap\MemoryCacheIdentityMap.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStoreSync.cs" />
     <Compile Include="Impl\Extensions\ConcurrentDictionaryExtensions.cs" />
