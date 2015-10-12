@@ -26,11 +26,11 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
-    public class Basic_tests
+    public class Entity_tests
     {
         private readonly IntegrationTestFixture fixture;
 
-        public Basic_tests(IntegrationTestFixture fixture)
+        public Entity_tests(IntegrationTestFixture fixture)
         {
             this.fixture = fixture;
         }
@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // TODO Holy Grail: This original un-linked object can haz link too?
             var newAccount = client.Instantiate<IAccount>();
-            newAccount.SetEmail("identity-maps-are-useful@test.foo");
+            newAccount.SetEmail("identity-maps-are-useful-sync@test.foo");
             newAccount.SetPassword("Changeme123!");
             newAccount.SetGivenName("Testing");
             newAccount.SetSurname("IdentityMaps");
