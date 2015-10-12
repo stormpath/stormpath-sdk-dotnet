@@ -208,7 +208,7 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
-        public void IsEmptyOrDefault_returns_true_for_nonreserved_keys()
+        public void IsEmptyOrDefault_returns_false_for_nonreserved_keys()
         {
             var instanceData = new Dictionary<string, object>()
             {
