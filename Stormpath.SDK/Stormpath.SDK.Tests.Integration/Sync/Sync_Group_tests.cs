@@ -106,7 +106,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             lando.IsMemberOfGroup(humans.Href).ShouldBeTrue();
 
-            humans.RemoveAccount(lando);
+            humans.RemoveAccount(lando).ShouldBeTrue();
         }
 
         [Theory]
@@ -142,7 +142,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             leia.IsMemberOfGroup(this.fixture.PrimaryGroupHref).ShouldBeTrue();
 
-            leia.RemoveGroup(this.fixture.PrimaryGroupHref);
+            leia.RemoveGroup(this.fixture.PrimaryGroupHref).ShouldBeTrue();
         }
 
         [Theory]
@@ -157,7 +157,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             han.IsMemberOfGroup(this.fixture.PrimaryGroupHref).ShouldBeTrue();
 
-            han.RemoveGroup(groupName);
+            han.RemoveGroup(groupName).ShouldBeTrue();
         }
 
         [Theory]
@@ -172,7 +172,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             leia.IsMemberOfGroup(this.fixture.PrimaryGroupHref).ShouldBeTrue();
 
-            humans.RemoveAccount(leia.Href);
+            humans.RemoveAccount(leia.Href).ShouldBeTrue();
         }
 
         [Theory]
@@ -187,7 +187,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             han.IsMemberOfGroup(this.fixture.PrimaryGroupHref).ShouldBeTrue();
 
-            humans.RemoveAccount(han.Email);
+            humans.RemoveAccount(han.Email).ShouldBeTrue();
         }
 
         [Theory]
@@ -210,7 +210,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             created.Description.ShouldBe("A nu start");
             created.Status.ShouldBe(GroupStatus.Disabled);
 
-            created.Delete();
+            created.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -233,7 +233,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             created.Description.ShouldBe("A nu start");
             created.Status.ShouldBe(GroupStatus.Enabled);
 
-            created.Delete();
+            created.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -255,7 +255,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             customData["isNeat"].ShouldBe(true);
             customData["roleBasedSecurity"].ShouldBe("pieceOfCake");
 
-            created.Delete();
+            created.Delete().ShouldBeTrue();
         }
     }
 }

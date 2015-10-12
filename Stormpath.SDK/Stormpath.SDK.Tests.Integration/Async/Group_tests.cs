@@ -105,7 +105,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             (await lando.IsMemberOfGroupAsync(humans.Href)).ShouldBeTrue();
 
-            await humans.RemoveAccountAsync(lando);
+            (await humans.RemoveAccountAsync(lando)).ShouldBeTrue();
         }
 
         [Theory]
@@ -141,7 +141,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             (await leia.IsMemberOfGroupAsync(this.fixture.PrimaryGroupHref)).ShouldBeTrue();
 
-            await leia.RemoveGroupAsync(this.fixture.PrimaryGroupHref);
+            (await leia.RemoveGroupAsync(this.fixture.PrimaryGroupHref)).ShouldBeTrue();
         }
 
         [Theory]
@@ -156,7 +156,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             (await han.IsMemberOfGroupAsync(this.fixture.PrimaryGroupHref)).ShouldBeTrue();
 
-            await han.RemoveGroupAsync(groupName);
+            (await han.RemoveGroupAsync(groupName)).ShouldBeTrue();
         }
 
         [Theory]
@@ -171,7 +171,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             (await leia.IsMemberOfGroupAsync(this.fixture.PrimaryGroupHref)).ShouldBeTrue();
 
-            await humans.RemoveAccountAsync(leia.Href);
+            (await humans.RemoveAccountAsync(leia.Href)).ShouldBeTrue();
         }
 
         [Theory]
@@ -186,7 +186,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             (await han.IsMemberOfGroupAsync(this.fixture.PrimaryGroupHref)).ShouldBeTrue();
 
-            await humans.RemoveAccountAsync(han.Email);
+            (await humans.RemoveAccountAsync(han.Email)).ShouldBeTrue();
         }
 
         [Theory]
@@ -209,7 +209,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             created.Description.ShouldBe("A nu start");
             created.Status.ShouldBe(GroupStatus.Disabled);
 
-            await created.DeleteAsync();
+            (await created.DeleteAsync()).ShouldBeTrue();
         }
 
         [Theory]
@@ -232,7 +232,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             created.Description.ShouldBe("A nu start");
             created.Status.ShouldBe(GroupStatus.Enabled);
 
-            await created.DeleteAsync();
+            (await created.DeleteAsync()).ShouldBeTrue();
         }
 
         [Theory]
@@ -254,7 +254,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             customData["isNeat"].ShouldBe(true);
             customData["roleBasedSecurity"].ShouldBe("pieceOfCake");
 
-            await created.DeleteAsync();
+            (await created.DeleteAsync()).ShouldBeTrue();
         }
     }
 }
