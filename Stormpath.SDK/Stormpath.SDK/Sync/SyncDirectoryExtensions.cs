@@ -1,4 +1,4 @@
-﻿// <copyright file="IDirectorySync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SyncDirectoryExtensions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -17,18 +17,19 @@
 
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Impl.Account;
-using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Directory;
 
-namespace Stormpath.SDK.Impl.Directory
+namespace Stormpath.SDK.Sync
 {
-    internal interface IDirectorySync : ISaveableSync<IDirectory>, IDeletableSync, IAccountCreationActionsSync, IExtendableSync
+    public static class SyncDirectoryExtensions
     {
         /// <summary>
         /// Synchronously creates a new <see cref="IGroup"/> instance in this directory.
         /// </summary>
+        /// <param name="directory">The group.</param>
         /// <param name="group">The group to create/persist.</param>
         /// <returns>The newly-created <see cref="IGroup"/>.</returns>
-        IGroup CreateGroup(IGroup group);
+        public static IGroup CreateGroup(this IDirectory directory, IGroup group)
+            => (directory as IDirectorySync).CreateGroup(group);
     }
 }

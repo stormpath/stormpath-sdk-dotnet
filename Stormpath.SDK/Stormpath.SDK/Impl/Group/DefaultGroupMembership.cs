@@ -26,7 +26,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Group
 {
-    internal sealed class DefaultGroupMembership : AbstractInstanceResource, IGroupMembership, IInternalGroupMembership
+    internal sealed class DefaultGroupMembership : AbstractInstanceResource, IGroupMembership, IInternalGroupMembership, IGroupMembershipSync
     {
         private static readonly string GroupPropertyName = "group";
         private static readonly string AccountPropertyName = "account";

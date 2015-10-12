@@ -20,6 +20,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Application;
 
 namespace Stormpath.SDK.Sync
@@ -121,6 +122,35 @@ namespace Stormpath.SDK.Sync
         /// or <c>null</c> if no default <see cref="IAccountStore"/> has been designated.</returns>
         public static IAccountStore GetDefaultAccountStore(this IApplication application)
             => (application as IApplicationSync).GetDefaultAccountStore();
+
+        /// <summary>
+        /// Synchronously gets the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
+        /// if no account store has been designated.
+        /// <para>
+        /// Stormpath's current REST API requires this to be a Directory.
+        /// However, this could be a Group in the future, so do not assume it is always a
+        /// Directory if you want your code to be function correctly if/when this support is added.
+        /// </para>
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <returns>The <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
+        /// if no account store has been designated.</returns>
+        public static IAccountStore GetDefaultGroupStore(this IApplication application)
+            => (application as IApplicationSync).GetDefaultGroupStore();
+
+        /// <summary>
+        /// Synchronously creates a new <see cref="IGroup"/> that may be used by this application in the application's <see cref="GetDefaultGroupStoreAsync(CancellationToken)"/>.
+        /// <para>This is a convenience method. It merely delegates to the application's designated default group store.</para>
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <param name="group">The group to create/persist.</param>
+        /// <returns>The new <see cref="IGroup"/> that may be used by this application.</returns>
+        /// <exception cref="Error.ResourceException">
+        /// The application does not have a designated default group store, or the
+        /// designated default group store does not allow new groups to be created.
+        /// </exception>
+        public static IGroup CreateGroup(this IApplication application, IGroup group)
+            => (application as IApplicationSync).CreateGroup(group);
 
         /// <summary>
         /// Synchronously verifies the password reset token (received in the user's email) and immediately

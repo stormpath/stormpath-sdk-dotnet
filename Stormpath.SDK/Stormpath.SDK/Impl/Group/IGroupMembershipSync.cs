@@ -1,4 +1,4 @@
-﻿// <copyright file="IDirectorySync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IGroupMembershipSync.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,20 +15,25 @@
 // limitations under the License.
 // </remarks>
 
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Resource;
 
-namespace Stormpath.SDK.Impl.Directory
+namespace Stormpath.SDK.Impl.Group
 {
-    internal interface IDirectorySync : ISaveableSync<IDirectory>, IDeletableSync, IAccountCreationActionsSync, IExtendableSync
+    internal interface IGroupMembershipSync : IDeletableSync
     {
         /// <summary>
-        /// Synchronously creates a new <see cref="IGroup"/> instance in this directory.
+        /// Synchronously gets this membership's <see cref="IAccount"/> resource.
         /// </summary>
-        /// <param name="group">The group to create/persist.</param>
-        /// <returns>The newly-created <see cref="IGroup"/>.</returns>
-        IGroup CreateGroup(IGroup group);
+        /// <returns>This membership's <see cref="IAccount"/> resource.</returns>
+        IAccount GetAccount();
+
+        /// <summary>
+        /// Synchronously gets this membership's <see cref="IGroup"/> resource.
+        /// </summary>
+        /// <returns>This membership's <see cref="IGroup"/> resource.</returns>
+        IGroup GetGroup();
     }
 }

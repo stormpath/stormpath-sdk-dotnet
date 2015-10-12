@@ -31,7 +31,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Group
 {
-    internal sealed class DefaultGroup : AbstractExtendableInstanceResource, IGroup
+    internal sealed class DefaultGroup : AbstractExtendableInstanceResource, IGroup, IGroupSync
     {
         private static readonly string NamePropertyName = "name";
         private static readonly string DescriptionPropertyName = "description";

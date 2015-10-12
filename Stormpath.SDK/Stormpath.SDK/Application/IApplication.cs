@@ -180,7 +180,7 @@ namespace Stormpath.SDK.Application
         /// </para>
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
+        /// <returns>A Task whose result is the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
         /// if no account store has been designated.</returns>
         Task<IAccountStore> GetDefaultGroupStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
 
