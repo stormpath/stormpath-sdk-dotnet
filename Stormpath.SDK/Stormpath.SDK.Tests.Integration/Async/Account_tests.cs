@@ -23,7 +23,6 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Error;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 

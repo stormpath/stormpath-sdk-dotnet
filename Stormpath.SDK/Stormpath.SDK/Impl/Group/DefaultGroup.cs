@@ -20,7 +20,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Group;

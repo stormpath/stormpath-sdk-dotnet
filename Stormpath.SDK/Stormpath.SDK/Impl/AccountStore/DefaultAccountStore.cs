@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;

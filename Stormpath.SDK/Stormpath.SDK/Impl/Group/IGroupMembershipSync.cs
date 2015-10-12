@@ -16,7 +16,6 @@
 // </remarks>
 
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
 
