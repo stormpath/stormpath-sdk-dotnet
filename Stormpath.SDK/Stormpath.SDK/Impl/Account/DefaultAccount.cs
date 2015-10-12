@@ -200,7 +200,7 @@ namespace Stormpath.SDK.Impl.Account
             if (string.IsNullOrEmpty(hrefOrName))
                 throw new ArgumentNullException(nameof(hrefOrName));
 
-            var group = await this.FindGroupInDirectoryAsync(hrefOrName, this.Directory.Href).ConfigureAwait(false);
+            var group = await this.FindGroupInDirectoryAsync(hrefOrName, this.Directory.Href, cancellationToken).ConfigureAwait(false);
             if (group == null)
                 throw new InvalidOperationException("The specified group was not found in the account's directory.");
 
@@ -277,7 +277,7 @@ namespace Stormpath.SDK.Impl.Account
             return foundGroup != null;
         }
 
-        private async Task<IGroup> FindGroupInDirectoryAsync(string hrefOrName, string directoryHref)
+        private async Task<IGroup> FindGroupInDirectoryAsync(string hrefOrName, string directoryHref, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrName))
                 throw new ArgumentNullException(nameof(hrefOrName));
@@ -291,7 +291,7 @@ namespace Stormpath.SDK.Impl.Account
             {
                 try
                 {
-                    group = await this.GetInternalDataStore().GetResourceAsync<IGroup>(hrefOrName).ConfigureAwait(false);
+                    group = await this.GetInternalDataStore().GetResourceAsync<IGroup>(hrefOrName, cancellationToken).ConfigureAwait(false);
 
                     if ((group as DefaultGroup)?.Directory.Href == directoryHref)
                         return group;
@@ -306,7 +306,7 @@ namespace Stormpath.SDK.Impl.Account
             group = await (await this.AsInterface.GetDirectoryAsync().ConfigureAwait(false))
                 .GetGroups()
                 .Where(x => x.Name == hrefOrName)
-                .FirstOrDefaultAsync()
+                .FirstOrDefaultAsync(cancellationToken)
                 .ConfigureAwait(false);
 
             return group; // or null

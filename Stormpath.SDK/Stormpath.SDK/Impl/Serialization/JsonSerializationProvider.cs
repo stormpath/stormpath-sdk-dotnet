@@ -30,7 +30,8 @@ namespace Stormpath.SDK.Impl.Serialization
                 new LinkPropertyConverter(),
                 new StatusFieldConverters.AccountStatusConverter(),
                 new StatusFieldConverters.ApplicationStatusConverter(),
-                new StatusFieldConverters.DirectoryStatusConverter());
+                new StatusFieldConverters.DirectoryStatusConverter(),
+                new StatusFieldConverters.GroupStatusConverter());
 
         private readonly IJsonSerializer externalSerializer;
         private readonly ResourceTypeLookup typeLookup;

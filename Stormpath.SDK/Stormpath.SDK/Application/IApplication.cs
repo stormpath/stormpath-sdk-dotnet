@@ -186,7 +186,7 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Creates a new <see cref="IGroup"/> that may be used by this application in the application's <see cref="GetDefaultGroupStoreAsync(CancellationToken)"/>.
-        /// <para>This is a convenience method. It merely delegates to the application's designated <see cref="GetDefaultGroupStoreAsync(CancellationToken)"/></para>.
+        /// <para>This is a convenience method. It merely delegates to the application's designated default group store.</para>
         /// </summary>
         /// <param name="group">The group to create/persist.</param>
         /// <param name="cancellationToken">The cancellation token.</param>

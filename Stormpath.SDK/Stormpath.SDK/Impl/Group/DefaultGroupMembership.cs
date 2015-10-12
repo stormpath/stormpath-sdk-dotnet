@@ -54,10 +54,10 @@ namespace Stormpath.SDK.Impl.Group
             => this.GetInternalDataStore().GetResourceAsync<IGroup>(this.Group.Href, cancellationToken);
 
         private void SetGroup(IGroup group)
-            => this.SetProperty(GroupPropertyName, group.Href);
+            => this.SetLinkProperty(GroupPropertyName, group.Href);
 
         private void SetAccount(IAccount account)
-            => this.SetProperty(AccountPropertyName, account.Href);
+            => this.SetLinkProperty(AccountPropertyName, account.Href);
 
         public static Task<IGroupMembership> CreateAsync(IAccount account, IGroup group, IInternalDataStore dataStore, CancellationToken cancellationToken)
         {
