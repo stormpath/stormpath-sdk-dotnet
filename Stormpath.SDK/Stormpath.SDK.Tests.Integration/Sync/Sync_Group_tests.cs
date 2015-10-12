@@ -235,5 +235,27 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             created.Delete();
         }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_group_with_custom_data(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var instance = client.Instantiate<IGroup>();
+            instance.SetName($".NET ITs Custom Data Group {this.fixture.TestRunIdentifier}");
+            instance.CustomData.Put("isNeat", true);
+            instance.CustomData.Put("roleBasedSecurity", "pieceOfCake");
+
+            var created = app.CreateGroup(instance);
+            this.fixture.CreatedGroupHrefs.Add(created.Href);
+
+            var customData = created.GetCustomData();
+            customData["isNeat"].ShouldBe(true);
+            customData["roleBasedSecurity"].ShouldBe("pieceOfCake");
+
+            created.Delete();
+        }
     }
 }
