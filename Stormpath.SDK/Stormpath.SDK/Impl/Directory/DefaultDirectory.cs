@@ -122,6 +122,9 @@ namespace Stormpath.SDK.Impl.Directory
         Task<IGroup> IDirectory.CreateGroupAsync(IGroup group, CancellationToken cancellationToken)
             => this.GetInternalDataStore().CreateAsync(this.Groups.Href, group, cancellationToken);
 
+        IGroup IDirectorySync.CreateGroup(IGroup group)
+            => this.GetInternalDataStoreSync().Create(this.Groups.Href, group);
+
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
 

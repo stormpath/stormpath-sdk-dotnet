@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -28,6 +29,7 @@ using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
@@ -195,7 +197,10 @@ namespace Stormpath.SDK.Impl.Account
         Task<IGroupMembership> IAccount.AddGroupAsync(IGroup group, CancellationToken cancellationToken)
             => DefaultGroupMembership.CreateAsync(this, group, this.GetInternalDataStore(), cancellationToken);
 
-       async Task<IGroupMembership> IAccount.AddGroupAsync(string hrefOrName, CancellationToken cancellationToken)
+        IGroupMembership IAccountSync.AddGroup(IGroup group)
+            => DefaultGroupMembership.Create(this, group, this.GetInternalDataStoreSync());
+
+        async Task<IGroupMembership> IAccount.AddGroupAsync(string hrefOrName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrName))
                 throw new ArgumentNullException(nameof(hrefOrName));
@@ -205,6 +210,18 @@ namespace Stormpath.SDK.Impl.Account
                 throw new InvalidOperationException("The specified group was not found in the account's directory.");
 
             return await DefaultGroupMembership.CreateAsync(this, group, this.GetInternalDataStore(), cancellationToken).ConfigureAwait(false);
+        }
+
+        IGroupMembership IAccountSync.AddGroup(string hrefOrName)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            var group = this.FindGroupInDirectory(hrefOrName, this.Directory.Href);
+            if (group == null)
+                throw new InvalidOperationException("The specified group was not found in the account's directory.");
+
+            return DefaultGroupMembership.Create(this, group, this.GetInternalDataStoreSync());
         }
 
         async Task<bool> IAccount.RemoveGroupAsync(IGroup group, CancellationToken cancellationToken)
@@ -226,6 +243,28 @@ namespace Stormpath.SDK.Impl.Account
                 throw new InvalidOperationException("This account does not belong to the specified group.");
 
             return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        bool IAccountSync.RemoveGroup(IGroup group)
+        {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
+            IGroupMembership foundMembership = null;
+
+            foreach (var item in this.AsInterface.GetGroupMemberships().Synchronously())
+            {
+                if ((item as IInternalGroupMembership).GroupHref.Equals(group.Href, StringComparison.InvariantCultureIgnoreCase))
+                    foundMembership = item;
+
+                if (foundMembership != null)
+                    break;
+            }
+
+            if (foundMembership == null)
+                throw new InvalidOperationException("This account does not belong to the specified group.");
+
+            return foundMembership.Delete();
         }
 
         async Task<bool> IAccount.RemoveGroupAsync(string hrefOrName, CancellationToken cancellationToken)
@@ -258,6 +297,29 @@ namespace Stormpath.SDK.Impl.Account
             return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
         }
 
+        bool IAccountSync.RemoveGroup(string hrefOrName)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            IGroupMembership foundMembership = null;
+            foreach (var item in this.AsInterface.GetGroupMemberships().Synchronously())
+            {
+                IGroup group = item.GetGroup();
+                if (group.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
+                    group.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                    foundMembership = item;
+
+                if (foundMembership != null)
+                    break;
+            }
+
+            if (foundMembership == null)
+                throw new InvalidOperationException("This account does not belong to the specified group.");
+
+            return foundMembership.Delete();
+        }
+
         async Task<bool> IAccount.IsMemberOfGroupAsync(string hrefOrName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrName))
@@ -273,6 +335,25 @@ namespace Stormpath.SDK.Impl.Account
 
                     return foundGroup != null;
                 }, cancellationToken).ConfigureAwait(false);
+
+            return foundGroup != null;
+        }
+
+        bool IAccountSync.IsMemberOfGroup(string hrefOrName)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            IGroup foundGroup = null;
+            foreach (var item in this.AsInterface.GetGroups().Synchronously())
+            {
+                if (item.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
+                        item.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                    foundGroup = item;
+
+                if (foundGroup != null)
+                    break;
+            }
 
             return foundGroup != null;
         }
@@ -308,6 +389,41 @@ namespace Stormpath.SDK.Impl.Account
                 .Where(x => x.Name == hrefOrName)
                 .FirstOrDefaultAsync(cancellationToken)
                 .ConfigureAwait(false);
+
+            return group; // or null
+        }
+
+        private IGroup FindGroupInDirectory(string hrefOrName, string directoryHref)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+            if (string.IsNullOrEmpty(directoryHref))
+                throw new ArgumentNullException(nameof(directoryHref));
+
+            IGroup group = null;
+
+            bool looksLikeHref = hrefOrName.Split('/').Length > 4;
+            if (looksLikeHref)
+            {
+                try
+                {
+                    group = this.GetInternalDataStoreSync().GetResource<IGroup>(hrefOrName);
+
+                    if ((group as DefaultGroup)?.Directory.Href == directoryHref)
+                        return group;
+                }
+                catch (ResourceException)
+                {
+                    // It looked like an href, but no group was found.
+                    // We'll try looking it up by name.
+                }
+            }
+
+            group = this.AsInterface.GetDirectory()
+                .GetGroups()
+                .Synchronously()
+                .Where(x => x.Name == hrefOrName)
+                .FirstOrDefault();
 
             return group; // or null
         }

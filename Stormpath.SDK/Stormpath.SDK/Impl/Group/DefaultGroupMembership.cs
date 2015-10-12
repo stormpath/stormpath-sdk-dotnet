@@ -19,6 +19,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
@@ -47,11 +48,20 @@ namespace Stormpath.SDK.Impl.Group
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
 
+        bool IDeletableSync.Delete()
+            => this.GetInternalDataStoreSync().Delete(this);
+
         Task<IAccount> IGroupMembership.GetAccountAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
 
+        IAccount IGroupMembershipSync.GetAccount()
+            => this.GetInternalDataStoreSync().GetResource<IAccount>(this.Account.Href);
+
         Task<IGroup> IGroupMembership.GetGroupAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().GetResourceAsync<IGroup>(this.Group.Href, cancellationToken);
+
+        IGroup IGroupMembershipSync.GetGroup()
+            => this.GetInternalDataStoreSync().GetResource<IGroup>(this.Group.Href);
 
         private void SetGroup(IGroup group)
             => this.SetLinkProperty(GroupPropertyName, group.Href);
@@ -73,6 +83,22 @@ namespace Stormpath.SDK.Impl.Group
             var href = "/groupMemberships";
 
             return dataStore.CreateAsync<IGroupMembership>(href, groupMembership, cancellationToken);
+        }
+
+        public static IGroupMembership Create(IAccount account, IGroup group, IInternalDataStoreSync dataStore)
+        {
+            if (string.IsNullOrEmpty(account.Href))
+                throw new ApplicationException("You must persist the account first before assigning it to a group.");
+            if (string.IsNullOrEmpty(group.Href))
+                throw new ApplicationException("You must persist the group first because assigning it to a group.");
+
+            var groupMembership = (DefaultGroupMembership)(dataStore as IDataStore).Instantiate<IGroupMembership>();
+            groupMembership.SetGroup(group);
+            groupMembership.SetAccount(account);
+
+            var href = "/groupMemberships";
+
+            return dataStore.Create<IGroupMembership>(href, groupMembership);
         }
     }
 }

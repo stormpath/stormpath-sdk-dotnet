@@ -303,7 +303,10 @@ namespace Stormpath.SDK.Impl.Application
         }
 
         Task<IGroup> IApplication.CreateGroupAsync(IGroup group, CancellationToken cancellationToken)
-            => this.GetInternalDataStore().CreateAsync<IGroup>(this.Groups.Href, group, cancellationToken);
+            => this.GetInternalDataStore().CreateAsync(this.Groups.Href, group, cancellationToken);
+
+        IGroup IApplicationSync.CreateGroup(IGroup group)
+            => this.GetInternalDataStoreSync().Create(this.Groups.Href, group);
 
         IAsyncQueryable<IAccount> IApplication.GetAccounts()
              => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
@@ -350,6 +353,18 @@ namespace Stormpath.SDK.Impl.Application
             return groupStoreMapping == null
                 ? null
                 : await groupStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
+        }
+
+        IAccountStore IApplicationSync.GetDefaultGroupStore()
+        {
+            if (this.DefaultGroupStoreMapping.Href == null)
+                return null;
+
+            var groupStoreMapping = this.GetInternalDataStoreSync().GetResource<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href);
+
+            return groupStoreMapping == null
+                ? null
+                : groupStoreMapping.GetAccountStore();
         }
     }
 }

@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -28,6 +29,7 @@ using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Sync;
 
 namespace Stormpath.SDK.Impl.Group
 {
@@ -126,8 +128,55 @@ namespace Stormpath.SDK.Impl.Group
             return account; // or null
         }
 
+        private IAccount FindAccount(string hrefOrEmailOrUsername)
+        {
+            if (string.IsNullOrEmpty(hrefOrEmailOrUsername))
+                throw new ArgumentNullException(nameof(hrefOrEmailOrUsername));
+
+            IAccount account = null;
+
+            bool looksLikeHref = hrefOrEmailOrUsername.Split('/').Length > 4;
+            if (looksLikeHref)
+            {
+                try
+                {
+                    account = this.GetInternalDataStoreSync().GetResource<IAccount>(hrefOrEmailOrUsername);
+
+                    if ((account as DefaultAccount)?.Directory.Href == this.Directory.Href)
+                        return account;
+                }
+                catch (ResourceException)
+                {
+                    // It looked like an href, but no group was found.
+                    // We'll try looking it up by name.
+                }
+            }
+
+            var directory = this.AsInterface.GetDirectory();
+
+            account = directory
+                    .GetAccounts()
+                    .Synchronously()
+                    .Where(x => x.Email == hrefOrEmailOrUsername)
+                    .FirstOrDefault();
+
+            if (account == null)
+            {
+                account = directory
+                .GetAccounts()
+                .Synchronously()
+                .Where(x => x.Username == hrefOrEmailOrUsername)
+                .FirstOrDefault();
+            }
+
+            return account; // or null
+        }
+
         Task<IGroupMembership> IGroup.AddAccountAsync(IAccount account, CancellationToken cancellationToken)
             => DefaultGroupMembership.CreateAsync(account, this, this.GetInternalDataStore(), cancellationToken);
+
+        IGroupMembership IGroupSync.AddAccount(IAccount account)
+            => DefaultGroupMembership.Create(account, this, this.GetInternalDataStoreSync());
 
         async Task<IGroupMembership> IGroup.AddAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken)
         {
@@ -139,6 +188,18 @@ namespace Stormpath.SDK.Impl.Group
                 throw new InvalidOperationException($"No matching account for {nameof(hrefOrEmailOrUsername)} '{hrefOrEmailOrUsername}' found.");
 
             return await DefaultGroupMembership.CreateAsync(account, this, this.GetInternalDataStore(), cancellationToken).ConfigureAwait(false);
+        }
+
+        IGroupMembership IGroupSync.AddAccount(string hrefOrEmailOrUsername)
+        {
+            if (string.IsNullOrEmpty(hrefOrEmailOrUsername))
+                throw new ArgumentNullException(nameof(hrefOrEmailOrUsername));
+
+            var account = this.FindAccount(hrefOrEmailOrUsername);
+            if (account == null)
+                throw new InvalidOperationException($"No matching account for {nameof(hrefOrEmailOrUsername)} '{hrefOrEmailOrUsername}' found.");
+
+            return DefaultGroupMembership.Create(account, this, this.GetInternalDataStoreSync());
         }
 
         async Task<bool> IGroup.RemoveAccountAsync(IAccount account, CancellationToken cancellationToken)
@@ -160,6 +221,27 @@ namespace Stormpath.SDK.Impl.Group
                 throw new InvalidOperationException("The specified account does not belong to this group.");
 
             return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        bool IGroupSync.RemoveAccount(IAccount account)
+        {
+            if (account == null)
+                throw new ArgumentNullException(nameof(account));
+
+            IGroupMembership foundMembership = null;
+            foreach (var item in this.AsInterface.GetAccountMemberships().Synchronously())
+            {
+                if ((item as IInternalGroupMembership).AccountHref.Equals(account.Href, StringComparison.InvariantCultureIgnoreCase))
+                    foundMembership = item;
+
+                if (foundMembership != null)
+                    break;
+            }
+
+            if (foundMembership == null)
+                throw new InvalidOperationException("The specified account does not belong to this group.");
+
+            return foundMembership.Delete();
         }
 
         async Task<bool> IGroup.RemoveAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken)
@@ -193,8 +275,35 @@ namespace Stormpath.SDK.Impl.Group
             return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
         }
 
+        bool IGroupSync.RemoveAccount(string hrefOrEmailOrUsername)
+        {
+            if (string.IsNullOrEmpty(hrefOrEmailOrUsername))
+                throw new ArgumentNullException(nameof(hrefOrEmailOrUsername));
+
+            IGroupMembership foundMembership = null;
+            foreach (var item in this.AsInterface.GetAccountMemberships().Synchronously())
+            {
+                IAccount account = item.GetAccount();
+                if (account.Href.Equals(hrefOrEmailOrUsername, StringComparison.InvariantCultureIgnoreCase) ||
+                    account.Email.Equals(hrefOrEmailOrUsername, StringComparison.InvariantCultureIgnoreCase) ||
+                    account.Username.Equals(hrefOrEmailOrUsername, StringComparison.InvariantCultureIgnoreCase))
+                    foundMembership = item;
+
+                if (foundMembership != null)
+                    break;
+            }
+
+            if (foundMembership == null)
+                throw new InvalidOperationException("The specified account does not belong to this group.");
+
+            return foundMembership.Delete();
+        }
+
         Task<IDirectory> IGroup.GetDirectoryAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
+
+        IDirectory IGroupSync.GetDirectory()
+            => this.GetInternalDataStoreSync().GetResource<IDirectory>(this.Directory.Href);
 
         IAsyncQueryable<IGroupMembership> IGroup.GetAccountMemberships()
             => new CollectionResourceQueryable<IGroupMembership>(this.AccountMemberships.Href, this.GetInternalDataStore());
@@ -205,7 +314,13 @@ namespace Stormpath.SDK.Impl.Group
         Task<IGroup> ISaveable<IGroup>.SaveAsync(CancellationToken cancellationToken)
             => this.SaveAsync<IGroup>(cancellationToken);
 
+        IGroup ISaveableSync<IGroup>.Save()
+            => this.GetInternalDataStoreSync().Save<IGroup>(this);
+
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
+
+        bool IDeletableSync.Delete()
+            => this.GetInternalDataStoreSync().Delete(this);
     }
 }
