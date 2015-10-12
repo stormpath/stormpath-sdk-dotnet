@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Impl.Resource
         }
 
         protected virtual T Save<T>()
-            where T : class, IResource, ISaveable<T>, ISaveableSync<T>
+            where T : class, IResource, ISaveable<T>
         {
             return this.GetInternalDataStoreSync().Save(this as T);
         }
