@@ -1,4 +1,4 @@
-﻿// <copyright file="DirectoryStatus.cs" company="Stormpath, Inc.">
+﻿// <copyright file="GroupStatus.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -18,46 +18,46 @@
 using System;
 using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Directory
+namespace Stormpath.SDK.Group
 {
     /// <summary>
-    /// Represents the status of a <see cref="IDirectory"/>.
+    /// Represents the status of a <see cref="IGroup"/>.
     /// </summary>
-    public sealed class DirectoryStatus : Enumeration
+    public sealed class GroupStatus : Enumeration
     {
         /// <summary>
-        /// Accounts in this directory may login to applications.
+        /// Accounts in enabled Groups mapped to applications may login to those applications.
         /// </summary>
-        public static DirectoryStatus Enabled = new DirectoryStatus(0, "ENABLED");
+        public static GroupStatus Enabled = new GroupStatus(0, "ENABLED");
 
         /// <summary>
-        /// Accounts in this directory may not login to applications.
+        /// Accounts in disabled Groups mapped to applications may not login to those applications.
         /// </summary>
-        public static DirectoryStatus Disabled = new DirectoryStatus(1, "DISABLED");
+        public static GroupStatus Disabled = new GroupStatus(1, "DISABLED");
 
-        private DirectoryStatus()
+        private GroupStatus()
         {
         }
 
-        private DirectoryStatus(int value, string displayName)
+        private GroupStatus(int value, string displayName)
             : base(value, displayName)
         {
         }
 
         /// <summary>
-        /// Parses a string to a <see cref="DirectoryStatus"/>.
+        /// Parses a string to a <see cref="GroupStatus"/>.
         /// </summary>
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
-        /// <returns>The <see cref="DirectoryStatus"/> with the specified name.</returns>
+        /// <returns>The <see cref="GroupStatus"/> with the specified name.</returns>
         /// <exception cref="ApplicationException">No match is found.</exception>
-        public static DirectoryStatus Parse(string status)
+        public static GroupStatus Parse(string status)
         {
             switch (status.ToUpper())
             {
                 case "ENABLED": return Enabled;
                 case "DISABLED": return Disabled;
                 default:
-                    throw new ApplicationException($"Could not parse directory status value '{status.ToUpper()}'");
+                    throw new ApplicationException($"Could not parse group status value '{status.ToUpper()}'");
             }
         }
     }

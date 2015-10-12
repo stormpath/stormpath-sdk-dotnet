@@ -87,6 +87,9 @@
     <Compile Include="Directory\IDirectory.cs" />
     <Compile Include="Error\IError.cs" />
     <Compile Include="Error\ResourceException.cs" />
+    <Compile Include="Group\GroupStatus.cs" />
+    <Compile Include="Group\IGroup.cs" />
+    <Compile Include="Group\IGroupMembership.cs" />
     <Compile Include="Http\HttpExtensions.cs" />
     <Compile Include="Http\IAsynchronousHttpClient.cs" />
     <Compile Include="Http\IHttpClient.cs" />
@@ -138,6 +141,11 @@
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
     <Compile Include="Impl\DataStore\IDataStoreSync.cs" />
     <Compile Include="Impl\Directory\IDirectorySync.cs" />
+    <Compile Include="Impl\Group\DefaultGroup.cs" />
+    <Compile Include="Impl\Group\DefaultGroupMembership.cs" />
+    <Compile Include="Impl\Group\IGroupMembershipSync.cs" />
+    <Compile Include="Impl\Group\IGroupSync.cs" />
+    <Compile Include="Impl\Group\IInternalGroupMembership.cs" />
     <Compile Include="Impl\IdentityMap\MemoryCacheIdentityMap.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStoreSync.cs" />
     <Compile Include="Impl\Extensions\ConcurrentDictionaryExtensions.cs" />
@@ -180,6 +188,9 @@
     <Compile Include="Resource\IExtendable.cs" />
     <Compile Include="Sync\FilterExtensions.cs" />
     <Compile Include="Sync\SyncAccountCreationActionsExtensions.cs" />
+    <Compile Include="Sync\SyncDirectoryExtensions.cs" />
+    <Compile Include="Sync\SyncGroupMembershipExtensions.cs" />
+    <Compile Include="Sync\SyncGroupExtensions.cs" />
     <Compile Include="Sync\SyncAccountExtensions.cs" />
     <Compile Include="Sync\SyncAccountStoreMappingExtensions.cs" />
     <Compile Include="Sync\SyncApplicationExtensions.cs" />

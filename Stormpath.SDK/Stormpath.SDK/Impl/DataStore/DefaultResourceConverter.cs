@@ -45,8 +45,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var asLinkProperty = rawValue as LinkProperty;
             if (asLinkProperty != null)
             {
-                // For now we are just skipping link properties; no need to serialize
-                return null;
+                return new { href = asLinkProperty.Href };
             }
 
             bool isEnumeration = rawValue.GetType().IsSubclassOf(typeof(Enumeration));

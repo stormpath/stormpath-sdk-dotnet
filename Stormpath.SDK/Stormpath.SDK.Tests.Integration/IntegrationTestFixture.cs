@@ -42,6 +42,7 @@ namespace Stormpath.SDK.Tests.Integration
             this.CreatedAccountHrefs = new List<string>();
             this.CreatedApplicationHrefs = new List<string>();
             this.CreatedDirectoryHrefs = new List<string>();
+            this.CreatedGroupHrefs = new List<string>();
 
             this.AddObjectsToTenantAsync()
                 .GetAwaiter().GetResult();
@@ -74,6 +75,8 @@ namespace Stormpath.SDK.Tests.Integration
 
         public string PrimaryDirectoryHref { get; private set; }
 
+        public string PrimaryGroupHref { get; private set; }
+
         public string TestRunIdentifier { get; private set; }
 
         public List<string> CreatedApplicationHrefs { get; private set; }
@@ -81,6 +84,8 @@ namespace Stormpath.SDK.Tests.Integration
         public List<string> CreatedAccountHrefs { get; private set; }
 
         public List<string> CreatedDirectoryHrefs { get; private set; }
+
+        public List<string> CreatedGroupHrefs { get; private set; }
 
         private async Task AddObjectsToTenantAsync()
         {
@@ -143,35 +148,44 @@ namespace Stormpath.SDK.Tests.Integration
                 await this.RemoveObjectsFromTenantAsync();
                 throw new ApplicationException("Could not create accounts", e);
             }
+
+            // Create groups
+            try
+            {
+                var groupsToCreate = this.testData.GetTestGroups(client);
+                var groupCreationTasks = groupsToCreate.Select(g =>
+                    primaryApplication.CreateGroupAsync(g));
+
+                var resultingGroups = await Task.WhenAll(groupCreationTasks);
+                this.CreatedGroupHrefs.AddRange(resultingGroups.Select(x => x.Href));
+
+                this.PrimaryGroupHref = resultingGroups.Where(x => x.Name.Contains("primary")).Single().Href;
+            }
+            catch (Exception e)
+            {
+                await this.RemoveObjectsFromTenantAsync();
+                throw new ApplicationException("Could not create groups", e);
+            }
+
+            // Add some accounts to groups
+            try
+            {
+                var luke = await primaryApplication.GetAccounts()
+                    .Where(x => x.Email.StartsWith("lskywalker"))
+                    .SingleAsync();
+                await luke.AddGroupAsync(this.PrimaryGroupHref);
+            }
+            catch (Exception e)
+            {
+                await this.RemoveObjectsFromTenantAsync();
+                throw new ApplicationException("Could not add accounts to groups", e);
+            }
         }
 
         private async Task RemoveObjectsFromTenantAsync()
         {
             var client = IntegrationTestClients.GetSAuthc1Client();
             var results = new ConcurrentDictionary<string, Exception>();
-
-            // Delete accounts
-            var deleteAccountTasks = this.CreatedAccountHrefs.Select(async href =>
-            {
-                try
-                {
-                    var account = await client.GetResourceAsync<IAccount>(href);
-                    var deleteResult = await account.DeleteAsync();
-                    results.TryAdd(href, null);
-                }
-                catch (ResourceException rex)
-                {
-                    if (rex.Code == 404)
-                    {
-                        // Already deleted
-                        results.TryAdd(href, null);
-                    }
-                }
-                catch (Exception e)
-                {
-                    results.TryAdd(href, e);
-                }
-            });
 
             // Delete applications
             var deleteApplicationTasks = this.CreatedApplicationHrefs.Select(async href =>
@@ -220,7 +234,6 @@ namespace Stormpath.SDK.Tests.Integration
             });
 
             await Task.WhenAll(
-                Task.WhenAll(deleteAccountTasks),
                 Task.WhenAll(deleteApplicationTasks),
                 Task.WhenAll(deleteDirectoryTasks));
 

@@ -227,11 +227,11 @@ namespace Stormpath.SDK.Tests.Integration
 
             asyncButNotSync.Count.ShouldBe(
                 0,
-                $"These async method do not have a corresponding sync method: {string.Join(Environment.NewLine, asyncButNotSync)}");
+                $"These async method do not have a corresponding sync method:{Environment.NewLine}{string.Join(Environment.NewLine, asyncButNotSync)}");
 
             syncButNotAsync.Count.ShouldBe(
                 0,
-                $"These sync methods do not have a corresponding async methods: {string.Join(Environment.NewLine, syncButNotAsync)}");
+                $"These sync methods do not have a corresponding async methods:{Environment.NewLine}{string.Join(Environment.NewLine, syncButNotAsync)}");
         }
 
         [Fact]

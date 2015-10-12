@@ -26,6 +26,7 @@ using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
@@ -265,6 +266,14 @@ namespace Stormpath.SDK.Impl.Client
                 this.AsInterface.GetCurrentTenantAsync().GetAwaiter().GetResult();
 
             return this.tenant.GetAccounts();
+        }
+
+        IAsyncQueryable<IGroup> ITenantActions.GetGroups()
+        {
+            if (this.tenant == null)
+                this.AsInterface.GetCurrentTenantAsync().GetAwaiter().GetResult();
+
+            return this.tenant.GetGroups();
         }
 
         private void Dispose(bool disposing)

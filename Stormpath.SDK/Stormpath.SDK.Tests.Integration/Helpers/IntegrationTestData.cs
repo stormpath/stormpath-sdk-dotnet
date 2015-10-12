@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Group;
 
 namespace Stormpath.SDK.Tests.Integration.Helpers
 {
@@ -49,6 +50,20 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
                         .SetName($".NET IT (primary) {this.Nonce} - {timeString}")
                         .SetDescription("The Battle of Endor")
                         .SetStatus(ApplicationStatus.Enabled)
+                },
+            };
+        }
+
+        public List<IGroup> GetTestGroups(IClient client)
+        {
+            var timeString = DateTimeOffset.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+
+            return new List<IGroup>()
+            {
+                {
+                    client.Instantiate<IGroup>()
+                        .SetName($".NET IT Test Group (primary) {this.Nonce} - {timeString}")
+                        .SetDescription("Humans")
                 },
             };
         }

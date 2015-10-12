@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountStore.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IInternalGroupMembership.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,14 +15,12 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Resource;
-
-namespace Stormpath.SDK.AccountStore
+namespace Stormpath.SDK.Impl.Group
 {
-    /// <summary>
-    /// An abstract representation of a <see cref="Directory.IDirectory"/> or <see cref="Group.IGroup"/>.
-    /// </summary>
-    public interface IAccountStore : IResource
+    internal interface IInternalGroupMembership
     {
+        string AccountHref { get; }
+
+        string GroupHref { get; }
     }
 }

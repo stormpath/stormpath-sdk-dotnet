@@ -23,6 +23,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.DataStore;
@@ -301,22 +302,33 @@ namespace Stormpath.SDK.Impl.Application
             this.GetInternalDataStoreSync().Create(href, builder.Build());
         }
 
+        Task<IGroup> IApplication.CreateGroupAsync(IGroup group, CancellationToken cancellationToken)
+            => this.GetInternalDataStore().CreateAsync(this.Groups.Href, group, cancellationToken);
+
+        IGroup IApplicationSync.CreateGroup(IGroup group)
+            => this.GetInternalDataStoreSync().Create(this.Groups.Href, group);
+
         IAsyncQueryable<IAccount> IApplication.GetAccounts()
              => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
 
         IAsyncQueryable<IAccountStoreMapping> IApplication.GetAccountStoreMappings()
              => new CollectionResourceQueryable<IAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalDataStore());
 
+        IAsyncQueryable<IGroup> IApplication.GetGroups()
+            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalDataStore());
+
         async Task<IAccountStore> IApplication.GetDefaultAccountStoreAsync(CancellationToken cancellationToken)
         {
             if (this.DefaultAccountStoreMapping.Href == null)
                 return null;
 
-            var accountStoreMapping = await this.GetInternalDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken).ConfigureAwait(false);
-            if (accountStoreMapping == null)
-                return null;
+            var accountStoreMapping = await this.GetInternalDataStore()
+                .GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken)
+                .ConfigureAwait(false);
 
-            return await accountStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
+            return accountStoreMapping == null
+                ? null
+                : await accountStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
         }
 
         IAccountStore IApplicationSync.GetDefaultAccountStore()
@@ -329,6 +341,30 @@ namespace Stormpath.SDK.Impl.Application
                 return null;
 
             return accountStoreMapping.GetAccountStore();
+        }
+
+        async Task<IAccountStore> IApplication.GetDefaultGroupStoreAsync(CancellationToken cancellationToken)
+        {
+            if (this.DefaultGroupStoreMapping.Href == null)
+                return null;
+
+            var groupStoreMapping = await this.GetInternalDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken).ConfigureAwait(false);
+
+            return groupStoreMapping == null
+                ? null
+                : await groupStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
+        }
+
+        IAccountStore IApplicationSync.GetDefaultGroupStore()
+        {
+            if (this.DefaultGroupStoreMapping.Href == null)
+                return null;
+
+            var groupStoreMapping = this.GetInternalDataStoreSync().GetResource<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href);
+
+            return groupStoreMapping == null
+                ? null
+                : groupStoreMapping.GetAccountStore();
         }
     }
 }

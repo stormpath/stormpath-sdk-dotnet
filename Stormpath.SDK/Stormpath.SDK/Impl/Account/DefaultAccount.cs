@@ -17,13 +17,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Error;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
@@ -53,6 +59,8 @@ namespace Stormpath.SDK.Impl.Account
             : base(dataStore)
         {
         }
+
+        private IAccount AsInterface => this;
 
         internal LinkProperty AccessTokens => this.GetLinkProperty(AccessTokensPropertyName);
 
@@ -156,6 +164,12 @@ namespace Stormpath.SDK.Impl.Account
             return this;
         }
 
+        IAsyncQueryable<IGroup> IAccount.GetGroups()
+            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalDataStore());
+
+        IAsyncQueryable<IGroupMembership> IAccount.GetGroupMemberships()
+            => new CollectionResourceQueryable<IGroupMembership>(this.GroupMemberships.Href, this.GetInternalDataStore());
+
         Task<IDirectory> IAccount.GetDirectoryAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
 
@@ -179,5 +193,239 @@ namespace Stormpath.SDK.Impl.Account
 
         IAccount ISaveableSync<IAccount>.Save()
              => this.GetInternalDataStoreSync().Save<IAccount>(this);
+
+        Task<IGroupMembership> IAccount.AddGroupAsync(IGroup group, CancellationToken cancellationToken)
+            => DefaultGroupMembership.CreateAsync(this, group, this.GetInternalDataStore(), cancellationToken);
+
+        IGroupMembership IAccountSync.AddGroup(IGroup group)
+            => DefaultGroupMembership.Create(this, group, this.GetInternalDataStoreSync());
+
+        async Task<IGroupMembership> IAccount.AddGroupAsync(string hrefOrName, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            var group = await this.FindGroupInDirectoryAsync(hrefOrName, this.Directory.Href, cancellationToken).ConfigureAwait(false);
+            if (group == null)
+                throw new InvalidOperationException("The specified group was not found in the account's directory.");
+
+            return await DefaultGroupMembership.CreateAsync(this, group, this.GetInternalDataStore(), cancellationToken).ConfigureAwait(false);
+        }
+
+        IGroupMembership IAccountSync.AddGroup(string hrefOrName)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            var group = this.FindGroupInDirectory(hrefOrName, this.Directory.Href);
+            if (group == null)
+                throw new InvalidOperationException("The specified group was not found in the account's directory.");
+
+            return DefaultGroupMembership.Create(this, group, this.GetInternalDataStoreSync());
+        }
+
+        async Task<bool> IAccount.RemoveGroupAsync(IGroup group, CancellationToken cancellationToken)
+        {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
+            IGroupMembership foundMembership = null;
+            await this.AsInterface.GetGroupMemberships().ForEachAsync(
+                item =>
+                {
+                    if ((item as IInternalGroupMembership).GroupHref.Equals(group.Href, StringComparison.InvariantCultureIgnoreCase))
+                        foundMembership = item;
+
+                    return foundMembership != null;
+                }, cancellationToken).ConfigureAwait(false);
+
+            if (foundMembership == null)
+                throw new InvalidOperationException("This account does not belong to the specified group.");
+
+            return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        bool IAccountSync.RemoveGroup(IGroup group)
+        {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
+            IGroupMembership foundMembership = null;
+
+            foreach (var item in this.AsInterface.GetGroupMemberships().Synchronously())
+            {
+                if ((item as IInternalGroupMembership).GroupHref.Equals(group.Href, StringComparison.InvariantCultureIgnoreCase))
+                    foundMembership = item;
+
+                if (foundMembership != null)
+                    break;
+            }
+
+            if (foundMembership == null)
+                throw new InvalidOperationException("This account does not belong to the specified group.");
+
+            return foundMembership.Delete();
+        }
+
+        async Task<bool> IAccount.RemoveGroupAsync(string hrefOrName, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            IGroupMembership foundMembership = null;
+            var iterator = this.AsInterface.GetGroupMemberships();
+            while (await iterator.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            {
+                foreach (var item in iterator.CurrentPage)
+                {
+                    IGroup group = await item.GetGroupAsync(cancellationToken).ConfigureAwait(false);
+                    if (group.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
+                        group.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                        foundMembership = item;
+
+                    if (foundMembership != null)
+                        break;
+                }
+
+                if (foundMembership != null)
+                    break;
+            }
+
+            if (foundMembership == null)
+                throw new InvalidOperationException("This account does not belong to the specified group.");
+
+            return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        bool IAccountSync.RemoveGroup(string hrefOrName)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            IGroupMembership foundMembership = null;
+            foreach (var item in this.AsInterface.GetGroupMemberships().Synchronously())
+            {
+                IGroup group = item.GetGroup();
+                if (group.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
+                    group.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                    foundMembership = item;
+
+                if (foundMembership != null)
+                    break;
+            }
+
+            if (foundMembership == null)
+                throw new InvalidOperationException("This account does not belong to the specified group.");
+
+            return foundMembership.Delete();
+        }
+
+        async Task<bool> IAccount.IsMemberOfGroupAsync(string hrefOrName, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            IGroup foundGroup = null;
+            await this.AsInterface.GetGroups().ForEachAsync(
+                item =>
+                {
+                    if (item.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
+                        item.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                        foundGroup = item;
+
+                    return foundGroup != null;
+                }, cancellationToken).ConfigureAwait(false);
+
+            return foundGroup != null;
+        }
+
+        bool IAccountSync.IsMemberOfGroup(string hrefOrName)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            IGroup foundGroup = null;
+            foreach (var item in this.AsInterface.GetGroups().Synchronously())
+            {
+                if (item.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
+                        item.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                    foundGroup = item;
+
+                if (foundGroup != null)
+                    break;
+            }
+
+            return foundGroup != null;
+        }
+
+        private async Task<IGroup> FindGroupInDirectoryAsync(string hrefOrName, string directoryHref, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+            if (string.IsNullOrEmpty(directoryHref))
+                throw new ArgumentNullException(nameof(directoryHref));
+
+            IGroup group = null;
+
+            bool looksLikeHref = hrefOrName.Split('/').Length > 4;
+            if (looksLikeHref)
+            {
+                try
+                {
+                    group = await this.GetInternalDataStore().GetResourceAsync<IGroup>(hrefOrName, cancellationToken).ConfigureAwait(false);
+
+                    if ((group as DefaultGroup)?.Directory.Href == directoryHref)
+                        return group;
+                }
+                catch (ResourceException)
+                {
+                    // It looked like an href, but no group was found.
+                    // We'll try looking it up by name.
+                }
+            }
+
+            group = await (await this.AsInterface.GetDirectoryAsync().ConfigureAwait(false))
+                .GetGroups()
+                .Where(x => x.Name == hrefOrName)
+                .FirstOrDefaultAsync(cancellationToken)
+                .ConfigureAwait(false);
+
+            return group; // or null
+        }
+
+        private IGroup FindGroupInDirectory(string hrefOrName, string directoryHref)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+            if (string.IsNullOrEmpty(directoryHref))
+                throw new ArgumentNullException(nameof(directoryHref));
+
+            IGroup group = null;
+
+            bool looksLikeHref = hrefOrName.Split('/').Length > 4;
+            if (looksLikeHref)
+            {
+                try
+                {
+                    group = this.GetInternalDataStoreSync().GetResource<IGroup>(hrefOrName);
+
+                    if ((group as DefaultGroup)?.Directory.Href == directoryHref)
+                        return group;
+                }
+                catch (ResourceException)
+                {
+                    // It looked like an href, but no group was found.
+                    // We'll try looking it up by name.
+                }
+            }
+
+            group = this.AsInterface.GetDirectory()
+                .GetGroups()
+                .Synchronously()
+                .Where(x => x.Name == hrefOrName)
+                .FirstOrDefault();
+
+            return group; // or null
+        }
     }
 }
