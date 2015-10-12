@@ -134,7 +134,7 @@ namespace Stormpath.SDK.Impl.Directory
             => this.SaveAsync<IDirectory>(cancellationToken);
 
         IDirectory ISaveableSync<IDirectory>.Save()
-            => this.GetInternalDataStoreSync().Save<IDirectory>(this);
+            => this.Save();
 
         IAsyncQueryable<IAccount> IDirectory.GetAccounts()
             => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());

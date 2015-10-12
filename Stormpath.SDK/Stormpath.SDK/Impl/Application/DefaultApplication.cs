@@ -205,7 +205,7 @@ namespace Stormpath.SDK.Impl.Application
              => this.SaveAsync<IApplication>(cancellationToken);
 
         IApplication ISaveableSync<IApplication>.Save()
-            => this.GetInternalDataStoreSync().Save<IApplication>(this);
+            => this.Save();
 
         Task<IPasswordResetToken> IApplication.SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken)
         {
