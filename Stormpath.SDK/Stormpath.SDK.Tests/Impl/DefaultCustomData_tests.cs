@@ -17,6 +17,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
 using Shouldly;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Impl.CustomData;
@@ -27,6 +29,36 @@ namespace Stormpath.SDK.Tests.Impl
 {
     public class DefaultCustomData_tests
     {
+        private static List<object> validValueTypes = new List<object>()
+        {
+            short.MinValue,
+            int.MaxValue,
+            long.MinValue,
+            float.MaxValue,
+            double.MinValue,
+            decimal.MaxValue,
+            byte.MinValue,
+            true,
+            "foobar",
+            'x'
+        };
+
+        private static List<object> invalidValueTypes = new List<object>()
+            {
+                new object(),
+                DateTime.Now,
+                DateTimeOffset.Now,
+                TimeSpan.FromSeconds(1),
+                Guid.NewGuid(),
+                new System.Text.StringBuilder("foobar!"),
+                new Lazy<bool>(() => false),
+                new string[] { "foo", "bar" },
+                new Dictionary<int, bool>()
+                {
+                    [123] = true
+                }
+            };
+
         private static ICustomData GetInstance(IDictionary<string, object> properties = null)
         {
             if (properties == null)
@@ -115,6 +147,21 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
+        public void Put_dynamic_items()
+        {
+            var customData = GetInstance();
+
+            dynamic data = new ExpandoObject();
+            data.foo = "bar";
+            data.baz = 123;
+
+            customData.Put(data);
+
+            customData["foo"].ShouldBe("bar");
+            customData["baz"].ShouldBe(123);
+        }
+
+        [Fact]
         public void Put_throws_for_reserved_key_names()
         {
             var customData = GetInstance();
@@ -145,6 +192,100 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 Should.Throw<ArgumentOutOfRangeException>(() => customData.Put(x, "quz"));
             });
+        }
+
+        [Fact]
+        public void Put_only_accepts_primitives()
+        {
+            var customData = GetInstance();
+
+            validValueTypes.ForEach(v => customData.Put(v.GetType().Name, v));
+
+            invalidValueTypes.ForEach(x =>
+            {
+                Should.Throw<ArgumentOutOfRangeException>(
+                    () => customData.Put("bad", x), $"This should not be allowed in customData: {x}");
+            });
+
+            customData.Values.Count.ShouldBe(validValueTypes.Count);
+        }
+
+        [Fact]
+        public void Put_only_accepts_primitives_in_key_value_pairs()
+        {
+            var customData = GetInstance();
+
+            validValueTypes.ForEach(v => customData.Put(new KeyValuePair<string, object>(v.GetType().Name, v)));
+
+            invalidValueTypes.ForEach(x =>
+            {
+                Should.Throw<ArgumentOutOfRangeException>(
+                    () => customData.Put(new KeyValuePair<string, object>("bad", x)), $"This should not be allowed in customData: {x}");
+            });
+
+            customData.Values.Count.ShouldBe(validValueTypes.Count);
+        }
+
+        [Fact]
+        public void Put_only_accepts_primitives_in_dictionary()
+        {
+            var customData = GetInstance();
+
+            var itemsToPut = validValueTypes.ToDictionary(key => key.GetType().Name, value => value);
+            customData.Put(itemsToPut);
+
+            var invalidItems = invalidValueTypes.ToDictionary(key => key.GetType().Name, value => value);
+            Should.Throw<ArgumentOutOfRangeException>(() =>
+            {
+                customData.Put(invalidItems);
+            });
+
+            customData.Values.Count.ShouldBe(validValueTypes.Count);
+        }
+
+        [Fact]
+        public void Put_only_accepts_primitives_in_anonymous_type()
+        {
+            var validValueTypesAnon = new
+            {
+                aShort = short.MinValue,
+                aInt = int.MaxValue,
+                aLong = long.MinValue,
+                aFloat = float.MaxValue,
+                aDouble = double.MinValue,
+                aDecimal = decimal.MaxValue,
+                aByte = byte.MinValue,
+                aBool = true,
+                aString = "foobar",
+                aChar = 'x'
+            };
+
+            var invalidValueTypesAnon = new
+            {
+                aObject = new object(),
+                aDate = DateTime.Now,
+                aDateWithTimezone = DateTimeOffset.Now,
+                aDuration = TimeSpan.FromSeconds(1),
+                aGuid = Guid.NewGuid(),
+                aStringBuilder = new System.Text.StringBuilder("foobar!"),
+                aLazyBool = new Lazy<bool>(() => false),
+                aStringArray = new string[] { "foo", "bar" },
+                aDictionary = new Dictionary<int, bool>()
+                {
+                    [123] = true
+                }
+            };
+
+            var customData = GetInstance();
+
+            customData.Put(validValueTypesAnon);
+
+            Should.Throw<ArgumentOutOfRangeException>(() =>
+            {
+                customData.Put(invalidValueTypesAnon);
+            });
+
+            customData.Values.Count.ShouldBe(validValueTypes.Count);
         }
 
         [Fact]

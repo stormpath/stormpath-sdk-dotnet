@@ -76,6 +76,18 @@ namespace Stormpath.SDK.Impl.CustomData
             return true;
         }
 
+        private static bool IsValidValue(object value)
+        {
+            var type = value.GetType();
+
+            if (type.IsPrimitive ||
+                type == typeof(string) ||
+                type == typeof(decimal))
+                return true;
+
+            return false;
+        }
+
         private List<string> GetAvailableKeys()
         {
             var keys = new List<string>();
@@ -147,6 +159,9 @@ namespace Stormpath.SDK.Impl.CustomData
 
             if (!IsValidKey(key))
                 throw new ArgumentOutOfRangeException($"{key} is not a valid key name.");
+
+            if (!IsValidValue(value))
+                throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'. Only primitives and strings can be stored in Custom Data.");
 
             object dummy;
             this.deletedProperties.TryRemove(key, out dummy);
