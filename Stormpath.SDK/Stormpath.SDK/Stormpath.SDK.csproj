@@ -185,6 +185,16 @@
     <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
+    <Compile Include="Provider\ILinkedInProviderData.cs" />
+    <Compile Include="Provider\ILinkedInProvider.cs" />
+    <Compile Include="Provider\IGoogleProviderData.cs" />
+    <Compile Include="Provider\IGoogleProvider.cs" />
+    <Compile Include="Provider\IGithubProviderData.cs" />
+    <Compile Include="Provider\IGithubProvider.cs" />
+    <Compile Include="Provider\IFacebookProvider.cs" />
+    <Compile Include="Provider\IFacebookProviderData.cs" />
+    <Compile Include="Provider\IProvider.cs" />
+    <Compile Include="Provider\IProviderData.cs" />
     <Compile Include="Resource\IExtendable.cs" />
     <Compile Include="Sync\FilterExtensions.cs" />
     <Compile Include="Sync\SyncAccountCreationActionsExtensions.cs" />
