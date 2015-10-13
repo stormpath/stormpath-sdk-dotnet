@@ -15,6 +15,8 @@
 // limitations under the License.
 // </remarks>
 
+using Stormpath.SDK.Impl.Provider;
+
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
@@ -26,7 +28,7 @@ namespace Stormpath.SDK.Provider
         /// </summary>
         /// <returns>A new <see cref="IFacebookRequestFactory"/>.</returns>
         public static IFacebookRequestFactory Facebook()
-            => null;
+            => new DefaultFacebookRequestFactory();
 
         /// <summary>
         /// Returns a new <see cref="IGithubRequestFactory"/> instance, used to construct Github requests, like Github Account creation and retrieval.

@@ -30,6 +30,6 @@ namespace Stormpath.SDK.Provider
         /// </summary>
         /// <returns>The Provider instance containing all the Provider information to be used
         /// when creating a Provider-based directory in Stormpath.</returns>
-        IProviderData GetProviderData();
+        IProvider GetProvider();
     }
 }
