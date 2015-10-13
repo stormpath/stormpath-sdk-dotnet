@@ -113,6 +113,9 @@ namespace Stormpath.SDK.Impl.CustomData
             set { this.AsInterface.Put(key, value); }
         }
 
+        int ICustomData.Count
+            => this.GetAvailableKeys().Except(ReservedKeys).Count();
+
         IReadOnlyCollection<string> ICustomData.Keys
             => this.GetAvailableKeys();
 

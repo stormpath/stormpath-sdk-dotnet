@@ -361,6 +361,48 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
+        public void Count_ignores_reserved_keys()
+        {
+            var instanceData = new Dictionary<string, object>()
+            {
+                { "href", "http://foo/bar" },
+                { "createdAt", DateTimeOffset.UtcNow },
+                { "modifiedAt", DateTimeOffset.UtcNow }
+            };
+            var customData = GetInstance(instanceData);
+
+            customData.Count.ShouldBe(0);
+        }
+
+        [Fact]
+        public void Count_ignores_pending_deleted_items()
+        {
+            var instanceData = new Dictionary<string, object>()
+            {
+                { "foo", "bar" },
+            };
+            var customData = GetInstance(instanceData);
+
+            customData.Remove("foo");
+
+            customData.Count.ShouldBe(0);
+        }
+
+        [Fact]
+        public void Count_includes_pending_items()
+        {
+            var instanceData = new Dictionary<string, object>()
+            {
+                { "foo", "bar" },
+            };
+            var customData = GetInstance(instanceData);
+
+            customData.Put("baz", 123);
+
+            customData.Count.ShouldBe(2);
+        }
+
+        [Fact]
         public void Iterating_over_collection()
         {
             var instanceData = new Dictionary<string, object>()

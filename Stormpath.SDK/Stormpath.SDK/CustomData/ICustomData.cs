@@ -27,7 +27,13 @@ namespace Stormpath.SDK.CustomData
     /// </summary>
     public interface ICustomData : IResource, ISaveable<ICustomData>, IDeletable, IAuditable, IEnumerable<KeyValuePair<string, object>>
     {
+        int Count { get; }
+
         object this[string key] { get; set; }
+
+        IReadOnlyCollection<string> Keys { get; }
+
+        IReadOnlyCollection<object> Values { get; }
 
         /// <summary>
         /// Removes all custom data items when this custom data resource is saved.
@@ -94,10 +100,6 @@ namespace Stormpath.SDK.CustomData
         /// <param name="value">If found, this <c>out</c> parameter will be set to the found value.</param>
         /// <returns><c>true</c> if the custom data item exists; <c>false</c> otherwise.</returns>
         bool TryGetValue(string key, out object value);
-
-        IReadOnlyCollection<string> Keys { get; }
-
-        IReadOnlyCollection<object> Values { get; }
 
         /// <summary>
         /// Determines whether any user-defined custom data items have been added.
