@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultFacebookRequestFactory.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultProvider.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,16 +15,21 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Provider;
+using Stormpath.SDK.Impl.DataStore;
 
 namespace Stormpath.SDK.Impl.Provider
 {
-    internal sealed class DefaultFacebookRequestFactory : IFacebookRequestFactory
+    /// <summary>
+    /// Represents Stormpath as a Provider. For example, the provider of a Stormpath-owned directory is "stormpath".
+    /// </summary>
+    internal sealed class DefaultProvider : AbstractProvider
     {
-        IFacebookAccountRequestBuilder IProviderRequestFactory<IFacebookAccountRequestBuilder, IFacebookCreateProviderRequestBuilder>.Account()
-            => new DefaultFacebookAccountRequestBuilder();
+        public DefaultProvider(IInternalDataStore dataStore)
+            : base(dataStore)
+        {
+        }
 
-        IFacebookCreateProviderRequestBuilder IProviderRequestFactory<IFacebookAccountRequestBuilder, IFacebookCreateProviderRequestBuilder>.Builder()
-            => new DefaultFacebookCreateProviderRequestBuilder();
+        protected override string ConcreteProviderId
+            => ProviderType.Stormpath.DisplayName;
     }
 }

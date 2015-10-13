@@ -24,6 +24,8 @@ namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class DefaultResourceConverter : IResourceConverter
     {
+        private IResourceConverter AsInterface => this;
+
         IDictionary<string, object> IResourceConverter.ToMap(AbstractResource resource)
         {
             var propertyNames = resource.GetUpdatedPropertyNames();
@@ -31,7 +33,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var resultMap = propertyNames.Select(name =>
             {
                 var rawValue = resource.GetProperty(name);
-                var value = SanitizeValue(resource, name, rawValue);
+                var value = this.SanitizeValue(resource, name, rawValue);
                 return new { name, value };
             }).ToDictionary(
                 map => map.name,
@@ -40,7 +42,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return resultMap;
         }
 
-        private static object SanitizeValue(AbstractResource resource, string propertyName, object rawValue)
+        private object SanitizeValue(AbstractResource resource, string propertyName, object rawValue)
         {
             var asLinkProperty = rawValue as LinkProperty;
             if (asLinkProperty != null)
@@ -48,12 +50,19 @@ namespace Stormpath.SDK.Impl.DataStore
                 return new { href = asLinkProperty.Href };
             }
 
-            bool isEnumeration = rawValue.GetType().IsSubclassOf(typeof(Enumeration));
-            if (isEnumeration)
+            var asEnumeration = rawValue as Enumeration;
+            if (asEnumeration != null)
             {
-                return rawValue.ToString().ToLower();
+                return asEnumeration.DisplayName.ToLower();
             }
 
+            var asEmbeddedResource = rawValue as AbstractResource;
+            if (asEmbeddedResource != null)
+            {
+                return this.AsInterface.ToMap(asEmbeddedResource);
+            }
+
+            // Already a primitive-like type, no need to sanitize
             return rawValue;
         }
     }

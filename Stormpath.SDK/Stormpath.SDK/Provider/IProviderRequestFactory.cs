@@ -36,6 +36,6 @@ namespace Stormpath.SDK.Provider
         /// Returns a builder to generate an attempt to create a Provider-based <see cref="Directory.IDirectory"/> in Stormpath.
         /// </summary>
         /// <returns>A builder to generate an attempt to create a Provider-based <see cref="Directory.IDirectory"/> in Stormpath.</returns>
-        P Buider();
+        P Builder();
     }
 }

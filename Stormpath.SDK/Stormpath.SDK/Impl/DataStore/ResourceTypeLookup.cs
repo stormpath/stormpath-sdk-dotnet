@@ -30,8 +30,10 @@ using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Group;
+using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
@@ -53,6 +55,8 @@ namespace Stormpath.SDK.Impl.DataStore
         private static readonly Type CustomDataInterface = typeof(ICustomData);
         private static readonly Type EmailVerificationTokenInterface = typeof(IEmailVerificationToken);
         private static readonly Type EmailVerificationRequestInterface = typeof(IEmailVerificationRequest);
+        private static readonly Type StormpathProviderInterface = typeof(IProvider);
+        private static readonly Type FacebookProviderInterface = typeof(IFacebookProvider);
 
         private static readonly Type AccountConcrete = typeof(DefaultAccount);
         private static readonly Type ApplicationConcrete = typeof(DefaultApplication);
@@ -68,6 +72,8 @@ namespace Stormpath.SDK.Impl.DataStore
         private static readonly Type CustomDataConcrete = typeof(DefaultCustomData);
         private static readonly Type EmailVerificationTokenConcrete = typeof(DefaultEmailVerificationToken);
         private static readonly Type EmailVerificationRequestConcrete = typeof(DefaultEmailVerificationRequest);
+        private static readonly Type StormpathProviderConcrete = typeof(DefaultProvider);
+        private static readonly Type FacebookProviderConcrete = typeof(DefaultFacebookProvider);
 
         private static readonly Type CollectionPageOfAccount = typeof(CollectionResponsePage<IAccount>);
         private static readonly Type CollectionPageOfApplication = typeof(CollectionResponsePage<IApplication>);
@@ -124,6 +130,12 @@ namespace Stormpath.SDK.Impl.DataStore
             if (iface == EmailVerificationRequestInterface)
                 return EmailVerificationRequestConcrete;
 
+            if (iface == StormpathProviderInterface)
+                return StormpathProviderConcrete;
+
+            if (iface == FacebookProviderInterface)
+                return FacebookProviderConcrete;
+
             return null; // unknown
         }
 
@@ -176,6 +188,12 @@ namespace Stormpath.SDK.Impl.DataStore
             if (concrete == EmailVerificationRequestConcrete)
                 return EmailVerificationRequestInterface;
 
+            if (concrete == StormpathProviderConcrete)
+                return StormpathProviderInterface;
+
+            if (concrete == FacebookProviderConcrete)
+                return FacebookProviderInterface;
+
             return null; // unknown
         }
 
@@ -200,7 +218,9 @@ namespace Stormpath.SDK.Impl.DataStore
                 possiblyInterface == PasswordResetTokenInterface ||
                 possiblyInterface == CustomDataInterface ||
                 possiblyInterface == EmailVerificationTokenInterface ||
-                possiblyInterface == EmailVerificationRequestInterface;
+                possiblyInterface == EmailVerificationRequestInterface ||
+                possiblyInterface == StormpathProviderInterface ||
+                possiblyInterface == FacebookProviderInterface;
         }
 
         /// <summary>
@@ -224,7 +244,9 @@ namespace Stormpath.SDK.Impl.DataStore
                 possiblyConcrete == PasswordResetTokenConcrete ||
                 possiblyConcrete == CustomDataConcrete ||
                 possiblyConcrete == EmailVerificationTokenConcrete ||
-                possiblyConcrete == EmailVerificationRequestConcrete;
+                possiblyConcrete == EmailVerificationRequestConcrete ||
+                possiblyConcrete == StormpathProviderConcrete ||
+                possiblyConcrete == FacebookProviderConcrete;
         }
 
         /// <summary>

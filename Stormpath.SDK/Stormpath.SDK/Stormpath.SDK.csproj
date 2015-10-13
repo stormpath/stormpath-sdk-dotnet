@@ -170,6 +170,7 @@
     <Compile Include="Impl\Provider\DefaultFacebookProvider.cs" />
     <Compile Include="Impl\Provider\DefaultFacebookProviderData.cs" />
     <Compile Include="Impl\Provider\DefaultFacebookRequestFactory.cs" />
+    <Compile Include="Impl\Provider\DefaultProvider.cs" />
     <Compile Include="Impl\Provider\DefaultProviderAccountRequest.cs" />
     <Compile Include="Impl\Provider\ProviderType.cs" />
     <Compile Include="Impl\Provider\ProviderTypeConverter.cs" />
