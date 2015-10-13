@@ -186,6 +186,27 @@ namespace Stormpath.SDK.Impl.DataStore
         // DataStore methods
         async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
         {
+            var result = await this.GetResourceDataAsync<T>(resourcePath, cancellationToken).ConfigureAwait(false);
+
+            return this.resourceFactory.Create<T>(result.Body);
+        }
+
+        async Task<T> IInternalDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
+        {
+            var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);
+
+            var targetType = typeLookup(result.Body);
+            if (targetType == null)
+                throw new ApplicationException("No type mapping could be found for this resource.");
+
+            return this.resourceFactory.Create(targetType, result.Body) as T;
+        }
+
+        private Task<IResourceDataResult> GetResourceDataAsync<T>(string resourcePath, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(resourcePath))
+                throw new ArgumentNullException(nameof(resourcePath));
+
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
             this.logger.Trace($"Asynchronously getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResourceAsync<T>");
 
@@ -201,9 +222,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri);
-            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
-
-            return this.resourceFactory.Create<T>(result.Body);
+            return chain.ExecuteAsync(request, this.logger, cancellationToken);
         }
 
         T IDataStoreSync.GetResource<T>(string resourcePath)

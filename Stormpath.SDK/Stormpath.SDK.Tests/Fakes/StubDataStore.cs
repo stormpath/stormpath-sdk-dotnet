@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.DataStore;
@@ -82,6 +83,9 @@ namespace Stormpath.SDK.Tests.Fakes
 
         Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken) => this.FakeDataStore.GetResourceAsync<T>(href, cancellationToken);
 
+        Task<T> IInternalDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> conversionFunc, CancellationToken cancellationToken)
+            => this.FakeDataStore.GetResourceAsync<T>(href, conversionFunc, cancellationToken);
+
         T IDataStore.Instantiate<T>() => this.FakeDataStore.Instantiate<T>();
 
         T IInternalDataStoreSync.Save<T>(T resource) => this.FakeDataStoreSync.Save(resource);
@@ -115,6 +119,11 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         bool IInternalDataStoreSync.DeleteProperty(string parentHref, string propertyName)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IDisposable.Dispose()
         {
             throw new NotImplementedException();
         }

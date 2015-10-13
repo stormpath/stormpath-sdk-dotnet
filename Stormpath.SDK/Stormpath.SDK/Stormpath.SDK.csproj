@@ -83,7 +83,9 @@
     <Compile Include="Client\IClientBuilder.cs" />
     <Compile Include="CustomData\ICustomData.cs" />
     <Compile Include="CustomData\IEmbeddedCustomData.cs" />
+    <Compile Include="Directory\DirectoryCreationOptionsBuilder.cs" />
     <Compile Include="Directory\DirectoryStatus.cs" />
+    <Compile Include="Directory\IDirectoryCreationOptions.cs" />
     <Compile Include="Directory\IDirectory.cs" />
     <Compile Include="Error\IError.cs" />
     <Compile Include="Error\ResourceException.cs" />
@@ -140,6 +142,7 @@
     <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
     <Compile Include="Impl\DataStore\IDataStoreSync.cs" />
+    <Compile Include="Impl\Directory\DefaultDirectoryCreationOptions.cs" />
     <Compile Include="Impl\Directory\IDirectorySync.cs" />
     <Compile Include="Impl\Group\DefaultGroup.cs" />
     <Compile Include="Impl\Group\DefaultGroupMembership.cs" />
@@ -169,6 +172,7 @@
     <Compile Include="Impl\Provider\DefaultFacebookRequestFactory.cs" />
     <Compile Include="Impl\Provider\DefaultProviderAccountRequest.cs" />
     <Compile Include="Impl\Provider\ProviderType.cs" />
+    <Compile Include="Impl\Provider\ProviderTypeConverter.cs" />
     <Compile Include="Impl\Resource\IExtendableSync.cs" />
     <Compile Include="Impl\Resource\IDeletableSync.cs" />
     <Compile Include="Impl\Resource\ISaveableSync.cs" />

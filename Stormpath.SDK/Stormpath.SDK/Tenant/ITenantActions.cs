@@ -33,10 +33,19 @@ namespace Stormpath.SDK.Tenant
     public interface ITenantActions
     {
         /// <summary>
+        /// Creates a new <see cref="Application.IApplication"/> resource in the current tenant, with the default creation options.
+        /// </summary>
+        /// <param name="application">The <see cref="IApplication"/> to create.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the created <see cref="IApplication"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
+        Task<IApplication> CreateApplicationAsync(IApplication application, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Creates a new <see cref="Application.IApplication"/> resource in the current tenant.
         /// </summary>
         /// <param name="application">The <see cref="IApplication"/> to create.</param>
-        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="ApplicationCreationOptionsBuilder"/>,
+        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IApplicationCreationOptions"/>,
         /// which will be used when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the created <see cref="IApplication"/>.</returns>
@@ -54,16 +63,7 @@ namespace Stormpath.SDK.Tenant
         Task<IApplication> CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new <see cref="Application.IApplication"/> resource in the current tenant, with the default creation options.
-        /// </summary>
-        /// <param name="application">The <see cref="IApplication"/> to create.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IApplication"/>.</returns>
-        /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
-        Task<IApplication> CreateApplicationAsync(IApplication application, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Creates a new <see cref="Application.IApplication"/> resource in the current tenant.
+        /// Convenience method. Creates a new <see cref="Application.IApplication"/> resource in the current tenant.
         /// </summary>
         /// <param name="name">The name of the application.</param>
         /// <param name="createDirectory">Whether a default directory should be created automatically.</param>
@@ -82,7 +82,28 @@ namespace Stormpath.SDK.Tenant
         Task<IDirectory> CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new Cloud Directory resource in the Tenant.
+        /// Creates a new Provider-based Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="creationOptionsAction">An inline builder for aninstance of <see cref="IDirectoryCreationOptions"/>,
+        /// which will be used when sending the request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        Task<IDirectory> CreateDirectoryAsync(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Creates a new Provider-based Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        Task<IDirectory> CreateDirectoryAsync(IDirectory directory, IDirectoryCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Convenience method. Creates a new Cloud Directory resource in the Tenant.
         /// </summary>
         /// <param name="name">The directory name.</param>
         /// <param name="description">The directory description.</param>
