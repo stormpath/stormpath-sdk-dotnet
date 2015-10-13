@@ -83,7 +83,6 @@
     <Compile Include="Impl\DefaultCacheProviderBuilder_tests.cs" />
     <Compile Include="Impl\DefaultCustomData_persistence_tests.cs" />
     <Compile Include="Impl\DefaultCustomData_tests.cs" />
-    <Compile Include="Impl\DefaultEmbeddedCustomData_tests.cs" />
     <Compile Include="Impl\DefaultJsonSerializerBuilder_tests.cs" />
     <Compile Include="Impl\DefaultHttpClientLoader_tests.cs" />
     <Compile Include="Impl\DefaultJsonSerializerLoader_tests.cs" />
