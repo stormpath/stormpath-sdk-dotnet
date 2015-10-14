@@ -132,5 +132,40 @@ namespace Stormpath.SDK.Tests.Integration.Async
             // Cleanup
             await created.DeleteAsync();
         }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_github_directory(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var directoryName = $"My New Github Directory (.NET IT {this.fixture.TestRunIdentifier})";
+
+            var instance = client.Instantiate<IDirectory>();
+            instance.SetName(directoryName);
+            var created = await tenant.CreateDirectoryAsync(instance, options => options.ForProvider(
+                Providers.Github()
+                    .Builder()
+                    .SetClientId("foobar")
+                    .SetClientSecret("secret123!")
+                    .Build()));
+
+            created.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(created.Href);
+
+            created.Name.ShouldBe(directoryName);
+
+            var provider = await created.GetProviderAsync() as IGithubProvider;
+            provider.ShouldNotBeNull();
+            provider.Href.ShouldNotBeNullOrEmpty();
+
+            provider.ProviderId.ShouldBe("github");
+            provider.ClientId.ShouldBe("foobar");
+            provider.ClientSecret.ShouldBe("secret123!");
+
+            // Cleanup
+            await created.DeleteAsync();
+        }
     }
 }

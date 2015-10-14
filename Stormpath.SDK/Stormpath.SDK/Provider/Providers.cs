@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Provider
         /// </summary>
         /// <returns>A new <see cref="IGithubRequestFactory"/>.</returns>
         public static IGithubRequestFactory Github()
-            => null;
+            => new DefaultGithubRequestFactory();
 
         /// <summary>
         /// Returns a new <see cref="IGoogleRequestFactory"/> instance, used to construct Google requests, like Google Directory creation.

@@ -165,6 +165,11 @@
     <Compile Include="Impl\Provider\AbstractProvider.cs" />
     <Compile Include="Impl\Provider\AbstractProviderAccountRequestBuilder.cs" />
     <Compile Include="Impl\Provider\AbstractProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultGithubProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultGithubProvider.cs" />
+    <Compile Include="Impl\Provider\DefaultGithubAccountRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultGithubCreateProviderRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultGithubRequestFactory.cs" />
     <Compile Include="Impl\Provider\DefaultProviderAccountAccess.cs" />
     <Compile Include="Impl\Provider\DefaultCreateProviderRequest.cs" />
     <Compile Include="Impl\Provider\DefaultFacebookAccountRequestBuilder.cs" />
