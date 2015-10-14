@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Provider
         /// </summary>
         /// <returns>A new <see cref="IGoogleRequestFactory"/>.</returns>
         public static IGoogleRequestFactory Google()
-            => null;
+            => new DefaultGoogleRequestFactory();
 
         /// <summary>
         /// Returns a new <see cref="ILinkedInRequestFactory"/> instance, used to construct LinkedIn requests, like LinkedIn Account creation and retrieval.

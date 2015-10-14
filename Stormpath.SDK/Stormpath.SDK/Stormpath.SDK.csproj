@@ -165,6 +165,11 @@
     <Compile Include="Impl\Provider\AbstractProvider.cs" />
     <Compile Include="Impl\Provider\AbstractProviderAccountRequestBuilder.cs" />
     <Compile Include="Impl\Provider\AbstractProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultGoogleProvider.cs" />
+    <Compile Include="Impl\Provider\DefaultGoogleProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultGoogleAccountRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultGoogleCreateProviderRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultGoogleRequestFactory.cs" />
     <Compile Include="Impl\Provider\DefaultGithubProviderData.cs" />
     <Compile Include="Impl\Provider\DefaultGithubProvider.cs" />
     <Compile Include="Impl\Provider\DefaultGithubAccountRequestBuilder.cs" />
