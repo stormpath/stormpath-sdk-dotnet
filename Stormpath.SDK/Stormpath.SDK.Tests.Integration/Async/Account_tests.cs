@@ -76,6 +76,23 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Getting_account_provider_data(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var luke = await application
+                .GetAccounts()
+                .Where(x => x.Email.StartsWith("lskywalker"))
+                .SingleAsync();
+
+            var providerData = await luke.GetProviderDataAsync();
+            providerData.Href.ShouldNotBeNullOrEmpty();
+            providerData.ProviderId.ShouldBe("stormpath");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Updating_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
