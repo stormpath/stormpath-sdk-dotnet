@@ -164,6 +164,7 @@
     <Compile Include="Impl\Provider\AbstractProvider.cs" />
     <Compile Include="Impl\Provider\AbstractProviderAccountRequestBuilder.cs" />
     <Compile Include="Impl\Provider\AbstractProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultProviderAccountAccess.cs" />
     <Compile Include="Impl\Provider\DefaultCreateProviderRequest.cs" />
     <Compile Include="Impl\Provider\DefaultFacebookAccountRequestBuilder.cs" />
     <Compile Include="Impl\Provider\DefaultFacebookCreateProviderRequestBuilder.cs" />
@@ -172,6 +173,9 @@
     <Compile Include="Impl\Provider\DefaultFacebookRequestFactory.cs" />
     <Compile Include="Impl\Provider\DefaultProvider.cs" />
     <Compile Include="Impl\Provider\DefaultProviderAccountRequest.cs" />
+    <Compile Include="Impl\Provider\DefaultProviderAccountResult.cs" />
+    <Compile Include="Impl\Provider\IProviderAccountAccess.cs" />
+    <Compile Include="Impl\Provider\ProviderAccountResolver.cs" />
     <Compile Include="Impl\Provider\ProviderType.cs" />
     <Compile Include="Impl\Provider\ProviderTypeConverter.cs" />
     <Compile Include="Impl\Resource\IExtendableSync.cs" />
@@ -227,6 +231,7 @@
     <Compile Include="Provider\IProvider.cs" />
     <Compile Include="Provider\IProviderAccountRequest.cs" />
     <Compile Include="Provider\IProviderAccountRequestBuilder.cs" />
+    <Compile Include="Provider\IProviderAccountResult.cs" />
     <Compile Include="Provider\IProviderData.cs" />
     <Compile Include="Provider\IProviderRequestFactory.cs" />
     <Compile Include="Provider\Providers.cs" />
