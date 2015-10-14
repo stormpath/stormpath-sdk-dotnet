@@ -48,15 +48,16 @@ namespace Stormpath.SDK.Impl.Resource
             if (properties == null)
                 properties = new Dictionary<string, object>();
 
-            this.ResetAndUpdateDerived(properties);
+            properties = this.ResetAndUpdateDerived(properties);
 
             this.properties = new ConcurrentDictionary<string, object>(properties);
             this.dirtyProperties = new ConcurrentDictionary<string, object>();
             this.isDirty = false;
         }
 
-        protected virtual void ResetAndUpdateDerived(IDictionary<string, object> properties)
+        protected virtual IDictionary<string, object> ResetAndUpdateDerived(IDictionary<string, object> properties)
         {
+            return properties;
         }
 
         string IResource.Href => this.GetProperty<string>(HrefPropertyName);

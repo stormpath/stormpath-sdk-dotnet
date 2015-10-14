@@ -16,6 +16,7 @@
 // </remarks>
 
 using System.Collections.Generic;
+using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
@@ -34,18 +35,22 @@ namespace Stormpath.SDK.Impl.Provider
         {
         }
 
-        public DefaultProviderAccountResult(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore)
+        protected override IDictionary<string, object> ResetAndUpdateDerived(IDictionary<string, object> properties)
         {
-            if (properties != null)
+            var newProperties = new Dictionary<string, object>(2);
+
+            bool hasProperties = properties?.Any() ?? false;
+            if (hasProperties)
             {
-                this.SetProperty(IsNewAccountPropertyName, properties[IsNewAccountPropertyName]);
+                newProperties.Add(IsNewAccountPropertyName, properties[IsNewAccountPropertyName]);
                 properties.Remove(IsNewAccountPropertyName);
 
                 var account = this.GetInternalDataStore().Instantiate<IAccount>() as DefaultAccount;
                 account.ResetAndUpdate(properties);
-                this.SetProperty(AccountPropertyName, account as IAccount);
+                newProperties.Add(AccountPropertyName, account);
             }
+
+            return newProperties;
         }
 
         IAccount IProviderAccountResult.Account

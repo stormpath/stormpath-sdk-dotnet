@@ -55,8 +55,11 @@ namespace Stormpath.SDK.Impl.DataStore
         private static readonly Type CustomDataInterface = typeof(ICustomData);
         private static readonly Type EmailVerificationTokenInterface = typeof(IEmailVerificationToken);
         private static readonly Type EmailVerificationRequestInterface = typeof(IEmailVerificationRequest);
+        private static readonly Type ProviderAccountResultInterface = typeof(IProviderAccountResult);
         private static readonly Type StormpathProviderInterface = typeof(IProvider);
+        private static readonly Type StormpathProviderDataInterface = typeof(IProviderData);
         private static readonly Type FacebookProviderInterface = typeof(IFacebookProvider);
+        private static readonly Type FacebookProviderDataInterface = typeof(IFacebookProviderData);
 
         private static readonly Type AccountConcrete = typeof(DefaultAccount);
         private static readonly Type ApplicationConcrete = typeof(DefaultApplication);
@@ -72,8 +75,11 @@ namespace Stormpath.SDK.Impl.DataStore
         private static readonly Type CustomDataConcrete = typeof(DefaultCustomData);
         private static readonly Type EmailVerificationTokenConcrete = typeof(DefaultEmailVerificationToken);
         private static readonly Type EmailVerificationRequestConcrete = typeof(DefaultEmailVerificationRequest);
+        private static readonly Type ProviderAccountResultConcrete = typeof(DefaultProviderAccountResult);
         private static readonly Type StormpathProviderConcrete = typeof(DefaultProvider);
+        private static readonly Type StormpathProviderDataConcrete = typeof(DefaultProviderData);
         private static readonly Type FacebookProviderConcrete = typeof(DefaultFacebookProvider);
+        private static readonly Type FacebookProviderDataConcrete = typeof(DefaultFacebookProviderData);
 
         private static readonly Type CollectionPageOfAccount = typeof(CollectionResponsePage<IAccount>);
         private static readonly Type CollectionPageOfApplication = typeof(CollectionResponsePage<IApplication>);
@@ -130,11 +136,20 @@ namespace Stormpath.SDK.Impl.DataStore
             if (iface == EmailVerificationRequestInterface)
                 return EmailVerificationRequestConcrete;
 
+            if (iface == ProviderAccountResultInterface)
+                return ProviderAccountResultConcrete;
+
             if (iface == StormpathProviderInterface)
                 return StormpathProviderConcrete;
 
+            if (iface == StormpathProviderDataInterface)
+                return StormpathProviderDataConcrete;
+
             if (iface == FacebookProviderInterface)
                 return FacebookProviderConcrete;
+
+            if (iface == FacebookProviderDataInterface)
+                return FacebookProviderDataConcrete;
 
             return null; // unknown
         }
@@ -188,11 +203,20 @@ namespace Stormpath.SDK.Impl.DataStore
             if (concrete == EmailVerificationRequestConcrete)
                 return EmailVerificationRequestInterface;
 
+            if (concrete == ProviderAccountResultConcrete)
+                return ProviderAccountResultInterface;
+
             if (concrete == StormpathProviderConcrete)
                 return StormpathProviderInterface;
 
+            if (concrete == StormpathProviderDataConcrete)
+                return StormpathProviderDataInterface;
+
             if (concrete == FacebookProviderConcrete)
                 return FacebookProviderInterface;
+
+            if (concrete == FacebookProviderDataConcrete)
+                return FacebookProviderDataInterface;
 
             return null; // unknown
         }
@@ -219,8 +243,11 @@ namespace Stormpath.SDK.Impl.DataStore
                 possiblyInterface == CustomDataInterface ||
                 possiblyInterface == EmailVerificationTokenInterface ||
                 possiblyInterface == EmailVerificationRequestInterface ||
+                possiblyInterface == ProviderAccountResultInterface ||
                 possiblyInterface == StormpathProviderInterface ||
-                possiblyInterface == FacebookProviderInterface;
+                possiblyInterface == StormpathProviderDataInterface ||
+                possiblyInterface == FacebookProviderInterface ||
+                possiblyInterface == FacebookProviderDataInterface;
         }
 
         /// <summary>
@@ -245,8 +272,11 @@ namespace Stormpath.SDK.Impl.DataStore
                 possiblyConcrete == CustomDataConcrete ||
                 possiblyConcrete == EmailVerificationTokenConcrete ||
                 possiblyConcrete == EmailVerificationRequestConcrete ||
+                possiblyConcrete == ProviderAccountResultConcrete ||
                 possiblyConcrete == StormpathProviderConcrete ||
-                possiblyConcrete == FacebookProviderConcrete;
+                possiblyConcrete == StormpathProviderDataConcrete ||
+                possiblyConcrete == FacebookProviderConcrete ||
+                possiblyConcrete == FacebookProviderDataConcrete;
         }
 
         /// <summary>

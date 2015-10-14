@@ -131,6 +131,7 @@
     <Compile Include="Impl\Client\DefaultJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\DefaultHttpClientBuilder.cs" />
     <Compile Include="Impl\CustomData\ICustomDataSync.cs" />
+    <Compile Include="Impl\DataStore\Filters\ProviderAccountResultFilter.cs" />
     <Compile Include="Impl\DataStore\ICacheProviderBuilder.cs" />
     <Compile Include="Impl\Client\IClientSync.cs" />
     <Compile Include="Impl\Client\IJsonSerializerBuilder.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Impl\Provider\DefaultProvider.cs" />
     <Compile Include="Impl\Provider\DefaultProviderAccountRequest.cs" />
     <Compile Include="Impl\Provider\DefaultProviderAccountResult.cs" />
+    <Compile Include="Impl\Provider\DefaultProviderData.cs" />
     <Compile Include="Impl\Provider\IProviderAccountAccess.cs" />
     <Compile Include="Impl\Provider\ProviderAccountResolver.cs" />
     <Compile Include="Impl\Provider\ProviderType.cs" />

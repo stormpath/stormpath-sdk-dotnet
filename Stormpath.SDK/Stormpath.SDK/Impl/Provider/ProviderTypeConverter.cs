@@ -23,32 +23,56 @@ namespace Stormpath.SDK.Impl.Provider
 {
     internal static class ProviderTypeConverter
     {
-        public static Func<IDictionary<string, object>, Type> TypeLookup = new Func<IDictionary<string, object>, Type>(properties =>
+        private static readonly IReadOnlyDictionary<string, Type> TypeLookupTable = new Dictionary<string, Type>()
+        {
+            ["stormpath"] = typeof(IProvider),
+            ["facebook"] = typeof(IFacebookProvider),
+            ["github"] = typeof(IGithubProvider),
+            ["google"] = typeof(IGoogleProvider),
+            ["linkedin"] = typeof(ILinkedInProvider),
+        };
+
+        private static readonly IReadOnlyDictionary<string, Type> DataTypeLookupTable = new Dictionary<string, Type>()
+        {
+            ["stormpath"] = typeof(IProviderData),
+            ["facebook"] = typeof(IFacebookProviderData),
+            ["github"] = typeof(IGithubProviderData),
+            ["google"] = typeof(IGoogleProviderData),
+            ["linkedin"] = typeof(ILinkedInProviderData),
+        };
+
+        private static string GetProviderId(IDictionary<string, object> properties)
         {
             object rawProviderId = null;
-            string providerId = null;
 
             if (!properties.TryGetValue("providerId", out rawProviderId))
                 return null;
 
-            providerId = (string)rawProviderId;
+            return ((string)rawProviderId).ToLower();
+        }
 
-            if (providerId.Equals("stormpath", StringComparison.InvariantCultureIgnoreCase))
-                return typeof(IProvider);
+        public static Type TypeLookup(IDictionary<string, object> properties)
+        {
+            var providerId = GetProviderId(properties);
+            if (string.IsNullOrEmpty(providerId))
+                return null;
 
-            if (providerId.Equals("facebook", StringComparison.InvariantCultureIgnoreCase))
-                return typeof(IFacebookProvider);
+            Type provider = null;
+            TypeLookupTable.TryGetValue(providerId, out provider);
 
-            if (providerId.Equals("github", StringComparison.InvariantCultureIgnoreCase))
-                return typeof(IGithubProvider);
+            return provider;
+        }
 
-            if (providerId.Equals("google", StringComparison.InvariantCultureIgnoreCase))
-                return typeof(IGoogleProvider);
+        public static Type DataTypeLookup(IDictionary<string, object> properties)
+        {
+            var providerId = GetProviderId(properties);
+            if (string.IsNullOrEmpty(providerId))
+                return null;
 
-            if (providerId.Equals("linkedin", StringComparison.InvariantCultureIgnoreCase))
-                return typeof(ILinkedInProvider);
+            Type providerData = null;
+            DataTypeLookupTable.TryGetValue(providerId, out providerData);
 
-            return null;
-        });
+            return providerData;
+        }
     }
 }

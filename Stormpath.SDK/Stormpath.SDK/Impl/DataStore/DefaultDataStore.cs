@@ -106,6 +106,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 asyncFilterChain.Add(new WriteCacheFilter(this.cacheResolver));
             }
 
+            asyncFilterChain.Add(new ProviderAccountResultFilter());
+
             return asyncFilterChain;
         }
 
@@ -118,6 +120,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 syncFilterChain.Add(new ReadCacheFilter(this.baseUrl, this.cacheResolver));
                 syncFilterChain.Add(new WriteCacheFilter(this.cacheResolver));
             }
+
+            syncFilterChain.Add(new ProviderAccountResultFilter());
 
             return syncFilterChain;
         }
@@ -222,7 +226,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri);
-            return chain.ExecuteAsync(request, this.logger, cancellationToken);
+            return chain.FilterAsync(request, this.logger, cancellationToken);
         }
 
         T IDataStoreSync.GetResource<T>(string resourcePath)
@@ -422,7 +426,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     if (!responseHasExpectedData)
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
 
-                    return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.StatusCode, responseBody);
+                    return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
 
             // Serialize properties
@@ -462,7 +466,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 : ResourceAction.Update;
             var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
 
-            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
+            var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
             return this.resourceFactory.Create<TReturned>(result.Body);
         }
 
@@ -563,7 +567,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri);
-            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
+            var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
 
             bool successfullyDeleted = result.HttpStatus == 204;
             return successfullyDeleted;

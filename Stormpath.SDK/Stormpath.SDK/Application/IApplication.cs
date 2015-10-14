@@ -233,7 +233,7 @@ namespace Stormpath.SDK.Application
         Task<IAccount> VerifyPasswordResetTokenAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Retrieves a Provider-based {@link Account}. The account must exist in one of the Provider-based <see cref="Directory.IDirectory"/>
+        /// Retrieves a Provider-based <see cref="IAccount"/>. The account must exist in one of the Provider-based <see cref="Directory.IDirectory"/>
         /// assigned to the Application as an account store, and the Directory must also be <see cref="Directory.DirectoryStatus.Enabled"/>.
         /// If not in an assigned account store, the retrieval attempt will fail.
         /// </summary>

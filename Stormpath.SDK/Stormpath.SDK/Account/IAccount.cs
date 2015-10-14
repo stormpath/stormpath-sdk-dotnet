@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
@@ -201,6 +202,13 @@ namespace Stormpath.SDK.Account
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is <c>true</c> if the account belongs to the specified group.</returns>
         Task<bool> IsMemberOfGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Gets the ProviderData Resource belonging to the account.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the ProviderData Resource belonging to the account.</returns>
+        Task<IProviderData> GetProviderDataAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a queryable list of the account's assigned groups.
