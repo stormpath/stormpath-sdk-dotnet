@@ -47,8 +47,8 @@ namespace Stormpath.SDK.Provider
         /// <summary>
         /// Returns a new <see cref="ILinkedInRequestFactory"/> instance, used to construct LinkedIn requests, like LinkedIn Account creation and retrieval.
         /// </summary>
-        /// <returns>A new <see cref="IFacebookRequestFactory"/>.</returns>
+        /// <returns>A new <see cref="ILinkedInRequestFactory"/>.</returns>
         public static ILinkedInRequestFactory LinkedIn()
-            => null;
+            => new DefaultLinkedInRequestFactory();
     }
 }

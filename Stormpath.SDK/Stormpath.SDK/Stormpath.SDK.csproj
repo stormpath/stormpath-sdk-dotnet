@@ -165,6 +165,11 @@
     <Compile Include="Impl\Provider\AbstractProvider.cs" />
     <Compile Include="Impl\Provider\AbstractProviderAccountRequestBuilder.cs" />
     <Compile Include="Impl\Provider\AbstractProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultLinkedInProvider.cs" />
+    <Compile Include="Impl\Provider\DefaultLinkedInProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultLinkedInAccountRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultLinkedInCreateProviderRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultLinkedInRequestFactory.cs" />
     <Compile Include="Impl\Provider\DefaultGoogleProvider.cs" />
     <Compile Include="Impl\Provider\DefaultGoogleProviderData.cs" />
     <Compile Include="Impl\Provider\DefaultGoogleAccountRequestBuilder.cs" />

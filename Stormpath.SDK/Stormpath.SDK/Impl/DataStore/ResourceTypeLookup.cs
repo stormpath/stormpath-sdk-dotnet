@@ -67,6 +67,8 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(IGithubProviderData)] = typeof(DefaultGithubProviderData),
             [typeof(IGoogleProvider)] = typeof(DefaultGoogleProvider),
             [typeof(IGoogleProviderData)] = typeof(DefaultGoogleProviderData),
+            [typeof(ILinkedInProvider)] = typeof(DefaultLinkedInProvider),
+            [typeof(ILinkedInProviderData)] = typeof(DefaultLinkedInProviderData),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> InterfaceLookup = new Dictionary<Type, Type>()
@@ -92,8 +94,10 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultFacebookProviderData)] = typeof(IFacebookProviderData),
             [typeof(DefaultGithubProvider)] = typeof(IGithubProvider),
             [typeof(DefaultGithubProviderData)] = typeof(IGithubProviderData),
-            [typeof(DefaultGoogleProvider)] = typeof(IGithubProvider),
-            [typeof(DefaultGoogleProviderData)] = typeof(IGithubProviderData),
+            [typeof(DefaultGoogleProvider)] = typeof(IGoogleProvider),
+            [typeof(DefaultGoogleProviderData)] = typeof(IGoogleProviderData),
+            [typeof(DefaultLinkedInProvider)] = typeof(ILinkedInProvider),
+            [typeof(DefaultLinkedInProviderData)] = typeof(ILinkedInProviderData),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()
