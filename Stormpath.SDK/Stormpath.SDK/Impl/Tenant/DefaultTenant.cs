@@ -26,6 +26,7 @@ using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Tenant
@@ -146,6 +147,15 @@ namespace Stormpath.SDK.Impl.Tenant
             return this.AsInterface.CreateDirectoryAsync(directory, options, cancellationToken);
         }
 
+        IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction)
+        {
+            var builder = new DirectoryCreationOptionsBuilder();
+            creationOptionsAction(builder);
+            var options = builder.Build();
+
+            return this.CreateDirectory(directory, options);
+        }
+
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, IDirectoryCreationOptions creationOptions, CancellationToken cancellationToken)
         {
             if (directory == null)
@@ -155,6 +165,17 @@ namespace Stormpath.SDK.Impl.Tenant
                 (directory as DefaultDirectory).SetProvider(creationOptions.Provider);
 
             return this.AsInterface.CreateDirectoryAsync(directory, cancellationToken);
+        }
+
+        IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory, IDirectoryCreationOptions creationOptions)
+        {
+            if (directory == null)
+                throw new ArgumentNullException(nameof(directory));
+
+            if (creationOptions?.Provider != null)
+                (directory as DefaultDirectory).SetProvider(creationOptions.Provider);
+
+            return this.CreateDirectory(directory);
         }
 
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken)

@@ -240,7 +240,7 @@ namespace Stormpath.SDK.Tests.Fakes
             throw new NotImplementedException();
         }
 
-        void IDisposable.Dispose()
+        T IDataStoreSync.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
         {
             throw new NotImplementedException();
         }

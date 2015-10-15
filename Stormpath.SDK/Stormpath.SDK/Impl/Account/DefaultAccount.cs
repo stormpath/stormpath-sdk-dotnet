@@ -363,6 +363,9 @@ namespace Stormpath.SDK.Impl.Account
         Task<IProviderData> IAccount.GetProviderDataAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().GetResourceAsync<IProviderData>(this.ProviderData.Href, ProviderTypeConverter.DataTypeLookup, cancellationToken);
 
+        IProviderData IAccountSync.GetProviderData()
+            => this.GetInternalDataStoreSync().GetResource<IProviderData>(this.ProviderData.Href, ProviderTypeConverter.DataTypeLookup);
+
         private async Task<IGroup> FindGroupInDirectoryAsync(string hrefOrName, string directoryHref, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrName))

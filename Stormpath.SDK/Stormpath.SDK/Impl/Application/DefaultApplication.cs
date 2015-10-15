@@ -141,7 +141,7 @@ namespace Stormpath.SDK.Impl.Application
         {
             var request = new UsernamePasswordRequest(username, password) as IAuthenticationRequest;
 
-            return this.AsSyncInterface.AuthenticateAccount(request);
+            return this.AuthenticateAccount(request);
         }
 
         async Task<bool> IApplication.TryAuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken)
@@ -161,7 +161,7 @@ namespace Stormpath.SDK.Impl.Application
         {
             try
             {
-                var loginResult = this.AsSyncInterface.AuthenticateAccount(username, password);
+                var loginResult = this.AuthenticateAccount(username, password);
                 return true;
             }
             catch
@@ -288,7 +288,7 @@ namespace Stormpath.SDK.Impl.Application
         }
 
         void IApplicationSync.SendVerificationEmail(string usernameOrEmail)
-            => this.AsSyncInterface.SendVerificationEmail(request => request.Login = usernameOrEmail);
+            => this.SendVerificationEmail(request => request.Login = usernameOrEmail);
 
         void IApplicationSync.SendVerificationEmail(Action<EmailVerificationRequestBuilder> requestBuilderAction)
         {
@@ -311,6 +311,9 @@ namespace Stormpath.SDK.Impl.Application
 
         Task<IProviderAccountResult> IApplication.GetAccountAsync(IProviderAccountRequest request, CancellationToken cancellationToken)
             => new ProviderAccountResolver(this.GetInternalDataStore()).ResolveProviderAccountAsync(this.AsInterface.Href, request, cancellationToken);
+
+        IProviderAccountResult IApplicationSync.GetAccount(IProviderAccountRequest request)
+            => new ProviderAccountResolver(this.GetInternalDataStore()).ResolveProviderAccount(this.AsInterface.Href, request);
 
         IAsyncQueryable<IAccount> IApplication.GetAccounts()
              => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());

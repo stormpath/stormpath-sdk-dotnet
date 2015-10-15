@@ -18,6 +18,7 @@
 using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
@@ -93,6 +94,148 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Cleanup
             updated.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_facebook_directory(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
+
+            var directoryName = $"My New Facebook Directory (.NET IT {this.fixture.TestRunIdentifier})-Sync";
+
+            var instance = client.Instantiate<IDirectory>();
+            instance.SetName(directoryName);
+            var created = tenant.CreateDirectory(instance, options => options.ForProvider(
+                Providers.Facebook()
+                    .Builder()
+                    .SetClientId("foobar")
+                    .SetClientSecret("secret123!")
+                    .Build()));
+
+            created.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(created.Href);
+
+            created.Name.ShouldBe(directoryName);
+
+            var provider = created.GetProvider() as IFacebookProvider;
+            provider.ShouldNotBeNull();
+            provider.Href.ShouldNotBeNullOrEmpty();
+
+            provider.ProviderId.ShouldBe("facebook");
+            provider.ClientId.ShouldBe("foobar");
+            provider.ClientSecret.ShouldBe("secret123!");
+
+            // Cleanup
+            created.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_github_directory(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
+
+            var directoryName = $"My New Github Directory (.NET IT {this.fixture.TestRunIdentifier})-Sync";
+
+            var instance = client.Instantiate<IDirectory>();
+            instance.SetName(directoryName);
+            var created = tenant.CreateDirectory(instance, options => options.ForProvider(
+                Providers.Github()
+                    .Builder()
+                    .SetClientId("foobar")
+                    .SetClientSecret("secret123!")
+                    .Build()));
+
+            created.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(created.Href);
+
+            created.Name.ShouldBe(directoryName);
+
+            var provider = created.GetProvider() as IGithubProvider;
+            provider.ShouldNotBeNull();
+            provider.Href.ShouldNotBeNullOrEmpty();
+
+            provider.ProviderId.ShouldBe("github");
+            provider.ClientId.ShouldBe("foobar");
+            provider.ClientSecret.ShouldBe("secret123!");
+
+            // Cleanup
+            created.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_google_directory(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
+
+            var directoryName = $"My New Google Directory (.NET IT {this.fixture.TestRunIdentifier})-Sync";
+
+            var instance = client.Instantiate<IDirectory>();
+            instance.SetName(directoryName);
+            var created = tenant.CreateDirectory(instance, options => options.ForProvider(
+                Providers.Google()
+                    .Builder()
+                    .SetClientId("foobar")
+                    .SetClientSecret("secret123!")
+                    .SetRedirectUri("foo://bar")
+                    .Build()));
+
+            created.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(created.Href);
+
+            created.Name.ShouldBe(directoryName);
+
+            var provider = created.GetProvider() as IGoogleProvider;
+            provider.ShouldNotBeNull();
+            provider.Href.ShouldNotBeNullOrEmpty();
+
+            provider.ProviderId.ShouldBe("google");
+            provider.ClientId.ShouldBe("foobar");
+            provider.ClientSecret.ShouldBe("secret123!");
+            provider.RedirectUri.ShouldBe("foo://bar");
+
+            // Cleanup
+            created.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_linkedin_directory(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
+
+            var directoryName = $"My New LinkedIn Directory (.NET IT {this.fixture.TestRunIdentifier})-Sync";
+
+            var instance = client.Instantiate<IDirectory>();
+            instance.SetName(directoryName);
+            var created = tenant.CreateDirectory(instance, options => options.ForProvider(
+                Providers.LinkedIn()
+                    .Builder()
+                    .SetClientId("foobar")
+                    .SetClientSecret("secret123!")
+                    .Build()));
+
+            created.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(created.Href);
+
+            created.Name.ShouldBe(directoryName);
+
+            var provider = created.GetProvider() as ILinkedInProvider;
+            provider.ShouldNotBeNull();
+            provider.Href.ShouldNotBeNullOrEmpty();
+
+            provider.ProviderId.ShouldBe("linkedin");
+            provider.ClientId.ShouldBe("foobar");
+            provider.ClientSecret.ShouldBe("secret123!");
+
+            // Cleanup
+            created.Delete();
         }
     }
 }

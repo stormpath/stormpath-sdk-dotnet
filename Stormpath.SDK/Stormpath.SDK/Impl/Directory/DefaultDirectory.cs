@@ -140,6 +140,9 @@ namespace Stormpath.SDK.Impl.Directory
         Task<IProvider> IDirectory.GetProviderAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().GetResourceAsync<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup, cancellationToken);
 
+        IProvider IDirectorySync.GetProvider()
+            => this.GetInternalDataStoreSync().GetResource<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup);
+
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
 

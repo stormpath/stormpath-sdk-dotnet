@@ -26,16 +26,36 @@ namespace Stormpath.SDK.Impl.Provider
     internal sealed class ProviderAccountResolver
     {
         private readonly IInternalDataStore dataStore;
+        private readonly IInternalDataStoreSync dataStoreSync;
 
         public ProviderAccountResolver(IInternalDataStore dataStore)
         {
             this.dataStore = dataStore;
+            this.dataStoreSync = dataStore as IInternalDataStoreSync;
         }
 
         public Task<IProviderAccountResult> ResolveProviderAccountAsync(string parentHref, IProviderAccountRequest request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(parentHref))
                 throw new ArgumentNullException(nameof(parentHref));
+            var providerAccountAccess = this.BuildRequest(request);
+            var href = $"{parentHref}/accounts";
+
+            return this.dataStore.CreateAsync<IProviderAccountAccess, IProviderAccountResult>(href, providerAccountAccess, cancellationToken);
+        }
+
+        public IProviderAccountResult ResolveProviderAccount(string parentHref, IProviderAccountRequest request)
+        {
+            if (string.IsNullOrEmpty(parentHref))
+                throw new ArgumentNullException(nameof(parentHref));
+            var providerAccountAccess = this.BuildRequest(request);
+            var href = $"{parentHref}/accounts";
+
+            return this.dataStoreSync.Create<IProviderAccountAccess, IProviderAccountResult>(href, providerAccountAccess);
+        }
+
+        private IProviderAccountAccess BuildRequest(IProviderAccountRequest request)
+        {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
             if (request.GetProviderData() == null)
@@ -43,9 +63,8 @@ namespace Stormpath.SDK.Impl.Provider
 
             IProviderAccountAccess providerAccountAccess = new DefaultProviderAccountAccess(this.dataStore);
             providerAccountAccess.SetProviderData(request.GetProviderData());
-            var href = $"{parentHref}/accounts";
 
-            return this.dataStore.CreateAsync<IProviderAccountAccess, IProviderAccountResult>(href, providerAccountAccess, cancellationToken);
+            return providerAccountAccess;
         }
     }
 }

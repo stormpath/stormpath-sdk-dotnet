@@ -88,6 +88,9 @@ namespace Stormpath.SDK.Tests.Fakes
 
         Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken) => this.FakeDataStore.GetResourceAsync<T>(href, cancellationToken);
 
+        T IDataStoreSync.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+            => this.FakeDataStoreSync.GetResource<T>(href, typeLookup);
+
         Task<T> IInternalDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> conversionFunc, CancellationToken cancellationToken)
             => this.FakeDataStore.GetResourceAsync<T>(href, conversionFunc, cancellationToken);
 
