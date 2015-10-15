@@ -16,22 +16,27 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
 {
     internal sealed class DefaultGithubAccountRequestBuilder : AbstractProviderAccountRequestBuilder<IGithubAccountRequestBuilder>, IGithubAccountRequestBuilder
     {
+        public DefaultGithubAccountRequestBuilder(IInternalDataStore dataStore)
+            : base(dataStore)
+        {
+        }
+
         protected override string ConcreteProviderId
             => ProviderType.Github.DisplayName;
 
-        protected override IProviderAccountRequest BuildConcrete(IDictionary<string, object> properties)
+        protected override IProviderAccountRequest BuildConcrete()
         {
             if (string.IsNullOrEmpty(this.accessToken))
                 throw new ApplicationException($"{nameof(this.accessToken)} is a required property. It must be provided before building.");
 
-            var providerData = new DefaultGithubProviderData(null, properties);
+            var providerData = this.dataStore.Instantiate<IGithubProviderData>() as DefaultGithubProviderData;
             providerData.SetAccessToken(this.accessToken);
 
             return new DefaultProviderAccountRequest(providerData);

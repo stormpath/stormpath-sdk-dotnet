@@ -16,15 +16,14 @@
 // </remarks>
 
 using Stormpath.SDK.AccountStore;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
     internal sealed class DefaultAccountStore : AbstractInstanceResource, IAccountStore
     {
-        public DefaultAccountStore(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultAccountStore(ResourceData data)
+            : base(data)
         {
         }
     }

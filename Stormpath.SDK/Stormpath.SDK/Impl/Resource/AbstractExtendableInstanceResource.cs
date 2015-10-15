@@ -15,12 +15,10 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Impl.CustomData;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
@@ -29,19 +27,12 @@ namespace Stormpath.SDK.Impl.Resource
     {
         private static readonly string CustomDataPropertyName = "customData";
 
-        private DefaultEmbeddedCustomData customDataProxy;
+        private IEmbeddedCustomData customDataProxy;
 
-        protected AbstractExtendableInstanceResource(IInternalDataStore dataStore)
-            : base(dataStore)
+        protected AbstractExtendableInstanceResource(ResourceData data)
+            : base(data)
         {
             this.ResetCustomData();
-        }
-
-        protected override IDictionary<string, object> ResetAndUpdateDerived(IDictionary<string, object> properties)
-        {
-            this.ResetCustomData();
-
-            return base.ResetAndUpdateDerived(properties);
         }
 
         internal LinkProperty CustomData => this.GetProperty<LinkProperty>(CustomDataPropertyName);
@@ -51,14 +42,15 @@ namespace Stormpath.SDK.Impl.Resource
         IEmbeddedCustomData IExtendableSync.CustomData => this.customDataProxy;
 
         Task<ICustomData> IExtendable.GetCustomDataAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<ICustomData>(this.CustomData.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<ICustomData>(this.CustomData.Href, cancellationToken);
 
         ICustomData IExtendableSync.GetCustomData()
-            => this.GetInternalDataStoreSync().GetResource<ICustomData>(this.CustomData.Href);
+            => this.GetInternalSyncDataStore().GetResource<ICustomData>(this.CustomData.Href);
 
-        internal void ResetCustomData()
+        public void ResetCustomData()
         {
-            this.customDataProxy = new DefaultEmbeddedCustomData(this.InternalDataStore);
+            // TODO need to delete first!
+            this.customDataProxy = new DefaultEmbeddedCustomData(this.GetInternalAsyncDataStore(), this.AsInterface.Href);
         }
     }
 }

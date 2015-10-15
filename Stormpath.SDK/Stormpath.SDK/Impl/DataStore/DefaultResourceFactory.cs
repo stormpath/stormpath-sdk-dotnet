@@ -25,11 +25,11 @@ namespace Stormpath.SDK.Impl.DataStore
     internal sealed class DefaultResourceFactory : IResourceFactory
     {
         private readonly IInternalDataStore dataStore;
-        private readonly IIdentityMap<string, AbstractResource> identityMap;
+        private readonly IIdentityMap<string, ResourceData> identityMap;
         private readonly ResourceTypeLookup typeLookup;
         private bool isDisposed = false; // To detect redundant calls
 
-        public DefaultResourceFactory(IInternalDataStore dataStore, IIdentityMap<string, AbstractResource> identityMap)
+        public DefaultResourceFactory(IInternalDataStore dataStore, IIdentityMap<string, ResourceData> identityMap)
         {
             this.dataStore = dataStore;
             this.identityMap = identityMap;
@@ -39,16 +39,16 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private IResourceFactory AsInterface => this;
 
-        T IResourceFactory.Create<T>()
-            => (T)this.AsInterface.Create(typeof(T), null);
+        T IResourceFactory.Create<T>(ILinkable original)
+            => (T)this.AsInterface.Create(typeof(T), null, original);
 
-        object IResourceFactory.Create(Type type)
-            => this.AsInterface.Create(type, null);
+        object IResourceFactory.Create(Type type, ILinkable original)
+            => this.AsInterface.Create(type, null, original);
 
-        T IResourceFactory.Create<T>(IDictionary<string, object> properties)
-            => (T)this.AsInterface.Create(typeof(T), properties);
+        T IResourceFactory.Create<T>(IDictionary<string, object> properties, ILinkable original)
+            => (T)this.AsInterface.Create(typeof(T), properties, original);
 
-        object IResourceFactory.Create(Type type, IDictionary<string, object> properties)
+        object IResourceFactory.Create(Type type, IDictionary<string, object> properties, ILinkable original)
         {
             bool isCollection =
                 type.IsGenericType &&
@@ -56,10 +56,10 @@ namespace Stormpath.SDK.Impl.DataStore
             if (isCollection)
                 return this.InstantiateCollection(type, properties);
 
-            return this.InstantiateSingle(type, properties);
+            return this.InstantiateSingle(type, properties, original);
         }
 
-        private object InstantiateSingle(Type type, IDictionary<string, object> properties)
+        private object InstantiateSingle(Type type, IDictionary<string, object> properties, ILinkable original)
         {
             var targetType = this.typeLookup.GetConcrete(type);
             if (targetType == null)
@@ -68,20 +68,30 @@ namespace Stormpath.SDK.Impl.DataStore
             AbstractResource targetObject;
             try
             {
-                string id = RandomResourceId();
+                string id = RandomResourceId(type.Name);
+
+                if (properties == null)
+                    properties = new Dictionary<string, object>();
 
                 object href = null;
                 bool propertiesContainsHref =
-                    properties != null &&
                     properties.TryGetValue("href", out href) &&
                     href != null;
                 if (propertiesContainsHref)
                     id = href.ToString();
 
-                targetObject = this.identityMap.GetOrAdd(id, () => Activator.CreateInstance(targetType, new object[] { this.dataStore }) as AbstractResource);
+                if (!propertiesContainsHref)
+                    properties.Add("href", id);
+
+                var resourceData = this.identityMap.GetOrAdd(id, () => new ResourceData(this.dataStore));
 
                 if (properties != null)
-                    targetObject.ResetAndUpdate(properties);
+                    resourceData.Update(properties);
+
+                targetObject = Activator.CreateInstance(targetType, new object[] { resourceData }) as AbstractResource;
+
+                if (original != null)
+                    original.Link(resourceData);
             }
             catch (Exception e)
             {
@@ -145,7 +155,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
                 foreach (var itemMap in items)
                 {
-                    var materialized = this.InstantiateSingle(innerType, itemMap);
+                    var materialized = this.InstantiateSingle(innerType, itemMap, original: null);
                     addMethod.Invoke(materializedItems, new object[] { materialized });
                 }
 
@@ -160,8 +170,8 @@ namespace Stormpath.SDK.Impl.DataStore
             }
         }
 
-        private static string RandomResourceId()
-            => $"autogen://{Guid.NewGuid().ToString().ToLowerInvariant().Replace("-", string.Empty)}";
+        private static string RandomResourceId(string typeName)
+            => $"autogen://{typeName}/{Guid.NewGuid().ToString().ToLowerInvariant().Replace("-", string.Empty)}";
 
         private void Dispose(bool disposing)
         {

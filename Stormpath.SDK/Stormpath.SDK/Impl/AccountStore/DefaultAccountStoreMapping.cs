@@ -19,7 +19,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
@@ -32,8 +31,8 @@ namespace Stormpath.SDK.Impl.AccountStore
         private static readonly string IsDefaultGroupStorePropertyName = "isDefaultGroupStore";
         private static readonly string ListIndexPropertyName = "listIndex";
 
-        public DefaultAccountStoreMapping(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultAccountStoreMapping(ResourceData data)
+            : base(data)
         {
         }
 
@@ -48,15 +47,15 @@ namespace Stormpath.SDK.Impl.AccountStore
         int IAccountStoreMapping.ListIndex => this.GetProperty<int>(ListIndexPropertyName);
 
         Task<IAccountStore> IAccountStoreMapping.GetAccountStoreAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<IAccountStore>(this.AccountStore.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccountStore>(this.AccountStore.Href, cancellationToken);
 
         IAccountStore IAccountStoreMappingSync.GetAccountStore()
-            => this.GetInternalDataStoreSync().GetResource<IAccountStore>(this.AccountStore.Href);
+            => this.GetInternalSyncDataStore().GetResource<IAccountStore>(this.AccountStore.Href);
 
         Task<IApplication> IAccountStoreMapping.GetApplicationAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<IApplication>(this.Application.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IApplication>(this.Application.Href, cancellationToken);
 
         IApplication IAccountStoreMappingSync.GetApplication()
-            => this.GetInternalDataStoreSync().GetResource<IApplication>(this.Application.Href);
+            => this.GetInternalSyncDataStore().GetResource<IApplication>(this.Application.Href);
     }
 }

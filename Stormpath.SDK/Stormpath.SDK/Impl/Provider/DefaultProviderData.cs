@@ -15,21 +15,15 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
 {
     internal sealed class DefaultProviderData : AbstractProviderData, IProviderData
     {
-        public DefaultProviderData(IInternalDataStore dataStore)
-            : base(dataStore)
-        {
-        }
-
-        public DefaultProviderData(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
+        public DefaultProviderData(ResourceData data)
+            : base(data)
         {
         }
 

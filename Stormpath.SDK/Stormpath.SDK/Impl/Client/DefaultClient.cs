@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -66,7 +65,8 @@ namespace Stormpath.SDK.Impl.Client
             IHttpClient httpClient,
             IJsonSerializer serializer,
             ICacheProvider cacheProvider,
-            ILogger logger)
+            ILogger logger,
+            TimeSpan identityMapExpiration)
         {
             if (apiKey == null || !apiKey.IsValid())
                 throw new ArgumentException("API Key is not valid.");
@@ -86,7 +86,7 @@ namespace Stormpath.SDK.Impl.Client
 
             var requestExecutor = new DefaultRequestExecutor(httpClient, apiKey, authenticationScheme, this.logger);
 
-            this.dataStore = new DefaultDataStore(requestExecutor, baseUrl, this.serializer, this.logger, cacheProvider);
+            this.dataStore = new DefaultDataStore(requestExecutor, baseUrl, this.serializer, this.logger, cacheProvider, identityMapExpiration);
         }
 
         private IClient AsInterface => this;
@@ -108,6 +108,20 @@ namespace Stormpath.SDK.Impl.Client
         internal IJsonSerializer Serializer => this.serializer;
 
         internal IHttpClient HttpClient => this.httpClient;
+
+        internal IInternalDataStore DataStore => this.dataStore;
+
+        private async Task EnsureTenantAsync(CancellationToken cancellationToken)
+        {
+            if (this.tenant == null)
+                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        private void EnsureTenant()
+        {
+            if (this.tenant == null)
+                this.GetCurrentTenant();
+        }
 
         T IDataStore.Instantiate<T>() => this.dataStore.Instantiate<T>();
 
@@ -133,181 +147,156 @@ namespace Stormpath.SDK.Impl.Client
         T IDataStoreSync.GetResource<T>(string href)
             => this.dataStore.GetResource<T>(href);
 
-        T IDataStoreSync.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
-            => (this.dataStore as IInternalDataStoreSync).GetResource<T>(href, typeLookup);
-
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
-            if (this.tenant == null)
-                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.CreateApplicationAsync(application, creationOptionsAction, cancellationToken).ConfigureAwait(false);
         }
 
         IApplication ITenantActionsSync.CreateApplication(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction)
         {
-            if (this.tenant == null)
-                this.GetCurrentTenant();
+            this.EnsureTenant();
 
             return this.tenant.CreateApplication(application, creationOptionsAction);
         }
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken)
         {
-            if (this.tenant == null)
-                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.CreateApplicationAsync(application, creationOptions, cancellationToken).ConfigureAwait(false);
         }
 
         IApplication ITenantActionsSync.CreateApplication(IApplication application, IApplicationCreationOptions creationOptions)
         {
-            if (this.tenant == null)
-                this.GetCurrentTenant();
+            this.EnsureTenant();
 
             return this.tenant.CreateApplication(application, creationOptions);
         }
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, CancellationToken cancellationToken)
         {
-            if (this.tenant == null)
-                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.CreateApplicationAsync(application, cancellationToken).ConfigureAwait(false);
         }
 
         IApplication ITenantActionsSync.CreateApplication(IApplication application)
         {
-            if (this.tenant == null)
-                this.GetCurrentTenant();
+            this.EnsureTenant();
 
             return this.tenant.CreateApplication(application);
         }
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken)
         {
-            if (this.tenant == null)
-                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.CreateApplicationAsync(name, createDirectory, cancellationToken).ConfigureAwait(false);
         }
 
         IApplication ITenantActionsSync.CreateApplication(string name, bool createDirectory)
         {
-            if (this.tenant == null)
-                this.GetCurrentTenant();
+            this.EnsureTenant();
 
             return this.tenant.CreateApplication(name, createDirectory);
         }
 
         async Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken)
         {
-            if (this.tenant == null)
-                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.CreateDirectoryAsync(directory, cancellationToken).ConfigureAwait(false);
         }
 
         IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory)
         {
-            if (this.tenant == null)
-                this.GetCurrentTenant();
+            this.EnsureTenant();
 
             return this.tenant.CreateDirectory(directory);
         }
 
         async Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
-            if (this.tenant == null)
-                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.CreateDirectoryAsync(directory, creationOptionsAction, cancellationToken).ConfigureAwait(false);
         }
 
         IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction)
         {
-            if (this.tenant == null)
-                this.GetCurrentTenant();
+            this.EnsureTenant();
 
             return this.tenant.CreateDirectory(directory, creationOptionsAction);
         }
 
         async Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, IDirectoryCreationOptions creationOptions, CancellationToken cancellationToken)
         {
-            if (this.tenant == null)
-                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.CreateDirectoryAsync(directory, creationOptions, cancellationToken).ConfigureAwait(false);
         }
 
         IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory, IDirectoryCreationOptions creationOptions)
         {
-            if (this.tenant == null)
-                this.GetCurrentTenant();
+            this.EnsureTenant();
 
             return this.tenant.CreateDirectory(directory, creationOptions);
         }
 
         async Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken)
         {
-            if (this.tenant == null)
-                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.CreateDirectoryAsync(name, description, status, cancellationToken).ConfigureAwait(false);
         }
 
         IDirectory ITenantActionsSync.CreateDirectory(string name, string description, DirectoryStatus status)
         {
-            if (this.tenant == null)
-                this.GetCurrentTenant();
+            this.EnsureTenant();
 
             return this.tenant.CreateDirectory(name, description, status);
         }
 
         async Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
         {
-            if (this.tenant == null)
-                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.VerifyAccountEmailAsync(token, cancellationToken).ConfigureAwait(false);
         }
 
         IAccount ITenantActionsSync.VerifyAccountEmail(string token)
         {
-            if (this.tenant == null)
-                this.GetCurrentTenant();
+            this.EnsureTenant();
 
             return this.tenant.VerifyAccountEmail(token);
         }
 
         IAsyncQueryable<IApplication> ITenantActions.GetApplications()
         {
-            if (this.tenant == null)
-                this.AsInterface.GetCurrentTenantAsync().GetAwaiter().GetResult();
+            this.EnsureTenant();
 
             return this.tenant.GetApplications();
         }
 
         IAsyncQueryable<IDirectory> ITenantActions.GetDirectories()
         {
-            if (this.tenant == null)
-                this.AsInterface.GetCurrentTenantAsync().GetAwaiter().GetResult();
+            this.EnsureTenant();
 
             return this.tenant.GetDirectories();
         }
 
         IAsyncQueryable<IAccount> ITenantActions.GetAccounts()
         {
-            if (this.tenant == null)
-                this.AsInterface.GetCurrentTenantAsync().GetAwaiter().GetResult();
+            this.EnsureTenant();
 
             return this.tenant.GetAccounts();
         }
 
         IAsyncQueryable<IGroup> ITenantActions.GetGroups()
         {
-            if (this.tenant == null)
-                this.AsInterface.GetCurrentTenantAsync().GetAwaiter().GetResult();
+            this.EnsureTenant();
 
             return this.tenant.GetGroups();
         }

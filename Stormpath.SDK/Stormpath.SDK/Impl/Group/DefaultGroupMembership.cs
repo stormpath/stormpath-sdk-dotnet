@@ -36,8 +36,8 @@ namespace Stormpath.SDK.Impl.Group
 
         internal LinkProperty Group => this.GetLinkProperty(GroupPropertyName);
 
-        public DefaultGroupMembership(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultGroupMembership(ResourceData data)
+            : base(data)
         {
         }
 
@@ -46,22 +46,22 @@ namespace Stormpath.SDK.Impl.Group
         string IInternalGroupMembership.GroupHref => this.Group?.Href;
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
+            => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
 
         bool IDeletableSync.Delete()
-            => this.GetInternalDataStoreSync().Delete(this);
+            => this.GetInternalSyncDataStore().Delete(this);
 
         Task<IAccount> IGroupMembership.GetAccountAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
 
         IAccount IGroupMembershipSync.GetAccount()
-            => this.GetInternalDataStoreSync().GetResource<IAccount>(this.Account.Href);
+            => this.GetInternalSyncDataStore().GetResource<IAccount>(this.Account.Href);
 
         Task<IGroup> IGroupMembership.GetGroupAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<IGroup>(this.Group.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IGroup>(this.Group.Href, cancellationToken);
 
         IGroup IGroupMembershipSync.GetGroup()
-            => this.GetInternalDataStoreSync().GetResource<IGroup>(this.Group.Href);
+            => this.GetInternalSyncDataStore().GetResource<IGroup>(this.Group.Href);
 
         private void SetGroup(IGroup group)
             => this.SetLinkProperty(GroupPropertyName, group.Href);
@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Impl.Group
         private void SetAccount(IAccount account)
             => this.SetLinkProperty(AccountPropertyName, account.Href);
 
-        public static Task<IGroupMembership> CreateAsync(IAccount account, IGroup group, IInternalDataStore dataStore, CancellationToken cancellationToken)
+        public static Task<IGroupMembership> CreateAsync(IAccount account, IGroup group, IInternalAsyncDataStore dataStore, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(account.Href))
                 throw new ApplicationException("You must persist the account first before assigning it to a group.");
@@ -85,7 +85,7 @@ namespace Stormpath.SDK.Impl.Group
             return dataStore.CreateAsync<IGroupMembership>(href, groupMembership, cancellationToken);
         }
 
-        public static IGroupMembership Create(IAccount account, IGroup group, IInternalDataStoreSync dataStore)
+        public static IGroupMembership Create(IAccount account, IGroup group, IInternalSyncDataStore dataStore)
         {
             if (string.IsNullOrEmpty(account.Href))
                 throw new ApplicationException("You must persist the account first before assigning it to a group.");

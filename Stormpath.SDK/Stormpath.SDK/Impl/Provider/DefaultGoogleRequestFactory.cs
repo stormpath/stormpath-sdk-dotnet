@@ -15,16 +15,24 @@
 // limitations under the License.
 // </remarks>
 
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
 {
     internal sealed class DefaultGoogleRequestFactory : IGoogleRequestFactory
     {
+        private readonly IInternalDataStore dataStore;
+
+        public DefaultGoogleRequestFactory(IInternalDataStore dataStore)
+        {
+            this.dataStore = dataStore;
+        }
+
         IGoogleAccountRequestBuilder IProviderRequestFactory<IGoogleAccountRequestBuilder, IGoogleCreateProviderRequestBuilder>.Account()
-            => new DefaultGoogleAccountRequestBuilder();
+            => new DefaultGoogleAccountRequestBuilder(this.dataStore);
 
         IGoogleCreateProviderRequestBuilder IProviderRequestFactory<IGoogleAccountRequestBuilder, IGoogleCreateProviderRequestBuilder>.Builder()
-            => new DefaultGoogleCreateProviderRequestBuilder();
+            => new DefaultGoogleCreateProviderRequestBuilder(this.dataStore);
     }
 }

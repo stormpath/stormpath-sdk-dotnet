@@ -22,7 +22,6 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
@@ -49,12 +48,12 @@ namespace Stormpath.SDK.Impl.Tenant
         private string groupsResourceBase = "groups";
 #pragma warning restore CS0414 // Assigned but value is never used
 
-        public DefaultTenant(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultTenant(ResourceData data)
+            : base(data)
         {
         }
 
-        private ITenant AsInterface => this;
+        private new ITenant AsInterface => this;
 
         private ITenantActionsSync AsTenantActionSyncInterface => this;
 
@@ -82,7 +81,7 @@ namespace Stormpath.SDK.Impl.Tenant
             creationOptionsAction(builder);
             var options = builder.Build();
 
-            return this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, options, cancellationToken);
+            return this.GetInternalAsyncDataStore().CreateAsync(this.applicationsResourceBase, application, options, cancellationToken);
         }
 
         IApplication ITenantActionsSync.CreateApplication(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction)
@@ -91,24 +90,24 @@ namespace Stormpath.SDK.Impl.Tenant
             creationOptionsAction(builder);
             var options = builder.Build();
 
-            return this.GetInternalDataStoreSync().Create(this.applicationsResourceBase, application, options);
+            return this.GetInternalSyncDataStore().Create(this.applicationsResourceBase, application, options);
         }
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken)
-            => this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, creationOptions, cancellationToken);
+            => this.GetInternalAsyncDataStore().CreateAsync(this.applicationsResourceBase, application, creationOptions, cancellationToken);
 
         IApplication ITenantActionsSync.CreateApplication(IApplication application, IApplicationCreationOptions creationOptions)
-            => this.GetInternalDataStoreSync().Create(this.applicationsResourceBase, application, creationOptions);
+            => this.GetInternalSyncDataStore().Create(this.applicationsResourceBase, application, creationOptions);
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, CancellationToken cancellationToken)
-            => this.GetInternalDataStore().CreateAsync(this.applicationsResourceBase, application, cancellationToken);
+            => this.GetInternalAsyncDataStore().CreateAsync(this.applicationsResourceBase, application, cancellationToken);
 
         IApplication ITenantActionsSync.CreateApplication(IApplication application)
-            => this.GetInternalDataStoreSync().Create(this.applicationsResourceBase, application);
+            => this.GetInternalSyncDataStore().Create(this.applicationsResourceBase, application);
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken)
         {
-            var application = this.GetInternalDataStore().Instantiate<IApplication>();
+            var application = this.GetInternalAsyncDataStore().Instantiate<IApplication>();
             application.SetName(name);
 
             var options = new ApplicationCreationOptionsBuilder()
@@ -121,7 +120,7 @@ namespace Stormpath.SDK.Impl.Tenant
 
         IApplication ITenantActionsSync.CreateApplication(string name, bool createDirectory)
         {
-            var application = this.GetInternalDataStore().Instantiate<IApplication>();
+            var application = this.GetInternalAsyncDataStore().Instantiate<IApplication>();
             application.SetName(name);
 
             var options = new ApplicationCreationOptionsBuilder()
@@ -133,10 +132,10 @@ namespace Stormpath.SDK.Impl.Tenant
         }
 
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken)
-            => this.GetInternalDataStore().CreateAsync(this.directoriesResourceBase, directory, cancellationToken);
+            => this.GetInternalAsyncDataStore().CreateAsync(this.directoriesResourceBase, directory, cancellationToken);
 
         IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory)
-            => this.GetInternalDataStoreSync().Create(this.directoriesResourceBase, directory);
+            => this.GetInternalSyncDataStore().Create(this.directoriesResourceBase, directory);
 
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
@@ -180,7 +179,7 @@ namespace Stormpath.SDK.Impl.Tenant
 
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken)
         {
-            var directory = this.GetInternalDataStore().Instantiate<IDirectory>();
+            var directory = this.GetInternalAsyncDataStore().Instantiate<IDirectory>();
             directory.SetName(name);
             directory.SetDescription(description);
             directory.SetStatus(status);
@@ -190,7 +189,7 @@ namespace Stormpath.SDK.Impl.Tenant
 
         IDirectory ITenantActionsSync.CreateDirectory(string name, string description, DirectoryStatus status)
         {
-            var directory = this.GetInternalDataStore().Instantiate<IDirectory>();
+            var directory = this.GetInternalAsyncDataStore().Instantiate<IDirectory>();
             directory.SetName(name);
             directory.SetDescription(description);
             directory.SetStatus(status);
@@ -202,30 +201,30 @@ namespace Stormpath.SDK.Impl.Tenant
         {
             var href = $"/accounts/emailVerificationTokens/{token}";
 
-            var emailVerificationToken = this.GetInternalDataStore().Instantiate<IEmailVerificationToken>();
-            var tokenResponse = await this.GetInternalDataStore().CreateAsync(href, emailVerificationToken, cancellationToken).ConfigureAwait(false);
-            return await this.GetInternalDataStore().GetResourceAsync<IAccount>(tokenResponse.Href, cancellationToken).ConfigureAwait(false);
+            var emailVerificationToken = this.GetInternalAsyncDataStore().Instantiate<IEmailVerificationToken>();
+            var tokenResponse = await this.GetInternalAsyncDataStore().CreateAsync(href, emailVerificationToken, cancellationToken).ConfigureAwait(false);
+            return await this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(tokenResponse.Href, cancellationToken).ConfigureAwait(false);
         }
 
         IAccount ITenantActionsSync.VerifyAccountEmail(string token)
         {
             var href = $"/accounts/emailVerificationTokens/{token}";
 
-            var emailVerificationToken = this.GetInternalDataStore().Instantiate<IEmailVerificationToken>();
-            var tokenResponse = this.GetInternalDataStoreSync().Create(href, emailVerificationToken);
-            return this.GetInternalDataStoreSync().GetResource<IAccount>(tokenResponse.Href);
+            var emailVerificationToken = this.GetInternalAsyncDataStore().Instantiate<IEmailVerificationToken>();
+            var tokenResponse = this.GetInternalSyncDataStore().Create(href, emailVerificationToken);
+            return this.GetInternalSyncDataStore().GetResource<IAccount>(tokenResponse.Href);
         }
 
         IAsyncQueryable<IApplication> ITenantActions.GetApplications()
-            => new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetInternalDataStore());
+            => new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IDirectory> ITenantActions.GetDirectories()
-            => new CollectionResourceQueryable<IDirectory>(this.Directories.Href, this.GetInternalDataStore());
+            => new CollectionResourceQueryable<IDirectory>(this.Directories.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IAccount> ITenantActions.GetAccounts()
-            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
+            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IGroup> ITenantActions.GetGroups()
-            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalDataStore());
+            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalAsyncDataStore());
     }
 }

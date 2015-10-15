@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Impl.Account
     /// </summary>
     internal static class AccountCreationActionsShared
     {
-        public static Task<IAccount> CreateAccountAsync(IInternalDataStore dataStore, string accountsHref, IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
+        public static Task<IAccount> CreateAccountAsync(IInternalAsyncDataStore dataStore, string accountsHref, IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
             var builder = new AccountCreationOptionsBuilder();
             creationOptionsAction(builder);
@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Impl.Account
             return dataStore.CreateAsync(accountsHref, account, options, cancellationToken);
         }
 
-        public static IAccount CreateAccount(IInternalDataStoreSync dataStoreSync, string accountsHref, IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction)
+        public static IAccount CreateAccount(IInternalSyncDataStore dataStoreSync, string accountsHref, IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction)
         {
             var builder = new AccountCreationOptionsBuilder();
             creationOptionsAction(builder);
@@ -47,26 +47,26 @@ namespace Stormpath.SDK.Impl.Account
             return dataStoreSync.Create(accountsHref, account, options);
         }
 
-        public static Task<IAccount> CreateAccountAsync(IInternalDataStore dataStore, string accountsHref, IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken)
+        public static Task<IAccount> CreateAccountAsync(IInternalAsyncDataStore dataStore, string accountsHref, IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken)
             => dataStore.CreateAsync(accountsHref, account, creationOptions, cancellationToken);
 
-        public static IAccount CreateAccount(IInternalDataStoreSync dataStoreSync, string accountsHref, IAccount account, IAccountCreationOptions creationOptions)
+        public static IAccount CreateAccount(IInternalSyncDataStore dataStoreSync, string accountsHref, IAccount account, IAccountCreationOptions creationOptions)
             => dataStoreSync.Create(accountsHref, account, creationOptions);
 
-        public static Task<IAccount> CreateAccountAsync(IInternalDataStore dataStore, string accountsHref, IAccount account, CancellationToken cancellationToken)
+        public static Task<IAccount> CreateAccountAsync(IInternalAsyncDataStore dataStore, string accountsHref, IAccount account, CancellationToken cancellationToken)
             => dataStore.CreateAsync(accountsHref, account, cancellationToken);
 
-        public static IAccount CreateAccount(IInternalDataStoreSync dataStoreSync, string accountsHref, IAccount account)
+        public static IAccount CreateAccount(IInternalSyncDataStore dataStoreSync, string accountsHref, IAccount account)
             => dataStoreSync.Create(accountsHref, account);
 
-        public static Task<IAccount> CreateAccountAsync(IInternalDataStore dataStore, string accountsHref, string givenName, string surname, string email, string password, object customData, CancellationToken cancellationToken)
+        public static Task<IAccount> CreateAccountAsync(IInternalAsyncDataStore dataStore, string accountsHref, string givenName, string surname, string email, string password, object customData, CancellationToken cancellationToken)
         {
             var account = CreateAccountWith(dataStore, givenName, surname, email, password, customData);
 
             return CreateAccountAsync(dataStore, accountsHref, account, cancellationToken: cancellationToken);
         }
 
-        public static IAccount CreateAccount(IInternalDataStoreSync dataStoreSync, string accountsHref, string givenName, string surname, string email, string password, object customData = null)
+        public static IAccount CreateAccount(IInternalSyncDataStore dataStoreSync, string accountsHref, string givenName, string surname, string email, string password, object customData = null)
         {
             // TODO refactor this after refactoring IDataStore
             var account = CreateAccountWith(dataStoreSync as IInternalDataStore, givenName, surname, email, password, customData);

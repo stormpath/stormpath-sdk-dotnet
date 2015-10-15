@@ -16,7 +16,7 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
@@ -24,6 +24,11 @@ namespace Stormpath.SDK.Impl.Provider
     internal sealed class DefaultGoogleCreateProviderRequestBuilder : AbstractCreateProviderRequestBuilder<IGoogleCreateProviderRequestBuilder>, IGoogleCreateProviderRequestBuilder
     {
         private string redirectUri;
+
+        public DefaultGoogleCreateProviderRequestBuilder(IInternalDataStore dataStore)
+            : base(dataStore)
+        {
+        }
 
         IGoogleCreateProviderRequestBuilder IGoogleCreateProviderRequestBuilder.SetRedirectUri(string redirectUri)
         {
@@ -34,12 +39,12 @@ namespace Stormpath.SDK.Impl.Provider
         protected override string ConcreteProviderId
             => ProviderType.Google.DisplayName;
 
-        protected override ICreateProviderRequest BuildConcrete(IDictionary<string, object> properties)
+        protected override ICreateProviderRequest BuildConcrete()
         {
             if (string.IsNullOrEmpty(this.redirectUri))
                 throw new ApplicationException($"{nameof(this.redirectUri)} is a required property. It must be provided before building.");
 
-            var provider = new DefaultGoogleProvider(null, properties);
+            var provider = this.dataStore.Instantiate<IGoogleProvider>() as DefaultGoogleProvider;
             provider.SetClientId(this.clientId);
             provider.SetClientSecret(this.clientSecret);
             provider.SetRedirectUri(this.redirectUri);

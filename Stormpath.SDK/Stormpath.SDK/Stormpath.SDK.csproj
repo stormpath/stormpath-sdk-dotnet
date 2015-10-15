@@ -150,8 +150,9 @@
     <Compile Include="Impl\Group\IGroupMembershipSync.cs" />
     <Compile Include="Impl\Group\IGroupSync.cs" />
     <Compile Include="Impl\Group\IInternalGroupMembership.cs" />
+    <Compile Include="Impl\DataStore\IInternalAsyncDataStore.cs" />
     <Compile Include="Impl\IdentityMap\MemoryCacheIdentityMap.cs" />
-    <Compile Include="Impl\DataStore\IInternalDataStoreSync.cs" />
+    <Compile Include="Impl\DataStore\IInternalSyncDataStore.cs" />
     <Compile Include="Impl\Extensions\ConcurrentDictionaryExtensions.cs" />
     <Compile Include="Impl\Http\DefaultHttpClientLoader.cs" />
     <Compile Include="Impl\Http\DefaultRequestExecutor.cs" />
@@ -191,10 +192,13 @@
     <Compile Include="Impl\Provider\DefaultProviderAccountRequest.cs" />
     <Compile Include="Impl\Provider\DefaultProviderAccountResult.cs" />
     <Compile Include="Impl\Provider\DefaultProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultProviderFactory.cs" />
     <Compile Include="Impl\Provider\IProviderAccountAccess.cs" />
     <Compile Include="Impl\Provider\ProviderAccountResolver.cs" />
     <Compile Include="Impl\Provider\ProviderType.cs" />
     <Compile Include="Impl\Provider\ProviderTypeConverter.cs" />
+    <Compile Include="Impl\Resource\ILinkable.cs" />
+    <Compile Include="Impl\Resource\ResourceData.cs" />
     <Compile Include="Impl\Resource\IExtendableSync.cs" />
     <Compile Include="Impl\Resource\IDeletableSync.cs" />
     <Compile Include="Impl\Resource\ISaveableSync.cs" />
@@ -223,6 +227,7 @@
     <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
+    <Compile Include="Provider\ClientProviderExtensions.cs" />
     <Compile Include="Provider\ICreateProviderRequest.cs" />
     <Compile Include="Provider\ICreateProviderRequestBuilder.cs" />
     <Compile Include="Provider\ILinkedInAccountRequestBuilder.cs" />
@@ -250,8 +255,8 @@
     <Compile Include="Provider\IProviderAccountRequestBuilder.cs" />
     <Compile Include="Provider\IProviderAccountResult.cs" />
     <Compile Include="Provider\IProviderData.cs" />
+    <Compile Include="Provider\IProviderFactory.cs" />
     <Compile Include="Provider\IProviderRequestFactory.cs" />
-    <Compile Include="Provider\Providers.cs" />
     <Compile Include="Resource\IExtendable.cs" />
     <Compile Include="Sync\FilterExtensions.cs" />
     <Compile Include="Sync\SyncAccountCreationActionsExtensions.cs" />

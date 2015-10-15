@@ -27,20 +27,20 @@ namespace Stormpath.SDK.Tests.Helpers
     public sealed class CollectionTestHarness<T>
         where T : IResource
     {
-        internal IInternalDataStore DataStore { get; private set; }
+        internal IInternalAsyncDataStore DataStoreAsync { get; private set; }
 
         public string Href { get; set; }
 
         public IAsyncQueryable<T> Queryable { get; private set; }
 
-        internal static CollectionTestHarness<TType> Create<TType>(string collectionHref, IInternalDataStore mockDataStore = null)
+        internal static CollectionTestHarness<TType> Create<TType>(string collectionHref, IInternalAsyncDataStore mockDataStore = null)
             where TType : class, IResource
         {
             var ds = mockDataStore ?? new FakeDataStore<TType>(Enumerable.Empty<TType>());
 
             return new CollectionTestHarness<TType>()
             {
-                DataStore = ds,
+                DataStoreAsync = ds,
                 Href = collectionHref,
                 Queryable = new CollectionResourceQueryable<TType>(collectionHref, ds)
             };

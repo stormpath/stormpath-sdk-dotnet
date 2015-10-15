@@ -16,7 +16,7 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
@@ -28,7 +28,14 @@ namespace Stormpath.SDK.Impl.Provider
     internal abstract class AbstractProviderAccountRequestBuilder<T> : IProviderAccountRequestBuilder<T>
         where T : class, IProviderAccountRequestBuilder<T>
     {
+        protected readonly IInternalDataStore dataStore;
+
         protected string accessToken;
+
+        public AbstractProviderAccountRequestBuilder(IInternalDataStore dataStore)
+        {
+            this.dataStore = dataStore;
+        }
 
         protected abstract string ConcreteProviderId { get; }
 
@@ -44,18 +51,14 @@ namespace Stormpath.SDK.Impl.Provider
             if (string.IsNullOrEmpty(providerId))
                 throw new ApplicationException("The Provider ID is missing.");
 
-            var properties = new Dictionary<string, object>();
-            properties.Add("providerId", providerId);
-
-            return this.BuildConcrete(properties);
+            return this.BuildConcrete();
         }
 
         /// <summary>
         /// Delegates responsibility to Provider-specific subclasses when constructing <see cref="IProviderAccountRequest"/> instances,
         /// so subclasses can add their own properties.
         /// </summary>
-        /// <param name="properties">Provider-wide properties that each Provider will need in order to construct the <see cref="IProviderAccountRequest"/>.</param>
         /// <returns>The actual request based on the subclassed builder's current state.</returns>
-        protected abstract IProviderAccountRequest BuildConcrete(IDictionary<string, object> properties);
+        protected abstract IProviderAccountRequest BuildConcrete();
     }
 }

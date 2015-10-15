@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Account
         /// <returns>A new <see cref="IEmailVerificationRequest"/> based on the current builder state.</returns>
         internal IEmailVerificationRequest Build()
         {
-            var request = new DefaultEmailVerificationRequest(this.InternalDataStore);
+            var request = this.InternalDataStore.Instantiate<IEmailVerificationRequest>() as DefaultEmailVerificationRequest;
             request.SetLogin(this.Login);
 
             return request;

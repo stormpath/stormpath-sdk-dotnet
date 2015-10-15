@@ -18,7 +18,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
@@ -28,8 +27,8 @@ namespace Stormpath.SDK.Impl.Resource
         protected static readonly string CreatedAtPropertyName = "createdAt";
         protected static readonly string ModifiedAtPropertyName = "modifiedAt";
 
-        protected AbstractInstanceResource(IInternalDataStore dataStore)
-            : base(dataStore)
+        protected AbstractInstanceResource(ResourceData data)
+            : base(data)
         {
         }
 
@@ -40,13 +39,13 @@ namespace Stormpath.SDK.Impl.Resource
         protected virtual Task<T> SaveAsync<T>(CancellationToken cancellationToken)
             where T : class, IResource, ISaveable<T>
         {
-            return this.GetInternalDataStore().SaveAsync(this as T, cancellationToken);
+            return this.GetInternalAsyncDataStore().SaveAsync(this as T, cancellationToken);
         }
 
         protected virtual T Save<T>()
             where T : class, IResource, ISaveable<T>
         {
-            return this.GetInternalDataStoreSync().Save(this as T);
+            return this.GetInternalSyncDataStore().Save(this as T);
         }
     }
 }

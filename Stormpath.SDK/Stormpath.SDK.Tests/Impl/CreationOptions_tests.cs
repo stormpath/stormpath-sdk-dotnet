@@ -22,8 +22,6 @@ using NSubstitute;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Http;
-using Stormpath.SDK.Impl.Account;
-using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Resource;
@@ -48,7 +46,7 @@ namespace Stormpath.SDK.Tests.Impl
 
         public class Application_options : IDisposable
         {
-            private readonly IInternalDataStore dataStore;
+            private readonly IInternalAsyncDataStore dataStore;
 
             public Application_options()
             {
@@ -57,7 +55,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             private async Task VerifyThat(ICreationOptions options, string resultsInQueryString)
             {
-                var newApplication = new DefaultApplication(this.dataStore) as IApplication;
+                var newApplication = this.dataStore.Instantiate<IApplication>();
                 await this.dataStore.CreateAsync("/application", newApplication, options, CancellationToken.None);
 
                 VerifyRequestContents(this.dataStore.RequestExecutor, resultsInQueryString);
@@ -122,7 +120,7 @@ namespace Stormpath.SDK.Tests.Impl
 
         public class Account_options : IDisposable
         {
-            private readonly IInternalDataStore dataStore;
+            private readonly IInternalAsyncDataStore dataStore;
 
             public Account_options()
             {
@@ -131,7 +129,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             private async Task VerifyThat(ICreationOptions options, string resultsInQueryString)
             {
-                var newAccount = new DefaultAccount(this.dataStore) as IAccount;
+                var newAccount = this.dataStore.Instantiate<IAccount>();
                 await this.dataStore.CreateAsync("/account", newAccount, options, CancellationToken.None);
 
                 VerifyRequestContents(this.dataStore.RequestExecutor, resultsInQueryString);

@@ -25,13 +25,13 @@ namespace Stormpath.SDK.Impl.Provider
 {
     internal sealed class ProviderAccountResolver
     {
-        private readonly IInternalDataStore dataStore;
-        private readonly IInternalDataStoreSync dataStoreSync;
+        private readonly IInternalAsyncDataStore dataStoreAsync;
+        private readonly IInternalSyncDataStore dataStoreSync;
 
         public ProviderAccountResolver(IInternalDataStore dataStore)
         {
-            this.dataStore = dataStore;
-            this.dataStoreSync = dataStore as IInternalDataStoreSync;
+            this.dataStoreAsync = dataStore as IInternalAsyncDataStore;
+            this.dataStoreSync = dataStore as IInternalSyncDataStore;
         }
 
         public Task<IProviderAccountResult> ResolveProviderAccountAsync(string parentHref, IProviderAccountRequest request, CancellationToken cancellationToken)
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Impl.Provider
             var providerAccountAccess = this.BuildRequest(request);
             var href = $"{parentHref}/accounts";
 
-            return this.dataStore.CreateAsync<IProviderAccountAccess, IProviderAccountResult>(href, providerAccountAccess, cancellationToken);
+            return this.dataStoreAsync.CreateAsync<IProviderAccountAccess, IProviderAccountResult>(href, providerAccountAccess, cancellationToken);
         }
 
         public IProviderAccountResult ResolveProviderAccount(string parentHref, IProviderAccountRequest request)
@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Impl.Provider
             if (request.GetProviderData() == null)
                 throw new ArgumentNullException("ProviderData");
 
-            IProviderAccountAccess providerAccountAccess = new DefaultProviderAccountAccess(this.dataStore);
+            var providerAccountAccess = this.dataStoreAsync.Instantiate<IProviderAccountAccess>();
             providerAccountAccess.SetProviderData(request.GetProviderData());
 
             return providerAccountAccess;

@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultBasicLoginAttempt.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ILinkable.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,21 +15,10 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Impl.Resource;
-
-namespace Stormpath.SDK.Impl.Auth
+namespace Stormpath.SDK.Impl.Resource
 {
-    internal sealed class DefaultBasicLoginAttempt : AbstractLoginAttempt, IBasicLoginAttempt
+    internal interface ILinkable
     {
-        private static readonly string ValuePropertyName = "value";
-
-        public DefaultBasicLoginAttempt(ResourceData data)
-            : base(data)
-        {
-        }
-
-        string IBasicLoginAttempt.Value => this.GetProperty<string>(ValuePropertyName);
-
-        void IBasicLoginAttempt.SetValue(string value) => this.SetProperty(ValuePropertyName, value);
+        void Link(ResourceData data);
     }
 }

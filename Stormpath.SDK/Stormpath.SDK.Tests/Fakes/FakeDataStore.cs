@@ -29,7 +29,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
-    public sealed class FakeDataStore<TType> : IInternalDataStore, IInternalDataStoreSync
+    public sealed class FakeDataStore<TType> : IInternalDataStore, IInternalAsyncDataStore, IInternalSyncDataStore
     {
         private static int defaultLimit = 25;
         private static int defaultOffset = 0;
@@ -71,9 +71,9 @@ namespace Stormpath.SDK.Tests.Fakes
 
         private IInternalDataStore AsInterface => this;
 
-        private IInternalDataStoreSync AsSyncInterface => this;
+        private IInternalSyncDataStore AsSyncInterface => this;
 
-        async Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
+        async Task<CollectionResponsePage<T>> IInternalAsyncDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             await Task.Yield();
@@ -81,7 +81,7 @@ namespace Stormpath.SDK.Tests.Fakes
             return this.AsSyncInterface.GetCollection<T>(href);
         }
 
-        CollectionResponsePage<T> IInternalDataStoreSync.GetCollection<T>(string href)
+        CollectionResponsePage<T> IInternalSyncDataStore.GetCollection<T>(string href)
         {
             bool typesMatch = typeof(T) == typeof(TType);
             if (!typesMatch)
@@ -138,32 +138,37 @@ namespace Stormpath.SDK.Tests.Fakes
             throw new NotImplementedException();
         }
 
-        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
+        T IInternalDataStore.InstantiateWithHref<T>(string href)
         {
             throw new NotImplementedException();
         }
 
-        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
+        Task<T> IInternalAsyncDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
+        Task<T> IInternalAsyncDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
+        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        Task<T> IInternalDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
+        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        Task<bool> IInternalDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
+        Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IInternalAsyncDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -173,32 +178,32 @@ namespace Stormpath.SDK.Tests.Fakes
             throw new NotImplementedException();
         }
 
-        T IInternalDataStoreSync.Create<T>(string parentHref, T resource)
+        T IInternalSyncDataStore.Create<T>(string parentHref, T resource)
         {
             throw new NotImplementedException();
         }
 
-        T IInternalDataStoreSync.Create<T>(string parentHref, T resource, ICreationOptions options)
+        T IInternalSyncDataStore.Create<T>(string parentHref, T resource, ICreationOptions options)
         {
             throw new NotImplementedException();
         }
 
-        TReturned IInternalDataStoreSync.Create<T, TReturned>(string parentHref, T resource)
+        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource)
         {
             throw new NotImplementedException();
         }
 
-        TReturned IInternalDataStoreSync.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
+        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
         {
             throw new NotImplementedException();
         }
 
-        T IInternalDataStoreSync.Save<T>(T resource)
+        T IInternalSyncDataStore.Save<T>(T resource)
         {
             throw new NotImplementedException();
         }
 
-        bool IInternalDataStoreSync.Delete<T>(T resource)
+        bool IInternalSyncDataStore.Delete<T>(T resource)
         {
             throw new NotImplementedException();
         }
@@ -225,22 +230,22 @@ namespace Stormpath.SDK.Tests.Fakes
             this.Dispose(true);
         }
 
-        Task<bool> IInternalDataStore.DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken)
+        Task<bool> IInternalAsyncDataStore.DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        bool IInternalDataStoreSync.DeleteProperty(string parentHref, string propertyName)
+        bool IInternalSyncDataStore.DeleteProperty(string parentHref, string propertyName)
         {
             throw new NotImplementedException();
         }
 
-        Task<T> IInternalDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> conversionFunc, CancellationToken cancellationToken)
+        Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        T IDataStoreSync.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+        T IInternalSyncDataStore.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
         {
             throw new NotImplementedException();
         }

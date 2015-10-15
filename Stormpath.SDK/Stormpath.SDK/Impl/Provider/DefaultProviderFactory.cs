@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultLinkedInRequestFactory.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultProviderFactory.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -20,19 +20,25 @@ using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
 {
-    internal sealed class DefaultLinkedInRequestFactory : ILinkedInRequestFactory
+    internal sealed class DefaultProviderFactory : IProviderFactory
     {
         private readonly IInternalDataStore dataStore;
 
-        public DefaultLinkedInRequestFactory(IInternalDataStore dataStore)
+        public DefaultProviderFactory(IInternalDataStore dataStore)
         {
             this.dataStore = dataStore;
         }
 
-        ILinkedInAccountRequestBuilder IProviderRequestFactory<ILinkedInAccountRequestBuilder, ILinkedInCreateProviderRequestBuilder>.Account()
-            => new DefaultLinkedInAccountRequestBuilder(this.dataStore);
+        IFacebookRequestFactory IProviderFactory.Facebook()
+            => new DefaultFacebookRequestFactory(this.dataStore);
 
-        ILinkedInCreateProviderRequestBuilder IProviderRequestFactory<ILinkedInAccountRequestBuilder, ILinkedInCreateProviderRequestBuilder>.Builder()
-            => new DefaultLinkedInCreateProviderRequestBuilder(this.dataStore);
+        IGithubRequestFactory IProviderFactory.Github()
+            => new DefaultGithubRequestFactory(this.dataStore);
+
+        IGoogleRequestFactory IProviderFactory.Google()
+            => new DefaultGoogleRequestFactory(this.dataStore);
+
+        ILinkedInRequestFactory IProviderFactory.LinkedIn()
+            => new DefaultLinkedInRequestFactory(this.dataStore);
     }
 }

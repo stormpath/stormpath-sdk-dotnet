@@ -15,16 +15,24 @@
 // limitations under the License.
 // </remarks>
 
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
 {
     internal sealed class DefaultGithubRequestFactory : IGithubRequestFactory
     {
+        private readonly IInternalDataStore dataStore;
+
+        public DefaultGithubRequestFactory(IInternalDataStore dataStore)
+        {
+            this.dataStore = dataStore;
+        }
+
         IGithubAccountRequestBuilder IProviderRequestFactory<IGithubAccountRequestBuilder, IGithubCreateProviderRequestBuilder>.Account()
-            => new DefaultGithubAccountRequestBuilder();
+            => new DefaultGithubAccountRequestBuilder(this.dataStore);
 
         IGithubCreateProviderRequestBuilder IProviderRequestFactory<IGithubAccountRequestBuilder, IGithubCreateProviderRequestBuilder>.Builder()
-            => new DefaultGithubCreateProviderRequestBuilder();
+            => new DefaultGithubCreateProviderRequestBuilder(this.dataStore);
     }
 }

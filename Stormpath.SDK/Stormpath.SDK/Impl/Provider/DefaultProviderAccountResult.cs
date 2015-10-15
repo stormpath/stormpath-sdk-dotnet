@@ -15,11 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using System.Linq;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Impl.Account;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 
@@ -30,27 +26,9 @@ namespace Stormpath.SDK.Impl.Provider
         private static readonly string IsNewAccountPropertyName = "isNewAccount";
         private static readonly string AccountPropertyName = "account";
 
-        public DefaultProviderAccountResult(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultProviderAccountResult(ResourceData data)
+            : base(data)
         {
-        }
-
-        protected override IDictionary<string, object> ResetAndUpdateDerived(IDictionary<string, object> properties)
-        {
-            var newProperties = new Dictionary<string, object>(2);
-
-            bool hasProperties = properties?.Any() ?? false;
-            if (hasProperties)
-            {
-                newProperties.Add(IsNewAccountPropertyName, properties[IsNewAccountPropertyName]);
-                properties.Remove(IsNewAccountPropertyName);
-
-                var account = this.GetInternalDataStore().Instantiate<IAccount>() as DefaultAccount;
-                account.ResetAndUpdate(properties);
-                newProperties.Add(AccountPropertyName, account);
-            }
-
-            return newProperties;
         }
 
         IAccount IProviderAccountResult.Account

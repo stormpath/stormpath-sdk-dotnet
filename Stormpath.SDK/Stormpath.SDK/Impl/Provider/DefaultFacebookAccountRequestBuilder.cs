@@ -16,22 +16,27 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
 {
     internal sealed class DefaultFacebookAccountRequestBuilder : AbstractProviderAccountRequestBuilder<IFacebookAccountRequestBuilder>, IFacebookAccountRequestBuilder
     {
+        public DefaultFacebookAccountRequestBuilder(IInternalDataStore dataStore)
+            : base(dataStore)
+        {
+        }
+
         protected override string ConcreteProviderId
             => ProviderType.Facebook.DisplayName;
 
-        protected override IProviderAccountRequest BuildConcrete(IDictionary<string, object> properties)
+        protected override IProviderAccountRequest BuildConcrete()
         {
             if (string.IsNullOrEmpty(this.accessToken))
                 throw new ApplicationException($"{nameof(this.accessToken)} is a required property. It must be provided before building.");
 
-            var providerData = new DefaultFacebookProviderData(null, properties);
+            var providerData = this.dataStore.Instantiate<IFacebookProviderData>() as DefaultFacebookProviderData;
             providerData.SetAccessToken(this.accessToken);
 
             return new DefaultProviderAccountRequest(providerData);

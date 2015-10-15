@@ -40,10 +40,8 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal sealed class DefaultDataStore : IInternalDataStore, IInternalDataStoreSync, IDisposable
+    internal sealed class DefaultDataStore : IInternalDataStore, IInternalAsyncDataStore, IInternalSyncDataStore, IDisposable
     {
-        private static readonly TimeSpan DefaultIdentityMapSlidingExpiration = TimeSpan.FromMinutes(10);
-
         private readonly string baseUrl;
         private readonly IRequestExecutor requestExecutor;
         private readonly ICacheProvider cacheProvider;
@@ -52,22 +50,22 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly ILogger logger;
         private readonly IResourceFactory resourceFactory;
         private readonly IResourceConverter resourceConverter;
-        private readonly IIdentityMap<string, AbstractResource> identityMap;
+        private readonly IIdentityMap<string, ResourceData> identityMap;
         private readonly IAsynchronousFilterChain defaultAsyncFilters;
         private readonly ISynchronousFilterChain defaultSyncFilters;
         private readonly UriQualifier uriQualifier;
 
         private bool disposed = false;
 
-        private IInternalDataStore AsInterface => this;
+        private IInternalAsyncDataStore AsAsyncInterface => this;
 
-        private IInternalDataStoreSync AsSyncInterface => this;
+        private IInternalSyncDataStore AsSyncInterface => this;
 
         IRequestExecutor IInternalDataStore.RequestExecutor => this.requestExecutor;
 
         string IInternalDataStore.BaseUrl => this.baseUrl;
 
-        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider)
+        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider, TimeSpan identityMapExpiration)
         {
             if (requestExecutor == null)
                 throw new ArgumentNullException(nameof(requestExecutor));
@@ -84,7 +82,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.cacheResolver = new DefaultCacheResolver(cacheProvider, new DefaultCacheRegionNameResolver());
 
             this.serializer = new JsonSerializationProvider(serializer);
-            this.identityMap = new MemoryCacheIdentityMap<string, AbstractResource>(DefaultIdentityMapSlidingExpiration);
+            this.identityMap = new MemoryCacheIdentityMap<string, ResourceData>(identityMapExpiration);
             this.resourceFactory = new DefaultResourceFactory(this, this.identityMap);
             this.resourceConverter = new DefaultResourceConverter();
 
@@ -127,8 +125,17 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         T IDataStore.Instantiate<T>()
+            => this.resourceFactory.Create<T>();
+
+        T IInternalDataStore.InstantiateWithHref<T>(string href)
         {
-            return this.resourceFactory.Create<T>();
+            var properties = new Dictionary<string, object>()
+            {
+                ["href"] = href
+            };
+            var instantiated = this.resourceFactory.Create<T>(properties);
+
+            return instantiated;
         }
 
         private void ApplyDefaultRequestHeaders(IHttpRequest request)
@@ -202,7 +209,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create<T>(result.Body);
         }
 
-        async Task<T> IInternalDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
+        async Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
         {
             var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);
 
@@ -213,7 +220,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create(targetType, result.Body) as T;
         }
 
-        T IDataStoreSync.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+        T IInternalSyncDataStore.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
         {
             var result = this.GetResourceData<T>(href);
 
@@ -244,7 +251,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri);
-            return chain.FilterAsync(request, this.logger, cancellationToken);
+            return chain.ExecuteAsync(request, this.logger, cancellationToken);
         }
 
         private IResourceDataResult GetResourceData<T>(string resourcePath)
@@ -270,30 +277,30 @@ namespace Stormpath.SDK.Impl.DataStore
             return chain.Filter(request, this.logger);
         }
 
-        Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
+        Task<CollectionResponsePage<T>> IInternalAsyncDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
         {
             this.logger.Trace($"Asynchronously getting collection page of type {typeof(T).Name} from: {href}", "DefaultDataStore.GetCollectionAsync<T>");
 
-            return this.AsInterface.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
+            return this.AsAsyncInterface.GetResourceAsync<CollectionResponsePage<T>>(href, cancellationToken);
         }
 
-        CollectionResponsePage<T> IInternalDataStoreSync.GetCollection<T>(string href)
+        CollectionResponsePage<T> IInternalSyncDataStore.GetCollection<T>(string href)
         {
             this.logger.Trace($"Synchronously getting collection page of type {typeof(T).Name} from: {href}", "DefaultDataStore.GetCollection<T>");
 
             return this.AsSyncInterface.GetResource<CollectionResponsePage<T>>(href);
         }
 
-        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
+        Task<T> IInternalAsyncDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
         {
-            return this.AsInterface.CreateAsync<T, T>(
+            return this.AsAsyncInterface.CreateAsync<T, T>(
                 parentHref,
                 resource,
                 options: null,
                 cancellationToken: cancellationToken);
         }
 
-        T IInternalDataStoreSync.Create<T>(string parentHref, T resource)
+        T IInternalSyncDataStore.Create<T>(string parentHref, T resource)
         {
             return this.AsSyncInterface.Create<T, T>(
                 parentHref,
@@ -301,16 +308,16 @@ namespace Stormpath.SDK.Impl.DataStore
                 options: null);
         }
 
-        Task<T> IInternalDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
+        Task<T> IInternalAsyncDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
         {
-            return this.AsInterface.CreateAsync<T, T>(
+            return this.AsAsyncInterface.CreateAsync<T, T>(
                 parentHref,
                 resource,
                 options: options,
                 cancellationToken: cancellationToken);
         }
 
-        T IInternalDataStoreSync.Create<T>(string parentHref, T resource, ICreationOptions options)
+        T IInternalSyncDataStore.Create<T>(string parentHref, T resource, ICreationOptions options)
         {
             return this.AsSyncInterface.Create<T, T>(
                 parentHref,
@@ -318,16 +325,16 @@ namespace Stormpath.SDK.Impl.DataStore
                 options: options);
         }
 
-        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
+        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
         {
-            return this.AsInterface.CreateAsync<T, TReturned>(
+            return this.AsAsyncInterface.CreateAsync<T, TReturned>(
                 parentHref,
                 resource,
                 options: null,
                 cancellationToken: cancellationToken);
         }
 
-        TReturned IInternalDataStoreSync.Create<T, TReturned>(string parentHref, T resource)
+        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource)
         {
             return this.AsSyncInterface.Create<T, TReturned>(
                 parentHref,
@@ -335,7 +342,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 options: null);
         }
 
-        Task<TReturned> IInternalDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
+        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
         {
             return this.SaveCoreAsync<T, TReturned>(
                 resource,
@@ -345,7 +352,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 cancellationToken: cancellationToken);
         }
 
-        TReturned IInternalDataStoreSync.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
+        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
         {
             return this.SaveCore<T, TReturned>(
                 resource,
@@ -354,7 +361,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 queryParams: this.CreateQueryStringFromCreationOptions(options));
         }
 
-        Task<T> IInternalDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
+        Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
         {
             var href = resource?.Href;
             if (string.IsNullOrEmpty(href))
@@ -368,7 +375,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 cancellationToken: cancellationToken);
         }
 
-        T IInternalDataStoreSync.Save<T>(T resource)
+        T IInternalSyncDataStore.Save<T>(T resource)
         {
             var href = resource?.Href;
             if (string.IsNullOrEmpty(href))
@@ -381,12 +388,12 @@ namespace Stormpath.SDK.Impl.DataStore
                 queryParams: null);
         }
 
-        Task<bool> IInternalDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
+        Task<bool> IInternalAsyncDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
         {
             return this.DeleteCoreAsync<T>(resource.Href, cancellationToken);
         }
 
-        Task<bool> IInternalDataStore.DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken)
+        Task<bool> IInternalAsyncDataStore.DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(propertyName))
                 throw new ArgumentNullException(nameof(propertyName));
@@ -396,7 +403,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.DeleteCoreAsync<IResource>(propertyHref, cancellationToken);
         }
 
-        bool IInternalDataStoreSync.DeleteProperty(string parentHref, string propertyName)
+        bool IInternalSyncDataStore.DeleteProperty(string parentHref, string propertyName)
         {
             if (string.IsNullOrEmpty(propertyName))
                 throw new ArgumentNullException(nameof(propertyName));
@@ -406,7 +413,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.DeleteCore<IResource>(propertyHref);
         }
 
-        bool IInternalDataStoreSync.Delete<T>(T resource)
+        bool IInternalSyncDataStore.Delete<T>(T resource)
         {
             return this.DeleteCore<T>(resource.Href);
         }
@@ -441,9 +448,15 @@ namespace Stormpath.SDK.Impl.DataStore
                     var responseBody = this.GetBody<T>(response);
                     var responseAction = this.GetPostAction(req, response);
 
-                    bool responseHasExpectedData = responseBody.Any() || response.StatusCode == 202;
-                    if (!responseHasExpectedData)
+                    bool responseHasData = responseBody.Any();
+                    bool responseIsProcessing = response.StatusCode == 202;
+                    bool responseOkay = responseHasData || responseIsProcessing;
+
+                    if (!responseOkay)
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
+
+                    if (responseIsProcessing)
+                        this.logger.Warn($"Received a 202 response, returning empty result. Href: '{href}'", "DefaultDataStore.SaveCoreAsync");
 
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
@@ -468,7 +481,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
                 // Merge in custom data updates
                 if (customDataProxy.HasUpdatedCustomDataProperties())
-                    propertiesMap["customData"] = new Dictionary<string, object>(customDataProxy.UpdatedCustomDataProperties);
+                    propertiesMap["customData"] = customDataProxy.UpdatedCustomDataProperties;
 
                 // Remove custom data updates from proxy
                 extendableInstanceResource.ResetCustomData();
@@ -478,15 +491,15 @@ namespace Stormpath.SDK.Impl.DataStore
             // So, we should just refresh with the latest data from the server.
             bool nothingToPost = !propertiesMap.Any();
             if (!create && nothingToPost)
-                return await this.AsInterface.GetResourceAsync<TReturned>(href, cancellationToken).ConfigureAwait(false);
+                return await this.AsAsyncInterface.GetResourceAsync<TReturned>(href, cancellationToken).ConfigureAwait(false);
 
             var requestAction = create
                 ? ResourceAction.Create
                 : ResourceAction.Update;
             var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
 
-            var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
-            return this.resourceFactory.Create<TReturned>(result.Body);
+            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
+            return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
         }
 
         private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, bool create)
@@ -519,9 +532,15 @@ namespace Stormpath.SDK.Impl.DataStore
                     var responseBody = this.GetBody<T>(response);
                     var responseAction = this.GetPostAction(req, response);
 
-                    bool responseHasExpectedData = responseBody.Any() || response.StatusCode == 202;
-                    if (!responseHasExpectedData)
+                    bool responseHasData = responseBody.Any();
+                    bool responseIsProcessing = response.StatusCode == 202;
+                    bool responseOkay = responseHasData || responseIsProcessing;
+
+                    if (!responseOkay)
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
+
+                    if (responseIsProcessing)
+                        this.logger.Warn($"Received a 202 response, returning empty result. Href: '{href}'", "DefaultDataStore.SaveCoreAsync");
 
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
@@ -546,7 +565,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
                 // Merge in custom data updates
                 if (customDataProxy.HasUpdatedCustomDataProperties())
-                    propertiesMap["customData"] = new Dictionary<string, object>(customDataProxy.UpdatedCustomDataProperties);
+                    propertiesMap["customData"] = customDataProxy.UpdatedCustomDataProperties;
 
                 // Remove custom data updates from proxy
                 extendableInstanceResource.ResetCustomData();
@@ -564,7 +583,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
 
             var result = chain.Filter(request, this.logger);
-            return this.resourceFactory.Create<TReturned>(result.Body);
+            return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
         }
 
         private async Task<bool> DeleteCoreAsync<T>(string href, CancellationToken cancellationToken)
@@ -586,7 +605,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri);
-            var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
+            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
 
             bool successfullyDeleted = result.HttpStatus == 204;
             return successfullyDeleted;

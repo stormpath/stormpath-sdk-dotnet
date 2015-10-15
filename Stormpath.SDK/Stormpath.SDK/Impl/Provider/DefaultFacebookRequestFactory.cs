@@ -15,16 +15,24 @@
 // limitations under the License.
 // </remarks>
 
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
 {
     internal sealed class DefaultFacebookRequestFactory : IFacebookRequestFactory
     {
+        private readonly IInternalDataStore dataStore;
+
+        public DefaultFacebookRequestFactory(IInternalDataStore dataStore)
+        {
+            this.dataStore = dataStore;
+        }
+
         IFacebookAccountRequestBuilder IProviderRequestFactory<IFacebookAccountRequestBuilder, IFacebookCreateProviderRequestBuilder>.Account()
-            => new DefaultFacebookAccountRequestBuilder();
+            => new DefaultFacebookAccountRequestBuilder(this.dataStore);
 
         IFacebookCreateProviderRequestBuilder IProviderRequestFactory<IFacebookAccountRequestBuilder, IFacebookCreateProviderRequestBuilder>.Builder()
-            => new DefaultFacebookCreateProviderRequestBuilder();
+            => new DefaultFacebookCreateProviderRequestBuilder(this.dataStore);
     }
 }

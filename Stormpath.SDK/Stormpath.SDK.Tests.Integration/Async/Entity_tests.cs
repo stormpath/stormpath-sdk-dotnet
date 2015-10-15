@@ -36,15 +36,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Multiple_instances_reference_same_object(TestClientBuilder clientBuilder)
+        public async Task Multiple_instances_reference_same_data(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var account = await application.GetAccounts().FirstAsync();
             var anotherAccount = await application.GetAccounts().FirstAsync();
-
-            account.ShouldBeSameAs(anotherAccount);
 
             var updatedEmail = account.Email + "-foobar";
             account.SetEmail(updatedEmail);
@@ -53,12 +51,11 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Original_reference_is_updated_after_save(TestClientBuilder clientBuilder)
+        public async Task Reference_is_updated_after_saving(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            // TODO Holy Grail: This original un-linked object can haz link too?
             var newAccount = client.Instantiate<IAccount>();
             newAccount.SetEmail("identity-maps-are-useful@test.foo");
             newAccount.SetPassword("Changeme123!");
@@ -70,12 +67,59 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             created.SetMiddleName("these");
             var updated = await created.SaveAsync();
-            created.ShouldBeSameAs(updated);
 
             updated.SetEmail("different");
             created.Email.ShouldBe("different");
 
             await updated.DeleteAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Original_object_is_updated_after_creating(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var newAccount = client.Instantiate<IAccount>();
+            newAccount.SetEmail("super-smart-objects@test.foo");
+            newAccount.SetPassword("Changeme123!");
+            newAccount.SetGivenName("Testing");
+            newAccount.SetSurname("InitialProxy");
+
+            var created = await application.CreateAccountAsync(newAccount, opt => opt.RegistrationWorkflowEnabled = false);
+            this.fixture.CreatedAccountHrefs.Add(created.Href);
+
+            created.SetMiddleName("these");
+            newAccount.MiddleName.ShouldBe("these");
+
+            await created.DeleteAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Not_capturing_save_result_works(TestClientBuilder clientBuilder)
+        {
+            // This test is a little redundant, but explicitly tests a style
+            // that will be common among consumers of the SDK.
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var newAccount = client.Instantiate<IAccount>();
+            newAccount.SetEmail("indistinguishable-from-magic@test.foo");
+            newAccount.SetPassword("Changeme123!");
+            newAccount.SetGivenName("Testing");
+            newAccount.SetSurname("InitialProxy-NonCaptureWorkflow");
+
+            newAccount.Href.ShouldBeNullOrEmpty();
+
+            // Instead of capturing result = ...
+            // Just execute the method and expect the original object to be updated
+            await application.CreateAccountAsync(newAccount, opt => opt.RegistrationWorkflowEnabled = false);
+            newAccount.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedAccountHrefs.Add(newAccount.Href);
+
+            await newAccount.DeleteAsync();
         }
     }
 }

@@ -15,19 +15,24 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
 {
     internal sealed class DefaultLinkedInCreateProviderRequestBuilder : AbstractCreateProviderRequestBuilder<ILinkedInCreateProviderRequestBuilder>, ILinkedInCreateProviderRequestBuilder
     {
+        public DefaultLinkedInCreateProviderRequestBuilder(IInternalDataStore dataStore)
+            : base(dataStore)
+        {
+        }
+
         protected override string ConcreteProviderId
             => ProviderType.LinkedIn.DisplayName;
 
-        protected override ICreateProviderRequest BuildConcrete(IDictionary<string, object> properties)
+        protected override ICreateProviderRequest BuildConcrete()
         {
-            var provider = new DefaultLinkedInProvider(null, properties);
+            var provider = this.dataStore.Instantiate<ILinkedInProvider>() as DefaultLinkedInProvider;
             provider.SetClientId(this.clientId);
             provider.SetClientSecret(this.clientSecret);
 

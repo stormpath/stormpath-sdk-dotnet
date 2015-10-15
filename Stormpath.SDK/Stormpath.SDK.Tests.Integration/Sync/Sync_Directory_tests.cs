@@ -108,7 +108,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var instance = client.Instantiate<IDirectory>();
             instance.SetName(directoryName);
             var created = tenant.CreateDirectory(instance, options => options.ForProvider(
-                Providers.Facebook()
+                client.Providers().Facebook()
                     .Builder()
                     .SetClientId("foobar")
                     .SetClientSecret("secret123!")
@@ -143,7 +143,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var instance = client.Instantiate<IDirectory>();
             instance.SetName(directoryName);
             var created = tenant.CreateDirectory(instance, options => options.ForProvider(
-                Providers.Github()
+                client.Providers().Github()
                     .Builder()
                     .SetClientId("foobar")
                     .SetClientSecret("secret123!")
@@ -178,7 +178,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var instance = client.Instantiate<IDirectory>();
             instance.SetName(directoryName);
             var created = tenant.CreateDirectory(instance, options => options.ForProvider(
-                Providers.Google()
+                client.Providers().Google()
                     .Builder()
                     .SetClientId("foobar")
                     .SetClientSecret("secret123!")
@@ -215,7 +215,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var instance = client.Instantiate<IDirectory>();
             instance.SetName(directoryName);
             var created = tenant.CreateDirectory(instance, options => options.ForProvider(
-                Providers.LinkedIn()
+                client.Providers().LinkedIn()
                     .Builder()
                     .SetClientId("foobar")
                     .SetClientSecret("secret123!")

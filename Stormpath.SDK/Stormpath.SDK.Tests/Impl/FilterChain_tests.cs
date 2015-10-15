@@ -134,7 +134,7 @@ namespace Stormpath.SDK.Tests.Impl
                     }
                     else
                     {
-                        return chain.FilterAsync(request, logger, cancellationToken);
+                        return chain.ExecuteAsync(request, logger, cancellationToken);
                     }
                 }
             }
@@ -150,7 +150,7 @@ namespace Stormpath.SDK.Tests.Impl
                     }
                     else
                     {
-                        return chain.FilterAsync(request, logger, cancellationToken);
+                        return chain.ExecuteAsync(request, logger, cancellationToken);
                     }
                 }
             }
@@ -163,7 +163,7 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new DeleteInterceptorFilter());
 
                 var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
-                var result = await filterChain.FilterAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
+                var result = await filterChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Create);
                 result.Body.ShouldContainKeyAndValue("Foo", "bar");
@@ -177,7 +177,7 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new DeleteInterceptorFilter());
 
                 var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
-                var result = await filterChain.FilterAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
+                var result = await filterChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Delete);
                 result.Body.ShouldBeNull();
@@ -201,7 +201,7 @@ namespace Stormpath.SDK.Tests.Impl
                     }));
 
                 var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
-                var result = await finalChain.FilterAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
+                var result = await finalChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Create);
                 result.Body.ShouldContainKeyAndValue("Foo", "bar");

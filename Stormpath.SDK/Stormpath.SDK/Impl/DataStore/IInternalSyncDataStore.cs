@@ -1,4 +1,4 @@
-﻿// <copyright file="IInternalDataStoreSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IInternalSyncDataStore.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,14 +15,19 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections.Generic;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal interface IInternalDataStoreSync : IDataStoreSync
+    internal interface IInternalSyncDataStore : IInternalDataStore, IDataStoreSync
     {
         CollectionResponsePage<T> GetCollection<T>(string href);
+
+        T GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+            where T : class, IResource;
 
         T Create<T>(string parentHref, T resource)
             where T : class, IResource;

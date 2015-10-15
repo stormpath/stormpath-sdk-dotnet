@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +23,6 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
@@ -57,12 +55,12 @@ namespace Stormpath.SDK.Impl.Account
         private static readonly string TenantPropertyName = "tenant";
         private static readonly string UsernamePropertyName = "username";
 
-        public DefaultAccount(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultAccount(ResourceData data)
+            : base(data)
         {
         }
 
-        private IAccount AsInterface => this;
+        private new IAccount AsInterface => this;
 
         internal LinkProperty AccessTokens => this.GetLinkProperty(AccessTokensPropertyName);
 
@@ -80,9 +78,8 @@ namespace Stormpath.SDK.Impl.Account
         {
             get
             {
-                var emailVerificationToken = new DefaultEmailVerificationToken(this.GetInternalDataStore());
-                emailVerificationToken.ResetAndUpdate(
-                    new Dictionary<string, object>() { { "href", this.EmailVerificationToken.Href } });
+                var emailVerificationToken = this.GetInternalAsyncDataStore()
+                    .InstantiateWithHref<IEmailVerificationToken>(this.EmailVerificationToken.Href);
                 return emailVerificationToken;
             }
         }
@@ -167,28 +164,28 @@ namespace Stormpath.SDK.Impl.Account
         }
 
         IAsyncQueryable<IGroup> IAccount.GetGroups()
-            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalDataStore());
+            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IGroupMembership> IAccount.GetGroupMemberships()
-            => new CollectionResourceQueryable<IGroupMembership>(this.GroupMemberships.Href, this.GetInternalDataStore());
+            => new CollectionResourceQueryable<IGroupMembership>(this.GroupMemberships.Href, this.GetInternalAsyncDataStore());
 
         Task<IDirectory> IAccount.GetDirectoryAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
 
         IDirectory IAccountSync.GetDirectory()
-            => this.GetInternalDataStoreSync().GetResource<IDirectory>(this.Directory.Href);
+            => this.GetInternalSyncDataStore().GetResource<IDirectory>(this.Directory.Href);
 
         Task<ITenant> IAccount.GetTenantAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<ITenant>(this.Tenant.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(this.Tenant.Href, cancellationToken);
 
         ITenant IAccountSync.GetTenant()
-            => this.GetInternalDataStoreSync().GetResource<ITenant>(this.Tenant.Href);
+            => this.GetInternalSyncDataStore().GetResource<ITenant>(this.Tenant.Href);
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
+            => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
 
         bool IDeletableSync.Delete()
-             => this.GetInternalDataStoreSync().Delete(this);
+             => this.GetInternalSyncDataStore().Delete(this);
 
         Task<IAccount> ISaveable<IAccount>.SaveAsync(CancellationToken cancellationToken)
              => this.SaveAsync<IAccount>(cancellationToken);
@@ -197,10 +194,10 @@ namespace Stormpath.SDK.Impl.Account
              => this.Save<IAccount>();
 
         Task<IGroupMembership> IAccount.AddGroupAsync(IGroup group, CancellationToken cancellationToken)
-            => DefaultGroupMembership.CreateAsync(this, group, this.GetInternalDataStore(), cancellationToken);
+            => DefaultGroupMembership.CreateAsync(this, group, this.GetInternalAsyncDataStore(), cancellationToken);
 
         IGroupMembership IAccountSync.AddGroup(IGroup group)
-            => DefaultGroupMembership.Create(this, group, this.GetInternalDataStoreSync());
+            => DefaultGroupMembership.Create(this, group, this.GetInternalSyncDataStore());
 
         async Task<IGroupMembership> IAccount.AddGroupAsync(string hrefOrName, CancellationToken cancellationToken)
         {
@@ -211,7 +208,7 @@ namespace Stormpath.SDK.Impl.Account
             if (group == null)
                 throw new InvalidOperationException("The specified group was not found in the account's directory.");
 
-            return await DefaultGroupMembership.CreateAsync(this, group, this.GetInternalDataStore(), cancellationToken).ConfigureAwait(false);
+            return await DefaultGroupMembership.CreateAsync(this, group, this.GetInternalAsyncDataStore(), cancellationToken).ConfigureAwait(false);
         }
 
         IGroupMembership IAccountSync.AddGroup(string hrefOrName)
@@ -223,7 +220,7 @@ namespace Stormpath.SDK.Impl.Account
             if (group == null)
                 throw new InvalidOperationException("The specified group was not found in the account's directory.");
 
-            return DefaultGroupMembership.Create(this, group, this.GetInternalDataStoreSync());
+            return DefaultGroupMembership.Create(this, group, this.GetInternalSyncDataStore());
         }
 
         async Task<bool> IAccount.RemoveGroupAsync(IGroup group, CancellationToken cancellationToken)
@@ -361,10 +358,10 @@ namespace Stormpath.SDK.Impl.Account
         }
 
         Task<IProviderData> IAccount.GetProviderDataAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<IProviderData>(this.ProviderData.Href, ProviderTypeConverter.DataTypeLookup, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IProviderData>(this.ProviderData.Href, ProviderTypeConverter.DataTypeLookup, cancellationToken);
 
         IProviderData IAccountSync.GetProviderData()
-            => this.GetInternalDataStoreSync().GetResource<IProviderData>(this.ProviderData.Href, ProviderTypeConverter.DataTypeLookup);
+            => this.GetInternalSyncDataStore().GetResource<IProviderData>(this.ProviderData.Href, ProviderTypeConverter.DataTypeLookup);
 
         private async Task<IGroup> FindGroupInDirectoryAsync(string hrefOrName, string directoryHref, CancellationToken cancellationToken)
         {
@@ -380,7 +377,7 @@ namespace Stormpath.SDK.Impl.Account
             {
                 try
                 {
-                    group = await this.GetInternalDataStore().GetResourceAsync<IGroup>(hrefOrName, cancellationToken).ConfigureAwait(false);
+                    group = await this.GetInternalAsyncDataStore().GetResourceAsync<IGroup>(hrefOrName, cancellationToken).ConfigureAwait(false);
 
                     if ((group as DefaultGroup)?.Directory.Href == directoryHref)
                         return group;
@@ -415,7 +412,7 @@ namespace Stormpath.SDK.Impl.Account
             {
                 try
                 {
-                    group = this.GetInternalDataStoreSync().GetResource<IGroup>(hrefOrName);
+                    group = this.GetInternalSyncDataStore().GetResource<IGroup>(hrefOrName);
 
                     if ((group as DefaultGroup)?.Directory.Href == directoryHref)
                         return group;

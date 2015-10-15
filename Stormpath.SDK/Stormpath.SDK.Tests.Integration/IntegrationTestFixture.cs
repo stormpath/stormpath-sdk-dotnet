@@ -151,7 +151,7 @@ namespace Stormpath.SDK.Tests.Integration
 
             // Create groups
             try
-            {
+        {
                 var groupsToCreate = this.testData.GetTestGroups(client);
                 var groupCreationTasks = groupsToCreate.Select(g =>
                     primaryApplication.CreateGroupAsync(g));
@@ -168,22 +168,22 @@ namespace Stormpath.SDK.Tests.Integration
             }
 
             // Add some accounts to groups
-            try
-            {
+                try
+                {
                 var luke = await primaryApplication.GetAccounts()
                     .Where(x => x.Email.StartsWith("lskywalker"))
                     .SingleAsync();
                 await luke.AddGroupAsync(this.PrimaryGroupHref);
-            }
+                }
             catch (Exception e)
-            {
+                    {
                 await this.RemoveObjectsFromTenantAsync();
                 throw new ApplicationException("Could not add accounts to groups", e);
-            }
-        }
+                    }
+                }
 
         private async Task RemoveObjectsFromTenantAsync()
-        {
+                {
             var client = IntegrationTestClients.GetSAuthc1Client();
             var results = new ConcurrentDictionary<string, Exception>();
 

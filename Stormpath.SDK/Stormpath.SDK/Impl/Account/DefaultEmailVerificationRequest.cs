@@ -16,7 +16,6 @@
 // </remarks>
 
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Account
@@ -25,8 +24,8 @@ namespace Stormpath.SDK.Impl.Account
     {
         private static readonly string LoginPropertyName = "login";
 
-        public DefaultEmailVerificationRequest(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultEmailVerificationRequest(ResourceData data)
+            : base(data)
         {
         }
 

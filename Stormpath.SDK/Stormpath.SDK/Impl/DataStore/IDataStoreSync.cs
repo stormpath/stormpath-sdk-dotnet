@@ -15,10 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-using System.Collections.Generic;
-using Stormpath.SDK.Resource;
-
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal interface IDataStoreSync
@@ -31,8 +27,5 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
         T GetResource<T>(string href);
-
-        T GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
-            where T : class, IResource;
     }
 }
