@@ -79,11 +79,5 @@ namespace Stormpath.SDK.Impl.Resource
 
         public void SetLinkProperty(string name, string href)
             => this.SetProperty(name, new LinkProperty(href));
-
-        public void SetProperty(string name, object value)
-        {
-            this.dirtyProperties.AddOrUpdate(name, value, (key, oldValue) => value);
-            this.isDirty = true;
-        }
     }
 }

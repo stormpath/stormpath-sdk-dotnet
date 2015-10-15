@@ -49,13 +49,6 @@ namespace Stormpath.SDK.Impl.CustomData
         {
         }
 
-        protected override IDictionary<string, object> ResetAndUpdateDerived(IDictionary<string, object> properties)
-        {
-            this.deletedProperties = new ConcurrentDictionary<string, object>();
-
-            return base.ResetAndUpdateDerived(properties);
-        }
-
         private ICustomData AsInterface => this;
 
         private static bool IsValidKey(string possibleKey)
@@ -160,8 +153,7 @@ namespace Stormpath.SDK.Impl.CustomData
             if (!IsValidValue(value))
                 throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'. Only primitives and strings can be stored in Custom Data.");
 
-            object dummy;
-            this.deletedProperties.TryRemove(key, out dummy);
+            this.GetResourceData()?.RemoveProperty(key);
 
             this.SetProperty(key, value);
         }

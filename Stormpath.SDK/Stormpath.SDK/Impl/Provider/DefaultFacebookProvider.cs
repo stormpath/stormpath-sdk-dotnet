@@ -15,8 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
@@ -26,13 +25,8 @@ namespace Stormpath.SDK.Impl.Provider
         private static readonly string ClientIdPropertyName = "clientId";
         private static readonly string ClientSecretPropertyName = "clientSecret";
 
-        public DefaultFacebookProvider(IInternalDataStore dataStore)
-            : base(dataStore)
-        {
-        }
-
-        public DefaultFacebookProvider(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
+        public DefaultFacebookProvider(ResourceData data)
+            : base(data)
         {
         }
 

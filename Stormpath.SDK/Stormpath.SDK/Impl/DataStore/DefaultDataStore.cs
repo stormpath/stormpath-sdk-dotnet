@@ -208,7 +208,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create<T>(result.Body);
         }
 
-        async Task<T> IInternalDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
+        async Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
         {
             var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);
 
@@ -219,7 +219,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create(targetType, result.Body) as T;
         }
 
-        T IDataStoreSync.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+        T IInternalSyncDataStore.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
         {
             var result = this.GetResourceData<T>(href);
 
@@ -250,7 +250,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri);
-            return chain.FilterAsync(request, this.logger, cancellationToken);
+            return chain.ExecuteAsync(request, this.logger, cancellationToken);
         }
 
         private IResourceDataResult GetResourceData<T>(string resourcePath)
@@ -592,7 +592,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri);
-            var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
+            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
 
             bool successfullyDeleted = result.HttpStatus == 204;
             return successfullyDeleted;

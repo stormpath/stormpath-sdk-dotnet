@@ -16,7 +16,7 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
@@ -24,6 +24,11 @@ namespace Stormpath.SDK.Impl.Provider
     internal sealed class DefaultGoogleAccountRequestBuilder : AbstractProviderAccountRequestBuilder<IGoogleAccountRequestBuilder>, IGoogleAccountRequestBuilder
     {
         private string code;
+
+        public DefaultGoogleAccountRequestBuilder(IInternalDataStore dataStore)
+            : base(dataStore)
+        {
+        }
 
         IGoogleAccountRequestBuilder IGoogleAccountRequestBuilder.SetCode(string code)
         {
@@ -34,12 +39,12 @@ namespace Stormpath.SDK.Impl.Provider
         protected override string ConcreteProviderId
             => ProviderType.Google.DisplayName;
 
-        protected override IProviderAccountRequest BuildConcrete(IDictionary<string, object> properties)
+        protected override IProviderAccountRequest BuildConcrete()
         {
             if (string.IsNullOrEmpty(this.accessToken) && string.IsNullOrEmpty(this.code))
                 throw new ApplicationException($"Either '{nameof(this.code)}' or '{nameof(this.accessToken)}' properties must exist in a Google account request.");
 
-            var providerData = new DefaultGoogleProviderData(null, properties);
+            var providerData = this.dataStore.Instantiate<IGoogleProviderData>() as DefaultGoogleProviderData;
 
             if (!string.IsNullOrEmpty(this.accessToken))
                 providerData.SetAccessToken(this.accessToken);

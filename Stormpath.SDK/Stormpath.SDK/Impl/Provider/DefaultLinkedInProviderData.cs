@@ -15,8 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
@@ -25,13 +24,8 @@ namespace Stormpath.SDK.Impl.Provider
     {
         private static readonly string AccessTokenPropertyName = "accessToken";
 
-        public DefaultLinkedInProviderData(IInternalDataStore dataStore)
-            : base(dataStore)
-        {
-        }
-
-        public DefaultLinkedInProviderData(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
+        public DefaultLinkedInProviderData(ResourceData data)
+            : base(data)
         {
         }
 

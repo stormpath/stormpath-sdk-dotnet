@@ -142,6 +142,16 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             throw new NotImplementedException();
         }
+
+        Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        T IInternalSyncDataStore.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

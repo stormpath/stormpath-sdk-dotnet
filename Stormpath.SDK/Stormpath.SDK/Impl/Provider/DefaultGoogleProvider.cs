@@ -15,8 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
@@ -27,13 +26,8 @@ namespace Stormpath.SDK.Impl.Provider
         private static readonly string ClientSecretPropertyName = "clientSecret";
         private static readonly string RedirectUriPropertyName = "redirectUri";
 
-        public DefaultGoogleProvider(IInternalDataStore dataStore)
-            : base(dataStore)
-        {
-        }
-
-        public DefaultGoogleProvider(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
+        public DefaultGoogleProvider(ResourceData data)
+            : base(data)
         {
         }
 

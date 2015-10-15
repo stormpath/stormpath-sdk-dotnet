@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         public void ResetCustomData()
         {
-            this.customDataProxy = new DefaultEmbeddedCustomData(this.GetInternalDataStore());
+            this.customDataProxy = new DefaultEmbeddedCustomData(this.GetInternalAsyncDataStore());
         }
     }
 }

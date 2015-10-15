@@ -22,8 +22,6 @@ using NSubstitute;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Http;
-using Stormpath.SDK.Impl.Account;
-using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Resource;

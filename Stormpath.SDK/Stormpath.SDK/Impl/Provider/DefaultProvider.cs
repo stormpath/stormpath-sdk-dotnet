@@ -15,7 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Provider
 {
@@ -24,8 +24,8 @@ namespace Stormpath.SDK.Impl.Provider
     /// </summary>
     internal sealed class DefaultProvider : AbstractProvider
     {
-        public DefaultProvider(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultProvider(ResourceData data)
+            : base(data)
         {
         }
 

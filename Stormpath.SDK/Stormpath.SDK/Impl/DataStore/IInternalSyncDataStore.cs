@@ -15,6 +15,8 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections.Generic;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
@@ -23,6 +25,9 @@ namespace Stormpath.SDK.Impl.DataStore
     internal interface IInternalSyncDataStore : IInternalDataStore, IDataStoreSync
     {
         CollectionResponsePage<T> GetCollection<T>(string href);
+
+        T GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+            where T : class, IResource;
 
         T Create<T>(string parentHref, T resource)
             where T : class, IResource;

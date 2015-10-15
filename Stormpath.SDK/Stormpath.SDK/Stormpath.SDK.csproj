@@ -192,6 +192,7 @@
     <Compile Include="Impl\Provider\DefaultProviderAccountRequest.cs" />
     <Compile Include="Impl\Provider\DefaultProviderAccountResult.cs" />
     <Compile Include="Impl\Provider\DefaultProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultProviderFactory.cs" />
     <Compile Include="Impl\Provider\IProviderAccountAccess.cs" />
     <Compile Include="Impl\Provider\ProviderAccountResolver.cs" />
     <Compile Include="Impl\Provider\ProviderType.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
+    <Compile Include="Provider\ClientProviderExtensions.cs" />
     <Compile Include="Provider\ICreateProviderRequest.cs" />
     <Compile Include="Provider\ICreateProviderRequestBuilder.cs" />
     <Compile Include="Provider\ILinkedInAccountRequestBuilder.cs" />
@@ -253,8 +255,8 @@
     <Compile Include="Provider\IProviderAccountRequestBuilder.cs" />
     <Compile Include="Provider\IProviderAccountResult.cs" />
     <Compile Include="Provider\IProviderData.cs" />
+    <Compile Include="Provider\IProviderFactory.cs" />
     <Compile Include="Provider\IProviderRequestFactory.cs" />
-    <Compile Include="Provider\Providers.cs" />
     <Compile Include="Resource\IExtendable.cs" />
     <Compile Include="Sync\FilterExtensions.cs" />
     <Compile Include="Sync\SyncAccountCreationActionsExtensions.cs" />

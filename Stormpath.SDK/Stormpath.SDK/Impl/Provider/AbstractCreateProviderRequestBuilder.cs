@@ -16,7 +16,7 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
@@ -24,8 +24,15 @@ namespace Stormpath.SDK.Impl.Provider
     internal abstract class AbstractCreateProviderRequestBuilder<T> : ICreateProviderRequestBuilder<T>
         where T : class, ICreateProviderRequestBuilder<T>
     {
+        protected readonly IInternalDataStore dataStore;
+
         protected string clientId;
         protected string clientSecret;
+
+        public AbstractCreateProviderRequestBuilder(IInternalDataStore dataStore)
+        {
+            this.dataStore = dataStore;
+        }
 
         T ICreateProviderRequestBuilder<T>.SetClientId(string clientId)
         {
@@ -46,14 +53,11 @@ namespace Stormpath.SDK.Impl.Provider
             if (string.IsNullOrEmpty(this.clientSecret))
                 throw new ApplicationException($"{nameof(this.clientSecret)} is a required property. It must be provided before building.");
 
-            var properties = new Dictionary<string, object>();
-            properties.Add("providerId", this.ConcreteProviderId);
-
-            return this.BuildConcrete(properties);
+            return this.BuildConcrete();
         }
 
         protected abstract string ConcreteProviderId { get; }
 
-        protected abstract ICreateProviderRequest BuildConcrete(IDictionary<string, object> properties);
+        protected abstract ICreateProviderRequest BuildConcrete();
     }
 }

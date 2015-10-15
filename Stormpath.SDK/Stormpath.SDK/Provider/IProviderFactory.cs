@@ -1,4 +1,4 @@
-﻿// <copyright file="Providers.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IProviderFactory.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,41 +15,32 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Impl.Provider;
-
 namespace Stormpath.SDK.Provider
 {
-    /// <summary>
-    /// Static utility/helper methods serving Provider-specific <see cref="IProviderRequestFactory{A, P}"/>s.
-    /// </summary>
-    public static class Providers
+    public interface IProviderFactory
     {
         /// <summary>
         /// Returns a new <see cref="IFacebookRequestFactory"/> instance, used to construct Facebook requests, like Facebook Account creation and retrieval.
         /// </summary>
         /// <returns>A new <see cref="IFacebookRequestFactory"/>.</returns>
-        public static IFacebookRequestFactory Facebook()
-            => new DefaultFacebookRequestFactory();
+        IFacebookRequestFactory Facebook();
 
         /// <summary>
         /// Returns a new <see cref="IGithubRequestFactory"/> instance, used to construct Github requests, like Github Account creation and retrieval.
         /// </summary>
         /// <returns>A new <see cref="IGithubRequestFactory"/>.</returns>
-        public static IGithubRequestFactory Github()
-            => new DefaultGithubRequestFactory();
+        IGithubRequestFactory Github();
 
         /// <summary>
         /// Returns a new <see cref="IGoogleRequestFactory"/> instance, used to construct Google requests, like Google Directory creation.
         /// </summary>
         /// <returns>A new <see cref="IGoogleRequestFactory"/>.</returns>
-        public static IGoogleRequestFactory Google()
-            => new DefaultGoogleRequestFactory();
+        IGoogleRequestFactory Google();
 
         /// <summary>
         /// Returns a new <see cref="ILinkedInRequestFactory"/> instance, used to construct LinkedIn requests, like LinkedIn Account creation and retrieval.
         /// </summary>
         /// <returns>A new <see cref="ILinkedInRequestFactory"/>.</returns>
-        public static ILinkedInRequestFactory LinkedIn()
-            => new DefaultLinkedInRequestFactory();
+        ILinkedInRequestFactory LinkedIn();
     }
 }

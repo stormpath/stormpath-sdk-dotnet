@@ -15,6 +15,8 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Resource;
@@ -25,6 +27,9 @@ namespace Stormpath.SDK.Impl.DataStore
     internal interface IInternalAsyncDataStore : IInternalDataStore
     {
         Task<CollectionResponsePage<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken);
+
+        Task<T> GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
+            where T : class, IResource;
 
         Task<T> CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
             where T : class, IResource;

@@ -15,19 +15,24 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
 {
     internal sealed class DefaultFacebookCreateProviderRequestBuilder : AbstractCreateProviderRequestBuilder<IFacebookCreateProviderRequestBuilder>, IFacebookCreateProviderRequestBuilder
     {
+        public DefaultFacebookCreateProviderRequestBuilder(IInternalDataStore dataStore)
+            : base(dataStore)
+        {
+        }
+
         protected override string ConcreteProviderId
             => ProviderType.Facebook.DisplayName;
 
-        protected override ICreateProviderRequest BuildConcrete(IDictionary<string, object> properties)
+        protected override ICreateProviderRequest BuildConcrete()
         {
-            var provider = new DefaultFacebookProvider(null, properties);
+            var provider = this.dataStore.Instantiate<IFacebookProvider>() as DefaultFacebookProvider;
             provider.SetClientId(this.clientId);
             provider.SetClientSecret(this.clientSecret);
 

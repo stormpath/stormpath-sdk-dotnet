@@ -18,8 +18,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Stormpath.SDK.CustomData;
-using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.DataStore;
 
 namespace Stormpath.SDK.Impl.Resource

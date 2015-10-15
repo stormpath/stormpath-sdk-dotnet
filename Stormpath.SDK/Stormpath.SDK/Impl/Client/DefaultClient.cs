@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -109,6 +108,8 @@ namespace Stormpath.SDK.Impl.Client
 
         internal IHttpClient HttpClient => this.httpClient;
 
+        internal IInternalDataStore DataStore => this.dataStore;
+
         private async Task EnsureTenantAsync(CancellationToken cancellationToken)
         {
             if (this.tenant == null)
@@ -144,9 +145,6 @@ namespace Stormpath.SDK.Impl.Client
 
         T IDataStoreSync.GetResource<T>(string href)
             => this.dataStore.GetResource<T>(href);
-
-        T IDataStoreSync.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
-            => (this.dataStore as IInternalDataStoreSync).GetResource<T>(href, typeLookup);
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {

@@ -15,7 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 
@@ -25,8 +24,8 @@ namespace Stormpath.SDK.Impl.Provider
     {
         private static readonly string ProviderDataPropertyName = "providerData";
 
-        public DefaultProviderAccountAccess(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultProviderAccountAccess(ResourceData data)
+            : base(data)
         {
         }
 

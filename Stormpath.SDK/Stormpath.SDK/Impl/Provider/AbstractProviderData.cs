@@ -15,8 +15,6 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 
@@ -26,15 +24,9 @@ namespace Stormpath.SDK.Impl.Provider
     {
         private static readonly string ProviderIdPropertyName = "providerId";
 
-        public AbstractProviderData(IInternalDataStore dataStore)
-            : this(dataStore, null)
+        public AbstractProviderData(ResourceData data)
+            : base(data)
         {
-        }
-
-        public AbstractProviderData(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore)
-        {
-            this.ResetAndUpdate(properties);
             this.SetProperty(ProviderIdPropertyName, this.ConcreteProviderId);
         }
 

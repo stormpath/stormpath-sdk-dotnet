@@ -22,7 +22,6 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
@@ -133,10 +132,10 @@ namespace Stormpath.SDK.Impl.Tenant
         }
 
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken)
-            => this.GetInternalDataStore().CreateAsync(this.directoriesResourceBase, directory, cancellationToken);
+            => this.GetInternalAsyncDataStore().CreateAsync(this.directoriesResourceBase, directory, cancellationToken);
 
         IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory)
-            => this.GetInternalDataStoreSync().Create(this.directoriesResourceBase, directory);
+            => this.GetInternalSyncDataStore().Create(this.directoriesResourceBase, directory);
 
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
@@ -180,7 +179,7 @@ namespace Stormpath.SDK.Impl.Tenant
 
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken)
         {
-            var directory = this.GetInternalDataStore().Instantiate<IDirectory>();
+            var directory = this.GetInternalAsyncDataStore().Instantiate<IDirectory>();
             directory.SetName(name);
             directory.SetDescription(description);
             directory.SetStatus(status);
@@ -190,7 +189,7 @@ namespace Stormpath.SDK.Impl.Tenant
 
         IDirectory ITenantActionsSync.CreateDirectory(string name, string description, DirectoryStatus status)
         {
-            var directory = this.GetInternalDataStore().Instantiate<IDirectory>();
+            var directory = this.GetInternalAsyncDataStore().Instantiate<IDirectory>();
             directory.SetName(name);
             directory.SetDescription(description);
             directory.SetStatus(status);
@@ -223,9 +222,9 @@ namespace Stormpath.SDK.Impl.Tenant
             => new CollectionResourceQueryable<IDirectory>(this.Directories.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IAccount> ITenantActions.GetAccounts()
-            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
+            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IGroup> ITenantActions.GetGroups()
-            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalDataStore());
+            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalAsyncDataStore());
     }
 }
