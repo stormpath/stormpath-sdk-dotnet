@@ -68,8 +68,7 @@ namespace Stormpath.SDK.Impl.Account
 
         public static IAccount CreateAccount(IInternalSyncDataStore dataStoreSync, string accountsHref, string givenName, string surname, string email, string password, object customData = null)
         {
-            // TODO refactor this after refactoring IDataStore
-            var account = CreateAccountWith(dataStoreSync as IInternalDataStore, givenName, surname, email, password, customData);
+            var account = CreateAccountWith(dataStoreSync, givenName, surname, email, password, customData);
 
             return CreateAccount(dataStoreSync, accountsHref, account);
         }
