@@ -196,7 +196,7 @@ namespace Stormpath.SDK.Tests.Impl
                 });
 
                 // Should only have 1 call: no retries!
-                throwingHttpClient.Received(1).ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>()).IgnoreAwait();
+                await throwingHttpClient.Received(1).ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>());
             }
 
             [Fact]

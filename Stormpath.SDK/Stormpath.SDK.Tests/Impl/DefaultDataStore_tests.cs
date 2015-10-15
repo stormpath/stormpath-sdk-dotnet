@@ -119,10 +119,10 @@ namespace Stormpath.SDK.Tests.Impl
             var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
 
             // Verify the default headers
-            dataStore.RequestExecutor.Received().ExecuteAsync(
+            await dataStore.RequestExecutor.Received().ExecuteAsync(
                 Arg.Is<IHttpRequest>(request =>
                     request.Headers.Accept == "application/json"),
-                Arg.Any<CancellationToken>()).IgnoreAwait();
+                Arg.Any<CancellationToken>());
         }
 
         [Fact]

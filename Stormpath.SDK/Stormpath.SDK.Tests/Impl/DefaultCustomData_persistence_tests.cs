@@ -46,11 +46,11 @@ namespace Stormpath.SDK.Tests.Impl
             var expectedBody = @"{""newprop"":""foo""}";
 
             // Sent the update as a diff
-            dataStore.RequestExecutor.Received().ExecuteAsync(
+            await dataStore.RequestExecutor.Received().ExecuteAsync(
                 Arg.Is<IHttpRequest>(request =>
                     request.Method == HttpMethod.Post &&
                     request.Body == expectedBody),
-                Arg.Any<CancellationToken>()).IgnoreAwait();
+                Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -65,18 +65,18 @@ namespace Stormpath.SDK.Tests.Impl
             await customData.SaveAsync();
 
             // Delete
-            dataStore.RequestExecutor.Received().ExecuteAsync(
+            await dataStore.RequestExecutor.Received().ExecuteAsync(
                 Arg.Is<IHttpRequest>(request =>
                     request.Method == HttpMethod.Delete &&
                     request.CanonicalUri.ToString() == "https://api.stormpath.com/v1/accounts/foobarAccount/customData/membershipType"),
-                Arg.Any<CancellationToken>()).IgnoreAwait();
+                Arg.Any<CancellationToken>());
 
             // Post
-            dataStore.RequestExecutor.Received().ExecuteAsync(
+            await dataStore.RequestExecutor.Received().ExecuteAsync(
                 Arg.Is<IHttpRequest>(request =>
                     request.Method == HttpMethod.Post &&
                     request.Body == @"{""testingIsUseful"":true}"),
-                Arg.Any<CancellationToken>()).IgnoreAwait();
+                Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -91,18 +91,18 @@ namespace Stormpath.SDK.Tests.Impl
             await customData.SaveAsync();
 
             // Delete
-            dataStore.RequestExecutor.DidNotReceive().ExecuteAsync(
+            await dataStore.RequestExecutor.DidNotReceive().ExecuteAsync(
                 Arg.Is<IHttpRequest>(request =>
                     request.Method == HttpMethod.Delete &&
                     request.CanonicalUri.ToString() == "https://api.stormpath.com/v1/accounts/foobarAccount/customData/membershipType"),
-                Arg.Any<CancellationToken>()).IgnoreAwait();
+                Arg.Any<CancellationToken>());
 
             // Update
-            dataStore.RequestExecutor.Received().ExecuteAsync(
+            await dataStore.RequestExecutor.Received().ExecuteAsync(
                 Arg.Is<IHttpRequest>(request =>
                     request.Method == HttpMethod.Post &&
                     request.Body == @"{""membershipType"":""unknown""}"),
-                Arg.Any<CancellationToken>()).IgnoreAwait();
+                Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -117,10 +117,10 @@ namespace Stormpath.SDK.Tests.Impl
             await account.SaveAsync();
 
             // Empty save, should not POST anything
-            dataStore.RequestExecutor.DidNotReceive().ExecuteAsync(
+            await dataStore.RequestExecutor.DidNotReceive().ExecuteAsync(
                 Arg.Is<IHttpRequest>(req =>
                     req.Method == HttpMethod.Post),
-                Arg.Any<CancellationToken>()).IgnoreAwait();
+                Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -147,10 +147,10 @@ namespace Stormpath.SDK.Tests.Impl
             await account.SaveAsync();
 
             // Empty save, should not POST anything
-            dataStore.RequestExecutor.DidNotReceive().ExecuteAsync(
+            await dataStore.RequestExecutor.DidNotReceive().ExecuteAsync(
                 Arg.Is<IHttpRequest>(req =>
                     req.Method == HttpMethod.Post),
-                Arg.Any<CancellationToken>()).IgnoreAwait();
+                Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -178,10 +178,10 @@ namespace Stormpath.SDK.Tests.Impl
             await account2.SaveAsync();
 
             // Empty save, should not POST anything
-            dataStore.RequestExecutor.DidNotReceive().ExecuteAsync(
+            await dataStore.RequestExecutor.DidNotReceive().ExecuteAsync(
                 Arg.Is<IHttpRequest>(req =>
                     req.Method == HttpMethod.Post),
-                Arg.Any<CancellationToken>()).IgnoreAwait();
+                Arg.Any<CancellationToken>());
         }
     }
 }

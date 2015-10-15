@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Tests.Impl
                 .ExecuteAsync(
                     Arg.Is<IHttpRequest>(request =>
                         request.CanonicalUri.ToString().EndsWith(queryString)),
-                    Arg.Any<CancellationToken>()).IgnoreAwait();
+                    Arg.Any<CancellationToken>());
         }
 
         public class Application_options : IDisposable
