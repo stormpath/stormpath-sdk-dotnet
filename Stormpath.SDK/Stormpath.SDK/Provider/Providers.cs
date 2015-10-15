@@ -20,6 +20,7 @@ using Stormpath.SDK.Impl.Provider;
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
+    /// Static utility/helper methods serving Provider-specific <see cref="IProviderRequestFactory{A, P}"/>s.
     /// </summary>
     public static class Providers
     {
