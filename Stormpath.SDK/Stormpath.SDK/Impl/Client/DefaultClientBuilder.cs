@@ -31,6 +31,7 @@ namespace Stormpath.SDK.Impl.Client
         public static readonly int DefaultConnectionTimeout = 20 * 1000;
         public static readonly string DefaultBaseUrl = "https://api.stormpath.com/v1";
         public static readonly AuthenticationScheme DefaultAuthenticationScheme = AuthenticationScheme.SAuthc1;
+        private static readonly TimeSpan DefaultIdentityMapSlidingExpiration = TimeSpan.FromMinutes(10);
 
         private readonly IClientApiKeyBuilder clientApiKeyBuilder;
         private readonly IJsonSerializerBuilder serializerBuilder;
@@ -43,6 +44,7 @@ namespace Stormpath.SDK.Impl.Client
         private AuthenticationScheme authenticationScheme = DefaultAuthenticationScheme;
         private IClientApiKey apiKey;
         private ILogger logger;
+        private TimeSpan? identityMapExpiration;
 
         public DefaultClientBuilder()
         {
@@ -129,6 +131,17 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
+        IClientBuilder IClientBuilder.SetIdentityMapExpiration(TimeSpan expiration)
+        {
+            if (expiration.TotalSeconds < 10 ||
+                expiration.TotalHours > 24)
+                throw new ArgumentOutOfRangeException($"{nameof(expiration)} must be between 10 seconds and 24 hours.");
+
+            this.identityMapExpiration = expiration;
+
+            return this;
+        }
+
         internal IClientBuilder SetCache(bool cacheEnabled)
         {
             this.cacheProviderBuilder.UseCache(cacheEnabled);
@@ -175,7 +188,8 @@ namespace Stormpath.SDK.Impl.Client
                 this.httpClientBuilder.Build(),
                 this.serializerBuilder.Build(),
                 this.cacheProviderBuilder.Build(),
-                this.logger);
+                this.logger,
+                this.identityMapExpiration ?? DefaultIdentityMapSlidingExpiration);
         }
     }
 }

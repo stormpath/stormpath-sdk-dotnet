@@ -68,7 +68,7 @@ namespace Stormpath.SDK.Impl.DataStore
             AbstractResource targetObject;
             try
             {
-                string id = RandomResourceId();
+                string id = RandomResourceId(type.Name);
 
                 object href = null;
                 bool propertiesContainsHref =
@@ -78,12 +78,15 @@ namespace Stormpath.SDK.Impl.DataStore
                 if (propertiesContainsHref)
                     id = href.ToString();
 
-                var resourceData = this.identityMap.GetOrAdd(id, () => new ResourceData(id, this.dataStore));
+                if (!propertiesContainsHref)
+                    properties.Add("href", id);
 
-                targetObject = Activator.CreateInstance(targetType, new object[] { resourceData }) as AbstractResource;
+                var resourceData = this.identityMap.GetOrAdd(id, () => new ResourceData(this.dataStore));
 
                 if (properties != null)
                     resourceData.Update(properties);
+
+                targetObject = Activator.CreateInstance(targetType, new object[] { resourceData }) as AbstractResource;
 
                 if (original != null)
                     original.Link(resourceData);
@@ -165,8 +168,8 @@ namespace Stormpath.SDK.Impl.DataStore
             }
         }
 
-        private static string RandomResourceId()
-            => $"autogen://{Guid.NewGuid().ToString().ToLowerInvariant().Replace("-", string.Empty)}";
+        private static string RandomResourceId(string typeName)
+            => $"autogen://{typeName}/{Guid.NewGuid().ToString().ToLowerInvariant().Replace("-", string.Empty)}";
 
         private void Dispose(bool disposing)
         {

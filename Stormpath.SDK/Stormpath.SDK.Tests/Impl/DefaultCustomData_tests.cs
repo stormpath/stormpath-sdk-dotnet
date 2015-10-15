@@ -62,8 +62,7 @@ namespace Stormpath.SDK.Tests.Impl
 
         private static ICustomData GetInstance(IDictionary<string, object> properties = null)
         {
-            var fakeId = Guid.NewGuid().ToString();
-            var fakeResourceData = new ResourceData(fakeId, new FakeDataStore<ICustomData>());
+            var fakeResourceData = new ResourceData(new FakeDataStore<ICustomData>());
             fakeResourceData.Update(properties);
 
             return new DefaultCustomData(fakeResourceData);

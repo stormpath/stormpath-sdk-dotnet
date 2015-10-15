@@ -28,11 +28,14 @@ namespace Stormpath.SDK.Impl.CustomData
         private readonly DefaultCustomData customDataProxy;
         private bool deleteAll;
 
-        public DefaultEmbeddedCustomData(IInternalDataStore dataStore)
+        public DefaultEmbeddedCustomData(IInternalDataStore dataStore, string parentHref)
         {
-            this.customDataProxy = dataStore.Instantiate<ICustomData>() as DefaultCustomData;
+            this.customDataProxy = dataStore.InstantiateWithHref<ICustomData>(GenerateEmbeddedCustomDataId(parentHref)) as DefaultCustomData;
             this.deleteAll = false;
         }
+
+        private static string GenerateEmbeddedCustomDataId(string parentHref)
+            => $"proxy-{parentHref}/customData";
 
         internal bool DeleteAll
             => this.deleteAll;

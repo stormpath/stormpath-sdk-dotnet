@@ -1,4 +1,4 @@
-﻿// <copyright file="AbstractResource_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Entity_identity_map_tests.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,20 +15,26 @@
 // limitations under the License.
 // </remarks>
 
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.DataStore;
+using Stormpath.SDK.Http;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class AbstractResource_tests
+    public class Entity_identity_map_tests
     {
-        private readonly IDataStore dataStore;
+        private readonly IInternalDataStore dataStore;
 
-        public AbstractResource_tests()
+        public Entity_identity_map_tests()
         {
             this.dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
         }
@@ -57,6 +63,30 @@ namespace Stormpath.SDK.Tests.Impl
 
             account1.SetMiddleName("hello world!");
             account2.MiddleName.ShouldBe("hello world!");
+        }
+
+        [Fact]
+        public async Task Loaded_resources_custom_data_proxies_are_linked()
+        {
+            var account1 = await this.dataStore.GetResourceAsync<IAccount>("/foo");
+            var account2 = await this.dataStore.GetResourceAsync<IAccount>("/foo");
+
+            account1.CustomData.Put("foo", "bar");
+            account2.CustomData.Put("foo2", 123);
+
+            await account2.SaveAsync();
+
+            var expectedBody = @"{""customData"":{""foo"":""bar"",""foo2"":123}}";
+
+            var body = this.dataStore.RequestExecutor
+                .ReceivedCalls()
+                .Last()
+                .GetArguments()
+                .OfType<IHttpRequest>()
+                .First()
+                .Body;
+
+            body.ShouldBe(expectedBody);
         }
     }
 }

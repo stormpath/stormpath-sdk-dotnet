@@ -38,6 +38,8 @@ namespace Stormpath.SDK.Impl.Resource
             Interlocked.Exchange(ref this.resourceData, data);
         }
 
+        protected IResource AsInterface => this;
+
         public ResourceData GetResourceData() => this.resourceData;
 
         string IResource.Href => this.GetProperty<string>(HrefPropertyName);

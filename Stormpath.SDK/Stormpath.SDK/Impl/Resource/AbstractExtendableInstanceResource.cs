@@ -49,7 +49,8 @@ namespace Stormpath.SDK.Impl.Resource
 
         public void ResetCustomData()
         {
-            this.customDataProxy = new DefaultEmbeddedCustomData(this.GetInternalAsyncDataStore());
+            // TODO need to delete first!
+            this.customDataProxy = new DefaultEmbeddedCustomData(this.GetInternalAsyncDataStore(), this.AsInterface.Href);
         }
     }
 }

@@ -24,8 +24,6 @@ namespace Stormpath.SDK.Impl.Resource
 {
     internal sealed class ResourceData
     {
-        private readonly string href;
-
         private readonly IInternalDataStore internalDataStore;
         private readonly IInternalAsyncDataStore internalDataStoreAsync;
         private readonly IInternalSyncDataStore internalDataStoreSync;
@@ -36,10 +34,8 @@ namespace Stormpath.SDK.Impl.Resource
 
         private bool isDirty = false;
 
-        public ResourceData(string href, IInternalDataStore dataStore)
+        public ResourceData(IInternalDataStore dataStore)
         {
-            this.href = href;
-
             this.internalDataStore = dataStore;
             this.internalDataStoreAsync = dataStore as IInternalAsyncDataStore;
             this.internalDataStoreSync = dataStore as IInternalSyncDataStore;

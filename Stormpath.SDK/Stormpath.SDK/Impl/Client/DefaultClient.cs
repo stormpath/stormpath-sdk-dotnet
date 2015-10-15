@@ -65,7 +65,8 @@ namespace Stormpath.SDK.Impl.Client
             IHttpClient httpClient,
             IJsonSerializer serializer,
             ICacheProvider cacheProvider,
-            ILogger logger)
+            ILogger logger,
+            TimeSpan identityMapExpiration)
         {
             if (apiKey == null || !apiKey.IsValid())
                 throw new ArgumentException("API Key is not valid.");
@@ -85,7 +86,7 @@ namespace Stormpath.SDK.Impl.Client
 
             var requestExecutor = new DefaultRequestExecutor(httpClient, apiKey, authenticationScheme, this.logger);
 
-            this.dataStore = new DefaultDataStore(requestExecutor, baseUrl, this.serializer, this.logger, cacheProvider);
+            this.dataStore = new DefaultDataStore(requestExecutor, baseUrl, this.serializer, this.logger, cacheProvider, identityMapExpiration);
         }
 
         private IClient AsInterface => this;

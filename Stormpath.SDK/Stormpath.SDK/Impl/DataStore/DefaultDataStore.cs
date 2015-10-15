@@ -42,8 +42,6 @@ namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class DefaultDataStore : IInternalDataStore, IInternalAsyncDataStore, IInternalSyncDataStore, IDisposable
     {
-        private static readonly TimeSpan DefaultIdentityMapSlidingExpiration = TimeSpan.FromMinutes(10);
-
         private readonly string baseUrl;
         private readonly IRequestExecutor requestExecutor;
         private readonly ICacheProvider cacheProvider;
@@ -67,7 +65,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         string IInternalDataStore.BaseUrl => this.baseUrl;
 
-        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider)
+        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider, TimeSpan identityMapExpiration)
         {
             if (requestExecutor == null)
                 throw new ArgumentNullException(nameof(requestExecutor));
@@ -84,7 +82,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.cacheResolver = new DefaultCacheResolver(cacheProvider, new DefaultCacheRegionNameResolver());
 
             this.serializer = new JsonSerializationProvider(serializer);
-            this.identityMap = new MemoryCacheIdentityMap<string, ResourceData>(DefaultIdentityMapSlidingExpiration);
+            this.identityMap = new MemoryCacheIdentityMap<string, ResourceData>(identityMapExpiration);
             this.resourceFactory = new DefaultResourceFactory(this, this.identityMap);
             this.resourceConverter = new DefaultResourceConverter();
 
