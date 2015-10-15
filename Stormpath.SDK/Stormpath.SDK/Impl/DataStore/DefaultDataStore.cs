@@ -131,8 +131,11 @@ namespace Stormpath.SDK.Impl.DataStore
 
         T IInternalDataStore.InstantiateWithHref<T>(string href)
         {
-            var instantiated = this.resourceFactory.Create<T>();
-            (instantiated as AbstractResource).GetResourceData().Update(new Dictionary<string, object>() { { "href", href } });
+            var properties = new Dictionary<string, object>()
+            {
+                ["href"] = href
+            };
+            var instantiated = this.resourceFactory.Create<T>(properties);
 
             return instantiated;
         }
