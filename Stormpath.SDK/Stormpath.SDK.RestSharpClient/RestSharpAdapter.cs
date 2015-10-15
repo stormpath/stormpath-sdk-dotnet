@@ -112,7 +112,7 @@ namespace Stormpath.SDK.Extensions.Http
             if (httpMethod == SDK.Http.HttpMethod.Put)
                 return RestSharp.Method.PUT;
 
-            throw new ArgumentException($"Unknown method type {httpMethod.DisplayName}", nameof(httpMethod));
+            throw new ArgumentException($"Unknown method type {httpMethod}", nameof(httpMethod));
         }
     }
 }

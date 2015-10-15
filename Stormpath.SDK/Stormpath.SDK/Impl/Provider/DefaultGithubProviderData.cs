@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         protected override string ConcreteProviderId
-            => ProviderType.Github.DisplayName;
+            => ProviderType.Github;
 
         string IGithubProviderData.AccessToken
             => this.GetProperty<string>(AccessTokenPropertyName);

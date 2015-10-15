@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         protected override string ConcreteProviderId
-            => ProviderType.LinkedIn.DisplayName;
+            => ProviderType.LinkedIn;
 
         string ILinkedInProvider.ClientId
             => this.GetProperty<string>(ClientIdPropertyName);

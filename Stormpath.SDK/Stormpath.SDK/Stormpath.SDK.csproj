@@ -258,6 +258,7 @@
     <Compile Include="Provider\IProviderFactory.cs" />
     <Compile Include="Provider\IProviderRequestFactory.cs" />
     <Compile Include="Resource\IExtendable.cs" />
+    <Compile Include="Shared\StringEnumeration.cs" />
     <Compile Include="Sync\FilterExtensions.cs" />
     <Compile Include="Sync\SyncAccountCreationActionsExtensions.cs" />
     <Compile Include="Sync\SyncDirectoryExtensions.cs" />
@@ -361,7 +362,6 @@
     <Compile Include="Resource\ICreationOptions.cs" />
     <Compile Include="Resource\IDeletable.cs" />
     <Compile Include="Resource\ISaveable.cs" />
-    <Compile Include="Shared\Enumeration.cs" />
     <Compile Include="Impl\Utility\EnvironmentWrapper.cs" />
     <Compile Include="Impl\Utility\FileWrapper.cs" />
     <Compile Include="Impl\Utility\IConfigurationManager.cs" />

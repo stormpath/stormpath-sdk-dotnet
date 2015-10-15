@@ -23,24 +23,24 @@ namespace Stormpath.SDK.Directory
     /// <summary>
     /// Represents the status of a <see cref="IDirectory"/>.
     /// </summary>
-    public sealed class DirectoryStatus : Enumeration
+    public sealed class DirectoryStatus : StringEnumeration
     {
         /// <summary>
         /// Accounts in this directory may login to applications.
         /// </summary>
-        public static DirectoryStatus Enabled = new DirectoryStatus(0, "ENABLED");
+        public static DirectoryStatus Enabled = new DirectoryStatus("ENABLED");
 
         /// <summary>
         /// Accounts in this directory may not login to applications.
         /// </summary>
-        public static DirectoryStatus Disabled = new DirectoryStatus(1, "DISABLED");
+        public static DirectoryStatus Disabled = new DirectoryStatus("DISABLED");
 
         private DirectoryStatus()
         {
         }
 
-        private DirectoryStatus(int value, string displayName)
-            : base(value, displayName)
+        private DirectoryStatus(string value)
+            : base(value)
         {
         }
 

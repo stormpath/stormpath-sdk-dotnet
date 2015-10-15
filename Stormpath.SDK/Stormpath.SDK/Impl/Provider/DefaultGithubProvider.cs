@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         protected override string ConcreteProviderId
-            => ProviderType.Github.DisplayName;
+            => ProviderType.Github;
 
         string IGithubProvider.ClientId
             => this.GetProperty<string>(ClientIdPropertyName);

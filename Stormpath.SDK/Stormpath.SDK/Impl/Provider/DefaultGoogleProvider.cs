@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         protected override string ConcreteProviderId
-            => ProviderType.Google.DisplayName;
+            => ProviderType.Google;
 
         string IGoogleProvider.ClientId
             => this.GetProperty<string>(ClientIdPropertyName);

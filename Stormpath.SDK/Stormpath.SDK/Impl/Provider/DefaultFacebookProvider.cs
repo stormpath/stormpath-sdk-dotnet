@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         protected override string ConcreteProviderId
-            => ProviderType.Facebook.DisplayName;
+            => ProviderType.Facebook;
 
         string IFacebookProvider.ClientId
             => this.GetProperty<string>(ClientIdPropertyName);

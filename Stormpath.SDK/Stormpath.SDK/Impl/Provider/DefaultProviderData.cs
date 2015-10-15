@@ -28,6 +28,6 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         protected override string ConcreteProviderId
-            => ProviderType.Stormpath.DisplayName;
+            => ProviderType.Stormpath;
     }
 }

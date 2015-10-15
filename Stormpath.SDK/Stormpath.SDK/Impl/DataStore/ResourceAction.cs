@@ -20,19 +20,19 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal sealed class ResourceAction : Enumeration
+    internal sealed class ResourceAction : StringEnumeration
     {
-        public static ResourceAction Create = new ResourceAction(0, "CREATE");
-        public static ResourceAction Read = new ResourceAction(1, "READ");
-        public static ResourceAction Update = new ResourceAction(2, "UPDATE");
-        public static ResourceAction Delete = new ResourceAction(3, "DELETE");
+        public static ResourceAction Create = new ResourceAction("CREATE");
+        public static ResourceAction Read = new ResourceAction("READ");
+        public static ResourceAction Update = new ResourceAction("UPDATE");
+        public static ResourceAction Delete = new ResourceAction("DELETE");
 
         private ResourceAction()
         {
         }
 
-        private ResourceAction(int value, string displayName)
-            : base(value, displayName)
+        private ResourceAction(string value)
+            : base(value)
         {
         }
 

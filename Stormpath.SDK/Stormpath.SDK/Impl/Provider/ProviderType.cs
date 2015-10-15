@@ -22,24 +22,24 @@ namespace Stormpath.SDK.Impl.Provider
     /// <summary>
     /// Represents provider-specific names and class mappings.
     /// </summary>
-    internal sealed class ProviderType : Enumeration
+    internal sealed class ProviderType : StringEnumeration
     {
-        public static ProviderType Stormpath = new ProviderType(0, "stormpath");
+        public static ProviderType Stormpath = new ProviderType("stormpath");
 
-        public static ProviderType Facebook = new ProviderType(1, "facebook");
+        public static ProviderType Facebook = new ProviderType("facebook");
 
-        public static ProviderType Github = new ProviderType(2, "github");
+        public static ProviderType Github = new ProviderType("github");
 
-        public static ProviderType Google = new ProviderType(3, "google");
+        public static ProviderType Google = new ProviderType("google");
 
-        public static ProviderType LinkedIn = new ProviderType(4, "linkedin");
+        public static ProviderType LinkedIn = new ProviderType("linkedin");
 
         private ProviderType()
         {
         }
 
-        private ProviderType(int value, string displayName)
-            : base(value, displayName)
+        private ProviderType(string value)
+            : base(value)
         {
         }
     }

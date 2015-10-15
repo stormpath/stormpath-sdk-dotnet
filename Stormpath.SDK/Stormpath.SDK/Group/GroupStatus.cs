@@ -23,24 +23,24 @@ namespace Stormpath.SDK.Group
     /// <summary>
     /// Represents the status of a <see cref="IGroup"/>.
     /// </summary>
-    public sealed class GroupStatus : Enumeration
+    public sealed class GroupStatus : StringEnumeration
     {
         /// <summary>
         /// Accounts in enabled Groups mapped to applications may login to those applications.
         /// </summary>
-        public static GroupStatus Enabled = new GroupStatus(0, "ENABLED");
+        public static GroupStatus Enabled = new GroupStatus("ENABLED");
 
         /// <summary>
         /// Accounts in disabled Groups mapped to applications may not login to those applications.
         /// </summary>
-        public static GroupStatus Disabled = new GroupStatus(1, "DISABLED");
+        public static GroupStatus Disabled = new GroupStatus("DISABLED");
 
         private GroupStatus()
         {
         }
 
-        private GroupStatus(int value, string displayName)
-            : base(value, displayName)
+        private GroupStatus(string value)
+            : base(value)
         {
         }
 

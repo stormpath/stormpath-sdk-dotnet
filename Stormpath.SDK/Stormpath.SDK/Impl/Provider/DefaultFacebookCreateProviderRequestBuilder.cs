@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         protected override string ConcreteProviderId
-            => ProviderType.Facebook.DisplayName;
+            => ProviderType.Facebook;
 
         protected override ICreateProviderRequest BuildConcrete()
         {

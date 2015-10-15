@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         protected override string ConcreteProviderId
-            => ProviderType.Google.DisplayName;
+            => ProviderType.Google;
 
         protected override ICreateProviderRequest BuildConcrete()
         {

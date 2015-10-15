@@ -186,7 +186,7 @@ namespace Stormpath.SDK.Impl.Linq
                 return expression; // done
             }
 
-            if (expression.Type.IsSubclassOf(typeof(Enumeration)))
+            if (expression.Type.IsSubclassOf(typeof(StringEnumeration)))
             {
                 this.inProgress.StringValue = expression.Value.ToString();
                 return expression; // done

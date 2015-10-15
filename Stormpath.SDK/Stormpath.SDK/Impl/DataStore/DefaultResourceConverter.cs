@@ -50,10 +50,10 @@ namespace Stormpath.SDK.Impl.DataStore
                 return new { href = asLinkProperty.Href };
             }
 
-            var asEnumeration = rawValue as Enumeration;
+            var asEnumeration = rawValue as StringEnumeration;
             if (asEnumeration != null)
             {
-                return asEnumeration.DisplayName.ToLower();
+                return asEnumeration.Value.ToLower();
             }
 
             var asEmbeddedResource = rawValue as AbstractResource;

@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         protected override string ConcreteProviderId
-            => ProviderType.Github.DisplayName;
+            => ProviderType.Github;
 
         protected override IProviderAccountRequest BuildConcrete()
         {
