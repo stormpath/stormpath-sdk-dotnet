@@ -450,8 +450,9 @@ namespace Stormpath.SDK.Impl.DataStore
 
                     bool responseHasData = responseBody.Any();
                     bool responseIsProcessing = response.StatusCode == 202;
+                    bool responseOkay = responseHasData || responseIsProcessing;
 
-                    if (responseHasData || responseIsProcessing)
+                    if (!responseOkay)
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
 
                     if (responseIsProcessing)
@@ -533,8 +534,9 @@ namespace Stormpath.SDK.Impl.DataStore
 
                     bool responseHasData = responseBody.Any();
                     bool responseIsProcessing = response.StatusCode == 202;
+                    bool responseOkay = responseHasData || responseIsProcessing;
 
-                    if (responseHasData || responseIsProcessing)
+                    if (!responseOkay)
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
 
                     if (responseIsProcessing)
