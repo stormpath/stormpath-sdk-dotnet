@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Impl.Tenant
         {
         }
 
-        private ITenant AsInterface => this;
+        private new ITenant AsInterface => this;
 
         private ITenantActionsSync AsTenantActionSyncInterface => this;
 

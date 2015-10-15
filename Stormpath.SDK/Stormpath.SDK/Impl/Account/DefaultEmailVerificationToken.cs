@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-        private IEmailVerificationToken AsInterface => this;
+        private new IEmailVerificationToken AsInterface => this;
 
         string IEmailVerificationToken.GetValue()
         {

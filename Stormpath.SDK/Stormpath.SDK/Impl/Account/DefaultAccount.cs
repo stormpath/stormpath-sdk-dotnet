@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-        private IAccount AsInterface => this;
+        private new IAccount AsInterface => this;
 
         internal LinkProperty AccessTokens => this.GetLinkProperty(AccessTokensPropertyName);
 

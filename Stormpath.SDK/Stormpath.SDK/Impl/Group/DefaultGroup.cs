@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Impl.Group
         {
         }
 
-        private IGroup AsInterface => this;
+        private new IGroup AsInterface => this;
 
         string IGroup.Name => this.GetProperty<string>(NamePropertyName);
 

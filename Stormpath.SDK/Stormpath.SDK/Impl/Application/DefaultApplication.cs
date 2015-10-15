@@ -57,7 +57,7 @@ namespace Stormpath.SDK.Impl.Application
         {
         }
 
-        private IApplication AsInterface => this;
+        private new IApplication AsInterface => this;
 
         private IApplicationSync AsSyncInterface => this;
 

@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Impl.CustomData
         {
         }
 
-        private ICustomData AsInterface => this;
+        private new ICustomData AsInterface => this;
 
         private static bool IsValidKey(string possibleKey)
         {

@@ -49,8 +49,6 @@ namespace Stormpath.SDK.Impl.Directory
         {
         }
 
-        private IDirectory AsInterface => this;
-
         internal LinkProperty AccountCreationPolicy => this.GetLinkProperty(AccountCreationPolicyPropertyName);
 
         internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
