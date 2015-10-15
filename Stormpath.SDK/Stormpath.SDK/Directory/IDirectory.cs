@@ -21,6 +21,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Directory
@@ -87,6 +88,13 @@ namespace Stormpath.SDK.Directory
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the newly-created <see cref="IGroup"/>.</returns>
         Task<IGroup> CreateGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Gets the <see cref="IProvider"/> of this Directory.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the Provider of this Directory.</returns>
+        Task<IProvider> GetProviderAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a queryable list of all accounts in this directory.

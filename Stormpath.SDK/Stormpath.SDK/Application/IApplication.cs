@@ -23,6 +23,7 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Application
@@ -230,6 +231,20 @@ namespace Stormpath.SDK.Application
         /// <returns>A Task whose result is the <see cref="IAccount"/> matching the specified token.</returns>
         /// <exception cref="Error.ResourceException">The token is not valid.</exception>
         Task<IAccount> VerifyPasswordResetTokenAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves a Provider-based <see cref="IAccount"/>. The account must exist in one of the Provider-based <see cref="Directory.IDirectory"/>
+        /// assigned to the Application as an account store, and the Directory must also be <see cref="Directory.DirectoryStatus.Enabled"/>.
+        /// If not in an assigned account store, the retrieval attempt will fail.
+        /// </summary>
+        /// <param name="request">
+        /// The <see cref="IProviderAccountRequest"/> representing the Provider-specific account access data
+        /// (e.g. an <c>accessToken</c>) used to verify the identity.
+        /// </param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the result of the access request.</returns>
+        /// <exception cref="Error.ResourceException">The access attempt failed.</exception>
+        Task<IProviderAccountResult> GetAccountAsync(IProviderAccountRequest request, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a queryable list of all accounts in this application.

@@ -81,6 +81,29 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).CreateDirectory(directory);
 
         /// <summary>
+        /// Synchronously creates a new Provider-based Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="creationOptionsAction">An inline builder for aninstance of <see cref="IDirectoryCreationOptions"/>,
+        /// which will be used when sending the request.</param>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        public static IDirectory CreateDirectory(this ITenantActions tenantActions, IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction)
+            => (tenantActions as ITenantActionsSync).CreateDirectory(directory, creationOptionsAction);
+
+        /// <summary>
+        /// Synchronously creates a new Provider-based Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        public static IDirectory CreateDirectory(this ITenantActions tenantActions, IDirectory directory, IDirectoryCreationOptions creationOptions)
+            => (tenantActions as ITenantActionsSync).CreateDirectory(directory, creationOptions);
+
+        /// <summary>
         /// Synchronously creates a new Cloud Directory resource in the Tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>

@@ -19,6 +19,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
@@ -80,5 +81,11 @@ namespace Stormpath.SDK.Impl.Account
         /// <param name="hrefOrName">The <c>href</c> or name of the group to check.</param>
         /// <returns><c>true</c> if the account belongs to the specified group.</returns>
         bool IsMemberOfGroup(string hrefOrName);
+
+        /// <summary>
+        /// Synchronously gets the ProviderData Resource belonging to the account.
+        /// </summary>
+        /// <returns>The ProviderData Resource belonging to The account..</returns>
+        IProviderData GetProviderData();
     }
 }

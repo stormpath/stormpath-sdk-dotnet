@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.DataStore;
@@ -74,6 +75,11 @@ namespace Stormpath.SDK.Tests.Fakes
         Task<bool> IInternalDataStore.DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken)
             => this.FakeDataStore.DeletePropertyAsync(parentHref, propertyName, cancellationToken);
 
+        bool IInternalDataStoreSync.DeleteProperty(string parentHref, string propertyName)
+        {
+            throw new NotImplementedException();
+        }
+
         CollectionResponsePage<T> IInternalDataStoreSync.GetCollection<T>(string href) => this.FakeDataStoreSync.GetCollection<T>(href);
 
         Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken) => this.FakeDataStore.GetCollectionAsync<T>(href, cancellationToken);
@@ -81,6 +87,12 @@ namespace Stormpath.SDK.Tests.Fakes
         T IDataStoreSync.GetResource<T>(string href) => this.FakeDataStoreSync.GetResource<T>(href);
 
         Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken) => this.FakeDataStore.GetResourceAsync<T>(href, cancellationToken);
+
+        T IDataStoreSync.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+            => this.FakeDataStoreSync.GetResource<T>(href, typeLookup);
+
+        Task<T> IInternalDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> conversionFunc, CancellationToken cancellationToken)
+            => this.FakeDataStore.GetResourceAsync<T>(href, conversionFunc, cancellationToken);
 
         T IDataStore.Instantiate<T>() => this.FakeDataStore.Instantiate<T>();
 
@@ -112,11 +124,6 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
-        }
-
-        bool IInternalDataStoreSync.DeleteProperty(string parentHref, string propertyName)
-        {
-            throw new NotImplementedException();
         }
         #endregion
     }

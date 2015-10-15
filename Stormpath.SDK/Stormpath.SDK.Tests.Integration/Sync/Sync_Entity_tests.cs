@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // TODO Holy Grail: This original un-linked object can haz link too?
             var newAccount = client.Instantiate<IAccount>();
-            newAccount.SetEmail(new RandomEmail("foo.co"));
+            newAccount.SetEmail("identity-maps-are-useful-sync@test.foo");
             newAccount.SetPassword("Changeme123!");
             newAccount.SetGivenName("Testing");
             newAccount.SetSurname("IdentityMaps");

@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
         internal sealed class AccountStatusConverter : AbstractFieldConverter
         {
             public AccountStatusConverter()
-                : base(nameof(AccountStatusConverter), appliesToTargetType: typeof(SDK.Account.IAccount))
+                : base(nameof(AccountStatusConverter), typeof(SDK.Account.IAccount), typeof(SDK.Provider.IProviderAccountResult))
             {
             }
 

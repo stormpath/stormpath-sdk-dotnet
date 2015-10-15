@@ -314,7 +314,7 @@ namespace Stormpath.SDK.Impl.Group
             => this.SaveAsync<IGroup>(cancellationToken);
 
         IGroup ISaveableSync<IGroup>.Save()
-            => this.Save();
+            => this.Save<IGroup>();
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);

@@ -23,8 +23,10 @@ using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Directory
@@ -47,6 +49,8 @@ namespace Stormpath.SDK.Impl.Directory
             : base(dataStore)
         {
         }
+
+        private IDirectory AsInterface => this;
 
         internal LinkProperty AccountCreationPolicy => this.GetLinkProperty(AccountCreationPolicyPropertyName);
 
@@ -91,6 +95,15 @@ namespace Stormpath.SDK.Impl.Directory
             return this;
         }
 
+        internal IDirectory SetProvider(IProvider provider)
+        {
+            if (!string.IsNullOrEmpty(this.AsInterface.Href))
+                throw new ApplicationException("Cannot change the provider of an existing Directory");
+
+            this.SetProperty(ProviderPropertyName, provider);
+            return this;
+        }
+
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
             => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalDataStore(), this.Accounts.Href, account, creationOptionsAction, cancellationToken);
 
@@ -123,6 +136,12 @@ namespace Stormpath.SDK.Impl.Directory
 
         IGroup IDirectorySync.CreateGroup(IGroup group)
             => this.GetInternalDataStoreSync().Create(this.Groups.Href, group);
+
+        Task<IProvider> IDirectory.GetProviderAsync(CancellationToken cancellationToken)
+            => this.GetInternalDataStore().GetResourceAsync<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup, cancellationToken);
+
+        IProvider IDirectorySync.GetProvider()
+            => this.GetInternalDataStoreSync().GetResource<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup);
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);

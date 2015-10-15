@@ -106,6 +106,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 asyncFilterChain.Add(new WriteCacheFilter(this.cacheResolver));
             }
 
+            asyncFilterChain.Add(new ProviderAccountResultFilter());
+
             return asyncFilterChain;
         }
 
@@ -118,6 +120,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 syncFilterChain.Add(new ReadCacheFilter(this.baseUrl, this.cacheResolver));
                 syncFilterChain.Add(new WriteCacheFilter(this.cacheResolver));
             }
+
+            syncFilterChain.Add(new ProviderAccountResultFilter());
 
             return syncFilterChain;
         }
@@ -186,6 +190,45 @@ namespace Stormpath.SDK.Impl.DataStore
         // DataStore methods
         async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
         {
+            var result = await this.GetResourceDataAsync<T>(resourcePath, cancellationToken).ConfigureAwait(false);
+
+            return this.resourceFactory.Create<T>(result.Body);
+        }
+
+        T IDataStoreSync.GetResource<T>(string resourcePath)
+        {
+            var result = this.GetResourceData<T>(resourcePath);
+
+            return this.resourceFactory.Create<T>(result.Body);
+        }
+
+        async Task<T> IInternalDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
+        {
+            var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);
+
+            var targetType = typeLookup(result.Body);
+            if (targetType == null)
+                throw new ApplicationException("No type mapping could be found for this resource.");
+
+            return this.resourceFactory.Create(targetType, result.Body) as T;
+        }
+
+        T IDataStoreSync.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+        {
+            var result = this.GetResourceData<T>(href);
+
+            var targetType = typeLookup(result.Body);
+            if (targetType == null)
+                throw new ApplicationException("No type mapping could be found for this resource.");
+
+            return this.resourceFactory.Create(targetType, result.Body) as T;
+        }
+
+        private Task<IResourceDataResult> GetResourceDataAsync<T>(string resourcePath, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(resourcePath))
+                throw new ArgumentNullException(nameof(resourcePath));
+
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
             this.logger.Trace($"Asynchronously getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResourceAsync<T>");
 
@@ -201,13 +244,14 @@ namespace Stormpath.SDK.Impl.DataStore
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri);
-            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
-
-            return this.resourceFactory.Create<T>(result.Body);
+            return chain.FilterAsync(request, this.logger, cancellationToken);
         }
 
-        T IDataStoreSync.GetResource<T>(string resourcePath)
+        private IResourceDataResult GetResourceData<T>(string resourcePath)
         {
+            if (string.IsNullOrEmpty(resourcePath))
+                throw new ArgumentNullException(nameof(resourcePath));
+
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
             this.logger.Trace($"Synchronously getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResource<T>");
 
@@ -223,9 +267,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri);
-            var result = chain.Filter(request, this.logger);
-
-            return this.resourceFactory.Create<T>(result.Body);
+            return chain.Filter(request, this.logger);
         }
 
         Task<CollectionResponsePage<T>> IInternalDataStore.GetCollectionAsync<T>(string href, CancellationToken cancellationToken)
@@ -403,7 +445,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     if (!responseHasExpectedData)
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
 
-                    return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.StatusCode, responseBody);
+                    return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
 
             // Serialize properties
@@ -443,7 +485,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 : ResourceAction.Update;
             var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
 
-            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
+            var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
             return this.resourceFactory.Create<TReturned>(result.Body);
         }
 
@@ -481,7 +523,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     if (!responseHasExpectedData)
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
 
-                    return new DefaultResourceDataResult(responseAction, typeof(T), req.Uri, response.StatusCode, responseBody);
+                    return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
 
             // Serialize properties
@@ -544,7 +586,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri);
-            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
+            var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
 
             bool successfullyDeleted = result.HttpStatus == 204;
             return successfullyDeleted;
@@ -617,11 +659,6 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
-        }
-
-        void IDisposable.Dispose()
-        {
-            throw new NotImplementedException();
         }
 
         #endregion

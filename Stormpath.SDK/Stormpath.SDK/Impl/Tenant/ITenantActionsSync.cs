@@ -73,6 +73,25 @@ namespace Stormpath.SDK.Impl.Tenant
         IDirectory CreateDirectory(IDirectory directory);
 
         /// <summary>
+        /// Synchronously creates a new Provider-based Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="creationOptionsAction">An inline builder for aninstance of <see cref="IDirectoryCreationOptions"/>,
+        /// which will be used when sending the request.</param>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        IDirectory CreateDirectory(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction);
+
+        /// <summary>
+        /// Synchronously creates a new Provider-based Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        IDirectory CreateDirectory(IDirectory directory, IDirectoryCreationOptions creationOptions);
+
+        /// <summary>
         /// Synchronously creates a new Cloud Directory resource in the Tenant.
         /// </summary>
         /// <param name="name">The directory name.</param>

@@ -53,9 +53,11 @@ namespace Stormpath.SDK.Impl.CustomData
         {
         }
 
-        protected override void ResetAndUpdateDerived(IDictionary<string, object> properties)
+        protected override IDictionary<string, object> ResetAndUpdateDerived(IDictionary<string, object> properties)
         {
             this.deletedProperties = new ConcurrentDictionary<string, object>();
+
+            return base.ResetAndUpdateDerived(properties);
         }
 
         private ICustomData AsInterface => this;

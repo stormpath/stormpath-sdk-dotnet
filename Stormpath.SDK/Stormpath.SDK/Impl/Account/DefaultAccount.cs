@@ -26,8 +26,10 @@ using Stormpath.SDK.Error;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Group;
+using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
@@ -192,7 +194,7 @@ namespace Stormpath.SDK.Impl.Account
              => this.SaveAsync<IAccount>(cancellationToken);
 
         IAccount ISaveableSync<IAccount>.Save()
-             => this.Save();
+             => this.Save<IAccount>();
 
         Task<IGroupMembership> IAccount.AddGroupAsync(IGroup group, CancellationToken cancellationToken)
             => DefaultGroupMembership.CreateAsync(this, group, this.GetInternalDataStore(), cancellationToken);
@@ -357,6 +359,12 @@ namespace Stormpath.SDK.Impl.Account
 
             return foundGroup != null;
         }
+
+        Task<IProviderData> IAccount.GetProviderDataAsync(CancellationToken cancellationToken)
+            => this.GetInternalDataStore().GetResourceAsync<IProviderData>(this.ProviderData.Href, ProviderTypeConverter.DataTypeLookup, cancellationToken);
+
+        IProviderData IAccountSync.GetProviderData()
+            => this.GetInternalDataStoreSync().GetResource<IProviderData>(this.ProviderData.Href, ProviderTypeConverter.DataTypeLookup);
 
         private async Task<IGroup> FindGroupInDirectoryAsync(string hrefOrName, string directoryHref, CancellationToken cancellationToken)
         {

@@ -19,6 +19,7 @@ using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Directory
 {
@@ -30,5 +31,11 @@ namespace Stormpath.SDK.Impl.Directory
         /// <param name="group">The group to create/persist.</param>
         /// <returns>The newly-created <see cref="IGroup"/>.</returns>
         IGroup CreateGroup(IGroup group);
+
+        /// <summary>
+        /// Synchronously gets the <see cref="IProvider"/> of this Directory.
+        /// </summary>
+        /// <returns>The Provider of this Directory.</returns>
+        IProvider GetProvider();
     }
 }

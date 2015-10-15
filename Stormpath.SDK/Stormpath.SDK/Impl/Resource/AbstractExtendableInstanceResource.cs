@@ -37,9 +37,11 @@ namespace Stormpath.SDK.Impl.Resource
             this.ResetCustomData();
         }
 
-        protected override void ResetAndUpdateDerived(IDictionary<string, object> properties)
+        protected override IDictionary<string, object> ResetAndUpdateDerived(IDictionary<string, object> properties)
         {
             this.ResetCustomData();
+
+            return base.ResetAndUpdateDerived(properties);
         }
 
         internal LinkProperty CustomData => this.GetProperty<LinkProperty>(CustomDataPropertyName);

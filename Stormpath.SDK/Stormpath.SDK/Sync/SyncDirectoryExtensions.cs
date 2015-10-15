@@ -18,6 +18,7 @@
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Sync
 {
@@ -26,10 +27,18 @@ namespace Stormpath.SDK.Sync
         /// <summary>
         /// Synchronously creates a new <see cref="IGroup"/> instance in this directory.
         /// </summary>
-        /// <param name="directory">The group.</param>
+        /// <param name="directory">The directory.</param>
         /// <param name="group">The group to create/persist.</param>
         /// <returns>The newly-created <see cref="IGroup"/>.</returns>
         public static IGroup CreateGroup(this IDirectory directory, IGroup group)
             => (directory as IDirectorySync).CreateGroup(group);
+
+        /// <summary>
+        /// Synchronously gets the <see cref="IProvider"/> of this Directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <returns>The Provider of this Directory.</returns>
+        public static IProvider GetProvider(this IDirectory directory)
+            => (directory as IDirectorySync).GetProvider();
     }
 }

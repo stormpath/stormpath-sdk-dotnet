@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -132,6 +133,9 @@ namespace Stormpath.SDK.Impl.Client
         T IDataStoreSync.GetResource<T>(string href)
             => this.dataStore.GetResource<T>(href);
 
+        T IDataStoreSync.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+            => (this.dataStore as IInternalDataStoreSync).GetResource<T>(href, typeLookup);
+
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
             if (this.tenant == null)
@@ -143,7 +147,7 @@ namespace Stormpath.SDK.Impl.Client
         IApplication ITenantActionsSync.CreateApplication(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction)
         {
             if (this.tenant == null)
-                this.AsSyncInterface.GetCurrentTenant();
+                this.GetCurrentTenant();
 
             return this.tenant.CreateApplication(application, creationOptionsAction);
         }
@@ -159,7 +163,7 @@ namespace Stormpath.SDK.Impl.Client
         IApplication ITenantActionsSync.CreateApplication(IApplication application, IApplicationCreationOptions creationOptions)
         {
             if (this.tenant == null)
-                this.AsSyncInterface.GetCurrentTenant();
+                this.GetCurrentTenant();
 
             return this.tenant.CreateApplication(application, creationOptions);
         }
@@ -175,7 +179,7 @@ namespace Stormpath.SDK.Impl.Client
         IApplication ITenantActionsSync.CreateApplication(IApplication application)
         {
             if (this.tenant == null)
-                this.AsSyncInterface.GetCurrentTenant();
+                this.GetCurrentTenant();
 
             return this.tenant.CreateApplication(application);
         }
@@ -191,7 +195,7 @@ namespace Stormpath.SDK.Impl.Client
         IApplication ITenantActionsSync.CreateApplication(string name, bool createDirectory)
         {
             if (this.tenant == null)
-                this.AsSyncInterface.GetCurrentTenant();
+                this.GetCurrentTenant();
 
             return this.tenant.CreateApplication(name, createDirectory);
         }
@@ -207,9 +211,41 @@ namespace Stormpath.SDK.Impl.Client
         IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory)
         {
             if (this.tenant == null)
-                this.AsSyncInterface.GetCurrentTenant();
+                this.GetCurrentTenant();
 
             return this.tenant.CreateDirectory(directory);
+        }
+
+        async Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
+        {
+            if (this.tenant == null)
+                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.CreateDirectoryAsync(directory, creationOptionsAction, cancellationToken).ConfigureAwait(false);
+        }
+
+        IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction)
+        {
+            if (this.tenant == null)
+                this.GetCurrentTenant();
+
+            return this.tenant.CreateDirectory(directory, creationOptionsAction);
+        }
+
+        async Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, IDirectoryCreationOptions creationOptions, CancellationToken cancellationToken)
+        {
+            if (this.tenant == null)
+                await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.CreateDirectoryAsync(directory, creationOptions, cancellationToken).ConfigureAwait(false);
+        }
+
+        IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory, IDirectoryCreationOptions creationOptions)
+        {
+            if (this.tenant == null)
+                this.GetCurrentTenant();
+
+            return this.tenant.CreateDirectory(directory, creationOptions);
         }
 
         async Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken)
@@ -223,7 +259,7 @@ namespace Stormpath.SDK.Impl.Client
         IDirectory ITenantActionsSync.CreateDirectory(string name, string description, DirectoryStatus status)
         {
             if (this.tenant == null)
-                this.AsSyncInterface.GetCurrentTenant();
+                this.GetCurrentTenant();
 
             return this.tenant.CreateDirectory(name, description, status);
         }
@@ -239,7 +275,7 @@ namespace Stormpath.SDK.Impl.Client
         IAccount ITenantActionsSync.VerifyAccountEmail(string token)
         {
             if (this.tenant == null)
-                this.AsSyncInterface.GetCurrentTenant();
+                this.GetCurrentTenant();
 
             return this.tenant.VerifyAccountEmail(token);
         }

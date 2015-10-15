@@ -26,8 +26,10 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
 
@@ -139,7 +141,7 @@ namespace Stormpath.SDK.Impl.Application
         {
             var request = new UsernamePasswordRequest(username, password) as IAuthenticationRequest;
 
-            return this.AsSyncInterface.AuthenticateAccount(request);
+            return this.AuthenticateAccount(request);
         }
 
         async Task<bool> IApplication.TryAuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken)
@@ -159,7 +161,7 @@ namespace Stormpath.SDK.Impl.Application
         {
             try
             {
-                var loginResult = this.AsSyncInterface.AuthenticateAccount(username, password);
+                var loginResult = this.AuthenticateAccount(username, password);
                 return true;
             }
             catch
@@ -205,7 +207,7 @@ namespace Stormpath.SDK.Impl.Application
              => this.SaveAsync<IApplication>(cancellationToken);
 
         IApplication ISaveableSync<IApplication>.Save()
-            => this.Save();
+            => this.Save<IApplication>();
 
         Task<IPasswordResetToken> IApplication.SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken)
         {
@@ -286,7 +288,7 @@ namespace Stormpath.SDK.Impl.Application
         }
 
         void IApplicationSync.SendVerificationEmail(string usernameOrEmail)
-            => this.AsSyncInterface.SendVerificationEmail(request => request.Login = usernameOrEmail);
+            => this.SendVerificationEmail(request => request.Login = usernameOrEmail);
 
         void IApplicationSync.SendVerificationEmail(Action<EmailVerificationRequestBuilder> requestBuilderAction)
         {
@@ -306,6 +308,12 @@ namespace Stormpath.SDK.Impl.Application
 
         IGroup IApplicationSync.CreateGroup(IGroup group)
             => this.GetInternalDataStoreSync().Create(this.Groups.Href, group);
+
+        Task<IProviderAccountResult> IApplication.GetAccountAsync(IProviderAccountRequest request, CancellationToken cancellationToken)
+            => new ProviderAccountResolver(this.GetInternalDataStore()).ResolveProviderAccountAsync(this.AsInterface.Href, request, cancellationToken);
+
+        IProviderAccountResult IApplicationSync.GetAccount(IProviderAccountRequest request)
+            => new ProviderAccountResolver(this.GetInternalDataStore()).ResolveProviderAccount(this.AsInterface.Href, request);
 
         IAsyncQueryable<IAccount> IApplication.GetAccounts()
              => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());

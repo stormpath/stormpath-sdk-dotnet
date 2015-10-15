@@ -23,6 +23,7 @@ using Stormpath.SDK.Auth;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -167,5 +168,18 @@ namespace Stormpath.SDK.Impl.Application
         /// <returns>The <see cref="IAccount"/> matching the specified token.</returns>
         /// <exception cref="SDK.Error.ResourceException">The token is not valid.</exception>
         IAccount VerifyPasswordResetToken(string token);
+
+        /// <summary>
+        /// Synchronously retrieves a Provider-based <see cref="IAccount"/>. The account must exist in one of the Provider-based <see cref="Directory.IDirectory"/>
+        /// assigned to the Application as an account store, and the Directory must also be <see cref="Directory.DirectoryStatus.Enabled"/>.
+        /// If not in an assigned account store, the retrieval attempt will fail.
+        /// </summary>
+        /// <param name="request">
+        /// The <see cref="IProviderAccountRequest"/> representing the Provider-specific account access data
+        /// (e.g. an <c>accessToken</c>) used to verify the identity.
+        /// </param>
+        /// <returns>The result of the access request.</returns>
+        /// <exception cref="Error.ResourceException">The access attempt failed.</exception>
+        IProviderAccountResult GetAccount(IProviderAccountRequest request);
     }
 }
