@@ -81,10 +81,11 @@ namespace Stormpath.SDK.Tests.Impl
 
             account1.CustomData.Put("foo", "bar");
             account2.CustomData.Put("foo2", 123);
+            account1.CustomData.Remove("foo2");
 
             await account2.SaveAsync();
 
-            var expectedBody = @"{""customData"":{""foo"":""bar"",""foo2"":123}}";
+            var expectedBody = @"{""customData"":{""foo"":""bar""}}";
 
             var body = this.dataStore.RequestExecutor
                 .ReceivedCalls()
