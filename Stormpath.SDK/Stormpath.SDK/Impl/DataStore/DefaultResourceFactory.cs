@@ -70,9 +70,11 @@ namespace Stormpath.SDK.Impl.DataStore
             {
                 string id = RandomResourceId(type.Name);
 
+                if (properties == null)
+                    properties = new Dictionary<string, object>();
+
                 object href = null;
                 bool propertiesContainsHref =
-                    properties != null &&
                     properties.TryGetValue("href", out href) &&
                     href != null;
                 if (propertiesContainsHref)

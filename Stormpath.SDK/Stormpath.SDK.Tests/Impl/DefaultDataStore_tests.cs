@@ -212,7 +212,7 @@ namespace Stormpath.SDK.Tests.Impl
             account.SetUsername("newusername");
 
             var result = await dataStore.CreateAsync("http://api.foo.bar/accounts", account, CancellationToken.None);
-            bool isEmpty = (result as AbstractResource).GetPropertyNames().Count == 0;
+            bool isEmpty = (result as AbstractResource).GetPropertyNames().Single() == "href";
             isEmpty.ShouldBeTrue();
         }
 

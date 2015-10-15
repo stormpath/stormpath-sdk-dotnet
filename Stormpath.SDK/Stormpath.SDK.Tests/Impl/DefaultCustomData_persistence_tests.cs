@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
@@ -42,11 +43,13 @@ namespace Stormpath.SDK.Tests.Impl
             customData.Put("newprop", "foo");
             await customData.SaveAsync();
 
+            var expectedBody = @"{""newprop"":""foo""}";
+
             // Sent the update as a diff
             dataStore.RequestExecutor.Received().ExecuteAsync(
                 Arg.Is<IHttpRequest>(request =>
                     request.Method == HttpMethod.Post &&
-                    request.Body == @"{""newprop"":""foo""}"),
+                    request.Body == expectedBody),
                 Arg.Any<CancellationToken>()).IgnoreAwait();
         }
 
@@ -99,6 +102,85 @@ namespace Stormpath.SDK.Tests.Impl
                 Arg.Is<IHttpRequest>(request =>
                     request.Method == HttpMethod.Post &&
                     request.Body == @"{""membershipType"":""unknown""}"),
+                Arg.Any<CancellationToken>()).IgnoreAwait();
+        }
+
+        [Fact]
+        public async Task Embedded_custom_data_is_cleared_after_reload()
+        {
+            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+
+            var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
+            account.CustomData.Put("foo", 123);
+
+            await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None); // reload
+            await account.SaveAsync();
+
+            // Empty save, should not POST anything
+            dataStore.RequestExecutor.DidNotReceive().ExecuteAsync(
+                Arg.Is<IHttpRequest>(req =>
+                    req.Method == HttpMethod.Post),
+                Arg.Any<CancellationToken>()).IgnoreAwait();
+        }
+
+        [Fact]
+        public async Task Embedded_custom_data_is_cleared_after_save()
+        {
+            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+
+            var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
+            account.CustomData.Put("foo", 123);
+
+            await account.SaveAsync();
+
+            var expectedBody = @"{""customData"":{""foo"":123}}";
+            var body = dataStore.RequestExecutor
+                .ReceivedCalls()
+                .Last()
+                .GetArguments()
+                .OfType<IHttpRequest>()
+                .First()
+                .Body;
+            body.ShouldBe(expectedBody);
+
+            dataStore.RequestExecutor.ClearReceivedCalls();
+            await account.SaveAsync();
+
+            // Empty save, should not POST anything
+            dataStore.RequestExecutor.DidNotReceive().ExecuteAsync(
+                Arg.Is<IHttpRequest>(req =>
+                    req.Method == HttpMethod.Post),
+                Arg.Any<CancellationToken>()).IgnoreAwait();
+        }
+
+        [Fact]
+        public async Task Embedded_custom_data_is_cleared_for_all_instances_after_save()
+        {
+            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+
+            var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
+            var account2 = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
+            account.CustomData.Put("foo", 123);
+
+            await account.SaveAsync();
+
+            var expectedBody = @"{""customData"":{""foo"":123}}";
+            var body = dataStore.RequestExecutor
+                .ReceivedCalls()
+                .Last()
+                .GetArguments()
+                .OfType<IHttpRequest>()
+                .First()
+                .Body;
+            body.ShouldBe(expectedBody);
+
+            dataStore.RequestExecutor.ClearReceivedCalls();
+            await account2.SaveAsync();
+
+            // Empty save, should not POST anything
+            dataStore.RequestExecutor.DidNotReceive().ExecuteAsync(
+                Arg.Is<IHttpRequest>(req =>
+                    req.Method == HttpMethod.Post),
                 Arg.Any<CancellationToken>()).IgnoreAwait();
         }
     }
