@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var newAccount = client.Instantiate<IAccount>();
-            newAccount.SetEmail("identity-maps-are-useful@test.foo");
+            newAccount.SetEmail("identity-maps-are-useful-sync@test.foo");
             newAccount.SetPassword("Changeme123!");
             newAccount.SetGivenName("Testing");
             newAccount.SetSurname("IdentityMaps");

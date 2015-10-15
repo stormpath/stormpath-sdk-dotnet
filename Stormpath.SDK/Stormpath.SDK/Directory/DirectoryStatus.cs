@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Directory
         }
 
         /// <summary>
-        /// Parses a string to an <see cref="DirectoryStatus"/>.
+        /// Parses a string to a <see cref="DirectoryStatus"/>.
         /// </summary>
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
         /// <returns>The <see cref="DirectoryStatus"/> with the specified name.</returns>

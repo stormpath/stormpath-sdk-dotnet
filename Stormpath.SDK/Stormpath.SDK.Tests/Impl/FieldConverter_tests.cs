@@ -80,6 +80,23 @@ namespace Stormpath.SDK.Tests.Impl
             }
 
             [Fact]
+            public void Returns_value_when_expected_type_exists_in_list()
+            {
+                var fakeAccountFieldConverter = new FuncFieldConverter(
+                    _ => new FieldConverterResult(true, "good!"),
+                    "Test",
+                    typeof(IApplication),
+                    typeof(IAccount));
+
+                var dummyField = new KeyValuePair<string, object>("foo", "bar");
+
+                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IAccount));
+
+                result.Success.ShouldBeTrue();
+                result.Value.ShouldBe("good!");
+            }
+
+            [Fact]
             public void Returns_value_when_expected_type_matches_inside_collection_type()
             {
                 var fakeAccountFieldConverter = new FuncFieldConverter(

@@ -22,10 +22,14 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Auth;
+using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
 
@@ -137,7 +141,7 @@ namespace Stormpath.SDK.Impl.Application
         {
             var request = new UsernamePasswordRequest(username, password) as IAuthenticationRequest;
 
-            return this.AsSyncInterface.AuthenticateAccount(request);
+            return this.AuthenticateAccount(request);
         }
 
         async Task<bool> IApplication.TryAuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken)
@@ -157,7 +161,7 @@ namespace Stormpath.SDK.Impl.Application
         {
             try
             {
-                var loginResult = this.AsSyncInterface.AuthenticateAccount(username, password);
+                var loginResult = this.AuthenticateAccount(username, password);
                 return true;
             }
             catch
@@ -167,61 +171,31 @@ namespace Stormpath.SDK.Impl.Application
         }
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-        {
-            var builder = new AccountCreationOptionsBuilder();
-            creationOptionsAction(builder);
-            var options = builder.Build();
-
-            return this.GetInternalAsyncDataStore().CreateAsync(this.Accounts.Href, account, options, cancellationToken);
-        }
+            => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalDataStore(), this.Accounts.Href, account, creationOptionsAction, cancellationToken);
 
         IAccount IAccountCreationActionsSync.CreateAccount(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction)
-        {
-            var builder = new AccountCreationOptionsBuilder();
-            creationOptionsAction(builder);
-            var options = builder.Build();
-
-            return this.GetInternalSyncDataStore().Create(this.Accounts.Href, account, options);
-        }
+            => AccountCreationActionsShared.CreateAccount(this.GetInternalDataStoreSync(), this.Accounts.Href, account, creationOptionsAction);
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken)
-             => this.GetInternalAsyncDataStore().CreateAsync(this.Accounts.Href, account, creationOptions, cancellationToken);
+             => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalDataStore(), this.Accounts.Href, account, creationOptions, cancellationToken);
 
         IAccount IAccountCreationActionsSync.CreateAccount(IAccount account, IAccountCreationOptions creationOptions)
-             => this.GetInternalSyncDataStore().Create(this.Accounts.Href, account, creationOptions);
+             => AccountCreationActionsShared.CreateAccount(this.GetInternalDataStoreSync(), this.Accounts.Href, account, creationOptions);
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, CancellationToken cancellationToken)
-             => this.GetInternalAsyncDataStore().CreateAsync(this.Accounts.Href, account, cancellationToken);
+             => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalDataStore(), this.Accounts.Href, account, cancellationToken);
 
         IAccount IAccountCreationActionsSync.CreateAccount(IAccount account)
-             => this.GetInternalSyncDataStore().Create(this.Accounts.Href, account);
+             => AccountCreationActionsShared.CreateAccount(this.GetInternalDataStoreSync(), this.Accounts.Href, account);
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(string givenName, string surname, string email, string password, object customData, CancellationToken cancellationToken)
-        {
-            var account = this.GetInternalAsyncDataStore().Instantiate<IAccount>();
-            account.SetGivenName(givenName);
-            account.SetSurname(surname);
-            account.SetEmail(email);
-            account.SetPassword(password);
-            account.CustomData.Put(customData);
-
-            return this.AsInterface.CreateAccountAsync(account, cancellationToken: cancellationToken);
-        }
+            => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalDataStore(), this.Accounts.Href, givenName, surname, email, password, customData, cancellationToken);
 
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
-            => this.AsInterface.CreateAccountAsync(givenName, surname, email, password, customData: null, cancellationToken: cancellationToken);
+            => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalDataStore(), this.Accounts.Href, givenName, surname, email, password, null, cancellationToken);
 
         IAccount IAccountCreationActionsSync.CreateAccount(string givenName, string surname, string email, string password, object customData)
-        {
-            var account = this.GetInternalAsyncDataStore().Instantiate<IAccount>();
-            account.SetGivenName(givenName);
-            account.SetSurname(surname);
-            account.SetEmail(email);
-            account.SetPassword(password);
-            account.CustomData.Put(customData);
-
-            return this.AsSyncInterface.CreateAccount(account);
-        }
+            => AccountCreationActionsShared.CreateAccount(this.GetInternalDataStoreSync(), this.Accounts.Href, givenName, surname, email, password, customData);
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
@@ -233,7 +207,7 @@ namespace Stormpath.SDK.Impl.Application
              => this.SaveAsync<IApplication>(cancellationToken);
 
         IApplication ISaveableSync<IApplication>.Save()
-            => this.GetInternalSyncDataStore().Save<IApplication>(this);
+            => this.Save<IApplication>();
 
         Task<IPasswordResetToken> IApplication.SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken)
         {
@@ -314,7 +288,7 @@ namespace Stormpath.SDK.Impl.Application
         }
 
         void IApplicationSync.SendVerificationEmail(string usernameOrEmail)
-            => this.AsSyncInterface.SendVerificationEmail(request => request.Login = usernameOrEmail);
+            => this.SendVerificationEmail(request => request.Login = usernameOrEmail);
 
         void IApplicationSync.SendVerificationEmail(Action<EmailVerificationRequestBuilder> requestBuilderAction)
         {
@@ -329,22 +303,39 @@ namespace Stormpath.SDK.Impl.Application
             this.GetInternalSyncDataStore().Create(href, builder.Build());
         }
 
+        Task<IGroup> IApplication.CreateGroupAsync(IGroup group, CancellationToken cancellationToken)
+            => this.GetInternalDataStore().CreateAsync(this.Groups.Href, group, cancellationToken);
+
+        IGroup IApplicationSync.CreateGroup(IGroup group)
+            => this.GetInternalDataStoreSync().Create(this.Groups.Href, group);
+
+        Task<IProviderAccountResult> IApplication.GetAccountAsync(IProviderAccountRequest request, CancellationToken cancellationToken)
+            => new ProviderAccountResolver(this.GetInternalDataStore()).ResolveProviderAccountAsync(this.AsInterface.Href, request, cancellationToken);
+
+        IProviderAccountResult IApplicationSync.GetAccount(IProviderAccountRequest request)
+            => new ProviderAccountResolver(this.GetInternalDataStore()).ResolveProviderAccount(this.AsInterface.Href, request);
+
         IAsyncQueryable<IAccount> IApplication.GetAccounts()
              => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IAccountStoreMapping> IApplication.GetAccountStoreMappings()
              => new CollectionResourceQueryable<IAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalAsyncDataStore());
 
+        IAsyncQueryable<IGroup> IApplication.GetGroups()
+            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalDataStore());
+
         async Task<IAccountStore> IApplication.GetDefaultAccountStoreAsync(CancellationToken cancellationToken)
         {
             if (this.DefaultAccountStoreMapping.Href == null)
                 return null;
 
-            var accountStoreMapping = await this.GetInternalAsyncDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken).ConfigureAwait(false);
-            if (accountStoreMapping == null)
-                return null;
+            var accountStoreMapping = await this.GetInternalDataStore()
+                .GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken)
+                .ConfigureAwait(false);
 
-            return await accountStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
+            return accountStoreMapping == null
+                ? null
+                : await accountStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
         }
 
         IAccountStore IApplicationSync.GetDefaultAccountStore()
@@ -357,6 +348,30 @@ namespace Stormpath.SDK.Impl.Application
                 return null;
 
             return accountStoreMapping.GetAccountStore();
+        }
+
+        async Task<IAccountStore> IApplication.GetDefaultGroupStoreAsync(CancellationToken cancellationToken)
+        {
+            if (this.DefaultGroupStoreMapping.Href == null)
+                return null;
+
+            var groupStoreMapping = await this.GetInternalDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken).ConfigureAwait(false);
+
+            return groupStoreMapping == null
+                ? null
+                : await groupStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
+        }
+
+        IAccountStore IApplicationSync.GetDefaultGroupStore()
+        {
+            if (this.DefaultGroupStoreMapping.Href == null)
+                return null;
+
+            var groupStoreMapping = this.GetInternalDataStoreSync().GetResource<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href);
+
+            return groupStoreMapping == null
+                ? null
+                : groupStoreMapping.GetAccountStore();
         }
     }
 }

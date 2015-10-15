@@ -16,20 +16,25 @@
 // </remarks>
 
 using System;
+using System.Collections.Generic;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Impl.Group;
+using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
@@ -37,126 +42,87 @@ namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class ResourceTypeLookup
     {
-        private static readonly Type AccountInterface = typeof(IAccount);
-        private static readonly Type ApplicationInterface = typeof(IApplication);
-        private static readonly Type TenantInterface = typeof(ITenant);
-        private static readonly Type DirectoryInterface = typeof(IDirectory);
-        private static readonly Type AccountStoreMappingInterface = typeof(IAccountStoreMapping);
-        private static readonly Type AccountStoreInterface = typeof(IAccountStore);
-        private static readonly Type BasicLoginAttemptInterface = typeof(IBasicLoginAttempt);
-        private static readonly Type AuthenticationResultInterface = typeof(IAuthenticationResult);
-        private static readonly Type PasswordResetTokenInterface = typeof(IPasswordResetToken);
-        private static readonly Type CustomDataInterface = typeof(ICustomData);
-        private static readonly Type EmailVerificationTokenInterface = typeof(IEmailVerificationToken);
-        private static readonly Type EmailVerificationRequestInterface = typeof(IEmailVerificationRequest);
+        private static readonly IReadOnlyDictionary<Type, Type> ConcreteLookup = new Dictionary<Type, Type>()
+        {
+            [typeof(IAccount)] = typeof(DefaultAccount),
+            [typeof(IApplication)] = typeof(DefaultApplication),
+            [typeof(ITenant)] = typeof(DefaultTenant),
+            [typeof(IDirectory)] = typeof(DefaultDirectory),
+            [typeof(IGroup)] = typeof(DefaultGroup),
+            [typeof(IGroupMembership)] = typeof(DefaultGroupMembership),
+            [typeof(IAccountStoreMapping)] = typeof(DefaultAccountStoreMapping),
+            [typeof(IAccountStore)] = typeof(DefaultAccountStore),
+            [typeof(IBasicLoginAttempt)] = typeof(DefaultBasicLoginAttempt),
+            [typeof(IAuthenticationResult)] = typeof(DefaultAuthenticationResult),
+            [typeof(IPasswordResetToken)] = typeof(DefaultPasswordResetToken),
+            [typeof(ICustomData)] = typeof(DefaultCustomData),
+            [typeof(IEmailVerificationToken)] = typeof(DefaultEmailVerificationToken),
+            [typeof(IEmailVerificationRequest)] = typeof(DefaultEmailVerificationRequest),
+            [typeof(IProviderAccountResult)] = typeof(DefaultProviderAccountResult),
+            [typeof(IProvider)] = typeof(DefaultProvider),
+            [typeof(IProviderData)] = typeof(DefaultProviderData),
+            [typeof(IFacebookProvider)] = typeof(DefaultFacebookProvider),
+            [typeof(IFacebookProviderData)] = typeof(DefaultFacebookProviderData),
+            [typeof(IGithubProvider)] = typeof(DefaultGithubProvider),
+            [typeof(IGithubProviderData)] = typeof(DefaultGithubProviderData),
+            [typeof(IGoogleProvider)] = typeof(DefaultGoogleProvider),
+            [typeof(IGoogleProviderData)] = typeof(DefaultGoogleProviderData),
+            [typeof(ILinkedInProvider)] = typeof(DefaultLinkedInProvider),
+            [typeof(ILinkedInProviderData)] = typeof(DefaultLinkedInProviderData),
+        };
 
-        private static readonly Type AccountConcrete = typeof(DefaultAccount);
-        private static readonly Type ApplicationConcrete = typeof(DefaultApplication);
-        private static readonly Type TenantConcrete = typeof(DefaultTenant);
-        private static readonly Type DirectoryConcrete = typeof(DefaultDirectory);
-        private static readonly Type AccountStoreMappingConcrete = typeof(DefaultAccountStoreMapping);
-        private static readonly Type AccountStoreConcrete = typeof(DefaultAccountStore);
-        private static readonly Type BasicLoginAttemptConcrete = typeof(DefaultBasicLoginAttempt);
-        private static readonly Type AuthenticationResultConcrete = typeof(DefaultAuthenticationResult);
-        private static readonly Type PasswordResetTokenConcrete = typeof(DefaultPasswordResetToken);
-        private static readonly Type CustomDataConcrete = typeof(DefaultCustomData);
-        private static readonly Type EmailVerificationTokenConcrete = typeof(DefaultEmailVerificationToken);
-        private static readonly Type EmailVerificationRequestConcrete = typeof(DefaultEmailVerificationRequest);
+        private static readonly IReadOnlyDictionary<Type, Type> InterfaceLookup = new Dictionary<Type, Type>()
+        {
+            [typeof(DefaultAccount)] = typeof(IAccount),
+            [typeof(DefaultApplication)] = typeof(IApplication),
+            [typeof(DefaultTenant)] = typeof(ITenant),
+            [typeof(DefaultDirectory)] = typeof(IDirectory),
+            [typeof(DefaultGroup)] = typeof(IGroup),
+            [typeof(DefaultGroupMembership)] = typeof(IGroupMembership),
+            [typeof(DefaultAccountStoreMapping)] = typeof(IAccountStoreMapping),
+            [typeof(DefaultAccountStore)] = typeof(IAccountStore),
+            [typeof(DefaultBasicLoginAttempt)] = typeof(IBasicLoginAttempt),
+            [typeof(DefaultAuthenticationResult)] = typeof(IAuthenticationResult),
+            [typeof(DefaultPasswordResetToken)] = typeof(IPasswordResetToken),
+            [typeof(DefaultCustomData)] = typeof(ICustomData),
+            [typeof(DefaultEmailVerificationToken)] = typeof(IEmailVerificationToken),
+            [typeof(DefaultEmailVerificationRequest)] = typeof(IEmailVerificationRequest),
+            [typeof(DefaultProviderAccountResult)] = typeof(IProviderAccountResult),
+            [typeof(DefaultProvider)] = typeof(IProvider),
+            [typeof(DefaultProviderData)] = typeof(IProviderData),
+            [typeof(DefaultFacebookProvider)] = typeof(IFacebookProvider),
+            [typeof(DefaultFacebookProviderData)] = typeof(IFacebookProviderData),
+            [typeof(DefaultGithubProvider)] = typeof(IGithubProvider),
+            [typeof(DefaultGithubProviderData)] = typeof(IGithubProviderData),
+            [typeof(DefaultGoogleProvider)] = typeof(IGoogleProvider),
+            [typeof(DefaultGoogleProviderData)] = typeof(IGoogleProviderData),
+            [typeof(DefaultLinkedInProvider)] = typeof(ILinkedInProvider),
+            [typeof(DefaultLinkedInProviderData)] = typeof(ILinkedInProviderData),
+        };
 
-        private static readonly Type CollectionPageOfAccount = typeof(CollectionResponsePage<IAccount>);
-        private static readonly Type CollectionPageOfApplication = typeof(CollectionResponsePage<IApplication>);
-        private static readonly Type CollectionPageOfDirectory = typeof(CollectionResponsePage<IDirectory>);
+        private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()
+        {
+            [typeof(CollectionResponsePage<IAccount>)] = typeof(IAccount),
+            [typeof(CollectionResponsePage<IApplication>)] = typeof(IApplication),
+            [typeof(CollectionResponsePage<IDirectory>)] = typeof(IDirectory),
+            [typeof(CollectionResponsePage<IGroup>)] = typeof(IGroup),
+            [typeof(CollectionResponsePage<IGroupMembership>)] = typeof(IGroupMembership),
+        };
 
-        /// <summary>
-        /// Fast lookups of concrete types from their interfaces.
-        /// </summary>
-        /// <param name="iface">A resource interface (e.g., <see cref="IAccount"/>)</param>
-        /// <returns>The associated concrete instance class type (e.g., <see cref="DefaultAccount"/>)</returns>
         private static Type GetConcreteTypeForInterface(Type iface)
         {
-            if (iface == AccountInterface)
-                return AccountConcrete;
+            Type concrete = null;
+            ConcreteLookup.TryGetValue(iface, out concrete);
 
-            if (iface == ApplicationInterface)
-                return ApplicationConcrete;
-
-            if (iface == TenantInterface)
-                return TenantConcrete;
-
-            if (iface == DirectoryInterface)
-                return DirectoryConcrete;
-
-            if (iface == AccountStoreMappingInterface)
-                return AccountStoreMappingConcrete;
-
-            if (iface == AccountStoreInterface)
-                return AccountStoreConcrete;
-
-            if (iface == BasicLoginAttemptInterface)
-                return BasicLoginAttemptConcrete;
-
-            if (iface == AuthenticationResultInterface)
-                return AuthenticationResultConcrete;
-
-            if (iface == PasswordResetTokenInterface)
-                return PasswordResetTokenConcrete;
-
-            if (iface == CustomDataInterface)
-                return CustomDataConcrete;
-
-            if (iface == EmailVerificationTokenInterface)
-                return EmailVerificationTokenConcrete;
-
-            if (iface == EmailVerificationRequestInterface)
-                return EmailVerificationRequestConcrete;
-
-            return null; // unknown
+            return concrete;
         }
 
-        /// <summary>
-        /// Fast lookups of concrete types from their interfaces.
-        /// </summary>
-        /// <param name="concrete">A concrete instance class type (e.g., <see cref="DefaultAccount"/>)</param>
-        /// <returns>The associated interface type (e.g., <see cref="IAccount"/>)</returns>
         private static Type GetInterfaceForConcreteType(Type concrete)
         {
-            if (concrete == AccountConcrete)
-                return AccountInterface;
+            Type iface = null;
+            InterfaceLookup.TryGetValue(concrete, out iface);
 
-            if (concrete == ApplicationConcrete)
-                return ApplicationInterface;
-
-            if (concrete == TenantConcrete)
-                return TenantInterface;
-
-            if (concrete == DirectoryConcrete)
-                return DirectoryInterface;
-
-            if (concrete == AccountStoreMappingConcrete)
-                return AccountStoreMappingInterface;
-
-            if (concrete == AccountStoreConcrete)
-                return AccountStoreInterface;
-
-            if (concrete == BasicLoginAttemptConcrete)
-                return BasicLoginAttemptInterface;
-
-            if (concrete == AuthenticationResultConcrete)
-                return AuthenticationResultInterface;
-
-            if (concrete == PasswordResetTokenConcrete)
-                return PasswordResetTokenInterface;
-
-            if (concrete == CustomDataConcrete)
-                return CustomDataInterface;
-
-            if (concrete == EmailVerificationTokenConcrete)
-                return EmailVerificationTokenInterface;
-
-            if (concrete == EmailVerificationRequestConcrete)
-                return EmailVerificationRequestInterface;
-
-            return null; // unknown
+            return iface;
         }
 
         /// <summary>
@@ -165,21 +131,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="possiblyInterface">The type to check</param>
         /// <returns>True if this type is a known resource interface</returns>
         private static bool IsInterface(Type possiblyInterface)
-        {
-            return
-                possiblyInterface == AccountInterface ||
-                possiblyInterface == ApplicationInterface ||
-                possiblyInterface == TenantInterface ||
-                possiblyInterface == DirectoryInterface ||
-                possiblyInterface == AccountStoreMappingInterface ||
-                possiblyInterface == AccountStoreInterface ||
-                possiblyInterface == BasicLoginAttemptInterface ||
-                possiblyInterface == AuthenticationResultInterface ||
-                possiblyInterface == PasswordResetTokenInterface ||
-                possiblyInterface == CustomDataInterface ||
-                possiblyInterface == EmailVerificationTokenInterface ||
-                possiblyInterface == EmailVerificationRequestInterface;
-        }
+            => ConcreteLookup.ContainsKey(possiblyInterface);
 
         /// <summary>
         /// Checks whether this type is a known concrete instance class (e.g., <see cref="DefaultAccount"/>).
@@ -187,47 +139,24 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="possiblyConcrete">The type to check</param>
         /// <returns>True if this type is a known concrete type</returns>
         private static bool IsConcrete(Type possiblyConcrete)
-        {
-            return
-                possiblyConcrete == AccountConcrete ||
-                possiblyConcrete == ApplicationConcrete ||
-                possiblyConcrete == TenantConcrete ||
-                possiblyConcrete == DirectoryConcrete ||
-                possiblyConcrete == AccountStoreMappingConcrete ||
-                possiblyConcrete == AccountStoreConcrete ||
-                possiblyConcrete == BasicLoginAttemptConcrete ||
-                possiblyConcrete == AuthenticationResultConcrete ||
-                possiblyConcrete == PasswordResetTokenConcrete ||
-                possiblyConcrete == CustomDataConcrete ||
-                possiblyConcrete == EmailVerificationTokenConcrete ||
-                possiblyConcrete == EmailVerificationRequestConcrete;
-        }
+            => InterfaceLookup.ContainsKey(possiblyConcrete);
 
         /// <summary>
-        /// Fast lookups of the inner interface from a collection type.
+        /// Looks up an interface from a concrete type.
         /// </summary>
-        /// <param name="collectionType">A <see cref="CollectionResponsePage{T}"/> containing some inner <see cref="IResource"/> interface (e.g. <see cref="CollectionResponsePage{IAccount}"/>).</param>
-        /// <returns>The inner interface (e.g. <see cref="IAccount"/>)</returns>
-        private static Type GetCollectionInnerTypeImpl(Type collectionType)
-        {
-            if (collectionType == CollectionPageOfAccount)
-                return AccountInterface;
-
-            if (collectionType == CollectionPageOfApplication)
-                return ApplicationInterface;
-
-            if (collectionType == CollectionPageOfDirectory)
-                return DirectoryInterface;
-
-            return null; // unknown
-        }
-
+        /// <typeparam name="T">A concrete instance class type (e.g., <see cref="DefaultAccount"/>).</typeparam>
+        /// <returns>The associated interface type (e.g., <see cref="IAccount"/>).</returns>
         public Type GetInterface<T>()
             where T : IResource
         {
             return this.GetInterface(typeof(T));
         }
 
+        /// <summary>
+        /// Looks up an interface from a concrete type.
+        /// </summary>
+        /// <param name="possiblyConcrete">A concrete instance class type (e.g., <see cref="DefaultAccount"/>).</param>
+        /// <returns>The associated interface type (e.g., <see cref="IAccount"/>).</returns>
         public Type GetInterface(Type possiblyConcrete)
         {
             if (IsInterface(possiblyConcrete))
@@ -236,12 +165,22 @@ namespace Stormpath.SDK.Impl.DataStore
             return GetInterfaceForConcreteType(possiblyConcrete);
         }
 
+        /// <summary>
+        /// Looks up concrete type from an interface.
+        /// </summary>
+        /// <typeparam name="T">A resource interface (e.g., <see cref="IAccount"/>).</typeparam>.
+        /// <returns>The associated concrete instance class type (e.g., <see cref="DefaultAccount"/>).</returns>
         public Type GetConcrete<T>()
             where T : IResource
         {
             return this.GetConcrete(typeof(T));
         }
 
+        /// <summary>
+        /// Looks up concrete type from an interface.
+        /// </summary>
+        /// <param name="possiblyInterface">A resource interface (e.g., <see cref="IAccount"/>).</param>
+        /// <returns>The associated concrete instance class type (e.g., <see cref="DefaultAccount"/>).</returns>
         public Type GetConcrete(Type possiblyInterface)
         {
             if (IsConcrete(possiblyInterface))
@@ -250,9 +189,17 @@ namespace Stormpath.SDK.Impl.DataStore
             return GetConcreteTypeForInterface(possiblyInterface);
         }
 
+        /// <summary>
+        /// Looks up the inner interface from a collection type.
+        /// </summary>
+        /// <param name="collectionType">A <see cref="CollectionResponsePage{T}"/> containing some inner <see cref="IResource"/> interface (e.g. <see cref="CollectionResponsePage{IAccount}"/>).</param>
+        /// <returns>The inner interface (e.g. <see cref="IAccount"/>).</returns>
         public Type GetInnerCollectionInterface(Type collectionType)
         {
-            return GetCollectionInnerTypeImpl(collectionType);
+            Type iface = null;
+            CollectionInterfaceLookup.TryGetValue(collectionType, out iface);
+
+            return iface;
         }
     }
 }

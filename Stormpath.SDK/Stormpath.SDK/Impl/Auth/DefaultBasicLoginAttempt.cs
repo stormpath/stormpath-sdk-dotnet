@@ -15,7 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.DataStore;
 
 namespace Stormpath.SDK.Impl.Auth
 {

@@ -39,7 +39,13 @@ namespace Stormpath.SDK.Impl.Resource
         protected virtual Task<T> SaveAsync<T>(CancellationToken cancellationToken)
             where T : class, IResource, ISaveable<T>
         {
-            return this.GetInternalAsyncDataStore().SaveAsync<T>(this as T, cancellationToken);
+            return this.GetInternalDataStore().SaveAsync(this as T, cancellationToken);
+        }
+
+        protected virtual T Save<T>()
+            where T : class, IResource, ISaveable<T>
+        {
+            return this.GetInternalDataStoreSync().Save(this as T);
         }
     }
 }

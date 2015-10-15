@@ -49,6 +49,13 @@ namespace Stormpath.SDK.Impl.CustomData
         {
         }
 
+        protected override IDictionary<string, object> ResetAndUpdateDerived(IDictionary<string, object> properties)
+        {
+            this.deletedProperties = new ConcurrentDictionary<string, object>();
+
+            return base.ResetAndUpdateDerived(properties);
+        }
+
         private ICustomData AsInterface => this;
 
         private static bool IsValidKey(string possibleKey)
@@ -65,6 +72,18 @@ namespace Stormpath.SDK.Impl.CustomData
                 return false;
 
             return true;
+        }
+
+        private static bool IsValidValue(object value)
+        {
+            var type = value.GetType();
+
+            if (type.IsPrimitive ||
+                type == typeof(string) ||
+                type == typeof(decimal))
+            return true;
+
+            return false;
         }
 
         private List<string> GetAvailableKeys()
@@ -91,6 +110,9 @@ namespace Stormpath.SDK.Impl.CustomData
 
             set { this.AsInterface.Put(key, value); }
         }
+
+        int ICustomData.Count
+            => this.GetAvailableKeys().Except(ReservedKeys).Count();
 
         IReadOnlyCollection<string> ICustomData.Keys
             => this.GetAvailableKeys();
@@ -134,6 +156,12 @@ namespace Stormpath.SDK.Impl.CustomData
 
             if (!IsValidKey(key))
                 throw new ArgumentOutOfRangeException($"{key} is not a valid key name.");
+
+            if (!IsValidValue(value))
+                throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'. Only primitives and strings can be stored in Custom Data.");
+
+            object dummy;
+            this.deletedProperties.TryRemove(key, out dummy);
 
             this.SetProperty(key, value);
         }
@@ -228,7 +256,7 @@ namespace Stormpath.SDK.Impl.CustomData
         {
             var results = new List<bool>();
             foreach (var propName in this.GetResourceData()?.GetDeletedPropertyNames())
-            {
+                {
                 var successful = this.GetInternalSyncDataStore().DeleteProperty(parentHref, propName)
                     && (this.GetResourceData()?.OnDeletingRemovedProperty(propName) ?? false);
                 results.Add(successful);

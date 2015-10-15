@@ -21,7 +21,9 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Auth;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Application
@@ -161,13 +163,40 @@ namespace Stormpath.SDK.Application
         Task SendVerificationEmailAsync(string usernameOrEmail, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets the <see cref="IAccountStore"/> (either a Group or <see cref="Directory.IDirectory"/>)
-        /// used to persist new accounts created by the application.
+        /// Gets the <see cref="IAccountStore"/> (either a <see cref="IGroup"/> or <see cref="Directory.IDirectory"/>)
+        /// used to persist new accounts created by the application, or <c>null</c> if no account store has been designated.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the default <see cref="IAccountStore"/>,
         /// or <c>null</c> if no default <see cref="IAccountStore"/> has been designated.</returns>
         Task<IAccountStore> GetDefaultAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Gets the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
+        /// if no account store has been designated.
+        /// <para>
+        /// Stormpath's current REST API requires this to be a Directory.
+        /// However, this could be a Group in the future, so do not assume it is always a
+        /// Directory if you want your code to be function correctly if/when this support is added.
+        /// </para>
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
+        /// if no account store has been designated.</returns>
+        Task<IAccountStore> GetDefaultGroupStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Creates a new <see cref="IGroup"/> that may be used by this application in the application's <see cref="GetDefaultGroupStoreAsync(CancellationToken)"/>.
+        /// <para>This is a convenience method. It merely delegates to the application's designated default group store.</para>
+        /// </summary>
+        /// <param name="group">The group to create/persist.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the new <see cref="IGroup"/> that may be used by this application.</returns>
+        /// <exception cref="Error.ResourceException">
+        /// The application does not have a designated default group store, or the
+        /// designated default group store does not allow new groups to be created.
+        /// </exception>
+        Task<IGroup> CreateGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Verifies the password reset token (received in the user's email) and immediately
@@ -204,6 +233,20 @@ namespace Stormpath.SDK.Application
         Task<IAccount> VerifyPasswordResetTokenAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Retrieves a Provider-based <see cref="IAccount"/>. The account must exist in one of the Provider-based <see cref="Directory.IDirectory"/>
+        /// assigned to the Application as an account store, and the Directory must also be <see cref="Directory.DirectoryStatus.Enabled"/>.
+        /// If not in an assigned account store, the retrieval attempt will fail.
+        /// </summary>
+        /// <param name="request">
+        /// The <see cref="IProviderAccountRequest"/> representing the Provider-specific account access data
+        /// (e.g. an <c>accessToken</c>) used to verify the identity.
+        /// </param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the result of the access request.</returns>
+        /// <exception cref="Error.ResourceException">The access attempt failed.</exception>
+        Task<IProviderAccountResult> GetAccountAsync(IProviderAccountRequest request, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Gets a queryable list of all accounts in this application.
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
@@ -211,6 +254,14 @@ namespace Stormpath.SDK.Application
         ///     var allAccounts = await myApp.GetAccounts().ToListAsync();
         /// </example>
         IAsyncQueryable<IAccount> GetAccounts();
+
+        /// <summary>
+        /// Gets a queryable list of all groups accessible to this application.
+        /// It will not only return any group associated directly as an <see cref="IAccountStore"/>
+        /// but also every group that exists inside every directory associated as an account store.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
+        IAsyncQueryable<IGroup> GetGroups();
 
         /// <summary>
         /// Gets a queryable list of all account store mappings accessible to the application.

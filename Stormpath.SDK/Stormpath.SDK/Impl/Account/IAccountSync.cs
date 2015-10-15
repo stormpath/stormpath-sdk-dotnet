@@ -17,7 +17,9 @@
 
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
@@ -35,5 +37,55 @@ namespace Stormpath.SDK.Impl.Account
         /// </summary>
         /// <returns>The tenant.</returns>
         ITenant GetTenant();
+
+        /// <summary>
+        /// Synchronously assigns this account to the specified <see cref="IGroup"/>.
+        /// </summary>
+        /// <param name="group">The Group this account will be added to.</param>
+        /// <returns>
+        /// The new <see cref="IGroupMembership"/> resource created reflecting the account-to-group association.
+        /// </returns>
+        IGroupMembership AddGroup(IGroup group);
+
+        /// <summary>
+        /// Synchronously assigns this account to the specified <see cref="IGroup"/> represented
+        /// by its (case-insensitive) <c>name</c> or <c>href</c>.
+        /// </summary>
+        /// <param name="hrefOrName">The <c>href</c> or name of the group to add.</param>
+        /// <returns>
+        /// The new <see cref="IGroupMembership"/> resource created reflecting the account-to-group association.
+        /// </returns>
+        IGroupMembership AddGroup(string hrefOrName);
+
+        /// <summary>
+        /// Synchronously removes this <see cref="IAccount"/> from the specified <see cref="IGroup"/>.
+        /// </summary>
+        /// <param name="group">The group object from which the account must be removed.</param>
+        /// <returns>Whether the operation succeeded.</returns>
+        /// <exception cref="InvalidOperationException">The account does not belong to the specified group.</exception>
+        bool RemoveGroup(IGroup group);
+
+        /// <summary>
+        /// Synchronously removes this <see cref="IAccount"/> from the specified <see cref="IGroup"/>
+        /// represented by its (case-insensitive) <c>name</c> or <c>href</c>.
+        /// </summary>
+        /// <param name="hrefOrName">The <c>href</c> or name of the group object from which the account must be removed.</param>
+        /// <returns>Whether the operation succeeded.</returns>
+        /// <exception cref="InvalidOperationException">The account does not belong to the specified group.</exception>
+        bool RemoveGroup(string hrefOrName);
+
+        /// <summary>
+        /// Synchronously gets whether this account belongs to the group whose name or <c>href</c> is
+        /// (case-insensitive) equal to the specified value.
+        /// </summary>
+        /// <param name="hrefOrName">The <c>href</c> or name of the group to check.</param>
+        /// <returns><c>true</c> if the account belongs to the specified group.</returns>
+        bool IsMemberOfGroup(string hrefOrName);
+
+        /// <summary>
+        /// Synchronously gets the ProviderData Resource belonging to the account.
+        /// </summary>
+        /// <returns>The ProviderData Resource belonging to The account..</returns>
+        IProviderData GetProviderData();
     }
 }

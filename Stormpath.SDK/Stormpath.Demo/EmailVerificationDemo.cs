@@ -29,7 +29,7 @@ namespace Stormpath.Demo
 
             var application = await client.GetApplications()
                 .Where(x => x.Name == "EmailWorkflowDemo")
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(cancellationToken);
 
             if (application == null)
             {

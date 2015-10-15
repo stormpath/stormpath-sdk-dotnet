@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Stormpath.SDK.Impl.DataStore;
 
 namespace Stormpath.SDK.Impl.Serialization.FieldConverters
@@ -26,26 +27,34 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
         public const Type AnyType = null;
 
         private readonly string name;
-        private readonly Type appliesToTargetType;
+        private readonly Type[] appliesToTargetTypes;
         private readonly ResourceTypeLookup typeLookup;
 
         public AbstractFieldConverter(string converterName, Type appliesToTargetType = AnyType)
+            : this(converterName, appliesToTargetTypes: appliesToTargetType)
         {
-            this.appliesToTargetType = appliesToTargetType;
+        }
+
+        public AbstractFieldConverter(string converterName, params Type[] appliesToTargetTypes)
+        {
+            this.appliesToTargetTypes = appliesToTargetTypes;
             this.name = converterName;
             this.typeLookup = new ResourceTypeLookup();
         }
 
         public FieldConverterResult TryConvertField(KeyValuePair<string, object> token, Type targetType)
         {
-            bool isSupportedTargetType = targetType == this.appliesToTargetType;
-            bool isSupportedGenericTargetType = (targetType?.IsGenericType ?? false) && this.typeLookup.GetInnerCollectionInterface(targetType) == this.appliesToTargetType;
-
             bool isSupported = false;
-            if (this.appliesToTargetType == AnyType)
+            if (this.appliesToTargetTypes.Contains(AnyType))
+            {
                 isSupported = true;
+            }
             else
+            {
+                bool isSupportedTargetType = this.appliesToTargetTypes.Contains(targetType);
+                bool isSupportedGenericTargetType = (targetType?.IsGenericType ?? false) && this.appliesToTargetTypes.Contains(this.typeLookup.GetInnerCollectionInterface(targetType));
                 isSupported = isSupportedTargetType || isSupportedGenericTargetType;
+            }
 
             if (!isSupported)
                 return FieldConverterResult.Failed;
