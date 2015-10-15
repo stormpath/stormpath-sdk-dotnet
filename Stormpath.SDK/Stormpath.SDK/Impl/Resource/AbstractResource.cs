@@ -42,7 +42,17 @@ namespace Stormpath.SDK.Impl.Resource
 
         public ResourceData GetResourceData() => this.resourceData;
 
-        string IResource.Href => this.GetProperty<string>(HrefPropertyName);
+        string IResource.Href
+        {
+            get
+            {
+                var href = this.GetProperty<string>(HrefPropertyName);
+                if (href.StartsWith("autogen", System.StringComparison.InvariantCultureIgnoreCase))
+                    return null;
+
+                return href;
+            }
+        }
 
         protected IInternalDataStore GetInternalDataStore()
             => this.GetResourceData()?.InternalDataStore;

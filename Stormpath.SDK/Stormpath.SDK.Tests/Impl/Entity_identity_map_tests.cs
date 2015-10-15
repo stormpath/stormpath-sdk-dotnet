@@ -40,6 +40,14 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
+        public void Instantiated_resources_have_null_href()
+        {
+            var account = this.dataStore.Instantiate<IAccount>();
+
+            account.Href.ShouldBeNullOrEmpty();
+        }
+
+        [Fact]
         public void Instantiated_resources_are_not_linked()
         {
             var account1 = this.dataStore.Instantiate<IAccount>();
@@ -87,6 +95,22 @@ namespace Stormpath.SDK.Tests.Impl
                 .Body;
 
             body.ShouldBe(expectedBody);
+        }
+
+        [Fact]
+        public async Task Created_resources_are_linked()
+        {
+            var account = this.dataStore.Instantiate<IAccount>();
+
+            account.Href.ShouldBeNullOrEmpty();
+
+            var result = await (this.dataStore as IInternalAsyncDataStore)
+                .CreateAsync("/foo", account, CancellationToken.None);
+
+            account.Href.ShouldBe(result.Href);
+
+            account.SetMiddleName("Lord Sidious");
+            result.MiddleName.ShouldBe("Lord Sidious");
         }
     }
 }

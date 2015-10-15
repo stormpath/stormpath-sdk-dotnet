@@ -159,8 +159,11 @@ namespace Stormpath.SDK.Tests.Impl
                 });
 
             var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
+            account.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount");
+
             account.SetMiddleName("Test");
             account.SetUsername("newusername");
+
             await account.SaveAsync();
 
             savedHref.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount");
@@ -214,6 +217,8 @@ namespace Stormpath.SDK.Tests.Impl
             var result = await dataStore.CreateAsync("http://api.foo.bar/accounts", account, CancellationToken.None);
             bool isEmpty = (result as AbstractResource).GetPropertyNames().Single() == "href";
             isEmpty.ShouldBeTrue();
+
+            result.Href.ShouldBeNullOrEmpty();
         }
 
         [Fact]

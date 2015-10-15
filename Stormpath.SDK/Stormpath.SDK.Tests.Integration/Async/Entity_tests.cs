@@ -95,5 +95,31 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             await created.DeleteAsync();
         }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Not_capturing_save_result_works(TestClientBuilder clientBuilder)
+        {
+            // This test is a little redundant, but explicitly tests a style
+            // that will be common among consumers of the SDK.
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var newAccount = client.Instantiate<IAccount>();
+            newAccount.SetEmail("indistinguishable-from-magic@test.foo");
+            newAccount.SetPassword("Changeme123!");
+            newAccount.SetGivenName("Testing");
+            newAccount.SetSurname("InitialProxy-NonCaptureWorkflow");
+
+            newAccount.Href.ShouldBeNullOrEmpty();
+
+            // Instead of capturing result = ...
+            // Just execute the method and expect the original object to be updated
+            await application.CreateAccountAsync(newAccount, opt => opt.RegistrationWorkflowEnabled = false);
+            newAccount.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedAccountHrefs.Add(newAccount.Href);
+
+            await newAccount.DeleteAsync();
+        }
     }
 }
