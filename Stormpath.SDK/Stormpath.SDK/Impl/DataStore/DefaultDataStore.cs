@@ -448,9 +448,14 @@ namespace Stormpath.SDK.Impl.DataStore
                     var responseBody = this.GetBody<T>(response);
                     var responseAction = this.GetPostAction(req, response);
 
-                    bool responseHasExpectedData = responseBody.Any() || response.StatusCode == 202;
-                    if (!responseHasExpectedData)
+                    bool responseHasData = responseBody.Any();
+                    bool responseIsProcessing = response.StatusCode == 202;
+
+                    if (responseHasData || responseIsProcessing)
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
+
+                    if (responseIsProcessing)
+                        this.logger.Warn($"Received a 202 response, returning empty result. Href: '{href}'", "DefaultDataStore.SaveCoreAsync");
 
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
@@ -526,9 +531,14 @@ namespace Stormpath.SDK.Impl.DataStore
                     var responseBody = this.GetBody<T>(response);
                     var responseAction = this.GetPostAction(req, response);
 
-                    bool responseHasExpectedData = responseBody.Any() || response.StatusCode == 202;
-                    if (!responseHasExpectedData)
+                    bool responseHasData = responseBody.Any();
+                    bool responseIsProcessing = response.StatusCode == 202;
+
+                    if (responseHasData || responseIsProcessing)
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
+
+                    if (responseIsProcessing)
+                        this.logger.Warn($"Received a 202 response, returning empty result. Href: '{href}'", "DefaultDataStore.SaveCoreAsync");
 
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
