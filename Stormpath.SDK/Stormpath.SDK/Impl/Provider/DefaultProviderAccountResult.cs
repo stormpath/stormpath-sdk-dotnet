@@ -15,13 +15,17 @@
 // limitations under the License.
 // </remarks>
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Provider
 {
-    internal sealed class DefaultProviderAccountResult : AbstractResource, IProviderAccountResult
+    internal sealed class DefaultProviderAccountResult : AbstractResource, IProviderAccountResult, INotifiable
     {
         private static readonly string IsNewAccountPropertyName = "isNewAccount";
         private static readonly string AccountPropertyName = "account";
@@ -29,6 +33,7 @@ namespace Stormpath.SDK.Impl.Provider
         public DefaultProviderAccountResult(ResourceData data)
             : base(data)
         {
+            data.SetPropertiesMutator(OnCreation);
         }
 
         IAccount IProviderAccountResult.Account
@@ -36,5 +41,28 @@ namespace Stormpath.SDK.Impl.Provider
 
         bool IProviderAccountResult.IsNewAccount
             => this.GetProperty<bool>(IsNewAccountPropertyName);
+
+        internal static IDictionary<string, object> OnCreation(IDictionary<string, object> properties, IInternalDataStore dataStore)
+        {
+            throw new NotImplementedException();
+            // todo delete
+        }
+
+        void INotifiable.OnUpdate(IDictionary<string, object> properties, IInternalDataStore dataStore)
+        {
+            var newProperties = new Dictionary<string, object>(2);
+
+            bool hasProperties = properties?.Any() ?? false;
+            if (hasProperties)
+            {
+                newProperties.Add(IsNewAccountPropertyName, properties[IsNewAccountPropertyName]);
+                properties.Remove(IsNewAccountPropertyName);
+
+                var account = dataStore.InstantiateWithData<IAccount>(properties);
+                newProperties.Add(AccountPropertyName, account);
+
+                this.GetResourceData()?.Update(newProperties);
+            }
+        }
     }
 }

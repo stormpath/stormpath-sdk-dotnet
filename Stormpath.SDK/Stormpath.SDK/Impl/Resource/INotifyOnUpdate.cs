@@ -1,4 +1,4 @@
-﻿// <copyright file="IInternalDataStore.cs" company="Stormpath, Inc.">
+﻿// <copyright file="INotifiable.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -16,22 +16,12 @@
 // </remarks>
 
 using System.Collections.Generic;
-using Stormpath.SDK.DataStore;
-using Stormpath.SDK.Impl.Http;
-using Stormpath.SDK.Resource;
+using Stormpath.SDK.Impl.DataStore;
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Impl.Resource
 {
-    internal interface IInternalDataStore : IDataStore
+    internal interface INotifiable
     {
-        IRequestExecutor RequestExecutor { get; }
-
-        string BaseUrl { get; }
-
-        T InstantiateWithHref<T>(string href)
-            where T : IResource;
-
-        T InstantiateWithData<T>(IDictionary<string, object> properties)
-            where T : IResource;
+        void OnUpdate(IDictionary<string, object> properties, IInternalDataStore dataStore);
     }
 }

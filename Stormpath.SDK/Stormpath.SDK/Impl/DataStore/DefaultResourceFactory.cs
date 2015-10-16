@@ -90,6 +90,10 @@ namespace Stormpath.SDK.Impl.DataStore
 
                 targetObject = Activator.CreateInstance(targetType, new object[] { resourceData }) as AbstractResource;
 
+                var notifyableTarget = targetObject as INotifiable;
+                if (notifyableTarget != null)
+                    notifyableTarget.OnUpdate(properties, this.dataStore);
+
                 if (original != null)
                     original.Link(resourceData);
             }

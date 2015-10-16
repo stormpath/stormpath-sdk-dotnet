@@ -198,6 +198,7 @@
     <Compile Include="Impl\Provider\ProviderType.cs" />
     <Compile Include="Impl\Provider\ProviderTypeConverter.cs" />
     <Compile Include="Impl\Resource\ILinkable.cs" />
+    <Compile Include="Impl\Resource\INotifyOnUpdate.cs" />
     <Compile Include="Impl\Resource\ResourceData.cs" />
     <Compile Include="Impl\Resource\IExtendableSync.cs" />
     <Compile Include="Impl\Resource\IDeletableSync.cs" />

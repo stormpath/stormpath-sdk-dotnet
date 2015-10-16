@@ -112,9 +112,25 @@ namespace Stormpath.SDK.Tests.Fakes
         Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
             => this.ProxyAsyncDataStore.SaveAsync(resource, cancellationToken);
 
-#pragma warning disable SA1124 // Do not use regions
-        #region IDisposable Support
-#pragma warning restore SA1124 // Do not use regions
+        bool IInternalSyncDataStore.DeleteProperty(string parentHref, string propertyName)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        T IInternalSyncDataStore.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+        {
+            throw new NotImplementedException();
+        }
+
+        T IInternalDataStore.InstantiateWithData<T>(IDictionary<string, object> properties)
+        {
+            throw new NotImplementedException();
+        }
 
         private bool isDisposed = false; // To detect redundant calls
 
@@ -137,21 +153,5 @@ namespace Stormpath.SDK.Tests.Fakes
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
         }
-
-        bool IInternalSyncDataStore.DeleteProperty(string parentHref, string propertyName)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        T IInternalSyncDataStore.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
     }
 }

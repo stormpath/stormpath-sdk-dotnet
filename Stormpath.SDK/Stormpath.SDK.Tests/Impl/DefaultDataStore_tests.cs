@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Tests.Impl
     public class DefaultDataStore_tests
     {
         [Fact]
-        public async Task Single_item_Json_is_deserialized_properly()
+        public async Task Single_item_data_is_deserialized_properly()
         {
             IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
 
@@ -73,7 +73,7 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
-        public async Task Collection_resource_Json_is_deserialized_properly()
+        public async Task Collection_resource_data_is_deserialized_properly()
         {
             IInternalDataStore dataStore = new StubDataStore(FakeJson.AccountList, "http://api.foo.bar");
 

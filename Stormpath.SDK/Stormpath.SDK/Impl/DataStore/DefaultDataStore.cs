@@ -124,20 +124,6 @@ namespace Stormpath.SDK.Impl.DataStore
             return syncFilterChain;
         }
 
-        T IDataStore.Instantiate<T>()
-            => this.resourceFactory.Create<T>();
-
-        T IInternalDataStore.InstantiateWithHref<T>(string href)
-        {
-            var properties = new Dictionary<string, object>()
-            {
-                ["href"] = href
-            };
-            var instantiated = this.resourceFactory.Create<T>(properties);
-
-            return instantiated;
-        }
-
         private void ApplyDefaultRequestHeaders(IHttpRequest request)
         {
             request.Headers.Accept = "application/json";
@@ -194,7 +180,21 @@ namespace Stormpath.SDK.Impl.DataStore
             return response;
         }
 
-        // DataStore methods
+        T IDataStore.Instantiate<T>()
+            => this.resourceFactory.Create<T>();
+
+        T IInternalDataStore.InstantiateWithData<T>(IDictionary<string, object> properties)
+            => this.resourceFactory.Create<T>(properties);
+
+        T IInternalDataStore.InstantiateWithHref<T>(string href)
+        {
+            var properties = new Dictionary<string, object>()
+            {
+                ["href"] = href
+            };
+            return this.AsAsyncInterface.InstantiateWithData<T>(properties);
+        }
+
         async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
         {
             var result = await this.GetResourceDataAsync<T>(resourcePath, cancellationToken).ConfigureAwait(false);
@@ -656,10 +656,6 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.HandleResponseOrError(response);
         }
 
-#pragma warning disable SA1124 // Do not use regions
-        #region IDisposable
-#pragma warning restore SA1124 // Do not use regions
-
         private void Dispose(bool disposing)
         {
             if (!this.disposed)
@@ -679,7 +675,5 @@ namespace Stormpath.SDK.Impl.DataStore
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
         }
-
-        #endregion
     }
 }

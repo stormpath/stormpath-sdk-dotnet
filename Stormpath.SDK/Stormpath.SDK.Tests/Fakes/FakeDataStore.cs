@@ -249,5 +249,10 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             throw new NotImplementedException();
         }
+
+        T IInternalDataStore.InstantiateWithData<T>(IDictionary<string, object> properties)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
