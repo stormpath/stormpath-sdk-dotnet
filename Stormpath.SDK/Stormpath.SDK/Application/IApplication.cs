@@ -25,6 +25,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Application
 {
@@ -161,6 +162,13 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task that determines when the operation is complete.</returns>
         Task SendVerificationEmailAsync(string usernameOrEmail, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Gets the Stormpath <see cref="ITenant"/> that owns this Application resource.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is this application's tenant.</returns>
+        Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the <see cref="IAccountStore"/> (either a <see cref="IGroup"/> or <see cref="Directory.IDirectory"/>)

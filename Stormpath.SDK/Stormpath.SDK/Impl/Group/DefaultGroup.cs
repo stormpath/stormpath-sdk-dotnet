@@ -28,6 +28,7 @@ using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Group
 {
@@ -302,6 +303,12 @@ namespace Stormpath.SDK.Impl.Group
 
         IDirectory IGroupSync.GetDirectory()
             => this.GetInternalSyncDataStore().GetResource<IDirectory>(this.Directory.Href);
+
+        Task<ITenant> IGroup.GetTenantAsync(CancellationToken cancellationToken)
+            => this.GetTenantAsync(this.Tenant.Href, cancellationToken);
+
+        ITenant IGroupSync.GetTenant()
+            => this.GetTenant(this.Tenant.Href);
 
         IAsyncQueryable<IGroupMembership> IGroup.GetAccountMemberships()
             => new CollectionResourceQueryable<IGroupMembership>(this.AccountMemberships.Href, this.GetInternalAsyncDataStore());

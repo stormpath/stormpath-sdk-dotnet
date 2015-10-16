@@ -20,6 +20,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Directory
 {
@@ -37,5 +38,11 @@ namespace Stormpath.SDK.Impl.Directory
         /// </summary>
         /// <returns>The Provider of this Directory.</returns>
         IProvider GetProvider();
+
+        /// <summary>
+        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Directory resource.
+        /// </summary>
+        /// <returns>The tenant.</returns>
+        ITenant GetTenant();
     }
 }

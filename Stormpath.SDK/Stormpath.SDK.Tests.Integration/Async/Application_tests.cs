@@ -50,6 +50,18 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Getting_application_tenant(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            // Verify data from IntegrationTestData
+            var tenantHref = (await application.GetTenantAsync()).Href;
+            tenantHref.ShouldBe(this.fixture.TenantHref);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Creating_application_without_directory(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

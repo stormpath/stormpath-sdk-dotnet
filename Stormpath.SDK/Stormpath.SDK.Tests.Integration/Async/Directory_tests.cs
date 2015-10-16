@@ -47,6 +47,18 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Getting_directory_tenant(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
+
+            // Verify data from IntegrationTestData
+            var tenantHref = (await directory.GetTenantAsync()).Href;
+            tenantHref.ShouldBe(this.fixture.TenantHref);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Creating_disabled_directory(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

@@ -22,6 +22,7 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Group
 {
@@ -116,6 +117,13 @@ namespace Stormpath.SDK.Group
         /// <returns>A Task whose result determines whether the operation succeeded.</returns>
         /// <exception cref="InvalidOperationException">The specified account does not belong to this group.</exception>
         Task<bool> RemoveAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is this group's tenant.</returns>
+        Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the group's parent <see cref="IDirectory"/> (where the group is stored).

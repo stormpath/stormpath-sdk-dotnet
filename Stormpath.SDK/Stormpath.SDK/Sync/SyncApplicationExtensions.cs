@@ -23,6 +23,7 @@ using Stormpath.SDK.Auth;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {
@@ -138,6 +139,14 @@ namespace Stormpath.SDK.Sync
         /// if no account store has been designated.</returns>
         public static IAccountStore GetDefaultGroupStore(this IApplication application)
             => (application as IApplicationSync).GetDefaultGroupStore();
+
+        /// <summary>
+        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Application resource.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <returns>This account's tenant.</returns>
+        public static ITenant GetTenant(this IApplication application)
+            => (application as IApplicationSync).GetTenant();
 
         /// <summary>
         /// Synchronously creates a new <see cref="IGroup"/> that may be used by this application in the application's <see cref="GetDefaultGroupStoreAsync(CancellationToken)"/>.

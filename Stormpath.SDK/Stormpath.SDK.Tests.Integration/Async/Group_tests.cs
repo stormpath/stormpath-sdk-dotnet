@@ -48,6 +48,18 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Getting_group_tenant(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var group = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryGroupHref);
+
+            // Verify data from IntegrationTestData
+            var tenantHref = (await group.GetTenantAsync()).Href;
+            tenantHref.ShouldBe(this.fixture.TenantHref);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Getting_application_groups(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

@@ -27,6 +27,7 @@ using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Directory
 {
@@ -139,6 +140,12 @@ namespace Stormpath.SDK.Impl.Directory
 
         IProvider IDirectorySync.GetProvider()
             => this.GetInternalSyncDataStore().GetResource<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup);
+
+        Task<ITenant> IDirectory.GetTenantAsync(CancellationToken cancellationToken)
+            => this.GetTenantAsync(this.Tenant.Href, cancellationToken);
+
+        ITenant IDirectorySync.GetTenant()
+            => this.GetTenant(this.Tenant.Href);
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);

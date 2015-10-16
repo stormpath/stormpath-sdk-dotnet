@@ -17,8 +17,10 @@
 
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Resource
 {
@@ -62,6 +64,12 @@ namespace Stormpath.SDK.Impl.Resource
 
         protected IInternalSyncDataStore GetInternalSyncDataStore()
             => this.GetResourceData()?.InternalSyncDataStore;
+
+        protected Task<ITenant> GetTenantAsync(string tenantHref, CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(tenantHref, new IdentityMapOptions() { StoreWithInfiniteExpiration = true }, cancellationToken);
+
+        protected ITenant GetTenant(string tenantHref)
+            => this.GetInternalSyncDataStore().GetResource<ITenant>(tenantHref, new IdentityMapOptions() { StoreWithInfiniteExpiration = true });
 
         internal bool IsDirty => this.GetResourceData()?.IsDirty ?? true;
 

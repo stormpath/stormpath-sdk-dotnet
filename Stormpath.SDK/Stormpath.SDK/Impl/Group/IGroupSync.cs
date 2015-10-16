@@ -19,6 +19,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Group
 {
@@ -62,6 +63,12 @@ namespace Stormpath.SDK.Impl.Group
         /// <returns>Whether the operation succeeded.</returns>
         /// <exception cref="InvalidOperationException">The specified account does not belong to this group.</exception>
         bool RemoveAccount(string hrefOrEmailOrUsername);
+
+        /// <summary>
+        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Group resource.
+        /// </summary>
+        /// <returns>The tenant.</returns>
+        ITenant GetTenant();
 
         /// <summary>
         /// Synchronously gets the group's parent <see cref="IDirectory"/> (where the group is stored).

@@ -23,6 +23,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Directory
 {
@@ -80,6 +81,13 @@ namespace Stormpath.SDK.Directory
         /// </param>
         /// <returns>This instance for method chaining.</returns>
         IDirectory SetStatus(DirectoryStatus status);
+
+        /// <summary>
+        /// Gets the Stormpath <see cref="ITenant"/> that owns this Directory resource.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is this directory's tenant.</returns>
+        Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Creates a new <see cref="IGroup"/> instance in this directory.

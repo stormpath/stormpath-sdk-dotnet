@@ -50,6 +50,18 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Getting_application_tenant(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            // Verify data from IntegrationTestData
+            var tenantHref = application.GetTenant().Href;
+            tenantHref.ShouldBe(this.fixture.TenantHref);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Creating_application_without_directory(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

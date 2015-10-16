@@ -48,6 +48,18 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Getting_directory_tenant(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
+
+            // Verify data from IntegrationTestData
+            var tenantHref = directory.GetTenant().Href;
+            tenantHref.ShouldBe(this.fixture.TenantHref);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Creating_disabled_directory(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

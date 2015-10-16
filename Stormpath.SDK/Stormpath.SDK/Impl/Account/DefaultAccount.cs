@@ -176,10 +176,10 @@ namespace Stormpath.SDK.Impl.Account
             => this.GetInternalSyncDataStore().GetResource<IDirectory>(this.Directory.Href);
 
         Task<ITenant> IAccount.GetTenantAsync(CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(this.Tenant.Href, cancellationToken);
+            => this.GetTenantAsync(this.Tenant.Href, cancellationToken);
 
         ITenant IAccountSync.GetTenant()
-            => this.GetInternalSyncDataStore().GetResource<ITenant>(this.Tenant.Href);
+            => this.GetTenant(this.Tenant.Href);
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);

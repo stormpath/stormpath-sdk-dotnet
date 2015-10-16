@@ -31,6 +31,7 @@ using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -313,6 +314,12 @@ namespace Stormpath.SDK.Impl.Application
 
         IProviderAccountResult IApplicationSync.GetAccount(IProviderAccountRequest request)
             => new ProviderAccountResolver(this.GetInternalAsyncDataStore()).ResolveProviderAccount(this.AsInterface.Href, request);
+
+        Task<ITenant> IApplication.GetTenantAsync(CancellationToken cancellationToken)
+            => this.GetTenantAsync(this.Tenant.Href, cancellationToken);
+
+        ITenant IApplicationSync.GetTenant()
+            => this.GetTenant(this.Tenant.Href);
 
         IAsyncQueryable<IAccount> IApplication.GetAccounts()
              => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());

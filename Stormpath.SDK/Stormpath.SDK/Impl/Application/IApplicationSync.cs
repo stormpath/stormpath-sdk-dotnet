@@ -24,6 +24,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -125,6 +126,12 @@ namespace Stormpath.SDK.Impl.Application
         /// <returns>The <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
         /// if no account store has been designated.</returns>
         IAccountStore GetDefaultGroupStore();
+
+        /// <summary>
+        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Application resource.
+        /// </summary>
+        /// <returns>The tenant.</returns>
+        ITenant GetTenant();
 
         /// <summary>
         /// Synchronously creates a new <see cref="IGroup"/> that may be used by this application in the application's <see cref="GetDefaultGroupStoreAsync(CancellationToken)"/>.
