@@ -473,10 +473,6 @@ namespace Stormpath.SDK.Impl.DataStore
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
 
-            var abstractResource = resource as AbstractResource;
-            if (resource == null)
-                throw new ArgumentNullException(nameof(resource));
-
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
             this.logger.Trace($"Asynchronously saving resource of type {typeof(T).Name} to {href}", "DefaultDataStore.SaveCoreAsync");
 
@@ -509,35 +505,42 @@ namespace Stormpath.SDK.Impl.DataStore
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
 
-            // Serialize properties
-            var propertiesMap = this.resourceConverter.ToMap(abstractResource);
+            IDictionary<string, object> propertiesMap = null;
 
-            var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
-            bool includesCustomData = extendableInstanceResource != null;
-            if (includesCustomData)
+            var abstractResource = resource as AbstractResource;
+            if (abstractResource != null)
             {
-                var customDataProxy = (extendableInstanceResource as IExtendable).CustomData as DefaultEmbeddedCustomData;
+                // Serialize properties
+                propertiesMap = this.resourceConverter.ToMap(abstractResource);
 
-                // Apply custom data deletes
-                if (customDataProxy.HasDeletedProperties())
+                var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
+                bool includesCustomData = extendableInstanceResource != null;
+                if (includesCustomData)
                 {
-                    if (customDataProxy.DeleteAll)
-                        await this.DeleteCoreAsync<ICustomData>(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
-                    else
-                        await customDataProxy.DeleteRemovedCustomDataPropertiesAsync(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
+                    var customDataProxy = (extendableInstanceResource as IExtendable).CustomData as DefaultEmbeddedCustomData;
+
+                    // Apply custom data deletes
+                    if (customDataProxy.HasDeletedProperties())
+                    {
+                        if (customDataProxy.DeleteAll)
+                            await this.DeleteCoreAsync<ICustomData>(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
+                        else
+                            await customDataProxy.DeleteRemovedCustomDataPropertiesAsync(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
+                    }
+
+                    // Merge in custom data updates
+                    if (customDataProxy.HasUpdatedCustomDataProperties())
+                        propertiesMap["customData"] = customDataProxy.UpdatedCustomDataProperties;
+
+                    // Remove custom data updates from proxy
+                    extendableInstanceResource.ResetCustomData();
                 }
-
-                // Merge in custom data updates
-                if (customDataProxy.HasUpdatedCustomDataProperties())
-                    propertiesMap["customData"] = customDataProxy.UpdatedCustomDataProperties;
-
-                // Remove custom data updates from proxy
-                extendableInstanceResource.ResetCustomData();
             }
 
             // In some cases, all we need to save are custom data property deletions, which is taken care of above.
             // So, we should just refresh with the latest data from the server.
-            bool nothingToPost = !propertiesMap.Any();
+            // This doesn't apply to CREATEs, though, because sometimes we need to POST a null body.
+            bool nothingToPost = !(propertiesMap?.Any() ?? false);
             if (!create && nothingToPost)
                 return await this.AsAsyncInterface.GetResourceAsync<TReturned>(href, cancellationToken).ConfigureAwait(false);
 

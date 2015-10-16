@@ -78,6 +78,9 @@ namespace Stormpath.SDK.Impl.Account
         {
             get
             {
+                if (string.IsNullOrEmpty(this.EmailVerificationToken.Href))
+                    return null;
+
                 var emailVerificationToken = this.GetInternalAsyncDataStore()
                     .InstantiateWithHref<IEmailVerificationToken>(this.EmailVerificationToken.Href);
                 return emailVerificationToken;

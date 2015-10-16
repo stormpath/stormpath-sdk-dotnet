@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     id = href.ToString();
 
                 if (!propertiesContainsHref)
-                    properties.Add("href", id);
+                    properties["href"] = id;
 
                 var resourceData = options.SkipIdentityMap
                     ? new ResourceData(this.dataStore)

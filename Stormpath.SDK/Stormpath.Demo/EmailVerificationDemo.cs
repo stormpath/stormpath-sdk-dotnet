@@ -43,8 +43,9 @@ namespace Stormpath.Demo
             await application.SendVerificationEmailAsync("test@foo.co");
             Console.WriteLine($"Verification email resent to {createdAccount.Email}");
 
-            var verifiedAccount = await client.VerifyAccountEmailAsync(createdAccount.EmailVerificationToken.GetValue());
-            Console.WriteLine($"{createdAccount.Email} verified with token {createdAccount.EmailVerificationToken}{NL}");
+            var token = createdAccount.EmailVerificationToken.GetValue();
+            var verifiedAccount = await client.VerifyAccountEmailAsync(token);
+            Console.WriteLine($"{createdAccount.Email} verified with token {token}{NL}");
 
             // Clean up
             await createdAccount.DeleteAsync();

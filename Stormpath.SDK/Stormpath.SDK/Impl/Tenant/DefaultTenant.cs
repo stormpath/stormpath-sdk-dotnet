@@ -22,9 +22,11 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
 
@@ -201,8 +203,8 @@ namespace Stormpath.SDK.Impl.Tenant
         {
             var href = $"/accounts/emailVerificationTokens/{token}";
 
-            var emailVerificationToken = this.GetInternalAsyncDataStore().Instantiate<IEmailVerificationToken>();
-            var tokenResponse = await this.GetInternalAsyncDataStore().CreateAsync(href, emailVerificationToken, cancellationToken).ConfigureAwait(false);
+            //var emailVerificationToken = this.GetInternalAsyncDataStore().Instantiate<IEmailVerificationToken>();
+            var tokenResponse = await this.GetInternalAsyncDataStore().CreateAsync<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions { SkipIdentityMap = true }, cancellationToken).ConfigureAwait(false);
             return await this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(tokenResponse.Href, cancellationToken).ConfigureAwait(false);
         }
 
