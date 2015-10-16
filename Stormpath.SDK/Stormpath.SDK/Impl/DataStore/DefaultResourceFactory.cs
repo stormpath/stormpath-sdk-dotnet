@@ -43,12 +43,18 @@ namespace Stormpath.SDK.Impl.DataStore
             => (T)this.AsInterface.Create(typeof(T), null, original);
 
         object IResourceFactory.Create(Type type, ILinkable original)
-            => this.AsInterface.Create(type, null, original);
+            => this.AsInterface.Create(type, null, null, original);
 
         T IResourceFactory.Create<T>(IDictionary<string, object> properties, ILinkable original)
-            => (T)this.AsInterface.Create(typeof(T), properties, original);
+            => (T)this.AsInterface.Create(typeof(T), properties, null, original);
 
         object IResourceFactory.Create(Type type, IDictionary<string, object> properties, ILinkable original)
+            => this.AsInterface.Create(type, properties, null, original);
+
+        T IResourceFactory.Create<T>(IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
+            => (T)this.AsInterface.Create(typeof(T), properties, options, original);
+
+        object IResourceFactory.Create(Type type, IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
         {
             bool isCollection =
                 type.IsGenericType &&
@@ -56,11 +62,14 @@ namespace Stormpath.SDK.Impl.DataStore
             if (isCollection)
                 return this.InstantiateCollection(type, properties);
 
-            return this.InstantiateSingle(type, properties, original);
+            return this.InstantiateSingle(type, properties, options, original);
         }
 
-        private object InstantiateSingle(Type type, IDictionary<string, object> properties, ILinkable original)
+        private object InstantiateSingle(Type type, IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
         {
+            if (options == null)
+                options = new IdentityMapOptions(); // with default values
+
             var targetType = this.typeLookup.GetConcrete(type);
             if (targetType == null)
                 throw new ApplicationException($"Unknown resource type {type.Name}");
@@ -83,7 +92,9 @@ namespace Stormpath.SDK.Impl.DataStore
                 if (!propertiesContainsHref)
                     properties.Add("href", id);
 
-                var resourceData = this.identityMap.GetOrAdd(id, () => new ResourceData(this.dataStore));
+                var resourceData = options.SkipIdentityMap
+                    ? new ResourceData(this.dataStore)
+                    : this.identityMap.GetOrAdd(id, () => new ResourceData(this.dataStore), options.StoreWithInfiniteExpiration);
 
                 if (properties != null)
                     resourceData.Update(properties);
@@ -159,7 +170,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
                 foreach (var itemMap in items)
                 {
-                    var materialized = this.InstantiateSingle(innerType, itemMap, original: null);
+                    var materialized = this.InstantiateSingle(innerType, itemMap, options: null, original: null);
                     addMethod.Invoke(materializedItems, new object[] { materialized });
                 }
 
@@ -190,7 +201,6 @@ namespace Stormpath.SDK.Impl.DataStore
             }
         }
 
-        // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.

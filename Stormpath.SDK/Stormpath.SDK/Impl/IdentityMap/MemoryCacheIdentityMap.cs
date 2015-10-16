@@ -40,10 +40,16 @@ namespace Stormpath.SDK.Impl.IdentityMap
 
         public long LifetimeItemsAdded => this.lifetimeItemsAdded;
 
-        public TItem GetOrAdd(TKey key, Func<TItem> itemFactory)
+        public TItem GetOrAdd(TKey key, Func<TItem> itemFactory, bool storeInfinitely)
         {
             var lazyItem = new Lazy<TItem>(() => itemFactory());
-            var policy = new CacheItemPolicy() { SlidingExpiration = this.slidingExpiration };
+            var policy = new CacheItemPolicy()
+            {
+                SlidingExpiration = storeInfinitely
+                    ? ObjectCache.NoSlidingExpiration
+                    : this.slidingExpiration
+            };
+
             var existing = this.itemCache.AddOrGetExisting(CreateKey(key), lazyItem, policy);
 
             bool added = existing == null;

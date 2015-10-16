@@ -33,7 +33,6 @@ namespace Stormpath.SDK.Impl.Provider
         public DefaultProviderAccountResult(ResourceData data)
             : base(data)
         {
-            data.SetPropertiesMutator(OnCreation);
         }
 
         IAccount IProviderAccountResult.Account
@@ -41,12 +40,6 @@ namespace Stormpath.SDK.Impl.Provider
 
         bool IProviderAccountResult.IsNewAccount
             => this.GetProperty<bool>(IsNewAccountPropertyName);
-
-        internal static IDictionary<string, object> OnCreation(IDictionary<string, object> properties, IInternalDataStore dataStore)
-        {
-            throw new NotImplementedException();
-            // todo delete
-        }
 
         void INotifiable.OnUpdate(IDictionary<string, object> properties, IInternalDataStore dataStore)
         {

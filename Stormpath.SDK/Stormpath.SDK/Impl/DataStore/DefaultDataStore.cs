@@ -195,16 +195,16 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.AsAsyncInterface.InstantiateWithData<T>(properties);
         }
 
-        async Task<T> IDataStore.GetResourceAsync<T>(string resourcePath, CancellationToken cancellationToken)
+        async Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
         {
-            var result = await this.GetResourceDataAsync<T>(resourcePath, cancellationToken).ConfigureAwait(false);
+            var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);
 
             return this.resourceFactory.Create<T>(result.Body);
         }
 
-        T IDataStoreSync.GetResource<T>(string resourcePath)
+        T IDataStoreSync.GetResource<T>(string href)
         {
-            var result = this.GetResourceData<T>(resourcePath);
+            var result = this.GetResourceData<T>(href);
 
             return this.resourceFactory.Create<T>(result.Body);
         }
@@ -231,12 +231,32 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create(targetType, result.Body) as T;
         }
 
-        private Task<IResourceDataResult> GetResourceDataAsync<T>(string resourcePath, CancellationToken cancellationToken)
+        async Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(resourcePath))
-                throw new ArgumentNullException(nameof(resourcePath));
+            if (identityMapOptions != null && !identityMapOptions.IsValid())
+                throw new ApplicationException("Bad identity map options specified.");
 
-            var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
+            var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);
+
+            return this.resourceFactory.Create<T>(result.Body, identityMapOptions);
+        }
+
+        T IInternalSyncDataStore.GetResource<T>(string href, IdentityMapOptions identityMapOptions)
+        {
+            if (identityMapOptions != null && !identityMapOptions.IsValid())
+                throw new ApplicationException("Bad identity map options specified.");
+
+            var result = this.GetResourceData<T>(href);
+
+            return this.resourceFactory.Create<T>(result.Body, identityMapOptions);
+        }
+
+        private Task<IResourceDataResult> GetResourceDataAsync<T>(string href, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(href))
+                throw new ArgumentNullException(nameof(href));
+
+            var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href));
             this.logger.Trace($"Asynchronously getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResourceAsync<T>");
 
             IAsynchronousFilterChain chain = new DefaultAsynchronousFilterChain(this.defaultAsyncFilters as DefaultAsynchronousFilterChain)
@@ -254,12 +274,12 @@ namespace Stormpath.SDK.Impl.DataStore
             return chain.ExecuteAsync(request, this.logger, cancellationToken);
         }
 
-        private IResourceDataResult GetResourceData<T>(string resourcePath)
+        private IResourceDataResult GetResourceData<T>(string href)
         {
-            if (string.IsNullOrEmpty(resourcePath))
-                throw new ArgumentNullException(nameof(resourcePath));
+            if (string.IsNullOrEmpty(href))
+                throw new ArgumentNullException(nameof(href));
 
-            var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(resourcePath));
+            var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href));
             this.logger.Trace($"Synchronously getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResource<T>");
 
             ISynchronousFilterChain chain = new DefaultSynchronousFilterChain(this.defaultSyncFilters as DefaultSynchronousFilterChain)
@@ -349,6 +369,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 parentHref,
                 queryParams: this.CreateQueryStringFromCreationOptions(options),
                 create: true,
+                identityMapOptions: null,
                 cancellationToken: cancellationToken);
         }
 
@@ -357,8 +378,30 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.SaveCore<T, TReturned>(
                 resource,
                 parentHref,
+                queryParams: this.CreateQueryStringFromCreationOptions(options),
                 create: true,
-                queryParams: this.CreateQueryStringFromCreationOptions(options));
+                identityMapOptions: null);
+        }
+
+        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
+        {
+            return this.SaveCoreAsync<T, TReturned>(
+                resource,
+                parentHref,
+                queryParams: null,
+                create: true,
+                identityMapOptions: identityMapOptions,
+                cancellationToken: cancellationToken);
+        }
+
+        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions)
+        {
+            return this.SaveCore<T, TReturned>(
+                resource,
+                parentHref,
+                create: true,
+                queryParams: null,
+                identityMapOptions: identityMapOptions);
         }
 
         Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
@@ -372,6 +415,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 href,
                 queryParams: null,
                 create: false,
+                identityMapOptions: null,
                 cancellationToken: cancellationToken);
         }
 
@@ -385,7 +429,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 resource,
                 href,
                 create: false,
-                queryParams: null);
+                queryParams: null,
+                identityMapOptions: null);
         }
 
         Task<bool> IInternalAsyncDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
@@ -418,10 +463,13 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.DeleteCore<T>(resource.Href);
         }
 
-        private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, bool create, CancellationToken cancellationToken)
+        private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, bool create, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
             where T : IResource
             where TReturned : class, IResource
         {
+            if (identityMapOptions != null && !identityMapOptions.IsValid())
+                throw new ApplicationException("Bad identity map options specified.");
+
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
 
@@ -499,13 +547,16 @@ namespace Stormpath.SDK.Impl.DataStore
             var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
 
             var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
-            return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
+            return this.resourceFactory.Create<TReturned>(result.Body, identityMapOptions, resource as ILinkable);
         }
 
-        private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, bool create)
+        private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, bool create, IdentityMapOptions identityMapOptions)
             where T : IResource
             where TReturned : class, IResource
         {
+            if (identityMapOptions != null && !identityMapOptions.IsValid())
+                throw new ApplicationException("Bad identity map options specified.");
+
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
 
@@ -583,7 +634,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
 
             var result = chain.Filter(request, this.logger);
-            return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
+            return this.resourceFactory.Create<TReturned>(result.Body, identityMapOptions, resource as ILinkable);
         }
 
         private async Task<bool> DeleteCoreAsync<T>(string href, CancellationToken cancellationToken)
@@ -670,7 +721,7 @@ namespace Stormpath.SDK.Impl.DataStore
             }
         }
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);

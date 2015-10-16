@@ -223,8 +223,7 @@ namespace Stormpath.SDK.Tests.Fakes
             }
         }
 
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
+        void IDisposable.Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
@@ -251,6 +250,26 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         T IInternalDataStore.InstantiateWithData<T>(IDictionary<string, object> properties)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        T IInternalSyncDataStore.GetResource<T>(string href, IdentityMapOptions identityMapOptions)
+        {
+            throw new NotImplementedException();
+        }
+
+        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions)
         {
             throw new NotImplementedException();
         }

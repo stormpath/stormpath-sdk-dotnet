@@ -41,7 +41,13 @@ namespace Stormpath.SDK.Impl.Provider
             var providerAccountAccess = this.BuildRequest(request);
             var href = $"{parentHref}/accounts";
 
-            return this.dataStoreAsync.CreateAsync<IProviderAccountAccess, IProviderAccountResult>(href, providerAccountAccess, cancellationToken);
+            // Do NOT store this result in the identity map, because IProviderAccountResult is really just a wrapper around an IAccount.
+            // DefaultProviderAccountResult.OnUpdate does the work of taking the implied IAccount and instantiating it.
+            return this.dataStoreAsync.CreateAsync<IProviderAccountAccess, IProviderAccountResult>(
+                href,
+                providerAccountAccess,
+                new IdentityMapOptions() { SkipIdentityMap = true },
+                cancellationToken);
         }
 
         public IProviderAccountResult ResolveProviderAccount(string parentHref, IProviderAccountRequest request)
@@ -51,7 +57,12 @@ namespace Stormpath.SDK.Impl.Provider
             var providerAccountAccess = this.BuildRequest(request);
             var href = $"{parentHref}/accounts";
 
-            return this.dataStoreSync.Create<IProviderAccountAccess, IProviderAccountResult>(href, providerAccountAccess);
+            // Do NOT store this result in the identity map, because IProviderAccountResult is really just a wrapper around an IAccount.
+            // DefaultProviderAccountResult.OnUpdate does the work of taking the implied IAccount and instantiating it.
+            return this.dataStoreSync.Create<IProviderAccountAccess, IProviderAccountResult>(
+                href,
+                providerAccountAccess,
+                new IdentityMapOptions() { SkipIdentityMap = true });
         }
 
         private IProviderAccountAccess BuildRequest(IProviderAccountRequest request)

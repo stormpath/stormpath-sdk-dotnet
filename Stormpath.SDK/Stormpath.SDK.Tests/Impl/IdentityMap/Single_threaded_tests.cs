@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
         public void Creating_one_resource()
         {
             var barId = Guid.NewGuid().ToString();
-            var bar = this.identityMap.GetOrAdd(barId, () => this.CreateEntity(barId));
+            var bar = this.identityMap.GetOrAdd(barId, () => this.CreateEntity(barId), storeInfinitely: false);
             bar.SetCount(5);
 
             bar.Count.ShouldBe(5);
@@ -56,11 +56,11 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
         public void Creating_two_resources()
         {
             var barId = Guid.NewGuid().ToString();
-            var bar = this.identityMap.GetOrAdd(barId, () => this.CreateEntity(barId));
+            var bar = this.identityMap.GetOrAdd(barId, () => this.CreateEntity(barId), storeInfinitely: false);
             bar.SetCount(5);
 
             var bazId = Guid.NewGuid().ToString();
-            var baz = this.identityMap.GetOrAdd(bazId, () => this.CreateEntity(bazId));
+            var baz = this.identityMap.GetOrAdd(bazId, () => this.CreateEntity(bazId), storeInfinitely: false);
             baz.SetCount(3);
 
             bar.Count.ShouldBe(5);
@@ -74,10 +74,10 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
         {
             var id = "foo-id";
 
-            var bar1 = this.identityMap.GetOrAdd(id, () => this.CreateEntity(id));
+            var bar1 = this.identityMap.GetOrAdd(id, () => this.CreateEntity(id), storeInfinitely: false);
             bar1.SetCount(100);
 
-            var bar2 = this.identityMap.GetOrAdd(id, () => this.CreateEntity(id));
+            var bar2 = this.identityMap.GetOrAdd(id, () => this.CreateEntity(id), storeInfinitely: false);
             bar2.Count.ShouldBe(100);
 
             bar1.ShouldBeSameAs(bar2);
@@ -93,16 +93,16 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
         public void Making_many_items(int items)
         {
             var persistentItemId = $"Making_many_items_{items}";
-            var foo = this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId));
+            var foo = this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId), storeInfinitely: false);
             foo.SetCount(1337);
 
             for (var i = 0; i < items; i++)
             {
                 var itemId = $"item-{i}";
-                this.identityMap.GetOrAdd(itemId, () => this.CreateEntity(itemId)).SetCount(i);
+                this.identityMap.GetOrAdd(itemId, () => this.CreateEntity(itemId), storeInfinitely: false).SetCount(i);
 
                 foo.Count.ShouldBe(1337);
-                this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId)).Count.ShouldBe(1337);
+                this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId), storeInfinitely: false).Count.ShouldBe(1337);
             }
 
             this.identityMap.LifetimeItemsAdded.ShouldBe(items + 1);
@@ -117,11 +117,11 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
         public void Making_many_duplicates(int times)
         {
             var persistentItemId = $"Making_many_duplicates_{times}";
-            this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId)).SetCount(1337);
+            this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId), storeInfinitely: false).SetCount(1337);
 
             for (var i = 0; i < times; i++)
             {
-                var foo = this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId));
+                var foo = this.identityMap.GetOrAdd(persistentItemId, () => this.CreateEntity(persistentItemId), storeInfinitely: false);
                 foo.Count.ShouldBe(1337);
             }
 

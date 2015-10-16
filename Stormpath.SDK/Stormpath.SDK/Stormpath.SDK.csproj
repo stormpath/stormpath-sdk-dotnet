@@ -143,6 +143,7 @@
     <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
     <Compile Include="Impl\DataStore\IDataStoreSync.cs" />
+    <Compile Include="Impl\DataStore\IdentityMapOptions.cs" />
     <Compile Include="Impl\Directory\DefaultDirectoryCreationOptions.cs" />
     <Compile Include="Impl\Directory\IDirectorySync.cs" />
     <Compile Include="Impl\Group\DefaultGroup.cs" />

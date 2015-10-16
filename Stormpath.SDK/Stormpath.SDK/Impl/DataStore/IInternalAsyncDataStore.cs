@@ -31,6 +31,9 @@ namespace Stormpath.SDK.Impl.DataStore
         Task<T> GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
             where T : class, IResource;
 
+        Task<T> GetResourceAsync<T>(string href, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
+            where T : class, IResource;
+
         Task<T> CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
             where T : class, IResource;
 
@@ -42,6 +45,10 @@ namespace Stormpath.SDK.Impl.DataStore
             where TReturned : class, IResource;
 
         Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
+            where T : class, IResource
+            where TReturned : class, IResource;
+
+        Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
             where T : class, IResource
             where TReturned : class, IResource;
 

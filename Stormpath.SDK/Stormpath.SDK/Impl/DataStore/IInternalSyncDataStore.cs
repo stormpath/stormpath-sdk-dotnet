@@ -29,6 +29,9 @@ namespace Stormpath.SDK.Impl.DataStore
         T GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
             where T : class, IResource;
 
+        T GetResource<T>(string href, IdentityMapOptions identityMapOptions)
+            where T : class, IResource;
+
         T Create<T>(string parentHref, T resource)
             where T : class, IResource;
 
@@ -40,6 +43,10 @@ namespace Stormpath.SDK.Impl.DataStore
             where TReturned : class, IResource;
 
         TReturned Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
+            where T : class, IResource
+            where TReturned : class, IResource;
+
+        TReturned Create<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions)
             where T : class, IResource
             where TReturned : class, IResource;
 

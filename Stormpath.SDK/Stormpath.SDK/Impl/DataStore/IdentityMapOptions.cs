@@ -1,4 +1,4 @@
-﻿// <copyright file="IIdentityMap.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IdentityMapOptions.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
@@ -15,15 +15,21 @@
 // limitations under the License.
 // </remarks>
 
-using System;
-
-namespace Stormpath.SDK.Impl.IdentityMap
+namespace Stormpath.SDK.Impl.DataStore
 {
-    internal interface IIdentityMap<TKey, TItem> : IDisposable
-        where TItem : class
+    internal sealed class IdentityMapOptions
     {
-        long LifetimeItemsAdded { get; }
+        public bool SkipIdentityMap { get; set; } = false;
 
-        TItem GetOrAdd(TKey key, Func<TItem> itemFactory, bool storeInfinitely);
+        public bool StoreWithInfiniteExpiration { get; set; } = false;
+
+        public bool IsValid()
+        {
+            // Can't be both at the same time!
+            if (this.SkipIdentityMap && this.StoreWithInfiniteExpiration)
+                return false;
+
+            return true;
+        }
     }
 }

@@ -29,8 +29,6 @@ namespace Stormpath.SDK.Impl.Resource
         private readonly IInternalAsyncDataStore internalDataStoreAsync;
         private readonly IInternalSyncDataStore internalDataStoreSync;
 
-        private Func<IDictionary<string, object>, IInternalDataStore, IDictionary<string, object>> propertiesMutator;
-
         private ConcurrentDictionary<string, object> properties;
         private ConcurrentDictionary<string, object> dirtyProperties;
         private ConcurrentDictionary<string, object> deletedProperties;
@@ -53,11 +51,6 @@ namespace Stormpath.SDK.Impl.Resource
         public IInternalSyncDataStore InternalSyncDataStore => this.internalDataStoreSync;
 
         public bool IsDirty => this.isDirty;
-
-        public void SetPropertiesMutator(Func<IDictionary<string, object>, IInternalDataStore, IDictionary<string, object>> mutator)
-        {
-            this.propertiesMutator = mutator;
-        }
 
         public IReadOnlyList<string> GetPropertyNames()
             => this.properties.Select(x => x.Key).ToList();
@@ -129,9 +122,6 @@ namespace Stormpath.SDK.Impl.Resource
         {
             if (properties == null)
                 properties = new Dictionary<string, object>();
-
-            if (this.propertiesMutator != null)
-                properties = this.propertiesMutator(properties, this.internalDataStore);
 
             this.properties = new ConcurrentDictionary<string, object>(properties);
             this.dirtyProperties = new ConcurrentDictionary<string, object>();
