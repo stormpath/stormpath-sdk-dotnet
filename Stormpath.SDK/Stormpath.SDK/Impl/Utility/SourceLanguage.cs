@@ -1,4 +1,4 @@
-﻿// <copyright file="So9urceLanguage.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SourceLanguage.cs" company="Stormpath, Inc.">
 //      Copyright (c) 2015 Stormpath, Inc.
 // </copyright>
 // <remarks>
