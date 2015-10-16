@@ -203,7 +203,6 @@ namespace Stormpath.SDK.Impl.Tenant
         {
             var href = $"/accounts/emailVerificationTokens/{token}";
 
-            //var emailVerificationToken = this.GetInternalAsyncDataStore().Instantiate<IEmailVerificationToken>();
             var tokenResponse = await this.GetInternalAsyncDataStore().CreateAsync<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions { SkipIdentityMap = true }, cancellationToken).ConfigureAwait(false);
             return await this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(tokenResponse.Href, cancellationToken).ConfigureAwait(false);
         }
@@ -212,8 +211,7 @@ namespace Stormpath.SDK.Impl.Tenant
         {
             var href = $"/accounts/emailVerificationTokens/{token}";
 
-            var emailVerificationToken = this.GetInternalAsyncDataStore().Instantiate<IEmailVerificationToken>();
-            var tokenResponse = this.GetInternalSyncDataStore().Create(href, emailVerificationToken);
+            var tokenResponse = this.GetInternalSyncDataStore().Create<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions() { SkipIdentityMap = true });
             return this.GetInternalSyncDataStore().GetResource<IAccount>(tokenResponse.Href);
         }
 
