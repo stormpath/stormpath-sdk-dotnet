@@ -24,6 +24,8 @@ namespace Stormpath.SDK.Impl.Http
 {
     internal static class UserAgentBuilder
     {
+        public static string GetUserAgent() => SdkUserAgentValue.Value;
+
         // Lazy ensures this only runs once and is cached.
         private static readonly Lazy<string> SdkUserAgentValue = new Lazy<string>(() => GetSdkUserAgentImpl());
 
@@ -33,12 +35,19 @@ namespace Stormpath.SDK.Impl.Http
                 " ",
                 string.Join(" ", GetInstalledIntegrationsInfo()),
                 GetSdkInfo(),
+                GetLanguageInfo(),
                 GetRuntimeInfo(),
                 GetPlatformInfo())
             .Trim();
         }
 
-        public static string GetUserAgent() => SdkUserAgentValue.Value;
+        private static string GetLanguageInfo()
+        {
+            if (!DetectLanguage.Result.HasValue)
+                return null;
+
+            return $"lang/{DetectLanguage.Result.Value.ToString().ToLower()}";
+        }
 
         private static IEnumerable<string> GetInstalledIntegrationsInfo() => Enumerable.Empty<string>();
 
@@ -48,7 +57,7 @@ namespace Stormpath.SDK.Impl.Http
                 .Version.ToString()
                 .Replace(".0", string.Empty); // remove unnecessary .0.0
 
-            return $"stormpath-sdk-csharp/{version}";
+            return $"stormpath-sdk-dotnet/{version}";
         }
 
         private static string GetRuntimeInfo()

@@ -225,7 +225,9 @@
     <Compile Include="Impl\Tenant\ITenantActionsSync.cs" />
     <Compile Include="Impl\Tenant\ITenantSync.cs" />
     <Compile Include="Impl\Utility\AnonymousType.cs" />
+    <Compile Include="Impl\Utility\DetectLanguage.cs" />
     <Compile Include="Impl\Utility\ITypeLoader.cs" />
+    <Compile Include="Impl\Utility\SourceLanguage.cs" />
     <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
