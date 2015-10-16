@@ -49,10 +49,14 @@ namespace Stormpath.SDK.Impl.Resource
             get
             {
                 var href = this.GetProperty<string>(HrefPropertyName);
-                if (href.StartsWith("autogen", System.StringComparison.InvariantCultureIgnoreCase))
-                    return null;
 
-                return href;
+                bool isEmptyOrDefault =
+                    href == null ||
+                    href.StartsWith("autogen", System.StringComparison.InvariantCultureIgnoreCase);
+
+                return isEmptyOrDefault
+                    ? null
+                    : href;
             }
         }
 
