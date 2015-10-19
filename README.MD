@@ -10,7 +10,6 @@ library gives your ASP.NET, C#, or VB.NET application access to all of Stormpath
 - A hosted login subdomain, for easy Single Sign-On across your apps.
 - Social login with Facebook and Google OAuth.
 - Secure API key authentication for your service.
-- Servlet support for Java web applications.
 
 In addition to these core Stormpath features, this SDK provides:
 
