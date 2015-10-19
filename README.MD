@@ -17,7 +17,7 @@ In addition to these core Stormpath features, this SDK provides:
 - Support for .NET 4.5 and later
 - Support for Mono on Linux
 - Easy installation using NuGet
-- Fully dual-stack design for both native asynchronous ([TPL](https://msdn.microsoft.com/en-us/library/dd460717(v=vs.110).aspx)) and synchronous access
+- Fully dual-stack design for native asynchronous ([TPL](https://msdn.microsoft.com/en-us/library/dd460717(v=vs.110).aspx)) and native synchronous access
 
 If you have feedback about this library, please get in touch and share your
 thoughts! support@stormpath.com
@@ -130,7 +130,7 @@ IClient client = Clients.Builder()
     .Build();
 ```
 
-You can skip building the `IClientApiKey` object and the call to `.SetApiKey()` if you put your `apiKey.properties` file in the default location. Calling `.Build()` without specifying an API Key will check the default location. :thumbsup:
+You can skip building the `IClientApiKey` object and the call to `.SetApiKey()` if you put your `apiKey.properties` file in the default location. Calling `client.Build()` without specifying an API Key will check the default location. :thumbsup:
 
 Once you have built a `IClient`, keep it around! You should only need to create it **once** per application. It's thread-safe, so you can safely reuse it, even in an ASP.NET application.
 
@@ -153,7 +153,8 @@ You can create a new user by calling `CreateAccountAsync`:
 ```csharp
 var joe = await myApp.CreateAccountAsync("Joe", "Stormtrooper",
                                          "tk421@galacticempire.co",
-                                         "Changeme123!");
+                                         "Changeme123!",
+                                         new { isAtPost = false });
 Console.WriteLine("User " + joe.FullName + " created");
 ```
 
@@ -172,7 +173,10 @@ try
 {
      var loginResult = await myApp.AuthenticateAccountAsync(usernameOrEmail, password);
      var loggedInAccount = await loginResult.GetAccountAsync();
-     Console.WriteLine("User {0} logged in", loggedInAccount.FullName);
+     var accountCustomData = await loggedInAccount.GetCustomDataAsync();
+     Console.WriteLine("User {0} logged in. Is at post: {1}",
+                       loggedInAccount.FullName,
+                       accountCustomData["isAtPost"]);
 }
 catch (ResourceException rex)
 {
@@ -206,10 +210,14 @@ Console.ReadKey(false);
 
 #### Other things you can do with the SDK
 
+ * Search for any resource using LINQ 
  * Create and delete entire applications
- * Search for accounts using LINQ
- * Modify and save account data
+ * Create and manage directories
+ * Create and manage groups and account membership in groups
+ * Store arbitrary custom data for any resource
+ * Easily perform social login against Google, Facebook, Github, and LinkedIn
  * Reset an account's password
+ * Verify an account's email address
 
 ## Build Instructions
 
@@ -219,7 +227,7 @@ Building the SDK requires Visual Studio 2015.
 
  1. Use `git clone` or the Visual Studio GitHub extension to clone the branch you want to build (`master` or `develop`).
  2. Open `stormpath-sdk-csharp\Stormpath.SDK\Stormpath.SDK.sln` in Visual Studio.
- 3. On first build, the required NuGet packages should resore. If not, [enable automatic package restore](http://stackoverflow.com/a/29708080/3191599).
+ 3. On first build, the required NuGet packages will resore. If not, [enable automatic package restore](http://stackoverflow.com/a/29708080/3191599).
 
 #### Building with MSBuild
 
