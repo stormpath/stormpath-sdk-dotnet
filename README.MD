@@ -3,7 +3,7 @@
 *An advanced, reliable and easy-to-use user management API for .NET by security experts*
 
 [Stormpath](https://stormpath.com) is a complete user management API.  This
-library gives your ASP.NET or C# application access to all of Stormpath's features:
+library gives your ASP.NET, C#, or VB.NET application access to all of Stormpath's features:
 
 - Robust authentication and authorization.
 - Schemaless user data and profiles.
@@ -17,7 +17,7 @@ In addition to these core Stormpath features, this SDK provides:
 - Support for .NET 4.5 and later
 - Support for Mono on Linux
 - Easy installation using NuGet
-- Fully asynchronous design using the [TPL](https://msdn.microsoft.com/en-us/library/dd460717(v=vs.110).aspx)
+- Fully dual-stack design for both native asynchronous ([TPL](https://msdn.microsoft.com/en-us/library/dd460717(v=vs.110).aspx)) and synchronous access
 
 If you have feedback about this library, please get in touch and share your
 thoughts! support@stormpath.com
