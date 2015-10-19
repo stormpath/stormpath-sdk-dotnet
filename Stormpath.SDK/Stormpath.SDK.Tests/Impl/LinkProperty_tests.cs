@@ -44,6 +44,7 @@ namespace Stormpath.SDK.Tests.Impl
             link2.ShouldBe(new LinkProperty("HTTP://baR"));
         }
 
+#pragma warning disable SA1131 // Use readable conditions
         [Fact]
         public void Comparing_to_null()
         {
@@ -51,6 +52,7 @@ namespace Stormpath.SDK.Tests.Impl
             LinkProperty link2 = new LinkProperty("http://foo");
 
             (link1 == null).ShouldBeTrue();
+
             (null == link1).ShouldBeTrue();
             link1.ShouldBeNull();
 
@@ -60,6 +62,7 @@ namespace Stormpath.SDK.Tests.Impl
             link2.ShouldNotBe(link1);
             link2.ShouldNotBe(null);
         }
+#pragma warning restore SA1131 // Use readable conditions
 
         [Fact]
         public void GetHashCode_hashes_href_string()
