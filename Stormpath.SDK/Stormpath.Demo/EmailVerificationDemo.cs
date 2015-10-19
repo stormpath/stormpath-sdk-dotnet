@@ -8,7 +8,7 @@ using Stormpath.SDK.Client;
 
 namespace Stormpath.Demo
 {
-    public class EmailVerificationDemo : IDemo
+    public class EmailVerificationDemo : AbstractDemo
     {
         private static bool ShouldContinue()
         {
@@ -21,7 +21,7 @@ namespace Stormpath.Demo
             return input.Equals("yes", StringComparison.CurrentCultureIgnoreCase);
         }
 
-        public async Task RunAsync(CancellationToken cancellationToken)
+        public override async Task RunAsync(CancellationToken cancellationToken)
         {
             if (!ShouldContinue())
                 return;
@@ -48,20 +48,22 @@ namespace Stormpath.Demo
             var createdAccount = await application.CreateAccountAsync("Email", "Test", "test@foo.co", "Changeme123!", cancellationToken);
             Console.WriteLine($"Account {createdAccount.Email} created");
 
+
+
             await application.SendVerificationEmailAsync("test@foo.co");
             Console.WriteLine($"Verification email resent to {createdAccount.Email}");
 
             var token = createdAccount.EmailVerificationToken.GetValue();
             var verifiedAccount = await client.VerifyAccountEmailAsync(token);
-            Console.WriteLine($"{createdAccount.Email} verified with token {token}{Strings.NL}");
+            Console.WriteLine($"{createdAccount.Email} verified with token {token}");
 
             // Clean up
             await createdAccount.DeleteAsync();
         }
 
-        public async Task CleanupAsync()
+        public override async Task CleanupAsync()
         {
-            return;
+            await RemoveAccountsAsync();
         }
     }
 }

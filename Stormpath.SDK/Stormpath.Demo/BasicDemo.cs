@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK;
@@ -13,16 +11,9 @@ using Stormpath.SDK.Error;
 
 namespace Stormpath.Demo
 {
-    public class BasicDemo : IDemo
+    public class BasicDemo : AbstractDemo
     {
-        private readonly List<IAccount> addedUsers;
-
-        public BasicDemo()
-        {
-            addedUsers = new List<IAccount>();
-        }
-
-        public async Task RunAsync(CancellationToken cancellationToken)
+        public override async Task RunAsync(CancellationToken cancellationToken)
         {
             var apiKey = ClientApiKeys.Builder()
                 // This is actually unnecessary, because this is already the default search path
@@ -52,9 +43,9 @@ namespace Stormpath.Demo
             // Add some users
             var myApp = applications.Where(x => x.Name == "My Application").Single();
             Console.WriteLine($"{Strings.NL}Adding users to '{myApp.Name}'...");
-            addedUsers.Add(
+            createdAccounts.Add(
                 await myApp.CreateAccountAsync("Joe", "Stormtrooper", "tk421@galacticempire.co", "Changeme123!", customData: cancellationToken));
-            addedUsers.Add(
+            createdAccounts.Add(
                 await myApp.CreateAccountAsync("Lando", "Calrissian", "lando@bespin.co", "Changeme123!",
                                                 new { phrase = "You got a lotta nerve, showing your face after what you pulled." }, cancellationToken));
 
@@ -65,7 +56,7 @@ namespace Stormpath.Demo
             vader.SetSurname("Vader");
             vader.SetPassword("Togetherw3willrulethegalaxy!");
             vader.CustomData.Put("phrase", "I find your lack of faith disturbing.");
-            addedUsers.Add(
+            createdAccounts.Add(
                 await myApp.CreateAccountAsync(vader,
                     options => options.RegistrationWorkflowEnabled = false,
                 cancellationToken));
@@ -92,21 +83,9 @@ namespace Stormpath.Demo
             if (!Helpers.SpacebarToContinue(cancellationToken)) return;
         }
 
-        public async Task CleanupAsync()
+        public override async Task CleanupAsync()
         {
-            Console.WriteLine("Deleting accounts:");
-            foreach (var account in addedUsers)
-            {
-                try
-                {
-                    await account.DeleteAsync();
-                    Console.WriteLine($"Deleted {account.Email}");
-                }
-                catch (ResourceException rex)
-                {
-                    Console.WriteLine($"Could not delete {account.Email}. Error: {rex.Message}");
-                }
-            }
+            await RemoveAccountsAsync();
         }
     }
 }

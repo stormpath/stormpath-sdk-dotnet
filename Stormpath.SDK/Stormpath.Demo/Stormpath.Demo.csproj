@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractDemo.cs" />
     <Compile Include="BasicDemo.cs" />
     <Compile Include="EmailVerificationDemo.cs" />
     <Compile Include="Helpers.cs" />
