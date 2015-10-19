@@ -8,15 +8,23 @@ using Stormpath.SDK.Client;
 
 namespace Stormpath.Demo
 {
-    class EmailVerificationDemo
+    public class EmailVerificationDemo : IDemo
     {
-        private static readonly string NL = Environment.NewLine;
+        private static bool ShouldContinue()
+        {
+            Console.WriteLine("This demo assumes you have an application called 'EmailWorkflowDemo' in your tenant.");
+            Console.WriteLine("This application must be configured with the Verification Email workflow turned on.");
+            Console.Write("Do you want to continue? [no] ");
+
+            var input = Console.ReadLine();
+
+            return input.Equals("yes", StringComparison.CurrentCultureIgnoreCase);
+        }
 
         public async Task RunAsync(CancellationToken cancellationToken)
         {
-            Console.WriteLine("Running the email verification workflow demo.");
-            Console.WriteLine("This assumes you have an application called 'EmailWorkflowDemo' in your tenant.");
-            Console.WriteLine($"This application must be configured with the Verification Email workflow turned on.{NL}");
+            if (!ShouldContinue())
+                return;
 
             var apiKey = ClientApiKeys.Builder()
                 .SetFileLocation("~\\.stormpath\\apiKey.properties")
@@ -45,10 +53,15 @@ namespace Stormpath.Demo
 
             var token = createdAccount.EmailVerificationToken.GetValue();
             var verifiedAccount = await client.VerifyAccountEmailAsync(token);
-            Console.WriteLine($"{createdAccount.Email} verified with token {token}{NL}");
+            Console.WriteLine($"{createdAccount.Email} verified with token {token}{Strings.NL}");
 
             // Clean up
             await createdAccount.DeleteAsync();
+        }
+
+        public async Task CleanupAsync()
+        {
+            return;
         }
     }
 }

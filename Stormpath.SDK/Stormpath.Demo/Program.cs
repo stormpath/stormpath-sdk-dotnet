@@ -1,23 +1,11 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Stormpath.SDK;
-using Stormpath.SDK.Api;
-using Stormpath.SDK.Client;
 using System.Threading;
-using Stormpath.SDK.Application;
-using System.Linq;
-using System.Collections.Generic;
-using Stormpath.SDK.Account;
-using Stormpath.SDK.Error;
+using System.Threading.Tasks;
 
 namespace Stormpath.Demo
 {
     class Program
     {
-        private static readonly string NL = Environment.NewLine;
-
-        private static List<IAccount> addedUsers;
-
         static void Main(string[] args)
         {
             // Wire up the console cancel event (Ctrl+C) to cancel async tasks
@@ -28,146 +16,56 @@ namespace Stormpath.Demo
                 cts.Cancel();
             };
 
-            // Email verification demo
-            var emailDemo = new EmailVerificationDemo();
-            emailDemo.RunAsync(cts.Token).GetAwaiter().GetResult();
+            Console.WriteLine("Welcome to the Stormpath.SDK demo suite!");
 
-            // Keep track of the accounts we've created so we can clean them up later
-            addedUsers = new List<IAccount>();
-
-            // Logically equivalent to MainAsync(...).Wait() but allows exceptions to bubble up unwrapped
-            MainAsync(cts.Token).GetAwaiter().GetResult();
-
-            // Clean up
-            if (addedUsers.Any())
+            while (true)
             {
-                Console.WriteLine($"{NL}Cleaning up!");
-                CleanupAsync().GetAwaiter().GetResult();
-            }
+                Console.WriteLine($"Available commands:{Strings.NL}");
+                Console.WriteLine("{0,-10} {1}", "basic", "Simple account creation and login");
+                Console.WriteLine("{0,-10} {1}", "email", "Email verification");
+                Console.WriteLine("{0,-10} {1}", "quit", "Exit the demo");
+                Console.Write($"{Strings.NL}> ");
 
-            Console.WriteLine($"{NL}Finished! Press any key to exit...");
-            Console.ReadKey(false);
+                var input = Console.ReadLine();
+                Thread.Sleep(50); // let the CancellationToken "catch up"
+
+                if (cts.Token.IsCancellationRequested)
+                    return;
+
+                if (input.Equals("quit", StringComparison.CurrentCultureIgnoreCase))
+                    return;
+
+                switch (input)
+                {
+                    case "basic":
+                        RunAsync<BasicDemo>(cts.Token).GetAwaiter().GetResult();
+                        break;
+                    case "email":
+                        RunAsync<EmailVerificationDemo>(cts.Token).GetAwaiter().GetResult();
+                        break;
+                    default:
+                        Console.WriteLine($"Unknown command '{input}'");
+                        break;
+                }
+            }
         }
 
-        static async Task MainAsync(CancellationToken cancellationToken)
+        static async Task RunAsync<T>(CancellationToken cancellationToken)
+            where T : class, IDemo, new()
         {
-            var apiKey = ClientApiKeys.Builder()
-                // This is actually unnecessary, because this is already the default search path
-                .SetFileLocation("~\\.stormpath\\apiKey.properties")
-                .Build();
+            var demo = new T();
 
-            // Create an IClient object. Everything starts here!
-            var client = Clients.Builder()
-                .SetApiKey(apiKey)
-                .Build();
-            
-            // Get current tenant
-            var tenant = await client.GetCurrentTenantAsync(cancellationToken);
-            Console.WriteLine($"Current tenant is: {tenant.Name}");
-
-            // List applications
-            Console.WriteLine($"{NL}Tenant applications:");
-            var applications = await tenant
-                .GetApplications()
-                .ToListAsync(cancellationToken);
-            foreach (var app in applications)
-            {
-                Console.WriteLine($"{TrimWithEllipse(app.Name, 15), -15} {(app.Status == ApplicationStatus.Enabled ? "enabled" : "disabled")}");
-            }
-            if (!SpacebarToContinue(cancellationToken)) return;
-
-            // Add some users
-            var myApp = applications.First();
-            Console.WriteLine($"{NL}Adding users to '{myApp.Name}'...");
-            addedUsers.Add(
-                await myApp.CreateAccountAsync("Joe", "Stormtrooper", "tk421@galacticempire.co", "Changeme123!", customData: cancellationToken));
-            addedUsers.Add(
-                await myApp.CreateAccountAsync("Lando", "Calrissian", "lando@bespin.co", "Changeme123!", 
-                                                new { phrase = "You got a lotta nerve, showing your face after what you pulled." }, cancellationToken));
-
-            // Another way to add users. Disable the default registration email workflow
-            var vader = client.Instantiate<IAccount>();
-            vader.SetEmail("vader@galacticempire.co");
-            vader.SetGivenName("Darth");
-            vader.SetSurname("Vader");
-            vader.SetPassword("Togetherw3willrulethegalaxy!");
-            vader.CustomData.Put("phrase", "I find your lack of faith disturbing.");
-            addedUsers.Add(
-                await myApp.CreateAccountAsync(vader,
-                    options => options.RegistrationWorkflowEnabled = false,
-                cancellationToken));
-
-            // List all accounts (this time with an asynchronous foreach)
-            Console.WriteLine($"{NL}Application accounts:");
-            await myApp.GetAccounts().ForEachAsync(account => Console.WriteLine($"{TrimWithEllipse(account.Email, 25), -25} {TrimWithEllipse(account.FullName, 20), -20} {account.Status.ToString().ToLower()}"), cancellationToken);
-            if (!SpacebarToContinue(cancellationToken)) return;
-
-            // Authenticate a user
-            Console.WriteLine($"{NL}Logging in as vader@galacticempire.co");
             try
             {
-                var result = await myApp.AuthenticateAccountAsync("vader@galacticempire.co", "Togetherw3willrulethegalaxy!", cancellationToken);
-                var returnedAccount = await result.GetAccountAsync();
-                var customData = await returnedAccount.GetCustomDataAsync();
-                Console.WriteLine($"Success! {returnedAccount.FullName} logged in.");
-                Console.WriteLine($"Famous phrase: '{customData["phrase"]}'");
+                await demo.RunAsync(cancellationToken);
+                Console.WriteLine("Demo finished.");
             }
-            catch (ResourceException rex)
+            finally
             {
-                Console.WriteLine($"Could not log in. Error: {rex.Message}");
+                Console.WriteLine("Cleaning up...");
+                await demo.CleanupAsync();
+                Console.WriteLine("Cleaned up.");
             }
-            if (!SpacebarToContinue(cancellationToken)) return;
-        }
-
-        static async Task CleanupAsync()
-        {
-            Console.WriteLine("Deleting accounts:");
-            foreach (var account in addedUsers)
-            {
-                try
-                {
-                    await account.DeleteAsync();
-                    Console.WriteLine($"Deleted {account.Email}");
-                }
-                catch (ResourceException rex)
-                {
-                    Console.WriteLine($"Could not delete {account.Email}. Error: {rex.Message}");
-                }
-            }
-        }
-
-        private static bool SpacebarToContinue(CancellationToken cancelToken)
-        {
-            if (cancelToken.IsCancellationRequested)
-                return false;
-
-            Console.Write($"{NL}Press spacebar to continue");
-            var key = Console.ReadKey(true);
-
-            if (cancelToken.IsCancellationRequested)
-                return false;
-
-            ClearCurrentLine(Console.CursorTop);
-            Console.SetCursorPosition(0, Console.CursorTop - 1);
-            return (key.KeyChar == ' ');
-        }
-
-        private static string TrimWithEllipse(string input, int maxLength)
-        {
-            if (input.Length <= maxLength)
-                return input;
-
-            return input.Substring(0, maxLength - 3) + "...";
-        }
-
-        private static void ClearCurrentLine(int line)
-        {
-            Console.SetCursorPosition(0, line);
-            for (int i = 0; i < Console.WindowWidth; i++)
-            {
-                Console.Write(" ");
-            }
-            Console.SetCursorPosition(0, line);
         }
     }
 }
