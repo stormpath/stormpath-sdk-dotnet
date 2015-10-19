@@ -756,6 +756,19 @@ namespace Stormpath.SDK.Tests.Fakes
 }";
 
         #endregion
+
+        #region CustomData
+
+        public static readonly string CustomData = @"
+        {
+            ""createdAt"": ""2015-08-12T21:30:53.321Z"",
+            ""expiresAt"": ""2015-08-15T21:31:29Z"",
+            ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/customData"",
+            ""membershipType"": ""lifetime"",
+            ""modifiedAt"": ""2015-08-12T21:31:49.854Z""
+        }";
+
+        #endregion
     }
 #pragma warning restore SA1124 // Do not use regions
 }

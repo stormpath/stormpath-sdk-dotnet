@@ -25,6 +25,8 @@ using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Impl.IdentityMap;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -33,14 +35,15 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class DefaultResourceFactory_tests
+    public class DefaultResourceFactory_tests : IDisposable
     {
         private readonly IResourceFactory factory;
 
         public DefaultResourceFactory_tests()
         {
             var dataStore = new StubDataStore(null, "http://api.foo.bar");
-            this.factory = new DefaultResourceFactory(dataStore);
+            var identityMap = new MemoryCacheIdentityMap<string, ResourceData>(TimeSpan.FromSeconds(10)); // arbitrary expiration time
+            this.factory = new DefaultResourceFactory(dataStore, identityMap);
         }
 
         [Fact]
@@ -83,6 +86,11 @@ namespace Stormpath.SDK.Tests.Impl
             yield return new object[] { typeof(IApplication), typeof(DefaultApplication) };
             yield return new object[] { typeof(ITenant), typeof(DefaultTenant) };
             yield return new object[] { typeof(IDirectory), typeof(DefaultDirectory) };
+        }
+
+        public void Dispose()
+        {
+            this.factory.Dispose();
         }
     }
 }

@@ -30,6 +30,12 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             this.convertAction = convertAction;
         }
 
+        public FuncFieldConverter(Func<KeyValuePair<string, object>, FieldConverterResult> convertAction, string converterName, params Type[] appliesToTargetTypes)
+            : base(converterName, appliesToTargetTypes)
+        {
+            this.convertAction = convertAction;
+        }
+
         protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
         {
             return this.convertAction(token);

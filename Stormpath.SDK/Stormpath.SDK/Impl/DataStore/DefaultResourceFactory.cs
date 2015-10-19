@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using Stormpath.SDK.Impl.IdentityMap;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
@@ -24,26 +25,36 @@ namespace Stormpath.SDK.Impl.DataStore
     internal sealed class DefaultResourceFactory : IResourceFactory
     {
         private readonly IInternalDataStore dataStore;
+        private readonly IIdentityMap<string, ResourceData> identityMap;
         private readonly ResourceTypeLookup typeLookup;
+        private bool isDisposed = false; // To detect redundant calls
 
-        public DefaultResourceFactory(IInternalDataStore dataStore)
+        public DefaultResourceFactory(IInternalDataStore dataStore, IIdentityMap<string, ResourceData> identityMap)
         {
             this.dataStore = dataStore;
+            this.identityMap = identityMap;
+
             this.typeLookup = new ResourceTypeLookup();
         }
 
         private IResourceFactory AsInterface => this;
 
-        T IResourceFactory.Create<T>()
-            => (T)this.AsInterface.Create(typeof(T), null);
+        T IResourceFactory.Create<T>(ILinkable original)
+            => (T)this.AsInterface.Create(typeof(T), null, original);
 
-        object IResourceFactory.Create(Type type)
-            => this.AsInterface.Create(type, null);
+        object IResourceFactory.Create(Type type, ILinkable original)
+            => this.AsInterface.Create(type, null, null, original);
 
-        T IResourceFactory.Create<T>(IDictionary<string, object> properties)
-            => (T)this.AsInterface.Create(typeof(T), properties);
+        T IResourceFactory.Create<T>(IDictionary<string, object> properties, ILinkable original)
+            => (T)this.AsInterface.Create(typeof(T), properties, null, original);
 
-        object IResourceFactory.Create(Type type, IDictionary<string, object> properties)
+        object IResourceFactory.Create(Type type, IDictionary<string, object> properties, ILinkable original)
+            => this.AsInterface.Create(type, properties, null, original);
+
+        T IResourceFactory.Create<T>(IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
+            => (T)this.AsInterface.Create(typeof(T), properties, options, original);
+
+        object IResourceFactory.Create(Type type, IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
         {
             bool isCollection =
                 type.IsGenericType &&
@@ -51,22 +62,51 @@ namespace Stormpath.SDK.Impl.DataStore
             if (isCollection)
                 return this.InstantiateCollection(type, properties);
 
-            return this.InstantiateSingle(type, properties);
+            return this.InstantiateSingle(type, properties, options, original);
         }
 
-        private object InstantiateSingle(Type type, IDictionary<string, object> properties)
+        private object InstantiateSingle(Type type, IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
         {
+            if (options == null)
+                options = new IdentityMapOptions(); // with default values
+
             var targetType = this.typeLookup.GetConcrete(type);
             if (targetType == null)
                 throw new ApplicationException($"Unknown resource type {type.Name}");
 
-            object targetObject;
+            AbstractResource targetObject;
             try
             {
+                string id = RandomResourceId(type.Name);
+
                 if (properties == null)
-                    targetObject = Activator.CreateInstance(targetType, new object[] { this.dataStore });
-                else
-                    targetObject = Activator.CreateInstance(targetType, new object[] { this.dataStore, properties });
+                    properties = new Dictionary<string, object>();
+
+                object href = null;
+                bool propertiesContainsHref =
+                    properties.TryGetValue("href", out href) &&
+                    href != null;
+                if (propertiesContainsHref)
+                    id = href.ToString();
+
+                if (!propertiesContainsHref)
+                    properties["href"] = id;
+
+                var resourceData = options.SkipIdentityMap
+                    ? new ResourceData(this.dataStore)
+                    : this.identityMap.GetOrAdd(id, () => new ResourceData(this.dataStore), options.StoreWithInfiniteExpiration);
+
+                if (properties != null)
+                    resourceData.Update(properties);
+
+                targetObject = Activator.CreateInstance(targetType, new object[] { resourceData }) as AbstractResource;
+
+                var notifyableTarget = targetObject as INotifiable;
+                if (notifyableTarget != null)
+                    notifyableTarget.OnUpdate(properties, this.dataStore);
+
+                if (original != null)
+                    original.Link(resourceData);
             }
             catch (Exception e)
             {
@@ -130,7 +170,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
                 foreach (var itemMap in items)
                 {
-                    var materialized = this.InstantiateSingle(innerType, itemMap);
+                    var materialized = this.InstantiateSingle(innerType, itemMap, options: null, original: null);
                     addMethod.Invoke(materializedItems, new object[] { materialized });
                 }
 
@@ -143,6 +183,28 @@ namespace Stormpath.SDK.Impl.DataStore
             {
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: failed to add items to collection.", e);
             }
+        }
+
+        private static string RandomResourceId(string typeName)
+            => $"autogen://{typeName}/{Guid.NewGuid().ToString().ToLowerInvariant().Replace("-", string.Empty)}";
+
+        private void Dispose(bool disposing)
+        {
+            if (!this.isDisposed)
+            {
+                if (disposing)
+                {
+                    this.identityMap.Dispose();
+                }
+
+                this.isDisposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            this.Dispose(true);
         }
     }
 }

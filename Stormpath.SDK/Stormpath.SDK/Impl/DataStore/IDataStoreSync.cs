@@ -20,7 +20,7 @@ namespace Stormpath.SDK.Impl.DataStore
     internal interface IDataStoreSync
     {
         /// <summary>
-        /// Synchronously retrieves the resource at the specified <paramref name="href"/> URL synchronously and returns the resource
+        /// Synchronously retrieves the resource at the specified <paramref name="href"/> URL and returns the resource
         /// as an instance of the specified class <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T">The type of the returned <see cref="SDK.Resource.IResource"/> value.</typeparam>

@@ -28,17 +28,17 @@ namespace Stormpath.SDK.Client
     /// in order for your code to properly communicate with Stormpath API server.
     /// There are currently two authentication schemes available: HTTP Basic Authentication (<see cref="Basic"/>) and Digest Authentication (<see cref="SAuthc1"/>).
     /// </summary>
-    public sealed class AuthenticationScheme : Enumeration
+    public sealed class AuthenticationScheme : StringEnumeration
     {
         /// <summary>
         /// HTTP Basic Authentication
         /// </summary>
-        public static AuthenticationScheme Basic = new AuthenticationScheme(0, "BASIC", typeof(BasicRequestAuthenticator));
+        public static AuthenticationScheme Basic = new AuthenticationScheme("BASIC", typeof(BasicRequestAuthenticator));
 
         /// <summary>
         /// Digest Authentication
         /// </summary>
-        public static AuthenticationScheme SAuthc1 = new AuthenticationScheme(1, "SAUTHC1", typeof(SAuthc1RequestAuthenticator));
+        public static AuthenticationScheme SAuthc1 = new AuthenticationScheme("SAUTHC1", typeof(SAuthc1RequestAuthenticator));
 
         private readonly Type authenticatorType;
 
@@ -46,8 +46,8 @@ namespace Stormpath.SDK.Client
         {
         }
 
-        private AuthenticationScheme(int value, string displayName, Type authenticatorType)
-            : base(value, displayName)
+        private AuthenticationScheme(string value, Type authenticatorType)
+            : base(value)
         {
             this.authenticatorType = authenticatorType;
         }

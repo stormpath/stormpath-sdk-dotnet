@@ -15,10 +15,9 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
 using Shouldly;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Impl.Account;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 
@@ -29,12 +28,11 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void GetValue_returns_token_value()
         {
-            var dataStore = new StubDataStore(null, "https://api.foo.bar");
+            IInternalDataStore dataStore = new StubDataStore(null, "https://api.foo.bar");
 
             var href = "https://api.foobar.com/v1/applications/WpM9nyZ2TbaEzfbRvLk9KA/passwordResetTokens/my-token-value-here";
-            var properties = new Dictionary<string, object>();
-            properties.Add("href", href);
-            IPasswordResetToken passwordResetToken = new DefaultPasswordResetToken(dataStore, properties);
+
+            var passwordResetToken = dataStore.InstantiateWithHref<IPasswordResetToken>(href);
 
             passwordResetToken.GetValue().ShouldBe("my-token-value-here");
         }

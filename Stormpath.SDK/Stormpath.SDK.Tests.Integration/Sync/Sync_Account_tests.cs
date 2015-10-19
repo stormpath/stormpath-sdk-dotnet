@@ -26,7 +26,7 @@ using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
     public class Sync_Account_tests
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Tests.Integration
             var accounts = application.GetAccounts().Synchronously().ToList();
 
             // Verify data from IntegrationTestData
-            accounts.Count.ShouldBe(8);
+            accounts.Count.ShouldBeGreaterThanOrEqualTo(8);
 
             var luke = accounts.Where(x => x.GivenName == "Luke").Single();
             luke.FullName.ShouldBe("Luke Skywalker");
@@ -72,6 +72,24 @@ namespace Stormpath.SDK.Tests.Integration
             vader.FullName.ShouldBe("Darth Vader");
             vader.Email.ShouldStartWith("vader@galacticempire.co");
             vader.Username.ShouldStartWith("lordvader");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Getting_account_provider_data(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var luke = application
+                .GetAccounts()
+                .Synchronously()
+                .Where(x => x.Email.StartsWith("lskywalker"))
+                .Single();
+
+            var providerData = luke.GetProviderData();
+            providerData.Href.ShouldNotBeNullOrEmpty();
+            providerData.ProviderId.ShouldBe("stormpath");
         }
 
         [Theory]
@@ -366,7 +384,7 @@ namespace Stormpath.SDK.Tests.Integration
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var count = application.GetAccounts().Synchronously().Count();
-            count.ShouldBe(8);
+            count.ShouldBeGreaterThanOrEqualTo(8);
         }
 
         [Theory]
@@ -424,6 +442,29 @@ namespace Stormpath.SDK.Tests.Integration
             if (deleted)
                 this.fixture.CreatedAccountHrefs.Remove(account.Href);
             deleted.ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_account_with_custom_data(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var account = application.CreateAccount(
+                "Mara", "Jade", "mara.jade@test.sync", new RandomPassword(12), new { quote = "I'm a fighter. I've always been a fighter.", birth = -17, death = 40 });
+
+            account.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+            var customData = account.GetCustomData();
+
+            account.FullName.ShouldBe("Mara Jade");
+            customData["quote"].ShouldBe("I'm a fighter. I've always been a fighter.");
+            customData["birth"].ShouldBe(-17);
+            customData["death"].ShouldBe(40);
+
+            // Clean up
+            account.Delete();
         }
 
         [Theory]

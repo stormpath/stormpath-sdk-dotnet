@@ -15,12 +15,10 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Auth;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Auth
@@ -29,22 +27,17 @@ namespace Stormpath.SDK.Impl.Auth
     {
         private static readonly string AccountPropertyName = "account";
 
-        public DefaultAuthenticationResult(IInternalDataStore dataStore)
-            : base(dataStore)
-        {
-        }
-
-        public DefaultAuthenticationResult(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
+        public DefaultAuthenticationResult(ResourceData data)
+            : base(data)
         {
         }
 
         internal LinkProperty Account => this.GetLinkProperty(AccountPropertyName);
 
         Task<IAccount> IAuthenticationResult.GetAccountAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
 
         IAccount IAuthenticationResultSync.GetAccount()
-            => this.GetInternalDataStoreSync().GetResource<IAccount>(this.Account.Href);
+            => this.GetInternalSyncDataStore().GetResource<IAccount>(this.Account.Href);
     }
 }

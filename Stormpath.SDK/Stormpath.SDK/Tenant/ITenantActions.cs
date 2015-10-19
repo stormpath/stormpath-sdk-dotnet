@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Tenant
@@ -32,10 +33,19 @@ namespace Stormpath.SDK.Tenant
     public interface ITenantActions
     {
         /// <summary>
+        /// Creates a new <see cref="Application.IApplication"/> resource in the current tenant, with the default creation options.
+        /// </summary>
+        /// <param name="application">The <see cref="IApplication"/> to create.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the created <see cref="IApplication"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
+        Task<IApplication> CreateApplicationAsync(IApplication application, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Creates a new <see cref="Application.IApplication"/> resource in the current tenant.
         /// </summary>
         /// <param name="application">The <see cref="IApplication"/> to create.</param>
-        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="ApplicationCreationOptionsBuilder"/>,
+        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IApplicationCreationOptions"/>,
         /// which will be used when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the created <see cref="IApplication"/>.</returns>
@@ -53,16 +63,7 @@ namespace Stormpath.SDK.Tenant
         Task<IApplication> CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new <see cref="Application.IApplication"/> resource in the current tenant, with the default creation options.
-        /// </summary>
-        /// <param name="application">The <see cref="IApplication"/> to create.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IApplication"/>.</returns>
-        /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
-        Task<IApplication> CreateApplicationAsync(IApplication application, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Creates a new <see cref="Application.IApplication"/> resource in the current tenant.
+        /// Convenience method. Creates a new <see cref="Application.IApplication"/> resource in the current tenant.
         /// </summary>
         /// <param name="name">The name of the application.</param>
         /// <param name="createDirectory">Whether a default directory should be created automatically.</param>
@@ -70,6 +71,69 @@ namespace Stormpath.SDK.Tenant
         /// <returns>A Task whose result is the created <see cref="IApplication"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
         Task<IApplication> CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Creates a new Cloud Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="directory">The Directory resource to create.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        Task<IDirectory> CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Creates a new Provider-based Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="creationOptionsAction">An inline builder for aninstance of <see cref="IDirectoryCreationOptions"/>,
+        /// which will be used when sending the request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        Task<IDirectory> CreateDirectoryAsync(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Creates a new Provider-based Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        Task<IDirectory> CreateDirectoryAsync(IDirectory directory, IDirectoryCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Convenience method. Creates a new Cloud Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="name">The directory name.</param>
+        /// <param name="description">The directory description.</param>
+        /// <param name="status">The initial directory status.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        Task<IDirectory> CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Verifies an account's email address based on a <c>sptoken</c> parameter embedded in a clickable URL
+        /// found in an account's verification email.
+        /// <para>
+        /// For example:
+        /// <code>
+        /// https://my.company.com/email/verify?sptoken=ExAmPleEmAilVeRiFiCaTiOnTokEnHeRE
+        /// </code>
+        /// </para>
+        /// <para>
+        /// Based on this URL, the following should be invoked:
+        /// <code>
+        /// tenant.VerifyAccountEmailAsync("ExAmPleEmAilVeRiFiCaTiOnTokEnHeRE");
+        /// </code>
+        /// </para>
+        /// </summary>
+        /// <param name="token">The <c>sptoken</c> query parameter value.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The verified account.</returns>
+        /// <exception cref="Error.ResourceException">The token was not valid.</exception>
+        Task<IAccount> VerifyAccountEmailAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a queryable list of all accounts in this tenant.
@@ -97,5 +161,14 @@ namespace Stormpath.SDK.Tenant
         ///     var allDirectories = await myTenant.GetDirectories().ToListAsync();
         /// </example>
         IAsyncQueryable<IDirectory> GetDirectories();
+
+        /// <summary>
+        /// Gets a queryable list of all groups in this tenant.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
+        /// <example>
+        ///     var allGroups = await myTenant.GetGroups().ToListAsync();
+        /// </example>
+        IAsyncQueryable<IGroup> GetGroups();
     }
 }

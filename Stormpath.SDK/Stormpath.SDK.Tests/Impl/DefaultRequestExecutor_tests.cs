@@ -26,7 +26,6 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Shared;
 using Stormpath.SDK.Tests.Fakes;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -196,7 +195,7 @@ namespace Stormpath.SDK.Tests.Impl
                 });
 
                 // Should only have 1 call: no retries!
-                throwingHttpClient.Received(1).ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>()).IgnoreAwait();
+                await throwingHttpClient.Received(1).ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>());
             }
 
             [Fact]

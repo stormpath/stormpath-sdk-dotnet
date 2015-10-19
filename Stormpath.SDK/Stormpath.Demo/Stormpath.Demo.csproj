@@ -26,7 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,7 +36,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\Stormpath.SDK.Tests.Integration\Stormpath.SDK.Tests.Integration.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Stormpath.SDK\Stormpath.SDK.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -51,13 +52,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractDemo.cs" />
+    <Compile Include="BasicDemo.cs" />
+    <Compile Include="EmailVerificationDemo.cs" />
+    <Compile Include="Helpers.cs" />
+    <Compile Include="IDemo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Stormpath.SDK.JsonNetSerializer\Stormpath.SDK.JsonNetSerializer.csproj">
+      <Project>{4011b5ea-ceb5-4212-b8e6-d18c63ab6acf}</Project>
+      <Name>Stormpath.SDK.JsonNetSerializer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stormpath.SDK.RestSharpClient\Stormpath.SDK.RestSharpClient.csproj">
+      <Project>{21f7a025-7bb1-49b0-8ad3-cee8a3b1d542}</Project>
+      <Name>Stormpath.SDK.RestSharpClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Stormpath.SDK\Stormpath.SDK.csproj">
       <Project>{79a65c37-9db1-413a-ac23-708404530295}</Project>
       <Name>Stormpath.SDK</Name>

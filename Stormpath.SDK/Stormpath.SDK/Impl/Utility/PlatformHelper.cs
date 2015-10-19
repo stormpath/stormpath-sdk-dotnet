@@ -173,8 +173,8 @@ namespace Stormpath.SDK.Impl.Utility
 
         private static string GetMonoOSVersion()
         {
-            var osVersion = Environment.OSVersion.Version;
-            var version = $"{osVersion.Major}.{osVersion.Minor}.{osVersion.MajorRevision}.{osVersion.MinorRevision}";
+            var operatingSystemVersion = Environment.OSVersion.Version;
+            var version = $"{operatingSystemVersion.Major}.{operatingSystemVersion.Minor}.{operatingSystemVersion.MajorRevision}.{operatingSystemVersion.MinorRevision}";
             if (!string.IsNullOrEmpty(Environment.OSVersion.ServicePack))
                 version = $"{version}-{Environment.OSVersion.ServicePack}";
 

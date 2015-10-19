@@ -16,7 +16,9 @@
 // </remarks>
 
 using System;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Directory;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
@@ -61,5 +63,63 @@ namespace Stormpath.SDK.Impl.Tenant
         /// <returns>The created <see cref="IApplication"/>.</returns>
         /// <exception cref="SDK.Error.ResourceException">There was a problem creating the application.</exception>
         IApplication CreateApplication(string name, bool createDirectory);
+
+        /// <summary>
+        /// Synchronously creates a new Cloud Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="directory">The Directory resource to create.</param>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        IDirectory CreateDirectory(IDirectory directory);
+
+        /// <summary>
+        /// Synchronously creates a new Provider-based Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="creationOptionsAction">An inline builder for aninstance of <see cref="IDirectoryCreationOptions"/>,
+        /// which will be used when sending the request.</param>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        IDirectory CreateDirectory(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction);
+
+        /// <summary>
+        /// Synchronously creates a new Provider-based Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        IDirectory CreateDirectory(IDirectory directory, IDirectoryCreationOptions creationOptions);
+
+        /// <summary>
+        /// Synchronously creates a new Cloud Directory resource in the Tenant.
+        /// </summary>
+        /// <param name="name">The directory name.</param>
+        /// <param name="description">The directory description.</param>
+        /// <param name="status">The initial directory status.</param>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
+        IDirectory CreateDirectory(string name, string description, DirectoryStatus status);
+
+        /// <summary>
+        /// Synchronously verifies an account's email address based on a <c>sptoken</c> parameter embedded in a clickable URL
+        /// found in an account's verification email.
+        /// <para>
+        /// For example:
+        /// <code>
+        /// https://my.company.com/email/verify?sptoken=ExAmPleEmAilVeRiFiCaTiOnTokEnHeRE
+        /// </code>
+        /// </para>
+        /// <para>
+        /// Based on this URL, the following should be invoked:
+        /// <code>
+        /// tenant.VerifyAccountEmailAsync("ExAmPleEmAilVeRiFiCaTiOnTokEnHeRE");
+        /// </code>
+        /// </para>
+        /// </summary>
+        /// <param name="token">The <c>sptoken</c> query parameter value.</param>
+        /// <returns>The verified account.</returns>
+        /// <exception cref="Error.ResourceException">The token was not valid.</exception>
+        IAccount VerifyAccountEmail(string token);
     }
 }

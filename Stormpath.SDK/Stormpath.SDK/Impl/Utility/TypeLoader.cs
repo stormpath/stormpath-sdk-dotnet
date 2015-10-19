@@ -35,13 +35,23 @@ namespace Stormpath.SDK.Impl.Utility
 
         public bool TryLoad(out T instance, object[] constructorArguments = null)
         {
-            var absolutePath = Path.GetFullPath(this.fileName);
+            // Try to load via AppDomain.CurrentDomain
+            var appDomainPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", this.fileName);
+            bool foundViaAppDomain = File.Exists(appDomainPath);
 
-            if (!File.Exists(absolutePath))
+            // Try to load via local working directory
+            var naivePath = Path.GetFullPath(this.fileName);
+            bool foundViaNaivePath = File.Exists(naivePath);
+
+            if (!foundViaAppDomain && !foundViaNaivePath)
             {
                 instance = null;
                 return false;
             }
+
+            var absolutePath = foundViaAppDomain
+                ? appDomainPath
+                : naivePath;
 
             Assembly assembly = Assembly.LoadFile(absolutePath);
             var type = assembly.GetType(this.fullyQualifiedTypeName);

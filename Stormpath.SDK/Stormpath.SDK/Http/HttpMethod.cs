@@ -23,59 +23,59 @@ namespace Stormpath.SDK.Http
     /// <summary>
     /// Enumeration of HTTP methods defined in the HTTP/1.1 specification.
     /// </summary>
-    public sealed class HttpMethod : Enumeration
+    public sealed class HttpMethod : StringEnumeration
     {
         /// <summary>
         /// An HTTP GET.
         /// </summary>
-        public static HttpMethod Get = new HttpMethod(0, "GET");
+        public static HttpMethod Get = new HttpMethod("GET");
 
         /// <summary>
         /// An HTTP HEAD.
         /// </summary>
-        public static HttpMethod Head = new HttpMethod(10, "HEAD");
+        public static HttpMethod Head = new HttpMethod("HEAD");
 
         /// <summary>
         /// An HTTP POST.
         /// </summary>
-        public static HttpMethod Post = new HttpMethod(20, "POST");
+        public static HttpMethod Post = new HttpMethod("POST");
 
         /// <summary>
         /// An HTTP PUT.
         /// </summary>
-        public static HttpMethod Put = new HttpMethod(30, "PUT");
+        public static HttpMethod Put = new HttpMethod("PUT");
 
         /// <summary>
         /// An HTTP PATCH.
         /// </summary>
-        public static HttpMethod Patch = new HttpMethod(40, "PATCH");
+        public static HttpMethod Patch = new HttpMethod("PATCH");
 
         /// <summary>
         /// An HTTP DELETE.
         /// </summary>
-        public static HttpMethod Delete = new HttpMethod(50, "DELETE");
+        public static HttpMethod Delete = new HttpMethod("DELETE");
 
         /// <summary>
         /// A HTTP OPTIONS.
         /// </summary>
-        public static HttpMethod Options = new HttpMethod(60, "OPTIONS");
+        public static HttpMethod Options = new HttpMethod("OPTIONS");
 
         /// <summary>
         /// An HTTP TRACE.
         /// </summary>
-        public static HttpMethod Trace = new HttpMethod(70, "TRACE");
+        public static HttpMethod Trace = new HttpMethod("TRACE");
 
         /// <summary>
         /// An HTTP Connect.
         /// </summary>
-        public static HttpMethod Connect = new HttpMethod(80, "CONNECT");
+        public static HttpMethod Connect = new HttpMethod("CONNECT");
 
         private HttpMethod()
         {
         }
 
-        private HttpMethod(int value, string displayName)
-            : base(value, displayName)
+        private HttpMethod(string value)
+            : base(value)
         {
         }
 
@@ -85,7 +85,7 @@ namespace Stormpath.SDK.Http
         /// <returns>A new instance representing the same <see cref="HttpMethod"/> action.</returns>
         public HttpMethod Clone()
         {
-            return Parse(this.DisplayName);
+            return Parse(this.Value);
         }
 
         /// <summary>

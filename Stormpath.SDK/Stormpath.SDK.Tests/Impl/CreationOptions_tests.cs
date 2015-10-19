@@ -17,17 +17,15 @@
 
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using NSubstitute;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Http;
-using Stormpath.SDK.Impl.Account;
-using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tests.Fakes;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -42,50 +40,50 @@ namespace Stormpath.SDK.Tests.Impl
                 .ExecuteAsync(
                     Arg.Is<IHttpRequest>(request =>
                         request.CanonicalUri.ToString().EndsWith(queryString)),
-                    Arg.Any<CancellationToken>()).IgnoreAwait();
+                    Arg.Any<CancellationToken>());
         }
 
         public class Application_options : IDisposable
         {
-            private readonly IInternalDataStore dataStore;
+            private readonly IInternalAsyncDataStore dataStore;
 
             public Application_options()
             {
                 this.dataStore = new StubDataStore(FakeJson.Application, BaseHref);
             }
 
-            private void VerifyThat(ICreationOptions options, string resultsInQueryString)
+            private async Task VerifyThat(ICreationOptions options, string resultsInQueryString)
             {
-                var newApplication = new DefaultApplication(this.dataStore) as IApplication;
-                this.dataStore.CreateAsync("/application", newApplication, options, CancellationToken.None);
+                var newApplication = this.dataStore.Instantiate<IApplication>();
+                await this.dataStore.CreateAsync("/application", newApplication, options, CancellationToken.None);
 
                 VerifyRequestContents(this.dataStore.RequestExecutor, resultsInQueryString);
             }
 
             [Fact]
-            public void Create_without_directory()
+            public async Task Create_without_directory()
             {
                 var options = new ApplicationCreationOptionsBuilder()
                 {
                     CreateDirectory = false
                 }.Build();
 
-                this.VerifyThat(options, resultsInQueryString: string.Empty);
+                await this.VerifyThat(options, resultsInQueryString: string.Empty);
             }
 
             [Fact]
-            public void Create_application_request_with_default_directory()
+            public async Task Create_application_request_with_default_directory()
             {
                 var options = new ApplicationCreationOptionsBuilder()
                 {
                     CreateDirectory = true
                 }.Build();
 
-                this.VerifyThat(options, resultsInQueryString: "?createDirectory=true");
+                await this.VerifyThat(options, resultsInQueryString: "?createDirectory=true");
             }
 
             [Fact]
-            public void Create_application_request_with_named_directory()
+            public async Task Create_application_request_with_named_directory()
             {
                 var options = new ApplicationCreationOptionsBuilder()
                 {
@@ -93,7 +91,7 @@ namespace Stormpath.SDK.Tests.Impl
                     DirectoryName = "Foobar Directory"
                 }.Build();
 
-                this.VerifyThat(options, resultsInQueryString: "?createDirectory=Foobar+Directory");
+                await this.VerifyThat(options, resultsInQueryString: "?createDirectory=Foobar+Directory");
             }
 
             private bool isDisposed = false; // To detect redundant calls
@@ -121,51 +119,51 @@ namespace Stormpath.SDK.Tests.Impl
 
         public class Account_options : IDisposable
         {
-            private readonly IInternalDataStore dataStore;
+            private readonly IInternalAsyncDataStore dataStore;
 
             public Account_options()
             {
                 this.dataStore = new StubDataStore(FakeJson.Account, BaseHref);
             }
 
-            private void VerifyThat(ICreationOptions options, string resultsInQueryString)
+            private async Task VerifyThat(ICreationOptions options, string resultsInQueryString)
             {
-                var newAccount = new DefaultAccount(this.dataStore) as IAccount;
-                this.dataStore.CreateAsync("/account", newAccount, options, CancellationToken.None);
+                var newAccount = this.dataStore.Instantiate<IAccount>();
+                await this.dataStore.CreateAsync("/account", newAccount, options, CancellationToken.None);
 
                 VerifyRequestContents(this.dataStore.RequestExecutor, resultsInQueryString);
             }
 
             [Fact]
-            public void Create_without_workflow_option()
+            public async Task Create_without_workflow_option()
             {
                 var options = new AccountCreationOptionsBuilder()
                 {
                 }.Build();
 
-                this.VerifyThat(options, resultsInQueryString: string.Empty);
+                await this.VerifyThat(options, resultsInQueryString: string.Empty);
             }
 
             [Fact]
-            public void Create_with_workflow_override_enabled()
+            public async Task Create_with_workflow_override_enabled()
             {
                 var options = new AccountCreationOptionsBuilder()
                 {
                     RegistrationWorkflowEnabled = true
                 }.Build();
 
-                this.VerifyThat(options, resultsInQueryString: "?registrationWorkflowEnabled=true");
+                await this.VerifyThat(options, resultsInQueryString: "?registrationWorkflowEnabled=true");
             }
 
             [Fact]
-            public void Create_with_workflow_override_disabled()
+            public async Task Create_with_workflow_override_disabled()
             {
                 var options = new AccountCreationOptionsBuilder()
                 {
                     RegistrationWorkflowEnabled = false
                 }.Build();
 
-                this.VerifyThat(options, resultsInQueryString: "?registrationWorkflowEnabled=false");
+                await this.VerifyThat(options, resultsInQueryString: "?registrationWorkflowEnabled=false");
             }
 
             private bool isDisposed = false; // To detect redundant calls

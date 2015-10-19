@@ -117,14 +117,14 @@ namespace Stormpath.SDK.Impl.Api
             }
 
             // 3. Try environment variables directly
-            var idFromEnvironment = this.env.GetEnvironmentVariable(this.apiKeyIdPropertyName ?? DefaultDirectIdPropertyName);
+            var apiIdFromEnvironment = this.env.GetEnvironmentVariable(this.apiKeyIdPropertyName ?? DefaultDirectIdPropertyName);
             var secretFromEnvironment = this.env.GetEnvironmentVariable(this.apiKeySecretPropertyName ?? DefaultDirectSecretPropertyName);
-            bool didRetrieveValuesFromEnvironment = !string.IsNullOrEmpty(idFromEnvironment) && !string.IsNullOrEmpty(secretFromEnvironment);
+            bool didRetrieveValuesFromEnvironment = !string.IsNullOrEmpty(apiIdFromEnvironment) && !string.IsNullOrEmpty(secretFromEnvironment);
             if (didRetrieveValuesFromEnvironment)
             {
                 this.logger.Trace("Found API Key and Secret in environment variables.");
 
-                id = idFromEnvironment;
+                id = apiIdFromEnvironment;
                 secret = secretFromEnvironment;
             }
 
@@ -141,14 +141,14 @@ namespace Stormpath.SDK.Impl.Api
             }
 
             // 5. Try web.config/app.config keys directly
-            var idFromAppConfig = this.config.AppSettings?[this.apiKeyIdPropertyName ?? DefaultDirectIdPropertyName];
+            var apiIdFromAppConfig = this.config.AppSettings?[this.apiKeyIdPropertyName ?? DefaultDirectIdPropertyName];
             var secretFromAppConfig = this.config.AppSettings?[this.apiKeySecretPropertyName ?? DefaultDirectSecretPropertyName];
-            bool didRetrieveValuesFromAppConfig = !string.IsNullOrEmpty(idFromAppConfig) && !string.IsNullOrEmpty(secretFromAppConfig);
+            bool didRetrieveValuesFromAppConfig = !string.IsNullOrEmpty(apiIdFromAppConfig) && !string.IsNullOrEmpty(secretFromAppConfig);
             if (didRetrieveValuesFromAppConfig)
             {
                 this.logger.Trace("Found API Key and Secret in .config file.");
 
-                id = idFromAppConfig;
+                id = apiIdFromAppConfig;
                 secret = secretFromAppConfig;
             }
 

@@ -22,7 +22,7 @@ using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
     public class Sync_Application_tests
@@ -46,6 +46,18 @@ namespace Stormpath.SDK.Tests.Integration
             applications
                 .Any(app => app.Status == ApplicationStatus.Enabled)
                 .ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Getting_application_tenant(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            // Verify data from IntegrationTestData
+            var tenantHref = application.GetTenant().Href;
+            tenantHref.ShouldBe(this.fixture.TenantHref);
         }
 
         [Theory]

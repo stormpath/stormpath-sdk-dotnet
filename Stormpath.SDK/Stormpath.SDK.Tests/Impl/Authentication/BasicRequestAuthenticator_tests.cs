@@ -50,26 +50,26 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         [Fact]
         public void Adds_XStormpathDate_header()
         {
-            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(this.uriQualifier.EnsureFullyQualified("/bar")));
+            var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(this.uriQualifier.EnsureFullyQualified("/bar")));
             var now = new DateTimeOffset(2015, 08, 01, 06, 30, 00, TimeSpan.Zero);
 
-            this.authenticator.AuthenticateCore(myRequest, this.apiKey, now);
+            this.authenticator.AuthenticateCore(request, this.apiKey, now);
 
             // X-Stormpath-Date -> current time in UTC
-            var xStormpathDateHeader = Iso8601.Parse(myRequest.Headers.GetFirst<string>("X-Stormpath-Date"));
-            xStormpathDateHeader.ShouldBe(now);
+            var stormpathDateHeader = Iso8601.Parse(request.Headers.GetFirst<string>("X-Stormpath-Date"));
+            stormpathDateHeader.ShouldBe(now);
         }
 
         [Fact]
         public void Adds_Basic_authorization_header()
         {
-            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(this.uriQualifier.EnsureFullyQualified("/bar")));
+            var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(this.uriQualifier.EnsureFullyQualified("/bar")));
             var now = new DateTimeOffset(2015, 08, 01, 06, 30, 00, TimeSpan.Zero);
 
-            this.authenticator.AuthenticateCore(myRequest, this.apiKey, now);
+            this.authenticator.AuthenticateCore(request, this.apiKey, now);
 
             // Authorization: "Basic [base64 stuff]"
-            var authenticationHeader = myRequest.Headers.Authorization;
+            var authenticationHeader = request.Headers.Authorization;
             authenticationHeader.Scheme.ShouldBe("Basic");
             authenticationHeader.Parameter.FromBase64(Encoding.UTF8).ShouldBe($"{this.fakeApiKeyId}:{this.fakeApiKeySecret}");
         }

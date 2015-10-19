@@ -23,24 +23,24 @@ namespace Stormpath.SDK.Application
     /// <summary>
     /// Represents the states an <see cref="IApplication"/> may be in.
     /// </summary>
-    public sealed class ApplicationStatus : Enumeration
+    public sealed class ApplicationStatus : StringEnumeration
     {
         /// <summary>
         /// Accounts can log into this application.
         /// </summary>
-        public static ApplicationStatus Enabled = new ApplicationStatus(0, "ENABLED");
+        public static ApplicationStatus Enabled = new ApplicationStatus("ENABLED");
 
         /// <summary>
         /// Accounts are prevented from logging into this application.
         /// </summary>
-        public static ApplicationStatus Disabled = new ApplicationStatus(1, "DISABLED");
+        public static ApplicationStatus Disabled = new ApplicationStatus("DISABLED");
 
         private ApplicationStatus()
         {
         }
 
-        private ApplicationStatus(int value, string displayName)
-            : base(value, displayName)
+        private ApplicationStatus(string value)
+            : base(value)
         {
         }
 

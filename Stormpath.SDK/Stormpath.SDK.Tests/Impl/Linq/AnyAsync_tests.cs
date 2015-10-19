@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
@@ -48,7 +49,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Limits_result_to_one_item()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
+            IInternalAsyncDataStore fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
             await harness.Queryable.AnyAsync();

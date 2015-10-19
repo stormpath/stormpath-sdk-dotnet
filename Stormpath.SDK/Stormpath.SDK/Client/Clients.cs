@@ -15,6 +15,8 @@
 // limitations under the License.
 // </remarks>
 
+using Stormpath.SDK.Impl.Utility;
+
 namespace Stormpath.SDK.Client
 {
     /// <summary>
@@ -35,6 +37,19 @@ namespace Stormpath.SDK.Client
         /// </example>
         public static IClientBuilder Builder()
         {
+            if (!DetectLanguage.RanOnce)
+            {
+                try
+                {
+                    DetectLanguage.RanOnce = true;
+                    DetectLanguage.Result = DetectLanguage.ForAssembly(System.Reflection.Assembly.GetCallingAssembly());
+                }
+                catch
+                {
+                    // swallow
+                }
+            }
+
             return new Impl.Client.DefaultClientBuilder();
         }
     }

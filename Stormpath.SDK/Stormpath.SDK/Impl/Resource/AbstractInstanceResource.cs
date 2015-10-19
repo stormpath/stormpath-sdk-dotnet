@@ -16,8 +16,8 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore;
+using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
@@ -27,18 +27,25 @@ namespace Stormpath.SDK.Impl.Resource
         protected static readonly string CreatedAtPropertyName = "createdAt";
         protected static readonly string ModifiedAtPropertyName = "modifiedAt";
 
-        protected AbstractInstanceResource(IInternalDataStore dataStore)
-            : base(dataStore)
+        protected AbstractInstanceResource(ResourceData data)
+            : base(data)
         {
         }
 
-        protected AbstractInstanceResource(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
+        DateTimeOffset IAuditable.CreatedAt => this.GetProperty<DateTimeOffset>(CreatedAtPropertyName);
+
+        DateTimeOffset IAuditable.ModifiedAt => this.GetProperty<DateTimeOffset>(ModifiedAtPropertyName);
+
+        protected virtual Task<T> SaveAsync<T>(CancellationToken cancellationToken)
+            where T : class, IResource, ISaveable<T>
         {
+            return this.GetInternalAsyncDataStore().SaveAsync(this as T, cancellationToken);
         }
 
-        DateTimeOffset IAuditable.CreatedAt => GetProperty<DateTimeOffset>(CreatedAtPropertyName);
-
-        DateTimeOffset IAuditable.ModifiedAt => GetProperty<DateTimeOffset>(ModifiedAtPropertyName);
+        protected virtual T Save<T>()
+            where T : class, IResource, ISaveable<T>
+        {
+            return this.GetInternalSyncDataStore().Save(this as T);
+        }
     }
 }

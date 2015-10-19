@@ -89,5 +89,25 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 reachedIndex.ShouldBe(2);
             }
         }
+
+        [Fact]
+        public async Task Can_break_gracefully()
+        {
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
+                this.Href,
+                new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
+            var cts = new CancellationTokenSource();
+            var reachedIndex = -1;
+
+            await harness.Queryable.ForEachAsync(
+                (acct, index) =>
+                {
+                    reachedIndex = index;
+
+                    return index == 2;
+                }, cts.Token);
+
+            reachedIndex.ShouldBe(2);
+        }
     }
 }

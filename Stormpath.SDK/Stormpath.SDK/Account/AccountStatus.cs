@@ -23,29 +23,29 @@ namespace Stormpath.SDK.Account
     /// <summary>
     /// Respresents the various states an <see cref="IAccount"/> may be in.
     /// </summary>
-    public sealed class AccountStatus : Enumeration
+    public sealed class AccountStatus : StringEnumeration
     {
         /// <summary>
         /// A disabled account may not login to applications.
         /// </summary>
-        public static AccountStatus Enabled = new AccountStatus(0, "ENABLED");
+        public static AccountStatus Enabled = new AccountStatus("ENABLED");
 
         /// <summary>
         /// An enabled account may login to applications.
         /// </summary>
-        public static AccountStatus Disabled = new AccountStatus(1, "DISABLED");
+        public static AccountStatus Disabled = new AccountStatus("DISABLED");
 
         /// <summary>
         /// An unverified account is a disabled account that does not have a verified email address.
         /// </summary>
-        public static AccountStatus Unverified = new AccountStatus(2, "UNVERIFIED");
+        public static AccountStatus Unverified = new AccountStatus("UNVERIFIED");
 
         private AccountStatus()
         {
         }
 
-        private AccountStatus(int value, string displayName)
-            : base(value, displayName)
+        private AccountStatus(string value)
+            : base(value)
         {
         }
 

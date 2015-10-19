@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Tests.Impl
                 .Skip(10);
 
             await (query as IAsyncQueryable<IAccount>).MoveNextAsync();
-            harness.DataStore.WasCalledWithArguments<IAccount>(href, "limit=5&offset=10");
+            harness.DataStoreAsync.WasCalledWithArguments<IAccount>(href, "limit=5&offset=10");
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Tests.Impl
             var query = harness.Queryable;
 
             await query.MoveNextAsync();
-            harness.DataStore.WasCalledWithArguments<IAccount>(href, string.Empty);
+            harness.DataStoreAsync.WasCalledWithArguments<IAccount>(href, string.Empty);
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Tests.Impl
             await query.MoveNextAsync();
             var firstPageCount = query.CurrentPage.Count();
             await query.MoveNextAsync();
-            harness.DataStore.WasCalledWithArguments<IAccount>(href, $"offset={firstPageCount}");
+            harness.DataStoreAsync.WasCalledWithArguments<IAccount>(href, $"offset={firstPageCount}");
         }
     }
 }

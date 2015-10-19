@@ -15,11 +15,15 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Application;
+using Stormpath.SDK.Provider;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {
@@ -81,7 +85,38 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).TryAuthenticateAccount(username, password);
 
         /// <summary>
-        /// Synchronously gets the <see cref="IAccountStore"/> (either a Group or <see cref="Directory.IDirectory"/>)
+        /// Synchronously triggers the delivery of a new verification email for the specified account.
+        /// <para>
+        /// This method is useful in scenarios where the Account Registration and Verification workflow
+        /// is enabled. If the welcome email has not been received by a newly registered account,
+        /// then the user will not be able to login until the account is verified.
+        /// </para>
+        /// <para>This method re-sends the verification email and allows the user to verify the account.</para>
+        /// <para>
+        /// The <see cref="IEmailVerificationRequest"/> must contain the username or email identifying the account.
+        /// </para>
+        /// </summary>
+        /// <param name="application">The application</param>
+        /// <param name="requestBuilderAction">Sets the options required for the verification email request.</param>
+        public static void SendVerificationEmail(this IApplication application, Action<EmailVerificationRequestBuilder> requestBuilderAction)
+            => (application as IApplicationSync).SendVerificationEmail(requestBuilderAction);
+
+        /// <summary>
+        /// Synchronously triggers the delivery of a new verification email for the specified account.
+        /// <para>
+        /// This method is useful in scenarios where the Account Registration and Verification workflow
+        /// is enabled. If the welcome email has not been received by a newly registered account,
+        /// then the user will not be able to login until the account is verified.
+        /// </para>
+        /// <para>This method re-sends the verification email and allows the user to verify the account.</para>
+        /// </summary>
+        /// <param name="application">The application</param>
+        /// <param name="usernameOrEmail">The username or email identifying the account to send the verification email to.</param>
+        public static void SendVerificationEmail(this IApplication application, string usernameOrEmail)
+            => (application as IApplicationSync).SendVerificationEmail(usernameOrEmail);
+
+        /// <summary>
+        /// Synchronously gets the <see cref="IAccountStore"/> (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>)
         /// used to persist new accounts created by the application.
         /// </summary>
         /// <param name="application">The application.</param>
@@ -89,6 +124,43 @@ namespace Stormpath.SDK.Sync
         /// or <c>null</c> if no default <see cref="IAccountStore"/> has been designated.</returns>
         public static IAccountStore GetDefaultAccountStore(this IApplication application)
             => (application as IApplicationSync).GetDefaultAccountStore();
+
+        /// <summary>
+        /// Synchronously gets the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
+        /// if no account store has been designated.
+        /// <para>
+        /// Stormpath's current REST API requires this to be a Directory.
+        /// However, this could be a Group in the future, so do not assume it is always a
+        /// Directory if you want your code to be function correctly if/when this support is added.
+        /// </para>
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <returns>The <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
+        /// if no account store has been designated.</returns>
+        public static IAccountStore GetDefaultGroupStore(this IApplication application)
+            => (application as IApplicationSync).GetDefaultGroupStore();
+
+        /// <summary>
+        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Application resource.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <returns>This account's tenant.</returns>
+        public static ITenant GetTenant(this IApplication application)
+            => (application as IApplicationSync).GetTenant();
+
+        /// <summary>
+        /// Synchronously creates a new <see cref="IGroup"/> that may be used by this application in the application's <see cref="GetDefaultGroupStoreAsync(CancellationToken)"/>.
+        /// <para>This is a convenience method. It merely delegates to the application's designated default group store.</para>
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <param name="group">The group to create/persist.</param>
+        /// <returns>The new <see cref="IGroup"/> that may be used by this application.</returns>
+        /// <exception cref="Error.ResourceException">
+        /// The application does not have a designated default group store, or the
+        /// designated default group store does not allow new groups to be created.
+        /// </exception>
+        public static IGroup CreateGroup(this IApplication application, IGroup group)
+            => (application as IApplicationSync).CreateGroup(group);
 
         /// <summary>
         /// Synchronously verifies the password reset token (received in the user's email) and immediately
@@ -126,5 +198,20 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="SDK.Error.ResourceException">The token is not valid.</exception>
         public static IAccount VerifyPasswordResetToken(this IApplication application, string token)
             => (application as IApplicationSync).VerifyPasswordResetToken(token);
+
+        /// <summary>
+        /// Synchronously retrieves a Provider-based <see cref="IAccount"/>. The account must exist in one of the Provider-based <see cref="Directory.IDirectory"/>
+        /// assigned to the Application as an account store, and the Directory must also be <see cref="Directory.DirectoryStatus.Enabled"/>.
+        /// If not in an assigned account store, the retrieval attempt will fail.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <param name="request">
+        /// The <see cref="IProviderAccountRequest"/> representing the Provider-specific account access data
+        /// (e.g. an <c>accessToken</c>) used to verify the identity.
+        /// </param>
+        /// <returns>The result of the access request.</returns>
+        /// <exception cref="Error.ResourceException">The access attempt failed.</exception>
+        public static IProviderAccountResult GetAccount(this IApplication application, IProviderAccountRequest request)
+            => (application as IApplicationSync).GetAccount(request);
     }
 }

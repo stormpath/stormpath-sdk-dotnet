@@ -15,25 +15,41 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore;
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.CustomData;
+using Stormpath.SDK.Impl.CustomData;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal abstract class AbstractExtendableInstanceResource : AbstractInstanceResource
+    internal abstract class AbstractExtendableInstanceResource : AbstractInstanceResource, IExtendable, IExtendableSync
     {
         private static readonly string CustomDataPropertyName = "customData";
 
-        protected AbstractExtendableInstanceResource(IInternalDataStore dataStore)
-            : base(dataStore)
+        private IEmbeddedCustomData customDataProxy;
+
+        protected AbstractExtendableInstanceResource(ResourceData data)
+            : base(data)
         {
+            this.ResetCustomData();
         }
 
-        protected AbstractExtendableInstanceResource(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
+        internal LinkProperty CustomData => this.GetProperty<LinkProperty>(CustomDataPropertyName);
 
-        internal LinkProperty CustomData => GetProperty<LinkProperty>(CustomDataPropertyName);
+        IEmbeddedCustomData IExtendable.CustomData => this.customDataProxy;
+
+        IEmbeddedCustomData IExtendableSync.CustomData => this.customDataProxy;
+
+        Task<ICustomData> IExtendable.GetCustomDataAsync(CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<ICustomData>(this.CustomData.Href, cancellationToken);
+
+        ICustomData IExtendableSync.GetCustomData()
+            => this.GetInternalSyncDataStore().GetResource<ICustomData>(this.CustomData.Href);
+
+        public void ResetCustomData()
+        {
+            this.customDataProxy = new DefaultEmbeddedCustomData(this.GetInternalAsyncDataStore(), this.AsInterface.Href);
+        }
     }
 }

@@ -15,6 +15,7 @@
 // limitations under the License.
 // </remarks>
 
+using System;
 using System.Net;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Http;
@@ -102,6 +103,14 @@ namespace Stormpath.SDK.Client
         /// <param name="logger">A logger instance for capturing trace output; pass <c>null</c> to disable logging.</param>
         /// <returns>This instance for method chaining.</returns>
         IClientBuilder SetLogger(ILogger logger);
+
+        /// <summary>
+        /// Advanced use; only change this if you know what you are doing. Sets the internal identity map expiration time.
+        /// </summary>
+        /// <param name="expiration">Identity map expiration timeout.</param>
+        /// <returns>This instance for method chaining.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="expiration"/> is less than 10 seconds or more than 24 hours.</exception>
+        IClientBuilder SetIdentityMapExpiration(TimeSpan expiration);
 
         /// <summary>
         /// Constructs a new <see cref="IClient"/> instance based on the builder's current configuration state.

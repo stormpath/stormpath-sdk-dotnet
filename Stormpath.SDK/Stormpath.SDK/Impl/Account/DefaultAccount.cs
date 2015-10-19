@@ -16,14 +16,20 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Error;
+using Stormpath.SDK.Group;
+using Stormpath.SDK.Impl.Group;
+using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Linq;
+using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
@@ -49,15 +55,12 @@ namespace Stormpath.SDK.Impl.Account
         private static readonly string TenantPropertyName = "tenant";
         private static readonly string UsernamePropertyName = "username";
 
-        public DefaultAccount(IInternalDataStore dataStore)
-            : base(dataStore)
+        public DefaultAccount(ResourceData data)
+            : base(data)
         {
         }
 
-        public DefaultAccount(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
-        {
-        }
+        private new IAccount AsInterface => this;
 
         internal LinkProperty AccessTokens => this.GetLinkProperty(AccessTokensPropertyName);
 
@@ -67,31 +70,44 @@ namespace Stormpath.SDK.Impl.Account
 
         internal LinkProperty Directory => this.GetLinkProperty(DirectoryPropertyName);
 
-        string IAccount.Email => GetProperty<string>(EmailPropertyName);
+        string IAccount.Email => this.GetProperty<string>(EmailPropertyName);
 
         internal LinkProperty EmailVerificationToken => this.GetLinkProperty(EmailVerificationTokenPropertyName);
 
-        string IAccount.FullName => GetProperty<string>(FullNamePropertyName);
+        IEmailVerificationToken IAccount.EmailVerificationToken
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.EmailVerificationToken.Href))
+                    return null;
 
-        string IAccount.GivenName => GetProperty<string>(GivenNamePropertyName);
+                var emailVerificationToken = this.GetInternalAsyncDataStore()
+                    .InstantiateWithHref<IEmailVerificationToken>(this.EmailVerificationToken.Href);
+                return emailVerificationToken;
+            }
+        }
+
+        string IAccount.FullName => this.GetProperty<string>(FullNamePropertyName);
+
+        string IAccount.GivenName => this.GetProperty<string>(GivenNamePropertyName);
 
         internal LinkProperty GroupMemberships => this.GetLinkProperty(GroupMembershipsPropertyName);
 
         internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        string IAccount.MiddleName => GetProperty<string>(MiddleNamePropertyName);
+        string IAccount.MiddleName => this.GetProperty<string>(MiddleNamePropertyName);
 
         internal LinkProperty ProviderData => this.GetLinkProperty(ProviderDataPropertyName);
 
         internal LinkProperty RefreshTokens => this.GetLinkProperty(RefreshTokensPropertyName);
 
-        AccountStatus IAccount.Status => GetProperty<AccountStatus>(StatusPropertyName);
+        AccountStatus IAccount.Status => this.GetProperty<AccountStatus>(StatusPropertyName);
 
-        string IAccount.Surname => GetProperty<string>(SurnamePropertyName);
+        string IAccount.Surname => this.GetProperty<string>(SurnamePropertyName);
 
         internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
-        string IAccount.Username => GetProperty<string>(UsernamePropertyName);
+        string IAccount.Username => this.GetProperty<string>(UsernamePropertyName);
 
         IAccount IAccount.SetEmail(string email)
         {
@@ -150,28 +166,274 @@ namespace Stormpath.SDK.Impl.Account
             return this;
         }
 
+        IAsyncQueryable<IGroup> IAccount.GetGroups()
+            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalAsyncDataStore());
+
+        IAsyncQueryable<IGroupMembership> IAccount.GetGroupMemberships()
+            => new CollectionResourceQueryable<IGroupMembership>(this.GroupMemberships.Href, this.GetInternalAsyncDataStore());
+
         Task<IDirectory> IAccount.GetDirectoryAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
 
         IDirectory IAccountSync.GetDirectory()
-            => this.GetInternalDataStoreSync().GetResource<IDirectory>(this.Directory.Href);
+            => this.GetInternalSyncDataStore().GetResource<IDirectory>(this.Directory.Href);
 
         Task<ITenant> IAccount.GetTenantAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().GetResourceAsync<ITenant>(this.Tenant.Href, cancellationToken);
+            => this.GetTenantAsync(this.Tenant.Href, cancellationToken);
 
         ITenant IAccountSync.GetTenant()
-            => this.GetInternalDataStoreSync().GetResource<ITenant>(this.Tenant.Href);
+            => this.GetTenant(this.Tenant.Href);
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
-            => this.GetInternalDataStore().DeleteAsync(this, cancellationToken);
+            => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
 
         bool IDeletableSync.Delete()
-             => this.GetInternalDataStoreSync().Delete(this);
+             => this.GetInternalSyncDataStore().Delete(this);
 
         Task<IAccount> ISaveable<IAccount>.SaveAsync(CancellationToken cancellationToken)
-             => this.GetInternalDataStore().SaveAsync<IAccount>(this, cancellationToken);
+             => this.SaveAsync<IAccount>(cancellationToken);
 
         IAccount ISaveableSync<IAccount>.Save()
-             => this.GetInternalDataStoreSync().Save<IAccount>(this);
+             => this.Save<IAccount>();
+
+        Task<IGroupMembership> IAccount.AddGroupAsync(IGroup group, CancellationToken cancellationToken)
+            => DefaultGroupMembership.CreateAsync(this, group, this.GetInternalAsyncDataStore(), cancellationToken);
+
+        IGroupMembership IAccountSync.AddGroup(IGroup group)
+            => DefaultGroupMembership.Create(this, group, this.GetInternalSyncDataStore());
+
+        async Task<IGroupMembership> IAccount.AddGroupAsync(string hrefOrName, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            var group = await this.FindGroupInDirectoryAsync(hrefOrName, this.Directory.Href, cancellationToken).ConfigureAwait(false);
+            if (group == null)
+                throw new InvalidOperationException("The specified group was not found in the account's directory.");
+
+            return await DefaultGroupMembership.CreateAsync(this, group, this.GetInternalAsyncDataStore(), cancellationToken).ConfigureAwait(false);
+        }
+
+        IGroupMembership IAccountSync.AddGroup(string hrefOrName)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            var group = this.FindGroupInDirectory(hrefOrName, this.Directory.Href);
+            if (group == null)
+                throw new InvalidOperationException("The specified group was not found in the account's directory.");
+
+            return DefaultGroupMembership.Create(this, group, this.GetInternalSyncDataStore());
+        }
+
+        async Task<bool> IAccount.RemoveGroupAsync(IGroup group, CancellationToken cancellationToken)
+        {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
+            IGroupMembership foundMembership = null;
+            await this.AsInterface.GetGroupMemberships().ForEachAsync(
+                item =>
+                {
+                    if ((item as IInternalGroupMembership).GroupHref.Equals(group.Href, StringComparison.InvariantCultureIgnoreCase))
+                        foundMembership = item;
+
+                    return foundMembership != null;
+                }, cancellationToken).ConfigureAwait(false);
+
+            if (foundMembership == null)
+                throw new InvalidOperationException("This account does not belong to the specified group.");
+
+            return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        bool IAccountSync.RemoveGroup(IGroup group)
+        {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
+            IGroupMembership foundMembership = null;
+
+            foreach (var item in this.AsInterface.GetGroupMemberships().Synchronously())
+            {
+                if ((item as IInternalGroupMembership).GroupHref.Equals(group.Href, StringComparison.InvariantCultureIgnoreCase))
+                    foundMembership = item;
+
+                if (foundMembership != null)
+                    break;
+            }
+
+            if (foundMembership == null)
+                throw new InvalidOperationException("This account does not belong to the specified group.");
+
+            return foundMembership.Delete();
+        }
+
+        async Task<bool> IAccount.RemoveGroupAsync(string hrefOrName, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            IGroupMembership foundMembership = null;
+            var iterator = this.AsInterface.GetGroupMemberships();
+            while (await iterator.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            {
+                foreach (var item in iterator.CurrentPage)
+                {
+                    IGroup group = await item.GetGroupAsync(cancellationToken).ConfigureAwait(false);
+                    if (group.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
+                        group.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                        foundMembership = item;
+
+                    if (foundMembership != null)
+                        break;
+                }
+
+                if (foundMembership != null)
+                    break;
+            }
+
+            if (foundMembership == null)
+                throw new InvalidOperationException("This account does not belong to the specified group.");
+
+            return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        bool IAccountSync.RemoveGroup(string hrefOrName)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            IGroupMembership foundMembership = null;
+            foreach (var item in this.AsInterface.GetGroupMemberships().Synchronously())
+            {
+                IGroup group = item.GetGroup();
+                if (group.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
+                    group.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                    foundMembership = item;
+
+                if (foundMembership != null)
+                    break;
+            }
+
+            if (foundMembership == null)
+                throw new InvalidOperationException("This account does not belong to the specified group.");
+
+            return foundMembership.Delete();
+        }
+
+        async Task<bool> IAccount.IsMemberOfGroupAsync(string hrefOrName, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            IGroup foundGroup = null;
+            await this.AsInterface.GetGroups().ForEachAsync(
+                item =>
+                {
+                    if (item.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
+                        item.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                        foundGroup = item;
+
+                    return foundGroup != null;
+                }, cancellationToken).ConfigureAwait(false);
+
+            return foundGroup != null;
+        }
+
+        bool IAccountSync.IsMemberOfGroup(string hrefOrName)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+
+            IGroup foundGroup = null;
+            foreach (var item in this.AsInterface.GetGroups().Synchronously())
+            {
+                if (item.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
+                        item.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                    foundGroup = item;
+
+                if (foundGroup != null)
+                    break;
+            }
+
+            return foundGroup != null;
+        }
+
+        Task<IProviderData> IAccount.GetProviderDataAsync(CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IProviderData>(this.ProviderData.Href, ProviderTypeConverter.DataTypeLookup, cancellationToken);
+
+        IProviderData IAccountSync.GetProviderData()
+            => this.GetInternalSyncDataStore().GetResource<IProviderData>(this.ProviderData.Href, ProviderTypeConverter.DataTypeLookup);
+
+        private async Task<IGroup> FindGroupInDirectoryAsync(string hrefOrName, string directoryHref, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+            if (string.IsNullOrEmpty(directoryHref))
+                throw new ArgumentNullException(nameof(directoryHref));
+
+            IGroup group = null;
+
+            bool looksLikeHref = hrefOrName.Split('/').Length > 4;
+            if (looksLikeHref)
+            {
+                try
+                {
+                    group = await this.GetInternalAsyncDataStore().GetResourceAsync<IGroup>(hrefOrName, cancellationToken).ConfigureAwait(false);
+
+                    if ((group as DefaultGroup)?.Directory.Href == directoryHref)
+                        return group;
+                }
+                catch (ResourceException)
+                {
+                    // It looked like an href, but no group was found.
+                    // We'll try looking it up by name.
+                }
+            }
+
+            group = await (await this.AsInterface.GetDirectoryAsync().ConfigureAwait(false))
+                .GetGroups()
+                .Where(x => x.Name == hrefOrName)
+                .FirstOrDefaultAsync(cancellationToken)
+                .ConfigureAwait(false);
+
+            return group; // or null
+        }
+
+        private IGroup FindGroupInDirectory(string hrefOrName, string directoryHref)
+        {
+            if (string.IsNullOrEmpty(hrefOrName))
+                throw new ArgumentNullException(nameof(hrefOrName));
+            if (string.IsNullOrEmpty(directoryHref))
+                throw new ArgumentNullException(nameof(directoryHref));
+
+            IGroup group = null;
+
+            bool looksLikeHref = hrefOrName.Split('/').Length > 4;
+            if (looksLikeHref)
+            {
+                try
+                {
+                    group = this.GetInternalSyncDataStore().GetResource<IGroup>(hrefOrName);
+
+                    if ((group as DefaultGroup)?.Directory.Href == directoryHref)
+                        return group;
+                }
+                catch (ResourceException)
+                {
+                    // It looked like an href, but no group was found.
+                    // We'll try looking it up by name.
+                }
+            }
+
+            group = this.AsInterface.GetDirectory()
+                .GetGroups()
+                .Synchronously()
+                .Where(x => x.Name == hrefOrName)
+                .FirstOrDefault();
+
+            return group; // or null
+        }
     }
 }

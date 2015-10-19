@@ -24,7 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>stormpath.sdk.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -52,7 +52,10 @@
   <ItemGroup>
     <Compile Include="AccountStore\IAccountStore.cs" />
     <Compile Include="AccountStore\IAccountStoreMapping.cs" />
+    <Compile Include="Account\EmailVerificationRequestBuilder.cs" />
+    <Compile Include="Account\IEmailVerificationToken.cs" />
     <Compile Include="Account\IPasswordResetToken.cs" />
+    <Compile Include="Account\IEmailVerificationRequest.cs" />
     <Compile Include="Application\ApplicationCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountStatus.cs" />
@@ -78,10 +81,17 @@
     <Compile Include="Client\Clients.cs" />
     <Compile Include="Client\IClient.cs" />
     <Compile Include="Client\IClientBuilder.cs" />
+    <Compile Include="CustomData\ICustomData.cs" />
+    <Compile Include="CustomData\IEmbeddedCustomData.cs" />
+    <Compile Include="Directory\DirectoryCreationOptionsBuilder.cs" />
     <Compile Include="Directory\DirectoryStatus.cs" />
+    <Compile Include="Directory\IDirectoryCreationOptions.cs" />
     <Compile Include="Directory\IDirectory.cs" />
     <Compile Include="Error\IError.cs" />
     <Compile Include="Error\ResourceException.cs" />
+    <Compile Include="Group\GroupStatus.cs" />
+    <Compile Include="Group\IGroup.cs" />
+    <Compile Include="Group\IGroupMembership.cs" />
     <Compile Include="Http\HttpExtensions.cs" />
     <Compile Include="Http\IAsynchronousHttpClient.cs" />
     <Compile Include="Http\IHttpClient.cs" />
@@ -89,8 +99,11 @@
     <Compile Include="Impl\AccountStore\DefaultAccountStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreMappingSync.cs" />
+    <Compile Include="Impl\Account\AccountCreationActionsShared.cs" />
     <Compile Include="Impl\Account\DefaultAccountCreationOptions.cs" />
+    <Compile Include="Impl\Account\DefaultEmailVerificationToken.cs" />
     <Compile Include="Impl\Account\DefaultPasswordResetToken.cs" />
+    <Compile Include="Impl\Account\DefaultEmailVerificationRequest.cs" />
     <Compile Include="Impl\Account\IAccountCreationActionsSync.cs" />
     <Compile Include="Impl\Account\IAccountSync.cs" />
     <Compile Include="Impl\Account\IPasswordResetTokenSync.cs" />
@@ -117,23 +130,78 @@
     <Compile Include="Impl\Client\DefaultCacheProviderBuilder.cs" />
     <Compile Include="Impl\Client\DefaultJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\DefaultHttpClientBuilder.cs" />
-    <Compile Include="Impl\Client\ICacheProviderBuilder.cs" />
+    <Compile Include="Impl\CustomData\ICustomDataSync.cs" />
+    <Compile Include="Impl\DataStore\Filters\ProviderAccountResultFilter.cs" />
+    <Compile Include="Impl\DataStore\ICacheProviderBuilder.cs" />
     <Compile Include="Impl\Client\IClientSync.cs" />
     <Compile Include="Impl\Client\IJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\IHttpClientBuilder.cs" />
+    <Compile Include="Impl\CustomData\DefaultCustomData.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataRequest.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataResult.cs" />
     <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
     <Compile Include="Impl\DataStore\IDataStoreSync.cs" />
-    <Compile Include="Impl\DataStore\IInternalDataStoreSync.cs" />
+    <Compile Include="Impl\DataStore\IdentityMapOptions.cs" />
+    <Compile Include="Impl\Directory\DefaultDirectoryCreationOptions.cs" />
+    <Compile Include="Impl\Directory\IDirectorySync.cs" />
+    <Compile Include="Impl\Group\DefaultGroup.cs" />
+    <Compile Include="Impl\Group\DefaultGroupMembership.cs" />
+    <Compile Include="Impl\Group\IGroupMembershipSync.cs" />
+    <Compile Include="Impl\Group\IGroupSync.cs" />
+    <Compile Include="Impl\Group\IInternalGroupMembership.cs" />
+    <Compile Include="Impl\DataStore\IInternalAsyncDataStore.cs" />
+    <Compile Include="Impl\IdentityMap\MemoryCacheIdentityMap.cs" />
+    <Compile Include="Impl\DataStore\IInternalSyncDataStore.cs" />
+    <Compile Include="Impl\Extensions\ConcurrentDictionaryExtensions.cs" />
     <Compile Include="Impl\Http\DefaultHttpClientLoader.cs" />
     <Compile Include="Impl\Http\DefaultRequestExecutor.cs" />
     <Compile Include="Impl\Http\Support\DefaultBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\IBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
+    <Compile Include="Impl\IdentityMap\IIdentityMap.cs" />
     <Compile Include="Impl\Linq\LinqHelper.cs" />
+    <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
+    <Compile Include="Impl\Provider\AbstractCreateProviderRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\AbstractProvider.cs" />
+    <Compile Include="Impl\Provider\AbstractProviderAccountRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\AbstractProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultLinkedInProvider.cs" />
+    <Compile Include="Impl\Provider\DefaultLinkedInProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultLinkedInAccountRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultLinkedInCreateProviderRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultLinkedInRequestFactory.cs" />
+    <Compile Include="Impl\Provider\DefaultGoogleProvider.cs" />
+    <Compile Include="Impl\Provider\DefaultGoogleProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultGoogleAccountRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultGoogleCreateProviderRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultGoogleRequestFactory.cs" />
+    <Compile Include="Impl\Provider\DefaultGithubProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultGithubProvider.cs" />
+    <Compile Include="Impl\Provider\DefaultGithubAccountRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultGithubCreateProviderRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultGithubRequestFactory.cs" />
+    <Compile Include="Impl\Provider\DefaultProviderAccountAccess.cs" />
+    <Compile Include="Impl\Provider\DefaultCreateProviderRequest.cs" />
+    <Compile Include="Impl\Provider\DefaultFacebookAccountRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultFacebookCreateProviderRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\DefaultFacebookProvider.cs" />
+    <Compile Include="Impl\Provider\DefaultFacebookProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultFacebookRequestFactory.cs" />
+    <Compile Include="Impl\Provider\DefaultProvider.cs" />
+    <Compile Include="Impl\Provider\DefaultProviderAccountRequest.cs" />
+    <Compile Include="Impl\Provider\DefaultProviderAccountResult.cs" />
+    <Compile Include="Impl\Provider\DefaultProviderData.cs" />
+    <Compile Include="Impl\Provider\DefaultProviderFactory.cs" />
+    <Compile Include="Impl\Provider\IProviderAccountAccess.cs" />
+    <Compile Include="Impl\Provider\ProviderAccountResolver.cs" />
+    <Compile Include="Impl\Provider\ProviderType.cs" />
+    <Compile Include="Impl\Provider\ProviderTypeConverter.cs" />
+    <Compile Include="Impl\Resource\ILinkable.cs" />
+    <Compile Include="Impl\Resource\INotifiable.cs" />
+    <Compile Include="Impl\Resource\ResourceData.cs" />
+    <Compile Include="Impl\Resource\IExtendableSync.cs" />
     <Compile Include="Impl\Resource\IDeletableSync.cs" />
     <Compile Include="Impl\Resource\ISaveableSync.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterResult.cs" />
@@ -155,12 +223,51 @@
     <Compile Include="Impl\Serialization\JsonSerializationProvider.cs" />
     <Compile Include="Impl\Serialization\DefaultJsonSerializerLoader.cs" />
     <Compile Include="Impl\Tenant\ITenantActionsSync.cs" />
+    <Compile Include="Impl\Tenant\ITenantSync.cs" />
+    <Compile Include="Impl\Utility\AnonymousType.cs" />
+    <Compile Include="Impl\Utility\DetectLanguage.cs" />
     <Compile Include="Impl\Utility\ITypeLoader.cs" />
+    <Compile Include="Impl\Utility\SourceLanguage.cs" />
     <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
+    <Compile Include="Provider\ClientProviderExtensions.cs" />
+    <Compile Include="Provider\ICreateProviderRequest.cs" />
+    <Compile Include="Provider\ICreateProviderRequestBuilder.cs" />
+    <Compile Include="Provider\ILinkedInAccountRequestBuilder.cs" />
+    <Compile Include="Provider\ILinkedInCreateProviderRequestBuilder.cs" />
+    <Compile Include="Provider\ILinkedInRequestFactory.cs" />
+    <Compile Include="Provider\IGoogleAccountRequestBuilder.cs" />
+    <Compile Include="Provider\IGoogleCreateProviderRequestBuilder.cs" />
+    <Compile Include="Provider\IGoogleRequestFactory.cs" />
+    <Compile Include="Provider\IGithubAccountRequestBuilder.cs" />
+    <Compile Include="Provider\IFacebookAccountRequestBuilder.cs" />
+    <Compile Include="Provider\IGithubCreateProviderRequestBuilder.cs" />
+    <Compile Include="Provider\IFacebookCreateProviderRequestBuilder.cs" />
+    <Compile Include="Provider\IGithubRequestFactory.cs" />
+    <Compile Include="Provider\IFacebookRequestFactory.cs" />
+    <Compile Include="Provider\ILinkedInProviderData.cs" />
+    <Compile Include="Provider\ILinkedInProvider.cs" />
+    <Compile Include="Provider\IGoogleProviderData.cs" />
+    <Compile Include="Provider\IGoogleProvider.cs" />
+    <Compile Include="Provider\IGithubProviderData.cs" />
+    <Compile Include="Provider\IGithubProvider.cs" />
+    <Compile Include="Provider\IFacebookProvider.cs" />
+    <Compile Include="Provider\IFacebookProviderData.cs" />
+    <Compile Include="Provider\IProvider.cs" />
+    <Compile Include="Provider\IProviderAccountRequest.cs" />
+    <Compile Include="Provider\IProviderAccountRequestBuilder.cs" />
+    <Compile Include="Provider\IProviderAccountResult.cs" />
+    <Compile Include="Provider\IProviderData.cs" />
+    <Compile Include="Provider\IProviderFactory.cs" />
+    <Compile Include="Provider\IProviderRequestFactory.cs" />
+    <Compile Include="Resource\IExtendable.cs" />
+    <Compile Include="Shared\StringEnumeration.cs" />
     <Compile Include="Sync\FilterExtensions.cs" />
     <Compile Include="Sync\SyncAccountCreationActionsExtensions.cs" />
+    <Compile Include="Sync\SyncDirectoryExtensions.cs" />
+    <Compile Include="Sync\SyncGroupMembershipExtensions.cs" />
+    <Compile Include="Sync\SyncGroupExtensions.cs" />
     <Compile Include="Sync\SyncAccountExtensions.cs" />
     <Compile Include="Sync\SyncAccountStoreMappingExtensions.cs" />
     <Compile Include="Sync\SyncApplicationExtensions.cs" />
@@ -259,7 +366,6 @@
     <Compile Include="Resource\ICreationOptions.cs" />
     <Compile Include="Resource\IDeletable.cs" />
     <Compile Include="Resource\ISaveable.cs" />
-    <Compile Include="Shared\Enumeration.cs" />
     <Compile Include="Impl\Utility\EnvironmentWrapper.cs" />
     <Compile Include="Impl\Utility\FileWrapper.cs" />
     <Compile Include="Impl\Utility\IConfigurationManager.cs" />
@@ -274,6 +380,7 @@
     <Compile Include="Shared\LogEntry.cs" />
     <Compile Include="Shared\LoggerExtensions.cs" />
     <Compile Include="Shared\LogLevel.cs" />
+    <Compile Include="Sync\SyncExtendableExtensions.cs" />
     <Compile Include="Sync\SyncResourceExtensions.cs" />
     <Compile Include="Sync\SyncTenantActionsExtensions.cs" />
     <Compile Include="Tenant\ITenant.cs" />
@@ -289,10 +396,17 @@
   <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta012\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta012\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta014\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta014\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets" Condition="Exists('..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

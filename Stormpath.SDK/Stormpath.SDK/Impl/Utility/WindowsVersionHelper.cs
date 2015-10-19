@@ -63,13 +63,13 @@ namespace Stormpath.SDK.Impl.Utility
 
         private static int? GetProductType()
         {
-            var osVersionInfo = new SafeNativeMethods.OSVERSIONINFOEX();
-            osVersionInfo.dwOSVersionInfoSize = Marshal.SizeOf(typeof(SafeNativeMethods.OSVERSIONINFOEX));
+            var operatingSystemVersionInfo = default(SafeNativeMethods.OSVERSIONINFOEX);
+            operatingSystemVersionInfo.dwOSVersionInfoSize = Marshal.SizeOf(typeof(SafeNativeMethods.OSVERSIONINFOEX));
 
-            if (!SafeNativeMethods.GetVersionEx(ref osVersionInfo))
+            if (!SafeNativeMethods.GetVersionEx(ref operatingSystemVersionInfo))
                 return null;
 
-            return osVersionInfo.wProductType;
+            return operatingSystemVersionInfo.wProductType;
         }
     }
 }

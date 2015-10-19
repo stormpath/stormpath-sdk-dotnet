@@ -15,92 +15,93 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal abstract class AbstractResource : IResource
+    internal abstract class AbstractResource : IResource, ILinkable
     {
-        private static readonly string HrefPropertyName = "href";
+        protected static readonly string HrefPropertyName = "href";
 
-        internal readonly IInternalDataStore InternalDataStore;
-        internal readonly IInternalDataStoreSync InternalDataStoreSync;
-        private readonly ConcurrentDictionary<string, object> properties;
-        private readonly ConcurrentDictionary<string, object> dirtyProperties;
+        private ResourceData resourceData;
 
-        private bool isDirty = false;
-
-        public AbstractResource(IInternalDataStore dataStore)
-            : this(dataStore, new Dictionary<string, object>())
+        public AbstractResource(ResourceData data)
         {
+            this.resourceData = data;
         }
 
-        public AbstractResource(IInternalDataStore dataStore, IDictionary<string, object> properties)
+        void ILinkable.Link(ResourceData data)
         {
-            this.InternalDataStore = dataStore;
-            this.InternalDataStoreSync = dataStore as IInternalDataStoreSync;
-
-            this.properties = new ConcurrentDictionary<string, object>(properties);
-            this.dirtyProperties = new ConcurrentDictionary<string, object>();
-            this.isDirty = false;
+            Interlocked.Exchange(ref this.resourceData, data);
         }
 
-        string IResource.Href => GetProperty<string>(HrefPropertyName);
+        protected IResource AsInterface => this;
 
-        protected IInternalDataStore GetInternalDataStore() => this.InternalDataStore;
+        public ResourceData GetResourceData() => this.resourceData;
 
-        protected IInternalDataStoreSync GetInternalDataStoreSync() => this.InternalDataStoreSync;
-
-        internal bool IsDirty => this.isDirty;
-
-        public List<string> GetPropertyNames()
+        string IResource.Href
         {
-            return this.properties.Keys
-                .OfType<string>()
-                .ToList();
+            get
+            {
+                var href = this.GetProperty<string>(HrefPropertyName);
+
+                bool isEmptyOrDefault =
+                    href == null ||
+                    href.StartsWith("autogen", System.StringComparison.InvariantCultureIgnoreCase);
+
+                return isEmptyOrDefault
+                    ? null
+                    : href;
+            }
         }
 
-        public List<string> GetUpdatedPropertyNames()
-        {
-            return this.dirtyProperties.Keys
-                .OfType<string>()
-                .ToList();
-        }
+        protected IInternalDataStore GetInternalDataStore()
+            => this.GetResourceData()?.InternalDataStore;
 
-        public LinkProperty GetLinkProperty(string name)
-            => GetProperty<LinkProperty>(name) ?? new LinkProperty(null);
+        protected IInternalAsyncDataStore GetInternalAsyncDataStore()
+            => this.GetResourceData()?.InternalAsyncDataStore;
 
-        public T GetProperty<T>(string name)
-        {
-            var value = this.GetProperty(name);
+        protected IInternalSyncDataStore GetInternalSyncDataStore()
+            => this.GetResourceData()?.InternalSyncDataStore;
 
-            return (T)value;
-        }
+        protected Task<ITenant> GetTenantAsync(string tenantHref, CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(tenantHref, new IdentityMapOptions() { StoreWithInfiniteExpiration = true }, cancellationToken);
+
+        protected ITenant GetTenant(string tenantHref)
+            => this.GetInternalSyncDataStore().GetResource<ITenant>(tenantHref, new IdentityMapOptions() { StoreWithInfiniteExpiration = true });
+
+        internal bool IsDirty => this.GetResourceData()?.IsDirty ?? true;
+
+        public IReadOnlyList<string> GetPropertyNames()
+            => this.GetResourceData()?.GetPropertyNames();
+
+        public IReadOnlyList<string> GetUpdatedPropertyNames()
+            => this.GetResourceData()?.GetUpdatedPropertyNames();
 
         public object GetProperty(string name)
-        {
-            object value;
+            => this.GetResourceData()?.GetProperty(name);
 
-            if (this.dirtyProperties.TryGetValue(name, out value))
-                return value;
+        public T GetProperty<T>(string name)
+            => (T)(this.GetProperty(name) ?? default(T));
 
-            if (this.properties.TryGetValue(name, out value))
-                return value;
+        public LinkProperty GetLinkProperty(string name)
+            => this.GetProperty<LinkProperty>(name) ?? new LinkProperty(null);
 
-            return null;
-        }
+        public bool ContainsProperty(string name)
+            => this.GetResourceData()?.ContainsProperty(name) ?? false;
+
+        public void SetProperty(string name, object value)
+            => this.GetResourceData()?.SetProperty(name, value);
 
         public void SetProperty<T>(string name, T value)
             => this.SetProperty(name, (object)value);
 
-        public void SetProperty(string name, object value)
-        {
-            this.dirtyProperties.AddOrUpdate(name, value, (key, oldValue) => value);
-            this.isDirty = true;
-        }
+        public void SetLinkProperty(string name, string href)
+            => this.SetProperty(name, new LinkProperty(href));
     }
 }

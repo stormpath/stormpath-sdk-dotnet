@@ -46,11 +46,11 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         public void Throws_for_empty_request_URI()
         {
             var apiKey = new DefaultClientApiKey("foo", "bar");
-            var myRequest = new DefaultHttpRequest(HttpMethod.Get, null);
+            var request = new DefaultHttpRequest(HttpMethod.Get, null);
 
             Should.Throw<RequestAuthenticationException>(() =>
             {
-                this.authenticator.AuthenticateCore(myRequest, apiKey, this.fakeNow, this.fakeNonce);
+                this.authenticator.AuthenticateCore(request, apiKey, this.fakeNow, this.fakeNonce);
             });
         }
 
@@ -59,13 +59,13 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         {
             var apiKey = new DefaultClientApiKey("foo", "bar");
             var uriQualifier = new UriQualifier("http://api.foo.bar");
-            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/stuff")));
+            var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/stuff")));
 
-            this.authenticator.AuthenticateCore(myRequest, apiKey, this.fakeNow, this.fakeNonce);
+            this.authenticator.AuthenticateCore(request, apiKey, this.fakeNow, this.fakeNonce);
 
             // X-Stormpath-Date -> current time in UTC
-            var xStormpathDateHeader = Iso8601.Parse(myRequest.Headers.GetFirst<string>("X-Stormpath-Date"));
-            xStormpathDateHeader.ShouldBe(this.fakeNow);
+            var stormpathDateHeader = Iso8601.Parse(request.Headers.GetFirst<string>("X-Stormpath-Date"));
+            stormpathDateHeader.ShouldBe(this.fakeNow);
         }
 
         [Fact]
@@ -73,12 +73,12 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         {
             var apiKey = new DefaultClientApiKey("foo", "bar");
             var uriQualifier = new UriQualifier("http://api.foo.bar");
-            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/stuff")));
+            var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/stuff")));
 
-            this.authenticator.AuthenticateCore(myRequest, apiKey, this.fakeNow, this.fakeNonce);
+            this.authenticator.AuthenticateCore(request, apiKey, this.fakeNow, this.fakeNonce);
 
             // Host: [hostname]
-            myRequest.Headers.Host.ShouldBe("api.foo.bar");
+            request.Headers.Host.ShouldBe("api.foo.bar");
         }
 
         [Fact]
@@ -86,12 +86,12 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         {
             var apiKey = new DefaultClientApiKey("foo", "bar");
             var uriQualifier = new UriQualifier("https://api.foo.bar:8088");
-            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/baz")));
+            var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/baz")));
 
-            this.authenticator.AuthenticateCore(myRequest, apiKey, this.fakeNow, this.fakeNonce);
+            this.authenticator.AuthenticateCore(request, apiKey, this.fakeNow, this.fakeNonce);
 
             // Host: [hostname]
-            myRequest.Headers.Host.ShouldBe("api.foo.bar:8088");
+            request.Headers.Host.ShouldBe("api.foo.bar:8088");
         }
 
         [Fact]
@@ -99,12 +99,12 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
         {
             IClientApiKey apiKey = new DefaultClientApiKey("myAppId", "super-secret");
             var uriQualifier = new UriQualifier("http://api.stormpath.com/v1");
-            var myRequest = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/accounts")));
+            var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/accounts")));
 
-            this.authenticator.AuthenticateCore(myRequest, apiKey, this.fakeNow, this.fakeNonce);
+            this.authenticator.AuthenticateCore(request, apiKey, this.fakeNow, this.fakeNonce);
 
             // Authorization: "SAuthc1 [signed hash]"
-            var authenticationHeader = myRequest.Headers.Authorization;
+            var authenticationHeader = request.Headers.Authorization;
             authenticationHeader.Scheme.ShouldBe("SAuthc1");
             authenticationHeader.Parameter.ShouldNotBe(null);
 

@@ -17,17 +17,22 @@
 
 using System;
 using System.Collections.Generic;
+using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal interface IResourceFactory
+    internal interface IResourceFactory : IDisposable
     {
-        object Create(Type type);
+        object Create(Type type, ILinkable original = null);
 
-        T Create<T>();
+        T Create<T>(ILinkable original = null);
 
-        object Create(Type type, IDictionary<string, object> properties);
+        object Create(Type type, IDictionary<string, object> properties, ILinkable original = null);
 
-        T Create<T>(IDictionary<string, object> properties);
+        T Create<T>(IDictionary<string, object> properties, ILinkable original = null);
+
+        object Create(Type type, IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original = null);
+
+        T Create<T>(IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original = null);
     }
 }

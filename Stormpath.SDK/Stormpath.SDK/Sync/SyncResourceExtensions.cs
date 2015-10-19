@@ -30,7 +30,8 @@ namespace Stormpath.SDK.Sync
         /// <returns>The persisted resource data.</returns>
         /// <exception cref="Error.ResourceException">The save operation failed.</exception>
         public static T Save<T>(this ISaveable<T> resource)
-            where T : IResource => (resource as ISaveableSync<T>).Save();
+            where T : IResource
+            => (resource as ISaveableSync<T>).Save();
 
         /// <summary>
         /// Synchronously deletes the resource.
@@ -38,6 +39,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="resource">The resource.</param>
         /// <returns>Whether the delete operation succeeded.</returns>
         /// <exception cref="Error.ResourceException">The delete operation failed.</exception>
-        public static bool Delete(this IDeletable resource) => (resource as IDeletableSync).Delete();
+        public static bool Delete(this IDeletable resource)
+            => (resource as IDeletableSync).Delete();
     }
 }

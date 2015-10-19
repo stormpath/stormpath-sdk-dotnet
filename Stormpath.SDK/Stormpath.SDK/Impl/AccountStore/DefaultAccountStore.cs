@@ -15,22 +15,15 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
 using Stormpath.SDK.AccountStore;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
     internal sealed class DefaultAccountStore : AbstractInstanceResource, IAccountStore
     {
-        public DefaultAccountStore(IInternalDataStore dataStore)
-            : base(dataStore)
-        {
-        }
-
-        public DefaultAccountStore(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
+        public DefaultAccountStore(ResourceData data)
+            : base(data)
         {
         }
     }

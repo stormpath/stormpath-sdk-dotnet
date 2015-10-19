@@ -193,9 +193,9 @@ namespace Stormpath.SDK.Tests.Impl
 
         public class Building_with_environment_variable_values
         {
-            private readonly string idVariableName = "STORMPATH_API_KEY_ID";
+            private readonly string apiKeyIdVariableName = "STORMPATH_API_KEY_ID";
             private readonly string fakeApiKeyId = "idSetByEnv";
-            private readonly string secretVariableName = "STORMPATH_API_KEY_SECRET";
+            private readonly string apiKeySecretVariableName = "STORMPATH_API_KEY_SECRET";
             private readonly string fakeApiSecretId = "secretSetByEnv";
 
             private IClientApiKeyBuilder builder;
@@ -204,8 +204,8 @@ namespace Stormpath.SDK.Tests.Impl
             public Building_with_environment_variable_values()
             {
                 this.env = Substitute.For<IEnvironment>();
-                this.env.GetEnvironmentVariable(this.idVariableName).Returns(this.fakeApiKeyId);
-                this.env.GetEnvironmentVariable(this.secretVariableName).Returns(this.fakeApiSecretId);
+                this.env.GetEnvironmentVariable(this.apiKeyIdVariableName).Returns(this.fakeApiKeyId);
+                this.env.GetEnvironmentVariable(this.apiKeySecretVariableName).Returns(this.fakeApiSecretId);
 
                 this.builder = new DefaultClientApiKeyBuilder(
                     Substitute.For<IConfigurationManager>(),
@@ -329,7 +329,7 @@ namespace Stormpath.SDK.Tests.Impl
 
         public class Building_with_values_from_AppConfig
         {
-            private readonly string idVariableName = "STORMPATH_API_KEY_ID";
+            private readonly string apiKeyIdVariableName = "STORMPATH_API_KEY_ID";
             private readonly string fakeApiKeyId = "idSetByAppConfig";
             private readonly string secretVariableName = "STORMPATH_API_KEY_SECRET";
             private readonly string fakeApiSecretId = "secretSetByAppConfig";
@@ -342,7 +342,7 @@ namespace Stormpath.SDK.Tests.Impl
                 this.config = Substitute.For<IConfigurationManager>();
                 this.config.AppSettings.Returns(new System.Collections.Specialized.NameValueCollection()
                 {
-                    { this.idVariableName, this.fakeApiKeyId },
+                    { this.apiKeyIdVariableName, this.fakeApiKeyId },
                     { this.secretVariableName, this.fakeApiSecretId }
                 });
 

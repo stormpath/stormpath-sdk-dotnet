@@ -15,8 +15,7 @@
 // limitations under the License.
 // </remarks>
 
-using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Auth
 {
@@ -24,13 +23,8 @@ namespace Stormpath.SDK.Impl.Auth
     {
         private static readonly string ValuePropertyName = "value";
 
-        public DefaultBasicLoginAttempt(IInternalDataStore dataStore)
-            : base(dataStore)
-        {
-        }
-
-        public DefaultBasicLoginAttempt(IInternalDataStore dataStore, IDictionary<string, object> properties)
-            : base(dataStore, properties)
+        public DefaultBasicLoginAttempt(ResourceData data)
+            : base(data)
         {
         }
 
