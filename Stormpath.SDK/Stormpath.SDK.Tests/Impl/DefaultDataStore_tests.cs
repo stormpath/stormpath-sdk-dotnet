@@ -33,7 +33,6 @@ using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Shared;
 using Stormpath.SDK.Tests.Fakes;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl

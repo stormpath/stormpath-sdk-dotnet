@@ -17,7 +17,6 @@
 
 using System;
 using System.Net;
-using System.Threading;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Serialization;
