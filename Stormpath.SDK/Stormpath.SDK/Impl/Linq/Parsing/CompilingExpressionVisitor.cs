@@ -13,6 +13,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 {
     internal sealed class CompilingExpressionVisitor : ExpressionVisitor
     {
+        private static readonly int DefaultApiPageLimit = 100;
+
         private FieldNameTranslator fieldNameTranslator
             = new FieldNameTranslator();
 
@@ -26,8 +28,15 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         internal Expression VisitTake(TakeExpression node)
         {
-            if (!this.Model.Limit.HasValue)
-                this.Model.Limit = node.Value;
+            if (this.Model.Limit.HasValue)
+                return node; // LIFO behavior
+
+            var value = node.Value;
+            this.Model.ExecutionPlan.MaxItems = value;
+            this.Model.Limit = value;
+
+            if (value > DefaultApiPageLimit)
+                this.Model.Limit = DefaultApiPageLimit;
 
             return node;
         }

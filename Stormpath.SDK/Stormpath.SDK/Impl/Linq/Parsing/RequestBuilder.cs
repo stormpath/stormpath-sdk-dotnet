@@ -29,8 +29,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             if (!this.arguments.Any())
             {
                 this.HandleFilter();
-                this.HandleTake();
-                this.HandleSkip();
+                this.HandleLimit();
+                this.HandleOffset();
                 this.HandleOrderByThenBy();
             }
 
@@ -47,13 +47,13 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 this.arguments.Add("q", this.queryModel.FilterTerm);
         }
 
-        private void HandleTake()
+        private void HandleLimit()
         {
             if (this.queryModel.Limit > 0)
                 this.arguments.Add("limit", this.queryModel.Limit.Value.ToString());
         }
 
-        private void HandleSkip()
+        private void HandleOffset()
         {
             if (this.queryModel.Offset > 0)
                 this.arguments.Add("offset", this.queryModel.Offset.Value.ToString());

@@ -29,7 +29,13 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             // Compile
             var compilingVisitor = new CompilingExpressionVisitor();
             compilingVisitor.Visit(discoveringVisitor.Expressions);
-            return compilingVisitor.Model;
+            var compiledModel = compilingVisitor.Model;
+
+            // Validate
+            var validator = new QueryModelValidator(compiledModel);
+            validator.Validate();
+
+            return compiledModel;
         }
     }
 }

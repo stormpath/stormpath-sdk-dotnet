@@ -159,6 +159,7 @@
     <Compile Include="Impl\IdentityMap\IIdentityMap.cs" />
     <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
     <Compile Include="Impl\Linq\CollectionResourceExecutor.cs" />
+    <Compile Include="Impl\Linq\Parsing\QueryModelValidator.cs" />
     <Compile Include="Impl\Linq\Sync\CollectionResourceScalarExecutor.cs" />
     <Compile Include="Impl\Linq\Parsing\CompilingExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\Parsing\DiscoveringExpressionVisitor.cs" />
