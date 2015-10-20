@@ -26,14 +26,16 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         internal Expression VisitTake(TakeExpression node)
         {
-            this.Model.Limit = node.Value;
+            if (!this.Model.Limit.HasValue)
+                this.Model.Limit = node.Value;
 
             return node;
         }
 
         internal Expression VisitSkip(SkipExpression node)
         {
-            this.Model.Offset = node.Value;
+            if (!this.Model.Offset.HasValue)
+                this.Model.Offset = node.Value;
 
             return node;
         }
