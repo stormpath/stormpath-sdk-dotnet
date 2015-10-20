@@ -80,6 +80,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             else
                 return false;
 
+            if (node.Arguments.Count > 2)
+                throw new NotSupportedException("This overload of OrderBy is not supported.");
+
             var field = ((node.Arguments[1] as UnaryExpression)?.Operand as LambdaExpression)?.Body as MemberExpression;
             if (field == null)
                 throw new NotSupportedException($"{node.Method.Name} must operate on a supported field.");
@@ -99,6 +102,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 direction = OrderByDirection.Descending;
             else
                 return false;
+
+            if (node.Arguments.Count > 2)
+                throw new NotSupportedException("This overload of ThenBy is not supported.");
 
             var field = ((node.Arguments[1] as UnaryExpression)?.Operand as LambdaExpression)?.Body as MemberExpression;
             if (field == null)

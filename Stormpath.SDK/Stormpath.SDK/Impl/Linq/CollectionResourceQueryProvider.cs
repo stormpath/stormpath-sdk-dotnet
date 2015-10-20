@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Impl.Linq
             => new CollectionResourceQueryable<TResult>(this, expression);
 
         public IQueryable<T> CreateQuery<T>(Expression expression)
-            => new CollectionResourceQueryable<T>(this as IAsyncQueryProvider<T>, expression);
+            => new CollectionResourceQueryable<T>(this, expression);
 
         public object Execute(Expression expression)
         {

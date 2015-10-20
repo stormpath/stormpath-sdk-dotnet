@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Impl.Linq.Sync
                 return this.executor.CurrentPage.Any();
 
             if (resultOperator == Parsing.ResultOperator.Count)
-                return this.executor.Size;
+                return Convert.ToInt32(this.executor.Size);
 
             if (resultOperator == Parsing.ResultOperator.LongCount)
                 return this.executor.Size;

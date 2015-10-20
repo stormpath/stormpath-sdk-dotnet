@@ -43,8 +43,10 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         internal Expression VisitSkip(SkipExpression node)
         {
-            if (!this.Model.Offset.HasValue)
-                this.Model.Offset = node.Value;
+            if (this.Model.Offset.HasValue)
+                return node; // LIFO behavior
+
+            this.Model.Offset = node.Value;
 
             return node;
         }
@@ -66,6 +68,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         internal Expression VisitFilter(FilterExpression node)
         {
+            if (!string.IsNullOrEmpty(this.Model.FilterTerm))
+                throw new NotSupportedException("Multiple Filter terms are not supported");
+
             this.Model.FilterTerm = node.Value;
 
             return node;

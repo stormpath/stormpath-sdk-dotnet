@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Impl.Linq
         }
 
         // This constructor is called internally by LINQ
-        public CollectionResourceQueryable(IAsyncQueryProvider<TResult> provider, Expression expression)
+        public CollectionResourceQueryable(IQueryProvider provider, Expression expression)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");
@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Impl.Linq
 
             var concreteProvider = provider as CollectionResourceQueryProvider<TResult>;
             if (concreteProvider == null)
-                throw new InvalidOperationException("LINQ queries must start from a supported provider.");
+                throw new NotSupportedException("LINQ queries must start from a supported provider.");
 
             this.expression = expression;
             this.queryProvider = concreteProvider;
