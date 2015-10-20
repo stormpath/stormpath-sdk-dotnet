@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Stormpath.SDK.Impl.Linq.Parsing;
 
 namespace Stormpath.SDK.Impl.Linq.QueryModel
 {
@@ -17,8 +18,12 @@ namespace Stormpath.SDK.Impl.Linq.QueryModel
         public List<OrderBy> OrderByTerms{ get; set; }
             = new List<OrderBy>();
 
-        public ExecutionPlanModel ExecutionPlan { get; private set; }
+        public ExecutionPlanModel ExecutionPlan { get; set; }
             = new ExecutionPlanModel();
+
+        public ResultOperator? ResultOperator { get; set; }
+
+        public bool ResultDefaultIfEmpty { get; set; } = false;
 
         public static CollectionResourceQueryModel Default = new CollectionResourceQueryModel()
         {
@@ -28,7 +33,9 @@ namespace Stormpath.SDK.Impl.Linq.QueryModel
             ExecutionPlan = new ExecutionPlanModel()
             {
                 MaxItems = null
-            }
+            },
+            ResultOperator = null,
+            ResultDefaultIfEmpty = false
         };
     }
 }

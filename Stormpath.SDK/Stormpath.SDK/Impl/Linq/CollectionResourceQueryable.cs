@@ -55,6 +55,7 @@ namespace Stormpath.SDK.Impl.Linq
             if (concreteProvider == null)
                 throw new InvalidOperationException("LINQ queries must start from a supported provider.");
 
+            this.expression = expression;
             this.queryProvider = concreteProvider;
             this.executor = new CollectionResourceExecutor<TResult>(this.queryProvider.Executor, expression);
             this.queryProvider.Executor = this.executor;

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Linq.Sync;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 
@@ -38,17 +39,16 @@ namespace Stormpath.SDK.Impl.Linq
 
         public object Execute(Expression expression)
         {
-            throw new NotImplementedException();
+            var scalarExecutor = new SyncScalarExecutor<TResult>(this.executor, expression);
+            return scalarExecutor.Execute();
         }
 
         public T Execute<T>(Expression expression)
         {
             bool isEnumerable = typeof(T).Name == "IEnumerable`1";
 
-            //var compiledModel = 
-
-            //return (TResult)SimpleExecutor.Execute(expression, IsEnumerable);
-            throw new NotImplementedException();
+            var scalarExecutor = new SyncScalarExecutor<TResult>(this.executor, expression);
+            return (T)scalarExecutor.Execute();
         }
     }
 }

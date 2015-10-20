@@ -64,7 +64,16 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         internal Expression VisitResultOperator(ResultOperatorExpression node)
         {
-            //todo
+            this.Model.ResultOperator = node.ResultType;
+
+            if (node.ResultType == ResultOperator.First)
+            {
+                this.Model.ResultDefaultIfEmpty = (node as FirstResultOperator).DefaultIfEmpty;
+            }
+            else if (node.ResultType == ResultOperator.Single)
+            {
+                this.Model.ResultDefaultIfEmpty = (node as SingleResultOperator).DefaultIfEmpty;
+            }
 
             return node;
         }

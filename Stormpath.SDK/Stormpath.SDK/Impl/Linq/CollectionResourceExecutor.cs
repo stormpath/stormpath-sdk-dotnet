@@ -20,6 +20,8 @@ namespace Stormpath.SDK.Impl.Linq
 
         private CollectionResourceQueryModel compiledModel = null;
 
+        private bool enumeratedOnce = false;
+
         private long totalItemsRetrieved = 0;
 
         private long currentOffset;
@@ -46,10 +48,9 @@ namespace Stormpath.SDK.Impl.Linq
             this.expression = newExpression;
         }
 
-        private void NoResultsGuard()
+        private void ThrowIfNotEnumerated()
         {
-            bool atLeastOnePageRetrieved = this.totalItemsRetrieved > 0;
-            if (!atLeastOnePageRetrieved)
+            if (!this.enumeratedOnce)
                 throw new InvalidOperationException("Call MoveNextAsync() first to retrieve the collection.");
         }
 
@@ -57,7 +58,7 @@ namespace Stormpath.SDK.Impl.Linq
         {
             get
             {
-                this.NoResultsGuard();
+                this.ThrowIfNotEnumerated();
 
                 return this.currentOffset;
             }
@@ -67,7 +68,7 @@ namespace Stormpath.SDK.Impl.Linq
         {
             get
             {
-                this.NoResultsGuard();
+                this.ThrowIfNotEnumerated();
 
                 return this.currentLimit;
             }
@@ -77,7 +78,7 @@ namespace Stormpath.SDK.Impl.Linq
         {
             get
             {
-                this.NoResultsGuard();
+                this.ThrowIfNotEnumerated();
 
                 return this.currentSize;
             }
@@ -87,9 +88,19 @@ namespace Stormpath.SDK.Impl.Linq
         {
             get
             {
-                this.NoResultsGuard();
+                this.ThrowIfNotEnumerated();
 
                 return this.currentItems;
+            }
+        }
+
+        public CollectionResourceQueryModel CompiledModel
+        {
+            get
+            {
+                this.ThrowIfNotEnumerated();
+
+                return this.compiledModel;
             }
         }
 
@@ -108,6 +119,8 @@ namespace Stormpath.SDK.Impl.Linq
             var url = this.GenerateRequestUrlFromModel();
             var response = await this.asyncDataStore.GetCollectionAsync<TResult>(url, cancellationToken).ConfigureAwait(false);
 
+            this.enumeratedOnce = true;
+
             return this.DidUpdateWithNewResults(response);
         }
 
@@ -122,6 +135,8 @@ namespace Stormpath.SDK.Impl.Linq
 
             var url = this.GenerateRequestUrlFromModel();
             var response = this.syncDataStore.GetCollection<TResult>(url);
+
+            this.enumeratedOnce = true;
 
             return this.DidUpdateWithNewResults(response);
         }
@@ -157,14 +172,14 @@ namespace Stormpath.SDK.Impl.Linq
 
         private bool DidUpdateWithNewResults(CollectionResponsePage<TResult> response)
         {
-            bool anyNewItems = response?.Items?.Any() ?? false;
-            if (!anyNewItems)
-                return false;
-
             this.currentOffset = response.Offset;
             this.currentLimit = response.Limit;
             this.currentSize = response.Size;
             this.currentItems = response.Items;
+
+            bool anyNewItems = response.Items.Any();
+            if (!anyNewItems)
+                return false;
 
             this.totalItemsRetrieved += response.Items.Count;
             return true;
