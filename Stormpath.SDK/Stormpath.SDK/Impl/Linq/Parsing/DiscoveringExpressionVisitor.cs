@@ -44,6 +44,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             // Result operators
             if (this.HandleAnyResultOperator(node) ||
                 this.HandleCountResultOperator(node) ||
+                this.HandleLongCountResultOperator(node) ||
                 this.HandleFirstResultOperator(node) ||
                 this.HandleSingleResultOperator(node))
             {
@@ -166,6 +167,16 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return false;
 
             this.expressions.Add(new CountResultOperator());
+
+            return true;
+        }
+
+        private bool HandleLongCountResultOperator(MethodCallExpression node)
+        {
+            if (node.Method.Name != "LongCount")
+                return false;
+
+            this.expressions.Add(new LongCountResultOperator());
 
             return true;
         }

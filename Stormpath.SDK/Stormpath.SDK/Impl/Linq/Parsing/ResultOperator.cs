@@ -10,6 +10,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
     {
         Any,
         Count,
+        LongCount,
         First,
         Single,
     }
