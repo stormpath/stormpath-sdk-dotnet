@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 var orderByArgument = new StringBuilder();
                 bool addedOne = false;
 
-                foreach (var clause in queryModel.OrderByTerms)
+                foreach (var clause in queryModel.OrderByTerms.Reverse<OrderBy>())
                 {
                     if (addedOne)
                         orderByArgument.Append(",");

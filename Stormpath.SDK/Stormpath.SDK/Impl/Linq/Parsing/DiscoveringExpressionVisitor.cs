@@ -98,16 +98,13 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             else
                 return false;
 
-            // TODO
+            var field = ((node.Arguments[1] as UnaryExpression)?.Operand as LambdaExpression)?.Body as MemberExpression;
+            if (field == null)
+                throw new NotSupportedException($"{node.Method.Name} must operate on a supported field.");
+
+            this.expressions.Add(new OrderByExpression(field.Member.Name, direction.Value));
+
             return true;
-
-            //var field = ((node.Arguments[1] as UnaryExpression)?.Operand as LambdaExpression)?.Body as MemberExpression;
-            //if (field == null)
-            //    throw new NotSupportedException($"{node.Method.Name} must operate on a supported field.");
-
-            //this.expressions.Add(new OrderByExpression(field.Member.Name, direction.Value));
-
-            //return true;
         }
 
         private bool HandleTakeMethod(MethodCallExpression node)
