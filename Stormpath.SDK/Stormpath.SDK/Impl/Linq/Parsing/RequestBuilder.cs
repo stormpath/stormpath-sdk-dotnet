@@ -11,7 +11,27 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
     {
         public static IList<string> GetArguments(CollectionResourceQueryModel queryModel)
         {
-            throw new NotImplementedException();
+            var builder = new RequestBuilder();
+            return builder.GenerateArgumentsFromModel(queryModel);
+        }
+
+        private List<string> GenerateArgumentsFromModel(CollectionResourceQueryModel queryModel)
+        {
+            var arguments = new Dictionary<string, string>();
+
+            // From .Take()
+            if (queryModel?.Limit > 0)
+                arguments.Add("limit", queryModel.Limit.Value.ToString());
+
+            // From .Skip()
+            if (queryModel?.Offset > 0)
+                arguments.Add("offset", queryModel.Offset.Value.ToString());
+
+            var argumentList = arguments
+                .Select(x => $"{x.Key}={x.Value}")
+                .ToList();
+
+            return argumentList;
         }
     }
 }

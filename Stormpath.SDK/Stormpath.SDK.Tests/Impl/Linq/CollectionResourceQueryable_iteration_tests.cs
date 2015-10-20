@@ -23,7 +23,7 @@ using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Impl
+namespace Stormpath.SDK.Tests.Impl.Linq
 {
     public class CollectionResourceQueryable_iteration_tests
     {

@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Impl.Linq
 
         public IQueryable<T> CreateQuery<T>(Expression expression)
         {
-            throw new NotImplementedException();
+            return new CollectionResourceQueryable<T>(this as IAsyncQueryProvider<T>, expression);
         }
 
         public object Execute(Expression expression)

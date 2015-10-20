@@ -16,6 +16,7 @@
 // </remarks>
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -29,9 +30,9 @@ using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Impl.Linq
 {
-    internal sealed class CollectionResourceQueryable<T> : IOrderedAsyncQueryable<T>
+    internal sealed class CollectionResourceQueryable<TResult> : IOrderedAsyncQueryable<TResult>, IOrderedQueryable<TResult>
     {
-        private readonly CollectionResourceQueryProvider<T> queryProvider;
+        private readonly CollectionResourceQueryProvider<TResult> queryProvider;
 
         private readonly Expression expression;
 
@@ -47,25 +48,24 @@ namespace Stormpath.SDK.Impl.Linq
 
         private long currentSize;
 
-        private IEnumerable<T> currentItems;
+        private IEnumerable<TResult> currentItems;
 
         public CollectionResourceQueryable(string collectionHref, IInternalDataStore dataStore)
         {
             this.collectionHref = collectionHref;
-            this.queryProvider = new CollectionResourceQueryProvider<T>(collectionHref, dataStore);
+            this.queryProvider = new CollectionResourceQueryProvider<TResult>(collectionHref, dataStore);
+            this.expression = Expression.Constant(this);
         }
 
         // This constructor is called internally by LINQ
-        public CollectionResourceQueryable(IAsyncQueryProvider<T> provider, Expression expression)
+        public CollectionResourceQueryable(IAsyncQueryProvider<TResult> provider, Expression expression)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");
             if (expression == null)
                 throw new ArgumentNullException("expression");
-            if (!typeof(IAsyncQueryable<T>).IsAssignableFrom(expression.Type))
-                throw new ArgumentOutOfRangeException("expression");
 
-            var concreteProvider = provider as CollectionResourceQueryProvider<T>;
+            var concreteProvider = provider as CollectionResourceQueryProvider<TResult>;
             if (concreteProvider == null)
                 throw new InvalidOperationException("LINQ queries must start from a supported provider.");
 
@@ -112,7 +112,7 @@ namespace Stormpath.SDK.Impl.Linq
             }
         }
 
-        IEnumerable<T> IAsyncQueryable<T>.CurrentPage
+        IEnumerable<TResult> IAsyncQueryable<TResult>.CurrentPage
         {
             get
             {
@@ -124,11 +124,17 @@ namespace Stormpath.SDK.Impl.Linq
 
         internal string CurrentHref => this.GenerateRequestUrlFromModel();
 
-        Expression IAsyncQueryable<T>.Expression => this.expression;
+        Expression IAsyncQueryable<TResult>.Expression => this.expression;
 
-        IAsyncQueryProvider<T> IAsyncQueryable<T>.Provider => this.queryProvider;
+        IAsyncQueryProvider<TResult> IAsyncQueryable<TResult>.Provider => this.queryProvider;
 
-        async Task<bool> IAsyncQueryable<T>.MoveNextAsync(CancellationToken cancellationToken)
+        Expression IQueryable.Expression => this.expression;
+
+        Type IQueryable.ElementType => typeof(TResult);
+
+        IQueryProvider IQueryable.Provider => this.queryProvider;
+
+        async Task<bool> IAsyncQueryable<TResult>.MoveNextAsync(CancellationToken cancellationToken)
         {
             this.CompileModelOrUseDefaultValues();
 
@@ -138,7 +144,7 @@ namespace Stormpath.SDK.Impl.Linq
             this.AdjustPagingOffset();
 
             var url = this.GenerateRequestUrlFromModel();
-            var response = await this.queryProvider.ExecuteCollectionAsync<T>(url, cancellationToken).ConfigureAwait(false);
+            var response = await this.queryProvider.ExecuteCollectionAsync<TResult>(url, cancellationToken).ConfigureAwait(false);
 
             return this.DidUpdateWithNewResults(response);
         }
@@ -153,7 +159,7 @@ namespace Stormpath.SDK.Impl.Linq
             this.AdjustPagingOffset();
 
             var url = this.GenerateRequestUrlFromModel();
-            var response = this.queryProvider.ExecuteCollection<T>(url);
+            var response = this.queryProvider.ExecuteCollection<TResult>(url);
 
             return this.DidUpdateWithNewResults(response);
         }
@@ -187,7 +193,7 @@ namespace Stormpath.SDK.Impl.Linq
             }
         }
 
-        private bool DidUpdateWithNewResults(CollectionResponsePage<T> response)
+        private bool DidUpdateWithNewResults(CollectionResponsePage<TResult> response)
         {
             bool anyNewItems = response?.Items?.Any() ?? false;
             if (!anyNewItems)
@@ -213,6 +219,16 @@ namespace Stormpath.SDK.Impl.Linq
 
             var arguments = string.Join("&", argumentList);
             return $"{this.collectionHref}?{arguments}";
+        }
+
+        IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
         }
     }
 }
