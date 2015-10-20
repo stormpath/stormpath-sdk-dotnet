@@ -75,6 +75,16 @@ namespace Stormpath.SDK.Impl.Linq
             this.collectionHref = concreteProvider.CollectionHref;
         }
 
+        Expression IAsyncQueryable<TResult>.Expression => this.expression;
+
+        IAsyncQueryProvider<TResult> IAsyncQueryable<TResult>.Provider => this.queryProvider;
+
+        Expression IQueryable.Expression => this.expression;
+
+        Type IQueryable.ElementType => typeof(TResult);
+
+        IQueryProvider IQueryable.Provider => this.queryProvider;
+
         private void NoResultsGuard()
         {
             bool atLeastOnePageRetrieved = this.totalItemsRetrieved > 0;
@@ -123,16 +133,6 @@ namespace Stormpath.SDK.Impl.Linq
         }
 
         internal string CurrentHref => this.GenerateRequestUrlFromModel();
-
-        Expression IAsyncQueryable<TResult>.Expression => this.expression;
-
-        IAsyncQueryProvider<TResult> IAsyncQueryable<TResult>.Provider => this.queryProvider;
-
-        Expression IQueryable.Expression => this.expression;
-
-        Type IQueryable.ElementType => typeof(TResult);
-
-        IQueryProvider IQueryable.Provider => this.queryProvider;
 
         async Task<bool> IAsyncQueryable<TResult>.MoveNextAsync(CancellationToken cancellationToken)
         {
@@ -222,13 +222,9 @@ namespace Stormpath.SDK.Impl.Linq
         }
 
         IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+            => new Sync.SyncCollectionEnumeratorAdapter<TResult>(this).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+            => (this as IEnumerable<TResult>).GetEnumerator();
     }
 }

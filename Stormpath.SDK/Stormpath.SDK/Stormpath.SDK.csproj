@@ -158,7 +158,7 @@
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
     <Compile Include="Impl\IdentityMap\IIdentityMap.cs" />
     <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
-    <Compile Include="Impl\Linq\CollectionResourceQueryExecutor.cs" />
+    <Compile Include="Impl\Linq\CollectionResourceExecutor.cs" />
     <Compile Include="Impl\Linq\Parsing\CompilingExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\Parsing\DiscoveringExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\Parsing\Evaluator.cs" />
@@ -184,6 +184,7 @@
     <Compile Include="Impl\Linq\Parsing\RequestBuilder.cs" />
     <Compile Include="Impl\Linq\QueryModel\ExecutionPlanModel.cs" />
     <Compile Include="Impl\Linq\QueryModel\OrderBy.cs" />
+    <Compile Include="Impl\Linq\Sync\SyncEnumeratorAdapter.cs" />
     <Compile Include="Impl\Linq\TypeSystem.cs" />
     <Compile Include="Impl\Provider\AbstractCreateProviderRequestBuilder.cs" />
     <Compile Include="Impl\Provider\AbstractProvider.cs" />

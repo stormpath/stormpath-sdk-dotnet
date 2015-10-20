@@ -40,12 +40,11 @@ namespace Stormpath.SDK.Sync
 
             bool isEmptyExpressionTree =
                 source.Expression.NodeType == ExpressionType.Constant &&
-                source.Expression.Type == typeof(EnumerableQuery<TSource>);
+                source.Expression.Type == typeof(CollectionResourceQueryable<TSource>);
             if (!isEmptyExpressionTree)
                 throw new NotSupportedException("Synchronously must be called first.");
 
-            //return new CollectionResourceQueryable<TSource>(collection, proxy: null);
-            throw new NotImplementedException();
+            return source as IQueryable<TSource>;
         }
     }
 }

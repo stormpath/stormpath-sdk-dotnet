@@ -5,12 +5,12 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Linq
 {
-    internal sealed class CollectionResourceQueryExecutor
+    internal sealed class CollectionResourceExecutor
     {
         private readonly IInternalAsyncDataStore asyncDataStore;
         private readonly IInternalSyncDataStore syncDataStore;
 
-        public CollectionResourceQueryExecutor(IInternalDataStore dataStore)
+        public CollectionResourceExecutor(IInternalDataStore dataStore)
         {
             this.asyncDataStore = dataStore as IInternalAsyncDataStore;
             this.syncDataStore = dataStore as IInternalSyncDataStore;

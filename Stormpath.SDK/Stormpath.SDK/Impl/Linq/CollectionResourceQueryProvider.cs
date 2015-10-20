@@ -15,22 +15,26 @@ namespace Stormpath.SDK.Impl.Linq
     {
         private readonly string collectionHref;
         private readonly IInternalDataStore dataStore;
-        private readonly CollectionResourceQueryExecutor executor;
+        private readonly CollectionResourceExecutor executor;
 
         public CollectionResourceQueryProvider(string collectionHref, IInternalDataStore dataStore)
         {
             this.collectionHref = collectionHref;
             this.dataStore = dataStore;
-            this.executor = new CollectionResourceQueryExecutor(dataStore);
+            this.executor = new CollectionResourceExecutor(dataStore);
         }
 
         public string CollectionHref => this.collectionHref;
 
         // Collection-returning standard query operators call this method.
         IAsyncQueryable<TResult> IAsyncQueryProvider<TResult>.CreateQuery(Expression expression)
-        {
-            return new CollectionResourceQueryable<TResult>(this, expression);
-        }
+            => new CollectionResourceQueryable<TResult>(this, expression);
+
+        public IQueryable CreateQuery(Expression expression)
+            => new CollectionResourceQueryable<TResult>(this, expression);
+
+        public IQueryable<T> CreateQuery<T>(Expression expression)
+            => new CollectionResourceQueryable<T>(this as IAsyncQueryProvider<T>, expression);
 
         public Task<CollectionResponsePage<T>> ExecuteCollectionAsync<T>(string href, CancellationToken cancellationToken)
             => this.executor.ExecuteCollectionAsync<T>(href, cancellationToken);
@@ -38,26 +42,16 @@ namespace Stormpath.SDK.Impl.Linq
         public CollectionResponsePage<T> ExecuteCollection<T>(string href)
             => this.executor.ExecuteCollection<T>(href);
 
-        public IQueryable<T> CreateQuery<T>(Expression expression)
-        {
-            return new CollectionResourceQueryable<T>(this as IAsyncQueryProvider<T>, expression);
-        }
-
         public object Execute(Expression expression)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable CreateQuery(Expression expression)
+        public T Execute<T>(Expression expression)
         {
-            throw new NotImplementedException();
-        }
+            bool isEnumerable = typeof(T).Name == "IEnumerable`1";
 
-        // Queryable's "single value" standard query operators call this method.
-        // It is also called from QueryableTerraServerData.GetEnumerator().
-        public TResult Execute<TResult>(Expression expression)
-        {
-            bool isEnumerable = typeof(TResult).Name == "IEnumerable`1";
+            var compiledModel = 
 
             //return (TResult)SimpleExecutor.Execute(expression, IsEnumerable);
             throw new NotImplementedException();
