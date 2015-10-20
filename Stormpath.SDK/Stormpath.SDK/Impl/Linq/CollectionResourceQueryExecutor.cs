@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
@@ -21,13 +17,9 @@ namespace Stormpath.SDK.Impl.Linq
         }
 
         public Task<CollectionResponsePage<T>> ExecuteCollectionAsync<T>(string href, CancellationToken cancellationToken)
-        {
-            return this.asyncDataStore.GetCollectionAsync<T>(href, cancellationToken);
-        }
+            => this.asyncDataStore.GetCollectionAsync<T>(href, cancellationToken);
 
         public CollectionResponsePage<T> ExecuteCollection<T>(string href)
-        {
-            return this.syncDataStore.GetCollection<T>(href);
-        }
+            => this.syncDataStore.GetCollection<T>(href);
     }
 }

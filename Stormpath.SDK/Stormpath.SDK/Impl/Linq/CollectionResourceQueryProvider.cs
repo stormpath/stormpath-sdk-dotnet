@@ -33,14 +33,10 @@ namespace Stormpath.SDK.Impl.Linq
         }
 
         public Task<CollectionResponsePage<T>> ExecuteCollectionAsync<T>(string href, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+            => this.executor.ExecuteCollectionAsync<T>(href, cancellationToken);
 
         public CollectionResponsePage<T> ExecuteCollection<T>(string href)
-        {
-            throw new NotImplementedException();
-        }
+            => this.executor.ExecuteCollection<T>(href);
 
         public IQueryable<T> CreateQuery<T>(Expression expression)
         {
@@ -66,7 +62,5 @@ namespace Stormpath.SDK.Impl.Linq
             //return (TResult)SimpleExecutor.Execute(expression, IsEnumerable);
             throw new NotImplementedException();
         }
-
-
     }
 }

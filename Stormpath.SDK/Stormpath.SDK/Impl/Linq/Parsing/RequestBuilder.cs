@@ -27,6 +27,25 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             if (queryModel?.Offset > 0)
                 arguments.Add("offset", queryModel.Offset.Value.ToString());
 
+            // From .OrderBy(x => ?) / .OrderByDescending(x => ?)
+            if (queryModel.OrderByTerms.Count > 0)
+            {
+                var orderByArgument = new StringBuilder();
+                bool addedOne = false;
+
+                foreach (var clause in queryModel.OrderByTerms)
+                {
+                    if (addedOne)
+                        orderByArgument.Append(",");
+                    var direction = clause.Direction == OrderByDirection.Descending ? " desc" : string.Empty;
+                    orderByArgument.Append($"{clause.FieldName}{direction}");
+                    addedOne = true;
+                }
+
+                if (addedOne)
+                    arguments.Add("orderBy", orderByArgument.ToString());
+            }
+
             var argumentList = arguments
                 .Select(x => $"{x.Key}={x.Value}")
                 .ToList();

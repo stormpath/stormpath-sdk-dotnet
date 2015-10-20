@@ -14,7 +14,11 @@ namespace Stormpath.SDK.Impl.Linq.QueryModel
 
         public string FilterTerm { get; set; }
 
+        public List<OrderBy> OrderByTerms{ get; set; }
+            = new List<OrderBy>();
+
         public ExecutionPlanModel ExecutionPlan { get; private set; }
+            = new ExecutionPlanModel();
 
         public static CollectionResourceQueryModel Default = new CollectionResourceQueryModel()
         {

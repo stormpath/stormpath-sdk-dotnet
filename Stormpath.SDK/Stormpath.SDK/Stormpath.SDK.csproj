@@ -162,6 +162,7 @@
     <Compile Include="Impl\Linq\Parsing\CompilingExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\Parsing\DiscoveringExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\Parsing\Evaluator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\OrderByExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\ParsedExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\AnyResultOperator.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\CountResultOperator.cs" />
@@ -172,6 +173,8 @@
     <Compile Include="Impl\Linq\Parsing\Expressions\TakeExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\OrderByDirection.cs" />
     <Compile Include="Impl\Linq\Parsing\ResultOperator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Translators\AbstractNameTranslator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Translators\FieldNameTranslator.cs" />
     <Compile Include="Impl\Linq\Parsing\WhereComparison.cs" />
     <Compile Include="Impl\Linq\QueryModel\CollectionResourceQueryModel.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryProvider.cs" />
@@ -179,6 +182,7 @@
     <Compile Include="Impl\Linq\Parsing\QueryModelCompiler.cs" />
     <Compile Include="Impl\Linq\Parsing\RequestBuilder.cs" />
     <Compile Include="Impl\Linq\QueryModel\ExecutionPlanModel.cs" />
+    <Compile Include="Impl\Linq\QueryModel\OrderBy.cs" />
     <Compile Include="Impl\Linq\TypeSystem.cs" />
     <Compile Include="Impl\Provider\AbstractCreateProviderRequestBuilder.cs" />
     <Compile Include="Impl\Provider\AbstractProvider.cs" />
