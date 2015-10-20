@@ -32,29 +32,15 @@ namespace Stormpath.SDK.Impl.Linq
 {
     internal sealed class CollectionResourceQueryable<TResult> : IOrderedAsyncQueryable<TResult>, IOrderedQueryable<TResult>
     {
+        private readonly CollectionResourceExecutor<TResult> executor;
         private readonly CollectionResourceQueryProvider<TResult> queryProvider;
-
         private readonly Expression expression;
-
-        private readonly string collectionHref;
-
-        private CollectionResourceQueryModel compiledModel = null;
-
-        private long totalItemsRetrieved = 0;
-
-        private long currentOffset;
-
-        private long currentLimit;
-
-        private long currentSize;
-
-        private IEnumerable<TResult> currentItems;
 
         public CollectionResourceQueryable(string collectionHref, IInternalDataStore dataStore)
         {
-            this.collectionHref = collectionHref;
-            this.queryProvider = new CollectionResourceQueryProvider<TResult>(collectionHref, dataStore);
             this.expression = Expression.Constant(this);
+            this.executor = new CollectionResourceExecutor<TResult>(collectionHref, dataStore, this.expression);
+            this.queryProvider = new CollectionResourceQueryProvider<TResult>(this.executor);
         }
 
         // This constructor is called internally by LINQ
@@ -70,9 +56,8 @@ namespace Stormpath.SDK.Impl.Linq
                 throw new InvalidOperationException("LINQ queries must start from a supported provider.");
 
             this.queryProvider = concreteProvider;
-            this.expression = expression;
-
-            this.collectionHref = concreteProvider.CollectionHref;
+            this.executor = new CollectionResourceExecutor<TResult>(this.queryProvider.Executor, expression);
+            this.queryProvider.Executor = this.executor;
         }
 
         Expression IAsyncQueryable<TResult>.Expression => this.expression;
@@ -85,146 +70,28 @@ namespace Stormpath.SDK.Impl.Linq
 
         IQueryProvider IQueryable.Provider => this.queryProvider;
 
-        private void NoResultsGuard()
-        {
-            bool atLeastOnePageRetrieved = this.totalItemsRetrieved > 0;
-            if (!atLeastOnePageRetrieved)
-                throw new InvalidOperationException("Call MoveNextAsync() first to retrieve the collection.");
-        }
-
-        internal long Offset
-        {
-            get
-            {
-                this.NoResultsGuard();
-
-                return this.currentOffset;
-            }
-        }
-
-        internal long Limit
-        {
-            get
-            {
-                NoResultsGuard();
-
-                return this.currentLimit;
-            }
-        }
-
-        internal long Size
-        {
-            get
-            {
-                this.NoResultsGuard();
-
-                return this.currentSize;
-            }
-        }
-
         IEnumerable<TResult> IAsyncQueryable<TResult>.CurrentPage
-        {
-            get
-            {
-                this.NoResultsGuard();
+            => this.executor.CurrentPage;
 
-                return this.currentItems;
-            }
-        }
-
-        internal string CurrentHref => this.GenerateRequestUrlFromModel();
-
-        async Task<bool> IAsyncQueryable<TResult>.MoveNextAsync(CancellationToken cancellationToken)
-        {
-            this.CompileModelOrUseDefaultValues();
-
-            if (this.AlreadyRetrievedEnoughItems())
-                return false;
-
-            this.AdjustPagingOffset();
-
-            var url = this.GenerateRequestUrlFromModel();
-            var response = await this.queryProvider.ExecuteCollectionAsync<TResult>(url, cancellationToken).ConfigureAwait(false);
-
-            return this.DidUpdateWithNewResults(response);
-        }
-
-        internal bool MoveNext()
-        {
-            this.CompileModelOrUseDefaultValues();
-
-            if (this.AlreadyRetrievedEnoughItems())
-                return false;
-
-            this.AdjustPagingOffset();
-
-            var url = this.GenerateRequestUrlFromModel();
-            var response = this.queryProvider.ExecuteCollection<TResult>(url);
-
-            return this.DidUpdateWithNewResults(response);
-        }
-
-        private void CompileModelOrUseDefaultValues()
-        {
-            bool needToCompile = this.compiledModel == null;
-            if (needToCompile)
-            {
-                bool shouldUseDefaultValues = this.expression == null;
-
-                this.compiledModel = shouldUseDefaultValues
-                    ? CollectionResourceQueryModel.Default
-                    : QueryModelCompiler.Compile(this.expression);
-            }
-        }
-
-        private bool AlreadyRetrievedEnoughItems()
-        {
-            return this.totalItemsRetrieved >= this.compiledModel.ExecutionPlan.MaxItems;
-        }
-
-        private void AdjustPagingOffset()
-        {
-            bool atLeastOnePageRetrieved = this.totalItemsRetrieved > 0;
-            if (atLeastOnePageRetrieved)
-            {
-                if (!this.compiledModel.Offset.HasValue)
-                    this.compiledModel.Offset = 0;
-                this.compiledModel.Offset += this.currentItems.Count();
-            }
-        }
-
-        private bool DidUpdateWithNewResults(CollectionResponsePage<TResult> response)
-        {
-            bool anyNewItems = response?.Items?.Any() ?? false;
-            if (!anyNewItems)
-                return false;
-
-            this.currentOffset = response.Offset;
-            this.currentLimit = response.Limit;
-            this.currentSize = response.Size;
-            this.currentItems = response.Items;
-
-            this.totalItemsRetrieved += response.Items.Count;
-            return true;
-        }
-
-        private string GenerateRequestUrlFromModel()
-        {
-            if (this.compiledModel == null)
-                this.CompileModelOrUseDefaultValues();
-
-            var argumentList = RequestBuilder.GetArguments(this.compiledModel);
-            if (!argumentList.Any())
-                return this.collectionHref;
-
-            var arguments = string.Join("&", argumentList);
-            return $"{this.collectionHref}?{arguments}";
-        }
+        Task<bool> IAsyncQueryable<TResult>.MoveNextAsync(CancellationToken cancellationToken)
+            => this.executor.MoveNextAsync(cancellationToken);
 
         IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
-            => new Sync.SyncCollectionEnumeratorAdapter<TResult>(this).GetEnumerator();
+            => new Sync.SyncCollectionEnumeratorAdapter<TResult>(this.executor).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
-            => (this as IEnumerable<TResult>).GetEnumerator();
+            => new Sync.SyncCollectionEnumeratorAdapter<TResult>(this.executor).GetEnumerator();
+
+        public string CurrentHref
+            => this.executor.CurrentHref;
+
+        public long Size
+            => this.executor.Size;
+
+        public long Offset
+            => this.executor.Offset;
+
+        public long Limit
+            => this.executor.Limit;
     }
 }

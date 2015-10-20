@@ -9,24 +9,24 @@ using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Impl.Linq.Sync
 {
-    internal sealed class SyncCollectionEnumeratorAdapter<T> : IEnumerable<T>
+    internal sealed class SyncCollectionEnumeratorAdapter<TResult> : IEnumerable<TResult>
     {
-        private readonly CollectionResourceQueryable<T> collection;
+        private readonly CollectionResourceExecutor<TResult> executor;
         private readonly CancellationToken cancellationToken;
 
-        public SyncCollectionEnumeratorAdapter(CollectionResourceQueryable<T> collection, CancellationToken cancellationToken = default(CancellationToken))
+        public SyncCollectionEnumeratorAdapter(CollectionResourceExecutor<TResult> executor, CancellationToken cancellationToken = default(CancellationToken))
         {
-            this.collection = collection;
+            this.executor = executor;
             this.cancellationToken = cancellationToken;
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerator<TResult> GetEnumerator()
         {
-            while (this.collection.MoveNext())
+            while (this.executor.MoveNext())
             {
                 this.cancellationToken.ThrowIfCancellationRequested();
 
-                foreach (var item in (this.collection as IAsyncQueryable<T>).CurrentPage)
+                foreach (var item in this.executor.CurrentPage)
                 {
                     yield return item;
                 }
