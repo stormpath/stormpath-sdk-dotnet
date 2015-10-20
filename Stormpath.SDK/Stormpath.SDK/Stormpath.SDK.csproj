@@ -162,6 +162,7 @@
     <Compile Include="Impl\Linq\Parsing\CompilingExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\Parsing\DiscoveringExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\Parsing\Evaluator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\FilterExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\OrderByExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\ParsedExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\AnyResultOperator.cs" />

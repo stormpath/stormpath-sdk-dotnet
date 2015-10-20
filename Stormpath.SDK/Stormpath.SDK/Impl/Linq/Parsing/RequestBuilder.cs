@@ -11,29 +11,62 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
     {
         public static IList<string> GetArguments(CollectionResourceQueryModel queryModel)
         {
-            var builder = new RequestBuilder();
-            return builder.GenerateArgumentsFromModel(queryModel);
+            var builder = new RequestBuilder(queryModel);
+            return builder.GenerateArguments();
         }
 
-        private List<string> GenerateArgumentsFromModel(CollectionResourceQueryModel queryModel)
+        private readonly CollectionResourceQueryModel queryModel;
+        private readonly Dictionary<string, string> arguments;
+
+        public RequestBuilder(CollectionResourceQueryModel queryModel)
         {
-            var arguments = new Dictionary<string, string>();
+            this.queryModel = queryModel;
+            this.arguments = new Dictionary<string, string>();
+        }
 
-            // From .Take()
-            if (queryModel?.Limit > 0)
-                arguments.Add("limit", queryModel.Limit.Value.ToString());
+        private List<string> GenerateArguments()
+        {
+            if (!this.arguments.Any())
+            {
+                this.HandleFilter();
+                this.HandleTake();
+                this.HandleSkip();
+                this.HandleOrderByThenBy();
+            }
 
-            // From .Skip()
-            if (queryModel?.Offset > 0)
-                arguments.Add("offset", queryModel.Offset.Value.ToString());
+            var argumentList = this.arguments
+                .Select(x => $"{x.Key}={x.Value}")
+                .ToList();
 
-            // From .OrderBy(x => ?) / .OrderByDescending(x => ?)
-            if (queryModel.OrderByTerms.Count > 0)
+            return argumentList;
+        }
+
+        private void HandleFilter()
+        {
+            if (!string.IsNullOrEmpty(this.queryModel.FilterTerm))
+                this.arguments.Add("q", this.queryModel.FilterTerm);
+        }
+
+        private void HandleTake()
+        {
+            if (this.queryModel.Limit > 0)
+                this.arguments.Add("limit", this.queryModel.Limit.Value.ToString());
+        }
+
+        private void HandleSkip()
+        {
+            if (this.queryModel.Offset > 0)
+                this.arguments.Add("offset", this.queryModel.Offset.Value.ToString());
+        }
+
+        private void HandleOrderByThenBy()
+        {
+            if (this.queryModel.OrderByTerms.Count > 0)
             {
                 var orderByArgument = new StringBuilder();
                 bool addedOne = false;
 
-                foreach (var clause in queryModel.OrderByTerms.Reverse<OrderBy>())
+                foreach (var clause in this.queryModel.OrderByTerms.Reverse<OrderBy>())
                 {
                     if (addedOne)
                         orderByArgument.Append(",");
@@ -43,14 +76,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 }
 
                 if (addedOne)
-                    arguments.Add("orderBy", orderByArgument.ToString());
+                    this.arguments.Add("orderBy", orderByArgument.ToString());
             }
-
-            var argumentList = arguments
-                .Select(x => $"{x.Key}={x.Value}")
-                .ToList();
-
-            return argumentList;
         }
     }
 }

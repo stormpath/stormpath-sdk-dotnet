@@ -34,7 +34,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 this.HandleOrderByMethod(node) ||
                 this.HandleThenByMethod(node) ||
                 this.HandleTakeMethod(node) ||
-                this.HandleSkipMethod(node))
+                this.HandleSkipMethod(node) ||
+                this.HandleFilterExtensionMethod(node))
             {
                 this.Visit(node.Arguments[0]);
                 return node;
@@ -131,6 +132,20 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 throw new ArgumentException("Value passed to Take operator is not supported.");
 
             this.expressions.Add(new SkipExpression((int)value.Value));
+
+            return true;
+        }
+
+        private bool HandleFilterExtensionMethod(MethodCallExpression node)
+        {
+            if (node.Method.Name != "Filter")
+                return false;
+
+            var value = node.Arguments[1] as ConstantExpression;
+            if (value == null)
+                throw new ArgumentException("Value passed to Filter operator is not supported.");
+
+            this.expressions.Add(new FilterExpression((string)value.Value));
 
             return true;
         }

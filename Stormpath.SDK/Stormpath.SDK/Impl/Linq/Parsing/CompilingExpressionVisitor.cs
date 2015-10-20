@@ -53,6 +53,13 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             return node;
         }
 
+        internal Expression VisitFilter(FilterExpression node)
+        {
+            this.Model.FilterTerm = node.Value;
+
+            return node;
+        }
+
         internal Expression VisitResultOperator(ResultOperatorExpression node)
         {
             //todo
