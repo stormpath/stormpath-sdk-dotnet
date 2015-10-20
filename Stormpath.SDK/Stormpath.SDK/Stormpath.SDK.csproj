@@ -39,10 +39,6 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Remotion.Linq, Version=1.15.15.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Remotion.Linq.1.15.15.0\lib\portable-net45+wp80+wpa81+win\Remotion.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -161,8 +157,15 @@
     <Compile Include="Impl\Http\Support\IBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
     <Compile Include="Impl\IdentityMap\IIdentityMap.cs" />
-    <Compile Include="Impl\Linq\LinqHelper.cs" />
     <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
+    <Compile Include="Impl\Linq\CollectionResourceQueryExecutor.cs" />
+    <Compile Include="Impl\Linq\QueryModel\CollectionResourceQueryModel.cs" />
+    <Compile Include="Impl\Linq\CollectionResourceQueryProvider.cs" />
+    <Compile Include="Impl\Linq\LinqHelper.cs" />
+    <Compile Include="Impl\Linq\Parsing\QueryModelCompiler.cs" />
+    <Compile Include="Impl\Linq\Parsing\RequestBuilder.cs" />
+    <Compile Include="Impl\Linq\QueryModel\ExecutionPlanModel.cs" />
+    <Compile Include="Impl\Linq\TypeSystem.cs" />
     <Compile Include="Impl\Provider\AbstractCreateProviderRequestBuilder.cs" />
     <Compile Include="Impl\Provider\AbstractProvider.cs" />
     <Compile Include="Impl\Provider\AbstractProviderAccountRequestBuilder.cs" />
@@ -316,35 +319,10 @@
     <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Impl\Http\Authentication\RequestAuthenticationException.cs" />
     <Compile Include="Http\RequestException.cs" />
-    <Compile Include="Impl\Linq\CollectionResourceQueryExecutor.cs" />
-    <Compile Include="Impl\Linq\CollectionResourceQueryModelVisitor.cs" />
-    <Compile Include="Impl\Linq\CollectionResourceWhereExpressionVisitor.cs" />
-    <Compile Include="Impl\Linq\Parsing\ExpandExpressionNode.cs" />
-    <Compile Include="Impl\Linq\Parsing\ExpandResultOperator.cs" />
-    <Compile Include="Impl\Linq\Parsing\ExtendedQueryParser.cs" />
-    <Compile Include="Impl\Linq\Parsing\FilterClause.cs" />
-    <Compile Include="Impl\Linq\Parsing\FilterExpressionNode.cs" />
-    <Compile Include="Impl\Linq\CollectionResourceRequestModelCompiler.cs" />
-    <Compile Include="Impl\Linq\RequestModel\AbstractAttributeTermModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\CollectionResourceRequestModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\DatetimeShorthandAttributeTermModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\DatetimeAttributeTermModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\ExecutionPlanModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\ExpansionTerm.cs" />
-    <Compile Include="Impl\Linq\RequestModel\OrderByModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\StringAttributeMatchingType.cs" />
-    <Compile Include="Impl\Linq\RequestModel\StringAttributeTermModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\WhereAttributeTermInProgressModel.cs" />
-    <Compile Include="Impl\Linq\StaticNameTranslators\CollectionLinkMethodNameTranslator.cs" />
-    <Compile Include="Impl\Linq\StaticNameTranslators\DatetimeFieldNameTranslator.cs" />
-    <Compile Include="Impl\Linq\StaticNameTranslators\FieldNameTranslator.cs" />
-    <Compile Include="Impl\Linq\StaticNameTranslators\LinkMethodNameTranslator.cs" />
-    <Compile Include="Impl\Linq\StaticNameTranslators\StringHelperMethodNameTranslator.cs" />
-    <Compile Include="Impl\Linq\Sync\SyncCollectionEnumeratorAdapter.cs" />
     <Compile Include="Impl\NullLogger.cs" />
     <Compile Include="Impl\Resource\AbstractExtendableInstanceResource.cs" />
     <Compile Include="Impl\Resource\AbstractInstanceResource.cs" />
-    <Compile Include="Impl\Resource\CollectionResourceQueryable.cs" />
+    <Compile Include="Impl\Linq\CollectionResourceQueryable.cs" />
     <Compile Include="Impl\Resource\CollectionResponsePage.cs" />
     <Compile Include="Impl\Resource\LinkProperty.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.cs" />

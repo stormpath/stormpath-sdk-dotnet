@@ -20,6 +20,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Impl.Linq;
 
 namespace Stormpath.SDK.Sync
 {
@@ -43,7 +44,8 @@ namespace Stormpath.SDK.Sync
             if (!isEmptyExpressionTree)
                 throw new NotSupportedException("Synchronously must be called first.");
 
-            return new CollectionResourceQueryable<TSource>(collection, proxy: null);
+            //return new CollectionResourceQueryable<TSource>(collection, proxy: null);
+            throw new NotImplementedException();
         }
     }
 }

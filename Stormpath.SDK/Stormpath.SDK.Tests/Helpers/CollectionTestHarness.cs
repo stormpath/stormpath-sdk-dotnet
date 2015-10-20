@@ -21,6 +21,7 @@ using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Impl.Linq;
 
 namespace Stormpath.SDK.Tests.Helpers
 {

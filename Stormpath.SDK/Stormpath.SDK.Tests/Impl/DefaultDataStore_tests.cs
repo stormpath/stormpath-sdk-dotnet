@@ -34,6 +34,7 @@ using Stormpath.SDK.Linq;
 using Stormpath.SDK.Shared;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
+using Stormpath.SDK.Impl.Linq;
 
 namespace Stormpath.SDK.Tests.Impl
 {
