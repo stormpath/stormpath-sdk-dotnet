@@ -16,7 +16,7 @@
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
 {
-    public enum OrderByDirection
+    internal enum OrderByDirection
     {
         Ascending,
         Descending

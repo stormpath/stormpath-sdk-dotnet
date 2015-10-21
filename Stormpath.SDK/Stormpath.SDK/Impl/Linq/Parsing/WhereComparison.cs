@@ -16,7 +16,7 @@
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
 {
-    public enum WhereComparison
+    internal enum WhereComparison
     {
         Equal,
         StartsWith,

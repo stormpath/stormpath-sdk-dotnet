@@ -16,7 +16,7 @@
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
 {
-    public enum ResultOperator
+    internal enum ResultOperator
     {
         Any,
         Count,
