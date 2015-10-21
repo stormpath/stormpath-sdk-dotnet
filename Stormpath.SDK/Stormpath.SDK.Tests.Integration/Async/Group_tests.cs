@@ -84,7 +84,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Getting_account_groups(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var luke = await client.GetAccounts().Where(x => x.Email.StartsWith("lskywalker")).SingleAsync();
+            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+            var luke = await app.GetAccounts().Where(x => x.Email.StartsWith("lskywalker")).SingleAsync();
+
             var groups = await luke.GetGroups().ToListAsync();
 
             groups.Count.ShouldBeGreaterThan(0);
@@ -106,9 +108,10 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Adding_account_to_group(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
+            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
-            var lando = await client.GetAccounts().Where(x => x.Email.StartsWith("lcalrissian")).SingleAsync();
+            var lando = await app.GetAccounts().Where(x => x.Email.StartsWith("lcalrissian")).SingleAsync();
             var membership = await humans.AddAccountAsync(lando);
 
             membership.ShouldNotBeNull();
@@ -124,9 +127,10 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Getting_group_membership(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
+            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
-            var lando = await client.GetAccounts().Where(x => x.Email.StartsWith("lcalrissian")).SingleAsync();
+            var lando = await app.GetAccounts().Where(x => x.Email.StartsWith("lcalrissian")).SingleAsync();
             var membership = await humans.AddAccountAsync(lando);
 
             // Should also be seen in the master membership list
@@ -146,8 +150,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Adding_account_to_group_by_group_href(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
+            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var leia = await client.GetAccounts().Where(x => x.Email.StartsWith("leia.organa")).SingleAsync();
+            var leia = await app.GetAccounts().Where(x => x.Email.StartsWith("leia.organa")).SingleAsync();
             await leia.AddGroupAsync(this.fixture.PrimaryGroupHref);
 
             (await leia.IsMemberOfGroupAsync(this.fixture.PrimaryGroupHref)).ShouldBeTrue();
@@ -160,9 +165,11 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Adding_account_to_group_by_group_name(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
+            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
             var groupName = (await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref)).Name;
 
-            var han = await client.GetAccounts().Where(x => x.Email.StartsWith("han.solo")).SingleAsync();
+            var han = await app.GetAccounts().Where(x => x.Email.StartsWith("han.solo")).SingleAsync();
             await han.AddGroupAsync(groupName);
 
             (await han.IsMemberOfGroupAsync(this.fixture.PrimaryGroupHref)).ShouldBeTrue();
@@ -175,9 +182,10 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Adding_account_to_group_by_account_href(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
+            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
-            var leia = await client.GetAccounts().Where(x => x.Email.StartsWith("leia.organa")).SingleAsync();
+            var leia = await app.GetAccounts().Where(x => x.Email.StartsWith("leia.organa")).SingleAsync();
             await humans.AddAccountAsync(leia.Href);
 
             (await leia.IsMemberOfGroupAsync(this.fixture.PrimaryGroupHref)).ShouldBeTrue();
@@ -190,9 +198,10 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Adding_account_to_group_by_account_email(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
+            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
-            var han = await client.GetAccounts().Where(x => x.Email.StartsWith("han.solo")).SingleAsync();
+            var han = await app.GetAccounts().Where(x => x.Email.StartsWith("han.solo")).SingleAsync();
             await humans.AddAccountAsync(han.Email);
 
             (await han.IsMemberOfGroupAsync(this.fixture.PrimaryGroupHref)).ShouldBeTrue();

@@ -85,7 +85,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         public void Getting_account_groups(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var luke = client.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("lskywalker")).Single();
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+            var luke = app.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("lskywalker")).Single();
+
             var groups = luke.GetGroups().Synchronously().ToList();
 
             groups.Count.ShouldBeGreaterThan(0);
@@ -107,9 +109,10 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         public void Adding_account_to_group(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
-            var lando = client.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("lcalrissian")).Single();
+            var lando = app.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("lcalrissian")).Single();
             var membership = humans.AddAccount(lando);
 
             membership.ShouldNotBeNull();
@@ -125,9 +128,10 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         public void Getting_group_membership(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
-            var lando = client.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("lcalrissian")).Single();
+            var lando = app.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("lcalrissian")).Single();
             var membership = humans.AddAccount(lando);
 
             // Should also be seen in the master membership list
@@ -147,8 +151,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         public void Adding_account_to_group_by_group_href(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var leia = client.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("leia.organa")).Single();
+            var leia = app.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("leia.organa")).Single();
             leia.AddGroup(this.fixture.PrimaryGroupHref);
 
             leia.IsMemberOfGroup(this.fixture.PrimaryGroupHref).ShouldBeTrue();
@@ -161,9 +166,10 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         public void Adding_account_to_group_by_group_name(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var groupName = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref).Name;
 
-            var han = client.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("han.solo")).Single();
+            var han = app.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("han.solo")).Single();
             han.AddGroup(groupName);
 
             han.IsMemberOfGroup(this.fixture.PrimaryGroupHref).ShouldBeTrue();
@@ -176,9 +182,10 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         public void Adding_account_to_group_by_account_href(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
-            var leia = client.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("leia.organa")).Single();
+            var leia = app.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("leia.organa")).Single();
             humans.AddAccount(leia.Href);
 
             leia.IsMemberOfGroup(this.fixture.PrimaryGroupHref).ShouldBeTrue();
@@ -191,9 +198,10 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         public void Adding_account_to_group_by_account_email(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
-            var han = client.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("han.solo")).Single();
+            var han = app.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("han.solo")).Single();
             humans.AddAccount(han.Email);
 
             han.IsMemberOfGroup(this.fixture.PrimaryGroupHref).ShouldBeTrue();
