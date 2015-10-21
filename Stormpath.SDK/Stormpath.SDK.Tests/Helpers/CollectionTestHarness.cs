@@ -17,7 +17,7 @@
 
 using System.Linq;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tests.Fakes;

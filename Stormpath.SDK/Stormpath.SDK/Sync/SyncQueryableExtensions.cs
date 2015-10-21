@@ -18,7 +18,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Sync
@@ -39,11 +39,11 @@ namespace Stormpath.SDK.Sync
 
             bool isEmptyExpressionTree =
                 source.Expression.NodeType == ExpressionType.Constant &&
-                source.Expression.Type == typeof(EnumerableQuery<TSource>);
+                source.Expression.Type == typeof(CollectionResourceQueryable<TSource>);
             if (!isEmptyExpressionTree)
                 throw new NotSupportedException("Synchronously must be called first.");
 
-            return new CollectionResourceQueryable<TSource>(collection, proxy: null);
+            return source as IQueryable<TSource>;
         }
     }
 }

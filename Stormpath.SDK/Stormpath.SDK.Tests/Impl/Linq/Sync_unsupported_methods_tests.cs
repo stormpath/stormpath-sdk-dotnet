@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NSubstitute;
 using Shouldly;
@@ -196,13 +195,26 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Order_throws_for_complex_overloads()
+        public void OrderBy_throws_for_complex_overloads()
         {
             Should.Throw<NotSupportedException>(() =>
             {
                 this.Harness.Queryable
                     .Synchronously()
-                    .OrderBy(x => x.GivenName, Substitute.For<IComparer<string>>()).ToList();
+                    .OrderBy(x => x.GivenName, StringComparer.OrdinalIgnoreCase).ToList();
+            });
+        }
+
+        [Fact]
+        public void ThenBy_throws_for_complex_overloads()
+        {
+            Should.Throw<NotSupportedException>(() =>
+            {
+                this.Harness.Queryable
+                    .Synchronously()
+                    .OrderBy(x => x.GivenName)
+                    .ThenBy(x => x.Surname, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
             });
         }
 

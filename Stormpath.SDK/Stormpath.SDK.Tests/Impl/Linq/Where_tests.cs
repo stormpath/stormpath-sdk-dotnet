@@ -105,6 +105,28 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
+        public void Where_attribute_equals_using_variable()
+        {
+            var email = "tk421@deathstar.co";
+
+            var query = this.Harness.Queryable
+                .Where(x => x.Email.Equals(email));
+
+            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co");
+        }
+
+        [Fact]
+        public void Where_attribute_equals_using_formatted_string()
+        {
+            var domain = "deathstar.co";
+
+            var query = this.Harness.Queryable
+                .Where(x => x.Email.Equals($"tk421@{domain}"));
+
+            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co");
+        }
+
+        [Fact]
         public void Where_attribute_starts_with()
         {
             var query = this.Harness.Queryable
@@ -199,6 +221,33 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt > testStartDate && x.CreatedAt <= testEndDate);
 
             query.GeneratedArgumentsWere(this.Href, "createdAt=(2015-01-01T00:00:00Z,2015-12-31T23:59:59Z]");
+        }
+
+        [Fact]
+        public void Where_date_attribute_using_implicit_DateTime()
+        {
+            var testDate = new DateTime(2016, 01, 01, 12, 00, 00);
+            var query = this.Harness.Queryable
+                .Where(x => x.ModifiedAt < testDate);
+
+            var timezoneOffset = new DateTimeOffset(testDate).Offset;
+            var adjustedHour = (int)(12 - timezoneOffset.TotalHours);
+
+            query.GeneratedArgumentsWere(this.Href, $"modifiedAt=[,2016-01-01T{adjustedHour}:00:00Z)");
+        }
+
+        [Fact]
+        public void Where_date_attribute_equals()
+        {
+            var testDate = new DateTime(2016, 01, 01, 12, 00, 00);
+
+            Should.Throw<NotSupportedException>(() =>
+            {
+                var query = this.Harness.Queryable
+                    .Where(x => x.ModifiedAt == testDate);
+
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+            });
         }
 
         [Fact]

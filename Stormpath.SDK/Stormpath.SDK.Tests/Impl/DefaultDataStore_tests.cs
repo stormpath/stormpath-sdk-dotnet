@@ -28,6 +28,7 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Linq;
