@@ -213,10 +213,6 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
             foreach (var term in terms)
             {
-                //todo move this to validator
-                if (this.arguments.ContainsKey(term.FieldName))
-                    throw new NotSupportedException($"Multiple date constraints on field {term.FieldName} are not supported");
-
                 var shorthandModel = term.Value as DatetimeShorthandModel;
                 if (shorthandModel == null)
                     throw new ArgumentException("One or more Within constraints are invalid.");
