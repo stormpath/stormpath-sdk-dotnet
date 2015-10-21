@@ -164,5 +164,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             query.GeneratedArgumentsWere(this.Href, "createdAt=2015-01-01T12:30:31");
         }
+
+        //test within and other constraints on same field
     }
 }

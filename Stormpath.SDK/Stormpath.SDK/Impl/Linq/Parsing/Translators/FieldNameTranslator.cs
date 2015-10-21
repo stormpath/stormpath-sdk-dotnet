@@ -14,8 +14,6 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Translators
             ["Name"] = "name",
             ["Description"] = "description",
             ["Status"] = "status",
-            ["CreatedAt"] = "createdAt",
-            ["ModifiedAt"] = "modifiedAt",
         };
 
         public FieldNameTranslator()

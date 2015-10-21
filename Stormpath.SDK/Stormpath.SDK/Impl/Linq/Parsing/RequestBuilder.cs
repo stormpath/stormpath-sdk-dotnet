@@ -89,7 +89,16 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 .ToList();
             this.HandleWhereDateTerms(datetimeTerms);
 
-            foreach (var term in this.queryModel.WhereTerms.Except(datetimeTerms))
+            var datetimeShorthandTerms = this.queryModel.WhereTerms
+                .Where(x => x.Type == typeof(DatetimeShorthandModel))
+                .ToList();
+            this.HandleWhereDateShorthandTerms(datetimeShorthandTerms);
+
+            var remainingTerms = this.queryModel.WhereTerms
+                .Except(datetimeTerms)
+                .Except(datetimeShorthandTerms);
+
+            foreach (var term in remainingTerms)
             {
                 switch (term.Comparison)
                 {
@@ -179,6 +188,62 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 }
 
                 this.arguments.Add(term.FieldName, datetimeAttributeBuilder.ToString());
+            }
+        }
+
+        private void HandleWhereDateShorthandTerms(IList<WhereTerm> terms)
+        {
+            var shorthandAttributeBuilder = new StringBuilder();
+
+            foreach (var term in terms)
+            {
+                //todo move this to validator
+                if (this.arguments.ContainsKey(term.FieldName))
+                    throw new NotSupportedException($"Multiple date constraints on field {term.FieldName} are not supported");
+
+                var shorthandModel = term.Value as DatetimeShorthandModel;
+                if (shorthandModel == null)
+                    throw new ArgumentException("One or more Within constraints are invalid.");
+
+                shorthandAttributeBuilder.Clear();
+
+                shorthandAttributeBuilder.Append(shorthandModel.Year);
+                if (shorthandModel.Month.HasValue)
+                {
+                    shorthandAttributeBuilder.Append($"-{shorthandModel.Month.Value:D2}");
+                }
+
+                if (shorthandModel.Month.HasValue &&
+                    shorthandModel.Day.HasValue)
+                {
+                    shorthandAttributeBuilder.Append($"-{shorthandModel.Day.Value:D2}");
+                }
+
+                if (shorthandModel.Month.HasValue &&
+                    shorthandModel.Day.HasValue &&
+                    shorthandModel.Hour.HasValue)
+                {
+                    shorthandAttributeBuilder.Append($"T{shorthandModel.Hour.Value:D2}");
+                }
+
+                if (shorthandModel.Month.HasValue &&
+                    shorthandModel.Day.HasValue &&
+                    shorthandModel.Hour.HasValue &&
+                    shorthandModel.Minute.HasValue)
+                {
+                    shorthandAttributeBuilder.Append($":{shorthandModel.Minute.Value:D2}");
+                }
+
+                if (shorthandModel.Month.HasValue &&
+                    shorthandModel.Day.HasValue &&
+                    shorthandModel.Hour.HasValue &&
+                    shorthandModel.Hour.HasValue &&
+                    shorthandModel.Second.HasValue)
+                {
+                    shorthandAttributeBuilder.Append($":{shorthandModel.Second.Value:D2}");
+                }
+
+                this.arguments.Add(term.FieldName, shorthandAttributeBuilder.ToString());
             }
         }
     }

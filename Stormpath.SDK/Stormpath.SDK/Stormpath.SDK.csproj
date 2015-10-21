@@ -163,7 +163,9 @@
     <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\LongCountResultOperator.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\WhereMemberExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\QueryModelValidator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Translators\DateTimeFieldNameTranslator.cs" />
     <Compile Include="Impl\Linq\Parsing\WhereExpressionVisitor.cs" />
+    <Compile Include="Impl\Linq\QueryModel\DatetimeShorthandModel.cs" />
     <Compile Include="Impl\Linq\QueryModel\WhereTerm.cs" />
     <Compile Include="Impl\Linq\Sync\SyncScalarExecutor.cs" />
     <Compile Include="Impl\Linq\Parsing\CompilingExpressionVisitor.cs" />

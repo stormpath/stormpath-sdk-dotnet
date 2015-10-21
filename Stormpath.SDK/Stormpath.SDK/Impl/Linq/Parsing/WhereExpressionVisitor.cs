@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Linq.Parsing.Expressions;
+using Stormpath.SDK.Impl.Linq.QueryModel;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
 {
@@ -42,21 +43,10 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
             if (comparison.Value == WhereComparison.AndAlso)
             {
-                this.parsedExpressions.AddRange(GetParsedExpressions(node.Right));
                 this.parsedExpressions.AddRange(GetParsedExpressions(node.Left));
+                this.parsedExpressions.AddRange(GetParsedExpressions(node.Right));
                 return node;
             }
-
-            //if (node.Left.NodeType == ExpressionType.MemberAccess &&
-            //    node.Right.NodeType == ExpressionType.MemberAccess)
-            //{
-            //    if ((node.Right as MemberExpression).Expression.NodeType == ExpressionType.Constant)
-            //    {
-            //        LambdaExpression lambda = Expression.Lambda(node.Right);
-            //        Delegate fn = lambda.Compile();
-            //        var result = Expression.Constant(fn.DynamicInvoke(null), node.Right.Type);
-            //    }
-            //}
 
             // .Where(x => x.Foo == 5)
             if (node.Left.NodeType == ExpressionType.MemberAccess &&
@@ -89,6 +79,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
+            if (node.Method.Name == "Within")
+                return this.HandleWithinExtensionMethod(node);
+
             bool correctOverload =
                 node.Arguments.Count == 1 &&
                 node.Arguments[0].NodeType == ExpressionType.Constant;
@@ -140,6 +133,40 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             }
 
             throw new NotSupportedException($"The method {node.Method.Name} is not supported.");
+        }
+
+        private Expression HandleWithinExtensionMethod(MethodCallExpression node)
+        {
+            var methodCallMember = node.Arguments[0] as MemberExpression;
+            var fieldName = methodCallMember.Member.Name;
+
+            bool isDateTimeField = methodCallMember?.Type == typeof(DateTimeOffset);
+            if (!isDateTimeField)
+                throw new NotSupportedException("Within must be used on a supported datetime field.");
+
+            var numberOfConstantArgs = node.Arguments.Count - 1;
+            var yearArg = (int)(node.Arguments[1] as ConstantExpression).Value;
+            int? monthArg = null,
+                dayArg = null,
+                hourArg = null,
+                minuteArg = null,
+                secondArg = null;
+
+            if (node.Arguments.Count >= 3)
+                monthArg = (node.Arguments?[2] as ConstantExpression)?.Value as int?;
+            if (node.Arguments.Count >= 4)
+                dayArg = (node.Arguments?[3] as ConstantExpression)?.Value as int?;
+            if (node.Arguments.Count >= 5)
+                hourArg = (node.Arguments?[4] as ConstantExpression)?.Value as int?;
+            if (node.Arguments.Count >= 6)
+                minuteArg = (node.Arguments?[5] as ConstantExpression)?.Value as int?;
+            if (node.Arguments.Count == 7)
+                secondArg = (node.Arguments?[6] as ConstantExpression)?.Value as int?;
+
+            var shorthandModel = new DatetimeShorthandModel(fieldName, yearArg, monthArg, dayArg, hourArg, minuteArg, secondArg);
+            this.parsedExpressions.Add(new WhereMemberExpression(fieldName, shorthandModel, WhereComparison.Equal));
+
+            return node;
         }
 
         private static Dictionary<ExpressionType, WhereComparison> comparisonLookup

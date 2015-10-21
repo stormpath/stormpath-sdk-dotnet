@@ -17,6 +17,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         public ReadOnlyCollection<Expression> Expressions
             => new ReadOnlyCollection<Expression>(this.expressions);
 
+        private int orderByTermCount = 0;
+
         public DiscoveringExpressionVisitor()
         {
             this.expressions = new List<Expression>();
@@ -79,7 +81,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             if (field == null)
                 throw new NotSupportedException($"{node.Method.Name} must operate on a supported field.");
 
-            this.expressions.Add(new OrderByExpression(field.Member.Name, direction.Value));
+            this.expressions.Add(new OrderByExpression(field.Member.Name, direction.Value, this.orderByTermCount++));
 
             return true;
         }
@@ -102,7 +104,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             if (field == null)
                 throw new NotSupportedException($"{node.Method.Name} must operate on a supported field.");
 
-            this.expressions.Add(new OrderByExpression(field.Member.Name, direction.Value));
+            this.expressions.Add(new OrderByExpression(field.Member.Name, direction.Value, this.orderByTermCount++));
 
             return true;
         }

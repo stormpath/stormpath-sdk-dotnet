@@ -18,18 +18,11 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private FieldNameTranslator fieldNameTranslator
             = new FieldNameTranslator();
 
+        private DateTimeFieldNameTranslator datetimeFieldNameTranslator
+            = new DateTimeFieldNameTranslator();
+
         public CollectionResourceQueryModel Model { get; private set; }
             = new CollectionResourceQueryModel();
-
-        public override Expression Visit(Expression node)
-        {
-            var result = base.Visit(node);
-
-            this.Model.OrderByTerms.Reverse();
-            this.Model.WhereTerms.Reverse();
-
-            return result;
-        }
 
         internal Expression VisitParsedExpression(ParsedExpression node)
         {
@@ -89,7 +82,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         internal Expression VisitWhereMember(WhereMemberExpression node)
         {
             string translatedFieldName = null;
-            if (!this.fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
+            if (!this.fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName) &&
+                !this.datetimeFieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
                 throw new NotSupportedException($"{node.FieldName} is not a supported field.");
 
             this.Model.WhereTerms.Add(new WhereTerm()
