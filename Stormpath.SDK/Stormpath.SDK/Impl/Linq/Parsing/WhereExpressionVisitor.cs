@@ -100,7 +100,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 node.Arguments.Count == 1 &&
                 node.Arguments[0].NodeType == ExpressionType.Constant;
             if (!correctOverload)
-                throw new NotSupportedException($"The method {node.Method.Name} is not supported.");
+                throw new NotSupportedException($"The {node.Method.Name} with these overloads is not supported.");
 
             if (node.Method.Name == "Equals")
             {

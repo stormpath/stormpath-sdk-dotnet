@@ -55,6 +55,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private class SubtreeEvaluator : ExpressionVisitor
         {
             private readonly HashSet<Expression> candidates;
+            private bool passedRootNode = false;
 
             internal SubtreeEvaluator(HashSet<Expression> candidates)
             {
@@ -66,21 +67,28 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return this.Visit(exp);
             }
 
-            public override Expression Visit(Expression exp)
+            public override Expression Visit(Expression expression)
             {
-                if (exp == null)
+                if (expression == null)
                     return null;
 
-                if (this.candidates.Contains(exp))
-                    return this.Evaluate(exp);
+                Expression result = null;
 
-                return base.Visit(exp);
+                if (this.candidates.Contains(expression))
+                    result = this.Evaluate(expression);
+                else
+                    result = base.Visit(expression);
+
+                // Skip the root node, only evaluate child nodes (if any)
+                this.passedRootNode = true;
+
+                return result;
             }
 
             private Expression Evaluate(Expression e)
             {
                 if (e.NodeType == ExpressionType.Constant ||
-                    e.NodeType == ExpressionType.Call)
+                    (!this.passedRootNode && e.NodeType == ExpressionType.Call))
                 {
                     return e;
                 }

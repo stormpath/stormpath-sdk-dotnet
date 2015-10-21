@@ -105,6 +105,28 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
+        public void Where_attribute_equals_using_variable()
+        {
+            var email = "tk421@deathstar.co";
+
+            var query = this.Harness.Queryable
+                .Where(x => x.Email.Equals(email));
+
+            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co");
+        }
+
+        [Fact]
+        public void Where_attribute_equals_using_formatted_string()
+        {
+            var domain = "deathstar.co";
+
+            var query = this.Harness.Queryable
+                .Where(x => x.Email.Equals($"tk421@{domain}"));
+
+            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co");
+        }
+
+        [Fact]
         public void Where_attribute_starts_with()
         {
             var query = this.Harness.Queryable
