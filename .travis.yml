@@ -5,7 +5,7 @@ solution: "./Stormpath.SDK/Stormpath.SDK.sln"
 install:
 - nuget restore -source "https://www.nuget.org/api/v2" ./Stormpath.SDK/Stormpath.SDK.sln
 script:
-- xbuild /p:Configuration=Release ./Stormpath.SDK/Stormpath.SDK.sln
+- xbuild /p:Configuration=Debug ./Stormpath.SDK/Stormpath.SDK.sln
 - mono ./Stormpath.SDK/packages/xunit.runner.console*/tools/xunit.console.exe ./Stormpath.SDK/Stormpath.SDK.Tests/bin/Release/Stormpath.SDK.Tests.dll -noappdomain
 - mono ./Stormpath.SDK/packages/xunit.runner.console*/tools/xunit.console.exe ./Stormpath.SDK/Stormpath.SDK.Tests.Integration/bin/Release/Stormpath.SDK.Tests.Integration.dll -noappdomain
 - mono ./Stormpath.SDK/packages/xunit.runner.console*/tools/xunit.console.exe ./Stormpath.SDK/Stormpath.SDK.JsonNetSerializer.Tests/bin/Release/Stormpath.SDK.JsonNetSerializer.Tests.dll -noappdomain
