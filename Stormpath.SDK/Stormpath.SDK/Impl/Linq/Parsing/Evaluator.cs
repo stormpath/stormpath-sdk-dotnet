@@ -32,7 +32,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         private static bool CanBeEvaluatedLocally(Expression expression)
         {
-            return expression.NodeType != ExpressionType.Parameter;
+            return expression.NodeType != ExpressionType.Parameter &&
+                expression.NodeType != ExpressionType.Call;
         }
 
         /// <summary> 
@@ -71,6 +72,14 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 {
                     return e;
                 }
+
+                //var asMethodCall = e as MethodCallExpression;
+                //if (asMethodCall != null &&
+                //    asMethodCall.Arguments.All(x => x.NodeType == ExpressionType.Constant))
+                //{
+                //    return e;
+                //}
+
                 LambdaExpression lambda = Expression.Lambda(e);
                 Delegate fn = lambda.Compile();
                 return Expression.Constant(fn.DynamicInvoke(null), e.Type);

@@ -8,11 +8,14 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 {
     public enum WhereComparison
     {
-        Equals,
+        Equal,
         StartsWith,
         EndsWith,
         Contains,
         GreaterThan,
-        LessThan
+        GreaterThanOrEqual,
+        LessThan,
+        LessThanOrEqual,
+        AndAlso
     }
 }

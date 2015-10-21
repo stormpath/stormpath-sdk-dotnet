@@ -19,8 +19,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private CollectionResourceQueryModel GenerateQueryModel(Expression expression)
         {
             // Partial evaluation
-            //var evaluatedExpression = Evaluator.PartialEval(expression);
-            var evaluatedExpression = expression;
+            var evaluatedExpression = Evaluator.PartialEval(expression);
+            //var evaluatedExpression = expression;
 
             // Discover
             var discoveringVisitor = new DiscoveringExpressionVisitor();

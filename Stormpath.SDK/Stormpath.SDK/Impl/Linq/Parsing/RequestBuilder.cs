@@ -32,6 +32,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 this.HandleLimit();
                 this.HandleOffset();
                 this.HandleOrderByThenBy();
+                this.HandleWhere();
             }
 
             var argumentList = this.arguments
@@ -61,22 +62,46 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         private void HandleOrderByThenBy()
         {
-            if (this.queryModel.OrderByTerms.Count > 0)
+            if (!this.queryModel.OrderByTerms.Any())
+                return;
+
+            var orderByArgument = new StringBuilder();
+            bool addedOne = false;
+
+            foreach (var clause in this.queryModel.OrderByTerms)
             {
-                var orderByArgument = new StringBuilder();
-                bool addedOne = false;
-
-                foreach (var clause in this.queryModel.OrderByTerms.Reverse<OrderBy>())
-                {
-                    if (addedOne)
-                        orderByArgument.Append(",");
-                    var direction = clause.Direction == OrderByDirection.Descending ? " desc" : string.Empty;
-                    orderByArgument.Append($"{clause.FieldName}{direction}");
-                    addedOne = true;
-                }
-
                 if (addedOne)
-                    this.arguments.Add("orderBy", orderByArgument.ToString());
+                    orderByArgument.Append(",");
+                var direction = clause.Direction == OrderByDirection.Descending ? " desc" : string.Empty;
+                orderByArgument.Append($"{clause.FieldName}{direction}");
+                addedOne = true;
+            }
+
+            if (addedOne)
+                this.arguments.Add("orderBy", orderByArgument.ToString());
+        }
+
+        private void HandleWhere()
+        {
+            foreach (var term in this.queryModel.WhereTerms)
+            {
+                switch (term.Comparison)
+                {
+                    case WhereComparison.Contains:
+                        this.arguments.Add(term.FieldName, $"*{term.Value.ToString()}*");
+                        break;
+                    case WhereComparison.EndsWith:
+                        this.arguments.Add(term.FieldName, $"*{term.Value.ToString()}");
+                        break;
+                    case WhereComparison.StartsWith:
+                        this.arguments.Add(term.FieldName, $"{term.Value.ToString()}*");
+                        break;
+                    case WhereComparison.Equal:
+                        this.arguments.Add(term.FieldName, term.Value.ToString());
+                        break;
+                    default:
+                        throw new NotSupportedException($"The comparison operator {term.Comparison.ToString()} is not supported on this field.");
+                }
             }
         }
     }

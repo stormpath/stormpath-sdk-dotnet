@@ -160,7 +160,10 @@
     <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
     <Compile Include="Impl\Linq\CollectionResourceExecutor.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\LongCountResultOperator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\WhereMemberExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\QueryModelValidator.cs" />
+    <Compile Include="Impl\Linq\Parsing\WhereExpressionVisitor.cs" />
+    <Compile Include="Impl\Linq\QueryModel\WhereTerm.cs" />
     <Compile Include="Impl\Linq\Sync\SyncScalarExecutor.cs" />
     <Compile Include="Impl\Linq\Parsing\CompilingExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\Parsing\DiscoveringExpressionVisitor.cs" />
@@ -186,7 +189,7 @@
     <Compile Include="Impl\Linq\Parsing\QueryModelCompiler.cs" />
     <Compile Include="Impl\Linq\Parsing\RequestBuilder.cs" />
     <Compile Include="Impl\Linq\QueryModel\ExecutionPlanModel.cs" />
-    <Compile Include="Impl\Linq\QueryModel\OrderBy.cs" />
+    <Compile Include="Impl\Linq\QueryModel\OrderByTerm.cs" />
     <Compile Include="Impl\Linq\Sync\SyncEnumeratorAdapter.cs" />
     <Compile Include="Impl\Linq\TypeSystem.cs" />
     <Compile Include="Impl\Provider\AbstractCreateProviderRequestBuilder.cs" />

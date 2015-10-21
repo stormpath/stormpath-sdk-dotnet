@@ -7,7 +7,7 @@ using Stormpath.SDK.Impl.Linq.Parsing;
 
 namespace Stormpath.SDK.Impl.Linq.QueryModel
 {
-    internal class OrderBy
+    internal class OrderByTerm
     {
         public string FieldName { get; set; }
 

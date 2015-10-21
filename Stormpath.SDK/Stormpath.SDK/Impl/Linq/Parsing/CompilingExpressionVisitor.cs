@@ -21,6 +21,16 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         public CollectionResourceQueryModel Model { get; private set; }
             = new CollectionResourceQueryModel();
 
+        public override Expression Visit(Expression node)
+        {
+            var result = base.Visit(node);
+
+            this.Model.OrderByTerms.Reverse();
+            this.Model.WhereTerms.Reverse();
+
+            return result;
+        }
+
         internal Expression VisitParsedExpression(ParsedExpression node)
         {
             throw new NotSupportedException($"{node.GetType()} is an unsupported expression.");
@@ -57,7 +67,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             if (!this.fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
                 throw new NotSupportedException($"{node.FieldName} is not a supported field.");
 
-            this.Model.OrderByTerms.Add(new OrderBy()
+            this.Model.OrderByTerms.Add(new OrderByTerm()
             {
                 FieldName = translatedFieldName,
                 Direction = node.Direction
@@ -72,6 +82,22 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 throw new NotSupportedException("Multiple Filter terms are not supported");
 
             this.Model.FilterTerm = node.Value;
+
+            return node;
+        }
+
+        internal Expression VisitWhereMember(WhereMemberExpression node)
+        {
+            string translatedFieldName = null;
+            if (!this.fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
+                throw new NotSupportedException($"{node.FieldName} is not a supported field.");
+
+            this.Model.WhereTerms.Add(new WhereTerm()
+            {
+                FieldName = translatedFieldName,
+                Comparison = node.Comparison,
+                Value = node.Value
+            });
 
             return node;
         }

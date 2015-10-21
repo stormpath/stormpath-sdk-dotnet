@@ -15,8 +15,11 @@ namespace Stormpath.SDK.Impl.Linq.QueryModel
 
         public string FilterTerm { get; set; }
 
-        public List<OrderBy> OrderByTerms{ get; set; }
-            = new List<OrderBy>();
+        public List<WhereTerm> WhereTerms { get; set; }
+            = new List<WhereTerm>();
+
+        public List<OrderByTerm> OrderByTerms { get; set; }
+            = new List<OrderByTerm>();
 
         public ExecutionPlanModel ExecutionPlan { get; set; }
             = new ExecutionPlanModel();

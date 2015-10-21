@@ -22,11 +22,6 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             this.expressions = new List<Expression>();
         }
 
-        public override Expression Visit(Expression node)
-        {
-            return base.Visit(node);
-        }
-
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
             // Query operators
@@ -60,13 +55,10 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             if (node.Method.Name != "Where")
                 return false;
 
-            // TODO
+            var whereExpressions = WhereExpressionVisitor.GetParsedExpressions(node.Arguments[1]);
+            this.expressions.AddRange(whereExpressions);
+
             return true;
-
-            //var whereExpressions = WhereExpressionVisitor.GetParsedExpressions(node.Arguments[1]);
-            //this.expressions.AddRange(whereExpressions);
-
-            //return true;
         }
 
         private bool HandleOrderByMethod(MethodCallExpression node)
