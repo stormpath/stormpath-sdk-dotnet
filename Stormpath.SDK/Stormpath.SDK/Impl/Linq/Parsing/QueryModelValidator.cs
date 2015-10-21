@@ -34,6 +34,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             this.ValidateLimit();
             this.ValidateOffset();
             this.ValidateWheres();
+            this.ValidateDatetimeWheres();
         }
 
         private void ValidateLimit()
@@ -66,16 +67,37 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                         x.Comparison == WhereComparison.EndsWith ||
                         x.Comparison == WhereComparison.Equal);
 
-            bool datetimeTermsUseValidComparisonOperators = this.queryModel.WhereTerms
+            if (!termsUseValidComparisonOperators)
+                throw new NotSupportedException($"One or more Where terms use unsupported comparison operators.");
+        }
+
+        private void ValidateDatetimeWheres()
+        {
+            if (!this.queryModel.WhereTerms.Any())
+                return;
+
+            var datetimeTerms = this.queryModel.WhereTerms
                 .Where(x => x.Type == typeof(DateTimeOffset))
+                .ToList();
+
+            var shorthandTerms = this.queryModel.WhereTerms
+                .Where(x => x.Type == typeof(DatetimeShorthandModel))
+                .ToList();
+
+            bool datetimeTermsUseValidComparisonOperators = datetimeTerms
                 .All(x => x.Comparison == WhereComparison.GreaterThan ||
                         x.Comparison == WhereComparison.GreaterThanOrEqual ||
                         x.Comparison == WhereComparison.LessThan ||
                         x.Comparison == WhereComparison.LessThanOrEqual);
 
-            if (!termsUseValidComparisonOperators ||
-                !datetimeTermsUseValidComparisonOperators)
+            if (!datetimeTermsUseValidComparisonOperators)
                 throw new NotSupportedException($"One or more Where terms use unsupported comparison operators.");
+
+            var shorthandAndDatetimeTermsCollisions = shorthandTerms
+                .Where(x => datetimeTerms.Any(y => y.FieldName == x.FieldName));
+
+            if (shorthandAndDatetimeTermsCollisions.Any())
+                throw new NotSupportedException($"Multiple date constraints on field {shorthandAndDatetimeTermsCollisions.First().FieldName} are not supported");
         }
     }
 }
