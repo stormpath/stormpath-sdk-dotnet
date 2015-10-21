@@ -194,7 +194,6 @@
     <Compile Include="Impl\Linq\QueryModel\ExecutionPlanModel.cs" />
     <Compile Include="Impl\Linq\QueryModel\OrderByTerm.cs" />
     <Compile Include="Impl\Linq\Sync\SyncEnumeratorAdapter.cs" />
-    <Compile Include="Impl\Linq\TypeSystem.cs" />
     <Compile Include="Impl\Provider\AbstractCreateProviderRequestBuilder.cs" />
     <Compile Include="Impl\Provider\AbstractProvider.cs" />
     <Compile Include="Impl\Provider\AbstractProviderAccountRequestBuilder.cs" />

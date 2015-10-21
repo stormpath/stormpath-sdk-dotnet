@@ -18,9 +18,8 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Linq;
 using Stormpath.SDK.Impl.Linq;
+using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Sync
 {

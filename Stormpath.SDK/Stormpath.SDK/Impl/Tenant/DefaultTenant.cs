@@ -24,12 +24,12 @@ using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
-using Stormpath.SDK.Impl.Linq;
 
 namespace Stormpath.SDK.Impl.Tenant
 {

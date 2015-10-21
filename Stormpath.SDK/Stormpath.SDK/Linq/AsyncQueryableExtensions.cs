@@ -22,7 +22,6 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Linq;
-using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK

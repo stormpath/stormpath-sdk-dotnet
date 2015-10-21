@@ -16,7 +16,6 @@
 // </remarks>
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NSubstitute;
 using Shouldly;
