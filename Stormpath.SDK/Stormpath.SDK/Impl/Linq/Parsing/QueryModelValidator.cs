@@ -97,7 +97,15 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 .Where(x => datetimeTerms.Any(y => y.FieldName == x.FieldName));
 
             if (shorthandAndDatetimeTermsCollisions.Any())
-                throw new NotSupportedException($"Multiple date constraints on field {shorthandAndDatetimeTermsCollisions.First().FieldName} are not supported");
+                throw new NotSupportedException($"Multiple date constraints on field {shorthandAndDatetimeTermsCollisions.First().FieldName} are not supported.");
+
+            bool shorthandTermCollisions = shorthandTerms
+                .GroupBy(x => x.FieldName)
+                .Distinct()
+                .Count() != shorthandTerms.Count;
+
+            if (shorthandTermCollisions)
+                throw new NotSupportedException("Multiple Within constrants on the same field are not supported.");
         }
     }
 }

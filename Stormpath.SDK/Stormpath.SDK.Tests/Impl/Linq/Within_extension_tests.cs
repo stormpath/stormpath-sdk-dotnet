@@ -41,14 +41,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt.Within(2015))
                 .Where(x => x.CreatedAt.Within(2015, 01, 01));
 
-            try
+            Should.Throw<NotSupportedException>(() =>
             {
                 query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
-            }
-            catch (NotSupportedException)
-            {
-                // all good
-            }
+            });
         }
 
         [Fact]
