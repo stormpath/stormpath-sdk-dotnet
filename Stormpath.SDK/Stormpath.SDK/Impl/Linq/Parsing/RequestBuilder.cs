@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Linq.QueryModel;
+using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
 {
@@ -83,7 +84,12 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         private void HandleWhere()
         {
-            foreach (var term in this.queryModel.WhereTerms)
+            var datetimeTerms = this.queryModel.WhereTerms
+                .Where(x => x.Type == typeof(DateTimeOffset))
+                .ToList();
+            this.HandleWhereDateTerms(datetimeTerms);
+
+            foreach (var term in this.queryModel.WhereTerms.Except(datetimeTerms))
             {
                 switch (term.Comparison)
                 {
@@ -102,6 +108,77 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                     default:
                         throw new NotSupportedException($"The comparison operator {term.Comparison.ToString()} is not supported on this field.");
                 }
+            }
+        }
+
+        private void HandleWhereDateTerms(IList<WhereTerm> terms)
+        {
+            // Parse and consolidate terms
+            var workingModels = new Dictionary<string, DatetimeAttributeTermWorkingModel>();
+            foreach (var term in terms)
+            {
+                if (!workingModels.ContainsKey(term.FieldName))
+                    workingModels.Add(term.FieldName, new DatetimeAttributeTermWorkingModel());
+                var workingModel = workingModels[term.FieldName];
+
+                bool isStartTerm =
+                    term.Comparison == WhereComparison.GreaterThan ||
+                    term.Comparison == WhereComparison.GreaterThanOrEqual;
+                bool collision =
+                    (isStartTerm && (workingModel.Start.HasValue || workingModel.StartInclusive.HasValue)) ||
+                    (!isStartTerm && (workingModel.End.HasValue || workingModel.EndInclusive.HasValue));
+                if (collision)
+                    throw new ArgumentException("Error compiling date terms.");
+
+                workingModel.FieldName = term.FieldName;
+
+                bool isInclusive =
+                    term.Comparison == WhereComparison.GreaterThanOrEqual ||
+                    term.Comparison == WhereComparison.LessThanOrEqual;
+                if (isStartTerm)
+                {
+                    workingModel.Start = (DateTimeOffset)term.Value;
+                    workingModel.StartInclusive = term.Comparison == WhereComparison.GreaterThanOrEqual;
+                }
+                else
+                {
+                    workingModel.End = (DateTimeOffset)term.Value;
+                    workingModel.EndInclusive = term.Comparison == WhereComparison.LessThanOrEqual;
+                }
+            }
+
+            // Add terms to query
+            var datetimeAttributeBuilder = new StringBuilder();
+            foreach (var term in workingModels.Values)
+            {
+                if (this.arguments.ContainsKey(term.FieldName))
+                    throw new NotSupportedException($"Multiple date constraints on field {term.FieldName} are not supported");
+
+                datetimeAttributeBuilder.Clear();
+
+                if (!term.Start.HasValue)
+                {
+                    datetimeAttributeBuilder.Append("[");
+                }
+                else
+                {
+                    datetimeAttributeBuilder.Append(term.StartInclusive ?? true ? "[" : "(");
+                    datetimeAttributeBuilder.Append(Iso8601.Format(term.Start.Value));
+                }
+
+                datetimeAttributeBuilder.Append(",");
+
+                if (!term.End.HasValue)
+                {
+                    datetimeAttributeBuilder.Append("]");
+                }
+                else
+                {
+                    datetimeAttributeBuilder.Append(Iso8601.Format(term.End.Value));
+                    datetimeAttributeBuilder.Append(term.EndInclusive ?? true ? "]" : ")");
+                }
+
+                this.arguments.Add(term.FieldName, datetimeAttributeBuilder.ToString());
             }
         }
     }

@@ -13,6 +13,8 @@ namespace Stormpath.SDK.Impl.Linq.QueryModel
 
         public object Value { get; set; }
 
+        public Type Type { get; set; }
+
         public WhereComparison Comparison { get; set; }
     }
 }

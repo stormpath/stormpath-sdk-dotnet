@@ -20,6 +20,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         {
             this.ValidateLimit();
             this.ValidateOffset();
+            this.ValidateWheres();
         }
 
         private void ValidateLimit()
@@ -38,6 +39,30 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
             if (this.queryModel.Offset.Value < 0)
                 throw new ArgumentOutOfRangeException("Skip must be greater than zero.");
+        }
+
+        private void ValidateWheres()
+        {
+            if (!this.queryModel.WhereTerms.Any())
+                return;
+
+            bool termsUseValidComparisonOperators = this.queryModel.WhereTerms
+                .Where(x => x.Type != typeof(DateTimeOffset))
+                .All(x => x.Comparison == WhereComparison.Contains ||
+                        x.Comparison == WhereComparison.StartsWith ||
+                        x.Comparison == WhereComparison.EndsWith ||
+                        x.Comparison == WhereComparison.Equal);
+
+            bool datetimeTermsUseValidComparisonOperators = this.queryModel.WhereTerms
+                .Where(x => x.Type == typeof(DateTimeOffset))
+                .All(x => x.Comparison == WhereComparison.GreaterThan ||
+                        x.Comparison == WhereComparison.GreaterThanOrEqual ||
+                        x.Comparison == WhereComparison.LessThan ||
+                        x.Comparison == WhereComparison.LessThanOrEqual);
+
+            if (!termsUseValidComparisonOperators ||
+                !datetimeTermsUseValidComparisonOperators)
+                throw new NotSupportedException($"One or more Where terms use unsupported comparison operators.");
         }
     }
 }

@@ -32,8 +32,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         private static bool CanBeEvaluatedLocally(Expression expression)
         {
-            return expression.NodeType != ExpressionType.Parameter &&
-                expression.NodeType != ExpressionType.Call;
+            return expression.NodeType != ExpressionType.Parameter;
         }
 
         /// <summary> 
@@ -68,7 +67,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
             private Expression Evaluate(Expression e)
             {
-                if (e.NodeType == ExpressionType.Constant)
+                if (e.NodeType == ExpressionType.Constant ||
+                    e.NodeType == ExpressionType.Call)
                 {
                     return e;
                 }

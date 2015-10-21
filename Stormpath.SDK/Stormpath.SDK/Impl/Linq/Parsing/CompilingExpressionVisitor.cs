@@ -96,7 +96,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             {
                 FieldName = translatedFieldName,
                 Comparison = node.Comparison,
-                Value = node.Value
+                Value = node.Value,
+                Type = node.Value.GetType()
             });
 
             return node;

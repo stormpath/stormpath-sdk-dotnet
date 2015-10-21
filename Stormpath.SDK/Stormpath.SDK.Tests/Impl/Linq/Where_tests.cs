@@ -202,6 +202,33 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
+        public void Where_date_attribute_using_implicit_DateTime()
+        {
+            var testDate = new DateTime(2016, 01, 01, 12, 00, 00);
+            var query = this.Harness.Queryable
+                .Where(x => x.ModifiedAt < testDate);
+
+            var timezoneOffset = new DateTimeOffset(testDate).Offset;
+            var adjustedHour = (int)(12 - timezoneOffset.TotalHours);
+
+            query.GeneratedArgumentsWere(this.Href, $"modifiedAt=[,2016-01-01T{adjustedHour}:00:00Z)");
+        }
+
+        [Fact]
+        public void Where_date_attribute_equals()
+        {
+            var testDate = new DateTime(2016, 01, 01, 12, 00, 00);
+
+            Should.Throw<NotSupportedException>(() =>
+            {
+                var query = this.Harness.Queryable
+                    .Where(x => x.ModifiedAt == testDate);
+
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+            });
+        }
+
+        [Fact]
         public void Alternate_query_syntax_is_okay()
         {
             var query = from account in this.Harness.Queryable
