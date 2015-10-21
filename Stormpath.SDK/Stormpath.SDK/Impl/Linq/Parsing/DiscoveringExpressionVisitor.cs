@@ -13,15 +13,26 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
     internal sealed class DiscoveringExpressionVisitor : ExpressionVisitor
     {
         private readonly List<Expression> expressions;
-
-        public ReadOnlyCollection<Expression> Expressions
-            => new ReadOnlyCollection<Expression>(this.expressions);
-
-        private int orderByTermCount = 0;
+        private readonly Stack<Expression> orderByExpressions;
+        private readonly Stack<Expression> whereExpressions;
 
         public DiscoveringExpressionVisitor()
         {
             this.expressions = new List<Expression>();
+            this.orderByExpressions = new Stack<Expression>();
+            this.whereExpressions = new Stack<Expression>();
+        }
+
+        public ReadOnlyCollection<Expression> Expressions
+        {
+            get
+            {
+                return new ReadOnlyCollection<Expression>(
+                    this.expressions
+                        .Concat(this.orderByExpressions)
+                        .Concat(this.whereExpressions)
+                        .ToList());
+            }
         }
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
@@ -58,7 +69,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return false;
 
             var whereExpressions = WhereExpressionVisitor.GetParsedExpressions(node.Arguments[1]);
-            this.expressions.AddRange(whereExpressions);
+            whereExpressions.ForEach(e => this.whereExpressions.Push(e));
 
             return true;
         }
@@ -81,7 +92,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             if (field == null)
                 throw new NotSupportedException($"{node.Method.Name} must operate on a supported field.");
 
-            this.expressions.Add(new OrderByExpression(field.Member.Name, direction.Value, this.orderByTermCount++));
+            this.orderByExpressions.Push(new OrderByExpression(field.Member.Name, direction.Value));
 
             return true;
         }
@@ -104,7 +115,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             if (field == null)
                 throw new NotSupportedException($"{node.Method.Name} must operate on a supported field.");
 
-            this.expressions.Add(new OrderByExpression(field.Member.Name, direction.Value, this.orderByTermCount++));
+            this.orderByExpressions.Push(new OrderByExpression(field.Member.Name, direction.Value));
 
             return true;
         }

@@ -87,12 +87,10 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             var datetimeTerms = this.queryModel.WhereTerms
                 .Where(x => x.Type == typeof(DateTimeOffset))
                 .ToList();
-            this.HandleWhereDateTerms(datetimeTerms);
 
             var datetimeShorthandTerms = this.queryModel.WhereTerms
                 .Where(x => x.Type == typeof(DatetimeShorthandModel))
                 .ToList();
-            this.HandleWhereDateShorthandTerms(datetimeShorthandTerms);
 
             var remainingTerms = this.queryModel.WhereTerms
                 .Except(datetimeTerms)
@@ -118,6 +116,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                         throw new NotSupportedException($"The comparison operator {term.Comparison.ToString()} is not supported on this field.");
                 }
             }
+
+            this.HandleWhereDateTerms(datetimeTerms);
+            this.HandleWhereDateShorthandTerms(datetimeShorthandTerms);
         }
 
         private void HandleWhereDateTerms(IList<WhereTerm> terms)

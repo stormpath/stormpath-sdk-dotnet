@@ -43,8 +43,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
             if (comparison.Value == WhereComparison.AndAlso)
             {
-                this.parsedExpressions.AddRange(GetParsedExpressions(node.Left));
                 this.parsedExpressions.AddRange(GetParsedExpressions(node.Right));
+                this.parsedExpressions.AddRange(GetParsedExpressions(node.Left));
+
                 return node;
             }
 
