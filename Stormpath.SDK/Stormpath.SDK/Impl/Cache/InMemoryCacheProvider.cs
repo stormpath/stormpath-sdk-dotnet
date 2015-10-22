@@ -25,13 +25,15 @@ using Stormpath.SDK.Cache;
 
 namespace Stormpath.SDK.Impl.Cache
 {
-    internal class InMemoryCacheProvider : ISynchronousCacheProvider, IAsynchronousCacheProvider
+    internal class InMemoryCacheProvider : ISynchronousCacheProvider, IAsynchronousCacheProvider, IDisposable
     {
         private readonly ConcurrentDictionary<string, ICacheConfiguration> cacheConfigs;
         private readonly ConcurrentDictionary<string, object> caches;
 
         private TimeSpan? defaultTimeToLive;
         private TimeSpan? defaultTimeToIdle;
+
+        private bool disposed = false;
 
         public InMemoryCacheProvider()
         {
@@ -41,6 +43,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         ISynchronousCache<K, V> ISynchronousCacheProvider.GetCache<K, V>(string name)
         {
+            this.ThrowIfDisposed();
+
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
 
@@ -50,6 +54,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         Task<IAsynchronousCache<K, V>> IAsynchronousCacheProvider.GetCacheAsync<K, V>(string name, CancellationToken cancellationToken)
         {
+            this.ThrowIfDisposed();
+
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
 
@@ -67,8 +73,16 @@ namespace Stormpath.SDK.Impl.Cache
 
         bool ICacheProvider.IsSynchronousSupported => false; // Currently unsupported
 
+        private void ThrowIfDisposed()
+        {
+            if (this.disposed)
+                throw new ApplicationException("This cache provider has been disposed.");
+        }
+
         private object CreateCache<K, V>(string name)
         {
+            this.ThrowIfDisposed();
+
             var ttl = this.defaultTimeToLive;
             var tti = this.defaultTimeToIdle;
 
@@ -87,6 +101,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         public void SetDefaultTimeToLive(TimeSpan defaultTimeToLive)
         {
+            this.ThrowIfDisposed();
+
             if (defaultTimeToLive.TotalMilliseconds <= 0)
                 throw new ArgumentOutOfRangeException("TTL duration must be greater than zero.", nameof(defaultTimeToLive));
 
@@ -95,6 +111,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         public void SetDefaultTimeToIdle(TimeSpan defaultTimeToIdle)
         {
+            this.ThrowIfDisposed();
+
             if (defaultTimeToIdle.TotalMilliseconds <= 0)
                 throw new ArgumentOutOfRangeException("TTL duration must be greater than zero.", nameof(defaultTimeToIdle));
 
@@ -103,6 +121,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         public void SetCacheConfigurations(ICollection<ICacheConfiguration> configs)
         {
+            this.ThrowIfDisposed();
+
             if (configs == null)
                 throw new ArgumentNullException(nameof(configs));
 
@@ -116,6 +136,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         public override string ToString()
         {
+            this.ThrowIfDisposed();
+
             var caches = this.caches.Values;
             var builder = new StringBuilder();
 
@@ -152,6 +174,30 @@ namespace Stormpath.SDK.Impl.Cache
             return duration.HasValue
                 ? duration.Value.ToString()
                 : "indefinite";
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                this.disposed = true;
+
+                if (disposing)
+                {
+                    foreach (var cacheKey in this.caches.Keys)
+                    {
+                        object cache = null;
+                        if (this.caches.TryRemove(cacheKey, out cache))
+                            (cache as IDisposable).Dispose();
+                    }
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            this.Dispose(true);
         }
     }
 }
