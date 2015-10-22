@@ -69,15 +69,15 @@ namespace Stormpath.SDK.Impl.Cache
 
         string ICache<K, V>.Name => this.region;
 
+        TimeSpan? ICache<K, V>.TimeToLive => this.timeToLive;
+
+        TimeSpan? ICache<K, V>.TimeToIdle => this.timeToIdle;
+
         /// <summary>
         /// Gets the number of items stored in all regions of the cache.
         /// </summary>
         /// <value>The total number of items stored in all regions of the cache.</value>
         public long TotalSize => this.cacheManager.Count;
-
-        public TimeSpan? TimeToLive => this.timeToLive;
-
-        public TimeSpan? TimeToIdle => this.timeToIdle;
 
         public long AccessCount => Interlocked.Read(ref this.accessCount);
 

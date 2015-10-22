@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Cache
 {
     /// <summary>
@@ -26,5 +28,9 @@ namespace Stormpath.SDK.Cache
     public interface ICache<K, V>
     {
         string Name { get; }
+
+        TimeSpan? TimeToLive { get; }
+
+        TimeSpan? TimeToIdle { get; }
     }
 }

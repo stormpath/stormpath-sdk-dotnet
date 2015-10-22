@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
@@ -23,6 +24,10 @@ namespace Stormpath.SDK.Impl.Cache
     internal sealed class NullCache<K, V> : ISynchronousCache<K, V>, IAsynchronousCache<K, V>
     {
         string ICache<K, V>.Name => "NullCache";
+
+        TimeSpan? ICache<K, V>.TimeToLive => null;
+
+        TimeSpan? ICache<K, V>.TimeToIdle => null;
 
         V ISynchronousCache<K, V>.Get(K key)
         {

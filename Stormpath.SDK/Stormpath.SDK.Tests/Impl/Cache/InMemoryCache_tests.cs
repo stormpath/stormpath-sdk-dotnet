@@ -66,8 +66,8 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 var cache = new InMemoryCache<string, string>("fooCache");
 
                 (cache as ISynchronousCache<string, string>).Name.ShouldBe("fooCache");
-                cache.TimeToLive.ShouldBeNull();
-                cache.TimeToIdle.ShouldBeNull();
+                (cache as ISynchronousCache<string, string>).TimeToLive.ShouldBeNull();
+                (cache as ISynchronousCache<string, string>).TimeToIdle.ShouldBeNull();
                 cache.TotalSize.ShouldBe(0);
                 cache.AccessCount.ShouldBe(0);
                 cache.HitCount.ShouldBe(0);
@@ -235,8 +235,8 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 var cache = new InMemoryCache<string, string>("fooCache");
 
                 (cache as IAsynchronousCache<string, string>).Name.ShouldBe("fooCache");
-                cache.TimeToLive.ShouldBeNull();
-                cache.TimeToIdle.ShouldBeNull();
+                (cache as IAsynchronousCache<string, string>).TimeToLive.ShouldBeNull();
+                (cache as IAsynchronousCache<string, string>).TimeToIdle.ShouldBeNull();
                 cache.TotalSize.ShouldBe(0);
                 cache.AccessCount.ShouldBe(0);
                 cache.HitCount.ShouldBe(0);

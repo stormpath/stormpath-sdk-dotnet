@@ -73,7 +73,7 @@ namespace Stormpath.SDK.Impl.Cache
             var tti = this.defaultTimeToIdle;
 
             ICacheConfiguration config = null;
-            if (!this.cacheConfigs.TryGetValue(name, out config))
+            if (this.cacheConfigs.TryGetValue(name, out config))
             {
                 if (config.TimeToLive.HasValue)
                     ttl = config.TimeToLive;
