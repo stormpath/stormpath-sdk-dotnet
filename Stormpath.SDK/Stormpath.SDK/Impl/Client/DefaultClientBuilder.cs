@@ -166,6 +166,9 @@ namespace Stormpath.SDK.Impl.Client
             if (this.logger == null)
                 this.logger = new NullLogger();
 
+            if (this.cacheProvider == null)
+                this.cacheProvider = Caches.NewDisabledCacheProvider();
+
             this.httpClientBuilder
                 .SetBaseUrl(this.baseUrl)
                 .SetConnectionTimeout(this.connectionTimeout)

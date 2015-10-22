@@ -73,7 +73,7 @@ namespace Stormpath.SDK.Impl.DataStore
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
             if (cacheProvider == null)
-                throw new ArgumentNullException(nameof(cacheProvider), "Use NullCacheManager if you wish to turn off caching.");
+                throw new ArgumentNullException(nameof(cacheProvider), "Use NullCacheProvider if you wish to turn off caching.");
 
             this.baseUrl = baseUrl;
             this.requestExecutor = requestExecutor;

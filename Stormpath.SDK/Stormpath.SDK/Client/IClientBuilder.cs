@@ -93,6 +93,21 @@ namespace Stormpath.SDK.Client
         IClientBuilder SetCacheProvider(ICacheProvider cacheProvider);
 
         /// <summary>
+        /// Sets an optional logger to send trace and debug messages to.
+        /// </summary>
+        /// <param name="logger">A logger instance for capturing trace output; pass <c>null</c> to disable logging.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IClientBuilder SetLogger(ILogger logger);
+
+        /// <summary>
+        /// Advanced use; only change this if you know what you are doing. Sets the internal identity map expiration time.
+        /// </summary>
+        /// <param name="expiration">Identity map expiration timeout.</param>
+        /// <returns>This instance for method chaining.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="expiration"/> is less than 10 seconds or more than 24 hours.</exception>
+        IClientBuilder SetIdentityMapExpiration(TimeSpan expiration);
+
+        /// <summary>
         /// Sets the JSON serializer to use when serializing and deserializing request data.
         /// Don't call this method unless you want to use a different serializer than the default.
         /// </summary>
@@ -109,21 +124,6 @@ namespace Stormpath.SDK.Client
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="System.ArgumentNullException"><paramref name="httpClient"/> is null.</exception>
         IClientBuilder UseHttpClient(IHttpClient httpClient);
-
-        /// <summary>
-        /// Sets an optional logger to send trace and debug messages to.
-        /// </summary>
-        /// <param name="logger">A logger instance for capturing trace output; pass <c>null</c> to disable logging.</param>
-        /// <returns>This instance for method chaining.</returns>
-        IClientBuilder SetLogger(ILogger logger);
-
-        /// <summary>
-        /// Advanced use; only change this if you know what you are doing. Sets the internal identity map expiration time.
-        /// </summary>
-        /// <param name="expiration">Identity map expiration timeout.</param>
-        /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="expiration"/> is less than 10 seconds or more than 24 hours.</exception>
-        IClientBuilder SetIdentityMapExpiration(TimeSpan expiration);
 
         /// <summary>
         /// Constructs a new <see cref="IClient"/> instance based on the builder's current configuration state.

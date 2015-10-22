@@ -21,6 +21,7 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Extensions.Http;
 using Stormpath.SDK.Extensions.Serialization;
+using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
@@ -124,6 +125,17 @@ namespace Stormpath.SDK.Tests.Impl
 
             // Default value
             (client as DefaultClient).BaseUrl.ShouldBe("https://api.stormpath.com/v1");
+        }
+
+        [Fact]
+        public void CacheProvider_is_optional()
+        {
+            var client = this.builder
+                .SetApiKey(FakeApiKey.Create(valid: true))
+                .Build();
+
+            // Default value
+            (client as DefaultClient).CacheProvider.ShouldBeOfType<NullCacheProvider>();
         }
 
         [Fact]
