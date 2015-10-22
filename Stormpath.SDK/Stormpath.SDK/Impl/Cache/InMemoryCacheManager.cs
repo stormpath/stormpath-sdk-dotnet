@@ -24,7 +24,6 @@ namespace Stormpath.SDK.Impl.Cache
     /// </summary>
     /// <typeparam name="V">The type of vaules stored in the cache.</typeparam>
     internal sealed class InMemoryCacheManager<V> : IDisposable
-        where V : class
     {
         private readonly MemoryCache memoryCache;
         private bool alreadyDisposed = false;
@@ -52,7 +51,7 @@ namespace Stormpath.SDK.Impl.Cache
             if (itemHasNotExpired)
                 return (V)tokenAndItem[key];
             else
-                return null;
+                return default(V);
         }
 
         public V Put(string key, V value, DateTimeOffset absoluteExpiration, TimeSpan slidingExpiration)
@@ -71,7 +70,7 @@ namespace Stormpath.SDK.Impl.Cache
             if (absoluteTokenInserted && mainItemInserted)
                 return value;
             else
-                return null;
+                return default(V);
         }
 
         public V Remove(string key)

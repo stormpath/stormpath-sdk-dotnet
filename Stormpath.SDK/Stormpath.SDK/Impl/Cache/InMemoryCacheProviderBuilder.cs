@@ -56,10 +56,10 @@ namespace Stormpath.SDK.Impl.Cache
             var provider = new InMemoryCacheProvider();
 
             if (this.defaultTimeToLive.HasValue)
-                provider.SetDefaultTimeToLive(this.defaultTimeToLive);
+                provider.SetDefaultTimeToLive(this.defaultTimeToLive.Value);
 
             if (this.defaultTimeToIdle.HasValue)
-                provider.SetDefaultTimeToIdle(this.defaultTimeToIdle);
+                provider.SetDefaultTimeToIdle(this.defaultTimeToIdle.Value);
 
             if (this.cacheConfigs.Any())
                 provider.SetCacheConfigurations(this.cacheConfigs);

@@ -24,7 +24,6 @@ using Stormpath.SDK.Cache;
 namespace Stormpath.SDK.Impl.Cache
 {
     internal sealed class InMemoryCache<K, V> : ISynchronousCache<K, V>, IAsynchronousCache<K, V>, IDisposable
-        where V : class
     {
         private readonly string region;
         private readonly TimeSpan? timeToLive;
@@ -172,11 +171,13 @@ namespace Stormpath.SDK.Impl.Cache
         public override string ToString()
         {
             return new StringBuilder()
-                .AppendLine($"Region: {this.region}")
-                .AppendLine($"AccessCount: {this.AccessCount}")
-                .AppendLine($"HitCount: {this.HitCount}")
-                .AppendLine($"MissCount: {this.MissCount}")
-                .AppendLine($"HitRatio: {this.GetHitRatio()}")
+                .AppendLine($"{{")
+                .AppendLine($@" ""region"": ""{this.region}"",")
+                .AppendLine($@" ""accessCount"": {this.AccessCount},")
+                .AppendLine($@" ""hitCount"": {this.HitCount},")
+                .AppendLine($@" ""missCount"": {this.MissCount},")
+                .AppendLine($@" ""hitRatio"": {this.GetHitRatio()}")
+                .AppendLine($"}}")
                 .ToString();
         }
 
