@@ -17,6 +17,7 @@
 using System;
 using System.Net;
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Cache;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared;
@@ -77,6 +78,19 @@ namespace Stormpath.SDK.Client
         /// <param name="proxy">The proxy server to use.</param>
         /// <returns>This instance for method chaining.</returns>
         IClientBuilder SetProxy(IWebProxy proxy);
+
+        /// <summary>
+        /// Sets the cache provider that should be used to cache Stormpath REST resources, reducing round-trips
+        /// to the Stormpath API server and enhancing application performance.
+        /// <para>
+        /// Note: The default in-memory cache might not be sufficient forn application that runs on multiple servers,
+        /// due to cache-coherency issues. If your application runs in multiple instances, consider plugging in a
+        /// distributed cache like Redis.
+        /// </para>
+        /// </summary>
+        /// <param name="cacheProvider">The cache provider to use.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IClientBuilder SetCacheProvider(ICacheProvider cacheProvider);
 
         /// <summary>
         /// Sets the JSON serializer to use when serializing and deserializing request data.
