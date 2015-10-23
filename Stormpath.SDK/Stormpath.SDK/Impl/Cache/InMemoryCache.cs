@@ -171,13 +171,13 @@ namespace Stormpath.SDK.Impl.Cache
         public override string ToString()
         {
             return new StringBuilder()
-                .AppendLine($"{{")
-                .AppendLine($@" ""region"": ""{this.region}"",")
-                .AppendLine($@" ""accessCount"": {this.AccessCount},")
-                .AppendLine($@" ""hitCount"": {this.HitCount},")
-                .AppendLine($@" ""missCount"": {this.MissCount},")
-                .AppendLine($@" ""hitRatio"": {this.GetHitRatio()}")
-                .AppendLine($"}}")
+                .Append("{")
+                .Append($@" ""region"": ""{this.region}"",")
+                .Append($@" ""accessCount"": {this.AccessCount},")
+                .Append($@" ""hitCount"": {this.HitCount},")
+                .Append($@" ""missCount"": {this.MissCount},")
+                .Append($@" ""hitRatio"": {this.GetHitRatio()}")
+                .Append(" }")
                 .ToString();
         }
 

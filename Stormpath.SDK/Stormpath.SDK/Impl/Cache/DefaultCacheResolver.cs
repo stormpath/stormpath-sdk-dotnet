@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
+using Stormpath.SDK.Impl.DataStore;
 
 namespace Stormpath.SDK.Impl.Cache
 {
@@ -27,41 +28,45 @@ namespace Stormpath.SDK.Impl.Cache
         private readonly ICacheProvider cacheProvider;
         private readonly ISynchronousCacheProvider syncCacheProvider;
         private readonly IAsynchronousCacheProvider asyncCacheProvider;
-        private readonly ICacheRegionNameResolver cacheRegionNameResolver;
+        private readonly ResourceTypeLookup typeLookup;
+
+        public DefaultCacheResolver(ICacheProvider cacheProvider)
+        {
+            if (cacheProvider == null)
+                throw new ArgumentNullException(nameof(cacheProvider));
+
+            this.cacheProvider = cacheProvider;
+            this.syncCacheProvider = cacheProvider as ISynchronousCacheProvider;
+            this.asyncCacheProvider = cacheProvider as IAsynchronousCacheProvider;
+            this.typeLookup = new ResourceTypeLookup();
+        }
 
         bool ICacheResolver.IsSynchronousSupported => this.cacheProvider.IsAsynchronousSupported;
 
         bool ICacheResolver.IsAsynchronousSupported => this.cacheProvider.IsSynchronousSupported;
 
-        public DefaultCacheResolver(ICacheProvider cacheProvider, ICacheRegionNameResolver cacheRegionNameResolver)
+        private string GetCacheRegionName(Type type)
         {
-            if (cacheProvider == null)
-                throw new ArgumentNullException(nameof(cacheProvider));
-            if (cacheRegionNameResolver == null)
-                throw new ArgumentNullException(nameof(cacheRegionNameResolver));
-
-            this.cacheProvider = cacheProvider;
-            this.syncCacheProvider = cacheProvider as ISynchronousCacheProvider;
-            this.asyncCacheProvider = cacheProvider as IAsynchronousCacheProvider;
-            this.cacheRegionNameResolver = cacheRegionNameResolver;
+            var iface = this.typeLookup.GetInterface(type);
+            return iface.Name;
         }
 
-        ISynchronousCache<string, IDictionary<string, object>> ICacheResolver.GetCache<T>()
+        ISynchronousCache<string, IDictionary<string, object>> ICacheResolver.GetCache(Type resourceType)
         {
             if (!this.cacheProvider.IsSynchronousSupported || this.syncCacheProvider == null)
                 throw new ApplicationException($"A synchronous caching path is not supported in {this.cacheProvider.GetType().Name}");
 
-            var cacheRegionName = this.cacheRegionNameResolver.GetCacheRegionName<T>();
+            var cacheRegionName = this.GetCacheRegionName(resourceType);
 
             return this.syncCacheProvider.GetCache<string, IDictionary<string, object>>(cacheRegionName);
         }
 
-        Task<IAsynchronousCache<string, IDictionary<string, object>>> ICacheResolver.GetCacheAsync<T>(CancellationToken cancellationToken)
+        Task<IAsynchronousCache<string, IDictionary<string, object>>> ICacheResolver.GetCacheAsync(Type resourceType, CancellationToken cancellationToken)
         {
             if (!this.cacheProvider.IsAsynchronousSupported || this.asyncCacheProvider == null)
                 throw new ApplicationException($"An asynchronous caching path is not supported in {this.cacheProvider.GetType().Name}");
 
-            var cacheRegionName = this.cacheRegionNameResolver.GetCacheRegionName<T>();
+            var cacheRegionName = this.GetCacheRegionName(resourceType);
 
             return this.asyncCacheProvider.GetCacheAsync<string, IDictionary<string, object>>(cacheRegionName, cancellationToken);
         }

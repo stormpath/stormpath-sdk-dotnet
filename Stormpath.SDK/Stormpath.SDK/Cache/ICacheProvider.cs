@@ -14,12 +14,14 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Cache
 {
     /// <summary>
     /// Base interface for <see cref="ISynchronousCacheProvider"/> and <see cref="IAsynchronousCacheProvider"/>.
     /// </summary>
-    public interface ICacheProvider
+    public interface ICacheProvider : IDisposable
     {
         /// <summary>
         /// Gets whether this <see cref="ICacheProvider"/> instance supports synchronous operations.

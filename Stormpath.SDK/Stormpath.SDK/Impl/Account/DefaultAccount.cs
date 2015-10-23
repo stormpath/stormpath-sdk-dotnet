@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Impl.Account
         private static readonly string GroupMembershipsPropertyName = "groupMemberships";
         private static readonly string GroupsPropertyName = "groups";
         private static readonly string MiddleNamePropertyName = "middleName";
-        private static readonly string PasswordPropertyName = "password";
+        public static readonly string PasswordPropertyName = "password";
         private static readonly string ProviderDataPropertyName = "providerData";
         private static readonly string RefreshTokensPropertyName = "refreshTokens";
         private static readonly string StatusPropertyName = "status";

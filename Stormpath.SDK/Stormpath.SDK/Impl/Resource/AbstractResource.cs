@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Impl.Resource
 {
     internal abstract class AbstractResource : IResource, ILinkable
     {
-        protected static readonly string HrefPropertyName = "href";
+        public static readonly string HrefPropertyName = "href";
 
         private ResourceData resourceData;
 
@@ -38,6 +38,9 @@ namespace Stormpath.SDK.Impl.Resource
         {
             Interlocked.Exchange(ref this.resourceData, data);
         }
+
+        public bool IsLinkedTo(AbstractResource other)
+            => ReferenceEquals(this.resourceData, other.resourceData);
 
         protected IResource AsInterface => this;
 

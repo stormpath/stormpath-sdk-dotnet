@@ -89,9 +89,10 @@ namespace Stormpath.SDK.Http
         /// </summary>
         /// <returns><c>true</c> if this instance contains one or more query parameters.</returns>
         public bool Any()
-        {
-            return this.queryStringItems?.Any() ?? false;
-        }
+            => this.queryStringItems?.Any() ?? false;
+
+        public bool ContainsKey(string key)
+            => this.queryStringItems?.ContainsKey(key) ?? false;
 
         public string ToString(bool canonical)
         {

@@ -20,29 +20,26 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.Cache;
+using Stormpath.SDK.Impl.Provider;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
 {
-    internal sealed class ReadCacheFilter : IAsynchronousFilter, ISynchronousFilter
+    internal sealed class ReadCacheFilter : AbstractCacheFilter
     {
         private readonly string baseUrl;
-        private readonly ICacheResolver cacheResolver;
 
         public ReadCacheFilter(string baseUrl, ICacheResolver cacheResolver)
+            : base(cacheResolver)
         {
             if (string.IsNullOrEmpty(baseUrl))
                 throw new ArgumentNullException(nameof(baseUrl));
-            if (cacheResolver == null)
-                throw new ArgumentNullException(nameof(cacheResolver));
 
             this.baseUrl = baseUrl;
-            this.cacheResolver = cacheResolver;
-
-            throw new NotImplementedException();
         }
 
-        IResourceDataResult ISynchronousFilter.Filter(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
+        public override IResourceDataResult Filter(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
         {
             if (this.cacheResolver.IsSynchronousSupported && this.IsCacheRetrievalEnabled(request))
             {
@@ -52,19 +49,34 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                     return result; // short-circuit the remainder of the filter chain
             }
 
-            return chain.Filter(request, logger); // cache miss
+            // cache miss, let the chain continue
+            return chain.Filter(request, logger);
         }
 
-        Task<IResourceDataResult> IAsynchronousFilter.FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
+        public override async Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (this.cacheResolver.IsAsynchronousSupported && this.IsCacheRetrievalEnabled(request))
+            {
+                var result = await this.GetCachedResourceDataAsync(request, cancellationToken).ConfigureAwait(false);
+
+                if (result != null)
+                    return result; // short-circuit the remainder of the filter chain
+            }
+
+            // cache miss, let the chain continue
+            return await chain.ExecuteAsync(request, logger, cancellationToken).ConfigureAwait(false);
         }
 
-        private IResourceDataResult GetCachedResourceData(IResourceDataRequest request)
+        private async Task<IResourceDataResult> GetCachedResourceDataAsync(IResourceDataRequest request, CancellationToken cancellationToken)
         {
-            IDictionary<string, object> data = null;
+            // TODO isApiKeyCollectionQuery
 
             var cacheKey = this.GetCacheKey(request);
+            if (string.IsNullOrEmpty(cacheKey))
+                return null;
+            // todo log - this is weird
+
+            var data = await this.GetCachedValueAsync(cacheKey, request.ResourceType, cancellationToken).ConfigureAwait(false);
 
             if (data == null)
                 return null;
@@ -72,19 +84,37 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             return new DefaultResourceDataResult(request.Action, request.ResourceType, request.Uri, 200, data);
         }
 
-        private string GetCacheKey(IResourceDataRequest request)
+        private IResourceDataResult GetCachedResourceData(IResourceDataRequest request)
         {
-            throw new NotImplementedException();
+            // TODO isApiKeyCollectionQuery
+
+            var cacheKey = this.GetCacheKey(request);
+            if (string.IsNullOrEmpty(cacheKey))
+                return null;
+            // todo log - this is weird
+
+            var data = this.GetCachedValue(cacheKey, request.ResourceType);
+
+            if (data == null)
+                return null;
+
+            return new DefaultResourceDataResult(request.Action, request.ResourceType, request.Uri, 200, data);
         }
 
         private bool IsCacheRetrievalEnabled(IResourceDataRequest request)
         {
             bool isRead = request.Action == ResourceAction.Read;
-            bool isLoginAttempt = request.ResourceType is ILoginAttempt;
+            bool isLoginAttempt = request.ResourceType == typeof(ILoginAttempt);
+            bool isProviderAccountAccess = request.ResourceType == typeof(IProviderAccountAccess);
+            bool isCollectionResource =
+                request.ResourceType.IsGenericType &&
+                request.ResourceType.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
 
             return
                 isRead &&
-                !isLoginAttempt;
+                !isLoginAttempt &&
+                !isProviderAccountAccess &&
+                !isCollectionResource;
         }
     }
 }

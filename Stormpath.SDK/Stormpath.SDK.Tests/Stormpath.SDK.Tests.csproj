@@ -82,6 +82,7 @@
     <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Fakes\StubDataStore.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
+    <Compile Include="Impl\Cache\Caching_tests.cs" />
     <Compile Include="Impl\Cache\InMemoryCacheProviderBuilder_tests.cs" />
     <Compile Include="Impl\DefaultProviderAccountResult_tests.cs" />
     <Compile Include="Impl\Entity_identity_map_tests.cs" />
@@ -100,7 +101,6 @@
     <Compile Include="Impl\Authentication\BasicRequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\DefaultRequestAuthenticatorFactory_tests.cs" />
     <Compile Include="Impl\BackoffStrategy_tests.cs" />
-    <Compile Include="Impl\Cache\DefaultCacheRegionNameResolver_tests.cs" />
     <Compile Include="Impl\Cache\DefaultCacheResolver_tests.cs" />
     <Compile Include="Impl\CanonicalUri_tests.cs" />
     <Compile Include="Impl\ClientApiKey_tests.cs" />

@@ -14,11 +14,11 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Cache
 {
@@ -28,10 +28,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         bool IsAsynchronousSupported { get; }
 
-        ISynchronousCache<string, IDictionary<string, object>> GetCache<T>()
-            where T : IResource;
+        ISynchronousCache<string, IDictionary<string, object>> GetCache(Type resourceType);
 
-        Task<IAsynchronousCache<string, IDictionary<string, object>>> GetCacheAsync<T>(CancellationToken cancellationToken)
-            where T : IResource;
+        Task<IAsynchronousCache<string, IDictionary<string, object>>> GetCacheAsync(Type resourceType, CancellationToken cancellationToken);
     }
 }

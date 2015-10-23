@@ -78,7 +78,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.baseUrl = baseUrl;
             this.requestExecutor = requestExecutor;
             this.cacheProvider = cacheProvider;
-            this.cacheResolver = new DefaultCacheResolver(cacheProvider, new DefaultCacheRegionNameResolver());
+            this.cacheResolver = new DefaultCacheResolver(cacheProvider);
 
             this.serializer = new JsonSerializationProvider(serializer);
             this.identityMap = new MemoryCacheIdentityMap<string, ResourceData>(identityMapExpiration);
@@ -100,7 +100,7 @@ namespace Stormpath.SDK.Impl.DataStore
             if (this.IsCachingEnabled())
             {
                 asyncFilterChain.Add(new ReadCacheFilter(this.baseUrl, this.cacheResolver));
-                asyncFilterChain.Add(new WriteCacheFilter(this.cacheResolver));
+                asyncFilterChain.Add(new WriteCacheFilter(this.cacheResolver, this.resourceFactory));
             }
 
             asyncFilterChain.Add(new ProviderAccountResultFilter());
@@ -115,7 +115,7 @@ namespace Stormpath.SDK.Impl.DataStore
             if (this.IsCachingEnabled())
             {
                 syncFilterChain.Add(new ReadCacheFilter(this.baseUrl, this.cacheResolver));
-                syncFilterChain.Add(new WriteCacheFilter(this.cacheResolver));
+                syncFilterChain.Add(new WriteCacheFilter(this.cacheResolver, this.resourceFactory));
             }
 
             syncFilterChain.Add(new ProviderAccountResultFilter());
@@ -720,6 +720,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 {
                     this.requestExecutor.Dispose();
                     this.resourceFactory.Dispose();
+                    this.cacheProvider.Dispose();
                 }
 
                 this.disposed = true;

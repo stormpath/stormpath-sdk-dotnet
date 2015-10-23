@@ -126,13 +126,12 @@
     <Compile Include="Impl\Cache\InMemoryCacheProviderBuilder.cs" />
     <Compile Include="Impl\Cache\NullCache.cs" />
     <Compile Include="Impl\Cache\NullCacheProvider.cs" />
-    <Compile Include="Impl\Cache\DefaultCacheRegionNameResolver.cs" />
     <Compile Include="Impl\Cache\DefaultCacheResolver.cs" />
-    <Compile Include="Impl\Cache\ICacheRegionNameResolver.cs" />
     <Compile Include="Impl\Cache\ICacheResolver.cs" />
     <Compile Include="Impl\Client\DefaultJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\DefaultHttpClientBuilder.cs" />
     <Compile Include="Impl\CustomData\ICustomDataSync.cs" />
+    <Compile Include="Impl\DataStore\Filters\AbstractCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\ProviderAccountResultFilter.cs" />
     <Compile Include="Impl\Client\IClientSync.cs" />
     <Compile Include="Impl\Client\IJsonSerializerBuilder.cs" />

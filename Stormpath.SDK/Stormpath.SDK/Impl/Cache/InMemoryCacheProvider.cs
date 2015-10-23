@@ -41,6 +41,22 @@ namespace Stormpath.SDK.Impl.Cache
             this.caches = new ConcurrentDictionary<string, object>();
         }
 
+        private ISynchronousCacheProvider AsSyncInterface => this;
+
+        public TimeSpan? DefaultTimeToLive => this.defaultTimeToLive;
+
+        public TimeSpan? DefaultTimeToIdle => this.defaultTimeToIdle;
+
+        bool ICacheProvider.IsAsynchronousSupported => true;
+
+        bool ICacheProvider.IsSynchronousSupported => true;
+
+        private void ThrowIfDisposed()
+        {
+            if (this.disposed)
+                throw new ApplicationException("This cache provider has been disposed.");
+        }
+
         ISynchronousCache<K, V> ISynchronousCacheProvider.GetCache<K, V>(string name)
         {
             this.ThrowIfDisposed();
@@ -61,22 +77,6 @@ namespace Stormpath.SDK.Impl.Cache
 
             var cache = this.caches.GetOrAdd(name, n => this.CreateCache<K, V>(n)) as IAsynchronousCache<K, V>;
             return Task.FromResult(cache);
-        }
-
-        private ISynchronousCacheProvider AsSyncInterface => this;
-
-        public TimeSpan? DefaultTimeToLive => this.defaultTimeToLive;
-
-        public TimeSpan? DefaultTimeToIdle => this.defaultTimeToIdle;
-
-        bool ICacheProvider.IsAsynchronousSupported => false; // Currently unsupported
-
-        bool ICacheProvider.IsSynchronousSupported => false; // Currently unsupported
-
-        private void ThrowIfDisposed()
-        {
-            if (this.disposed)
-                throw new ApplicationException("This cache provider has been disposed.");
         }
 
         private object CreateCache<K, V>(string name)
@@ -143,24 +143,21 @@ namespace Stormpath.SDK.Impl.Cache
 
             var indent = "    ";
             builder.AppendLine("{");
-            builder.AppendLine($@"{indent}""cacheCount"": ""{caches.Count}"",");
+            builder.AppendLine($@"{indent}""cacheCount"": {caches.Count},");
             builder.AppendLine($@"{indent}""defaultTimeToLive"": ""{PrettyDuration(this.defaultTimeToLive)}"",");
             builder.AppendLine($@"{indent}""defaultTimeToIdle"": ""{PrettyDuration(this.defaultTimeToIdle)}"",");
-            builder.AppendLine($@"{indent}""caches"": [");
+            builder.Append($@"{indent}""caches"": [");
 
             if (caches.Any())
             {
-                builder.AppendLine(string.Empty);
+                builder.Append(Environment.NewLine);
 
-                var added = 0;
-                foreach (var cache in caches)
-                {
-                    if (added++ > 0)
-                        builder.AppendLine(",");
-                    builder.AppendLine($"{indent}{indent}{cache.ToString()}");
-                }
+                builder.Append(string.Join(
+                    "," + Environment.NewLine,
+                    caches.Select(x => $"{indent}{indent}{x.ToString()}")));
 
-                builder.Append($"{indent}");
+                builder.Append(Environment.NewLine);
+                builder.Append(indent);
             }
 
             builder.AppendLine($"]");
