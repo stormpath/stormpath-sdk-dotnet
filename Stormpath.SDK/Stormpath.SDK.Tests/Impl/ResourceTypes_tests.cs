@@ -1,4 +1,4 @@
-﻿// <copyright file="ResourceTypeLookup_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ResourceTypes_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,19 +35,19 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class ResourceTypeLookup_tests
+    public class ResourceTypes_tests
     {
-        private readonly ResourceTypeLookup lookup;
+        private readonly ResourceTypes lookup;
 
-        public ResourceTypeLookup_tests()
+        public ResourceTypes_tests()
         {
-            this.lookup = new ResourceTypeLookup();
+            this.lookup = new ResourceTypes();
         }
 
         [Fact]
         public void Returns_null_for_unknown_concrete_type()
         {
-            this.lookup.GetConcrete(typeof(ResourceTypeLookup)).ShouldBeNull();
+            this.lookup.GetConcrete(typeof(ResourceTypes)).ShouldBeNull();
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Returns_null_for_unknown_collection_type()
         {
-            this.lookup.GetInnerCollectionInterface(typeof(ResourceTypeLookup)).ShouldBeNull();
+            this.lookup.GetInnerCollectionInterface(typeof(ResourceTypes)).ShouldBeNull();
             this.lookup.GetInnerCollectionInterface(typeof(CollectionResponsePage<>)).ShouldBeNull();
             this.lookup.GetInnerCollectionInterface(typeof(CollectionResponsePage<IBasicLoginAttempt>)).ShouldBeNull();
         }

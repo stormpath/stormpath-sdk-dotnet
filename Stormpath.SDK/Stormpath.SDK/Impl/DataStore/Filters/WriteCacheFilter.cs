@@ -74,8 +74,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         {
             bool hasData = result?.Body?.Any() ?? false;
 
-            bool isCollectionResponse = result.Type.IsGenericType &&
-                result.Type.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
+            bool isCollectionResponse =
 
             return
 
@@ -94,14 +93,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         private static bool IsComplexResource(IDictionary<string, object> data)
         {
-            bool hasItems = data?.Any() ?? false;
+            bool hasItems = data.Count > 1;
             bool hasHref = data.ContainsKey(AbstractResource.HrefPropertyName);
-            bool hasData = data.Count > 1;
 
-            return
-                hasItems &&
-                hasHref &&
-                hasData;
+            return hasHref && hasItems;
         }
 
         private async Task CacheAsync(Type resourceType, IDictionary<string, object> data, CanonicalUri uri, CancellationToken cancellationToken)

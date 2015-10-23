@@ -106,9 +106,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             bool isRead = request.Action == ResourceAction.Read;
             bool isLoginAttempt = request.ResourceType == typeof(ILoginAttempt);
             bool isProviderAccountAccess = request.ResourceType == typeof(IProviderAccountAccess);
-            bool isCollectionResource =
-                request.ResourceType.IsGenericType &&
-                request.ResourceType.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
+            bool isCollectionResource = ResourceTypes.IsCollectionResponse(request.ResourceType);
 
             return
                 isRead &&

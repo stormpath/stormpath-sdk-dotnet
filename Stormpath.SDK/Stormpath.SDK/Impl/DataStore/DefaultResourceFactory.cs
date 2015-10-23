@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Impl.DataStore
     {
         private readonly IInternalDataStore dataStore;
         private readonly IIdentityMap<string, ResourceData> identityMap;
-        private readonly ResourceTypeLookup typeLookup;
+        private readonly ResourceTypes typeLookup;
         private bool isDisposed = false; // To detect redundant calls
 
         public DefaultResourceFactory(IInternalDataStore dataStore, IIdentityMap<string, ResourceData> identityMap)
@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.dataStore = dataStore;
             this.identityMap = identityMap;
 
-            this.typeLookup = new ResourceTypeLookup();
+            this.typeLookup = new ResourceTypes();
         }
 
         private IResourceFactory AsInterface => this;
@@ -55,10 +55,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         object IResourceFactory.Create(Type type, IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
         {
-            bool isCollection =
-                type.IsGenericType &&
-                type.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
-            if (isCollection)
+            if (ResourceTypes.IsCollectionResponse(type))
                 return this.InstantiateCollection(type, properties);
 
             return this.InstantiateSingle(type, properties, options, original);

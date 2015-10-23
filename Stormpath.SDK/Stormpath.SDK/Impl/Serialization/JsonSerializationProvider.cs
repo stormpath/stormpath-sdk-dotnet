@@ -33,12 +33,12 @@ namespace Stormpath.SDK.Impl.Serialization
                 new StatusFieldConverters.GroupStatusConverter());
 
         private readonly IJsonSerializer externalSerializer;
-        private readonly ResourceTypeLookup typeLookup;
+        private readonly ResourceTypes typeLookup;
 
         public JsonSerializationProvider(IJsonSerializer externalSerializer)
         {
             this.externalSerializer = externalSerializer;
-            this.typeLookup = new ResourceTypeLookup();
+            this.typeLookup = new ResourceTypes();
         }
 
         public string Serialize(IDictionary<string, object> map)

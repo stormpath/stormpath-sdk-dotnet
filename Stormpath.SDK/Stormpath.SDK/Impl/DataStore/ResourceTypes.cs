@@ -39,7 +39,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal sealed class ResourceTypeLookup
+    internal sealed class ResourceTypes
     {
         private static readonly IReadOnlyDictionary<Type, Type> ConcreteLookup = new Dictionary<Type, Type>()
         {
@@ -141,6 +141,9 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <returns>True if this type is a known concrete type</returns>
         private static bool IsConcrete(Type possiblyConcrete)
             => InterfaceLookup.ContainsKey(possiblyConcrete);
+
+        public static bool IsCollectionResponse(Type type)
+            => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
 
         /// <summary>
         /// Looks up an interface from a concrete type.

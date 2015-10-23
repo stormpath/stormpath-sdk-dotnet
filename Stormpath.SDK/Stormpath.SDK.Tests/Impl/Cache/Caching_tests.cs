@@ -26,7 +26,9 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 
@@ -61,9 +63,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
 
             await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
-                Arg.Is<IHttpRequest>(x =>
-                    x.CanonicalUri.ToString() == BaseUrl + "/accounts/foobarAccount" &&
-                    x.Method == HttpMethod.Get),
+                Arg.Any<IHttpRequest>(),
                 Arg.Any<CancellationToken>());
         }
 
@@ -80,13 +80,28 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
 
             await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
-                Arg.Is<IHttpRequest>(x =>
-                    x.CanonicalUri.ToString() == BaseUrl + "/accounts/foobarAccount" &&
-                    x.Method == HttpMethod.Get),
+                Arg.Any<IHttpRequest>(),
                 Arg.Any<CancellationToken>());
         }
 
-        //skipped for different objects
+        [Fact]
+        public async Task Async_collection_access_is_not_cached()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+
+            this.BuildDataStore(FakeJson.AccountList, cacheProvider);
+
+            IAsyncQueryable<IAccount> accounts = new CollectionResourceQueryable<IAccount>("/accounts", this.dataStore);
+            await accounts.MoveNextAsync();
+
+            IAsyncQueryable<IAccount> accounts2 = new CollectionResourceQueryable<IAccount>("/accounts", this.dataStore);
+            await accounts2.MoveNextAsync();
+
+            await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+
+        }
 
         //test IProviderAccountAccess
         //test CollectionResponsePage
