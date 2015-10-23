@@ -32,6 +32,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
     internal sealed class WriteCacheFilter : AbstractCacheFilter, IAsynchronousFilter, ISynchronousFilter
     {
         private readonly IResourceFactory resourceFactory;
+        private readonly ResourceTypes resourceTypes;
 
         public WriteCacheFilter(ICacheResolver cacheResolver, IResourceFactory resourceFactory)
             : base(cacheResolver)
@@ -40,6 +41,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 throw new ArgumentNullException(nameof(resourceFactory));
 
             this.resourceFactory = resourceFactory;
+            this.resourceTypes = new ResourceTypes();
         }
 
         public override async Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
@@ -57,7 +59,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             // - cache collection *items*
 
             if (IsCacheable(request, result))
-                await this.CacheAsync(result.Type, result.Body, result.Uri, cancellationToken).ConfigureAwait(false);
+                await this.CacheAsync(result.Type, result.Body, cancellationToken).ConfigureAwait(false);
 
             //todo handle nested custom data
 
@@ -70,51 +72,27 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             return chain.Filter(request, logger);
         }
 
-        private static bool IsCacheable(IResourceDataRequest request, IResourceDataResult result)
-        {
-            bool hasData = result?.Body?.Any() ?? false;
-
-            bool isCollectionResponse =
-
-            return
-
-                // Must be a resource
-                IsComplexResource(result?.Body) &&
-
-                // Not currently caching collections
-                !isCollectionResponse &&
-
-                // Don't cache PasswordResetTokens
-                result.Type != typeof(IPasswordResetToken) &&
-
-                // ProviderAccountResults look like Accounts but should not be cached either
-                result.Type != typeof(IProviderAccountResult);
-        }
-
-        private static bool IsComplexResource(IDictionary<string, object> data)
-        {
-            bool hasItems = data.Count > 1;
-            bool hasHref = data.ContainsKey(AbstractResource.HrefPropertyName);
-
-            return hasHref && hasItems;
-        }
-
-        private async Task CacheAsync(Type resourceType, IDictionary<string, object> data, CanonicalUri uri, CancellationToken cancellationToken)
+        private async Task CacheAsync(Type resourceType, IDictionary<string, object> data, CancellationToken cancellationToken)
         {
             string href = data[AbstractResource.HrefPropertyName].ToString();
 
             var cacheData = new Dictionary<string, object>();
 
+            // TODO CustomData edge case
+
             foreach (var item in data)
             {
+                string key = item.Key;
+                object value = item.Value;
+
                 // TODO DefaultModelMap edge case
 
                 // TODO ApiEncryptionMetadata edge case
 
-                var asNestedResource = item.Value as IDictionary<string, object>;
-                var asNestedArray = item.Value as IList<IDictionary<string, object>>;
+                var asNestedResource = value as IDictionary<string, object>;
+                var asNestedArray = value as IList<IDictionary<string, object>>;
 
-                if (asNestedResource != null && IsComplexResource(asNestedResource))
+                if (asNestedResource != null && IsResource(asNestedResource))
                 {
                     // TODO find the implied object type
                     // recursively cache
@@ -123,17 +101,75 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 }
                 else if (asNestedArray != null)
                 {
-                    throw new NotImplementedException();
+                    // This is a CollectionResponsePage<T>.Items property
+                    // Find the type of objects to expect
+                    var nestedType = this.resourceTypes.GetInnerCollectionInterface(resourceType);
+                    if (nestedType == null)
+                        throw new ApplicationException($"Can not cache array '{key}'. Item type for '{resourceType.Name}' unknown.");
+
+                    // Recursively cache nested resources and create a new collection that only has references
+                    var canonicalList = new List<object>();
+                    foreach (var element in asNestedArray)
+                    {
+                        object canonicalElement = element;
+                        var resourceElement = canonicalElement as IDictionary<string, object>;
+                        if (resourceElement != null)
+                        {
+                            if (IsResource(resourceElement))
+                            {
+                                await this.CacheAsync(nestedType, resourceElement, cancellationToken).ConfigureAwait(false);
+                                canonicalElement = ToCanonicalReference(resourceElement);
+                            }
+                        }
+
+                        canonicalList.Add(canonicalElement);
+                    }
                 }
 
-                bool isSensitive = DefaultAccount.PasswordPropertyName.Equals(item.Key);
+                bool isSensitive = DefaultAccount.PasswordPropertyName.Equals(key);
                 if (!isSensitive)
-                    cacheData.Add(item.Key, item.Value);
+                    cacheData.Add(key, value);
             }
 
-            var cache = await this.GetCacheAsync(resourceType, cancellationToken).ConfigureAwait(false);
-            var cacheKey = this.GetCacheKey(href);
-            await cache.PutAsync(cacheKey, cacheData, cancellationToken).ConfigureAwait(false);
+            if (!ResourceTypes.IsCollectionResponse(resourceType))
+            {
+                var cache = await this.GetCacheAsync(resourceType, cancellationToken).ConfigureAwait(false);
+                var cacheKey = this.GetCacheKey(href);
+                await cache.PutAsync(cacheKey, cacheData, cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+        private static bool IsCacheable(IResourceDataRequest request, IResourceDataResult result)
+        {
+            bool hasData = result?.Body?.Any() ?? false;
+
+            return
+
+                // Must be a resource
+                IsResource(result?.Body) &&
+
+                // Don't cache PasswordResetTokens
+                result.Type != typeof(IPasswordResetToken) &&
+
+                // ProviderAccountResults look like Accounts but should not be cached either
+                result.Type != typeof(IProviderAccountResult);
+        }
+
+        private static bool IsResource(IDictionary<string, object> data)
+        {
+            bool hasItems = data.Count > 1;
+            bool hasHref = data.ContainsKey(AbstractResource.HrefPropertyName);
+
+            return hasHref && hasItems;
+        }
+
+        private static IDictionary<string, object> ToCanonicalReference(IDictionary<string, object> resourceData)
+        {
+            if (IsResource(resourceData))
+                return new Dictionary<string, object>(1) { ["href"] = resourceData[AbstractResource.HrefPropertyName] };
+
+            // TODO collections or other stuff?
+            throw new NotImplementedException();
         }
     }
 }

@@ -68,7 +68,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         }
 
         [Fact]
-        public async Task Async_resource_access_is_cached()
+        public async Task Resource_access_is_cached()
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
 
@@ -85,10 +85,9 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         }
 
         [Fact]
-        public async Task Async_collection_access_is_not_cached()
+        public async Task Collection_access_is_not_cached()
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
-
             this.BuildDataStore(FakeJson.AccountList, cacheProvider);
 
             IAsyncQueryable<IAccount> accounts = new CollectionResourceQueryable<IAccount>("/accounts", this.dataStore);
@@ -100,7 +99,22 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
                 Arg.Any<IHttpRequest>(),
                 Arg.Any<CancellationToken>());
+        }
 
+        [Fact]
+        public async Task Collection_items_are_cached()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            this.BuildDataStore(FakeJson.AccountList, cacheProvider);
+
+            IAsyncQueryable<IAccount> accounts = new CollectionResourceQueryable<IAccount>("/accounts", this.dataStore);
+            await accounts.MoveNextAsync();
+
+            var han = this.dataStore.GetResourceAsync<IAccount>("/accounts/account1");
+
+            await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
         }
 
         //test IProviderAccountAccess
