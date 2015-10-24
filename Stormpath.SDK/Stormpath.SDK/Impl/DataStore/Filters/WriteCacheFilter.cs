@@ -56,7 +56,6 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             //todo edge cases:
             // - remove account from cache on email verification token
-            // - cache collection *items*
 
             if (IsCacheable(request, result))
                 await this.CacheAsync(result.Type, result.Body, cancellationToken).ConfigureAwait(false);
@@ -86,18 +85,19 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 object value = item.Value;
 
                 // TODO DefaultModelMap edge case
-
                 // TODO ApiEncryptionMetadata edge case
 
                 var asNestedResource = value as IDictionary<string, object>;
-                var asNestedArray = value as IList<IDictionary<string, object>>;
+                var asNestedArray = value as IEnumerable<IDictionary<string, object>>;
 
                 if (asNestedResource != null && IsResource(asNestedResource))
                 {
-                    // TODO find the implied object type
-                    // recursively cache
-                    // convert this to an unmaterialized/canonical reference
-                    throw new NotImplementedException();
+                    var nestedType = this.resourceTypes.GetInterface(item.Key);
+                    if (nestedType == null)
+                        throw new ApplicationException($"Cannot cache nested item. Item type for '{item.Key}' unknown.");
+
+                    await this.CacheAsync(nestedType, asNestedResource, cancellationToken).ConfigureAwait(false);
+                    value = ToCanonicalReference(asNestedResource);
                 }
                 else if (asNestedArray != null)
                 {
@@ -163,10 +163,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             return hasHref && hasItems;
         }
 
-        private static IDictionary<string, object> ToCanonicalReference(IDictionary<string, object> resourceData)
+        private static object ToCanonicalReference(IDictionary<string, object> resourceData)
         {
             if (IsResource(resourceData))
-                return new Dictionary<string, object>(1) { ["href"] = resourceData[AbstractResource.HrefPropertyName] };
+                return new LinkProperty(resourceData[AbstractResource.HrefPropertyName].ToString());
 
             // TODO collections or other stuff?
             throw new NotImplementedException();

@@ -63,6 +63,7 @@ namespace Stormpath.SDK.Impl.Serialization
                 object value = prop.Value;
 
                 var asListOfObjects = prop.Value as IEnumerable<IDictionary<string, object>>;
+                var asEmbeddedObject = prop.Value as IDictionary<string, object>;
                 if (asListOfObjects != null)
                 {
                     var outputList = new List<IDictionary<string, object>>();
@@ -72,6 +73,14 @@ namespace Stormpath.SDK.Impl.Serialization
                     }
 
                     value = outputList;
+                }
+                else if (asEmbeddedObject != null && asEmbeddedObject.Count > 1)
+                {
+                    var embeddedTargetType = this.typeLookup.GetInterface(prop.Key);
+                    if (embeddedTargetType == null)
+                        throw new ApplicationException($"Could not parse attribute '{prop.Key}'. Unknown type.");
+
+                    value = this.ConvertProperties(asEmbeddedObject, embeddedTargetType);
                 }
                 else
                 {

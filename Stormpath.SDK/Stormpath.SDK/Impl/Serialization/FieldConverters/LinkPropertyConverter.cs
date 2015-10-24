@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
                 && string.Equals(firstItem.Key, "href", StringComparison.InvariantCultureIgnoreCase);
 
             if (!isLinkProperty)
-                return null;
+                return FieldConverterResult.Failed;
 
             return new FieldConverterResult(true, new LinkProperty(firstItem.Value.ToString()));
         }

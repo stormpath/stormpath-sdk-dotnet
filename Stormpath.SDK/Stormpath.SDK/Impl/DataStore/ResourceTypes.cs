@@ -101,6 +101,11 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultLinkedInProviderData)] = typeof(ILinkedInProviderData),
         };
 
+        private static readonly IReadOnlyDictionary<string, Type> InterfaceLookupByAttributeName = new Dictionary<string, Type>()
+        {
+            ["directory"] = typeof(IDirectory)
+        };
+
         private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()
         {
             [typeof(CollectionResponsePage<IAccount>)] = typeof(IAccount),
@@ -142,6 +147,11 @@ namespace Stormpath.SDK.Impl.DataStore
         private static bool IsConcrete(Type possiblyConcrete)
             => InterfaceLookup.ContainsKey(possiblyConcrete);
 
+        /// <summary>
+        /// Checks whether this type represents a paged collection response.
+        /// </summary>
+        /// <param name="type">The type to check</param>
+        /// <returns><c>true</c> if this type represents a paged collection response; <c>false</c> otherwise.</returns>
         public static bool IsCollectionResponse(Type type)
             => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
 
@@ -167,6 +177,19 @@ namespace Stormpath.SDK.Impl.DataStore
                 return possiblyConcrete;
 
             return GetInterfaceForConcreteType(possiblyConcrete);
+        }
+
+        /// <summary>
+        /// Gets a resource interface type given a resource attribute name.
+        /// </summary>
+        /// <param name="nestedItemKey">A resource attribute name (e.g. "directory").</param>
+        /// <returns>The associated interface type (e.g., <see cref="IDirectory"/>, or <c>null</c> if no type could be found.</returns>
+        public Type GetInterface(string nestedItemKey)
+        {
+            Type foundType = null;
+            InterfaceLookupByAttributeName.TryGetValue(nestedItemKey, out foundType);
+
+            return foundType;
         }
 
         /// <summary>

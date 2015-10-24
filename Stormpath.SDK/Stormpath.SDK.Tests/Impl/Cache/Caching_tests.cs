@@ -21,6 +21,7 @@ using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Cache;
+using Stormpath.SDK.Directory;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl;
@@ -62,6 +63,10 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
 
+            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
+            account1.Email.ShouldBe("han.solo@corellia.core");
+            account1.FullName.ShouldBe("Han Solo");
+
             await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
                 Arg.Any<IHttpRequest>(),
                 Arg.Any<CancellationToken>());
@@ -78,6 +83,8 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
 
             (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
+            account1.Email.ShouldBe("han.solo@corellia.core");
+            account1.FullName.ShouldBe("Han Solo");
 
             await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
                 Arg.Any<IHttpRequest>(),
@@ -110,7 +117,32 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             IAsyncQueryable<IAccount> accounts = new CollectionResourceQueryable<IAccount>("/accounts", this.dataStore);
             await accounts.MoveNextAsync();
 
-            var han = this.dataStore.GetResourceAsync<IAccount>("/accounts/account1");
+            var han = await this.dataStore.GetResourceAsync<IAccount>("/accounts/account1");
+            han.Email.ShouldBe("han.solo@corellia.core");
+            han.FullName.ShouldBe("Han Solo");
+
+            await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task Expanded_nested_resources_are_cached()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+
+            this.BuildDataStore(FakeJson.AccountWithExpandedDirectory, cacheProvider);
+
+            var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
+            var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
+            var directory = await this.dataStore.GetResourceAsync<IDirectory>("/directories/directory1");
+
+            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
+            account1.Email.ShouldBe("han.solo@corellia.core");
+            account1.FullName.ShouldBe("Han Solo");
+
+            directory.Name.ShouldBe("Jedi Council Directory");
+            directory.Description.ShouldBe("The members of the Jedi Council.");
 
             await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
                 Arg.Any<IHttpRequest>(),
