@@ -27,6 +27,7 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
@@ -44,8 +45,13 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var fakeRequestExecutor = new StubRequestExecutor(resourceResponse);
 
+            this.BuildDataStore(fakeRequestExecutor.Object, cacheProviderUnderTest);
+        }
+
+        private void BuildDataStore(IRequestExecutor requestExecutor, ICacheProvider cacheProviderUnderTest)
+        {
             this.dataStore = new DefaultDataStore(
-                fakeRequestExecutor.Object,
+                requestExecutor,
                 baseUrl: BaseUrl,
                 serializer: new JsonNetSerializer(),
                 logger: new NullLogger(),
@@ -168,7 +174,41 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
                 Arg.Is<IHttpRequest>(x => x.Method == HttpMethod.Get),
                 Arg.Any<CancellationToken>());
+        }
 
+        [Fact]
+        public async Task Updating_resource_updates_cache()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+
+            var requestExecutor = Substitute.For<IRequestExecutor>();
+            this.BuildDataStore(requestExecutor, cacheProvider);
+
+            // GET returns original
+            requestExecutor
+                .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Get), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), FakeJson.Account, "application/json", transportError: false) as IHttpResponse));
+
+            // Save returns update data
+            requestExecutor
+                .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new DefaultHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account.Replace("han.solo@corellia.core", "han@solo.me"), "application/json", transportError: false) as IHttpResponse));
+
+            var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
+            account1.Email.ShouldBe("han.solo@corellia.core");
+
+            account1.SetEmail("han@solo.me");
+            await account1.SaveAsync();
+            account1.Email.ShouldBe("han@solo.me");
+
+            var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
+            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
+            account2.Email.ShouldBe("han@solo.me");
+
+            // Only one GET; second is intercepted by the cache (but the updated data is returned!) #magic
+            await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
+                Arg.Is<IHttpRequest>(x => x.Method == HttpMethod.Get),
+                Arg.Any<CancellationToken>());
         }
 
         //test IProviderAccountAccess

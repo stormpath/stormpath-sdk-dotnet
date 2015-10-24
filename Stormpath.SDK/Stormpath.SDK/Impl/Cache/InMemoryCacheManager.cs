@@ -57,7 +57,7 @@ namespace Stormpath.SDK.Impl.Cache
         public V Put(string key, V value, DateTimeOffset absoluteExpiration, TimeSpan slidingExpiration)
         {
             var absoluteTokenKey = CreateAbsoluteTokenKey(key);
-            bool absoluteTokenInserted = this.memoryCache.Add(absoluteTokenKey, new object(), absoluteExpiration);
+            this.memoryCache.Set(absoluteTokenKey, new object(), absoluteExpiration);
 
             // Create a monitor to link the two items
             var monitor = this.memoryCache.CreateCacheEntryChangeMonitor(new string[] { absoluteTokenKey });
@@ -65,12 +65,9 @@ namespace Stormpath.SDK.Impl.Cache
             var mainItemPolicy = new CacheItemPolicy();
             mainItemPolicy.SlidingExpiration = slidingExpiration;
             mainItemPolicy.ChangeMonitors.Add(monitor);
-            bool mainItemInserted = this.memoryCache.Add(key, value, mainItemPolicy);
+            this.memoryCache.Set(key, value, mainItemPolicy);
 
-            if (absoluteTokenInserted && mainItemInserted)
-                return value;
-            else
-                return default(V);
+            return value;
         }
 
         public V Remove(string key)
