@@ -149,8 +149,29 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 Arg.Any<CancellationToken>());
         }
 
+        [Fact]
+        public async Task Deleting_resource_removes_cached_item()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            this.BuildDataStore(FakeJson.Account, cacheProvider);
+
+            var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
+
+            await account1.DeleteAsync();
+
+            var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
+
+            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
+            account1.Email.ShouldBe("han.solo@corellia.core");
+            account1.FullName.ShouldBe("Han Solo");
+
+            await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
+                Arg.Is<IHttpRequest>(x => x.Method == HttpMethod.Get),
+                Arg.Any<CancellationToken>());
+
+        }
+
         //test IProviderAccountAccess
-        //test CollectionResponsePage
 
         public void Dispose()
         {

@@ -48,8 +48,8 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         {
             if (request.Action == ResourceAction.Delete)
             {
-                // TODO uncache
-                throw new NotImplementedException();
+                var cacheKey = this.GetCacheKey(request);
+                await this.UncacheAsync(request.ResourceType, cacheKey, cancellationToken).ConfigureAwait(false);
             }
 
             var result = await chain.ExecuteAsync(request, logger, cancellationToken).ConfigureAwait(false);
@@ -68,7 +68,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         public override IResourceDataResult Filter(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
         {
             // TODO
-            return chain.Filter(request, logger);
+            throw new NotImplementedException();
         }
 
         private async Task CacheAsync(Type resourceType, IDictionary<string, object> data, CancellationToken cancellationToken)
@@ -101,8 +101,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 }
                 else if (asNestedArray != null)
                 {
-                    // This is a CollectionResponsePage<T>.Items property
-                    // Find the type of objects to expect
+                    // This is a CollectionResponsePage<T>.Items property. Find the type of objects to expect
                     var nestedType = this.resourceTypes.GetInnerCollectionInterface(resourceType);
                     if (nestedType == null)
                         throw new ApplicationException($"Can not cache array '{key}'. Item type for '{resourceType.Name}' unknown.");
@@ -139,6 +138,17 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             }
         }
 
+        private async Task UncacheAsync(Type resourceType, string cacheKey, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(cacheKey))
+                throw new ArgumentNullException(nameof(cacheKey));
+            if (resourceType == null)
+                throw new ArgumentNullException(nameof(resourceType));
+
+            var cache = await this.GetCacheAsync(resourceType, cancellationToken).ConfigureAwait(false);
+            await cache.RemoveAsync(cacheKey, cancellationToken).ConfigureAwait(false);
+        }
+
         private static bool IsCacheable(IResourceDataRequest request, IResourceDataResult result)
         {
             bool hasData = result?.Body?.Any() ?? false;
@@ -157,6 +167,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         private static bool IsResource(IDictionary<string, object> data)
         {
+            if (data == null)
+                return false;
+
             bool hasItems = data.Count > 1;
             bool hasHref = data.ContainsKey(AbstractResource.HrefPropertyName);
 
