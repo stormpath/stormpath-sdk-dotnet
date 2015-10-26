@@ -1,4 +1,4 @@
-﻿// <copyright file="LinkProperty.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IEmbeddedProperty.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,24 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using Stormpath.SDK.Shared;
-
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal sealed class LinkProperty : ImmutableValueObject<LinkProperty>, IEmbeddedProperty
+    internal interface IEmbeddedProperty
     {
-        private static Func<LinkProperty, LinkProperty, bool> EqualityFunction =>
-            (a, b) => string.Equals(a?.Href, b?.Href, StringComparison.InvariantCultureIgnoreCase);
-
-        public LinkProperty(string href)
-            : base(EqualityFunction)
-        {
-            this.Href = href;
-        }
-
-        public string Href { get; }
-
-        public override string ToString() => this.Href;
+        string Href { get; }
     }
 }

@@ -102,7 +102,7 @@ namespace Stormpath.SDK.Tests.Fakes
     ""username"": ""han.solo@corellia.core""
 }";
 
-        public static readonly string AccountWithExpandedDirectory = @"
+        public static readonly string AccountWithExpandedCustomData = @"
 {
     ""accessTokens"": {
         ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/accessTokens""
@@ -115,42 +115,13 @@ namespace Stormpath.SDK.Tests.Fakes
     },
     ""createdAt"": ""2015-07-21T23:50:49.078Z"",
     ""customData"": {
-        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/customData""
+        ""createdAt"": ""2015-07-30T02:42:17.833Z"",
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/customData"",
+        ""modifiedAt"": ""2015-07-30T02:42:17.833Z"",
+        ""isAdmin"": false
     },
     ""directory"": {
-            ""accountCreationPolicy"": {
-                ""href"": ""https://api.stormpath.com/v1/accountCreationPolicies/directory1""
-            },
-            ""accounts"": {
-                ""href"": ""https://api.stormpath.com/v1/directories/directory1/accounts""
-            },
-            ""applicationMappings"": {
-                ""href"": ""https://api.stormpath.com/v1/directories/directory1/applicationMappings""
-            },
-            ""applications"": {
-                ""href"": ""https://api.stormpath.com/v1/directories/directory1/applications""
-            },
-            ""createdAt"": ""2015-07-21T23:50:49.569Z"",
-            ""customData"": {
-                ""href"": ""https://api.stormpath.com/v1/directories/directory1/customData""
-            },
-            ""description"": ""The members of the Jedi Council."",
-            ""groups"": {
-                ""href"": ""https://api.stormpath.com/v1/directories/directory1/groups""
-            },
-            ""href"": ""https://api.stormpath.com/v1/directories/directory1"",
-            ""modifiedAt"": ""2015-07-21T23:50:49.569Z"",
-            ""name"": ""Jedi Council Directory"",
-            ""passwordPolicy"": {
-                ""href"": ""https://api.stormpath.com/v1/passwordPolicies/directory1""
-            },
-            ""provider"": {
-                ""href"": ""https://api.stormpath.com/v1/directories/directory1/provider""
-            },
-            ""status"": ""ENABLED"",
-            ""tenant"": {
-                ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
-            }
+        ""href"": ""https://api.stormpath.com/v1/directories/foobarDirectory""
     },
     ""email"": ""han.solo@corellia.core"",
     ""emailVerificationToken"": null,

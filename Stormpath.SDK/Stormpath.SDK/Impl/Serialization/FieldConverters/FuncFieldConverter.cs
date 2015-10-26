@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             this.convertAction = convertAction;
         }
 
-        protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
+        protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token, Func<IDictionary<string, object>, Type, IDictionary<string, object>> recursiveConverter)
         {
             return this.convertAction(token);
         }

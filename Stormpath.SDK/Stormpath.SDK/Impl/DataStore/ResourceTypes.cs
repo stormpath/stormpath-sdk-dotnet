@@ -103,7 +103,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private static readonly IReadOnlyDictionary<string, Type> InterfaceLookupByAttributeName = new Dictionary<string, Type>()
         {
-            ["directory"] = typeof(IDirectory)
+            ["directory"] = typeof(IDirectory),
+            ["customData"] = typeof(ICustomData),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()

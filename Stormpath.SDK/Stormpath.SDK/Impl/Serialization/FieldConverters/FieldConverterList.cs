@@ -53,13 +53,13 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             this.converters.Add(converter);
         }
 
-        public FieldConverterResult TryConvertField(KeyValuePair<string, object> token, Type targetType)
+        public FieldConverterResult TryConvertField(KeyValuePair<string, object> token, Type targetType, Func<IDictionary<string, object>, Type, IDictionary<string, object>> recursiveConverter)
         {
             var result = FieldConverterResult.Failed; // presumed failed until proven successful
 
             foreach (var converter in this.converters)
             {
-                result = converter.TryConvertField(token, targetType);
+                result = converter.TryConvertField(token, targetType, recursiveConverter);
                 if (result.Success)
                     break;
             }

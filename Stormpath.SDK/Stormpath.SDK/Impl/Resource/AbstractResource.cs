@@ -91,8 +91,8 @@ namespace Stormpath.SDK.Impl.Resource
         public T GetProperty<T>(string name)
             => (T)(this.GetProperty(name) ?? default(T));
 
-        public LinkProperty GetLinkProperty(string name)
-            => this.GetProperty<LinkProperty>(name) ?? new LinkProperty(null);
+        public IEmbeddedProperty GetLinkProperty(string name)
+            => this.GetProperty<IEmbeddedProperty>(name) ?? new LinkProperty(null);
 
         public bool ContainsProperty(string name)
             => this.GetResourceData()?.ContainsProperty(name) ?? false;

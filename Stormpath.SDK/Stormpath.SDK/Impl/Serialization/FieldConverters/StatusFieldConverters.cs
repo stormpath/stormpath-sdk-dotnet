@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             {
             }
 
-            protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
+            protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token, Func<IDictionary<string, object>, Type, IDictionary<string, object>> recursiveConverter)
             {
                 if (!IsStatusField(token))
                     return FieldConverterResult.Failed;
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             {
             }
 
-            protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
+            protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token, Func<IDictionary<string, object>, Type, IDictionary<string, object>> recursiveConverter)
             {
                 if (!IsStatusField(token))
                     return FieldConverterResult.Failed;
@@ -66,7 +66,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             {
             }
 
-            protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
+            protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token, Func<IDictionary<string, object>, Type, IDictionary<string, object>> recursiveConverter)
             {
                 if (!IsStatusField(token))
                     return FieldConverterResult.Failed;
@@ -82,7 +82,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             {
             }
 
-            protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
+            protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token, Func<IDictionary<string, object>, Type, IDictionary<string, object>> recursiveConverter)
             {
                 if (!IsStatusField(token))
                     return FieldConverterResult.Failed;

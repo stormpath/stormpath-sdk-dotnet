@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 
         private readonly string name;
         private readonly Type[] appliesToTargetTypes;
-        private readonly ResourceTypes typeLookup;
+        protected readonly ResourceTypes typeLookup;
 
         public AbstractFieldConverter(string converterName, Type appliesToTargetType = AnyType)
             : this(converterName, appliesToTargetTypes: appliesToTargetType)
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             this.typeLookup = new ResourceTypes();
         }
 
-        public FieldConverterResult TryConvertField(KeyValuePair<string, object> token, Type targetType)
+        public FieldConverterResult TryConvertField(KeyValuePair<string, object> token, Type targetType, Func<IDictionary<string, object>, Type, IDictionary<string, object>> recursiveConverter)
         {
             bool isSupported = false;
             if (this.appliesToTargetTypes.Contains(AnyType))
@@ -58,11 +58,11 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             if (!isSupported)
                 return FieldConverterResult.Failed;
 
-            var result = this.ConvertImpl(token);
+            var result = this.ConvertImpl(token, recursiveConverter);
             return result;
         }
 
-        protected abstract FieldConverterResult ConvertImpl(KeyValuePair<string, object> token);
+        protected abstract FieldConverterResult ConvertImpl(KeyValuePair<string, object> token, Func<IDictionary<string, object>, Type, IDictionary<string, object>> recursiveConverter);
 
         public override string ToString()
         {

@@ -1,4 +1,4 @@
-﻿// <copyright file="LinkProperty.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ExpandedData.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,24 +14,24 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using Stormpath.SDK.Shared;
+using System.Collections.Generic;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal sealed class LinkProperty : ImmutableValueObject<LinkProperty>, IEmbeddedProperty
+    /// <summary>
+    /// Represents embedded resource data that is returned from a link expansion request.
+    /// </summary>
+    internal sealed class ExpandedProperty : IEmbeddedProperty
     {
-        private static Func<LinkProperty, LinkProperty, bool> EqualityFunction =>
-            (a, b) => string.Equals(a?.Href, b?.Href, StringComparison.InvariantCultureIgnoreCase);
+        private readonly string href;
 
-        public LinkProperty(string href)
-            : base(EqualityFunction)
+        public ExpandedProperty(IDictionary<string, object> data)
         {
-            this.Href = href;
+            object href;
+            if (data.TryGetValue("href", out href))
+                this.href = href.ToString();
         }
 
-        public string Href { get; }
-
-        public override string ToString() => this.Href;
+        public string Href => this.href;
     }
 }

@@ -233,6 +233,8 @@
     <Compile Include="Impl\Provider\ProviderAccountResolver.cs" />
     <Compile Include="Impl\Provider\ProviderType.cs" />
     <Compile Include="Impl\Provider\ProviderTypeConverter.cs" />
+    <Compile Include="Impl\Resource\ExpandedProperty.cs" />
+    <Compile Include="Impl\Resource\IEmbeddedProperty.cs" />
     <Compile Include="Impl\Resource\ILinkable.cs" />
     <Compile Include="Impl\Resource\INotifiable.cs" />
     <Compile Include="Impl\Resource\ResourceData.cs" />
@@ -244,6 +246,7 @@
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterList.cs" />
     <Compile Include="DataStore\IDataStore.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FuncFieldConverter.cs" />
+    <Compile Include="Impl\Serialization\FieldConverters\ExpandedPropertyConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\LinkPropertyConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\StatusFieldConverters.cs" />
     <Compile Include="Impl\DataStore\Filters\DefaultSynchronousFilter.cs" />

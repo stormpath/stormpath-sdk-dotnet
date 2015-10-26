@@ -50,27 +50,27 @@ namespace Stormpath.SDK.Impl.Directory
         {
         }
 
-        internal LinkProperty AccountCreationPolicy => this.GetLinkProperty(AccountCreationPolicyPropertyName);
+        internal IEmbeddedProperty AccountCreationPolicy => this.GetLinkProperty(AccountCreationPolicyPropertyName);
 
-        internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
+        internal IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
-        internal LinkProperty ApplicationMappings => this.GetLinkProperty(ApplicationMappingsPropertyName);
+        internal IEmbeddedProperty ApplicationMappings => this.GetLinkProperty(ApplicationMappingsPropertyName);
 
-        internal LinkProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
+        internal IEmbeddedProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
         string IDirectory.Description => this.GetProperty<string>(DescriptionPropertyName);
 
-        internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
+        internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
         string IDirectory.Name => this.GetProperty<string>(NamePropertyName);
 
-        internal LinkProperty PasswordPolicy => this.GetLinkProperty(PasswordPolicyPropertyName);
+        internal IEmbeddedProperty PasswordPolicy => this.GetLinkProperty(PasswordPolicyPropertyName);
 
-        internal LinkProperty Provider => this.GetLinkProperty(ProviderPropertyName);
+        internal IEmbeddedProperty Provider => this.GetLinkProperty(ProviderPropertyName);
 
         DirectoryStatus IDirectory.Status => this.GetProperty<DirectoryStatus>(StatusPropertyName);
 
-        internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
+        internal IEmbeddedProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
         IDirectory IDirectory.SetDescription(string description)
         {

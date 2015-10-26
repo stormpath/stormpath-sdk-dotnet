@@ -1,4 +1,4 @@
-﻿// <copyright file="LinkPropertyConverter.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ExpandedPropertyConverter.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,34 +16,33 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 {
-    internal sealed class LinkPropertyConverter : AbstractFieldConverter
+    internal sealed class ExpandedPropertyConverter : AbstractFieldConverter
     {
-        public LinkPropertyConverter()
-            : base(nameof(LinkPropertyConverter), appliesToTargetType: AnyType)
+        public ExpandedPropertyConverter()
+            : base(nameof(ExpandedPropertyConverter), appliesToTargetType: AnyType)
         {
         }
 
         protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token, Func<IDictionary<string, object>, Type, IDictionary<string, object>> recursiveConverter)
         {
-            var asEmbeddedObject = token.Value as IDictionary<string, object>;
-            if (asEmbeddedObject == null)
+            var asEmbeddedResource = token.Value as IDictionary<string, object>;
+            if (asEmbeddedResource == null)
                 return FieldConverterResult.Failed;
 
-            if (asEmbeddedObject.Count > 1)
+            if (asEmbeddedResource.Count <= 1)
                 return FieldConverterResult.Failed;
 
-            var firstItem = asEmbeddedObject.FirstOrDefault();
-            var hasHref = string.Equals(firstItem.Key, "href", StringComparison.InvariantCultureIgnoreCase);
+            if (recursiveConverter == null)
+                throw new ApplicationException($"Could not parse expanded property data from attribute '{token.Key}'.");
 
-            if (!hasHref)
-                return FieldConverterResult.Failed;
+            var embeddedType = this.typeLookup.GetInterface(token.Key);
+            var convertedData = recursiveConverter(asEmbeddedResource, embeddedType);
 
-            return new FieldConverterResult(true, new LinkProperty(firstItem.Value.ToString()));
+            return new FieldConverterResult(true, new ExpandedProperty(convertedData));
         }
     }
 }

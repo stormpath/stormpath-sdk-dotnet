@@ -27,6 +27,7 @@ namespace Stormpath.SDK.Impl.Serialization
         private static readonly FieldConverterList ConverterChain =
             new FieldConverterList(
                 new LinkPropertyConverter(),
+                new ExpandedPropertyConverter(),
                 new StatusFieldConverters.AccountStatusConverter(),
                 new StatusFieldConverters.ApplicationStatusConverter(),
                 new StatusFieldConverters.DirectoryStatusConverter(),
@@ -74,17 +75,9 @@ namespace Stormpath.SDK.Impl.Serialization
 
                     value = outputList;
                 }
-                else if (asEmbeddedObject != null && asEmbeddedObject.Count > 1)
-                {
-                    var embeddedTargetType = this.typeLookup.GetInterface(prop.Key);
-                    if (embeddedTargetType == null)
-                        throw new ApplicationException($"Could not parse attribute '{prop.Key}'. Unknown type.");
-
-                    value = this.ConvertProperties(asEmbeddedObject, embeddedTargetType);
-                }
                 else
                 {
-                    var convertResult = ConverterChain.TryConvertField(prop, targetType);
+                    var convertResult = ConverterChain.TryConvertField(prop, targetType, this.ConvertProperties);
                     if (convertResult.Success)
                         value = convertResult.Value;
                 }

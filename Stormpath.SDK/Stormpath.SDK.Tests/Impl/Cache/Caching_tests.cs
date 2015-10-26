@@ -21,6 +21,7 @@ using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Cache;
+using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Http;
@@ -137,18 +138,20 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
 
-            this.BuildDataStore(FakeJson.AccountWithExpandedDirectory, cacheProvider);
+            this.BuildDataStore(FakeJson.AccountWithExpandedCustomData, cacheProvider);
 
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
-            var directory = await this.dataStore.GetResourceAsync<IDirectory>("/directories/directory1");
 
             (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
             account1.Email.ShouldBe("han.solo@corellia.core");
             account1.FullName.ShouldBe("Han Solo");
 
-            directory.Name.ShouldBe("Jedi Council Directory");
-            directory.Description.ShouldBe("The members of the Jedi Council.");
+            var customDataFromHref = await this.dataStore.GetResourceAsync<ICustomData>("/accounts/foobarAccount/customData");
+            var customDataFromLink = await account1.GetCustomDataAsync();
+
+            (customDataFromHref as AbstractResource).IsLinkedTo(customDataFromLink as AbstractResource).ShouldBeTrue();
+            customDataFromHref["isAdmin"].ShouldBe(false);
 
             await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
                 Arg.Any<IHttpRequest>(),
@@ -206,6 +209,28 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             account2.Email.ShouldBe("han@solo.me");
 
             // Only one GET; second is intercepted by the cache (but the updated data is returned!) #magic
+            await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
+                Arg.Is<IHttpRequest>(x => x.Method == HttpMethod.Get),
+                Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task Updating_custom_data_with_proxy_updates_cache()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+
+            this.BuildDataStore(FakeJson.AccountWithExpandedCustomData, cacheProvider);
+
+            var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
+
+            account.CustomData.Put("isAdmin", true);
+            account.CustomData.Put("writeAccess", "yes");
+            await account.SaveAsync();
+
+            var customData = await account.GetCustomDataAsync();
+            customData["isAdmin"].ShouldBe(true);
+            customData["writeAccess"].ShouldBe("yes");
+
             await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
                 Arg.Is<IHttpRequest>(x => x.Method == HttpMethod.Get),
                 Arg.Any<CancellationToken>());

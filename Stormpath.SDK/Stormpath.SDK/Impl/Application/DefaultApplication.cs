@@ -62,35 +62,35 @@ namespace Stormpath.SDK.Impl.Application
 
         private IApplicationSync AsSyncInterface => this;
 
-        internal LinkProperty AccountStoreMappings => this.GetLinkProperty(AccountStoreMappingsPropertyName);
+        internal IEmbeddedProperty AccountStoreMappings => this.GetLinkProperty(AccountStoreMappingsPropertyName);
 
-        internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
+        internal IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
-        internal LinkProperty ApiKeys => this.GetLinkProperty(ApiKeysPropertyName);
+        internal IEmbeddedProperty ApiKeys => this.GetLinkProperty(ApiKeysPropertyName);
 
-        internal LinkProperty AuthTokens => this.GetLinkProperty(AuthTokensPropertyName);
+        internal IEmbeddedProperty AuthTokens => this.GetLinkProperty(AuthTokensPropertyName);
 
-        internal LinkProperty DefaultAccountStoreMapping => this.GetLinkProperty(DefaultAccountStoreMappingPropertyName);
+        internal IEmbeddedProperty DefaultAccountStoreMapping => this.GetLinkProperty(DefaultAccountStoreMappingPropertyName);
 
-        internal LinkProperty DefaultGroupStoreMapping => this.GetLinkProperty(DefaultGroupStoreMappingPropertyName);
+        internal IEmbeddedProperty DefaultGroupStoreMapping => this.GetLinkProperty(DefaultGroupStoreMappingPropertyName);
 
         string IApplication.Description => this.GetProperty<string>(DescriptionPropertyName);
 
-        internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
+        internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
         string IApplication.Name => this.GetProperty<string>(NamePropertyName);
 
-        internal LinkProperty LoginAttempts => this.GetLinkProperty(LoginAttemptsPropertyName);
+        internal IEmbeddedProperty LoginAttempts => this.GetLinkProperty(LoginAttemptsPropertyName);
 
-        internal LinkProperty OAuthPolicy => this.GetLinkProperty(OAuthPolicyPropertyName);
+        internal IEmbeddedProperty OAuthPolicy => this.GetLinkProperty(OAuthPolicyPropertyName);
 
-        internal LinkProperty PasswordResetToken => this.GetLinkProperty(PasswordResetTokensPropertyName);
+        internal IEmbeddedProperty PasswordResetToken => this.GetLinkProperty(PasswordResetTokensPropertyName);
 
         ApplicationStatus IApplication.Status => this.GetProperty<ApplicationStatus>(StatusPropertyName);
 
-        internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
+        internal IEmbeddedProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
-        internal LinkProperty VerificationEmails => this.GetLinkProperty(VerificationEmailsPropertyName);
+        internal IEmbeddedProperty VerificationEmails => this.GetLinkProperty(VerificationEmailsPropertyName);
 
         IApplication IApplication.SetDescription(string description)
         {

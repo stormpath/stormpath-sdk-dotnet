@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Impl.Resource
             this.ResetCustomData();
         }
 
-        internal LinkProperty CustomData => this.GetProperty<LinkProperty>(CustomDataPropertyName);
+        internal IEmbeddedProperty CustomData => this.GetLinkProperty(CustomDataPropertyName);
 
         IEmbeddedCustomData IExtendable.CustomData => this.customDataProxy;
 
