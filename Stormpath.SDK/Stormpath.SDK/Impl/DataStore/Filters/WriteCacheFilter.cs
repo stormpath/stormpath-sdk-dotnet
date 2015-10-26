@@ -20,6 +20,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Auth;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Account;
@@ -62,23 +63,21 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 await this.UncacheAsync(request.ResourceType, cacheKey, cancellationToken).ConfigureAwait(false);
             }
 
-            // Execute request and get result
             var result = await chain.ExecuteAsync(request, logger, cancellationToken).ConfigureAwait(false);
 
-            //todo edge cases:
-            // - remove account from cache on email verification token
+            bool isEmailVerificationResponse = result.Type == typeof(IEmailVerificationToken);
+            if (isEmailVerificationResponse)
+            {
+                await this.UncacheAccountOnEmailVerificationAsync(result, cancellationToken).ConfigureAwait(false);
+            }
 
-            bool possibleCustomDataUpdate =
-                (request.Action == ResourceAction.Create ||
-                request.Action == ResourceAction.Update) &&
+            bool possibleCustomDataUpdate = (request.Action == ResourceAction.Create || request.Action == ResourceAction.Update) &&
                 AbstractExtendableInstanceResource.IsExtendable(request.ResourceType);
             if (possibleCustomDataUpdate)
                 await this.CacheNestedCustomDataUpdatesAsync(request.Uri.ResourcePath.ToString(), request.Properties, cancellationToken).ConfigureAwait(false);
 
             if (IsCacheable(request, result))
                 await this.CacheAsync(result.Type, result.Body, cancellationToken).ConfigureAwait(false);
-
-            //todo handle nested custom data
 
             return result;
         }
@@ -95,7 +94,13 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             var cacheData = new Dictionary<string, object>();
 
-            // TODO CustomData edge case
+            bool isCustomData = resourceType == typeof(ICustomData);
+            if (isCustomData)
+            {
+                var cache = await this.GetCacheAsync(resourceType, cancellationToken).ConfigureAwait(false);
+                await cache.PutAsync(this.GetCacheKey(href), data, cancellationToken).ConfigureAwait(false);
+                return; // simple! return early
+            }
 
             foreach (var item in data)
             {
@@ -115,7 +120,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                         throw new ApplicationException($"Cannot cache nested item. Item type for '{item.Key}' unknown.");
 
                     await this.CacheAsync(nestedType, asNestedResource.Data, cancellationToken).ConfigureAwait(false);
-                    value = ToCanonicalReference(asNestedResource.Data);
+                    value = ToCanonicalReference(key, asNestedResource.Data);
                 }
                 else if (asNestedArray != null)
                 {
@@ -135,7 +140,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                             if (IsResource(resourceElement))
                             {
                                 await this.CacheAsync(nestedType, resourceElement, cancellationToken).ConfigureAwait(false);
-                                canonicalElement = ToCanonicalReference(resourceElement);
+                                canonicalElement = ToCanonicalReference(key, resourceElement);
                             }
                         }
 
@@ -213,6 +218,21 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             await cache.PutAsync(cacheKey, existingData, cancellationToken).ConfigureAwait(false);
         }
 
+        private async Task UncacheAccountOnEmailVerificationAsync(IResourceDataResult result, CancellationToken cancellationToken)
+        {
+            object accountHrefRaw = null;
+            string accountHref = null;
+            if (!result.Body.TryGetValue(AbstractResource.HrefPropertyName, out accountHrefRaw))
+                return;
+
+            accountHref = accountHrefRaw.ToString();
+            if (string.IsNullOrEmpty(accountHref))
+                return;
+
+            var cache = await this.GetCacheAsync(typeof(IAccount), cancellationToken).ConfigureAwait(false);
+            await cache.RemoveAsync(this.GetCacheKey(accountHref), cancellationToken).ConfigureAwait(false);
+        }
+
         private static bool IsCacheable(IResourceDataRequest request, IResourceDataResult result)
         {
             bool hasData = result?.Body?.Any() ?? false;
@@ -222,10 +242,15 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 // Must be a resource
                 IsResource(result?.Body) &&
 
-                // Don't cache PasswordResetTokens
+                // Don't cache password reset or email verificaiton requests
                 result.Type != typeof(IPasswordResetToken) &&
+                result.Type != typeof(IEmailVerificationToken) &&
+                result.Type != typeof(IEmailVerificationRequest) &&
 
-                // ProviderAccountResults look like Accounts but should not be cached either
+                // Don't cache login attempts
+                result.Type != typeof(IAuthenticationResult) &&
+
+                // ProviderAccountResults look like IAccounts but should not be cached either
                 result.Type != typeof(IProviderAccountResult);
         }
 
@@ -240,13 +265,12 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             return hasHref && hasItems;
         }
 
-        private static object ToCanonicalReference(IDictionary<string, object> resourceData)
+        private static object ToCanonicalReference(string propertyName, IDictionary<string, object> resourceData)
         {
             if (IsResource(resourceData))
                 return new LinkProperty(resourceData[AbstractResource.HrefPropertyName].ToString());
 
-            // TODO collections or other stuff?
-            throw new NotImplementedException();
+            throw new ApplicationException($"Could not convert embedded resource '{propertyName}' to a canonical reference.");
         }
     }
 }

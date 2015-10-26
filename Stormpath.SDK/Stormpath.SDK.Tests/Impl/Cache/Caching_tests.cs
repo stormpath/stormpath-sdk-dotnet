@@ -20,18 +20,23 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Auth;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl;
+using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Provider;
+using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 
@@ -64,7 +69,6 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         public async Task Resource_access_not_cached_with_null_cache()
         {
             var cacheProvider = Caches.NewDisabledCacheProvider();
-
             this.BuildDataStore(FakeJson.Account, cacheProvider);
 
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
@@ -83,7 +87,6 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         public async Task Resource_access_is_cached()
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
-
             this.BuildDataStore(FakeJson.Account, cacheProvider);
 
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
@@ -134,10 +137,26 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         }
 
         [Fact]
+        public async Task Custom_data_is_cached()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            this.BuildDataStore(FakeJson.CustomData, cacheProvider);
+
+            var customData1 = await this.dataStore.GetResourceAsync<ICustomData>("/accounts/foobarAccount/customData");
+            var customData2 = await this.dataStore.GetResourceAsync<ICustomData>("/accounts/foobarAccount/customData");
+
+            (customData1 as AbstractResource).IsLinkedTo(customData2 as AbstractResource).ShouldBeTrue();
+            customData2["membershipType"].ShouldBe("lifetime");
+
+            await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
         public async Task Expanded_nested_resources_are_cached()
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
-
             this.BuildDataStore(FakeJson.AccountWithExpandedCustomData, cacheProvider);
 
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
@@ -183,7 +202,6 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         public async Task Updating_resource_updates_cache()
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
-
             var requestExecutor = Substitute.For<IRequestExecutor>();
             this.BuildDataStore(requestExecutor, cacheProvider);
 
@@ -218,7 +236,6 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         public async Task Updating_custom_data_with_proxy_updates_cache()
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
-
             var requestExecutor = Substitute.For<IRequestExecutor>();
             this.BuildDataStore(requestExecutor, cacheProvider);
 
@@ -277,13 +294,160 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 Arg.Any<CancellationToken>());
         }
 
-        //test customData deletes
-        //test IProviderAccountAccess
+        [Fact]
+        public async Task Email_verification_result_removes_associated_account_from_cache()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var requestExecutor = Substitute.For<IRequestExecutor>();
+            this.BuildDataStore(requestExecutor, cacheProvider);
+
+            var emailVerificationTokenResponse = @"
+{
+    ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount""
+}
+";
+
+            // POST returns email verification token response
+            requestExecutor
+                .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), emailVerificationTokenResponse, "application/json", transportError: false) as IHttpResponse));
+
+            // GET returns account as unverified first,
+            // then second GET returns account as verified
+            requestExecutor
+                .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Get), Arg.Any<CancellationToken>())
+                .Returns(
+                    Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), FakeJson.Account.Replace(@"""status"": ""ENABLED""", @"""status"": ""UNVERIFIED"""), "application/json", transportError: false) as IHttpResponse),
+                    Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), FakeJson.Account, "application/json", transportError: false) as IHttpResponse));
+
+            var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
+            account.Status.ShouldBe(AccountStatus.Unverified);
+
+            var href = $"/accounts/emailVerificationTokens/fooToken";
+            var tokenResponse = await (this.dataStore as IInternalAsyncDataStore).CreateAsync<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions { SkipIdentityMap = true }, CancellationToken.None);
+            await this.dataStore.GetResourceAsync<IAccount>(tokenResponse.Href);
+
+            account.Status.ShouldBe(AccountStatus.Enabled);
+
+            // Second GET should *not* hit cache
+            await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
+                Arg.Is<IHttpRequest>(x => x.Method == HttpMethod.Get),
+                Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task Does_not_cache_provider_account_access()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            this.BuildDataStore(FakeJson.Account, cacheProvider);
+
+            var customData1 = await this.dataStore.GetResourceAsync<IProviderAccountResult>("/accounts/foobarAccount");
+            var customData2 = await this.dataStore.GetResourceAsync<IProviderAccountResult>("/accounts/foobarAccount");
+
+            // Not cached
+            await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task Does_not_cache_email_verification_tokens()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var requestExecutor = Substitute.For<IRequestExecutor>();
+            this.BuildDataStore(requestExecutor, cacheProvider);
+
+            var emailVerificationTokenResponse = @"
+{
+    ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount""
+}
+";
+
+            // POST returns email verification token response
+            requestExecutor
+                .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), emailVerificationTokenResponse, "application/json", transportError: false) as IHttpResponse));
+
+            var href = $"/accounts/emailVerificationTokens/fooToken";
+            await (this.dataStore as IInternalAsyncDataStore).CreateAsync<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions { SkipIdentityMap = true }, CancellationToken.None);
+            await (this.dataStore as IInternalAsyncDataStore).CreateAsync<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions { SkipIdentityMap = true }, CancellationToken.None);
+
+            // Not cached
+            await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task Does_not_cache_password_reset_tokens()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var requestExecutor = Substitute.For<IRequestExecutor>();
+            this.BuildDataStore(requestExecutor, cacheProvider);
+
+            var passwordResetTokenResponse = @"
+{
+    ""href"": ""https://api.stormpath.com/v1/applications/foo/passwordResetTokens/bar"",
+    ""email"": ""john.smith@stormpath.com"",
+    ""account"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/cJoiwcorTTmkDDBsf02bAb""
+    }
+}
+";
+
+            // POST returns token response
+            requestExecutor
+                .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), passwordResetTokenResponse, "application/json", transportError: false) as IHttpResponse));
+
+            // GET also returns token response
+            requestExecutor
+                .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Get), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), passwordResetTokenResponse, "application/json", transportError: false) as IHttpResponse));
+
+            await this.dataStore.GetResourceAsync<IPasswordResetToken>("https://api.stormpath.com/v1/applications/foo/passwordResetTokens/bar");
+            await this.dataStore.GetResourceAsync<IPasswordResetToken>("https://api.stormpath.com/v1/applications/foo/passwordResetTokens/bar");
+
+            // Not cached
+            await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task Does_not_cache_login_attempts()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var requestExecutor = Substitute.For<IRequestExecutor>();
+            this.BuildDataStore(requestExecutor, cacheProvider);
+
+            var authResponse = @"
+{
+  ""account"": {
+    ""href"" : ""https://api.stormpath.com/v1/accounts/5BedLIvyfLjdKKEEXAMPLE""
+  }
+}";
+
+            // POST returns auth response
+            requestExecutor
+                .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), authResponse, "application/json", transportError: false) as IHttpResponse));
+
+            var request = new UsernamePasswordRequest("foo", "bar") as IAuthenticationRequest;
+            var authenticator = new BasicAuthenticator(this.dataStore);
+
+            var result1 = await authenticator.AuthenticateAsync("/loginAttempts", request, CancellationToken.None);
+            var result2 = await authenticator.AuthenticateAsync("/loginAttempts", request, CancellationToken.None);
+
+            // Not cached
+            await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+        }
 
         public void Dispose()
         {
             this.dataStore?.Dispose();
-            //todo test disposing a live cache
         }
     }
 }
