@@ -247,6 +247,36 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 Arg.Any<CancellationToken>());
         }
 
+        [Fact]
+        public async Task Deleting_custom_data_with_proxy_updates_cache()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+
+            var requestExecutor = Substitute.For<IRequestExecutor>();
+            this.BuildDataStore(requestExecutor, cacheProvider);
+
+            // GET returns expanded request
+            requestExecutor
+                .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Get), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), FakeJson.AccountWithExpandedCustomData, "application/json", transportError: false) as IHttpResponse));
+
+            // Save is not an expanded request
+            requestExecutor
+                .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new DefaultHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account, "application/json", transportError: false) as IHttpResponse));
+
+            var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount?expand=customData");
+            account.CustomData.Remove("isAdmin");
+            await account.SaveAsync();
+
+            var customData = await account.GetCustomDataAsync();
+            customData["isAdmin"].ShouldBe(null);
+
+            await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
+                Arg.Is<IHttpRequest>(x => x.Method == HttpMethod.Get),
+                Arg.Any<CancellationToken>());
+        }
+
         //test customData deletes
         //test IProviderAccountAccess
 

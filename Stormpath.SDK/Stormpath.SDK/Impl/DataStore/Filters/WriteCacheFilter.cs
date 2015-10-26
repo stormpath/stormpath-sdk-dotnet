@@ -49,18 +49,25 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         public override async Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
         {
-            if (request.Action == ResourceAction.Delete)
+            bool isDelete = request.Action == ResourceAction.Delete;
+            bool isCustomDataPropertyRequest = request.Uri.ResourcePath.ToString().Contains("/customData/");
+
+            if (isCustomDataPropertyRequest && isDelete)
+            {
+                await this.UncacheCustomDataPropertyAsync(request.Uri.ResourcePath, cancellationToken).ConfigureAwait(false);
+            }
+            else if (isDelete)
             {
                 var cacheKey = this.GetCacheKey(request);
                 await this.UncacheAsync(request.ResourceType, cacheKey, cancellationToken).ConfigureAwait(false);
             }
 
+            // Execute request and get result
             var result = await chain.ExecuteAsync(request, logger, cancellationToken).ConfigureAwait(false);
 
             //todo edge cases:
             // - remove account from cache on email verification token
 
-            // todo handle deletes here?
             bool possibleCustomDataUpdate =
                 (request.Action == ResourceAction.Create ||
                 request.Action == ResourceAction.Update) &&
@@ -183,6 +190,27 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             var cache = await this.GetCacheAsync(resourceType, cancellationToken).ConfigureAwait(false);
             await cache.RemoveAsync(cacheKey, cancellationToken).ConfigureAwait(false);
+        }
+
+        private async Task UncacheCustomDataPropertyAsync(Uri resourceUri, CancellationToken cancellationToken)
+        {
+            var href = resourceUri.ToString();
+            var propertyName = href.Substring(href.LastIndexOf('/') + 1);
+            href = href.Substring(0, href.LastIndexOf('/'));
+
+            if (string.IsNullOrEmpty(propertyName) ||
+                string.IsNullOrEmpty(href))
+                throw new ApplicationException("Could not update cache for removed custom data entry.");
+
+            var cache = await this.GetCacheAsync(typeof(ICustomData), cancellationToken).ConfigureAwait(false);
+            var cacheKey = this.GetCacheKey(href);
+
+            var existingData = await cache.GetAsync(cacheKey, cancellationToken).ConfigureAwait(false);
+            if (existingData.IsNullOrEmpty())
+                return;
+
+            existingData.Remove(propertyName);
+            await cache.PutAsync(cacheKey, existingData, cancellationToken).ConfigureAwait(false);
         }
 
         private static bool IsCacheable(IResourceDataRequest request, IResourceDataResult result)
