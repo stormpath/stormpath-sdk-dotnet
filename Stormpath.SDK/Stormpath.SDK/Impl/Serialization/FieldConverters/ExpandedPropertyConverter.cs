@@ -22,12 +22,15 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 {
     internal sealed class ExpandedPropertyConverter : AbstractFieldConverter
     {
-        public ExpandedPropertyConverter()
+        private readonly Func<IDictionary<string, object>, Type, IDictionary<string, object>> converter;
+
+        public ExpandedPropertyConverter(Func<IDictionary<string, object>, Type, IDictionary<string, object>> converter)
             : base(nameof(ExpandedPropertyConverter), appliesToTargetType: AnyType)
         {
+            this.converter = converter;
         }
 
-        protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token, Func<IDictionary<string, object>, Type, IDictionary<string, object>> recursiveConverter)
+        protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
         {
             var asEmbeddedResource = token.Value as IDictionary<string, object>;
             if (asEmbeddedResource == null)
@@ -36,11 +39,11 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             if (asEmbeddedResource.Count <= 1)
                 return FieldConverterResult.Failed;
 
-            if (recursiveConverter == null)
+            if (this.converter == null)
                 throw new ApplicationException($"Could not parse expanded property data from attribute '{token.Key}'.");
 
             var embeddedType = this.typeLookup.GetInterface(token.Key);
-            var convertedData = recursiveConverter(asEmbeddedResource, embeddedType);
+            var convertedData = this.converter(asEmbeddedResource, embeddedType);
 
             return new FieldConverterResult(true, new ExpandedProperty(convertedData));
         }

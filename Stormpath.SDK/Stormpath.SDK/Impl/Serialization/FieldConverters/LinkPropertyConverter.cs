@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
         {
         }
 
-        protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token, Func<IDictionary<string, object>, Type, IDictionary<string, object>> recursiveConverter)
+        protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
         {
             var asEmbeddedObject = token.Value as IDictionary<string, object>;
             if (asEmbeddedObject == null)

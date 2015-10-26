@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Tests.Impl
             var dummyField = new KeyValuePair<string, object>("foo", "bar");
             var testTarget = Type.GetType(nameof(IAccount));
 
-            var result = converterList.TryConvertField(dummyField, testTarget, null);
+            var result = converterList.TryConvertField(dummyField, testTarget);
 
             result.Success.ShouldBeFalse();
             result.Value.ShouldBeNull();

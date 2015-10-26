@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Tests.Impl
 
                 var dummyField = new KeyValuePair<string, object>("foo", "bar");
 
-                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IApplication), null);
+                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IApplication));
 
                 result.Success.ShouldBeFalse();
                 result.Value.ShouldBeNull();
@@ -56,7 +56,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var dummyField = new KeyValuePair<string, object>("foo", "bar");
                 var applicationTarget = Type.GetType(nameof(IApplication));
 
-                var result = stringFieldConverter.TryConvertField(dummyField, applicationTarget, null);
+                var result = stringFieldConverter.TryConvertField(dummyField, applicationTarget);
 
                 result.Success.ShouldBeTrue();
                 result.Value.ShouldBe("bar");
@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Tests.Impl
 
                 var dummyField = new KeyValuePair<string, object>("foo", "bar");
 
-                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IAccount), null);
+                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IAccount));
 
                 result.Success.ShouldBeTrue();
                 result.Value.ShouldBe("good!");
@@ -89,7 +89,7 @@ namespace Stormpath.SDK.Tests.Impl
 
                 var dummyField = new KeyValuePair<string, object>("foo", "bar");
 
-                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IAccount), null);
+                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(IAccount));
 
                 result.Success.ShouldBeTrue();
                 result.Value.ShouldBe("good!");
@@ -105,7 +105,7 @@ namespace Stormpath.SDK.Tests.Impl
 
                 var dummyField = new KeyValuePair<string, object>("foo", "bar");
 
-                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(CollectionResponsePage<IAccount>), null);
+                var result = fakeAccountFieldConverter.TryConvertField(dummyField, typeof(CollectionResponsePage<IAccount>));
 
                 result.Success.ShouldBeTrue();
                 result.Value.ShouldBe("good!");
@@ -120,7 +120,7 @@ namespace Stormpath.SDK.Tests.Impl
 
                 var dummyField = new KeyValuePair<string, object>("foo", "bar");
 
-                var result = failingConverter.TryConvertField(dummyField, typeof(IAccount), null);
+                var result = failingConverter.TryConvertField(dummyField, typeof(IAccount));
 
                 result.Success.ShouldBeFalse();
                 result.Value.ShouldBeNull();
@@ -137,7 +137,7 @@ namespace Stormpath.SDK.Tests.Impl
                     new Dictionary<string, object>() { ["href"] = "http://foobar/myprop" } );
                 var converter = new LinkPropertyConverter();
 
-                var result = converter.TryConvertField(token, AbstractFieldConverter.AnyType, null);
+                var result = converter.TryConvertField(token, AbstractFieldConverter.AnyType);
 
                 result.Value.ShouldBe(new LinkProperty("http://foobar/myprop"));
                 result.Success.ShouldBeTrue();
@@ -156,9 +156,9 @@ namespace Stormpath.SDK.Tests.Impl
                     ["expanded"] = true
                 };
                 var token = new KeyValuePair<string, object>("test", data);
-                var converter = new LinkPropertyConverter();
+                var converter = new ExpandedPropertyConverter((p, t) => p);
 
-                var result = converter.TryConvertField(token, AbstractFieldConverter.AnyType, null);
+                var result = converter.TryConvertField(token, AbstractFieldConverter.AnyType);
 
                 result.Value.ShouldBeOfType<ExpandedProperty>();
                 (result.Value as ExpandedProperty).Href.ShouldBe("http://foobar/myprop");
@@ -174,7 +174,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var token = new KeyValuePair<string, object>("status", "unverified");
                 var converter = new StatusFieldConverters.AccountStatusConverter();
 
-                var result = converter.TryConvertField(token, typeof(IAccount), null);
+                var result = converter.TryConvertField(token, typeof(IAccount));
 
                 result.Value.ShouldBe(AccountStatus.Unverified);
                 result.Success.ShouldBeTrue();
@@ -186,7 +186,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var token = new KeyValuePair<string, object>("status", "disabled");
                 var converter = new StatusFieldConverters.ApplicationStatusConverter();
 
-                var result = converter.TryConvertField(token, typeof(IApplication), null);
+                var result = converter.TryConvertField(token, typeof(IApplication));
 
                 result.Value.ShouldBe(ApplicationStatus.Disabled);
                 result.Success.ShouldBeTrue();
@@ -198,7 +198,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var token = new KeyValuePair<string, object>("status", "enabled");
                 var converter = new StatusFieldConverters.DirectoryStatusConverter();
 
-                var result = converter.TryConvertField(token, typeof(IDirectory), null);
+                var result = converter.TryConvertField(token, typeof(IDirectory));
 
                 result.Value.ShouldBe(DirectoryStatus.Enabled);
                 result.Success.ShouldBeTrue();

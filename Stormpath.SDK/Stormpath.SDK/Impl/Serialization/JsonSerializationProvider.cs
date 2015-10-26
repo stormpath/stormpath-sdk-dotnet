@@ -24,14 +24,7 @@ namespace Stormpath.SDK.Impl.Serialization
 {
     internal sealed class JsonSerializationProvider
     {
-        private static readonly FieldConverterList ConverterChain =
-            new FieldConverterList(
-                new LinkPropertyConverter(),
-                new ExpandedPropertyConverter(),
-                new StatusFieldConverters.AccountStatusConverter(),
-                new StatusFieldConverters.ApplicationStatusConverter(),
-                new StatusFieldConverters.DirectoryStatusConverter(),
-                new StatusFieldConverters.GroupStatusConverter());
+        private readonly FieldConverterList converterChain;
 
         private readonly IJsonSerializer externalSerializer;
         private readonly ResourceTypes typeLookup;
@@ -40,6 +33,14 @@ namespace Stormpath.SDK.Impl.Serialization
         {
             this.externalSerializer = externalSerializer;
             this.typeLookup = new ResourceTypes();
+
+            this.converterChain = new FieldConverterList(
+                new LinkPropertyConverter(),
+                new ExpandedPropertyConverter(converter: this.ConvertProperties),
+                new StatusFieldConverters.AccountStatusConverter(),
+                new StatusFieldConverters.ApplicationStatusConverter(),
+                new StatusFieldConverters.DirectoryStatusConverter(),
+                new StatusFieldConverters.GroupStatusConverter());
         }
 
         public string Serialize(IDictionary<string, object> map)
@@ -77,7 +78,7 @@ namespace Stormpath.SDK.Impl.Serialization
                 }
                 else
                 {
-                    var convertResult = ConverterChain.TryConvertField(prop, targetType, this.ConvertProperties);
+                    var convertResult = this.converterChain.TryConvertField(prop, targetType);
                     if (convertResult.Success)
                         value = convertResult.Value;
                 }
