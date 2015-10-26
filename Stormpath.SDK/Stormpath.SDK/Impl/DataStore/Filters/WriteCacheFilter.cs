@@ -20,11 +20,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Cache;
+using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
@@ -57,6 +60,14 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             //todo edge cases:
             // - remove account from cache on email verification token
 
+            // todo handle deletes here?
+            bool possibleCustomDataUpdate =
+                (request.Action == ResourceAction.Create ||
+                request.Action == ResourceAction.Update) &&
+                AbstractExtendableInstanceResource.IsExtendable(request.ResourceType);
+            if (possibleCustomDataUpdate)
+                await this.CacheNestedCustomDataUpdatesAsync(request.Uri.ResourcePath.ToString(), request.Properties, cancellationToken).ConfigureAwait(false);
+
             if (IsCacheable(request, result))
                 await this.CacheAsync(result.Type, result.Body, cancellationToken).ConfigureAwait(false);
 
@@ -87,17 +98,17 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 // TODO DefaultModelMap edge case
                 // TODO ApiEncryptionMetadata edge case
 
-                var asNestedResource = value as IDictionary<string, object>;
+                var asNestedResource = value as ExpandedProperty;
                 var asNestedArray = value as IEnumerable<IDictionary<string, object>>;
 
-                if (asNestedResource != null && IsResource(asNestedResource))
+                if (asNestedResource != null && IsResource(asNestedResource.Data))
                 {
                     var nestedType = this.resourceTypes.GetInterface(item.Key);
                     if (nestedType == null)
                         throw new ApplicationException($"Cannot cache nested item. Item type for '{item.Key}' unknown.");
 
-                    await this.CacheAsync(nestedType, asNestedResource, cancellationToken).ConfigureAwait(false);
-                    value = ToCanonicalReference(asNestedResource);
+                    await this.CacheAsync(nestedType, asNestedResource.Data, cancellationToken).ConfigureAwait(false);
+                    value = ToCanonicalReference(asNestedResource.Data);
                 }
                 else if (asNestedArray != null)
                 {
@@ -136,6 +147,31 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 var cacheKey = this.GetCacheKey(href);
                 await cache.PutAsync(cacheKey, cacheData, cancellationToken).ConfigureAwait(false);
             }
+        }
+
+        private async Task CacheNestedCustomDataUpdatesAsync(string parentHref, IDictionary<string, object> data, CancellationToken cancellationToken)
+        {
+            object customDataObj = null;
+            IDictionary<string, object> customData = null;
+
+            if (!data.TryGetValue(AbstractExtendableInstanceResource.CustomDataPropertyName, out customDataObj))
+                return;
+
+            customData = customDataObj as IDictionary<string, object>;
+            if (customData.IsNullOrEmpty())
+                return;
+
+            var customDataHref = parentHref + "/customData";
+            var updatedDataToCache = await this.GetCachedValueAsync(customDataHref, typeof(ICustomData), cancellationToken).ConfigureAwait(false);
+            if (updatedDataToCache.IsNullOrEmpty())
+                updatedDataToCache = new Dictionary<string, object>();
+
+            foreach (var updatedItem in customData)
+            {
+                updatedDataToCache[updatedItem.Key] = updatedItem.Value;
+            }
+
+            await this.CacheAsync(typeof(ICustomData), updatedDataToCache, cancellationToken).ConfigureAwait(false);
         }
 
         private async Task UncacheAsync(Type resourceType, string cacheKey, CancellationToken cancellationToken)

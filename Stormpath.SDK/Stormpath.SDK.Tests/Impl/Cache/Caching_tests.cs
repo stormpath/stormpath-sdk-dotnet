@@ -219,9 +219,20 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
 
-            this.BuildDataStore(FakeJson.AccountWithExpandedCustomData, cacheProvider);
+            var requestExecutor = Substitute.For<IRequestExecutor>();
+            this.BuildDataStore(requestExecutor, cacheProvider);
 
-            var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
+            // GET returns expanded request
+            requestExecutor
+                .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Get), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), FakeJson.AccountWithExpandedCustomData, "application/json", transportError: false) as IHttpResponse));
+
+            // Save is not an expanded request
+            requestExecutor
+                .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new DefaultHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account, "application/json", transportError: false) as IHttpResponse));
+
+            var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount?expand=customData");
 
             account.CustomData.Put("isAdmin", true);
             account.CustomData.Put("writeAccess", "yes");
@@ -236,6 +247,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 Arg.Any<CancellationToken>());
         }
 
+        //test customData deletes
         //test IProviderAccountAccess
 
         public void Dispose()

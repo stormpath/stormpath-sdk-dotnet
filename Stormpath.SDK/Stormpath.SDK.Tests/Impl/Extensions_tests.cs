@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using Shouldly;
 using Stormpath.SDK.Impl.Extensions;
 using Xunit;
@@ -172,6 +173,36 @@ namespace Stormpath.SDK.Tests.Impl
 
                 // Editor's note: World did not cataclysmically end on this date.
                 endOfMayanLongCountCycle.ToUnixTimestamp().ShouldBe(1356134399000);
+            }
+        }
+
+        public class Dictionary_IsNullOrEmpty
+        {
+            [Fact]
+            public void Returns_true_when_null()
+            {
+                IDictionary<string, object> dict = null;
+
+                dict.IsNullOrEmpty().ShouldBeTrue();
+            }
+
+            [Fact]
+            public void Returns_true_when_empty()
+            {
+                var dict = new Dictionary<string, object>();
+
+                dict.IsNullOrEmpty().ShouldBeTrue();
+            }
+
+            [Fact]
+            public void Returns_false_when_items_exist()
+            {
+                var dict = new Dictionary<string, object>()
+                {
+                    ["foo"] = new object()
+                };
+
+                dict.IsNullOrEmpty().ShouldBeFalse();
             }
         }
     }

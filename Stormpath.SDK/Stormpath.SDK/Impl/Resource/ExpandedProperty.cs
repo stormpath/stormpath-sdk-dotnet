@@ -23,6 +23,7 @@ namespace Stormpath.SDK.Impl.Resource
     /// </summary>
     internal sealed class ExpandedProperty : IEmbeddedProperty
     {
+        private readonly IDictionary<string, object> data;
         private readonly string href;
 
         public ExpandedProperty(IDictionary<string, object> data)
@@ -30,8 +31,12 @@ namespace Stormpath.SDK.Impl.Resource
             object href;
             if (data.TryGetValue("href", out href))
                 this.href = href.ToString();
+
+            this.data = data;
         }
 
         public string Href => this.href;
+
+        public IDictionary<string, object> Data => this.data;
     }
 }
