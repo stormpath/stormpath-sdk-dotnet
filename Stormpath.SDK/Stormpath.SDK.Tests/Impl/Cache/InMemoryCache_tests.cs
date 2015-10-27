@@ -237,7 +237,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 
                 iface.Dispose();
 
-                Should.Throw<ApplicationException>(() =>
+                Should.Throw<Exception>(() =>
                 {
                     iface.Get("foo").ShouldBe("bar");
                 });
@@ -429,7 +429,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 
                 iface.Dispose();
 
-                Should.Throw<ApplicationException>(async () =>
+                Should.Throw<Exception>(async () =>
                 {
                     (await iface.GetAsync("foo")).ShouldBe("bar");
                 });
