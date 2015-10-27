@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Impl.Cache
     internal sealed class InMemoryCacheManager<V> : IDisposable
     {
         private readonly MemoryCache memoryCache;
-        private bool alreadyDisposed = false;
+        private bool isDisposed = false;
 
         public InMemoryCacheManager()
         {
@@ -38,8 +38,16 @@ namespace Stormpath.SDK.Impl.Cache
             return $"{key}-absoluteToken";
         }
 
+        private void ThrowIfDisposed()
+        {
+            if (this.isDisposed)
+                throw new ApplicationException($"The object ({this.GetType().Name}) has been disposed.");
+        }
+
         public V Get(string key)
         {
+            this.ThrowIfDisposed();
+
             var absoluteTokenKey = CreateAbsoluteTokenKey(key);
             var tokenAndItem = this.memoryCache.GetValues(new string[] { absoluteTokenKey, key });
 
@@ -56,6 +64,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         public V Put(string key, V value, DateTimeOffset absoluteExpiration, TimeSpan slidingExpiration)
         {
+            this.ThrowIfDisposed();
+
             var absoluteTokenKey = CreateAbsoluteTokenKey(key);
             this.memoryCache.Set(absoluteTokenKey, new object(), absoluteExpiration);
 
@@ -72,22 +82,32 @@ namespace Stormpath.SDK.Impl.Cache
 
         public V Remove(string key)
         {
+            this.ThrowIfDisposed();
+
             this.memoryCache.Remove(CreateAbsoluteTokenKey(key));
             return (V)this.memoryCache.Remove(key);
         }
 
-        public long Count => this.memoryCache.GetCount() / 2;
+        public long Count
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+
+                return this.memoryCache.GetCount() / 2;
+            }
+        }
 
         private void Dispose(bool disposing)
         {
-            if (!this.alreadyDisposed)
+            if (!this.isDisposed)
             {
                 if (disposing)
                 {
                     this.memoryCache.Dispose();
                 }
 
-                this.alreadyDisposed = true;
+                this.isDisposed = true;
             }
         }
 

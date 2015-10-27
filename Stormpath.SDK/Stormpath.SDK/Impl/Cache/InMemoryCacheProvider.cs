@@ -25,7 +25,7 @@ using Stormpath.SDK.Cache;
 
 namespace Stormpath.SDK.Impl.Cache
 {
-    internal class InMemoryCacheProvider : ISynchronousCacheProvider, IAsynchronousCacheProvider, IDisposable
+    internal class InMemoryCacheProvider : ISynchronousCacheProvider, IAsynchronousCacheProvider
     {
         private readonly ConcurrentDictionary<string, ICacheConfiguration> cacheConfigs;
         private readonly ConcurrentDictionary<string, object> caches;

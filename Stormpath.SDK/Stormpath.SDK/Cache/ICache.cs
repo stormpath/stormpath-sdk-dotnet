@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Cache
     /// <seealso cref="ISynchronousCache{K, V}"/>
     /// <typeparam name="K">The key type stored in the cache.</typeparam>
     /// <typeparam name="V">The value type stored in the cache.</typeparam>
-    public interface ICache<K, V>
+    public interface ICache<K, V> : IDisposable
     {
         string Name { get; }
 
