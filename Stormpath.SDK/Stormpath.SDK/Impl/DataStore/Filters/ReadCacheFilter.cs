@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return null;
             // todo log - this is weird
 
-            var data = await this.GetCachedValueAsync(cacheKey, request.ResourceType, cancellationToken).ConfigureAwait(false);
+            var data = await this.GetCachedValueAsync(request.ResourceType, cacheKey, cancellationToken).ConfigureAwait(false);
 
             if (data == null)
                 return null;
@@ -91,7 +91,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return null;
             // todo log - this is weird
 
-            var data = this.GetCachedValue(cacheKey, request.ResourceType);
+            var data = this.GetCachedValue(request.ResourceType, cacheKey);
 
             if (data == null)
                 return null;

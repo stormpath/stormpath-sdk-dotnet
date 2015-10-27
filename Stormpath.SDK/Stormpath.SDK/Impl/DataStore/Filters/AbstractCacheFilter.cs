@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         public abstract Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken);
 
-        protected async Task<IDictionary<string, object>> GetCachedValueAsync(string cacheKey, Type resourceType, CancellationToken cancellationToken)
+        protected async Task<IDictionary<string, object>> GetCachedValueAsync(Type resourceType, string cacheKey, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(cacheKey))
                 throw new ArgumentNullException(nameof(cacheKey));
@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 .ConfigureAwait(false);
         }
 
-        protected IDictionary<string, object> GetCachedValue(string cacheKey, Type resourceType)
+        protected IDictionary<string, object> GetCachedValue(Type resourceType, string cacheKey)
         {
             if (string.IsNullOrEmpty(cacheKey))
                 throw new ArgumentNullException(nameof(cacheKey));

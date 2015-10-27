@@ -273,7 +273,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return;
 
             var customDataHref = parentHref + "/customData";
-            var updatedDataToCache = await this.GetCachedValueAsync(customDataHref, typeof(ICustomData), cancellationToken).ConfigureAwait(false);
+            var updatedDataToCache = await this.GetCachedValueAsync(typeof(ICustomData), customDataHref, cancellationToken).ConfigureAwait(false);
             if (updatedDataToCache.IsNullOrEmpty())
                 updatedDataToCache = new Dictionary<string, object>();
 
@@ -298,7 +298,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return;
 
             var customDataHref = parentHref + "/customData";
-            var updatedDataToCache = this.GetCachedValue(customDataHref, typeof(ICustomData));
+            var updatedDataToCache = this.GetCachedValue(typeof(ICustomData), customDataHref);
             if (updatedDataToCache.IsNullOrEmpty())
                 updatedDataToCache = new Dictionary<string, object>();
 
