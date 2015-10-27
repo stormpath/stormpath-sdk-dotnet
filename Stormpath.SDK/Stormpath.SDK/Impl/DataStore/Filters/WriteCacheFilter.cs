@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             bool possibleCustomDataUpdate = (request.Action == ResourceAction.Create || request.Action == ResourceAction.Update) &&
                 AbstractExtendableInstanceResource.IsExtendable(request.ResourceType);
             if (possibleCustomDataUpdate)
-                await this.CacheNestedCustomDataUpdatesAsync(request.Uri.ResourcePath.ToString(), request.Properties, cancellationToken).ConfigureAwait(false);
+                await this.CacheNestedCustomDataUpdatesAsync(request, result, cancellationToken).ConfigureAwait(false);
 
             if (IsCacheable(request, result))
                 await this.CacheAsync(result.Type, result.Body, cancellationToken).ConfigureAwait(false);
@@ -106,7 +106,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             bool possibleCustomDataUpdate = (request.Action == ResourceAction.Create || request.Action == ResourceAction.Update) &&
                 AbstractExtendableInstanceResource.IsExtendable(request.ResourceType);
             if (possibleCustomDataUpdate)
-                this.CacheNestedCustomDataUpdates(request.Uri.ResourcePath.ToString(), request.Properties);
+                this.CacheNestedCustomDataUpdates(request, result);
 
             if (IsCacheable(request, result))
                 this.Cache(result.Type, result.Body);
@@ -258,54 +258,80 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             }
         }
 
-        private async Task CacheNestedCustomDataUpdatesAsync(string parentHref, IDictionary<string, object> data, CancellationToken cancellationToken)
+        private async Task CacheNestedCustomDataUpdatesAsync(IResourceDataRequest request, IResourceDataResult result, CancellationToken cancellationToken)
         {
             object customDataObj = null;
             IDictionary<string, object> customData = null;
 
-            if (!data.TryGetValue(AbstractExtendableInstanceResource.CustomDataPropertyName, out customDataObj))
+            if (!request.Properties.TryGetValue(AbstractExtendableInstanceResource.CustomDataPropertyName, out customDataObj))
                 return;
 
             customData = customDataObj as IDictionary<string, object>;
             if (customData.IsNullOrEmpty())
                 return;
 
+            bool creating = request.Action == ResourceAction.Create;
+
+            var parentHref = request.Uri.ResourcePath.ToString();
+            if (creating && !result.Body.TryGetValueAsString(AbstractResource.HrefPropertyName, out parentHref))
+                return;
+
             var customDataHref = parentHref + "/customData";
-            var updatedDataToCache = await this.GetCachedValueAsync(typeof(ICustomData), customDataHref, cancellationToken).ConfigureAwait(false);
-            if (updatedDataToCache.IsNullOrEmpty())
-                updatedDataToCache = new Dictionary<string, object>();
+
+            var dataToCache = await this.GetCachedValueAsync(typeof(ICustomData), customDataHref, cancellationToken).ConfigureAwait(false);
+            if (!creating && dataToCache == null)
+                return;
+
+            if (dataToCache.IsNullOrEmpty())
+                dataToCache = new Dictionary<string, object>();
 
             foreach (var updatedItem in customData)
             {
-                updatedDataToCache[updatedItem.Key] = updatedItem.Value;
+                dataToCache[updatedItem.Key] = updatedItem.Value;
             }
 
-            await this.CacheAsync(typeof(ICustomData), updatedDataToCache, cancellationToken).ConfigureAwait(false);
+            // Ensure the href property exists
+            dataToCache[AbstractResource.HrefPropertyName] = customDataHref;
+
+            await this.CacheAsync(typeof(ICustomData), dataToCache, cancellationToken).ConfigureAwait(false);
         }
 
-        private void CacheNestedCustomDataUpdates(string parentHref, IDictionary<string, object> data)
+        private void CacheNestedCustomDataUpdates(IResourceDataRequest request, IResourceDataResult result)
         {
             object customDataObj = null;
             IDictionary<string, object> customData = null;
 
-            if (!data.TryGetValue(AbstractExtendableInstanceResource.CustomDataPropertyName, out customDataObj))
+            if (!request.Properties.TryGetValue(AbstractExtendableInstanceResource.CustomDataPropertyName, out customDataObj))
                 return;
 
             customData = customDataObj as IDictionary<string, object>;
             if (customData.IsNullOrEmpty())
                 return;
 
+            bool creating = request.Action == ResourceAction.Create;
+
+            var parentHref = request.Uri.ResourcePath.ToString();
+            if (creating && !result.Body.TryGetValueAsString(AbstractResource.HrefPropertyName, out parentHref))
+                return;
+
             var customDataHref = parentHref + "/customData";
-            var updatedDataToCache = this.GetCachedValue(typeof(ICustomData), customDataHref);
-            if (updatedDataToCache.IsNullOrEmpty())
-                updatedDataToCache = new Dictionary<string, object>();
+
+            var dataToCache = this.GetCachedValue(typeof(ICustomData), customDataHref);
+            if (!creating && dataToCache == null)
+                return;
+
+            if (dataToCache.IsNullOrEmpty())
+                dataToCache = new Dictionary<string, object>();
 
             foreach (var updatedItem in customData)
             {
-                updatedDataToCache[updatedItem.Key] = updatedItem.Value;
+                dataToCache[updatedItem.Key] = updatedItem.Value;
             }
 
-            this.Cache(typeof(ICustomData), updatedDataToCache);
+            // Ensure the href property exists
+            dataToCache[AbstractResource.HrefPropertyName] = customDataHref;
+
+            this.Cache(typeof(ICustomData), dataToCache);
         }
 
         private async Task UncacheAsync(Type resourceType, string cacheKey, CancellationToken cancellationToken)

@@ -289,6 +289,47 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         }
 
         [Fact]
+        public void Custom_data_is_always_cached_on_parent_resource_save()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            this.BuildDataStore(FakeJson.Account, cacheProvider);
+
+            var account = this.dataStore.Instantiate<IAccount>();
+            account.CustomData.Put("foo", "bar");
+            account.CustomData.Put("baz", 1234);
+            (this.dataStore as IInternalSyncDataStore).Create("/accounts", account);
+
+            var customData = account.GetCustomData();
+            customData["foo"].ShouldBe("bar");
+            customData["baz"].ShouldBe(1234);
+
+            // CustomData was cached; did not make a request
+            this.dataStore.RequestExecutor.Received(1).Execute(
+                Arg.Any<IHttpRequest>());
+        }
+
+        [Fact]
+        public void Custom_data_updates_are_not_cached_if_authoritative_custom_data_is_not_cached()
+        {
+            // This test differs from Updating_custom_data_with_proxy_updates_cache
+            // because we aren't GETting the custom data first (whether explicitly or with an expanded query).
+            // In this case, we don't want to cache updates because we have no authoritative version.
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            this.BuildDataStore(FakeJson.Account, cacheProvider);
+
+            var account = this.dataStore.GetResource<IAccount>("/account");
+            account.CustomData.Put("foo", "bar!");
+            account.CustomData.Put("isWorking", true);
+            account.Save();
+
+            var customData = account.GetCustomData();
+
+            // CustomData was *not* cached
+            this.dataStore.RequestExecutor.Received(3).Execute(
+                Arg.Any<IHttpRequest>());
+        }
+
+        [Fact]
         public void Email_verification_result_removes_associated_account_from_cache()
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();

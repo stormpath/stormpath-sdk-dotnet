@@ -271,6 +271,49 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         }
 
         [Fact]
+        public async Task Custom_data_is_always_cached_on_parent_resource_save()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            this.BuildDataStore(FakeJson.Account, cacheProvider);
+
+            var account = this.dataStore.Instantiate<IAccount>();
+            account.CustomData.Put("foo", "bar");
+            account.CustomData.Put("baz", 1234);
+            await (this.dataStore as IInternalAsyncDataStore).CreateAsync("/accounts", account, CancellationToken.None);
+
+            var customData = await account.GetCustomDataAsync();
+            customData["foo"].ShouldBe("bar");
+            customData["baz"].ShouldBe(1234);
+
+            // CustomData was cached; did not make a request
+            await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task Custom_data_updates_are_not_cached_if_authoritative_custom_data_is_not_cached()
+        {
+            // This test differs from Updating_custom_data_with_proxy_updates_cache
+            // because we aren't GETting the custom data first (whether explicitly or with an expanded query).
+            // In this case, we don't want to cache updates because we have no authoritative version.
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            this.BuildDataStore(FakeJson.Account, cacheProvider);
+
+            var account = await this.dataStore.GetResourceAsync<IAccount>("/account");
+            account.CustomData.Put("foo", "bar!");
+            account.CustomData.Put("isWorking", true);
+            await account.SaveAsync();
+
+            var customData = await account.GetCustomDataAsync();
+
+            // CustomData was *not* cached
+            await this.dataStore.RequestExecutor.Received(3).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
         public async Task Deleting_custom_data_with_proxy_updates_cache()
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
