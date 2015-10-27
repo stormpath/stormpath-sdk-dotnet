@@ -25,6 +25,7 @@ using Stormpath.SDK.Cache;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Extensions.Serialization;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl;
 using Stormpath.SDK.Impl.Auth;
@@ -156,16 +157,32 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             this.BuildDataStore(FakeJson.AccountWithExpandedCustomData, cacheProvider);
 
-            var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
-            var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
-
-            account1.Email.ShouldBe("han.solo@corellia.core");
-            account1.FullName.ShouldBe("Han Solo");
+            var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
+            account.Email.ShouldBe("han.solo@corellia.core");
+            account.FullName.ShouldBe("Han Solo");
 
             var customDataFromHref = await this.dataStore.GetResourceAsync<ICustomData>("/accounts/foobarAccount/customData");
-            var customDataFromLink = await account1.GetCustomDataAsync();
+            var customDataFromLink = await account.GetCustomDataAsync();
 
             customDataFromHref["isAdmin"].ShouldBe(false);
+
+            await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task Expanded_collection_items_are_cached()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            this.BuildDataStore(FakeJson.AccountWithExpandedGroups, cacheProvider);
+
+            var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount?expand=groups(offset:0,limit:25)");
+            var group1 = await this.dataStore.GetResourceAsync<IGroup>("/groups/group1");
+            var group2 = await this.dataStore.GetResourceAsync<IGroup>("/groups/group2");
+
+            group1.Name.ShouldBe("Imperials");
+            group2.Name.ShouldBe("Rebels");
 
             await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
                 Arg.Any<IHttpRequest>(),

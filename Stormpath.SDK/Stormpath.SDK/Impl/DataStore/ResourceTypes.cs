@@ -105,6 +105,7 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             ["directory"] = typeof(IDirectory),
             ["customData"] = typeof(ICustomData),
+            ["groups"] = typeof(CollectionResponsePage<IGroup>),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()

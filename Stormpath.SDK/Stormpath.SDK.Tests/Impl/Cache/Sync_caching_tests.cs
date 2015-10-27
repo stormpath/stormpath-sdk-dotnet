@@ -25,6 +25,7 @@ using Stormpath.SDK.Auth;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Extensions.Serialization;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl;
 using Stormpath.SDK.Impl.Auth;
@@ -149,16 +150,31 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             this.BuildDataStore(FakeJson.AccountWithExpandedCustomData, cacheProvider);
 
-            var account1 = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount");
-            var account2 = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount");
-
-            account1.Email.ShouldBe("han.solo@corellia.core");
-            account1.FullName.ShouldBe("Han Solo");
+            var account = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount");
+            account.Email.ShouldBe("han.solo@corellia.core");
+            account.FullName.ShouldBe("Han Solo");
 
             var customDataFromHref = this.dataStore.GetResource<ICustomData>("/accounts/foobarAccount/customData");
-            var customDataFromLink = account1.GetCustomData();
+            var customDataFromLink = account.GetCustomData();
 
             customDataFromHref["isAdmin"].ShouldBe(false);
+
+            this.dataStore.RequestExecutor.Received(1).Execute(
+                Arg.Any<IHttpRequest>());
+        }
+
+        [Fact]
+        public void Expanded_collection_items_are_cached()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            this.BuildDataStore(FakeJson.AccountWithExpandedGroups, cacheProvider);
+
+            var account = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount?expand=groups(offset:0,limit:25)");
+            var group1 = this.dataStore.GetResource<IGroup>("/groups/group1");
+            var group2 = this.dataStore.GetResource<IGroup>("/groups/group2");
+
+            group1.Name.ShouldBe("Imperials");
+            group2.Name.ShouldBe("Rebels");
 
             this.dataStore.RequestExecutor.Received(1).Execute(
                 Arg.Any<IHttpRequest>());
