@@ -15,9 +15,6 @@
 // </copyright>
 
 using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Impl.Cache;

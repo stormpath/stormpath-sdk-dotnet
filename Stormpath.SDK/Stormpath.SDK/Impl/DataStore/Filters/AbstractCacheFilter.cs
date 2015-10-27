@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
-using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Shared;
 

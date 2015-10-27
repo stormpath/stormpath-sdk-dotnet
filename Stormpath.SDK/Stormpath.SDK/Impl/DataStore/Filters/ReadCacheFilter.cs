@@ -15,13 +15,11 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.Provider;
-using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
