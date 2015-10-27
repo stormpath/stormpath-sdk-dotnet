@@ -134,7 +134,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var token = new KeyValuePair<string, object>(
                     "test",
-                    new Dictionary<string, object>() { ["href"] = "http://foobar/myprop" } );
+                    new Dictionary<string, object>() { ["href"] = "http://foobar/myprop" });
                 var converter = new LinkPropertyConverter();
 
                 var result = converter.TryConvertField(token, AbstractFieldConverter.AnyType);
