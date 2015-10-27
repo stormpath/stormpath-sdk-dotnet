@@ -84,12 +84,12 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .Returns(true);
             fakeCacheManager
                 .GetCache<string, IDictionary<string, object>>(Arg.Any<string>())
-                .Returns(new NullCache<string, IDictionary<string, object>>());
+                .Returns(Substitute.For<ISynchronousCache<string, IDictionary<string, object>>>());
 
             ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager);
 
             var cache = cacheResolver.GetCache(typeof(IAccount));
-            cache.ShouldBeOfType<NullCache<string, IDictionary<string, object>>>();
+            cache.ShouldBeAssignableTo<ISynchronousCache<string, IDictionary<string, object>>>();
         }
 
         [Fact]
@@ -106,13 +106,13 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .Returns(async _ =>
                 {
                     await Task.Yield();
-                    return (IAsynchronousCache<string, IDictionary<string, object>>)new NullCache<string, IDictionary<string, object>>();
+                    return Substitute.For<IAsynchronousCache<string, IDictionary<string, object>>>();
                 });
 
             ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager);
 
             var cache = await cacheResolver.GetCacheAsync(typeof(IAccount), CancellationToken.None);
-            cache.ShouldBeOfType<NullCache<string, IDictionary<string, object>>>();
+            cache.ShouldBeAssignableTo<IAsynchronousCache<string, IDictionary<string, object>>>();
         }
     }
 }

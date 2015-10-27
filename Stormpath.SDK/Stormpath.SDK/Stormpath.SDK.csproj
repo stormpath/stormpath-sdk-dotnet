@@ -124,7 +124,6 @@
     <Compile Include="Impl\Cache\InMemoryCacheManager.cs" />
     <Compile Include="Impl\Cache\InMemoryCacheProvider.cs" />
     <Compile Include="Impl\Cache\InMemoryCacheProviderBuilder.cs" />
-    <Compile Include="Impl\Cache\NullCache.cs" />
     <Compile Include="Impl\Cache\NullCacheProvider.cs" />
     <Compile Include="Impl\Cache\DefaultCacheResolver.cs" />
     <Compile Include="Impl\Cache\ICacheResolver.cs" />

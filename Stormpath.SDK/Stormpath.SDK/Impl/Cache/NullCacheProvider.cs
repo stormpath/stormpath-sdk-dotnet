@@ -25,9 +25,9 @@ namespace Stormpath.SDK.Impl.Cache
     {
         private bool disposed = false;
 
-        bool ICacheProvider.IsAsynchronousSupported => true;
+        bool ICacheProvider.IsAsynchronousSupported => false;
 
-        bool ICacheProvider.IsSynchronousSupported => true;
+        bool ICacheProvider.IsSynchronousSupported => false;
 
         private void ThrowIfDisposed()
         {
@@ -37,12 +37,12 @@ namespace Stormpath.SDK.Impl.Cache
 
         ISynchronousCache<K, V> ISynchronousCacheProvider.GetCache<K, V>(string name)
         {
-            return new NullCache<K, V>();
+            throw new NotImplementedException();
         }
 
         Task<IAsynchronousCache<K, V>> IAsynchronousCacheProvider.GetCacheAsync<K, V>(string name, CancellationToken cancellationToken)
         {
-            return Task.FromResult<IAsynchronousCache<K, V>>(new NullCache<K, V>());
+            throw new NotImplementedException();
         }
 
         public void Dispose()
