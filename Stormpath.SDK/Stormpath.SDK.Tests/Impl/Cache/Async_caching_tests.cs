@@ -1,4 +1,4 @@
-﻿// <copyright file="Caching_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Async_caching_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,7 +42,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Cache
 {
-    public class Caching_tests : IDisposable
+    public class Async_caching_tests : IDisposable
     {
         private static readonly string BaseUrl = "https://api.stormpath.com/v1";
         private IInternalDataStore dataStore;

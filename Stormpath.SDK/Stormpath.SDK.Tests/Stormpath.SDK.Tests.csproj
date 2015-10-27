@@ -82,7 +82,8 @@
     <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Fakes\StubDataStore.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
-    <Compile Include="Impl\Cache\Caching_tests.cs" />
+    <Compile Include="Impl\Cache\Sync_caching_tests.cs" />
+    <Compile Include="Impl\Cache\Async_caching_tests.cs" />
     <Compile Include="Impl\Cache\InMemoryCacheProviderBuilder_tests.cs" />
     <Compile Include="Impl\DefaultProviderAccountResult_tests.cs" />
     <Compile Include="Impl\Entity_identity_map_tests.cs" />
