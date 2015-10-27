@@ -74,7 +74,6 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
 
-            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
             account1.Email.ShouldBe("han.solo@corellia.core");
             account1.FullName.ShouldBe("Han Solo");
 
@@ -92,7 +91,6 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
 
-            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
             account1.Email.ShouldBe("han.solo@corellia.core");
             account1.FullName.ShouldBe("Han Solo");
 
@@ -145,7 +143,6 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var customData1 = await this.dataStore.GetResourceAsync<ICustomData>("/accounts/foobarAccount/customData");
             var customData2 = await this.dataStore.GetResourceAsync<ICustomData>("/accounts/foobarAccount/customData");
 
-            (customData1 as AbstractResource).IsLinkedTo(customData2 as AbstractResource).ShouldBeTrue();
             customData2["membershipType"].ShouldBe("lifetime");
 
             await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
@@ -162,14 +159,12 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
 
-            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
             account1.Email.ShouldBe("han.solo@corellia.core");
             account1.FullName.ShouldBe("Han Solo");
 
             var customDataFromHref = await this.dataStore.GetResourceAsync<ICustomData>("/accounts/foobarAccount/customData");
             var customDataFromLink = await account1.GetCustomDataAsync();
 
-            (customDataFromHref as AbstractResource).IsLinkedTo(customDataFromLink as AbstractResource).ShouldBeTrue();
             customDataFromHref["isAdmin"].ShouldBe(false);
 
             await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
@@ -189,7 +184,6 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
 
-            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
             account1.Email.ShouldBe("han.solo@corellia.core");
             account1.FullName.ShouldBe("Han Solo");
 
@@ -223,7 +217,6 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             account1.Email.ShouldBe("han@solo.me");
 
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
-            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
             account2.Email.ShouldBe("han@solo.me");
 
             // Only one GET; second is intercepted by the cache (but the updated data is returned!) #magic
