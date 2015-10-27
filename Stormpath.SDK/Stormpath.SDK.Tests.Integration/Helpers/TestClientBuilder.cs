@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
     [Serializable]
     public class TestClientBuilder : IXunitSerializable
     {
-        private string authSchemeName;
+        private string clientName;
 
         // required for deserializer
         public TestClientBuilder()
@@ -34,34 +34,36 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
 
         public TestClientBuilder(string authScheme)
         {
-            this.authSchemeName = authScheme;
+            this.clientName = authScheme;
         }
 
         public IClient Build()
         {
-            var authentication = AuthenticationScheme.Parse(this.authSchemeName);
-            var apiKey = IntegrationTestClients.GetApiKey();
-            return Clients.Builder()
-                .SetApiKey(apiKey)
-                .UseHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
-                .UseJsonSerializer(new JsonNetSerializer())
-                .SetAuthenticationScheme(authentication)
-                .Build();
+            switch (this.clientName)
+            {
+                case nameof(IntegrationTestClients.Basic):
+                    return IntegrationTestClients.Basic.Value;
+
+                case nameof(IntegrationTestClients.SAuthc1):
+                    return IntegrationTestClients.SAuthc1.Value;
+            }
+
+            throw new NotImplementedException($"Client '{this.clientName}' is not supported.");
         }
 
         public void Deserialize(IXunitSerializationInfo info)
         {
-            this.authSchemeName = info.GetValue<string>("authSchemeName");
+            this.clientName = info.GetValue<string>("clientName");
         }
 
         public void Serialize(IXunitSerializationInfo info)
         {
-            info.AddValue("authSchemeName", this.authSchemeName, typeof(string));
+            info.AddValue("clientName", this.clientName, typeof(string));
         }
 
         public override string ToString()
         {
-            return $"Auth = {this.authSchemeName}";
+            return $"Client: {this.clientName}";
         }
     }
 }
