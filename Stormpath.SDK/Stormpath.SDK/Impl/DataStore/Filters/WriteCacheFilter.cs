@@ -135,7 +135,6 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
                 // TODO DefaultModelMap edge case
                 // TODO ApiEncryptionMetadata edge case
-
                 var asNestedResource = value as ExpandedProperty;
                 var asNestedArray = value as IEnumerable<IDictionary<string, object>>;
 
@@ -208,7 +207,6 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
                 // TODO DefaultModelMap edge case
                 // TODO ApiEncryptionMetadata edge case
-
                 var asNestedResource = value as ExpandedProperty;
                 var asNestedArray = value as IEnumerable<IDictionary<string, object>>;
 

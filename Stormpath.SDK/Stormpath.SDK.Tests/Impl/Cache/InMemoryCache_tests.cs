@@ -424,7 +424,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 var cache = new InMemoryCache<string, string>("fooCache");
                 var iface = cache as IAsynchronousCache<string, string>;
 
-                await iface.PutAsync ("foo", "bar");
+                await iface.PutAsync("foo", "bar");
                 (await iface.GetAsync("foo")).ShouldBe("bar");
 
                 iface.Dispose();
