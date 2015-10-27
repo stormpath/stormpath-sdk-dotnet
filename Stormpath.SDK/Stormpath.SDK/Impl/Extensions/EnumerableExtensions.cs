@@ -1,4 +1,4 @@
-﻿// <copyright file="DictionaryExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="EnumerableExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,9 +19,9 @@ using System.Linq;
 
 namespace Stormpath.SDK.Impl.Extensions
 {
-    internal static class DictionaryExtensions
+    internal static class EnumerableExtensions
     {
-        public static bool IsNullOrEmpty<TKey, TValue>(this IDictionary<TKey, TValue> source)
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
             => !(source?.Any() ?? false);
     }
 }

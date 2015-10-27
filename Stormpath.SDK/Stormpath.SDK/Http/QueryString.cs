@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Shared;
 
@@ -89,7 +90,7 @@ namespace Stormpath.SDK.Http
         /// </summary>
         /// <returns><c>true</c> if this instance contains one or more query parameters.</returns>
         public bool Any()
-            => this.queryStringItems?.Any() ?? false;
+            => this.queryStringItems.IsNullOrEmpty();
 
         public bool ContainsKey(string key)
             => this.queryStringItems?.ContainsKey(key) ?? false;

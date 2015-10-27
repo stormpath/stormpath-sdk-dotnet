@@ -406,7 +406,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         private static bool IsCacheable(IResourceDataRequest request, IResourceDataResult result)
         {
-            bool hasData = result?.Body?.Any() ?? false;
+            bool hasData = !result.Body.IsNullOrEmpty();
 
             return
 

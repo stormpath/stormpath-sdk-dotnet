@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 
@@ -43,7 +44,7 @@ namespace Stormpath.SDK.Impl.Provider
         {
             var newProperties = new Dictionary<string, object>(2);
 
-            bool hasProperties = properties?.Any() ?? false;
+            bool hasProperties = !properties.IsNullOrEmpty();
             if (hasProperties)
             {
                 newProperties.Add(IsNewAccountPropertyName, properties[IsNewAccountPropertyName]);

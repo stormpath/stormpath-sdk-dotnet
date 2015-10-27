@@ -28,6 +28,7 @@ using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.DataStore.Filters;
 using Stormpath.SDK.Impl.Error;
+using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.IdentityMap;
@@ -539,7 +540,7 @@ namespace Stormpath.SDK.Impl.DataStore
             // In some cases, all we need to save are custom data property deletions, which is taken care of above.
             // So, we should just refresh with the latest data from the server.
             // This doesn't apply to CREATEs, though, because sometimes we need to POST a null body.
-            bool nothingToPost = !(propertiesMap?.Any() ?? false);
+            bool nothingToPost = !propertiesMap.IsNullOrEmpty();
             if (!create && nothingToPost)
                 return await this.AsAsyncInterface.GetResourceAsync<TReturned>(href, cancellationToken).ConfigureAwait(false);
 
@@ -629,7 +630,7 @@ namespace Stormpath.SDK.Impl.DataStore
             // In some cases, all we need to save are custom data property deletions, which is taken care of above.
             // So, we should just refresh with the latest data from the server.
             // This doesn't apply to CREATEs, though, because sometimes we need to POST a null body.
-            bool nothingToPost = !(propertiesMap?.Any() ?? false);
+            bool nothingToPost = !propertiesMap.IsNullOrEmpty();
             if (!create && nothingToPost)
                 return this.AsSyncInterface.GetResource<TReturned>(href);
 

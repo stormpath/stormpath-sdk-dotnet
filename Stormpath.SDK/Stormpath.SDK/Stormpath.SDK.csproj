@@ -145,7 +145,7 @@
     <Compile Include="Impl\DataStore\IdentityMapOptions.cs" />
     <Compile Include="Impl\Directory\DefaultDirectoryCreationOptions.cs" />
     <Compile Include="Impl\Directory\IDirectorySync.cs" />
-    <Compile Include="Impl\Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Impl\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Impl\Group\DefaultGroup.cs" />
     <Compile Include="Impl\Group\DefaultGroupMembership.cs" />
     <Compile Include="Impl\Group\IGroupMembershipSync.cs" />
