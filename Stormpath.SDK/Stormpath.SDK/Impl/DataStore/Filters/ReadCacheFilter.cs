@@ -68,11 +68,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         private async Task<IResourceDataResult> GetCachedResourceDataAsync(IResourceDataRequest request, CancellationToken cancellationToken)
         {
             // TODO isApiKeyCollectionQuery
-
             var cacheKey = this.GetCacheKey(request);
             if (string.IsNullOrEmpty(cacheKey))
-                return null;
-            // todo log - this is weird
+                return null; // todo log - this is weird
 
             var data = await this.GetCachedValueAsync(request.ResourceType, cacheKey, cancellationToken).ConfigureAwait(false);
 
@@ -85,11 +83,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         private IResourceDataResult GetCachedResourceData(IResourceDataRequest request)
         {
             // TODO isApiKeyCollectionQuery
-
             var cacheKey = this.GetCacheKey(request);
             if (string.IsNullOrEmpty(cacheKey))
-                return null;
-            // todo log - this is weird
+                return null; // todo log - this is weird
 
             var data = this.GetCachedValue(request.ResourceType, cacheKey);
 
