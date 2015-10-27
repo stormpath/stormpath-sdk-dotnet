@@ -451,7 +451,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var account = application.CreateAccount(
-                "Mara", "Jade", "mara.jade@test.sync", new RandomPassword(12), new { quote = "I'm a fighter. I've always been a fighter.", birth = -17, death = 40 });
+                "Mara", "Jade", new RandomEmail("empire.co"), new RandomPassword(12), new { quote = "I'm a fighter. I've always been a fighter.", birth = -17, death = 40 });
 
             account.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedAccountHrefs.Add(account.Href);

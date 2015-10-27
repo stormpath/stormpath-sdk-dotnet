@@ -20,7 +20,7 @@ using Stormpath.SDK.Extensions.Http;
 using Stormpath.SDK.Extensions.Serialization;
 using Xunit.Abstractions;
 
-namespace Stormpath.SDK.Tests.Integration.Helpers
+namespace Stormpath.SDK.Tests.Integration
 {
     [Serializable]
     public class TestClientBuilder : IXunitSerializable
@@ -37,6 +37,8 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
             this.clientName = authScheme;
         }
 
+        public string Name => this.clientName;
+
         public IClient Build()
         {
             switch (this.clientName)
@@ -44,8 +46,14 @@ namespace Stormpath.SDK.Tests.Integration.Helpers
                 case nameof(IntegrationTestClients.Basic):
                     return IntegrationTestClients.Basic.Value;
 
+                case nameof(IntegrationTestClients.BasicCaching):
+                    return IntegrationTestClients.BasicCaching.Value;
+
                 case nameof(IntegrationTestClients.SAuthc1):
                     return IntegrationTestClients.SAuthc1.Value;
+
+                case nameof(IntegrationTestClients.SAuthc1Caching):
+                    return IntegrationTestClients.SAuthc1Caching.Value;
             }
 
             throw new NotImplementedException($"Client '{this.clientName}' is not supported.");

@@ -86,7 +86,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var client = clientBuilder.Build();
             var tenant = await client.GetCurrentTenantAsync();
 
-            var directoryName = $"My New Directory (.NET IT {this.fixture.TestRunIdentifier})";
+            var directoryName = $"My New Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
             var newDirectory = client.Instantiate<IDirectory>();
             newDirectory.SetName(directoryName);
             newDirectory.SetDescription("Put some accounts here!");
@@ -116,7 +116,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var client = clientBuilder.Build();
             var tenant = await client.GetCurrentTenantAsync();
 
-            var directoryName = $"My New Facebook Directory (.NET IT {this.fixture.TestRunIdentifier})";
+            var directoryName = $"My New Facebook Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
 
             var instance = client.Instantiate<IDirectory>();
             instance.SetName(directoryName);
@@ -151,7 +151,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var client = clientBuilder.Build();
             var tenant = await client.GetCurrentTenantAsync();
 
-            var directoryName = $"My New Github Directory (.NET IT {this.fixture.TestRunIdentifier})";
+            var directoryName = $"My New Github Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
 
             var instance = client.Instantiate<IDirectory>();
             instance.SetName(directoryName);
@@ -186,7 +186,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var client = clientBuilder.Build();
             var tenant = await client.GetCurrentTenantAsync();
 
-            var directoryName = $"My New Google Directory (.NET IT {this.fixture.TestRunIdentifier})";
+            var directoryName = $"My New Google Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
 
             var instance = client.Instantiate<IDirectory>();
             instance.SetName(directoryName);
@@ -223,7 +223,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var client = clientBuilder.Build();
             var tenant = await client.GetCurrentTenantAsync();
 
-            var directoryName = $"My New LinkedIn Directory (.NET IT {this.fixture.TestRunIdentifier})";
+            var directoryName = $"My New LinkedIn Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
 
             var instance = client.Instantiate<IDirectory>();
             instance.SetName(directoryName);
