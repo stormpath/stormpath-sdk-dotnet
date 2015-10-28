@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         async Task<IResourceDataResult> IAsynchronousFilter.FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
         {
-            var result = await chain.ExecuteAsync(request, logger, cancellationToken).ConfigureAwait(false);
+            var result = await chain.FilterAsync(request, logger, cancellationToken).ConfigureAwait(false);
 
             return FilterCore(result);
         }

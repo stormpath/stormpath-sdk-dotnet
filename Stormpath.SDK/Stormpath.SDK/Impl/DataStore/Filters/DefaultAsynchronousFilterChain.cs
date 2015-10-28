@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             return this;
         }
 
-        Task<IResourceDataResult> IAsynchronousFilterChain.ExecuteAsync(IResourceDataRequest request, ILogger logger, CancellationToken cancellationToken)
+        Task<IResourceDataResult> IAsynchronousFilterChain.FilterAsync(IResourceDataRequest request, ILogger logger, CancellationToken cancellationToken)
         {
             bool hasFilters = !this.filters.IsNullOrEmpty();
             if (!hasFilters)

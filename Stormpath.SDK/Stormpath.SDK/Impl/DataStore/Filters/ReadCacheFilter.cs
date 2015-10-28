@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 logger.Trace($"Cache miss for {request.Uri}", "ReadCacheFilter.FilterAsync");
             }
 
-            return await chain.ExecuteAsync(request, logger, cancellationToken).ConfigureAwait(false);
+            return await chain.FilterAsync(request, logger, cancellationToken).ConfigureAwait(false);
         }
 
         private async Task<IResourceDataResult> GetCachedResourceDataAsync(IResourceDataRequest request, ILogger logger, CancellationToken cancellationToken)

@@ -62,7 +62,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 await this.UncacheAsync(request.ResourceType, cacheKey, cancellationToken).ConfigureAwait(false);
             }
 
-            var result = await chain.ExecuteAsync(request, logger, cancellationToken).ConfigureAwait(false);
+            var result = await chain.FilterAsync(request, logger, cancellationToken).ConfigureAwait(false);
 
             bool isEmailVerificationResponse = result.Type == typeof(IEmailVerificationToken);
             if (isEmailVerificationResponse)
