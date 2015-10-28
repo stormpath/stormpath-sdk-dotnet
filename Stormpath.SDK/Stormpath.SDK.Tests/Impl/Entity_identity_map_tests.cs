@@ -22,6 +22,7 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 
@@ -50,6 +51,8 @@ namespace Stormpath.SDK.Tests.Impl
             var account1 = this.dataStore.Instantiate<IAccount>();
             var account2 = this.dataStore.Instantiate<IAccount>();
 
+            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeFalse();
+
             account1.MiddleName.ShouldBeNullOrEmpty();
             account2.MiddleName.ShouldBeNullOrEmpty();
 
@@ -62,6 +65,8 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/foo");
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/foo");
+
+            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
 
             account1.MiddleName.ShouldBeNullOrEmpty();
             account2.MiddleName.ShouldBeNullOrEmpty();
