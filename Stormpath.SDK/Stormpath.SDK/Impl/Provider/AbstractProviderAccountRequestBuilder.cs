@@ -22,8 +22,8 @@ namespace Stormpath.SDK.Impl.Provider
 {
     /// <summary>
     /// Base class that each Provider-specific <see cref="IProviderAccountRequestBuilder{T}"/> can extend to facilitate its work.
-    /// <typeparam name="T">The builder type.</typeparam>
     /// </summary>
+    /// <typeparam name="T">The builder type.</typeparam>
     internal abstract class AbstractProviderAccountRequestBuilder<T> : IProviderAccountRequestBuilder<T>
         where T : class, IProviderAccountRequestBuilder<T>
     {
