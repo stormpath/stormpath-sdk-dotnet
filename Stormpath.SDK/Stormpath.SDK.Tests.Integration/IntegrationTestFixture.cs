@@ -43,8 +43,12 @@ namespace Stormpath.SDK.Tests.Integration
             this.CreatedDirectoryHrefs = new List<string>();
             this.CreatedGroupHrefs = new List<string>();
 
+            StaticLogger.Instance.Info($"IT run {this.testData.Nonce} starting...");
+
             this.AddObjectsToTenantAsync()
                 .GetAwaiter().GetResult();
+
+            StaticLogger.Instance.Info($"Done adding objects. Beginning test...");
         }
 
         protected virtual void Dispose(bool disposing)
@@ -53,8 +57,16 @@ namespace Stormpath.SDK.Tests.Integration
             {
                 if (disposing)
                 {
+                    StaticLogger.Instance.Info($"IT run {this.testData.Nonce} finished. Cleaning up...");
+
                     this.RemoveObjectsFromTenantAsync()
                         .GetAwaiter().GetResult();
+
+                    StaticLogger.Instance.Info($"Done cleaning up objects.");
+
+                    var filename = System.IO.Path.Combine(Environment.CurrentDirectory, "its.log");
+                    StaticLogger.Instance.Info($"Saving log to file {filename}");
+                    System.IO.File.WriteAllText(filename, StaticLogger.Instance.ToString());
                 }
 
                 this.isDisposed = true;

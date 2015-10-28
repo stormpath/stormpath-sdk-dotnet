@@ -1,4 +1,4 @@
-﻿// <copyright file="MemoryLogger.cs" company="Stormpath, Inc.">
+﻿// <copyright file="InMemoryLogger.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,26 +14,34 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Text;
 
 namespace Stormpath.SDK.Logging
 {
-    public sealed class MemoryLogger : ILogger
+    public sealed class InMemoryLogger : ILogger
     {
         private readonly StringBuilder builder
             = new StringBuilder();
 
-        public MemoryLogger()
+        public InMemoryLogger()
         {
         }
 
         void ILogger.Log(LogEntry entry)
         {
-            var logEntry = $"[{entry.Severity.ToString().ToUpper()}] {entry.Source} - {entry.Message}";
-            if (entry.Exception != null)
-                logEntry += $" (Exception: '{entry.Exception.Message}' in {entry.Exception.Source} (Inner: {entry.Exception.InnerException?.ToString()}))";
+            var logEntryBuilder = new StringBuilder()
+                .Append($"{DateTimeOffset.Now.ToString()} [{entry.Severity.ToString().ToUpper()}]");
 
-            this.builder.AppendLine(logEntry);
+            if (!string.IsNullOrEmpty(entry.Source))
+                logEntryBuilder.Append($"{entry.Source} - ");
+
+            logEntryBuilder.Append(entry.Message);
+
+            if (entry.Exception != null)
+                logEntryBuilder.Append($" (Exception: '{entry.Exception.Message}' in {entry.Exception.Source} (Inner: {entry.Exception.InnerException?.ToString()}))");
+
+            this.builder.AppendLine(logEntryBuilder.ToString());
         }
 
         public override string ToString()

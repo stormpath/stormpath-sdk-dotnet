@@ -80,6 +80,7 @@
     <Compile Include="IntegrationTestFixture.cs" />
     <Compile Include="Async\Directory_tests.cs" />
     <Compile Include="Async\Error_tests.cs" />
+    <Compile Include="StaticLogger.cs" />
     <Compile Include="TestClientBuilder.cs" />
     <Compile Include="Meta_tests.cs" />
     <Compile Include="Sync\Sync_Entity_tests.cs" />
