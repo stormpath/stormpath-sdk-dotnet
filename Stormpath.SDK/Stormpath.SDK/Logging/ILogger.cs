@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultCacheRegionNameResolver.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ILogger.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,23 +14,17 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Impl.DataStore;
-
-namespace Stormpath.SDK.Impl.Cache
+namespace Stormpath.SDK.Logging
 {
-    internal sealed class DefaultCacheRegionNameResolver : ICacheRegionNameResolver
+    /// <summary>
+    /// A wrapper interface for logger plugins.
+    /// </summary>
+    public interface ILogger
     {
-        private readonly ResourceTypeLookup typeLookup;
-
-        public DefaultCacheRegionNameResolver()
-        {
-            this.typeLookup = new ResourceTypeLookup();
-        }
-
-        string ICacheRegionNameResolver.GetCacheRegionName<T>()
-        {
-            var iface = this.typeLookup.GetInterface<T>();
-            return iface.Name;
-        }
+        /// <summary>
+        /// Send the specified log entry to the logger.
+        /// </summary>
+        /// <param name="entry">The log entry.</param>
+        void Log(LogEntry entry);
     }
 }

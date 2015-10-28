@@ -19,7 +19,7 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal sealed class LinkProperty : ImmutableValueObject<LinkProperty>
+    internal sealed class LinkProperty : ImmutableValueObject<LinkProperty>, IEmbeddedProperty
     {
         private static Func<LinkProperty, LinkProperty, bool> EqualityFunction =>
             (a, b) => string.Equals(a?.Href, b?.Href, StringComparison.InvariantCultureIgnoreCase);

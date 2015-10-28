@@ -66,8 +66,8 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 var cache = new InMemoryCache<string, string>("fooCache");
 
                 (cache as ISynchronousCache<string, string>).Name.ShouldBe("fooCache");
-                cache.TimeToLive.ShouldBeNull();
-                cache.TimeToIdle.ShouldBeNull();
+                (cache as ISynchronousCache<string, string>).TimeToLive.ShouldBeNull();
+                (cache as ISynchronousCache<string, string>).TimeToIdle.ShouldBeNull();
                 cache.TotalSize.ShouldBe(0);
                 cache.AccessCount.ShouldBe(0);
                 cache.HitCount.ShouldBe(0);
@@ -225,6 +225,27 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 Thread.Sleep(1000);
                 iface.Get("foo").ShouldBeNull();
             }
+
+            [Fact]
+            public void Disposing_clears_cache()
+            {
+                var cache = new InMemoryCache<string, string>("fooCache");
+                var iface = cache as ISynchronousCache<string, string>;
+
+                iface.Put("foo", "bar");
+                iface.Get("foo").ShouldBe("bar");
+
+                iface.Dispose();
+
+                Should.Throw<Exception>(() =>
+                {
+                    iface.Get("foo").ShouldBe("bar");
+                });
+
+                cache = new InMemoryCache<string, string>("fooCache");
+                iface = cache as ISynchronousCache<string, string>;
+                iface.Get("foo").ShouldBeNull();
+            }
         }
 
         public class AsynchronousCache
@@ -235,8 +256,8 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 var cache = new InMemoryCache<string, string>("fooCache");
 
                 (cache as IAsynchronousCache<string, string>).Name.ShouldBe("fooCache");
-                cache.TimeToLive.ShouldBeNull();
-                cache.TimeToIdle.ShouldBeNull();
+                (cache as IAsynchronousCache<string, string>).TimeToLive.ShouldBeNull();
+                (cache as IAsynchronousCache<string, string>).TimeToIdle.ShouldBeNull();
                 cache.TotalSize.ShouldBe(0);
                 cache.AccessCount.ShouldBe(0);
                 cache.HitCount.ShouldBe(0);
@@ -394,6 +415,27 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 (await iface.GetAsync("foo")).ShouldBe("bar");
 
                 Thread.Sleep(1000);
+                (await iface.GetAsync("foo")).ShouldBeNull();
+            }
+
+            [Fact]
+            public async Task Disposing_clears_cache()
+            {
+                var cache = new InMemoryCache<string, string>("fooCache");
+                var iface = cache as IAsynchronousCache<string, string>;
+
+                await iface.PutAsync("foo", "bar");
+                (await iface.GetAsync("foo")).ShouldBe("bar");
+
+                iface.Dispose();
+
+                Should.Throw<Exception>(async () =>
+                {
+                    (await iface.GetAsync("foo")).ShouldBe("bar");
+                });
+
+                cache = new InMemoryCache<string, string>("fooCache");
+                iface = cache as IAsynchronousCache<string, string>;
                 (await iface.GetAsync("foo")).ShouldBeNull();
             }
         }

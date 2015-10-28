@@ -31,9 +31,9 @@ namespace Stormpath.SDK.Impl.Group
         private static readonly string GroupPropertyName = "group";
         private static readonly string AccountPropertyName = "account";
 
-        internal LinkProperty Account => this.GetLinkProperty(AccountPropertyName);
+        internal IEmbeddedProperty Account => this.GetLinkProperty(AccountPropertyName);
 
-        internal LinkProperty Group => this.GetLinkProperty(GroupPropertyName);
+        internal IEmbeddedProperty Group => this.GetLinkProperty(GroupPropertyName);
 
         public DefaultGroupMembership(ResourceData data)
             : base(data)

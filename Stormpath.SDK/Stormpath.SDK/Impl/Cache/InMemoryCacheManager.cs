@@ -24,10 +24,9 @@ namespace Stormpath.SDK.Impl.Cache
     /// </summary>
     /// <typeparam name="V">The type of vaules stored in the cache.</typeparam>
     internal sealed class InMemoryCacheManager<V> : IDisposable
-        where V : class
     {
         private readonly MemoryCache memoryCache;
-        private bool alreadyDisposed = false;
+        private bool isDisposed = false;
 
         public InMemoryCacheManager()
         {
@@ -39,8 +38,16 @@ namespace Stormpath.SDK.Impl.Cache
             return $"{key}-absoluteToken";
         }
 
+        private void ThrowIfDisposed()
+        {
+            if (this.isDisposed)
+                throw new ApplicationException($"The object ({this.GetType().Name}) has been disposed.");
+        }
+
         public V Get(string key)
         {
+            this.ThrowIfDisposed();
+
             var absoluteTokenKey = CreateAbsoluteTokenKey(key);
             var tokenAndItem = this.memoryCache.GetValues(new string[] { absoluteTokenKey, key });
 
@@ -52,13 +59,15 @@ namespace Stormpath.SDK.Impl.Cache
             if (itemHasNotExpired)
                 return (V)tokenAndItem[key];
             else
-                return null;
+                return default(V);
         }
 
         public V Put(string key, V value, DateTimeOffset absoluteExpiration, TimeSpan slidingExpiration)
         {
+            this.ThrowIfDisposed();
+
             var absoluteTokenKey = CreateAbsoluteTokenKey(key);
-            bool absoluteTokenInserted = this.memoryCache.Add(absoluteTokenKey, new object(), absoluteExpiration);
+            this.memoryCache.Set(absoluteTokenKey, new object(), absoluteExpiration);
 
             // Create a monitor to link the two items
             var monitor = this.memoryCache.CreateCacheEntryChangeMonitor(new string[] { absoluteTokenKey });
@@ -66,32 +75,39 @@ namespace Stormpath.SDK.Impl.Cache
             var mainItemPolicy = new CacheItemPolicy();
             mainItemPolicy.SlidingExpiration = slidingExpiration;
             mainItemPolicy.ChangeMonitors.Add(monitor);
-            bool mainItemInserted = this.memoryCache.Add(key, value, mainItemPolicy);
+            this.memoryCache.Set(key, value, mainItemPolicy);
 
-            if (absoluteTokenInserted && mainItemInserted)
-                return value;
-            else
-                return null;
+            return value;
         }
 
         public V Remove(string key)
         {
+            this.ThrowIfDisposed();
+
             this.memoryCache.Remove(CreateAbsoluteTokenKey(key));
             return (V)this.memoryCache.Remove(key);
         }
 
-        public long Count => this.memoryCache.GetCount() / 2;
+        public long Count
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+
+                return this.memoryCache.GetCount() / 2;
+            }
+        }
 
         private void Dispose(bool disposing)
         {
-            if (!this.alreadyDisposed)
+            if (!this.isDisposed)
             {
                 if (disposing)
                 {
                     this.memoryCache.Dispose();
                 }
 
-                this.alreadyDisposed = true;
+                this.isDisposed = true;
             }
         }
 

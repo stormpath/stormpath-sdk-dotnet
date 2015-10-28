@@ -19,7 +19,6 @@ using Shouldly;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Async
@@ -240,7 +239,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var directory = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryDirectoryHref);
 
             var instance = client.Instantiate<IGroup>();
-            instance.SetName($".NET ITs New Test Group #2 {this.fixture.TestRunIdentifier}");
+            var directoryName = $".NET ITs New Test Group #2 ({this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
+            instance.SetName(directoryName);
             instance.SetDescription("A nu start");
             instance.SetStatus(GroupStatus.Enabled);
 
@@ -248,7 +248,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             created.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedGroupHrefs.Add(created.Href);
 
-            created.Name.ShouldBe($".NET ITs New Test Group #2 {this.fixture.TestRunIdentifier}");
+            created.Name.ShouldBe(directoryName);
             created.Description.ShouldBe("A nu start");
             created.Status.ShouldBe(GroupStatus.Enabled);
 
@@ -263,7 +263,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var instance = client.Instantiate<IGroup>();
-            instance.SetName($".NET ITs Custom Data Group {this.fixture.TestRunIdentifier}");
+            instance.SetName($".NET ITs Custom Data Group ({this.fixture.TestRunIdentifier} - {clientBuilder.Name})");
             instance.CustomData.Put("isNeat", true);
             instance.CustomData.Put("roleBasedSecurity", "pieceOfCake");
 

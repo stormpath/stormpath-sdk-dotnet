@@ -23,7 +23,7 @@ using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 

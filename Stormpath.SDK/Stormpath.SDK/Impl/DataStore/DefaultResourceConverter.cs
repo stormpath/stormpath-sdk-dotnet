@@ -43,10 +43,10 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private object SanitizeValue(AbstractResource resource, string propertyName, object rawValue)
         {
-            var asLinkProperty = rawValue as LinkProperty;
-            if (asLinkProperty != null)
+            var asEmbedded = rawValue as IEmbeddedProperty;
+            if (asEmbedded != null)
             {
-                return new { href = asLinkProperty.Href };
+                return new { href = asEmbedded.Href };
             }
 
             var asEnumeration = rawValue as StringEnumeration;

@@ -55,13 +55,13 @@ namespace Stormpath.SDK.Impl.Group
 
         GroupStatus IGroup.Status => this.GetProperty<GroupStatus>(StatusPropertyName);
 
-        internal LinkProperty Directory => this.GetLinkProperty(DirectoryPropertyName);
+        internal IEmbeddedProperty Directory => this.GetLinkProperty(DirectoryPropertyName);
 
-        internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
+        internal IEmbeddedProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
-        internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
+        internal IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
-        internal LinkProperty AccountMemberships => this.GetLinkProperty(AccountMembershipsPropertyName);
+        internal IEmbeddedProperty AccountMemberships => this.GetLinkProperty(AccountMembershipsPropertyName);
 
         IGroup IGroup.SetDescription(string description)
         {

@@ -17,7 +17,7 @@
 using System;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Impl.Utility;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.Api
 {

@@ -23,15 +23,14 @@ using Stormpath.SDK.Cache;
 
 namespace Stormpath.SDK.Impl.Cache
 {
-    internal sealed class InMemoryCache<K, V> : ISynchronousCache<K, V>, IAsynchronousCache<K, V>, IDisposable
-        where V : class
+    internal sealed class InMemoryCache<K, V> : ISynchronousCache<K, V>, IAsynchronousCache<K, V>
     {
         private readonly string region;
         private readonly TimeSpan? timeToLive;
         private readonly TimeSpan? timeToIdle;
 
         private InMemoryCacheManager<V> cacheManager;
-        private bool alreadyDisposed = false;
+        private bool isDisposed = false;
 
         private long accessCount;
         private long hitCount;
@@ -61,6 +60,12 @@ namespace Stormpath.SDK.Impl.Cache
             this.missCount = 0;
         }
 
+        private void ThrowIfDisposed()
+        {
+            if (this.isDisposed)
+                throw new ApplicationException($"The object ({this.GetType().Name}) has been disposed.");
+        }
+
         private string CreateCompositeKey(K key)
         {
             return $"{this.region}-{key}";
@@ -70,15 +75,23 @@ namespace Stormpath.SDK.Impl.Cache
 
         string ICache<K, V>.Name => this.region;
 
+        TimeSpan? ICache<K, V>.TimeToLive => this.timeToLive;
+
+        TimeSpan? ICache<K, V>.TimeToIdle => this.timeToIdle;
+
         /// <summary>
         /// Gets the number of items stored in all regions of the cache.
         /// </summary>
         /// <value>The total number of items stored in all regions of the cache.</value>
-        public long TotalSize => this.cacheManager.Count;
+        public long TotalSize
+        {
+            get
+            {
+                this.ThrowIfDisposed();
 
-        public TimeSpan? TimeToLive => this.timeToLive;
-
-        public TimeSpan? TimeToIdle => this.timeToIdle;
+                return this.cacheManager.Count;
+            }
+        }
 
         public long AccessCount => Interlocked.Read(ref this.accessCount);
 
@@ -94,6 +107,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         V ISynchronousCache<K, V>.Get(K key)
         {
+            this.ThrowIfDisposed();
+
             Interlocked.Increment(ref this.accessCount);
 
             var compositeKey = this.CreateCompositeKey(key);
@@ -109,6 +124,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         V ISynchronousCache<K, V>.Put(K key, V value)
         {
+            this.ThrowIfDisposed();
+
             var compositeKey = this.CreateCompositeKey(key);
             var absoluteExpiration = this.timeToLive.HasValue
                 ? DateTimeOffset.Now.Add(this.timeToLive.Value)
@@ -122,6 +139,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         V ISynchronousCache<K, V>.Remove(K key)
         {
+            this.ThrowIfDisposed();
+
             Interlocked.Increment(ref this.accessCount);
 
             var compositeKey = this.CreateCompositeKey(key);
@@ -137,6 +156,7 @@ namespace Stormpath.SDK.Impl.Cache
 
         async Task<V> IAsynchronousCache<K, V>.GetAsync(K key, CancellationToken cancellationToken)
         {
+            this.ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             await Task.Yield();
@@ -145,6 +165,7 @@ namespace Stormpath.SDK.Impl.Cache
 
         async Task<V> IAsynchronousCache<K, V>.PutAsync(K key, V value, CancellationToken cancellationToken)
         {
+            this.ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             await Task.Yield();
@@ -153,6 +174,7 @@ namespace Stormpath.SDK.Impl.Cache
 
         async Task<V> IAsynchronousCache<K, V>.RemoveAsync(K key, CancellationToken cancellationToken)
         {
+            this.ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             await Task.Yield();
@@ -171,25 +193,29 @@ namespace Stormpath.SDK.Impl.Cache
 
         public override string ToString()
         {
+            this.ThrowIfDisposed();
+
             return new StringBuilder()
-                .AppendLine($"Region: {this.region}")
-                .AppendLine($"AccessCount: {this.AccessCount}")
-                .AppendLine($"HitCount: {this.HitCount}")
-                .AppendLine($"MissCount: {this.MissCount}")
-                .AppendLine($"HitRatio: {this.GetHitRatio()}")
+                .Append("{")
+                .Append($@" ""region"": ""{this.region}"",")
+                .Append($@" ""accessCount"": {this.AccessCount},")
+                .Append($@" ""hitCount"": {this.HitCount},")
+                .Append($@" ""missCount"": {this.MissCount},")
+                .Append($@" ""hitRatio"": {this.GetHitRatio()}")
+                .Append(" }")
                 .ToString();
         }
 
         private void Dispose(bool disposing)
         {
-            if (!this.alreadyDisposed)
+            if (!this.isDisposed)
             {
                 if (disposing)
                 {
                     this.cacheManager.Dispose();
                 }
 
-                this.alreadyDisposed = true;
+                this.isDisposed = true;
             }
         }
 

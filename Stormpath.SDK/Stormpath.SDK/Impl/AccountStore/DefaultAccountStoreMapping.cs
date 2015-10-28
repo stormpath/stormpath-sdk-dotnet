@@ -35,9 +35,9 @@ namespace Stormpath.SDK.Impl.AccountStore
         {
         }
 
-        internal LinkProperty AccountStore => this.GetLinkProperty(AccountStorePropertyName);
+        internal IEmbeddedProperty AccountStore => this.GetLinkProperty(AccountStorePropertyName);
 
-        internal LinkProperty Application => this.GetLinkProperty(ApplicationPropertyName);
+        internal IEmbeddedProperty Application => this.GetLinkProperty(ApplicationPropertyName);
 
         bool IAccountStoreMapping.IsDefaultAccountStore => this.GetProperty<bool>(IsDefaultAccountStorePropertyName);
 

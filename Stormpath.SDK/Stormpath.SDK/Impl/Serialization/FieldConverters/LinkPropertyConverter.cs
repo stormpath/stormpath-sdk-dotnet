@@ -34,14 +34,14 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             if (asEmbeddedObject == null)
                 return FieldConverterResult.Failed;
 
+            if (asEmbeddedObject.Count > 1)
+                return FieldConverterResult.Failed;
+
             var firstItem = asEmbeddedObject.FirstOrDefault();
+            var hasHref = string.Equals(firstItem.Key, "href", StringComparison.InvariantCultureIgnoreCase);
 
-            var isLinkProperty = asEmbeddedObject.Count == 1
-                && !string.IsNullOrEmpty(firstItem.ToString())
-                && string.Equals(firstItem.Key, "href", StringComparison.InvariantCultureIgnoreCase);
-
-            if (!isLinkProperty)
-                return null;
+            if (!hasHref)
+                return FieldConverterResult.Failed;
 
             return new FieldConverterResult(true, new LinkProperty(firstItem.Value.ToString()));
         }

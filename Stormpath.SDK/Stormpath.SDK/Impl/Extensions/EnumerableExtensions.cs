@@ -1,4 +1,4 @@
-﻿// <copyright file="ICacheRegionNameResolver.cs" company="Stormpath, Inc.">
+﻿// <copyright file="EnumerableExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Resource;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Stormpath.SDK.Impl.Cache
+namespace Stormpath.SDK.Impl.Extensions
 {
-    internal interface ICacheRegionNameResolver
+    internal static class EnumerableExtensions
     {
-        string GetCacheRegionName<T>()
-            where T : IResource;
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
+            => !(source?.Any() ?? false);
     }
 }

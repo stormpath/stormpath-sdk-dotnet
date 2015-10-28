@@ -59,23 +59,23 @@ namespace Stormpath.SDK.Impl.Tenant
 
         private ITenantActionsSync AsTenantActionSyncInterface => this;
 
-        internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
+        internal IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
-        internal LinkProperty Agents => this.GetLinkProperty(AgentsPropertyName);
+        internal IEmbeddedProperty Agents => this.GetLinkProperty(AgentsPropertyName);
 
-        internal LinkProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
+        internal IEmbeddedProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
-        internal LinkProperty Directories => this.GetLinkProperty(DirectoriesPropertyName);
+        internal IEmbeddedProperty Directories => this.GetLinkProperty(DirectoriesPropertyName);
 
-        internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
+        internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        internal LinkProperty IdSites => this.GetLinkProperty(IdSitesPropertyName);
+        internal IEmbeddedProperty IdSites => this.GetLinkProperty(IdSitesPropertyName);
 
         string ITenant.Key => this.GetProperty<string>(KeyPropertyName);
 
         string ITenant.Name => this.GetProperty<string>(NamePropertyName);
 
-        internal LinkProperty Organizations => this.GetLinkProperty(OrganizationsPropertyName);
+        internal IEmbeddedProperty Organizations => this.GetLinkProperty(OrganizationsPropertyName);
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {

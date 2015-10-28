@@ -70,7 +70,7 @@
     <Compile Include="Async\CustomData_tests.cs" />
     <Compile Include="Async\Group_tests.cs" />
     <Compile Include="Helpers\Assertly.cs" />
-    <Compile Include="Helpers\IntegrationTestClients.cs" />
+    <Compile Include="IntegrationTestClients.cs" />
     <Compile Include="Helpers\RandomPassword.cs" />
     <Compile Include="Helpers\RandomEmail.cs" />
     <Compile Include="Helpers\RandomPassword_tests.cs" />
@@ -80,7 +80,8 @@
     <Compile Include="IntegrationTestFixture.cs" />
     <Compile Include="Async\Directory_tests.cs" />
     <Compile Include="Async\Error_tests.cs" />
-    <Compile Include="Helpers\TestClientBuilder.cs" />
+    <Compile Include="StaticLogger.cs" />
+    <Compile Include="TestClientBuilder.cs" />
     <Compile Include="Meta_tests.cs" />
     <Compile Include="Sync\Sync_Entity_tests.cs" />
     <Compile Include="Sync\Sync_Group_tests.cs" />

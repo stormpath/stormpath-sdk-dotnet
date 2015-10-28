@@ -20,8 +20,8 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
-using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Client
 {
@@ -35,11 +35,11 @@ namespace Stormpath.SDK.Impl.Client
         private readonly IClientApiKeyBuilder clientApiKeyBuilder;
         private readonly IJsonSerializerBuilder serializerBuilder;
         private readonly IHttpClientBuilder httpClientBuilder;
-        private readonly ICacheProviderBuilder cacheProviderBuilder;
 
         private string baseUrl = DefaultBaseUrl;
         private int connectionTimeout = DefaultConnectionTimeout;
         private IWebProxy proxy;
+        private ICacheProvider cacheProvider;
         private AuthenticationScheme authenticationScheme = DefaultAuthenticationScheme;
         private IClientApiKey apiKey;
         private ILogger logger;
@@ -48,7 +48,6 @@ namespace Stormpath.SDK.Impl.Client
         public DefaultClientBuilder()
         {
             this.serializerBuilder = new DefaultJsonSerializerBuilder();
-            this.cacheProviderBuilder = new DefaultCacheProviderBuilder();
             this.httpClientBuilder = new DefaultHttpClientBuilder();
             this.clientApiKeyBuilder = ClientApiKeys.Builder();
         }
@@ -141,20 +140,15 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
-        internal IClientBuilder SetCache(bool cacheEnabled)
-        {
-            this.cacheProviderBuilder.UseCache(cacheEnabled);
-
-            return this;
-        }
-
-        internal IClientBuilder SetCache(ICacheProvider cacheProvider)
+        IClientBuilder IClientBuilder.SetCacheProvider(ICacheProvider cacheProvider)
         {
             if (cacheProvider == null)
                 throw new ArgumentNullException(nameof(cacheProvider));
 
-            this.cacheProviderBuilder.UseCache(true);
-            this.cacheProviderBuilder.UseProvider(cacheProvider);
+            if (this.cacheProvider != null)
+                throw new ApplicationException("Cache provider already set.");
+
+            this.cacheProvider = cacheProvider;
 
             return this;
         }
@@ -172,6 +166,17 @@ namespace Stormpath.SDK.Impl.Client
             if (this.logger == null)
                 this.logger = new NullLogger();
 
+            if (this.cacheProvider == null)
+            {
+                this.logger.Info("No CacheProvider configured. Defaulting to in-memory CacheProvider with default TTL and TTI of one hour.");
+
+                this.cacheProvider = Caches
+                    .NewInMemoryCacheProvider()
+                    .WithDefaultTimeToIdle(TimeSpan.FromHours(1))
+                    .WithDefaultTimeToLive(TimeSpan.FromHours(1))
+                    .Build();
+            }
+
             this.httpClientBuilder
                 .SetBaseUrl(this.baseUrl)
                 .SetConnectionTimeout(this.connectionTimeout)
@@ -186,7 +191,7 @@ namespace Stormpath.SDK.Impl.Client
                 this.proxy,
                 this.httpClientBuilder.Build(),
                 this.serializerBuilder.Build(),
-                this.cacheProviderBuilder.Build(),
+                this.cacheProvider,
                 this.logger,
                 this.identityMapExpiration ?? DefaultIdentityMapSlidingExpiration);
         }

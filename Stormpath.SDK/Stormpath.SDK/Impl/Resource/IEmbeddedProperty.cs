@@ -1,4 +1,4 @@
-﻿// <copyright file="ILogger.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IEmbeddedProperty.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Shared
+namespace Stormpath.SDK.Impl.Resource
 {
-    /// <summary>
-    /// A wrapper interface for logger plugins.
-    /// </summary>
-    public interface ILogger
+    internal interface IEmbeddedProperty
     {
-        /// <summary>
-        /// Send the specified log entry to the logger.
-        /// </summary>
-        /// <param name="entry">The log entry.</param>
-        void Log(LogEntry entry);
+        string Href { get; }
     }
 }

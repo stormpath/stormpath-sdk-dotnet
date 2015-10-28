@@ -17,7 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
 {
@@ -50,7 +51,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         IResourceDataResult ISynchronousFilterChain.Filter(IResourceDataRequest request, ILogger logger)
         {
-            bool hasFilters = this.filters?.Any() ?? false;
+            bool hasFilters = !this.filters.IsNullOrEmpty();
             if (!hasFilters)
                 throw new ApplicationException("Empty filter chain");
 

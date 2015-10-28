@@ -24,21 +24,23 @@ namespace Stormpath.SDK.Impl.Serialization
 {
     internal sealed class JsonSerializationProvider
     {
-        private static readonly FieldConverterList ConverterChain =
-            new FieldConverterList(
-                new LinkPropertyConverter(),
-                new StatusFieldConverters.AccountStatusConverter(),
-                new StatusFieldConverters.ApplicationStatusConverter(),
-                new StatusFieldConverters.DirectoryStatusConverter(),
-                new StatusFieldConverters.GroupStatusConverter());
+        private readonly FieldConverterList converterChain;
 
         private readonly IJsonSerializer externalSerializer;
-        private readonly ResourceTypeLookup typeLookup;
+        private readonly ResourceTypes typeLookup;
 
         public JsonSerializationProvider(IJsonSerializer externalSerializer)
         {
             this.externalSerializer = externalSerializer;
-            this.typeLookup = new ResourceTypeLookup();
+            this.typeLookup = new ResourceTypes();
+
+            this.converterChain = new FieldConverterList(
+                new LinkPropertyConverter(),
+                new ExpandedPropertyConverter(converter: this.ConvertProperties),
+                new StatusFieldConverters.AccountStatusConverter(),
+                new StatusFieldConverters.ApplicationStatusConverter(),
+                new StatusFieldConverters.DirectoryStatusConverter(),
+                new StatusFieldConverters.GroupStatusConverter());
         }
 
         public string Serialize(IDictionary<string, object> map)
@@ -63,6 +65,7 @@ namespace Stormpath.SDK.Impl.Serialization
                 object value = prop.Value;
 
                 var asListOfObjects = prop.Value as IEnumerable<IDictionary<string, object>>;
+                var asEmbeddedObject = prop.Value as IDictionary<string, object>;
                 if (asListOfObjects != null)
                 {
                     var outputList = new List<IDictionary<string, object>>();
@@ -75,7 +78,7 @@ namespace Stormpath.SDK.Impl.Serialization
                 }
                 else
                 {
-                    var convertResult = ConverterChain.TryConvertField(prop, targetType);
+                    var convertResult = this.converterChain.TryConvertField(prop, targetType);
                     if (convertResult.Success)
                         value = convertResult.Value;
                 }

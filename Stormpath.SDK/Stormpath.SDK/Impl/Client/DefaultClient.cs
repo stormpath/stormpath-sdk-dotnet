@@ -32,8 +32,8 @@ using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
-using Stormpath.SDK.Shared;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
 
@@ -46,6 +46,7 @@ namespace Stormpath.SDK.Impl.Client
         private readonly AuthenticationScheme authenticationScheme;
         private readonly int connectionTimeout;
         private readonly IWebProxy proxy;
+        private readonly ICacheProvider cacheProvider;
         private readonly IJsonSerializer serializer;
         private readonly IHttpClient httpClient;
         private readonly ILogger logger;
@@ -82,6 +83,7 @@ namespace Stormpath.SDK.Impl.Client
             this.baseUrl = baseUrl;
             this.connectionTimeout = connectionTimeout;
             this.proxy = proxy;
+            this.cacheProvider = cacheProvider;
             this.authenticationScheme = authenticationScheme;
             this.serializer = serializer;
             this.httpClient = httpClient;
@@ -108,6 +110,8 @@ namespace Stormpath.SDK.Impl.Client
         internal int ConnectionTimeout => this.connectionTimeout;
 
         internal IWebProxy Proxy => this.proxy;
+
+        internal ICacheProvider CacheProvider => this.cacheProvider;
 
         internal IJsonSerializer Serializer => this.serializer;
 

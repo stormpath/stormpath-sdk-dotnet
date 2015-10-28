@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
@@ -22,18 +23,31 @@ namespace Stormpath.SDK.Impl.Cache
 {
     internal sealed class NullCacheProvider : ISynchronousCacheProvider, IAsynchronousCacheProvider
     {
-        bool ICacheProvider.IsAsynchronousSupported => true;
+        private bool disposed = false;
 
-        bool ICacheProvider.IsSynchronousSupported => true;
+        bool ICacheProvider.IsAsynchronousSupported => false;
+
+        bool ICacheProvider.IsSynchronousSupported => false;
+
+        private void ThrowIfDisposed()
+        {
+            if (this.disposed)
+                throw new ApplicationException("This cache provider has been disposed.");
+        }
 
         ISynchronousCache<K, V> ISynchronousCacheProvider.GetCache<K, V>(string name)
         {
-            return new NullCache<K, V>();
+            throw new NotImplementedException();
         }
 
         Task<IAsynchronousCache<K, V>> IAsynchronousCacheProvider.GetCacheAsync<K, V>(string name, CancellationToken cancellationToken)
         {
-            return Task.FromResult<IAsynchronousCache<K, V>>(new NullCache<K, V>());
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            this.disposed = true;
         }
     }
 }

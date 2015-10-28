@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.CustomData;
@@ -24,7 +25,7 @@ namespace Stormpath.SDK.Impl.Resource
 {
     internal abstract class AbstractExtendableInstanceResource : AbstractInstanceResource, IExtendable, IExtendableSync
     {
-        private static readonly string CustomDataPropertyName = "customData";
+        public static readonly string CustomDataPropertyName = "customData";
 
         private IEmbeddedCustomData customDataProxy;
 
@@ -34,7 +35,10 @@ namespace Stormpath.SDK.Impl.Resource
             this.ResetCustomData();
         }
 
-        internal LinkProperty CustomData => this.GetProperty<LinkProperty>(CustomDataPropertyName);
+        public static bool IsExtendable(Type type)
+            => typeof(IExtendable).IsAssignableFrom(type);
+
+        internal IEmbeddedProperty CustomData => this.GetLinkProperty(CustomDataPropertyName);
 
         IEmbeddedCustomData IExtendable.CustomData => this.customDataProxy;
 

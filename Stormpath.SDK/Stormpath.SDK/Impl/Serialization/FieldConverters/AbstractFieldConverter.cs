@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 
         private readonly string name;
         private readonly Type[] appliesToTargetTypes;
-        private readonly ResourceTypeLookup typeLookup;
+        protected readonly ResourceTypes typeLookup;
 
         public AbstractFieldConverter(string converterName, Type appliesToTargetType = AnyType)
             : this(converterName, appliesToTargetTypes: appliesToTargetType)
@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
         {
             this.appliesToTargetTypes = appliesToTargetTypes;
             this.name = converterName;
-            this.typeLookup = new ResourceTypeLookup();
+            this.typeLookup = new ResourceTypes();
         }
 
         public FieldConverterResult TryConvertField(KeyValuePair<string, object> token, Type targetType)

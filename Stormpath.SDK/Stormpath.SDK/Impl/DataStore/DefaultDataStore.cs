@@ -28,14 +28,15 @@ using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.DataStore.Filters;
 using Stormpath.SDK.Impl.Error;
+using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.IdentityMap;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Serialization;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Serialization;
-using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -73,12 +74,12 @@ namespace Stormpath.SDK.Impl.DataStore
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
             if (cacheProvider == null)
-                throw new ArgumentNullException(nameof(cacheProvider), "Use NullCacheManager if you wish to turn off caching.");
+                throw new ArgumentNullException(nameof(cacheProvider), "Use NullCacheProvider if you wish to turn off caching.");
 
             this.baseUrl = baseUrl;
             this.requestExecutor = requestExecutor;
             this.cacheProvider = cacheProvider;
-            this.cacheResolver = new DefaultCacheResolver(cacheProvider, new DefaultCacheRegionNameResolver());
+            this.cacheResolver = new DefaultCacheResolver(cacheProvider);
 
             this.serializer = new JsonSerializationProvider(serializer);
             this.identityMap = new MemoryCacheIdentityMap<string, ResourceData>(identityMapExpiration);
@@ -92,7 +93,6 @@ namespace Stormpath.SDK.Impl.DataStore
             this.defaultSyncFilters = this.BuildDefaultSyncFilterChain();
         }
 
-        // *** Helper methods ***
         private IAsynchronousFilterChain BuildDefaultAsyncFilterChain()
         {
             var asyncFilterChain = new DefaultAsynchronousFilterChain();
@@ -100,7 +100,7 @@ namespace Stormpath.SDK.Impl.DataStore
             if (this.IsCachingEnabled())
             {
                 asyncFilterChain.Add(new ReadCacheFilter(this.baseUrl, this.cacheResolver));
-                asyncFilterChain.Add(new WriteCacheFilter(this.cacheResolver));
+                asyncFilterChain.Add(new WriteCacheFilter(this.cacheResolver, this.resourceFactory));
             }
 
             asyncFilterChain.Add(new ProviderAccountResultFilter());
@@ -115,7 +115,7 @@ namespace Stormpath.SDK.Impl.DataStore
             if (this.IsCachingEnabled())
             {
                 syncFilterChain.Add(new ReadCacheFilter(this.baseUrl, this.cacheResolver));
-                syncFilterChain.Add(new WriteCacheFilter(this.cacheResolver));
+                syncFilterChain.Add(new WriteCacheFilter(this.cacheResolver, this.resourceFactory));
             }
 
             syncFilterChain.Add(new ProviderAccountResultFilter());
@@ -539,7 +539,7 @@ namespace Stormpath.SDK.Impl.DataStore
             // In some cases, all we need to save are custom data property deletions, which is taken care of above.
             // So, we should just refresh with the latest data from the server.
             // This doesn't apply to CREATEs, though, because sometimes we need to POST a null body.
-            bool nothingToPost = !(propertiesMap?.Any() ?? false);
+            bool nothingToPost = propertiesMap.IsNullOrEmpty();
             if (!create && nothingToPost)
                 return await this.AsAsyncInterface.GetResourceAsync<TReturned>(href, cancellationToken).ConfigureAwait(false);
 
@@ -629,7 +629,7 @@ namespace Stormpath.SDK.Impl.DataStore
             // In some cases, all we need to save are custom data property deletions, which is taken care of above.
             // So, we should just refresh with the latest data from the server.
             // This doesn't apply to CREATEs, though, because sometimes we need to POST a null body.
-            bool nothingToPost = !(propertiesMap?.Any() ?? false);
+            bool nothingToPost = propertiesMap.IsNullOrEmpty();
             if (!create && nothingToPost)
                 return this.AsSyncInterface.GetResource<TReturned>(href);
 
@@ -720,6 +720,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 {
                     this.requestExecutor.Dispose();
                     this.resourceFactory.Dispose();
+                    this.cacheProvider.Dispose();
                 }
 
                 this.disposed = true;

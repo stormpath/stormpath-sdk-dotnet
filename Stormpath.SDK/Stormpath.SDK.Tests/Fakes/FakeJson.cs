@@ -102,6 +102,156 @@ namespace Stormpath.SDK.Tests.Fakes
     ""username"": ""han.solo@corellia.core""
 }";
 
+        public static readonly string AccountWithExpandedCustomData = @"
+{
+    ""accessTokens"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/accessTokens""
+    },
+    ""apiKeys"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/apiKeys""
+    },
+    ""applications"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/applications""
+    },
+    ""createdAt"": ""2015-07-21T23:50:49.078Z"",
+    ""customData"": {
+        ""createdAt"": ""2015-07-30T02:42:17.833Z"",
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/customData"",
+        ""modifiedAt"": ""2015-07-30T02:42:17.833Z"",
+        ""isAdmin"": false
+    },
+    ""directory"": {
+        ""href"": ""https://api.stormpath.com/v1/directories/foobarDirectory""
+    },
+    ""email"": ""han.solo@corellia.core"",
+    ""emailVerificationToken"": null,
+    ""fullName"": ""Han Solo"",
+    ""givenName"": ""Han"",
+    ""groupMemberships"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/groupMemberships""
+    },
+    ""groups"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/groups""
+    },
+    ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount"",
+    ""middleName"": null,
+    ""modifiedAt"": ""2015-07-21T23:50:49.078Z"",
+    ""providerData"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/providerData""
+    },
+    ""refreshTokens"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/refreshTokens""
+    },
+    ""status"": ""ENABLED"",
+    ""surname"": ""Solo"",
+    ""tenant"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
+    },
+    ""username"": ""han.solo@corellia.core""
+}";
+
+        public static readonly string AccountWithExpandedGroups = @"
+{
+    ""accessTokens"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/accessTokens""
+    },
+    ""apiKeys"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/apiKeys""
+    },
+    ""applications"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/applications""
+    },
+    ""createdAt"": ""2015-07-21T23:50:49.078Z"",
+    ""customData"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/customData""
+    },
+    ""directory"": {
+        ""href"": ""https://api.stormpath.com/v1/directories/foobarDirectory""
+    },
+    ""email"": ""han.solo@corellia.core"",
+    ""emailVerificationToken"": null,
+    ""fullName"": ""Han Solo"",
+    ""givenName"": ""Han"",
+    ""groupMemberships"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/groupMemberships""
+    },
+    ""groups"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant/groups"",
+        ""items"": [
+            {
+                ""accountMemberships"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group1/accountMemberships""
+                },
+                ""accounts"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group1/accounts""
+                },
+                ""applications"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group1/applications""
+                },
+                ""createdAt"": ""2015-08-24T17:02:52.915Z"",
+                ""customData"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group1/customData""
+                },
+                ""description"": ""Those loyal to the Galactic Empire."",
+                ""directory"": {
+                    ""href"": ""https://api.stormpath.com/v1/directories/directory1""
+                },
+                ""href"": ""https://api.stormpath.com/v1/groups/group1"",
+                ""modifiedAt"": ""2015-08-24T17:02:52.915Z"",
+                ""name"": ""Imperials"",
+                ""status"": ""DISABLED"",
+                ""tenant"": {
+                    ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
+                }
+            },
+            {
+                ""accountMemberships"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group2/accountMemberships""
+                },
+                ""accounts"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group2/accounts""
+                },
+                ""applications"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group2/applications""
+                },
+                ""createdAt"": ""2015-08-24T17:02:42.755Z"",
+                ""customData"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group2/customData""
+                },
+                ""description"": ""The members of the Rebel Alliance."",
+                ""directory"": {
+                    ""href"": ""https://api.stormpath.com/v1/directories/directory1""
+                },
+                ""href"": ""https://api.stormpath.com/v1/groups/group2"",
+                ""modifiedAt"": ""2015-08-24T17:02:42.755Z"",
+                ""name"": ""Rebels"",
+                ""status"": ""ENABLED"",
+                ""tenant"": {
+                    ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
+                }
+            }
+        ],
+        ""limit"": 25,
+        ""offset"": 0,
+        ""size"": 2
+    },
+    ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount"",
+    ""middleName"": null,
+    ""modifiedAt"": ""2015-07-21T23:50:49.078Z"",
+    ""providerData"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/providerData""
+    },
+    ""refreshTokens"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/refreshTokens""
+    },
+    ""status"": ""ENABLED"",
+    ""surname"": ""Solo"",
+    ""tenant"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
+    },
+    ""username"": ""han.solo@corellia.core""
+}";
+
         #endregion
 
         #region Account list

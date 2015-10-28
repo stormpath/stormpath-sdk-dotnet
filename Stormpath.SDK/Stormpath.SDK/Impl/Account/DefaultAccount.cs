@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Impl.Account
         private static readonly string GroupMembershipsPropertyName = "groupMemberships";
         private static readonly string GroupsPropertyName = "groups";
         private static readonly string MiddleNamePropertyName = "middleName";
-        private static readonly string PasswordPropertyName = "password";
+        public static readonly string PasswordPropertyName = "password";
         private static readonly string ProviderDataPropertyName = "providerData";
         private static readonly string RefreshTokensPropertyName = "refreshTokens";
         private static readonly string StatusPropertyName = "status";
@@ -62,17 +62,17 @@ namespace Stormpath.SDK.Impl.Account
 
         private new IAccount AsInterface => this;
 
-        internal LinkProperty AccessTokens => this.GetLinkProperty(AccessTokensPropertyName);
+        internal IEmbeddedProperty AccessTokens => this.GetLinkProperty(AccessTokensPropertyName);
 
-        internal LinkProperty ApiKeys => this.GetLinkProperty(ApiKeysPropertyName);
+        internal IEmbeddedProperty ApiKeys => this.GetLinkProperty(ApiKeysPropertyName);
 
-        internal LinkProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
+        internal IEmbeddedProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
-        internal LinkProperty Directory => this.GetLinkProperty(DirectoryPropertyName);
+        internal IEmbeddedProperty Directory => this.GetLinkProperty(DirectoryPropertyName);
 
         string IAccount.Email => this.GetProperty<string>(EmailPropertyName);
 
-        internal LinkProperty EmailVerificationToken => this.GetLinkProperty(EmailVerificationTokenPropertyName);
+        internal IEmbeddedProperty EmailVerificationToken => this.GetLinkProperty(EmailVerificationTokenPropertyName);
 
         IEmailVerificationToken IAccount.EmailVerificationToken
         {
@@ -91,21 +91,21 @@ namespace Stormpath.SDK.Impl.Account
 
         string IAccount.GivenName => this.GetProperty<string>(GivenNamePropertyName);
 
-        internal LinkProperty GroupMemberships => this.GetLinkProperty(GroupMembershipsPropertyName);
+        internal IEmbeddedProperty GroupMemberships => this.GetLinkProperty(GroupMembershipsPropertyName);
 
-        internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
+        internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
         string IAccount.MiddleName => this.GetProperty<string>(MiddleNamePropertyName);
 
-        internal LinkProperty ProviderData => this.GetLinkProperty(ProviderDataPropertyName);
+        internal IEmbeddedProperty ProviderData => this.GetLinkProperty(ProviderDataPropertyName);
 
-        internal LinkProperty RefreshTokens => this.GetLinkProperty(RefreshTokensPropertyName);
+        internal IEmbeddedProperty RefreshTokens => this.GetLinkProperty(RefreshTokensPropertyName);
 
         AccountStatus IAccount.Status => this.GetProperty<AccountStatus>(StatusPropertyName);
 
         string IAccount.Surname => this.GetProperty<string>(SurnamePropertyName);
 
-        internal LinkProperty Tenant => this.GetLinkProperty(TenantPropertyName);
+        internal IEmbeddedProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
         string IAccount.Username => this.GetProperty<string>(UsernamePropertyName);
 

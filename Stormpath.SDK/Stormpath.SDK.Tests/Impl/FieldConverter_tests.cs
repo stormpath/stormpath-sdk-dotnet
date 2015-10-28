@@ -133,13 +133,35 @@ namespace Stormpath.SDK.Tests.Impl
             public void Link_property_is_materialized()
             {
                 var token = new KeyValuePair<string, object>(
-                    "link",
-                    new Dictionary<string, object>() { { "href", "http://foobar/myprop" } });
+                    "test",
+                    new Dictionary<string, object>() { ["href"] = "http://foobar/myprop" });
                 var converter = new LinkPropertyConverter();
 
                 var result = converter.TryConvertField(token, AbstractFieldConverter.AnyType);
 
                 result.Value.ShouldBe(new LinkProperty("http://foobar/myprop"));
+                result.Success.ShouldBeTrue();
+            }
+        }
+
+        public class ExpandedPropertyConverter_tests
+        {
+            [Fact]
+            public void Expanded_property_is_materialized()
+            {
+                var data = new Dictionary<string, object>()
+                {
+                    ["href"] = "http://foobar/myprop",
+                    ["foo"] = "bar",
+                    ["expanded"] = true
+                };
+                var token = new KeyValuePair<string, object>("test", data);
+                var converter = new ExpandedPropertyConverter((p, t) => p);
+
+                var result = converter.TryConvertField(token, AbstractFieldConverter.AnyType);
+
+                result.Value.ShouldBeOfType<ExpandedProperty>();
+                (result.Value as ExpandedProperty).Href.ShouldBe("http://foobar/myprop");
                 result.Success.ShouldBeTrue();
             }
         }

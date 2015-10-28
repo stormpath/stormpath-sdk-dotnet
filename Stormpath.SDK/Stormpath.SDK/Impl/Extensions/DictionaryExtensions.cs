@@ -1,4 +1,4 @@
-﻿// <copyright file="ICacheProviderBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DictionaryExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,22 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Cache;
+using System.Collections.Generic;
 
-namespace Stormpath.SDK.Impl.Client
+namespace Stormpath.SDK.Impl.Extensions
 {
-    internal interface ICacheProviderBuilder
+    internal static class DictionaryExtensions
     {
-        ICacheProviderBuilder UseCache(bool useCache);
+        public static bool TryGetValueAsString(this IDictionary<string, object> source, string key, out string value)
+        {
+            value = null;
+            object raw = null;
 
-        ICacheProviderBuilder UseProvider(ICacheProvider cacheProvider);
+            var keyExists = source.TryGetValue(key, out raw);
+            if (keyExists)
+                value = raw.ToString();
 
-        ICacheProvider Build();
+            return keyExists;
+        }
     }
 }

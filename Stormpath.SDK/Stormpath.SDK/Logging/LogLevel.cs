@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Shared
+namespace Stormpath.SDK.Logging
 {
     public enum LogLevel
     {

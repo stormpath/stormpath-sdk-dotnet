@@ -43,8 +43,12 @@ namespace Stormpath.SDK.Tests.Integration
             this.CreatedDirectoryHrefs = new List<string>();
             this.CreatedGroupHrefs = new List<string>();
 
+            StaticLogger.Instance.Info($"IT run {this.testData.Nonce} starting...");
+
             this.AddObjectsToTenantAsync()
                 .GetAwaiter().GetResult();
+
+            StaticLogger.Instance.Info($"Done adding objects. Beginning test...");
         }
 
         protected virtual void Dispose(bool disposing)
@@ -53,8 +57,16 @@ namespace Stormpath.SDK.Tests.Integration
             {
                 if (disposing)
                 {
+                    StaticLogger.Instance.Info($"IT run {this.testData.Nonce} finished. Cleaning up...");
+
                     this.RemoveObjectsFromTenantAsync()
                         .GetAwaiter().GetResult();
+
+                    StaticLogger.Instance.Info($"Done cleaning up objects.");
+
+                    var filename = System.IO.Path.Combine(Environment.CurrentDirectory, "its.log");
+                    StaticLogger.Instance.Info($"Saving log to file {filename}");
+                    System.IO.File.WriteAllText(filename, StaticLogger.Instance.ToString());
                 }
 
                 this.isDisposed = true;
@@ -150,7 +162,7 @@ namespace Stormpath.SDK.Tests.Integration
 
             // Create groups
             try
-        {
+            {
                 var groupsToCreate = this.testData.GetTestGroups(client);
                 var groupCreationTasks = groupsToCreate.Select(g =>
                     primaryApplication.CreateGroupAsync(g));
@@ -167,22 +179,22 @@ namespace Stormpath.SDK.Tests.Integration
             }
 
             // Add some accounts to groups
-                try
-                {
+            try
+            {
                 var luke = await primaryApplication.GetAccounts()
                     .Where(x => x.Email.StartsWith("lskywalker"))
                     .SingleAsync();
                 await luke.AddGroupAsync(this.PrimaryGroupHref);
-                }
+            }
             catch (Exception e)
-                    {
+            {
                 await this.RemoveObjectsFromTenantAsync();
                 throw new ApplicationException("Could not add accounts to groups", e);
-                    }
-                }
+            }
+        }
 
         private async Task RemoveObjectsFromTenantAsync()
-                {
+        {
             var client = IntegrationTestClients.GetSAuthc1Client();
             var results = new ConcurrentDictionary<string, Exception>();
 

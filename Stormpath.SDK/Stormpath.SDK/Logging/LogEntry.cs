@@ -16,7 +16,7 @@
 
 using System;
 
-namespace Stormpath.SDK.Shared
+namespace Stormpath.SDK.Logging
 {
     /// <summary>
     /// A log entry to be passed to a <see cref="ILogger"/>.

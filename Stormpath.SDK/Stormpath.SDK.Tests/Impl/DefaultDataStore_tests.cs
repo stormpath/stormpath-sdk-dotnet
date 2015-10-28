@@ -31,7 +31,7 @@ using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Linq;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 

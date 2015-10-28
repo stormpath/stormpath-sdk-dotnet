@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Auth
         {
         }
 
-        internal LinkProperty Account => this.GetLinkProperty(AccountPropertyName);
+        internal IEmbeddedProperty Account => this.GetLinkProperty(AccountPropertyName);
 
         Task<IAccount> IAuthenticationResult.GetAccountAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
