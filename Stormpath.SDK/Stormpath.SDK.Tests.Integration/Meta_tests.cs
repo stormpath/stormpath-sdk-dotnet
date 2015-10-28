@@ -15,7 +15,6 @@
 // </copyright>
 
 using Shouldly;
-using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 using Xunit.Abstractions;
 

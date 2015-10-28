@@ -16,7 +16,6 @@
 
 using System.Threading.Tasks;
 using Shouldly;
-using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Async

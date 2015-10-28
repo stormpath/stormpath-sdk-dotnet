@@ -15,7 +15,6 @@
 // </copyright>
 
 using System.Collections.Generic;
-using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;

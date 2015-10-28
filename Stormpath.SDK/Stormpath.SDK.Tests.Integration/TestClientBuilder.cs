@@ -16,8 +16,6 @@
 
 using System;
 using Stormpath.SDK.Client;
-using Stormpath.SDK.Extensions.Http;
-using Stormpath.SDK.Extensions.Serialization;
 using Xunit.Abstractions;
 
 namespace Stormpath.SDK.Tests.Integration

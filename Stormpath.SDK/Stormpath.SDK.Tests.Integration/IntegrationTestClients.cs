@@ -22,7 +22,6 @@ using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Extensions.Http;
 using Stormpath.SDK.Extensions.Serialization;
-using Stormpath.SDK.Tests.Integration.Helpers;
 
 namespace Stormpath.SDK.Tests.Integration
 {

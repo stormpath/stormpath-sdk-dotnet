@@ -93,7 +93,6 @@ namespace Stormpath.SDK.Impl.DataStore
             this.defaultSyncFilters = this.BuildDefaultSyncFilterChain();
         }
 
-        // *** Helper methods ***
         private IAsynchronousFilterChain BuildDefaultAsyncFilterChain()
         {
             var asyncFilterChain = new DefaultAsynchronousFilterChain();
