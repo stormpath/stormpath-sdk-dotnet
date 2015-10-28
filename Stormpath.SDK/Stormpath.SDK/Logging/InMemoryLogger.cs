@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Logging
                 .Append($"{DateTimeOffset.Now.ToString()} [{entry.Severity.ToString().ToUpper()}]");
 
             if (!string.IsNullOrEmpty(entry.Source))
-                logEntryBuilder.Append($"{entry.Source} - ");
+                logEntryBuilder.Append($" {entry.Source} - ");
 
             logEntryBuilder.Append(entry.Message);
 
