@@ -39,21 +39,6 @@ namespace Stormpath.SDK.Tests.Integration
                 .Build();
         });
 
-        public static readonly Lazy<IClient> BasicCaching = new Lazy<IClient>(() =>
-        {
-            return Clients.Builder()
-                .SetApiKey(GetApiKey())
-                .UseHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
-                .UseJsonSerializer(new JsonNetSerializer())
-                .SetAuthenticationScheme(AuthenticationScheme.Basic)
-                .SetLogger(StaticLogger.Instance)
-                .SetCacheProvider(Caches.NewInMemoryCacheProvider()
-                    .WithDefaultTimeToIdle(TimeSpan.FromMinutes(10))
-                    .WithDefaultTimeToLive(TimeSpan.FromMinutes(10))
-                    .Build())
-                .Build();
-        });
-
         public static readonly Lazy<IClient> SAuthc1 = new Lazy<IClient>(() =>
         {
             return Clients.Builder()
@@ -89,12 +74,11 @@ namespace Stormpath.SDK.Tests.Integration
         {
             yield return new object[] { new TestClientBuilder(nameof(Basic)) };
             yield return new object[] { new TestClientBuilder(nameof(SAuthc1)) };
-            yield return new object[] { new TestClientBuilder(nameof(BasicCaching)) };
             yield return new object[] { new TestClientBuilder(nameof(SAuthc1Caching)) };
         }
 
         public static IClient GetSAuthc1Client()
-            => SAuthc1.Value;
+            => SAuthc1Caching.Value;
 
         public static IClientApiKey GetApiKey()
         {

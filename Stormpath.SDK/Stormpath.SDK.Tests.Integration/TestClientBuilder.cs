@@ -44,9 +44,6 @@ namespace Stormpath.SDK.Tests.Integration
                 case nameof(IntegrationTestClients.Basic):
                     return IntegrationTestClients.Basic.Value;
 
-                case nameof(IntegrationTestClients.BasicCaching):
-                    return IntegrationTestClients.BasicCaching.Value;
-
                 case nameof(IntegrationTestClients.SAuthc1):
                     return IntegrationTestClients.SAuthc1.Value;
 
