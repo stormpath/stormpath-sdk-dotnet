@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         CanonicalUri Uri { get; }
 
-        Type ResourceType { get; }
+        Type Type { get; }
 
         IDictionary<string, object> Properties { get; }
     }

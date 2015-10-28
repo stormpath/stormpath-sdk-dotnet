@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         IDictionary<string, object> IResourceDataRequest.Properties => this.properties;
 
-        Type IResourceDataRequest.ResourceType => this.resourceType;
+        Type IResourceDataRequest.Type => this.resourceType;
 
         CanonicalUri IResourceDataRequest.Uri => this.uri;
     }

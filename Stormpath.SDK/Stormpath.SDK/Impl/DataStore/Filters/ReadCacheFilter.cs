@@ -85,12 +85,12 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return null;
             }
 
-            var data = await this.GetCachedValueAsync(request.ResourceType, cacheKey, cancellationToken).ConfigureAwait(false);
+            var data = await this.GetCachedValueAsync(request.Type, cacheKey, cancellationToken).ConfigureAwait(false);
 
             if (data == null)
                 return null;
 
-            return new DefaultResourceDataResult(request.Action, request.ResourceType, request.Uri, 200, data);
+            return new DefaultResourceDataResult(request.Action, request.Type, request.Uri, 200, data);
         }
 
         private IResourceDataResult GetCachedResourceData(IResourceDataRequest request, ILogger logger)
@@ -103,20 +103,20 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return null;
             }
 
-            var data = this.GetCachedValue(request.ResourceType, cacheKey);
+            var data = this.GetCachedValue(request.Type, cacheKey);
 
             if (data == null)
                 return null;
 
-            return new DefaultResourceDataResult(request.Action, request.ResourceType, request.Uri, 200, data);
+            return new DefaultResourceDataResult(request.Action, request.Type, request.Uri, 200, data);
         }
 
         private bool IsCacheRetrievalEnabled(IResourceDataRequest request)
         {
             bool isRead = request.Action == ResourceAction.Read;
-            bool isLoginAttempt = request.ResourceType == typeof(ILoginAttempt);
-            bool isProviderAccountAccess = request.ResourceType == typeof(IProviderAccountAccess);
-            bool isCollectionResource = ResourceTypes.IsCollectionResponse(request.ResourceType);
+            bool isLoginAttempt = request.Type == typeof(ILoginAttempt);
+            bool isProviderAccountAccess = request.Type == typeof(IProviderAccountAccess);
+            bool isCollectionResource = ResourceTypes.IsCollectionResponse(request.Type);
 
             return
                 isRead &&

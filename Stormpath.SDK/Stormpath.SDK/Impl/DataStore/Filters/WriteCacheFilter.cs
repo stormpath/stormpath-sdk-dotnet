@@ -59,7 +59,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             {
                 logger.Trace($"Request {request.Action} {request.Uri} is a resource deletion, purging from cache if exists", "WriteCacheFilter.FilterAsync");
                 var cacheKey = this.GetCacheKey(request);
-                await this.UncacheAsync(request.ResourceType, cacheKey, cancellationToken).ConfigureAwait(false);
+                await this.UncacheAsync(request.Type, cacheKey, cancellationToken).ConfigureAwait(false);
             }
 
             var result = await chain.FilterAsync(request, logger, cancellationToken).ConfigureAwait(false);
@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             }
 
             bool possibleCustomDataUpdate = (request.Action == ResourceAction.Create || request.Action == ResourceAction.Update) &&
-                AbstractExtendableInstanceResource.IsExtendable(request.ResourceType);
+                AbstractExtendableInstanceResource.IsExtendable(request.Type);
             if (possibleCustomDataUpdate)
                 await this.CacheNestedCustomDataUpdatesAsync(request, result, logger, cancellationToken).ConfigureAwait(false);
 
@@ -99,7 +99,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             {
                 logger.Trace($"Request {request.Action} {request.Uri} is a resource deletion, purging from cache if exists", "WriteCacheFilter.Filter");
                 var cacheKey = this.GetCacheKey(request);
-                this.Uncache(request.ResourceType, cacheKey);
+                this.Uncache(request.Type, cacheKey);
             }
 
             var result = chain.Filter(request, logger);
@@ -112,7 +112,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             }
 
             bool possibleCustomDataUpdate = (request.Action == ResourceAction.Create || request.Action == ResourceAction.Update) &&
-                AbstractExtendableInstanceResource.IsExtendable(request.ResourceType);
+                AbstractExtendableInstanceResource.IsExtendable(request.Type);
             if (possibleCustomDataUpdate)
                 this.CacheNestedCustomDataUpdates(request, result, logger);
 
