@@ -18,106 +18,106 @@ using System.Linq;
 using Stormpath.SDK.Sync;
 using Xunit;
 
-//namespace Stormpath.SDK.Tests.Integration.Sync
-//{
-//    [Collection("Live tenant tests")]
-//    public class Sync_expansion_tests
-//    {
-//        private readonly IntegrationTestFixture fixture;
+namespace Stormpath.SDK.Tests.Integration.Sync
+{
+    [Collection("Live tenant tests")]
+    public class Sync_expansion_tests
+    {
+        private readonly IntegrationTestFixture fixture;
 
-//        public Sync_expansion_tests(IntegrationTestFixture fixture)
-//        {
-//            this.fixture = fixture;
-//        }
+        public Sync_expansion_tests(IntegrationTestFixture fixture)
+        {
+            this.fixture = fixture;
+        }
 
-//        [Theory]
-//        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-//        public void Expanding_custom_data(TestClientBuilder clientBuilder)
-//        {
-//            var client = clientBuilder.Build();
-//            var tenant = client.GetCurrentTenant();
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Expanding_custom_data(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
 
-//            var account = tenant
-//                .GetAccounts()
-//                .Synchronously()
-//                .Where(x => x.Email.StartsWith("lskywalker"))
-//                .Expand(x => x.GetCustomData)
-//                .FirstOrDefault();
-//        }
+            var account = tenant
+                .GetAccounts()
+                .Synchronously()
+                .Where(x => x.Email.StartsWith("lskywalker"))
+                .Expand(x => x.GetCustomData)
+                .FirstOrDefault();
+        }
 
-//        [Theory]
-//        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-//        public void Expanding_directory(TestClientBuilder clientBuilder)
-//        {
-//            var client = clientBuilder.Build();
-//            var tenant = client.GetCurrentTenant();
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Expanding_directory(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
 
-//            var account = tenant
-//                .GetAccounts()
-//                .Synchronously()
-//                .Where(x => x.Email.StartsWith("lskywalker"))
-//                .Expand(x => x.GetDirectory)
-//                .FirstOrDefault();
-//        }
+            var account = tenant
+                .GetAccounts()
+                .Synchronously()
+                .Where(x => x.Email.StartsWith("lskywalker"))
+                .Expand(x => x.GetDirectory)
+                .FirstOrDefault();
+        }
 
-//        [Theory]
-//        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-//        public void Expanding_group_memberships(TestClientBuilder clientBuilder)
-//        {
-//            var client = clientBuilder.Build();
-//            var tenant = client.GetCurrentTenant();
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Expanding_group_memberships(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
 
-//            var account = tenant
-//                .GetAccounts()
-//                .Synchronously()
-//                .Where(x => x.Email.StartsWith("lskywalker"))
-//                .Expand(x => x.GetGroupMemberships)
-//                .FirstOrDefault();
-//        }
+            var account = tenant
+                .GetAccounts()
+                .Synchronously()
+                .Where(x => x.Email.StartsWith("lskywalker"))
+                .Expand(x => x.GetGroupMemberships)
+                .FirstOrDefault();
+        }
 
-//        [Theory]
-//        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-//        public void Expanding_groups(TestClientBuilder clientBuilder)
-//        {
-//            var client = clientBuilder.Build();
-//            var tenant = client.GetCurrentTenant();
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Expanding_groups(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
 
-//            var account = tenant
-//                .GetAccounts()
-//                .Synchronously()
-//                .Where(x => x.Email.StartsWith("lskywalker"))
-//                .Expand(x => x.GetGroups)
-//                .FirstOrDefault();
-//        }
+            var account = tenant
+                .GetAccounts()
+                .Synchronously()
+                .Where(x => x.Email.StartsWith("lskywalker"))
+                .Expand(x => x.GetGroups)
+                .FirstOrDefault();
+        }
 
-//        [Theory]
-//        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-//        public void Expanding_provider_data(TestClientBuilder clientBuilder)
-//        {
-//            var client = clientBuilder.Build();
-//            var tenant = client.GetCurrentTenant();
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Expanding_provider_data(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
 
-//            var account = tenant
-//                .GetAccounts()
-//                .Synchronously()
-//                .Where(x => x.Email.StartsWith("lskywalker"))
-//                .Expand(x => x.GetProviderData)
-//                .FirstOrDefault();
-//        }
+            var account = tenant
+                .GetAccounts()
+                .Synchronously()
+                .Where(x => x.Email.StartsWith("lskywalker"))
+                .Expand(x => x.GetProviderData)
+                .FirstOrDefault();
+        }
 
-//        [Theory]
-//        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-//        public void Expanding_tenant(TestClientBuilder clientBuilder)
-//        {
-//            var client = clientBuilder.Build();
-//            var tenant = client.GetCurrentTenant();
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Expanding_tenant(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
 
-//            var account = tenant
-//                .GetAccounts()
-//                .Synchronously()
-//                .Where(x => x.Email.StartsWith("lskywalker"))
-//                .Expand(x => x.GetTenant)
-//                .FirstOrDefault();
-//        }
-//    }
-//}
+            var account = tenant
+                .GetAccounts()
+                .Synchronously()
+                .Where(x => x.Email.StartsWith("lskywalker"))
+                .Expand(x => x.GetTenant)
+                .FirstOrDefault();
+        }
+    }
+}
