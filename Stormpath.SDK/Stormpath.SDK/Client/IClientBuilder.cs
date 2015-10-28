@@ -19,8 +19,8 @@ using System.Net;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Http;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
-using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Client
 {

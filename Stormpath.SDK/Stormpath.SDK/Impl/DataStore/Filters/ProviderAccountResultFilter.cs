@@ -16,8 +16,8 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Provider;
-using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
 {

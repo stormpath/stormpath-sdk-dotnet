@@ -20,7 +20,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Extensions;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
 {

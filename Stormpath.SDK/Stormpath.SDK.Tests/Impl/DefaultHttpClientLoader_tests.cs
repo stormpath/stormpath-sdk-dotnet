@@ -19,7 +19,7 @@ using Shouldly;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Utility;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl

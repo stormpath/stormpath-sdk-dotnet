@@ -22,7 +22,7 @@ using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Http.Authentication;
 using Stormpath.SDK.Impl.Http.Support;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.Http
 {

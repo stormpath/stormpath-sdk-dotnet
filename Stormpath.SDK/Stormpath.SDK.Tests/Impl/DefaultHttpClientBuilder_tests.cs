@@ -21,7 +21,7 @@ using Stormpath.SDK.Extensions.Http;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.Utility;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl

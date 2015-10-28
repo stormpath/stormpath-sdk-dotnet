@@ -24,8 +24,8 @@ using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Tests.Fakes
 {

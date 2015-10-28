@@ -16,7 +16,7 @@
 
 using System;
 using Stormpath.SDK.Impl.Extensions;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK
 {

@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl
 {

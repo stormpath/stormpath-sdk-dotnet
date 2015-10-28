@@ -19,7 +19,7 @@ using System.Net;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Utility;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.Client
 {

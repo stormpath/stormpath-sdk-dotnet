@@ -34,9 +34,9 @@ using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.IdentityMap;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Serialization;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Serialization;
-using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore
 {

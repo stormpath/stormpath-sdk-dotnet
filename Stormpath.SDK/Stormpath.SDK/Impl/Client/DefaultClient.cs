@@ -32,8 +32,8 @@ using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
-using Stormpath.SDK.Shared;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
 

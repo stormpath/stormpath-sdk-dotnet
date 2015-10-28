@@ -16,7 +16,7 @@
 
 using System;
 using NSubstitute;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 using Xunit;
 
 namespace Stormpath.SDK.Tests
