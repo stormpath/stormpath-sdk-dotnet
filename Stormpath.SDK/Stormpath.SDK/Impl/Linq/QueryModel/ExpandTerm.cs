@@ -1,4 +1,4 @@
-﻿// <copyright file="OrderByTerm.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ExpandTerm.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Impl.Linq.Parsing;
-
 namespace Stormpath.SDK.Impl.Linq.QueryModel
 {
-    internal sealed class OrderByTerm
+    internal sealed class ExpandTerm
     {
-        public string FieldName { get; set; }
+        public string PropertyName { get; set; }
 
-        public OrderByDirection Direction { get; set; }
+        public int? Offset { get; set; }
+
+        public int? Limit { get; set; }
     }
 }

@@ -116,6 +116,7 @@
     <Compile Include="Impl\IdentityMap\Single_threaded_tests.cs" />
     <Compile Include="Impl\IdentityMap\TestEntity.cs" />
     <Compile Include="Impl\Linq\Complicated_tests.cs" />
+    <Compile Include="Impl\Linq\Expand_extension_tests.cs" />
     <Compile Include="Impl\Linq\Sync_SingleOrDefault_tests.cs" />
     <Compile Include="Impl\Linq\Sync_Single_tests.cs" />
     <Compile Include="Impl\Linq\Sync_foreach_tests.cs" />

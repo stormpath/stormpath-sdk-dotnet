@@ -19,7 +19,7 @@ using Stormpath.SDK.Impl.Linq.Parsing;
 
 namespace Stormpath.SDK.Impl.Linq.QueryModel
 {
-    internal class WhereTerm
+    internal sealed class WhereTerm
     {
         public string FieldName { get; set; }
 

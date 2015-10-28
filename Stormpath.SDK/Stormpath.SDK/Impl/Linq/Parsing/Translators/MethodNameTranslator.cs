@@ -1,4 +1,4 @@
-﻿// <copyright file="OrderByTerm.cs" company="Stormpath, Inc.">
+﻿// <copyright file="MethodNameTranslator.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +14,22 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Impl.Linq.Parsing;
+using System.Collections.Generic;
 
-namespace Stormpath.SDK.Impl.Linq.QueryModel
+namespace Stormpath.SDK.Impl.Linq.Parsing.Translators
 {
-    internal sealed class OrderByTerm
+    internal class MethodNameTranslator : AbstractNameTranslator
     {
-        public string FieldName { get; set; }
+        private static Dictionary<string, string> methodNameMap = new Dictionary<string, string>()
+        {
+            ["GetDirectoryAsync"] = "directory",
+            ["GetTenantAsync"] = "tenant",
+            ["GetGroups"] = "groups",
+        };
 
-        public OrderByDirection Direction { get; set; }
+        public MethodNameTranslator()
+            : base(methodNameMap)
+        {
+        }
     }
 }

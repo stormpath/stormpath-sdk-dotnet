@@ -165,12 +165,15 @@
     <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
     <Compile Include="Impl\Linq\CollectionResourceExecutor.cs" />
     <Compile Include="Impl\Linq\Parsing\DatetimeAttributeTermWorkingModel.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\ExpandExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\LongCountResultOperator.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\WhereMemberExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\QueryModelValidator.cs" />
     <Compile Include="Impl\Linq\Parsing\Translators\DateTimeFieldNameTranslator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Translators\MethodNameTranslator.cs" />
     <Compile Include="Impl\Linq\Parsing\WhereExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\QueryModel\DatetimeShorthandModel.cs" />
+    <Compile Include="Impl\Linq\QueryModel\ExpandTerm.cs" />
     <Compile Include="Impl\Linq\QueryModel\WhereTerm.cs" />
     <Compile Include="Impl\Linq\Sync\SyncScalarExecutor.cs" />
     <Compile Include="Impl\Linq\Parsing\CompilingExpressionVisitor.cs" />
@@ -268,6 +271,7 @@
     <Compile Include="Impl\Utility\ITypeLoader.cs" />
     <Compile Include="Impl\Utility\SourceLanguage.cs" />
     <Compile Include="Impl\Utility\TypeLoader.cs" />
+    <Compile Include="Linq\AsyncQueryableExpandExtensions.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
     <Compile Include="Logging\InMemoryLogger.cs" />
