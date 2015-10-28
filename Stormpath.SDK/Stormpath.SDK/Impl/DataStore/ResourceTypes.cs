@@ -103,13 +103,21 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private static readonly IReadOnlyDictionary<string, Type> InterfaceLookupByAttributeName = new Dictionary<string, Type>()
         {
+            ["account"] = typeof(IAccount),
             ["directory"] = typeof(IDirectory),
+            ["group"] = typeof(IGroup),
             ["customData"] = typeof(ICustomData),
             ["providerData"] = typeof(IProviderData),
+            ["provider"] = typeof(IProvider),
             ["tenant"] = typeof(ITenant),
+            ["defaultAccountStoreMapping"] = typeof(IAccountStoreMapping),
+            ["defaultGroupStoreMapping"] = typeof(IAccountStoreMapping),
 
+            ["accounts"] = typeof(CollectionResponsePage<IAccount>),
+            ["accountStoreMappings"] = typeof(CollectionResponsePage<IAccountStoreMapping>),
             ["groups"] = typeof(CollectionResponsePage<IGroup>),
             ["groupMemberships"] = typeof(CollectionResponsePage<IGroupMembership>),
+            ["accountMemberships"] = typeof(CollectionResponsePage<IGroupMembership>),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()
@@ -119,6 +127,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(CollectionResponsePage<IDirectory>)] = typeof(IDirectory),
             [typeof(CollectionResponsePage<IGroup>)] = typeof(IGroup),
             [typeof(CollectionResponsePage<IGroupMembership>)] = typeof(IGroupMembership),
+            [typeof(CollectionResponsePage<IAccountStoreMapping>)] = typeof(IAccountStoreMapping),
         };
 
         private static Type GetConcreteTypeForInterface(Type iface)

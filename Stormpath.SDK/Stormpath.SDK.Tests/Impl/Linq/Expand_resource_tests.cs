@@ -17,11 +17,15 @@
 using System;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
+using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
+#pragma warning disable SA1402 // File may only contain a single class
     public class Expand_account_tests : Linq_tests<IAccount>
     {
         [Fact]
@@ -110,4 +114,105 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             });
         }
     }
+
+    public class Expand_application_tests : Linq_tests<IApplication>
+    {
+        [Fact]
+        public void Accounts_are_expanded()
+        {
+            var query = this.Harness.Queryable.Expand(x => x.GetAccounts);
+
+            query.GeneratedArgumentsWere(this.Href, "expand=accounts");
+        }
+
+        [Fact]
+        public void Accounts_are_expanded_with_options()
+        {
+            var query = this.Harness.Queryable.Expand(x => x.GetAccounts, offset: 123, limit: 321);
+
+            query.GeneratedArgumentsWere(this.Href, "expand=accounts(offset:123,limit:321)");
+        }
+
+        [Fact]
+        public void AccountStoreMappings_are_expanded()
+        {
+            var query = this.Harness.Queryable.Expand(x => x.GetAccountStoreMappings);
+
+            query.GeneratedArgumentsWere(this.Href, "expand=accountStoreMappings");
+        }
+
+        [Fact]
+        public void AccountStoreMappings_are_expanded_with_options()
+        {
+            var query = this.Harness.Queryable.Expand(x => x.GetAccountStoreMappings, offset: 123, limit: 321);
+
+            query.GeneratedArgumentsWere(this.Href, "expand=accountStoreMappings(offset:123,limit:321)");
+        }
+
+        [Fact]
+        public void DefaultAccountStore_is_expanded()
+        {
+            var query = this.Harness.Queryable.Expand(x => x.GetDefaultAccountStoreAsync);
+
+            query.GeneratedArgumentsWere(this.Href, "expand=defaultAccountStoreMapping");
+        }
+
+        [Fact]
+        public void DefaultGroupStore_is_expanded()
+        {
+            var query = this.Harness.Queryable.Expand(x => x.GetDefaultGroupStoreAsync);
+
+            query.GeneratedArgumentsWere(this.Href, "expand=defaultGroupStoreMapping");
+        }
+    }
+
+    public class Expand_directory_tests : Linq_tests<IDirectory>
+    {
+        [Fact]
+        public void Provider_is_expanded()
+        {
+            var query = this.Harness.Queryable.Expand(x => x.GetProviderAsync);
+
+            query.GeneratedArgumentsWere(this.Href, "expand=provider");
+        }
+    }
+
+    public class Expand_group_tests : Linq_tests<IGroup>
+    {
+        [Fact]
+        public void AccountMemberships_are_expanded()
+        {
+            var query = this.Harness.Queryable.Expand(x => x.GetAccountMemberships);
+
+            query.GeneratedArgumentsWere(this.Href, "expand=accountMemberships");
+        }
+
+        [Fact]
+        public void AccountMemberships_are_expanded_with_options()
+        {
+            var query = this.Harness.Queryable.Expand(x => x.GetAccountMemberships, offset: 7331, limit: 1337);
+
+            query.GeneratedArgumentsWere(this.Href, "expand=accountMemberships(offset:7331,limit:1337)");
+        }
+    }
+
+    public class Expand_group_membership_tests : Linq_tests<IGroupMembership>
+    {
+        [Fact]
+        public void Account_is_expanded()
+        {
+            var query = this.Harness.Queryable.Expand(x => x.GetAccountAsync);
+
+            query.GeneratedArgumentsWere(this.Href, "expand=account");
+        }
+
+        [Fact]
+        public void Group_is_expanded()
+        {
+            var query = this.Harness.Queryable.Expand(x => x.GetGroupAsync);
+
+            query.GeneratedArgumentsWere(this.Href, "expand=group");
+        }
+    }
+#pragma warning restore SA1402 // File may only contain a single class
 }

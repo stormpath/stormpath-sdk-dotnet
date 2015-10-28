@@ -54,6 +54,16 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
+        public void Expand_collection_query_with_no_parameters()
+        {
+            var query = this.Harness.Queryable
+                .Synchronously()
+                .Expand(x => x.GetGroups);
+
+            query.GeneratedSynchronousArgumentsWere(this.Href, "expand=groups");
+        }
+
+        [Fact]
         public void Expand_collection_query_with_offset()
         {
             var query = this.Harness.Queryable

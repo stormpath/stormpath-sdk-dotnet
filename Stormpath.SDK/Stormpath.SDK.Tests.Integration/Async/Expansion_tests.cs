@@ -15,6 +15,7 @@
 // </copyright>
 
 using System.Threading.Tasks;
+using Stormpath.SDK.Group;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Async
@@ -67,7 +68,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetAccounts()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetGroupMemberships)
+                .Expand(x => x.GetGroupMemberships, limit: 10)
                 .FirstOrDefaultAsync();
         }
 
@@ -81,7 +82,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetAccounts()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetGroups)
+                .Expand(x => x.GetGroups, limit: 10)
                 .FirstOrDefaultAsync();
         }
 
@@ -110,6 +111,116 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .GetAccounts()
                 .Where(x => x.Email.StartsWith("lskywalker"))
                 .Expand(x => x.GetTenantAsync)
+                .FirstOrDefaultAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Expanding_accounts(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var account = await tenant
+                .GetApplications()
+                .Where(x => x.Description == "The Battle of Endor")
+                .Expand(x => x.GetAccounts, limit: 10)
+                .FirstOrDefaultAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Expanding_account_store_mappings(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var account = await tenant
+                .GetApplications()
+                .Where(x => x.Description == "The Battle of Endor")
+                .Expand(x => x.GetAccountStoreMappings, limit: 10)
+                .FirstOrDefaultAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Expanding_default_account_store(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var account = await tenant
+                .GetApplications()
+                .Where(x => x.Description == "The Battle of Endor")
+                .Expand(x => x.GetDefaultAccountStoreAsync)
+                .FirstOrDefaultAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Expanding_default_group_store(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var account = await tenant
+                .GetApplications()
+                .Where(x => x.Description == "The Battle of Endor")
+                .Expand(x => x.GetDefaultGroupStoreAsync)
+                .FirstOrDefaultAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Expanding_provider(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var account = await tenant
+                .GetDirectories()
+                .Filter("(primary)")
+                .Expand(x => x.GetProviderAsync)
+                .FirstOrDefaultAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Expanding_account_memberships(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var account = await tenant
+                .GetGroups()
+                .Where(x => x.Description == "Humans")
+                .Expand(x => x.GetAccountMemberships, limit: 10)
+                .FirstOrDefaultAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Expanding_membership_account(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
+
+            var membership = await group
+                .GetAccountMemberships()
+                .Expand(x => x.GetAccountAsync)
+                .FirstOrDefaultAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Expanding_membership_group(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
+
+            var membership = await group
+                .GetAccountMemberships()
+                .Expand(x => x.GetGroupAsync)
                 .FirstOrDefaultAsync();
         }
     }
