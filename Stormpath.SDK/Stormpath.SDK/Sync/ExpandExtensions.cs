@@ -1,4 +1,4 @@
-﻿// <copyright file="AsyncQueryableExpandExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ExpandExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,33 +15,43 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
-using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK
+namespace Stormpath.SDK.Sync
 {
-    public static class AsyncQueryableExpandExtensions
+    public static class ExpandExtensions
     {
-        public static IAsyncQueryable<TSource> Expand<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, Func<CancellationToken, Task>>> selector)
-            where TSource : IResource
+        public static IQueryable<TSource> Expand<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, Func<Resource.IResource>>> selector)
+            where TSource : Resource.IResource
         {
-            return source.Provider.CreateQuery(
+            return source.Provider.CreateQuery<TSource>(
                 LinqHelper.MethodCall(
                     LinqHelper.GetMethodInfo(Expand, source, selector),
                     source.Expression,
                     Expression.Quote(selector)));
         }
 
-        public static IAsyncQueryable<TSource> Expand<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, Func<IAsyncQueryable>>> selector, int? offset = null, int? limit = null)
-            where TSource : IResource
+        public static IQueryable<TSource> Expand<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, Func<CancellationToken, Task>>> selector)
+            where TSource : Resource.IResource
         {
-            return source.Provider.CreateQuery(
+            return source.Provider.CreateQuery<TSource>(
+                LinqHelper.MethodCall(
+                    LinqHelper.GetMethodInfo(Expand, source, selector),
+                    source.Expression,
+                    Expression.Quote(selector)));
+        }
+
+        public static IQueryable<TSource> Expand<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, Func<IAsyncQueryable>>> selector, int? offset = null, int? limit = null)
+            where TSource : Resource.IResource
+        {
+            return source.Provider.CreateQuery<TSource>(
                 LinqHelper.MethodCall(
                     LinqHelper.GetMethodInfo(Expand, source, selector, offset, limit),
                     source.Expression,

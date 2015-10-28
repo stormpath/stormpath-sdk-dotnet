@@ -307,6 +307,7 @@
     <Compile Include="Provider\IProviderRequestFactory.cs" />
     <Compile Include="Resource\IExtendable.cs" />
     <Compile Include="Shared\StringEnumeration.cs" />
+    <Compile Include="Sync\ExpandExtensions.cs" />
     <Compile Include="Sync\FilterExtensions.cs" />
     <Compile Include="Sync\SyncAccountCreationActionsExtensions.cs" />
     <Compile Include="Sync\SyncDirectoryExtensions.cs" />

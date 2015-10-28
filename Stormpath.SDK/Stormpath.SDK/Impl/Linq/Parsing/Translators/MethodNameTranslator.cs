@@ -23,7 +23,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Translators
         private static Dictionary<string, string> methodNameMap = new Dictionary<string, string>()
         {
             ["GetDirectoryAsync"] = "directory",
+            ["GetDirectory"] = "directory",
             ["GetTenantAsync"] = "tenant",
+            ["GetTenant"] = "tenant",
             ["GetGroups"] = "groups",
         };
 
