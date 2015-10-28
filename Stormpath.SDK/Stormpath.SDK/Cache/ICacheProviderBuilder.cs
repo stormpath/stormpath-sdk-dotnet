@@ -40,6 +40,14 @@ namespace Stormpath.SDK.Cache
         /// </para>
         /// </summary>
         /// <param name="ttl">Default Time to Live value</param>
+        /// <example>
+        /// Create an in-memory cache with a default TTL of 30 minutes:
+        /// <code>
+        /// var cacheProvider = Caches.NewInMemoryCacheProvider()
+        ///     .WithDefaultTimeToLive(TimeSpan.FromMinutes(30))
+        ///     .Build();
+        /// </code>
+        /// </example>
         /// <returns>This instance for method chaining.</returns>
         ICacheProviderBuilder WithDefaultTimeToLive(TimeSpan ttl);
 
@@ -59,6 +67,14 @@ namespace Stormpath.SDK.Cache
         /// </para>
         /// </summary>
         /// <param name="tti">Default Time To Idle value.</param>
+        /// <example>
+        /// Create an in-memory cache with a default TTI of 30 minutes:
+        /// <code>
+        /// var cacheProvider = Caches.NewInMemoryCacheProvider()
+        ///     .WithDefaultTimeToIdle(TimeSpan.FromMinutes(30))
+        ///     .Build();
+        /// </code>
+        /// </example>
         /// <returns>This instance for method chaining.</returns>
         ICacheProviderBuilder WithDefaultTimeToIdle(TimeSpan tti);
 
@@ -70,6 +86,17 @@ namespace Stormpath.SDK.Cache
         /// be used to specify a cache's configuration.
         /// </param>
         /// <returns>This instance for method chaining.</returns>
+        /// <example>
+        /// Set the TTL and TTI for a specific cache region:
+        /// <code>
+        /// var cacheProvider = Caches.NewInMemoryCacheProvider()
+        ///     .WithCache(Caches
+        ///         .ForResource<Account.IAccount>()
+        ///         .WithTimeToLive(TimeSpan.FromHours(2))
+        ///         .WithTimeToIdle(TimeSpan.FromHours(2)))
+        ///     .Build();
+        /// </code>
+        /// </example>
         /// <exception cref="ApplicationException">The cache configuration is not valid.</exception>
         ICacheProviderBuilder WithCache(ICacheConfigurationBuilder builder);
 

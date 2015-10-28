@@ -26,9 +26,19 @@ namespace Stormpath.SDK.Client
 {
     /// <summary>
     /// A Builder design pattern used to construct <see cref="IClient"/> instances.
+    /// <para>
+    /// Unless otherwise specified, an in-memory cache will be used to improve performance,
+    /// with a default TTL (Time to Live) and TTI (Time to Idle) of 1 hour. Caching can be disabled
+    /// by passing <see cref="Caches.NewDisabledCacheProvider"/> to <see cref="SetCacheProvider(ICacheProvider)"/>.
+    /// </para>
+    /// <para>
+    /// Note: The default in-memory cache might not be sufficient for an application that runs on multiple servers,
+    /// due to cache-coherency issues. If your application runs in multiple instances, consider plugging in a
+    /// distributed cache like Redis.
+    /// </para>
     /// </summary>
     /// <example>
-    /// Create a client with a specified API Key:
+    /// Create a client with a specified API Key and default caching options:
     /// <code>
     ///     IClient client = Clients.Builder()
     ///         .SetApiKey(apiKey)
@@ -82,11 +92,6 @@ namespace Stormpath.SDK.Client
         /// <summary>
         /// Sets the cache provider that should be used to cache Stormpath REST resources, reducing round-trips
         /// to the Stormpath API server and enhancing application performance.
-        /// <para>
-        /// Note: The default in-memory cache might not be sufficient forn application that runs on multiple servers,
-        /// due to cache-coherency issues. If your application runs in multiple instances, consider plugging in a
-        /// distributed cache like Redis.
-        /// </para>
         /// </summary>
         /// <param name="cacheProvider">The cache provider to use.</param>
         /// <returns>This instance for method chaining.</returns>

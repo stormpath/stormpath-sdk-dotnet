@@ -89,5 +89,34 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             cache.TimeToLive.ShouldBe(cacheTtl);
             cache.TimeToIdle.ShouldBe(cacheTti);
         }
+
+        [Fact]
+        public void Combining_configuration_options()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider()
+                .WithDefaultTimeToLive(TimeSpan.FromMinutes(30))
+                .WithDefaultTimeToIdle(TimeSpan.FromMinutes(30))
+                .WithCache(Caches
+                    .ForResource<Account.IAccount>()
+                    .WithTimeToLive(TimeSpan.FromHours(2)))
+                .WithCache(Caches
+                    .ForResource<Application.IApplication>()
+                    .WithTimeToIdle(TimeSpan.FromHours(6))
+                    .WithTimeToLive(TimeSpan.FromHours(6)))
+                .Build() as ISynchronousCacheProvider;
+
+            var accountCache = cacheProvider.GetCache<string, object>(nameof(Account.IAccount));
+            var applicationCache = cacheProvider.GetCache<string, object>(nameof(Application.IApplication));
+            var directoryCache = cacheProvider.GetCache<string, object>(nameof(Directory.IDirectory));
+
+            accountCache.TimeToLive.ShouldBe(TimeSpan.FromHours(2));
+            accountCache.TimeToIdle.ShouldBe(TimeSpan.FromMinutes(30));
+
+            applicationCache.TimeToLive.ShouldBe(TimeSpan.FromHours(6));
+            applicationCache.TimeToIdle.ShouldBe(TimeSpan.FromHours(6));
+
+            directoryCache.TimeToLive.ShouldBe(TimeSpan.FromMinutes(30));
+            directoryCache.TimeToIdle.ShouldBe(TimeSpan.FromMinutes(30));
+        }
     }
 }
