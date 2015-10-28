@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
@@ -40,7 +41,7 @@ namespace Stormpath.SDK
 
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
-                    LinqHelper.GetMethodInfo(Filter, source, caseInsensitiveMatch),
+                    LinqHelper.GetMethodInfo(Sync.FilterExtensions.Filter, (IQueryable<TSource>)null, caseInsensitiveMatch),
                     source.Expression,
                     Expression.Constant(caseInsensitiveMatch)));
         }

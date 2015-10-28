@@ -163,6 +163,8 @@ namespace Stormpath.SDK.Tests.Integration
             var whitelistedSyncMethods = new List<string>()
             {
                 "IQueryable`1.Filter(String)",
+                "IQueryable`1.Expand(Expression`1)",
+                "IQueryable`1.Expand(Expression`1, Nullable`1, Nullable`1)",
                 "IAsyncQueryable`1.Synchronously()"
             };
 
@@ -230,7 +232,7 @@ namespace Stormpath.SDK.Tests.Integration
 
             syncButNotAsync.Count.ShouldBe(
                 0,
-                $"These sync methods do not have a corresponding async methods:{Environment.NewLine}{string.Join(Environment.NewLine, syncButNotAsync)}");
+                $"These sync methods do not have a corresponding async method:{Environment.NewLine}{string.Join(Environment.NewLine, syncButNotAsync)}");
         }
 
         [Fact]

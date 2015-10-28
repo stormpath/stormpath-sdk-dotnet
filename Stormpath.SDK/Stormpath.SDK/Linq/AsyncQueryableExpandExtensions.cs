@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace Stormpath.SDK
         {
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
-                    LinqHelper.GetMethodInfo(Expand, source, selector),
+                    LinqHelper.GetMethodInfo(Sync.ExpandExtensions.Expand, (IQueryable<TSource>)null, selector),
                     source.Expression,
                     Expression.Quote(selector)));
         }
@@ -57,7 +58,7 @@ namespace Stormpath.SDK
         {
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
-                    LinqHelper.GetMethodInfo(Expand, source, selector, offset, limit),
+                    LinqHelper.GetMethodInfo(Sync.ExpandExtensions.Expand, (IQueryable<TSource>)null, selector, offset, limit),
                     source.Expression,
                     Expression.Quote(selector),
                     Expression.Constant(offset, typeof(int?)),

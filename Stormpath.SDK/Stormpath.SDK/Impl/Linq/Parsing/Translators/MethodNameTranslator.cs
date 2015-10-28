@@ -26,6 +26,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Translators
             ["GetDirectory"] = "directory",
             ["GetTenantAsync"] = "tenant",
             ["GetTenant"] = "tenant",
+            ["GetCustomDataAsync"] = "customData",
+            ["GetCustomData"] = "customData",
             ["GetGroups"] = "groups",
         };
 
