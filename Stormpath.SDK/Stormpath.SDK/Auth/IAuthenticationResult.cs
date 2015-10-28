@@ -28,6 +28,13 @@ namespace Stormpath.SDK.Auth
     public interface IAuthenticationResult : IResource
     {
         /// <summary>
+        /// Gets whether the authentication was successful.
+        /// </summary>
+        /// <returns><c>true</c> if the authentication was successful; <c>false</c> otherwise.</returns>
+        /// <value>Whether the authentication was successful.</value>
+        bool Success { get; }
+
+        /// <summary>
         /// Gets the successfully authenticated <see cref="IAccount"/>.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>

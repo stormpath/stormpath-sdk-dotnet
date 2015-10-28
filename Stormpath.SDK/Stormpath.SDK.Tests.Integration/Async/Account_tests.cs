@@ -458,6 +458,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
             var result = await application.AuthenticateAccountAsync(username, "whataPieceofjunk$1138");
             result.ShouldBeAssignableTo<IAuthenticationResult>();
+            result.Success.ShouldBeTrue();
 
             var account = await result.GetAccountAsync();
             account.FullName.ShouldBe("Luke Skywalker");

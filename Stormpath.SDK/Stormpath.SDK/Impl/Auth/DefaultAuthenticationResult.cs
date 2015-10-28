@@ -33,6 +33,9 @@ namespace Stormpath.SDK.Impl.Auth
 
         internal IEmbeddedProperty Account => this.GetLinkProperty(AccountPropertyName);
 
+        bool IAuthenticationResult.Success
+            => !string.IsNullOrEmpty(this?.Account?.Href);
+
         Task<IAccount> IAuthenticationResult.GetAccountAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
 

@@ -476,6 +476,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
             var result = application.AuthenticateAccount(username, "whataPieceofjunk$1138");
             result.ShouldBeAssignableTo<IAuthenticationResult>();
+            result.Success.ShouldBeTrue();
 
             var account = result.GetAccount();
             account.FullName.ShouldBe("Luke Skywalker");
