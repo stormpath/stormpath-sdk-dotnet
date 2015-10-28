@@ -463,8 +463,8 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, bool create, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
-            where T : IResource
-            where TReturned : class, IResource
+            where T : class
+            where TReturned : class
         {
             if (identityMapOptions != null && !identityMapOptions.IsValid())
                 throw new ApplicationException("Bad identity map options specified.");
@@ -553,8 +553,8 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, bool create, IdentityMapOptions identityMapOptions)
-            where T : IResource
-            where TReturned : class, IResource
+            where T : class
+            where TReturned : class
         {
             if (identityMapOptions != null && !identityMapOptions.IsValid())
                 throw new ApplicationException("Bad identity map options specified.");

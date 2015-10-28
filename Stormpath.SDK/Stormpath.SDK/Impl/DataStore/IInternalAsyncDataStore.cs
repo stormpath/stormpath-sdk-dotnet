@@ -34,22 +34,22 @@ namespace Stormpath.SDK.Impl.DataStore
             where T : class, IResource;
 
         Task<T> CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
-            where T : class, IResource;
+            where T : class;
 
         Task<T> CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
-            where T : class, IResource;
+            where T : class;
 
         Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
-            where T : class, IResource
-            where TReturned : class, IResource;
+            where T : class
+            where TReturned : class;
 
         Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
-            where T : class, IResource
-            where TReturned : class, IResource;
+            where T : class
+            where TReturned : class;
 
         Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
-            where T : class, IResource
-            where TReturned : class, IResource;
+            where T : class
+            where TReturned : class;
 
         Task<T> SaveAsync<T>(T resource, CancellationToken cancellationToken)
             where T : class, IResource, ISaveable<T>;

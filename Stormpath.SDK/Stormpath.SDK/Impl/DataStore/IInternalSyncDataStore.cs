@@ -32,22 +32,22 @@ namespace Stormpath.SDK.Impl.DataStore
             where T : class, IResource;
 
         T Create<T>(string parentHref, T resource)
-            where T : class, IResource;
+            where T : class;
 
         T Create<T>(string parentHref, T resource, ICreationOptions options)
-            where T : class, IResource;
+            where T : class;
 
         TReturned Create<T, TReturned>(string parentHref, T resource)
-            where T : class, IResource
-            where TReturned : class, IResource;
+            where T : class
+            where TReturned : class;
 
         TReturned Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
-            where T : class, IResource
-            where TReturned : class, IResource;
+            where T : class
+            where TReturned : class;
 
         TReturned Create<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions)
-            where T : class, IResource
-            where TReturned : class, IResource;
+            where T : class
+            where TReturned : class;
 
         T Save<T>(T resource)
             where T : class, IResource, ISaveable<T>;

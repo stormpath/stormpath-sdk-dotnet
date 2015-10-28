@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Auth
     /// Represents the return value of an <see cref="Application.IApplication"/> authentication attempt.
     /// The successfully authenticated account may be obtained via <see cref="GetAccountAsync(CancellationToken)"/>.
     /// </summary>
-    public interface IAuthenticationResult : IResource
+    public interface IAuthenticationResult
     {
         /// <summary>
         /// Gets whether the authentication was successful.
