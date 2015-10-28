@@ -128,14 +128,16 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
-        public void CacheProvider_is_optional()
+        public void Default_cache_is_InMemoryCache()
         {
             var client = this.builder
                 .SetApiKey(FakeApiKey.Create(valid: true))
                 .Build();
 
             // Default value
-            (client as DefaultClient).CacheProvider.ShouldBeOfType<NullCacheProvider>();
+            (client as DefaultClient).CacheProvider.ShouldBeOfType<InMemoryCacheProvider>();
+            ((client as DefaultClient).CacheProvider as InMemoryCacheProvider).DefaultTimeToIdle.ShouldBe(TimeSpan.FromHours(1));
+            ((client as DefaultClient).CacheProvider as InMemoryCacheProvider).DefaultTimeToLive.ShouldBe(TimeSpan.FromHours(1));
         }
 
         [Fact]
