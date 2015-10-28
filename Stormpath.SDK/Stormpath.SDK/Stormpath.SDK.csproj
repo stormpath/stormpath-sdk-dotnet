@@ -270,6 +270,7 @@
     <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
+    <Compile Include="Logging\MemoryLogger.cs" />
     <Compile Include="Provider\ClientProviderExtensions.cs" />
     <Compile Include="Provider\ICreateProviderRequest.cs" />
     <Compile Include="Provider\ICreateProviderRequestBuilder.cs" />
@@ -390,10 +391,10 @@
     <Compile Include="Impl\Utility\HashCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\IResource.cs" />
-    <Compile Include="Shared\ILogger.cs" />
-    <Compile Include="Shared\LogEntry.cs" />
-    <Compile Include="Shared\LoggerExtensions.cs" />
-    <Compile Include="Shared\LogLevel.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\LogEntry.cs" />
+    <Compile Include="Logging\LoggerExtensions.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Sync\SyncExtendableExtensions.cs" />
     <Compile Include="Sync\SyncResourceExtensions.cs" />
     <Compile Include="Sync\SyncTenantActionsExtensions.cs" />

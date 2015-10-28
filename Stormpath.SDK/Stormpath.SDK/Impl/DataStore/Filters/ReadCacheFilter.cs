@@ -41,13 +41,18 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         {
             if (this.cacheResolver.IsSynchronousSupported && this.IsCacheRetrievalEnabled(request))
             {
-                var result = this.GetCachedResourceData(request);
+                logger.Trace($"Checking cache for resource {request.Uri}", "ReadCacheFilter.Filter");
+                var result = this.GetCachedResourceData(request, logger);
 
                 if (result != null)
+                {
+                    logger.Trace($"Cache hit for {request.Uri}; returning cached data", "ReadCacheFilter.Filter");
                     return result; // short-circuit the remainder of the filter chain
+                }
+
+                logger.Trace($"Cache miss for {request.Uri}", "ReadCacheFilter.Filter");
             }
 
-            // cache miss, let the chain continue
             return chain.Filter(request, logger);
         }
 
@@ -55,22 +60,30 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         {
             if (this.cacheResolver.IsAsynchronousSupported && this.IsCacheRetrievalEnabled(request))
             {
-                var result = await this.GetCachedResourceDataAsync(request, cancellationToken).ConfigureAwait(false);
+                logger.Trace($"Checking cache for resource {request.Uri}", "ReadCacheFilter.FilterAsync");
+                var result = await this.GetCachedResourceDataAsync(request, logger, cancellationToken).ConfigureAwait(false);
 
                 if (result != null)
+                {
+                    logger.Trace($"Cache hit for {request.Uri}; returning cached data", "ReadCacheFilter.FilterAsync");
                     return result; // short-circuit the remainder of the filter chain
+                }
+
+                logger.Trace($"Cache miss for {request.Uri}", "ReadCacheFilter.FilterAsync");
             }
 
-            // cache miss, let the chain continue
             return await chain.ExecuteAsync(request, logger, cancellationToken).ConfigureAwait(false);
         }
 
-        private async Task<IResourceDataResult> GetCachedResourceDataAsync(IResourceDataRequest request, CancellationToken cancellationToken)
+        private async Task<IResourceDataResult> GetCachedResourceDataAsync(IResourceDataRequest request, ILogger logger, CancellationToken cancellationToken)
         {
             // TODO isApiKeyCollectionQuery
             var cacheKey = this.GetCacheKey(request);
             if (string.IsNullOrEmpty(cacheKey))
-                return null; // todo log - this is weird
+            {
+                logger.Warn($"Could not construct cacheKey for request {request.Uri}; aborting", "ReadCacheFilter.GetCachedResourceDataAsync");
+                return null;
+            }
 
             var data = await this.GetCachedValueAsync(request.ResourceType, cacheKey, cancellationToken).ConfigureAwait(false);
 
@@ -80,12 +93,15 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             return new DefaultResourceDataResult(request.Action, request.ResourceType, request.Uri, 200, data);
         }
 
-        private IResourceDataResult GetCachedResourceData(IResourceDataRequest request)
+        private IResourceDataResult GetCachedResourceData(IResourceDataRequest request, ILogger logger)
         {
             // TODO isApiKeyCollectionQuery
             var cacheKey = this.GetCacheKey(request);
             if (string.IsNullOrEmpty(cacheKey))
-                return null; // todo log - this is weird
+            {
+                logger.Warn($"Could not construct cacheKey for request {request.Uri}; aborting", "ReadCacheFilter.GetCachedResourceData");
+                return null;
+            }
 
             var data = this.GetCachedValue(request.ResourceType, cacheKey);
 

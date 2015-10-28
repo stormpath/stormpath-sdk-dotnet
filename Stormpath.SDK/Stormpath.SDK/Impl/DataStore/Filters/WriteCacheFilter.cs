@@ -52,10 +52,12 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             if (isCustomDataPropertyRequest && isDelete)
             {
-                await this.UncacheCustomDataPropertyAsync(request.Uri.ResourcePath, cancellationToken).ConfigureAwait(false);
+                logger.Trace($"Request {request.Action} {request.Uri} is a custom data property delete, deleting cached property name if exists", "WriteCacheFilter.FilterAsync");
+                await this.UncacheCustomDataPropertyAsync(request.Uri.ResourcePath, logger, cancellationToken).ConfigureAwait(false);
             }
             else if (isDelete)
             {
+                logger.Trace($"Request {request.Action} {request.Uri} is a resource deletion, purging from cache if exists", "WriteCacheFilter.FilterAsync");
                 var cacheKey = this.GetCacheKey(request);
                 await this.UncacheAsync(request.ResourceType, cacheKey, cancellationToken).ConfigureAwait(false);
             }
@@ -65,16 +67,20 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             bool isEmailVerificationResponse = result.Type == typeof(IEmailVerificationToken);
             if (isEmailVerificationResponse)
             {
+                logger.Trace($"Request {request.Action} {request.Uri} is an email verification request, purging account from cache if exists", "WriteCacheFilter.FilterAsync");
                 await this.UncacheAccountOnEmailVerificationAsync(result, cancellationToken).ConfigureAwait(false);
             }
 
             bool possibleCustomDataUpdate = (request.Action == ResourceAction.Create || request.Action == ResourceAction.Update) &&
                 AbstractExtendableInstanceResource.IsExtendable(request.ResourceType);
             if (possibleCustomDataUpdate)
-                await this.CacheNestedCustomDataUpdatesAsync(request, result, cancellationToken).ConfigureAwait(false);
+                await this.CacheNestedCustomDataUpdatesAsync(request, result, logger, cancellationToken).ConfigureAwait(false);
 
             if (IsCacheable(request, result))
-                await this.CacheAsync(result.Type, result.Body, cancellationToken).ConfigureAwait(false);
+            {
+                logger.Trace($"Caching request {request.Action} {request.Uri}", "WriteCacheFilter.FilterAsync");
+                await this.CacheAsync(result.Type, result.Body, logger, cancellationToken).ConfigureAwait(false);
+            }
 
             return result;
         }
@@ -86,10 +92,12 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             if (isCustomDataPropertyRequest && isDelete)
             {
-                this.UncacheCustomDataProperty(request.Uri.ResourcePath);
+                logger.Trace($"Request {request.Action} {request.Uri} is a custom data property delete, deleting cached property name if exists", "WriteCacheFilter.FilterAsync");
+                this.UncacheCustomDataProperty(request.Uri.ResourcePath, logger);
             }
             else if (isDelete)
             {
+                logger.Trace($"Request {request.Action} {request.Uri} is a resource deletion, purging from cache if exists", "WriteCacheFilter.Filter");
                 var cacheKey = this.GetCacheKey(request);
                 this.Uncache(request.ResourceType, cacheKey);
             }
@@ -99,21 +107,25 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             bool isEmailVerificationResponse = result.Type == typeof(IEmailVerificationToken);
             if (isEmailVerificationResponse)
             {
+                logger.Trace($"Request {request.Action} {request.Uri} is an email verification request, purging account from cache if exists", "WriteCacheFilter.Filter");
                 this.UncacheAccountOnEmailVerification(result);
             }
 
             bool possibleCustomDataUpdate = (request.Action == ResourceAction.Create || request.Action == ResourceAction.Update) &&
                 AbstractExtendableInstanceResource.IsExtendable(request.ResourceType);
             if (possibleCustomDataUpdate)
-                this.CacheNestedCustomDataUpdates(request, result);
+                this.CacheNestedCustomDataUpdates(request, result, logger);
 
             if (IsCacheable(request, result))
-                this.Cache(result.Type, result.Body);
+            {
+                logger.Trace($"Caching request {request.Action} {request.Uri}", "WriteCacheFilter.Filter");
+                this.Cache(result.Type, result.Body, logger);
+            }
 
             return result;
         }
 
-        private async Task CacheAsync(Type resourceType, IDictionary<string, object> data, CancellationToken cancellationToken)
+        private async Task CacheAsync(Type resourceType, IDictionary<string, object> data, ILogger logger, CancellationToken cancellationToken)
         {
             string href = data[AbstractResource.HrefPropertyName].ToString();
 
@@ -122,6 +134,8 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             bool isCustomData = resourceType == typeof(ICustomData);
             if (isCustomData)
             {
+                logger.Trace($"Response {href} is a custom data resource, caching directly", "WriteCacheFilter.CacheAsync");
+
                 var cache = await this.GetCacheAsync(resourceType, cancellationToken).ConfigureAwait(false);
                 await cache.PutAsync(this.GetCacheKey(href), data, cancellationToken).ConfigureAwait(false);
                 return; // simple! return early
@@ -139,15 +153,19 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
                 if (asNestedResource != null && IsResource(asNestedResource.Data))
                 {
+                    logger.Trace($"Attribute {key} on response {href} is an expanded resource, caching recursively", "WriteCacheFilter.CacheAsync");
+
                     var nestedType = this.resourceTypes.GetInterface(item.Key);
                     if (nestedType == null)
                         throw new ApplicationException($"Cannot cache nested item. Item type for '{item.Key}' unknown.");
 
-                    await this.CacheAsync(nestedType, asNestedResource.Data, cancellationToken).ConfigureAwait(false);
+                    await this.CacheAsync(nestedType, asNestedResource.Data, logger, cancellationToken).ConfigureAwait(false);
                     value = ToCanonicalReference(key, asNestedResource.Data);
                 }
                 else if (asNestedArray != null)
                 {
+                    logger.Trace($"Attribute {key} on response {href} is an array, caching items recursively", "WriteCacheFilter.CacheAsync");
+
                     // This is a CollectionResponsePage<T>.Items property. Find the type of objects to expect
                     var nestedType = this.resourceTypes.GetInnerCollectionInterface(resourceType);
                     if (nestedType == null)
@@ -163,7 +181,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                         {
                             if (IsResource(resourceElement))
                             {
-                                await this.CacheAsync(nestedType, resourceElement, cancellationToken).ConfigureAwait(false);
+                                await this.CacheAsync(nestedType, resourceElement, logger, cancellationToken).ConfigureAwait(false);
                                 canonicalElement = ToCanonicalReference(key, resourceElement);
                             }
                         }
@@ -179,13 +197,15 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             if (!ResourceTypes.IsCollectionResponse(resourceType))
             {
+                logger.Trace($"Caching {href} as type {resourceType.Name}", "WriteCacheFilter.CacheAsync");
+
                 var cache = await this.GetCacheAsync(resourceType, cancellationToken).ConfigureAwait(false);
                 var cacheKey = this.GetCacheKey(href);
                 await cache.PutAsync(cacheKey, cacheData, cancellationToken).ConfigureAwait(false);
             }
         }
 
-        private void Cache(Type resourceType, IDictionary<string, object> data)
+        private void Cache(Type resourceType, IDictionary<string, object> data, ILogger logger)
         {
             string href = data[AbstractResource.HrefPropertyName].ToString();
 
@@ -194,6 +214,8 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             bool isCustomData = resourceType == typeof(ICustomData);
             if (isCustomData)
             {
+                logger.Trace($"Response {href} is a custom data resource, caching directly", "WriteCacheFilter.Cache");
+
                 var cache = this.GetCache(resourceType);
                 cache.Put(this.GetCacheKey(href), data);
                 return; // simple! return early
@@ -211,15 +233,19 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
                 if (asNestedResource != null && IsResource(asNestedResource.Data))
                 {
+                    logger.Trace($"Attribute {key} on response {href} is an expanded resource, caching recursively", "WriteCacheFilter.Cache");
+
                     var nestedType = this.resourceTypes.GetInterface(item.Key);
                     if (nestedType == null)
                         throw new ApplicationException($"Cannot cache nested item. Item type for '{item.Key}' unknown.");
 
-                    this.Cache(nestedType, asNestedResource.Data);
+                    this.Cache(nestedType, asNestedResource.Data, logger);
                     value = ToCanonicalReference(key, asNestedResource.Data);
                 }
                 else if (asNestedArray != null)
                 {
+                    logger.Trace($"Attribute {key} on response {href} is an array, caching items recursively", "WriteCacheFilter.Cache");
+
                     // This is a CollectionResponsePage<T>.Items property. Find the type of objects to expect
                     var nestedType = this.resourceTypes.GetInnerCollectionInterface(resourceType);
                     if (nestedType == null)
@@ -235,7 +261,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                         {
                             if (IsResource(resourceElement))
                             {
-                                this.Cache(nestedType, resourceElement);
+                                this.Cache(nestedType, resourceElement, logger);
                                 canonicalElement = ToCanonicalReference(key, resourceElement);
                             }
                         }
@@ -251,13 +277,15 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             if (!ResourceTypes.IsCollectionResponse(resourceType))
             {
+                logger.Trace($"Caching {href} as type {resourceType.Name}", "WriteCacheFilter.Cache");
+
                 var cache = this.GetCache(resourceType);
                 var cacheKey = this.GetCacheKey(href);
                 cache.Put(cacheKey, cacheData);
             }
         }
 
-        private async Task CacheNestedCustomDataUpdatesAsync(IResourceDataRequest request, IResourceDataResult result, CancellationToken cancellationToken)
+        private async Task CacheNestedCustomDataUpdatesAsync(IResourceDataRequest request, IResourceDataResult result, ILogger logger, CancellationToken cancellationToken)
         {
             object customDataObj = null;
             IDictionary<string, object> customData = null;
@@ -279,7 +307,12 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             var dataToCache = await this.GetCachedValueAsync(typeof(ICustomData), customDataHref, cancellationToken).ConfigureAwait(false);
             if (!creating && dataToCache == null)
+            {
+                logger.Trace($"Request {request.Uri} has nested custom data updates, but no authoritative cached custom data exists; aborting", "WriteCacheFilter.CacheNestedCustomDataUpdatesAsync");
                 return;
+            }
+
+            logger.Trace($"Request {request.Uri} has nested custom data updates, updating cached custom data", "WriteCacheFilter.CacheNestedCustomDataUpdatesAsync");
 
             if (dataToCache.IsNullOrEmpty())
                 dataToCache = new Dictionary<string, object>();
@@ -292,10 +325,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             // Ensure the href property exists
             dataToCache[AbstractResource.HrefPropertyName] = customDataHref;
 
-            await this.CacheAsync(typeof(ICustomData), dataToCache, cancellationToken).ConfigureAwait(false);
+            await this.CacheAsync(typeof(ICustomData), dataToCache, logger, cancellationToken).ConfigureAwait(false);
         }
 
-        private void CacheNestedCustomDataUpdates(IResourceDataRequest request, IResourceDataResult result)
+        private void CacheNestedCustomDataUpdates(IResourceDataRequest request, IResourceDataResult result, ILogger logger)
         {
             object customDataObj = null;
             IDictionary<string, object> customData = null;
@@ -317,7 +350,12 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             var dataToCache = this.GetCachedValue(typeof(ICustomData), customDataHref);
             if (!creating && dataToCache == null)
+            {
+                logger.Trace($"Request {request.Uri} has nested custom data updates, but no authoritative cached custom data exists; aborting", "WriteCacheFilter.CacheNestedCustomDataUpdates");
                 return;
+            }
+
+            logger.Trace($"Request {request.Uri} has nested custom data updates, updating cached custom data", "WriteCacheFilter.CacheNestedCustomDataUpdates");
 
             if (dataToCache.IsNullOrEmpty())
                 dataToCache = new Dictionary<string, object>();
@@ -330,7 +368,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             // Ensure the href property exists
             dataToCache[AbstractResource.HrefPropertyName] = customDataHref;
 
-            this.Cache(typeof(ICustomData), dataToCache);
+            this.Cache(typeof(ICustomData), dataToCache, logger);
         }
 
         private async Task UncacheAsync(Type resourceType, string cacheKey, CancellationToken cancellationToken)
@@ -355,7 +393,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             cache.Remove(cacheKey);
         }
 
-        private async Task UncacheCustomDataPropertyAsync(Uri resourceUri, CancellationToken cancellationToken)
+        private async Task UncacheCustomDataPropertyAsync(Uri resourceUri, ILogger logger, CancellationToken cancellationToken)
         {
             var href = resourceUri.ToString();
             var propertyName = href.Substring(href.LastIndexOf('/') + 1);
@@ -372,11 +410,13 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             if (existingData.IsNullOrEmpty())
                 return;
 
+            logger.Trace($"Deleting custom data property '{propertyName}' from resource {href}", "WriteCacheFilter.UncacheCustomDataPropertyAsync");
+
             existingData.Remove(propertyName);
             await cache.PutAsync(cacheKey, existingData, cancellationToken).ConfigureAwait(false);
         }
 
-        private void UncacheCustomDataProperty(Uri resourceUri)
+        private void UncacheCustomDataProperty(Uri resourceUri, ILogger logger)
         {
             var href = resourceUri.ToString();
             var propertyName = href.Substring(href.LastIndexOf('/') + 1);
@@ -392,6 +432,8 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             var existingData = cache.Get(cacheKey);
             if (existingData.IsNullOrEmpty())
                 return;
+
+            logger.Trace($"Deleting custom data property '{propertyName}' from resource {href}", "WriteCacheFilter.UncacheCustomDataProperty");
 
             existingData.Remove(propertyName);
             cache.Put(cacheKey, existingData);

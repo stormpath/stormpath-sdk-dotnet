@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Shared
+namespace Stormpath.SDK.Logging
 {
     /// <summary>
     /// A wrapper interface for logger plugins.
