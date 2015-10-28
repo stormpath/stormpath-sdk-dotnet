@@ -201,13 +201,29 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             if (node.Method.Name != "Expand")
                 return false;
 
-            var targetMethod =
-                (((((node.Arguments[1] as UnaryExpression)
+            var methodCallExpression =
+                (((node.Arguments[1] as UnaryExpression)
                     ?.Operand as LambdaExpression)
                         ?.Body as UnaryExpression)
-                            ?.Operand as MethodCallExpression)
-                                ?.Object as ConstantExpression)
-                                    ?.Value as MethodInfo;
+                            ?.Operand as MethodCallExpression;
+            if (methodCallExpression == null)
+                throw new ArgumentException("Method selector passed to Expand operator could not be parsed.");
+
+            ConstantExpression methodExpression = null;
+
+            // TODO Mono 4.x bug - it compiles this expression differently
+            if (methodCallExpression.Object == null)
+            {
+                if (methodCallExpression.Arguments.Count > 2)
+                    methodExpression = methodCallExpression.Arguments[2] as ConstantExpression;
+            }
+            else
+            {
+                methodExpression = methodCallExpression.Object as ConstantExpression;
+            }
+
+            var targetMethod = methodExpression?.Value as MethodInfo;
+
             if (targetMethod == null)
                 throw new ArgumentException("Method selector passed to Expand operator is not supported.");
 
