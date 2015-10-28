@@ -28,7 +28,10 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Translators
             ["GetTenant"] = "tenant",
             ["GetCustomDataAsync"] = "customData",
             ["GetCustomData"] = "customData",
+            ["GetProviderDataAsync"] = "providerData",
+            ["GetProviderData"] = "providerData",
             ["GetGroups"] = "groups",
+            ["GetGroupMemberships"] = "groupMemberships"
         };
 
         public MethodNameTranslator()

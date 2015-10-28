@@ -68,6 +68,7 @@
     <Compile Include="Async\Entity_tests.cs" />
     <Compile Include="Async\CustomData_embedded_tests.cs" />
     <Compile Include="Async\CustomData_tests.cs" />
+    <Compile Include="Async\Expansion_tests.cs" />
     <Compile Include="Async\Group_tests.cs" />
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="IntegrationTestClients.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Async\Directory_tests.cs" />
     <Compile Include="Async\Error_tests.cs" />
     <Compile Include="StaticLogger.cs" />
+    <Compile Include="Sync\Sync_expansion_tests.cs" />
     <Compile Include="TestClientBuilder.cs" />
     <Compile Include="Meta_tests.cs" />
     <Compile Include="Sync\Sync_Entity_tests.cs" />
