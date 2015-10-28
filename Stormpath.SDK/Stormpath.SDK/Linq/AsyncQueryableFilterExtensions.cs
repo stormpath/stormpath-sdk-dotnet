@@ -29,7 +29,7 @@ namespace Stormpath.SDK
         /// Filters the items in a collection by searching all fields for a string.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <param name="source">A sequence of values to order.</param>
+        /// <param name="source">An <see cref=IAsyncQueryable{TSource}"/> to filter.</param>
         /// <param name="caseInsensitiveMatch">The string to search for. Matching is case-insensitive.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> that contains elements from the input sequence that contain <paramref name="caseInsensitiveMatch"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="caseInsensitiveMatch"/> is null or empty.</exception>

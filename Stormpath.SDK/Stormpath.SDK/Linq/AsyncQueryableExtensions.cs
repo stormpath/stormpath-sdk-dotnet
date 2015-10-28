@@ -36,7 +36,7 @@ namespace Stormpath.SDK
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <typeparam name="TKey">The type of the key returned by the function that is represented by <paramref name="keySelector"/>.</typeparam>
-        /// <param name="source">A sequence of values to order.</param>
+        /// <param name="source">An <see cref="IOrderedAsyncQueryable{T}"/> that contains elements to sort.</param>
         /// <param name="keySelector">A function to extract a key from an element.</param>
         /// <returns>An <see cref="IOrderedAsyncQueryable{T}"/> whose elements are sorted according to a key.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
@@ -59,7 +59,7 @@ namespace Stormpath.SDK
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <typeparam name="TKey">The type of the key returned by the function that is represented by <paramref name="keySelector"/>.</typeparam>
-        /// <param name="source">A sequence of values to order.</param>
+        /// <param name="source">An <see cref="IOrderedAsyncQueryable{T}"/> that contains elements to sort.</param>
         /// <param name="keySelector">A function to extract a key from an element.</param>
         /// <returns>An <see cref="IOrderedAsyncQueryable{T}"/> whose elements are sorted in descending order according to a key.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
