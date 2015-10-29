@@ -243,25 +243,21 @@ namespace Stormpath.SDK.Tests.Integration
                 .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Async")
                 .SelectMany(x => x.GetMethods())
                 .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-                .ToList();
+                .Select(x => GetQualifiedMethodName(x));
 
             var syncTests = this.GetType().Assembly
                 .GetTypes()
                 .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Sync")
                 .SelectMany(x => x.GetMethods())
                 .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-                .ToList();
+                .Select(x => GetQualifiedMethodName(x));
 
             var asyncButNotSync = asyncTests
-                .Select(a => a.Name)
-                .Except(
-                    syncTests.Select(s => s.Name))
+                .Except(syncTests)
                 .ToList();
 
             var syncButNotAsync = syncTests
-                .Select(a => a.Name)
-                .Except(
-                    asyncTests.Select(s => s.Name))
+                .Except(asyncTests)
                 .ToList();
 
             asyncButNotSync.Count.ShouldBe(
@@ -272,5 +268,8 @@ namespace Stormpath.SDK.Tests.Integration
                 0,
                 $"These sync tests do not have a corresponding async test: {string.Join(", ", syncButNotAsync)}");
         }
+
+        private static string GetQualifiedMethodName(MethodInfo m)
+            => $"{m.DeclaringType.Name}.{m.Name}";
     }
 }

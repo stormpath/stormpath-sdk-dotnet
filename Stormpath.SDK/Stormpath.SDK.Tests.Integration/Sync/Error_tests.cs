@@ -22,7 +22,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
-    public class Sync_Error_tests
+    public class Error_tests
     {
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]

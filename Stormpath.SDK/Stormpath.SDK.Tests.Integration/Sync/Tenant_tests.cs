@@ -21,7 +21,7 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [CollectionDefinition("Live tenant tests")]
-    public class Sync_Tenant_tests
+    public class Tenant_tests
     {
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]

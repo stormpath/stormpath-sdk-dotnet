@@ -23,11 +23,11 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
-    public class Sync_Application_tests
+    public class Application_tests
     {
         private readonly IntegrationTestFixture fixture;
 
-        public Sync_Application_tests(IntegrationTestFixture fixture)
+        public Application_tests(IntegrationTestFixture fixture)
         {
             this.fixture = fixture;
         }

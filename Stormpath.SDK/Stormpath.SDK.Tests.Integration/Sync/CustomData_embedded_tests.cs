@@ -25,11 +25,11 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
-    public class Sync_CustomData_embedded_tests
+    public class CustomData_embedded_tests
     {
         private readonly IntegrationTestFixture fixture;
 
-        public Sync_CustomData_embedded_tests(IntegrationTestFixture fixture)
+        public CustomData_embedded_tests(IntegrationTestFixture fixture)
         {
             this.fixture = fixture;
         }
