@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -33,7 +34,7 @@ namespace Stormpath.SDK.Directory
     /// You can map one or more directories (or groups within a directory) to an <see cref="Application.IApplication"/>.
     /// This forms the application's effective 'user base' of all <see cref="IAccount"/> that may use the application.</para>
     /// </summary>
-    public interface IDirectory : IResource, ISaveableWithOptions<IDirectory>, IDeletable, IAuditable, IExtendable, IAccountStore, IAccountCreationActions
+    public interface IDirectory : IResource, ISaveableWithOptions<IDirectory>, IDeletable, IAuditable, IExtendable, IAccountStore, IAccountCreationActions, IGroupCreationActions
     {
         /// <summary>
         /// Gets the directory's name.
@@ -87,14 +88,6 @@ namespace Stormpath.SDK.Directory
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is this directory's tenant.</returns>
         Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Creates a new <see cref="IGroup"/> instance in this directory.
-        /// </summary>
-        /// <param name="group">The group to create/persist.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the newly-created <see cref="IGroup"/>.</returns>
-        Task<IGroup> CreateGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the <see cref="IProvider"/> of this Directory.

@@ -14,12 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Extensions;
-using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Application
@@ -28,13 +26,13 @@ namespace Stormpath.SDK.Impl.Application
     {
         private readonly bool createDirectory;
         private readonly string directoryName;
-        private readonly Action<IRetrievalOptions<IApplication>> responseOptionsAction;
+        private readonly IRetrievalOptions<IApplication> responseOptions;
 
-        public DefaultApplicationCreationOptions(bool createDirectory, string directoryName, Action<IRetrievalOptions<IApplication>> responseOptionsAction)
+        public DefaultApplicationCreationOptions(bool createDirectory, string directoryName, IRetrievalOptions<IApplication> responseOptions)
         {
             this.createDirectory = createDirectory;
             this.directoryName = directoryName;
-            this.responseOptionsAction = responseOptionsAction;
+            this.responseOptions = responseOptions;
         }
 
         bool IApplicationCreationOptions.CreateDirectory => this.createDirectory;
@@ -50,13 +48,8 @@ namespace Stormpath.SDK.Impl.Application
             if (this.createDirectory)
                 arguments.Add("createDirectory=" + (this.IsDirectoryNameSpecified ? this.directoryName : "true"));
 
-            if (this.responseOptionsAction != null)
-            {
-                var responseOptions = new DefaultRetrivalOptions<IApplication>();
-                this.responseOptionsAction(responseOptions);
-
-                arguments.Add(responseOptions.ToString());
-            }
+            if (this.responseOptions != null)
+                arguments.Add(this.responseOptions.ToString());
 
             return arguments
                 .Where(x => !string.IsNullOrEmpty(x))

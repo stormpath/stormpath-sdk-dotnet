@@ -78,6 +78,28 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_directory_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
+
+            var directory = client
+                .Instantiate<IDirectory>()
+                .SetName($"My New Directory With Options (.NET IT {this.fixture.TestRunIdentifier}) - Sync")
+                .SetDescription("Another great directory for my app")
+                .SetStatus(DirectoryStatus.Disabled);
+
+            tenant.CreateDirectory(directory, opt => opt.ResponseOptions.Expand(x => x.GetCustomData));
+
+            directory.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
+
+            // Cleanup
+            directory.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Modifying_directory(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

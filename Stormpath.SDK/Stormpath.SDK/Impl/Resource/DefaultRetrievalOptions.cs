@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultRetrivalOptions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultRetrievalOptions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ using Stormpath.SDK.Sync;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    internal sealed class DefaultRetrivalOptions<T> : IRetrievalOptions<T>
+    internal sealed class DefaultRetrievalOptions<T> : IRetrievalOptions<T>
     {
         private IQueryable<T> proxy = Enumerable.Empty<T>().AsQueryable();
         private bool dirty = false;

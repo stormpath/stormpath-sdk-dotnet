@@ -322,5 +322,24 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             created.Delete().ShouldBeTrue();
         }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_group_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var group = client
+                .Instantiate<IGroup>()
+                .SetName($".NET ITs Custom Data Group #2 ({this.fixture.TestRunIdentifier} - {clientBuilder.Name})");
+
+            app.CreateGroup(group, opt => opt.ResponseOptions.Expand(x => x.GetCustomData));
+
+            group.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedGroupHrefs.Add(group.Href);
+
+            group.Delete().ShouldBeTrue();
+        }
     }
 }

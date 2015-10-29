@@ -23,15 +23,8 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Directory
 {
-    internal interface IDirectorySync : ISaveableWithOptionsSync<IDirectory>, IDeletableSync, IAccountCreationActionsSync, IExtendableSync
+    internal interface IDirectorySync : ISaveableWithOptionsSync<IDirectory>, IDeletableSync, IExtendableSync, IAccountCreationActionsSync, IGroupCreationActionsSync
     {
-        /// <summary>
-        /// Synchronously creates a new <see cref="IGroup"/> instance in this directory.
-        /// </summary>
-        /// <param name="group">The group to create/persist.</param>
-        /// <returns>The newly-created <see cref="IGroup"/>.</returns>
-        IGroup CreateGroup(IGroup group);
-
         /// <summary>
         /// Synchronously gets the <see cref="IProvider"/> of this Directory.
         /// </summary>

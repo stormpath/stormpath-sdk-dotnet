@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Application
     /// <summary>
     /// Represents a Stormpath registered application.
     /// </summary>
-    public interface IApplication : IResource, ISaveableWithOptions<IApplication>, IDeletable, IAuditable, IExtendable, IAccountCreationActions
+    public interface IApplication : IResource, ISaveableWithOptions<IApplication>, IDeletable, IAuditable, IExtendable, IAccountCreationActions, IGroupCreationActions
     {
         /// <summary>
         /// Gets the application's name.
@@ -191,19 +191,6 @@ namespace Stormpath.SDK.Application
         /// <returns>A Task whose result is the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
         /// if no account store has been designated.</returns>
         Task<IAccountStore> GetDefaultGroupStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Creates a new <see cref="IGroup"/> that may be used by this application in the application's <see cref="GetDefaultGroupStoreAsync(CancellationToken)"/>.
-        /// <para>This is a convenience method. It merely delegates to the application's designated default group store.</para>
-        /// </summary>
-        /// <param name="group">The group to create/persist.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the new <see cref="IGroup"/> that may be used by this application.</returns>
-        /// <exception cref="Error.ResourceException">
-        /// The application does not have a designated default group store, or the
-        /// designated default group store does not allow new groups to be created.
-        /// </exception>
-        Task<IGroup> CreateGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Verifies the password reset token (received in the user's email) and immediately

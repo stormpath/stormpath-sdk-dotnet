@@ -283,7 +283,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Creating_group_in_directory(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
-            var directory = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryDirectoryHref);
+            var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
 
             var instance = client.Instantiate<IGroup>();
             var directoryName = $".NET ITs New Test Group #2 ({this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
@@ -322,6 +322,25 @@ namespace Stormpath.SDK.Tests.Integration.Async
             customData["roleBasedSecurity"].ShouldBe("pieceOfCake");
 
             (await created.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_group_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var group = client
+                .Instantiate<IGroup>()
+                .SetName($".NET ITs Custom Data Group #2 ({this.fixture.TestRunIdentifier} - {clientBuilder.Name})");
+
+            await app.CreateGroupAsync(group, opt => opt.ResponseOptions.Expand(x => x.GetCustomDataAsync));
+
+            group.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedGroupHrefs.Add(group.Href);
+
+            (await group.DeleteAsync()).ShouldBeTrue();
         }
     }
 }

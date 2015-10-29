@@ -485,6 +485,31 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_account_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var account = client
+                .Instantiate<IAccount>()
+                .SetGivenName("Galen")
+                .SetSurname("Marek")
+                .SetEmail("gmarek@kashyyk.rim")
+                .SetPassword(new RandomPassword(12));
+            application.CreateAccount(account, opt =>
+            {
+                opt.ResponseOptions.Expand(x => x.GetCustomData);
+            });
+
+            account.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            // Clean up
+            account.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Authenticating_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

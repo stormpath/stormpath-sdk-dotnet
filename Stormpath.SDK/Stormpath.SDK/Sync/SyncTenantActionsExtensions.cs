@@ -84,7 +84,7 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
-        /// <param name="creationOptionsAction">An inline builder for aninstance of <see cref="IDirectoryCreationOptions"/>,
+        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
         /// which will be used when sending the request.</param>
         /// <returns>The created <see cref="IDirectory"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
@@ -92,7 +92,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).CreateDirectory(directory, creationOptionsAction);
 
         /// <summary>
-        /// Synchronously creates a new Provider-based Directory resource in the Tenant.
+        /// Synchronously creates a new Cloud- or Provider-based Directory resource in the Tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="directory">The <see cref="IDirectory"/> to create.</param>

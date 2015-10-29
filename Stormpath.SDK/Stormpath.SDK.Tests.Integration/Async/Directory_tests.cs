@@ -80,6 +80,28 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_directory_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var directory = client
+                .Instantiate<IDirectory>()
+                .SetName($"My New Directory With Options (.NET IT {this.fixture.TestRunIdentifier})")
+                .SetDescription("Another great directory for my app")
+                .SetStatus(DirectoryStatus.Disabled);
+
+            await tenant.CreateDirectoryAsync(directory, opt => opt.ResponseOptions.Expand(x => x.GetCustomDataAsync));
+
+            directory.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
+
+            // Cleanup
+            await directory.DeleteAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Modifying_directory(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

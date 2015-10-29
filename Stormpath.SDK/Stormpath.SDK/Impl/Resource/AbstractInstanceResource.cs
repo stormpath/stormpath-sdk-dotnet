@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Impl.Resource
         protected virtual Task<T> SaveAsync<T>(Action<IRetrievalOptions<T>> options, CancellationToken cancellationToken)
             where T : class, IResource, ISaveable<T>
         {
-            var optionsInstance = new DefaultRetrivalOptions<T>();
+            var optionsInstance = new DefaultRetrievalOptions<T>();
             options(optionsInstance);
             var queryString = optionsInstance.ToString();
 
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Impl.Resource
         protected virtual T Save<T>(Action<IRetrievalOptions<T>> options)
             where T : class, IResource, ISaveable<T>
         {
-            var optionsInstance = new DefaultRetrivalOptions<T>();
+            var optionsInstance = new DefaultRetrievalOptions<T>();
             options(optionsInstance);
             var queryString = optionsInstance.ToString();
 

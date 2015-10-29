@@ -87,6 +87,26 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_application_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var newApp = client
+                .Instantiate<IApplication>()
+                .SetName($".NET IT {this.fixture.TestRunIdentifier} Application #3");
+
+            await tenant.CreateApplicationAsync(newApp, opt => opt.ResponseOptions.Expand(x => x.GetCustomDataAsync));
+
+            newApp.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(newApp.Href);
+
+            // Clean up
+            await newApp.DeleteAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Updating_application(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

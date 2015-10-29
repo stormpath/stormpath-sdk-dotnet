@@ -14,8 +14,8 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 
@@ -42,14 +42,14 @@ namespace Stormpath.SDK.Directory
         /// <summary>
         /// Gets or sets the response options to apply to the request.
         /// </summary>
-        /// <value>The response optoins to apply to the request.</value>
+        /// <value>The response options to apply to the request.</value>
         /// <example>
         /// To request and cache custom data along with this request:
         /// <code>
-        /// builder.ResponseOptions = r => r.Expand(x => x.GetCustomDataAsync);
+        /// builder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
         /// </code>
         /// </example>
-        public Action<IRetrievalOptions<IDirectory>> ResponseOptions { get; set; }
+        public IRetrievalOptions<IDirectory> ResponseOptions { get; } = new DefaultRetrievalOptions<IDirectory>();
 
         /// <summary>
         /// Creates a new <see cref="IDirectoryCreationOptions"/> instance based on the current builder state.

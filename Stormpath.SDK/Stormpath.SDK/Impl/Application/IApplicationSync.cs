@@ -27,7 +27,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
 {
-    internal interface IApplicationSync : ISaveableWithOptionsSync<IApplication>, IDeletableSync, IAccountCreationActionsSync, IExtendableSync
+    internal interface IApplicationSync : ISaveableWithOptionsSync<IApplication>, IDeletableSync, IExtendableSync, IAccountCreationActionsSync, IGroupCreationActionsSync
     {
         /// <summary>
         /// Synchronously authenticates an account's submitted principals and credentials (e.g. username and password).
@@ -131,18 +131,6 @@ namespace Stormpath.SDK.Impl.Application
         /// </summary>
         /// <returns>The tenant.</returns>
         ITenant GetTenant();
-
-        /// <summary>
-        /// Synchronously creates a new <see cref="IGroup"/> that may be used by this application in the application's <see cref="GetDefaultGroupStoreAsync(CancellationToken)"/>.
-        /// <para>This is a convenience method. It merely delegates to the application's designated default group store.</para>
-        /// </summary>
-        /// <param name="group">The group to create/persist.</param>
-        /// <returns>The new <see cref="IGroup"/> that may be used by this application.</returns>
-        /// <exception cref="Error.ResourceException">
-        /// The application does not have a designated default group store, or the
-        /// designated default group store does not allow new groups to be created.
-        /// </exception>
-        IGroup CreateGroup(IGroup group);
 
         /// <summary>
         /// Synchronously verifies the password reset token (received in the user's email) and immediately

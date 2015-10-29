@@ -87,6 +87,26 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_application_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
+
+            var newApp = client
+                .Instantiate<IApplication>()
+                .SetName($".NET IT {this.fixture.TestRunIdentifier} Application #3 - Sync");
+
+            tenant.CreateApplication(newApp, opt => opt.ResponseOptions.Expand(x => x.GetCustomData));
+
+            newApp.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(newApp.Href);
+
+            // Clean up
+            newApp.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Updating_application(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

@@ -24,6 +24,7 @@ using Stormpath.SDK.Auth;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Auth;
+using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
@@ -309,11 +310,23 @@ namespace Stormpath.SDK.Impl.Application
             this.GetInternalSyncDataStore().Create(href, builder.Build());
         }
 
-        Task<IGroup> IApplication.CreateGroupAsync(IGroup group, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().CreateAsync(this.Groups.Href, group, cancellationToken);
+        Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, CancellationToken cancellationToken)
+            => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, cancellationToken);
 
-        IGroup IApplicationSync.CreateGroup(IGroup group)
-            => this.GetInternalSyncDataStore().Create(this.Groups.Href, group);
+        IGroup IGroupCreationActionsSync.CreateGroup(IGroup group)
+            => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, group);
+
+        Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
+            => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, creationOptionsAction, cancellationToken);
+
+        IGroup IGroupCreationActionsSync.CreateGroup(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction)
+            => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, group, creationOptionsAction);
+
+        Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, IGroupCreationOptions creationOptions, CancellationToken cancellationToken)
+            => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, creationOptions, cancellationToken);
+
+        IGroup IGroupCreationActionsSync.CreateGroup(IGroup group, IGroupCreationOptions creationOptions)
+            => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, group, creationOptions);
 
         Task<IProviderAccountResult> IApplication.GetAccountAsync(IProviderAccountRequest request, CancellationToken cancellationToken)
             => new ProviderAccountResolver(this.GetInternalAsyncDataStore()).ResolveProviderAccountAsync(this.AsInterface.Href, request, cancellationToken);

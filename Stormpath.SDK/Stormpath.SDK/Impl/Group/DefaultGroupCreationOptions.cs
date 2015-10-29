@@ -14,31 +14,26 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Group
 {
     internal sealed class DefaultGroupCreationOptions : IGroupCreationOptions
     {
-        private readonly Action<IRetrievalOptions<IGroup>> responseOptionsAction;
+        private readonly IRetrievalOptions<IGroup> responseOptions;
 
-        public DefaultGroupCreationOptions(Action<IRetrievalOptions<IGroup>> responseOptionsAction)
+        public DefaultGroupCreationOptions(IRetrievalOptions<IGroup> responseOptions)
         {
-            this.responseOptionsAction = responseOptionsAction;
+            this.responseOptions = responseOptions;
         }
 
         public string GetQueryString()
         {
-            if (this.responseOptionsAction == null)
+            if (this.responseOptions == null)
                 return string.Empty;
 
-            var responseOptions = new DefaultRetrivalOptions<IGroup>();
-            this.responseOptionsAction(responseOptions);
-
-            return responseOptions.ToString();
+            return this.responseOptions.ToString();
         }
     }
 }

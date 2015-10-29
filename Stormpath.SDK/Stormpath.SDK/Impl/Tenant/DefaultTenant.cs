@@ -165,7 +165,7 @@ namespace Stormpath.SDK.Impl.Tenant
             if (creationOptions?.Provider != null)
                 (directory as DefaultDirectory).SetProvider(creationOptions.Provider);
 
-            return this.AsInterface.CreateDirectoryAsync(directory, cancellationToken);
+            return this.GetInternalAsyncDataStore().CreateAsync(this.directoriesResourceBase, directory, creationOptions, cancellationToken);
         }
 
         IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory, IDirectoryCreationOptions creationOptions)
@@ -176,7 +176,7 @@ namespace Stormpath.SDK.Impl.Tenant
             if (creationOptions?.Provider != null)
                 (directory as DefaultDirectory).SetProvider(creationOptions.Provider);
 
-            return this.CreateDirectory(directory);
+            return this.GetInternalSyncDataStore().Create(this.directoriesResourceBase, directory, creationOptions);
         }
 
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken)

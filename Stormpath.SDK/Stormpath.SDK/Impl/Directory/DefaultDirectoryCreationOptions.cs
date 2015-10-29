@@ -14,9 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 
@@ -25,12 +23,12 @@ namespace Stormpath.SDK.Impl.Directory
     internal sealed class DefaultDirectoryCreationOptions : IDirectoryCreationOptions
     {
         private readonly IProvider provider;
-        private readonly Action<IRetrievalOptions<IDirectory>> responseOptionsAction;
+        private readonly IRetrievalOptions<IDirectory> responseOptions;
 
-        public DefaultDirectoryCreationOptions(IProvider provider, Action<IRetrievalOptions<IDirectory>> responseOptionsAction)
+        public DefaultDirectoryCreationOptions(IProvider provider, IRetrievalOptions<IDirectory> responseOptions)
         {
             this.provider = provider;
-            this.responseOptionsAction = responseOptionsAction;
+            this.responseOptions = responseOptions;
         }
 
         IProvider IDirectoryCreationOptions.Provider
@@ -38,13 +36,10 @@ namespace Stormpath.SDK.Impl.Directory
 
         public string GetQueryString()
         {
-            if (this.responseOptionsAction == null)
+            if (this.responseOptions == null)
                 return string.Empty;
 
-            var responseOptions = new DefaultRetrivalOptions<IDirectory>();
-            this.responseOptionsAction(responseOptions);
-
-            return responseOptions.ToString();
+            return this.responseOptions.ToString();
         }
     }
 }

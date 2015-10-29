@@ -14,8 +14,8 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using Stormpath.SDK.Impl.Group;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Group
@@ -28,14 +28,14 @@ namespace Stormpath.SDK.Group
         /// <summary>
         /// Gets or sets the response options to apply to the request.
         /// </summary>
-        /// <value>The response optoins to apply to the request.</value>
+        /// <value>The response options to apply to the request.</value>
         /// <example>
         /// To request and cache custom data along with this request:
         /// <code>
-        /// builder.ResponseOptions = r => r.Expand(x => x.GetCustomDataAsync);
+        /// builder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
         /// </code>
         /// </example>
-        public Action<IRetrievalOptions<IGroup>> ResponseOptions { get; set; }
+        public IRetrievalOptions<IGroup> ResponseOptions { get; } = new DefaultRetrievalOptions<IGroup>();
 
         /// <summary>
         /// Creates a new <see cref="IApplicationCreationOptions"/> instance based on the current builder state.

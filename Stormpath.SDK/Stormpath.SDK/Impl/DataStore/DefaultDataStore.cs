@@ -210,7 +210,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<T> IDataStore.GetResourceAsync<T>(string href, Action<IRetrievalOptions<T>> options, CancellationToken cancellationToken)
         {
-            var optionsInstance = new DefaultRetrivalOptions<T>();
+            var optionsInstance = new DefaultRetrievalOptions<T>();
             options(optionsInstance);
 
             var queryString = optionsInstance.ToString();
@@ -222,7 +222,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         T IDataStoreSync.GetResource<T>(string href, Action<IRetrievalOptions<T>> options)
         {
-            var optionsInstance = new DefaultRetrivalOptions<T>();
+            var optionsInstance = new DefaultRetrievalOptions<T>();
             options(optionsInstance);
 
             var queryString = optionsInstance.ToString();

@@ -14,12 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.Extensions;
-using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Account
@@ -27,12 +25,12 @@ namespace Stormpath.SDK.Impl.Account
     internal sealed class DefaultAccountCreationOptions : IAccountCreationOptions
     {
         private readonly bool? registrationWorkflowEnabled;
-        private readonly Action<IRetrievalOptions<IAccount>> responseOptionsAction;
+        private readonly IRetrievalOptions<IAccount> responseOptions;
 
-        public DefaultAccountCreationOptions(bool? registrationWorkflowEnabled, Action<IRetrievalOptions<IAccount>> responseOptionsAction)
+        public DefaultAccountCreationOptions(bool? registrationWorkflowEnabled, IRetrievalOptions<IAccount> responseOptions)
         {
             this.registrationWorkflowEnabled = registrationWorkflowEnabled;
-            this.responseOptionsAction = responseOptionsAction;
+            this.responseOptions = responseOptions;
         }
 
         bool? IAccountCreationOptions.RegistrationWorkflowEnabled => this.registrationWorkflowEnabled;
@@ -40,7 +38,7 @@ namespace Stormpath.SDK.Impl.Account
         public string GetQueryString()
         {
             if (this.registrationWorkflowEnabled == null &&
-                this.responseOptionsAction == null)
+                this.responseOptions == null)
                 return string.Empty;
 
             var arguments = new List<string>(2);
@@ -48,13 +46,8 @@ namespace Stormpath.SDK.Impl.Account
             if (this.registrationWorkflowEnabled != null)
                 arguments.Add("registrationWorkflowEnabled=" + (this.registrationWorkflowEnabled.Value ? "true" : "false"));
 
-            if (this.responseOptionsAction != null)
-            {
-                var responseOptions = new DefaultRetrivalOptions<IAccount>();
-                this.responseOptionsAction(responseOptions);
-
-                arguments.Add(responseOptions.ToString());
-            }
+            if (this.responseOptions != null)
+                arguments.Add(this.responseOptions.ToString());
 
             return arguments
                 .Where(x => !string.IsNullOrEmpty(x))

@@ -148,20 +148,6 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).GetTenant();
 
         /// <summary>
-        /// Synchronously creates a new <see cref="IGroup"/> that may be used by this application in the application's <see cref="GetDefaultGroupStoreAsync(CancellationToken)"/>.
-        /// <para>This is a convenience method. It merely delegates to the application's designated default group store.</para>
-        /// </summary>
-        /// <param name="application">The application.</param>
-        /// <param name="group">The group to create/persist.</param>
-        /// <returns>The new <see cref="IGroup"/> that may be used by this application.</returns>
-        /// <exception cref="Error.ResourceException">
-        /// The application does not have a designated default group store, or the
-        /// designated default group store does not allow new groups to be created.
-        /// </exception>
-        public static IGroup CreateGroup(this IApplication application, IGroup group)
-            => (application as IApplicationSync).CreateGroup(group);
-
-        /// <summary>
         /// Synchronously verifies the password reset token (received in the user's email) and immediately
         /// changes the password in the same request, if the token is valid.
         /// <para>Once the token has been successfully used, it is immediately invalidated and can't be used again.

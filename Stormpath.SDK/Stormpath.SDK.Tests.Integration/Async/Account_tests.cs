@@ -466,6 +466,31 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_account_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var account = client
+                .Instantiate<IAccount>()
+                .SetGivenName("Galen")
+                .SetSurname("Marek")
+                .SetEmail("gmarek@kashyyk.rim")
+                .SetPassword(new RandomPassword(12));
+            await application.CreateAccountAsync(account, opt =>
+            {
+                opt.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+            });
+
+            account.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            // Clean up
+            await account.DeleteAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Authenticating_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
