@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultDirectoryCreationOptions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultGroupCreationOptions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,33 +15,27 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Impl.Directory
+namespace Stormpath.SDK.Impl.Group
 {
-    internal sealed class DefaultDirectoryCreationOptions : IDirectoryCreationOptions
+    internal sealed class DefaultGroupCreationOptions : IGroupCreationOptions
     {
-        private readonly IProvider provider;
-        private readonly Action<IRetrievalOptions<IDirectory>> responseOptionsAction;
+        private readonly Action<IRetrievalOptions<IGroup>> responseOptionsAction;
 
-        public DefaultDirectoryCreationOptions(IProvider provider, Action<IRetrievalOptions<IDirectory>> responseOptionsAction)
+        public DefaultGroupCreationOptions(Action<IRetrievalOptions<IGroup>> responseOptionsAction)
         {
-            this.provider = provider;
             this.responseOptionsAction = responseOptionsAction;
         }
-
-        IProvider IDirectoryCreationOptions.Provider
-            => this.provider;
 
         public string GetQueryString()
         {
             if (this.responseOptionsAction == null)
                 return string.Empty;
 
-            var responseOptions = new DefaultRetrivalOptions<IDirectory>();
+            var responseOptions = new DefaultRetrivalOptions<IGroup>();
             this.responseOptionsAction(responseOptions);
 
             return responseOptions.ToString();

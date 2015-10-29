@@ -14,7 +14,9 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Impl.Application;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Application
 {
@@ -40,6 +42,18 @@ namespace Stormpath.SDK.Application
         public bool CreateDirectory { get; set; } = false;
 
         /// <summary>
+        /// Gets or sets the response options to apply to the request.
+        /// </summary>
+        /// <value>The response optoins to apply to the request.</value>
+        /// <example>
+        /// To request and cache custom data along with this request:
+        /// <code>
+        /// builder.ResponseOptions = r => r.Expand(x => x.GetCustomDataAsync);
+        /// </code>
+        /// </example>
+        public Action<IRetrievalOptions<IApplication>> ResponseOptions { get; set; }
+
+        /// <summary>
         /// Gets or sets the name to use when creating a new <see cref="Directory.IDirectory"/>.
         /// </summary>
         /// <value>
@@ -55,7 +69,7 @@ namespace Stormpath.SDK.Application
         /// <returns>A new <see cref="IApplicationCreationOptions"/> instance.</returns>
         public IApplicationCreationOptions Build()
         {
-            return new DefaultApplicationCreationOptions(this.CreateDirectory, this.DirectoryName);
+            return new DefaultApplicationCreationOptions(this.CreateDirectory, this.DirectoryName, this.ResponseOptions);
         }
     }
 }

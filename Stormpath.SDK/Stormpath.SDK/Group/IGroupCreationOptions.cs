@@ -1,4 +1,4 @@
-﻿// <copyright file="ISaveableSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IGroupCreationOptions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,20 +16,12 @@
 
 using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Impl.Resource
+namespace Stormpath.SDK.Group
 {
     /// <summary>
-    /// Represents a resource that can be created or modified synchronously.
+    /// Represents options for an <see cref="IGroup"/> creation request.
     /// </summary>
-    /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
-    internal interface ISaveableSync<T>
-        where T : IResource
+    public interface IGroupCreationOptions : ICreationOptions
     {
-        /// <summary>
-        /// Synchronously creates or updates the resource.
-        /// </summary>
-        /// <returns>The persisted resource data.</returns>
-        /// <exception cref="SDK.Error.ResourceException">The save operation failed.</exception>
-        T Save();
     }
 }

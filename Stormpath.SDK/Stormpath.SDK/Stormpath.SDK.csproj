@@ -88,7 +88,9 @@
     <Compile Include="Directory\IDirectory.cs" />
     <Compile Include="Error\IError.cs" />
     <Compile Include="Error\ResourceException.cs" />
+    <Compile Include="Group\GroupCreationOptionsBuilder.cs" />
     <Compile Include="Group\GroupStatus.cs" />
+    <Compile Include="Group\IGroupCreationOptions.cs" />
     <Compile Include="Group\IGroup.cs" />
     <Compile Include="Group\IGroupMembership.cs" />
     <Compile Include="Http\HttpExtensions.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="Impl\Directory\IDirectorySync.cs" />
     <Compile Include="Impl\Extensions\DictionaryExtensions.cs" />
     <Compile Include="Impl\Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Impl\Group\DefaultGroupCreationOptions.cs" />
     <Compile Include="Impl\Group\DefaultGroup.cs" />
     <Compile Include="Impl\Group\DefaultGroupMembership.cs" />
     <Compile Include="Impl\Group\IGroupMembershipSync.cs" />

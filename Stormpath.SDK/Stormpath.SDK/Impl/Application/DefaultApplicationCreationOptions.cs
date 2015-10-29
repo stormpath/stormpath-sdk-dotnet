@@ -14,7 +14,13 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -22,11 +28,13 @@ namespace Stormpath.SDK.Impl.Application
     {
         private readonly bool createDirectory;
         private readonly string directoryName;
+        private readonly Action<IRetrievalOptions<IApplication>> responseOptionsAction;
 
-        public DefaultApplicationCreationOptions(bool createDirectory, string directoryName)
+        public DefaultApplicationCreationOptions(bool createDirectory, string directoryName, Action<IRetrievalOptions<IApplication>> responseOptionsAction)
         {
             this.createDirectory = createDirectory;
             this.directoryName = directoryName;
+            this.responseOptionsAction = responseOptionsAction;
         }
 
         bool IApplicationCreationOptions.CreateDirectory => this.createDirectory;
@@ -37,15 +45,22 @@ namespace Stormpath.SDK.Impl.Application
 
         public string GetQueryString()
         {
-            var argument = string.Empty;
+            var arguments = new List<string>(2);
 
             if (this.createDirectory)
+                arguments.Add("createDirectory=" + (this.IsDirectoryNameSpecified ? this.directoryName : "true"));
+
+            if (this.responseOptionsAction != null)
             {
-                argument = "createDirectory=" +
-                    (this.IsDirectoryNameSpecified ? this.directoryName : "true");
+                var responseOptions = new DefaultRetrivalOptions<IApplication>();
+                this.responseOptionsAction(responseOptions);
+
+                arguments.Add(responseOptions.ToString());
             }
 
-            return argument;
+            return arguments
+                .Where(x => !string.IsNullOrEmpty(x))
+                .Join("&");
         }
     }
 }
