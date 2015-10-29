@@ -208,6 +208,30 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create<T>(result.Body);
         }
 
+        Task<T> IDataStore.GetResourceAsync<T>(string href, Action<IRetrievalOptions<T>> options, CancellationToken cancellationToken)
+        {
+            var optionsInstance = new DefaultRetrivalOptions<T>();
+            options(optionsInstance);
+
+            var queryString = optionsInstance.ToString();
+            if (!string.IsNullOrEmpty(queryString))
+                href = $"{href}?{queryString}";
+
+            return this.AsAsyncInterface.GetResourceAsync<T>(href, cancellationToken);
+        }
+
+        T IDataStoreSync.GetResource<T>(string href, Action<IRetrievalOptions<T>> options)
+        {
+            var optionsInstance = new DefaultRetrivalOptions<T>();
+            options(optionsInstance);
+
+            var queryString = optionsInstance.ToString();
+            if (!string.IsNullOrEmpty(queryString))
+                href = $"{href}?{queryString}";
+
+            return this.AsSyncInterface.GetResource<T>(href);
+        }
+
         async Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
         {
             var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);

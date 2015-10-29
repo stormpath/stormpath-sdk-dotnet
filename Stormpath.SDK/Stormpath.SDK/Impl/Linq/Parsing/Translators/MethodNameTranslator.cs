@@ -34,18 +34,24 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Translators
             ["GetDefaultAccountStore"] = "defaultAccountStoreMapping",
             ["GetDefaultGroupStoreAsync"] = "defaultGroupStoreMapping",
             ["GetDefaultGroupStore"] = "defaultGroupStoreMapping",
+            ["GetAccountStoreAsync"] = "accountStore",
+            ["GetAccountStore"] = "accountStore",
             ["GetProviderAsync"] = "provider",
             ["GetProvider"] = "provider",
             ["GetAccountAsync"] = "account",
             ["GetAccount"] = "account",
             ["GetGroupAsync"] = "group",
             ["GetGroup"] = "group",
+            ["GetApplicationAsync"] = "application",
+            ["GetApplication"] = "application",
 
             ["GetGroups"] = "groups",
             ["GetGroupMemberships"] = "groupMemberships",
             ["GetAccountMemberships"] = "accountMemberships",
             ["GetAccounts"] = "accounts",
             ["GetAccountStoreMappings"] = "accountStoreMappings",
+            ["GetApplications"] = "applications",
+            ["GetDirectories"] = "directories",
         };
 
         public MethodNameTranslator()

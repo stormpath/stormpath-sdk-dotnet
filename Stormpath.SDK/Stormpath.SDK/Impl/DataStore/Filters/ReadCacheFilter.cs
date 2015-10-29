@@ -117,12 +117,24 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             bool isLoginAttempt = request.Type == typeof(ILoginAttempt);
             bool isProviderAccountAccess = request.Type == typeof(IProviderAccountAccess);
             bool isCollectionResource = ResourceTypes.IsCollectionResponse(request.Type);
+            bool isExpandedRequest = request.Uri.ToString().Contains("expand=");
 
             return
+
+                // Only consider cache retrieval for GETs
                 isRead &&
+
+                // Login attempts are always sent to the server
                 !isLoginAttempt &&
+
+                // Provider account access looks like an IAccount response, but it should not be cached
                 !isProviderAccountAccess &&
-                !isCollectionResource;
+
+                // Not currently caching collections
+                !isCollectionResource &&
+
+                // Always send expanded requests to the server
+                !isExpandedRequest;
         }
     }
 }

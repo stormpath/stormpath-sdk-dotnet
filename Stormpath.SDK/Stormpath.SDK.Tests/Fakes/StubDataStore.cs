@@ -63,6 +63,9 @@ namespace Stormpath.SDK.Tests.Fakes
         Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
             => this.ProxyDataStore.GetResourceAsync<T>(href, cancellationToken);
 
+        Task<T> IDataStore.GetResourceAsync<T>(string href, Action<IRetrievalOptions<T>> options, CancellationToken cancellationToken)
+            => this.ProxyDataStore.GetResourceAsync<T>(href, options, cancellationToken);
+
         Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
             => this.ProxyAsyncDataStore.GetResourceAsync<T>(href, identityMapOptions, cancellationToken);
 
@@ -162,6 +165,11 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
+        }
+
+        T IDataStoreSync.GetResource<T>(string href, Action<IRetrievalOptions<T>> options)
+        {
+            throw new NotImplementedException();
         }
     }
 }

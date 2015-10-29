@@ -34,7 +34,6 @@ namespace Stormpath.SDK.Sync
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
         public static IQueryable<TSource> Expand<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, Func<Resource.IResource>>> selector)
-            where TSource : Resource.IResource
         {
             return source.Provider.CreateQuery<TSource>(
                 LinqHelper.MethodCall(
@@ -51,7 +50,6 @@ namespace Stormpath.SDK.Sync
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
         public static IQueryable<TSource> Expand<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, Func<CancellationToken, Task>>> selector)
-            where TSource : Resource.IResource
         {
             return source.Provider.CreateQuery<TSource>(
                 LinqHelper.MethodCall(
@@ -70,7 +68,6 @@ namespace Stormpath.SDK.Sync
         /// <param name="limit">Set the paging limit of the expanded collection, or <c>null</c> to use the default limit.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
         public static IQueryable<TSource> Expand<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, Func<IAsyncQueryable>>> selector, int? offset = null, int? limit = null)
-            where TSource : Resource.IResource
         {
             return source.Provider.CreateQuery<TSource>(
                 LinqHelper.MethodCall(

@@ -90,6 +90,7 @@
     <Compile Include="Impl\DefaultJsonSerializerLoader_tests.cs" />
     <Compile Include="Impl\DefaultHttpClientBuilder_tests.cs" />
     <Compile Include="Impl\DefaultRequestExecutor_tests.cs" />
+    <Compile Include="Impl\Expansion_retrieval_options_tests.cs" />
     <Compile Include="Impl\FieldConverter_tests.cs" />
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\CollectionTestHarness.cs" />

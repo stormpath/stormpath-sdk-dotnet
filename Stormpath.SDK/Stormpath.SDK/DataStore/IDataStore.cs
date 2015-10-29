@@ -48,5 +48,16 @@ namespace Stormpath.SDK.DataStore
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
         Task<T> GetResourceAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves the resource at the specified <paramref name="href"/> URL with the specified <see cref="options"/>,
+        /// and returns the resource as an instance of the specified class <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <param name="href">The resource URL of the resource to retrieve.</param>
+        /// <param name="options">The options to apply to this request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
+        Task<T> GetResourceAsync<T>(string href, Action<IRetrievalOptions<T>> options, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

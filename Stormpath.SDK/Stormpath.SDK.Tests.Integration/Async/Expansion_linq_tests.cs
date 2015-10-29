@@ -1,4 +1,4 @@
-﻿// <copyright file="Expansion_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Expansion_linq_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,11 +21,11 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Async
 {
     [Collection("Live tenant tests")]
-    public class Expansion_tests
+    public class Expansion_linq_tests
     {
         private readonly IntegrationTestFixture fixture;
 
-        public Expansion_tests(IntegrationTestFixture fixture)
+        public Expansion_linq_tests(IntegrationTestFixture fixture)
         {
             this.fixture = fixture;
         }

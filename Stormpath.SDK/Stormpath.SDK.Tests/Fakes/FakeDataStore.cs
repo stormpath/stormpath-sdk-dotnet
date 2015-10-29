@@ -106,6 +106,11 @@ namespace Stormpath.SDK.Tests.Fakes
             throw new NotImplementedException();
         }
 
+        Task<T> IDataStore.GetResourceAsync<T>(string href, Action<IRetrievalOptions<T>> options, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         private static Regex limitRegex = new Regex(@"limit=(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static int? GetLimitFromUrlString(string href)
@@ -269,6 +274,11 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T GetResource<T>(string href, Action<IRetrievalOptions<T>> options)
         {
             throw new NotImplementedException();
         }

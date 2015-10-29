@@ -1,4 +1,4 @@
-﻿// <copyright file="Sync_CustomData_embedded_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="CustomData_embedded_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

@@ -103,6 +103,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private static readonly IReadOnlyDictionary<string, Type> InterfaceLookupByAttributeName = new Dictionary<string, Type>()
         {
+            ["application"] = typeof(IApplication),
             ["account"] = typeof(IAccount),
             ["directory"] = typeof(IDirectory),
             ["group"] = typeof(IGroup),
@@ -112,7 +113,10 @@ namespace Stormpath.SDK.Impl.DataStore
             ["tenant"] = typeof(ITenant),
             ["defaultAccountStoreMapping"] = typeof(IAccountStoreMapping),
             ["defaultGroupStoreMapping"] = typeof(IAccountStoreMapping),
+            ["accountStore"] = typeof(IAccountStore),
 
+            ["applications"] = typeof(CollectionResponsePage<IApplication>),
+            ["directories"] = typeof(CollectionResponsePage<IDirectory>),
             ["accounts"] = typeof(CollectionResponsePage<IAccount>),
             ["accountStoreMappings"] = typeof(CollectionResponsePage<IAccountStoreMapping>),
             ["groups"] = typeof(CollectionResponsePage<IGroup>),

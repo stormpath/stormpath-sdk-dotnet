@@ -237,6 +237,7 @@
     <Compile Include="Impl\Provider\ProviderAccountResolver.cs" />
     <Compile Include="Impl\Provider\ProviderType.cs" />
     <Compile Include="Impl\Provider\ProviderTypeConverter.cs" />
+    <Compile Include="Impl\Resource\DefaultRetrivalOptions.cs" />
     <Compile Include="Impl\Resource\ExpandedProperty.cs" />
     <Compile Include="Impl\Resource\IEmbeddedProperty.cs" />
     <Compile Include="Impl\Resource\ILinkable.cs" />
@@ -305,6 +306,7 @@
     <Compile Include="Provider\IProviderData.cs" />
     <Compile Include="Provider\IProviderFactory.cs" />
     <Compile Include="Provider\IProviderRequestFactory.cs" />
+    <Compile Include="Resource\IRetrievalOptions.cs" />
     <Compile Include="Resource\IExtendable.cs" />
     <Compile Include="Shared\StringEnumeration.cs" />
     <Compile Include="Sync\ExpandExtensions.cs" />
