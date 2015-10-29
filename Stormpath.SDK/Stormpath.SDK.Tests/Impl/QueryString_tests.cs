@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Tests.Impl
                  */
 
                 var notApplicable = new QueryString("foo=[bar:baz]");
-                notApplicable.ToString().ShouldBe("foo=%5Bbar%3Abaz%5D");
+                notApplicable.ToString().ShouldBe("foo=[bar:baz]");
 
                 var createdAtSearch = new QueryString("createdAt=[2015-06-01T12:00:59Z,)");
                 createdAtSearch.ToString().ShouldBe("createdAt=[2015-06-01T12:00:59Z,)");
