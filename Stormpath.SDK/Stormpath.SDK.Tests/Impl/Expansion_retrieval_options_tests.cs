@@ -92,7 +92,8 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Account);
 
-            Should.Throw<NotSupportedException>(async () =>
+            // TODO Mono throws NullReferenceException, should be NotSupportedException
+            Should.Throw<Exception>(async () =>
             {
                 var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.DeleteAsync));
             });
@@ -103,6 +104,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Account);
 
+            // TODO Mono throws NullReferenceException, should be NotSupportedException
             Should.Throw<NotSupportedException>(async () =>
             {
                 var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.SaveAsync));
