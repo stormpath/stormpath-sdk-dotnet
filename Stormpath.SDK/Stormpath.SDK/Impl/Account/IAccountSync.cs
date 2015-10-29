@@ -23,7 +23,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
 {
-    internal interface IAccountSync : ISaveableSync<IAccount>, IDeletableSync, IExtendableSync
+    internal interface IAccountSync : ISaveableWithOptionsSync<IAccount>, IDeletableSync, IExtendableSync
     {
         /// <summary>
         /// Synchronously gets the account's parent <see cref="IDirectory"/> (where the account is stored).

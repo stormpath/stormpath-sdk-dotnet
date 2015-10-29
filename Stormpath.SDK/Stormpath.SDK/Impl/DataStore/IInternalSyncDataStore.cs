@@ -52,6 +52,9 @@ namespace Stormpath.SDK.Impl.DataStore
         T Save<T>(T resource)
             where T : class, IResource, ISaveable<T>;
 
+        T Save<T>(T resource, string queryString)
+            where T : class, IResource, ISaveable<T>;
+
         bool Delete<T>(T resource)
             where T : class, IResource, IDeletable;
 

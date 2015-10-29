@@ -1,4 +1,4 @@
-﻿// <copyright file="ISaveableSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ISaveableWithOptionsSync.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,17 +20,18 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Impl.Resource
 {
     /// <summary>
-    /// Represents a resource that can be created or modified synchronously.
+    /// Represents a resource that can be saved synchronously with additional options.
     /// </summary>
     /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
-    internal interface ISaveableSync<T>
+    internal interface ISaveableWithOptionsSync<T> : ISaveableSync<T>
         where T : IResource
     {
         /// <summary>
-        /// Synchronously creates or updates the resource.
+        /// Synchronously reates or updates the resource, and returns the persisted resource data with the specified <paramref name="responseOptions"/>.
         /// </summary>
+        /// <param name="responseOptions">The options to apply to this request.</param>
         /// <returns>The persisted resource data.</returns>
-        /// <exception cref="SDK.Error.ResourceException">The save operation failed.</exception>
-        T Save();
+        /// <exception cref="Error.ResourceException">The save operation failed.</exception>
+        T Save(Action<IRetrievalOptions<T>> responseOptions);
     }
 }

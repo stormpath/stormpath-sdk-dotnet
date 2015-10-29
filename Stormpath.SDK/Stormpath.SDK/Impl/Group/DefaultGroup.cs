@@ -322,6 +322,12 @@ namespace Stormpath.SDK.Impl.Group
         IGroup ISaveableSync<IGroup>.Save()
             => this.Save<IGroup>();
 
+        Task<IGroup> ISaveableWithOptions<IGroup>.SaveAsync(Action<IRetrievalOptions<IGroup>> options, CancellationToken cancellationToken)
+             => this.SaveAsync(options, cancellationToken);
+
+        IGroup ISaveableWithOptionsSync<IGroup>.Save(Action<IRetrievalOptions<IGroup>> options)
+             => this.Save(options);
+
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
 

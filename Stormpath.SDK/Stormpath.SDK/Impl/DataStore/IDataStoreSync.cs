@@ -36,8 +36,8 @@ namespace Stormpath.SDK.Impl.DataStore
         /// </summary>
         /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
         /// <param name="href">The resource URL of the resource to retrieve.</param>
-        /// <param name="options">The options to apply to this request.</param>
+        /// <param name="responseOptions">The options to apply to this request.</param>
         /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
-        T GetResource<T>(string href, Action<IRetrievalOptions<T>> options);
+        T GetResource<T>(string href, Action<IRetrievalOptions<T>> responseOptions);
     }
 }

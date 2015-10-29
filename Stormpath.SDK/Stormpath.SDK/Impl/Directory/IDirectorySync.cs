@@ -23,7 +23,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Directory
 {
-    internal interface IDirectorySync : ISaveableSync<IDirectory>, IDeletableSync, IAccountCreationActionsSync, IExtendableSync
+    internal interface IDirectorySync : ISaveableWithOptionsSync<IDirectory>, IDeletableSync, IAccountCreationActionsSync, IExtendableSync
     {
         /// <summary>
         /// Synchronously creates a new <see cref="IGroup"/> instance in this directory.

@@ -1,4 +1,4 @@
-﻿// <copyright file="ISaveable.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ISaveableWithOptions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,18 +21,19 @@ using System.Threading.Tasks;
 namespace Stormpath.SDK.Resource
 {
     /// <summary>
-    /// Represents a resource that can be created or modified.
+    /// Represents a resource that can be saved with additional options.
     /// </summary>
     /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
-    public interface ISaveable<T>
+    public interface ISaveableWithOptions<T> : ISaveable<T>
         where T : IResource
     {
         /// <summary>
-        /// Creates or updates the resource.
+        /// Creates or updates the resource, and returns the persisted resource data with the specified <paramref name="responseOptions"/>.
         /// </summary>
+        /// <param name="responseOptions">The options to apply to this request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the persisted resource data.</returns>
         /// <exception cref="Error.ResourceException">The save operation failed.</exception>
-        Task<T> SaveAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> SaveAsync(Action<IRetrievalOptions<T>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

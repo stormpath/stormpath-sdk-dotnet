@@ -104,6 +104,53 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Modifying_group(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
+
+            var droids = client
+                .Instantiate<IGroup>()
+                .SetName($"Droids (.NET ITs {this.fixture.TestRunIdentifier})")
+                .SetDescription("Mechanical entities")
+                .SetStatus(GroupStatus.Enabled);
+
+            await directory.CreateGroupAsync(droids);
+            this.fixture.CreatedGroupHrefs.Add(droids.Href);
+
+            droids.SetStatus(GroupStatus.Disabled);
+            var result = await droids.SaveAsync();
+
+            result.Status.ShouldBe(GroupStatus.Disabled);
+
+            // Clean up
+            await droids.DeleteAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Saving_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
+
+            var newGroup = client
+                .Instantiate<IGroup>()
+                .SetName($"Another Group (.NET ITs {this.fixture.TestRunIdentifier})")
+                .SetStatus(GroupStatus.Disabled);
+
+            await directory.CreateGroupAsync(newGroup);
+            this.fixture.CreatedGroupHrefs.Add(newGroup.Href);
+
+            newGroup.SetDescription("foobar");
+            await newGroup.SaveAsync(response => response.Expand(x => x.GetAccounts, 0, 10));
+
+            // Clean up
+            await newGroup.DeleteAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Adding_account_to_group(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

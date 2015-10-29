@@ -282,5 +282,15 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             throw new NotImplementedException();
         }
+
+        Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, string queryString, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        T IInternalSyncDataStore.Save<T>(T resource, string queryString)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

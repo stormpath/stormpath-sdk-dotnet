@@ -104,6 +104,21 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Saving_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var application = await tenant.GetApplications()
+                .Where(app => app.Name.StartsWith($".NET IT (disabled) {this.fixture.TestRunIdentifier}"))
+                .SingleAsync();
+
+            application.SetStatus(ApplicationStatus.Disabled);
+            await application.SaveAsync(response => response.Expand(x => x.GetAccounts));
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Searching_by_name(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

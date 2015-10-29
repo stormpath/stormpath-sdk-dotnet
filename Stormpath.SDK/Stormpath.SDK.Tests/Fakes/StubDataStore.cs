@@ -126,6 +126,12 @@ namespace Stormpath.SDK.Tests.Fakes
         Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
             => this.ProxyAsyncDataStore.SaveAsync(resource, cancellationToken);
 
+        T IInternalSyncDataStore.Save<T>(T resource, string queryString)
+            => this.ProxySyncDataStore.Save(resource, queryString);
+
+        Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, string queryString, CancellationToken cancellationToken)
+            => this.ProxyAsyncDataStore.SaveAsync(resource, queryString, cancellationToken);
+
         bool IInternalSyncDataStore.DeleteProperty(string parentHref, string propertyName)
         {
             throw new NotImplementedException();

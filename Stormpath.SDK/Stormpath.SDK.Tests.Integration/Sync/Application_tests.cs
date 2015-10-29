@@ -105,6 +105,22 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Saving_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
+
+            var application = tenant.GetApplications()
+                .Synchronously()
+                .Where(app => app.Name.StartsWith($".NET IT (disabled) {this.fixture.TestRunIdentifier}"))
+                .Single();
+
+            application.SetStatus(ApplicationStatus.Disabled);
+            application.Save(response => response.Expand(x => x.GetAccounts));
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Searching_by_name(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

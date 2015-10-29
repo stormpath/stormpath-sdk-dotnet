@@ -112,6 +112,22 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Saving_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var chewie = await application
+                .GetAccounts()
+                .Where(a => a.Email == "chewie@kashyyyk.rim")
+                .SingleAsync();
+
+            chewie.SetUsername($"rwaaargh-{this.fixture.TestRunIdentifier}");
+            await chewie.SaveAsync(response => response.Expand(x => x.GetCustomDataAsync));
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Getting_account_directory(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

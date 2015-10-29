@@ -22,7 +22,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Group
 {
-    internal interface IGroupSync : ISaveableSync<IGroup>, IDeletableSync, IExtendableSync
+    internal interface IGroupSync : ISaveableWithOptionsSync<IGroup>, IDeletableSync, IExtendableSync
     {
         /// <summary>
         /// Synchronously assigns the specified <see cref="IAccount"/> to this <see cref="IGroup"/>.

@@ -114,6 +114,23 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Saving_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var chewie = application
+                .GetAccounts()
+                .Synchronously()
+                .Where(a => a.Email == "chewie@kashyyyk.rim")
+                .Single();
+
+            chewie.SetUsername($"rwaaargh-{this.fixture.TestRunIdentifier}");
+            chewie.Save(response => response.Expand(x => x.GetCustomData));
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Getting_account_directory(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();

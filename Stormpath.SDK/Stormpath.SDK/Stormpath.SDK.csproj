@@ -242,6 +242,7 @@
     <Compile Include="Impl\Resource\IEmbeddedProperty.cs" />
     <Compile Include="Impl\Resource\ILinkable.cs" />
     <Compile Include="Impl\Resource\INotifiable.cs" />
+    <Compile Include="Impl\Resource\ISaveableWithOptionsSync.cs" />
     <Compile Include="Impl\Resource\ResourceData.cs" />
     <Compile Include="Impl\Resource\IExtendableSync.cs" />
     <Compile Include="Impl\Resource\IDeletableSync.cs" />
@@ -308,6 +309,7 @@
     <Compile Include="Provider\IProviderRequestFactory.cs" />
     <Compile Include="Resource\IRetrievalOptions.cs" />
     <Compile Include="Resource\IExtendable.cs" />
+    <Compile Include="Resource\ISaveableWithOptions.cs" />
     <Compile Include="Shared\StringEnumeration.cs" />
     <Compile Include="Sync\ExpandExtensions.cs" />
     <Compile Include="Sync\FilterExtensions.cs" />

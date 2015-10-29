@@ -25,7 +25,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Group
 {
-    public interface IGroup : IResource, ISaveable<IGroup>, IDeletable, IAuditable, IExtendable, IAccountStore
+    public interface IGroup : IResource, ISaveableWithOptions<IGroup>, IDeletable, IAuditable, IExtendable, IAccountStore
     {
         /// <summary>
         /// Gets the group's name, guaranteed to be unique for all groups within a <see cref="IDirectory"/>.
