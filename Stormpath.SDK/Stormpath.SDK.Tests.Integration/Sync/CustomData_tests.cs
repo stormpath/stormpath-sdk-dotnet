@@ -132,6 +132,10 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             // Expected behavior: works the same as calling Delete (see Deleting_all_custom_data)
             updated.Clear();
             var result = updated.Save();
+
+            // Let the cache update
+            System.Threading.Thread.Sleep(100);
+
             var newCustomData = account.GetCustomData();
             newCustomData.Count().ShouldBe(3);
 

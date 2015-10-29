@@ -132,6 +132,10 @@ namespace Stormpath.SDK.Tests.Integration.Async
             // Expected behavior: works the same as calling DeleteAsync (see Deleting_all_custom_data)
             updated.Clear();
             var result = await updated.SaveAsync();
+
+            // Let the cache update
+            await Task.Delay(100);
+
             var newCustomData = await account.GetCustomDataAsync();
             newCustomData.Count().ShouldBe(3);
 
