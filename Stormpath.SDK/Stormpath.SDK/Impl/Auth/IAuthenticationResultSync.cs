@@ -18,16 +18,8 @@ using Stormpath.SDK.Account;
 
 namespace Stormpath.SDK.Impl.Auth
 {
-    /// <summary>
-    /// Represents the return value of an <see cref="Application.IApplication"/> authentication attempt.
-    /// The successfully authenticated account may be obtained via <see cref="GetAccount()"/>.
-    /// </summary>
     internal interface IAuthenticationResultSync
     {
-        /// <summary>
-        /// Synchronously gets the successfully authenticated <see cref="IAccount"/>.
-        /// </summary>
-        /// <returns>The <see cref="IAccount"/> that was successfully authenticated.</returns>
         IAccount GetAccount();
     }
 }

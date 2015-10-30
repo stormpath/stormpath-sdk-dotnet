@@ -18,24 +18,10 @@ using Stormpath.SDK.CustomData;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    /// <summary>
-    /// Represents resources that can be deleted synchronously.
-    /// </summary>
     internal interface IExtendableSync
     {
-        /// <summary>
-        /// Provides access to convenience methods that can manipulate this resource's custom data.
-        /// </summary>
-        /// <value>
-        /// Access to convenience methods that can manipulate this resource's custom data.
-        /// </value>
         IEmbeddedCustomData CustomData { get; }
 
-        /// <summary>
-        /// Synchronously gets the custom data associated with this resource.
-        /// </summary>
-        /// <returns>The <see cref="ICustomData"/> associated with this resource.</returns>
-        /// <exception cref="SDK.Error.ResourceException">The custom data could not be loaded.</exception>
         ICustomData GetCustomData();
     }
 }

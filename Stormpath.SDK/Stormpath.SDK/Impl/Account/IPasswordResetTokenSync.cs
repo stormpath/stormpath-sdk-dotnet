@@ -18,15 +18,8 @@ using Stormpath.SDK.Account;
 
 namespace Stormpath.SDK.Impl.Account
 {
-    /// <summary>
-    /// A token returned as part of the reset password workflow that can be accessed synchronously.
-    /// </summary>
     internal interface IPasswordResetTokenSync
     {
-        /// <summary>
-        /// Synchronously gets the <see cref="IAccount"/> associated with this password reset token.
-        /// </summary>
-        /// <returns>The <see cref="IAccount"/> in the reset password workflow.</returns>
         IAccount GetAccount();
     }
 }

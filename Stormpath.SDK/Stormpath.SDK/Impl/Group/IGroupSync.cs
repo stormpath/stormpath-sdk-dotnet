@@ -24,55 +24,16 @@ namespace Stormpath.SDK.Impl.Group
 {
     internal interface IGroupSync : ISaveableWithOptionsSync<IGroup>, IDeletableSync, IExtendableSync
     {
-        /// <summary>
-        /// Synchronously assigns the specified <see cref="IAccount"/> to this <see cref="IGroup"/>.
-        /// </summary>
-        /// <param name="account">The account to assignt to this group.</param>
-        /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created
-        /// reflecting the group-to-account association.
-        /// </returns>
         IGroupMembership AddAccount(IAccount account);
 
-        /// <summary>
-        /// Synchronously assigns this <see cref="IGroup"/> to the specified <see cref="IAccount"/>
-        /// represented by its (case-insensitive) <c>username</c>, <c>email</c>, or <c>href</c>
-        /// </summary>
-        /// <param name="hrefOrEmailOrUsername">The <c>href</c>, email, or username of the <see cref="IAccount"/> to associate.</param>
-        /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created
-        /// reflecting the group-to-account association.
-        /// </returns>
-        /// <exception cref="InvalidOperationException">The specified account could not be found.</exception>
         IGroupMembership AddAccount(string hrefOrEmailOrUsername);
 
-        /// <summary>
-        /// Synchronously removes this group's association with the specified <see cref="IAccount"/>.
-        /// </summary>
-        /// <param name="account">The <see cref="IAccount"/> object to disassociate.</param>
-        /// <returns>Whether the operation succeeded.</returns>
-        /// <exception cref="InvalidOperationException">The specified account does not belong to this group.</exception>
         bool RemoveAccount(IAccount account);
 
-        /// <summary>
-        /// Synchronously removes this Group's association with the specified <see cref="IAccount"/>
-        /// represented by its (case-insensitive) <c>username</c>, <c>email</c>, or <c>href</c>
-        /// </summary>
-        /// <param name="hrefOrEmailOrUsername">The <see cref="IAccount"/> object to disassociate.</param>
-        /// <returns>Whether the operation succeeded.</returns>
-        /// <exception cref="InvalidOperationException">The specified account does not belong to this group.</exception>
         bool RemoveAccount(string hrefOrEmailOrUsername);
 
-        /// <summary>
-        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Group resource.
-        /// </summary>
-        /// <returns>The tenant.</returns>
         ITenant GetTenant();
 
-        /// <summary>
-        /// Synchronously gets the group's parent <see cref="IDirectory"/> (where the group is stored).
-        /// </summary>
-        /// <returns>This group's parent <see cref="IDirectory"/>.</returns>
         IDirectory GetDirectory();
     }
 }

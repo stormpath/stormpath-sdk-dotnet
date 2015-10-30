@@ -96,7 +96,7 @@ namespace Stormpath.SDK.Sync
             => (account as IAccountSync).IsMemberOfGroup(hrefOrName);
 
         /// <summary>
-        /// Synchronously gets the ProviderData Resource belonging to the account.
+        /// Synchronously gets the <see cref="IProviderData"/> Resource belonging to the account.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>The ProviderData Resource belonging to the account.</returns>

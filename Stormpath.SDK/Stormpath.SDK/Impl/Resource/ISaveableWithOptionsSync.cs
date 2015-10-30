@@ -19,19 +19,9 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
-    /// <summary>
-    /// Represents a resource that can be saved synchronously with additional options.
-    /// </summary>
-    /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
     internal interface ISaveableWithOptionsSync<T> : ISaveableSync<T>
         where T : IResource
     {
-        /// <summary>
-        /// Synchronously reates or updates the resource, and returns the persisted resource data with the specified <paramref name="responseOptions"/>.
-        /// </summary>
-        /// <param name="responseOptions">The options to apply to this request.</param>
-        /// <returns>The persisted resource data.</returns>
-        /// <exception cref="Error.ResourceException">The save operation failed.</exception>
         T Save(Action<IRetrievalOptions<T>> responseOptions);
     }
 }

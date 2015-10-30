@@ -22,16 +22,8 @@ namespace Stormpath.SDK.Impl.Group
 {
     internal interface IGroupMembershipSync : IDeletableSync
     {
-        /// <summary>
-        /// Synchronously gets this membership's <see cref="IAccount"/> resource.
-        /// </summary>
-        /// <returns>This membership's <see cref="IAccount"/> resource.</returns>
         IAccount GetAccount();
 
-        /// <summary>
-        /// Synchronously gets this membership's <see cref="IGroup"/> resource.
-        /// </summary>
-        /// <returns>This membership's <see cref="IGroup"/> resource.</returns>
         IGroup GetGroup();
     }
 }
