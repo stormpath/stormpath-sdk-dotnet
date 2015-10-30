@@ -187,11 +187,11 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             if (node.Method.Name != "Filter")
                 return false;
 
-            var value = node.Arguments[1] as ConstantExpression;
-            if (value == null)
+            var value = (node.Arguments[1] as ConstantExpression)?.Value as string;
+            if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("Value passed to Filter operator is not supported.");
 
-            this.expressions.Add(new FilterExpression((string)value.Value));
+            this.expressions.Add(new FilterExpression(value));
 
             return true;
         }

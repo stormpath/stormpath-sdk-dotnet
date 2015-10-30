@@ -35,7 +35,18 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_multiple_serial_calls()
+        public void Parameters_are_trimmed()
+        {
+            // Act
+            var query = this.Harness.Queryable
+                .Filter("  Joe  ");
+
+            // Assert
+            query.GeneratedArgumentsWere(this.Href, "q=Joe");
+        }
+
+        [Fact]
+        public void Throws_for_multiple_calls()
         {
             var query = this.Harness.Queryable
                 .Filter("Joe")
@@ -43,7 +54,34 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                query.GeneratedArgumentsWere(this.Href, "q=Joey");
+                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+            });
+        }
+
+        [Fact]
+        public void Throws_for_null()
+        {
+            Should.Throw<ArgumentException>(() =>
+            {
+                var query = this.Harness.Queryable.Filter(null);
+            });
+        }
+
+        [Fact]
+        public void Throws_for_empty_string()
+        {
+            Should.Throw<ArgumentException>(() =>
+            {
+                var query = this.Harness.Queryable.Filter(string.Empty);
+            });
+        }
+
+        [Fact]
+        public void Throws_for_whitespace()
+        {
+            Should.Throw<ArgumentException>(() =>
+            {
+                var query = this.Harness.Queryable.Filter("   ");
             });
         }
     }

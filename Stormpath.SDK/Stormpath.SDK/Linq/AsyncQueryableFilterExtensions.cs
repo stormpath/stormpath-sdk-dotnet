@@ -36,8 +36,9 @@ namespace Stormpath.SDK
         public static IAsyncQueryable<TSource> Filter<TSource>(this IAsyncQueryable<TSource> source, string caseInsensitiveMatch)
             where TSource : IResource
         {
-            if (string.IsNullOrEmpty(caseInsensitiveMatch))
-                throw new ArgumentNullException(nameof(caseInsensitiveMatch));
+            caseInsensitiveMatch = caseInsensitiveMatch?.Trim();
+            if (string.IsNullOrWhiteSpace(caseInsensitiveMatch))
+                throw new ArgumentNullException(nameof(caseInsensitiveMatch), "Filter string cannot be null or whitespace-only.");
 
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
