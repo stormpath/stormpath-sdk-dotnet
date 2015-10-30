@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Auth;
+using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
@@ -204,6 +205,20 @@ namespace Stormpath.SDK.Application
         Task<IAccountStore> GetDefaultAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Sets the <see cref="IAccountStore"/> (either a <see cref="IGroup"/> or a <see cref="IDirectory"/>)
+        /// used to persist new accounts created by the Application.
+        /// <para>
+        /// Because an Application is not an <see cref="IAccountStore"/> itself, it delegates to a Group or Directory
+        /// when creating accounts; this method sets the <see cref="IAccountStore"/> to which the Application delegates
+        /// new account persistence.
+        /// </para>
+        /// </summary>
+        /// <param name="accountStore">The <see cref="IAccountStore"/> used to persist new accounts.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task indicating the completion of the method.</returns>
+        Task SetDefaultAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Gets the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
         /// if no account store has been designated.
         /// <para>
@@ -216,6 +231,93 @@ namespace Stormpath.SDK.Application
         /// <returns>A Task whose result is the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
         /// if no account store has been designated.</returns>
         Task<IAccountStore> GetDefaultGroupStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Sets the <see cref="IAccountStore"/> (a <see cref="IDirectory"/>)
+        /// used to persist new groups created by the Application.
+        /// <para>
+        /// Stormpath's current REST API requires this to be a Directory. However, this could be a Group in the future,
+        /// so do not assume it is always a Directory if you want your code to function properly if/when this support is added.
+        /// </para>
+        /// <para>
+        /// Because an Application is not an <see cref="IAccountStore"/> itself, it delegates to a Directory
+        /// when creating groups; this method sets the <see cref="IAccountStore"/> to which the Application delegates
+        /// new group persistence.
+        /// </para>
+        /// </summary>
+        /// <param name="accountStore">The <see cref="IAccountStore"/> used to persist new groups.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task indicating the completion of the method.</returns>
+        Task SetDefaultGroupStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Creates a new <see cref="IAccountStoreMapping"/> for this Application, allowing the associated AccountStore
+        /// to be used a source of accounts that may login to the Application.
+        /// </summary>
+        /// <param name="mapping">The new <see cref="IAccountStoreMapping"/> resource to add to the Application's AccountStoreMapping list.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>.</returns>
+        /// <exception cref="Error.ResourceException">The AccountStoreMapping's ListIndex is negative, or the mapping could not be added to the Application.</exception>
+        Task<IAccountStoreMapping> CreateAccountStoreMappingAsync(IAccountStoreMapping mapping, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Adds a new <see cref="IAccountStore"/> to this Application and appends the resulting <see cref="IAccountStoreMapping"/>
+        /// to the end of the Application's AccountStoreMapping list.
+        /// <para>
+        /// If you need to control the order of the added AccountStore, use the <see cref="CreateAccountStoreMappingAsync(IAccountStoreMapping, CancellationToken)"/> method.
+        /// </para>
+        /// </summary>
+        /// <param name="accountStore">The new <see cref="IAccountStore"/> resource to add to the Application's AccountStoreMapping list.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>.</returns>
+        /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application.</exception>
+        Task<IAccountStoreMapping> AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Adds a new <see cref="IAccountStore"/> to this Application. The given string can either be an <c>href</c> or a <c>name</c> of a
+        /// <see cref="IDirectory"/> or <see cref="IGroup"/> belonging to the current <see cref="ITenant"/>.
+        /// <para>
+        /// If the provided value is an <c>href</c>, this method will get the proper Resource and add it as a new AccountStore in this
+        /// Application without much effort. However, if the provided value is not an <c>href</c>, it will be considered as a <c>name</c>. In this case,
+        /// this method will search for both a Directory and a Group whose names equal the provided <paramref name="hrefOrName"/>. If only
+        /// one resource exists (either a Directory or a Group), then it will be added as a new AccountStore in this Application. However,
+        /// if there are two resources (a Directory and a Group) matching that name, a <see cref="Error.ResourceException"/> will be thrown.
+        /// </para>
+        /// <para>
+        /// Note: When using <c>names</c> this method is not efficient as it will search for both Directories and Groups within this Tenant
+        /// for a matching name. In order to do so, some looping takes place at the client side: groups exist within directories, therefore we need
+        /// to loop through every existing directory in order to find the required Group. In contrast, providing the Group's <c>href</c> is much more
+        /// efficient as no actual search operation needs to be carried out.
+        /// </para>
+        /// </summary>
+        /// <param name="hrefOrName">Either the <c>href</c> or <c>name</c> of the desired <see cref="IDirectory"/> or <see cref="IGroup"/>.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>.</returns>
+        /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application.</exception>
+        /// <exception cref="ArgumentException">The given <paramref name="hrefOrName"/> matches more than one resource in the current Tenant.</exception>
+        Task<IAccountStoreMapping> AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Adds a <see cref="IDirectory"/> as a new <see cref="IAccountStore"/> to this Application. The provided <see cref="IAsyncQueryable{IDirectory}"/>
+        /// must match a single <see cref="IDirectory"/> in the current Tenant. If no Directory matches the query, this method will return <c>null.</c>
+        /// </summary>
+        /// <param name="directoryQuery">Query to search for a <see cref="IDirectory"/> in the current Tenant.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>, or <c>null</c> if there is no Directory matching the query.</returns>
+        /// <exception cref="Error.ResourceException">The found <see cref="IDirectory"/> already exists as an account store in the application.</exception>
+        /// <exception cref="ArgumentException">The query matches more than one Directory in the current Tenant.</exception>
+        Task<IAccountStoreMapping> AddAccountStoreAsync(IAsyncQueryable<IDirectory> directoryQuery, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Adds a <see cref="IGroup"/> as a new <see cref="IAccountStore"/> to this Application. The provided <see cref="IAsyncQueryable{IGroup}"/>
+        /// must match a single <see cref="IGroup"/> in the current Tenant. If no Group matches the query, this method will return <c>null.</c>
+        /// </summary>
+        /// <param name="groupQuery">Query to search for a <see cref="IGroup"/> in the current Tenant.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>, or <c>null</c> if there is no Group matching the query.</returns>
+        /// <exception cref="Error.ResourceException">The found <see cref="IGroup"/> already exists as an account store in the application.</exception>
+        /// <exception cref="ArgumentException">The query matches more than one Group in the current Tenant.</exception>
+        Task<IAccountStoreMapping> AddAccountStoreAsync(IAsyncQueryable<IGroup> groupQuery, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Verifies the password reset token (received in the user's email) and immediately
@@ -232,6 +334,44 @@ namespace Stormpath.SDK.Application
         Task<IAccount> ResetPasswordAsync(string token, string newPassword, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Verifies the password reset token (received in the user's email) and immediately
+        /// changes the password in the same request, for the account in the specified <see cref="IAccountStore"/>.
+        /// If you are unsure of which of the application's mapped account stores might contain the account, use the more general
+        /// <see cref="ResetPasswordAsync(string, string, CancellationToken)"/> method instead.
+        /// <para>Once the token has been successfully used, it is immediately invalidated and can't be used again.
+        /// If you need to change the password again, you will previously need to execute
+        /// <see cref="SendPasswordResetEmailAsync(string, CancellationToken)"/> again in order to obtain a new password reset token.</para>
+        /// </summary>
+        /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
+        /// <param name="newPassword">The new password that will be set to the <see cref="IAccount"/> if the token is successfully validated.</param>
+        /// <param name="accountStore">The AccountStore expected to contain the account.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the account matching the specified token.</returns>
+        /// <exception cref="Error.ResourceException">
+        /// The specified <see cref="IAccountStore"/> is not mapped to this application, the account does not exist in this Account Store, or the token is not valid.
+        /// </exception>
+        Task<IAccount> ResetPasswordAsync(string token, string newPassword, IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Verifies the password reset token (received in the user's email) and immediately
+        /// changes the password in the same request, for the account in the specified AccountStore or Organization <paramref name="hrefOrNameKey"/>.
+        /// If you are unsure of which of the application's mapped account stores might contain the account, use the more general
+        /// <see cref="ResetPasswordAsync(string, string, CancellationToken)"/> method instead.
+        /// <para>Once the token has been successfully used, it is immediately invalidated and can't be used again.
+        /// If you need to change the password again, you will previously need to execute
+        /// <see cref="SendPasswordResetEmailAsync(string, CancellationToken)"/> again in order to obtain a new password reset token.</para>
+        /// </summary>
+        /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
+        /// <param name="newPassword">The new password that will be set to the <see cref="IAccount"/> if the token is successfully validated.</param>
+        /// <param name="hrefOrNameKey">The href of the AccountStore, or the name key of the Organization, expected to contain the account.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the account matching the specified token.</returns>
+        /// <exception cref="Error.ResourceException">
+        /// The specified AccountStore or Organization is not mapped to this application, the account does not exist in this Account Store, or the token is not valid.
+        /// </exception>
+        Task<IAccount> ResetPasswordAsync(string token, string newPassword, string hrefOrNameKey, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Sends a password reset email for the specified account email address.
         /// The email will contain a password reset link that the user can click or copy into their browser address bar.
         /// </summary>
@@ -241,6 +381,43 @@ namespace Stormpath.SDK.Application
         /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">There is no account that matches the specified email address.</exception>
         Task<IPasswordResetToken> SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Sends a password reset email to an account in the specified <see cref="IAccountStore"/> matching
+        /// the specified <paramref name="email"/>. If the email does not match an account in the specified
+        /// <see cref="IAccountStore"/>, a <see cref="Error.ResourceException"/> will be thrown.
+        /// If you are unsure of which of the application's mapped account stores might contain the account, use the more general
+        /// <see cref="SendPasswordResetEmailAsync(string, CancellationToken)"/> method instead.
+        /// The email will contain a password reset link that the user can click or copy into their browser address bar.
+        /// </summary>
+        /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
+        /// <param name="accountStore">The AccountStore expected to contain an account with the specified email address.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the created <see cref="IPasswordResetToken"/>.
+        /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
+        /// <exception cref="Error.ResourceException">
+        /// The specified <see cref="IAccountStore"/> is not mapped to this application, or there is no account that matches the specified email address in the specified <paramref name="accountStore"/>.
+        /// </exception>
+        Task<IPasswordResetToken> SendPasswordResetEmailAsync(string email, IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Sends a password reset email to an account matching the specified <paramref name="email"/>
+        /// in the AccountStore or Organization matching the specified <paramref name="hrefOrNameKey"/>.
+        /// If the email does not match an account in the specified AccountStore or Organization,
+        /// a <see cref="Error.ResourceException"/> will be thrown.
+        /// If you are unsure of which of the application's mapped account stores might contain the account, use the more general
+        /// <see cref="SendPasswordResetEmailAsync(string, CancellationToken)"/> method instead.
+        /// The email will contain a password reset link that the user can click or copy into their browser address bar.
+        /// </summary>
+        /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
+        /// <param name="hrefOrNameKey">The href of the AccountStore, or the name key of the Organization, expected to contain an account with the specified email address.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is the created <see cref="IPasswordResetToken"/>.
+        /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
+        /// <exception cref="Error.ResourceException">
+        /// The specified AccountStore or Organization is not mapped to this application, or there is no account that matches the specified email address in the AccountStore or Organization.
+        /// </exception>
+        Task<IPasswordResetToken> SendPasswordResetEmailAsync(string email, string hrefOrNameKey, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Verifies a password reset token.
