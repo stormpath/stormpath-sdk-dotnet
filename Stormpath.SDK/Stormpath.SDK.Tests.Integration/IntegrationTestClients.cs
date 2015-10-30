@@ -72,9 +72,9 @@ namespace Stormpath.SDK.Tests.Integration
         /// <returns>A list of testing clients.</returns>
         public static IEnumerable<object[]> GetClients()
         {
-            yield return new object[] { new TestClientBuilder(nameof(Basic)) };
-            yield return new object[] { new TestClientBuilder(nameof(SAuthc1)) };
-            yield return new object[] { new TestClientBuilder(nameof(SAuthc1Caching)) };
+            yield return new object[] { new TestClientProvider(nameof(Basic)) };
+            yield return new object[] { new TestClientProvider(nameof(SAuthc1)) };
+            yield return new object[] { new TestClientProvider(nameof(SAuthc1Caching)) };
         }
 
         public static IClient GetSAuthc1Client()
