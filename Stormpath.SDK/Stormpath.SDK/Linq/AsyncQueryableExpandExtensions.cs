@@ -56,6 +56,12 @@ namespace Stormpath.SDK
         public static IAsyncQueryable<TSource> Expand<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, Func<IAsyncQueryable>>> selector, int? offset = null, int? limit = null)
             where TSource : IResource
         {
+            if (offset != null && offset < 0)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+
+            if (limit != null && limit < 0)
+                throw new ArgumentOutOfRangeException(nameof(limit));
+
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
                     LinqHelper.GetMethodInfo(Sync.ExpandExtensions.Expand, (IQueryable<TSource>)null, selector, offset, limit),

@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using Shouldly;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
@@ -85,6 +87,20 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetDirectoryAsync);
 
             query.GeneratedArgumentsWere(this.Href, "expand=tenant,groups(offset:10,limit:20),directory");
+        }
+
+        [Fact]
+        public void Throws_for_negative_paging_values()
+        {
+            Should.Throw<ArgumentOutOfRangeException>(() =>
+            {
+                var query = this.Harness.Queryable.Expand(x => x.GetGroups, -1, 0);
+            });
+
+            Should.Throw<ArgumentOutOfRangeException>(() =>
+            {
+                var query = this.Harness.Queryable.Expand(x => x.GetGroups, 0, -1);
+            });
         }
     }
 }

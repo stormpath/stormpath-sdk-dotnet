@@ -35,7 +35,6 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             this.ValidateOffset();
             this.ValidateWheres();
             this.ValidateDatetimeWheres();
-            this.ValidateExpands();
         }
 
         private void ValidateLimit()
@@ -107,16 +106,6 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
             if (shorthandTermCollisions)
                 throw new NotSupportedException("Multiple Within constrants on the same field are not supported.");
-        }
-
-        private void ValidateExpands()
-        {
-            if (!this.queryModel.ExpandTerms.Any())
-                return;
-
-            // todo
-            // validate field is not null or empty
-            // validate offset/limit are not < 0
         }
     }
 }

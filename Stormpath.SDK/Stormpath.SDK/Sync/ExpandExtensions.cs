@@ -69,6 +69,12 @@ namespace Stormpath.SDK.Sync
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
         public static IQueryable<TSource> Expand<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, Func<IAsyncQueryable>>> selector, int? offset = null, int? limit = null)
         {
+            if (offset != null && offset < 0)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+
+            if (limit != null && limit < 0)
+                throw new ArgumentOutOfRangeException(nameof(limit));
+
             return source.Provider.CreateQuery<TSource>(
                 LinqHelper.MethodCall(
                     LinqHelper.GetMethodInfo(Expand, source, selector, offset, limit),
