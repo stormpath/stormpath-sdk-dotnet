@@ -149,10 +149,10 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is <c>true</c> if the authentication attempt succeeded; <c>false</c> otherwise.</returns>
         /// <example>
-        ///     if (await myApp.TryAuthenticateAccountAsync("jsmith", "Password123#"))
-        ///     {
-        ///         // Login successful
-        ///     }
+        /// if (await myApp.TryAuthenticateAccountAsync("jsmith", "Password123#"))
+        /// {
+        ///     // Login successful
+        /// }
         /// </example>
         Task<bool> TryAuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -270,7 +270,7 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
         /// <example>
-        ///     var allAccounts = await myApp.GetAccounts().ToListAsync();
+        /// var allAccounts = await myApp.GetAccounts().ToListAsync();
         /// </example>
         IAsyncQueryable<IAccount> GetAccounts();
 

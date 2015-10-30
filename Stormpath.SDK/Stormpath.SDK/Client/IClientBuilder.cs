@@ -40,9 +40,9 @@ namespace Stormpath.SDK.Client
     /// <example>
     /// Create a client with a specified API Key and default caching options:
     /// <code>
-    ///     IClient client = Clients.Builder()
-    ///         .SetApiKey(apiKey)
-    ///         .Build();
+    /// IClient client = Clients.Builder()
+    ///     .SetApiKey(apiKey)
+    ///     .Build();
     /// </code>
     /// </example>
     public interface IClientBuilder

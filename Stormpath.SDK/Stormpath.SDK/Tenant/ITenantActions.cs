@@ -139,7 +139,7 @@ namespace Stormpath.SDK.Tenant
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
         /// <example>
-        ///     var allAccounts = await myTenant.GetAccounts().ToListAsync();
+        /// var allAccounts = await myTenant.GetAccounts().ToListAsync();
         /// </example>
         IAsyncQueryable<IAccount> GetAccounts();
 
@@ -148,7 +148,7 @@ namespace Stormpath.SDK.Tenant
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to asynchronously list or search applications.</returns>
         /// <example>
-        ///     var allApplications = await myTenant.GetApplications().ToListAsync();
+        /// var allApplications = await myTenant.GetApplications().ToListAsync();
         /// </example>
         IAsyncQueryable<IApplication> GetApplications();
 
@@ -157,7 +157,7 @@ namespace Stormpath.SDK.Tenant
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IDirectory}"/> that may be used to asynchronously list or search directories.</returns>
         /// <example>
-        ///     var allDirectories = await myTenant.GetDirectories().ToListAsync();
+        /// var allDirectories = await myTenant.GetDirectories().ToListAsync();
         /// </example>
         IAsyncQueryable<IDirectory> GetDirectories();
 
@@ -166,7 +166,7 @@ namespace Stormpath.SDK.Tenant
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
         /// <example>
-        ///     var allGroups = await myTenant.GetGroups().ToListAsync();
+        /// var allGroups = await myTenant.GetGroups().ToListAsync();
         /// </example>
         IAsyncQueryable<IGroup> GetGroups();
     }

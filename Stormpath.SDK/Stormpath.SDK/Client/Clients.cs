@@ -29,9 +29,9 @@ namespace Stormpath.SDK.Client
         /// <returns>A new <see cref="IClientBuilder"/> instance.</returns>
         /// <example>
         /// <code>
-        ///     IClient client = Clients.Builder()
-        ///         .SetApiKey(apiKey)
-        ///         .Build();
+        /// IClient client = Clients.Builder()
+        ///     .SetApiKey(apiKey)
+        ///     .Build();
         /// </code>
         /// </example>
         public static IClientBuilder Builder()

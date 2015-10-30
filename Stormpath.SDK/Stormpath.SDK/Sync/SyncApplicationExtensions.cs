@@ -102,10 +102,10 @@ namespace Stormpath.SDK.Sync
         /// <param name="password">The account's raw (plaintext) password</param>
         /// <returns><c>true</c> if the authentication attempt succeeded; <c>false</c> otherwise.</returns>
         /// <example>
-        ///     if (myApp.TryAuthenticateAccount("jsmith", "Password123#"))
-        ///     {
-        ///         // Login successful
-        ///     }
+        /// if (myApp.TryAuthenticateAccount("jsmith", "Password123#"))
+        /// {
+        ///     // Login successful
+        /// }
         /// </example>
         public static bool TryAuthenticateAccount(this IApplication application, string username, string password)
             => (application as IApplicationSync).TryAuthenticateAccount(username, password);

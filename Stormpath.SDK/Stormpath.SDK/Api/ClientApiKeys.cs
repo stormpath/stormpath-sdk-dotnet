@@ -30,9 +30,9 @@ namespace Stormpath.SDK.Api
         /// <returns>A new <see cref="IClientApiKeyBuilder"/> instance.</returns>
         /// <example>
         /// <code>
-        ///     IClientApiKey apiKey = ClientApiKeys.Builder()
-        ///         .SetFileLocation("path\\to\\apiKey.properties")
-        ///         .Build();
+        /// IClientApiKey apiKey = ClientApiKeys.Builder()
+        ///     .SetFileLocation("path\\to\\apiKey.properties")
+        ///     .Build();
         /// </code>
         /// </example>
         public static IClientApiKeyBuilder Builder(ILogger logger = null)

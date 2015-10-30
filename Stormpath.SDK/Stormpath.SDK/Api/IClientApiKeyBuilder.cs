@@ -28,9 +28,9 @@ namespace Stormpath.SDK.Api
     /// </code>
     /// Then, create a client:
     /// <code>
-    ///     IClient client = Clients.Builder()
-    ///         .SetApiKey(apiKey)
-    ///         .Build();
+    /// IClient client = Clients.Builder()
+    ///     .SetApiKey(apiKey)
+    ///     .Build();
     /// </code>
     /// </example>
     public interface IClientApiKeyBuilder
@@ -46,10 +46,10 @@ namespace Stormpath.SDK.Api
         /// <example>
         /// This method <b>SHOULD NOT</b> be used on production machines:
         /// <code>
-        ///     IClientApiKey apiKey = builder
-        ///         .SetId("myApiKeyId")
-        ///         .SetSecret("mySuperSecretApiKeySecret")
-        ///         .Build();
+        /// IClientApiKey apiKey = builder
+        ///     .SetId("myApiKeyId")
+        ///     .SetSecret("mySuperSecretApiKeySecret")
+        ///     .Build();
         /// </code>
         /// </example>
         IClientApiKeyBuilder SetId(string id);
@@ -63,10 +63,10 @@ namespace Stormpath.SDK.Api
         /// <example>
         /// This method <b>SHOULD NOT</b> be used on production machines:
         /// <code>
-        ///     IClientApiKey apiKey = builder
-        ///         .SetId("myApiKeyId")
-        ///         .SetSecret("mySuperSecretApiKeySecret")
-        ///         .Build();
+        /// IClientApiKey apiKey = builder
+        ///     .SetId("myApiKeyId")
+        ///     .SetSecret("mySuperSecretApiKeySecret")
+        ///     .Build();
         /// </code>
         /// </example>
         IClientApiKeyBuilder SetSecret(string secret);
@@ -79,13 +79,13 @@ namespace Stormpath.SDK.Api
         /// <returns>This instance for method chaining.</returns>
         /// <example>
         /// <code>
-        ///     IClientApiKey = null;
-        ///     using (var stream = new Stream(...))
-        ///     {
-        ///         apiKey = builder
-        ///             .SetInputStream(myStream)
-        ///             .Build();
-        ///     }
+        /// IClientApiKey = null;
+        /// using (var stream = new Stream(...))
+        /// {
+        ///     apiKey = builder
+        ///         .SetInputStream(myStream)
+        ///         .Build();
+        /// }
         /// </code>
         /// </example>
         IClientApiKeyBuilder SetInputStream(System.IO.Stream stream);
@@ -100,9 +100,9 @@ namespace Stormpath.SDK.Api
         /// <returns>This instance for method chaining.</returns>
         /// <example>
         /// <code>
-        ///     IClientApiKey apiKey = builder
-        ///         .SetFileLocation("path\\to\\apiKey.properties")
-        ///         .Build();
+        /// IClientApiKey apiKey = builder
+        ///     .SetFileLocation("path\\to\\apiKey.properties")
+        ///     .Build();
         /// </code>
         /// </example>
         IClientApiKeyBuilder SetFileLocation(string path);
@@ -114,15 +114,15 @@ namespace Stormpath.SDK.Api
         /// <returns>This instance for method chaining.</returns>
         /// <example>
         /// <code>
-        ///     // If the file at \path\to\apiKey.properties is formatted like:
-        ///     // myApiKey = foobar
-        ///     // mySecret = qux-secret-key!
+        /// // If the file at \path\to\apiKey.properties is formatted like:
+        /// // myApiKey = foobar
+        /// // mySecret = qux-secret-key!
         ///
-        ///     IClientApiKey apiKey = builder
-        ///         .SetIdPropertyName("myApiKey")
-        ///         .SetSecretPropertyName("mySecret")
-        ///         .SetFileLocation("path\\to\\apiKey.properties")
-        ///         .Build();
+        /// IClientApiKey apiKey = builder
+        ///     .SetIdPropertyName("myApiKey")
+        ///     .SetSecretPropertyName("mySecret")
+        ///     .SetFileLocation("path\\to\\apiKey.properties")
+        ///     .Build();
         /// </code>
         /// </example>
         IClientApiKeyBuilder SetIdPropertyName(string idPropertyName);
@@ -134,15 +134,15 @@ namespace Stormpath.SDK.Api
         /// <returns>This instance for method chaining.</returns>
         /// <example>
         /// <code>
-        ///     // If the file at \path\to\apiKey.properties is formatted like:
-        ///     // myApiKey = foobar
-        ///     // mySecret = qux-secret-key!
+        /// // If the file at \path\to\apiKey.properties is formatted like:
+        /// // myApiKey = foobar
+        /// // mySecret = qux-secret-key!
         ///
-        ///     IClientApiKey apiKey = builder
-        ///         .SetIdPropertyName("myApiKey")
-        ///         .SetSecretPropertyName("mySecret")
-        ///         .SetFileLocation("path\\to\\apiKey.properties")
-        ///         .Build();
+        /// IClientApiKey apiKey = builder
+        ///     .SetIdPropertyName("myApiKey")
+        ///     .SetSecretPropertyName("mySecret")
+        ///     .SetFileLocation("path\\to\\apiKey.properties")
+        ///     .Build();
         /// </code>
         /// </example>
         IClientApiKeyBuilder SetSecretPropertyName(string secretPropertyName);

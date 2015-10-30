@@ -214,7 +214,9 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
         /// <example>
-        ///     var allGroups = await account.GetGroups().ToListAsync();
+        /// <code>
+        /// var allGroups = await account.GetGroups().ToListAsync();
+        /// </code>
         /// </example>
         IAsyncQueryable<IGroup> GetGroups();
 

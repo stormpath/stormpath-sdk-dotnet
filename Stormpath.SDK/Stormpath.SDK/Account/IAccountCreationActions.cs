@@ -31,7 +31,9 @@ namespace Stormpath.SDK.Account
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <example>
         /// If you would like to force disabling the backing directory's account registration workflow:
-        /// <code>await IApplication.CreateAccountAsync(theAccount, options => options.RegistrationWorkflowEnabled = false, cancellationToken);</code>
+        /// <code>
+        /// await IApplication.CreateAccountAsync(theAccount, options => options.RegistrationWorkflowEnabled = false, cancellationToken);
+        /// </code>
         /// </example>
         /// <returns>A Task whose result is the persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated

@@ -31,7 +31,9 @@ namespace Stormpath.SDK.Sync
         /// which will be used when sending the request.</param>
         /// <example>
         /// If you would like to force disabling the backing directory's account registration workflow:
-        /// <code>app.CreateAccount(theAccount, options => options.RegistrationWorkflowEnabled = false);</code>
+        /// <code>
+        /// app.CreateAccount(theAccount, options => options.RegistrationWorkflowEnabled = false);
+        /// </code>
         /// </example>
         /// <returns>The persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
