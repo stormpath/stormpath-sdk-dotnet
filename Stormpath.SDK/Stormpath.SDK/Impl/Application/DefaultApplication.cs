@@ -121,14 +121,34 @@ namespace Stormpath.SDK.Impl.Application
         {
             var dispatcher = new AuthenticationRequestDispatcher();
 
-            return dispatcher.AuthenticateAsync(this.GetInternalAsyncDataStore(), this, request, cancellationToken);
+            return dispatcher.AuthenticateAsync(this.GetInternalAsyncDataStore(), this, request, null, cancellationToken);
         }
 
         IAuthenticationResult IApplicationSync.AuthenticateAccount(IAuthenticationRequest request)
         {
             var dispatcher = new AuthenticationRequestDispatcher();
 
-            return dispatcher.Authenticate(this.GetInternalAsyncDataStore(), this, request);
+            return dispatcher.Authenticate(this.GetInternalSyncDataStore(), this, request, null);
+        }
+
+        Task<IAuthenticationResult> IApplication.AuthenticateAccountAsync(IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken)
+        {
+            var options = new DefaultRetrievalOptions<IAuthenticationResult>();
+            responseOptions(options);
+
+            var dispatcher = new AuthenticationRequestDispatcher();
+
+            return dispatcher.AuthenticateAsync(this.GetInternalAsyncDataStore(), this, request, options, cancellationToken);
+        }
+
+        IAuthenticationResult IApplicationSync.AuthenticateAccount(IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions)
+        {
+            var options = new DefaultRetrievalOptions<IAuthenticationResult>();
+            responseOptions(options);
+
+            var dispatcher = new AuthenticationRequestDispatcher();
+
+            return dispatcher.Authenticate(this.GetInternalSyncDataStore(), this, request, options);
         }
 
         Task<IAuthenticationResult> IApplication.AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken)

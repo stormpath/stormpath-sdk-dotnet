@@ -23,6 +23,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
@@ -41,10 +42,32 @@ namespace Stormpath.SDK.Impl.Application
         /// </returns>
         /// <exception cref="SDK.Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
-        ///     var loginRequest = new UsernamePasswordRequest("jsmith", "Password123#");
-        ///     var result = myApp.AuthenticateAccount(loginRequest);
+        /// <code>
+        /// var loginRequest = new UsernamePasswordRequest("jsmith", "Password123#");
+        /// var result = myApp.AuthenticateAccount(loginRequest);
+        /// </code>
         /// </example>
         IAuthenticationResult AuthenticateAccount(IAuthenticationRequest request);
+
+        /// <summary>
+        /// Synchronously authenticates an account's submitted principals and credentials (e.g. username and password).
+        /// The account must be in one of the Application's assigned account stores.
+        /// If not in an assigned account store, the authentication attempt will fail.
+        /// </summary>
+        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. <see cref="UsernamePasswordRequest"/>).</param>
+        /// <param name="responseOptions">The options to apply to this request.</param>
+        /// <returns>
+        /// A Task whose result is the result of the authentication.
+        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// </returns>
+        /// <exception cref="SDK.Error.ResourceException">The authentication attempt failed.</exception>
+        /// <example>
+        /// To request and cache the account details:
+        /// <code>
+        /// var result = myApp.AuthenticateAccount(new UsernamePasswordRequest("jsmith", "Password123#"), response => response.Expand(x => x.GetAccount));
+        /// </code>
+        /// </example>
+        IAuthenticationResult AuthenticateAccount(IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions);
 
         /// <summary>
         /// Synchronously authenticates an account's submitted principals and credentials (e.g. username and password).
@@ -59,7 +82,9 @@ namespace Stormpath.SDK.Impl.Application
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
-        ///     var result = myApp.AuthenticateAccount("jsmith", "Password123#");
+        /// <code>
+        /// var result = myApp.AuthenticateAccount("jsmith", "Password123#");
+        /// </code>
         /// </example>
         IAuthenticationResult AuthenticateAccount(string username, string password);
 

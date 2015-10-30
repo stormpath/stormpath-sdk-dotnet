@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Auth
 {
@@ -35,22 +36,22 @@ namespace Stormpath.SDK.Impl.Auth
                 throw new ArgumentNullException(nameof(request));
         }
 
-        public Task<IAuthenticationResult> AuthenticateAsync(IInternalDataStore dataStore, IApplication application, IAuthenticationRequest request, CancellationToken cancellationToken)
+        public Task<IAuthenticationResult> AuthenticateAsync(IInternalDataStore dataStore, IApplication application, IAuthenticationRequest request, IRetrievalOptions<IAuthenticationResult> options, CancellationToken cancellationToken)
         {
             Validate(dataStore, application, request);
 
             if (request is UsernamePasswordRequest)
-                return new BasicAuthenticator(dataStore).AuthenticateAsync(application.Href, request, cancellationToken);
+                return new BasicAuthenticator(dataStore).AuthenticateAsync(application.Href, request, options, cancellationToken);
 
             throw new InvalidOperationException($"The AuthenticationRequest {request.GetType().Name} is not supported by this implementation.");
         }
 
-        public IAuthenticationResult Authenticate(IInternalDataStore dataStore, IApplication application, IAuthenticationRequest request)
+        public IAuthenticationResult Authenticate(IInternalDataStore dataStore, IApplication application, IAuthenticationRequest request, IRetrievalOptions<IAuthenticationResult> options)
         {
             Validate(dataStore, application, request);
 
             if (request is UsernamePasswordRequest)
-                return new BasicAuthenticator(dataStore).Authenticate(application.Href, request);
+                return new BasicAuthenticator(dataStore).Authenticate(application.Href, request, options);
 
             throw new InvalidOperationException($"The AuthenticationRequest {request.GetType().Name} is not supported by this implementation.");
         }

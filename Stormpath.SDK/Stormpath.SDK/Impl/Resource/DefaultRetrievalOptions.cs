@@ -57,7 +57,7 @@ namespace Stormpath.SDK.Impl.Resource
             return this;
         }
 
-        string IRetrievalOptions<T>.GetQueryString()
+        string ICreationOptions.GetQueryString()
         {
             if (!this.dirty)
                 return string.Empty;

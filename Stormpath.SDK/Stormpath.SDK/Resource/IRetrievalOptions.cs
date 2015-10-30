@@ -26,18 +26,12 @@ namespace Stormpath.SDK.Resource
     /// Base interface for retrieval request options objects.
     /// </summary>
     /// <typeparam name="T">The resource type being retrieved.</typeparam>
-    public interface IRetrievalOptions<T>
+    public interface IRetrievalOptions<T> : ICreationOptions
     {
         IRetrievalOptions<T> Expand(Expression<Func<T, Func<IResource>>> selector);
 
         IRetrievalOptions<T> Expand(Expression<Func<T, Func<CancellationToken, Task>>> selector);
 
         IRetrievalOptions<T> Expand(Expression<Func<T, Func<IAsyncQueryable>>> selector, int? offset = null, int? limit = null);
-
-        /// <summary>
-        /// Retrieves the query string arguments represented by this option configuration.
-        /// </summary>
-        /// <returns>The query string equivalent of this options instance.</returns>
-        string GetQueryString();
     }
 }

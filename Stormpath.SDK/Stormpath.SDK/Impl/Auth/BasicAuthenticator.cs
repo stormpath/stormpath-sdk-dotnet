@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Auth
 {
@@ -63,24 +64,24 @@ namespace Stormpath.SDK.Impl.Auth
             return attempt;
         }
 
-        public Task<IAuthenticationResult> AuthenticateAsync(string parentHref, IAuthenticationRequest request, CancellationToken cancellationToken)
+        public Task<IAuthenticationResult> AuthenticateAsync(string parentHref, IAuthenticationRequest request, IRetrievalOptions<IAuthenticationResult> options, CancellationToken cancellationToken)
         {
             Validate(parentHref, request);
 
             var attempt = this.BuildRequest(parentHref, request);
             var href = $"{parentHref}/loginAttempts";
 
-            return this.dataStoreAsync.CreateAsync<IBasicLoginAttempt, IAuthenticationResult>(href, attempt, cancellationToken);
+            return this.dataStoreAsync.CreateAsync<IBasicLoginAttempt, IAuthenticationResult>(href, attempt, options, cancellationToken);
         }
 
-        public IAuthenticationResult Authenticate(string parentHref, IAuthenticationRequest request)
+        public IAuthenticationResult Authenticate(string parentHref, IAuthenticationRequest request, IRetrievalOptions<IAuthenticationResult> options)
         {
             Validate(parentHref, request);
 
             var attempt = this.BuildRequest(parentHref, request);
             var href = $"{parentHref}/loginAttempts";
 
-            return this.dataStoreSync.Create<IBasicLoginAttempt, IAuthenticationResult>(href, attempt);
+            return this.dataStoreSync.Create<IBasicLoginAttempt, IAuthenticationResult>(href, attempt, options);
         }
     }
 }

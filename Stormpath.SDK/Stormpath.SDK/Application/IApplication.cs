@@ -92,10 +92,33 @@ namespace Stormpath.SDK.Application
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
-        ///     var loginRequest = new UsernamePasswordRequest("jsmith", "Password123#");
-        ///     var result = await myApp.AuthenticateAccountAsync(loginRequest);
+        /// <code>
+        /// var loginRequest = new UsernamePasswordRequest("jsmith", "Password123#");
+        /// var result = await myApp.AuthenticateAccountAsync(loginRequest);
+        /// </code>
         /// </example>
         Task<IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Authenticates an account's submitted principals and credentials (e.g. username and password).
+        /// The account must be in one of the Application's assigned account stores.
+        /// If not in an assigned account store, the authentication attempt will fail.
+        /// </summary>
+        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. <see cref="UsernamePasswordRequest"/>).</param>
+        /// <param name="responseOptions">The options to apply to this request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>
+        /// A Task whose result is the result of the authentication.
+        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// </returns>
+        /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
+        /// <example>
+        /// To request and cache the account details:
+        /// <code>
+        /// var result = await myApp.AuthenticateAccountAsync(new UsernamePasswordRequest("jsmith", "Password123#"), response => response.Expand(x => x.GetAccountAsync));
+        /// </code>
+        /// </example>
+        Task<IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password).
@@ -111,7 +134,9 @@ namespace Stormpath.SDK.Application
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
-        ///     var result = await myApp.AuthenticateAccountAsync("jsmith", "Password123#");
+        /// <code>
+        /// var result = await myApp.AuthenticateAccountAsync("jsmith", "Password123#");
+        /// </code>
         /// </example>
         Task<IAuthenticationResult> AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
 
