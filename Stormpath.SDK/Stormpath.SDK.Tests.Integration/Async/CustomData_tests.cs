@@ -26,7 +26,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Async
 {
-    [Collection("Live tenant tests")]
+    [Collection(nameof(IntegrationTestCollection))]
     public class CustomData_tests
     {
         private readonly IntegrationTestFixture fixture;

@@ -18,7 +18,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    [CollectionDefinition("Live tenant tests")]
+    [CollectionDefinition(nameof(IntegrationTestCollection))]
     public class IntegrationTestCollection : ICollectionFixture<IntegrationTestFixture>
     {
         // Intentionally left blank. This class only serves as an anchor for CollectionDefinition.
