@@ -39,9 +39,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_tenant_accounts(TestClientBuilder clientBuilder)
+        public async Task Getting_tenant_accounts(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var accounts = await tenant.GetAccounts().ToListAsync();
@@ -51,9 +51,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_accounts(TestClientBuilder clientBuilder)
+        public async Task Getting_accounts(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var accounts = await application.GetAccounts().ToListAsync();
@@ -75,9 +75,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_account_provider_data(TestClientBuilder clientBuilder)
+        public async Task Getting_account_provider_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var luke = await application
@@ -92,9 +92,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Updating_account(TestClientBuilder clientBuilder)
+        public async Task Updating_account(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var leia = await application
@@ -112,9 +112,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Saving_with_response_options(TestClientBuilder clientBuilder)
+        public async Task Saving_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var chewie = await application
@@ -128,9 +128,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_account_directory(TestClientBuilder clientBuilder)
+        public async Task Getting_account_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var luke = await application
@@ -145,9 +145,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_account_tenant(TestClientBuilder clientBuilder)
+        public async Task Getting_account_tenant(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var leia = await application
@@ -162,9 +162,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_accounts_by_email(TestClientBuilder clientBuilder)
+        public async Task Searching_accounts_by_email(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var coreCitizens = await application
@@ -186,9 +186,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_accounts_by_firstname(TestClientBuilder clientBuilder)
+        public async Task Searching_accounts_by_firstname(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var chewie = await application
@@ -202,9 +202,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_accounts_by_lastname(TestClientBuilder clientBuilder)
+        public async Task Searching_accounts_by_lastname(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var palpatine = await application
@@ -218,9 +218,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_accounts_by_middle_name(TestClientBuilder clientBuilder)
+        public async Task Searching_accounts_by_middle_name(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var chewie = await application
@@ -234,9 +234,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_accounts_by_username(TestClientBuilder clientBuilder)
+        public async Task Searching_accounts_by_username(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var vader = await application
@@ -250,9 +250,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_accounts_by_status(TestClientBuilder clientBuilder)
+        public async Task Searching_accounts_by_status(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var tarkin = await application
@@ -266,9 +266,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_accounts_by_creation_date(TestClientBuilder clientBuilder)
+        public async Task Searching_accounts_by_creation_date(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             // Make a new account that's created now
@@ -292,9 +292,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_accounts_by_creation_date_within_shorthand(TestClientBuilder clientBuilder)
+        public async Task Searching_accounts_by_creation_date_within_shorthand(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var firstAccount = await application.GetAccounts().FirstAsync();
@@ -309,9 +309,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_accounts_using_filter(TestClientBuilder clientBuilder)
+        public async Task Searching_accounts_using_filter(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var filtered = await application
@@ -327,9 +327,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Sorting_accounts_by_lastname(TestClientBuilder clientBuilder)
+        public async Task Sorting_accounts_by_lastname(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var accountsSortedByLastName = await application
@@ -343,9 +343,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Sorting_accounts_by_username_and_lastname(TestClientBuilder clientBuilder)
+        public async Task Sorting_accounts_by_username_and_lastname(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var accountsSortedByMultiple = await application
@@ -362,9 +362,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Taking_only_two_accounts(TestClientBuilder clientBuilder)
+        public async Task Taking_only_two_accounts(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var firstTwo = await application
@@ -377,9 +377,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Counting_accounts(TestClientBuilder clientBuilder)
+        public async Task Counting_accounts(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var count = await application.GetAccounts().CountAsync();
@@ -388,9 +388,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Any_returns_false_for_empty_filtered_set(TestClientBuilder clientBuilder)
+        public async Task Any_returns_false_for_empty_filtered_set(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var anyDroids = await application
@@ -403,9 +403,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Any_returns_true_for_nonempty_filtered_set(TestClientBuilder clientBuilder)
+        public async Task Any_returns_true_for_nonempty_filtered_set(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var anyWookiees = await application
@@ -418,9 +418,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_and_deleting_account(TestClientBuilder clientBuilder)
+        public async Task Creating_and_deleting_account(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var account = await application.CreateAccountAsync("Gial", "Ackbar", "admiralackbar@dac.rim", new RandomPassword(12));
@@ -443,9 +443,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_account_with_custom_data(TestClientBuilder clientBuilder)
+        public async Task Creating_account_with_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var account = await application.CreateAccountAsync(
@@ -466,9 +466,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_account_with_response_options(TestClientBuilder clientBuilder)
+        public async Task Creating_account_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var account = client
@@ -491,9 +491,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Authenticating_account(TestClientBuilder clientBuilder)
+        public async Task Authenticating_account(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
@@ -507,9 +507,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Authenticating_account_with_response_options(TestClientBuilder clientBuilder)
+        public async Task Authenticating_account_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
@@ -521,9 +521,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task TryAuthenticating_account(TestClientBuilder clientBuilder)
+        public async Task TryAuthenticating_account(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
@@ -537,9 +537,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Authenticating_throws_for_invalid_credentials(TestClientBuilder clientBuilder)
+        public async Task Authenticating_throws_for_invalid_credentials(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";

@@ -53,9 +53,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_account_custom_data(TestClientBuilder clientBuilder)
+        public void Getting_account_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = client.GetResource<IAccount>(this.fixture.CreatedAccountHrefs.First());
             var customData = account.GetCustomData();
@@ -68,9 +68,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Putting_account_custom_data(TestClientBuilder clientBuilder)
+        public void Putting_account_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = this.CreateRandomAccount(client);
             var customData = account.GetCustomData();
@@ -88,9 +88,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Deleting_all_custom_data(TestClientBuilder clientBuilder)
+        public void Deleting_all_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = this.CreateRandomAccount(client);
             var customData = account.GetCustomData();
@@ -114,9 +114,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Clearing_all_custom_data(TestClientBuilder clientBuilder)
+        public void Clearing_all_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = this.CreateRandomAccount(client);
             var customData = account.GetCustomData();
@@ -145,9 +145,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Deleting_single_item(TestClientBuilder clientBuilder)
+        public void Deleting_single_item(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = this.CreateRandomAccount(client);
             var customData = account.GetCustomData();

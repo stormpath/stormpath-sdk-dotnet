@@ -34,9 +34,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_tenant_applications(TestClientBuilder clientBuilder)
+        public void Getting_tenant_applications(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
             var applications = tenant.GetApplications().Synchronously().ToList();
 
@@ -48,9 +48,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_application_tenant(TestClientBuilder clientBuilder)
+        public void Getting_application_tenant(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             // Verify data from IntegrationTestData
@@ -60,9 +60,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_application_without_directory(TestClientBuilder clientBuilder)
+        public void Creating_application_without_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var newApplicationName = $".NET IT {this.fixture.TestRunIdentifier} Application #2";
@@ -87,9 +87,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_application_with_response_options(TestClientBuilder clientBuilder)
+        public void Creating_application_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var newApp = client
@@ -107,9 +107,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Updating_application(TestClientBuilder clientBuilder)
+        public void Updating_application(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var application = tenant.GetApplications()
@@ -125,9 +125,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Saving_with_response_options(TestClientBuilder clientBuilder)
+        public void Saving_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var application = tenant.GetApplications()
@@ -141,9 +141,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Searching_by_name(TestClientBuilder clientBuilder)
+        public void Searching_by_name(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var application = tenant.GetApplications()
@@ -157,9 +157,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Searching_by_description(TestClientBuilder clientBuilder)
+        public void Searching_by_description(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var applications = tenant.GetApplications()
@@ -174,9 +174,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Searching_by_status(TestClientBuilder clientBuilder)
+        public void Searching_by_status(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var applications = tenant.GetApplications()
@@ -191,9 +191,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Reset_password_for_valid_account(TestClientBuilder clientBuilder)
+        public void Reset_password_for_valid_account(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var token = application.SendPasswordResetEmail("vader@galacticempire.co");

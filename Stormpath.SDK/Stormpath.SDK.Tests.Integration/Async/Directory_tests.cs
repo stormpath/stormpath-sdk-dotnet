@@ -34,9 +34,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_tenant_directories(TestClientBuilder clientBuilder)
+        public async Task Getting_tenant_directories(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
             var directories = await tenant.GetDirectories().ToListAsync();
 
@@ -45,9 +45,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_directory_tenant(TestClientBuilder clientBuilder)
+        public async Task Getting_directory_tenant(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
 
             // Verify data from IntegrationTestData
@@ -57,9 +57,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_disabled_directory(TestClientBuilder clientBuilder)
+        public async Task Creating_disabled_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var directoryName = $"My New Disabled Directory (.NET IT {this.fixture.TestRunIdentifier})";
@@ -80,9 +80,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_directory_with_response_options(TestClientBuilder clientBuilder)
+        public async Task Creating_directory_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var directory = client
@@ -102,9 +102,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Modifying_directory(TestClientBuilder clientBuilder)
+        public async Task Modifying_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var directoryName = $"My New Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
@@ -132,9 +132,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Saving_with_response_options(TestClientBuilder clientBuilder)
+        public async Task Saving_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var directoryName = $"My New Directory #2 (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
@@ -157,9 +157,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_facebook_directory(TestClientBuilder clientBuilder)
+        public async Task Creating_facebook_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var directoryName = $"My New Facebook Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
@@ -192,9 +192,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_github_directory(TestClientBuilder clientBuilder)
+        public async Task Creating_github_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var directoryName = $"My New Github Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
@@ -227,9 +227,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_google_directory(TestClientBuilder clientBuilder)
+        public async Task Creating_google_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var directoryName = $"My New Google Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
@@ -264,9 +264,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_linkedin_directory(TestClientBuilder clientBuilder)
+        public async Task Creating_linkedin_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var directoryName = $"My New LinkedIn Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";

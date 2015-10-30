@@ -35,9 +35,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Multiple_instances_reference_same_data(TestClientBuilder clientBuilder)
+        public void Multiple_instances_reference_same_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var account = application.GetAccounts().Synchronously().First();
@@ -50,9 +50,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Reference_is_updated_after_saving(TestClientBuilder clientBuilder)
+        public void Reference_is_updated_after_saving(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var newAccount = client.Instantiate<IAccount>();
@@ -75,9 +75,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Original_object_is_updated_after_creating(TestClientBuilder clientBuilder)
+        public void Original_object_is_updated_after_creating(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var newAccount = client.Instantiate<IAccount>();
@@ -97,11 +97,11 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Not_capturing_save_result_works(TestClientBuilder clientBuilder)
+        public void Not_capturing_save_result_works(TestClientProvider clientBuilder)
         {
             // This test is a little redundant, but explicitly tests a style
             // that will be common among consumers of the SDK.
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var newAccount = client.Instantiate<IAccount>();

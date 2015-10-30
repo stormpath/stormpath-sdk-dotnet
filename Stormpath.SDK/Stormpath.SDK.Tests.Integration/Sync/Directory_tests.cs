@@ -35,9 +35,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_tenant_directories(TestClientBuilder clientBuilder)
+        public void Getting_tenant_directories(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
             var directories = tenant.GetDirectories().Synchronously().ToList();
 
@@ -46,9 +46,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_directory_tenant(TestClientBuilder clientBuilder)
+        public void Getting_directory_tenant(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
 
             // Verify data from IntegrationTestData
@@ -58,9 +58,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_disabled_directory(TestClientBuilder clientBuilder)
+        public void Creating_disabled_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var directoryName = $"My New Disabled Directory (.NET IT {this.fixture.TestRunIdentifier})";
@@ -78,9 +78,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_directory_with_response_options(TestClientBuilder clientBuilder)
+        public void Creating_directory_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var directory = client
@@ -100,9 +100,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Modifying_directory(TestClientBuilder clientBuilder)
+        public void Modifying_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var directoryName = $"My New Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
@@ -130,9 +130,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Saving_with_response_options(TestClientBuilder clientBuilder)
+        public void Saving_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var directoryName = $"My New Directory #2 (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
@@ -155,9 +155,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_facebook_directory(TestClientBuilder clientBuilder)
+        public void Creating_facebook_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var directoryName = $"My New Facebook Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name} Sync)";
@@ -190,9 +190,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_github_directory(TestClientBuilder clientBuilder)
+        public void Creating_github_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var directoryName = $"My New Github Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name} Sync)";
@@ -225,9 +225,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_google_directory(TestClientBuilder clientBuilder)
+        public void Creating_google_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var directoryName = $"My New Google Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name} Sync)";
@@ -262,9 +262,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_linkedin_directory(TestClientBuilder clientBuilder)
+        public void Creating_linkedin_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var directoryName = $"My New LinkedIn Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name} Sync)";

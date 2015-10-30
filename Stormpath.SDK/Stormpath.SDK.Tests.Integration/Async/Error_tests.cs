@@ -26,9 +26,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
     {
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task When_resource_does_not_exist(TestClientBuilder clientBuilder)
+        public async Task When_resource_does_not_exist(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             try

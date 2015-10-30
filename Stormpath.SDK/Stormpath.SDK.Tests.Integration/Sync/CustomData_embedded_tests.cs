@@ -56,9 +56,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_new_account_with_custom_data(TestClientBuilder clientBuilder)
+        public void Creating_new_account_with_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var newAccount = this.CreateRandomAccountInstance(client);
             newAccount.CustomData.Put("status", 1337);
@@ -75,9 +75,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_new_application_with_custom_data(TestClientBuilder clientBuilder)
+        public void Creating_new_application_with_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var newApp = client.Instantiate<IApplication>();
             newApp.SetName(".NET IT App with CustomData Test " + RandomString.Create());
@@ -96,9 +96,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Editing_embedded_custom_data(TestClientBuilder clientBuilder)
+        public void Editing_embedded_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var newAccount = this.CreateRandomAccountInstance(client);
             newAccount.CustomData.Put("status", 1337);
@@ -119,9 +119,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Clearing_embedded_custom_data(TestClientBuilder clientBuilder)
+        public void Clearing_embedded_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var newAccount = this.CreateRandomAccountInstance(client);
             newAccount.CustomData.Put("foo", "bar");

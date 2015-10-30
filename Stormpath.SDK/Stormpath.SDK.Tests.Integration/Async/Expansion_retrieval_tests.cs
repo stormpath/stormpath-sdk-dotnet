@@ -36,54 +36,54 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_custom_data(TestClientBuilder clientBuilder)
+        public async Task Expanding_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetCustomDataAsync));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_directory(TestClientBuilder clientBuilder)
+        public async Task Expanding_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetDirectoryAsync));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_group_memberships(TestClientBuilder clientBuilder)
+        public async Task Expanding_group_memberships(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetGroupMemberships, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_groups(TestClientBuilder clientBuilder)
+        public async Task Expanding_groups(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetGroups, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_tenant(TestClientBuilder clientBuilder)
+        public async Task Expanding_tenant(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetTenantAsync));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_account_store(TestClientBuilder clientBuilder)
+        public async Task Expanding_account_store(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var mapping = await app.GetAccountStoreMappings().FirstAsync();
@@ -93,9 +93,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_application(TestClientBuilder clientBuilder)
+        public async Task Expanding_application(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var mapping = await app.GetAccountStoreMappings().FirstAsync();
@@ -105,54 +105,54 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_accounts(TestClientBuilder clientBuilder)
+        public async Task Expanding_accounts(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccounts, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_account_store_mappings(TestClientBuilder clientBuilder)
+        public async Task Expanding_account_store_mappings(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccountStoreMappings, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_account_memberships(TestClientBuilder clientBuilder)
+        public async Task Expanding_account_memberships(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref, o => o.Expand(x => x.GetAccountMemberships, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_applications(TestClientBuilder clientBuilder)
+        public async Task Expanding_applications(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var app = await client.GetResourceAsync<ITenant>(this.fixture.TenantHref, o => o.Expand(x => x.GetApplications, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_directories(TestClientBuilder clientBuilder)
+        public async Task Expanding_directories(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var app = await client.GetResourceAsync<ITenant>(this.fixture.TenantHref, o => o.Expand(x => x.GetDirectories, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_account(TestClientBuilder clientBuilder)
+        public async Task Expanding_account(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref);
             var membership = await account.GetGroupMemberships().FirstAsync();
@@ -162,9 +162,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Expanding_group(TestClientBuilder clientBuilder)
+        public async Task Expanding_group(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref);
             var membership = await account.GetGroupMemberships().FirstAsync();

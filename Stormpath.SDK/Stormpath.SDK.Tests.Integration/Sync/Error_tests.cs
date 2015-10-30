@@ -26,9 +26,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
     {
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void When_resource_does_not_exist(TestClientBuilder clientBuilder)
+        public void When_resource_does_not_exist(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             try

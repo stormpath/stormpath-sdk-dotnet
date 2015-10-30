@@ -25,9 +25,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
     {
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_current_tenant(TestClientBuilder clientBuilder)
+        public void Getting_current_tenant(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             tenant.ShouldNotBe(null);

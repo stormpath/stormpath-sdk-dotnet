@@ -25,9 +25,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
     {
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_current_tenant(TestClientBuilder clientBuilder)
+        public async Task Getting_current_tenant(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             tenant.ShouldNotBe(null);

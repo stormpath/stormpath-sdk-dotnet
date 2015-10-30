@@ -35,9 +35,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_tenant_groups(TestClientBuilder clientBuilder)
+        public async Task Getting_tenant_groups(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
             var groups = await tenant.GetGroups().ToListAsync();
 
@@ -46,9 +46,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_group_tenant(TestClientBuilder clientBuilder)
+        public async Task Getting_group_tenant(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var group = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryGroupHref);
 
             // Verify data from IntegrationTestData
@@ -58,9 +58,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_application_groups(TestClientBuilder clientBuilder)
+        public async Task Getting_application_groups(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
             var groups = await app.GetGroups().ToListAsync();
 
@@ -69,9 +69,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_directory_groups(TestClientBuilder clientBuilder)
+        public async Task Getting_directory_groups(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
             var groups = await directory.GetGroups().ToListAsync();
 
@@ -80,9 +80,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_account_groups(TestClientBuilder clientBuilder)
+        public async Task Getting_account_groups(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
             var luke = await app.GetAccounts().Where(x => x.Email.StartsWith("lskywalker")).SingleAsync();
 
@@ -93,9 +93,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_group_accounts(TestClientBuilder clientBuilder)
+        public async Task Getting_group_accounts(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var humans = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
             (await humans.GetAccounts().CountAsync()).ShouldBeGreaterThan(0);
@@ -104,9 +104,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Modifying_group(TestClientBuilder clientBuilder)
+        public async Task Modifying_group(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
 
             var droids = client
@@ -129,9 +129,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Saving_with_response_options(TestClientBuilder clientBuilder)
+        public async Task Saving_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
 
             var newGroup = client
@@ -151,9 +151,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Adding_account_to_group(TestClientBuilder clientBuilder)
+        public async Task Adding_account_to_group(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
@@ -170,9 +170,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_group_membership(TestClientBuilder clientBuilder)
+        public async Task Getting_group_membership(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
@@ -193,9 +193,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Adding_account_to_group_by_group_href(TestClientBuilder clientBuilder)
+        public async Task Adding_account_to_group_by_group_href(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var leia = await app.GetAccounts().Where(x => x.Email.StartsWith("leia.organa")).SingleAsync();
@@ -208,9 +208,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Adding_account_to_group_by_group_name(TestClientBuilder clientBuilder)
+        public async Task Adding_account_to_group_by_group_name(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var groupName = (await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref)).Name;
@@ -225,9 +225,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Adding_account_to_group_by_account_href(TestClientBuilder clientBuilder)
+        public async Task Adding_account_to_group_by_account_href(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
@@ -241,9 +241,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Adding_account_to_group_by_account_email(TestClientBuilder clientBuilder)
+        public async Task Adding_account_to_group_by_account_email(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
@@ -257,9 +257,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_group_in_application(TestClientBuilder clientBuilder)
+        public async Task Creating_group_in_application(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var instance = client.Instantiate<IGroup>();
@@ -280,9 +280,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_group_in_directory(TestClientBuilder clientBuilder)
+        public async Task Creating_group_in_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
 
             var instance = client.Instantiate<IGroup>();
@@ -304,9 +304,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_group_with_custom_data(TestClientBuilder clientBuilder)
+        public async Task Creating_group_with_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var instance = client.Instantiate<IGroup>();
@@ -326,9 +326,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_group_with_response_options(TestClientBuilder clientBuilder)
+        public async Task Creating_group_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var group = client

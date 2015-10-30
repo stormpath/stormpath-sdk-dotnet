@@ -36,9 +36,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_tenant_groups(TestClientBuilder clientBuilder)
+        public void Getting_tenant_groups(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
             var groups = tenant.GetGroups().Synchronously().ToList();
 
@@ -47,9 +47,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_group_tenant(TestClientBuilder clientBuilder)
+        public void Getting_group_tenant(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var group = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
             // Verify data from IntegrationTestData
@@ -59,9 +59,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_application_groups(TestClientBuilder clientBuilder)
+        public void Getting_application_groups(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var groups = app.GetGroups().Synchronously().ToList();
 
@@ -70,9 +70,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_directory_groups(TestClientBuilder clientBuilder)
+        public void Getting_directory_groups(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
             var groups = directory.GetGroups().Synchronously().ToList();
 
@@ -81,9 +81,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_account_groups(TestClientBuilder clientBuilder)
+        public void Getting_account_groups(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var luke = app.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("lskywalker")).Single();
 
@@ -94,9 +94,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_group_accounts(TestClientBuilder clientBuilder)
+        public void Getting_group_accounts(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var humans = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
             humans.GetAccounts().Synchronously().Count().ShouldBeGreaterThan(0);
@@ -105,9 +105,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Modifying_group(TestClientBuilder clientBuilder)
+        public void Modifying_group(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
 
             var droids = client
@@ -130,9 +130,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Saving_with_response_options(TestClientBuilder clientBuilder)
+        public void Saving_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
 
             var newGroup = client
@@ -152,9 +152,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Adding_account_to_group(TestClientBuilder clientBuilder)
+        public void Adding_account_to_group(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
@@ -171,9 +171,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_group_membership(TestClientBuilder clientBuilder)
+        public void Getting_group_membership(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
@@ -194,9 +194,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Adding_account_to_group_by_group_href(TestClientBuilder clientBuilder)
+        public void Adding_account_to_group_by_group_href(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var leia = app.GetAccounts().Synchronously().Where(x => x.Email.StartsWith("leia.organa")).Single();
@@ -209,9 +209,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Adding_account_to_group_by_group_name(TestClientBuilder clientBuilder)
+        public void Adding_account_to_group_by_group_name(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var groupName = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref).Name;
 
@@ -225,9 +225,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Adding_account_to_group_by_account_href(TestClientBuilder clientBuilder)
+        public void Adding_account_to_group_by_account_href(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
@@ -241,9 +241,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Adding_account_to_group_by_account_email(TestClientBuilder clientBuilder)
+        public void Adding_account_to_group_by_account_email(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var humans = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
@@ -257,9 +257,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_group_in_application(TestClientBuilder clientBuilder)
+        public void Creating_group_in_application(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var instance = client.Instantiate<IGroup>();
@@ -280,9 +280,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_group_in_directory(TestClientBuilder clientBuilder)
+        public void Creating_group_in_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var directory = client.GetResource<IApplication>(this.fixture.PrimaryDirectoryHref);
 
             var instance = client.Instantiate<IGroup>();
@@ -303,9 +303,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_group_with_custom_data(TestClientBuilder clientBuilder)
+        public void Creating_group_with_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var instance = client.Instantiate<IGroup>();
@@ -325,9 +325,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Creating_group_with_response_options(TestClientBuilder clientBuilder)
+        public void Creating_group_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var group = client

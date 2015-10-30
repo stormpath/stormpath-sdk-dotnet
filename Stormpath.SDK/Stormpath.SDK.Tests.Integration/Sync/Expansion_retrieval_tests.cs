@@ -37,54 +37,54 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_custom_data(TestClientBuilder clientBuilder)
+        public void Expanding_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = client.GetResource<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetCustomData));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_directory(TestClientBuilder clientBuilder)
+        public void Expanding_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = client.GetResource<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetDirectory));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_group_memberships(TestClientBuilder clientBuilder)
+        public void Expanding_group_memberships(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = client.GetResource<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetGroupMemberships, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_groups(TestClientBuilder clientBuilder)
+        public void Expanding_groups(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = client.GetResource<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetGroups, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_tenant(TestClientBuilder clientBuilder)
+        public void Expanding_tenant(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = client.GetResource<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetTenant));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_account_store(TestClientBuilder clientBuilder)
+        public void Expanding_account_store(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var mapping = app.GetAccountStoreMappings().Synchronously().First();
@@ -94,9 +94,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_application(TestClientBuilder clientBuilder)
+        public void Expanding_application(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var mapping = app.GetAccountStoreMappings().Synchronously().First();
@@ -106,54 +106,54 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_accounts(TestClientBuilder clientBuilder)
+        public void Expanding_accounts(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccounts, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_account_store_mappings(TestClientBuilder clientBuilder)
+        public void Expanding_account_store_mappings(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccountStoreMappings, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_account_memberships(TestClientBuilder clientBuilder)
+        public void Expanding_account_memberships(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var group = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref, o => o.Expand(x => x.GetAccountMemberships, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_applications(TestClientBuilder clientBuilder)
+        public void Expanding_applications(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var app = client.GetResource<ITenant>(this.fixture.TenantHref, o => o.Expand(x => x.GetApplications, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_directories(TestClientBuilder clientBuilder)
+        public void Expanding_directories(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var app = client.GetResource<ITenant>(this.fixture.TenantHref, o => o.Expand(x => x.GetDirectories, 0, 10));
         }
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_account(TestClientBuilder clientBuilder)
+        public void Expanding_account(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = client.GetResource<IAccount>(this.fixture.PrimaryAccountHref);
             var membership = account.GetGroupMemberships().Synchronously().First();
@@ -163,9 +163,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Expanding_group(TestClientBuilder clientBuilder)
+        public void Expanding_group(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = client.GetResource<IAccount>(this.fixture.PrimaryAccountHref);
             var membership = account.GetGroupMemberships().Synchronously().First();

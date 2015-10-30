@@ -1,4 +1,4 @@
-﻿// <copyright file="TestClientBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="TestClientProvider.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,23 +21,23 @@ using Xunit.Abstractions;
 namespace Stormpath.SDK.Tests.Integration
 {
     [Serializable]
-    public class TestClientBuilder : IXunitSerializable
+    public class TestClientProvider : IXunitSerializable
     {
         private string clientName;
 
         // required for deserializer
-        public TestClientBuilder()
+        public TestClientProvider()
         {
         }
 
-        public TestClientBuilder(string authScheme)
+        public TestClientProvider(string authScheme)
         {
             this.clientName = authScheme;
         }
 
         public string Name => this.clientName;
 
-        public IClient Build()
+        public IClient GetClient()
         {
             switch (this.clientName)
             {

@@ -34,9 +34,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_tenant_applications(TestClientBuilder clientBuilder)
+        public async Task Getting_tenant_applications(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
             var applications = await tenant.GetApplications().ToListAsync();
 
@@ -48,9 +48,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_application_tenant(TestClientBuilder clientBuilder)
+        public async Task Getting_application_tenant(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             // Verify data from IntegrationTestData
@@ -60,9 +60,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_application_without_directory(TestClientBuilder clientBuilder)
+        public async Task Creating_application_without_directory(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var newApplicationName = $".NET IT {this.fixture.TestRunIdentifier} Application #2";
@@ -87,9 +87,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_application_with_response_options(TestClientBuilder clientBuilder)
+        public async Task Creating_application_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var newApp = client
@@ -107,9 +107,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Updating_application(TestClientBuilder clientBuilder)
+        public async Task Updating_application(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var application = await tenant.GetApplications()
@@ -124,9 +124,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Saving_with_response_options(TestClientBuilder clientBuilder)
+        public async Task Saving_with_response_options(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var application = await tenant.GetApplications()
@@ -139,9 +139,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_by_name(TestClientBuilder clientBuilder)
+        public async Task Searching_by_name(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var application = await tenant.GetApplications()
@@ -154,9 +154,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_by_description(TestClientBuilder clientBuilder)
+        public async Task Searching_by_description(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var applications = await tenant.GetApplications()
@@ -170,9 +170,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Searching_by_status(TestClientBuilder clientBuilder)
+        public async Task Searching_by_status(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
 
             var applications = await tenant.GetApplications()
@@ -186,9 +186,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Reset_password_for_valid_account(TestClientBuilder clientBuilder)
+        public async Task Reset_password_for_valid_account(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var token = await application.SendPasswordResetEmailAsync("vader@galacticempire.co");

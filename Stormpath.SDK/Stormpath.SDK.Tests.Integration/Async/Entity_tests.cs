@@ -34,9 +34,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Multiple_instances_reference_same_data(TestClientBuilder clientBuilder)
+        public async Task Multiple_instances_reference_same_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var account = await application.GetAccounts().FirstAsync();
@@ -49,9 +49,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Reference_is_updated_after_saving(TestClientBuilder clientBuilder)
+        public async Task Reference_is_updated_after_saving(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var newAccount = client.Instantiate<IAccount>();
@@ -74,9 +74,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Original_object_is_updated_after_creating(TestClientBuilder clientBuilder)
+        public async Task Original_object_is_updated_after_creating(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var newAccount = client.Instantiate<IAccount>();
@@ -96,11 +96,11 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Not_capturing_save_result_works(TestClientBuilder clientBuilder)
+        public async Task Not_capturing_save_result_works(TestClientProvider clientBuilder)
         {
             // This test is a little redundant, but explicitly tests a style
             // that will be common among consumers of the SDK.
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var newAccount = client.Instantiate<IAccount>();
