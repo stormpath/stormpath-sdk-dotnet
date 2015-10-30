@@ -135,9 +135,9 @@ namespace Stormpath.SDK.Tests.Impl
                 .Build();
 
             // Default value
-            (client as DefaultClient).CacheProvider.ShouldBeOfType<InMemoryCacheProvider>();
-            ((client as DefaultClient).CacheProvider as InMemoryCacheProvider).DefaultTimeToIdle.ShouldBe(TimeSpan.FromHours(1));
-            ((client as DefaultClient).CacheProvider as InMemoryCacheProvider).DefaultTimeToLive.ShouldBe(TimeSpan.FromHours(1));
+            client.GetCacheProvider().ShouldBeOfType<InMemoryCacheProvider>();
+            (client.GetCacheProvider() as InMemoryCacheProvider).DefaultTimeToIdle.ShouldBe(TimeSpan.FromHours(1));
+            (client.GetCacheProvider() as InMemoryCacheProvider).DefaultTimeToLive.ShouldBe(TimeSpan.FromHours(1));
         }
 
         [Fact]

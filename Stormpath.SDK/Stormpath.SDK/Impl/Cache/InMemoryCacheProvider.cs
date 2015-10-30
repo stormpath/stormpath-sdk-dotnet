@@ -143,6 +143,7 @@ namespace Stormpath.SDK.Impl.Cache
 
             var indent = "    ";
             builder.AppendLine("{");
+            builder.AppendLine($@"{indent}""name"": ""InMemoryCacheProvider"",");
             builder.AppendLine($@"{indent}""cacheCount"": {caches.Count},");
             builder.AppendLine($@"{indent}""defaultTimeToLive"": ""{PrettyDuration(this.defaultTimeToLive)}"",");
             builder.AppendLine($@"{indent}""defaultTimeToIdle"": ""{PrettyDuration(this.defaultTimeToIdle)}"",");

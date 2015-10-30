@@ -31,10 +31,10 @@ namespace Stormpath.SDK.Logging
         void ILogger.Log(LogEntry entry)
         {
             var logEntryBuilder = new StringBuilder()
-                .Append($"{DateTimeOffset.Now.ToString()} [{entry.Severity.ToString().ToUpper()}]");
+                .Append($"{DateTimeOffset.Now.ToString()} [{entry.Severity.ToString().ToUpper()}] ");
 
             if (!string.IsNullOrEmpty(entry.Source))
-                logEntryBuilder.Append($" {entry.Source} - ");
+                logEntryBuilder.Append($"{entry.Source} - ");
 
             logEntryBuilder.Append(entry.Message);
 

@@ -64,6 +64,9 @@ namespace Stormpath.SDK.Tests.Integration
 
                     StaticLogger.Instance.Info($"Done cleaning up objects.");
 
+                    StaticLogger.Instance.Info("Caching statistics:");
+                    StaticLogger.Instance.Info(IntegrationTestClients.GetSAuthc1Client().GetCacheProvider().ToString());
+
                     var filename = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "its.log");
                     StaticLogger.Instance.Info($"Saving log to file {filename}");
                     System.IO.File.WriteAllText(filename, StaticLogger.Instance.ToString());

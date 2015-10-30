@@ -45,6 +45,11 @@ namespace Stormpath.SDK.Impl.Cache
             throw new NotImplementedException();
         }
 
+        public override string ToString()
+        {
+            return @"{ ""name"": ""NullCacheProvider"" }";
+        }
+
         public void Dispose()
         {
             this.disposed = true;

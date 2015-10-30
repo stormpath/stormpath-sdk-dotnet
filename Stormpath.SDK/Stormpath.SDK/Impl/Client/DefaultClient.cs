@@ -111,8 +111,6 @@ namespace Stormpath.SDK.Impl.Client
 
         internal IWebProxy Proxy => this.proxy;
 
-        internal ICacheProvider CacheProvider => this.cacheProvider;
-
         internal IJsonSerializer Serializer => this.serializer;
 
         internal IHttpClient HttpClient => this.httpClient;
@@ -130,6 +128,9 @@ namespace Stormpath.SDK.Impl.Client
             if (this.tenant == null)
                 this.GetCurrentTenant();
         }
+
+        ICacheProvider IClient.GetCacheProvider()
+            => this.cacheProvider;
 
         T IDataStore.Instantiate<T>() => this.dataStore.Instantiate<T>();
 

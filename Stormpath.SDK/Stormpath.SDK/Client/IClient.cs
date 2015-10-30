@@ -16,6 +16,7 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Cache;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Tenant;
 
@@ -34,5 +35,11 @@ namespace Stormpath.SDK.Client
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the <see cref="ITenant"/> associated to this client.</returns>
         Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Gets the <see cref="ICacheProvider"/> associated with this client.
+        /// </summary>
+        /// <returns>The cache provider associated with this client.</returns>
+        ICacheProvider GetCacheProvider();
     }
 }
