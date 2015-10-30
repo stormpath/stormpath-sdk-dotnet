@@ -56,5 +56,10 @@ namespace Stormpath.SDK.Impl.Extensions
 
             return new KeyValuePair<string, string>(pair[0], pair[1]);
         }
+
+        public static string Join(this IEnumerable<string> source, string separator)
+        {
+            return string.Join(separator, source);
+        }
     }
 }

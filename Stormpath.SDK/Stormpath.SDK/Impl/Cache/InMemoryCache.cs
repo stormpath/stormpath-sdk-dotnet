@@ -35,6 +35,7 @@ namespace Stormpath.SDK.Impl.Cache
         private long accessCount;
         private long hitCount;
         private long missCount;
+        private long putCount;
 
         public InMemoryCache(string region)
             : this(region, timeToLive: null, timeToIdle: null)
@@ -99,6 +100,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         public long MissCount => Interlocked.Read(ref this.missCount);
 
+        public long PutCount => Interlocked.Read(ref this.putCount);
+
         public void Clear()
         {
             this.cacheManager.Dispose();
@@ -133,6 +136,8 @@ namespace Stormpath.SDK.Impl.Cache
             var slidingExpiration = this.timeToIdle.HasValue
                 ? this.timeToIdle.Value
                 : ObjectCache.NoSlidingExpiration;
+
+            Interlocked.Increment(ref this.putCount);
 
             return this.cacheManager.Put(compositeKey, value, absoluteExpiration, slidingExpiration);
         }
@@ -199,6 +204,7 @@ namespace Stormpath.SDK.Impl.Cache
                 .Append("{")
                 .Append($@" ""region"": ""{this.region}"",")
                 .Append($@" ""accessCount"": {this.AccessCount},")
+                .Append($@" ""putCount"": {this.PutCount},")
                 .Append($@" ""hitCount"": {this.HitCount},")
                 .Append($@" ""missCount"": {this.MissCount},")
                 .Append($@" ""hitRatio"": {this.GetHitRatio()}")

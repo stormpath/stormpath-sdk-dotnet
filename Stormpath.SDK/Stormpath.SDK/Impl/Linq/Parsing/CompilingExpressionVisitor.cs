@@ -33,6 +33,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private DateTimeFieldNameTranslator datetimeFieldNameTranslator
             = new DateTimeFieldNameTranslator();
 
+        private MethodNameTranslator methodNameTranslator
+            = new MethodNameTranslator();
+
         public CollectionResourceQueryModel Model { get; private set; }
             = new CollectionResourceQueryModel();
 
@@ -87,6 +90,20 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 throw new NotSupportedException("Multiple Filter terms are not supported");
 
             this.Model.FilterTerm = node.Value;
+
+            return node;
+        }
+
+        internal Expression VisitExpand(ExpandExpression node)
+        {
+            string translatedMethodName = null;
+            if (!this.methodNameTranslator.TryGetValue(node.MethodName, out translatedMethodName))
+                throw new NotSupportedException($"{node.MethodName} does not support expansion.");
+
+            this.Model.ExpandTerms.Add(new ExpandTerm()
+            {
+                PropertyName = translatedMethodName, Offset = node.Offset, Limit = node.Limit
+            });
 
             return node;
         }

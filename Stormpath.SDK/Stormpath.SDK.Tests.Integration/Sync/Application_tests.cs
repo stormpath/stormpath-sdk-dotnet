@@ -1,4 +1,4 @@
-﻿// <copyright file="Sync_Application_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Application_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,11 +23,11 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
-    public class Sync_Application_tests
+    public class Application_tests
     {
         private readonly IntegrationTestFixture fixture;
 
-        public Sync_Application_tests(IntegrationTestFixture fixture)
+        public Application_tests(IntegrationTestFixture fixture)
         {
             this.fixture = fixture;
         }
@@ -87,6 +87,26 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_application_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
+
+            var newApp = client
+                .Instantiate<IApplication>()
+                .SetName($".NET IT {this.fixture.TestRunIdentifier} Application #3 - Sync");
+
+            tenant.CreateApplication(newApp, opt => opt.ResponseOptions.Expand(x => x.GetCustomData));
+
+            newApp.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(newApp.Href);
+
+            // Clean up
+            newApp.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Updating_application(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
@@ -101,6 +121,22 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var saveResult = application.Save();
 
             saveResult.Description.ShouldBe("The Battle of Yavin - Victory!");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Saving_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
+
+            var application = tenant.GetApplications()
+                .Synchronously()
+                .Where(app => app.Name.StartsWith($".NET IT (disabled) {this.fixture.TestRunIdentifier}"))
+                .Single();
+
+            application.SetStatus(ApplicationStatus.Disabled);
+            application.Save(response => response.Expand(x => x.GetAccounts));
         }
 
         [Theory]

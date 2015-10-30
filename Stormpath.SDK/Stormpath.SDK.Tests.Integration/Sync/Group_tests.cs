@@ -1,4 +1,4 @@
-﻿// <copyright file="Sync_Group_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Group_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,11 +25,11 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
-    public class Sync_Group_tests
+    public class Group_tests
     {
         private readonly IntegrationTestFixture fixture;
 
-        public Sync_Group_tests(IntegrationTestFixture fixture)
+        public Group_tests(IntegrationTestFixture fixture)
         {
             this.fixture = fixture;
         }
@@ -101,6 +101,53 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             humans.GetAccounts().Synchronously().Count().ShouldBeGreaterThan(0);
             humans.GetAccountMemberships().Synchronously().Count().ShouldBeGreaterThan(0);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Modifying_group(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
+
+            var droids = client
+                .Instantiate<IGroup>()
+                .SetName($"Droids (.NET ITs {this.fixture.TestRunIdentifier}) - Sync")
+                .SetDescription("Mechanical entities")
+                .SetStatus(GroupStatus.Enabled);
+
+            directory.CreateGroup(droids);
+            this.fixture.CreatedGroupHrefs.Add(droids.Href);
+
+            droids.SetStatus(GroupStatus.Disabled);
+            var result = droids.Save();
+
+            result.Status.ShouldBe(GroupStatus.Disabled);
+
+            // Clean up
+            droids.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Saving_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
+
+            var newGroup = client
+                .Instantiate<IGroup>()
+                .SetName($"Another Group (.NET ITs {this.fixture.TestRunIdentifier})")
+                .SetStatus(GroupStatus.Disabled);
+
+            directory.CreateGroup(newGroup);
+            this.fixture.CreatedGroupHrefs.Add(newGroup.Href);
+
+            newGroup.SetDescription("foobar");
+            newGroup.Save(response => response.Expand(x => x.GetAccounts, 0, 10));
+
+            // Clean up
+            newGroup.Delete();
         }
 
         [Theory]
@@ -216,7 +263,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var instance = client.Instantiate<IGroup>();
-            instance.SetName($".NET ITs New Test Group {this.fixture.TestRunIdentifier}");
+            instance.SetName($".NET ITs New Test Group {this.fixture.TestRunIdentifier} - Sync");
             instance.SetDescription("A nu start");
             instance.SetStatus(GroupStatus.Disabled);
 
@@ -224,7 +271,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             created.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedGroupHrefs.Add(created.Href);
 
-            created.Name.ShouldBe($".NET ITs New Test Group {this.fixture.TestRunIdentifier}");
+            created.Name.ShouldBe($".NET ITs New Test Group {this.fixture.TestRunIdentifier} - Sync");
             created.Description.ShouldBe("A nu start");
             created.Status.ShouldBe(GroupStatus.Disabled);
 
@@ -239,7 +286,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var directory = client.GetResource<IApplication>(this.fixture.PrimaryDirectoryHref);
 
             var instance = client.Instantiate<IGroup>();
-            instance.SetName($".NET ITs New Test Group #2 {this.fixture.TestRunIdentifier}");
+            instance.SetName($".NET ITs New Test Group #2 {this.fixture.TestRunIdentifier} - Sync");
             instance.SetDescription("A nu start");
             instance.SetStatus(GroupStatus.Enabled);
 
@@ -247,7 +294,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             created.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedGroupHrefs.Add(created.Href);
 
-            created.Name.ShouldBe($".NET ITs New Test Group #2 {this.fixture.TestRunIdentifier}");
+            created.Name.ShouldBe($".NET ITs New Test Group #2 {this.fixture.TestRunIdentifier} - Sync");
             created.Description.ShouldBe("A nu start");
             created.Status.ShouldBe(GroupStatus.Enabled);
 
@@ -262,7 +309,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var instance = client.Instantiate<IGroup>();
-            instance.SetName($".NET ITs Custom Data Group {this.fixture.TestRunIdentifier}");
+            instance.SetName($".NET ITs Custom Data Group {this.fixture.TestRunIdentifier} - Sync");
             instance.CustomData.Put("isNeat", true);
             instance.CustomData.Put("roleBasedSecurity", "pieceOfCake");
 
@@ -274,6 +321,25 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             customData["roleBasedSecurity"].ShouldBe("pieceOfCake");
 
             created.Delete().ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_group_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var group = client
+                .Instantiate<IGroup>()
+                .SetName($".NET ITs Custom Data Group #2 ({this.fixture.TestRunIdentifier} - {clientBuilder.Name})");
+
+            app.CreateGroup(group, opt => opt.ResponseOptions.Expand(x => x.GetCustomData));
+
+            group.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedGroupHrefs.Add(group.Href);
+
+            group.Delete().ShouldBeTrue();
         }
     }
 }

@@ -33,6 +33,9 @@ namespace Stormpath.SDK.Impl.Linq.QueryModel
         public List<OrderByTerm> OrderByTerms { get; set; }
             = new List<OrderByTerm>();
 
+        public List<ExpandTerm> ExpandTerms { get; set; }
+            = new List<ExpandTerm>();
+
         public ExecutionPlanModel ExecutionPlan { get; set; }
             = new ExecutionPlanModel();
 

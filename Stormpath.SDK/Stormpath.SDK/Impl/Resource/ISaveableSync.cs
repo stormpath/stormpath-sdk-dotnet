@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Impl.Resource
 {
     /// <summary>
-    /// Represents a resource that can be created or modified synchronously
+    /// Represents a resource that can be created or modified synchronously.
     /// </summary>
     /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
     internal interface ISaveableSync<T>

@@ -15,7 +15,9 @@
 // </copyright>
 
 using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Directory
 {
@@ -38,12 +40,24 @@ namespace Stormpath.SDK.Directory
         }
 
         /// <summary>
-        /// Creates a new <see cref="IApplicationCreationOptions"/> instance based on the current builder state.
+        /// Gets or sets the response options to apply to the request.
         /// </summary>
-        /// <returns>A new <see cref="IApplicationCreationOptions"/> instance.</returns>
+        /// <value>The response options to apply to the request.</value>
+        /// <example>
+        /// To request and cache custom data along with this request:
+        /// <code>
+        /// builder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+        /// </code>
+        /// </example>
+        public IRetrievalOptions<IDirectory> ResponseOptions { get; } = new DefaultRetrievalOptions<IDirectory>();
+
+        /// <summary>
+        /// Creates a new <see cref="IDirectoryCreationOptions"/> instance based on the current builder state.
+        /// </summary>
+        /// <returns>A new <see cref="IDirectoryCreationOptions"/> instance.</returns>
         public IDirectoryCreationOptions Build()
         {
-            return new DefaultDirectoryCreationOptions(this.provider);
+            return new DefaultDirectoryCreationOptions(this.provider, this.ResponseOptions);
         }
     }
 }

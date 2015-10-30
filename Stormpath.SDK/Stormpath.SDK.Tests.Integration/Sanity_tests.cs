@@ -163,6 +163,8 @@ namespace Stormpath.SDK.Tests.Integration
             var whitelistedSyncMethods = new List<string>()
             {
                 "IQueryable`1.Filter(String)",
+                "IQueryable`1.Expand(Expression`1)",
+                "IQueryable`1.Expand(Expression`1, Nullable`1, Nullable`1)",
                 "IAsyncQueryable`1.Synchronously()"
             };
 
@@ -230,7 +232,7 @@ namespace Stormpath.SDK.Tests.Integration
 
             syncButNotAsync.Count.ShouldBe(
                 0,
-                $"These sync methods do not have a corresponding async methods:{Environment.NewLine}{string.Join(Environment.NewLine, syncButNotAsync)}");
+                $"These sync methods do not have a corresponding async method:{Environment.NewLine}{string.Join(Environment.NewLine, syncButNotAsync)}");
         }
 
         [Fact]
@@ -241,25 +243,21 @@ namespace Stormpath.SDK.Tests.Integration
                 .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Async")
                 .SelectMany(x => x.GetMethods())
                 .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-                .ToList();
+                .Select(x => GetQualifiedMethodName(x));
 
             var syncTests = this.GetType().Assembly
                 .GetTypes()
                 .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Sync")
                 .SelectMany(x => x.GetMethods())
                 .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-                .ToList();
+                .Select(x => GetQualifiedMethodName(x));
 
             var asyncButNotSync = asyncTests
-                .Select(a => a.Name)
-                .Except(
-                    syncTests.Select(s => s.Name))
+                .Except(syncTests)
                 .ToList();
 
             var syncButNotAsync = syncTests
-                .Select(a => a.Name)
-                .Except(
-                    asyncTests.Select(s => s.Name))
+                .Except(asyncTests)
                 .ToList();
 
             asyncButNotSync.Count.ShouldBe(
@@ -270,5 +268,8 @@ namespace Stormpath.SDK.Tests.Integration
                 0,
                 $"These sync tests do not have a corresponding async test: {string.Join(", ", syncButNotAsync)}");
         }
+
+        private static string GetQualifiedMethodName(MethodInfo m)
+            => $"{m.DeclaringType.Name}.{m.Name}";
     }
 }

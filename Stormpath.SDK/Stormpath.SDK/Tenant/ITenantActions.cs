@@ -84,7 +84,7 @@ namespace Stormpath.SDK.Tenant
         /// Creates a new Provider-based Directory resource in the Tenant.
         /// </summary>
         /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
-        /// <param name="creationOptionsAction">An inline builder for aninstance of <see cref="IDirectoryCreationOptions"/>,
+        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
         /// which will be used when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
@@ -92,7 +92,7 @@ namespace Stormpath.SDK.Tenant
         Task<IDirectory> CreateDirectoryAsync(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new Provider-based Directory resource in the Tenant.
+        /// Creates a new Cloud- or Provider-based Directory resource in the Tenant.
         /// </summary>
         /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
         /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>

@@ -15,6 +15,8 @@
 // </copyright>
 
 using Stormpath.SDK.Impl.Account;
+using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Account
 {
@@ -34,12 +36,24 @@ namespace Stormpath.SDK.Account
         public bool? RegistrationWorkflowEnabled { get; set; }
 
         /// <summary>
+        /// Gets or sets the response options to apply to the request.
+        /// </summary>
+        /// <value>The response options to apply to the request.</value>
+        /// <example>
+        /// To request and cache custom data along with this request:
+        /// <code>
+        /// builder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+        /// </code>
+        /// </example>
+        public IRetrievalOptions<IAccount> ResponseOptions { get; } = new DefaultRetrievalOptions<IAccount>();
+
+        /// <summary>
         /// Creates a new <see cref="IAccountCreationOptions"/> instance based on the current builder state.
         /// </summary>
         /// <returns>A new <see cref="IAccountCreationOptions"/> based on the current builder state.</returns>
         public IAccountCreationOptions Build()
         {
-            return new DefaultAccountCreationOptions(this.RegistrationWorkflowEnabled);
+            return new DefaultAccountCreationOptions(this.RegistrationWorkflowEnabled, this.ResponseOptions);
         }
     }
 }

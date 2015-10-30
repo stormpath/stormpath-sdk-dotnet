@@ -1,4 +1,4 @@
-﻿// <copyright file="Sync_Directory_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Directory_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,11 +24,11 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
-    public class Sync_Directory_tests
+    public class Directory_tests
     {
         private readonly IntegrationTestFixture fixture;
 
-        public Sync_Directory_tests(IntegrationTestFixture fixture)
+        public Directory_tests(IntegrationTestFixture fixture)
         {
             this.fixture = fixture;
         }
@@ -78,6 +78,28 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_directory_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
+
+            var directory = client
+                .Instantiate<IDirectory>()
+                .SetName($"My New Directory With Options (.NET IT {this.fixture.TestRunIdentifier}) - Sync")
+                .SetDescription("Another great directory for my app")
+                .SetStatus(DirectoryStatus.Disabled);
+
+            tenant.CreateDirectory(directory, opt => opt.ResponseOptions.Expand(x => x.GetCustomData));
+
+            directory.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
+
+            // Cleanup
+            directory.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Modifying_directory(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
@@ -104,6 +126,31 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Cleanup
             updated.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Saving_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var tenant = client.GetCurrentTenant();
+
+            var directoryName = $"My New Directory #2 (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})";
+            var newDirectory = client.Instantiate<IDirectory>();
+            newDirectory.SetName(directoryName);
+            newDirectory.SetDescription("Put some accounts here!");
+            newDirectory.SetStatus(DirectoryStatus.Enabled);
+
+            var created = tenant.CreateDirectory(newDirectory);
+            created.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(created.Href);
+
+            created.SetDescription("foobar");
+            created.CustomData.Put("good", true);
+            created.Save(response => response.Expand(x => x.GetCustomDataAsync));
+
+            // Cleanup
+            created.Delete();
         }
 
         [Theory]

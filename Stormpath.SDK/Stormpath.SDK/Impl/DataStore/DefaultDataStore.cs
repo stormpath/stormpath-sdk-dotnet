@@ -208,6 +208,30 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create<T>(result.Body);
         }
 
+        Task<T> IDataStore.GetResourceAsync<T>(string href, Action<IRetrievalOptions<T>> options, CancellationToken cancellationToken)
+        {
+            var optionsInstance = new DefaultRetrievalOptions<T>();
+            options(optionsInstance);
+
+            var queryString = optionsInstance.ToString();
+            if (!string.IsNullOrEmpty(queryString))
+                href = $"{href}?{queryString}";
+
+            return this.AsAsyncInterface.GetResourceAsync<T>(href, cancellationToken);
+        }
+
+        T IDataStoreSync.GetResource<T>(string href, Action<IRetrievalOptions<T>> options)
+        {
+            var optionsInstance = new DefaultRetrievalOptions<T>();
+            options(optionsInstance);
+
+            var queryString = optionsInstance.ToString();
+            if (!string.IsNullOrEmpty(queryString))
+                href = $"{href}?{queryString}";
+
+            return this.AsSyncInterface.GetResource<T>(href);
+        }
+
         async Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
         {
             var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);
@@ -405,30 +429,44 @@ namespace Stormpath.SDK.Impl.DataStore
 
         Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
         {
-            var href = resource?.Href;
-            if (string.IsNullOrEmpty(href))
-                throw new ArgumentNullException(nameof(resource.Href));
-
-            return this.SaveCoreAsync<T, T>(
-                resource,
-                href,
-                queryParams: null,
-                create: false,
-                identityMapOptions: null,
-                cancellationToken: cancellationToken);
+            return this.AsAsyncInterface.SaveAsync<T>(resource, string.Empty, cancellationToken);
         }
 
         T IInternalSyncDataStore.Save<T>(T resource)
+        {
+            return this.AsSyncInterface.Save<T>(resource, string.Empty);
+        }
+
+        Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, string queryString, CancellationToken cancellationToken)
         {
             var href = resource?.Href;
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(resource.Href));
 
+            var queryParams = new QueryString(queryString);
+
+            return this.SaveCoreAsync<T, T>(
+                resource,
+                href,
+                queryParams: queryParams,
+                create: false,
+                identityMapOptions: null,
+                cancellationToken: cancellationToken);
+        }
+
+        T IInternalSyncDataStore.Save<T>(T resource, string queryString)
+        {
+            var href = resource?.Href;
+            if (string.IsNullOrEmpty(href))
+                throw new ArgumentNullException(nameof(resource.Href));
+
+            var queryParams = new QueryString(queryString);
+
             return this.SaveCore<T, T>(
                 resource,
                 href,
                 create: false,
-                queryParams: null,
+                queryParams: queryParams,
                 identityMapOptions: null);
         }
 
@@ -473,7 +511,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ArgumentNullException(nameof(href));
 
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
-            this.logger.Trace($"Asynchronously saving resource of type {typeof(T).Name} to {href}", "DefaultDataStore.SaveCoreAsync");
+            this.logger.Trace($"Asynchronously saving resource of type {typeof(T).Name} to {canonicalUri.ToString()}", "DefaultDataStore.SaveCoreAsync");
 
             IAsynchronousFilterChain chain = new DefaultAsynchronousFilterChain(this.defaultAsyncFilters as DefaultAsynchronousFilterChain)
                 .Add(new DefaultAsynchronousFilter(async (req, next, logger, ct) =>
@@ -499,7 +537,7 @@ namespace Stormpath.SDK.Impl.DataStore
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
 
                     if (responseIsProcessing)
-                        this.logger.Warn($"Received a 202 response, returning empty result. Href: '{href}'", "DefaultDataStore.SaveCoreAsync");
+                        this.logger.Warn($"Received a 202 response, returning empty result. Href: '{canonicalUri.ToString()}'", "DefaultDataStore.SaveCoreAsync");
 
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
@@ -541,7 +579,7 @@ namespace Stormpath.SDK.Impl.DataStore
             // This doesn't apply to CREATEs, though, because sometimes we need to POST a null body.
             bool nothingToPost = propertiesMap.IsNullOrEmpty();
             if (!create && nothingToPost)
-                return await this.AsAsyncInterface.GetResourceAsync<TReturned>(href, cancellationToken).ConfigureAwait(false);
+                return await this.AsAsyncInterface.GetResourceAsync<TReturned>(canonicalUri.ToString(), cancellationToken).ConfigureAwait(false);
 
             var requestAction = create
                 ? ResourceAction.Create
@@ -563,7 +601,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ArgumentNullException(nameof(href));
 
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
-            this.logger.Trace($"Synchronously saving resource of type {typeof(T).Name} to {href}", "DefaultDataStore.SaveCore");
+            this.logger.Trace($"Synchronously saving resource of type {typeof(T).Name} to {canonicalUri.ToString()}", "DefaultDataStore.SaveCore");
 
             ISynchronousFilterChain chain = new DefaultSynchronousFilterChain(this.defaultSyncFilters as DefaultSynchronousFilterChain)
                 .Add(new DefaultSynchronousFilter((req, next, logger) =>
@@ -589,7 +627,7 @@ namespace Stormpath.SDK.Impl.DataStore
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
 
                     if (responseIsProcessing)
-                        this.logger.Warn($"Received a 202 response, returning empty result. Href: '{href}'", "DefaultDataStore.SaveCoreAsync");
+                        this.logger.Warn($"Received a 202 response, returning empty result. Href: '{canonicalUri.ToString()}'", "DefaultDataStore.SaveCoreAsync");
 
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
@@ -631,7 +669,7 @@ namespace Stormpath.SDK.Impl.DataStore
             // This doesn't apply to CREATEs, though, because sometimes we need to POST a null body.
             bool nothingToPost = propertiesMap.IsNullOrEmpty();
             if (!create && nothingToPost)
-                return this.AsSyncInterface.GetResource<TReturned>(href);
+                return this.AsSyncInterface.GetResource<TReturned>(canonicalUri.ToString());
 
             var requestAction = create
                 ? ResourceAction.Create

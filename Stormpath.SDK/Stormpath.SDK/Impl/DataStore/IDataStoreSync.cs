@@ -14,6 +14,9 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using Stormpath.SDK.Resource;
+
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal interface IDataStoreSync
@@ -26,5 +29,15 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
         T GetResource<T>(string href);
+
+        /// <summary>
+        /// Synchronously retrieves the resource at the specified <paramref name="href"/> URL with the specified <see cref="options"/>,
+        /// and returns the resource as an instance of the specified class <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <param name="href">The resource URL of the resource to retrieve.</param>
+        /// <param name="responseOptions">The options to apply to this request.</param>
+        /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
+        T GetResource<T>(string href, Action<IRetrievalOptions<T>> responseOptions);
     }
 }

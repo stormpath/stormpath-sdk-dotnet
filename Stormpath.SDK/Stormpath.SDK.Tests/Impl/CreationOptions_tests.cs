@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
@@ -33,9 +35,9 @@ namespace Stormpath.SDK.Tests.Impl
     {
         private static readonly string BaseHref = "http://api.foobar.com";
 
-        private static void VerifyRequestContents(IRequestExecutor reqex, string queryString)
+        private static void VerifyRequestContents(IRequestExecutor executor, string queryString)
         {
-            reqex.Received()
+            executor.Received()
                 .ExecuteAsync(
                     Arg.Is<IHttpRequest>(request =>
                         request.CanonicalUri.ToString().EndsWith(queryString)),
@@ -93,26 +95,31 @@ namespace Stormpath.SDK.Tests.Impl
                 await this.VerifyThat(options, resultsInQueryString: "?createDirectory=Foobar+Directory");
             }
 
-            private bool isDisposed = false; // To detect redundant calls
-
-            protected virtual void Dispose(bool disposing)
+            [Fact]
+            public async Task Create_with_response_options()
             {
-                if (!this.isDisposed)
-                {
-                    if (disposing)
-                    {
-                        this.dataStore.Dispose();
-                    }
+                var optionsBuilder = new ApplicationCreationOptionsBuilder();
+                optionsBuilder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+                var options = optionsBuilder.Build();
 
-                    this.isDisposed = true;
-                }
+                await this.VerifyThat(options, resultsInQueryString: "?expand=customData");
             }
 
-            // This code added to correctly implement the disposable pattern.
+            [Fact]
+            public async Task Create_with_all_options()
+            {
+                var optionsBuilder = new ApplicationCreationOptionsBuilder();
+                optionsBuilder.CreateDirectory = true;
+                optionsBuilder.DirectoryName = "Foobar Directory";
+                optionsBuilder.ResponseOptions.Expand(x => x.GetAccounts, 0, 10);
+                var options = optionsBuilder.Build();
+
+                await this.VerifyThat(options, resultsInQueryString: "?createDirectory=Foobar+Directory&expand=accounts(offset:0,limit:10)");
+            }
+
             public void Dispose()
             {
-                // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-                this.Dispose(true);
+                this.dataStore.Dispose();
             }
         }
 
@@ -165,26 +172,116 @@ namespace Stormpath.SDK.Tests.Impl
                 await this.VerifyThat(options, resultsInQueryString: "?registrationWorkflowEnabled=false");
             }
 
-            private bool isDisposed = false; // To detect redundant calls
-
-            protected virtual void Dispose(bool disposing)
+            [Fact]
+            public async Task Create_with_response_options()
             {
-                if (!this.isDisposed)
-                {
-                    if (disposing)
-                    {
-                        this.dataStore.Dispose();
-                    }
+                var optionsBuilder = new AccountCreationOptionsBuilder();
+                optionsBuilder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+                var options = optionsBuilder.Build();
 
-                    this.isDisposed = true;
-                }
+                await this.VerifyThat(options, resultsInQueryString: "?expand=customData");
             }
 
-            // This code added to correctly implement the disposable pattern.
+            [Fact]
+            public async Task Create_with_all_options()
+            {
+                var optionsBuilder = new AccountCreationOptionsBuilder();
+                optionsBuilder.RegistrationWorkflowEnabled = true;
+                optionsBuilder.ResponseOptions.Expand(x => x.GetGroups, 0, 10);
+                var options = optionsBuilder.Build();
+
+                await this.VerifyThat(options, resultsInQueryString: "?expand=groups(offset:0,limit:10)&registrationWorkflowEnabled=true");
+            }
+
             public void Dispose()
             {
-                // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-                this.Dispose(true);
+                this.dataStore.Dispose();
+            }
+        }
+
+        public class Directory_options : IDisposable
+        {
+            private readonly IInternalAsyncDataStore dataStore;
+
+            public Directory_options()
+            {
+                this.dataStore = new StubDataStore(FakeJson.Directory, BaseHref);
+            }
+
+            private async Task VerifyThat(ICreationOptions options, string resultsInQueryString)
+            {
+                var newDirectory = this.dataStore.Instantiate<IDirectory>();
+                await this.dataStore.CreateAsync("/directories", newDirectory, options, CancellationToken.None);
+
+                VerifyRequestContents(this.dataStore.RequestExecutor, resultsInQueryString);
+            }
+
+            [Fact]
+            public async Task Create_with_response_options()
+            {
+                var optionsBuilder = new DirectoryCreationOptionsBuilder();
+                optionsBuilder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+                var options = optionsBuilder.Build();
+
+                await this.VerifyThat(options, resultsInQueryString: "?expand=customData");
+            }
+
+            [Fact]
+            public async Task Create_with_all_options()
+            {
+                var optionsBuilder = new DirectoryCreationOptionsBuilder();
+                optionsBuilder.ResponseOptions.Expand(x => x.GetGroups, 0, 10);
+                var options = optionsBuilder.Build();
+
+                await this.VerifyThat(options, resultsInQueryString: "?expand=groups(offset:0,limit:10)");
+            }
+
+            public void Dispose()
+            {
+                this.dataStore.Dispose();
+            }
+        }
+
+        public class Group_options : IDisposable
+        {
+            private readonly IInternalAsyncDataStore dataStore;
+
+            public Group_options()
+            {
+                this.dataStore = new StubDataStore(FakeJson.Group, BaseHref);
+            }
+
+            private async Task VerifyThat(ICreationOptions options, string resultsInQueryString)
+            {
+                var newGroup = this.dataStore.Instantiate<IDirectory>();
+                await this.dataStore.CreateAsync("/groups", newGroup, options, CancellationToken.None);
+
+                VerifyRequestContents(this.dataStore.RequestExecutor, resultsInQueryString);
+            }
+
+            [Fact]
+            public async Task Create_with_response_options()
+            {
+                var optionsBuilder = new GroupCreationOptionsBuilder();
+                optionsBuilder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+                var options = optionsBuilder.Build();
+
+                await this.VerifyThat(options, resultsInQueryString: "?expand=customData");
+            }
+
+            [Fact]
+            public async Task Create_with_all_options()
+            {
+                var optionsBuilder = new GroupCreationOptionsBuilder();
+                optionsBuilder.ResponseOptions.Expand(x => x.GetAccounts, 0, 10);
+                var options = optionsBuilder.Build();
+
+                await this.VerifyThat(options, resultsInQueryString: "?expand=accounts(offset:0,limit:10)");
+            }
+
+            public void Dispose()
+            {
+                this.dataStore.Dispose();
             }
         }
     }

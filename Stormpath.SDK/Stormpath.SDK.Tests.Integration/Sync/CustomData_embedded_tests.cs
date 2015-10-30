@@ -1,4 +1,4 @@
-﻿// <copyright file="Sync_CustomData_embedded_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="CustomData_embedded_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,11 +25,11 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
-    public class Sync_CustomData_embedded_tests
+    public class CustomData_embedded_tests
     {
         private readonly IntegrationTestFixture fixture;
 
-        public Sync_CustomData_embedded_tests(IntegrationTestFixture fixture)
+        public CustomData_embedded_tests(IntegrationTestFixture fixture)
         {
             this.fixture = fixture;
         }

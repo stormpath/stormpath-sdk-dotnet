@@ -64,7 +64,7 @@ namespace Stormpath.SDK.Tests.Integration
 
                     StaticLogger.Instance.Info($"Done cleaning up objects.");
 
-                    var filename = System.IO.Path.Combine(Environment.CurrentDirectory, "its.log");
+                    var filename = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "its.log");
                     StaticLogger.Instance.Info($"Saving log to file {filename}");
                     System.IO.File.WriteAllText(filename, StaticLogger.Instance.ToString());
                 }
@@ -87,6 +87,8 @@ namespace Stormpath.SDK.Tests.Integration
         public string PrimaryDirectoryHref { get; private set; }
 
         public string PrimaryGroupHref { get; private set; }
+
+        public string PrimaryAccountHref { get; private set; }
 
         public string TestRunIdentifier { get; private set; }
 
@@ -185,6 +187,9 @@ namespace Stormpath.SDK.Tests.Integration
                     .Where(x => x.Email.StartsWith("lskywalker"))
                     .SingleAsync();
                 await luke.AddGroupAsync(this.PrimaryGroupHref);
+
+                // Stash an account for easy access
+                this.PrimaryAccountHref = luke.Href;
             }
             catch (Exception e)
             {

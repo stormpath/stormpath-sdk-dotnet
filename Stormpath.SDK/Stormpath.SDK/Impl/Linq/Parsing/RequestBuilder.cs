@@ -49,6 +49,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 this.HandleOffset();
                 this.HandleOrderByThenBy();
                 this.HandleWhere();
+                this.HandleExpand();
             }
 
             var argumentList = this.arguments
@@ -257,6 +258,45 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
                 this.arguments.Add(term.FieldName, shorthandAttributeBuilder.ToString());
             }
+        }
+
+        private void HandleExpand()
+        {
+            if (!this.queryModel.ExpandTerms.Any())
+                return;
+
+            var expansionArgument = new StringBuilder();
+            bool addedOne = false;
+
+            foreach (var item in this.queryModel.ExpandTerms)
+            {
+                if (addedOne)
+                    expansionArgument.Append(",");
+
+                expansionArgument.Append(item.PropertyName);
+
+                bool hasSubparameters = item.Offset.HasValue || item.Limit.HasValue;
+                if (hasSubparameters)
+                    expansionArgument.Append("(");
+
+                if (item.Offset.HasValue)
+                    expansionArgument.Append($"offset:{item.Offset.Value}");
+
+                if (item.Limit.HasValue)
+                {
+                    if (item.Offset.HasValue)
+                        expansionArgument.Append(",");
+                    expansionArgument.Append($"limit:{item.Limit.Value}");
+                }
+
+                if (hasSubparameters)
+                    expansionArgument.Append(")");
+
+                addedOne = true;
+            }
+
+            if (addedOne)
+                this.arguments.Add("expand", expansionArgument.ToString());
         }
     }
 }

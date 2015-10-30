@@ -467,8 +467,8 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var request = new UsernamePasswordRequest("foo", "bar") as IAuthenticationRequest;
             var authenticator = new BasicAuthenticator(this.dataStore);
 
-            var result1 = authenticator.Authenticate("/loginAttempts", request);
-            var result2 = authenticator.Authenticate("/loginAttempts", request);
+            var result1 = authenticator.Authenticate("/loginAttempts", request, null);
+            var result2 = authenticator.Authenticate("/loginAttempts", request, null);
 
             // Not cached
             this.dataStore.RequestExecutor.Received(2).Execute(

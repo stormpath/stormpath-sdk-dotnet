@@ -1,4 +1,4 @@
-﻿// <copyright file="Sync_Account_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Account_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,11 +28,11 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
-    public class Sync_Account_tests
+    public class Account_tests
     {
         private readonly IntegrationTestFixture fixture;
 
-        public Sync_Account_tests(IntegrationTestFixture fixture)
+        public Account_tests(IntegrationTestFixture fixture)
         {
             this.fixture = fixture;
         }
@@ -110,6 +110,23 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // In 8 ABY of course
             saveResult.FullName.ShouldBe("Leia Organa Solo");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Saving_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var chewie = application
+                .GetAccounts()
+                .Synchronously()
+                .Where(a => a.Email == "chewie@kashyyyk.rim")
+                .Single();
+
+            chewie.SetUsername($"rwaaargh-{this.fixture.TestRunIdentifier}");
+            chewie.Save(response => response.Expand(x => x.GetCustomData));
         }
 
         [Theory]
@@ -468,6 +485,31 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_account_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var account = client
+                .Instantiate<IAccount>()
+                .SetGivenName("Galen")
+                .SetSurname("Marek")
+                .SetEmail("gmarek@kashyyk.rim")
+                .SetPassword(new RandomPassword(12));
+            application.CreateAccount(account, opt =>
+            {
+                opt.ResponseOptions.Expand(x => x.GetCustomData);
+            });
+
+            account.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            // Clean up
+            account.Delete();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Authenticating_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
@@ -480,6 +522,20 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var account = result.GetAccount();
             account.FullName.ShouldBe("Luke Skywalker");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Authenticating_account_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
+            var result = application.AuthenticateAccount(new UsernamePasswordRequest(username, "whataPieceofjunk$1138"), response => response.Expand(x => x.GetAccount));
+
+            result.ShouldBeAssignableTo<IAuthenticationResult>();
+            result.Success.ShouldBeTrue();
         }
 
         [Theory]

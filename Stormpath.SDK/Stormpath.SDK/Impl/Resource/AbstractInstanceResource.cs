@@ -41,10 +41,30 @@ namespace Stormpath.SDK.Impl.Resource
             return this.GetInternalAsyncDataStore().SaveAsync(this as T, cancellationToken);
         }
 
+        protected virtual Task<T> SaveAsync<T>(Action<IRetrievalOptions<T>> options, CancellationToken cancellationToken)
+            where T : class, IResource, ISaveable<T>
+        {
+            var optionsInstance = new DefaultRetrievalOptions<T>();
+            options(optionsInstance);
+            var queryString = optionsInstance.ToString();
+
+            return this.GetInternalAsyncDataStore().SaveAsync(this as T, queryString, cancellationToken);
+        }
+
         protected virtual T Save<T>()
             where T : class, IResource, ISaveable<T>
         {
             return this.GetInternalSyncDataStore().Save(this as T);
+        }
+
+        protected virtual T Save<T>(Action<IRetrievalOptions<T>> options)
+            where T : class, IResource, ISaveable<T>
+        {
+            var optionsInstance = new DefaultRetrievalOptions<T>();
+            options(optionsInstance);
+            var queryString = optionsInstance.ToString();
+
+            return this.GetInternalSyncDataStore().Save(this as T, queryString);
         }
     }
 }

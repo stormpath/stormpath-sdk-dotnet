@@ -34,6 +34,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using Stormpath.SDK.Impl.Linq.Parsing.Expressions;
 using Stormpath.SDK.Impl.Linq.Parsing.Expressions.ResultOperators;
 
@@ -44,12 +45,14 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private readonly List<Expression> expressions;
         private readonly Stack<Expression> orderByExpressions;
         private readonly Stack<Expression> whereExpressions;
+        private readonly Stack<Expression> expandExpressions;
 
         public DiscoveringExpressionVisitor()
         {
             this.expressions = new List<Expression>();
             this.orderByExpressions = new Stack<Expression>();
             this.whereExpressions = new Stack<Expression>();
+            this.expandExpressions = new Stack<Expression>();
         }
 
         public ReadOnlyCollection<Expression> Expressions
@@ -60,6 +63,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                     this.expressions
                         .Concat(this.orderByExpressions)
                         .Concat(this.whereExpressions)
+                        .Concat(this.expandExpressions)
                         .ToList());
             }
         }
@@ -72,7 +76,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 this.HandleThenByMethod(node) ||
                 this.HandleTakeMethod(node) ||
                 this.HandleSkipMethod(node) ||
-                this.HandleFilterExtensionMethod(node))
+                this.HandleFilterExtensionMethod(node) ||
+                this.HandleExpandExtensionMethod(node))
             {
                 this.Visit(node.Arguments[0]);
                 return node;
@@ -187,6 +192,49 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 throw new ArgumentException("Value passed to Filter operator is not supported.");
 
             this.expressions.Add(new FilterExpression((string)value.Value));
+
+            return true;
+        }
+
+        private bool HandleExpandExtensionMethod(MethodCallExpression node)
+        {
+            if (node.Method.Name != "Expand")
+                return false;
+
+            var methodCallExpression =
+                (((node.Arguments[1] as UnaryExpression)
+                    ?.Operand as LambdaExpression)
+                        ?.Body as UnaryExpression)
+                            ?.Operand as MethodCallExpression;
+            if (methodCallExpression == null)
+                throw new ArgumentException("Method selector passed to Expand operator could not be parsed.");
+
+            ConstantExpression methodExpression = null;
+
+            // TODO Mono 4.x bug - it compiles this expression differently
+            if (methodCallExpression.Object == null)
+            {
+                if (methodCallExpression.Arguments.Count > 2)
+                    methodExpression = methodCallExpression.Arguments[2] as ConstantExpression;
+            }
+            else
+            {
+                methodExpression = methodCallExpression.Object as ConstantExpression;
+            }
+
+            var targetMethod = methodExpression?.Value as MethodInfo;
+
+            if (targetMethod == null)
+                throw new ArgumentException("Method selector passed to Expand operator is not supported.");
+
+            int? offset = null, limit = null;
+            if (node.Arguments.Count > 2)
+            {
+                offset = (node.Arguments[2] as ConstantExpression)?.Value as int?;
+                limit = (node.Arguments[3] as ConstantExpression)?.Value as int?;
+            }
+
+            this.expandExpressions.Push(new ExpandExpression(targetMethod.Name, offset, limit));
 
             return true;
         }

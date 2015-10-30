@@ -1,4 +1,4 @@
-﻿// <copyright file="Sync_CustomData_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="CustomData_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,11 +27,11 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection("Live tenant tests")]
-    public class Sync_CustomData_tests
+    public class CustomData_tests
     {
         private readonly IntegrationTestFixture fixture;
 
-        public Sync_CustomData_tests(IntegrationTestFixture fixture)
+        public CustomData_tests(IntegrationTestFixture fixture)
         {
             this.fixture = fixture;
         }
@@ -132,6 +132,10 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             // Expected behavior: works the same as calling Delete (see Deleting_all_custom_data)
             updated.Clear();
             var result = updated.Save();
+
+            // Let the cache update
+            System.Threading.Thread.Sleep(100);
+
             var newCustomData = account.GetCustomData();
             newCustomData.Count().ShouldBe(3);
 

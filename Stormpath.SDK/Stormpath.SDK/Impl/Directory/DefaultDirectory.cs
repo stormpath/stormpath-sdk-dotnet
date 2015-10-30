@@ -21,6 +21,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
+using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
@@ -129,11 +130,23 @@ namespace Stormpath.SDK.Impl.Directory
         IAccount IAccountCreationActionsSync.CreateAccount(string givenName, string surname, string email, string password, object customData)
             => AccountCreationActionsShared.CreateAccount(this.GetInternalSyncDataStore(), this.Accounts.Href, givenName, surname, email, password, customData);
 
-        Task<IGroup> IDirectory.CreateGroupAsync(IGroup group, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().CreateAsync(this.Groups.Href, group, cancellationToken);
+        Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, CancellationToken cancellationToken)
+            => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, cancellationToken);
 
-        IGroup IDirectorySync.CreateGroup(IGroup group)
-            => this.GetInternalSyncDataStore().Create(this.Groups.Href, group);
+        IGroup IGroupCreationActionsSync.CreateGroup(IGroup group)
+            => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, group);
+
+        Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
+            => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, creationOptionsAction, cancellationToken);
+
+        IGroup IGroupCreationActionsSync.CreateGroup(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction)
+            => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, group, creationOptionsAction);
+
+        Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, IGroupCreationOptions creationOptions, CancellationToken cancellationToken)
+            => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, creationOptions, cancellationToken);
+
+        IGroup IGroupCreationActionsSync.CreateGroup(IGroup group, IGroupCreationOptions creationOptions)
+            => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, group, creationOptions);
 
         Task<IProvider> IDirectory.GetProviderAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup, cancellationToken);
@@ -158,6 +171,12 @@ namespace Stormpath.SDK.Impl.Directory
 
         IDirectory ISaveableSync<IDirectory>.Save()
             => this.Save<IDirectory>();
+
+        Task<IDirectory> ISaveableWithOptions<IDirectory>.SaveAsync(Action<IRetrievalOptions<IDirectory>> options, CancellationToken cancellationToken)
+             => this.SaveAsync(options, cancellationToken);
+
+        IDirectory ISaveableWithOptionsSync<IDirectory>.Save(Action<IRetrievalOptions<IDirectory>> options)
+             => this.Save(options);
 
         IAsyncQueryable<IAccount> IDirectory.GetAccounts()
             => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());

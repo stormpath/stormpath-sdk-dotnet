@@ -106,8 +106,8 @@ namespace Stormpath.SDK.Http
                 var key = RequestHelper.UrlEncode(x.Key, false, canonical);
                 var value = RequestHelper.UrlEncode(x.Value, false, canonical);
 
-                if (IsDatetimeSearchCriteria(key) && !canonical)
-                    value = FixDatetimeSearchEncoding(value);
+                if (!canonical)
+                    value = FixSearchSyntaxEncoding(value);
 
                 return $"{key}={value}";
             });
@@ -184,17 +184,19 @@ namespace Stormpath.SDK.Http
         }
 
         /// <summary>
-        /// The URLEncoded version of a datetime search criteria string is over-encoded; we need to leave some symbols unencoded.
+        /// <see cref="RequestHelper.UrlEncode(string, bool, bool)"/> over-encodes some symbols used in search syntax; we want to revert them.
         /// </summary>
         /// <param name="encodedValue">URLEncoded datetime search criteria string</param>
         /// <returns>Properly encoded Stormpath datetime search criteria string</returns>
-        private static string FixDatetimeSearchEncoding(string encodedValue)
+        private static string FixSearchSyntaxEncoding(string encodedValue)
         {
             return encodedValue
                 .Replace("%5B", "[")
                 .Replace("%5D", "]")
                 .Replace("%3A", ":")
-                .Replace("%2C", ",");
+                .Replace("%2C", ",")
+                .Replace("%28", "(")
+                .Replace("%29", ")");
         }
 
         private static Dictionary<string, string> ToSortedDictionary(IEnumerable<KeyValuePair<string, string>> queryParams)

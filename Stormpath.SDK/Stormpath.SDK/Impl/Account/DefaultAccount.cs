@@ -196,6 +196,12 @@ namespace Stormpath.SDK.Impl.Account
         IAccount ISaveableSync<IAccount>.Save()
              => this.Save<IAccount>();
 
+        Task<IAccount> ISaveableWithOptions<IAccount>.SaveAsync(Action<IRetrievalOptions<IAccount>> options, CancellationToken cancellationToken)
+             => this.SaveAsync(options, cancellationToken);
+
+        IAccount ISaveableWithOptionsSync<IAccount>.Save(Action<IRetrievalOptions<IAccount>> options)
+             => this.Save(options);
+
         Task<IGroupMembership> IAccount.AddGroupAsync(IGroup group, CancellationToken cancellationToken)
             => DefaultGroupMembership.CreateAsync(this, group, this.GetInternalAsyncDataStore(), cancellationToken);
 

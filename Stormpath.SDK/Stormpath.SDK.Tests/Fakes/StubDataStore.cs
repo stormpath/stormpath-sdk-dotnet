@@ -63,6 +63,9 @@ namespace Stormpath.SDK.Tests.Fakes
         Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
             => this.ProxyDataStore.GetResourceAsync<T>(href, cancellationToken);
 
+        Task<T> IDataStore.GetResourceAsync<T>(string href, Action<IRetrievalOptions<T>> options, CancellationToken cancellationToken)
+            => this.ProxyDataStore.GetResourceAsync<T>(href, options, cancellationToken);
+
         Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
             => this.ProxyAsyncDataStore.GetResourceAsync<T>(href, identityMapOptions, cancellationToken);
 
@@ -123,6 +126,12 @@ namespace Stormpath.SDK.Tests.Fakes
         Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
             => this.ProxyAsyncDataStore.SaveAsync(resource, cancellationToken);
 
+        T IInternalSyncDataStore.Save<T>(T resource, string queryString)
+            => this.ProxySyncDataStore.Save(resource, queryString);
+
+        Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, string queryString, CancellationToken cancellationToken)
+            => this.ProxyAsyncDataStore.SaveAsync(resource, queryString, cancellationToken);
+
         bool IInternalSyncDataStore.DeleteProperty(string parentHref, string propertyName)
         {
             throw new NotImplementedException();
@@ -162,6 +171,11 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
+        }
+
+        T IDataStoreSync.GetResource<T>(string href, Action<IRetrievalOptions<T>> options)
+        {
+            throw new NotImplementedException();
         }
     }
 }

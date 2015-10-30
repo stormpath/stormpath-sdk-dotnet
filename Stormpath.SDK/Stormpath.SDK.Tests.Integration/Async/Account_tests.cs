@@ -112,6 +112,22 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Saving_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var chewie = await application
+                .GetAccounts()
+                .Where(a => a.Email == "chewie@kashyyyk.rim")
+                .SingleAsync();
+
+            chewie.SetUsername($"rwaaargh-{this.fixture.TestRunIdentifier}");
+            await chewie.SaveAsync(response => response.Expand(x => x.GetCustomDataAsync));
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Getting_account_directory(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
@@ -450,6 +466,31 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_account_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var account = client
+                .Instantiate<IAccount>()
+                .SetGivenName("Galen")
+                .SetSurname("Marek")
+                .SetEmail("gmarek@kashyyk.rim")
+                .SetPassword(new RandomPassword(12));
+            await application.CreateAccountAsync(account, opt =>
+            {
+                opt.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+            });
+
+            account.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            // Clean up
+            await account.DeleteAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Authenticating_account(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
@@ -462,6 +503,20 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var account = await result.GetAccountAsync();
             account.FullName.ShouldBe("Luke Skywalker");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Authenticating_account_with_response_options(TestClientBuilder clientBuilder)
+        {
+            var client = clientBuilder.Build();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
+            var result = await application.AuthenticateAccountAsync(new UsernamePasswordRequest(username, "whataPieceofjunk$1138"), response => response.Expand(x => x.GetAccountAsync));
+
+            result.ShouldBeAssignableTo<IAuthenticationResult>();
+            result.Success.ShouldBeTrue();
         }
 
         [Theory]

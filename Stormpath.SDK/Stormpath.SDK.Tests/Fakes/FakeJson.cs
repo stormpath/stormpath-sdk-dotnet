@@ -526,6 +526,24 @@ namespace Stormpath.SDK.Tests.Fakes
 
         #endregion
 
+        #region Account store mapping
+
+        public static readonly string AccountStoreMapping = @"
+{
+    ""accountStore"": {
+        ""href"": ""https://api.stormpath.com/v1/directories/directory1""
+    },
+    ""application"": {
+        ""href"": ""https://api.stormpath.com/v1/applications/foobarApplication""
+    },
+    ""href"": ""https://api.stormpath.com/v1/accountStoreMappings/foobarASM"",
+    ""isDefaultAccountStore"": true,
+    ""isDefaultGroupStore"": true,
+    ""listIndex"": 0
+}";
+
+        #endregion
+
         #region Application 'Lightsabers Galore'
 
         public static readonly string Application = @"
@@ -902,6 +920,21 @@ namespace Stormpath.SDK.Tests.Fakes
     ""limit"": 25,
     ""offset"": 0,
     ""size"": 2
+}";
+
+        #endregion
+
+        #region Group membership
+
+        public static readonly string GroupMembership = @"
+{
+    ""account"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/dcQvuLVsF48MKEnv8lrGU""
+    },
+    ""group"": {
+        ""href"": ""https://api.stormpath.com/v1/groups/56ka3Sg8VIBMnwGg3fw9y""
+    },
+    ""href"": ""https://api.stormpath.com/v1/groupMemberships/dohrFxk4XyyAMQZ6uEfog""
 }";
 
         #endregion

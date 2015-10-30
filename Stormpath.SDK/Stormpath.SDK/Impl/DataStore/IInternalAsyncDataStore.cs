@@ -54,6 +54,9 @@ namespace Stormpath.SDK.Impl.DataStore
         Task<T> SaveAsync<T>(T resource, CancellationToken cancellationToken)
             where T : class, IResource, ISaveable<T>;
 
+        Task<T> SaveAsync<T>(T resource, string queryString, CancellationToken cancellationToken)
+            where T : class, IResource, ISaveable<T>;
+
         Task<bool> DeleteAsync<T>(T resource, CancellationToken cancellationToken)
             where T : class, IResource, IDeletable;
 

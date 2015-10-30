@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Sync
         /// Provides synchronous access to a collection resource.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <param name="source">A sequence of values to order.</param>
+        /// <param name="source">An asynchronous data source to query synchronously.</param>
         /// <returns>A <see cref="IQueryable{T}"/> that will execute all requests synchronously.</returns>
         public static IQueryable<TSource> Synchronously<TSource>(this IAsyncQueryable<TSource> source)
         {

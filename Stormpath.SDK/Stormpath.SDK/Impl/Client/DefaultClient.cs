@@ -152,8 +152,14 @@ namespace Stormpath.SDK.Impl.Client
         Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
             => this.dataStoreAsync.GetResourceAsync<T>(href, cancellationToken);
 
+        Task<T> IDataStore.GetResourceAsync<T>(string href, Action<SDK.Resource.IRetrievalOptions<T>> options, CancellationToken cancellationToken)
+            => this.dataStoreAsync.GetResourceAsync(href, options, cancellationToken);
+
         T IDataStoreSync.GetResource<T>(string href)
             => this.dataStoreSync.GetResource<T>(href);
+
+        T IDataStoreSync.GetResource<T>(string href, Action<SDK.Resource.IRetrievalOptions<T>> options)
+            => this.dataStoreAsync.GetResource(href, options);
 
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {

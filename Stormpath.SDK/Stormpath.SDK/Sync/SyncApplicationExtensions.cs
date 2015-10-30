@@ -22,6 +22,7 @@ using Stormpath.SDK.Auth;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
@@ -41,11 +42,35 @@ namespace Stormpath.SDK.Sync
         /// </returns>
         /// <exception cref="SDK.Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
-        ///     var loginRequest = new UsernamePasswordRequest("jsmith", "Password123#");
-        ///     var result = myApp.AuthenticateAccount(loginRequest);
+        /// <code>
+        /// var loginRequest = new UsernamePasswordRequest("jsmith", "Password123#");
+        /// var result = myApp.AuthenticateAccount(loginRequest);
+        /// </code>
         /// </example>
         public static IAuthenticationResult AuthenticateAccount(this IApplication application, IAuthenticationRequest request)
             => (application as IApplicationSync).AuthenticateAccount(request);
+
+        /// <summary>
+        /// Synchronously authenticates an account's submitted principals and credentials (e.g. username and password).
+        /// The account must be in one of the Application's assigned account stores.
+        /// If not in an assigned account store, the authentication attempt will fail.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. <see cref="UsernamePasswordRequest"/>).</param>
+        /// <param name="responseOptions">The options to apply to this request.</param>
+        /// <returns>
+        /// A Task whose result is the result of the authentication.
+        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// </returns>
+        /// <exception cref="SDK.Error.ResourceException">The authentication attempt failed.</exception>
+        /// <example>
+        /// To request and cache the account details:
+        /// <code>
+        /// var result = myApp.AuthenticateAccount(new UsernamePasswordRequest("jsmith", "Password123#"), response => response.Expand(x => x.GetAccount));
+        /// </code>
+        /// </example>
+        public static IAuthenticationResult AuthenticateAccount(this IApplication application, IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions)
+            => (application as IApplicationSync).AuthenticateAccount(request, responseOptions);
 
         /// <summary>
         /// Synchronously authenticates an account's submitted principals and credentials (e.g. username and password).
@@ -61,7 +86,9 @@ namespace Stormpath.SDK.Sync
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
-        ///     var result = myApp.AuthenticateAccount("jsmith", "Password123#");
+        /// <code>
+        /// var result = myApp.AuthenticateAccount("jsmith", "Password123#");
+        /// </code>
         /// </example>
         public static IAuthenticationResult AuthenticateAccount(this IApplication application, string username, string password)
             => (application as IApplicationSync).AuthenticateAccount(username, password);
@@ -146,20 +173,6 @@ namespace Stormpath.SDK.Sync
         /// <returns>This account's tenant.</returns>
         public static ITenant GetTenant(this IApplication application)
             => (application as IApplicationSync).GetTenant();
-
-        /// <summary>
-        /// Synchronously creates a new <see cref="IGroup"/> that may be used by this application in the application's <see cref="GetDefaultGroupStoreAsync(CancellationToken)"/>.
-        /// <para>This is a convenience method. It merely delegates to the application's designated default group store.</para>
-        /// </summary>
-        /// <param name="application">The application.</param>
-        /// <param name="group">The group to create/persist.</param>
-        /// <returns>The new <see cref="IGroup"/> that may be used by this application.</returns>
-        /// <exception cref="Error.ResourceException">
-        /// The application does not have a designated default group store, or the
-        /// designated default group store does not allow new groups to be created.
-        /// </exception>
-        public static IGroup CreateGroup(this IApplication application, IGroup group)
-            => (application as IApplicationSync).CreateGroup(group);
 
         /// <summary>
         /// Synchronously verifies the password reset token (received in the user's email) and immediately

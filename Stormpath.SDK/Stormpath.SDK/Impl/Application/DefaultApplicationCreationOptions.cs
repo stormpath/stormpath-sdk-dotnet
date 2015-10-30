@@ -14,7 +14,11 @@
 // limitations under the License.
 // </copyright>
 
+using System.Collections.Generic;
+using System.Linq;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -22,11 +26,13 @@ namespace Stormpath.SDK.Impl.Application
     {
         private readonly bool createDirectory;
         private readonly string directoryName;
+        private readonly IRetrievalOptions<IApplication> responseOptions;
 
-        public DefaultApplicationCreationOptions(bool createDirectory, string directoryName)
+        public DefaultApplicationCreationOptions(bool createDirectory, string directoryName, IRetrievalOptions<IApplication> responseOptions)
         {
             this.createDirectory = createDirectory;
             this.directoryName = directoryName;
+            this.responseOptions = responseOptions;
         }
 
         bool IApplicationCreationOptions.CreateDirectory => this.createDirectory;
@@ -37,15 +43,17 @@ namespace Stormpath.SDK.Impl.Application
 
         public string GetQueryString()
         {
-            var argument = string.Empty;
+            var arguments = new List<string>(2);
 
             if (this.createDirectory)
-            {
-                argument = "createDirectory=" +
-                    (this.IsDirectoryNameSpecified ? this.directoryName : "true");
-            }
+                arguments.Add("createDirectory=" + (this.IsDirectoryNameSpecified ? this.directoryName : "true"));
 
-            return argument;
+            if (this.responseOptions != null)
+                arguments.Add(this.responseOptions.ToString());
+
+            return arguments
+                .Where(x => !string.IsNullOrEmpty(x))
+                .Join("&");
         }
     }
 }

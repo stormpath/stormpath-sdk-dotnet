@@ -31,7 +31,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
     {
         private static string[] GetArguments(string href)
         {
-            return href.Split('?')[1].Split('&');
+            return href
+                .Split('?')[1]
+                .Split('&');
         }
 
         [Fact]
@@ -75,6 +77,26 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             arguments.ShouldContain("givenName=foo");
             arguments.ShouldContain("createdAt=[2015-01-01T00:00:00Z,2015-06-30T00:00:00Z)");
             arguments.Count().ShouldBe(6);
+        }
+
+        [Fact]
+        public void Case_3()
+        {
+            var query = this.Harness.Queryable
+                .Filter("luke")
+                .Expand(x => x.GetCustomDataAsync)
+                .Expand(x => x.GetDirectoryAsync)
+                .Where(x => x.Status == AccountStatus.Unverified)
+                .Expand(x => x.GetGroups, 10, 10)
+                .Take(2);
+
+            var arguments = GetArguments(query.GetGeneratedHref());
+
+            arguments.ShouldContain("q=luke");
+            arguments.ShouldContain("expand=customData,directory,groups(offset:10,limit:10)");
+            arguments.ShouldContain("status=UNVERIFIED");
+            arguments.ShouldContain("limit=2");
+            arguments.Count().ShouldBe(4);
         }
     }
 }

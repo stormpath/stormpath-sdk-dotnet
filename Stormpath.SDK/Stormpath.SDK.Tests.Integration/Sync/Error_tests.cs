@@ -1,4 +1,4 @@
-﻿// <copyright file="Sync_Tenant_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Error_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,24 +15,34 @@
 // </copyright>
 
 using Shouldly;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Error;
 using Stormpath.SDK.Sync;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Sync
 {
-    [CollectionDefinition("Live tenant tests")]
-    public class Sync_Tenant_tests
+    public class Error_tests
     {
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public void Getting_current_tenant(TestClientBuilder clientBuilder)
+        public void When_resource_does_not_exist(TestClientBuilder clientBuilder)
         {
             var client = clientBuilder.Build();
             var tenant = client.GetCurrentTenant();
 
-            tenant.ShouldNotBe(null);
-            tenant.Href.ShouldNotBe(null);
-            tenant.Name.ShouldNotBe(null);
+            try
+            {
+                var bad = client.GetResource<IAccount>(tenant.Href + "/foobar");
+            }
+            catch (ResourceException rex)
+            {
+                rex.Code.ShouldBe(404);
+                rex.DeveloperMessage.ShouldBe("The requested resource does not exist.");
+                rex.Message.ShouldNotBe(null);
+                rex.MoreInfo.ShouldNotBe(null);
+                rex.HttpStatus.ShouldBe(404);
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
@@ -164,6 +165,11 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         public Task<IProviderData> GetProviderDataAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IAccount> SaveAsync(Action<IRetrievalOptions<IAccount>> options, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }

@@ -27,5 +27,9 @@ namespace Stormpath.SDK.Impl.Linq
         public static MethodInfo GetMethodInfo<T1, T2>(Func<T1, T2> func, T1 ignored) => func.Method;
 
         public static MethodInfo GetMethodInfo<T1, T2, T3>(Func<T1, T2, T3> func, T1 ignored1, T2 ignored2) => func.Method;
+
+        public static MethodInfo GetMethodInfo<T1, T2, T3, T4>(Func<T1, T2, T3, T4> func, T1 ignored1, T2 ignored2, T3 ignored3) => func.Method;
+
+        public static MethodInfo GetMethodInfo<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5> func, T1 ignored1, T2 ignored2, T3 ignored3, T4 ignored4) => func.Method;
     }
 }

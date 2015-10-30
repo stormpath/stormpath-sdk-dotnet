@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
@@ -31,6 +32,18 @@ namespace Stormpath.SDK.Sync
         public static T Save<T>(this ISaveable<T> resource)
             where T : IResource
             => (resource as ISaveableSync<T>).Save();
+
+        /// <summary>
+        /// Synchronously reates or updates the resource, and returns the persisted resource data with the specified <paramref name="responseOptions"/>.
+        /// </summary>
+        /// <param name="resource">The resource.</param>
+        /// <param name="responseOptions">The options to apply to this request.</param>
+        /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
+        /// <returns>The persisted resource data.</returns>
+        /// <exception cref="Error.ResourceException">The save operation failed.</exception>
+        public static T Save<T>(this ISaveableWithOptions<T> resource, Action<IRetrievalOptions<T>> responseOptions)
+            where T : IResource
+            => (resource as ISaveableWithOptionsSync<T>).Save(responseOptions);
 
         /// <summary>
         /// Synchronously deletes the resource.

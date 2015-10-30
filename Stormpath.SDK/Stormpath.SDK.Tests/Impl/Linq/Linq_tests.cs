@@ -16,33 +16,41 @@
 
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tests.Helpers;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Linq_tests
+    public class Linq_tests : Linq_tests<IAccount>
+    {
+    }
+
+#pragma warning disable SA1402 // Files must only contain one class
+    public class Linq_tests<T>
+        where T : class, IResource
     {
         private static string href = "http://f.oo/bar";
-        private CollectionTestHarness<IAccount> harness;
+        private CollectionTestHarness<T> harness;
 
         public Linq_tests()
         {
             // Default test harness. Child classes can overwrite
-            this.harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href);
+            this.harness = CollectionTestHarness<T>.Create<T>(this.Href);
         }
 
         internal Linq_tests(IInternalDataStore ds)
         {
-            this.harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, ds as IInternalAsyncDataStore);
+            this.harness = CollectionTestHarness<T>.Create<T>(this.Href, ds as IInternalAsyncDataStore);
         }
 
         protected string Href => href;
 
-        protected CollectionTestHarness<IAccount> Harness
+        protected CollectionTestHarness<T> Harness
         {
             get { return this.harness; }
 
             set { this.harness = value; }
         }
     }
+#pragma warning restore SA1402 // Files must only contain one class
 }
