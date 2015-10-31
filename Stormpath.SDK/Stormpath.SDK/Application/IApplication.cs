@@ -306,7 +306,7 @@ namespace Stormpath.SDK.Application
         /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>, or <c>null</c> if there is no Directory matching the query.</returns>
         /// <exception cref="Error.ResourceException">The found <see cref="IDirectory"/> already exists as an account store in the application.</exception>
         /// <exception cref="ArgumentException">The query matches more than one Directory in the current Tenant.</exception>
-        Task<IAccountStoreMapping> AddAccountStoreAsync(Action<IAsyncQueryable<IDirectory>> directoryQuery, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IAccountStoreMapping> AddAccountStoreAsync(Func<IAsyncQueryable<IDirectory>, IAsyncQueryable<IDirectory>> directoryQuery, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Adds a <see cref="IGroup"/> as a new <see cref="IAccountStore"/> to this Application. The provided <see cref="IAsyncQueryable{IGroup}"/>
@@ -317,7 +317,7 @@ namespace Stormpath.SDK.Application
         /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>, or <c>null</c> if there is no Group matching the query.</returns>
         /// <exception cref="Error.ResourceException">The found <see cref="IGroup"/> already exists as an account store in the application.</exception>
         /// <exception cref="ArgumentException">The query matches more than one Group in the current Tenant.</exception>
-        Task<IAccountStoreMapping> AddAccountStoreAsync(Action<IAsyncQueryable<IGroup>> groupQuery, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IAccountStoreMapping> AddAccountStoreAsync(Func<IAsyncQueryable<IGroup>, IAsyncQueryable<IGroup>> groupQuery, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Verifies the password reset token (received in the user's email) and immediately

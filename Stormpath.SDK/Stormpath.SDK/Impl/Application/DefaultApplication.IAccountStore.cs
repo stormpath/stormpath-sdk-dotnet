@@ -202,8 +202,8 @@ namespace Stormpath.SDK.Impl.Application
             // Could not find any resource matching the hrefOrName value
             return null;
         }
-
-        async Task<IAccountStoreMapping> IApplication.AddAccountStoreAsync(Action<IAsyncQueryable<IDirectory>> directoryQuery, CancellationToken cancellationToken)
+        // above this I am done testing!
+        async Task<IAccountStoreMapping> IApplication.AddAccountStoreAsync(Func<IAsyncQueryable<IDirectory>, IAsyncQueryable<IDirectory>> directoryQuery, CancellationToken cancellationToken)
         {
             if (directoryQuery == null)
                 throw new ArgumentNullException(nameof(directoryQuery));
@@ -216,7 +216,7 @@ namespace Stormpath.SDK.Impl.Application
             return null;
         }
 
-        async Task<IAccountStoreMapping> IApplication.AddAccountStoreAsync(Action<IAsyncQueryable<IGroup>> groupQuery, CancellationToken cancellationToken)
+        async Task<IAccountStoreMapping> IApplication.AddAccountStoreAsync(Func<IAsyncQueryable<IGroup>, IAsyncQueryable<IGroup>> groupQuery, CancellationToken cancellationToken)
         {
             if (groupQuery == null)
                 throw new ArgumentNullException(nameof(groupQuery));
@@ -229,14 +229,14 @@ namespace Stormpath.SDK.Impl.Application
             return null;
         }
 
-        private async Task<IDirectory> GetSingleTenantDirectoryAsync(Action<IAsyncQueryable<IDirectory>> queryAction, CancellationToken cancellationToken)
+        private async Task<IDirectory> GetSingleTenantDirectoryAsync(Func<IAsyncQueryable<IDirectory>, IAsyncQueryable<IDirectory>> queryAction, CancellationToken cancellationToken)
         {
             if (queryAction == null)
                 throw new ArgumentNullException(nameof(queryAction));
 
             var tenant = await this.AsInterface.GetTenantAsync(cancellationToken).ConfigureAwait(false);
             var queryable = tenant.GetDirectories();
-            queryAction(queryable);
+            queryable = queryAction(queryable);
 
             IDirectory foundDirectory = null;
             await queryable.ForEachAsync(
@@ -251,14 +251,14 @@ namespace Stormpath.SDK.Impl.Application
             return foundDirectory;
         }
 
-        private async Task<IGroup> GetSingleTenantGroupAsync(Action<IAsyncQueryable<IGroup>> queryAction, CancellationToken cancellationToken)
+        private async Task<IGroup> GetSingleTenantGroupAsync(Func<IAsyncQueryable<IGroup>, IAsyncQueryable<IGroup>> queryAction, CancellationToken cancellationToken)
         {
             if (queryAction == null)
                 throw new ArgumentNullException(nameof(queryAction));
 
             var tenant = await this.AsInterface.GetTenantAsync(cancellationToken).ConfigureAwait(false);
             var queryable = tenant.GetGroups();
-            queryAction(queryable);
+            queryable = queryAction(queryable);
 
             IGroup foundGroup = null;
             await queryable.ForEachAsync(
