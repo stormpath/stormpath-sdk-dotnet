@@ -102,6 +102,11 @@
     <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreMappingSync.cs" />
     <Compile Include="Impl\Account\AccountCreationActionsShared.cs" />
+    <Compile Include="Impl\Account\DefaultAccount.Collections.cs" />
+    <Compile Include="Impl\Account\DefaultAccount.IGroup.cs" />
+    <Compile Include="Impl\Account\DefaultAccount.IGroupSync.cs" />
+    <Compile Include="Impl\Account\DefaultAccount.Resources.cs" />
+    <Compile Include="Impl\Account\DefaultAccount.ResourcesSync.cs" />
     <Compile Include="Impl\Account\DefaultAccountCreationOptions.cs" />
     <Compile Include="Impl\Account\DefaultEmailVerificationToken.cs" />
     <Compile Include="Impl\Account\DefaultPasswordResetToken.cs" />
@@ -130,6 +135,10 @@
     <Compile Include="Impl\Cache\NullCacheProvider.cs" />
     <Compile Include="Impl\Cache\DefaultCacheResolver.cs" />
     <Compile Include="Impl\Cache\ICacheResolver.cs" />
+    <Compile Include="Impl\Client\DefaultClient.Collections.cs" />
+    <Compile Include="Impl\Client\DefaultClient.IDataStore.cs" />
+    <Compile Include="Impl\Client\DefaultClient.ITenantActions.cs" />
+    <Compile Include="Impl\Client\DefaultClient.ITenantActionsSync.cs" />
     <Compile Include="Impl\Client\DefaultJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\DefaultHttpClientBuilder.cs" />
     <Compile Include="Impl\CustomData\ICustomDataSync.cs" />
