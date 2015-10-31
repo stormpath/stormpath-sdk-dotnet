@@ -592,5 +592,121 @@ namespace Stormpath.SDK.Tests.Integration.Async
             (await testGroup.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedGroupHrefs.Remove(testGroup.Href);
         }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task New_Adding_directory_as_account_store_to_application_by_query(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Directory By Query Test Application",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            var directoryName = (await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref)).Name;
+            var mapping = await createdApplication
+                .AddAccountStoreAsync<IDirectory>(dirs => dirs.Where(d => d.Name == directoryName));
+
+            (await mapping.GetAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
+
+            mapping.IsDefaultAccountStore.ShouldBeFalse();
+            mapping.IsDefaultGroupStore.ShouldBeFalse();
+            mapping.ListIndex.ShouldBe(0);
+
+            // Clean up
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task New_Adding_group_as_account_store_to_application_by_query(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group Test Application",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            var groupName = (await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref)).Name;
+            var mapping = await createdApplication
+                .AddAccountStoreAsync<IGroup>(groups => groups.Where(g => g.Name == groupName));
+
+            (await mapping.GetAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryGroupHref);
+            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
+
+            mapping.IsDefaultAccountStore.ShouldBeFalse();
+            mapping.IsDefaultGroupStore.ShouldBeFalse();
+            mapping.ListIndex.ShouldBe(0);
+
+            // Clean up
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task New_Adding_directory_as_account_store_to_application_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Directory By Query Test Application",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            //might need to create another dummy directory here to ensure multiple results
+            var mapping = await createdApplication
+                .AddAccountStoreAsync<IDirectory>(allDirs => allDirs);
+
+            (await mapping.GetAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
+
+            mapping.IsDefaultAccountStore.ShouldBeFalse();
+            mapping.IsDefaultGroupStore.ShouldBeFalse();
+            mapping.ListIndex.ShouldBe(0);
+
+            // Clean up
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task New_Adding_group_as_account_store_to_application_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group Test Application",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            //might need to create another dummy group here to ensure multiple results
+            var mapping = await createdApplication
+                .AddAccountStoreAsync<IGroup>(allGroups => allGroups);
+
+            (await mapping.GetAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryGroupHref);
+            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
+
+            mapping.IsDefaultAccountStore.ShouldBeFalse();
+            mapping.IsDefaultGroupStore.ShouldBeFalse();
+            mapping.ListIndex.ShouldBe(0);
+
+            // Clean up
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
     }
 }

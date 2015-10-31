@@ -202,28 +202,27 @@ namespace Stormpath.SDK.Impl.Application
             // Could not find any resource matching the hrefOrName value
             return null;
         }
+
         // above this I am done testing!
-        async Task<IAccountStoreMapping> IApplication.AddAccountStoreAsync(Func<IAsyncQueryable<IDirectory>, IAsyncQueryable<IDirectory>> directoryQuery, CancellationToken cancellationToken)
+        async Task<IAccountStoreMapping> IApplication.AddAccountStoreAsync<T>(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query, CancellationToken cancellationToken)
         {
-            if (directoryQuery == null)
-                throw new ArgumentNullException(nameof(directoryQuery));
+            if (query == null)
+                throw new ArgumentNullException(nameof(query));
 
-            var directory = await this.GetSingleTenantDirectoryAsync(directoryQuery, cancellationToken).ConfigureAwait(false);
-            if (directory != null)
-                return await this.AsInterface.AddAccountStoreAsync(directory, cancellationToken).ConfigureAwait(false);
+            IAccountStore foundAccountStore = null;
+            if (typeof(T) == typeof(IDirectory))
+            {
+                var directoryQuery = query as Func<IAsyncQueryable<IDirectory>, IAsyncQueryable<IDirectory>>;
+                foundAccountStore = await this.GetSingleTenantDirectoryAsync(directoryQuery, cancellationToken).ConfigureAwait(false);
+            }
+            else if (typeof(T) == typeof(IGroup))
+            {
+                var groupQuery = query as Func<IAsyncQueryable<IGroup>, IAsyncQueryable<IGroup>>;
+                foundAccountStore = await this.GetSingleTenantGroupAsync(groupQuery, cancellationToken).ConfigureAwait(false);
+            }
 
-            // No account store can be added
-            return null;
-        }
-
-        async Task<IAccountStoreMapping> IApplication.AddAccountStoreAsync(Func<IAsyncQueryable<IGroup>, IAsyncQueryable<IGroup>> groupQuery, CancellationToken cancellationToken)
-        {
-            if (groupQuery == null)
-                throw new ArgumentNullException(nameof(groupQuery));
-
-            var group = await this.GetSingleTenantGroupAsync(groupQuery, cancellationToken).ConfigureAwait(false);
-            if (group != null)
-                return await this.AsInterface.AddAccountStoreAsync(group, cancellationToken).ConfigureAwait(false);
+            if (foundAccountStore != null)
+                return await this.AsInterface.AddAccountStoreAsync(foundAccountStore, cancellationToken).ConfigureAwait(false);
 
             // No account store can be added
             return null;
