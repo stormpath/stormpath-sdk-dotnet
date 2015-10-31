@@ -51,7 +51,6 @@ namespace Stormpath.SDK.Impl.Application
         }
 
         // none of the below have been tested
-
         void IApplicationSync.SetDefaultAccountStore(IAccountStore accountStore)
         {
             if (string.IsNullOrEmpty(accountStore?.Href))
@@ -127,7 +126,6 @@ namespace Stormpath.SDK.Impl.Application
                 .SetListIndex(int.MaxValue);
 
             return this.AsInterface.CreateAccountStoreMapping(accountStoreMapping);
-
         }
 
         IAccountStoreMapping IApplicationSync.AddAccountStore(string hrefOrName)

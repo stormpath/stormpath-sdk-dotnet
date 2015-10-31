@@ -360,7 +360,7 @@ namespace Stormpath.SDK
 
         /// <summary>
         /// Asynchronously iterates over the input sequence and performs the specified action on each element of the <see cref="IAsyncQueryable{T}"/>.
-        /// Return <c>true</c> from <c>action</c> to cause the loop to gracefully break; <c>false</c> to continue looping.
+        /// Return <c>true</c> from <paramref name="action"/> to cause the loop to gracefully break; <c>false</c> to continue looping.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">An <see cref="IAsyncQueryable{T}"/> containing items to operate on.</param>
@@ -377,13 +377,15 @@ namespace Stormpath.SDK
         }
 
         /// <summary>
-        /// 
+        /// Asynchronously iterates over the input sequence and performs the specified asynchronous action on each element of the <see cref="IAsyncQueryable{T}"/>.
+        /// Return <c>true</c> from <paramref name="asyncAction"/> to cause the loop to gracefully break; <c>false</c> to continue looping.
         /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="asyncAction"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">An <see cref="IAsyncQueryable{T}"/> containing items to operate on.</param>
+        /// <param name="asyncAction">The action to perform on each element. Return <c>true</c> to cause the loop to gracefully break.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task indicating that the asynchronous operation is complete.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
         public static Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Func<TSource, Task<bool>> asyncAction, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (asyncAction == null)
@@ -416,7 +418,7 @@ namespace Stormpath.SDK
 
         /// <summary>
         /// Asynchronously iterates over the input sequence and performs the specified action on each indexed element of the <see cref="IAsyncQueryable{T}"/>.
-        /// Return <c>true</c> from <c>action</c> to cause the loop to gracefully break; <c>false</c> to continue looping.
+        /// Return <c>true</c> from <paramref name="action"/> to cause the loop to gracefully break; <c>false</c> to continue looping.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">An <see cref="IAsyncQueryable{T}"/> containing items to operate on.</param>
@@ -449,13 +451,15 @@ namespace Stormpath.SDK
         }
 
         /// <summary>
-        /// 
+        /// Asynchronously iterates over the input sequence and performs the specified asynchronous action on each indexed element of the <see cref="IAsyncQueryable{T}"/>.
+        /// Return <c>true</c> from <paramref name="asyncAction"/> to cause the loop to gracefully break; <c>false</c> to continue looping.
         /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="action"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">An <see cref="IAsyncQueryable{T}"/> containing items to operate on.</param>
+        /// <param name="action">The action to perform on the element with the specified index. Return <c>true</c> to cause the loop to gracefully break.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task indicating that the asynchronous operation is complete.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
         public static async Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Func<TSource, int, Task<bool>> action, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (action == null)
