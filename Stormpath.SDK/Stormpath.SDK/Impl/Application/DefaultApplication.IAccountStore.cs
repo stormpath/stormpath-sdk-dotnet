@@ -63,30 +63,27 @@ namespace Stormpath.SDK.Impl.Application
             if (string.IsNullOrEmpty(accountStore?.Href))
                 throw new ArgumentNullException(nameof(accountStore.Href));
 
-            bool needToCreateNewMapping = true;
+            IAccountStoreMapping newOrExistingMapping = null;
 
             await this.AsInterface.GetAccountStoreMappings().ForEachAsync(
-                async mapping =>
+                mapping =>
             {
                 bool isPassedAccountStore = (mapping as AccountStore.DefaultAccountStoreMapping)?.AccountStore?.Href.Equals(accountStore.Href) ?? false;
                 if (isPassedAccountStore)
-                {
-                    needToCreateNewMapping = false;
-                    mapping.SetDefaultAccountStore(true);
-                    await mapping.SaveAsync(cancellationToken).ConfigureAwait(false);
-                    this.SetLinkProperty(DefaultAccountStoreMappingPropertyName, mapping.Href);
-                }
+                    newOrExistingMapping = mapping;
 
-                return !needToCreateNewMapping; // break if needToCreateNewMapping = false
+                return newOrExistingMapping != null; // break if found
             }, cancellationToken).ConfigureAwait(false);
 
-            if (needToCreateNewMapping)
+            if (newOrExistingMapping == null)
             {
-                var newMapping = await this.AsInterface.AddAccountStoreAsync(accountStore, cancellationToken).ConfigureAwait(false);
-                newMapping.SetDefaultAccountStore(true);
-                await newMapping.SaveAsync(cancellationToken).ConfigureAwait(false);
-                this.SetLinkProperty(DefaultAccountStoreMappingPropertyName, newMapping.Href);
+                newOrExistingMapping = await this.AsInterface
+                    .AddAccountStoreAsync(accountStore, cancellationToken).ConfigureAwait(false);
             }
+
+            newOrExistingMapping.SetDefaultAccountStore(true);
+            await newOrExistingMapping.SaveAsync(cancellationToken).ConfigureAwait(false);
+            this.SetLinkProperty(DefaultAccountStoreMappingPropertyName, newOrExistingMapping.Href);
 
             await this.AsInterface.SaveAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -96,30 +93,27 @@ namespace Stormpath.SDK.Impl.Application
             if (string.IsNullOrEmpty(accountStore?.Href))
                 throw new ArgumentNullException(nameof(accountStore.Href));
 
-            bool needToCreateNewMapping = true;
+            IAccountStoreMapping newOrExistingMapping = null;
 
             await this.AsInterface.GetAccountStoreMappings().ForEachAsync(
-                async mapping =>
+                mapping =>
                 {
                     bool isPassedAccountStore = (mapping as AccountStore.DefaultAccountStoreMapping)?.AccountStore?.Href.Equals(accountStore.Href) ?? false;
                     if (isPassedAccountStore)
-                    {
-                        needToCreateNewMapping = false;
-                        mapping.SetDefaultGroupStore(true);
-                        await mapping.SaveAsync(cancellationToken).ConfigureAwait(false);
-                        this.SetLinkProperty(DefaultGroupStoreMappingPropertyName, mapping.Href);
-                    }
+                        newOrExistingMapping = mapping;
 
-                    return !needToCreateNewMapping; // break if needToCreateNewMapping = false
+                    return newOrExistingMapping != null; // break if found
                 }, cancellationToken).ConfigureAwait(false);
 
-            if (needToCreateNewMapping)
+            if (newOrExistingMapping == null)
             {
-                var newMapping = await this.AsInterface.AddAccountStoreAsync(accountStore, cancellationToken).ConfigureAwait(false);
-                newMapping.SetDefaultGroupStore(true);
-                await newMapping.SaveAsync(cancellationToken).ConfigureAwait(false);
-                this.SetLinkProperty(DefaultGroupStoreMappingPropertyName, newMapping.Href);
+                newOrExistingMapping = await this.AsInterface
+                    .AddAccountStoreAsync(accountStore, cancellationToken).ConfigureAwait(false);
             }
+
+            newOrExistingMapping.SetDefaultGroupStore(true);
+            await newOrExistingMapping.SaveAsync(cancellationToken).ConfigureAwait(false);
+            this.SetLinkProperty(DefaultGroupStoreMappingPropertyName, newOrExistingMapping.Href);
 
             await this.AsInterface.SaveAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -203,7 +197,6 @@ namespace Stormpath.SDK.Impl.Application
             return null;
         }
 
-        // above this I am done testing!
         async Task<IAccountStoreMapping> IApplication.AddAccountStoreAsync<T>(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query, CancellationToken cancellationToken)
         {
             if (query == null)

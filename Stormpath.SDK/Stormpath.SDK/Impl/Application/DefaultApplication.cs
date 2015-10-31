@@ -386,5 +386,25 @@ namespace Stormpath.SDK.Impl.Application
         {
             throw new NotImplementedException();//todo
         }
+
+        IAccount IApplicationSync.ResetPassword(string token, string newPassword, IAccountStore accountStore)
+        {
+            throw new NotImplementedException();//todo
+        }
+
+        IAccount IApplicationSync.ResetPassword(string token, string newPassword, string hrefOrNameKey)
+        {
+            throw new NotImplementedException();//todo
+        }
+
+        IPasswordResetToken IApplicationSync.SendPasswordResetEmail(string email, IAccountStore accountStore)
+        {
+            throw new NotImplementedException();//todo
+        }
+
+        IPasswordResetToken IApplicationSync.SendPasswordResetEmail(string email, string hrefOrNameKey)
+        {
+            throw new NotImplementedException();//todo
+        }
     }
 }
