@@ -298,7 +298,7 @@ namespace Stormpath.SDK.Application
         Task<IAccountStoreMapping> AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Adds a <typeparamref name="T"/> as a new <see cref="IAccountStore"/> to this Application. The provided <see cref="IAsyncQueryable{T}"/>
+        /// Adds a resource of type <typeparamref name="T"/> as a new <see cref="IAccountStore"/> to this Application. The provided <see cref="IAsyncQueryable{T}"/>
         /// must match a single <typeparamref name="T"/> in the current Tenant. If no compatible resource matches the query, this method will return <c>null</c>.
         /// </summary>
         /// <param name="query">Query to search for a resource of type <typeparamref name="T"/> in the current Tenant.</param>

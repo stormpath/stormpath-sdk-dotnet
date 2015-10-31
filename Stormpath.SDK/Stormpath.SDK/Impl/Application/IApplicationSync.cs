@@ -22,6 +22,7 @@ using Stormpath.SDK.Auth;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -42,15 +43,36 @@ namespace Stormpath.SDK.Impl.Application
 
         void SendVerificationEmail(string usernameOrEmail);
 
+        ITenant GetTenant();
+
         IAccountStore GetDefaultAccountStore();
+
+        void SetDefaultAccountStore(IAccountStore accountStore);
 
         IAccountStore GetDefaultGroupStore();
 
-        ITenant GetTenant();
+        void SetDefaultGroupStore(IAccountStore accountStore);
+
+        IAccountStoreMapping CreateAccountStoreMapping(IAccountStoreMapping mapping);
+
+        IAccountStoreMapping AddAccountStore(IAccountStore accountStore);
+
+        IAccountStoreMapping AddAccountStore(string hrefOrName);
+
+        IAccountStoreMapping AddAccountStore<T>(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query)
+            where T : IAccountStore;
 
         IAccount ResetPassword(string token, string newPassword);
 
+        IAccount ResetPassword(string token, string newPassword, IAccountStore accountStore);
+
+        IAccount ResetPassword(string token, string newPassword, string hrefOrNameKey);
+
         IPasswordResetToken SendPasswordResetEmail(string email);
+
+        IPasswordResetToken SendPasswordResetEmail(string email, IAccountStore accountStore);
+
+        IPasswordResetToken SendPasswordResetEmail(string email, string hrefOrNameKey);
 
         IAccount VerifyPasswordResetToken(string token);
 
