@@ -16,10 +16,11 @@
 
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
-    internal interface IAccountStoreMappingSync
+    internal interface IAccountStoreMappingSync : ISaveableSync<IAccountStoreMapping>, IDeletableSync
     {
         IAccountStore GetAccountStore();
 

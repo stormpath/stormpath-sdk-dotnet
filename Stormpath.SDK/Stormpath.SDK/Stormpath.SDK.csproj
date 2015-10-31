@@ -110,6 +110,7 @@
     <Compile Include="Impl\Account\IAccountSync.cs" />
     <Compile Include="Impl\Account\IPasswordResetTokenSync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.IAccountStoreSync.cs" />
     <Compile Include="Impl\Application\DefaultApplicationCreationOptions.cs" />
     <Compile Include="Impl\Application\IApplicationSync.cs" />
     <Compile Include="Impl\Auth\AbstractLoginAttempt.cs" />
@@ -418,6 +419,7 @@
     <Compile Include="Tenant\ITenantActions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Impl\Application\DefaultApplication.IAccountStore.cs" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

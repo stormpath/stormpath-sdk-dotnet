@@ -360,10 +360,11 @@ namespace Stormpath.SDK
 
         /// <summary>
         /// Asynchronously iterates over the input sequence and performs the specified action on each element of the <see cref="IAsyncQueryable{T}"/>.
+        /// Return <c>true</c> from <c>action</c> to cause the loop to gracefully break; <c>false</c> to continue looping.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">An <see cref="IAsyncQueryable{T}"/> containing items to operate on.</param>
-        /// <param name="action">The action to perform on each element. Return <c>true</c> to cause the loop to gracefully <c>break</c>.</param>
+        /// <param name="action">The action to perform on each element. Return <c>true</c> to cause the loop to gracefully break.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task indicating that the asynchronous operation is complete.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
@@ -373,6 +374,22 @@ namespace Stormpath.SDK
                 throw new ArgumentNullException(nameof(action));
 
             return source.ForEachAsync((item, _) => action(item), cancellationToken);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="asyncAction"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Func<TSource, Task<bool>> asyncAction, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (asyncAction == null)
+                throw new ArgumentNullException(nameof(asyncAction));
+
+            return source.ForEachAsync((item, _) => asyncAction(item), cancellationToken);
         }
 
         /// <summary>
@@ -399,10 +416,11 @@ namespace Stormpath.SDK
 
         /// <summary>
         /// Asynchronously iterates over the input sequence and performs the specified action on each indexed element of the <see cref="IAsyncQueryable{T}"/>.
+        /// Return <c>true</c> from <c>action</c> to cause the loop to gracefully break; <c>false</c> to continue looping.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">An <see cref="IAsyncQueryable{T}"/> containing items to operate on.</param>
-        /// <param name="action">The action to perform on the element with the specified index. Return <c>true</c> to cause the loop to gracefully <c>break</c>.</param>
+        /// <param name="action">The action to perform on the element with the specified index. Return <c>true</c> to cause the loop to gracefully break.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task indicating that the asynchronous operation is complete.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
@@ -420,6 +438,38 @@ namespace Stormpath.SDK
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     breakRequested |= action(item, index++);
+
+                    if (breakRequested)
+                        break;
+                }
+
+                if (breakRequested)
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="action"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Func<TSource, int, Task<bool>> action, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            var index = 0;
+            while (await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            {
+                bool breakRequested = false;
+
+                foreach (var item in source.CurrentPage)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    breakRequested |= await action(item, index++).ConfigureAwait(false);
 
                     if (breakRequested)
                         break;

@@ -21,6 +21,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
+using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Auth;
@@ -36,7 +37,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
 {
-    internal sealed class DefaultApplication : AbstractExtendableInstanceResource, IApplication, IApplicationSync
+    internal sealed partial class DefaultApplication : AbstractExtendableInstanceResource, IApplication, IApplicationSync
     {
         private static readonly string AccountStoreMappingsPropertyName = "accountStoreMappings";
         private static readonly string AccountsPropertyName = "accounts";
@@ -363,60 +364,27 @@ namespace Stormpath.SDK.Impl.Application
         IAsyncQueryable<IAccount> IApplication.GetAccounts()
              => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());
 
-        IAsyncQueryable<IAccountStoreMapping> IApplication.GetAccountStoreMappings()
-             => new CollectionResourceQueryable<IAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalAsyncDataStore());
-
         IAsyncQueryable<IGroup> IApplication.GetGroups()
             => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalAsyncDataStore());
 
-        async Task<IAccountStore> IApplication.GetDefaultAccountStoreAsync(CancellationToken cancellationToken)
+        Task<IAccount> IApplication.ResetPasswordAsync(string token, string newPassword, IAccountStore accountStore, CancellationToken cancellationToken)
         {
-            if (this.DefaultAccountStoreMapping.Href == null)
-                return null;
-
-            var accountStoreMapping = await this.GetInternalAsyncDataStore()
-                .GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken)
-                .ConfigureAwait(false);
-
-            return accountStoreMapping == null
-                ? null
-                : await accountStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
+            throw new NotImplementedException();//todo
         }
 
-        IAccountStore IApplicationSync.GetDefaultAccountStore()
+        Task<IAccount> IApplication.ResetPasswordAsync(string token, string newPassword, string hrefOrNameKey, CancellationToken cancellationToken)
         {
-            if (this.DefaultAccountStoreMapping.Href == null)
-                return null;
-
-            var accountStoreMapping = this.GetInternalAsyncDataStore().GetResource<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href);
-            if (accountStoreMapping == null)
-                return null;
-
-            return accountStoreMapping.GetAccountStore();
+            throw new NotImplementedException();//todo
         }
 
-        async Task<IAccountStore> IApplication.GetDefaultGroupStoreAsync(CancellationToken cancellationToken)
+        Task<IPasswordResetToken> IApplication.SendPasswordResetEmailAsync(string email, IAccountStore accountStore, CancellationToken cancellationToken)
         {
-            if (this.DefaultGroupStoreMapping.Href == null)
-                return null;
-
-            var groupStoreMapping = await this.GetInternalAsyncDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken).ConfigureAwait(false);
-
-            return groupStoreMapping == null
-                ? null
-                : await groupStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
+            throw new NotImplementedException();//todo
         }
 
-        IAccountStore IApplicationSync.GetDefaultGroupStore()
+        Task<IPasswordResetToken> IApplication.SendPasswordResetEmailAsync(string email, string hrefOrNameKey, CancellationToken cancellationToken)
         {
-            if (this.DefaultGroupStoreMapping.Href == null)
-                return null;
-
-            var groupStoreMapping = this.GetInternalSyncDataStore().GetResource<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href);
-
-            return groupStoreMapping == null
-                ? null
-                : groupStoreMapping.GetAccountStore();
+            throw new NotImplementedException();//todo
         }
     }
 }
