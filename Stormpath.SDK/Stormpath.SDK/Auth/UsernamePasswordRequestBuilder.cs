@@ -25,6 +25,7 @@ namespace Stormpath.SDK.Auth
         private string usernameOrEmail;
         private string password;
         private IAccountStore accountStore;
+        private string organizationNameKey;
 
         public UsernamePasswordRequestBuilder SetUsernameOrEmail(string usernameOrEmail)
         {
@@ -49,13 +50,28 @@ namespace Stormpath.SDK.Auth
             if (string.IsNullOrEmpty(accountStore?.Href))
                 throw new ArgumentNullException(nameof(accountStore));
 
+            if (!string.IsNullOrEmpty(this.organizationNameKey))
+                throw new ArgumentException("Cannot set both AccountStore and hrefOrNameKey properties.");
+
             this.accountStore = accountStore;
+            return this;
+        }
+
+        public UsernamePasswordRequestBuilder SetAccountStore(string hrefOrNameKey)
+        {
+            if (string.IsNullOrEmpty(hrefOrNameKey))
+                throw new ArgumentNullException(hrefOrNameKey);
+
+            if (this.accountStore != null)
+                throw new ArgumentException("Cannot set both AccountStore and hrefOrNameKey properties.");
+
+            this.organizationNameKey = hrefOrNameKey;
             return this;
         }
 
         public IAuthenticationRequest Build()
         {
-            return new UsernamePasswordRequest(this.usernameOrEmail, this.password, this.accountStore);
+            return new UsernamePasswordRequest(this.usernameOrEmail, this.password, this.accountStore, this.organizationNameKey);
         }
     }
 }

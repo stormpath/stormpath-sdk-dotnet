@@ -64,7 +64,7 @@ namespace Stormpath.SDK.Impl.Application
 
         Task<IAuthenticationResult> IApplication.AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken)
         {
-            var request = new UsernamePasswordRequest(username, password, null) as IAuthenticationRequest;
+            var request = new UsernamePasswordRequest(username, password, null, null) as IAuthenticationRequest;
 
             return this.AsInterface.AuthenticateAccountAsync(request, cancellationToken);
         }

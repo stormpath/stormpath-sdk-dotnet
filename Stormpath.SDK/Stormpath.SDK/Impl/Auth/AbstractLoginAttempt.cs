@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 
@@ -42,6 +43,24 @@ namespace Stormpath.SDK.Impl.Auth
                 throw new ArgumentNullException(nameof(accountStore.Href));
 
             this.SetLinkProperty(AccountStorePropertyName, accountStore.Href);
+        }
+
+        void ILoginAttempt.SetAccountStore(string hrefOrNameKey)
+        {
+            if (string.IsNullOrEmpty(hrefOrNameKey))
+                throw new ArgumentNullException(nameof(hrefOrNameKey));
+
+            bool looksLikeHref = hrefOrNameKey.Split('/').Length > 4;
+            if (looksLikeHref)
+            {
+                this.SetLinkProperty(AccountStorePropertyName, hrefOrNameKey);
+            }
+            else
+            {
+                this.SetProperty(
+                AccountStorePropertyName,
+                new Dictionary<string, object>() { ["nameKey"] = hrefOrNameKey });
+            }
         }
     }
 }

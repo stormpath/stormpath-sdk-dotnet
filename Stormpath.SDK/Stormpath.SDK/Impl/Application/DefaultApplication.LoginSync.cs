@@ -62,7 +62,7 @@ namespace Stormpath.SDK.Impl.Application
 
         IAuthenticationResult IApplicationSync.AuthenticateAccount(string username, string password)
         {
-            var request = new UsernamePasswordRequest(username, password, null) as IAuthenticationRequest;
+            var request = new UsernamePasswordRequest(username, password, null, null) as IAuthenticationRequest;
 
             return this.AuthenticateAccount(request);
         }

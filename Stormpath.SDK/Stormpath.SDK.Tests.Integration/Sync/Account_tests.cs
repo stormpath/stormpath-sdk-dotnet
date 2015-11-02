@@ -560,6 +560,28 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Authenticating_account_in_specified_account_store_by_href(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+            var accountStore = application.GetDefaultAccountStore();
+
+            var result = application.AuthenticateAccount(
+                request =>
+                {
+                    request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}");
+                    request.SetPassword("whataPieceofjunk$1138");
+                    request.SetAccountStore(this.fixture.PrimaryDirectoryHref);
+                });
+            result.ShouldBeAssignableTo<IAuthenticationResult>();
+            result.Success.ShouldBeTrue();
+
+            var account = result.GetAccount();
+            account.FullName.ShouldBe("Luke Skywalker");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Authenticating_account_in_specified_account_store_with_response_options(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

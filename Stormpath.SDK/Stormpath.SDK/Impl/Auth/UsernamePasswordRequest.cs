@@ -23,17 +23,19 @@ namespace Stormpath.SDK.Impl.Auth
     /// Represents a username (or email) and password pair.
     /// </summary>
     /// <seealso cref="UsernamePasswordRequestBuilder"/>
-    internal sealed class UsernamePasswordRequest : IAuthenticationRequest
+    internal sealed class UsernamePasswordRequest : IAuthenticationRequest, IOrganizationNameKey
     {
         private readonly string username;
         private readonly string password;
         private readonly IAccountStore accountStore;
+        private readonly string organizationNameKey;
 
-        public UsernamePasswordRequest(string username, string password, IAccountStore accountStore)
+        public UsernamePasswordRequest(string username, string password, IAccountStore accountStore, string organizationNameKey)
         {
             this.username = username;
             this.password = password;
             this.accountStore = accountStore;
+            this.organizationNameKey = organizationNameKey;
         }
 
         string IAuthenticationRequest<string, string>.Principals => this.username;
@@ -41,5 +43,7 @@ namespace Stormpath.SDK.Impl.Auth
         string IAuthenticationRequest<string, string>.Credentials => this.password;
 
         IAccountStore IAuthenticationRequest<string, string>.AccountStore => this.accountStore;
+
+        string IOrganizationNameKey.OrganizationNameKey => this.organizationNameKey;
     }
 }

@@ -482,7 +482,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), authResponse, "application/json", transportError: false) as IHttpResponse));
 
-            var request = new UsernamePasswordRequest("foo", "bar", null) as IAuthenticationRequest;
+            var request = new UsernamePasswordRequest("foo", "bar", null, null) as IAuthenticationRequest;
             var authenticator = new BasicAuthenticator(this.dataStore);
 
             var result1 = await authenticator.AuthenticateAsync("/loginAttempts", request, null, CancellationToken.None);

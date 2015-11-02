@@ -66,6 +66,7 @@
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
+    <Compile Include="Impl\Auth\IOrganizationNameKey.cs" />
     <Compile Include="Impl\Auth\UsernamePasswordRequest.cs" />
     <Compile Include="Auth\UsernamePasswordRequestBuilder.cs" />
     <Compile Include="Cache\Caches.cs" />

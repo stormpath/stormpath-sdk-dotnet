@@ -1,4 +1,4 @@
-﻿// <copyright file="ILoginAttempt.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IOrganizationNameKey.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.AccountStore;
-using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Resource;
-
 namespace Stormpath.SDK.Impl.Auth
 {
-    internal interface ILoginAttempt : IResource
+    internal interface IOrganizationNameKey
     {
-        string Type { get; }
-
-        IEmbeddedProperty AccountStore { get; }
-
-        void SetType(string type);
-
-        void SetAccountStore(IAccountStore accountStore);
-
-        void SetAccountStore(string hrefOrNameKey);
+        string OrganizationNameKey { get; }
     }
 }
