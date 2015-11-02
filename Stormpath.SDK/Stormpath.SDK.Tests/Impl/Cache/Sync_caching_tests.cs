@@ -464,7 +464,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .Execute(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post))
                 .Returns(new DefaultHttpResponse(200, "OK", new HttpHeaders(), authResponse, "application/json", transportError: false));
 
-            var request = new UsernamePasswordRequest("foo", "bar") as IAuthenticationRequest;
+            var request = new UsernamePasswordRequest("foo", "bar", null, null) as IAuthenticationRequest;
             var authenticator = new BasicAuthenticator(this.dataStore);
 
             var result1 = authenticator.Authenticate("/loginAttempts", request, null);

@@ -15,37 +15,35 @@
 // </copyright>
 
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Auth;
 
-namespace Stormpath.SDK.Auth
+namespace Stormpath.SDK.Impl.Auth
 {
     /// <summary>
     /// Represents a username (or email) and password pair.
     /// </summary>
-    public sealed class UsernamePasswordRequest : IAuthenticationRequest
+    /// <seealso cref="UsernamePasswordRequestBuilder"/>
+    internal sealed class UsernamePasswordRequest : IAuthenticationRequest, IOrganizationNameKey
     {
         private readonly string username;
         private readonly string password;
         private readonly IAccountStore accountStore;
+        private readonly string organizationNameKey;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UsernamePasswordRequest"/> class with the specified username (or email) and password.
-        /// </summary>
-        /// <param name="usernameOrEmail">The account's username or email address</param>
-        /// <param name="password">The account's raw (plaintext) password</param>
-        public UsernamePasswordRequest(string usernameOrEmail, string password)
-            : this(usernameOrEmail, password, null)
-        {
-        }
-
-        private UsernamePasswordRequest(string username, string password, IAccountStore accountStore)
+        public UsernamePasswordRequest(string username, string password, IAccountStore accountStore, string organizationNameKey)
         {
             this.username = username;
             this.password = password;
             this.accountStore = accountStore;
+            this.organizationNameKey = organizationNameKey;
         }
 
         string IAuthenticationRequest<string, string>.Principals => this.username;
 
         string IAuthenticationRequest<string, string>.Credentials => this.password;
+
+        IAccountStore IAuthenticationRequest<string, string>.AccountStore => this.accountStore;
+
+        string IOrganizationNameKey.OrganizationNameKey => this.organizationNameKey;
     }
 }

@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
@@ -22,6 +23,7 @@ using Stormpath.SDK.Auth;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -34,6 +36,10 @@ namespace Stormpath.SDK.Impl.Application
 
         IAuthenticationResult AuthenticateAccount(IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions);
 
+        IAuthenticationResult AuthenticateAccount(Action<UsernamePasswordRequestBuilder> requestBuilder);
+
+        IAuthenticationResult AuthenticateAccount(Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions);
+
         IAuthenticationResult AuthenticateAccount(string username, string password);
 
         bool TryAuthenticateAccount(string username, string password);
@@ -42,15 +48,32 @@ namespace Stormpath.SDK.Impl.Application
 
         void SendVerificationEmail(string usernameOrEmail);
 
+        ITenant GetTenant();
+
         IAccountStore GetDefaultAccountStore();
+
+        void SetDefaultAccountStore(IAccountStore accountStore);
 
         IAccountStore GetDefaultGroupStore();
 
-        ITenant GetTenant();
+        void SetDefaultGroupStore(IAccountStore accountStore);
+
+        IAccountStoreMapping CreateAccountStoreMapping(IAccountStoreMapping mapping);
+
+        IAccountStoreMapping AddAccountStore(IAccountStore accountStore);
+
+        IAccountStoreMapping AddAccountStore(string hrefOrName);
+
+        IAccountStoreMapping AddAccountStore<T>(Func<IQueryable<T>, IQueryable<T>> query)
+            where T : IAccountStore;
 
         IAccount ResetPassword(string token, string newPassword);
 
         IPasswordResetToken SendPasswordResetEmail(string email);
+
+        IPasswordResetToken SendPasswordResetEmail(string email, IAccountStore accountStore);
+
+        IPasswordResetToken SendPasswordResetEmail(string email, string hrefOrNameKey);
 
         IAccount VerifyPasswordResetToken(string token);
 

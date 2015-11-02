@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountStoreMappingSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IOrganizationNameKey.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.AccountStore;
-using Stormpath.SDK.Application;
-using Stormpath.SDK.Impl.Resource;
-
-namespace Stormpath.SDK.Impl.AccountStore
+namespace Stormpath.SDK.Impl.Auth
 {
-    internal interface IAccountStoreMappingSync : ISaveableSync<IAccountStoreMapping>, IDeletableSync
+    internal interface IOrganizationNameKey
     {
-        IAccountStore GetAccountStore();
-
-        IApplication GetApplication();
+        string OrganizationNameKey { get; }
     }
 }

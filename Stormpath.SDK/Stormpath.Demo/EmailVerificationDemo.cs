@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 
@@ -48,9 +49,13 @@ namespace Stormpath.Demo
             var createdAccount = await application.CreateAccountAsync("Email", "Test", "test@foo.co", "Changeme123!", cancellationToken);
             Console.WriteLine($"Account {createdAccount.Email} created");
 
+            var accountStore = await application.GetDefaultAccountStoreAsync();
 
-
-            await application.SendVerificationEmailAsync("test@foo.co");
+            await application.SendVerificationEmailAsync(req =>
+            {
+                req.Login = "test@foo.co";
+                req.AccountStore = accountStore;
+            });
             Console.WriteLine($"Verification email resent to {createdAccount.Email}");
 
             var token = createdAccount.EmailVerificationToken.GetValue();

@@ -14,11 +14,15 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
@@ -45,16 +49,92 @@ namespace Stormpath.SDK.Impl.AccountStore
 
         int IAccountStoreMapping.ListIndex => this.GetProperty<int>(ListIndexPropertyName);
 
-        Task<IAccountStore> IAccountStoreMapping.GetAccountStoreAsync(CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccountStore>(this.AccountStore.Href, cancellationToken);
+        IAccountStoreMapping IAccountStoreMapping.SetApplication(IApplication application)
+        {
+            if (string.IsNullOrEmpty(application?.Href))
+                throw new ArgumentNullException(nameof(application.Href));
+
+            this.SetLinkProperty(ApplicationPropertyName, application.Href);
+
+            return this;
+        }
+
+        IAccountStoreMapping IAccountStoreMapping.SetAccountStore(IAccountStore accountStore)
+        {
+            if (string.IsNullOrEmpty(accountStore?.Href))
+                throw new ArgumentNullException(nameof(accountStore.Href));
+
+            this.SetLinkProperty(AccountStorePropertyName, accountStore.Href);
+
+            return this;
+        }
+
+        IAccountStoreMapping IAccountStoreMapping.SetListIndex(int listIndex)
+        {
+            if (listIndex < 0)
+                throw new ArgumentException("Must be greater than 0.", nameof(listIndex));
+
+            this.SetProperty(ListIndexPropertyName, listIndex);
+
+            return this;
+        }
+
+        IAccountStoreMapping IAccountStoreMapping.SetDefaultAccountStore(bool defaultAccountStore)
+        {
+            this.SetProperty(IsDefaultAccountStorePropertyName, defaultAccountStore);
+
+            return this;
+        }
+
+        IAccountStoreMapping IAccountStoreMapping.SetDefaultGroupStore(bool defaultGroupStore)
+        {
+            this.SetProperty(IsDefaultGroupStorePropertyName, defaultGroupStore);
+
+            return this;
+        }
+
+        async Task<IAccountStore> IAccountStoreMapping.GetAccountStoreAsync(CancellationToken cancellationToken)
+        {
+            var href = this.AccountStore?.Href ?? string.Empty;
+            IAccountStore accountStore = null;
+
+            if (href.Contains("directories"))
+                accountStore = await this.GetInternalAsyncDataStore().GetResourceAsync<IDirectory>(href, cancellationToken).ConfigureAwait(false);
+            else if (href.Contains("groups"))
+                accountStore = await this.GetInternalAsyncDataStore().GetResourceAsync<IGroup>(href, cancellationToken).ConfigureAwait(false);
+
+            return accountStore;
+        }
 
         IAccountStore IAccountStoreMappingSync.GetAccountStore()
-            => this.GetInternalSyncDataStore().GetResource<IAccountStore>(this.AccountStore.Href);
+        {
+            var href = this.AccountStore?.Href ?? string.Empty;
+            IAccountStore accountStore = null;
+
+            if (href.Contains("directories"))
+                accountStore = this.GetInternalSyncDataStore().GetResource<IDirectory>(href);
+            else if (href.Contains("groups"))
+                accountStore = this.GetInternalSyncDataStore().GetResource<IGroup>(href);
+
+            return accountStore;
+        }
 
         Task<IApplication> IAccountStoreMapping.GetApplicationAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IApplication>(this.Application.Href, cancellationToken);
 
         IApplication IAccountStoreMappingSync.GetApplication()
             => this.GetInternalSyncDataStore().GetResource<IApplication>(this.Application.Href);
+
+        Task<IAccountStoreMapping> ISaveable<IAccountStoreMapping>.SaveAsync(CancellationToken cancellationToken)
+            => this.SaveAsync<IAccountStoreMapping>(cancellationToken);
+
+        IAccountStoreMapping ISaveableSync<IAccountStoreMapping>.Save()
+            => this.Save<IAccountStoreMapping>();
+
+        Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
+
+        bool IDeletableSync.Delete()
+            => this.GetInternalSyncDataStore().Delete(this);
     }
 }

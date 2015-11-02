@@ -46,6 +46,28 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
+        public async Task Operates_on_every_item_asynchronously()
+        {
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
+                this.Href,
+                new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance));
+            var gmailAlliance = new List<string>();
+
+            Func<string, Task> addAsynchronously = async str =>
+            {
+                await Task.Yield();
+                gmailAlliance.Add($"{str.ToLower()}@gmail.com");
+            };
+
+            await harness.Queryable.ForEachAsync(async acct =>
+            {
+                await addAsynchronously(acct.GivenName);
+            });
+
+            gmailAlliance.Count.ShouldBe(FakeAccounts.RebelAlliance.Count);
+        }
+
+        [Fact]
         public async Task Indexes_every_item()
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
@@ -56,6 +78,28 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             await harness.Queryable.ForEachAsync((acct, index) =>
             {
                 empireFirstNameLookup.Add(index, $"{acct.GivenName} {acct.Surname}");
+            });
+
+            empireFirstNameLookup[2].ShouldBe(FakeAccounts.GalacticEmpire.ElementAt(2).GivenName + " " + FakeAccounts.GalacticEmpire.ElementAt(2).Surname);
+        }
+
+        [Fact]
+        public async Task Indexes_every_item_asynchronously()
+        {
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
+                this.Href,
+                new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
+            var empireFirstNameLookup = new Dictionary<int, string>();
+
+            Func<string, string, int, Task> addAsynchronously = async (str1, str2, index) =>
+            {
+                await Task.Yield();
+                empireFirstNameLookup.Add(index, $"{str1} {str2}");
+            };
+
+            await harness.Queryable.ForEachAsync(async (acct, index) =>
+            {
+                await addAsynchronously(acct.GivenName, acct.Surname, index);
             });
 
             empireFirstNameLookup[2].ShouldBe(FakeAccounts.GalacticEmpire.ElementAt(2).GivenName + " " + FakeAccounts.GalacticEmpire.ElementAt(2).Surname);
@@ -95,7 +139,45 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
                 new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
-            var cts = new CancellationTokenSource();
+            var reachedIndex = -1;
+
+            await harness.Queryable.ForEachAsync(
+                acct =>
+                {
+                    reachedIndex++;
+
+                    return reachedIndex == 2;
+                }, CancellationToken.None);
+
+            reachedIndex.ShouldBe(2);
+        }
+
+        [Fact]
+        public async Task Can_break_gracefully_asynchronously()
+        {
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
+                this.Href,
+                new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
+            var reachedIndex = -1;
+
+            await harness.Queryable.ForEachAsync(
+                async acct =>
+                {
+                    await Task.Yield();
+                    reachedIndex++;
+
+                    return reachedIndex == 2;
+                }, CancellationToken.None);
+
+            reachedIndex.ShouldBe(2);
+        }
+
+        [Fact]
+        public async Task Can_break_gracefully_when_indexing()
+        {
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
+                this.Href,
+                new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
             var reachedIndex = -1;
 
             await harness.Queryable.ForEachAsync(
@@ -104,7 +186,27 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                     reachedIndex = index;
 
                     return index == 2;
-                }, cts.Token);
+                }, CancellationToken.None);
+
+            reachedIndex.ShouldBe(2);
+        }
+
+        [Fact]
+        public async Task Can_break_gracefully_when_indexing_asynchronously()
+        {
+            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
+                this.Href,
+                new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
+            var reachedIndex = -1;
+
+            await harness.Queryable.ForEachAsync(
+                async (acct, index) =>
+                {
+                    await Task.Yield();
+                    reachedIndex = index;
+
+                    return index == 2;
+                }, CancellationToken.None);
 
             reachedIndex.ShouldBe(2);
         }

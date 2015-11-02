@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountStoreMappingSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultApplication.ResourcesSync.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,18 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.AccountStore;
-using Stormpath.SDK.Application;
-using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Provider;
+using Stormpath.SDK.Provider;
+using Stormpath.SDK.Tenant;
 
-namespace Stormpath.SDK.Impl.AccountStore
+namespace Stormpath.SDK.Impl.Application
 {
-    internal interface IAccountStoreMappingSync : ISaveableSync<IAccountStoreMapping>, IDeletableSync
+    internal sealed partial class DefaultApplication
     {
-        IAccountStore GetAccountStore();
+        IProviderAccountResult IApplicationSync.GetAccount(IProviderAccountRequest request)
+            => new ProviderAccountResolver(this.GetInternalSyncDataStore()).ResolveProviderAccount(this.AsInterface.Href, request);
 
-        IApplication GetApplication();
+        ITenant IApplicationSync.GetTenant()
+            => this.GetTenant(this.Tenant.Href);
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountStoreMappingSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultApplication.Collections.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Group;
+using Stormpath.SDK.Impl.Linq;
+using Stormpath.SDK.Linq;
 
-namespace Stormpath.SDK.Impl.AccountStore
+namespace Stormpath.SDK.Impl.Application
 {
-    internal interface IAccountStoreMappingSync : ISaveableSync<IAccountStoreMapping>, IDeletableSync
+    internal sealed partial class DefaultApplication
     {
-        IAccountStore GetAccountStore();
+        IAsyncQueryable<IAccount> IApplication.GetAccounts()
+            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());
 
-        IApplication GetApplication();
+        IAsyncQueryable<IGroup> IApplication.GetGroups()
+            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalAsyncDataStore());
     }
 }

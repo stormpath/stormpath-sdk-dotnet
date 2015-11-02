@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.DataStore;
 
@@ -35,7 +36,11 @@ namespace Stormpath.SDK.Account
         /// <value>The username or email identifying the account that will receive the verification email.</value>
         public string Login { get; set; }
 
-        // TODO AccountStore
+        /// <summary>
+        /// Gets or sets the account store that will be used to locate the specified account.
+        /// </summary>
+        /// <value>The account store that will be used to locate the specified account.</value>
+        public IAccountStore AccountStore { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IInternalDataStore"/> used to construct this request.
@@ -49,8 +54,12 @@ namespace Stormpath.SDK.Account
         /// <returns>A new <see cref="IEmailVerificationRequest"/> based on the current builder state.</returns>
         internal IEmailVerificationRequest Build()
         {
-            var request = this.InternalDataStore.Instantiate<IEmailVerificationRequest>() as DefaultEmailVerificationRequest;
+            var request = this.InternalDataStore
+                .Instantiate<IEmailVerificationRequest>() as DefaultEmailVerificationRequest;
             request.SetLogin(this.Login);
+
+            if (this.AccountStore != null)
+                request.SetAccountStore(this.AccountStore);
 
             return request;
         }
