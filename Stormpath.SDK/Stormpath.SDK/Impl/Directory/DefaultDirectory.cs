@@ -17,22 +17,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
-using Stormpath.SDK.Impl.Account;
-using Stormpath.SDK.Impl.Group;
-using Stormpath.SDK.Impl.Linq;
-using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Directory
 {
-    internal sealed class DefaultDirectory : AbstractExtendableInstanceResource, IDirectory, IDirectorySync
+    internal sealed partial class DefaultDirectory : AbstractExtendableInstanceResource, IDirectory, IDirectorySync
     {
         private static readonly string AccountCreationPolicyPropertyName = "accountCreationPolicy";
         private static readonly string AccountsPropertyName = "accounts";
@@ -103,63 +95,6 @@ namespace Stormpath.SDK.Impl.Directory
             return this;
         }
 
-        Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-            => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalAsyncDataStore(), this.Accounts.Href, account, creationOptionsAction, cancellationToken);
-
-        IAccount IAccountCreationActionsSync.CreateAccount(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction)
-            => AccountCreationActionsShared.CreateAccount(this.GetInternalSyncDataStore(), this.Accounts.Href, account, creationOptionsAction);
-
-        Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken)
-             => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalAsyncDataStore(), this.Accounts.Href, account, creationOptions, cancellationToken);
-
-        IAccount IAccountCreationActionsSync.CreateAccount(IAccount account, IAccountCreationOptions creationOptions)
-             => AccountCreationActionsShared.CreateAccount(this.GetInternalSyncDataStore(), this.Accounts.Href, account, creationOptions);
-
-        Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, CancellationToken cancellationToken)
-             => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalAsyncDataStore(), this.Accounts.Href, account, cancellationToken);
-
-        IAccount IAccountCreationActionsSync.CreateAccount(IAccount account)
-             => AccountCreationActionsShared.CreateAccount(this.GetInternalSyncDataStore(), this.Accounts.Href, account);
-
-        Task<IAccount> IAccountCreationActions.CreateAccountAsync(string givenName, string surname, string email, string password, object customData, CancellationToken cancellationToken)
-            => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalAsyncDataStore(), this.Accounts.Href, givenName, surname, email, password, customData, cancellationToken);
-
-        Task<IAccount> IAccountCreationActions.CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken)
-            => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalAsyncDataStore(), this.Accounts.Href, givenName, surname, email, password, null, cancellationToken);
-
-        IAccount IAccountCreationActionsSync.CreateAccount(string givenName, string surname, string email, string password, object customData)
-            => AccountCreationActionsShared.CreateAccount(this.GetInternalSyncDataStore(), this.Accounts.Href, givenName, surname, email, password, customData);
-
-        Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, CancellationToken cancellationToken)
-            => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, cancellationToken);
-
-        IGroup IGroupCreationActionsSync.CreateGroup(IGroup group)
-            => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, group);
-
-        Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-            => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, creationOptionsAction, cancellationToken);
-
-        IGroup IGroupCreationActionsSync.CreateGroup(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction)
-            => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, group, creationOptionsAction);
-
-        Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, IGroupCreationOptions creationOptions, CancellationToken cancellationToken)
-            => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, creationOptions, cancellationToken);
-
-        IGroup IGroupCreationActionsSync.CreateGroup(IGroup group, IGroupCreationOptions creationOptions)
-            => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, group, creationOptions);
-
-        Task<IProvider> IDirectory.GetProviderAsync(CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup, cancellationToken);
-
-        IProvider IDirectorySync.GetProvider()
-            => this.GetInternalSyncDataStore().GetResource<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup);
-
-        Task<ITenant> IDirectory.GetTenantAsync(CancellationToken cancellationToken)
-            => this.GetTenantAsync(this.Tenant.Href, cancellationToken);
-
-        ITenant IDirectorySync.GetTenant()
-            => this.GetTenant(this.Tenant.Href);
-
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
 
@@ -177,11 +112,5 @@ namespace Stormpath.SDK.Impl.Directory
 
         IDirectory ISaveableWithOptionsSync<IDirectory>.Save(Action<IRetrievalOptions<IDirectory>> options)
              => this.Save(options);
-
-        IAsyncQueryable<IAccount> IDirectory.GetAccounts()
-            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());
-
-        IAsyncQueryable<IGroup> IDirectory.GetGroups()
-            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalAsyncDataStore());
     }
 }
