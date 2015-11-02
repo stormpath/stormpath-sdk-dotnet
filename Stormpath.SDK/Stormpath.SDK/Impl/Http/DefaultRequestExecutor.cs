@@ -31,6 +31,7 @@ namespace Stormpath.SDK.Impl.Http
         private const int MovedPermanently = 301;
         private const int Redirect = 302;
         private const int TemporaryRedirect = 307;
+        private const int Conflict = 409;
         private const int TooManyRequests = 429;
         private const int ServerUnavailable = 503;
         private const int NoGatewayResponse = 504;
@@ -155,7 +156,7 @@ namespace Stormpath.SDK.Impl.Http
                         currentUri = response.Headers.Location;
                         this.logger.Trace($"Redirected to {currentUri}", "DefaultRequestExecutor.CoreRequestLoopAsync");
 
-                        continue; // reexecute request, not counted as a retry
+                        continue; // re-execute request, not counted as a retry
                     }
 
                     var statusCode = response.StatusCode;
@@ -182,6 +183,15 @@ namespace Stormpath.SDK.Impl.Http
                     if (response.IsServerError() && attempts < this.maxAttemptsPerRequest)
                     {
                         this.logger.Warn($"Got HTTP {statusCode}, retrying", "DefaultRequestExecutor.CoreRequestLoopAsync");
+
+                        attempts++;
+                        continue; // retry request
+                    }
+
+                    // HTTP 409 (modified) during delete
+                    if (statusCode == Conflict && request.Method == HttpMethod.Delete)
+                    {
+                        this.logger.Warn($"Got HTTP {statusCode} during delete, retrying", "DefaultRequestExecutor.CoreRequestLoopAsync");
 
                         attempts++;
                         continue; // retry request
