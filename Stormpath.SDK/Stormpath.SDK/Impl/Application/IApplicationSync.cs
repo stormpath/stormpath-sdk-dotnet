@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
@@ -59,7 +60,7 @@ namespace Stormpath.SDK.Impl.Application
 
         IAccountStoreMapping AddAccountStore(string hrefOrName);
 
-        IAccountStoreMapping AddAccountStore<T>(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query)
+        IAccountStoreMapping AddAccountStore<T>(Func<IQueryable<T>, IQueryable<T>> query)
             where T : IAccountStore;
 
         IAccount ResetPassword(string token, string newPassword);

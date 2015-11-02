@@ -262,11 +262,11 @@ namespace Stormpath.SDK.Tests.Integration
 
             asyncButNotSync.Count.ShouldBe(
                 0,
-                $"These async tests do not have a corresponding sync test: {string.Join(", ", asyncButNotSync)}");
+                $"These async tests do not have a corresponding sync test:{Environment.NewLine}{string.Join(", ", asyncButNotSync)}");
 
             syncButNotAsync.Count.ShouldBe(
                 0,
-                $"These sync tests do not have a corresponding async test: {string.Join(", ", syncButNotAsync)}");
+                $"These sync tests do not have a corresponding async test:{Environment.NewLine}{string.Join(", ", syncButNotAsync)}");
         }
 
         private static string GetQualifiedMethodName(MethodInfo m)

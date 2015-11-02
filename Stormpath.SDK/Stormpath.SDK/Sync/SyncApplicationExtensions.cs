@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
@@ -267,7 +268,7 @@ namespace Stormpath.SDK.Sync
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <c>null</c> if there is no resource matching the query.</returns>
         /// <exception cref="Error.ResourceException">The found resource already exists as an account store in the application.</exception>
         /// <exception cref="ArgumentException">The query matches more than one resource in the current Tenant.</exception>
-        public static IAccountStoreMapping AddAccountStore<T>(this IApplication application, Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query)
+        public static IAccountStoreMapping AddAccountStore<T>(this IApplication application, Func<IQueryable<T>, IQueryable<T>> query)
             where T : IAccountStore
             => (application as IApplicationSync).AddAccountStore(query);
 

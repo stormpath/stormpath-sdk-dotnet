@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
@@ -190,7 +191,7 @@ namespace Stormpath.SDK.Impl.Application
             return null;
         }
 
-        IAccountStoreMapping IApplicationSync.AddAccountStore<T>(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query)
+        IAccountStoreMapping IApplicationSync.AddAccountStore<T>(Func<IQueryable<T>, IQueryable<T>> query)
         {
             if (query == null)
                 throw new ArgumentNullException(nameof(query));
@@ -198,12 +199,12 @@ namespace Stormpath.SDK.Impl.Application
             IAccountStore foundAccountStore = null;
             if (typeof(T) == typeof(IDirectory))
             {
-                var directoryQuery = query as Func<IAsyncQueryable<IDirectory>, IAsyncQueryable<IDirectory>>;
+                var directoryQuery = query as Func<IQueryable<IDirectory>, IQueryable<IDirectory>>;
                 foundAccountStore = this.GetSingleTenantDirectory(directoryQuery);
             }
             else if (typeof(T) == typeof(IGroup))
             {
-                var groupQuery = query as Func<IAsyncQueryable<IGroup>, IAsyncQueryable<IGroup>>;
+                var groupQuery = query as Func<IQueryable<IGroup>, IQueryable<IGroup>>;
                 foundAccountStore = this.GetSingleTenantGroup(groupQuery);
             }
 
@@ -214,17 +215,17 @@ namespace Stormpath.SDK.Impl.Application
             return null;
         }
 
-        private IDirectory GetSingleTenantDirectory(Func<IAsyncQueryable<IDirectory>, IAsyncQueryable<IDirectory>> queryAction)
+        private IDirectory GetSingleTenantDirectory(Func<IQueryable<IDirectory>, IQueryable<IDirectory>> queryAction)
         {
             if (queryAction == null)
                 throw new ArgumentNullException(nameof(queryAction));
 
             var tenant = this.AsInterface.GetTenant();
-            var queryable = tenant.GetDirectories();
+            var queryable = tenant.GetDirectories().Synchronously();
             queryable = queryAction(queryable);
 
             IDirectory foundDirectory = null;
-            foreach (var dir in queryable.Synchronously())
+            foreach (var dir in queryable)
             {
                 if (foundDirectory != null)
                     throw new ArgumentException("The provided query matched more than one Directory in the current Tenant.", nameof(queryAction));
@@ -235,17 +236,17 @@ namespace Stormpath.SDK.Impl.Application
             return foundDirectory;
         }
 
-        private IGroup GetSingleTenantGroup(Func<IAsyncQueryable<IGroup>, IAsyncQueryable<IGroup>> queryAction)
+        private IGroup GetSingleTenantGroup(Func<IQueryable<IGroup>, IQueryable<IGroup>> queryAction)
         {
             if (queryAction == null)
                 throw new ArgumentNullException(nameof(queryAction));
 
             var tenant = this.AsInterface.GetTenant();
-            var queryable = tenant.GetGroups();
+            var queryable = tenant.GetGroups().Synchronously();
             queryable = queryAction(queryable);
 
             IGroup foundGroup = null;
-            foreach (var group in queryable.Synchronously())
+            foreach (var group in queryable)
             {
                 if (foundGroup != null)
                     throw new ArgumentException("The provided query matched more than one Directory in the current Tenant.", nameof(queryAction));

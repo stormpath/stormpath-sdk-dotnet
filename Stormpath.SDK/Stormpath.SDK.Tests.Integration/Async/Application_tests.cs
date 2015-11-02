@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Getting_default_account_store(TestClientProvider clientBuilder)
+        public async Task Getting_default_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
@@ -101,7 +101,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Getting_default_group_store(TestClientProvider clientBuilder)
+        public async Task Getting_default_group_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
@@ -227,7 +227,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Adding_directory_as_account_store_to_application(TestClientProvider clientBuilder)
+        public async Task Adding_directory_as_account_store_to_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -255,7 +255,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Adding_group_as_account_store_to_application(TestClientProvider clientBuilder)
+        public async Task Adding_group_as_account_store_to_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -283,7 +283,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Setting_mapped_directory_to_default_account_store(TestClientProvider clientBuilder)
+        public async Task Setting_mapped_directory_to_default_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -309,7 +309,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Setting_mapped_group_to_default_account_store(TestClientProvider clientBuilder)
+        public async Task Setting_mapped_group_to_default_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -335,7 +335,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Setting_unmapped_directory_to_default_account_store(TestClientProvider clientBuilder)
+        public async Task Setting_unmapped_directory_to_default_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -360,7 +360,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Setting_unmapped_group_to_default_account_store(TestClientProvider clientBuilder)
+        public async Task Setting_unmapped_group_to_default_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -385,7 +385,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Setting_mapped_directory_to_default_group_store(TestClientProvider clientBuilder)
+        public async Task Setting_mapped_directory_to_default_group_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -411,7 +411,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Setting_unmapped_directory_to_default_group_store(TestClientProvider clientBuilder)
+        public async Task Setting_unmapped_directory_to_default_group_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -436,7 +436,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Setting_group_group_store_throws(TestClientProvider clientBuilder)
+        public async Task Setting_group_group_store_throws(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -462,7 +462,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Adding_directory_as_account_store_by_href_to_application(TestClientProvider clientBuilder)
+        public async Task Adding_directory_as_account_store_by_href_to_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -489,7 +489,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Adding_group_as_account_store_by_href_to_application(TestClientProvider clientBuilder)
+        public async Task Adding_group_as_account_store_by_href_to_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -516,7 +516,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Adding_directory_as_account_store_by_name_to_application(TestClientProvider clientBuilder)
+        public async Task Adding_directory_as_account_store_by_name_to_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -553,7 +553,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Adding_group_as_account_store_by_name_to_application(TestClientProvider clientBuilder)
+        public async Task Adding_group_as_account_store_by_name_to_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -595,7 +595,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Adding_directory_as_account_store_to_application_by_query(TestClientProvider clientBuilder)
+        public async Task Adding_directory_as_account_store_to_application_by_query(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -624,7 +624,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Adding_group_as_account_store_to_application_by_query(TestClientProvider clientBuilder)
+        public async Task Adding_group_as_account_store_to_application_by_query(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -653,7 +653,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Adding_directory_as_account_store_to_application_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
+        public async Task Adding_directory_as_account_store_to_application_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -677,7 +677,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task New_Adding_group_as_account_store_to_application_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
+        public async Task Adding_group_as_account_store_to_application_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
