@@ -109,9 +109,19 @@
     <Compile Include="Impl\Account\IAccountCreationActionsSync.cs" />
     <Compile Include="Impl\Account\IAccountSync.cs" />
     <Compile Include="Impl\Account\IPasswordResetTokenSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.Collections.cs" />
     <Compile Include="Impl\Application\DefaultApplication.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.EmailVerification.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.EmailVerificationSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.IAccountCreationOptionsSync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.IAccountStoreSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.IGroupCreationActions.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.IGroupCreationActionsSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.Login.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.LoginSync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.ResetPasswordSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.Resources.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.ResourcesSync.cs" />
     <Compile Include="Impl\Application\DefaultApplicationCreationOptions.cs" />
     <Compile Include="Impl\Application\IApplicationSync.cs" />
     <Compile Include="Impl\Auth\AbstractLoginAttempt.cs" />
@@ -422,6 +432,7 @@
   <ItemGroup>
     <Compile Include="Impl\Application\DefaultApplication.IAccountStore.cs" />
     <Compile Include="Impl\Application\DefaultApplication.ResetPassword.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.IAccountCreationOptions.cs" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
