@@ -14,9 +14,12 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Account
@@ -28,6 +31,7 @@ namespace Stormpath.SDK.Impl.Account
         private static readonly string EmailPropertyName = "email";
         private static readonly string PasswordPropertyName = "password";
         private static readonly string AccountPropertyName = "account";
+        private static readonly string AccountStorePropertyName = "accountStore";
 
         public DefaultPasswordResetToken(ResourceData data)
             : base(data)
@@ -38,6 +42,8 @@ namespace Stormpath.SDK.Impl.Account
 
         internal IEmbeddedProperty Account => this.GetLinkProperty(AccountPropertyName);
 
+        internal IEmbeddedProperty AccountStore => this.GetLinkProperty(AccountStorePropertyName);
+
         public IPasswordResetToken SetEmail(string email)
         {
             this.SetProperty(EmailPropertyName, email);
@@ -46,7 +52,36 @@ namespace Stormpath.SDK.Impl.Account
 
         public IPasswordResetToken SetPassword(string password)
         {
-            this.SetProperty<string>(PasswordPropertyName, password);
+            this.SetProperty(PasswordPropertyName, password);
+            return this;
+        }
+
+        public IPasswordResetToken SetAccountStore(IAccountStore accountStore)
+        {
+            if (string.IsNullOrEmpty(accountStore?.Href))
+                throw new ArgumentNullException(nameof(accountStore.Href));
+
+            this.SetLinkProperty(AccountStorePropertyName, accountStore.Href);
+            return this;
+        }
+
+        public IPasswordResetToken SetAccountStore(string hrefOrNameKey)
+        {
+            if (string.IsNullOrEmpty(hrefOrNameKey))
+                throw new ArgumentNullException(nameof(hrefOrNameKey));
+
+            bool looksLikeHref = hrefOrNameKey.Split('/').Length > 4;
+            if (looksLikeHref)
+            {
+                this.SetLinkProperty(AccountStorePropertyName, hrefOrNameKey);
+            }
+            else
+            {
+                this.SetProperty(
+                AccountStorePropertyName,
+                new Dictionary<string, object>() { ["nameKey"] = hrefOrNameKey });
+            }
+
             return this;
         }
 

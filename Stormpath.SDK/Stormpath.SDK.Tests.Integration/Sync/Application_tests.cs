@@ -232,6 +232,23 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Reset_password_for_account_in_account_store(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+            var accountStore = application.GetDefaultAccountStore();
+
+            var token = application.SendPasswordResetEmail("vader@galacticempire.co", accountStore);
+
+            var validTokenResponse = application.VerifyPasswordResetToken(token.GetValue());
+            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+
+            var resetPasswordResponse = application.ResetPassword(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
+            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Adding_directory_as_account_store_to_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

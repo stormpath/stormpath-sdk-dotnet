@@ -288,46 +288,6 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).ResetPassword(token, newPassword);
 
         /// <summary>
-        /// Synchronously verifies the password reset token (received in the user's email) and immediately
-        /// changes the password in the same request, for the account in the specified <see cref="IAccountStore"/>.
-        /// If you are unsure of which of the application's mapped account stores might contain the account, use the more general
-        /// <see cref="ResetPassword(IApplication, string, string)"/> method instead.
-        /// <para>Once the token has been successfully used, it is immediately invalidated and can't be used again.
-        /// If you need to change the password again, you will previously need to execute
-        /// <see cref="SendPasswordResetEmail(IApplication, string)"/> again in order to obtain a new password reset token.</para>
-        /// </summary>
-        /// <param name="application">The application.</param>
-        /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
-        /// <param name="newPassword">The new password that will be set to the <see cref="IAccount"/> if the token is successfully validated.</param>
-        /// <param name="accountStore">The AccountStore expected to contain the account.</param>
-        /// <returns>The account matching the specified token.</returns>
-        /// <exception cref="Error.ResourceException">
-        /// The specified <see cref="IAccountStore"/> is not mapped to this application, the account does not exist in this Account Store, or the token is not valid.
-        /// </exception>
-        public static IAccount ResetPassword(this IApplication application, string token, string newPassword, IAccountStore accountStore)
-            => (application as IApplicationSync).ResetPassword(token, newPassword, accountStore);
-
-        /// <summary>
-        /// Synchronously verifies the password reset token (received in the user's email) and immediately
-        /// changes the password in the same request, for the account in the specified AccountStore or Organization <paramref name="hrefOrNameKey"/>.
-        /// If you are unsure of which of the application's mapped account stores might contain the account, use the more general
-        /// <see cref="ResetPassword(IApplication, string, string)"/> method instead.
-        /// <para>Once the token has been successfully used, it is immediately invalidated and can't be used again.
-        /// If you need to change the password again, you will previously need to execute
-        /// <see cref="SendPasswordResetEmail(IApplication, string)"/> again in order to obtain a new password reset token.</para>
-        /// </summary>
-        /// <param name="application">The application.</param>
-        /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
-        /// <param name="newPassword">The new password that will be set to the <see cref="IAccount"/> if the token is successfully validated.</param>
-        /// <param name="hrefOrNameKey">The href of the AccountStore, or the name key of the Organization, expected to contain the account.</param>
-        /// <returns>The account matching the specified token.</returns>
-        /// <exception cref="Error.ResourceException">
-        /// The specified AccountStore or Organization is not mapped to this application, the account does not exist in this Account Store, or the token is not valid.
-        /// </exception>
-        public static IAccount ResetPassword(this IApplication application, string token, string newPassword, string hrefOrNameKey)
-            => (application as IApplicationSync).ResetPassword(token, newPassword, hrefOrNameKey);
-
-        /// <summary>
         /// Synchronously sends a password reset email for the specified account email address.
         /// The email will contain a password reset link that the user can click or copy into their browser address bar.
         /// </summary>

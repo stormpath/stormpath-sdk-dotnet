@@ -237,68 +237,6 @@ namespace Stormpath.SDK.Impl.Application
         IApplication ISaveableWithOptionsSync<IApplication>.Save(Action<IRetrievalOptions<IApplication>> options)
              => this.Save(options);
 
-        Task<IPasswordResetToken> IApplication.SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken)
-        {
-            var token = this.GetInternalAsyncDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;
-            token.SetEmail(email);
-
-            return this.GetInternalAsyncDataStore().CreateAsync(this.PasswordResetToken.Href, (IPasswordResetToken)token, cancellationToken);
-        }
-
-        IPasswordResetToken IApplicationSync.SendPasswordResetEmail(string email)
-        {
-            var token = this.GetInternalAsyncDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;
-            token.SetEmail(email);
-
-            return this.GetInternalSyncDataStore().Create(this.PasswordResetToken.Href, (IPasswordResetToken)token);
-        }
-
-        async Task<IAccount> IApplication.VerifyPasswordResetTokenAsync(string token, CancellationToken cancellationToken)
-        {
-            string href = $"{this.PasswordResetToken.Href}/{token}";
-
-            var validTokenResponse = await this.GetInternalAsyncDataStore().GetResourceAsync<IPasswordResetToken>(href, cancellationToken).ConfigureAwait(false);
-            return await validTokenResponse.GetAccountAsync(cancellationToken).ConfigureAwait(false);
-        }
-
-        IAccount IApplicationSync.VerifyPasswordResetToken(string token)
-        {
-            string href = $"{this.PasswordResetToken.Href}/{token}";
-
-            var validTokenResponse = this.GetInternalAsyncDataStore().GetResource<IPasswordResetToken>(href);
-            return validTokenResponse.GetAccount();
-        }
-
-        async Task<IAccount> IApplication.ResetPasswordAsync(string token, string newPassword, CancellationToken cancellationToken)
-        {
-            if (string.IsNullOrEmpty(token))
-                throw new ArgumentNullException(nameof(token));
-            if (string.IsNullOrEmpty(newPassword))
-                throw new ArgumentNullException(nameof(newPassword));
-
-            var href = $"{this.PasswordResetToken.Href}/{token}";
-            var passwordResetToken = this.GetInternalAsyncDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;
-            passwordResetToken.SetPassword(newPassword);
-
-            var responseToken = await this.GetInternalAsyncDataStore().CreateAsync(href, (IPasswordResetToken)passwordResetToken, cancellationToken).ConfigureAwait(false);
-            return await responseToken.GetAccountAsync(cancellationToken).ConfigureAwait(false);
-        }
-
-        IAccount IApplicationSync.ResetPassword(string token, string newPassword)
-        {
-            if (string.IsNullOrEmpty(token))
-                throw new ArgumentNullException(nameof(token));
-            if (string.IsNullOrEmpty(newPassword))
-                throw new ArgumentNullException(nameof(newPassword));
-
-            var href = $"{this.PasswordResetToken.Href}/{token}";
-            var passwordResetToken = this.GetInternalAsyncDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;
-            passwordResetToken.SetPassword(newPassword);
-
-            var responseToken = this.GetInternalSyncDataStore().Create(href, (IPasswordResetToken)passwordResetToken);
-            return responseToken.GetAccount();
-        }
-
         Task IApplication.SendVerificationEmailAsync(string usernameOrEmail, CancellationToken cancellationToken)
             => this.AsInterface.SendVerificationEmailAsync(request => request.Login = usernameOrEmail, cancellationToken);
 
@@ -366,45 +304,5 @@ namespace Stormpath.SDK.Impl.Application
 
         IAsyncQueryable<IGroup> IApplication.GetGroups()
             => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalAsyncDataStore());
-
-        Task<IAccount> IApplication.ResetPasswordAsync(string token, string newPassword, IAccountStore accountStore, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();//todo
-        }
-
-        Task<IAccount> IApplication.ResetPasswordAsync(string token, string newPassword, string hrefOrNameKey, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();//todo
-        }
-
-        Task<IPasswordResetToken> IApplication.SendPasswordResetEmailAsync(string email, IAccountStore accountStore, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();//todo
-        }
-
-        Task<IPasswordResetToken> IApplication.SendPasswordResetEmailAsync(string email, string hrefOrNameKey, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();//todo
-        }
-
-        IAccount IApplicationSync.ResetPassword(string token, string newPassword, IAccountStore accountStore)
-        {
-            throw new NotImplementedException();//todo
-        }
-
-        IAccount IApplicationSync.ResetPassword(string token, string newPassword, string hrefOrNameKey)
-        {
-            throw new NotImplementedException();//todo
-        }
-
-        IPasswordResetToken IApplicationSync.SendPasswordResetEmail(string email, IAccountStore accountStore)
-        {
-            throw new NotImplementedException();//todo
-        }
-
-        IPasswordResetToken IApplicationSync.SendPasswordResetEmail(string email, string hrefOrNameKey)
-        {
-            throw new NotImplementedException();//todo
-        }
     }
 }

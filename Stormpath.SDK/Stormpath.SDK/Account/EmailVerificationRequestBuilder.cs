@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Account
         /// <value>The username or email identifying the account that will receive the verification email.</value>
         public string Login { get; set; }
 
-        // TODO AccountStore
+        //TODO AccountStore
 
         /// <summary>
         /// Gets or sets the <see cref="IInternalDataStore"/> used to construct this request.

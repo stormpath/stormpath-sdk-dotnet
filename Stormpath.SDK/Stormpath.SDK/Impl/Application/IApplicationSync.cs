@@ -65,10 +65,6 @@ namespace Stormpath.SDK.Impl.Application
 
         IAccount ResetPassword(string token, string newPassword);
 
-        IAccount ResetPassword(string token, string newPassword, IAccountStore accountStore);
-
-        IAccount ResetPassword(string token, string newPassword, string hrefOrNameKey);
-
         IPasswordResetToken SendPasswordResetEmail(string email);
 
         IPasswordResetToken SendPasswordResetEmail(string email, IAccountStore accountStore);

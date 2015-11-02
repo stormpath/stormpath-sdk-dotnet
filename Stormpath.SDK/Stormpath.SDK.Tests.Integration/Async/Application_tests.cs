@@ -227,6 +227,23 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Reset_password_for_account_in_account_store(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+            var accountStore = await application.GetDefaultAccountStoreAsync();
+
+            var token = await application.SendPasswordResetEmailAsync("vader@galacticempire.co", accountStore);
+
+            var validTokenResponse = await application.VerifyPasswordResetTokenAsync(token.GetValue());
+            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+
+            var resetPasswordResponse = await application.ResetPasswordAsync(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
+            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Adding_directory_as_account_store_to_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
