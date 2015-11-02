@@ -455,7 +455,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var group = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
             // If this errors, the server-side API behavior has changed.
-            Should.Throw<Error.ResourceException>(() =>
+            Should.Throw<Exception>(() =>
             {
                 createdApplication.SetDefaultGroupStore(group);
             });
@@ -669,7 +669,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
-            Should.Throw<ArgumentException>(() =>
+            Should.Throw<Exception>(() =>
             {
                 var mapping = createdApplication
                     .AddAccountStore<IDirectory>(allDirs => allDirs);
@@ -701,7 +701,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             dummyGroup.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedGroupHrefs.Add(dummyGroup.Href);
 
-            Should.Throw<ArgumentException>(() =>
+            Should.Throw<Exception>(() =>
             {
                 var mapping = createdApplication
                     .AddAccountStore<IGroup>(allGroups => allGroups);

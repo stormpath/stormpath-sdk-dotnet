@@ -450,7 +450,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
             // If this errors, the server-side API behavior has changed.
-            Should.Throw<Error.ResourceException>(async () =>
+            Should.Throw<Exception>(async () =>
             {
                 await createdApplication.SetDefaultGroupStoreAsync(group);
             });
@@ -664,7 +664,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
-            Should.Throw<ArgumentException>(async () =>
+            Should.Throw<Exception>(async () =>
             {
                 var mapping = await createdApplication
                     .AddAccountStoreAsync<IDirectory>(allDirs => allDirs);
@@ -696,7 +696,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             dummyGroup.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedGroupHrefs.Add(dummyGroup.Href);
 
-            Should.Throw<ArgumentException>(async () =>
+            Should.Throw<Exception>(async () =>
             {
                 var mapping = await createdApplication
                     .AddAccountStoreAsync<IGroup>(allGroups => allGroups);
