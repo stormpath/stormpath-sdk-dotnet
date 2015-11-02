@@ -14,7 +14,9 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Account
@@ -22,6 +24,7 @@ namespace Stormpath.SDK.Impl.Account
     internal sealed class DefaultEmailVerificationRequest : AbstractResource, IEmailVerificationRequest
     {
         private static readonly string LoginPropertyName = "login";
+        private static readonly string AccountStorePropertyName = "accountStore";
 
         public DefaultEmailVerificationRequest(ResourceData data)
             : base(data)
@@ -34,6 +37,15 @@ namespace Stormpath.SDK.Impl.Account
         public IEmailVerificationRequest SetLogin(string usernameOrEmail)
         {
             this.SetProperty(LoginPropertyName, usernameOrEmail);
+            return this;
+        }
+
+        public IEmailVerificationRequest SetAccountStore(IAccountStore accountStore)
+        {
+            if (string.IsNullOrEmpty(accountStore?.Href))
+                throw new ArgumentNullException(accountStore.Href);
+
+            this.SetLinkProperty(AccountStorePropertyName, accountStore.Href);
             return this;
         }
     }
