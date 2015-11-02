@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Auth
@@ -22,6 +24,10 @@ namespace Stormpath.SDK.Impl.Auth
     {
         string Type { get; }
 
+        IEmbeddedProperty AccountStore { get; }
+
         void SetType(string type);
+
+        void SetAccountStore(IAccountStore accountStore);
     }
 }

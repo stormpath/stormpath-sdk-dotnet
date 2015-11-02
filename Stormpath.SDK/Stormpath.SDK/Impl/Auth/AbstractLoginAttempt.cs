@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Auth
@@ -21,6 +23,7 @@ namespace Stormpath.SDK.Impl.Auth
     internal abstract class AbstractLoginAttempt : AbstractResource, ILoginAttempt
     {
         private static readonly string TypePropertyName = "type";
+        private static readonly string AccountStorePropertyName = "accountStore";
 
         public AbstractLoginAttempt(ResourceData data)
             : base(data)
@@ -29,6 +32,16 @@ namespace Stormpath.SDK.Impl.Auth
 
         string ILoginAttempt.Type => this.GetProperty<string>(TypePropertyName);
 
+        IEmbeddedProperty ILoginAttempt.AccountStore => this.GetLinkProperty(AccountStorePropertyName);
+
         void ILoginAttempt.SetType(string type) => this.SetProperty(TypePropertyName, type);
+
+        void ILoginAttempt.SetAccountStore(IAccountStore accountStore)
+        {
+            if (string.IsNullOrEmpty(accountStore?.Href))
+                throw new ArgumentNullException(nameof(accountStore.Href));
+
+            this.SetLinkProperty(AccountStorePropertyName, accountStore.Href);
+        }
     }
 }

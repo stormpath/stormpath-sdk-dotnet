@@ -85,7 +85,7 @@ namespace Stormpath.SDK.Application
         /// The account must be in one of the Application's assigned account stores.
         /// If not in an assigned account store, the authentication attempt will fail.
         /// </summary>
-        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. <see cref="UsernamePasswordRequest"/>).</param>
+        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the result of the authentication.
@@ -94,8 +94,10 @@ namespace Stormpath.SDK.Application
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
         /// <code>
-        /// var loginRequest = new UsernamePasswordRequest("jsmith", "Password123#");
-        /// var result = await myApp.AuthenticateAccountAsync(loginRequest);
+        /// var loginRequest = new UsernamePasswordRequestBuilder();
+        /// loginRequest.SetUsernameOrEmail("jsmith");
+        /// loginRequest.SetPassword("Password123#");
+        /// var result = await myApp.AuthenticateAccountAsync(loginRequest.Build());
         /// </code>
         /// </example>
         Task<IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, CancellationToken cancellationToken = default(CancellationToken));
@@ -105,7 +107,7 @@ namespace Stormpath.SDK.Application
         /// The account must be in one of the Application's assigned account stores.
         /// If not in an assigned account store, the authentication attempt will fail.
         /// </summary>
-        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. <see cref="UsernamePasswordRequest"/>).</param>
+        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
         /// <param name="responseOptions">The options to apply to this request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
@@ -116,10 +118,66 @@ namespace Stormpath.SDK.Application
         /// <example>
         /// To request and cache the account details:
         /// <code>
-        /// var result = await myApp.AuthenticateAccountAsync(new UsernamePasswordRequest("jsmith", "Password123#"), response => response.Expand(x => x.GetAccountAsync));
+        /// var loginRequest = new UsernamePasswordRequestBuilder();
+        /// loginRequest.SetUsernameOrEmail("jsmith");
+        /// loginRequest.SetPassword("Password123#");
+        /// var result = await myApp.AuthenticateAccountAsync(loginRequest.Build(), response => response.Expand(x => x.GetAccountAsync));
         /// </code>
         /// </example>
         Task<IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Authenticates an account's submitted principals and credentials (e.g. username and password)
+        /// against the specified account store.
+        /// If the account does not exist in the account store, the authentication attempt will fail.
+        /// </summary>
+        /// <param name="requestBuilder">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>
+        /// A Task whose result is the result of the authentication.
+        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// </returns>
+        /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
+        /// <example>
+        /// To attempt to authenticate against a specific account store:
+        /// <code>
+        /// var result = await myApp.AuthenticateAccountAsync(request =>
+        /// {
+        ///     request.SetUsernameOrEmail("jsmith");
+        ///     request.SetPassword("Password123#");
+        ///     request.SetAccountStore(myAccountStore);
+        /// });
+        /// </code>
+        /// </example>
+        Task<IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Authenticates an account's submitted principals and credentials (e.g. username and password)
+        /// against the specified account store.
+        /// If the account does not exist in the account store, the authentication attempt will fail.
+        /// </summary>
+        /// <param name="requestBuilder">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
+        /// <param name="responseOptions">The options to apply to this request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>
+        /// A Task whose result is the result of the authentication.
+        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// </returns>
+        /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
+        /// <example>
+        /// To attempt to authenticate against a specific account store, and cache the returned account details:
+        /// <code>
+        /// var result = await myApp.AuthenticateAccountAsync(
+        ///     request =>
+        /// {
+        ///     request.SetUsernameOrEmail("jsmith");
+        ///     request.SetPassword("Password123#");
+        ///     request.SetAccountStore(myAccountStore);
+        /// },
+        ///     response => response.Expand(x => x.GetAccountAsync));
+        /// </code>
+        /// </example>
+        Task<IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password).

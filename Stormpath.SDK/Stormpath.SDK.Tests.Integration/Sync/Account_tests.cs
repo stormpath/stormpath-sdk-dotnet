@@ -531,8 +531,49 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var username = $"sonofthesuns-{this.fixture.TestRunIdentifier}";
-            var result = application.AuthenticateAccount(new UsernamePasswordRequest(username, "whataPieceofjunk$1138"), response => response.Expand(x => x.GetAccount));
+            var request = new UsernamePasswordRequestBuilder();
+            request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}");
+            request.SetPassword("whataPieceofjunk$1138");
+
+            var result = application.AuthenticateAccount(request.Build(), response => response.Expand(x => x.GetAccount));
+
+            result.ShouldBeAssignableTo<IAuthenticationResult>();
+            result.Success.ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Authenticating_account_in_specified_account_store(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+            var accountStore = application.GetDefaultAccountStore();
+
+            var result = application.AuthenticateAccount(
+                request => request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}").SetPassword("whataPieceofjunk$1138").SetAccountStore(accountStore));
+            result.ShouldBeAssignableTo<IAuthenticationResult>();
+            result.Success.ShouldBeTrue();
+
+            var account = result.GetAccount();
+            account.FullName.ShouldBe("Luke Skywalker");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Authenticating_account_in_specified_account_store_with_response_options(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+            var accountStore = application.GetDefaultAccountStore();
+
+            var result = application.AuthenticateAccount(
+                request =>
+                {
+                    request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}");
+                    request.SetPassword("whataPieceofjunk$1138");
+                    request.SetAccountStore(accountStore);
+                },
+            response => response.Expand(x => x.GetAccount));
 
             result.ShouldBeAssignableTo<IAuthenticationResult>();
             result.Success.ShouldBeTrue();

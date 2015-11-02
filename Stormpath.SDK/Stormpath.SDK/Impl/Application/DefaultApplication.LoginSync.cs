@@ -42,9 +42,27 @@ namespace Stormpath.SDK.Impl.Application
             return dispatcher.Authenticate(this.GetInternalSyncDataStore(), this, request, options);
         }
 
+        IAuthenticationResult IApplicationSync.AuthenticateAccount(Action<UsernamePasswordRequestBuilder> requestBuilder)
+        {
+            var builder = new UsernamePasswordRequestBuilder();
+            requestBuilder(builder);
+            var request = builder.Build();
+
+            return this.AsSyncInterface.AuthenticateAccount(request);
+        }
+
+        IAuthenticationResult IApplicationSync.AuthenticateAccount(Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions)
+        {
+            var builder = new UsernamePasswordRequestBuilder();
+            requestBuilder(builder);
+            var request = builder.Build();
+
+            return this.AsSyncInterface.AuthenticateAccount(request, responseOptions);
+        }
+
         IAuthenticationResult IApplicationSync.AuthenticateAccount(string username, string password)
         {
-            var request = new UsernamePasswordRequest(username, password) as IAuthenticationRequest;
+            var request = new UsernamePasswordRequest(username, password, null) as IAuthenticationRequest;
 
             return this.AuthenticateAccount(request);
         }

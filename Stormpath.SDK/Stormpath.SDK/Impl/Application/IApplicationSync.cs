@@ -36,6 +36,10 @@ namespace Stormpath.SDK.Impl.Application
 
         IAuthenticationResult AuthenticateAccount(IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions);
 
+        IAuthenticationResult AuthenticateAccount(Action<UsernamePasswordRequestBuilder> requestBuilder);
+
+        IAuthenticationResult AuthenticateAccount(Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions);
+
         IAuthenticationResult AuthenticateAccount(string username, string password);
 
         bool TryAuthenticateAccount(string username, string password);

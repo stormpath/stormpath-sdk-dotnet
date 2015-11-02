@@ -61,6 +61,9 @@ namespace Stormpath.SDK.Impl.Auth
             attempt.SetType("basic");
             attempt.SetValue(value);
 
+            if (request.AccountStore != null)
+                attempt.SetAccountStore(request.AccountStore);
+
             return attempt;
         }
 

@@ -45,8 +45,10 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="SDK.Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
         /// <code>
-        /// var loginRequest = new UsernamePasswordRequest("jsmith", "Password123#");
-        /// var result = myApp.AuthenticateAccount(loginRequest);
+        /// var loginRequest = new UsernamePasswordRequestBuilder();
+        /// loginRequest.SetUsernameOrEmail("jsmith");
+        /// loginRequest.SetPassword("Password123#");
+        /// var result = myApp.AuthenticateAccount(loginRequest.Build());
         /// </code>
         /// </example>
         public static IAuthenticationResult AuthenticateAccount(this IApplication application, IAuthenticationRequest request)
@@ -58,7 +60,7 @@ namespace Stormpath.SDK.Sync
         /// If not in an assigned account store, the authentication attempt will fail.
         /// </summary>
         /// <param name="application">The application.</param>
-        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. <see cref="UsernamePasswordRequest"/>).</param>
+        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. <see cref="UsernamePasswordRequestBuilder"/>).</param>
         /// <param name="responseOptions">The options to apply to this request.</param>
         /// <returns>
         /// A public static  whose result is the result of the authentication.
@@ -68,11 +70,69 @@ namespace Stormpath.SDK.Sync
         /// <example>
         /// To request and cache the account details:
         /// <code>
-        /// var result = myApp.AuthenticateAccount(new UsernamePasswordRequest("jsmith", "Password123#"), response => response.Expand(x => x.GetAccount));
+        /// var loginRequest = new UsernamePasswordRequestBuilder();
+        /// loginRequest.SetUsernameOrEmail("jsmith");
+        /// loginRequest.SetPassword("Password123#");
+        /// var result = myApp.AuthenticateAccount(loginRequest.Build(), response => response.Expand(x => x.GetAccount));
         /// </code>
         /// </example>
         public static IAuthenticationResult AuthenticateAccount(this IApplication application, IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions)
             => (application as IApplicationSync).AuthenticateAccount(request, responseOptions);
+
+        /// <summary>
+        /// Synchronously authenticates an account's submitted principals and credentials (e.g. username and password)
+        /// against the specified account store.
+        /// If the account does not exist in the account store, the authentication attempt will fail.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <param name="requestBuilder">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
+        /// <returns>
+        /// A Task whose result is the result of the authentication.
+        /// The authenticated account can be obtained from <see cref="SyncAuthenticationResultExtensions.GetAccount(IAuthenticationResult)"/>.
+        /// </returns>
+        /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
+        /// <example>
+        /// To attempt to authenticate against a specific account store:
+        /// <code>
+        /// var result = myApp.AuthenticateAccount(request =>
+        /// {
+        ///     request.SetUsernameOrEmail("jsmith");
+        ///     request.SetPassword("Password123#");
+        ///     request.SetAccountStore(myAccountStore);
+        /// });
+        /// </code>
+        /// </example>
+        public static IAuthenticationResult AuthenticateAccount(this IApplication application, Action<UsernamePasswordRequestBuilder> requestBuilder)
+            => (application as IApplicationSync).AuthenticateAccount(requestBuilder);
+
+        /// <summary>
+        /// Synchronously authenticates an account's submitted principals and credentials (e.g. username and password)
+        /// against the specified account store.
+        /// If the account does not exist in the account store, the authentication attempt will fail.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <param name="requestBuilder">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
+        /// <param name="responseOptions">The options to apply to this request.</param>
+        /// <returns>
+        /// A Task whose result is the result of the authentication.
+        /// The authenticated account can be obtained from <see cref="SyncAuthenticationResultExtensions.GetAccount(IAuthenticationResult)"/>.
+        /// </returns>
+        /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
+        /// <example>
+        /// To attempt to authenticate against a specific account store, and cache the returned account details:
+        /// <code>
+        /// var result = await myApp.AuthenticateAccount(
+        ///     request =>
+        /// {
+        ///     request.SetUsernameOrEmail("jsmith");
+        ///     request.SetPassword("Password123#");
+        ///     request.SetAccountStore(myAccountStore);
+        /// },
+        ///     response => response.Expand(x => x.GetAccountAsync));
+        /// </code>
+        /// </example>
+        public static IAuthenticationResult AuthenticateAccount(this IApplication application, Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions)
+            => (application as IApplicationSync).AuthenticateAccount(requestBuilder, responseOptions);
 
         /// <summary>
         /// Synchronously authenticates an account's submitted principals and credentials (e.g. username and password).
