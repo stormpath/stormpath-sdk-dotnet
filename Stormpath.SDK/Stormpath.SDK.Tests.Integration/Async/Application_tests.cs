@@ -630,7 +630,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var tenant = await client.GetCurrentTenantAsync();
 
             var createdApplication = await tenant.CreateApplicationAsync(
-                $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group Test Application",
+                $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group By Query Test Application",
                 createDirectory: false);
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
@@ -659,21 +659,16 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var tenant = await client.GetCurrentTenantAsync();
 
             var createdApplication = await tenant.CreateApplicationAsync(
-                $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Directory By Query Test Application",
+                $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Directory By Query Throws Test Application",
                 createDirectory: false);
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
-            //might need to create another dummy directory here to ensure multiple results
-            var mapping = await createdApplication
-                .AddAccountStoreAsync<IDirectory>(allDirs => allDirs);
-
-            (await mapping.GetAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
-            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
-
-            mapping.IsDefaultAccountStore.ShouldBeFalse();
-            mapping.IsDefaultGroupStore.ShouldBeFalse();
-            mapping.ListIndex.ShouldBe(0);
+            Should.Throw<ArgumentException>(async () =>
+            {
+                var mapping = await createdApplication
+                    .AddAccountStoreAsync<IDirectory>(allDirs => allDirs);
+            });
 
             // Clean up
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
@@ -688,23 +683,29 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var tenant = await client.GetCurrentTenantAsync();
 
             var createdApplication = await tenant.CreateApplicationAsync(
-                $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group Test Application",
+                $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group By Query Throws Test Application",
                 createDirectory: false);
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
-            //might need to create another dummy group here to ensure multiple results
-            var mapping = await createdApplication
-                .AddAccountStoreAsync<IGroup>(allGroups => allGroups);
+            var dummyGroup = client
+                .Instantiate<IGroup>()
+                .SetName($".NET IT {this.fixture.TestRunIdentifier} Dummy Test Group for Adding Multiple Groups as AccountStore");
+            var primaryDirectory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
+            await primaryDirectory.CreateGroupAsync(dummyGroup);
+            dummyGroup.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedGroupHrefs.Add(dummyGroup.Href);
 
-            (await mapping.GetAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryGroupHref);
-            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
-
-            mapping.IsDefaultAccountStore.ShouldBeFalse();
-            mapping.IsDefaultGroupStore.ShouldBeFalse();
-            mapping.ListIndex.ShouldBe(0);
+            Should.Throw<ArgumentException>(async () =>
+            {
+                var mapping = await createdApplication
+                    .AddAccountStoreAsync<IGroup>(allGroups => allGroups);
+            });
 
             // Clean up
+            (await dummyGroup.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedGroupHrefs.Remove(dummyGroup.Href);
+
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
