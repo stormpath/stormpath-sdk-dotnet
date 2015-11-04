@@ -17,26 +17,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Account;
-using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Auth;
-using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
-using Stormpath.SDK.IdSite;
-using Stormpath.SDK.Impl.Account;
-using Stormpath.SDK.Impl.Auth;
-using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.IdSite;
-using Stormpath.SDK.Impl.Group;
-using Stormpath.SDK.Impl.Linq;
-using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Linq;
-using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Sync;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -136,133 +119,7 @@ namespace Stormpath.SDK.Impl.Application
         Task<IApplication> ISaveableWithOptions<IApplication>.SaveAsync(Action<IRetrievalOptions<IApplication>> options, CancellationToken cancellationToken)
              => this.SaveAsync(options, cancellationToken);
 
-            return this.GetInternalDataStore().CreateAsync(this.PasswordResetToken.Href, (IPasswordResetToken)token, cancellationToken);
-        }
-
-        IPasswordResetToken IApplicationSync.SendPasswordResetEmail(string email)
-        {
-            var token = this.GetInternalDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;
-            token.SetEmail(email);
-
-            return this.GetInternalDataStoreSync().Create(this.PasswordResetToken.Href, (IPasswordResetToken)token);
-        }
-
-        async Task<IAccount> IApplication.VerifyPasswordResetTokenAsync(string token, CancellationToken cancellationToken)
-        {
-            string href = $"{this.PasswordResetToken.Href}/{token}";
-
-            var validTokenResponse = await this.GetInternalDataStore().GetResourceAsync<IPasswordResetToken>(href, cancellationToken).ConfigureAwait(false);
-            return await validTokenResponse.GetAccountAsync(cancellationToken).ConfigureAwait(false);
-        }
-
-        IAccount IApplicationSync.VerifyPasswordResetToken(string token)
-        {
-            string href = $"{this.PasswordResetToken.Href}/{token}";
-
-            var validTokenResponse = this.GetInternalDataStore().GetResource<IPasswordResetToken>(href);
-            return validTokenResponse.GetAccount();
-        }
-
-        async Task<IAccount> IApplication.ResetPasswordAsync(string token, string newPassword, CancellationToken cancellationToken)
-        {
-            if (string.IsNullOrEmpty(token))
-                throw new ArgumentNullException(nameof(token));
-            if (string.IsNullOrEmpty(newPassword))
-                throw new ArgumentNullException(nameof(newPassword));
-
-            var href = $"{this.PasswordResetToken.Href}/{token}";
-            var passwordResetToken = this.GetInternalDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;
-            passwordResetToken.SetPassword(newPassword);
-
-            var responseToken = await this.GetInternalDataStore().CreateAsync(href, (IPasswordResetToken)passwordResetToken, cancellationToken).ConfigureAwait(false);
-            return await responseToken.GetAccountAsync(cancellationToken).ConfigureAwait(false);
-        }
-
-        IAccount IApplicationSync.ResetPassword(string token, string newPassword)
-        {
-            if (string.IsNullOrEmpty(token))
-                throw new ArgumentNullException(nameof(token));
-            if (string.IsNullOrEmpty(newPassword))
-                throw new ArgumentNullException(nameof(newPassword));
-
-            var href = $"{this.PasswordResetToken.Href}/{token}";
-            var passwordResetToken = this.GetInternalDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;
-            passwordResetToken.SetPassword(newPassword);
-
-            var responseToken = this.GetInternalDataStoreSync().Create(href, (IPasswordResetToken)passwordResetToken);
-            return responseToken.GetAccount();
-        }
-
-        Task IApplication.SendVerificationEmailAsync(string usernameOrEmail, CancellationToken cancellationToken)
-            => this.AsInterface.SendVerificationEmailAsync(request => request.Login = usernameOrEmail, cancellationToken);
-
-        Task IApplication.SendVerificationEmailAsync(Action<EmailVerificationRequestBuilder> requestBuilderAction, CancellationToken cancellationToken)
-        {
-            var builder = new EmailVerificationRequestBuilder(this.GetInternalDataStore());
-            requestBuilderAction(builder);
-
-            if (string.IsNullOrEmpty(builder.Login))
-                throw new ArgumentNullException(nameof(builder.Login));
-
-            var href = $"{(this as IResource).Href}/verificationEmails";
-
-            return this.GetInternalDataStore().CreateAsync(href, builder.Build(), cancellationToken);
-        }
-
-        void IApplicationSync.SendVerificationEmail(string usernameOrEmail)
-            => this.AsSyncInterface.SendVerificationEmail(request => request.Login = usernameOrEmail);
-
-        void IApplicationSync.SendVerificationEmail(Action<EmailVerificationRequestBuilder> requestBuilderAction)
-        {
-            var builder = new EmailVerificationRequestBuilder(this.GetInternalDataStore());
-            requestBuilderAction(builder);
-
-            if (string.IsNullOrEmpty(builder.Login))
-                throw new ArgumentNullException(nameof(builder.Login));
-
-            var href = $"{(this as IResource).Href}/verificationEmails";
-
-            this.GetInternalDataStoreSync().Create(href, builder.Build());
-        }
-
-        SDK.IdSite.IIdSiteUrlBuilder IApplication.NewIdSiteUrlBuilder()
-        {
-            return new DefaultIdSiteUrlBuilder(this.InternalDataStore, this.AsInterface.Href);
-        }
-
-        SDK.IdSite.IIdSiteAsyncCallbackHandler IApplication.NewIdSiteCallbackHandler(SDK.Http.IHttpRequest request)
-        {
-            return new DefaultIdSiteAsyncCallbackHandler(this.InternalDataStore, this, request);
-        }
-
-        IAsyncQueryable<IAccount> IApplication.GetAccounts()
-             => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalDataStore());
-
-        IAsyncQueryable<IAccountStoreMapping> IApplication.GetAccountStoreMappings()
-             => new CollectionResourceQueryable<IAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalDataStore());
-
-        async Task<IAccountStore> IApplication.GetDefaultAccountStoreAsync(CancellationToken cancellationToken)
-        {
-            if (this.DefaultAccountStoreMapping.Href == null)
-                return null;
-
-            var accountStoreMapping = await this.GetInternalDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken).ConfigureAwait(false);
-            if (accountStoreMapping == null)
-                return null;
-
-            return await accountStoreMapping.GetAccountStoreAsync().ConfigureAwait(false);
-        }
-
-        IAccountStore IApplicationSync.GetDefaultAccountStore()
-        {
-            if (this.DefaultAccountStoreMapping.Href == null)
-                return null;
-
-            var accountStoreMapping = this.GetInternalDataStore().GetResource<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href);
-            if (accountStoreMapping == null)
-                return null;
-
-            return accountStoreMapping.GetAccountStore();
-        }
+        IApplication ISaveableWithOptionsSync<IApplication>.Save(Action<IRetrievalOptions<IApplication>> options)
+             => this.Save(options);
     }
 }

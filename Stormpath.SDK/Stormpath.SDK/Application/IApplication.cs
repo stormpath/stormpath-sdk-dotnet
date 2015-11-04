@@ -126,7 +126,7 @@ namespace Stormpath.SDK.Application
         /// var result = await myApp.AuthenticateAccountAsync(loginRequest.Build(), response => response.Expand(x => x.GetAccountAsync));
         /// </code>
         /// </example>
-        Task<IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, Action<IRetrievalOptions<Auth.IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password)
@@ -151,7 +151,7 @@ namespace Stormpath.SDK.Application
         /// });
         /// </code>
         /// </example>
-        Task<IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password)
@@ -179,7 +179,7 @@ namespace Stormpath.SDK.Application
         ///     response => response.Expand(x => x.GetAccountAsync));
         /// </code>
         /// </example>
-        Task<IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<Auth.IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password).
