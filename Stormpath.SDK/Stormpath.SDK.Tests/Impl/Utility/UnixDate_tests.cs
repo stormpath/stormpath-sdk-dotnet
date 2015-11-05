@@ -32,12 +32,12 @@ namespace Stormpath.SDK.Tests.Impl.Utility
         }
 
         [Fact]
-        public void Dec_31_2012_is_1356134399000()
+        public void Dec_31_2012_is_1356134399()
         {
             var endOfMayanLongCountCycle = new DateTimeOffset(2012, 12, 21, 23, 59, 59, TimeSpan.Zero);
 
             // Editor's note: World did not cataclysmically end on this date.
-            UnixDate.ToLong(endOfMayanLongCountCycle).ShouldBe(1356134399000);
+            UnixDate.ToLong(endOfMayanLongCountCycle).ShouldBe(1356134399);
         }
 
         [Fact]

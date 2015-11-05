@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Impl.Jwt;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
 using Xunit;
 
@@ -89,11 +90,11 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
             var data = GetClaims(this.builder);
 
             data.ShouldContain(kvp => kvp.Key == "aud" && (string)kvp.Value == "Count Dooku");
-            data.ShouldContain(kvp => kvp.Key == "exp" && (DateTimeOffset)kvp.Value == fakeExpiration);
+            data.ShouldContain(kvp => kvp.Key == "exp" && UnixDate.FromLong((long)kvp.Value) == fakeExpiration);
             data.ShouldContain(kvp => kvp.Key == "jti" && (string)kvp.Value == "jwt-id");
-            data.ShouldContain(kvp => kvp.Key == "iat" && (DateTimeOffset)kvp.Value == fakeIssuedAt);
+            data.ShouldContain(kvp => kvp.Key == "iat" && UnixDate.FromLong((long)kvp.Value) == fakeIssuedAt);
             data.ShouldContain(kvp => kvp.Key == "iss" && (string)kvp.Value == "Lord Sidious");
-            data.ShouldContain(kvp => kvp.Key == "nbf" && (DateTimeOffset)kvp.Value == fakeNotBefore);
+            data.ShouldContain(kvp => kvp.Key == "nbf" && UnixDate.FromLong((long)kvp.Value) == fakeNotBefore);
             data.ShouldContain(kvp => kvp.Key == "sub" && (string)kvp.Value == "Secret Plans");
         }
 
