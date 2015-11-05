@@ -32,17 +32,52 @@ namespace Stormpath.SDK.Impl.Extensions
         public static string ToBase64(this string source, Encoding encoding)
         {
             if (source == null)
-                return null;
+                throw new ArgumentNullException(nameof(source));
 
             return Convert.ToBase64String(encoding.GetBytes(source));
         }
 
+        /// <summary>
+        /// Decodes strings encoded with either <see cref="ToBase64(string, Encoding)"/>
+        /// or <see cref="ToUrlSafeBase64(string, Encoding)"/>.
+        /// </summary>
+        /// <param name="base64Source">Base64-encoded value.</param>
+        /// <param name="encoding">The encoding.</param>
+        /// <returns>The decoded string.</returns>
         public static string FromBase64(this string base64Source, Encoding encoding)
         {
             if (base64Source == null)
-                return null;
+                throw new ArgumentNullException(nameof(base64Source));
+
+            base64Source = base64Source
+                .Replace('-', '+')
+                .Replace('_', '/');
+
+            switch (base64Source.Length % 4)
+            {
+                case 0: break;
+                case 2: base64Source += "=="; break;
+                case 3: base64Source += "="; break;
+                default:
+                    throw new ArgumentException("Illegal base64 string.");
+            }
 
             return encoding.GetString(Convert.FromBase64String(base64Source));
+        }
+
+        public static string ToUrlSafeBase64(this string source, Encoding encoding)
+        {
+            var base64 = source.ToBase64(encoding);
+
+            // Remove trailing '='s
+            base64 = base64.Split('=')[0];
+
+            // Replace illegal characters
+            base64 = base64
+                .Replace('+', '-')
+                .Replace('/', '_');
+
+            return base64;
         }
 
         public static KeyValuePair<string, string> SplitToKeyValuePair(this string source, char separator)

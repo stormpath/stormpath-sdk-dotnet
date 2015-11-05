@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Shouldly;
 using Stormpath.SDK.Impl.Extensions;
 using Xunit;
@@ -23,21 +24,23 @@ namespace Stormpath.SDK.Tests.Impl.Extensions
     public class String_ToUrlSafeBase64_tests
     {
         [Fact]
-        public void Returns_null_when_string_is_null()
+        public void Throws_when_string_is_null()
         {
-            ((string)null).ToBase64(System.Text.Encoding.UTF8).ShouldBeNull();
+            Should.Throw<ArgumentNullException>(() =>
+            {
+                ((string)null).ToUrlSafeBase64(System.Text.Encoding.UTF8);
+            });
         }
 
-        [Fact]
-        public void Returns_empty_when_string_is_empty()
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("foobar", "Zm9vYmFy")]
+        [InlineData("tt?", "dHQ_")]
+        [InlineData("tt~", "dHR-")]
+        [InlineData("f", "Zg")]
+        public void Encodes_UTF8_URL_safe_base64_string(string plaintext, string expectedUrlSafeEncoded)
         {
-            string.Empty.ToBase64(System.Text.Encoding.UTF8).ShouldBe(string.Empty);
-        }
-
-        [Fact]
-        public void Returns_Zm9vYmFy_for_foobar()
-        {
-            "foobar".ToBase64(System.Text.Encoding.UTF8).ShouldBe("Zm9vYmFy");
+            plaintext.ToUrlSafeBase64(System.Text.Encoding.UTF8).ShouldBe(expectedUrlSafeEncoded);
         }
     }
 }

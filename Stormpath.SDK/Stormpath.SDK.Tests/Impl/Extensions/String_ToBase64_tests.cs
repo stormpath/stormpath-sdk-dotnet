@@ -32,16 +32,15 @@ namespace Stormpath.SDK.Tests.Impl.Extensions
             });
         }
 
-        [Fact]
-        public void Returns_empty_when_string_is_empty()
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("foobar", "Zm9vYmFy")]
+        [InlineData("tt?", "dHQ/")] // See String_ToUrlSafeBase64_tests
+        [InlineData("tt~", "dHR+")] // See String_ToUrlSafeBase64_tests
+        [InlineData("f", "Zg==")] // See String_ToUrlSafeBase64_tests
+        public void Encodes_UTF8_base64_string(string plaintext, string expectedEncoded)
         {
-            string.Empty.ToBase64(System.Text.Encoding.UTF8).ShouldBe(string.Empty);
-        }
-
-        [Fact]
-        public void Returns_Zm9vYmFy_for_foobar()
-        {
-            "foobar".ToBase64(System.Text.Encoding.UTF8).ShouldBe("Zm9vYmFy");
+            plaintext.ToBase64(System.Text.Encoding.UTF8).ShouldBe(expectedEncoded);
         }
     }
 }
