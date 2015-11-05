@@ -52,9 +52,8 @@ namespace Stormpath.SDK.Tests.Fakes
 
         string IInternalDataStore.BaseUrl => this.ProxyDataStore.BaseUrl;
 
-        IClientApiKey IInternalDataStore.ApiKey => this.FakeDataStore.ApiKey;
+        IClientApiKey IInternalDataStore.ApiKey => this.ProxyDataStore.ApiKey;
 
-        IRequestExecutor IInternalDataStore.RequestExecutor => this.FakeDataStore.RequestExecutor;
         IRequestExecutor IInternalDataStore.RequestExecutor
             => this.ProxyDataStore.RequestExecutor;
 

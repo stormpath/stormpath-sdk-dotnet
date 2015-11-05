@@ -156,26 +156,6 @@ namespace Stormpath.SDK.Tests.Impl
             }
         }
 
-        public class DateTime_ToUnixTimestamp
-        {
-            [Fact]
-            public void Start_of_Unix_epoch_is_zero()
-            {
-                var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-                epoch.ToUnixTimestamp().ShouldBe(0);
-            }
-
-            [Fact]
-            public void Dec_31_2012_is_1356134399000()
-            {
-                var endOfMayanLongCountCycle = new DateTime(2012, 12, 21, 23, 59, 59, DateTimeKind.Utc);
-
-                // Editor's note: World did not cataclysmically end on this date.
-                endOfMayanLongCountCycle.ToUnixTimestamp().ShouldBe(1356134399000);
-            }
-        }
-
         public class Dictionary_IsNullOrEmpty
         {
             [Fact]

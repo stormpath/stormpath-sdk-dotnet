@@ -70,6 +70,7 @@
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.IdSite.cs" />
     <Compile Include="Impl\Auth\IOrganizationNameKey.cs" />
     <Compile Include="Impl\Auth\UsernamePasswordRequest.cs" />
     <Compile Include="Auth\UsernamePasswordRequestBuilder.cs" />
@@ -248,7 +249,6 @@
     <Compile Include="Impl\Linq\Parsing\WhereComparison.cs" />
     <Compile Include="Impl\Linq\QueryModel\CollectionResourceQueryModel.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryProvider.cs" />
-    <Compile Include="Impl\IdSite\DefaultIdSiteCallbackHandler.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteUrlBuilder.cs" />
     <Compile Include="Impl\IdSite\DefaultNonce.cs" />

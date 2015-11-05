@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly string baseUrl;
         private readonly IRequestExecutor requestExecutor;
         private readonly ICacheResolver cacheResolver;
-        private readonly bool isCachingEnabled;
+        private readonly ICacheProvider cacheProvider;
         private readonly JsonSerializationProvider serializer;
         private readonly ILogger logger;
         private readonly IResourceFactory resourceFactory;
@@ -68,7 +68,6 @@ namespace Stormpath.SDK.Impl.DataStore
 
         IClientApiKey IInternalDataStore.ApiKey => this.requestExecutor.ApiKey;
 
-        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider)
         internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider, TimeSpan identityMapExpiration)
         {
             if (requestExecutor == null)
@@ -144,7 +143,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 return new Dictionary<string, object>();
         }
 
-        private bool IsCachingEnabled() => this.isCachingEnabled;
+        private bool IsCachingEnabled()
+            => this.cacheProvider != null && !(this.cacheProvider is NullCacheProvider);
 
         private QueryString CreateQueryStringFromCreationOptions(ICreationOptions options)
         {

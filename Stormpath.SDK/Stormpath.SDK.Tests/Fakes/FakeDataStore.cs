@@ -30,7 +30,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
-    internal sealed class FakeDataStore<TType> : IInternalDataStore, IInternalDataStoreSync
+    internal sealed class FakeDataStore<TType> : IInternalDataStore, IInternalAsyncDataStore, IInternalSyncDataStore
     {
         private static int defaultLimit = 25;
         private static int defaultOffset = 0;
