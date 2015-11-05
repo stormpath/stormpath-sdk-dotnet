@@ -23,6 +23,19 @@ namespace Stormpath.SDK.Jwt
     /// </summary>
     public sealed class InvalidJwtException : ApplicationException
     {
+        public static InvalidJwtException JwtRequired = new InvalidJwtException("JWT parameter is required.");
+
+        // InvalidValue
+        // InvalidJwtBodyEncoding
+        // InvalidJwtHeaderEncoding
+        // InvalidJwtSignature
+        // ExpiredJwtError
+        // AlreadyUsedJwtError
+
+        public static InvalidJwtException ResponseMissingParameter = new InvalidJwtException("Required response parameter is missing.");
+
+        public static InvalidJwtException ResponseInvalidApiKeyId = new InvalidJwtException("The client used to sign the response is different than the one used in this DataStore.");
+
         public InvalidJwtException(string message)
             : base(message)
         {

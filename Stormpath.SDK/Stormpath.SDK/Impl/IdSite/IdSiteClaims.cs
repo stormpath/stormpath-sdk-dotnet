@@ -25,6 +25,9 @@ namespace Stormpath.SDK.Impl.IdSite
         public static readonly string UseSubdomain = "usd";
         public static readonly string State = "state";
         public static readonly string ResponseId = "irt";
+        public static readonly string IsNewSubject = "isNewSub";
+        public static readonly string Status = "status";
+        public static readonly string Error = "err";
 
         public static readonly string JwtRequest = "jwtRequest";
         public static readonly string JwtResponse = "jwtResponse";

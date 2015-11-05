@@ -57,6 +57,9 @@ namespace Stormpath.SDK.Tests.Fakes
         IRequestExecutor IInternalDataStore.RequestExecutor
             => this.ProxyDataStore.RequestExecutor;
 
+        ICacheResolver IInternalDataStore.CacheResolver
+            => this.ProxyDataStore.CacheResolver;
+
         T IDataStoreSync.GetResource<T>(string href)
             => this.ProxySyncDataStore.GetResource<T>(href);
 

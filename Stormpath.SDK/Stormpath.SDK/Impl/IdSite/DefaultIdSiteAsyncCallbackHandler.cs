@@ -24,6 +24,8 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Impl.Jwt;
 using Stormpath.SDK.Jwt;
 
 namespace Stormpath.SDK.Impl.IdSite
@@ -31,7 +33,7 @@ namespace Stormpath.SDK.Impl.IdSite
     internal sealed class DefaultIdSiteAsyncCallbackHandler : IIdSiteAsyncCallbackHandler
     {
         private readonly IInternalDataStore internalDataStore;
-        private readonly IApplication application;
+        //private readonly IApplication application;
         private readonly string jwtResponse;
 
         private INonceStore nonceStore;
@@ -47,9 +49,9 @@ namespace Stormpath.SDK.Impl.IdSite
                 throw new ArgumentNullException(nameof(httpRequest));
 
             this.internalDataStore = internalDataStore;
-            this.application = application;
+            //this.application = application;
             this.jwtResponse = GetJwtResponse(httpRequest);
-            //this.nonceStore = new DefaultNonceStore(internalDataStore.GetCacheResolver());
+            this.nonceStore = new DefaultNonceStore(internalDataStore.CacheResolver);
         }
 
         private static string GetJwtResponse(IHttpRequest request)
@@ -59,8 +61,8 @@ namespace Stormpath.SDK.Impl.IdSite
 
             var jwtResponse = request.CanonicalUri.QueryString[IdSiteClaims.JwtResponse];
 
-            //if (string.IsNullOrEmpty(jwtResponse))
-            //    throw new InvalidJwtException(InvalidJwtException.JwtRequired);
+            if (string.IsNullOrEmpty(jwtResponse))
+                throw InvalidJwtException.JwtRequired;
 
             return jwtResponse;
         }
@@ -84,8 +86,68 @@ namespace Stormpath.SDK.Impl.IdSite
 
         Task<IAccountResult> IIdSiteAsyncCallbackHandler.ProcessRequestAsync(CancellationToken cancellationToken)
         {
+            try
+            {
+                var dataStoreApiKey = this.internalDataStore.ApiKey.GetId();
+
+                var jsonPayload = JWT.JsonWebToken.DecodeToObject<IDictionary<string, object>>(
+                    this.jwtResponse, dataStoreApiKey, false);
+
+                ThrowIfRequiredParametersMissing(jsonPayload);
+
+                string apiKeyFromJwt = null;
+                if (IsError(jsonPayload))
+                    jsonPayload.TryGetValueAsString(DefaultJwtClaims.Id, out apiKeyFromJwt);
+                else
+                    jsonPayload.TryGetValueAsString(DefaultJwtClaims.Audience, out apiKeyFromJwt);
+
+                ThrowIfJwtSignatureInvalid(apiKeyFromJwt, dataStoreApiKey, jsonPayload);
+                //ThrowIfJwtIsExpired(jsonPayload);
+            }
+            catch (JWT.SignatureVerificationException vex)
+            {
+                // throw as correct SDK exception
+                throw;
+            }
+
             throw new NotImplementedException();
-            //var jsonPayload = JWT.JsonWebToken.DecodeToObject<IDictionary<string, object>>()
+        }
+
+        private static void ThrowIfRequiredParametersMissing(IDictionary<string, object> payload)
+        {
+            var requiredKeys = new string[]
+            {
+                DefaultJwtClaims.Id,
+                DefaultJwtClaims.Audience,
+                DefaultJwtClaims.Expiration,
+                DefaultJwtClaims.Issuer,
+                IdSiteClaims.ResponseId,
+                IdSiteClaims.Status,
+                IdSiteClaims.IsNewSubject,
+            };
+
+            bool valid = requiredKeys?.All(x => payload.ContainsKey(x)) ?? false;
+            if (!valid)
+                throw InvalidJwtException.ResponseMissingParameter;
+        }
+
+        private static void ThrowIfJwtSignatureInvalid(string jwtApiKey, string expectedApiKey, IDictionary<string, object> payload)
+        {
+            if (!expectedApiKey.Equals(jwtApiKey, StringComparison.InvariantCultureIgnoreCase))
+                throw InvalidJwtException.ResponseInvalidApiKeyId;
+
+
+        }
+
+        private static bool IsError(IDictionary<string, object> payload)
+        {
+            if (payload == null)
+                throw new ArgumentNullException(nameof(payload));
+
+            object error = null;
+
+            return payload.TryGetValue(IdSiteClaims.Error, out error)
+                && error != null;
         }
     }
 }

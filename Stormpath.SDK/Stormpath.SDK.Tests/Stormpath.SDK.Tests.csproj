@@ -92,6 +92,11 @@
     <Compile Include="Impl\DefaultRequestExecutor_tests.cs" />
     <Compile Include="Impl\Expansion_save_options_tests.cs" />
     <Compile Include="Impl\Expansion_retrieval_options_tests.cs" />
+    <Compile Include="Impl\Extensions\Dictionary_IsNullOrEmpty_tests.cs" />
+    <Compile Include="Impl\Extensions\String_Nullable_tests.cs" />
+    <Compile Include="Impl\Extensions\String_ToUrlSafeBase64_tests.cs" />
+    <Compile Include="Impl\Extensions\String_ToBase64_tests.cs" />
+    <Compile Include="Impl\Extensions\Uri_WithoutQueryAndFragment_tests.cs" />
     <Compile Include="Impl\FieldConverter_tests.cs" />
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\CollectionTestHarness.cs" />
@@ -103,6 +108,7 @@
     <Compile Include="Impl\Cache\DefaultCacheResolver_tests.cs" />
     <Compile Include="Impl\CanonicalUri_tests.cs" />
     <Compile Include="Impl\ClientApiKey_tests.cs" />
+    <Compile Include="Impl\Jwt\DefaultIdSiteAsyncCallbackHandler_tests.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryable_iteration_tests.cs" />
     <Compile Include="Impl\CreationOptions_tests.cs" />
     <Compile Include="Impl\Cache\InMemoryCache_tests.cs" />
@@ -110,7 +116,6 @@
     <Compile Include="Impl\DefaultClientBuilder_tests.cs" />
     <Compile Include="Impl\DefaultDataStore_tests.cs" />
     <Compile Include="Impl\DefaultResourceFactory_tests.cs" />
-    <Compile Include="Impl\Extensions_tests.cs" />
     <Compile Include="Impl\FieldConverterList_tests.cs" />
     <Compile Include="Impl\FilterChain_tests.cs" />
     <Compile Include="Impl\HttpHeaders_tests.cs" />
@@ -139,6 +144,8 @@
     <Compile Include="Impl\Linq\Sync_ToList_tests.cs" />
     <Compile Include="Impl\PasswordResetToken_tests.cs" />
     <Compile Include="Impl\ResourceTypes_tests.cs" />
+    <Compile Include="Impl\Extensions\String_FromBase64_tests.cs" />
+    <Compile Include="Impl\Extensions\String_SplitToKeyValuePair_tests.cs" />
     <Compile Include="Impl\UriQualifier_tests.cs" />
     <Compile Include="Impl\Utility\AnonymousType_tests.cs" />
     <Compile Include="Impl\Utility\ImmutableValueObject_tests.cs" />

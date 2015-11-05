@@ -57,6 +57,14 @@ namespace Stormpath.SDK.Tests.Fakes
             }
         }
 
+        ICacheResolver IInternalDataStore.CacheResolver
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         string IInternalDataStore.BaseUrl
         {
             get

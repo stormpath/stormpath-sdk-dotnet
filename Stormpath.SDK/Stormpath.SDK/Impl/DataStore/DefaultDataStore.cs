@@ -64,6 +64,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
         IRequestExecutor IInternalDataStore.RequestExecutor => this.requestExecutor;
 
+        ICacheResolver IInternalDataStore.CacheResolver => this.cacheResolver;
+
         string IInternalDataStore.BaseUrl => this.baseUrl;
 
         IClientApiKey IInternalDataStore.ApiKey => this.requestExecutor.ApiKey;

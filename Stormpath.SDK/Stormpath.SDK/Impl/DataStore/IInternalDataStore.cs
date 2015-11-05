@@ -27,6 +27,8 @@ namespace Stormpath.SDK.Impl.DataStore
     {
         IRequestExecutor RequestExecutor { get; }
 
+        ICacheResolver CacheResolver { get; }
+
         string BaseUrl { get; }
 
         IClientApiKey ApiKey { get; }
