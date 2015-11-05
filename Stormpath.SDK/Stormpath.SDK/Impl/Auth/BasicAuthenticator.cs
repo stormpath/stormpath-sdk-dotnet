@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Auth
@@ -55,7 +56,7 @@ namespace Stormpath.SDK.Impl.Auth
             var username = request.Principals.Nullable() ?? string.Empty;
             var password = request.Credentials.Nullable() ?? string.Empty;
             var value = $"{username}:{password}";
-            value = value.ToBase64(Encoding.UTF8);
+            value = Base64.Encode(value, Encoding.UTF8);
 
             var attempt = this.dataStore.Instantiate<IBasicLoginAttempt>();
             attempt.SetType("basic");

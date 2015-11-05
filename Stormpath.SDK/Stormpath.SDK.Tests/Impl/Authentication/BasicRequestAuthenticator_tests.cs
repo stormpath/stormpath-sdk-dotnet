@@ -70,7 +70,7 @@ namespace Stormpath.SDK.Tests.Impl.Authentication
             // Authorization: "Basic [base64 stuff]"
             var authenticationHeader = request.Headers.Authorization;
             authenticationHeader.Scheme.ShouldBe("Basic");
-            authenticationHeader.Parameter.FromBase64(Encoding.UTF8).ShouldBe($"{this.fakeApiKeyId}:{this.fakeApiKeySecret}");
+            Base64.Decode(authenticationHeader.Parameter, Encoding.UTF8).ShouldBe($"{this.fakeApiKeyId}:{this.fakeApiKeySecret}");
         }
     }
 }

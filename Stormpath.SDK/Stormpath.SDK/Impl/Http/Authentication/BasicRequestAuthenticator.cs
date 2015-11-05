@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Impl.Http.Authentication
             request.Headers.Add(StormpathDateHeaderName, Iso8601.Format(now, withSeparators: false));
 
             var authorizationHeaderContent = $"{apiKey.GetId()}:{apiKey.GetSecret()}";
-            var authorizationHeaderEncrypted = authorizationHeaderContent.ToBase64(Encoding.UTF8);
+            var authorizationHeaderEncrypted = Base64.Encode(authorizationHeaderContent, Encoding.UTF8);
             request.Headers.Authorization = new AuthorizationHeaderValue("Basic", authorizationHeaderEncrypted);
         }
     }
