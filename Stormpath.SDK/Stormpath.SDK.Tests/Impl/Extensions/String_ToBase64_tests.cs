@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Shouldly;
 using Stormpath.SDK.Impl.Extensions;
 using Xunit;
@@ -23,9 +24,12 @@ namespace Stormpath.SDK.Tests.Impl.Extensions
     public class String_ToBase64_tests
     {
         [Fact]
-        public void Returns_null_when_string_is_null()
+        public void Throws_when_string_is_null()
         {
-            ((string)null).ToBase64(System.Text.Encoding.UTF8).ShouldBeNull();
+            Should.Throw<ArgumentNullException>(() =>
+            {
+                ((string)null).ToBase64(System.Text.Encoding.UTF8);
+            });
         }
 
         [Fact]
