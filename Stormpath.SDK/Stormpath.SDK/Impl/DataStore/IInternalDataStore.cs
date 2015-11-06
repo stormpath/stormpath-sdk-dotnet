@@ -36,7 +36,6 @@ namespace Stormpath.SDK.Impl.DataStore
         T InstantiateWithHref<T>(string href)
             where T : IResource;
 
-        T InstantiateWithData<T>(IDictionary<string, object> properties)
-            where T : IResource;
+        T InstantiateWithData<T>(IDictionary<string, object> properties);
     }
 }

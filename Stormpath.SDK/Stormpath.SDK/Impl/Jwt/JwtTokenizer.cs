@@ -1,4 +1,4 @@
-﻿// <copyright file="IdSiteResultStatus.cs" company="Stormpath, Inc.">
+﻿// <copyright file="JwtTokenizer.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +14,26 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.IdSite
+using Stormpath.SDK.Jwt;
+
+namespace Stormpath.SDK.Impl.Jwt
 {
-    public enum IdSiteResultStatus
+    internal sealed class JwtTokenizer
     {
-        Registered,
-        Authenticated,
-        Logout
+        private readonly string[] tokens;
+
+        public JwtTokenizer(string jwt)
+        {
+            this.tokens = jwt.Split(JwtStrings.Separator);
+
+            if (this.tokens.Length != 3)
+                throw InvalidJwtException.InvalidValue;
+        }
+
+        public string Base64Header => this.tokens[0];
+
+        public string Base64Payload => this.tokens[1];
+
+        public string Base64Signature => this.tokens[2];
     }
 }

@@ -70,7 +70,8 @@
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
-    <Compile Include="IdSite\IdSiteResultStatus.cs" />
+    <Compile Include="Impl\IdSite\DefaultAccountResult.cs" />
+    <Compile Include="Impl\IdSite\IdSiteResultStatus.cs" />
     <Compile Include="Impl\Application\DefaultApplication.IdSite.cs" />
     <Compile Include="Impl\Auth\IOrganizationNameKey.cs" />
     <Compile Include="Impl\Auth\UsernamePasswordRequest.cs" />
@@ -219,6 +220,9 @@
     <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
     <Compile Include="Impl\Jwt\DefaultJwtSigner.cs" />
     <Compile Include="Impl\Jwt\IJwtSigner.cs" />
+    <Compile Include="Impl\Jwt\JwtSignatureValidator.cs" />
+    <Compile Include="Impl\Jwt\JwtStrings.cs" />
+    <Compile Include="Impl\Jwt\JwtTokenizer.cs" />
     <Compile Include="Impl\Linq\CollectionResourceExecutor.cs" />
     <Compile Include="Impl\Linq\Parsing\DatetimeAttributeTermWorkingModel.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\ExpandExpression.cs" />

@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultApplication.IdSite.cs" company="Stormpath, Inc.">
+﻿// <copyright file="JwtStrings.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Application;
-using Stormpath.SDK.Impl.IdSite;
-
-namespace Stormpath.SDK.Impl.Application
+namespace Stormpath.SDK.Impl.Jwt
 {
-    internal sealed partial class DefaultApplication
+    internal static class JwtStrings
     {
-        SDK.IdSite.IIdSiteUrlBuilder IApplication.NewIdSiteUrlBuilder()
-            => new DefaultIdSiteUrlBuilder(this.GetInternalDataStore(), this.AsInterface.Href);
-
-        SDK.IdSite.IIdSiteAsyncCallbackHandler IApplication.NewIdSiteCallbackHandler(SDK.Http.IHttpRequest request)
-            => new DefaultIdSiteAsyncCallbackHandler(this.GetInternalDataStore(), request);
+        public static readonly char Separator = '.';
     }
 }

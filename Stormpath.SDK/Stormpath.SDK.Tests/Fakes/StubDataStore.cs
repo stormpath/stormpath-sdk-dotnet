@@ -154,9 +154,7 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         T IInternalDataStore.InstantiateWithData<T>(IDictionary<string, object> properties)
-        {
-            throw new NotImplementedException();
-        }
+            => this.ProxyDataStore.InstantiateWithData<T>(properties);
 
         private bool isDisposed = false; // To detect redundant calls
 

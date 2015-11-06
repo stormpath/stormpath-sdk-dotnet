@@ -17,6 +17,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.IdSite
 {

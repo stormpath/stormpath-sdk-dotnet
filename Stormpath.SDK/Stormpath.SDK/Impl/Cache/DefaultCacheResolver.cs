@@ -48,6 +48,10 @@ namespace Stormpath.SDK.Impl.Cache
         private string GetCacheRegionName(Type type)
         {
             var iface = this.typeLookup.GetInterface(type);
+
+            if (iface == null)
+                throw new ApplicationException($"Could not locate a cache region for resource type {type.Name}. Resource type unknown.");
+
             return iface.Name;
         }
 

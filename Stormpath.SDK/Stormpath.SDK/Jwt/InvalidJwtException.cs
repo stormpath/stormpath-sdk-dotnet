@@ -25,12 +25,16 @@ namespace Stormpath.SDK.Jwt
     {
         public static InvalidJwtException JwtRequired = new InvalidJwtException("JWT parameter is required.");
 
-        // InvalidValue
+        public static InvalidJwtException InvalidValue = new InvalidJwtException("The JWT value format is not correct.");
+
         // InvalidJwtBodyEncoding
         // InvalidJwtHeaderEncoding
-        // InvalidJwtSignature
-        // ExpiredJwtError
-        // AlreadyUsedJwtError
+
+        public static InvalidJwtException SignatureError = new InvalidJwtException("The JWT signature is invalid.");
+
+        public static InvalidJwtException Expired = new InvalidJwtException("The JWT has already expired.");
+
+        public static InvalidJwtException AlreadyUsed = new InvalidJwtException("This JWT has already been used.");
 
         public static InvalidJwtException ResponseMissingParameter = new InvalidJwtException("Required response parameter is missing.");
 

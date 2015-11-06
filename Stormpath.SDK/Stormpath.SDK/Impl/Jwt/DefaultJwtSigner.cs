@@ -25,8 +25,6 @@ namespace Stormpath.SDK.Impl.Jwt
         private static readonly string Base64UrlSafeJwtSignHeader
             = Base64.EncodeUrlSafe("{\"alg\":\"HS256\",\"typ\":\"JWT\"}", Encoding.UTF8);
 
-        private static readonly char TokenSeparator = '.';
-
         private readonly byte[] signingKey;
 
         public DefaultJwtSigner(string signingKey)
@@ -44,20 +42,19 @@ namespace Stormpath.SDK.Impl.Jwt
 
             return new StringBuilder()
                 .Append(Base64UrlSafeJwtSignHeader)
-                .Append(TokenSeparator)
+                .Append(JwtStrings.Separator)
                 .Append(base64UrlSafeJsonPayload)
-                .Append(TokenSeparator)
+                .Append(JwtStrings.Separator)
                 .Append(signature)
                 .ToString();
         }
 
         public string CalculateSignature(string base64Header, string base64JsonPayload)
         {
-            var input = $"{base64Header}{TokenSeparator}{base64JsonPayload}";
+            var input = $"{base64Header}{JwtStrings.Separator}{base64JsonPayload}";
             var hmac = new HmacGenerator(this.signingKey, Encoding.UTF8).ComputeHmac(input);
 
-            throw new NotImplementedException();
-            //return hmac.ToUrlSafeBase64
+            return Base64.EncodeUrlSafe(hmac);
         }
     }
 }

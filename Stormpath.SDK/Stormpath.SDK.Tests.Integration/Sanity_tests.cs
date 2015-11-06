@@ -100,6 +100,7 @@ namespace Stormpath.SDK.Tests.Integration
         [Fact]
         public void All_Impl_async_methods_have_required_CancellationToken_parameters()
         {
+            //todo refactor to match below
             var methodsInAssembly = Assembly
                 .GetAssembly(typeof(Client.IClient))
                 .GetTypes()
@@ -125,6 +126,13 @@ namespace Stormpath.SDK.Tests.Integration
         [Fact]
         public void All_SDK_async_methods_have_optional_CancellationToken_parameters()
         {
+            var whitelistedMethods = new List<string>()
+            {
+                "IIdSiteResultAsyncListener.OnRegisteredAsync(IAccountResult, CancellationToken)",
+                "IIdSiteResultAsyncListener.OnAuthenticatedAsync(IAccountResult, CancellationToken)",
+                "IIdSiteResultAsyncListener.OnLogoutAsync(IAccountResult, CancellationToken)",
+            };
+
             var methodsInAssembly = Assembly
                 .GetAssembly(typeof(Client.IClient))
                 .GetTypes()
@@ -139,12 +147,24 @@ namespace Stormpath.SDK.Tests.Integration
                 .Where(method => method.GetParameters().Any(p => p.ParameterType == typeof(CancellationToken) && !p.IsOptional))
                 .Where(method => !method.DeclaringType.Namespace.StartsWith("Stormpath.SDK.Impl"));
 
+            var violatingMethods = asyncMethodsWithRequiredCT
+                .Select(m =>
+                {
+                    var argList = m
+                        .GetParameters()
+                        .Select(p => p.ParameterType.Name);
+
+                    //DRY this up
+                    return $"{m.DeclaringType.Name}.{m.Name}({string.Join(", ", argList)})";
+                })
+                .Except(whitelistedMethods);
+
             // Must be all optional
-            asyncMethodsWithRequiredCT
+            violatingMethods
                 .Any()
                 .ShouldBe(
                     expected: false,
-                    customMessage: "These methods must have an optional CancellationToken parameter:" + Environment.NewLine + PrettyMethodOutput(asyncMethodsWithRequiredCT));
+                    customMessage: "These methods must have an optional CancellationToken parameter:" + Environment.NewLine + string.Join(Environment.NewLine, violatingMethods));
         }
 
         [Fact]

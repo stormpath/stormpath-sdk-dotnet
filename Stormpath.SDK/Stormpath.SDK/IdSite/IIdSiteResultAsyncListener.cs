@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Stormpath.SDK.IdSite
@@ -27,22 +28,25 @@ namespace Stormpath.SDK.IdSite
         /// <summary>
         /// This method will be invoked if a successful registration operation takes place on ID Site.
         /// </summary>
-        /// <param name="result">The </param>
+        /// <param name="result">The data specific to this event.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task that indicates the completion of the method.</returns>
-        Task OnRegisteredAsync(IRegistrationResult result);
+        Task OnRegisteredAsync(IAccountResult result, CancellationToken cancellationToken);
 
         /// <summary>
         /// This method will be invoked if a successful registration operation takes place on ID Site.
         /// </summary>
-        /// <param name="result">The </param>
+        /// <param name="result">The data specific to this event.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task that indicates the completion of the method.</returns>
-        Task OnAuthenticatedAsync(IAuthenticationResult result);
+        Task OnAuthenticatedAsync(IAccountResult result, CancellationToken cancellationToken);
 
         /// <summary>
         /// This method will be invoked if a successful registration operation takes place on ID Site.
         /// </summary>
-        /// <param name="result">The </param>
+        /// <param name="result">The data specific to this event.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task that indicates the completion of the method.</returns>
-        Task OnLogoutAsync(ILogoutResult result);
+        Task OnLogoutAsync(IAccountResult result, CancellationToken cancellationToken);
     }
 }

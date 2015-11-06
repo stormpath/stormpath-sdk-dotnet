@@ -64,7 +64,7 @@ namespace Stormpath.SDK.IdSite
         /// Sets the <see cref="IIdSiteResultAsyncListener"/> that will be notified about the actual operation
         /// of the ID Site invokation: registration, authentication, or logout.
         /// <para>
-        /// The listener must be set before the method <see cref="ProcessRequestAsync(CancellationToken)"/> is invoked.
+        /// The listener must be set before the method <see cref="GetAccountResultAsync(CancellationToken)"/> is invoked.
         /// </para>
         /// </summary>
         /// <param name="resultListener">The result listener to notify.</param>
@@ -78,7 +78,7 @@ namespace Stormpath.SDK.IdSite
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the resolved identity in the form of an <see cref="IAccountResult"/>.</returns>
         /// <exception cref="Jwt.InvalidJwtException">The returned token is invalid.</exception>
-        /// <exception cref=""></exception>
-        Task<IAccountResult> ProcessRequestAsync(CancellationToken cancellationToken);
+        /// <exception cref="ApplicationException">The current nonce store does not support asynchronous operations.</exception>
+        Task<IAccountResult> GetAccountResultAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }
