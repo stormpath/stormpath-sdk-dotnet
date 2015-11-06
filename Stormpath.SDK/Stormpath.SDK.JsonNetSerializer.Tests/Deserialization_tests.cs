@@ -112,6 +112,17 @@ namespace Stormpath.SDK.Extensions.Serialization.JsonNet.Tests
         }
 
         [Fact]
+        public void Long_is_deserialized_properly()
+        {
+            var result = this.serializer.Deserialize(@"{ items: 2147483648 }");
+
+            result.Count.ShouldBe(1);
+            result.Single().Key.ShouldBe("items");
+            result.Single().Value.ShouldBeOfType<long>();
+            result.Single().Value.ShouldBe(2147483648);
+        }
+
+        [Fact]
         public void Bool_is_deserialized_properly()
         {
             var result = this.serializer.Deserialize(@"{ isFoo: true }");
