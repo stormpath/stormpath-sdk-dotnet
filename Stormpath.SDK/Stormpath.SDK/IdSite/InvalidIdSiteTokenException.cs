@@ -16,7 +16,7 @@
 
 using Stormpath.SDK.Impl.Error;
 
-namespace Stormpath.SDK.Impl.IdSite
+namespace Stormpath.SDK.IdSite
 {
     /// <summary>
     /// This exception indicates that the token is invalid. Reasons for this could be:

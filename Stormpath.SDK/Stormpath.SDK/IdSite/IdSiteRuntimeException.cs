@@ -1,4 +1,4 @@
-﻿// <copyright file="IdSiteInvalidTokenException.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IdSiteRuntimeException.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,22 +15,28 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Impl.Error;
 
 namespace Stormpath.SDK.IdSite
 {
-    public sealed class IdSiteInvalidTokenException : ResourceException
+    /// <summary>
+    /// A sub-class of <see cref="ResourceException"/> representing an ID Site error.
+    /// </summary>
+    public class IdSiteRuntimeException : ResourceException
     {
-        internal IdSiteInvalidTokenException(DefaultError error)
+        private static readonly int[] SupportedErrors =
+            { 10011, 10012, 11001, 11002, 11003, 12001 };
+
+        internal IdSiteRuntimeException(DefaultError error)
             : base(error)
         {
+            if (!Supports(error))
+                throw new ArgumentException("Error type not supported; must be one of: " + string.Join(",", SupportedErrors));
         }
 
-        // TODO
+        private static bool Supports(IError error)
+            => SupportedErrors.Contains(error.Code);
     }
 }

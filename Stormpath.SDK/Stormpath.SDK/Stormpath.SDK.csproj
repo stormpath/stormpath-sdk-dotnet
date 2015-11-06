@@ -106,8 +106,6 @@
     <Compile Include="Http\ISynchronousHttpClient.cs" />
     <Compile Include="IdSite\IAccountResult.cs" />
     <Compile Include="IdSite\IAsynchronousNonceStore.cs" />
-    <Compile Include="IdSite\IdSiteInvalidTokenException.cs" />
-    <Compile Include="IdSite\IdSiteSessionTimeoutException.cs" />
     <Compile Include="IdSite\IIdSiteAsyncCallbackHandler.cs" />
     <Compile Include="IdSite\IIdSiteResultAsyncListener.cs" />
     <Compile Include="IdSite\IIdSiteUrlBuilder.cs" />
@@ -214,9 +212,9 @@
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
     <Compile Include="Impl\IdentityMap\IIdentityMap.cs" />
     <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
-    <Compile Include="Impl\IdSite\IdSiteRuntimeException.cs" />
-    <Compile Include="Impl\IdSite\IdSiteSessionTimeoutException.cs" />
-    <Compile Include="Impl\IdSite\InvalidIdSiteTokenException.cs" />
+    <Compile Include="IdSite\IdSiteRuntimeException.cs" />
+    <Compile Include="IdSite\IdSiteSessionTimeoutException.cs" />
+    <Compile Include="IdSite\InvalidIdSiteTokenException.cs" />
     <Compile Include="Impl\Jwt\DefaultJwtSigner.cs" />
     <Compile Include="Impl\Jwt\IJwtSigner.cs" />
     <Compile Include="Impl\Jwt\JsonWebToken.cs" />

@@ -226,6 +226,27 @@ namespace Stormpath.SDK.Impl.IdSite
             if (errorData == null)
                 throw new ApplicationException("Error parsing ID Site error response.");
 
+            object codeRaw;
+            int code;
+            if (!errorData.TryGetValue("code", out codeRaw) ||
+                !int.TryParse(codeRaw.ToString(), out code))
+                throw new ApplicationException($"Error type is unrecognized: '{codeRaw ?? "<null>"}'");
+
+            if (code == 10011
+                || code == 10012
+                || code == 11001
+                || code == 11002
+                || code == 11003)
+            {
+                throw new InvalidIdSiteTokenException(new Error.DefaultError(errorData));
+            }
+
+            if (code == 12001)
+            {
+                throw new IdSiteSessionTimeoutException(new Error.DefaultError(errorData));
+            }
+
+            // Default/fallback
             throw new IdSiteRuntimeException(new Error.DefaultError(errorData));
         }
 

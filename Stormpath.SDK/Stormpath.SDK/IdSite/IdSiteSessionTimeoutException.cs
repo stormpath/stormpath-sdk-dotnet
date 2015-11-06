@@ -14,23 +14,18 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Stormpath.SDK.Error;
 using Stormpath.SDK.Impl.Error;
 
 namespace Stormpath.SDK.IdSite
 {
-    public sealed class IdSiteSessionTimeoutException : ResourceException
+    /// <summary>
+    /// This exception indicates that the session on ID Site has timed out.
+    /// </summary>
+    public sealed class IdSiteSessionTimeoutException : IdSiteRuntimeException
     {
         internal IdSiteSessionTimeoutException(DefaultError error)
             : base(error)
         {
         }
-
-        // TODO
     }
 }
