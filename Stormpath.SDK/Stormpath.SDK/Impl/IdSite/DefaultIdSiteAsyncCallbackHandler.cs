@@ -94,36 +94,33 @@ namespace Stormpath.SDK.Impl.IdSite
         {
             var dataStoreApiKey = this.internalDataStore.ApiKey;
 
-            var payload = JWT.JsonWebToken.DecodeToObject<Map>(
-                this.jwtResponse, dataStoreApiKey.GetId(), false);
+            var jwt = new JsonWebToken(this.jwtResponse, this.internalDataStore.Serializer);
 
-            var payloadstring = JWT.JsonWebToken.Decode(this.jwtResponse, dataStoreApiKey.GetId(), false);
-
-            ThrowIfRequiredParametersMissing(payload);
+            ThrowIfRequiredParametersMissing(jwt.Payload);
 
             string apiKeyFromJwt = null;
-            if (IsError(payload))
-                payload.TryGetValueAsString(JwtHeaderParameters.KeyId, out apiKeyFromJwt);
+            if (IsError(jwt.Payload))
+                jwt.Header.TryGetValueAsString(JwtHeaderParameters.KeyId, out apiKeyFromJwt);
             else
-                payload.TryGetValueAsString(DefaultJwtClaims.Audience, out apiKeyFromJwt);
+                jwt.Payload.TryGetValueAsString(DefaultJwtClaims.Audience, out apiKeyFromJwt);
 
-            ThrowIfJwtSignatureInvalid(apiKeyFromJwt, dataStoreApiKey, this.jwtResponse);
-            ThrowIfJwtIsExpired(payload);
+            ThrowIfJwtSignatureInvalid(apiKeyFromJwt, dataStoreApiKey, jwt);
+            ThrowIfJwtIsExpired(jwt.Payload);
 
-            IfErrorThrowIdSiteException(payload);
+            IfErrorThrowIdSiteException(jwt.Payload);
 
             if (!this.nonceStore.IsAsynchronousSupported || this.asyncNonceStore == null)
                 throw new ApplicationException("The current nonce store does not support asynchronous operations.");
 
-            var responseNonce = (string)payload[IdSiteClaims.ResponseId];
+            var responseNonce = (string)jwt.Payload[IdSiteClaims.ResponseId];
             await this.ThrowIfNonceIsAlreadyUsedAsync(responseNonce, cancellationToken).ConfigureAwait(false);
             await this.asyncNonceStore.PutNonceAsync(responseNonce, cancellationToken).ConfigureAwait(false);
 
             string accountHref = null;
             bool accountHrefPresent =
-                payload.TryGetValueAsString(DefaultJwtClaims.Subject, out accountHref)
+                jwt.Payload.TryGetValueAsString(DefaultJwtClaims.Subject, out accountHref)
                 && !string.IsNullOrEmpty(accountHref);
-            var resultStatus = IdSiteResultStatus.Parse((string)payload[IdSiteClaims.Status]);
+            var resultStatus = IdSiteResultStatus.Parse((string)jwt.Payload[IdSiteClaims.Status]);
 
             // todo bundle up logic
             // The 'sub' claim (accountHref) can be null if calling /sso/logout when the subject is already logged out,
@@ -134,8 +131,8 @@ namespace Stormpath.SDK.Impl.IdSite
             // bundle up accountResult construction
 
             object state = null;
-            payload.TryGetValue(IdSiteClaims.State, out state);
-            bool isNewAccount = (bool)payload[IdSiteClaims.IsNewSubject];
+            jwt.Payload.TryGetValue(IdSiteClaims.State, out state);
+            bool isNewAccount = (bool)jwt.Payload[IdSiteClaims.IsNewSubject];
 
             var properties = new Dictionary<string, object>()
             {
@@ -202,7 +199,7 @@ namespace Stormpath.SDK.Impl.IdSite
                 throw InvalidJwtException.ResponseMissingParameter;
         }
 
-        private static void ThrowIfJwtSignatureInvalid(string jwtApiKey, IClientApiKey clientApiKey, string jwt)
+        private static void ThrowIfJwtSignatureInvalid(string jwtApiKey, IClientApiKey clientApiKey, JsonWebToken jwt)
         {
             if (!clientApiKey.GetId().Equals(jwtApiKey, StringComparison.InvariantCultureIgnoreCase))
                 throw InvalidJwtException.ResponseInvalidApiKeyId;

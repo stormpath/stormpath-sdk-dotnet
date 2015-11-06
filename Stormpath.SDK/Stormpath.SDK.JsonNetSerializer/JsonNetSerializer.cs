@@ -83,7 +83,16 @@ namespace Stormpath.SDK.Extensions.Serialization
                         break;
 
                     case JTokenType.Integer:
-                        value = int.Parse(prop.Value.ToString());
+                        var raw = prop.Value.ToString();
+                        int intResult;
+                        long longResult;
+
+                        if (int.TryParse(raw, out intResult))
+                            value = intResult;
+                        else if (long.TryParse(raw, out longResult))
+                            value = longResult;
+                        else
+                            throw new ArgumentException("Unknown integer type encountered during parsing.");
                         break;
 
                     case JTokenType.Boolean:

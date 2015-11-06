@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Error
         internal readonly DefaultError Error;
 
         internal ResourceException(DefaultError error)
-            : base(BuildExceptionMessage(error))
+            : base(error.Message)
         {
             this.Error = error;
             this.constructedErrorMessage = BuildExceptionMessage(error);

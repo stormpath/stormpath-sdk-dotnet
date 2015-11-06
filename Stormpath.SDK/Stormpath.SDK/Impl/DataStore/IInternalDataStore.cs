@@ -20,6 +20,7 @@ using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -28,6 +29,8 @@ namespace Stormpath.SDK.Impl.DataStore
         IRequestExecutor RequestExecutor { get; }
 
         ICacheResolver CacheResolver { get; }
+
+        IJsonSerializer Serializer { get; }
 
         string BaseUrl { get; }
 

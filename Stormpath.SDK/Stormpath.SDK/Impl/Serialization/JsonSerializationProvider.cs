@@ -25,13 +25,13 @@ namespace Stormpath.SDK.Impl.Serialization
     internal sealed class JsonSerializationProvider
     {
         private readonly FieldConverterList converterChain;
-
-        private readonly IJsonSerializer externalSerializer;
         private readonly ResourceTypes typeLookup;
+
+        internal readonly IJsonSerializer ExternalSerializer;
 
         public JsonSerializationProvider(IJsonSerializer externalSerializer)
         {
-            this.externalSerializer = externalSerializer;
+            this.ExternalSerializer = externalSerializer;
             this.typeLookup = new ResourceTypes();
 
             this.converterChain = new FieldConverterList(
@@ -45,12 +45,12 @@ namespace Stormpath.SDK.Impl.Serialization
 
         public string Serialize(IDictionary<string, object> map)
         {
-            return this.externalSerializer.Serialize(map);
+            return this.ExternalSerializer.Serialize(map);
         }
 
         public IDictionary<string, object> Deserialize(string json, Type targetType)
         {
-            var stringlyTypedProperties = this.externalSerializer.Deserialize(json);
+            var stringlyTypedProperties = this.ExternalSerializer.Deserialize(json);
             var stronglyTypedProperties = this.ConvertProperties(stringlyTypedProperties, targetType);
 
             return stronglyTypedProperties;

@@ -27,6 +27,7 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
@@ -59,6 +60,9 @@ namespace Stormpath.SDK.Tests.Fakes
 
         ICacheResolver IInternalDataStore.CacheResolver
             => this.ProxyDataStore.CacheResolver;
+
+        IJsonSerializer IInternalDataStore.Serializer
+            => this.ProxyDataStore.Serializer;
 
         T IDataStoreSync.GetResource<T>(string href)
             => this.ProxySyncDataStore.GetResource<T>(href);

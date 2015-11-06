@@ -66,6 +66,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
         ICacheResolver IInternalDataStore.CacheResolver => this.cacheResolver;
 
+        IJsonSerializer IInternalDataStore.Serializer => this.serializer.ExternalSerializer;
+
         string IInternalDataStore.BaseUrl => this.baseUrl;
 
         IClientApiKey IInternalDataStore.ApiKey => this.requestExecutor.ApiKey;

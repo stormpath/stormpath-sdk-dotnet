@@ -27,6 +27,7 @@ using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
@@ -58,6 +59,14 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         ICacheResolver IInternalDataStore.CacheResolver
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        IJsonSerializer IInternalDataStore.Serializer
         {
             get
             {

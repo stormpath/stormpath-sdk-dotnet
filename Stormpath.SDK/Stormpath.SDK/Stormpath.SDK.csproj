@@ -39,10 +39,6 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JWT, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\JWT.1.3.4\lib\3.5\JWT.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -223,9 +219,9 @@
     <Compile Include="Impl\IdSite\InvalidIdSiteTokenException.cs" />
     <Compile Include="Impl\Jwt\DefaultJwtSigner.cs" />
     <Compile Include="Impl\Jwt\IJwtSigner.cs" />
+    <Compile Include="Impl\Jwt\JsonWebToken.cs" />
     <Compile Include="Impl\Jwt\JwtHeaderParameters.cs" />
     <Compile Include="Impl\Jwt\JwtSignatureValidator.cs" />
-    <Compile Include="Impl\Jwt\JwtTokenizer.cs" />
     <Compile Include="Impl\Linq\CollectionResourceExecutor.cs" />
     <Compile Include="Impl\Linq\Parsing\DatetimeAttributeTermWorkingModel.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\ExpandExpression.cs" />

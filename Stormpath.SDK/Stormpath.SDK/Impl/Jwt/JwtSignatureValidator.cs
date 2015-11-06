@@ -31,15 +31,14 @@ namespace Stormpath.SDK.Impl.Jwt
             this.jwtSigner = new DefaultJwtSigner(apiKey.GetSecret());
         }
 
-        public bool IsValid(string jwt)
+        public bool IsValid(JsonWebToken jwt)
         {
             if (jwt == null)
                 throw new ArgumentNullException(nameof(jwt));
 
-            var tokenizer = new JwtTokenizer(jwt);
-            var calculatedSignature = this.jwtSigner.CalculateSignature(tokenizer.Base64Header, tokenizer.Base64Payload);
+            var calculatedSignature = this.jwtSigner.CalculateSignature(jwt.Base64Header, jwt.Base64Payload);
 
-            return tokenizer.Base64Signature.Equals(calculatedSignature, StringComparison.InvariantCultureIgnoreCase);
+            return jwt.Base64Signature.Equals(calculatedSignature, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
