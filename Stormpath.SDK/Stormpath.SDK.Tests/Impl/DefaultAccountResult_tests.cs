@@ -61,7 +61,8 @@ namespace Stormpath.SDK.Tests.Impl
                     ["state"] = "foobar"
                 });
 
-            Should.Throw<ApplicationException>(async () =>
+            // TODO mono bug - should be ApplicationException
+            Should.Throw<Exception>(async () =>
             {
                 var account = await accountResult.GetAccountAsync();
             });
