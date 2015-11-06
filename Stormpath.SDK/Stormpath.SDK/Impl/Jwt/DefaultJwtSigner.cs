@@ -42,16 +42,16 @@ namespace Stormpath.SDK.Impl.Jwt
 
             return new StringBuilder()
                 .Append(Base64UrlSafeJwtSignHeader)
-                .Append(JwtStrings.Separator)
+                .Append(JwtTokenizer.Separator)
                 .Append(base64UrlSafeJsonPayload)
-                .Append(JwtStrings.Separator)
+                .Append(JwtTokenizer.Separator)
                 .Append(signature)
                 .ToString();
         }
 
         public string CalculateSignature(string base64Header, string base64JsonPayload)
         {
-            var input = $"{base64Header}{JwtStrings.Separator}{base64JsonPayload}";
+            var input = $"{base64Header}{JwtTokenizer.Separator}{base64JsonPayload}";
             var hmac = new HmacGenerator(this.signingKey, Encoding.UTF8).ComputeHmac(input);
 
             return Base64.EncodeUrlSafe(hmac);

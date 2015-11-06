@@ -1,4 +1,4 @@
-﻿// <copyright file="JwtStrings.cs" company="Stormpath, Inc.">
+﻿// <copyright file="JwtHeaderParameters.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +16,10 @@
 
 namespace Stormpath.SDK.Impl.Jwt
 {
-    internal static class JwtStrings
+    internal static class JwtHeaderParameters
     {
-        public static readonly char Separator = '.';
+        public static readonly string Algorithm = "alg";
+        public static readonly string Type = "typ";
+        public static readonly string KeyId = "kid";
     }
 }

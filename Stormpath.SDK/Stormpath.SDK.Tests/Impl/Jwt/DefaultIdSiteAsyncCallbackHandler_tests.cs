@@ -16,14 +16,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Api;
-using Stormpath.SDK.Application;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Http;
@@ -32,7 +29,6 @@ using Stormpath.SDK.Impl;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.IdSite;
-using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Jwt

@@ -218,10 +218,13 @@
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
     <Compile Include="Impl\IdentityMap\IIdentityMap.cs" />
     <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
+    <Compile Include="Impl\IdSite\IdSiteRuntimeException.cs" />
+    <Compile Include="Impl\IdSite\IdSiteSessionTimeoutException.cs" />
+    <Compile Include="Impl\IdSite\InvalidIdSiteTokenException.cs" />
     <Compile Include="Impl\Jwt\DefaultJwtSigner.cs" />
     <Compile Include="Impl\Jwt\IJwtSigner.cs" />
+    <Compile Include="Impl\Jwt\JwtHeaderParameters.cs" />
     <Compile Include="Impl\Jwt\JwtSignatureValidator.cs" />
-    <Compile Include="Impl\Jwt\JwtStrings.cs" />
     <Compile Include="Impl\Jwt\JwtTokenizer.cs" />
     <Compile Include="Impl\Linq\CollectionResourceExecutor.cs" />
     <Compile Include="Impl\Linq\Parsing\DatetimeAttributeTermWorkingModel.cs" />

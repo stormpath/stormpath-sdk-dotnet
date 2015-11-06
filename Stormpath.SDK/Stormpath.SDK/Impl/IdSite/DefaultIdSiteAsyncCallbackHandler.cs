@@ -97,18 +97,20 @@ namespace Stormpath.SDK.Impl.IdSite
             var payload = JWT.JsonWebToken.DecodeToObject<Map>(
                 this.jwtResponse, dataStoreApiKey.GetId(), false);
 
+            var payloadstring = JWT.JsonWebToken.Decode(this.jwtResponse, dataStoreApiKey.GetId(), false);
+
             ThrowIfRequiredParametersMissing(payload);
 
             string apiKeyFromJwt = null;
             if (IsError(payload))
-                payload.TryGetValueAsString(DefaultJwtClaims.Id, out apiKeyFromJwt);
+                payload.TryGetValueAsString(JwtHeaderParameters.KeyId, out apiKeyFromJwt);
             else
                 payload.TryGetValueAsString(DefaultJwtClaims.Audience, out apiKeyFromJwt);
 
             ThrowIfJwtSignatureInvalid(apiKeyFromJwt, dataStoreApiKey, this.jwtResponse);
             ThrowIfJwtIsExpired(payload);
 
-            //TODO throw ID Site exceptions
+            IfErrorThrowIdSiteException(payload);
 
             if (!this.nonceStore.IsAsynchronousSupported || this.asyncNonceStore == null)
                 throw new ApplicationException("The current nonce store does not support asynchronous operations.");
@@ -123,10 +125,13 @@ namespace Stormpath.SDK.Impl.IdSite
                 && !string.IsNullOrEmpty(accountHref);
             var resultStatus = IdSiteResultStatus.Parse((string)payload[IdSiteClaims.Status]);
 
+            // todo bundle up logic
             // The 'sub' claim (accountHref) can be null if calling /sso/logout when the subject is already logged out,
             // but this is only legal during the logout scenario, so assert:
             if (!accountHrefPresent && resultStatus != IdSiteResultStatus.Logout)
                 throw InvalidJwtException.ResponseMissingParameter;
+
+            // bundle up accountResult construction
 
             object state = null;
             payload.TryGetValue(IdSiteClaims.State, out state);
@@ -191,8 +196,9 @@ namespace Stormpath.SDK.Impl.IdSite
                 IdSiteClaims.IsNewSubject,
             };
 
+            bool isError = IsError(payload);
             bool valid = requiredKeys?.All(x => payload.ContainsKey(x)) ?? false;
-            if (!valid)
+            if (!isError && !valid)
                 throw InvalidJwtException.ResponseMissingParameter;
         }
 
@@ -212,6 +218,18 @@ namespace Stormpath.SDK.Impl.IdSite
 
             if (now > expiration)
                 throw InvalidJwtException.Expired;
+        }
+
+        private static void IfErrorThrowIdSiteException(Map payload)
+        {
+            if (!IsError(payload))
+                return;
+
+            var errorData = payload[IdSiteClaims.Error] as Map;
+            if (errorData == null)
+                throw new ApplicationException("Error parsing ID Site error response.");
+
+            throw new IdSiteRuntimeException(new Error.DefaultError(errorData));
         }
 
         private async Task ThrowIfNonceIsAlreadyUsedAsync(string nonce, CancellationToken cancellationToken)

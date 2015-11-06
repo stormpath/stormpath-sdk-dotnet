@@ -1,4 +1,4 @@
-﻿// <copyright file="JwtTokenizer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IdSiteSessionTimeoutException.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,28 +14,18 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Jwt;
+using Stormpath.SDK.Impl.Error;
 
-namespace Stormpath.SDK.Impl.Jwt
+namespace Stormpath.SDK.Impl.IdSite
 {
-    internal sealed class JwtTokenizer
+    /// <summary>
+    /// This exception indicates that the session on ID Site has timed out.
+    /// </summary>
+    public sealed class IdSiteSessionTimeoutException : IdSiteRuntimeException
     {
-        public static readonly char Separator = '.';
-
-        private readonly string[] tokens;
-
-        public JwtTokenizer(string jwt)
+        internal IdSiteSessionTimeoutException(DefaultError error)
+            : base(error)
         {
-            this.tokens = jwt.Split(Separator);
-
-            if (this.tokens.Length != 3)
-                throw InvalidJwtException.InvalidValue;
         }
-
-        public string Base64Header => this.tokens[0];
-
-        public string Base64Payload => this.tokens[1];
-
-        public string Base64Signature => this.tokens[2];
     }
 }
