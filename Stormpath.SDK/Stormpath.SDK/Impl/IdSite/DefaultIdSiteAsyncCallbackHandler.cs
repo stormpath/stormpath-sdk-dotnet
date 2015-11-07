@@ -116,34 +116,10 @@ namespace Stormpath.SDK.Impl.IdSite
             await this.ThrowIfNonceIsAlreadyUsedAsync(responseNonce, cancellationToken).ConfigureAwait(false);
             await this.asyncNonceStore.PutNonceAsync(responseNonce, cancellationToken).ConfigureAwait(false);
 
-            string accountHref = null;
-            bool accountHrefPresent =
-                jwt.Payload.TryGetValueAsString(DefaultJwtClaims.Subject, out accountHref)
-                && !string.IsNullOrEmpty(accountHref);
+            ThrowIfSubjectIsMissing(jwt.Payload);
+
+            var accountResult = this.CreateAccountResult(jwt.Payload);
             var resultStatus = IdSiteResultStatus.Parse((string)jwt.Payload[IdSiteClaims.Status]);
-
-            // todo bundle up logic
-            // The 'sub' claim (accountHref) can be null if calling /sso/logout when the subject is already logged out,
-            // but this is only legal during the logout scenario, so assert:
-            if (!accountHrefPresent && resultStatus != IdSiteResultStatus.Logout)
-                throw InvalidJwtException.ResponseMissingParameter;
-
-            // bundle up accountResult construction
-
-            object state = null;
-            jwt.Payload.TryGetValue(IdSiteClaims.State, out state);
-            bool isNewAccount = (bool)jwt.Payload[IdSiteClaims.IsNewSubject];
-
-            var properties = new Dictionary<string, object>()
-            {
-                [DefaultAccountResult.NewAccountPropertyName] = isNewAccount,
-                [DefaultAccountResult.StatePropertyName] = state
-            };
-
-            if (accountHrefPresent)
-                properties[DefaultAccountResult.AccountPropertyName] = new LinkProperty(accountHref);
-
-            var accountResult = this.internalDataStore.InstantiateWithData<IAccountResult>(properties);
 
             if (this.resultListener != null)
                 await this.DispatchResponseStatusAsync(resultStatus, accountResult, cancellationToken).ConfigureAwait(false);
@@ -178,6 +154,14 @@ namespace Stormpath.SDK.Impl.IdSite
 
             return payload.TryGetValue(IdSiteClaims.Error, out error)
                 && error != null;
+        }
+
+        private static string GetAccountHref(Map payload)
+        {
+            string accountHref = null;
+            payload.TryGetValueAsString(DefaultJwtClaims.Subject, out accountHref);
+
+            return accountHref;
         }
 
         private static void ThrowIfRequiredParametersMissing(Map payload)
@@ -255,6 +239,37 @@ namespace Stormpath.SDK.Impl.IdSite
             bool alreadyUsed = await this.asyncNonceStore.ContainsNonceAsync(nonce, cancellationToken).ConfigureAwait(false);
             if (alreadyUsed)
                 throw InvalidJwtException.AlreadyUsed;
+        }
+
+        private static void ThrowIfSubjectIsMissing(Map payload)
+        {
+            var sub = GetAccountHref(payload);
+            bool subMissing = string.IsNullOrEmpty(sub);
+            var resultStatus = IdSiteResultStatus.Parse((string)payload[IdSiteClaims.Status]);
+
+            // The 'sub' claim (accountHref) can be null if calling /sso/logout when the subject is already logged out,
+            // but this is only legal during the logout scenario, so assert:
+            if (subMissing && resultStatus != IdSiteResultStatus.Logout)
+                throw InvalidJwtException.ResponseMissingParameter;
+        }
+
+        private IAccountResult CreateAccountResult(Map payload)
+        {
+            object state = null;
+            payload.TryGetValue(IdSiteClaims.State, out state);
+            bool isNewAccount = (bool)payload[IdSiteClaims.IsNewSubject];
+
+            var properties = new Dictionary<string, object>()
+            {
+                [DefaultAccountResult.NewAccountPropertyName] = isNewAccount,
+                [DefaultAccountResult.StatePropertyName] = state
+            };
+
+            var accountHref = GetAccountHref(payload);
+            if (!string.IsNullOrEmpty(accountHref))
+                properties[DefaultAccountResult.AccountPropertyName] = new LinkProperty(accountHref);
+
+            return this.internalDataStore.InstantiateWithData<IAccountResult>(properties);
         }
     }
 }

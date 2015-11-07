@@ -27,9 +27,6 @@ namespace Stormpath.SDK.Jwt
 
         public static InvalidJwtException InvalidValue = new InvalidJwtException("The JWT value format is not correct.");
 
-        // InvalidJwtBodyEncoding
-        // InvalidJwtHeaderEncoding
-
         public static InvalidJwtException SignatureError = new InvalidJwtException("The JWT signature is invalid.");
 
         public static InvalidJwtException Expired = new InvalidJwtException("The JWT has already expired.");
