@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Serialization;
@@ -26,45 +27,69 @@ namespace Stormpath.SDK.Impl.Jwt
     {
         public static readonly char Separator = '.';
 
-        private readonly IJsonSerializer jsonSerializer;
-
-        private readonly string headerJson;
-        private readonly string payloadJson;
-        private readonly string signature;
-
-        private readonly Lazy<Map> header;
-        private readonly Lazy<Map> payload;
-
         public string Base64Header { get; private set; }
 
         public string Base64Payload { get; private set; }
 
         public string Base64Signature { get; private set; }
 
-        public Map Header => this.jsonSerializer.Deserialize(this.headerJson);
+        public Map Header { get; private set; }
 
-        public Map Payload => this.jsonSerializer.Deserialize(this.payloadJson);
+        public Map Payload { get; private set; }
 
-        public string Signature => this.signature;
+        private JsonWebToken()
+        {
+        }
 
-        public JsonWebToken(string jwt, IJsonSerializer jsonSerializer)
+        public override string ToString()
+        {
+            return string.Join(Separator.ToString(), new string[] { this.Base64Header, this.Base64Payload, this.Base64Signature });
+        }
+
+        public static JsonWebToken Encode(Map payload, string key, IJsonSerializer jsonSerializer)
+        {
+            var header = new Dictionary<string, object>()
+            {
+                ["typ"] = "JWT",
+                ["alg"] = "HS256"
+            };
+
+            var headerBase64 = Base64.EncodeUrlSafe(jsonSerializer.Serialize(header), Encoding.UTF8);
+            var payloadBase64 = Base64.EncodeUrlSafe(jsonSerializer.Serialize(payload), Encoding.UTF8);
+
+            var stringToSign = string.Join(Separator.ToString(), new string[] { headerBase64, payloadBase64 });
+
+            byte[] signature = new HmacGenerator(key, Encoding.UTF8).ComputeHmac(stringToSign);
+            var signatureBase64 = Base64.EncodeUrlSafe(signature);
+
+            return new JsonWebToken()
+            {
+                Base64Header = headerBase64,
+                Base64Payload = payloadBase64,
+                Base64Signature = signatureBase64,
+                Header = header,
+                Payload = payload
+            };
+        }
+
+        public static JsonWebToken Decode(string jwt, IJsonSerializer jsonSerializer)
         {
             var parts = jwt.Split(Separator);
             if (parts.Length != 3)
                 throw new ArgumentException("Token must consist of 3 delimeted parts.");
 
-            this.Base64Header = parts[0];
-            this.Base64Payload = parts[1];
-            this.Base64Signature = parts[2];
+            var headerJson = Base64.Decode(parts[0], Encoding.UTF8);
+            var payloadJson = Base64.Decode(parts[1], Encoding.UTF8);
+            var signature = Base64.Decode(parts[2], Encoding.UTF8);
 
-            this.headerJson = Base64.Decode(this.Base64Header, Encoding.UTF8);
-            this.payloadJson = Base64.Decode(this.Base64Payload, Encoding.UTF8);
-            this.signature = Base64.Decode(this.Base64Signature, Encoding.UTF8);
-
-            this.jsonSerializer = jsonSerializer;
-
-            this.header = new Lazy<Map>(() => this.jsonSerializer.Deserialize(this.headerJson));
-            this.payload = new Lazy<Map>(() => this.jsonSerializer.Deserialize(this.payloadJson));
-        }
+            return new JsonWebToken()
+            {
+                Base64Header = parts[0],
+                Base64Payload = parts[1],
+                Base64Signature = parts[2],
+                Header = jsonSerializer.Deserialize(headerJson),
+                Payload = jsonSerializer.Deserialize(payloadJson),
+            };
+       }
     }
 }

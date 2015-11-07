@@ -161,7 +161,9 @@ namespace Stormpath.SDK.Impl.IdSite
             if (this.showOrganizationField.HasValue)
                 jwtBuilder.SetClaim(IdSiteClaims.ShowOrganizationField, this.showOrganizationField.Value);
 
-            string jwt = null; //JWT.JsonWebToken.Encode(jwtBuilder.Build().ToDictionary(), apiKey.GetSecret(), JWT.JwtHashAlgorithm.HS256);
+            string jwt = JsonWebToken
+                .Encode(jwtBuilder.Build().ToDictionary(), apiKey.GetSecret(), this.internalDataStore.Serializer)
+                .ToString();
 
             var urlBuilder = new StringBuilder(this.ssoEndpoint);
 

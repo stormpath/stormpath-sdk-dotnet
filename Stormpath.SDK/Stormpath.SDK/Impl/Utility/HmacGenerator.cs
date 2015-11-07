@@ -25,6 +25,11 @@ namespace Stormpath.SDK.Impl.Utility
         private readonly byte[] signingKey;
         private readonly Encoding encoding;
 
+        public HmacGenerator(string signingKey, Encoding encoding)
+            : this(encoding.GetBytes(signingKey), encoding)
+        {
+        }
+
         public HmacGenerator(byte[] signingKey, Encoding encoding)
         {
             this.signingKey = signingKey;

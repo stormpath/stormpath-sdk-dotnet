@@ -109,6 +109,7 @@
     <Compile Include="Impl\ClientApiKey_tests.cs" />
     <Compile Include="Impl\Jwt\DefaultIdSiteAsyncCallbackHandler_exception_tests.cs" />
     <Compile Include="Impl\Jwt\DefaultIdSiteAsyncCallbackHandler_tests.cs" />
+    <Compile Include="Impl\Jwt\Jwt_tests.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryable_iteration_tests.cs" />
     <Compile Include="Impl\CreationOptions_tests.cs" />
     <Compile Include="Impl\Cache\InMemoryCache_tests.cs" />

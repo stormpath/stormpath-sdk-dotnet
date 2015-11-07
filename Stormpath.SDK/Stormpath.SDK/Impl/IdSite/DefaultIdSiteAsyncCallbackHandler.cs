@@ -94,7 +94,7 @@ namespace Stormpath.SDK.Impl.IdSite
         {
             var dataStoreApiKey = this.internalDataStore.ApiKey;
 
-            var jwt = new JsonWebToken(this.jwtResponse, this.internalDataStore.Serializer);
+            var jwt = JsonWebToken.Decode(this.jwtResponse, this.internalDataStore.Serializer);
 
             ThrowIfRequiredParametersMissing(jwt.Payload);
 

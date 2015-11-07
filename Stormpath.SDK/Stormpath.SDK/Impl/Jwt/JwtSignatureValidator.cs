@@ -23,12 +23,17 @@ namespace Stormpath.SDK.Impl.Jwt
     {
         private readonly IJwtSigner jwtSigner;
 
-        public JwtSignatureValidator(IClientApiKey apiKey)
+        public JwtSignatureValidator(string signingKey)
         {
-            if (apiKey == null)
-                throw new ArgumentNullException(nameof(apiKey));
+            if (signingKey == null)
+                throw new ArgumentNullException(nameof(signingKey));
 
-            this.jwtSigner = new DefaultJwtSigner(apiKey.GetSecret());
+            this.jwtSigner = new DefaultJwtSigner(signingKey);
+        }
+
+        public JwtSignatureValidator(IClientApiKey apiKey)
+            : this(apiKey?.GetSecret())
+        {
         }
 
         public bool IsValid(JsonWebToken jwt)
