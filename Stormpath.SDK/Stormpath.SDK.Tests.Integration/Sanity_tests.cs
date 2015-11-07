@@ -28,6 +28,8 @@ namespace Stormpath.SDK.Tests.Integration
 {
     public class Sanity_tests
     {
+        public static readonly string NL = Environment.NewLine;
+
         private static string PrettyMethodOutput(IEnumerable<MethodInfo> methods)
         {
             if (!methods.Any())
@@ -38,7 +40,12 @@ namespace Stormpath.SDK.Tests.Integration
                 return $"{m.Name} (in {m.DeclaringType.Name})";
             });
 
-            return string.Join(Environment.NewLine, prettyMethods);
+            return string.Join(NL, prettyMethods);
+        }
+
+        private static string PrettyPrintMethod(string qualifiedMethodName, IEnumerable<ParameterInfo> args)
+        {
+            return $"{qualifiedMethodName}({string.Join(", ", args.Select(p => p.ParameterType.Name))})";
         }
 
         /// <summary>
@@ -94,13 +101,16 @@ namespace Stormpath.SDK.Tests.Integration
                 .Any()
                 .ShouldBe(
                     expected: false,
-                    customMessage: "These methods do not have a CancellationToken parameter:" + Environment.NewLine + PrettyMethodOutput(asyncMethodsWithoutCancellationToken));
+                    customMessage: "These methods do not have a CancellationToken parameter:" + NL + PrettyMethodOutput(asyncMethodsWithoutCancellationToken));
         }
 
         [Fact]
         public void All_Impl_async_methods_have_required_CancellationToken_parameters()
         {
-            //todo refactor to match below
+            // Whitelist some methods that legitimately have optional CancellationToken parameters
+            // Nothing here yet!
+            var whitelistedMethods = Enumerable.Empty<string>();
+
             var methodsInAssembly = Assembly
                 .GetAssembly(typeof(Client.IClient))
                 .GetTypes()
@@ -115,17 +125,22 @@ namespace Stormpath.SDK.Tests.Integration
                 .Where(method => method.GetParameters().Any(p => p.ParameterType == typeof(CancellationToken) && p.IsOptional))
                 .Where(method => method.DeclaringType.Namespace.StartsWith("Stormpath.SDK.Impl"));
 
+            var violatingMethods = asyncMethodsWithOptionalCT
+                .Select(m => PrettyPrintMethod($"{m.DeclaringType.Name}.{m.Name}", m.GetParameters()))
+                .Except(whitelistedMethods);
+
             // No optional/default values here!
-            asyncMethodsWithOptionalCT
+            violatingMethods
                 .Any()
                 .ShouldBe(
                     expected: false,
-                    customMessage: "These methods should not have an optional CancellationToken parameter:" + Environment.NewLine + PrettyMethodOutput(asyncMethodsWithOptionalCT));
+                    customMessage: "These methods should not have an optional CancellationToken parameter:" + NL + string.Join(NL, violatingMethods));
         }
 
         [Fact]
         public void All_SDK_async_methods_have_optional_CancellationToken_parameters()
         {
+            // Whitelist some methods that legitimately have nonoptional CancellationToken parameters
             var whitelistedMethods = new List<string>()
             {
                 "IIdSiteResultAsyncListener.OnRegisteredAsync(IAccountResult, CancellationToken)",
@@ -148,15 +163,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .Where(method => !method.DeclaringType.Namespace.StartsWith("Stormpath.SDK.Impl"));
 
             var violatingMethods = asyncMethodsWithRequiredCT
-                .Select(m =>
-                {
-                    var argList = m
-                        .GetParameters()
-                        .Select(p => p.ParameterType.Name);
-
-                    //DRY this up
-                    return $"{m.DeclaringType.Name}.{m.Name}({string.Join(", ", argList)})";
-                })
+                .Select(m => PrettyPrintMethod($"{m.DeclaringType.Name}.{m.Name}", m.GetParameters()))
                 .Except(whitelistedMethods);
 
             // Must be all optional
@@ -164,7 +171,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .Any()
                 .ShouldBe(
                     expected: false,
-                    customMessage: "These methods must have an optional CancellationToken parameter:" + Environment.NewLine + string.Join(Environment.NewLine, violatingMethods));
+                    customMessage: "These methods must have an optional CancellationToken parameter:" + NL + string.Join(NL, violatingMethods));
         }
 
         [Fact]
@@ -211,11 +218,9 @@ namespace Stormpath.SDK.Tests.Integration
 
                     var argList = m
                         .GetParameters()
-                        .Where(p => p.ParameterType != typeof(CancellationToken))
-                        .Select(p => p.ParameterType.Name);
+                        .Where(p => p.ParameterType != typeof(CancellationToken));
 
-                    return $"{m.DeclaringType.Name}.{nameWithoutAsync}" +
-                           $"({string.Join(", ", argList)})";
+                    return PrettyPrintMethod($"{m.DeclaringType.Name}.{nameWithoutAsync}", argList);
                 })
                 .ToList();
 
@@ -254,11 +259,11 @@ namespace Stormpath.SDK.Tests.Integration
 
             asyncButNotSync.Count.ShouldBe(
                 0,
-                $"These async method do not have a corresponding sync method:{Environment.NewLine}{string.Join(Environment.NewLine, asyncButNotSync)}");
+                $"These async method do not have a corresponding sync method:{NL}{string.Join(NL, asyncButNotSync)}");
 
             syncButNotAsync.Count.ShouldBe(
                 0,
-                $"These sync methods do not have a corresponding async method:{Environment.NewLine}{string.Join(Environment.NewLine, syncButNotAsync)}");
+                $"These sync methods do not have a corresponding async method:{NL}{string.Join(NL, syncButNotAsync)}");
         }
 
         [Fact]
@@ -288,11 +293,11 @@ namespace Stormpath.SDK.Tests.Integration
 
             asyncButNotSync.Count.ShouldBe(
                 0,
-                $"These async tests do not have a corresponding sync test:{Environment.NewLine}{string.Join(", ", asyncButNotSync)}");
+                $"These async tests do not have a corresponding sync test:{NL}{string.Join(", ", asyncButNotSync)}");
 
             syncButNotAsync.Count.ShouldBe(
                 0,
-                $"These sync tests do not have a corresponding async test:{Environment.NewLine}{string.Join(", ", syncButNotAsync)}");
+                $"These sync tests do not have a corresponding async test:{NL}{string.Join(", ", syncButNotAsync)}");
         }
 
         private static string GetQualifiedMethodName(MethodInfo m)
