@@ -178,7 +178,13 @@ namespace Stormpath.SDK.Tests.Integration
                 "IAsynchronousCache`2.Get(K)",
                 "IAsynchronousCache`2.Put(K, V)",
                 "IAsynchronousCache`2.Remove(K)",
-                "IAsynchronousCacheProvider.GetCache(String)"
+                "IAsynchronousCacheProvider.GetCache(String)",
+                "IAsynchronousNonceStore.ContainsNonce(String)",
+                "IAsynchronousNonceStore.PutNonce(String)",
+                "IIdSiteAsyncCallbackHandler.GetAccountResult()",
+                "IIdSiteResultAsyncListener.OnRegistered(IAccountResult)",
+                "IIdSiteResultAsyncListener.OnAuthenticated(IAccountResult)",
+                "IIdSiteResultAsyncListener.OnLogout(IAccountResult)"
             };
             var whitelistedSyncMethods = new List<string>()
             {

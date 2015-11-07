@@ -23,7 +23,7 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.IdSite
 {
-    internal class DefaultAccountResult : AbstractResource, IAccountResult
+    internal class DefaultAccountResult : AbstractResource, IAccountResult, IAccountResultSync
     {
         public static readonly string StatePropertyName = "state";
         public static readonly string NewAccountPropertyName = "isNewAccount";
@@ -45,6 +45,13 @@ namespace Stormpath.SDK.Impl.IdSite
             this.ThrowIfAccountNotPresent();
 
             return this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
+        }
+
+        IAccount IAccountResultSync.GetAccount()
+        {
+            this.ThrowIfAccountNotPresent();
+
+            return this.GetInternalSyncDataStore().GetResource<IAccount>(this.Account.Href);
         }
 
         private void ThrowIfAccountNotPresent()
