@@ -107,8 +107,10 @@
     <Compile Include="Impl\Cache\DefaultCacheResolver_tests.cs" />
     <Compile Include="Impl\CanonicalUri_tests.cs" />
     <Compile Include="Impl\ClientApiKey_tests.cs" />
-    <Compile Include="Impl\Jwt\DefaultIdSiteAsyncCallbackHandler_exception_tests.cs" />
-    <Compile Include="Impl\Jwt\DefaultIdSiteAsyncCallbackHandler_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler_exception_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler_exception_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler_tests.cs" />
     <Compile Include="Impl\Jwt\Jwt_tests.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryable_iteration_tests.cs" />
     <Compile Include="Impl\CreationOptions_tests.cs" />

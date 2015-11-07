@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultIdSiteAsyncCallbackHandler.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultIdSiteSyncCallbackHandler.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,17 +34,17 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.IdSite
 {
-    internal sealed class DefaultIdSiteAsyncCallbackHandler : IIdSiteAsyncCallbackHandler
+    internal sealed class DefaultIdSiteSyncCallbackHandler : IIdSiteSyncCallbackHandler
     {
         private readonly IInternalDataStore internalDataStore;
         private readonly string jwtResponse;
 
         private INonceStore nonceStore;
-        private IAsynchronousNonceStore asyncNonceStore;
+        private ISynchronousNonceStore syncNonceStore;
 
-        private IIdSiteResultAsyncListener resultListener;
+        private IIdSiteResultSyncListener resultListener;
 
-        public DefaultIdSiteAsyncCallbackHandler(IInternalDataStore internalDataStore, IHttpRequest httpRequest)
+        public DefaultIdSiteSyncCallbackHandler(IInternalDataStore internalDataStore, IHttpRequest httpRequest)
         {
             if (internalDataStore == null)
                 throw new ArgumentNullException(nameof(internalDataStore));
@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Impl.IdSite
             this.jwtResponse = GetJwtResponse(httpRequest);
 
             this.nonceStore = new DefaultNonceStore(internalDataStore.CacheResolver);
-            this.asyncNonceStore = this.nonceStore as IAsynchronousNonceStore;
+            this.syncNonceStore = this.nonceStore as ISynchronousNonceStore;
         }
 
         private static string GetJwtResponse(IHttpRequest request)
@@ -71,7 +71,7 @@ namespace Stormpath.SDK.Impl.IdSite
             return jwtResponse;
         }
 
-        IIdSiteAsyncCallbackHandler IIdSiteAsyncCallbackHandler.SetNonceStore(INonceStore nonceStore)
+        IIdSiteSyncCallbackHandler IIdSiteSyncCallbackHandler.SetNonceStore(INonceStore nonceStore)
         {
             if (nonceStore == null)
                 throw new ArgumentNullException(nameof(nonceStore));
@@ -81,14 +81,14 @@ namespace Stormpath.SDK.Impl.IdSite
             return this;
         }
 
-        IIdSiteAsyncCallbackHandler IIdSiteAsyncCallbackHandler.SetResultListener(IIdSiteResultAsyncListener resultListener)
+        IIdSiteSyncCallbackHandler IIdSiteSyncCallbackHandler.SetResultListener(IIdSiteResultSyncListener resultListener)
         {
             this.resultListener = resultListener;
 
             return this;
         }
 
-        async Task<IAccountResult> IIdSiteAsyncCallbackHandler.GetAccountResultAsync(CancellationToken cancellationToken)
+        IAccountResult IIdSiteSyncCallbackHandler.GetAccountResult()
         {
             var dataStoreApiKey = this.internalDataStore.ApiKey;
 
@@ -107,12 +107,12 @@ namespace Stormpath.SDK.Impl.IdSite
 
             IfErrorThrowIdSiteException(jwt.Payload);
 
-            if (!this.nonceStore.IsAsynchronousSupported || this.asyncNonceStore == null)
-                throw new ApplicationException("The current nonce store does not support asynchronous operations.");
+            if (!this.nonceStore.IsAsynchronousSupported || this.syncNonceStore == null)
+                throw new ApplicationException("The current nonce store does not support synchronous operations.");
 
             var responseNonce = (string)jwt.Payload[IdSiteClaims.ResponseId];
-            await this.ThrowIfNonceIsAlreadyUsedAsync(responseNonce, cancellationToken).ConfigureAwait(false);
-            await this.asyncNonceStore.PutNonceAsync(responseNonce, cancellationToken).ConfigureAwait(false);
+            this.ThrowIfNonceIsAlreadyUsed(responseNonce);
+            this.syncNonceStore.PutNonce(responseNonce);
 
             ThrowIfSubjectIsMissing(jwt.Payload);
 
@@ -120,24 +120,27 @@ namespace Stormpath.SDK.Impl.IdSite
             var resultStatus = IdSiteResultStatus.Parse((string)jwt.Payload[IdSiteClaims.Status]);
 
             if (this.resultListener != null)
-                await this.DispatchResponseStatusAsync(resultStatus, accountResult, cancellationToken).ConfigureAwait(false);
+                this.DispatchResponseStatus(resultStatus, accountResult);
 
             return accountResult;
         }
 
-        private Task DispatchResponseStatusAsync(IdSiteResultStatus status, IAccountResult accountResult, CancellationToken cancellationToken)
+        private void DispatchResponseStatus(IdSiteResultStatus status, IAccountResult accountResult)
         {
             if (status == IdSiteResultStatus.Registered)
             {
-                return this.resultListener.OnRegisteredAsync(accountResult, cancellationToken);
+                this.resultListener.OnRegistered(accountResult);
+                return;
             }
             else if (status == IdSiteResultStatus.Authenticated)
             {
-                return this.resultListener.OnAuthenticatedAsync(accountResult, cancellationToken);
+                this.resultListener.OnAuthenticated(accountResult);
+                return;
             }
             else if (status == IdSiteResultStatus.Logout)
             {
-                return this.resultListener.OnLogoutAsync(accountResult, cancellationToken);
+                this.resultListener.OnLogout(accountResult);
+                return;
             }
 
             throw new ArgumentException($"Encountered unknown ID Site result status: {status}");
@@ -232,9 +235,9 @@ namespace Stormpath.SDK.Impl.IdSite
             throw new IdSiteRuntimeException(new Error.DefaultError(errorData));
         }
 
-        private async Task ThrowIfNonceIsAlreadyUsedAsync(string nonce, CancellationToken cancellationToken)
+        private void ThrowIfNonceIsAlreadyUsed(string nonce)
         {
-            bool alreadyUsed = await this.asyncNonceStore.ContainsNonceAsync(nonce, cancellationToken).ConfigureAwait(false);
+            bool alreadyUsed = this.syncNonceStore.ContainsNonce(nonce);
             if (alreadyUsed)
                 throw InvalidJwtException.AlreadyUsed;
         }

@@ -32,7 +32,7 @@ using Stormpath.SDK.Impl.IdSite;
 using Stormpath.SDK.Jwt;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Impl.Jwt
+namespace Stormpath.SDK.Tests.Impl.IdSite
 {
     public class DefaultIdSiteAsyncCallbackHandler_exception_tests : IDisposable
     {

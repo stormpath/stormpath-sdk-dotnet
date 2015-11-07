@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultIdSiteAsyncCallbackHandler_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultIdSiteSyncCallbackHandler_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,9 +31,9 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.IdSite;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Impl.Jwt
+namespace Stormpath.SDK.Tests.Impl.IdSite
 {
-    public class DefaultIdSiteAsyncCallbackHandler_tests : IDisposable
+    public class DefaultIdSiteSyncCallbackHandler_tests : IDisposable
     {
         private IInternalDataStore dataStore;
 
@@ -70,14 +70,14 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
 
         [Theory]
         [MemberData(nameof(TestCases))]
-        public async Task Handle_response(string id_, string jwtResponse, string expectedStatus, bool isNewAccount, string expectedState)
+        public void Handle_response(string id_, string jwtResponse, string expectedStatus, bool isNewAccount, string expectedState)
         {
             IAccountResult accountResultFromListener = null;
 
             // Wire up dummy handler
-            var stubListener = Substitute.For<IIdSiteResultAsyncListener>();
+            var stubListener = Substitute.For<IIdSiteResultSyncListener>();
             stubListener
-                .When(x => x.OnAuthenticatedAsync(Arg.Any<IAccountResult>(), Arg.Any<CancellationToken>()))
+                .When(x => x.OnAuthenticated(Arg.Any<IAccountResult>()))
                 .Do(x =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Authenticated)
@@ -86,7 +86,7 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
                         throw new InvalidOperationException("This method should not have been executed");
                 });
             stubListener
-                .When(x => x.OnLogoutAsync(Arg.Any<IAccountResult>(), Arg.Any<CancellationToken>()))
+                .When(x => x.OnLogout(Arg.Any<IAccountResult>()))
                 .Do(x =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Logout)
@@ -95,7 +95,7 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
                         throw new InvalidOperationException("This method should not have been executed");
                 });
             stubListener
-                .When(x => x.OnRegisteredAsync(Arg.Any<IAccountResult>(), Arg.Any<CancellationToken>()))
+                .When(x => x.OnRegistered(Arg.Any<IAccountResult>()))
                 .Do(x =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Registered)
@@ -118,10 +118,10 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
 
             var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri($"https://foo.bar?{IdSiteClaims.JwtResponse}={jwtResponse}"));
 
-            IIdSiteAsyncCallbackHandler callbackHandler = new DefaultIdSiteAsyncCallbackHandler(this.dataStore, request);
+            IIdSiteSyncCallbackHandler callbackHandler = new DefaultIdSiteSyncCallbackHandler(this.dataStore, request);
             callbackHandler.SetResultListener(stubListener);
 
-            var accountResult = await callbackHandler.GetAccountResultAsync(CancellationToken.None);
+            var accountResult = callbackHandler.GetAccountResult();
 
             // Validate result
             (accountResult as DefaultAccountResult).Account.Href.ShouldBe("https://api.stormpath.com/v1/accounts/7Ora8KfVDEIQP38KzrYdAs");
