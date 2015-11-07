@@ -56,8 +56,7 @@ namespace Stormpath.SDK.Impl.Utility
         }
 
         /// <summary>
-        /// Decodes strings encoded with either <see cref="ToBase64(string, Encoding)"/>
-        /// or <see cref="ToUrlSafeBase64(string, Encoding)"/>.
+        /// Decodes strings encoded with either Encode() EncodeUrlSafe().
         /// </summary>
         /// <param name="encoded">Base64-encoded value.</param>
         /// <param name="encoding">The encoding.</param>
