@@ -210,7 +210,7 @@ namespace Stormpath.SDK.Impl.IdSite
 
         private static void ThrowIfJwtIsExpired(Map payload)
         {
-            var expiration = (long)payload[DefaultJwtClaims.Expiration];
+            var expiration = Convert.ToInt64(payload[DefaultJwtClaims.Expiration]);
             var now = UnixDate.ToLong(DateTimeOffset.Now);
 
             if (now > expiration)
