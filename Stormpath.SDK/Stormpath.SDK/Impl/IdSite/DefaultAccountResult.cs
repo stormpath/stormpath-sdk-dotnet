@@ -28,6 +28,7 @@ namespace Stormpath.SDK.Impl.IdSite
         public static readonly string StatePropertyName = "state";
         public static readonly string NewAccountPropertyName = "isNewAccount";
         public static readonly string AccountPropertyName = "account";
+        public static readonly string StatusPropertyName = "status";
 
         public DefaultAccountResult(ResourceData data)
             : base(data)
@@ -39,6 +40,8 @@ namespace Stormpath.SDK.Impl.IdSite
         bool IAccountResult.IsNewAccount => this.GetProperty<bool>(NewAccountPropertyName);
 
         string IAccountResult.State => this.GetProperty<string>(StatePropertyName);
+
+        IdSiteResultStatus IAccountResult.Status => this.GetProperty<IdSiteResultStatus>(StatusPropertyName);
 
         Task<IAccount> IAccountResult.GetAccountAsync(CancellationToken cancellationToken)
         {

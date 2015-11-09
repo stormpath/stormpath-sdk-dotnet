@@ -45,6 +45,12 @@ namespace Stormpath.SDK.IdSite
         bool IsNewAccount { get; }
 
         /// <summary>
+        /// Returns the status of the ID Site invocation (registered, authenticated, logged out).
+        /// </summary>
+        /// <value>The status of the ID Site invocation.</value>
+        IdSiteResultStatus Status { get; }
+
+        /// <summary>
         /// Returns the user account that either logged in or was created as a result of registration on the ID Site.
         /// You can determine if the account is newly registered if <see cref="IsNewAccount"/> is <c>true</c>.
         /// If <see cref="IsNewAccount"/> is <c>false</c>, the account reflects a previously-registered user

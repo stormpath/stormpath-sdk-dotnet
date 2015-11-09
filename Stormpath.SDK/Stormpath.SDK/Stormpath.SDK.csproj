@@ -71,7 +71,7 @@
     <Compile Include="Impl\IdSite\DefaultAccountResult.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\IdSite\IAccountResultSync.cs" />
-    <Compile Include="Impl\IdSite\IdSiteResultStatus.cs" />
+    <Compile Include="IdSite\IdSiteResultStatus.cs" />
     <Compile Include="Impl\Application\DefaultApplication.IdSite.cs" />
     <Compile Include="Impl\Auth\IOrganizationNameKey.cs" />
     <Compile Include="Impl\Auth\UsernamePasswordRequest.cs" />
@@ -115,9 +115,6 @@
     <Compile Include="IdSite\IIdSiteUrlBuilder.cs" />
     <Compile Include="IdSite\INonce.cs" />
     <Compile Include="IdSite\INonceStore.cs" />
-    <Compile Include="IdSite\IAuthenticationResult.cs" />
-    <Compile Include="IdSite\ILogoutResult.cs" />
-    <Compile Include="IdSite\IRegistrationResult.cs" />
     <Compile Include="IdSite\ISynchronousNonceStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />

@@ -119,10 +119,16 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
             // Validate result
             (accountResult as DefaultAccountResult).Account.Href.ShouldBe("https://api.stormpath.com/v1/accounts/7Ora8KfVDEIQP38KzrYdAs");
             (accountResultFromListener as DefaultAccountResult).Account.Href.ShouldBe("https://api.stormpath.com/v1/accounts/7Ora8KfVDEIQP38KzrYdAs");
+
             accountResult.IsNewAccount.ShouldBe(isNewAccount);
             accountResultFromListener.IsNewAccount.ShouldBe(isNewAccount);
+
             accountResult.State.ShouldBe(expectedState);
             accountResultFromListener.State.ShouldBe(expectedState);
+
+            var expectedResultStatus = IdSiteResultStatus.Parse(expectedStatus);
+            accountResult.Status.ShouldBe(expectedResultStatus);
+            accountResultFromListener.Status.ShouldBe(expectedResultStatus);
         }
     }
 }

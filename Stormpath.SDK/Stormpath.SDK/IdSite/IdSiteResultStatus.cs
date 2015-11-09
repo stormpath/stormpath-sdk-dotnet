@@ -17,12 +17,12 @@
 using System;
 using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Impl.IdSite
+namespace Stormpath.SDK.IdSite
 {
     /// <summary>
     /// Represents the possible results of an ID Site invocation.
     /// </summary>
-    internal sealed class IdSiteResultStatus : StringEnumeration
+    public sealed class IdSiteResultStatus : StringEnumeration
     {
         public static IdSiteResultStatus Registered = new IdSiteResultStatus("REGISTERED");
 
@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Impl.IdSite
         /// Parses a string to an <see cref="IdSiteResultStatus"/>.
         /// </summary>
         /// <param name="status">A string containing "registered", "authenticated", or "logout" (matching is case-insensitive).</param>
-        /// <returns>The <see cref="AccountStatus"/> with the specified name.</returns>
+        /// <returns>The <see cref="IdSiteResultStatus"/> with the specified name.</returns>
         /// <exception cref="ApplicationException">No match is found.</exception>
         public static IdSiteResultStatus Parse(string status)
         {
