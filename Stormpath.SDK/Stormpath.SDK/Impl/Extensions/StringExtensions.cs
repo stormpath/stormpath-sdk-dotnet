@@ -29,22 +29,6 @@ namespace Stormpath.SDK.Impl.Extensions
             return source;
         }
 
-        public static string ToBase64(this string source, Encoding encoding)
-        {
-            if (source == null)
-                return null;
-
-            return Convert.ToBase64String(encoding.GetBytes(source));
-        }
-
-        public static string FromBase64(this string base64Source, Encoding encoding)
-        {
-            if (base64Source == null)
-                return null;
-
-            return encoding.GetString(Convert.FromBase64String(base64Source));
-        }
-
         public static KeyValuePair<string, string> SplitToKeyValuePair(this string source, char separator)
         {
             if (string.IsNullOrEmpty(source) || !source.Contains(separator.ToString()))

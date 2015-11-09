@@ -23,6 +23,7 @@ using Stormpath.SDK.Auth;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Application;
@@ -30,6 +31,7 @@ using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Group;
+using Stormpath.SDK.Impl.IdSite;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
@@ -52,7 +54,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(IAccountStoreMapping)] = typeof(DefaultAccountStoreMapping),
             [typeof(IAccountStore)] = typeof(DefaultAccountStore),
             [typeof(IBasicLoginAttempt)] = typeof(DefaultBasicLoginAttempt),
-            [typeof(IAuthenticationResult)] = typeof(DefaultAuthenticationResult),
+            [typeof(SDK.Auth.IAuthenticationResult)] = typeof(DefaultAuthenticationResult),
             [typeof(IPasswordResetToken)] = typeof(DefaultPasswordResetToken),
             [typeof(ICustomData)] = typeof(DefaultCustomData),
             [typeof(IEmailVerificationToken)] = typeof(DefaultEmailVerificationToken),
@@ -69,6 +71,8 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(IGoogleProviderData)] = typeof(DefaultGoogleProviderData),
             [typeof(ILinkedInProvider)] = typeof(DefaultLinkedInProvider),
             [typeof(ILinkedInProviderData)] = typeof(DefaultLinkedInProviderData),
+            [typeof(IAccountResult)] = typeof(DefaultAccountResult),
+            [typeof(INonce)] = typeof(DefaultNonce),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> InterfaceLookup = new Dictionary<Type, Type>()
@@ -82,7 +86,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultAccountStoreMapping)] = typeof(IAccountStoreMapping),
             [typeof(DefaultAccountStore)] = typeof(IAccountStore),
             [typeof(DefaultBasicLoginAttempt)] = typeof(IBasicLoginAttempt),
-            [typeof(DefaultAuthenticationResult)] = typeof(IAuthenticationResult),
+            [typeof(DefaultAuthenticationResult)] = typeof(SDK.Auth.IAuthenticationResult),
             [typeof(DefaultPasswordResetToken)] = typeof(IPasswordResetToken),
             [typeof(DefaultCustomData)] = typeof(ICustomData),
             [typeof(DefaultEmailVerificationToken)] = typeof(IEmailVerificationToken),
@@ -99,6 +103,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultGoogleProviderData)] = typeof(IGoogleProviderData),
             [typeof(DefaultLinkedInProvider)] = typeof(ILinkedInProvider),
             [typeof(DefaultLinkedInProviderData)] = typeof(ILinkedInProviderData),
+            [typeof(DefaultAccountResult)] = typeof(IAccountResult)
         };
 
         private static readonly IReadOnlyDictionary<string, Type> InterfaceLookupByAttributeName = new Dictionary<string, Type>()

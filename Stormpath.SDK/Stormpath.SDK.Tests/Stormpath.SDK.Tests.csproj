@@ -81,6 +81,7 @@
     <Compile Include="Impl\Cache\Sync_caching_tests.cs" />
     <Compile Include="Impl\Cache\Async_caching_tests.cs" />
     <Compile Include="Impl\Cache\InMemoryCacheProviderBuilder_tests.cs" />
+    <Compile Include="Impl\DefaultAccountResult_tests.cs" />
     <Compile Include="Impl\DefaultProviderAccountResult_tests.cs" />
     <Compile Include="Impl\Entity_identity_map_tests.cs" />
     <Compile Include="Impl\DefaultCustomData_persistence_tests.cs" />
@@ -92,6 +93,10 @@
     <Compile Include="Impl\DefaultRequestExecutor_tests.cs" />
     <Compile Include="Impl\Expansion_save_options_tests.cs" />
     <Compile Include="Impl\Expansion_retrieval_options_tests.cs" />
+    <Compile Include="Impl\Extensions\Dictionary_TryGetValueAsString_tests.cs" />
+    <Compile Include="Impl\Extensions\Enumerable_IsNullOrEmpty_tests.cs" />
+    <Compile Include="Impl\Extensions\String_Nullable_tests.cs" />
+    <Compile Include="Impl\Extensions\Uri_WithoutQueryAndFragment_tests.cs" />
     <Compile Include="Impl\FieldConverter_tests.cs" />
     <Compile Include="Helpers\Assertly.cs" />
     <Compile Include="Helpers\CollectionTestHarness.cs" />
@@ -103,6 +108,13 @@
     <Compile Include="Impl\Cache\DefaultCacheResolver_tests.cs" />
     <Compile Include="Impl\CanonicalUri_tests.cs" />
     <Compile Include="Impl\ClientApiKey_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler_exception_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler_exception_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler_tests.cs" />
+    <Compile Include="Impl\IdSite\InlineIdSiteSyncResultListener_tests.cs" />
+    <Compile Include="Impl\IdSite\InlineIdSiteAsyncResultListener_tests.cs" />
+    <Compile Include="Impl\Jwt\Jwt_tests.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryable_iteration_tests.cs" />
     <Compile Include="Impl\CreationOptions_tests.cs" />
     <Compile Include="Impl\Cache\InMemoryCache_tests.cs" />
@@ -110,13 +122,13 @@
     <Compile Include="Impl\DefaultClientBuilder_tests.cs" />
     <Compile Include="Impl\DefaultDataStore_tests.cs" />
     <Compile Include="Impl\DefaultResourceFactory_tests.cs" />
-    <Compile Include="Impl\Extensions_tests.cs" />
     <Compile Include="Impl\FieldConverterList_tests.cs" />
     <Compile Include="Impl\FilterChain_tests.cs" />
     <Compile Include="Impl\HttpHeaders_tests.cs" />
     <Compile Include="Impl\IdentityMap\Multi_threaded_tests.cs" />
     <Compile Include="Impl\IdentityMap\Single_threaded_tests.cs" />
     <Compile Include="Impl\IdentityMap\TestEntity.cs" />
+    <Compile Include="Impl\Jwt\DefaultJwtClaimsBuilder_tests.cs" />
     <Compile Include="Impl\Linq\Complicated_tests.cs" />
     <Compile Include="Impl\Linq\Expand_resource_tests.cs" />
     <Compile Include="Impl\Linq\Sync_expand_extension_tests.cs" />
@@ -138,8 +150,10 @@
     <Compile Include="Impl\Linq\Sync_ToList_tests.cs" />
     <Compile Include="Impl\PasswordResetToken_tests.cs" />
     <Compile Include="Impl\ResourceTypes_tests.cs" />
+    <Compile Include="Impl\Extensions\String_SplitToKeyValuePair_tests.cs" />
     <Compile Include="Impl\UriQualifier_tests.cs" />
     <Compile Include="Impl\Utility\AnonymousType_tests.cs" />
+    <Compile Include="Impl\Utility\Base64_tests.cs" />
     <Compile Include="Impl\Utility\ImmutableValueObject_tests.cs" />
     <Compile Include="Impl\LinkProperty_tests.cs" />
     <Compile Include="Impl\Linq\CountAsync_tests.cs" />
@@ -159,6 +173,7 @@
     <Compile Include="Impl\Utility\Iso8601_tests.cs" />
     <Compile Include="Impl\Utility\Properties_tests.cs" />
     <Compile Include="Impl\Utility\RequestHelper_tests.cs" />
+    <Compile Include="Impl\Utility\UnixDate_tests.cs" />
     <Compile Include="Impl\Utility\WindowsVersion_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LoggerExtensions_tests.cs" />

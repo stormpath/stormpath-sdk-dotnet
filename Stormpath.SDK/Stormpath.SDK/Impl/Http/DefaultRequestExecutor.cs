@@ -90,6 +90,8 @@ namespace Stormpath.SDK.Impl.Http
             this.throttlingBackoffStrategy = throttlingBackoffStrategy;
         }
 
+        IClientApiKey IRequestExecutor.ApiKey => this.apiKey;
+
         Task<IHttpResponse> IRequestExecutor.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
         {
             if (!this.httpClient.IsAsynchronousSupported || this.asyncHttpClient == null)

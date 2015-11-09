@@ -15,9 +15,12 @@
 // </copyright>
 
 using System.Collections.Generic;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.DataStore;
+using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -25,12 +28,17 @@ namespace Stormpath.SDK.Impl.DataStore
     {
         IRequestExecutor RequestExecutor { get; }
 
+        ICacheResolver CacheResolver { get; }
+
+        IJsonSerializer Serializer { get; }
+
         string BaseUrl { get; }
+
+        IClientApiKey ApiKey { get; }
 
         T InstantiateWithHref<T>(string href)
             where T : IResource;
 
-        T InstantiateWithData<T>(IDictionary<string, object> properties)
-            where T : IResource;
+        T InstantiateWithData<T>(IDictionary<string, object> properties);
     }
 }

@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Impl.Cache;
@@ -26,6 +27,7 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Tests.Fakes
 {
@@ -51,8 +53,16 @@ namespace Stormpath.SDK.Tests.Fakes
 
         string IInternalDataStore.BaseUrl => this.ProxyDataStore.BaseUrl;
 
+        IClientApiKey IInternalDataStore.ApiKey => this.ProxyDataStore.ApiKey;
+
         IRequestExecutor IInternalDataStore.RequestExecutor
             => this.ProxyDataStore.RequestExecutor;
+
+        ICacheResolver IInternalDataStore.CacheResolver
+            => this.ProxyDataStore.CacheResolver;
+
+        IJsonSerializer IInternalDataStore.Serializer
+            => this.ProxyDataStore.Serializer;
 
         T IDataStoreSync.GetResource<T>(string href)
             => this.ProxySyncDataStore.GetResource<T>(href);
@@ -148,9 +158,7 @@ namespace Stormpath.SDK.Tests.Fakes
         }
 
         T IInternalDataStore.InstantiateWithData<T>(IDictionary<string, object> properties)
-        {
-            throw new NotImplementedException();
-        }
+            => this.ProxyDataStore.InstantiateWithData<T>(properties);
 
         private bool isDisposed = false; // To detect redundant calls
 

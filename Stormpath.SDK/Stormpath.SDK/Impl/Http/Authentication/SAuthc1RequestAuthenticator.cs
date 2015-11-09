@@ -145,17 +145,10 @@ namespace Stormpath.SDK.Impl.Http.Authentication
 
         private static byte[] SignHmac256(string data, byte[] key, Encoding encoding)
         {
-            return SignHmac256(encoding.GetBytes(data), key);
-        }
-
-        private static byte[] SignHmac256(byte[] data, byte[] key)
-        {
             try
             {
-                using (var hmac = new HMACSHA256(key))
-                {
-                    return hmac.ComputeHash(data);
-                }
+                var hmac = new HmacGenerator(key, encoding);
+                return hmac.ComputeHmac(data);
             }
             catch (Exception e)
             {

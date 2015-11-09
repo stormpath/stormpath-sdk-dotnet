@@ -23,5 +23,8 @@ namespace Stormpath.SDK.Impl.Extensions
     {
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
             => !(source?.Any() ?? false);
+
+        public static IDictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> source)
+            => source?.ToDictionary(k => k.Key, v => v.Value);
     }
 }

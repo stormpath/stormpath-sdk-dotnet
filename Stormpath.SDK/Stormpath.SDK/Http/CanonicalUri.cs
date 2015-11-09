@@ -29,8 +29,7 @@ namespace Stormpath.SDK.Http
         private readonly QueryString query;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CanonicalUri"/> class
-        /// with the specified <see cref="ResourcePath"/>, and no <see cref="QueryString"/> component.
+        /// Initializes a new instance of the <see cref="CanonicalUri"/> class from a fully-qualified URI.
         /// </summary>
         /// <param name="href">The value for <see cref="ResourcePath"/>.</param>
         public CanonicalUri(string href)

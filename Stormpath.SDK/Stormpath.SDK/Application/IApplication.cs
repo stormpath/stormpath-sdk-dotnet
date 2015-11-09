@@ -22,6 +22,8 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Http;
+using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
@@ -89,7 +91,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the result of the authentication.
-        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -100,7 +102,7 @@ namespace Stormpath.SDK.Application
         /// var result = await myApp.AuthenticateAccountAsync(loginRequest.Build());
         /// </code>
         /// </example>
-        Task<IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password).
@@ -112,7 +114,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the result of the authentication.
-        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -124,7 +126,7 @@ namespace Stormpath.SDK.Application
         /// var result = await myApp.AuthenticateAccountAsync(loginRequest.Build(), response => response.Expand(x => x.GetAccountAsync));
         /// </code>
         /// </example>
-        Task<IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, Action<IRetrievalOptions<Auth.IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password)
@@ -135,7 +137,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the result of the authentication.
-        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -149,7 +151,7 @@ namespace Stormpath.SDK.Application
         /// });
         /// </code>
         /// </example>
-        Task<IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password)
@@ -161,7 +163,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the result of the authentication.
-        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -177,7 +179,7 @@ namespace Stormpath.SDK.Application
         ///     response => response.Expand(x => x.GetAccountAsync));
         /// </code>
         /// </example>
-        Task<IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<Auth.IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password).
@@ -189,7 +191,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the result of the authentication.
-        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -197,7 +199,7 @@ namespace Stormpath.SDK.Application
         /// var result = await myApp.AuthenticateAccountAsync("jsmith", "Password123#");
         /// </code>
         /// </example>
-        Task<IAuthenticationResult> AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Attempts to authenticate an account with the specified username and password.
@@ -367,6 +369,26 @@ namespace Stormpath.SDK.Application
         /// <exception cref="ArgumentException">The query matches more than one resource in the current Tenant.</exception>
         Task<IAccountStoreMapping> AddAccountStoreAsync<T>(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query, CancellationToken cancellationToken = default(CancellationToken))
             where T : IAccountStore;
+
+        /// <summary>
+        /// Creates a new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your
+        /// application users to a hosted login/registration/forgot-password site - what Stormpath calls an 'Identity Site'
+        /// (or 'ID Site' for short) - for performing common user identity functionality.
+        /// When the user is done (logging in, registering, etc), they will be redirected back to a <c>callbackUri</c> of your choice.
+        /// </summary>
+        /// <returns>A new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your application users to a hosted login/registration/forgot-password 'ID Site'.</returns>
+        IIdSiteUrlBuilder NewIdSiteUrlBuilder();
+
+        /// <summary>
+        /// Creates a new <see cref="IIdSiteAsyncCallbackHandler"/> used to handle HTTP replies from your ID Site to your application's <c>callbackUri</c>,
+        /// as described in the <see cref="NewIdSiteUrlBuilder"/> method.
+        /// </summary>
+        /// <param name="request">
+        /// An instance of <see cref="IHttpRequest"/>.
+        /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
+        /// </param>
+        /// <returns>An <see cref="IIdSiteAsyncCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
+        IIdSiteAsyncCallbackHandler NewIdSiteAsyncCallbackHandler(IHttpRequest request);
 
         /// <summary>
         /// Verifies the password reset token (received in the user's email) and immediately

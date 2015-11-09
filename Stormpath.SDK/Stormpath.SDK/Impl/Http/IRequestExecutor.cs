@@ -17,12 +17,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.Http
 {
     internal interface IRequestExecutor : IDisposable
     {
+        IClientApiKey ApiKey { get; }
+
         Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken);
 
         IHttpResponse Execute(IHttpRequest request);

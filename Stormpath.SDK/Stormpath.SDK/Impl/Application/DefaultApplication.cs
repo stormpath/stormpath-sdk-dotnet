@@ -17,23 +17,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Account;
-using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Auth;
-using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
-using Stormpath.SDK.Impl.Account;
-using Stormpath.SDK.Impl.Auth;
-using Stormpath.SDK.Impl.Group;
-using Stormpath.SDK.Impl.Linq;
-using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Linq;
-using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Sync;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
 {

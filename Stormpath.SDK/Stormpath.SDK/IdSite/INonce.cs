@@ -1,4 +1,4 @@
-﻿// <copyright file="DateExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="INonce.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,19 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-using System;
+using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Impl.Extensions
+namespace Stormpath.SDK.IdSite
 {
-    internal static class DateExtensions
+    /// <summary>
+    /// A cryptographic nonce representation for values that cannot be
+    /// used more than once.
+    /// </summary>
+    public interface INonce : IResource
     {
-        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
         /// <summary>
-        /// Get this datetime as a Unix epoch timestamp (milliseconds since Jan 1, 1970, midnight UTC).
+        /// Gets the value of this nonce.
         /// </summary>
-        /// <param name="date">The date to convert.</param>
-        /// <returns>Milliseconds since Unix epoch.</returns>
-        public static long ToUnixTimestamp(this DateTime date) => (long)(date.ToUniversalTime() - UnixEpoch).TotalMilliseconds;
+        /// <value>The value of this instance.</value>
+        string Value { get; }
     }
 }
