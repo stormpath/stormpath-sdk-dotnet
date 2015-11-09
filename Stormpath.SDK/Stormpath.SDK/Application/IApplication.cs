@@ -91,7 +91,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the result of the authentication.
-        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -114,7 +114,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the result of the authentication.
-        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -137,7 +137,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the result of the authentication.
-        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -163,7 +163,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the result of the authentication.
-        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -191,7 +191,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the result of the authentication.
-        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
