@@ -14,6 +14,9 @@
 // limitations under the License.
 // </copyright>
 
+using System.Collections.Generic;
+using Stormpath.SDK.Impl.Http;
+
 namespace Stormpath.SDK.Http
 {
     /// <summary>
@@ -21,6 +24,36 @@ namespace Stormpath.SDK.Http
     /// </summary>
     public static class HttpRequests
     {
-        //TODO
+        /// <summary>
+        /// Creates a new instance of <see cref="IHttpRequest"/> based on the provided attributes.
+        /// </summary>
+        /// <param name="method">The HTTP method.</param>
+        /// <param name="uri">The URI of the request.</param>
+        /// <returns>An <see cref="IHttpRequest"/> instance that represents this request.</returns>
+        public static IHttpRequest Build(HttpMethod method, string uri)
+        {
+            return new DefaultHttpRequest(
+                method, new CanonicalUri(uri), null, null, null, null);
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="IHttpRequest"/> based on the provided attributes.
+        /// </summary>
+        /// <param name="method">The HTTP method.</param>
+        /// <param name="uri">The URI of the request.</param>
+        /// <param name="headers">The request headers, if any.</param>
+        /// <param name="body">The body content, if any.</param>
+        /// <param name="bodyContentType">The body content type.</param>
+        /// <returns>An <see cref="IHttpRequest"/> instance that represents this request.</returns>
+        public static IHttpRequest Build(HttpMethod method, string uri, IDictionary<string, object> headers, string body, string bodyContentType)
+        {
+            return new DefaultHttpRequest(
+                method,
+                new CanonicalUri(uri),
+                null,
+                new HttpHeaders(headers),
+                body,
+                bodyContentType);
+        }
     }
 }
