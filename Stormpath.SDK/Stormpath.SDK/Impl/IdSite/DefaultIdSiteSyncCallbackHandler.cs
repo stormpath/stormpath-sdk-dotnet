@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Impl.IdSite
         private INonceStore nonceStore;
         private ISynchronousNonceStore syncNonceStore;
 
-        private IIdSiteResultSyncListener resultListener;
+        private IIdSiteSyncResultListener resultListener;
 
         public DefaultIdSiteSyncCallbackHandler(IInternalDataStore internalDataStore, IHttpRequest httpRequest)
         {
@@ -81,7 +81,7 @@ namespace Stormpath.SDK.Impl.IdSite
             return this;
         }
 
-        IIdSiteSyncCallbackHandler IIdSiteSyncCallbackHandler.SetResultListener(IIdSiteResultSyncListener resultListener)
+        IIdSiteSyncCallbackHandler IIdSiteSyncCallbackHandler.SetResultListener(IIdSiteSyncResultListener resultListener)
         {
             this.resultListener = resultListener;
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="IIdSiteResultAsyncListener.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IIdAsyncSiteResultListener.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ namespace Stormpath.SDK.IdSite
     /// Listener interface to get asynchronous notifications about effective operations of the ID Site invocation
     /// (registration, authentication, or logout).
     /// </summary>
-    public interface IIdSiteResultAsyncListener
+    public interface IIdSiteAsyncResultListener
     {
         /// <summary>
         /// This method will be invoked if a successful registration operation takes place on ID Site.

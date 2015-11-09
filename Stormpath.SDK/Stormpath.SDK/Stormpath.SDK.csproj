@@ -66,7 +66,7 @@
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
-    <Compile Include="IdSite\IIdSiteResultSyncListener.cs" />
+    <Compile Include="IdSite\IIdSiteSyncResultListener.cs" />
     <Compile Include="IdSite\IIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\IdSite\DefaultAccountResult.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler.cs" />
@@ -111,7 +111,7 @@
     <Compile Include="IdSite\IAccountResult.cs" />
     <Compile Include="IdSite\IAsynchronousNonceStore.cs" />
     <Compile Include="IdSite\IIdSiteAsyncCallbackHandler.cs" />
-    <Compile Include="IdSite\IIdSiteResultAsyncListener.cs" />
+    <Compile Include="IdSite\IIdSiteAsyncResultListener.cs" />
     <Compile Include="IdSite\IIdSiteUrlBuilder.cs" />
     <Compile Include="IdSite\INonce.cs" />
     <Compile Include="IdSite\INonceStore.cs" />

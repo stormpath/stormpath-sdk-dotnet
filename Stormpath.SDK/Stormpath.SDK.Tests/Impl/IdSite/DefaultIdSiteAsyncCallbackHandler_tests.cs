@@ -75,7 +75,7 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
             IAccountResult accountResultFromListener = null;
 
             // Wire up dummy handler
-            var stubListener = Substitute.For<IIdSiteResultAsyncListener>();
+            var stubListener = Substitute.For<IIdSiteAsyncResultListener>();
             stubListener
                 .When(x => x.OnAuthenticatedAsync(Arg.Any<IAccountResult>(), Arg.Any<CancellationToken>()))
                 .Do(x =>

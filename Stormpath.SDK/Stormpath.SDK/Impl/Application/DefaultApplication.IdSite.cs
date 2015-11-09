@@ -24,7 +24,10 @@ namespace Stormpath.SDK.Impl.Application
         SDK.IdSite.IIdSiteUrlBuilder IApplication.NewIdSiteUrlBuilder()
             => new DefaultIdSiteUrlBuilder(this.GetInternalDataStore(), this.AsInterface.Href);
 
-        SDK.IdSite.IIdSiteAsyncCallbackHandler IApplication.NewIdSiteCallbackHandler(SDK.Http.IHttpRequest request)
+        SDK.IdSite.IIdSiteAsyncCallbackHandler IApplication.NewIdSiteAsyncCallbackHandler(SDK.Http.IHttpRequest request)
             => new DefaultIdSiteAsyncCallbackHandler(this.GetInternalDataStore(), request);
+
+        SDK.IdSite.IIdSiteSyncCallbackHandler IApplicationSync.NewIdSiteSyncCallbackHandler(SDK.Http.IHttpRequest request)
+            => new DefaultIdSiteSyncCallbackHandler(this.GetInternalDataStore(), request);
     }
 }

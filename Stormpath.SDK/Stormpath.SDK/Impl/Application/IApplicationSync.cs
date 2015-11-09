@@ -21,6 +21,7 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
@@ -66,6 +67,8 @@ namespace Stormpath.SDK.Impl.Application
 
         IAccountStoreMapping AddAccountStore<T>(Func<IQueryable<T>, IQueryable<T>> query)
             where T : IAccountStore;
+
+        SDK.IdSite.IIdSiteSyncCallbackHandler NewIdSiteSyncCallbackHandler(IHttpRequest request);
 
         IAccount ResetPassword(string token, string newPassword);
 

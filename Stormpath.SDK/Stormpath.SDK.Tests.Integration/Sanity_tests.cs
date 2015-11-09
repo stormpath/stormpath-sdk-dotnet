@@ -143,9 +143,9 @@ namespace Stormpath.SDK.Tests.Integration
             // Whitelist some methods that legitimately have nonoptional CancellationToken parameters
             var whitelistedMethods = new List<string>()
             {
-                "IIdSiteResultAsyncListener.OnRegisteredAsync(IAccountResult, CancellationToken)",
-                "IIdSiteResultAsyncListener.OnAuthenticatedAsync(IAccountResult, CancellationToken)",
-                "IIdSiteResultAsyncListener.OnLogoutAsync(IAccountResult, CancellationToken)",
+                "IIdSiteAsyncResultListener.OnRegisteredAsync(IAccountResult, CancellationToken)",
+                "IIdSiteAsyncResultListener.OnAuthenticatedAsync(IAccountResult, CancellationToken)",
+                "IIdSiteAsyncResultListener.OnLogoutAsync(IAccountResult, CancellationToken)",
             };
 
             var methodsInAssembly = Assembly
@@ -189,9 +189,9 @@ namespace Stormpath.SDK.Tests.Integration
                 "IAsynchronousNonceStore.ContainsNonce(String)",
                 "IAsynchronousNonceStore.PutNonce(String)",
                 "IIdSiteAsyncCallbackHandler.GetAccountResult()",
-                "IIdSiteResultAsyncListener.OnRegistered(IAccountResult)",
-                "IIdSiteResultAsyncListener.OnAuthenticated(IAccountResult)",
-                "IIdSiteResultAsyncListener.OnLogout(IAccountResult)"
+                "IIdSiteAsyncResultListener.OnRegistered(IAccountResult)",
+                "IIdSiteAsyncResultListener.OnAuthenticated(IAccountResult)",
+                "IIdSiteAsyncResultListener.OnLogout(IAccountResult)"
             };
             var whitelistedSyncMethods = new List<string>()
             {

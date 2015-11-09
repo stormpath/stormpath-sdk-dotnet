@@ -20,9 +20,8 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
-using Stormpath.SDK.Group;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Application;
-using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -331,6 +330,19 @@ namespace Stormpath.SDK.Sync
         public static IAccountStoreMapping AddAccountStore<T>(this IApplication application, Func<IQueryable<T>, IQueryable<T>> query)
             where T : IAccountStore
             => (application as IApplicationSync).AddAccountStore(query);
+
+        /// <summary>
+        /// Creates a new <see cref="IdSite.IIdSiteSyncCallbackHandler"/> used to synchronously handle HTTP replies from your ID Site to your application's <c>callbackUri</c>,
+        /// as described in the <see cref="IApplication.NewIdSiteUrlBuilder"/> method.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <param name="request">
+        /// An instance of <see cref="Http.IHttpRequest"/>.
+        /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
+        /// </param>
+        /// <returns>An <see cref="IIdSiteAsyncCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
+        public static IdSite.IIdSiteSyncCallbackHandler NewIdSiteSyncCallbackHandler(this IApplication application, IHttpRequest request)
+            => (application as IApplicationSync).NewIdSiteSyncCallbackHandler(request);
 
         /// <summary>
         /// Synchronously verifies the password reset token (received in the user's email) and immediately

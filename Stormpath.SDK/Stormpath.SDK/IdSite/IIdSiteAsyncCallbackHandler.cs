@@ -61,7 +61,7 @@ namespace Stormpath.SDK.IdSite
         IIdSiteAsyncCallbackHandler SetNonceStore(INonceStore nonceStore);
 
         /// <summary>
-        /// Sets the <see cref="IIdSiteResultAsyncListener"/> that will be notified about the actual operation
+        /// Sets the <see cref="IIdSiteAsyncResultListener"/> that will be notified about the actual operation
         /// of the ID Site invokation: registration, authentication, or logout.
         /// <para>
         /// The listener must be set before the method <see cref="GetAccountResultAsync(CancellationToken)"/> is invoked.
@@ -69,7 +69,7 @@ namespace Stormpath.SDK.IdSite
         /// </summary>
         /// <param name="resultListener">The result listener to notify.</param>
         /// <returns>This instance for method chaining.</returns>
-        IIdSiteAsyncCallbackHandler SetResultListener(IIdSiteResultAsyncListener resultListener);
+        IIdSiteAsyncCallbackHandler SetResultListener(IIdSiteAsyncResultListener resultListener);
 
         /// <summary>
         /// Processes the request and returns an <see cref="IAccountResult"/> object that reflects

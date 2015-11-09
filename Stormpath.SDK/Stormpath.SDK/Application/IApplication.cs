@@ -371,6 +371,26 @@ namespace Stormpath.SDK.Application
             where T : IAccountStore;
 
         /// <summary>
+        /// Creates a new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your
+        /// application users to a hosted login/registration/forgot-password site - what Stormpath calls an 'Identity Site'
+        /// (or 'ID Site' for short) - for performing common user identity functionality.
+        /// When the user is done (logging in, registering, etc), they will be redirected back to a <c>callbackUri</c> of your choice.
+        /// </summary>
+        /// <returns>A new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your application users to a hosted login/registration/forgot-password 'ID Site'.</returns>
+        IIdSiteUrlBuilder NewIdSiteUrlBuilder();
+
+        /// <summary>
+        /// Creates a new <see cref="IIdSiteAsyncCallbackHandler"/> used to handle HTTP replies from your ID Site to your application's <c>callbackUri</c>,
+        /// as described in the <see cref="NewIdSiteUrlBuilder"/> method.
+        /// </summary>
+        /// <param name="request">
+        /// An instance of <see cref="IHttpRequest"/>.
+        /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
+        /// </param>
+        /// <returns>An <see cref="IIdSiteAsyncCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
+        IIdSiteAsyncCallbackHandler NewIdSiteAsyncCallbackHandler(IHttpRequest request);
+
+        /// <summary>
         /// Verifies the password reset token (received in the user's email) and immediately
         /// changes the password in the same request, if the token is valid.
         /// <para>Once the token has been successfully used, it is immediately invalidated and can't be used again.
@@ -394,26 +414,6 @@ namespace Stormpath.SDK.Application
         /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">There is no account that matches the specified email address.</exception>
         Task<IPasswordResetToken> SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Creates a new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your
-        /// application users to a hosted login/registration/forgot-password site - what Stormpath calls an 'Identity Site'
-        /// (or 'ID Site' for short) - for performing common user identity functionality.
-        /// When the user is done (logging in, registering, etc), they will be redirected back to a <c>callbackUri</c> of your choice.
-        /// </summary>
-        /// <returns>A new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your application users to a hosted login/registration/forgot-password 'ID Site'.</returns>
-        IIdSiteUrlBuilder NewIdSiteUrlBuilder();
-
-        /// <summary>
-        /// Creates a new <see cref="IIdSiteAsyncCallbackHandler"/> used the handle HTTP replies from your ID Site to your application's <c>callbackUri</c>,
-        /// as described in the <see cref="NewIdSiteUrlBuilder"/> method.
-        /// </summary>
-        /// <param name="request">
-        /// An instance of <see cref="IHttpRequest"/>.
-        /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
-        /// </param>
-        /// <returns>An <see cref="IIdSiteAsyncCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
-        IIdSiteAsyncCallbackHandler NewIdSiteCallbackHandler(IHttpRequest request);
 
         /// <summary>
         /// Sends a password reset email to an account in the specified <see cref="IAccountStore"/> matching
