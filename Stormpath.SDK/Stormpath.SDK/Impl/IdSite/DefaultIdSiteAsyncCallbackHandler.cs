@@ -44,6 +44,8 @@ namespace Stormpath.SDK.Impl.IdSite
 
         private IIdSiteAsyncResultListener resultListener;
 
+        private IIdSiteAsyncCallbackHandler AsInterface => this;
+
         public DefaultIdSiteAsyncCallbackHandler(IInternalDataStore internalDataStore, IHttpRequest httpRequest)
         {
             if (internalDataStore == null)
@@ -86,6 +88,14 @@ namespace Stormpath.SDK.Impl.IdSite
             this.resultListener = resultListener;
 
             return this;
+        }
+
+        IIdSiteAsyncCallbackHandler IIdSiteAsyncCallbackHandler.SetResultListener(
+            Func<IAccountResult, CancellationToken, Task> onRegistered,
+            Func<IAccountResult, CancellationToken, Task> onAuthenticated,
+            Func<IAccountResult, CancellationToken, Task> onLogout)
+        {
+            return this.AsInterface.SetResultListener(new InlineIdSiteAsyncResultListener(onRegistered, onAuthenticated, onLogout));
         }
 
         async Task<IAccountResult> IIdSiteAsyncCallbackHandler.GetAccountResultAsync(CancellationToken cancellationToken)

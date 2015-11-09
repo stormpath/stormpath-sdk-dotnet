@@ -72,6 +72,23 @@ namespace Stormpath.SDK.IdSite
         IIdSiteSyncCallbackHandler SetResultListener(IIdSiteSyncResultListener resultListener);
 
         /// <summary>
+        /// Sets the <see cref="IIdSiteSyncResultListener"/> that will be notified about the actual operation
+        /// of the ID Site invokation: registration, authentication, or logout. This overload
+        /// constructs an inline <see cref="IIdSiteSyncResultListener"/> based on the delegate parameters.
+        /// <para>
+        /// The listener must be set before the method <see cref="GetAccountResult()"/> is invoked.
+        /// </para>
+        /// </summary>
+        /// <param name="onRegistered">The action to run for <see cref="IIdSiteSyncResultListener.OnRegistered(IAccountResult)"/>.</param>
+        /// <param name="onAuthenticated">The action to run for <see cref="IIdSiteSyncResultListener.OnAuthenticated(IAccountResult)"/>.</param>
+        /// <param name="onLogout">The action to run for <see cref="IIdSiteSyncResultListener.OnLogout(IAccountResult)"/>.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IIdSiteSyncCallbackHandler SetResultListener(
+            Action<IAccountResult> onRegistered = null,
+            Action<IAccountResult> onAuthenticated = null,
+            Action<IAccountResult> onLogout = null);
+
+        /// <summary>
         /// Synchronously processes the request and returns an <see cref="IAccountResult"/> object that reflects
         /// the account that logged in or registered.
         /// </summary>

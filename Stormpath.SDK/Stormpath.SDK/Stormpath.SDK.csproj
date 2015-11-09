@@ -219,6 +219,8 @@
     <Compile Include="IdSite\IdSiteRuntimeException.cs" />
     <Compile Include="IdSite\IdSiteSessionTimeoutException.cs" />
     <Compile Include="IdSite\InvalidIdSiteTokenException.cs" />
+    <Compile Include="Impl\IdSite\InlineIdSiteSyncResultListener.cs" />
+    <Compile Include="Impl\IdSite\InlineIdSiteAsyncResultListener.cs" />
     <Compile Include="Impl\Jwt\DefaultJwtSigner.cs" />
     <Compile Include="Impl\Jwt\IJwtSigner.cs" />
     <Compile Include="Impl\Jwt\JsonWebToken.cs" />

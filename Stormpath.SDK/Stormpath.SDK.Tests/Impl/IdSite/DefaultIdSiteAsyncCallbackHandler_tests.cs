@@ -74,34 +74,30 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
         {
             IAccountResult accountResultFromListener = null;
 
-            // Wire up dummy handler
-            var stubListener = Substitute.For<IIdSiteAsyncResultListener>();
-            stubListener
-                .When(x => x.OnAuthenticatedAsync(Arg.Any<IAccountResult>(), Arg.Any<CancellationToken>()))
-                .Do(x =>
+            var listener = new InlineIdSiteAsyncResultListener(
+                onAuthenticated: (result, ct) =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Authenticated)
-                        accountResultFromListener = x.Arg<IAccountResult>();
+                        accountResultFromListener = result;
                     else
                         throw new InvalidOperationException("This method should not have been executed");
-                });
-            stubListener
-                .When(x => x.OnLogoutAsync(Arg.Any<IAccountResult>(), Arg.Any<CancellationToken>()))
-                .Do(x =>
+                    return Task.FromResult(true);
+                },
+                onLogout: (result, ct) =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Logout)
-                        accountResultFromListener = x.Arg<IAccountResult>();
+                        accountResultFromListener = result;
                     else
                         throw new InvalidOperationException("This method should not have been executed");
-                });
-            stubListener
-                .When(x => x.OnRegisteredAsync(Arg.Any<IAccountResult>(), Arg.Any<CancellationToken>()))
-                .Do(x =>
+                    return Task.FromResult(true);
+                },
+                onRegistered: (result, ct) =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Registered)
-                        accountResultFromListener = x.Arg<IAccountResult>();
+                        accountResultFromListener = result;
                     else
                         throw new InvalidOperationException("This method should not have been executed");
+                    return Task.FromResult(true);
                 });
 
             var testApiKey = ClientApiKeys.Builder().SetId("2EV70AHRTYF0JOA7OEFO3SM29").SetSecret("goPUHQMkS4dlKwl5wtbNd91I+UrRehCsEDJrIrMruK8").Build();
@@ -119,7 +115,7 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
             var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri($"https://foo.bar?{IdSiteClaims.JwtResponse}={jwtResponse}"));
 
             IIdSiteAsyncCallbackHandler callbackHandler = new DefaultIdSiteAsyncCallbackHandler(this.dataStore, request);
-            callbackHandler.SetResultListener(stubListener);
+            callbackHandler.SetResultListener(listener);
 
             var accountResult = await callbackHandler.GetAccountResultAsync(CancellationToken.None);
 

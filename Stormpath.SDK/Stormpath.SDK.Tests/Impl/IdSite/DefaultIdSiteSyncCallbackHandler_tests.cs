@@ -74,32 +74,25 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
         {
             IAccountResult accountResultFromListener = null;
 
-            // Wire up dummy handler
-            var stubListener = Substitute.For<IIdSiteSyncResultListener>();
-            stubListener
-                .When(x => x.OnAuthenticated(Arg.Any<IAccountResult>()))
-                .Do(x =>
+            var listener = new InlineIdSiteSyncResultListener(
+                onAuthenticated: result =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Authenticated)
-                        accountResultFromListener = x.Arg<IAccountResult>();
+                        accountResultFromListener = result;
                     else
                         throw new InvalidOperationException("This method should not have been executed");
-                });
-            stubListener
-                .When(x => x.OnLogout(Arg.Any<IAccountResult>()))
-                .Do(x =>
+                },
+                onLogout: result =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Logout)
-                        accountResultFromListener = x.Arg<IAccountResult>();
+                        accountResultFromListener = result;
                     else
                         throw new InvalidOperationException("This method should not have been executed");
-                });
-            stubListener
-                .When(x => x.OnRegistered(Arg.Any<IAccountResult>()))
-                .Do(x =>
+                },
+                onRegistered: result =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Registered)
-                        accountResultFromListener = x.Arg<IAccountResult>();
+                        accountResultFromListener = result;
                     else
                         throw new InvalidOperationException("This method should not have been executed");
                 });
@@ -119,7 +112,7 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
             var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri($"https://foo.bar?{IdSiteClaims.JwtResponse}={jwtResponse}"));
 
             IIdSiteSyncCallbackHandler callbackHandler = new DefaultIdSiteSyncCallbackHandler(this.dataStore, request);
-            callbackHandler.SetResultListener(stubListener);
+            callbackHandler.SetResultListener(listener);
 
             var accountResult = callbackHandler.GetAccountResult();
 

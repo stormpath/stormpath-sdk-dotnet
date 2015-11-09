@@ -198,7 +198,8 @@ namespace Stormpath.SDK.Tests.Integration
                 "IQueryable`1.Filter(String)",
                 "IQueryable`1.Expand(Expression`1)",
                 "IQueryable`1.Expand(Expression`1, Nullable`1, Nullable`1)",
-                "IAsyncQueryable`1.Synchronously()"
+                "IAsyncQueryable`1.Synchronously()",
+                "IApplication.NewIdSiteSyncCallbackHandler(IHttpRequest)"
             };
 
             // Get normal async API from interfaces

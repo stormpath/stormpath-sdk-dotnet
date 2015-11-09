@@ -72,6 +72,23 @@ namespace Stormpath.SDK.IdSite
         IIdSiteAsyncCallbackHandler SetResultListener(IIdSiteAsyncResultListener resultListener);
 
         /// <summary>
+        /// Sets the <see cref="IIdSiteAsyncResultListener"/> that will be notified about the actual operation
+        /// of the ID Site invokation: registration, authentication, or logout. This overload
+        /// constructs an inline <see cref="IIdSiteAsyncResultListener"/> based on the delegate parameters.
+        /// <para>
+        /// The listener must be set before the method <see cref="GetAccountResultAsync(CancellationToken)"/> is invoked.
+        /// </para>
+        /// </summary>
+        /// <param name="onRegistered">The action to run for <see cref="IIdSiteAsyncResultListener.OnRegisteredAsync(IAccountResult, CancellationToken)"/>.</param>
+        /// <param name="onAuthenticated">The action to run for <see cref="IIdSiteAsyncResultListener.OnAuthenticatedAsync(IAccountResult, CancellationToken)"/>.</param>
+        /// <param name="onLogout">The action to run for <see cref="IIdSiteAsyncResultListener.OnLogoutAsync(IAccountResult, CancellationToken)"/>.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IIdSiteAsyncCallbackHandler SetResultListener(
+            Func<IAccountResult, CancellationToken, Task> onRegistered = null,
+            Func<IAccountResult, CancellationToken, Task> onAuthenticated = null,
+            Func<IAccountResult, CancellationToken, Task> onLogout = null);
+
+        /// <summary>
         /// Processes the request and returns an <see cref="IAccountResult"/> object that reflects
         /// the account that logged in or registered.
         /// </summary>

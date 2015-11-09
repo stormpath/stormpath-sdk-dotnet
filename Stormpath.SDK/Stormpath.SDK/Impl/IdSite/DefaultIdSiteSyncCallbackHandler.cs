@@ -44,6 +44,8 @@ namespace Stormpath.SDK.Impl.IdSite
 
         private IIdSiteSyncResultListener resultListener;
 
+        private IIdSiteSyncCallbackHandler AsInterface => this;
+
         public DefaultIdSiteSyncCallbackHandler(IInternalDataStore internalDataStore, IHttpRequest httpRequest)
         {
             if (internalDataStore == null)
@@ -86,6 +88,14 @@ namespace Stormpath.SDK.Impl.IdSite
             this.resultListener = resultListener;
 
             return this;
+        }
+
+        IIdSiteSyncCallbackHandler IIdSiteSyncCallbackHandler.SetResultListener(
+            Action<IAccountResult> onRegistered,
+            Action<IAccountResult> onAuthenticated,
+            Action<IAccountResult> onLogout)
+        {
+            return this.AsInterface.SetResultListener(new InlineIdSiteSyncResultListener(onRegistered, onAuthenticated, onLogout));
         }
 
         IAccountResult IIdSiteSyncCallbackHandler.GetAccountResult()
