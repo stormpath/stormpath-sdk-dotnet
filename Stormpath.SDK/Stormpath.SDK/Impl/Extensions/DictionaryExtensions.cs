@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Impl.Extensions
 
             var keyExists = source.TryGetValue(key, out raw);
             if (keyExists)
-                value = raw.ToString();
+                value = raw?.ToString();
 
             return keyExists;
         }

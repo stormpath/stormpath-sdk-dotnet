@@ -93,7 +93,8 @@
     <Compile Include="Impl\DefaultRequestExecutor_tests.cs" />
     <Compile Include="Impl\Expansion_save_options_tests.cs" />
     <Compile Include="Impl\Expansion_retrieval_options_tests.cs" />
-    <Compile Include="Impl\Extensions\Dictionary_IsNullOrEmpty_tests.cs" />
+    <Compile Include="Impl\Extensions\Dictionary_TryGetValueAsString_tests.cs" />
+    <Compile Include="Impl\Extensions\Enumerable_IsNullOrEmpty_tests.cs" />
     <Compile Include="Impl\Extensions\String_Nullable_tests.cs" />
     <Compile Include="Impl\Extensions\Uri_WithoutQueryAndFragment_tests.cs" />
     <Compile Include="Impl\FieldConverter_tests.cs" />

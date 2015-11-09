@@ -1,4 +1,4 @@
-﻿// <copyright file="Dictionary_IsNullOrEmpty_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Enumerable_IsNullOrEmpty_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Extensions
 {
-    public class Dictionary_IsNullOrEmpty_tests
+    public class Enumerable_IsNullOrEmpty_tests
     {
         [Fact]
         public void Returns_true_when_null()
