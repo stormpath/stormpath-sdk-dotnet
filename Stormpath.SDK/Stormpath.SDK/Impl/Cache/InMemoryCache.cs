@@ -159,31 +159,28 @@ namespace Stormpath.SDK.Impl.Cache
             return value;
         }
 
-        async Task<V> IAsynchronousCache<K, V>.GetAsync(K key, CancellationToken cancellationToken)
+        Task<V> IAsynchronousCache<K, V>.GetAsync(K key, CancellationToken cancellationToken)
         {
             this.ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
-            await Task.Yield();
-            return this.AsSyncInterface.Get(key);
+            return Task.FromResult(this.AsSyncInterface.Get(key));
         }
 
-        async Task<V> IAsynchronousCache<K, V>.PutAsync(K key, V value, CancellationToken cancellationToken)
+        Task<V> IAsynchronousCache<K, V>.PutAsync(K key, V value, CancellationToken cancellationToken)
         {
             this.ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
-            await Task.Yield();
-            return this.AsSyncInterface.Put(key, value);
+            return Task.FromResult(this.AsSyncInterface.Put(key, value));
         }
 
-        async Task<V> IAsynchronousCache<K, V>.RemoveAsync(K key, CancellationToken cancellationToken)
+        Task<V> IAsynchronousCache<K, V>.RemoveAsync(K key, CancellationToken cancellationToken)
         {
             this.ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
-            await Task.Yield();
-            return this.AsSyncInterface.Remove(key);
+            return Task.FromResult(this.AsSyncInterface.Remove(key));
         }
 
         public double GetHitRatio()
