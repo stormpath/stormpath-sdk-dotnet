@@ -17,16 +17,14 @@
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
+using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Directory
 {
-    internal interface IDirectorySync : ISaveableWithOptionsSync<IDirectory>, IDeletableSync, IExtendableSync, IAccountCreationActionsSync, IGroupCreationActionsSync
+    internal interface IDirectorySync : ISaveableWithOptionsSync<IDirectory>, IDeletableSync, IExtendableSync, IAccountCreationActionsSync, IGroupCreationActionsSync, IAccountStoreSync
     {
         IProvider GetProvider();
-
-        ITenant GetTenant();
     }
 }

@@ -14,7 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -23,7 +22,6 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Directory
 {
@@ -83,27 +81,11 @@ namespace Stormpath.SDK.Directory
         IDirectory SetStatus(DirectoryStatus status);
 
         /// <summary>
-        /// Gets the Stormpath <see cref="ITenant"/> that owns this Directory resource.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is this directory's tenant.</returns>
-        Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
         /// Gets the <see cref="IProvider"/> of this Directory.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the Provider of this Directory.</returns>
         Task<IProvider> GetProviderAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Gets a queryable list of all accounts in this directory.
-        /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
-        /// <example>
-        /// var allDirectoryAccounts = await myDirectory.GetAccounts().ToListAsync();
-        /// </example>
-        IAsyncQueryable<IAccount> GetAccounts();
 
         /// <summary>
         /// Gets a queryable list of all groups in this directory.

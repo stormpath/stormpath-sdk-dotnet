@@ -17,12 +17,12 @@
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Group
 {
-    internal interface IGroupSync : ISaveableWithOptionsSync<IGroup>, IDeletableSync, IExtendableSync
+    internal interface IGroupSync : ISaveableWithOptionsSync<IGroup>, IDeletableSync, IExtendableSync, IAccountStoreSync
     {
         IGroupMembership AddAccount(IAccount account);
 
@@ -31,8 +31,6 @@ namespace Stormpath.SDK.Impl.Group
         bool RemoveAccount(IAccount account);
 
         bool RemoveAccount(string hrefOrEmailOrUsername);
-
-        ITenant GetTenant();
 
         IDirectory GetDirectory();
     }

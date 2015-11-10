@@ -118,13 +118,6 @@ namespace Stormpath.SDK.Group
         Task<bool> RemoveAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is this group's tenant.</returns>
-        Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
         /// Gets the group's parent <see cref="IDirectory"/> (where the group is stored).
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -136,11 +129,5 @@ namespace Stormpath.SDK.Group
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to asynchronously list or search memberships.</returns>
         IAsyncQueryable<IGroupMembership> GetAccountMemberships();
-
-        /// <summary>
-        /// Gets a queryable list of all accounts in this directory.
-        /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
-        IAsyncQueryable<IAccount> GetAccounts();
     }
 }

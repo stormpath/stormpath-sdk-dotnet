@@ -14,16 +14,37 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Linq;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
-    internal sealed class DefaultAccountStore : AbstractInstanceResource, IAccountStore
+    internal sealed class DefaultAccountStore : AbstractInstanceResource, IAccountStore, IAccountStoreSync
     {
         public DefaultAccountStore(ResourceData data)
             : base(data)
         {
+        }
+
+        IAsyncQueryable<IAccount> IAccountStore.GetAccounts()
+        {
+            throw new ApplicationException("Access this resource through the IDirectory or IGroup interface to enumerate accounts.");
+        }
+
+        ITenant IAccountStoreSync.GetTenant()
+        {
+            throw new ApplicationException("Access this resource through the IDirectory or IGroup interface to get the current tenant.");
+        }
+
+        Task<ITenant> IAccountStore.GetTenantAsync(CancellationToken cancellationToken)
+        {
+            throw new ApplicationException("Access this resource through the IDirectory or IGroup interface to get the current tenant.");
         }
     }
 }

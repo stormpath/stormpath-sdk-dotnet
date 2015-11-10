@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultDirectory.ResourcesSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAccountStoreSync.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,19 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Impl.AccountStore;
-using Stormpath.SDK.Impl.Provider;
-using Stormpath.SDK.Provider;
 using Stormpath.SDK.Tenant;
 
-namespace Stormpath.SDK.Impl.Directory
+namespace Stormpath.SDK.Impl.AccountStore
 {
-    internal sealed partial class DefaultDirectory
+    internal interface IAccountStoreSync
     {
-        IProvider IDirectorySync.GetProvider()
-            => this.GetInternalSyncDataStore().GetResource<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup);
-
-        ITenant IAccountStoreSync.GetTenant()
-            => this.GetTenant(this.Tenant.Href);
+        ITenant GetTenant();
     }
 }

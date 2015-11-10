@@ -18,7 +18,6 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Group;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {
@@ -78,13 +77,5 @@ namespace Stormpath.SDK.Sync
         /// <returns>This group's parent <see cref="IDirectory"/>.</returns>
         public static IDirectory GetDirectory(this IGroup group)
             => (group as IGroupSync).GetDirectory();
-
-        /// <summary>
-        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Group resource.
-        /// </summary>
-        /// <param name="group">The group.</param>
-        /// <returns>This account's tenant.</returns>
-        public static ITenant GetTenant(this IGroup group)
-            => (group as IGroupSync).GetTenant();
     }
 }

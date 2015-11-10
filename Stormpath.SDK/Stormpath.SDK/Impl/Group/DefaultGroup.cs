@@ -19,10 +19,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
+using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
@@ -304,16 +306,16 @@ namespace Stormpath.SDK.Impl.Group
         IDirectory IGroupSync.GetDirectory()
             => this.GetInternalSyncDataStore().GetResource<IDirectory>(this.Directory.Href);
 
-        Task<ITenant> IGroup.GetTenantAsync(CancellationToken cancellationToken)
+        Task<ITenant> IAccountStore.GetTenantAsync(CancellationToken cancellationToken)
             => this.GetTenantAsync(this.Tenant.Href, cancellationToken);
 
-        ITenant IGroupSync.GetTenant()
+        ITenant IAccountStoreSync.GetTenant()
             => this.GetTenant(this.Tenant.Href);
 
         IAsyncQueryable<IGroupMembership> IGroup.GetAccountMemberships()
             => new CollectionResourceQueryable<IGroupMembership>(this.AccountMemberships.Href, this.GetInternalAsyncDataStore());
 
-        IAsyncQueryable<IAccount> IGroup.GetAccounts()
+        IAsyncQueryable<IAccount> IAccountStore.GetAccounts()
             => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());
 
         Task<IGroup> ISaveable<IGroup>.SaveAsync(CancellationToken cancellationToken)

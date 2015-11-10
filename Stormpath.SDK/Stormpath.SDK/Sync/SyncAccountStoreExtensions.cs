@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultDirectory.ResourcesSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SyncAccountStoreExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,19 +14,20 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.AccountStore;
-using Stormpath.SDK.Impl.Provider;
-using Stormpath.SDK.Provider;
 using Stormpath.SDK.Tenant;
 
-namespace Stormpath.SDK.Impl.Directory
+namespace Stormpath.SDK.Sync
 {
-    internal sealed partial class DefaultDirectory
+    public static class SyncAccountStoreExtensions
     {
-        IProvider IDirectorySync.GetProvider()
-            => this.GetInternalSyncDataStore().GetResource<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup);
-
-        ITenant IAccountStoreSync.GetTenant()
-            => this.GetTenant(this.Tenant.Href);
+        /// <summary>
+        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Account Store resource.
+        /// </summary>
+        /// <param name="accountStore">The account store (a <see cref="Directory.IDirectory"/> or <see cref="Group.IGroup"/>).</param>
+        /// <returns>This account's tenant.</returns>
+        public static ITenant GetTenant(this IAccountStore accountStore)
+            => (accountStore as IAccountStoreSync).GetTenant();
     }
 }

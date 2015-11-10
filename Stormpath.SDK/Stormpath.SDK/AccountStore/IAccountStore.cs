@@ -14,7 +14,12 @@
 // limitations under the License.
 // </copyright>
 
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.AccountStore
 {
@@ -23,5 +28,17 @@ namespace Stormpath.SDK.AccountStore
     /// </summary>
     public interface IAccountStore : IResource
     {
+        /// <summary>
+        /// Gets the Stormpath <see cref="ITenant"/> that owns this Account Store resource.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task whose result is this account store's tenant.</returns>
+        Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Gets a queryable list of all accounts in this Account Store.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
+        IAsyncQueryable<IAccount> GetAccounts();
     }
 }

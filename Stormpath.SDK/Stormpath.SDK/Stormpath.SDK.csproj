@@ -68,6 +68,7 @@
     <Compile Include="Auth\IAuthenticationRequest.cs" />
     <Compile Include="IdSite\IIdSiteSyncResultListener.cs" />
     <Compile Include="IdSite\IIdSiteSyncCallbackHandler.cs" />
+    <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
     <Compile Include="Impl\IdSite\DefaultAccountResult.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\IdSite\IAccountResultSync.cs" />
@@ -390,6 +391,7 @@
     <Compile Include="Sync\FilterExtensions.cs" />
     <Compile Include="Sync\SyncAccountCreationActionsExtensions.cs" />
     <Compile Include="Sync\SyncAccountResultExtensions.cs" />
+    <Compile Include="Sync\SyncAccountStoreExtensions.cs" />
     <Compile Include="Sync\SyncDirectoryExtensions.cs" />
     <Compile Include="Sync\SyncGroupCreationExtensions.cs" />
     <Compile Include="Sync\SyncGroupMembershipExtensions.cs" />

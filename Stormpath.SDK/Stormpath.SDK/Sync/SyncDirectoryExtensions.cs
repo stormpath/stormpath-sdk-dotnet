@@ -15,10 +15,8 @@
 // </copyright>
 
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Provider;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {
@@ -31,13 +29,5 @@ namespace Stormpath.SDK.Sync
         /// <returns>The Provider of this Directory.</returns>
         public static IProvider GetProvider(this IDirectory directory)
             => (directory as IDirectorySync).GetProvider();
-
-        /// <summary>
-        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Directory resource.
-        /// </summary>
-        /// <param name="directory">The directory.</param>
-        /// <returns>This account's tenant.</returns>
-        public static ITenant GetTenant(this IDirectory directory)
-            => (directory as IDirectorySync).GetTenant();
     }
 }
