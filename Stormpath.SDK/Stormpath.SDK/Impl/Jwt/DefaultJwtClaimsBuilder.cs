@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
 

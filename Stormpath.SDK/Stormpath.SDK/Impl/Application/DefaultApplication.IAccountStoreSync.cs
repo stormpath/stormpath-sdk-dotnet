@@ -20,7 +20,6 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Linq;
 using Stormpath.SDK.Sync;
 
 namespace Stormpath.SDK.Impl.Application

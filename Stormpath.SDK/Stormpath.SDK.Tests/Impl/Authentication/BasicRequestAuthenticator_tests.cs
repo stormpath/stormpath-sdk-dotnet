@@ -20,7 +20,6 @@ using Shouldly;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Api;
-using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Authentication;
 using Stormpath.SDK.Impl.Http.Support;

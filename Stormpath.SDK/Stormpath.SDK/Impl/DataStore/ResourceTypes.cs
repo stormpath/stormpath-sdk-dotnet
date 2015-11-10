@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Auth;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
