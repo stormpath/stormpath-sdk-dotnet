@@ -14,9 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace Stormpath.SDK.Cache
 {
     /// <summary>
@@ -29,10 +26,9 @@ namespace Stormpath.SDK.Cache
         /// a new one will be created with that name and returned.
         /// </summary>
         /// <param name="name">The name of the cache to acquire.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
         /// <typeparam name="K">The key type of the cache.</typeparam>
         /// <typeparam name="V">The value type of the cache.</typeparam>
-        /// <returns>A Task whose result is the cache with the given name.</returns>
-        Task<IAsynchronousCache<K, V>> GetCacheAsync<K, V>(string name, CancellationToken cancellationToken = default(CancellationToken));
+        /// <returns>The cache with the given name.</returns>
+        IAsynchronousCache<K, V> GetAsyncCache<K, V>(string name);
     }
 }

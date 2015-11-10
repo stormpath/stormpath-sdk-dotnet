@@ -66,6 +66,7 @@
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
+    <Compile Include="Cache\AbstractCacheProvider.cs" />
     <Compile Include="IdSite\IIdSiteSyncResultListener.cs" />
     <Compile Include="IdSite\IIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />

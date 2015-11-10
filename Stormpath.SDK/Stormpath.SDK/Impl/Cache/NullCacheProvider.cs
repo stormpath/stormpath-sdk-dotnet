@@ -15,44 +15,25 @@
 // </copyright>
 
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
 
 namespace Stormpath.SDK.Impl.Cache
 {
-    internal sealed class NullCacheProvider : ISynchronousCacheProvider, IAsynchronousCacheProvider
+    internal sealed class NullCacheProvider : AbstractCacheProvider
     {
-        private bool disposed = false;
-
-        bool ICacheProvider.IsAsynchronousSupported => false;
-
-        bool ICacheProvider.IsSynchronousSupported => false;
-
-        private void ThrowIfDisposed()
+        public NullCacheProvider()
+            : base(false, false)
         {
-            if (this.disposed)
-                throw new ApplicationException("This cache provider has been disposed.");
         }
 
-        ISynchronousCache<K, V> ISynchronousCacheProvider.GetCache<K, V>(string name)
+        protected override IAsynchronousCache<K, V> CreateAsyncCache<K, V>(string name, TimeSpan? ttl, TimeSpan? tti)
         {
             throw new NotImplementedException();
         }
 
-        Task<IAsynchronousCache<K, V>> IAsynchronousCacheProvider.GetCacheAsync<K, V>(string name, CancellationToken cancellationToken)
+        protected override ISynchronousCache<K, V> CreateSyncCache<K, V>(string name, TimeSpan? ttl, TimeSpan? tti)
         {
             throw new NotImplementedException();
-        }
-
-        public override string ToString()
-        {
-            return @"{ ""name"": ""NullCacheProvider"" }";
-        }
-
-        public void Dispose()
-        {
-            this.disposed = true;
         }
     }
 }

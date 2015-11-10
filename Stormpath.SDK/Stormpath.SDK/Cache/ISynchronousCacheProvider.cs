@@ -29,6 +29,6 @@ namespace Stormpath.SDK.Cache
         /// <typeparam name="K">The key type of the cache.</typeparam>
         /// <typeparam name="V">The value type of the cache.</typeparam>
         /// <returns>The cache with the given name.</returns>
-        ISynchronousCache<K, V> GetCache<K, V>(string name);
+        ISynchronousCache<K, V> GetSyncCache<K, V>(string name);
     }
 }
