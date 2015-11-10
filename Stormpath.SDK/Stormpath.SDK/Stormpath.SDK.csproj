@@ -69,6 +69,11 @@
     <Compile Include="IdSite\IIdSiteSyncResultListener.cs" />
     <Compile Include="IdSite\IIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
+    <Compile Include="Impl\Group\DefaultGroup.Membership.cs" />
+    <Compile Include="Impl\Group\DefaultGroup.Collections.cs" />
+    <Compile Include="Impl\Group\DefaultGroup.MembershipSync.cs" />
+    <Compile Include="Impl\Group\DefaultGroup.Resources.cs" />
+    <Compile Include="Impl\Group\DefaultGroup.ResourcesSync.cs" />
     <Compile Include="Impl\IdSite\DefaultAccountResult.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\IdSite\IAccountResultSync.cs" />
