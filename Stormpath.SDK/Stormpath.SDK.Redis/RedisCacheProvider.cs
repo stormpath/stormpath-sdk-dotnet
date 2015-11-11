@@ -17,22 +17,26 @@
 using System;
 using StackExchange.Redis;
 using Stormpath.SDK.Cache;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis
 {
     public class RedisCacheProvider : AbstractCacheProvider
     {
-        private readonly IConnectionMultiplexer redisConnection;
+        private readonly IConnectionMultiplexer connection;
+        private readonly ILogger logger;
 
-        public RedisCacheProvider(string redisConfiguration)
+        public RedisCacheProvider(string redisConfiguration, ILogger logger = null)
             : base(syncSupported: true, asyncSupported: true)
         {
-            this.redisConnection = ConnectionMultiplexer.Connect(redisConfiguration);
+            this.connection = ConnectionMultiplexer.Connect(redisConfiguration);
+            this.logger = logger;
         }
 
         protected override IAsynchronousCache<K, V> CreateAsyncCache<K, V>(string name, TimeSpan? ttl, TimeSpan? tti)
         {
             throw new NotImplementedException();
+            //return new RedisAsyncCache(this.connection, name, ttl, tti);
         }
 
         protected override ISynchronousCache<K, V> CreateSyncCache<K, V>(string name, TimeSpan? ttl, TimeSpan? tti)

@@ -15,70 +15,69 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 using Stormpath.SDK.Cache;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
-namespace Stormpath.SDK.Redis
+namespace Stormpath.SDK.Extensions.Cache.Redis
 {
-    internal sealed class RedisAsyncCache<K, V> : IAsynchronousCache<K, V>
+    internal sealed class RedisAsyncCache : IAsynchronousCache<string, Map>
     {
         private readonly IConnectionMultiplexer connection;
         private readonly string region;
+        private readonly TimeSpan? ttl;
+        private readonly TimeSpan? tti;
 
         public RedisAsyncCache(
             IConnectionMultiplexer connection,
-            string region)
+            string region,
+            TimeSpan? ttl,
+            TimeSpan? tti)
         {
             this.connection = connection;
             this.region = region;
-
-            var db = connection.GetDatabase(); // todo
+            this.ttl = ttl;
+            this.tti = tti;
         }
 
-        string ICache<K, V>.Name
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        string ICache<string, Map>.Name => this.region;
 
-        TimeSpan? ICache<K, V>.TimeToIdle
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        TimeSpan? ICache<string, Map>.TimeToLive => this.ttl;
 
-        TimeSpan? ICache<K, V>.TimeToLive
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        TimeSpan? ICache<string, Map>.TimeToIdle => this.tti;
 
-        void IDisposable.Dispose()
+        void IDisposable.Dispose() { }
+
+        Task<Map> IAsynchronousCache<string, Map>.GetAsync(string key, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        Task<V> IAsynchronousCache<K, V>.GetAsync(K key, CancellationToken cancellationToken)
+        async Task<Map> IAsynchronousCache<string, Map>.PutAsync(string key, Map value, CancellationToken cancellationToken)
+        {
+            var db = this.connection.GetDatabase();
+
+            var regionKey = this.ConstructKey(key);
+            //var cacheValue = new HashEntry[]
+            //{
+            //    new HashEntry("data", (object)value),
+            //    new HashEntry("ttl", ttl),
+            //    new HashEntry("tti", tti)
+            //};
+
+            await db.HashSetAsync(regionKey, null /*todo cacheValue*/).ConfigureAwait(false);
+            return value;
+        }
+
+        Task<Map> IAsynchronousCache<string, Map>.RemoveAsync(string key, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        Task<V> IAsynchronousCache<K, V>.PutAsync(K key, V value, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<V> IAsynchronousCache<K, V>.RemoveAsync(K key, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        private string ConstructKey(string key)
+            => $"{this.region}:{key}";
     }
 }
