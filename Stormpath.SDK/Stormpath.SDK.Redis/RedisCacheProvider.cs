@@ -18,18 +18,21 @@ using System;
 using StackExchange.Redis;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Logging;
+using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis
 {
     public class RedisCacheProvider : AbstractCacheProvider
     {
         private readonly IConnectionMultiplexer connection;
+        private readonly IJsonSerializer serializer;
         private readonly ILogger logger;
 
-        public RedisCacheProvider(string redisConfiguration, ILogger logger = null)
+        public RedisCacheProvider(string redisConfiguration, IJsonSerializer serializer, ILogger logger = null)
             : base(syncSupported: true, asyncSupported: true)
         {
             this.connection = ConnectionMultiplexer.Connect(redisConfiguration);
+            this.serializer = serializer;
             this.logger = logger;
         }
 
