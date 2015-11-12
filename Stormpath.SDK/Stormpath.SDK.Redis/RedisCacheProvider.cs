@@ -38,8 +38,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
 
         protected override IAsynchronousCache<K, V> CreateAsyncCache<K, V>(string name, TimeSpan? ttl, TimeSpan? tti)
         {
-            throw new NotImplementedException();
-            //return new RedisAsyncCache(this.connection, name, ttl, tti);
+            return new RedisAsyncCache<K, V>(this.connection, this.serializer, name, ttl, tti);
         }
 
         protected override ISynchronousCache<K, V> CreateSyncCache<K, V>(string name, TimeSpan? ttl, TimeSpan? tti)

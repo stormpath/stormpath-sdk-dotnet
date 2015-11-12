@@ -24,7 +24,7 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis
 {
-    internal sealed class RedisAsyncCache : IAsynchronousCache<string, Map>
+    internal sealed class RedisAsyncCache<K, V> : IAsynchronousCache<K, V>
     {
         private readonly IConnectionMultiplexer connection;
         private readonly IJsonSerializer serializer;
@@ -46,17 +46,17 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             this.tti = tti;
         }
 
-        string ICache<string, Map>.Name => this.region;
+        string ICache<K, V>.Name => this.region;
 
-        TimeSpan? ICache<string, Map>.TimeToLive => this.ttl;
+        TimeSpan? ICache<K, V>.TimeToLive => this.ttl;
 
-        TimeSpan? ICache<string, Map>.TimeToIdle => this.tti;
+        TimeSpan? ICache<K, V>.TimeToIdle => this.tti;
 
         void IDisposable.Dispose()
         {
         }
 
-        async Task<Map> IAsynchronousCache<string, Map>.GetAsync(string key, CancellationToken cancellationToken)
+        async Task<V> IAsynchronousCache<K, V>.GetAsync(K key, CancellationToken cancellationToken)
         {
             var db = this.connection.GetDatabase();
             var cacheKey = this.ConstructKey(key);
@@ -71,22 +71,22 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             if (IsExpired(storedAt, accessedAt, itemTtl, itemTti))
             {
                 await db.KeyDeleteAsync(cacheKey).ConfigureAwait(false);
-                return null;
+                return default(V);
             }
 
             await db.HashSetAsync(cacheKey, "accessed", DateTimeOffset.UtcNow.ToString(), When.Exists).ConfigureAwait(false);
 
             var cacheData = value[0].Value;
             var map = this.serializer.Deserialize(cacheData);
-            return map;
+            return (V)map;
         }
 
-        async Task<Map> IAsynchronousCache<string, Map>.PutAsync(string key, Map value, CancellationToken cancellationToken)
+        async Task<V> IAsynchronousCache<K, V>.PutAsync(K key, V value, CancellationToken cancellationToken)
         {
             var db = this.connection.GetDatabase();
 
             var cacheKey = this.ConstructKey(key);
-            var cacheData = this.serializer.Serialize(value);
+            var cacheData = this.serializer.Serialize((Map)value);
 
             var cacheValue = new HashEntry[]
             {
@@ -102,7 +102,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             return value;
         }
 
-        async Task<Map> IAsynchronousCache<string, Map>.RemoveAsync(string key, CancellationToken cancellationToken)
+        async Task<V> IAsynchronousCache<K, V>.RemoveAsync(K key, CancellationToken cancellationToken)
         {
             var db = this.connection.GetDatabase();
             var cacheKey = this.ConstructKey(key);
@@ -114,15 +114,15 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             var committed = await transaction.ExecuteAsync().ConfigureAwait(false);
 
             if (!committed)
-                return null;
+                return default(V);
 
             var cacheData = lastValue.Result[0].Value;
             var map = this.serializer.Deserialize(cacheData);
-            return map;
+            return (V)map;
         }
 
-        private string ConstructKey(string key)
-            => $"{this.region}:{key}";
+        private string ConstructKey(K key)
+            => $"{this.region}:{key.ToString()}";
 
         private static bool IsExpired(DateTimeOffset storedAt, DateTimeOffset accessedAt, TimeSpan? timeToLive, TimeSpan? timeToIdle)
         {
