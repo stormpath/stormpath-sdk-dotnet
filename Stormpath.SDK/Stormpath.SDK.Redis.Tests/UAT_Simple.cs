@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Extensions.Serialization;
+using Stormpath.SDK.Logging;
 using Xunit;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
@@ -29,8 +30,11 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
         {
             var redisCacheProvider = new RedisCacheProvider("localhost:6379", new JsonNetSerializer());
 
+            var logger = new InMemoryLogger();
+
             var client = Clients.Builder()
                 .SetCacheProvider(redisCacheProvider)
+                .SetLogger(logger)
                 .Build();
             var tenant = await client.GetCurrentTenantAsync();
 
@@ -42,6 +46,8 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 
             // Should be cache hit
             var customData = await application.GetCustomDataAsync();
+
+            var log = logger.ToString();
         }
     }
 }

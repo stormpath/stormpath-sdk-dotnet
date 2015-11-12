@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using StackExchange.Redis;
@@ -63,20 +64,27 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
 
             cancellationToken.ThrowIfCancellationRequested();
             var value = await db.HashGetAllAsync(cacheKey).ConfigureAwait(false);
-            var storedAt = DateTimeOffset.Parse(value[1].Value);
-            var accessedAt = DateTimeOffset.Parse(value[2].Value);
-            var itemTtl = DeserializeTimeSpan(value[3].Value);
-            var itemTti = DeserializeTimeSpan(value[4].Value);
+
+            if (value.Length == 0)
+                return default(V);
+
+            var storedAt = DateTimeOffset.Parse(value.Single(x => x.Name == "stored").Value);
+            var accessedAt = DateTimeOffset.Parse(value.Single(x => x.Name == "accessed").Value);
+            var itemTtl = DeserializeTimeSpan(value.Single(x => x.Name == "ttl").Value);
+            var itemTti = DeserializeTimeSpan(value.Single(x => x.Name == "tti").Value);
 
             if (IsExpired(storedAt, accessedAt, itemTtl, itemTti))
             {
+                throw new NotImplementedException("expired");
                 await db.KeyDeleteAsync(cacheKey).ConfigureAwait(false);
                 return default(V);
             }
 
+            throw new ApplicationException("not expired");
+
             await db.HashSetAsync(cacheKey, "accessed", DateTimeOffset.UtcNow.ToString(), When.Exists).ConfigureAwait(false);
 
-            var cacheData = value[0].Value;
+            var cacheData = value.Single(x => x.Name == "data").Value;
             var map = this.serializer.Deserialize(cacheData);
             return (V)map;
         }
@@ -122,7 +130,11 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
         }
 
         private string ConstructKey(K key)
-            => $"{this.region}:{key.ToString()}";
+        {
+            var sanitizedKey = key.ToString().Replace("://", "--");
+
+            return $"{this.region}:{sanitizedKey}";
+        }
 
         private static bool IsExpired(DateTimeOffset storedAt, DateTimeOffset accessedAt, TimeSpan? timeToLive, TimeSpan? timeToIdle)
         {
@@ -140,7 +152,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
         private static RedisValue SerializeTimeSpan(TimeSpan? timeSpan)
         {
             return timeSpan == null
-                ? RedisValue.Null
+                ? RedisValue.EmptyString
                 : (long)timeSpan.Value.TotalMilliseconds;
         }
 
