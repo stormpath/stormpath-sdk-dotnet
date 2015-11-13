@@ -43,12 +43,12 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
 
         protected override IAsynchronousCache CreateAsyncCache(string name, TimeSpan? ttl, TimeSpan? tti)
         {
-            return new RedisAsyncCache(this.connection, this.serializer, name, ttl, tti);
+            return new RedisAsyncCache(this.connection, this.serializer, this.logger, name, ttl, tti);
         }
 
         protected override ISynchronousCache CreateSyncCache(string name, TimeSpan? ttl, TimeSpan? tti)
         {
-            return new RedisSyncCache(this.connection, this.serializer, name, ttl, tti);
+            return new RedisSyncCache(this.connection, this.serializer, this.logger, name, ttl, tti);
         }
     }
 }

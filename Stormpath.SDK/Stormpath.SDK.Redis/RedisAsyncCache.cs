@@ -64,69 +64,92 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
 #pragma warning disable CS4014 // Use await for async calls
         async Task<Map> IAsynchronousCache.GetAsync(string key, CancellationToken cancellationToken)
         {
-            var db = this.connection.GetDatabase();
-            var cacheKey = this.ConstructKey(key);
-
             cancellationToken.ThrowIfCancellationRequested();
 
-            var transaction = db.CreateTransaction();
-            var value = transaction.StringGetAsync(cacheKey);
-            transaction.KeyExpireAsync(cacheKey, this.tti);
-            await transaction.ExecuteAsync().ConfigureAwait(false);
-
-            if (value.Result.IsNullOrEmpty)
-                return null;
-
-            var entry = CacheEntry.Parse(value.Result);
-            if (this.IsExpired(entry))
+            try
             {
-                await db.KeyDeleteAsync(cacheKey).ConfigureAwait(false);
+                var db = this.connection.GetDatabase();
+                var cacheKey = this.ConstructKey(key);
+
+                var transaction = db.CreateTransaction();
+                var value = transaction.StringGetAsync(cacheKey);
+                transaction.KeyExpireAsync(cacheKey, this.tti);
+                await transaction.ExecuteAsync().ConfigureAwait(false);
+
+                if (value.Result.IsNullOrEmpty)
+                    return null;
+
+                var entry = CacheEntry.Parse(value.Result);
+                if (this.IsExpired(entry))
+                {
+                    this.logger.Trace($"Entry {cacheKey} was expired (TTL), purging", "RedisAsyncCache.GetAsync");
+                    await db.KeyDeleteAsync(cacheKey).ConfigureAwait(false);
+                    return null;
+                }
+
+                var map = this.serializer.Deserialize(entry.Data);
+                return map;
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(e, "Error while getting cached value.", "RedisAsyncCache.GetAsync");
                 return null;
             }
-
-            //add graceful exception handling
-            //and logging
-
-            var map = this.serializer.Deserialize(entry.Data);
-            return map;
         }
 #pragma warning restore CS4014
 
         async Task<Map> IAsynchronousCache.PutAsync(string key, Map value, CancellationToken cancellationToken)
         {
-            var db = this.connection.GetDatabase();
-
-            var cacheKey = this.ConstructKey(key);
-            var cacheData = this.serializer.Serialize((Map)value);
-
-            var entry = new CacheEntry(
-                cacheData,
-                DateTimeOffset.UtcNow);
-
             cancellationToken.ThrowIfCancellationRequested();
-            await db.StringSetAsync(cacheKey, entry.ToString(), this.tti).ConfigureAwait(false);
+
+            try
+            {
+                var db = this.connection.GetDatabase();
+
+                var cacheKey = this.ConstructKey(key);
+                var cacheData = this.serializer.Serialize((Map)value);
+
+                var entry = new CacheEntry(
+                    cacheData,
+                    DateTimeOffset.UtcNow);
+
+                await db.StringSetAsync(cacheKey, entry.ToString(), this.tti).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(e, "Error while storing value in cache.", "RedisAsyncCache.PutAsync");
+            }
+
             return value;
         }
 
 #pragma warning disable CS4014 // Use await for async calls
         async Task<Map> IAsynchronousCache.RemoveAsync(string key, CancellationToken cancellationToken)
         {
-            var db = this.connection.GetDatabase();
-            var cacheKey = this.ConstructKey(key);
-
             cancellationToken.ThrowIfCancellationRequested();
 
-            var transaction = db.CreateTransaction();
-            var lastValue = transaction.StringGetAsync(cacheKey);
-            transaction.KeyDeleteAsync(cacheKey);
-            var committed = await transaction.ExecuteAsync().ConfigureAwait(false);
+            try
+            {
+                var db = this.connection.GetDatabase();
+                var cacheKey = this.ConstructKey(key);
 
-            if (!committed)
+                var transaction = db.CreateTransaction();
+                var lastValue = transaction.StringGetAsync(cacheKey);
+                transaction.KeyDeleteAsync(cacheKey);
+                var committed = await transaction.ExecuteAsync().ConfigureAwait(false);
+
+                if (!committed)
+                    return null;
+
+                var entry = CacheEntry.Parse(lastValue.Result);
+                var map = this.serializer.Deserialize(entry.Data);
+                return map;
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(e, "Error while deleting value from cache.", "RedisAsyncCache.RemoveAsync");
                 return null;
-
-            var entry = CacheEntry.Parse(lastValue.Result);
-            var map = this.serializer.Deserialize(entry.Data);
-            return map;
+            }
         }
 #pragma warning restore CS4014
 
