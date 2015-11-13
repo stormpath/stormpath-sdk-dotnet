@@ -9,7 +9,7 @@ namespace Stormpath.SDK.Tests.Common
         {
             if (!Debugger.IsAttached)
             {
-                Skip = "Only run in Debug mode.";
+                this.Skip = "Only run in Debug mode.";
             }
         }
     }

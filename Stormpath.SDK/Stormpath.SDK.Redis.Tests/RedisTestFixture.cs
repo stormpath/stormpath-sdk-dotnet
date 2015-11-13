@@ -15,10 +15,7 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using StackExchange.Redis;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
@@ -31,6 +28,9 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 
         public RedisTestFixture()
         {
+            if (!Debugger.IsAttached)
+                throw new NotImplementedException();
+
             this.Connection = ConnectionMultiplexer.Connect(RedisConnectionString);
             var server = this.Connection.GetServer("localhost", 6379);
             server.FlushAllDatabases();
@@ -38,7 +38,6 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
     }
 }

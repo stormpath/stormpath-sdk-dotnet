@@ -99,7 +99,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
                 DateTimeOffset.UtcNow);
 
             cancellationToken.ThrowIfCancellationRequested();
-            await db.StringSetAsync(cacheKey, entry.ToString()).ConfigureAwait(false);
+            await db.StringSetAsync(cacheKey, entry.ToString(), this.tti).ConfigureAwait(false);
             return value;
         }
 
