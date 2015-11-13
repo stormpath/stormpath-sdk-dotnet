@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NSubstitute, Version=1.9.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.1.9.2.0\lib\net45\NSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,12 +63,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assertly.cs" />
+    <Compile Include="DebugOnlyTheoryAttribute.cs" />
     <Compile Include="DebugOnlyFactAttribute.cs" />
+    <Compile Include="Fakes\FakeAccount.cs" />
+    <Compile Include="Fakes\FakeAccounts.cs" />
+    <Compile Include="Fakes\FakeApiKey.cs" />
+    <Compile Include="Fakes\FakeDataStore.cs" />
+    <Compile Include="Fakes\FakeJson.cs" />
+    <Compile Include="Fakes\StubDataStore.cs" />
+    <Compile Include="Fakes\StubRequestExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Stormpath.SDK.JsonNetSerializer\Stormpath.SDK.JsonNetSerializer.csproj">
+      <Project>{4011b5ea-ceb5-4212-b8e6-d18c63ab6acf}</Project>
+      <Name>Stormpath.SDK.JsonNetSerializer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stormpath.SDK\Stormpath.SDK.csproj">
+      <Project>{79a65c37-9db1-413a-ac23-708404530295}</Project>
+      <Name>Stormpath.SDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

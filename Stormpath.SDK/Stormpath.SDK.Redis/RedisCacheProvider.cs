@@ -29,9 +29,14 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
         private readonly ILogger logger;
 
         public RedisCacheProvider(string redisConfiguration, IJsonSerializer serializer, ILogger logger = null)
+            : this(ConnectionMultiplexer.Connect(redisConfiguration), serializer, logger)
+        {
+        }
+
+        public RedisCacheProvider(IConnectionMultiplexer redisConnection, IJsonSerializer serializer, ILogger logger = null)
             : base(syncSupported: true, asyncSupported: true)
         {
-            this.connection = ConnectionMultiplexer.Connect(redisConfiguration);
+            this.connection = redisConnection;
             this.serializer = serializer;
             this.logger = logger;
         }

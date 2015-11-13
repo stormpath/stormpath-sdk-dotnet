@@ -14,16 +14,50 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using System.Threading.Tasks;
+using Shouldly;
+using Stormpath.SDK.Client;
+using Stormpath.SDK.Extensions.Serialization;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Tests.Common;
+using Xunit;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 {
-    public class Asynctests
+    [Collection(nameof(RedisTestCollection))]
+    public class AsyncTests
     {
-        [DebugOnlyFact]
-        public void MyTestFact()
+        private readonly RedisTestFixture fixture;
+        private readonly IClient client;
+
+        public AsyncTests(RedisTestFixture fixture)
         {
-            Assertly.Fail("should not hit this!");
+            this.fixture = fixture;
+
+            var redisCacheProvider = new RedisCacheProvider(fixture.Connection, new JsonNetSerializer());
+            redisCacheProvider.SetDefaultTimeToIdle(TimeSpan.FromSeconds(30));
+            redisCacheProvider.SetDefaultTimeToLive(TimeSpan.FromSeconds(60));
+
+            var logger = new InMemoryLogger();
+
+            this.client = Clients.Builder()
+                .SetCacheProvider(redisCacheProvider)
+                .SetLogger(logger)
+                .Build();
+        }
+
+        [DebugOnlyFact]
+        public async Task Resource_is_cached()
+        {
+            var tenant = await this.client.GetCurrentTenantAsync();
+            var application = await tenant.GetApplications().Where(x => x.Name == "My Application").SingleAsync();
+
+            var db = this.fixture.Connection.GetDatabase();
+            var key = TestHelper.CreateKey(application);
+
+            var cached = await db.StringGetAsync(key);
+            cached.ToString().ShouldNotBeNullOrEmpty();
         }
     }
 }
