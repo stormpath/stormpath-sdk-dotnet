@@ -1,4 +1,4 @@
-﻿// <copyright file="UAT_simple.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Program.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,17 +20,21 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Logging;
-using Xunit;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 {
-    public class UAT_simple
+    public class Program
     {
-        [Fact]
-        public async Task Getting_resource_from_cache()
+        public static void Main()
+        {
+            MainAsync().GetAwaiter().GetResult();
+        }
+
+        private static async Task MainAsync()
         {
             var redisCacheProvider = new RedisCacheProvider("localhost:6379", new JsonNetSerializer());
-            redisCacheProvider.SetDefaultTimeToLive(TimeSpan.FromSeconds(10));
+            redisCacheProvider.SetDefaultTimeToIdle(TimeSpan.FromSeconds(30));
+            redisCacheProvider.SetDefaultTimeToLive(TimeSpan.FromSeconds(60));
 
             var logger = new InMemoryLogger();
 
@@ -57,6 +61,9 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             await client.GetResourceAsync<IApplication>(application.Href);
 
             var log = logger.ToString();
+
+            Console.WriteLine("Done!");
+            Console.ReadKey(false);
         }
     }
 }
