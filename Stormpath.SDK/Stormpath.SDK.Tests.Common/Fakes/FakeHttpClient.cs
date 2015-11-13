@@ -32,8 +32,9 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 
         private readonly string baseUrl;
         private readonly string defaultResponse;
+        private readonly IDictionary<string, IHttpResponse> responses;
 
-        private IDictionary<string, IHttpResponse> responses;
+        private int calls;
 
         public FakeHttpClient(string baseUrl, string defaultResponse = null)
         {
@@ -57,6 +58,8 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 
         IWebProxy IHttpClient.Proxy => null;
 
+        public int CallCount => this.calls;
+
         void IDisposable.Dispose()
         {
         }
@@ -77,9 +80,10 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             if (UnsupportedMethods.Contains(request.Method))
                 throw new NotImplementedException($"The method {request.Method} is not supported by FakeHttpClient.");
 
-            IHttpResponse response = null;
-
             var key = CreateKey(request.Method, request.CanonicalUri.ToString());
+            IHttpResponse response = null;
+            this.calls++;
+
             if (this.responses.TryGetValue(key, out response))
                 return response;
 

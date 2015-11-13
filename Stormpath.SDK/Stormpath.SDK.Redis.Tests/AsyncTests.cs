@@ -18,9 +18,6 @@ using System;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Client;
-using Stormpath.SDK.Extensions.Serialization;
-using Stormpath.SDK.Logging;
 using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Xunit;
@@ -28,50 +25,70 @@ using Xunit;
 namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 {
     [Collection(nameof(RedisTestCollection))]
-    public class AsyncTests
+    public class AsyncTests : RedisTestBase
     {
-        private static readonly string BaseUrl = "https://api.stormpath.com/v1";
-
-        private readonly RedisTestFixture fixture;
-        private FakeHttpClient fakeHttpClient;
-        private IClient client;
-
         public AsyncTests(RedisTestFixture fixture)
+            : base(fixture)
         {
-            this.fixture = fixture;
-        }
-
-        private void CreateClient(TimeSpan? ttl, TimeSpan? tti)
-        {
-            var redisCacheProvider = new RedisCacheProvider(this.fixture.Connection, new JsonNetSerializer());
-
-            if (ttl != null)
-                redisCacheProvider.SetDefaultTimeToLive(ttl.Value);
-            if (tti != null)
-                redisCacheProvider.SetDefaultTimeToIdle(tti.Value);
-
-            var logger = new InMemoryLogger();
-            this.fakeHttpClient = new FakeHttpClient(BaseUrl);
-
-            this.client = Clients.Builder()
-                .UseHttpClient(this.fakeHttpClient)
-                .SetCacheProvider(redisCacheProvider)
-                .SetLogger(logger)
-                .Build();
         }
 
         [DebugOnlyFact]
-        public async Task Resource_is_cached()
+        public async Task Resource_is_cached_indefinitely()
         {
             this.CreateClient(ttl: null, tti: null);
             this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
 
+            // Prime the cache
             var application = await this.client.GetResourceAsync<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
+
+            // All cache hits
+            await this.client.GetResourceAsync<IApplication>(application.Href);
+            await this.client.GetResourceAsync<IApplication>(application.Href);
+            await this.client.GetResourceAsync<IApplication>(application.Href);
 
             var db = this.fixture.Connection.GetDatabase();
             var key = TestHelper.CreateKey(application);
-            var cached = await db.StringGetAsync(key);
-            cached.ToString().ShouldNotBeNullOrEmpty();
+            var cached = await db.StringGetWithExpiryAsync(key);
+
+            cached.Expiry.ShouldBeNull(); // No TTI
+            cached.Value.ToString().ShouldNotBeNullOrEmpty();
+            this.fakeHttpClient.CallCount.ShouldBe(1);
+        }
+
+        [DebugOnlyFact]
+        public async Task Resource_expired_by_TTL()
+        {
+            this.CreateClient(ttl: TimeSpan.FromSeconds(1), tti: null);
+            this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
+
+            var application = await this.client.GetResourceAsync<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
+            await this.client.GetResourceAsync<IApplication>(application.Href);
+            await this.client.GetResourceAsync<IApplication>(application.Href);
+            this.fakeHttpClient.CallCount.ShouldBe(1);
+
+            await Task.Delay(1000);
+
+            await this.client.GetResourceAsync<IApplication>(application.Href);
+            await this.client.GetResourceAsync<IApplication>(application.Href);
+            this.fakeHttpClient.CallCount.ShouldBe(2);
+        }
+
+        [DebugOnlyFact]
+        public async Task Resource_expired_by_TTI()
+        {
+            this.CreateClient(ttl: null, tti: TimeSpan.FromSeconds(1));
+            this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
+
+            var application = await this.client.GetResourceAsync<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
+            await this.client.GetResourceAsync<IApplication>(application.Href);
+            await this.client.GetResourceAsync<IApplication>(application.Href);
+            this.fakeHttpClient.CallCount.ShouldBe(1);
+
+            await Task.Delay(1000);
+
+            await this.client.GetResourceAsync<IApplication>(application.Href);
+            await this.client.GetResourceAsync<IApplication>(application.Href);
+            this.fakeHttpClient.CallCount.ShouldBe(2);
         }
     }
 }

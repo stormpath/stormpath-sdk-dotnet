@@ -32,6 +32,10 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
                 throw new NotImplementedException();
 
             this.Connection = ConnectionMultiplexer.Connect(RedisConnectionString);
+        }
+
+        public void FlushDatabase()
+        {
             var server = this.Connection.GetServer("localhost", 6379);
             server.FlushAllDatabases();
         }

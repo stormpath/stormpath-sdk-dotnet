@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 using Stormpath.SDK.Cache;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
@@ -28,6 +29,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
     {
         private readonly IConnectionMultiplexer connection;
         private readonly IJsonSerializer serializer;
+        private readonly ILogger logger;
         private readonly string region;
         private readonly TimeSpan? ttl;
         private readonly TimeSpan? tti;
@@ -35,12 +37,15 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
         public RedisAsyncCache(
             IConnectionMultiplexer connection,
             IJsonSerializer serializer,
+            ILogger logger,
             string region,
             TimeSpan? ttl,
             TimeSpan? tti)
         {
             this.connection = connection;
             this.serializer = serializer;
+            this.logger = logger;
+
             this.region = region;
             this.ttl = ttl;
             this.tti = tti;
