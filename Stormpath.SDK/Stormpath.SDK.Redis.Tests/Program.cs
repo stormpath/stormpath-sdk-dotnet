@@ -15,11 +15,13 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Logging;
+using Stormpath.SDK.Sync;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 {
@@ -27,10 +29,53 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
     {
         public static void Main()
         {
-            MainAsync().GetAwaiter().GetResult();
+            TestSync();
+
+            TestAsync().GetAwaiter().GetResult();
+
+            Console.ReadKey(false);
         }
 
-        private static async Task MainAsync()
+        private static void TestSync()
+        {
+            var redisCacheProvider = new RedisCacheProvider("localhost:6379", new JsonNetSerializer());
+            redisCacheProvider.SetDefaultTimeToIdle(TimeSpan.FromSeconds(30));
+            redisCacheProvider.SetDefaultTimeToLive(TimeSpan.FromSeconds(60));
+
+            var logger = new InMemoryLogger();
+
+            var client = Clients.Builder()
+                .SetCacheProvider(redisCacheProvider)
+                .SetLogger(logger)
+                .Build();
+            var tenant = client.GetCurrentTenant();
+
+            // Prime the cache
+            var application = tenant
+                .GetApplications()
+                .Synchronously()
+                .Where(x => x.Name == "My Application")
+                .Single();
+            client.GetResource<IApplication>(application.Href);
+
+            // Should be cache hit
+            client.GetResource<IApplication>(application.Href, req => req.Expand(x => x.GetCustomDataAsync));
+
+            // Should be cache hit
+            var customData = application.GetCustomData();
+
+            client.GetResource<IApplication>(application.Href);
+            client.GetResource<IApplication>(application.Href);
+            client.GetResource<IApplication>(application.Href);
+            client.GetResource<IApplication>(application.Href);
+            client.GetResource<IApplication>(application.Href);
+
+            var log = logger.ToString();
+
+            Console.WriteLine("Done testing sync!");
+        }
+
+        private static async Task TestAsync()
         {
             var redisCacheProvider = new RedisCacheProvider("localhost:6379", new JsonNetSerializer());
             redisCacheProvider.SetDefaultTimeToIdle(TimeSpan.FromSeconds(30));
@@ -62,8 +107,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 
             var log = logger.ToString();
 
-            Console.WriteLine("Done!");
-            Console.ReadKey(false);
+            Console.WriteLine("Done testing async!");
         }
     }
 }
