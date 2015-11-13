@@ -26,8 +26,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         bool IsAsynchronousSupported { get; }
 
-        ISynchronousCache<string, IDictionary<string, object>> GetSyncCache(Type resourceType);
+        ISynchronousCache GetSyncCache(Type resourceType);
 
-        IAsynchronousCache<string, IDictionary<string, object>> GetAsyncCache(Type resourceType);
+        IAsynchronousCache GetAsyncCache(Type resourceType);
     }
 }

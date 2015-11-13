@@ -26,12 +26,12 @@ namespace Stormpath.SDK.Impl.Cache
         {
         }
 
-        protected override IAsynchronousCache<K, V> CreateAsyncCache<K, V>(string name, TimeSpan? ttl, TimeSpan? tti)
+        protected override IAsynchronousCache CreateAsyncCache(string name, TimeSpan? ttl, TimeSpan? tti)
         {
             throw new NotImplementedException();
         }
 
-        protected override ISynchronousCache<K, V> CreateSyncCache<K, V>(string name, TimeSpan? ttl, TimeSpan? tti)
+        protected override ISynchronousCache CreateSyncCache(string name, TimeSpan? ttl, TimeSpan? tti)
         {
             throw new NotImplementedException();
         }

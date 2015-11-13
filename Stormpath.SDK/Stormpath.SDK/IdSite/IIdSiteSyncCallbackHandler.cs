@@ -36,7 +36,7 @@ namespace Stormpath.SDK.IdSite
         /// </summary>
         /// <remarks>
         /// <para>
-        /// Default Nonce Store: A <see cref="Cache.ICache{K, V}"/>-based <see cref="INonceStore"/> is enabled by default
+        /// Default Nonce Store: A <see cref="Cache.ICache"/>-based <see cref="INonceStore"/> is enabled by default
         /// if you have caching enabled in the SDK. Because nonces are stored in a cache region, it is very important to
         /// ensure that the nonce store cache region has an entry TTL <em>longer</em> than the response message valid life span.
         /// For Stormpath, response messages are valid for 1 minute, so your default cache region settings must use a

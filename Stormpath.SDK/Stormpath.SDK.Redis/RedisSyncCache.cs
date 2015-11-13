@@ -24,7 +24,7 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis
 {
-    internal sealed class RedisSyncCache<K, V> : ISynchronousCache<K, V>
+    internal sealed class RedisSyncCache : ISynchronousCache
     {
         private readonly IConnectionMultiplexer connection;
         private readonly IJsonSerializer serializer;
@@ -46,17 +46,17 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             this.tti = tti;
         }
 
-        string ICache<K, V>.Name => this.region;
+        string ICache.Name => this.region;
 
-        TimeSpan? ICache<K, V>.TimeToLive => this.ttl;
+        TimeSpan? ICache.TimeToLive => this.ttl;
 
-        TimeSpan? ICache<K, V>.TimeToIdle => this.tti;
+        TimeSpan? ICache.TimeToIdle => this.tti;
 
         void IDisposable.Dispose()
         {
         }
 
-        V ISynchronousCache<K, V>.Get(K key)
+        Map ISynchronousCache.Get(string key)
         {
             var db = this.connection.GetDatabase();
             var cacheKey = this.ConstructKey(key);
@@ -67,20 +67,20 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             transaction.Execute();
 
             if (value.Result.IsNullOrEmpty)
-                return default(V);
+                return null;
 
             var entry = CacheEntry.Parse(value.Result);
             if (this.IsExpired(entry))
             {
                 db.KeyDelete(cacheKey);
-                return default(V);
+                return null;
             }
 
             var map = this.serializer.Deserialize(entry.Data);
-            return (V)map;
+            return map;
         }
 
-        V ISynchronousCache<K, V>.Put(K key, V value)
+        Map ISynchronousCache.Put(string key, Map value)
         {
             var db = this.connection.GetDatabase();
 
@@ -96,7 +96,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
         }
 
 #pragma warning disable CS4014 // Use await for async calls
-        V ISynchronousCache<K, V>.Remove(K key)
+        Map ISynchronousCache.Remove(string key)
         {
             var db = this.connection.GetDatabase();
             var cacheKey = this.ConstructKey(key);
@@ -107,15 +107,15 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             var committed = transaction.Execute();
 
             if (!committed)
-                return default(V);
+                return null;
 
             var entry = CacheEntry.Parse(lastValue.Result);
             var map = this.serializer.Deserialize(entry.Data);
-            return (V)map;
+            return map;
         }
 #pragma warning restore CS4014
 
-        private string ConstructKey(K key)
+        private string ConstructKey(string key)
         {
             var sanitizedKey = key.ToString().Replace("://", "--");
 

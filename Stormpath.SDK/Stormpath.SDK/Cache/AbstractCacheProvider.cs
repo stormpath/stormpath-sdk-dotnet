@@ -58,11 +58,11 @@ namespace Stormpath.SDK.Cache
                 throw new ApplicationException("This cache provider has been disposed.");
         }
 
-        protected abstract ISynchronousCache<K, V> CreateSyncCache<K, V>(string name, TimeSpan? ttl, TimeSpan? tti);
+        protected abstract ISynchronousCache CreateSyncCache(string name, TimeSpan? ttl, TimeSpan? tti);
 
-        protected abstract IAsynchronousCache<K, V> CreateAsyncCache<K, V>(string name, TimeSpan? ttl, TimeSpan? tti);
+        protected abstract IAsynchronousCache CreateAsyncCache(string name, TimeSpan? ttl, TimeSpan? tti);
 
-        ISynchronousCache<K, V> ISynchronousCacheProvider.GetSyncCache<K, V>(string name)
+        ISynchronousCache ISynchronousCacheProvider.GetSyncCache(string name)
         {
             this.ThrowIfDisposed();
 
@@ -73,14 +73,14 @@ namespace Stormpath.SDK.Cache
                 throw new ArgumentNullException(nameof(name));
 
             Func<string, TimeSpan?, TimeSpan?, object> callback =
-                (n, ttl, tti) => this.CreateSyncCache<K, V>(n, ttl, tti);
+                (n, ttl, tti) => this.CreateSyncCache(n, ttl, tti);
 
             return this.caches.GetOrAdd(
                 name,
-                region => this.CreateCache(region, callback)) as ISynchronousCache<K, V>;
+                region => this.CreateCache(region, callback)) as ISynchronousCache;
         }
 
-        IAsynchronousCache<K, V> IAsynchronousCacheProvider.GetAsyncCache<K, V>(string name)
+        IAsynchronousCache IAsynchronousCacheProvider.GetAsyncCache(string name)
         {
             this.ThrowIfDisposed();
 
@@ -91,11 +91,11 @@ namespace Stormpath.SDK.Cache
                 throw new ArgumentNullException(nameof(name));
 
             Func<string, TimeSpan?, TimeSpan?, object> callback =
-                (n, ttl, tti) => this.CreateAsyncCache<K, V>(n, ttl, tti);
+                (n, ttl, tti) => this.CreateAsyncCache(n, ttl, tti);
 
             return this.caches.GetOrAdd(
                 name,
-                region => this.CreateCache(region, callback)) as IAsynchronousCache<K, V>;
+                region => this.CreateCache(region, callback)) as IAsynchronousCache;
         }
 
         private object CreateCache(string name, Func<string, TimeSpan?, TimeSpan?, object> delegated)

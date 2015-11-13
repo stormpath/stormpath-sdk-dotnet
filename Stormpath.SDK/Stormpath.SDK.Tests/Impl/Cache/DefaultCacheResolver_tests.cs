@@ -83,13 +83,13 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .IsSynchronousSupported
                 .Returns(true);
             fakeCacheManager
-                .GetSyncCache<string, IDictionary<string, object>>(Arg.Any<string>())
-                .Returns(Substitute.For<ISynchronousCache<string, IDictionary<string, object>>>());
+                .GetSyncCache(Arg.Any<string>())
+                .Returns(Substitute.For<ISynchronousCache>());
 
             ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager);
 
             var cache = cacheResolver.GetSyncCache(typeof(IAccount));
-            cache.ShouldBeAssignableTo<ISynchronousCache<string, IDictionary<string, object>>>();
+            cache.ShouldBeAssignableTo<ISynchronousCache>();
         }
 
         [Fact]
@@ -100,17 +100,16 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .IsAsynchronousSupported
                 .Returns(true);
             fakeCacheManager
-                .GetAsyncCache<string, IDictionary<string, object>>(
-                    Arg.Any<string>())
+                .GetAsyncCache(Arg.Any<string>())
                 .Returns(_ =>
                 {
-                    return Substitute.For<IAsynchronousCache<string, IDictionary<string, object>>>();
+                    return Substitute.For<IAsynchronousCache>();
                 });
 
             ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager);
 
             var cache = cacheResolver.GetAsyncCache(typeof(IAccount));
-            cache.ShouldBeAssignableTo<IAsynchronousCache<string, IDictionary<string, object>>>();
+            cache.ShouldBeAssignableTo<IAsynchronousCache>();
         }
     }
 }

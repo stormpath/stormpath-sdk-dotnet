@@ -55,24 +55,24 @@ namespace Stormpath.SDK.Impl.Cache
             return iface.Name;
         }
 
-        ISynchronousCache<string, IDictionary<string, object>> ICacheResolver.GetSyncCache(Type resourceType)
+        ISynchronousCache ICacheResolver.GetSyncCache(Type resourceType)
         {
             if (!this.cacheProvider.IsSynchronousSupported || this.syncCacheProvider == null)
                 throw new ApplicationException($"A synchronous caching path is not supported in {this.cacheProvider.GetType().Name}");
 
             var cacheRegionName = this.GetCacheRegionName(resourceType);
 
-            return this.syncCacheProvider.GetSyncCache<string, IDictionary<string, object>>(cacheRegionName);
+            return this.syncCacheProvider.GetSyncCache(cacheRegionName);
         }
 
-        IAsynchronousCache<string, IDictionary<string, object>> ICacheResolver.GetAsyncCache(Type resourceType)
+        IAsynchronousCache ICacheResolver.GetAsyncCache(Type resourceType)
         {
             if (!this.cacheProvider.IsAsynchronousSupported || this.asyncCacheProvider == null)
                 throw new ApplicationException($"An asynchronous caching path is not supported in {this.cacheProvider.GetType().Name}");
 
             var cacheRegionName = this.GetCacheRegionName(resourceType);
 
-            return this.asyncCacheProvider.GetAsyncCache<string, IDictionary<string, object>>(cacheRegionName);
+            return this.asyncCacheProvider.GetAsyncCache(cacheRegionName);
         }
     }
 }

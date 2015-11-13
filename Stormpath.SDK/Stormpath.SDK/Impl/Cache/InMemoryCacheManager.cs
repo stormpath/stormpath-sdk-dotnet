@@ -16,14 +16,14 @@
 
 using System;
 using System.Runtime.Caching;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Cache
 {
     /// <summary>
-    /// A wrapper around <see cref="MemoryCache"/> that allows for both absolute and sliding expirations. (This separates implementation details from <see cref="InMemoryCache{K, V}"/>.)
+    /// A wrapper around <see cref="MemoryCache"/> that allows for both absolute and sliding expirations. (This separates implementation details from <see cref="InMemoryCache"/>.)
     /// </summary>
-    /// <typeparam name="V">The type of vaules stored in the cache.</typeparam>
-    internal sealed class InMemoryCacheManager<V> : IDisposable
+    internal sealed class InMemoryCacheManager : IDisposable
     {
         private readonly MemoryCache memoryCache;
         private bool isDisposed = false;
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Impl.Cache
                 throw new ApplicationException($"The object ({this.GetType().Name}) has been disposed.");
         }
 
-        public V Get(string key)
+        public Map Get(string key)
         {
             this.ThrowIfDisposed();
 
@@ -57,12 +57,12 @@ namespace Stormpath.SDK.Impl.Cache
                 (tokenAndItem.ContainsKey(key) && tokenAndItem[key] != null);
 
             if (itemHasNotExpired)
-                return (V)tokenAndItem[key];
+                return tokenAndItem[key] as Map;
             else
-                return default(V);
+                return null;
         }
 
-        public V Put(string key, V value, DateTimeOffset absoluteExpiration, TimeSpan slidingExpiration)
+        public Map Put(string key, Map value, DateTimeOffset absoluteExpiration, TimeSpan slidingExpiration)
         {
             this.ThrowIfDisposed();
 
@@ -80,12 +80,12 @@ namespace Stormpath.SDK.Impl.Cache
             return value;
         }
 
-        public V Remove(string key)
+        public Map Remove(string key)
         {
             this.ThrowIfDisposed();
 
             this.memoryCache.Remove(CreateAbsoluteTokenKey(key));
-            return (V)this.memoryCache.Remove(key);
+            return this.memoryCache.Remove(key) as Map;
         }
 
         public long Count

@@ -24,7 +24,7 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis
 {
-    internal sealed class RedisAsyncCache<K, V> : IAsynchronousCache<K, V>
+    internal sealed class RedisAsyncCache : IAsynchronousCache
     {
         private readonly IConnectionMultiplexer connection;
         private readonly IJsonSerializer serializer;
@@ -46,18 +46,18 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             this.tti = tti;
         }
 
-        string ICache<K, V>.Name => this.region;
+        string ICache.Name => this.region;
 
-        TimeSpan? ICache<K, V>.TimeToLive => this.ttl;
+        TimeSpan? ICache.TimeToLive => this.ttl;
 
-        TimeSpan? ICache<K, V>.TimeToIdle => this.tti;
+        TimeSpan? ICache.TimeToIdle => this.tti;
 
         void IDisposable.Dispose()
         {
         }
 
 #pragma warning disable CS4014 // Use await for async calls
-        async Task<V> IAsynchronousCache<K, V>.GetAsync(K key, CancellationToken cancellationToken)
+        async Task<Map> IAsynchronousCache.GetAsync(string key, CancellationToken cancellationToken)
         {
             var db = this.connection.GetDatabase();
             var cacheKey = this.ConstructKey(key);
@@ -70,21 +70,21 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             await transaction.ExecuteAsync().ConfigureAwait(false);
 
             if (value.Result.IsNullOrEmpty)
-                return default(V);
+                return null;
 
             var entry = CacheEntry.Parse(value.Result);
             if (this.IsExpired(entry))
             {
                 await db.KeyDeleteAsync(cacheKey).ConfigureAwait(false);
-                return default(V);
+                return null;
             }
 
             var map = this.serializer.Deserialize(entry.Data);
-            return (V)map;
+            return map;
         }
 #pragma warning restore CS4014
 
-        async Task<V> IAsynchronousCache<K, V>.PutAsync(K key, V value, CancellationToken cancellationToken)
+        async Task<Map> IAsynchronousCache.PutAsync(string key, Map value, CancellationToken cancellationToken)
         {
             var db = this.connection.GetDatabase();
 
@@ -101,7 +101,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
         }
 
 #pragma warning disable CS4014 // Use await for async calls
-        async Task<V> IAsynchronousCache<K, V>.RemoveAsync(K key, CancellationToken cancellationToken)
+        async Task<Map> IAsynchronousCache.RemoveAsync(string key, CancellationToken cancellationToken)
         {
             var db = this.connection.GetDatabase();
             var cacheKey = this.ConstructKey(key);
@@ -114,15 +114,15 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             var committed = await transaction.ExecuteAsync().ConfigureAwait(false);
 
             if (!committed)
-                return default(V);
+                return null;
 
             var entry = CacheEntry.Parse(lastValue.Result);
             var map = this.serializer.Deserialize(entry.Data);
-            return (V)map;
+            return map;
         }
 #pragma warning restore CS4014
 
-        private string ConstructKey(K key)
+        private string ConstructKey(string key)
         {
             var sanitizedKey = key.ToString().Replace("://", "--");
 

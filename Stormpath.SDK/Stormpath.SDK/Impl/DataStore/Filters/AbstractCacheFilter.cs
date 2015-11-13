@@ -73,10 +73,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             return href;
         }
 
-        protected IAsynchronousCache<string, IDictionary<string, object>> GetAsyncCache(Type resourceType)
+        protected IAsynchronousCache GetAsyncCache(Type resourceType)
             => this.cacheResolver.GetAsyncCache(resourceType);
 
-        protected ISynchronousCache<string, IDictionary<string, object>> GetSyncCache(Type resourceType)
+        protected ISynchronousCache GetSyncCache(Type resourceType)
             => this.cacheResolver.GetSyncCache(resourceType);
     }
 }
