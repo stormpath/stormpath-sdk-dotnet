@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading.Tasks;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
@@ -26,9 +27,10 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
     public class UAT_simple
     {
         [Fact]
-        public async Task MyTestMethodAsync()
+        public async Task Getting_resource_from_cache()
         {
             var redisCacheProvider = new RedisCacheProvider("localhost:6379", new JsonNetSerializer());
+            redisCacheProvider.SetDefaultTimeToLive(TimeSpan.FromSeconds(10));
 
             var logger = new InMemoryLogger();
 
@@ -39,13 +41,20 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             var tenant = await client.GetCurrentTenantAsync();
 
             // Prime the cache
-            var application = await tenant.GetApplications().FirstAsync();
+            var application = await tenant.GetApplications().Where(x => x.Name == "My Application").SingleAsync();
+            await client.GetResourceAsync<IApplication>(application.Href);
 
             // Should be cache hit
             await client.GetResourceAsync<IApplication>(application.Href, req => req.Expand(x => x.GetCustomDataAsync));
 
             // Should be cache hit
             var customData = await application.GetCustomDataAsync();
+
+            await client.GetResourceAsync<IApplication>(application.Href);
+            await client.GetResourceAsync<IApplication>(application.Href);
+            await client.GetResourceAsync<IApplication>(application.Href);
+            await client.GetResourceAsync<IApplication>(application.Href);
+            await client.GetResourceAsync<IApplication>(application.Href);
 
             var log = logger.ToString();
         }

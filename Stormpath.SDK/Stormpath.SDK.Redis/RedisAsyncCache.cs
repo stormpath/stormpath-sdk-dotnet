@@ -57,37 +57,33 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
         {
         }
 
+#pragma warning disable CS4014 // Use await for async calls
         async Task<V> IAsynchronousCache<K, V>.GetAsync(K key, CancellationToken cancellationToken)
         {
             var db = this.connection.GetDatabase();
             var cacheKey = this.ConstructKey(key);
 
             cancellationToken.ThrowIfCancellationRequested();
-            var value = await db.HashGetAllAsync(cacheKey).ConfigureAwait(false);
 
-            if (value.Length == 0)
+            var transaction = db.CreateTransaction();
+            var value = transaction.StringGetAsync(cacheKey);
+            transaction.KeyExpireAsync(cacheKey, this.tti);
+            await transaction.ExecuteAsync().ConfigureAwait(false);
+
+            if (value.Result.IsNullOrEmpty)
                 return default(V);
 
-            var storedAt = DateTimeOffset.Parse(value.Single(x => x.Name == "stored").Value);
-            var accessedAt = DateTimeOffset.Parse(value.Single(x => x.Name == "accessed").Value);
-            var itemTtl = DeserializeTimeSpan(value.Single(x => x.Name == "ttl").Value);
-            var itemTti = DeserializeTimeSpan(value.Single(x => x.Name == "tti").Value);
-
-            if (IsExpired(storedAt, accessedAt, itemTtl, itemTti))
+            var entry = CacheEntry.Parse(value.Result);
+            if (this.IsExpired(entry))
             {
-                throw new NotImplementedException("expired");
                 await db.KeyDeleteAsync(cacheKey).ConfigureAwait(false);
                 return default(V);
             }
 
-            throw new ApplicationException("not expired");
-
-            await db.HashSetAsync(cacheKey, "accessed", DateTimeOffset.UtcNow.ToString(), When.Exists).ConfigureAwait(false);
-
-            var cacheData = value.Single(x => x.Name == "data").Value;
-            var map = this.serializer.Deserialize(cacheData);
+            var map = this.serializer.Deserialize(entry.Data);
             return (V)map;
         }
+#pragma warning restore CS4014
 
         async Task<V> IAsynchronousCache<K, V>.PutAsync(K key, V value, CancellationToken cancellationToken)
         {
@@ -96,38 +92,36 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             var cacheKey = this.ConstructKey(key);
             var cacheData = this.serializer.Serialize((Map)value);
 
-            var cacheValue = new HashEntry[]
-            {
-                new HashEntry("data", cacheData),
-                new HashEntry("stored", DateTimeOffset.UtcNow.ToString()),
-                new HashEntry("accessed", DateTimeOffset.UtcNow.ToString()),
-                new HashEntry("ttl", SerializeTimeSpan(this.ttl)),
-                new HashEntry("tti", SerializeTimeSpan(this.tti))
-            };
+            var entry = new CacheEntry(
+                cacheData,
+                DateTimeOffset.UtcNow);
 
             cancellationToken.ThrowIfCancellationRequested();
-            await db.HashSetAsync(cacheKey, cacheValue).ConfigureAwait(false);
+            await db.StringSetAsync(cacheKey, entry.ToString()).ConfigureAwait(false);
             return value;
         }
 
+#pragma warning disable CS4014 // Use await for async calls
         async Task<V> IAsynchronousCache<K, V>.RemoveAsync(K key, CancellationToken cancellationToken)
         {
             var db = this.connection.GetDatabase();
             var cacheKey = this.ConstructKey(key);
 
             cancellationToken.ThrowIfCancellationRequested();
+
             var transaction = db.CreateTransaction();
-            var lastValue = transaction.HashGetAllAsync(cacheKey);
-            var deleteResult = transaction.KeyDeleteAsync(cacheKey);
+            var lastValue = transaction.StringGetAsync(cacheKey);
+            transaction.KeyDeleteAsync(cacheKey);
             var committed = await transaction.ExecuteAsync().ConfigureAwait(false);
 
             if (!committed)
                 return default(V);
 
-            var cacheData = lastValue.Result[0].Value;
-            var map = this.serializer.Deserialize(cacheData);
+            var entry = CacheEntry.Parse(lastValue.Result);
+            var map = this.serializer.Deserialize(entry.Data);
             return (V)map;
         }
+#pragma warning restore CS4014
 
         private string ConstructKey(K key)
         {
@@ -136,34 +130,12 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             return $"{this.region}:{sanitizedKey}";
         }
 
-        private static bool IsExpired(DateTimeOffset storedAt, DateTimeOffset accessedAt, TimeSpan? timeToLive, TimeSpan? timeToIdle)
+        private bool IsExpired(CacheEntry entry)
         {
-            var now = DateTimeOffset.UtcNow;
-
-            if (timeToIdle != null && (now - accessedAt > timeToIdle))
+            if (this.ttl == null)
                 return false;
 
-            if (timeToLive != null && (now - storedAt) > timeToLive)
-                return false;
-
-            return true;
-        }
-
-        private static RedisValue SerializeTimeSpan(TimeSpan? timeSpan)
-        {
-            return timeSpan == null
-                ? RedisValue.EmptyString
-                : (long)timeSpan.Value.TotalMilliseconds;
-        }
-
-        private static TimeSpan? DeserializeTimeSpan(RedisValue value)
-        {
-            long millis;
-
-            if (value.IsNull || !value.TryParse(out millis))
-                return null;
-
-            return TimeSpan.FromMilliseconds(millis);
+            return (DateTimeOffset.UtcNow - entry.CreatedAt) > this.ttl.Value;
         }
     }
 }
