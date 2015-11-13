@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using StackExchange.Redis;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Extensions.Serialization;
@@ -27,18 +28,37 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 {
     public class Program
     {
+        private static readonly string RedisConnectionString = "localhost:6379";
+
         public static void Main()
         {
-            TestSync();
+            Console.WriteLine("This test suite will attempt to connect to Redis at localhost:6379");
+            Console.Write("And indiscriminately blow everything away. Are you okay with that? [no] ");
 
-            TestAsync().GetAwaiter().GetResult();
+            if (!Console.ReadLine().Equals("yes", StringComparison.InvariantCultureIgnoreCase))
+                return;
 
+            var connection = ConnectionMultiplexer.Connect(RedisConnectionString);
+            var server = connection.GetServer("localhost", 6379);
+            Console.WriteLine($"Connected to {RedisConnectionString}");
+
+            server.FlushAllDatabases();
+            Console.WriteLine("Flushed all databases");
+
+            TestSync(connection);
+            Console.WriteLine("Done testing sync!");
+
+            TestAsync(connection).GetAwaiter().GetResult();
+            Console.WriteLine("Done testing async!");
+
+            Console.WriteLine("Finished.");
             Console.ReadKey(false);
         }
 
-        private static void TestSync()
+        private static void TestSync(IConnectionMultiplexer redisConnection)
         {
-            var redisCacheProvider = new RedisCacheProvider("localhost:6379", new JsonNetSerializer());
+            //todo add an overload that takes an IConnectionMultiplexer
+            var redisCacheProvider = new RedisCacheProvider(RedisConnectionString, new JsonNetSerializer());
             redisCacheProvider.SetDefaultTimeToIdle(TimeSpan.FromSeconds(30));
             redisCacheProvider.SetDefaultTimeToLive(TimeSpan.FromSeconds(60));
 
@@ -56,7 +76,9 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
                 .Synchronously()
                 .Where(x => x.Name == "My Application")
                 .Single();
-            client.GetResource<IApplication>(application.Href);
+            
+            //redisConnection.
+
 
             // Should be cache hit
             client.GetResource<IApplication>(application.Href, req => req.Expand(x => x.GetCustomDataAsync));
@@ -71,13 +93,11 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             client.GetResource<IApplication>(application.Href);
 
             var log = logger.ToString();
-
-            Console.WriteLine("Done testing sync!");
         }
 
-        private static async Task TestAsync()
+        private static async Task TestAsync(IConnectionMultiplexer redisConnection)
         {
-            var redisCacheProvider = new RedisCacheProvider("localhost:6379", new JsonNetSerializer());
+            var redisCacheProvider = new RedisCacheProvider(RedisConnectionString, new JsonNetSerializer());
             redisCacheProvider.SetDefaultTimeToIdle(TimeSpan.FromSeconds(30));
             redisCacheProvider.SetDefaultTimeToLive(TimeSpan.FromSeconds(60));
 
@@ -106,8 +126,6 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             await client.GetResourceAsync<IApplication>(application.Href);
 
             var log = logger.ToString();
-
-            Console.WriteLine("Done testing async!");
         }
     }
 }

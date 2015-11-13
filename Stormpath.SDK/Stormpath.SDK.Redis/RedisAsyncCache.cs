@@ -78,6 +78,8 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
                 await db.KeyDeleteAsync(cacheKey).ConfigureAwait(false);
                 return null;
             }
+            //add graceful exception handling
+            //and logging
 
             var map = this.serializer.Deserialize(entry.Data);
             return map;
