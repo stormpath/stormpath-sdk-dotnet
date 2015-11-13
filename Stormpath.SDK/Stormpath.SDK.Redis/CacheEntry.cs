@@ -48,7 +48,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
         {
             var data = new string[]
             {
-                this.CreatedAt.ToString(),
+                this.CreatedAt.ToString("o"),
                 this.Data
             };
 

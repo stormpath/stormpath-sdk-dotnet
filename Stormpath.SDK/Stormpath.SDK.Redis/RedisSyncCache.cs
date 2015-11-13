@@ -99,17 +99,17 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
                 var db = this.connection.GetDatabase();
 
                 var cacheKey = this.ConstructKey(key);
-                var cacheData = this.serializer.Serialize((Map)value);
+                var cacheData = this.serializer.Serialize(value);
 
                 var entry = new CacheEntry(
                     cacheData,
                     DateTimeOffset.UtcNow);
 
-                db.StringSet(cacheKey, entry.ToString());
+                db.StringSet(cacheKey, entry.ToString(), this.tti);
             }
             catch (Exception e)
             {
-                this.logger.Error(e, "Error while storing value in cache.", "RedisAsyncCache.PutAsync");
+                this.logger.Error(e, "Error while storing value in cache.", "RedisSyncCache.Put");
             }
 
             return value;
@@ -137,7 +137,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
             }
             catch (Exception e)
             {
-                this.logger.Error(e, "Error while deleting value from cache.", "RedisAsyncCache.RemoveAsync");
+                this.logger.Error(e, "Error while deleting value from cache.", "RedisSyncCache.Remove");
                 return null;
             }
         }

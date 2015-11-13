@@ -75,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SyncTests.cs" />
     <Compile Include="AsyncTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedisTestBase.cs" />
