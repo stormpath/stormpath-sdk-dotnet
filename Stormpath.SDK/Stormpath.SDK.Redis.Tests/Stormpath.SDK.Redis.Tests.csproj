@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -91,6 +92,10 @@
     <ProjectReference Include="..\Stormpath.SDK.RestSharpClient\Stormpath.SDK.RestSharpClient.csproj">
       <Project>{21f7a025-7bb1-49b0-8ad3-cee8a3b1d542}</Project>
       <Name>Stormpath.SDK.RestSharpClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stormpath.SDK.Tests.Common\Stormpath.SDK.Tests.Common.csproj">
+      <Project>{9ed26d42-2203-46c0-b897-8e3218954170}</Project>
+      <Name>Stormpath.SDK.Tests.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Stormpath.SDK\Stormpath.SDK.csproj">
       <Project>{79a65c37-9db1-413a-ac23-708404530295}</Project>
