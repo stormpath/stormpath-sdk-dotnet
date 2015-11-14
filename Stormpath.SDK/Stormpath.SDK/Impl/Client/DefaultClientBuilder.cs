@@ -102,17 +102,17 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
-        IClientBuilder IClientBuilder.UseJsonSerializer(IJsonSerializer serializer)
+        IClientBuilder ISerializerConsumer<IClientBuilder>.SetSerializer(IJsonSerializer serializer)
         {
             if (serializer == null)
                 throw new ArgumentNullException(nameof(serializer));
 
-            this.serializerBuilder.UseSerializer(serializer);
+            this.serializerBuilder.SetSerializer(serializer);
 
             return this;
         }
 
-        IClientBuilder IClientBuilder.UseHttpClient(IHttpClient httpClient)
+        IClientBuilder IClientBuilder.SetHttpClient(IHttpClient httpClient)
         {
             if (httpClient == null)
                 throw new ArgumentNullException(nameof(httpClient));
@@ -122,7 +122,7 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
-        IClientBuilder IClientBuilder.SetLogger(ILogger logger)
+        IClientBuilder ILoggerConsumer<IClientBuilder>.SetLogger(ILogger logger)
         {
             this.logger = logger;
 

@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             this.fakeHttpClient = new FakeHttpClient(BaseUrl);
 
             this.client = Clients.Builder()
-                .UseHttpClient(this.fakeHttpClient)
+                .SetHttpClient(this.fakeHttpClient)
                 .SetCacheProvider(redisCacheProvider)
                 .SetLogger(this.logger)
                 .Build();

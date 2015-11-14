@@ -20,7 +20,7 @@ using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    internal interface IHttpClientBuilder
+    internal interface IHttpClientBuilder : ILoggerConsumer<IHttpClientBuilder>
     {
         IHttpClientBuilder UseHttpClient(IHttpClient client);
 
@@ -29,8 +29,6 @@ namespace Stormpath.SDK.Impl.Client
         IHttpClientBuilder SetConnectionTimeout(int connectionTimeout);
 
         IHttpClientBuilder SetProxy(IWebProxy proxy);
-
-        IHttpClientBuilder SetLogger(ILogger logger);
 
         IHttpClient Build();
     }

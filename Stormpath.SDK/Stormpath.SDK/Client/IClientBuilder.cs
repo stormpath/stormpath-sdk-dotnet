@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Client
     ///     .Build();
     /// </code>
     /// </example>
-    public interface IClientBuilder
+    public interface IClientBuilder : ILoggerConsumer<IClientBuilder>, ISerializerConsumer<IClientBuilder>
     {
         /// <summary>
         /// Sets the <see cref="IClientApiKey"/> to use when making requests.
@@ -98,13 +98,6 @@ namespace Stormpath.SDK.Client
         IClientBuilder SetCacheProvider(ICacheProvider cacheProvider);
 
         /// <summary>
-        /// Sets an optional logger to send trace and debug messages to.
-        /// </summary>
-        /// <param name="logger">A logger instance for capturing trace output; pass <c>null</c> to disable logging.</param>
-        /// <returns>This instance for method chaining.</returns>
-        IClientBuilder SetLogger(ILogger logger);
-
-        /// <summary>
         /// Advanced use; only change this if you know what you are doing. Sets the internal identity map expiration time.
         /// </summary>
         /// <param name="expiration">Identity map expiration timeout.</param>
@@ -113,22 +106,13 @@ namespace Stormpath.SDK.Client
         IClientBuilder SetIdentityMapExpiration(TimeSpan expiration);
 
         /// <summary>
-        /// Sets the JSON serializer to use when serializing and deserializing request data.
-        /// Don't call this method unless you want to use a different serializer than the default.
-        /// </summary>
-        /// <param name="serializer">A valid <see cref="IJsonSerializer"/> instance.</param>
-        /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="System.ArgumentNullException"><paramref name="serializer"/> is null.</exception>
-        IClientBuilder UseJsonSerializer(IJsonSerializer serializer);
-
-        /// <summary>
         /// Sets the HTTP client to use when making requests.
         /// Don't call this method unless you want to use a different HTTP client than the default.
         /// </summary>
         /// <param name="httpClient">A valid <see cref="IHttpClient"/> instance.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="System.ArgumentNullException"><paramref name="httpClient"/> is null.</exception>
-        IClientBuilder UseHttpClient(IHttpClient httpClient);
+        IClientBuilder SetHttpClient(IHttpClient httpClient);
 
         /// <summary>
         /// Constructs a new <see cref="IClient"/> instance based on the builder's current configuration state.

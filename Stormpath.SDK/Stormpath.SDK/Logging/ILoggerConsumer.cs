@@ -19,12 +19,14 @@ namespace Stormpath.SDK.Logging
     /// <summary>
     /// Represents a class that depends on <see cref="ILogger"/>.
     /// </summary>
+    /// <typeparam name="T">The return type.</typeparam>
     public interface ILoggerConsumer<out T>
     {
         /// <summary>
-        /// Use the specified logger.
+        /// Sets an optional logger to send trace and debug messages to.
         /// </summary>
         /// <param name="logger">The logger to use.</param>
+        /// <returns>The source object for method chaining.</returns>
         T SetLogger(ILogger logger);
     }
 }

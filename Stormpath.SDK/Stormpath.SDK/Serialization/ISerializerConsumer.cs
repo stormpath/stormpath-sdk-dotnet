@@ -19,12 +19,14 @@ namespace Stormpath.SDK.Serialization
     /// <summary>
     /// Represents a class that depends on <see cref="IJsonSerializer"/>.
     /// </summary>
+    /// <typeparam name="T">The return type.</typeparam>
     public interface ISerializerConsumer<out T>
     {
         /// <summary>
         /// Use the specified JSON serializer.
         /// </summary>
         /// <param name="serializer">The serializer to use.</param>
+        /// <returns>The source object for method chaining.</returns>
         T SetSerializer(IJsonSerializer serializer);
     }
 }

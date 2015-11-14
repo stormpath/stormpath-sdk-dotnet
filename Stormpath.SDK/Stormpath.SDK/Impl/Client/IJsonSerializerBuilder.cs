@@ -18,10 +18,8 @@ using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    internal interface IJsonSerializerBuilder
+    internal interface IJsonSerializerBuilder : ISerializerConsumer<IJsonSerializerBuilder>
     {
-        IJsonSerializerBuilder UseSerializer(IJsonSerializer serializer);
-
         IJsonSerializer Build();
     }
 }
