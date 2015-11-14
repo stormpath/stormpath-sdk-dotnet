@@ -136,7 +136,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             {
                 logger.Trace($"Response {href} is a custom data resource, caching directly", "WriteCacheFilter.CacheAsync");
 
-                var cache = await this.GetCacheAsync(resourceType, cancellationToken).ConfigureAwait(false);
+                var cache = this.GetAsyncCache(resourceType);
                 await cache.PutAsync(this.GetCacheKey(href), data, cancellationToken).ConfigureAwait(false);
                 return; // simple! return early
             }
@@ -199,7 +199,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             {
                 logger.Trace($"Caching {href} as type {resourceType.Name}", "WriteCacheFilter.CacheAsync");
 
-                var cache = await this.GetCacheAsync(resourceType, cancellationToken).ConfigureAwait(false);
+                var cache = this.GetAsyncCache(resourceType);
                 var cacheKey = this.GetCacheKey(href);
                 await cache.PutAsync(cacheKey, cacheData, cancellationToken).ConfigureAwait(false);
             }
@@ -216,7 +216,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             {
                 logger.Trace($"Response {href} is a custom data resource, caching directly", "WriteCacheFilter.Cache");
 
-                var cache = this.GetCache(resourceType);
+                var cache = this.GetSyncCache(resourceType);
                 cache.Put(this.GetCacheKey(href), data);
                 return; // simple! return early
             }
@@ -279,7 +279,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             {
                 logger.Trace($"Caching {href} as type {resourceType.Name}", "WriteCacheFilter.Cache");
 
-                var cache = this.GetCache(resourceType);
+                var cache = this.GetSyncCache(resourceType);
                 var cacheKey = this.GetCacheKey(href);
                 cache.Put(cacheKey, cacheData);
             }
@@ -378,7 +378,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             if (resourceType == null)
                 throw new ArgumentNullException(nameof(resourceType));
 
-            var cache = await this.GetCacheAsync(resourceType, cancellationToken).ConfigureAwait(false);
+            var cache = this.GetAsyncCache(resourceType);
             await cache.RemoveAsync(cacheKey, cancellationToken).ConfigureAwait(false);
         }
 
@@ -389,7 +389,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             if (resourceType == null)
                 throw new ArgumentNullException(nameof(resourceType));
 
-            var cache = this.GetCache(resourceType);
+            var cache = this.GetSyncCache(resourceType);
             cache.Remove(cacheKey);
         }
 
@@ -403,7 +403,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 string.IsNullOrEmpty(href))
                 throw new ApplicationException("Could not update cache for removed custom data entry.");
 
-            var cache = await this.GetCacheAsync(typeof(ICustomData), cancellationToken).ConfigureAwait(false);
+            var cache = this.GetAsyncCache(typeof(ICustomData));
             var cacheKey = this.GetCacheKey(href);
 
             var existingData = await cache.GetAsync(cacheKey, cancellationToken).ConfigureAwait(false);
@@ -426,7 +426,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 string.IsNullOrEmpty(href))
                 throw new ApplicationException("Could not update cache for removed custom data entry.");
 
-            var cache = this.GetCache(typeof(ICustomData));
+            var cache = this.GetSyncCache(typeof(ICustomData));
             var cacheKey = this.GetCacheKey(href);
 
             var existingData = cache.Get(cacheKey);
@@ -450,7 +450,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             if (string.IsNullOrEmpty(accountHref))
                 return;
 
-            var cache = await this.GetCacheAsync(typeof(IAccount), cancellationToken).ConfigureAwait(false);
+            var cache = this.GetAsyncCache(typeof(IAccount));
             await cache.RemoveAsync(this.GetCacheKey(accountHref), cancellationToken).ConfigureAwait(false);
         }
 
@@ -465,7 +465,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             if (string.IsNullOrEmpty(accountHref))
                 return;
 
-            var cache = this.GetCache(typeof(IAccount));
+            var cache = this.GetSyncCache(typeof(IAccount));
             cache.Remove(this.GetCacheKey(accountHref));
         }
 

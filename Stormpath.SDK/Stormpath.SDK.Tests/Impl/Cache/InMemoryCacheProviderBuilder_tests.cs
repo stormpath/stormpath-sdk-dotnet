@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             this.builder.WithDefaultTimeToIdle(defaultTti);
             var cacheProvider = this.builder.Build() as ISynchronousCacheProvider;
 
-            var cache = cacheProvider.GetCache<string, object>("foobar");
+            var cache = cacheProvider.GetSyncCache("foobar");
 
             cache.TimeToLive.ShouldBe(defaultTtl);
             cache.TimeToIdle.ShouldBe(defaultTti);
@@ -84,7 +84,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             this.builder.WithCache(cacheConfigBuilder);
 
             var cacheProvider = this.builder.Build() as ISynchronousCacheProvider;
-            var cache = cacheProvider.GetCache<string, object>("foobar");
+            var cache = cacheProvider.GetSyncCache("foobar");
 
             cache.TimeToLive.ShouldBe(cacheTtl);
             cache.TimeToIdle.ShouldBe(cacheTti);
@@ -105,9 +105,9 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                     .WithTimeToLive(TimeSpan.FromHours(6)))
                 .Build() as ISynchronousCacheProvider;
 
-            var accountCache = cacheProvider.GetCache<string, object>(nameof(Account.IAccount));
-            var applicationCache = cacheProvider.GetCache<string, object>(nameof(Application.IApplication));
-            var directoryCache = cacheProvider.GetCache<string, object>(nameof(Directory.IDirectory));
+            var accountCache = cacheProvider.GetSyncCache(nameof(Account.IAccount));
+            var applicationCache = cacheProvider.GetSyncCache(nameof(Application.IApplication));
+            var directoryCache = cacheProvider.GetSyncCache(nameof(Directory.IDirectory));
 
             accountCache.TimeToLive.ShouldBe(TimeSpan.FromHours(2));
             accountCache.TimeToIdle.ShouldBe(TimeSpan.FromMinutes(30));

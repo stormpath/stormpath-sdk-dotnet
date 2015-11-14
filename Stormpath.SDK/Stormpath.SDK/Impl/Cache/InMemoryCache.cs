@@ -20,16 +20,17 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Cache
 {
-    internal sealed class InMemoryCache<K, V> : ISynchronousCache<K, V>, IAsynchronousCache<K, V>
+    internal sealed class InMemoryCache : ISynchronousCache, IAsynchronousCache
     {
         private readonly string region;
         private readonly TimeSpan? timeToLive;
         private readonly TimeSpan? timeToIdle;
 
-        private InMemoryCacheManager<V> cacheManager;
+        private InMemoryCacheManager cacheManager;
         private bool isDisposed = false;
 
         private long accessCount;
@@ -51,7 +52,7 @@ namespace Stormpath.SDK.Impl.Cache
             if (timeToIdle.HasValue && timeToIdle.Value.TotalMilliseconds <= 0)
                 throw new ArgumentException("TTI duration must be greater than zero.", nameof(timeToIdle));
 
-            this.cacheManager = new InMemoryCacheManager<V>();
+            this.cacheManager = new InMemoryCacheManager();
             this.region = region;
             this.timeToLive = timeToLive;
             this.timeToIdle = timeToIdle;
@@ -67,18 +68,18 @@ namespace Stormpath.SDK.Impl.Cache
                 throw new ApplicationException($"The object ({this.GetType().Name}) has been disposed.");
         }
 
-        private string CreateCompositeKey(K key)
+        private string CreateCompositeKey(string key)
         {
             return $"{this.region}-{key}";
         }
 
-        private ISynchronousCache<K, V> AsSyncInterface => this;
+        private ISynchronousCache AsSyncInterface => this;
 
-        string ICache<K, V>.Name => this.region;
+        string ICache.Name => this.region;
 
-        TimeSpan? ICache<K, V>.TimeToLive => this.timeToLive;
+        TimeSpan? ICache.TimeToLive => this.timeToLive;
 
-        TimeSpan? ICache<K, V>.TimeToIdle => this.timeToIdle;
+        TimeSpan? ICache.TimeToIdle => this.timeToIdle;
 
         /// <summary>
         /// Gets the number of items stored in all regions of the cache.
@@ -105,17 +106,17 @@ namespace Stormpath.SDK.Impl.Cache
         public void Clear()
         {
             this.cacheManager.Dispose();
-            this.cacheManager = new InMemoryCacheManager<V>();
+            this.cacheManager = new InMemoryCacheManager();
         }
 
-        V ISynchronousCache<K, V>.Get(K key)
+        Map ISynchronousCache.Get(string key)
         {
             this.ThrowIfDisposed();
 
             Interlocked.Increment(ref this.accessCount);
 
             var compositeKey = this.CreateCompositeKey(key);
-            V value = this.cacheManager.Get(compositeKey);
+            Map value = this.cacheManager.Get(compositeKey);
 
             if (value == null)
                 Interlocked.Increment(ref this.missCount);
@@ -125,7 +126,7 @@ namespace Stormpath.SDK.Impl.Cache
             return value;
         }
 
-        V ISynchronousCache<K, V>.Put(K key, V value)
+        Map ISynchronousCache.Put(string key, Map value)
         {
             this.ThrowIfDisposed();
 
@@ -142,7 +143,7 @@ namespace Stormpath.SDK.Impl.Cache
             return this.cacheManager.Put(compositeKey, value, absoluteExpiration, slidingExpiration);
         }
 
-        V ISynchronousCache<K, V>.Remove(K key)
+        Map ISynchronousCache.Remove(string key)
         {
             this.ThrowIfDisposed();
 
@@ -159,7 +160,7 @@ namespace Stormpath.SDK.Impl.Cache
             return value;
         }
 
-        Task<V> IAsynchronousCache<K, V>.GetAsync(K key, CancellationToken cancellationToken)
+        Task<Map> IAsynchronousCache.GetAsync(string key, CancellationToken cancellationToken)
         {
             this.ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
@@ -167,7 +168,7 @@ namespace Stormpath.SDK.Impl.Cache
             return Task.FromResult(this.AsSyncInterface.Get(key));
         }
 
-        Task<V> IAsynchronousCache<K, V>.PutAsync(K key, V value, CancellationToken cancellationToken)
+        Task<Map> IAsynchronousCache.PutAsync(string key, Map value, CancellationToken cancellationToken)
         {
             this.ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
@@ -175,7 +176,7 @@ namespace Stormpath.SDK.Impl.Cache
             return Task.FromResult(this.AsSyncInterface.Put(key, value));
         }
 
-        Task<V> IAsynchronousCache<K, V>.RemoveAsync(K key, CancellationToken cancellationToken)
+        Task<Map> IAsynchronousCache.RemoveAsync(string key, CancellationToken cancellationToken)
         {
             this.ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();

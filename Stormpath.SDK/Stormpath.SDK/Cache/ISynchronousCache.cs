@@ -14,21 +14,21 @@
 // limitations under the License.
 // </copyright>
 
+using Map = System.Collections.Generic.IDictionary<string, object>;
+
 namespace Stormpath.SDK.Cache
 {
     /// <summary>
     /// This interface provides an abstraction (wrapper) API on top of an underlying synchronous cache framework's cache instance.
     /// </summary>
-    /// <typeparam name="K">The key type stored in the cache.</typeparam>
-    /// <typeparam name="V">The value type stored in the cache.</typeparam>
-    public interface ISynchronousCache<K, V> : ICache<K, V>
+    public interface ISynchronousCache : ICache
     {
         /// <summary>
         /// Gets the cached value stored under the specified key.
         /// </summary>
         /// <param name="key">The key that the value was added with.</param>
         /// <returns>The cached object, or <c>null</c> if there is no entry for the specified key.</returns>
-        V Get(K key);
+        Map Get(string key);
 
         /// <summary>
         /// Adds a cache entry.
@@ -36,13 +36,13 @@ namespace Stormpath.SDK.Cache
         /// <param name="key">The key used to identify the object being stored.</param>
         /// <param name="value">The value to be stored in the cache.</param>
         /// <returns>The previous value associated with the given key, or <c>null</c> if there was no previous value.</returns>
-        V Put(K key, V value);
+        Map Put(string key, Map value);
 
         /// <summary>
         /// Removes the cached value stored under the specified key.
         /// </summary>
         /// <param name="key">The key used to identify the object being stored.</param>
         /// <returns>The removed value, or <c>null</c> if there was no value cached.</returns>
-        V Remove(K key);
+        Map Remove(string key);
     }
 }

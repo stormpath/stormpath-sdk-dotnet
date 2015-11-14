@@ -1,4 +1,4 @@
-﻿// <copyright file="Assertly.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DebugOnlyTheoryAttribute.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +14,19 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Tests.Helpers
-{
-    public static class Assertly
-    {
-        public static void Fail(string message)
-        {
-            Xunit.Assert.True(false, message);
-        }
+using System.Diagnostics;
+using Xunit;
 
-        public static void Todo()
+namespace Stormpath.SDK.Tests.Common
+{
+    public class DebugOnlyTheoryAttribute : TheoryAttribute
+    {
+        public DebugOnlyTheoryAttribute()
         {
-            Xunit.Assert.True(false, "TODO");
+            if (!Debugger.IsAttached)
+            {
+                this.Skip = "Only run in Debug mode.";
+            }
         }
     }
 }

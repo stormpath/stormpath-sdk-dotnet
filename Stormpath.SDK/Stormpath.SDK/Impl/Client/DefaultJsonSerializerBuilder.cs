@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Impl.Client
             this.defaultLibraryLoader = defaultLibraryLoader;
         }
 
-        IJsonSerializerBuilder IJsonSerializerBuilder.UseSerializer(IJsonSerializer serializer)
+        IJsonSerializerBuilder ISerializerConsumer<IJsonSerializerBuilder>.SetSerializer(IJsonSerializer serializer)
         {
             this.instance = serializer;
             return this;

@@ -182,9 +182,9 @@ namespace Stormpath.SDK.Tests.Integration
             {
                 "IAsyncQueryable`1.MoveNext()",
                 "IAsynchronousHttpClient.Execute(IHttpRequest)",
-                "IAsynchronousCache`2.Get(K)",
-                "IAsynchronousCache`2.Put(K, V)",
-                "IAsynchronousCache`2.Remove(K)",
+                "IAsynchronousCache.Get(String)",
+                "IAsynchronousCache.Put(String, IDictionary`2)",
+                "IAsynchronousCache.Remove(String)",
                 "IAsynchronousCacheProvider.GetCache(String)",
                 "IAsynchronousNonceStore.ContainsNonce(String)",
                 "IAsynchronousNonceStore.PutNonce(String)",

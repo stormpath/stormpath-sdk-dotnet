@@ -66,6 +66,7 @@
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
+    <Compile Include="Cache\AbstractCacheProvider.cs" />
     <Compile Include="IdSite\IIdSiteSyncResultListener.cs" />
     <Compile Include="IdSite\IIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
@@ -357,6 +358,7 @@
     <Compile Include="Jwt\Jwts.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
     <Compile Include="Linq\IAsyncQueryProvider.cs" />
+    <Compile Include="Logging\ILoggerConsumer.cs" />
     <Compile Include="Logging\InMemoryLogger.cs" />
     <Compile Include="Provider\ClientProviderExtensions.cs" />
     <Compile Include="Provider\ICreateProviderRequest.cs" />
@@ -391,6 +393,7 @@
     <Compile Include="Resource\IRetrievalOptions.cs" />
     <Compile Include="Resource\IExtendable.cs" />
     <Compile Include="Resource\ISaveableWithOptions.cs" />
+    <Compile Include="Serialization\ISerializerConsumer.cs" />
     <Compile Include="Shared\StringEnumeration.cs" />
     <Compile Include="Sync\ExpandExtensions.cs" />
     <Compile Include="Sync\FilterExtensions.cs" />
