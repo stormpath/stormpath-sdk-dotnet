@@ -166,6 +166,8 @@ namespace Stormpath.SDK.Impl.Client
             if (this.logger == null)
                 this.logger = new NullLogger();
 
+            var serializer = this.serializerBuilder.Build();
+
             if (this.cacheProvider == null)
             {
                 this.logger.Info("No CacheProvider configured. Defaulting to in-memory CacheProvider with default TTL and TTI of one hour.");
@@ -175,6 +177,16 @@ namespace Stormpath.SDK.Impl.Client
                     .WithDefaultTimeToIdle(TimeSpan.FromHours(1))
                     .WithDefaultTimeToLive(TimeSpan.FromHours(1))
                     .Build();
+            }
+            else
+            {
+                var injectableWithSerializer = this.cacheProvider as ISerializerConsumer<ICacheProvider>;
+                if (injectableWithSerializer != null)
+                    injectableWithSerializer.SetSerializer(serializer);
+
+                var injectableWithLogger = this.cacheProvider as ILoggerConsumer<ICacheProvider>;
+                if (injectableWithLogger != null)
+                    injectableWithLogger.SetLogger(this.logger);
             }
 
             this.httpClientBuilder

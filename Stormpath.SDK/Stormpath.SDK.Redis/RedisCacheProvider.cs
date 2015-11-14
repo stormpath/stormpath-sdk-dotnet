@@ -22,23 +22,35 @@ using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis
 {
-    public class RedisCacheProvider : AbstractCacheProvider
+    public class RedisCacheProvider : AbstractCacheProvider, ISerializerConsumer<RedisCacheProvider>, ILoggerConsumer<RedisCacheProvider>
     {
         private readonly IConnectionMultiplexer connection;
-        private readonly IJsonSerializer serializer;
-        private readonly ILogger logger;
+        private IJsonSerializer serializer;
+        private ILogger logger;
 
-        public RedisCacheProvider(string redisConfiguration, IJsonSerializer serializer, ILogger logger = null)
-            : this(ConnectionMultiplexer.Connect(redisConfiguration), serializer, logger)
+        public RedisCacheProvider(string redisConfiguration)
+            : this(ConnectionMultiplexer.Connect(redisConfiguration))
         {
         }
 
-        public RedisCacheProvider(IConnectionMultiplexer redisConnection, IJsonSerializer serializer, ILogger logger = null)
+        public RedisCacheProvider(IConnectionMultiplexer redisConnection)
             : base(syncSupported: true, asyncSupported: true)
         {
             this.connection = redisConnection;
-            this.serializer = serializer;
-            this.logger = logger;
+        }
+
+        public RedisCacheProvider SetSerializer(IJsonSerializer serializer)
+        {
+            if (serializer != null)
+                this.serializer = serializer;
+            return this;
+        }
+
+        public RedisCacheProvider SetLogger(ILogger logger)
+        {
+            if (logger != null)
+                this.logger = logger;
+            return this;
         }
 
         protected override IAsynchronousCache CreateAsyncCache(string name, TimeSpan? ttl, TimeSpan? tti)

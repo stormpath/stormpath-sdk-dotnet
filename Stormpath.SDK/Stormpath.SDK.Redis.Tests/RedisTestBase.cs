@@ -16,7 +16,6 @@
 
 using System;
 using Stormpath.SDK.Client;
-using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Tests.Common.Fakes;
 
@@ -29,6 +28,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 
         protected FakeHttpClient fakeHttpClient;
         protected IClient client;
+        protected ILogger logger;
 
         public RedisTestBase(RedisTestFixture fixture)
         {
@@ -39,20 +39,20 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 
         protected void CreateClient(TimeSpan? ttl, TimeSpan? tti)
         {
-            var redisCacheProvider = new RedisCacheProvider(this.fixture.Connection, new JsonNetSerializer());
+            var redisCacheProvider = new RedisCacheProvider(this.fixture.Connection);
 
             if (ttl != null)
                 redisCacheProvider.SetDefaultTimeToLive(ttl.Value);
             if (tti != null)
                 redisCacheProvider.SetDefaultTimeToIdle(tti.Value);
 
-            var logger = new InMemoryLogger();
+            this.logger = new InMemoryLogger();
             this.fakeHttpClient = new FakeHttpClient(BaseUrl);
 
             this.client = Clients.Builder()
                 .UseHttpClient(this.fakeHttpClient)
                 .SetCacheProvider(redisCacheProvider)
-                .SetLogger(logger)
+                .SetLogger(this.logger)
                 .Build();
         }
     }
