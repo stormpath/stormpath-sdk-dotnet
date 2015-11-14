@@ -64,6 +64,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Stormpath.SDK.JsonNetSerializer\Stormpath.SDK.JsonNetSerializer.csproj">

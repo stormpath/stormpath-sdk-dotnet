@@ -15,7 +15,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using Stormpath.SDK.Cache;
 
 namespace Stormpath.SDK.Impl.Cache
