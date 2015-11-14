@@ -78,6 +78,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis
                 var entry = CacheEntry.Parse(value.Result);
                 if (this.IsExpired(entry))
                 {
+                    this.logger.Trace($"Entry {cacheKey} was expired (TTL), purging", "RedisSyncCache.Get");
                     db.KeyDelete(cacheKey);
                     return null;
                 }

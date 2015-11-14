@@ -15,14 +15,13 @@
 // </copyright>
 
 using System;
-using System.Threading.Tasks;
+using System.Threading;
 using Shouldly;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Fakes;
-using Stormpath.SDK.Sync;
 using Xunit;
-using System.Threading;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 {
