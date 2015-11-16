@@ -42,33 +42,26 @@ namespace Stormpath.SDK.Impl.DataStore
             => (T)this.AsInterface.Create(typeof(T), null, original);
 
         object IResourceFactory.Create(Type type, ILinkable original)
-            => this.AsInterface.Create(type, null, null, original);
+            => this.AsInterface.Create(type, null, original);
 
         T IResourceFactory.Create<T>(IDictionary<string, object> properties, ILinkable original)
-            => (T)this.AsInterface.Create(typeof(T), properties, null, original);
+            => (T)this.AsInterface.Create(typeof(T), properties, original);
 
         object IResourceFactory.Create(Type type, IDictionary<string, object> properties, ILinkable original)
-            => this.AsInterface.Create(type, properties, null, original);
-
-        T IResourceFactory.Create<T>(IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
-            => (T)this.AsInterface.Create(typeof(T), properties, options, original);
-
-        object IResourceFactory.Create(Type type, IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
         {
             if (ResourceTypes.IsCollectionResponse(type))
                 return this.InstantiateCollection(type, properties);
 
-            return this.InstantiateSingle(type, properties, options, original);
+            return this.InstantiateSingle(type, properties, original);
         }
 
-        private object InstantiateSingle(Type type, IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
+        private object InstantiateSingle(Type type, IDictionary<string, object> properties, ILinkable original)
         {
-            if (options == null)
-                options = new IdentityMapOptions(); // with default values
-
             var targetType = this.typeLookup.GetConcrete(type);
             if (targetType == null)
                 throw new ApplicationException($"Unknown resource type {type.Name}");
+
+            var identityMapOptions = new IdentityMapOptionsResolver().GetOptions(type);
 
             AbstractResource targetObject;
             try
@@ -88,9 +81,9 @@ namespace Stormpath.SDK.Impl.DataStore
                 if (!propertiesContainsHref)
                     properties["href"] = id;
 
-                var resourceData = options.SkipIdentityMap
+                var resourceData = identityMapOptions.SkipIdentityMap
                     ? new ResourceData(this.dataStore)
-                    : this.identityMap.GetOrAdd(id, () => new ResourceData(this.dataStore), options.StoreWithInfiniteExpiration);
+                    : this.identityMap.GetOrAdd(id, () => new ResourceData(this.dataStore), identityMapOptions.StoreWithInfiniteExpiration);
 
                 if (properties != null)
                     resourceData.Update(properties);
@@ -166,7 +159,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
                 foreach (var itemMap in items)
                 {
-                    var materialized = this.InstantiateSingle(innerType, itemMap, options: null, original: null);
+                    var materialized = this.InstantiateSingle(innerType, itemMap, original: null);
                     addMethod.Invoke(materializedItems, new object[] { materialized });
                 }
 

@@ -266,7 +266,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);
 
-            return this.resourceFactory.Create<T>(result.Body, identityMapOptions);
+            return this.resourceFactory.Create<T>(result.Body);
         }
 
         T IInternalSyncDataStore.GetResource<T>(string href, IdentityMapOptions identityMapOptions)
@@ -276,7 +276,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var result = this.GetResourceData<T>(href);
 
-            return this.resourceFactory.Create<T>(result.Body, identityMapOptions);
+            return this.resourceFactory.Create<T>(result.Body);
         }
 
         private Task<IResourceDataResult> GetResourceDataAsync<T>(string href, CancellationToken cancellationToken)
@@ -552,7 +552,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var abstractResource = resource as AbstractResource;
             if (abstractResource != null)
             {
-            // Serialize properties
+                // Serialize properties
                 propertiesMap = this.resourceConverter.ToMap(abstractResource);
 
             var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
@@ -581,7 +581,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
             // In some cases, all we need to save are custom data property deletions, which is taken care of above.
             // So, we should just refresh with the latest data from the server.
-            // This doesn't apply to CREATEs, though, because sometimes we need to POST a null body.
+            // This doesn't apply to CREATEs, though, because sometimes we *need* to POST a null body.
             bool nothingToPost = propertiesMap.IsNullOrEmpty();
             if (!create && nothingToPost)
                 return await this.AsAsyncInterface.GetResourceAsync<TReturned>(canonicalUri.ToString(), cancellationToken).ConfigureAwait(false);
@@ -592,7 +592,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
 
             var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
-            return this.resourceFactory.Create<TReturned>(result.Body, identityMapOptions, resource as ILinkable);
+            return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
         }
 
         private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, bool create, IdentityMapOptions identityMapOptions)
@@ -682,7 +682,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
 
             var result = chain.Filter(request, this.logger);
-            return this.resourceFactory.Create<TReturned>(result.Body, identityMapOptions, resource as ILinkable);
+            return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
         }
 
         private async Task<bool> DeleteCoreAsync<T>(string href, CancellationToken cancellationToken)

@@ -29,9 +29,5 @@ namespace Stormpath.SDK.Impl.DataStore
         object Create(Type type, IDictionary<string, object> properties, ILinkable original = null);
 
         T Create<T>(IDictionary<string, object> properties, ILinkable original = null);
-
-        object Create(Type type, IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original = null);
-
-        T Create<T>(IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original = null);
     }
 }
