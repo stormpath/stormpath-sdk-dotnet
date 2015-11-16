@@ -663,7 +663,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var directoryName = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref).Name;
             var mapping = createdApplication
-                .AddAccountStore<IDirectory>(dirs => dirs.Where(d => d.Name == directoryName));
+                .AddAccountStore<IDirectory>(dirs => dirs.Where(d => d.Name.EndsWith(directoryName.Substring(1))));
 
             mapping.GetAccountStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
             mapping.GetApplication().Href.ShouldBe(createdApplication.Href);
@@ -692,7 +692,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var groupName = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref).Name;
             var mapping = createdApplication
-                .AddAccountStore<IGroup>(groups => groups.Where(g => g.Name == groupName));
+                .AddAccountStore<IGroup>(groups => groups.Where(g => g.Name.EndsWith(groupName.Substring(1))));
 
             mapping.GetAccountStore().Href.ShouldBe(this.fixture.PrimaryGroupHref);
             mapping.GetApplication().Href.ShouldBe(createdApplication.Href);

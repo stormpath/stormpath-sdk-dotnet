@@ -302,6 +302,12 @@ namespace Stormpath.SDK.Sync
         /// <param name="accountStore">The new <see cref="IAccountStore"/> resource to add to the Application's AccountStoreMapping list.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
         /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application.</exception>
+        /// <example>
+        /// <code>
+        /// IAccountStore directoryOrGroup = GetDirectoryOrGroup();
+        /// IAccountStoreMapping mapping = application.AddAccountStore(directoryOrGroup);
+        /// </code>
+        /// </example>
         public static IAccountStoreMapping AddAccountStore(this IApplication application, IAccountStore accountStore)
             => (application as IApplicationSync).AddAccountStore(accountStore);
 
@@ -327,6 +333,16 @@ namespace Stormpath.SDK.Sync
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
         /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application.</exception>
         /// <exception cref="ArgumentException">The given <paramref name="hrefOrName"/> matches more than one resource in the current Tenant.</exception>
+        /// <example>
+        /// Providing an href:
+        /// <code>
+        /// IAccountStoreMapping accountStoreMapping = application.AddAccountStore("https://api.stormpath.com/v1/groups/2rwq022yMt4u2DwKLfzriP");
+        /// </code>
+        /// Providing a name:
+        /// <code>
+        /// IAccountStoreMapping accountStoreMapping = application.AddAccountStore("Foo Name");
+        /// </code>
+        /// </example>
         public static IAccountStoreMapping AddAccountStore(this IApplication application, string hrefOrName)
             => (application as IApplicationSync).AddAccountStore(hrefOrName);
 
@@ -340,6 +356,12 @@ namespace Stormpath.SDK.Sync
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <c>null</c> if there is no resource matching the query.</returns>
         /// <exception cref="Error.ResourceException">The found resource already exists as an account store in the application.</exception>
         /// <exception cref="ArgumentException">The query matches more than one resource in the current Tenant.</exception>
+        /// <example>
+        /// Adding a directory by partial name:
+        /// <code>
+        /// IAccountStoreMapping mapping = application.AddAccountStore<IDirectory>(dirs => dirs.Where(d => d.Name.StartsWith(partialName)));
+        /// </code>
+        /// </example>
         public static IAccountStoreMapping AddAccountStore<T>(this IApplication application, Func<IQueryable<T>, IQueryable<T>> query)
             where T : IAccountStore
             => (application as IApplicationSync).AddAccountStore(query);

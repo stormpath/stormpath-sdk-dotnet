@@ -343,6 +343,12 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>.</returns>
         /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application.</exception>
+        /// <example>
+        /// <code>
+        /// IAccountStore directoryOrGroup = GetDirectoryOrGroupAsync();
+        /// IAccountStoreMapping mapping = await application.AddAccountStore(directoryOrGroup);
+        /// </code>
+        /// </example>
         Task<IAccountStoreMapping> AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -367,6 +373,16 @@ namespace Stormpath.SDK.Application
         /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>.</returns>
         /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application.</exception>
         /// <exception cref="ArgumentException">The given <paramref name="hrefOrName"/> matches more than one resource in the current Tenant.</exception>
+        /// <example>
+        /// Providing an href:
+        /// <code>
+        /// IAccountStoreMapping accountStoreMapping = await application.AddAccountStoreAsync("https://api.stormpath.com/v1/groups/2rwq022yMt4u2DwKLfzriP");
+        /// </code>
+        /// Providing a name:
+        /// <code>
+        /// IAccountStoreMapping accountStoreMapping = await application.AddAccountStoreAsync("Foo Name");
+        /// </code>
+        /// </example>
         Task<IAccountStoreMapping> AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -379,6 +395,12 @@ namespace Stormpath.SDK.Application
         /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>, or <c>null</c> if there is no resource matching the query.</returns>
         /// <exception cref="Error.ResourceException">The found resource already exists as an account store in the application.</exception>
         /// <exception cref="ArgumentException">The query matches more than one resource in the current Tenant.</exception>
+        /// <example>
+        /// Adding a directory by partial name:
+        /// <code>
+        /// IAccountStoreMapping mapping = await application.AddAccountStoreAsync<IDirectory>(dirs => dirs.Where(d => d.Name.StartsWith(partialName)));
+        /// </code>
+        /// </example>
         Task<IAccountStoreMapping> AddAccountStoreAsync<T>(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query, CancellationToken cancellationToken = default(CancellationToken))
             where T : IAccountStore;
 

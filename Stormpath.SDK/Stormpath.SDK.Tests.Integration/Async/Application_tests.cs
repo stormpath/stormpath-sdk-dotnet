@@ -658,7 +658,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var directoryName = (await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref)).Name;
             var mapping = await createdApplication
-                .AddAccountStoreAsync<IDirectory>(dirs => dirs.Where(d => d.Name == directoryName));
+                .AddAccountStoreAsync<IDirectory>(dirs => dirs.Where(d => d.Name.EndsWith(directoryName.Substring(1))));
 
             (await mapping.GetAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
             (await mapping.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
@@ -687,7 +687,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var groupName = (await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref)).Name;
             var mapping = await createdApplication
-                .AddAccountStoreAsync<IGroup>(groups => groups.Where(g => g.Name == groupName));
+                .AddAccountStoreAsync<IGroup>(groups => groups.Where(g => g.Name.EndsWith(groupName.Substring(1))));
 
             (await mapping.GetAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryGroupHref);
             (await mapping.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
