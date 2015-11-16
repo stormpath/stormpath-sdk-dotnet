@@ -217,6 +217,18 @@ namespace Stormpath.SDK.Sync
         /// <param name="application">The application.</param>
         /// <returns>The default <see cref="IAccountStore"/>,
         /// or <c>null</c> if no default <see cref="IAccountStore"/> has been designated.</returns>
+        /// <example>
+        /// Getting and using the default account store:
+        /// <code>
+        /// var accountStore = application.GetDefaultAccountStore();
+        /// var accountStoreAsDirectory = accountStore as IDirectory;
+        /// var accountStoreAsGroup = accountStore as IGroup;
+        /// if (accountStoreAsDirectory != null)
+        ///     // use as directory
+        /// else if (accountStoreAsGroup != null)
+        ///     // use as group
+        /// </code>
+        /// </example>
         public static IAccountStore GetDefaultAccountStore(this IApplication application)
             => (application as IApplicationSync).GetDefaultAccountStore();
 
@@ -246,6 +258,18 @@ namespace Stormpath.SDK.Sync
         /// <param name="application">The application.</param>
         /// <returns>The <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
         /// if no account store has been designated.</returns>
+        /// <example>
+        /// Getting and using the default group store:
+        /// <code>
+        /// var groupStore = application.GetDefaultGroupStore();
+        /// var groupStoreAsDirectory = groupStore as IDirectory;
+        /// var groupStoreAsGroup = groupStore as IGroup;
+        /// if (groupStoreAsDirectory != null)
+        ///     // use as directory
+        /// else if (groupStoreAsGroup != null)
+        ///     // use as group
+        /// </code>
+        /// </example>
         public static IAccountStore GetDefaultGroupStore(this IApplication application)
             => (application as IApplicationSync).GetDefaultGroupStore();
 

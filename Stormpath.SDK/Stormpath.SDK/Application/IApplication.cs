@@ -261,6 +261,18 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the default <see cref="IAccountStore"/>,
         /// or <c>null</c> if no default <see cref="IAccountStore"/> has been designated.</returns>
+        /// <example>
+        /// Getting and using the default account store:
+        /// <code>
+        /// var accountStore = await application.GetDefaultAccountStoreAsync();
+        /// var accountStoreAsDirectory = accountStore as IDirectory;
+        /// var accountStoreAsGroup = accountStore as IGroup;
+        /// if (accountStoreAsDirectory != null)
+        ///     // use as directory
+        /// else if (accountStoreAsGroup != null)
+        ///     // use as group
+        /// </code>
+        /// </example>
         Task<IAccountStore> GetDefaultAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -281,7 +293,7 @@ namespace Stormpath.SDK.Application
         /// Gets the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
         /// if no account store has been designated.
         /// <para>
-        /// Stormpath's current REST API requires this to be a Directory.
+        /// Stormpath's current REST API requires this to be a <see cref="Directory.IDirectory"/>.
         /// However, this could be a Group in the future, so do not assume it is always a
         /// Directory if you want your code to be function correctly if/when this support is added.
         /// </para>
@@ -289,6 +301,18 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
         /// if no account store has been designated.</returns>
+        /// <example>
+        /// Getting and using the default group store:
+        /// <code>
+        /// var groupStore = await application.GetDefaultGroupStoreAsync();
+        /// var groupStoreAsDirectory = groupStore as IDirectory;
+        /// var groupStoreAsGroup = groupStore as IGroup;
+        /// if (groupStoreAsDirectory != null)
+        ///     // use as directory
+        /// else if (groupStoreAsGroup != null)
+        ///     // use as group
+        /// </code>
+        /// </example>
         Task<IAccountStore> GetDefaultGroupStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
