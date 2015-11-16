@@ -97,7 +97,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var defaultAccountStore = app.GetDefaultAccountStore();
-            defaultAccountStore.ShouldBeAssignableTo<IDirectory>();
+            var asDirectory = defaultAccountStore as IDirectory;
+            asDirectory.ShouldNotBeNull();
         }
 
         [Theory]
@@ -107,8 +108,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var defaultAccountStore = app.GetDefaultGroupStore();
-            defaultAccountStore.ShouldBeAssignableTo<IDirectory>();
+            var defaultGroupStore = app.GetDefaultGroupStore();
+            var asDirectory = defaultGroupStore as IDirectory;
+            asDirectory.ShouldNotBeNull();
         }
 
         [Theory]

@@ -97,7 +97,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var defaultAccountStore = await app.GetDefaultAccountStoreAsync();
-            defaultAccountStore.ShouldBeAssignableTo<IDirectory>();
+            var asDirectory = defaultAccountStore as IDirectory;
+            asDirectory.ShouldNotBeNull();
         }
 
         [Theory]
@@ -107,8 +108,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var client = clientBuilder.GetClient();
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var defaultAccountStore = await app.GetDefaultGroupStoreAsync();
-            defaultAccountStore.ShouldBeAssignableTo<IDirectory>();
+            var defaultGroupStore = await app.GetDefaultGroupStoreAsync();
+            var asDirectory = defaultGroupStore as IDirectory;
+            asDirectory.ShouldNotBeNull();
         }
 
         [Theory]
