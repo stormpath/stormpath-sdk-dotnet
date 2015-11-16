@@ -47,8 +47,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             if (resourceType == null)
                 throw new ArgumentNullException(nameof(resourceType));
 
-            var cache = await this.GetCacheAsync(resourceType, cancellationToken)
-                .ConfigureAwait(false);
+            var cache = this.GetAsyncCache(resourceType);
             return await cache.GetAsync(cacheKey, cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -60,7 +59,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             if (resourceType == null)
                 throw new ArgumentNullException(nameof(resourceType));
 
-            var cache = this.GetCache(resourceType);
+            var cache = this.GetSyncCache(resourceType);
             return cache.Get(cacheKey);
         }
 
@@ -74,10 +73,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             return href;
         }
 
-        protected Task<IAsynchronousCache<string, IDictionary<string, object>>> GetCacheAsync(Type resourceType, CancellationToken cancellationToken)
-            => this.cacheResolver.GetCacheAsync(resourceType, cancellationToken);
+        protected IAsynchronousCache GetAsyncCache(Type resourceType)
+            => this.cacheResolver.GetAsyncCache(resourceType);
 
-        protected ISynchronousCache<string, IDictionary<string, object>> GetCache(Type resourceType)
-            => this.cacheResolver.GetCache(resourceType);
+        protected ISynchronousCache GetSyncCache(Type resourceType)
+            => this.cacheResolver.GetSyncCache(resourceType);
     }
 }

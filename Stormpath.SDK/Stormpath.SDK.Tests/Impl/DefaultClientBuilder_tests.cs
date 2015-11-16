@@ -39,8 +39,8 @@ namespace Stormpath.SDK.Tests.Impl
             // Providing these means the tests won't try to do a dynamic assembly lookup
             // which tends to screw up parallel-running tests
             this.builder
-                .UseHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
-                .UseJsonSerializer(new JsonNetSerializer());
+                .SetHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
+                .SetSerializer(new JsonNetSerializer());
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             var client = this.builder
                 .SetApiKey(FakeApiKey.Create(valid: true))
-                .UseHttpClient(fakeHttpClient)
+                .SetHttpClient(fakeHttpClient)
                 .Build();
 
             (client as DefaultClient).HttpClient.ShouldBe(fakeHttpClient);
@@ -109,7 +109,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             var client = this.builder
                 .SetApiKey(FakeApiKey.Create(valid: true))
-                .UseJsonSerializer(fakeSerializer)
+                .SetSerializer(fakeSerializer)
                 .Build();
 
             (client as DefaultClient).HttpClient.ShouldBeOfType<RestSharpClient>();

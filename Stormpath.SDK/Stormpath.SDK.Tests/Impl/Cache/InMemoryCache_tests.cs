@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,12 +28,15 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 {
     public class InMemoryCache_tests : IDisposable
     {
+        private static readonly Dictionary<string, object> DummyItem
+            = new Dictionary<string, object>() { ["bar"] = "baz" };
+
         private readonly IDisposable dummyCache;
         private bool isDisposed = false;
 
         public InMemoryCache_tests()
         {
-            this.dummyCache = new InMemoryCache<string, string>("dummy");
+            this.dummyCache = new InMemoryCache("dummy");
         }
 
         protected virtual void Dispose(bool disposing)
@@ -63,11 +67,11 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public void Empty_cache_is_empty()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
+                var cache = new InMemoryCache("fooCache");
 
-                (cache as ISynchronousCache<string, string>).Name.ShouldBe("fooCache");
-                (cache as ISynchronousCache<string, string>).TimeToLive.ShouldBeNull();
-                (cache as ISynchronousCache<string, string>).TimeToIdle.ShouldBeNull();
+                (cache as ISynchronousCache).Name.ShouldBe("fooCache");
+                (cache as ISynchronousCache).TimeToLive.ShouldBeNull();
+                (cache as ISynchronousCache).TimeToIdle.ShouldBeNull();
                 cache.TotalSize.ShouldBe(0);
                 cache.AccessCount.ShouldBe(0);
                 cache.HitCount.ShouldBe(0);
@@ -78,13 +82,13 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public void Cache_access_hit()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
-                var iface = cache as ISynchronousCache<string, string>;
+                var cache = new InMemoryCache("fooCache");
+                var iface = cache as ISynchronousCache;
 
-                iface.Put("foo", "bar");
+                iface.Put("foo", DummyItem);
                 cache.TotalSize.ShouldBe(1);
 
-                iface.Get("foo").ShouldBe("bar");
+                iface.Get("foo").ShouldBe(DummyItem);
                 cache.AccessCount.ShouldBe(1);
                 cache.HitCount.ShouldBe(1);
                 cache.MissCount.ShouldBe(0);
@@ -94,10 +98,10 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public void Cache_access_miss()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
-                var iface = cache as ISynchronousCache<string, string>;
+                var cache = new InMemoryCache("fooCache");
+                var iface = cache as ISynchronousCache;
 
-                iface.Put("foo", "bar");
+                iface.Put("foo", DummyItem);
 
                 iface.Get("baz").ShouldBeNull();
                 cache.AccessCount.ShouldBe(1);
@@ -109,10 +113,10 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public void Removing_item()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
-                var iface = cache as ISynchronousCache<string, string>;
+                var cache = new InMemoryCache("fooCache");
+                var iface = cache as ISynchronousCache;
 
-                iface.Put("foo", "bar");
+                iface.Put("foo", DummyItem);
                 iface.Remove("foo");
 
                 iface.Get("bar").ShouldBeNull();
@@ -122,15 +126,15 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public void Multiple_cache_reads_and_writes_from_single_thread()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
-                var iface = cache as ISynchronousCache<string, string>;
-                iface.Put("foo", "bar");
+                var cache = new InMemoryCache("fooCache");
+                var iface = cache as ISynchronousCache;
+                iface.Put("foo", DummyItem);
 
                 for (var i = 0; i < 10; i++)
                 {
-                    iface.Put(i.ToString(), $"loop{i}");
-                    iface.Get(i.ToString()).ShouldBe($"loop{i}");
-                    iface.Get("foo").ShouldBe("bar");
+                    iface.Put(i.ToString(), new Dictionary<string, object>() { [$"loop{i}"] = i });
+                    iface.Get(i.ToString()).ShouldContainKeyAndValue($"loop{i}", i);
+                    iface.Get("foo").ShouldBe(DummyItem);
                     iface.Get("baz").ShouldBeNull();
                 }
 
@@ -144,15 +148,15 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public void Accessing_cache_from_multiple_threads()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
-                var iface = cache as ISynchronousCache<string, string>;
-                iface.Put("foo", "bar");
+                var cache = new InMemoryCache("fooCache");
+                var iface = cache as ISynchronousCache;
+                iface.Put("foo", DummyItem);
 
                 Parallel.For(0, 10, i =>
                 {
-                    iface.Put(i.ToString(), $"loop{i}");
-                    iface.Get(i.ToString()).ShouldBe($"loop{i}");
-                    iface.Get("foo").ShouldBe("bar");
+                    iface.Put(i.ToString(), new Dictionary<string, object>() { [$"loop{i}"] = i });
+                    iface.Get(i.ToString()).ShouldContainKeyAndValue($"loop{i}", i);
+                    iface.Get("foo").ShouldBe(DummyItem);
                     iface.Get("baz").ShouldBeNull();
                 });
 
@@ -166,16 +170,16 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public void Cache_access_after_TTL_expiration()
             {
-                var cache = new InMemoryCache<string, string>(
+                var cache = new InMemoryCache(
                     "fooCache",
                     timeToLive: TimeSpan.FromMilliseconds(500),
                     timeToIdle: null);
-                var iface = cache as ISynchronousCache<string, string>;
+                var iface = cache as ISynchronousCache;
 
-                iface.Put("foo", "bar");
+                iface.Put("foo", DummyItem);
 
                 Thread.Sleep(250);
-                iface.Get("foo").ShouldBe("bar");
+                iface.Get("foo").ShouldBe(DummyItem);
 
                 Thread.Sleep(250);
                 iface.Get("foo").ShouldBeNull();
@@ -184,19 +188,19 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public void Cache_access_after_TTI_expiration()
             {
-                var cache = new InMemoryCache<string, string>(
+                var cache = new InMemoryCache(
                     "fooCache",
                     timeToLive: null,
                     timeToIdle: TimeSpan.FromMilliseconds(2000));
-                var iface = cache as ISynchronousCache<string, string>;
+                var iface = cache as ISynchronousCache;
 
-                iface.Put("foo", "bar");
-
-                Thread.Sleep(1000);
-                iface.Get("foo").ShouldBe("bar");
+                iface.Put("foo", DummyItem);
 
                 Thread.Sleep(1000);
-                iface.Get("foo").ShouldBe("bar");
+                iface.Get("foo").ShouldBe(DummyItem);
+
+                Thread.Sleep(1000);
+                iface.Get("foo").ShouldBe(DummyItem);
 
                 Thread.Sleep(2000);
                 iface.Get("foo").ShouldBeNull();
@@ -205,22 +209,22 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public void Cache_access_after_TTL_but_not_TTI_expiration()
             {
-                var cache = new InMemoryCache<string, string>(
+                var cache = new InMemoryCache(
                     "fooCache",
                     timeToLive: TimeSpan.FromMilliseconds(3500),
                     timeToIdle: TimeSpan.FromMilliseconds(2000));
-                var iface = cache as ISynchronousCache<string, string>;
+                var iface = cache as ISynchronousCache;
 
-                iface.Put("foo", "bar");
-
-                Thread.Sleep(1000);
-                iface.Get("foo").ShouldBe("bar");
+                iface.Put("foo", DummyItem);
 
                 Thread.Sleep(1000);
-                iface.Get("foo").ShouldBe("bar");
+                iface.Get("foo").ShouldBe(DummyItem);
 
                 Thread.Sleep(1000);
-                iface.Get("foo").ShouldBe("bar");
+                iface.Get("foo").ShouldBe(DummyItem);
+
+                Thread.Sleep(1000);
+                iface.Get("foo").ShouldBe(DummyItem);
 
                 Thread.Sleep(1000);
                 iface.Get("foo").ShouldBeNull();
@@ -229,21 +233,21 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public void Disposing_clears_cache()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
-                var iface = cache as ISynchronousCache<string, string>;
+                var cache = new InMemoryCache("fooCache");
+                var iface = cache as ISynchronousCache;
 
-                iface.Put("foo", "bar");
-                iface.Get("foo").ShouldBe("bar");
+                iface.Put("foo", DummyItem);
+                iface.Get("foo").ShouldBe(DummyItem);
 
                 iface.Dispose();
 
                 Should.Throw<Exception>(() =>
                 {
-                    iface.Get("foo").ShouldBe("bar");
+                    iface.Get("foo").ShouldBe(DummyItem);
                 });
 
-                cache = new InMemoryCache<string, string>("fooCache");
-                iface = cache as ISynchronousCache<string, string>;
+                cache = new InMemoryCache("fooCache");
+                iface = cache as ISynchronousCache;
                 iface.Get("foo").ShouldBeNull();
             }
         }
@@ -253,11 +257,11 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public void Empty_cache_is_empty()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
+                var cache = new InMemoryCache("fooCache");
 
-                (cache as IAsynchronousCache<string, string>).Name.ShouldBe("fooCache");
-                (cache as IAsynchronousCache<string, string>).TimeToLive.ShouldBeNull();
-                (cache as IAsynchronousCache<string, string>).TimeToIdle.ShouldBeNull();
+                (cache as IAsynchronousCache).Name.ShouldBe("fooCache");
+                (cache as IAsynchronousCache).TimeToLive.ShouldBeNull();
+                (cache as IAsynchronousCache).TimeToIdle.ShouldBeNull();
                 cache.TotalSize.ShouldBe(0);
                 cache.AccessCount.ShouldBe(0);
                 cache.HitCount.ShouldBe(0);
@@ -268,13 +272,13 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public async Task Cache_access_hit()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
-                var iface = cache as IAsynchronousCache<string, string>;
+                var cache = new InMemoryCache("fooCache");
+                var iface = cache as IAsynchronousCache;
 
-                await iface.PutAsync("foo", "bar");
+                await iface.PutAsync("foo", DummyItem);
                 cache.TotalSize.ShouldBe(1);
 
-                (await iface.GetAsync("foo")).ShouldBe("bar");
+                (await iface.GetAsync("foo")).ShouldBe(DummyItem);
                 cache.AccessCount.ShouldBe(1);
                 cache.HitCount.ShouldBe(1);
                 cache.MissCount.ShouldBe(0);
@@ -284,10 +288,10 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public async Task Cache_access_miss()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
-                var iface = cache as IAsynchronousCache<string, string>;
+                var cache = new InMemoryCache("fooCache");
+                var iface = cache as IAsynchronousCache;
 
-                await iface.PutAsync("foo", "bar");
+                await iface.PutAsync("foo", DummyItem);
 
                 (await iface.GetAsync("baz")).ShouldBeNull();
                 cache.AccessCount.ShouldBe(1);
@@ -299,10 +303,10 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public async Task Removing_item()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
-                var iface = cache as IAsynchronousCache<string, string>;
+                var cache = new InMemoryCache("fooCache");
+                var iface = cache as IAsynchronousCache;
 
-                await iface.PutAsync("foo", "bar");
+                await iface.PutAsync("foo", DummyItem);
                 await iface.RemoveAsync("foo");
 
                 (await iface.GetAsync("bar")).ShouldBeNull();
@@ -312,15 +316,15 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public async Task Multiple_cache_reads_and_writes_from_single_thread()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
-                var iface = cache as IAsynchronousCache<string, string>;
-                await iface.PutAsync("foo", "bar");
+                var cache = new InMemoryCache("fooCache");
+                var iface = cache as IAsynchronousCache;
+                await iface.PutAsync("foo", DummyItem);
 
                 for (var i = 0; i < 10; i++)
                 {
-                    await iface.PutAsync(i.ToString(), $"loop{i}");
-                    (await iface.GetAsync(i.ToString())).ShouldBe($"loop{i}");
-                    (await iface.GetAsync("foo")).ShouldBe("bar");
+                    await iface.PutAsync(i.ToString(), new Dictionary<string, object>() { [$"loop{i}"] = i });
+                    (await iface.GetAsync(i.ToString())).ShouldContainKeyAndValue($"loop{i}", i);
+                    (await iface.GetAsync("foo")).ShouldBe(DummyItem);
                     (await iface.GetAsync("baz")).ShouldBeNull();
                 }
 
@@ -334,16 +338,16 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public async Task Accessing_cache_from_multiple_threads()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
-                var iface = cache as IAsynchronousCache<string, string>;
-                await iface.PutAsync("foo", "bar");
+                var cache = new InMemoryCache("fooCache");
+                var iface = cache as IAsynchronousCache;
+                await iface.PutAsync("foo", DummyItem);
 
                 var tasks = from i in Enumerable.Range(0, 10)
                             select Task.Run(async () =>
                             {
-                                await iface.PutAsync(i.ToString(), $"loop{i}");
-                                (await iface.GetAsync(i.ToString())).ShouldBe($"loop{i}");
-                                (await iface.GetAsync("foo")).ShouldBe("bar");
+                                await iface.PutAsync(i.ToString(), new Dictionary<string, object>() { [$"loop{i}"] = i });
+                                (await iface.GetAsync(i.ToString())).ShouldContainKeyAndValue($"loop{i}", i);
+                                (await iface.GetAsync("foo")).ShouldBe(DummyItem);
                                 (await iface.GetAsync("baz")).ShouldBeNull();
                             });
                 await Task.WhenAll(tasks);
@@ -358,16 +362,16 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public async Task Cache_access_after_TTL_expiration()
             {
-                var cache = new InMemoryCache<string, string>(
+                var cache = new InMemoryCache(
                     "fooCache",
                     timeToLive: TimeSpan.FromMilliseconds(500),
                     timeToIdle: null);
-                var iface = cache as IAsynchronousCache<string, string>;
+                var iface = cache as IAsynchronousCache;
 
-                await iface.PutAsync("foo", "bar");
+                await iface.PutAsync("foo", DummyItem);
 
                 Thread.Sleep(250);
-                (await iface.GetAsync("foo")).ShouldBe("bar");
+                (await iface.GetAsync("foo")).ShouldBe(DummyItem);
 
                 Thread.Sleep(250);
                 (await iface.GetAsync("foo")).ShouldBeNull();
@@ -376,19 +380,19 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public async Task Cache_access_after_TTI_expiration()
             {
-                var cache = new InMemoryCache<string, string>(
+                var cache = new InMemoryCache(
                     "fooCache",
                     timeToLive: null,
                     timeToIdle: TimeSpan.FromMilliseconds(2000));
-                var iface = cache as IAsynchronousCache<string, string>;
+                var iface = cache as IAsynchronousCache;
 
-                await iface.PutAsync("foo", "bar");
-
-                Thread.Sleep(1000);
-                (await iface.GetAsync("foo")).ShouldBe("bar");
+                await iface.PutAsync("foo", DummyItem);
 
                 Thread.Sleep(1000);
-                (await iface.GetAsync("foo")).ShouldBe("bar");
+                (await iface.GetAsync("foo")).ShouldBe(DummyItem);
+
+                Thread.Sleep(1000);
+                (await iface.GetAsync("foo")).ShouldBe(DummyItem);
 
                 Thread.Sleep(2000);
                 (await iface.GetAsync("foo")).ShouldBeNull();
@@ -397,22 +401,22 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public async Task Cache_access_after_TTL_but_not_TTI_expiration()
             {
-                var cache = new InMemoryCache<string, string>(
+                var cache = new InMemoryCache(
                     "fooCache",
                     timeToLive: TimeSpan.FromMilliseconds(3500),
                     timeToIdle: TimeSpan.FromMilliseconds(2000));
-                var iface = cache as IAsynchronousCache<string, string>;
+                var iface = cache as IAsynchronousCache;
 
-                await iface.PutAsync("foo", "bar");
-
-                Thread.Sleep(1000);
-                (await iface.GetAsync("foo")).ShouldBe("bar");
+                await iface.PutAsync("foo", DummyItem);
 
                 Thread.Sleep(1000);
-                (await iface.GetAsync("foo")).ShouldBe("bar");
+                (await iface.GetAsync("foo")).ShouldBe(DummyItem);
 
                 Thread.Sleep(1000);
-                (await iface.GetAsync("foo")).ShouldBe("bar");
+                (await iface.GetAsync("foo")).ShouldBe(DummyItem);
+
+                Thread.Sleep(1000);
+                (await iface.GetAsync("foo")).ShouldBe(DummyItem);
 
                 Thread.Sleep(1000);
                 (await iface.GetAsync("foo")).ShouldBeNull();
@@ -421,21 +425,21 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             [Fact]
             public async Task Disposing_clears_cache()
             {
-                var cache = new InMemoryCache<string, string>("fooCache");
-                var iface = cache as IAsynchronousCache<string, string>;
+                var cache = new InMemoryCache("fooCache");
+                var iface = cache as IAsynchronousCache;
 
-                await iface.PutAsync("foo", "bar");
-                (await iface.GetAsync("foo")).ShouldBe("bar");
+                await iface.PutAsync("foo", DummyItem);
+                (await iface.GetAsync("foo")).ShouldBe(DummyItem);
 
                 iface.Dispose();
 
                 Should.Throw<Exception>(async () =>
                 {
-                    (await iface.GetAsync("foo")).ShouldBe("bar");
+                    (await iface.GetAsync("foo")).ShouldBe(DummyItem);
                 });
 
-                cache = new InMemoryCache<string, string>("fooCache");
-                iface = cache as IAsynchronousCache<string, string>;
+                cache = new InMemoryCache("fooCache");
+                iface = cache as IAsynchronousCache;
                 (await iface.GetAsync("foo")).ShouldBeNull();
             }
         }

@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Tests.Impl
             var instance = Substitute.For<IJsonSerializer>();
 
             IJsonSerializerBuilder builder = new DefaultJsonSerializerBuilder(this.GetFailingLoader());
-            builder.UseSerializer(instance);
+            builder.SetSerializer(instance);
 
             builder.Build().ShouldBe(instance);
         }

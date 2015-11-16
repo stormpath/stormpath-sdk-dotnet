@@ -15,9 +15,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
 
 namespace Stormpath.SDK.Impl.Cache
@@ -28,8 +25,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         bool IsAsynchronousSupported { get; }
 
-        ISynchronousCache<string, IDictionary<string, object>> GetCache(Type resourceType);
+        ISynchronousCache GetSyncCache(Type resourceType);
 
-        Task<IAsynchronousCache<string, IDictionary<string, object>>> GetCacheAsync(Type resourceType, CancellationToken cancellationToken);
+        IAsynchronousCache GetAsyncCache(Type resourceType);
     }
 }

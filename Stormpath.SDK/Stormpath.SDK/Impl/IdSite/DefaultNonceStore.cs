@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Impl.IdSite
             if (string.IsNullOrEmpty(nonce))
                 throw new ArgumentNullException(nameof(nonce));
 
-            var cache = this.cacheResolver.GetCache(typeof(INonce));
+            var cache = this.cacheResolver.GetSyncCache(typeof(INonce));
             var value = cache.Get(nonce);
 
             return value != null;
@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Impl.IdSite
             if (string.IsNullOrEmpty(nonce))
                 throw new ArgumentNullException(nameof(nonce));
 
-            var cache = await this.cacheResolver.GetCacheAsync(typeof(INonce), cancellationToken).ConfigureAwait(false);
+            var cache = this.cacheResolver.GetAsyncCache(typeof(INonce));
             var value = await cache.GetAsync(nonce).ConfigureAwait(false);
 
             return value != null;
@@ -65,7 +65,7 @@ namespace Stormpath.SDK.Impl.IdSite
             if (string.IsNullOrEmpty(nonce))
                 throw new ArgumentNullException(nameof(nonce));
 
-            var cache = this.cacheResolver.GetCache(typeof(INonce));
+            var cache = this.cacheResolver.GetSyncCache(typeof(INonce));
 
             var nonceObject = new DefaultNonce(nonce);
             cache.Put(nonce, nonceObject.GetProperties());
@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Impl.IdSite
             if (string.IsNullOrEmpty(nonce))
                 throw new ArgumentNullException(nameof(nonce));
 
-            var cache = await this.cacheResolver.GetCacheAsync(typeof(INonce), cancellationToken).ConfigureAwait(false);
+            var cache = this.cacheResolver.GetAsyncCache(typeof(INonce));
 
             var nonceObject = new DefaultNonce(nonce);
             await cache.PutAsync(nonce, nonceObject.GetProperties(), cancellationToken).ConfigureAwait(false);

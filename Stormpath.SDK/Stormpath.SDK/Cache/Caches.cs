@@ -20,7 +20,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Cache
 {
     /// <summary>
-    /// Static entry point for working with <see cref="ICache{K, V}"/> objects.
+    /// Static entry point for working with <see cref="ICache"/> objects.
     /// </summary>
     public static class Caches
     {

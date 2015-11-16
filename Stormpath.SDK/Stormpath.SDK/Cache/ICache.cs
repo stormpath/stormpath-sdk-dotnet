@@ -21,11 +21,9 @@ namespace Stormpath.SDK.Cache
     /// <summary>
     /// A Cache efficiently stores temporary objects to improve an application's performance.
     /// </summary>
-    /// <seealso cref="IAsynchronousCache{K, V}"/>
-    /// <seealso cref="ISynchronousCache{K, V}"/>
-    /// <typeparam name="K">The key type stored in the cache.</typeparam>
-    /// <typeparam name="V">The value type stored in the cache.</typeparam>
-    public interface ICache<K, V> : IDisposable
+    /// <seealso cref="IAsynchronousCache"/>
+    /// <seealso cref="ISynchronousCache"/>
+    public interface ICache : IDisposable
     {
         string Name { get; }
 

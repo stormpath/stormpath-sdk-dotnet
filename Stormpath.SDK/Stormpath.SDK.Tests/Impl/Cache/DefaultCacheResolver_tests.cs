@@ -15,9 +15,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
@@ -42,7 +39,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             bool didErrorCorrectly = false;
             try
             {
-                cacheResolver.GetCache(typeof(IAccount));
+                cacheResolver.GetSyncCache(typeof(IAccount));
             }
             catch (ApplicationException)
             {
@@ -53,7 +50,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         }
 
         [Fact]
-        public async Task Throws_when_getting_unsupported_asynchronous_cache()
+        public void Throws_when_getting_unsupported_asynchronous_cache()
         {
             var fakeCacheManager = Substitute.For<ICacheProvider>();
             fakeCacheManager
@@ -65,7 +62,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             bool didErrorCorrectly = false;
             try
             {
-                await cacheResolver.GetCacheAsync(typeof(IAccount), CancellationToken.None);
+                cacheResolver.GetAsyncCache(typeof(IAccount));
             }
             catch (ApplicationException)
             {
@@ -83,36 +80,33 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .IsSynchronousSupported
                 .Returns(true);
             fakeCacheManager
-                .GetCache<string, IDictionary<string, object>>(Arg.Any<string>())
-                .Returns(Substitute.For<ISynchronousCache<string, IDictionary<string, object>>>());
+                .GetSyncCache(Arg.Any<string>())
+                .Returns(Substitute.For<ISynchronousCache>());
 
             ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager);
 
-            var cache = cacheResolver.GetCache(typeof(IAccount));
-            cache.ShouldBeAssignableTo<ISynchronousCache<string, IDictionary<string, object>>>();
+            var cache = cacheResolver.GetSyncCache(typeof(IAccount));
+            cache.ShouldBeAssignableTo<ISynchronousCache>();
         }
 
         [Fact]
-        public async Task Getting_asynchronous_cache()
+        public void Getting_asynchronous_cache()
         {
             var fakeCacheManager = Substitute.For<IAsynchronousCacheProvider>();
             fakeCacheManager
                 .IsAsynchronousSupported
                 .Returns(true);
             fakeCacheManager
-                .GetCacheAsync<string, IDictionary<string, object>>(
-                    Arg.Any<string>(),
-                    Arg.Any<CancellationToken>())
-                .Returns(async _ =>
+                .GetAsyncCache(Arg.Any<string>())
+                .Returns(_ =>
                 {
-                    await Task.Yield();
-                    return Substitute.For<IAsynchronousCache<string, IDictionary<string, object>>>();
+                    return Substitute.For<IAsynchronousCache>();
                 });
 
             ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager);
 
-            var cache = await cacheResolver.GetCacheAsync(typeof(IAccount), CancellationToken.None);
-            cache.ShouldBeAssignableTo<IAsynchronousCache<string, IDictionary<string, object>>>();
+            var cache = cacheResolver.GetAsyncCache(typeof(IAccount));
+            cache.ShouldBeAssignableTo<IAsynchronousCache>();
         }
     }
 }

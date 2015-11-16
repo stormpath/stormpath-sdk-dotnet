@@ -67,9 +67,10 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
-        IHttpClientBuilder IHttpClientBuilder.SetLogger(ILogger logger)
+        IHttpClientBuilder ILoggerConsumer<IHttpClientBuilder>.SetLogger(ILogger logger)
         {
-            this.logger = logger;
+            if (logger != null)
+                this.logger = logger;
             return this;
         }
 

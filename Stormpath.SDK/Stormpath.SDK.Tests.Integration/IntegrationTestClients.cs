@@ -31,8 +31,8 @@ namespace Stormpath.SDK.Tests.Integration
         {
             return Clients.Builder()
                 .SetApiKey(GetApiKey())
-                .UseHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
-                .UseJsonSerializer(new JsonNetSerializer())
+                .SetHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
+                .SetSerializer(new JsonNetSerializer())
                 .SetAuthenticationScheme(AuthenticationScheme.Basic)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(Caches.NewDisabledCacheProvider())
@@ -43,8 +43,8 @@ namespace Stormpath.SDK.Tests.Integration
         {
             return Clients.Builder()
                 .SetApiKey(GetApiKey())
-                .UseHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
-                .UseJsonSerializer(new JsonNetSerializer())
+                .SetHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
+                .SetSerializer(new JsonNetSerializer())
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(Caches.NewDisabledCacheProvider())
@@ -55,8 +55,8 @@ namespace Stormpath.SDK.Tests.Integration
         {
             return Clients.Builder()
                 .SetApiKey(GetApiKey())
-                .UseHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
-                .UseJsonSerializer(new JsonNetSerializer())
+                .SetHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
+                .SetSerializer(new JsonNetSerializer())
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(Caches.NewInMemoryCacheProvider()
