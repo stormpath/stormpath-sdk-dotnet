@@ -275,6 +275,19 @@ namespace Stormpath.SDK.Sync
         /// <param name="mapping">The new <see cref="IAccountStoreMapping"/> resource to add to the Application's AccountStoreMapping list.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
         /// <exception cref="Error.ResourceException">The AccountStoreMapping's ListIndex is negative, or the mapping could not be added to the Application.</exception>
+        /// <example>
+        /// Setting a new <see cref="IAccountStoreMapping"/>'s <see cref="IAccountStoreMapping.ListIndex"/> to <c>500</c> and then adding the mapping to
+        /// an application with an existing 3-item list will automatically save the <see cref="IAccountStoreMapping"/>
+        /// at the end of the list and set its <see cref="IAccountStoreMapping.ListIndex"/> value to <c>3</c> (items at index 0, 1, 2 were the original items,
+        /// the new fourth item will be at index 3).
+        /// <code>
+        /// IAccountStore directoryOrGroup = GetDirectoryOrGroup();
+        /// IAccountStoreMapping mapping = client.Instantiate<IAccountStoreMapping>();
+        /// mapping.SetAccountStore(directoryOrGroup);
+        /// mapping.SetListIndex(500);
+        /// mapping = application.CreateAccountStoreMapping(mapping);
+        /// </code>
+        /// </example>
         public static IAccountStoreMapping CreateAccountStoreMapping(this IApplication application, IAccountStoreMapping mapping)
             => (application as IApplicationSync).CreateAccountStoreMapping(mapping);
 

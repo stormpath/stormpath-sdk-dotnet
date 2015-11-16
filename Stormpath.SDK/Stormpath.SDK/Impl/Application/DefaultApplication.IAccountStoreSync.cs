@@ -114,6 +114,8 @@ namespace Stormpath.SDK.Impl.Application
         IAccountStoreMapping IApplicationSync.CreateAccountStoreMapping(IAccountStoreMapping mapping)
         {
             var href = "/accountStoreMappings";
+
+            mapping.SetApplication(this);
             return this.GetInternalSyncDataStore().Create(href, mapping);
         }
 

@@ -121,6 +121,8 @@ namespace Stormpath.SDK.Impl.Application
         Task<IAccountStoreMapping> IApplication.CreateAccountStoreMappingAsync(IAccountStoreMapping mapping, CancellationToken cancellationToken)
         {
             var href = "/accountStoreMappings";
+
+            mapping.SetApplication(this);
             return this.GetInternalAsyncDataStore().CreateAsync(href, mapping, cancellationToken);
         }
 

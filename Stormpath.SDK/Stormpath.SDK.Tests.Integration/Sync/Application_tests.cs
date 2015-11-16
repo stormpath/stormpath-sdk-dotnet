@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using Shouldly;
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
@@ -245,6 +246,38 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var resetPasswordResponse = application.ResetPassword(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
             resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Creating_account_store_mapping(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Directly Test Application (Sync)",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            IAccountStore directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
+
+            var mapping = client.Instantiate<IAccountStoreMapping>();
+            mapping.SetAccountStore(directory);
+            mapping.SetListIndex(500);
+            createdApplication.CreateAccountStoreMapping(mapping);
+
+            mapping.GetAccountStore().Href.ShouldBe(directory.Href);
+            mapping.GetApplication().Href.ShouldBe(createdApplication.Href);
+
+            mapping.IsDefaultAccountStore.ShouldBeFalse();
+            mapping.IsDefaultGroupStore.ShouldBeFalse();
+            mapping.ListIndex.ShouldBe(0);
+
+            // Clean up
+            createdApplication.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
         [Theory]

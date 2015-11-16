@@ -18,6 +18,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
@@ -240,6 +241,38 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var resetPasswordResponse = await application.ResetPasswordAsync(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
             resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_account_store_mapping(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Directly Test Application",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            IAccountStore directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
+
+            var mapping = client.Instantiate<IAccountStoreMapping>();
+            mapping.SetAccountStore(directory);
+            mapping.SetListIndex(500);
+            await createdApplication.CreateAccountStoreMappingAsync(mapping);
+
+            (await mapping.GetAccountStoreAsync()).Href.ShouldBe(directory.Href);
+            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
+
+            mapping.IsDefaultAccountStore.ShouldBeFalse();
+            mapping.IsDefaultGroupStore.ShouldBeFalse();
+            mapping.ListIndex.ShouldBe(0);
+
+            // Clean up
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
         [Theory]
