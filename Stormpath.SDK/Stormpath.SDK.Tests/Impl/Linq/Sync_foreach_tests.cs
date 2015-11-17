@@ -25,17 +25,15 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_foreach_tests : Linq_tests
+    public class Sync_foreach_tests : Linq_test<IAccount>
     {
         [Fact]
         public void Operates_on_every_item()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(TestAccounts.RebelAlliance));
+            this.InitializeClientWithCollection(TestAccounts.RebelAlliance);
             var gmailAlliance = new List<string>();
 
-            foreach (var rebel in harness.Queryable.Synchronously())
+            foreach (var rebel in this.Queryable.Synchronously())
             {
                 gmailAlliance.Add($"{rebel.GivenName.ToLower()}@gmail.com");
             }

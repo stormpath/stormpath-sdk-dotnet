@@ -19,7 +19,10 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Stormpath.SDK.Http;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Impl.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Tests.Common.Fakes
 {
@@ -28,11 +31,13 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         private static readonly int DefaultLimit = 25;
         private static readonly int DefaultOffset = 0;
 
+        private readonly IResourceConverter resourceConverter;
         private readonly List<T> items;
 
         public CollectionReturningHttpClient(string baseUrl, IEnumerable<T> items)
             : base(baseUrl)
         {
+            this.resourceConverter = new DefaultResourceConverter();
             this.items = items.ToList();
         }
 
@@ -55,7 +60,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
                 Size = this.items.Count,
                 Limit = limit,
                 Offset = offset,
-                Items = responseItems
+                Items = responseItems.Select(x => this.resourceConverter.ToMap(x as AbstractResource)),
             };
 
             return new FakeHttpResponse(
@@ -80,7 +85,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 
             public int Offset { get; set; }
 
-            public List<TItem> Items { get; set; }
+            public IEnumerable<Map> Items { get; set; }
         }
     }
 }

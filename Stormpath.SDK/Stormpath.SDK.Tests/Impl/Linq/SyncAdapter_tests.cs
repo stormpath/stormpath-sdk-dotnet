@@ -25,16 +25,14 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class SyncAdapter_tests : Linq_tests
+    public class SyncAdapter_tests : Linq_test<IAccount>
     {
         [Fact]
         public void Iterates_through_collection()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.DarthVader, 52)));
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.DarthVader, 52));
 
-            var items = harness.Queryable
+            var items = this.Queryable
                 .Synchronously()
                 .Skip(10)
                 .ToList();
@@ -45,11 +43,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Take_is_observed()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.DarthVader, 52)));
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.DarthVader, 52));
 
-            var items = harness.Queryable
+            var items = this.Queryable
                 .Synchronously()
                 .Take(5)
                 .ToList();

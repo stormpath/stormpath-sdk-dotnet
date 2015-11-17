@@ -27,19 +27,18 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_First_tests : Linq_tests
+    public class Sync_First_tests : Linq_test<IAccount>
     {
         [Fact]
         public void Returns_first_item()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
+            this.InitializeClientWithCollection(new List<IAccount>()
                 {
                     TestAccounts.LukeSkywalker,
                     TestAccounts.HanSolo
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
-            var luke = harness.Queryable
+            var luke = this.Queryable
                 .Synchronously()
                 .First();
 
@@ -49,13 +48,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Throws_when_no_items_exist()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
-
             // TODO This should be InvalidOperationException, but under Mono it throws NullReferenceException for some undetermined reason
             Should.Throw<Exception>(() =>
             {
-                var jabba = harness.Queryable.Synchronously().First();
+                var jabba = this.Queryable.Synchronously().First();
             });
         }
     }

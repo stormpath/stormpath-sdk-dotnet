@@ -29,17 +29,15 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class ForEachAsync_tests : Linq_tests
+    public class ForEachAsync_tests : Linq_test<IAccount>
     {
         [Fact]
         public async Task Operates_on_every_item()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(TestAccounts.RebelAlliance));
+            this.InitializeClientWithCollection(TestAccounts.RebelAlliance);
             var gmailAlliance = new List<string>();
 
-            await harness.Queryable.ForEachAsync(acct =>
+            await this.Queryable.ForEachAsync(acct =>
             {
                 gmailAlliance.Add($"{acct.GivenName.ToLower()}@gmail.com");
             });
@@ -50,9 +48,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Operates_on_every_item_asynchronously()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(TestAccounts.RebelAlliance));
+            this.InitializeClientWithCollection(TestAccounts.RebelAlliance);
             var gmailAlliance = new List<string>();
 
             Func<string, Task> addAsynchronously = async str =>
@@ -61,9 +57,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 gmailAlliance.Add($"{str.ToLower()}@gmail.com");
             };
 
-            await harness.Queryable.ForEachAsync(async acct =>
+            await this.Queryable.ForEachAsync(acct =>
             {
-                await addAsynchronously(acct.GivenName);
+                return addAsynchronously(acct.GivenName);
             });
 
             gmailAlliance.Count.ShouldBe(TestAccounts.RebelAlliance.Count);
@@ -72,12 +68,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Indexes_every_item()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
+            this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
             var empireFirstNameLookup = new Dictionary<int, string>();
 
-            await harness.Queryable.ForEachAsync((acct, index) =>
+            await this.Queryable.ForEachAsync((acct, index) =>
             {
                 empireFirstNameLookup.Add(index, $"{acct.GivenName} {acct.Surname}");
             });
@@ -88,9 +82,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Indexes_every_item_asynchronously()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
+            this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
             var empireFirstNameLookup = new Dictionary<int, string>();
 
             Func<string, string, int, Task> addAsynchronously = async (str1, str2, index) =>
@@ -99,7 +91,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 empireFirstNameLookup.Add(index, $"{str1} {str2}");
             };
 
-            await harness.Queryable.ForEachAsync(async (acct, index) =>
+            await this.Queryable.ForEachAsync(async (acct, index) =>
             {
                 await addAsynchronously(acct.GivenName, acct.Surname, index);
             });
@@ -110,15 +102,13 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Can_be_cancelled()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
+            this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
             var cts = new CancellationTokenSource();
             var reachedIndex = -1;
 
             try
             {
-                await harness.Queryable.ForEachAsync(
+                await this.Queryable.ForEachAsync(
                     (acct, index) =>
                 {
                     reachedIndex = index;
@@ -138,12 +128,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Can_break_gracefully()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
+            this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
             var reachedIndex = -1;
 
-            await harness.Queryable.ForEachAsync(
+            await this.Queryable.ForEachAsync(
                 acct =>
                 {
                     reachedIndex++;
@@ -157,12 +145,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Can_break_gracefully_asynchronously()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
+            this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
             var reachedIndex = -1;
 
-            await harness.Queryable.ForEachAsync(
+            await this.Queryable.ForEachAsync(
                 async acct =>
                 {
                     await Task.Yield();
@@ -177,12 +163,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Can_break_gracefully_when_indexing()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
+            this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
             var reachedIndex = -1;
 
-            await harness.Queryable.ForEachAsync(
+            await this.Queryable.ForEachAsync(
                 (acct, index) =>
                 {
                     reachedIndex = index;
@@ -196,12 +180,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Can_break_gracefully_when_indexing_asynchronously()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
+            this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
             var reachedIndex = -1;
 
-            await harness.Queryable.ForEachAsync(
+            await this.Queryable.ForEachAsync(
                 async (acct, index) =>
                 {
                     await Task.Yield();

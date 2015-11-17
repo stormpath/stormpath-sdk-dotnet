@@ -358,6 +358,19 @@ namespace Stormpath.SDK
             }, cancellationToken);
         }
 
+        public static Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Func<TSource, Task> asyncAction, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (asyncAction == null)
+                throw new ArgumentNullException(nameof(asyncAction));
+
+            return source.ForEachAsync(
+                async (item, _) =>
+                {
+                    await asyncAction(item).ConfigureAwait(false);
+                    return false;
+                }, cancellationToken);
+        }
+
         /// <summary>
         /// Asynchronously iterates over the input sequence and performs the specified action on each element of the <see cref="IAsyncQueryable{T}"/>.
         /// Return <c>true</c> from <paramref name="action"/> to cause the loop to gracefully break; <c>false</c> to continue looping.

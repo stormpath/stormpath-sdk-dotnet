@@ -27,18 +27,17 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class SingleOrDefaultAsync_tests : Linq_tests
+    public class SingleOrDefaultAsync_tests : Linq_test<IAccount>
     {
         [Fact]
         public async Task Returns_one_item()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
+            this.InitializeClientWithCollection(new List<IAccount>()
                 {
                     TestAccounts.HanSolo
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
-            var han = await harness.Queryable.SingleOrDefaultAsync();
+            var han = await this.Queryable.SingleOrDefaultAsync();
 
             han.Surname.ShouldBe("Solo");
         }
@@ -46,27 +45,25 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Throws_when_more_than_one_item_exists()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
+            this.InitializeClientWithCollection(new List<IAccount>()
                 {
                     TestAccounts.HanSolo,
                     TestAccounts.LukeSkywalker
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
             // TODO This should be InvalidOperationException, but under Mono it throws NullReferenceException for some undetermined reason
             Should.Throw<Exception>(async () =>
             {
-                var han = await harness.Queryable.SingleOrDefaultAsync();
+                var han = await this.Queryable.SingleOrDefaultAsync();
             });
         }
 
         [Fact]
         public async Task Returns_null_when_no_items_exist()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Empty<IAccount>());
 
-            var notHan = await harness.Queryable.SingleOrDefaultAsync();
+            var notHan = await this.Queryable.SingleOrDefaultAsync();
 
             notHan.ShouldBeNull();
         }

@@ -26,66 +26,70 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Take_tests : Linq_tests
+    public class Take_tests : Linq_test<IAccount>
     {
         [Fact]
-        public void Take_with_constant_becomes_limit()
+        public async Task Take_with_constant_becomes_limit()
         {
-            var query = this.Harness.Queryable
-                .Take(10);
+            await this.Queryable
+                .Take(10)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "limit=10");
+            this.FakeHttpClient.Calls.Single().ShouldContain("limit=10");
         }
 
         [Fact]
-        public void Take_with_variable_becomes_limit()
+        public async Task Take_with_variable_becomes_limit()
         {
             var limit = 20;
-            var query = this.Harness.Queryable
-                .Take(limit);
+            await this.Queryable
+                .Take(limit)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "limit=20");
+            this.FakeHttpClient.Calls.Single().ShouldContain("limit=20");
         }
 
         [Fact]
-        public void Take_with_function_becomes_limit()
+        public async Task Take_with_function_becomes_limit()
         {
             var limitFunc = new Func<int>(() => 25);
-            var query = this.Harness.Queryable
-                .Take(limitFunc());
+            await this.Queryable
+                .Take(limitFunc())
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "limit=25");
+            this.FakeHttpClient.Calls.Single().ShouldContain("limit=25");
         }
 
         [Fact]
-        public void Multiple_calls_are_LIFO()
+        public async Task Multiple_calls_are_LIFO()
         {
-            var query = this.Harness.Queryable
-                .Take(10).Take(5);
+            await this.Queryable
+                .Take(10).Take(5)
+                .MoveNextAsync();
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(this.Href, "limit=5");
+            this.FakeHttpClient.Calls.Single().ShouldContain("limit=5");
         }
 
         [Fact]
-        public void Zero_is_ignored()
+        public async Task Zero_is_ignored()
         {
-            var query = this.Harness.Queryable
-                .Take(0);
+            await this.Queryable
+                .Take(0)
+                .MoveNextAsync();
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(this.Href, string.Empty);
+            this.FakeHttpClient.Calls.Single().ShouldNotContain("limit");
         }
 
         [Fact]
         public void Throws_for_invalid_value()
         {
-            Should.Throw<ArgumentOutOfRangeException>(() =>
+            Should.Throw<ArgumentOutOfRangeException>(async () =>
             {
-                var query = this.Harness.Queryable
-                    .Take(-1);
-
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Take(-1)
+                    .MoveNextAsync();
             });
         }
 
@@ -96,18 +100,17 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             // in Stormpath, even though that's what it translates to. .Take() represents an
             // upper limit to the items that are returned. Take(5) returns 5 items, Take(500) returns 500.
             // In the underyling API, the limi=? parameter has a hard maximum of 100.
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.C3PO, 250));
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.C3PO, 250));
 
-            var longList = await harness.Queryable
+            var longList = await this.Queryable
                 .Take(7)
                 .ToListAsync();
 
             longList.Count.ShouldBe(7);
-            fakeDataStore.GetCalls().Count().ShouldBe(1);
+            this.FakeHttpClient.Calls.Count().ShouldBe(1);
 
             // When Taking(<= 100), the limit parameter should match
-            fakeDataStore.GetCalls().First().ShouldEndWith("?limit=7");
+            this.FakeHttpClient.Calls.First().ShouldEndWith("?limit=7");
         }
 
         [Fact]
@@ -117,18 +120,17 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             // in Stormpath, even though that's what it translates to. .Take() represents an
             // upper limit to the items that are returned. Take(5) returns 5 items, Take(500) returns 500.
             // In the underyling API, the limi=? parameter has a hard maximum of 100.
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.DarthVader, 750));
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.DarthVader, 750));
 
-            var longList = await harness.Queryable
+            var longList = await this.Queryable
                 .Take(500)
                 .ToListAsync();
 
             longList.Count.ShouldBe(500);
-            fakeDataStore.GetCalls().Count().ShouldBe(5); // Max 100 per call
+            this.FakeHttpClient.Calls.Count().ShouldBe(5); // Max 100 per call
 
             // When Taking(> 100), the limit parameter should be 100
-            fakeDataStore.GetCalls().First().ShouldEndWith("?limit=100");
+            this.FakeHttpClient.Calls.First().ShouldEndWith("?limit=100");
         }
     }
 }

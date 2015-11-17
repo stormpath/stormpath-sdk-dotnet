@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
     /// Tests that combine many different query expressions and formats.
     /// These are especially important for any refactoring of the underlying LINQ code.
     /// </summary>
-    public class Complicated_tests : Linq_tests
+    public class Complicated_tests : Linq_test<IAccount>
     {
         private static string[] GetArguments(string href)
         {
@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Case_1()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .Filter("vader")
                 .Where(x => x.Email.EndsWith("@galacticempire.co") &&
                             x.Status == AccountStatus.Enabled)
@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Skip(0)
                 .Take(1);
 
-            var arguments = GetArguments(query.GetGeneratedHref());
+            var arguments = GetArguments(query.Generate());
 
             arguments.ShouldContain("q=vader");
             arguments.ShouldContain("email=*@galacticempire.co");
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Case_2()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .OrderBy(x => x.Email)
                 .ThenByDescending(x => x.Username)
                 .Skip(10)
@@ -68,7 +68,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.GivenName.Equals("foo"))
                 .Where(x => x.CreatedAt >= new DateTimeOffset(2015, 1, 1, 0, 0, 0, TimeSpan.Zero) && x.CreatedAt < new DateTimeOffset(2015, 6, 30, 0, 0, 0, TimeSpan.Zero));
 
-            var arguments = GetArguments(query.GetGeneratedHref());
+            var arguments = GetArguments(query.Generate());
 
             arguments.ShouldContain("orderBy=email,username desc");
             arguments.ShouldContain("offset=10");
@@ -82,7 +82,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Case_3()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .Filter("luke")
                 .Expand(x => x.GetCustomDataAsync)
                 .Expand(x => x.GetDirectoryAsync)
@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroups, 10, 10)
                 .Take(2);
 
-            var arguments = GetArguments(query.GetGeneratedHref());
+            var arguments = GetArguments(query.Generate());
 
             arguments.ShouldContain("q=luke");
             arguments.ShouldContain("expand=customData,directory,groups(offset:10,limit:10)");

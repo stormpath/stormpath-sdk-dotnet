@@ -15,6 +15,7 @@
 // </copyright>
 
 using System.Collections.Generic;
+using System.Linq;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.Linq;
@@ -30,6 +31,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         protected IAsyncQueryable<T> Queryable { get; private set; }
 
         protected CollectionReturningHttpClient<T> FakeHttpClient { get; private set; }
+
+        public Linq_test()
+        {
+            this.InitializeClientWithCollection(Enumerable.Empty<T>());
+        }
 
         protected void InitializeClientWithCollection(IEnumerable<T> items)
         {

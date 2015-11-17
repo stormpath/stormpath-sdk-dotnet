@@ -27,18 +27,17 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_Single_tests : Linq_tests
+    public class Sync_Single_tests : Linq_test<IAccount>
     {
         [Fact]
         public void Returns_one_item()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
+            this.InitializeClientWithCollection(new List<IAccount>()
                 {
                     TestAccounts.HanSolo
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
-            var han = harness.Queryable.Synchronously().Single();
+            var han = this.Queryable.Synchronously().Single();
 
             han.Surname.ShouldBe("Solo");
         }
@@ -46,30 +45,26 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Throws_when_more_than_one_item_exists()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
+            this.InitializeClientWithCollection(new List<IAccount>()
                 {
                     TestAccounts.HanSolo,
                     TestAccounts.LukeSkywalker
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
             // TODO This should be InvalidOperationException, but under Mono it throws NullReferenceException for some undetermined reason
             Should.Throw<Exception>(() =>
             {
-                var han = harness.Queryable.Synchronously().Single();
+                var han = this.Queryable.Synchronously().Single();
             });
         }
 
         [Fact]
         public void Throws_when_no_items_exist()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
-
             // TODO This should be InvalidOperationException, but under Mono it throws NullReferenceException for some undetermined reason
             Should.Throw<Exception>(() =>
             {
-                var jabba = harness.Queryable.Synchronously().Single();
+                var jabba = this.Queryable.Synchronously().Single();
             });
         }
     }

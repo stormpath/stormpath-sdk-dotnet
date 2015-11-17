@@ -15,73 +15,83 @@
 // </copyright>
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Filter_extension_tests : Linq_tests
+    public class Filter_extension_tests : Linq_test<IAccount>
     {
         [Fact]
-        public void With_simple_parameter()
+        public async Task With_simple_parameter()
         {
             // Act
-            var query = this.Harness.Queryable
-                .Filter("Joe");
+            await this.Queryable
+                .Filter("Joe")
+                .MoveNextAsync();
 
             // Assert
-            query.GeneratedArgumentsWere(this.Href, "q=Joe");
+            this.FakeHttpClient.Calls.Single().ShouldContain("q=Joe");
         }
 
         [Fact]
-        public void Parameters_are_trimmed()
+        public async Task Parameters_are_trimmed()
         {
             // Act
-            var query = this.Harness.Queryable
-                .Filter("  Joe  ");
+            await this.Queryable
+                .Filter("  Joe  ")
+                .MoveNextAsync();
 
             // Assert
-            query.GeneratedArgumentsWere(this.Href, "q=Joe");
+            this.FakeHttpClient.Calls.Single().ShouldContain("q=Joe");
         }
 
         [Fact]
         public void Throws_for_multiple_calls()
         {
-            var query = this.Harness.Queryable
-                .Filter("Joe")
-                .Filter("Joey");
-
-            Should.Throw<NotSupportedException>(() =>
+            Should.Throw<NotSupportedException>(async () =>
             {
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Filter("Joe")
+                    .Filter("Joey")
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
         public void Throws_for_null()
         {
-            Should.Throw<ArgumentException>(() =>
+            Should.Throw<ArgumentException>(async () =>
             {
-                var query = this.Harness.Queryable.Filter(null);
+                await this.Queryable
+                    .Filter(null)
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
         public void Throws_for_empty_string()
         {
-            Should.Throw<ArgumentException>(() =>
+            Should.Throw<ArgumentException>(async () =>
             {
-                var query = this.Harness.Queryable.Filter(string.Empty);
+                await this.Queryable
+                    .Filter(string.Empty)
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
         public void Throws_for_whitespace()
         {
-            Should.Throw<ArgumentException>(() =>
+            Should.Throw<ArgumentException>(async () =>
             {
-                var query = this.Harness.Queryable.Filter("   ");
+                await this.Queryable
+                    .Filter("   ")
+                    .MoveNextAsync();
             });
         }
     }

@@ -26,19 +26,18 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class FirstOrDefaultAsync_tests : Linq_tests
+    public class FirstOrDefaultAsync_tests : Linq_test<IAccount>
     {
         [Fact]
         public async Task Returns_first_item()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
+            this.InitializeClientWithCollection(new List<IAccount>()
                 {
                     TestAccounts.LukeSkywalker,
                     TestAccounts.HanSolo
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
-            var luke = await harness.Queryable.FirstOrDefaultAsync();
+            var luke = await this.Queryable.FirstOrDefaultAsync();
 
             luke.Surname.ShouldBe("Skywalker");
         }
@@ -46,10 +45,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Returns_null_when_no_items_exist()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
-
-            var notLuke = await harness.Queryable.FirstOrDefaultAsync();
+            var notLuke = await this.Queryable.FirstOrDefaultAsync();
 
             notLuke.ShouldBeNull();
         }

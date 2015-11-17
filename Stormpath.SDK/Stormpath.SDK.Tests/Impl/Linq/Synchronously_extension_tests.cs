@@ -26,18 +26,16 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Synchronously_extension_tests : Linq_tests
+    public class Synchronously_extension_tests : Linq_test<IAccount>
     {
         [Fact]
         public void Throws_if_not_called_first()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.DarthVader, 52)));
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.DarthVader, 52));
 
             Should.Throw<NotSupportedException>(() =>
             {
-                var synchronousQueryable = harness.Queryable
+                var synchronousQueryable = this.Queryable
                     .Skip(10)
                     .Synchronously();
             });
@@ -46,11 +44,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Returns_a_vanilla_queryable()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.DarthVader, 52)));
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.DarthVader, 52));
 
-            var synchronousQueryable = harness.Queryable
+            var synchronousQueryable = this.Queryable
                 .Synchronously()
                 .Skip(10);
 

@@ -25,15 +25,12 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class ToListAsync_tests : Linq_tests
+    public class ToListAsync_tests : Linq_test<IAccount>
     {
         [Fact]
         public async Task Returns_empty_list_for_no_items()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
-
-            var empty = await harness.Queryable.ToListAsync();
+            var empty = await this.Queryable.ToListAsync();
 
             empty.ShouldBeEmpty();
         }
@@ -41,10 +38,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Retrieves_all_items()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(TestAccounts.RebelAlliance);
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(TestAccounts.RebelAlliance);
 
-            var alliance = await harness.Queryable.ToListAsync();
+            var alliance = await this.Queryable.ToListAsync();
 
             alliance.Count.ShouldBe(TestAccounts.RebelAlliance.Count);
         }
@@ -56,13 +52,12 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             // so two calls will return 25 items, and the 3rd will return 1. However, ToListAsync
             // will make another call to the server, just to make sure another item hasn't been added
             // to the end while we were enumerating.
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.Chewbacca, 51));
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.Chewbacca, 51));
 
-            var longList = await harness.Queryable.ToListAsync();
+            var longList = await this.Queryable.ToListAsync();
 
             longList.Count.ShouldBe(51);
-            fakeDataStore.GetCalls().Count().ShouldBe(4);
+            this.FakeHttpClient.Calls.Count().ShouldBe(4);
         }
     }
 }

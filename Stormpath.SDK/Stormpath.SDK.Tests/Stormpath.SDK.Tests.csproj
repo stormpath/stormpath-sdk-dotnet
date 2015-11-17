@@ -158,7 +158,6 @@
     <Compile Include="Impl\Linq\FirstAsync_tests.cs" />
     <Compile Include="Impl\Linq\Take_tests.cs" />
     <Compile Include="Impl\Linq\Skip_tests.cs" />
-    <Compile Include="Impl\Linq\Linq_tests.cs" />
     <Compile Include="Impl\Linq\OrderBy_tests.cs" />
     <Compile Include="Impl\Linq\SingleAsync_tests.cs" />
     <Compile Include="Impl\Linq\ToListAsync_tests.cs" />

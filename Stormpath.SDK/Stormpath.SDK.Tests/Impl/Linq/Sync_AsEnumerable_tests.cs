@@ -25,15 +25,14 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_AsEnumerable_tests : Linq_tests
+    public class Sync_AsEnumerable_tests : Linq_test<IAccount>
     {
         [Fact]
         public void AsEnumerable_is_idempotent()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(TestAccounts.RebelAlliance);
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(TestAccounts.RebelAlliance);
 
-            var alliance = harness.Queryable
+            var alliance = this.Queryable
                 .Synchronously()
                 .AsEnumerable();
 

@@ -19,21 +19,18 @@ using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Common.Fakes;
-using Stormpath.SDK.Tests.Fakes;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class CountAsync_tests : Linq_tests
+    public class CountAsync_tests : Linq_test<IAccount>
     {
         [Fact]
         public async Task Returns_count()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.C3PO, 73));
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.C3PO, 73));
 
-            var count = await harness.Queryable.CountAsync();
+            var count = await this.Queryable.CountAsync();
 
             count.ShouldBe(73);
         }
@@ -41,12 +38,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Limits_result_to_one_item()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.R2D2, 73));
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.R2D2, 73));
 
-            var count = await harness.Queryable.CountAsync();
+            var count = await this.Queryable.CountAsync();
 
-            fakeDataStore.WasCalledWithArguments<IAccount>(this.Href, "limit=1");
+            this.FakeHttpClient.Calls.Single().ShouldContain("limit=1");
         }
     }
 }

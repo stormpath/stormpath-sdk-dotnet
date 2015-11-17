@@ -15,16 +15,19 @@
 // </copyright>
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Within_extension_tests : Linq_tests
+    public class Within_extension_tests : Linq_test<IAccount>
     {
         [Fact]
-        public void Within_throws_when_using_outside_LINQ()
+        public void Throws_when_using_outside_LINQ()
         {
             var dto = new DateTimeOffset(DateTime.Now);
 
@@ -37,131 +40,138 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Throws_for_multiple_series_calls()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015))
-                .Where(x => x.CreatedAt.Within(2015, 01, 01));
-
-            Should.Throw<NotSupportedException>(() =>
+            Should.Throw<NotSupportedException>(async () =>
             {
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Where(x => x.CreatedAt.Within(2015))
+                    .Where(x => x.CreatedAt.Within(2015, 01, 01))
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
         public void Throws_for_multiple_parallel_calls()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015) && x.CreatedAt.Within(2015, 01, 01));
-
-            Should.Throw<NotSupportedException>(() =>
+            Should.Throw<NotSupportedException>(async () =>
             {
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Where(x => x.CreatedAt.Within(2015) && x.CreatedAt.Within(2015, 01, 01))
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
         public void Throws_when_mixing_Within_and_date_comparison()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015))
-                .Where(x => x.CreatedAt > DateTime.Now);
-
-            Should.Throw<NotSupportedException>(() =>
+            Should.Throw<NotSupportedException>(async () =>
             {
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Where(x => x.CreatedAt.Within(2015))
+                    .Where(x => x.CreatedAt > DateTime.Now)
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
-        public void Both_created_and_modified_fields_in_series()
+        public async Task Both_created_and_modified_fields_in_series()
         {
-            var query = this.Harness.Queryable
+            await this.Queryable
                 .Where(x => x.CreatedAt.Within(2015))
-                .Where(x => x.ModifiedAt.Within(2015, 1));
+                .Where(x => x.ModifiedAt.Within(2015, 1))
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "createdAt=2015&modifiedAt=2015-01");
+            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015&modifiedAt=2015-01");
         }
 
         [Fact]
-        public void Both_created_and_modified_fields_in_parallel()
+        public async Task Both_created_and_modified_fields_in_parallel()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015) && x.ModifiedAt.Within(2015, 1));
+            await this.Queryable
+                .Where(x => x.CreatedAt.Within(2015) && x.ModifiedAt.Within(2015, 1))
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "createdAt=2015&modifiedAt=2015-01");
+            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015&modifiedAt=2015-01");
         }
 
         [Fact]
-        public void With_other_Where_terms_in_series()
+        public async Task With_other_Where_terms_in_series()
         {
-            var query = this.Harness.Queryable
+            await this.Queryable
                 .Where(x => x.Email == "foo@bar.co")
-                .Where(x => x.CreatedAt.Within(2015));
+                .Where(x => x.CreatedAt.Within(2015))
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "email=foo@bar.co&createdAt=2015");
+            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015&email=foo%40bar.co");
         }
 
         [Fact]
-        public void With_other_Where_terms_in_parallel()
+        public async Task With_other_Where_terms_in_parallel()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.Email == "foo@bar.co" && x.CreatedAt.Within(2015, 1));
+            await this.Queryable
+                .Where(x => x.Email == "foo@bar.co" && x.CreatedAt.Within(2015, 1))
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "email=foo@bar.co&createdAt=2015-01");
+            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015-01&email=foo%40bar.co");
         }
 
         [Fact]
-        public void Where_date_using_shorthand_for_year()
+        public async Task Where_date_using_shorthand_for_year()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015));
+            await this.Queryable
+                .Where(x => x.CreatedAt.Within(2015))
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "createdAt=2015");
+            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015");
         }
 
         [Fact]
-        public void Where_date_using_shorthand_for_month()
+        public async Task Where_date_using_shorthand_for_month()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015, 01));
+            await this.Queryable
+                .Where(x => x.CreatedAt.Within(2015, 01))
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "createdAt=2015-01");
+            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015-01");
         }
 
         [Fact]
-        public void Where_date_using_shorthand_for_day()
+        public async Task Where_date_using_shorthand_for_day()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015, 01, 01));
+            await this.Queryable
+                .Where(x => x.CreatedAt.Within(2015, 01, 01))
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "createdAt=2015-01-01");
+            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015-01-01");
         }
 
         [Fact]
-        public void Where_date_using_shorthand_for_hour()
+        public async Task Where_date_using_shorthand_for_hour()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015, 01, 01, 12));
+            await this.Queryable
+                .Where(x => x.CreatedAt.Within(2015, 01, 01, 12))
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "createdAt=2015-01-01T12");
+            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015-01-01T12");
         }
 
         [Fact]
-        public void Where_date_using_shorthand_for_minute()
+        public async Task Where_date_using_shorthand_for_minute()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30));
+            await this.Queryable
+                .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30))
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "createdAt=2015-01-01T12:30");
+            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015-01-01T12:30");
         }
 
         [Fact]
-        public void Where_date_using_shorthand_for_second()
+        public async Task Where_date_using_shorthand_for_second()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30, 31));
+            await this.Queryable
+                .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30, 31))
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "createdAt=2015-01-01T12:30:31");
+            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015-01-01T12:30:31");
         }
     }
 }
