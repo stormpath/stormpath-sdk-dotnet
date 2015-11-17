@@ -74,10 +74,11 @@
     <Compile Include="Fakes\FakeAccount.cs" />
     <Compile Include="Fakes\FakeAccounts.cs" />
     <Compile Include="Fakes\FakeApiKey.cs" />
-    <Compile Include="Fakes\FakeDataStore.cs" />
+    <Compile Include="Fakes\FakeDataStore{TType}.cs" />
     <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Fakes\StubDataStore.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
+    <Compile Include="Helpers\CollectionTestHarness{T}.cs" />
     <Compile Include="Impl\Cache\Sync_caching_tests.cs" />
     <Compile Include="Impl\Cache\Async_caching_tests.cs" />
     <Compile Include="Impl\Cache\InMemoryCacheProviderBuilder_tests.cs" />
@@ -98,7 +99,6 @@
     <Compile Include="Impl\Extensions\String_Nullable_tests.cs" />
     <Compile Include="Impl\Extensions\Uri_WithoutQueryAndFragment_tests.cs" />
     <Compile Include="Impl\FieldConverter_tests.cs" />
-    <Compile Include="Helpers\CollectionTestHarness.cs" />
     <Compile Include="Helpers\LinqAssertExtensions.cs" />
     <Compile Include="Impl\Authentication\SAuthc1RequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\BasicRequestAuthenticator_tests.cs" />

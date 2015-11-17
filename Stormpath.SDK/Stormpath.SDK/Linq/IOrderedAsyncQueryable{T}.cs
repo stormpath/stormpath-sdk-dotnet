@@ -1,4 +1,4 @@
-﻿// <copyright file="IAsyncQueryProvider.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IOrderedAsyncQueryable{T}.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +14,13 @@
 // limitations under the License.
 // </copyright>
 
-using System.Linq.Expressions;
-
 namespace Stormpath.SDK.Linq
 {
     /// <summary>
-    /// Represents a query provider for an asynchronous data source.
+    /// Represents an ordered collection of items in a data source that can be queried asynchronously.
     /// </summary>
     /// <typeparam name="T">The type of elements in the collection.</typeparam>
-    public interface IAsyncQueryProvider<T>
+    public interface IOrderedAsyncQueryable<T> : IAsyncQueryable<T>
     {
-        /// <summary>
-        /// Appends an <see cref="System.Linq.Expressions.Expression"/> to the existing expression tree
-        /// for an <see cref="IAsyncQueryable{T}"/>.
-        /// </summary>
-        /// <param name="expression">The expression to add to the expression tree.</param>
-        /// <returns>A new <see cref="IAsyncQueryable{T}"/> instance with the new expression tree.</returns>
-        IAsyncQueryable<T> CreateQuery(Expression expression);
     }
 }

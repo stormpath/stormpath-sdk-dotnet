@@ -1,4 +1,4 @@
-﻿// <copyright file="ILoggerConsumer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IIdentityMap{TKey,TItem}.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,19 +14,15 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Logging
+using System;
+
+namespace Stormpath.SDK.Impl.IdentityMap
 {
-    /// <summary>
-    /// Represents a class that depends on <see cref="ILogger"/>.
-    /// </summary>
-    /// <typeparam name="T">The return type.</typeparam>
-    public interface ILoggerConsumer<out T>
+    internal interface IIdentityMap<TKey, TItem> : IDisposable
+        where TItem : class
     {
-        /// <summary>
-        /// Sets an optional logger to send trace and debug messages to.
-        /// </summary>
-        /// <param name="logger">The logger to use.</param>
-        /// <returns>The source object for method chaining.</returns>
-        T SetLogger(ILogger logger);
+        long LifetimeItemsAdded { get; }
+
+        TItem GetOrAdd(TKey key, Func<TItem> itemFactory, bool storeInfinitely);
     }
 }

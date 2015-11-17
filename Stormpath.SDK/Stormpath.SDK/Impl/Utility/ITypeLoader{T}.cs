@@ -1,4 +1,4 @@
-﻿// <copyright file="ISaveableWithOptionsSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ITypeLoader{T}.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using Stormpath.SDK.Resource;
-
-namespace Stormpath.SDK.Impl.Resource
+namespace Stormpath.SDK.Impl.Utility
 {
-    internal interface ISaveableWithOptionsSync<T> : ISaveableSync<T>
-        where T : IResource
+    internal interface ITypeLoader<T>
+        where T : class
     {
-        T Save(Action<IRetrievalOptions<T>> responseOptions);
+        bool TryLoad(out T instance, object[] constructorArguments = null);
     }
 }

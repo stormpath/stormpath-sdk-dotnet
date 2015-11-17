@@ -38,7 +38,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Cache
 {
-    public class Caching_tests : IDisposable
+    public class Sync_caching_tests : IDisposable
     {
         private static readonly string BaseUrl = "https://api.stormpath.com/v1";
         private IInternalDataStore dataStore;

@@ -26,6 +26,7 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
 #pragma warning disable SA1402 // File may only contain a single class
+#pragma warning disable SA1649 // File name must match first class
     public class Expand_account_tests : Linq_tests<IAccount>
     {
         [Fact]
@@ -215,4 +216,5 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
     }
 #pragma warning restore SA1402 // File may only contain a single class
+#pragma warning restore SA1649 // File name must match first class
 }

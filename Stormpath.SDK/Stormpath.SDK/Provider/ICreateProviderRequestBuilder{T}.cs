@@ -1,4 +1,4 @@
-﻿// <copyright file="ICreateProviderRequestBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ICreateProviderRequestBuilder{T}.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

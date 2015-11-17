@@ -1,4 +1,4 @@
-﻿// <copyright file="IOrderedAsyncQueryable.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ISaveableWithOptionsSync{T}.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Linq
+using System;
+using Stormpath.SDK.Resource;
+
+namespace Stormpath.SDK.Impl.Resource
 {
-    /// <summary>
-    /// Represents an ordered collection of items in a data source that can be queried asynchronously.
-    /// </summary>
-    /// <typeparam name="T">The type of elements in the collection.</typeparam>
-    public interface IOrderedAsyncQueryable<T> : IAsyncQueryable<T>
+    internal interface ISaveableWithOptionsSync<T> : ISaveableSync<T>
+        where T : IResource
     {
+        T Save(Action<IRetrievalOptions<T>> responseOptions);
     }
 }

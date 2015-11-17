@@ -1,4 +1,4 @@
-﻿// <copyright file="ITypeLoader.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ISerializerConsumer{T}.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +14,19 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Impl.Utility
+namespace Stormpath.SDK.Serialization
 {
-    internal interface ITypeLoader<T>
-        where T : class
+    /// <summary>
+    /// Represents a class that depends on <see cref="IJsonSerializer"/>.
+    /// </summary>
+    /// <typeparam name="T">The return type.</typeparam>
+    public interface ISerializerConsumer<out T>
     {
-        bool TryLoad(out T instance, object[] constructorArguments = null);
+        /// <summary>
+        /// Use the specified JSON serializer.
+        /// </summary>
+        /// <param name="serializer">The serializer to use.</param>
+        /// <returns>The source object for method chaining.</returns>
+        T SetSerializer(IJsonSerializer serializer);
     }
 }

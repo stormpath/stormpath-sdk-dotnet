@@ -1,4 +1,4 @@
-﻿// <copyright file="ISaveableSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IMultiValueDictionary{TKey,TValue}.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Resource;
+using System.Collections.Generic;
 
-namespace Stormpath.SDK.Impl.Resource
+namespace Stormpath.SDK.Impl.Utility
 {
-    internal interface ISaveableSync<T>
-        where T : IResource
+    internal interface IMultiValueDictionary<TKey, TValue> : IDictionary<TKey, IList<TValue>>
     {
-        T Save();
+        TValue GetFirst(TKey key);
+
+        void Add(TKey key, TValue value);
+
+        void Set(TKey key, TValue value);
+
+        void SetAll(Dictionary<TKey, TValue> values);
+
+        IDictionary<TKey, TValue> ToSingleValueDictionary();
     }
 }
