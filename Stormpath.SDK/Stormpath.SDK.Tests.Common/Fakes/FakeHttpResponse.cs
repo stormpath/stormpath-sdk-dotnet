@@ -38,10 +38,8 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 
         bool IHttpMessage.HasBody => !string.IsNullOrEmpty(this.body);
 
-        //todo
         HttpHeaders IHttpMessage.Headers => new HttpHeaders();
 
-        //todo
         string IHttpResponse.ResponsePhrase
         {
             get
