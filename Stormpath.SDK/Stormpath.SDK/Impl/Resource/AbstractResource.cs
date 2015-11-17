@@ -72,10 +72,10 @@ namespace Stormpath.SDK.Impl.Resource
             => this.GetResourceData()?.InternalSyncDataStore;
 
         protected Task<ITenant> GetTenantAsync(string tenantHref, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(tenantHref, new IdentityMapOptions() { StoreWithInfiniteExpiration = true }, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(tenantHref, cancellationToken);
 
         protected ITenant GetTenant(string tenantHref)
-            => this.GetInternalSyncDataStore().GetResource<ITenant>(tenantHref, new IdentityMapOptions() { StoreWithInfiniteExpiration = true });
+            => this.GetInternalSyncDataStore().GetResource<ITenant>(tenantHref);
 
         internal bool IsDirty => this.GetResourceData()?.IsDirty ?? true;
 

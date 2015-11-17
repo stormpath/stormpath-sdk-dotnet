@@ -67,17 +67,11 @@ namespace Stormpath.SDK.Tests.Fakes
         T IDataStoreSync.GetResource<T>(string href)
             => this.ProxySyncDataStore.GetResource<T>(href);
 
-        T IInternalSyncDataStore.GetResource<T>(string href, IdentityMapOptions identityMapOptions)
-            => this.ProxySyncDataStore.GetResource<T>(href, identityMapOptions);
-
         Task<T> IDataStore.GetResourceAsync<T>(string href, CancellationToken cancellationToken)
             => this.ProxyDataStore.GetResourceAsync<T>(href, cancellationToken);
 
         Task<T> IDataStore.GetResourceAsync<T>(string href, Action<IRetrievalOptions<T>> options, CancellationToken cancellationToken)
             => this.ProxyDataStore.GetResourceAsync<T>(href, options, cancellationToken);
-
-        Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
-            => this.ProxyAsyncDataStore.GetResourceAsync<T>(href, identityMapOptions, cancellationToken);
 
         T IInternalSyncDataStore.Create<T>(string parentHref, T resource)
             => this.ProxySyncDataStore.Create(parentHref, resource);
@@ -91,17 +85,11 @@ namespace Stormpath.SDK.Tests.Fakes
         TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
             => this.ProxySyncDataStore.Create<T, TReturned>(parentHref, resource);
 
-        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions)
-            => this.ProxySyncDataStore.Create<T, TReturned>(parentHref, resource, identityMapOptions);
-
         Task<T> IInternalAsyncDataStore.CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
             => this.ProxyAsyncDataStore.CreateAsync(parentHref, resource, cancellationToken);
 
         Task<T> IInternalAsyncDataStore.CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
             => this.ProxyAsyncDataStore.CreateAsync(parentHref, resource, options, cancellationToken);
-
-        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
-            => this.ProxyAsyncDataStore.CreateAsync<T, TReturned>(parentHref, resource, identityMapOptions, cancellationToken);
 
         Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
             => this.ProxyAsyncDataStore.CreateAsync<T, TReturned>(parentHref, resource, cancellationToken);

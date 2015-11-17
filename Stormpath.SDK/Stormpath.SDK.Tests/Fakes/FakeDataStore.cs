@@ -285,26 +285,6 @@ namespace Stormpath.SDK.Tests.Fakes
             throw new NotImplementedException();
         }
 
-        Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        T IInternalSyncDataStore.GetResource<T>(string href, IdentityMapOptions identityMapOptions)
-        {
-            throw new NotImplementedException();
-        }
-
-        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions)
-        {
-            throw new NotImplementedException();
-        }
-
         public T GetResource<T>(string href, Action<IRetrievalOptions<T>> options)
         {
             throw new NotImplementedException();

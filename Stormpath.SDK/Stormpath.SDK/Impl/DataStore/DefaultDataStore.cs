@@ -259,26 +259,6 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create(targetType, result.Body) as T;
         }
 
-        async Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
-        {
-            if (identityMapOptions != null && !identityMapOptions.IsValid())
-                throw new ApplicationException("Bad identity map options specified.");
-
-            var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);
-
-            return this.resourceFactory.Create<T>(result.Body);
-        }
-
-        T IInternalSyncDataStore.GetResource<T>(string href, IdentityMapOptions identityMapOptions)
-        {
-            if (identityMapOptions != null && !identityMapOptions.IsValid())
-                throw new ApplicationException("Bad identity map options specified.");
-
-            var result = this.GetResourceData<T>(href);
-
-            return this.resourceFactory.Create<T>(result.Body);
-        }
-
         private Task<IResourceDataResult> GetResourceDataAsync<T>(string href, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(href))
@@ -397,7 +377,6 @@ namespace Stormpath.SDK.Impl.DataStore
                 parentHref,
                 queryParams: this.CreateQueryStringFromCreationOptions(options),
                 create: true,
-                identityMapOptions: null,
                 cancellationToken: cancellationToken);
         }
 
@@ -407,29 +386,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 resource,
                 parentHref,
                 queryParams: this.CreateQueryStringFromCreationOptions(options),
-                create: true,
-                identityMapOptions: null);
-        }
-
-        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
-        {
-            return this.SaveCoreAsync<T, TReturned>(
-                resource,
-                parentHref,
-                queryParams: null,
-                create: true,
-                identityMapOptions: identityMapOptions,
-                cancellationToken: cancellationToken);
-        }
-
-        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions)
-        {
-            return this.SaveCore<T, TReturned>(
-                resource,
-                parentHref,
-                create: true,
-                queryParams: null,
-                identityMapOptions: identityMapOptions);
+                create: true);
         }
 
         Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
@@ -455,7 +412,6 @@ namespace Stormpath.SDK.Impl.DataStore
                 href,
                 queryParams: queryParams,
                 create: false,
-                identityMapOptions: null,
                 cancellationToken: cancellationToken);
         }
 
@@ -471,8 +427,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 resource,
                 href,
                 create: false,
-                queryParams: queryParams,
-                identityMapOptions: null);
+                queryParams: queryParams);
         }
 
         Task<bool> IInternalAsyncDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
@@ -505,13 +460,10 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.DeleteCore<T>(resource.Href);
         }
 
-        private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, bool create, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
+        private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, bool create, CancellationToken cancellationToken)
             where T : class
             where TReturned : class
         {
-            if (identityMapOptions != null && !identityMapOptions.IsValid())
-                throw new ApplicationException("Bad identity map options specified.");
-
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
 
@@ -595,13 +547,10 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
         }
 
-        private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, bool create, IdentityMapOptions identityMapOptions)
+        private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, bool create)
             where T : class
             where TReturned : class
         {
-            if (identityMapOptions != null && !identityMapOptions.IsValid())
-                throw new ApplicationException("Bad identity map options specified.");
-
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
 

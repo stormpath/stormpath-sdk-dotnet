@@ -45,7 +45,6 @@ namespace Stormpath.SDK.Impl.Provider
             return this.dataStoreAsync.CreateAsync<IProviderAccountAccess, IProviderAccountResult>(
                 href,
                 providerAccountAccess,
-                new IdentityMapOptions() { SkipIdentityMap = true },
                 cancellationToken);
         }
 
@@ -60,8 +59,7 @@ namespace Stormpath.SDK.Impl.Provider
             // DefaultProviderAccountResult.OnUpdate does the work of taking the implied IAccount and instantiating it.
             return this.dataStoreSync.Create<IProviderAccountAccess, IProviderAccountResult>(
                 href,
-                providerAccountAccess,
-                new IdentityMapOptions() { SkipIdentityMap = true });
+                providerAccountAccess);
         }
 
         private IProviderAccountAccess BuildRequest(IProviderAccountRequest request)

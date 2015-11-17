@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Tests.Impl
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(201, "Created", null, FakeJson.Account, "application/json", transportError: false)));
 
-            var providerAccountResult = await dataStore.GetResourceAsync<IProviderAccountResult>("/providerAccount", new IdentityMapOptions() { SkipIdentityMap = true }, CancellationToken.None);
+            var providerAccountResult = await dataStore.GetResourceAsync<IProviderAccountResult>("/providerAccount", CancellationToken.None);
 
             providerAccountResult.IsNewAccount.ShouldBeTrue();
             var account = providerAccountResult.Account;
@@ -57,7 +57,7 @@ namespace Stormpath.SDK.Tests.Impl
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(200, "OK", null, FakeJson.Account, "application/json", transportError: false)));
 
-            var providerAccountResult = await dataStore.GetResourceAsync<IProviderAccountResult>("/providerAccount", new IdentityMapOptions() { SkipIdentityMap = true }, CancellationToken.None);
+            var providerAccountResult = await dataStore.GetResourceAsync<IProviderAccountResult>("/providerAccount", CancellationToken.None);
 
             providerAccountResult.IsNewAccount.ShouldBeFalse();
             var account = providerAccountResult.Account;

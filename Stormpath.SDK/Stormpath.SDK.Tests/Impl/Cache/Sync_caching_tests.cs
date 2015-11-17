@@ -359,7 +359,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             account.Status.ShouldBe(AccountStatus.Unverified);
 
             var href = $"/accounts/emailVerificationTokens/fooToken";
-            var tokenResponse = (this.dataStore as IInternalSyncDataStore).Create<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions { SkipIdentityMap = true });
+            var tokenResponse = (this.dataStore as IInternalSyncDataStore).Create<IResource, IEmailVerificationToken>(href, null);
             this.dataStore.GetResource<IAccount>(tokenResponse.Href);
 
             account.Status.ShouldBe(AccountStatus.Enabled);
@@ -402,8 +402,8 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .Returns(new DefaultHttpResponse(200, "OK", new HttpHeaders(), emailVerificationTokenResponse, "application/json", transportError: false));
 
             var href = $"/accounts/emailVerificationTokens/fooToken";
-            (this.dataStore as IInternalSyncDataStore).Create<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions { SkipIdentityMap = true });
-            (this.dataStore as IInternalSyncDataStore).Create<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions { SkipIdentityMap = true });
+            (this.dataStore as IInternalSyncDataStore).Create<IResource, IEmailVerificationToken>(href, null);
+            (this.dataStore as IInternalSyncDataStore).Create<IResource, IEmailVerificationToken>(href, null);
 
             // Not cached
             this.dataStore.RequestExecutor.Received(2).Execute(

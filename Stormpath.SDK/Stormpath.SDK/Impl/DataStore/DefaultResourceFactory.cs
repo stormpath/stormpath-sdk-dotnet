@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     properties.TryGetValue("href", out href) &&
                     href != null;
                 if (propertiesContainsHref)
-                    id = href.ToString();
+                    id = $"{type.Name}/{href.ToString()}";
 
                 if (!propertiesContainsHref)
                     properties["href"] = id;

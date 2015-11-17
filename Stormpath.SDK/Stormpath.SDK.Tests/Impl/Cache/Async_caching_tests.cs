@@ -373,7 +373,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             account.Status.ShouldBe(AccountStatus.Unverified);
 
             var href = $"/accounts/emailVerificationTokens/fooToken";
-            var tokenResponse = await (this.dataStore as IInternalAsyncDataStore).CreateAsync<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions { SkipIdentityMap = true }, CancellationToken.None);
+            var tokenResponse = await (this.dataStore as IInternalAsyncDataStore).CreateAsync<IResource, IEmailVerificationToken>(href, null, CancellationToken.None);
             await this.dataStore.GetResourceAsync<IAccount>(tokenResponse.Href);
 
             account.Status.ShouldBe(AccountStatus.Enabled);
@@ -418,8 +418,8 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), emailVerificationTokenResponse, "application/json", transportError: false) as IHttpResponse));
 
             var href = $"/accounts/emailVerificationTokens/fooToken";
-            await (this.dataStore as IInternalAsyncDataStore).CreateAsync<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions { SkipIdentityMap = true }, CancellationToken.None);
-            await (this.dataStore as IInternalAsyncDataStore).CreateAsync<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions { SkipIdentityMap = true }, CancellationToken.None);
+            await (this.dataStore as IInternalAsyncDataStore).CreateAsync<IResource, IEmailVerificationToken>(href, null, CancellationToken.None);
+            await (this.dataStore as IInternalAsyncDataStore).CreateAsync<IResource, IEmailVerificationToken>(href, null, CancellationToken.None);
 
             // Not cached
             await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(

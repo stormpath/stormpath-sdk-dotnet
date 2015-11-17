@@ -16,44 +16,32 @@
 
 using System;
 using System.Collections.Generic;
-using Stormpath.SDK.Provider;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class IdentityMapOptionsResolver
     {
-        private static readonly IdentityMapOptions DefaultOptions
-            = new IdentityMapOptions()
-            {
-                SkipIdentityMap = false,
-                StoreWithInfiniteExpiration = false
-            };
-
         private static readonly List<Type> DoNotStore
             = new List<Type>()
             {
-                typeof(IProviderAccountResult),
+                typeof(SDK.Provider.IProviderAccountResult),
+                typeof(SDK.Account.IEmailVerificationToken),
             };
 
         private static readonly List<Type> DoNotExpire
             = new List<Type>()
             {
-                typeof(ITenant),
+                typeof(SDK.Tenant.ITenant),
             };
 
         public IdentityMapOptions GetOptions(Type interfaceType)
         {
-            var options = DefaultOptions;
+            bool skip = DoNotStore.Contains(interfaceType);
+            bool storeInfinitely = DoNotExpire.Contains(interfaceType);
 
-            if (DoNotStore.Contains(interfaceType))
-                options.SkipIdentityMap = true;
-
-            if (DoNotExpire.Contains(interfaceType))
-                options.StoreWithInfiniteExpiration = true;
-
+            var options = new IdentityMapOptions(skip, storeInfinitely);
             if (!options.IsValid())
-                throw new ApplicationException("Bad identity map options specified.");
+                throw new ApplicationException($"Bad identity map options specified for type {interfaceType.Name}");
 
             return options;
         }

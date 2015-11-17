@@ -128,7 +128,7 @@ namespace Stormpath.SDK.Impl.Client
         async Task<ITenant> IClient.GetCurrentTenantAsync(CancellationToken cancellationToken)
         {
             this.tenant = await this.dataStoreAsync
-                .GetResourceAsync<ITenant>(this.CurrentTenantHref, new IdentityMapOptions() { StoreWithInfiniteExpiration = true }, cancellationToken)
+                .GetResourceAsync<ITenant>(this.CurrentTenantHref, cancellationToken)
                 .ConfigureAwait(false);
 
             return this.tenant;
@@ -136,7 +136,7 @@ namespace Stormpath.SDK.Impl.Client
 
         ITenant IClientSync.GetCurrentTenant()
         {
-            this.tenant = this.dataStoreSync.GetResource<ITenant>(this.CurrentTenantHref, new IdentityMapOptions() { StoreWithInfiniteExpiration = true });
+            this.tenant = this.dataStoreSync.GetResource<ITenant>(this.CurrentTenantHref);
 
             return this.tenant;
         }

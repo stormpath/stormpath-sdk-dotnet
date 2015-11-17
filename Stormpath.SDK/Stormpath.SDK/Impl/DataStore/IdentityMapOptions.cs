@@ -18,9 +18,15 @@ namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed class IdentityMapOptions
     {
-        public bool SkipIdentityMap { get; set; } = false;
+        public IdentityMapOptions(bool skip, bool storeInfinitely)
+        {
+            this.SkipIdentityMap = skip;
+            this.StoreWithInfiniteExpiration = storeInfinitely;
+        }
 
-        public bool StoreWithInfiniteExpiration { get; set; } = false;
+        public bool SkipIdentityMap { get; }
+
+        public bool StoreWithInfiniteExpiration { get; }
 
         public bool IsValid()
         {
