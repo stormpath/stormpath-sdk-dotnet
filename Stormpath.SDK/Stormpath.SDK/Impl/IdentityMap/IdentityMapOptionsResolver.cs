@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Impl.IdentityMap
 {
     internal sealed class IdentityMapOptionsResolver
     {

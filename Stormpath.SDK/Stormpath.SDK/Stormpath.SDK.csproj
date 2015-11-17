@@ -70,7 +70,7 @@
     <Compile Include="IdSite\IIdSiteSyncResultListener.cs" />
     <Compile Include="IdSite\IIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
-    <Compile Include="Impl\DataStore\IdentityMapOptionsResolver.cs" />
+    <Compile Include="Impl\IdentityMap\IdentityMapOptionsResolver.cs" />
     <Compile Include="Impl\Group\DefaultGroup.Membership.cs" />
     <Compile Include="Impl\Group\DefaultGroup.Collections.cs" />
     <Compile Include="Impl\Group\DefaultGroup.MembershipSync.cs" />
@@ -193,7 +193,7 @@
     <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
     <Compile Include="Impl\DataStore\IDataStoreSync.cs" />
-    <Compile Include="Impl\DataStore\IdentityMapOptions.cs" />
+    <Compile Include="Impl\IdentityMap\IdentityMapOptions.cs" />
     <Compile Include="Impl\Directory\DefaultDirectory.Collections.cs" />
     <Compile Include="Impl\Directory\DefaultDirectory.CreationActions.cs" />
     <Compile Include="Impl\Directory\DefaultDirectory.CreationActionsSync.cs" />
@@ -349,7 +349,6 @@
     <Compile Include="Impl\Utility\AnonymousType.cs" />
     <Compile Include="Impl\Utility\Base64.cs" />
     <Compile Include="Impl\Utility\DetectLanguage.cs" />
-    <Compile Include="Impl\Utility\GenericEqualityComparerDeprecated{T}.cs" />
     <Compile Include="Impl\Utility\HmacGenerator.cs" />
     <Compile Include="Impl\Utility\IMultiValueDictionary{TKey,TValue}.cs" />
     <Compile Include="Impl\Utility\ITypeLoader{T}.cs" />

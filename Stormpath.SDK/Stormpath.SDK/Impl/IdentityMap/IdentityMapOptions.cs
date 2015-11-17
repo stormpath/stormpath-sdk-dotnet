@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Impl.DataStore
+namespace Stormpath.SDK.Impl.IdentityMap
 {
     internal sealed class IdentityMapOptions
     {
