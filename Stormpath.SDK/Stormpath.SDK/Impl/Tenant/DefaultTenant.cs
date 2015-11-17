@@ -21,7 +21,6 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Resource;

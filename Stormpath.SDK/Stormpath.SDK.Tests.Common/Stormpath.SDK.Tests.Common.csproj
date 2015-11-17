@@ -38,6 +38,10 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NSubstitute, Version=1.9.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.1.9.2.0\lib\net45\NSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -68,10 +72,12 @@
     <Compile Include="DebugOnlyTheoryAttribute.cs" />
     <Compile Include="DebugOnlyFactAttribute.cs" />
     <Compile Include="Fakes\CollectionReturningHttpClient{T}.cs" />
+    <Compile Include="Fakes\FakeApiKey.cs" />
     <Compile Include="Fakes\ResourceReturningHttpClient.cs" />
     <Compile Include="Fakes\AbstractMockHttpClient.cs" />
     <Compile Include="Fakes\FakeHttpResponse.cs" />
     <Compile Include="Fakes\FakeJson.cs" />
+    <Compile Include="Fakes\TestAccounts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

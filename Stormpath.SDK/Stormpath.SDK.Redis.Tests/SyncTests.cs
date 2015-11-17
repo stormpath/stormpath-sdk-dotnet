@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 
             cached.Expiry.ShouldBeNull(); // No TTI
             cached.Value.ToString().ShouldNotBeNullOrEmpty();
-            this.fakeHttpClient.CallCount.ShouldBe(1);
+            this.fakeHttpClient.Calls.Count.ShouldBe(1);
         }
 
         [DebugOnlyFact]
@@ -65,13 +65,13 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             var application = this.client.GetResource<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
             this.client.GetResource<IApplication>(application.Href);
             this.client.GetResource<IApplication>(application.Href);
-            this.fakeHttpClient.CallCount.ShouldBe(1);
+            this.fakeHttpClient.Calls.Count.ShouldBe(1);
 
             Thread.Sleep(1500);
 
             this.client.GetResource<IApplication>(application.Href);
             this.client.GetResource<IApplication>(application.Href);
-            this.fakeHttpClient.CallCount.ShouldBe(2);
+            this.fakeHttpClient.Calls.Count.ShouldBe(2);
         }
 
         [DebugOnlyFact]
@@ -83,13 +83,13 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             var application = this.client.GetResource<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
             this.client.GetResource<IApplication>(application.Href);
             this.client.GetResource<IApplication>(application.Href);
-            this.fakeHttpClient.CallCount.ShouldBe(1);
+            this.fakeHttpClient.Calls.Count.ShouldBe(1);
 
             Thread.Sleep(1500);
 
             this.client.GetResource<IApplication>(application.Href);
             this.client.GetResource<IApplication>(application.Href);
-            this.fakeHttpClient.CallCount.ShouldBe(2);
+            this.fakeHttpClient.Calls.Count.ShouldBe(2);
         }
     }
 }

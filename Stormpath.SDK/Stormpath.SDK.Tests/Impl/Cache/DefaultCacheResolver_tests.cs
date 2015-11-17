@@ -14,7 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;

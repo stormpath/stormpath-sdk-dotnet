@@ -19,6 +19,7 @@ using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
@@ -32,7 +33,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
-                new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.DarthVader, 52)));
+                new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.DarthVader, 52)));
 
             Should.Throw<NotSupportedException>(() =>
             {
@@ -47,7 +48,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
-                new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.DarthVader, 52)));
+                new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.DarthVader, 52)));
 
             var synchronousQueryable = harness.Queryable
                 .Synchronously()

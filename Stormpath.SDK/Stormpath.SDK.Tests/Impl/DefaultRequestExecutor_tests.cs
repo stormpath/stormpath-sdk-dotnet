@@ -24,7 +24,7 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Logging;
-using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl

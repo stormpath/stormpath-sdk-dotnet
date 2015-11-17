@@ -17,7 +17,7 @@
 using NSubstitute;
 using Stormpath.SDK.Api;
 
-namespace Stormpath.SDK.Tests.Fakes
+namespace Stormpath.SDK.Tests.Common.Fakes
 {
     public static class FakeApiKey
     {

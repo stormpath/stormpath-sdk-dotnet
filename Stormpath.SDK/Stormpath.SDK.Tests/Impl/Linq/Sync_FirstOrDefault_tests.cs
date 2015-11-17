@@ -19,6 +19,7 @@ using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
@@ -32,8 +33,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
                 {
-                    FakeAccounts.LukeSkywalker,
-                    FakeAccounts.HanSolo
+                    TestAccounts.LukeSkywalker,
+                    TestAccounts.HanSolo
                 });
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 

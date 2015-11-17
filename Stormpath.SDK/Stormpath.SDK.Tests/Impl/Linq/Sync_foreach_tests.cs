@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
@@ -31,7 +32,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
-                new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance));
+                new FakeDataStore<IAccount>(TestAccounts.RebelAlliance));
             var gmailAlliance = new List<string>();
 
             foreach (var rebel in harness.Queryable.Synchronously())
@@ -39,7 +40,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 gmailAlliance.Add($"{rebel.GivenName.ToLower()}@gmail.com");
             }
 
-            gmailAlliance.Count.ShouldBe(FakeAccounts.RebelAlliance.Count);
+            gmailAlliance.Count.ShouldBe(TestAccounts.RebelAlliance.Count);
         }
     }
 }

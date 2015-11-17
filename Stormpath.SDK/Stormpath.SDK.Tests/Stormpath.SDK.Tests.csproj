@@ -71,9 +71,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fakes\FakeAccount.cs" />
-    <Compile Include="Fakes\FakeAccounts.cs" />
-    <Compile Include="Fakes\FakeApiKey.cs" />
     <Compile Include="Fakes\FakeDataStore{TType}.cs" />
     <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Fakes\StubDataStore.cs" />
@@ -130,6 +127,7 @@
     <Compile Include="Impl\Jwt\DefaultJwtClaimsBuilder_tests.cs" />
     <Compile Include="Impl\Linq\Complicated_tests.cs" />
     <Compile Include="Impl\Linq\Expand_resource_tests.cs" />
+    <Compile Include="Impl\Linq\Linq_test{T}.cs" />
     <Compile Include="Impl\Linq\Sync_expand_extension_tests.cs" />
     <Compile Include="Impl\Linq\Expand_extension_tests.cs" />
     <Compile Include="Impl\Linq\Sync_SingleOrDefault_tests.cs" />

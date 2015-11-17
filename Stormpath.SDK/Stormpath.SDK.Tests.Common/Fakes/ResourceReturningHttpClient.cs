@@ -28,8 +28,6 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         private readonly string defaultResponse;
         private readonly IDictionary<string, IHttpResponse> responses;
 
-        private int calls;
-
         public ResourceReturningHttpClient(string baseUrl, string defaultResponse = null)
             : base(baseUrl)
         {

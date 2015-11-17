@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
@@ -95,7 +96,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             // in Stormpath, even though that's what it translates to. .Take() represents an
             // upper limit to the items that are returned. Take(5) returns 5 items, Take(500) returns 500.
             // In the underyling API, the limi=? parameter has a hard maximum of 100.
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 250));
+            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.C3PO, 250));
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
             var longList = await harness.Queryable
@@ -116,7 +117,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             // in Stormpath, even though that's what it translates to. .Take() represents an
             // upper limit to the items that are returned. Take(5) returns 5 items, Take(500) returns 500.
             // In the underyling API, the limi=? parameter has a hard maximum of 100.
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 750));
+            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.DarthVader, 750));
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
             var longList = await harness.Queryable

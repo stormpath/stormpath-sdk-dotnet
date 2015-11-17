@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Common;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
@@ -35,7 +36,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
-                new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance));
+                new FakeDataStore<IAccount>(TestAccounts.RebelAlliance));
             var gmailAlliance = new List<string>();
 
             await harness.Queryable.ForEachAsync(acct =>
@@ -43,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 gmailAlliance.Add($"{acct.GivenName.ToLower()}@gmail.com");
             });
 
-            gmailAlliance.Count.ShouldBe(FakeAccounts.RebelAlliance.Count);
+            gmailAlliance.Count.ShouldBe(TestAccounts.RebelAlliance.Count);
         }
 
         [Fact]
@@ -51,7 +52,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
-                new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance));
+                new FakeDataStore<IAccount>(TestAccounts.RebelAlliance));
             var gmailAlliance = new List<string>();
 
             Func<string, Task> addAsynchronously = async str =>
@@ -65,7 +66,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 await addAsynchronously(acct.GivenName);
             });
 
-            gmailAlliance.Count.ShouldBe(FakeAccounts.RebelAlliance.Count);
+            gmailAlliance.Count.ShouldBe(TestAccounts.RebelAlliance.Count);
         }
 
         [Fact]
@@ -73,7 +74,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
-                new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
+                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
             var empireFirstNameLookup = new Dictionary<int, string>();
 
             await harness.Queryable.ForEachAsync((acct, index) =>
@@ -81,7 +82,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 empireFirstNameLookup.Add(index, $"{acct.GivenName} {acct.Surname}");
             });
 
-            empireFirstNameLookup[2].ShouldBe(FakeAccounts.GalacticEmpire.ElementAt(2).GivenName + " " + FakeAccounts.GalacticEmpire.ElementAt(2).Surname);
+            empireFirstNameLookup[2].ShouldBe(TestAccounts.GalacticEmpire.ElementAt(2).GivenName + " " + TestAccounts.GalacticEmpire.ElementAt(2).Surname);
         }
 
         [Fact]
@@ -89,7 +90,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
-                new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
+                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
             var empireFirstNameLookup = new Dictionary<int, string>();
 
             Func<string, string, int, Task> addAsynchronously = async (str1, str2, index) =>
@@ -103,7 +104,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 await addAsynchronously(acct.GivenName, acct.Surname, index);
             });
 
-            empireFirstNameLookup[2].ShouldBe(FakeAccounts.GalacticEmpire.ElementAt(2).GivenName + " " + FakeAccounts.GalacticEmpire.ElementAt(2).Surname);
+            empireFirstNameLookup[2].ShouldBe(TestAccounts.GalacticEmpire.ElementAt(2).GivenName + " " + TestAccounts.GalacticEmpire.ElementAt(2).Surname);
         }
 
         [Fact]
@@ -111,7 +112,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
-                new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
+                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
             var cts = new CancellationTokenSource();
             var reachedIndex = -1;
 
@@ -139,7 +140,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
-                new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
+                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
             var reachedIndex = -1;
 
             await harness.Queryable.ForEachAsync(
@@ -158,7 +159,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
-                new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
+                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
             var reachedIndex = -1;
 
             await harness.Queryable.ForEachAsync(
@@ -178,7 +179,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
-                new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
+                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
             var reachedIndex = -1;
 
             await harness.Queryable.ForEachAsync(
@@ -197,7 +198,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 this.Href,
-                new FakeDataStore<IAccount>(FakeAccounts.GalacticEmpire));
+                new FakeDataStore<IAccount>(TestAccounts.GalacticEmpire));
             var reachedIndex = -1;
 
             await harness.Queryable.ForEachAsync(

@@ -18,6 +18,7 @@ using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
@@ -29,14 +30,14 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void AsEnumerable_is_idempotent()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance);
+            var fakeDataStore = new FakeDataStore<IAccount>(TestAccounts.RebelAlliance);
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
             var alliance = harness.Queryable
                 .Synchronously()
                 .AsEnumerable();
 
-            alliance.Count().ShouldBe(FakeAccounts.RebelAlliance.Count);
+            alliance.Count().ShouldBe(TestAccounts.RebelAlliance.Count);
         }
     }
 }

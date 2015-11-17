@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
@@ -33,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 href,
-                new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance));
+                new FakeDataStore<IAccount>(TestAccounts.RebelAlliance));
 
             var query = harness.Queryable
                 .Take(5)
@@ -48,7 +49,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 href,
-                new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance));
+                new FakeDataStore<IAccount>(TestAccounts.RebelAlliance));
 
             var query = harness.Queryable;
 
@@ -61,7 +62,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
                 href,
-                new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 50)));
+                new FakeDataStore<IAccount>(Enumerable.Repeat(TestAccounts.AdmiralAckbar, 50)));
 
             var query = harness.Queryable;
 
