@@ -15,8 +15,10 @@
 // </copyright>
 
 using System;
+using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Impl.IdentityMap;
+using Stormpath.SDK.Logging;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.IdentityMap
@@ -29,7 +31,7 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
         {
             // Arbitrary expiration policy. We won't be validating expirations in these tests
             // because it's tricky to do so with MemoryCache.
-            this.identityMap = new MemoryCacheIdentityMap<string, TestEntity>(TimeSpan.FromSeconds(10));
+            this.identityMap = new MemoryCacheIdentityMap<string, TestEntity>(TimeSpan.FromSeconds(10), Substitute.For<ILogger>());
         }
 
         private TestEntity CreateEntity(string id)
