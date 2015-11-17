@@ -18,7 +18,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Client;
+using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Linq;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
@@ -30,6 +34,19 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Returns_false_for_empty_collection()
         {
+            var fakeHttpClient = new CollectionReturningHttpClient<IAccount>("http://f.oo", Enumerable.Empty<IAccount>());
+
+            var client = Clients.Builder()
+                .SetApiKey(FakeApiKey.Create(valid: true))
+                .SetBaseUrl(this.Href)
+                .SetHttpClient(fakeHttpClient)
+                .Build();
+
+            var queryable = new CollectionResourceQueryable<IAccount>(this.Href, (client as DefaultClient).DataStore);
+
+            (await queryable.AnyAsync()).ShouldBeFalse();
+
+            false.ShouldBeTrue();
             var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
             var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 

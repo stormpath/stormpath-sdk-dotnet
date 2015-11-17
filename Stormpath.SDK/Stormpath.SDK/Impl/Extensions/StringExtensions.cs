@@ -28,6 +28,17 @@ namespace Stormpath.SDK.Impl.Extensions
             return source;
         }
 
+        public static int? ToInt32(this string source)
+        {
+            int result;
+
+            if (string.IsNullOrEmpty(source)
+                || !int.TryParse(source, out result))
+                return null;
+
+            return result;
+        }
+
         public static KeyValuePair<string, string> SplitToKeyValuePair(this string source, char separator)
         {
             if (string.IsNullOrEmpty(source) || !source.Contains(separator.ToString()))

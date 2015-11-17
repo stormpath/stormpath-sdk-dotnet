@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -63,7 +67,9 @@
     <Compile Include="Assertly.cs" />
     <Compile Include="DebugOnlyTheoryAttribute.cs" />
     <Compile Include="DebugOnlyFactAttribute.cs" />
-    <Compile Include="Fakes\FakeHttpClient.cs" />
+    <Compile Include="Fakes\CollectionReturningHttpClient{T}.cs" />
+    <Compile Include="Fakes\ResourceReturningHttpClient.cs" />
+    <Compile Include="Fakes\AbstractMockHttpClient.cs" />
     <Compile Include="Fakes\FakeHttpResponse.cs" />
     <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

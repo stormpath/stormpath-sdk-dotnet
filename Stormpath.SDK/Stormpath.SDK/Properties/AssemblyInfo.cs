@@ -51,5 +51,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.2.0.0")]
 [assembly: AssemblyFileVersion("0.2.0.0")]
 [assembly: InternalsVisibleTo("Stormpath.SDK.Tests")]
+[assembly: InternalsVisibleTo("Stormpath.SDK.Tests.Common")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: InternalsVisibleTo("Stormpath.SDK.RestSharpClient")]
