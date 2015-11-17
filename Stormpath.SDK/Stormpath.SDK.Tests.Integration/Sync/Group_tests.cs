@@ -126,6 +126,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Clean up
             droids.Delete();
+            this.fixture.CreatedGroupHrefs.Remove(droids.Href);
         }
 
         [Theory]
@@ -148,6 +149,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Clean up
             newGroup.Delete();
+            this.fixture.CreatedGroupHrefs.Remove(newGroup.Href);
         }
 
         [Theory]
@@ -276,6 +278,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             created.Status.ShouldBe(GroupStatus.Disabled);
 
             created.Delete().ShouldBeTrue();
+            this.fixture.CreatedGroupHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -299,6 +302,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             created.Status.ShouldBe(GroupStatus.Enabled);
 
             created.Delete().ShouldBeTrue();
+            this.fixture.CreatedGroupHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -321,6 +325,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             customData["roleBasedSecurity"].ShouldBe("pieceOfCake");
 
             created.Delete().ShouldBeTrue();
+            this.fixture.CreatedGroupHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -340,6 +345,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedGroupHrefs.Add(group.Href);
 
             group.Delete().ShouldBeTrue();
+            this.fixture.CreatedGroupHrefs.Remove(group.Href);
         }
     }
 }

@@ -84,9 +84,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             defaultAccountStore.ShouldBeNull(); // no auto-created directory = no default account store
 
             // Clean up
-            var deleted = createdApplication.Delete();
-            if (deleted)
-                this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+            createdApplication.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
         [Theory]
@@ -130,7 +129,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedApplicationHrefs.Add(newApp.Href);
 
             // Clean up
-            newApp.Delete();
+            newApp.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(newApp.Href);
         }
 
         [Theory]

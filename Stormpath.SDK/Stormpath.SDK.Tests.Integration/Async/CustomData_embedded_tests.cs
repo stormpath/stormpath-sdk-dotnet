@@ -70,7 +70,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             customData["status"].ShouldBe(1337);
             customData["isAwesome"].ShouldBe(true);
 
-            await created.DeleteAsync();
+            (await created.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -91,7 +92,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             customData["isCool"].ShouldBe(true);
             customData["my-custom-data"].ShouldBe(1234);
 
-            await created.DeleteAsync();
+            (await created.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -114,7 +116,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             customData["isAwesome"].ShouldBe(null);
             customData["phrase"].ShouldBe("testing is neet");
 
-            await created.DeleteAsync();
+            (await created.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -137,7 +140,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             customData = await created.GetCustomDataAsync();
             customData.IsEmptyOrDefault().ShouldBeTrue();
 
-            await created.DeleteAsync();
+            (await created.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(created.Href);
         }
     }
 }

@@ -73,7 +73,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             created.Status.ShouldBe(DirectoryStatus.Disabled);
 
             // Cleanup
-            created.Delete();
+            created.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -95,7 +96,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
 
             // Cleanup
-            directory.Delete();
+            directory.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(directory.Href);
         }
 
         [Theory]
@@ -125,7 +127,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             customData["good"].ShouldBe(true);
 
             // Cleanup
-            updated.Delete();
+            updated.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(updated.Href);
         }
 
         [Theory]
@@ -150,7 +153,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             created.Save(response => response.Expand(x => x.GetCustomDataAsync));
 
             // Cleanup
-            created.Delete();
+            created.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -185,7 +189,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             provider.ClientSecret.ShouldBe("secret123!");
 
             // Cleanup
-            created.Delete();
+            created.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -220,7 +225,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             provider.ClientSecret.ShouldBe("secret123!");
 
             // Cleanup
-            created.Delete();
+            created.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -257,7 +263,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             provider.RedirectUri.ShouldBe("foo://bar");
 
             // Cleanup
-            created.Delete();
+            created.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -292,7 +299,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             provider.ClientSecret.ShouldBe("secret123!");
 
             // Cleanup
-            created.Delete();
+            created.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(created.Href);
         }
     }
 }

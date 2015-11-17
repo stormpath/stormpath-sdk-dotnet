@@ -83,7 +83,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             updated.Count().ShouldBe(4);
 
             // Cleanup
-            await account.DeleteAsync();
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]
@@ -109,7 +110,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             newCustomData.Count().ShouldBe(3);
 
             // Cleanup
-            await account.DeleteAsync();
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]
@@ -140,7 +142,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             newCustomData.Count().ShouldBe(3);
 
             // Cleanup
-            await account.DeleteAsync();
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]
@@ -166,7 +169,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             updated2.Get("text").ShouldBe("fizzbuzz");
 
             // Cleanup
-            await account.DeleteAsync();
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
     }
 }

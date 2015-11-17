@@ -71,6 +71,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             created.Email.ShouldBe("different");
 
             updated.Delete();
+            this.fixture.CreatedAccountHrefs.Remove(updated.Href);
         }
 
         [Theory]
@@ -93,6 +94,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             newAccount.MiddleName.ShouldBe("these");
 
             created.Delete();
+            this.fixture.CreatedAccountHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -119,6 +121,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedAccountHrefs.Add(newAccount.Href);
 
             newAccount.Delete();
+            this.fixture.CreatedAccountHrefs.Remove(newAccount.Href);
         }
     }
 }

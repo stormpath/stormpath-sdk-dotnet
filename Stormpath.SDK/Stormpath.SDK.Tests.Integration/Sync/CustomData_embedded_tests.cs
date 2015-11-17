@@ -70,7 +70,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             customData["status"].ShouldBe(1337);
             customData["isAwesome"].ShouldBe(true);
 
-            created.Delete();
+            created.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -91,7 +92,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             customData["isCool"].ShouldBe(true);
             customData["my-custom-data"].ShouldBe(1234);
 
-            created.Delete();
+            created.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -114,7 +116,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             customData["isAwesome"].ShouldBe(null);
             customData["phrase"].ShouldBe("testing is neet");
 
-            created.Delete();
+            created.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -137,7 +140,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             customData = created.GetCustomData();
             customData.IsEmptyOrDefault().ShouldBeTrue();
 
-            created.Delete();
+            created.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(created.Href);
         }
     }
 }

@@ -297,9 +297,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             wedge.FullName.ShouldBe("Wedge Antilles");
 
             // Clean up
-            var didDelete = newAccount.Delete();
-            if (didDelete)
-                this.fixture.CreatedAccountHrefs.Remove(newAccount.Href);
+            newAccount.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(newAccount.Href);
         }
 
         [Theory]
@@ -455,9 +454,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             account.ModifiedAt.ShouldBe(DateTimeOffset.Now, TimeSpan.FromSeconds(10));
 
             var deleted = account.Delete(); // It's a trap! :(
-            if (deleted)
-                this.fixture.CreatedAccountHrefs.Remove(account.Href);
             deleted.ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]
@@ -480,7 +478,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             customData["death"].ShouldBe(40);
 
             // Clean up
-            account.Delete();
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]
@@ -505,7 +504,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             // Clean up
-            account.Delete();
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]

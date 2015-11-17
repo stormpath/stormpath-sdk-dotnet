@@ -285,9 +285,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             wedge.FullName.ShouldBe("Wedge Antilles");
 
             // Clean up
-            var didDelete = await newAccount.DeleteAsync();
-            if (didDelete)
-                this.fixture.CreatedAccountHrefs.Remove(newAccount.Href);
+            (await newAccount.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(newAccount.Href);
         }
 
         [Theory]
@@ -436,9 +435,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             account.ModifiedAt.ShouldBe(DateTimeOffset.Now, TimeSpan.FromSeconds(10));
 
             var deleted = await account.DeleteAsync(); // It's a trap! :(
-            if (deleted)
-                this.fixture.CreatedAccountHrefs.Remove(account.Href);
             deleted.ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]
@@ -461,7 +459,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             customData["death"].ShouldBe(40);
 
             // Clean up
-            await account.DeleteAsync();
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]
@@ -486,7 +485,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             // Clean up
-            await account.DeleteAsync();
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]

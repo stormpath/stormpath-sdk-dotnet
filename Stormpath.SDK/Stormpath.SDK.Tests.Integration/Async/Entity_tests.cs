@@ -69,7 +69,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             updated.SetEmail("different");
             created.Email.ShouldBe("different");
 
-            await updated.DeleteAsync();
+            (await updated.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(updated.Href);
         }
 
         [Theory]
@@ -91,7 +92,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             created.SetMiddleName("these");
             newAccount.MiddleName.ShouldBe("these");
 
-            await created.DeleteAsync();
+            (await created.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(created.Href);
         }
 
         [Theory]
@@ -117,7 +119,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             newAccount.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedAccountHrefs.Add(newAccount.Href);
 
-            await newAccount.DeleteAsync();
+            (await newAccount.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(newAccount.Href);
         }
     }
 }
