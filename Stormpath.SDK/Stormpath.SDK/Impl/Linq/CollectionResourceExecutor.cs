@@ -206,7 +206,7 @@ namespace Stormpath.SDK.Impl.Linq
             if (this.compiledModel == null)
                 this.CompileModelOrUseDefaultValues();
 
-            var argumentList = RequestBuilder.GetArguments(this.compiledModel);
+            var argumentList = QueryModelParser.GetArguments(this.compiledModel);
             if (!argumentList.Any())
                 return this.collectionHref;
 

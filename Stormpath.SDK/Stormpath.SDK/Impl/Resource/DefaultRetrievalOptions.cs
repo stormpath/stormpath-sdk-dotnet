@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Impl.Resource
                 return string.Empty;
 
             var queryModel = QueryModelCompiler.Compile(this.proxy.Expression);
-            var arguments = RequestBuilder.GetArguments(queryModel);
+            var arguments = QueryModelParser.GetArguments(queryModel);
 
             return string.Join(",", arguments);
         }

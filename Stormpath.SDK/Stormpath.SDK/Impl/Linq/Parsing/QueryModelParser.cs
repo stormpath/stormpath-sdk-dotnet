@@ -1,4 +1,4 @@
-﻿// <copyright file="RequestBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="QueryModelParser.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,18 +23,18 @@ using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
 {
-    internal sealed class RequestBuilder
+    internal sealed class QueryModelParser
     {
         public static IList<string> GetArguments(CollectionResourceQueryModel queryModel)
         {
-            var builder = new RequestBuilder(queryModel);
+            var builder = new QueryModelParser(queryModel);
             return builder.GenerateArguments();
         }
 
         private readonly CollectionResourceQueryModel queryModel;
         private readonly Dictionary<string, string> arguments;
 
-        public RequestBuilder(CollectionResourceQueryModel queryModel)
+        public QueryModelParser(CollectionResourceQueryModel queryModel)
         {
             this.queryModel = queryModel;
             this.arguments = new Dictionary<string, string>();

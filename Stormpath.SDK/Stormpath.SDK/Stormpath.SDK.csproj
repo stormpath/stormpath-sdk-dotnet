@@ -273,7 +273,7 @@
     <Compile Include="Impl\IdSite\IdSiteClaims.cs" />
     <Compile Include="Impl\Linq\LinqHelper.cs" />
     <Compile Include="Impl\Linq\Parsing\QueryModelCompiler.cs" />
-    <Compile Include="Impl\Linq\Parsing\RequestBuilder.cs" />
+    <Compile Include="Impl\Linq\Parsing\QueryModelParser.cs" />
     <Compile Include="Impl\Linq\QueryModel\ExecutionPlanModel.cs" />
     <Compile Include="Impl\Linq\QueryModel\OrderByTerm.cs" />
     <Compile Include="Impl\Linq\Sync\SyncEnumeratorAdapter.cs" />
