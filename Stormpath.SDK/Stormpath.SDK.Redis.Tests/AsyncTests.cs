@@ -66,7 +66,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             await this.client.GetResourceAsync<IApplication>(application.Href);
             this.fakeHttpClient.CallCount.ShouldBe(1);
 
-            await Task.Delay(1000);
+            await Task.Delay(1500);
 
             await this.client.GetResourceAsync<IApplication>(application.Href);
             await this.client.GetResourceAsync<IApplication>(application.Href);
@@ -84,7 +84,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             await this.client.GetResourceAsync<IApplication>(application.Href);
             this.fakeHttpClient.CallCount.ShouldBe(1);
 
-            await Task.Delay(1000);
+            await Task.Delay(1500);
 
             await this.client.GetResourceAsync<IApplication>(application.Href);
             await this.client.GetResourceAsync<IApplication>(application.Href);

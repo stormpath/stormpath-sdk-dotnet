@@ -67,7 +67,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             this.client.GetResource<IApplication>(application.Href);
             this.fakeHttpClient.CallCount.ShouldBe(1);
 
-            Thread.Sleep(1000);
+            Thread.Sleep(1500);
 
             this.client.GetResource<IApplication>(application.Href);
             this.client.GetResource<IApplication>(application.Href);
@@ -85,7 +85,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             this.client.GetResource<IApplication>(application.Href);
             this.fakeHttpClient.CallCount.ShouldBe(1);
 
-            Thread.Sleep(1000);
+            Thread.Sleep(1500);
 
             this.client.GetResource<IApplication>(application.Href);
             this.client.GetResource<IApplication>(application.Href);
