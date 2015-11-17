@@ -46,60 +46,6 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public async Task Operates_on_every_item_asynchronously()
-        {
-            this.InitializeClientWithCollection(TestAccounts.RebelAlliance);
-            var gmailAlliance = new List<string>();
-
-            Func<string, Task> addAsynchronously = async str =>
-            {
-                await Task.Yield();
-                gmailAlliance.Add($"{str.ToLower()}@gmail.com");
-            };
-
-            await this.Queryable.ForEachAsync(acct =>
-            {
-                return addAsynchronously(acct.GivenName);
-            });
-
-            gmailAlliance.Count.ShouldBe(TestAccounts.RebelAlliance.Count);
-        }
-
-        [Fact]
-        public async Task Indexes_every_item()
-        {
-            this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
-            var empireFirstNameLookup = new Dictionary<int, string>();
-
-            await this.Queryable.ForEachAsync((acct, index) =>
-            {
-                empireFirstNameLookup.Add(index, $"{acct.GivenName} {acct.Surname}");
-            });
-
-            empireFirstNameLookup[2].ShouldBe(TestAccounts.GalacticEmpire.ElementAt(2).GivenName + " " + TestAccounts.GalacticEmpire.ElementAt(2).Surname);
-        }
-
-        [Fact]
-        public async Task Indexes_every_item_asynchronously()
-        {
-            this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
-            var empireFirstNameLookup = new Dictionary<int, string>();
-
-            Func<string, string, int, Task> addAsynchronously = async (str1, str2, index) =>
-            {
-                await Task.Yield();
-                empireFirstNameLookup.Add(index, $"{str1} {str2}");
-            };
-
-            await this.Queryable.ForEachAsync(async (acct, index) =>
-            {
-                await addAsynchronously(acct.GivenName, acct.Surname, index);
-            });
-
-            empireFirstNameLookup[2].ShouldBe(TestAccounts.GalacticEmpire.ElementAt(2).GivenName + " " + TestAccounts.GalacticEmpire.ElementAt(2).Surname);
-        }
-
-        [Fact]
         public async Task Can_be_cancelled()
         {
             this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
@@ -109,11 +55,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             try
             {
                 await this.Queryable.ForEachAsync(
-                    (acct, index) =>
+                    acct =>
                 {
-                    reachedIndex = index;
+                    reachedIndex++;
 
-                    if (index == 2)
+                    if (reachedIndex == 2)
                         cts.Cancel();
                 }, cts.Token);
 
@@ -137,59 +83,6 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                     reachedIndex++;
 
                     return reachedIndex == 2;
-                }, CancellationToken.None);
-
-            reachedIndex.ShouldBe(2);
-        }
-
-        [Fact]
-        public async Task Can_break_gracefully_asynchronously()
-        {
-            this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
-            var reachedIndex = -1;
-
-            await this.Queryable.ForEachAsync(
-                async acct =>
-                {
-                    await Task.Yield();
-                    reachedIndex++;
-
-                    return reachedIndex == 2;
-                }, CancellationToken.None);
-
-            reachedIndex.ShouldBe(2);
-        }
-
-        [Fact]
-        public async Task Can_break_gracefully_when_indexing()
-        {
-            this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
-            var reachedIndex = -1;
-
-            await this.Queryable.ForEachAsync(
-                (acct, index) =>
-                {
-                    reachedIndex = index;
-
-                    return index == 2;
-                }, CancellationToken.None);
-
-            reachedIndex.ShouldBe(2);
-        }
-
-        [Fact]
-        public async Task Can_break_gracefully_when_indexing_asynchronously()
-        {
-            this.InitializeClientWithCollection(TestAccounts.GalacticEmpire);
-            var reachedIndex = -1;
-
-            await this.Queryable.ForEachAsync(
-                async (acct, index) =>
-                {
-                    await Task.Yield();
-                    reachedIndex = index;
-
-                    return index == 2;
                 }, CancellationToken.None);
 
             reachedIndex.ShouldBe(2);
