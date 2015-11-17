@@ -26,6 +26,7 @@ namespace Stormpath.SDK.Impl.DataStore
             {
                 typeof(SDK.Provider.IProviderAccountResult),
                 typeof(SDK.Account.IEmailVerificationToken),
+                typeof(SDK.Auth.IAuthenticationResult),
             };
 
         private static readonly List<Type> DoNotExpire
