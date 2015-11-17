@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Serialization.FieldConverters
@@ -42,7 +43,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             if (this.converter == null)
                 throw new ApplicationException($"Could not parse expanded property data from attribute '{token.Key}'.");
 
-            var embeddedType = this.typeLookup.GetInterface(token.Key);
+            var embeddedType = new ResourceTypeLookup().GetInterface(token.Key);
             var convertedData = this.converter(asEmbeddedResource, embeddedType);
 
             return new FieldConverterResult(true, new ExpandedProperty(convertedData));

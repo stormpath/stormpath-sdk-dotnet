@@ -118,7 +118,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             bool isRead = request.Action == ResourceAction.Read;
             bool isLoginAttempt = request.Type == typeof(ILoginAttempt);
             bool isProviderAccountAccess = request.Type == typeof(IProviderAccountAccess);
-            bool isCollectionResource = ResourceTypes.IsCollectionResponse(request.Type);
+            bool isCollectionResource = ResourceTypeLookup.IsCollectionResponse(request.Type);
             bool isExpandedRequest = request.Uri.ToString().Contains("expand=");
 
             return

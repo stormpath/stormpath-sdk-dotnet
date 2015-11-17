@@ -1,4 +1,4 @@
-﻿// <copyright file="ResourceTypes.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ResourceTypeLookup.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +40,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    internal sealed class ResourceTypes
+    internal sealed class ResourceTypeLookup
     {
         private static readonly IReadOnlyDictionary<Type, Type> ConcreteLookup = new Dictionary<Type, Type>()
         {

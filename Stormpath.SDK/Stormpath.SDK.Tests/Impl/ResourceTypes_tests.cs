@@ -37,17 +37,17 @@ namespace Stormpath.SDK.Tests.Impl
 {
     public class ResourceTypes_tests
     {
-        private readonly ResourceTypes lookup;
+        private readonly ResourceTypeLookup lookup;
 
         public ResourceTypes_tests()
         {
-            this.lookup = new ResourceTypes();
+            this.lookup = new ResourceTypeLookup();
         }
 
         [Fact]
         public void Returns_null_for_unknown_concrete_type()
         {
-            this.lookup.GetConcrete(typeof(ResourceTypes)).ShouldBeNull();
+            this.lookup.GetConcrete(typeof(ResourceTypeLookup)).ShouldBeNull();
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Returns_null_for_unknown_collection_type()
         {
-            this.lookup.GetInnerCollectionInterface(typeof(ResourceTypes)).ShouldBeNull();
+            this.lookup.GetInnerCollectionInterface(typeof(ResourceTypeLookup)).ShouldBeNull();
             this.lookup.GetInnerCollectionInterface(typeof(CollectionResponsePage<>)).ShouldBeNull();
             this.lookup.GetInnerCollectionInterface(typeof(CollectionResponsePage<IBasicLoginAttempt>)).ShouldBeNull();
         }

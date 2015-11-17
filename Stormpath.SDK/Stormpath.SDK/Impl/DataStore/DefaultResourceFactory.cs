@@ -25,15 +25,12 @@ namespace Stormpath.SDK.Impl.DataStore
     {
         private readonly IInternalDataStore dataStore;
         private readonly IIdentityMap<string, ResourceData> identityMap;
-        private readonly ResourceTypes typeLookup;
         private bool isDisposed = false; // To detect redundant calls
 
         public DefaultResourceFactory(IInternalDataStore dataStore, IIdentityMap<string, ResourceData> identityMap)
         {
             this.dataStore = dataStore;
             this.identityMap = identityMap;
-
-            this.typeLookup = new ResourceTypes();
         }
 
         private IResourceFactory AsInterface => this;
@@ -49,7 +46,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         object IResourceFactory.Create(Type type, IDictionary<string, object> properties, ILinkable original)
         {
-            if (ResourceTypes.IsCollectionResponse(type))
+            if (ResourceTypeLookup.IsCollectionResponse(type))
                 return this.InstantiateCollection(type, properties);
 
             return this.InstantiateSingle(type, properties, original);
@@ -57,7 +54,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private object InstantiateSingle(Type type, IDictionary<string, object> properties, ILinkable original)
         {
-            var targetType = this.typeLookup.GetConcrete(type);
+            var targetType = new ResourceTypeLookup().GetConcrete(type);
             if (targetType == null)
                 throw new ApplicationException($"Unknown resource type {type.Name}");
 
@@ -107,8 +104,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private object InstantiateCollection(Type collectionType, IDictionary<string, object> properties)
         {
-            Type innerType = this.typeLookup.GetInnerCollectionInterface(collectionType);
-            var targetType = this.typeLookup.GetConcrete(innerType);
+            Type innerType = new ResourceTypeLookup().GetInnerCollectionInterface(collectionType);
+            var targetType = new ResourceTypeLookup().GetConcrete(innerType);
             if (innerType == null || targetType == null)
                 throw new ApplicationException($"Error creating collection resource: unknown inner type '{innerType?.Name}'.");
 

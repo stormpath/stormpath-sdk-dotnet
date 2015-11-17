@@ -27,7 +27,6 @@ namespace Stormpath.SDK.Impl.Cache
         private readonly ICacheProvider cacheProvider;
         private readonly ISynchronousCacheProvider syncCacheProvider;
         private readonly IAsynchronousCacheProvider asyncCacheProvider;
-        private readonly ResourceTypes typeLookup;
 
         public DefaultCacheResolver(ICacheProvider cacheProvider, ILogger logger)
         {
@@ -37,7 +36,6 @@ namespace Stormpath.SDK.Impl.Cache
             this.cacheProvider = cacheProvider;
             this.syncCacheProvider = cacheProvider as ISynchronousCacheProvider;
             this.asyncCacheProvider = cacheProvider as IAsynchronousCacheProvider;
-            this.typeLookup = new ResourceTypes();
             this.logger = logger;
         }
 
@@ -47,7 +45,7 @@ namespace Stormpath.SDK.Impl.Cache
 
         private string GetCacheRegionName(Type type)
         {
-            var iface = this.typeLookup.GetInterface(type);
+            var iface = new ResourceTypeLookup().GetInterface(type);
 
             if (iface == null)
                 throw new ApplicationException($"Could not locate a cache region for resource type {type.Name}. Resource type unknown.");

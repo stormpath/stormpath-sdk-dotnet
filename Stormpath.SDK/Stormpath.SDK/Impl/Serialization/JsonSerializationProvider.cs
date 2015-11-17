@@ -25,14 +25,12 @@ namespace Stormpath.SDK.Impl.Serialization
     internal sealed class JsonSerializationProvider
     {
         private readonly FieldConverterList converterChain;
-        private readonly ResourceTypes typeLookup;
 
         internal readonly IJsonSerializer ExternalSerializer;
 
         public JsonSerializationProvider(IJsonSerializer externalSerializer)
         {
             this.ExternalSerializer = externalSerializer;
-            this.typeLookup = new ResourceTypes();
 
             this.converterChain = new FieldConverterList(
                 new LinkPropertyConverter(),
