@@ -43,7 +43,6 @@ namespace Stormpath.SDK.Impl.Client
         private AuthenticationScheme authenticationScheme = DefaultAuthenticationScheme;
         private IClientApiKey apiKey;
         private ILogger logger;
-        private TimeSpan? identityMapExpiration;
 
         public DefaultClientBuilder()
         {
@@ -129,17 +128,6 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
-        IClientBuilder IClientBuilder.SetIdentityMapExpiration(TimeSpan expiration)
-        {
-            if (expiration.TotalSeconds < 10 ||
-                expiration.TotalHours > 24)
-                throw new ArgumentOutOfRangeException($"{nameof(expiration)} must be between 10 seconds and 24 hours.");
-
-            this.identityMapExpiration = expiration;
-
-            return this;
-        }
-
         IClientBuilder IClientBuilder.SetCacheProvider(ICacheProvider cacheProvider)
         {
             if (cacheProvider == null)
@@ -205,7 +193,7 @@ namespace Stormpath.SDK.Impl.Client
                 this.serializerBuilder.Build(),
                 this.cacheProvider,
                 this.logger,
-                this.identityMapExpiration ?? DefaultIdentityMapSlidingExpiration);
+                DefaultIdentityMapSlidingExpiration);
         }
     }
 }

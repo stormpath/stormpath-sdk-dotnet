@@ -98,14 +98,6 @@ namespace Stormpath.SDK.Client
         IClientBuilder SetCacheProvider(ICacheProvider cacheProvider);
 
         /// <summary>
-        /// Advanced use; only change this if you know what you are doing. Sets the internal identity map expiration time.
-        /// </summary>
-        /// <param name="expiration">Identity map expiration timeout.</param>
-        /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="expiration"/> is less than 10 seconds or more than 24 hours.</exception>
-        IClientBuilder SetIdentityMapExpiration(TimeSpan expiration);
-
-        /// <summary>
         /// Sets the HTTP client to use when making requests.
         /// Don't call this method unless you want to use a different HTTP client than the default.
         /// </summary>
