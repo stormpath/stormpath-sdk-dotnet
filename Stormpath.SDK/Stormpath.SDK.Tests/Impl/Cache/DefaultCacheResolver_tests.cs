@@ -20,6 +20,7 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Impl.Cache;
+using Stormpath.SDK.Logging;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Cache
@@ -27,49 +28,31 @@ namespace Stormpath.SDK.Tests.Impl.Cache
     public class DefaultCacheResolver_tests
     {
         [Fact]
-        public void Throws_when_getting_unsupported_synchronous_cache()
+        public void Getting_unsupported_synchronous_cache_returns_null()
         {
             var fakeCacheManager = Substitute.For<ICacheProvider>();
             fakeCacheManager
                 .IsSynchronousSupported
                 .Returns(false);
 
-            ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager);
+            ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager, Substitute.For<ILogger>());
 
-            bool didErrorCorrectly = false;
-            try
-            {
-                cacheResolver.GetSyncCache(typeof(IAccount));
-            }
-            catch (ApplicationException)
-            {
-                didErrorCorrectly = true;
-            }
-
-            Assert.True(didErrorCorrectly, "Did not throw!");
+            var cache = cacheResolver.GetSyncCache(typeof(IAccount));
+            cache.ShouldBeNull();
         }
 
         [Fact]
-        public void Throws_when_getting_unsupported_asynchronous_cache()
+        public void Getting_unsupported_asynchronous_cache_returns_null()
         {
             var fakeCacheManager = Substitute.For<ICacheProvider>();
             fakeCacheManager
                 .IsAsynchronousSupported
                 .Returns(false);
 
-            ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager);
+            ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager, Substitute.For<ILogger>());
 
-            bool didErrorCorrectly = false;
-            try
-            {
-                cacheResolver.GetAsyncCache(typeof(IAccount));
-            }
-            catch (ApplicationException)
-            {
-                didErrorCorrectly = true;
-            }
-
-            Assert.True(didErrorCorrectly, "Did not throw!");
+            var cache = cacheResolver.GetAsyncCache(typeof(IAccount));
+            cache.ShouldBeNull();
         }
 
         [Fact]
@@ -83,7 +66,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 .GetSyncCache(Arg.Any<string>())
                 .Returns(Substitute.For<ISynchronousCache>());
 
-            ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager);
+            ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager, Substitute.For<ILogger>());
 
             var cache = cacheResolver.GetSyncCache(typeof(IAccount));
             cache.ShouldBeAssignableTo<ISynchronousCache>();
@@ -103,7 +86,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                     return Substitute.For<IAsynchronousCache>();
                 });
 
-            ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager);
+            ICacheResolver cacheResolver = new DefaultCacheResolver(fakeCacheManager, Substitute.For<ILogger>());
 
             var cache = cacheResolver.GetAsyncCache(typeof(IAccount));
             cache.ShouldBeAssignableTo<IAsynchronousCache>();

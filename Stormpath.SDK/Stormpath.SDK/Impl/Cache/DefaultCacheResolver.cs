@@ -17,17 +17,19 @@
 using System;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.Cache
 {
     internal class DefaultCacheResolver : ICacheResolver
     {
+        private readonly ILogger logger;
         private readonly ICacheProvider cacheProvider;
         private readonly ISynchronousCacheProvider syncCacheProvider;
         private readonly IAsynchronousCacheProvider asyncCacheProvider;
         private readonly ResourceTypes typeLookup;
 
-        public DefaultCacheResolver(ICacheProvider cacheProvider)
+        public DefaultCacheResolver(ICacheProvider cacheProvider, ILogger logger)
         {
             if (cacheProvider == null)
                 throw new ArgumentNullException(nameof(cacheProvider));
@@ -36,6 +38,7 @@ namespace Stormpath.SDK.Impl.Cache
             this.syncCacheProvider = cacheProvider as ISynchronousCacheProvider;
             this.asyncCacheProvider = cacheProvider as IAsynchronousCacheProvider;
             this.typeLookup = new ResourceTypes();
+            this.logger = logger;
         }
 
         bool ICacheResolver.IsSynchronousSupported => this.cacheProvider.IsAsynchronousSupported;
@@ -55,21 +58,41 @@ namespace Stormpath.SDK.Impl.Cache
         ISynchronousCache ICacheResolver.GetSyncCache(Type resourceType)
         {
             if (!this.cacheProvider.IsSynchronousSupported || this.syncCacheProvider == null)
-                throw new ApplicationException($"A synchronous caching path is not supported in {this.cacheProvider.GetType().Name}");
+                return null;
 
-            var cacheRegionName = this.GetCacheRegionName(resourceType);
+            var cacheRegionName = string.Empty;
+            try
+            {
+                cacheRegionName = this.GetCacheRegionName(resourceType);
+            }
+            catch (Exception e)
+            {
+                this.logger.Warn($"Could not get sync cache for type {resourceType.Name}: {e.Message} (Source: {e.Source})", "DefaultCacheResolver.GetSyncCache");
+            }
 
-            return this.syncCacheProvider.GetSyncCache(cacheRegionName);
+            return string.IsNullOrEmpty(cacheRegionName)
+                ? null
+                : this.syncCacheProvider.GetSyncCache(cacheRegionName);
         }
 
         IAsynchronousCache ICacheResolver.GetAsyncCache(Type resourceType)
         {
             if (!this.cacheProvider.IsAsynchronousSupported || this.asyncCacheProvider == null)
-                throw new ApplicationException($"An asynchronous caching path is not supported in {this.cacheProvider.GetType().Name}");
+                return null;
 
-            var cacheRegionName = this.GetCacheRegionName(resourceType);
+            var cacheRegionName = string.Empty;
+            try
+            {
+                cacheRegionName = this.GetCacheRegionName(resourceType);
+            }
+            catch (Exception e)
+            {
+                this.logger.Warn($"Could not get async cache for type {resourceType.Name}: {e.Message} (Source: {e.Source})", "DefaultCacheResolver.GetAsyncCache");
+            }
 
-            return this.asyncCacheProvider.GetAsyncCache(cacheRegionName);
+            return string.IsNullOrEmpty(cacheRegionName)
+                ? null
+                : this.asyncCacheProvider.GetAsyncCache(cacheRegionName);
         }
     }
 }

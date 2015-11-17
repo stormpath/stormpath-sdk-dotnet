@@ -94,6 +94,22 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         }
 
         [Fact]
+        public void Does_not_hit_cache_if_no_asynchronous_path_exists()
+        {
+            var fakeCacheProvider = Substitute.For<ISynchronousCacheProvider>();
+            fakeCacheProvider.IsAsynchronousSupported.Returns(true);
+            fakeCacheProvider.IsSynchronousSupported.Returns(false);
+            fakeCacheProvider
+                .When(x => x.GetSyncCache(Arg.Any<string>()))
+                .Do(_ => { throw new NotImplementedException(); });
+
+            this.BuildDataStore(FakeJson.Account, fakeCacheProvider);
+
+            var account = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount");
+            account.Email.ShouldBe("han.solo@corellia.core");
+        }
+
+        [Fact]
         public void Collection_access_is_not_cached()
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();

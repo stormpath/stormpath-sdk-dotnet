@@ -48,6 +48,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 throw new ArgumentNullException(nameof(resourceType));
 
             var cache = this.GetAsyncCache(resourceType);
+            if (cache == null)
+                return null;
+
             return await cache.GetAsync(cacheKey, cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -60,6 +63,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 throw new ArgumentNullException(nameof(resourceType));
 
             var cache = this.GetSyncCache(resourceType);
+            if (cache == null)
+                return null;
+
             return cache.Get(cacheKey);
         }
 

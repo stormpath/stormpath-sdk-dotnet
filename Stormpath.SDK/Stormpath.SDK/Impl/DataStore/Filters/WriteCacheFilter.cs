@@ -47,6 +47,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         public override async Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
         {
+            bool cacheEnabled = this.cacheResolver.IsAsynchronousSupported;
+            if (!cacheEnabled)
+                return await chain.FilterAsync(request, logger, cancellationToken).ConfigureAwait(false);
+
             bool isDelete = request.Action == ResourceAction.Delete;
             bool isCustomDataPropertyRequest = request.Uri.ResourcePath.ToString().Contains("/customData/");
 
@@ -87,6 +91,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         public override IResourceDataResult Filter(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
         {
+            bool cacheEnabled = this.cacheResolver.IsSynchronousSupported;
+            if (!cacheEnabled)
+                return chain.Filter(request, logger);
+
             bool isDelete = request.Action == ResourceAction.Delete;
             bool isCustomDataPropertyRequest = request.Uri.ResourcePath.ToString().Contains("/customData/");
 
@@ -200,6 +208,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 logger.Trace($"Caching {href} as type {resourceType.Name}", "WriteCacheFilter.CacheAsync");
 
                 var cache = this.GetAsyncCache(resourceType);
+                if (cache == null)
+                    return;
+
                 var cacheKey = this.GetCacheKey(href);
                 await cache.PutAsync(cacheKey, cacheData, cancellationToken).ConfigureAwait(false);
             }
@@ -280,6 +291,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 logger.Trace($"Caching {href} as type {resourceType.Name}", "WriteCacheFilter.Cache");
 
                 var cache = this.GetSyncCache(resourceType);
+                if (cache == null)
+                    return;
+
                 var cacheKey = this.GetCacheKey(href);
                 cache.Put(cacheKey, cacheData);
             }

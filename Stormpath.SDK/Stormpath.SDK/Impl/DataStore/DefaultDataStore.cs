@@ -84,9 +84,10 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ArgumentNullException(nameof(cacheProvider), "Use NullCacheProvider if you wish to turn off caching.");
 
             this.baseUrl = baseUrl;
+            this.logger = logger;
             this.requestExecutor = requestExecutor;
             this.cacheProvider = cacheProvider;
-            this.cacheResolver = new DefaultCacheResolver(cacheProvider);
+            this.cacheResolver = new DefaultCacheResolver(cacheProvider, this.logger);
 
             this.serializer = new JsonSerializationProvider(serializer);
             this.identityMap = new MemoryCacheIdentityMap<string, ResourceData>(identityMapExpiration);
@@ -94,7 +95,6 @@ namespace Stormpath.SDK.Impl.DataStore
             this.resourceConverter = new DefaultResourceConverter();
 
             this.uriQualifier = new UriQualifier(baseUrl);
-            this.logger = logger;
 
             this.defaultAsyncFilters = this.BuildDefaultAsyncFilterChain();
             this.defaultSyncFilters = this.BuildDefaultSyncFilterChain();
