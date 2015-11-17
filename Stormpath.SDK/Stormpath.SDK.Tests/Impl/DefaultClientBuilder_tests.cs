@@ -141,6 +141,30 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
+        public void Passing_disabled_cache()
+        {
+            var client = this.builder
+                .SetApiKey(FakeApiKey.Create(valid: true))
+                .SetCacheProvider(SDK.Cache.Caches.NewDisabledCacheProvider())
+                .Build();
+
+            client.GetCacheProvider().ShouldBeOfType<NullCacheProvider>();
+        }
+
+        [Fact]
+        public void Passing_custom_cache()
+        {
+            var fakeCache = Substitute.For<SDK.Cache.ICacheProvider>();
+
+            var client = this.builder
+                .SetApiKey(FakeApiKey.Create(valid: true))
+                .SetCacheProvider(fakeCache)
+                .Build();
+
+            client.GetCacheProvider().ShouldBe(fakeCache);
+        }
+
+        [Fact]
         public void ConnectionTimeout_is_optional()
         {
             var client = this.builder
