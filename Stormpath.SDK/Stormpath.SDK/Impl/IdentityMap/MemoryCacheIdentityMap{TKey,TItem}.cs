@@ -34,6 +34,7 @@ namespace Stormpath.SDK.Impl.IdentityMap
         {
             this.itemCache = new MemoryCache("StormpathSDKIdentityMap");
             this.slidingExpiration = slidingExpiration;
+            this.logger = logger;
         }
 
         private static string CreateCacheKey(TKey key)
