@@ -39,19 +39,22 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 
         protected void CreateClient(TimeSpan? ttl, TimeSpan? tti)
         {
-            var redisCacheProvider = new RedisCacheProvider(this.fixture.Connection);
+            var builder = RedisCaches.NewRedisCacheProvider()
+                .WithRedisConnection(this.fixture.Connection);
 
             if (ttl != null)
-                redisCacheProvider.SetDefaultTimeToLive(ttl.Value);
+                builder.WithDefaultTimeToLive(ttl.Value);
             if (tti != null)
-                redisCacheProvider.SetDefaultTimeToIdle(tti.Value);
+                builder.WithDefaultTimeToIdle(tti.Value);
 
             this.logger = new InMemoryLogger();
             this.fakeHttpClient = new ResourceReturningHttpClient(BaseUrl);
 
+            var cacheProvider = builder.Build();
+
             this.client = Clients.Builder()
                 .SetHttpClient(this.fakeHttpClient)
-                .SetCacheProvider(redisCacheProvider)
+                .SetCacheProvider(cacheProvider)
                 .SetLogger(this.logger)
                 .Build();
         }

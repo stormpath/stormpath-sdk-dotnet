@@ -22,44 +22,52 @@ using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Extensions.Cache.Redis
 {
-    public class RedisCacheProvider : AbstractCacheProvider, ISerializerConsumer<RedisCacheProvider>, ILoggerConsumer<RedisCacheProvider>
+    internal class RedisCacheProvider : AbstractCacheProvider, ISerializerConsumer<RedisCacheProvider>, ILoggerConsumer<RedisCacheProvider>
     {
-        private readonly IConnectionMultiplexer connection;
+        private IConnectionMultiplexer connection;
         private IJsonSerializer serializer;
         private ILogger logger;
 
-        public RedisCacheProvider(string redisConfiguration)
-            : this(ConnectionMultiplexer.Connect(redisConfiguration))
-        {
-        }
-
-        public RedisCacheProvider(IConnectionMultiplexer redisConnection)
+        public RedisCacheProvider()
             : base(syncSupported: true, asyncSupported: true)
         {
-            this.connection = redisConnection;
         }
 
         public RedisCacheProvider SetSerializer(IJsonSerializer serializer)
         {
-            if (serializer != null)
-                this.serializer = serializer;
+            this.serializer = serializer;
             return this;
         }
 
         public RedisCacheProvider SetLogger(ILogger logger)
         {
-            if (logger != null)
-                this.logger = logger;
+            this.logger = logger;
             return this;
+        }
+
+        public RedisCacheProvider SetRedisConnectionMultiplexer(IConnectionMultiplexer connection)
+        {
+            this.connection = connection;
+            return this;
+        }
+
+        private void ThrowIfNotConfigured()
+        {
+            if (this.connection == null)
+                throw new ApplicationException("No connection present. Set up the cache provider with NewRedisCacheProvider first.");
         }
 
         protected override IAsynchronousCache CreateAsyncCache(string name, TimeSpan? ttl, TimeSpan? tti)
         {
+            this.ThrowIfNotConfigured();
+
             return new RedisAsyncCache(this.connection, this.serializer, this.logger, name, ttl, tti);
         }
 
         protected override ISynchronousCache CreateSyncCache(string name, TimeSpan? ttl, TimeSpan? tti)
         {
+            this.ThrowIfNotConfigured();
+
             return new RedisSyncCache(this.connection, this.serializer, this.logger, name, ttl, tti);
         }
     }

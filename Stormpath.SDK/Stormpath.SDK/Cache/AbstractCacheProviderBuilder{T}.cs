@@ -51,6 +51,11 @@ namespace Stormpath.SDK.Cache
             return this;
         }
 
+        protected virtual ICacheProvider OnBuilding(T provider)
+        {
+            return provider;
+        }
+
         ICacheProvider ICacheProviderBuilder.Build()
         {
             var provider = new T();
@@ -64,7 +69,7 @@ namespace Stormpath.SDK.Cache
             if (this.cacheConfigs.Any())
                 provider.SetCacheConfigurations(this.cacheConfigs);
 
-            return provider;
+            return this.OnBuilding(provider);
         }
     }
 }
