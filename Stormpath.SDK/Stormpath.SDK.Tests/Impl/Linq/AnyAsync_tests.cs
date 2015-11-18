@@ -18,42 +18,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Tests.Fakes;
-using Stormpath.SDK.Tests.Helpers;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class AnyAsync_tests : Linq_tests
+    public class AnyAsync_tests : Linq_test<IAccount>
     {
         [Fact]
         public async Task Returns_false_for_empty_collection()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Empty<IAccount>());
 
-            (await harness.Queryable.AnyAsync()).ShouldBeFalse();
+            (await this.Queryable.AnyAsync()).ShouldBeFalse();
         }
 
         [Fact]
         public async Task Returns_true_for_nonempty_collection()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.R2D2, 73));
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.R2D2, 73));
 
-            (await harness.Queryable.AnyAsync()).ShouldBeTrue();
+            (await this.Queryable.AnyAsync()).ShouldBeTrue();
         }
 
         [Fact]
         public async Task Limits_result_to_one_item()
         {
-            IInternalAsyncDataStore fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Empty<IAccount>());
+            await this.Queryable.AnyAsync();
 
-            await harness.Queryable.AnyAsync();
-
-            fakeDataStore.WasCalledWithArguments<IAccount>(this.Href, "limit=1");
+            this.FakeHttpClient.Calls.Single().ShouldContain("limit=1");
         }
     }
 }

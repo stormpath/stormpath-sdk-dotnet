@@ -14,59 +14,68 @@
 // limitations under the License.
 // </copyright>
 
+using System.Linq;
+using System.Threading.Tasks;
+using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class OrderBy_tests : Linq_tests
+    public class OrderBy_tests : Linq_test<IAccount>
     {
         [Fact]
-        public void Sort_by_field()
+        public async Task Sort_by_field()
         {
-            var query = this.Harness.Queryable
-                .OrderBy(x => x.GivenName);
-
-            query.GeneratedArgumentsWere(this.Href, "orderBy=givenName");
-        }
-
-        [Fact]
-        public void Sort_by_field_descending()
-        {
-            var query = this.Harness.Queryable
-                .OrderByDescending(x => x.Email);
-
-            query.GeneratedArgumentsWere(this.Href, "orderBy=email desc");
-        }
-
-        [Fact]
-        public void Sort_with_additional_expressions_before()
-        {
-            var query = this.Harness.Queryable
-                .Take(10)
-                .OrderBy(x => x.GivenName);
-
-            query.GeneratedArgumentsWere(this.Href, "limit=10&orderBy=givenName");
-        }
-
-        [Fact]
-        public void Sort_with_additional_expressions_after()
-        {
-            var query = this.Harness.Queryable
-                .OrderByDescending(x => x.GivenName)
-                .Take(10);
-
-            query.GeneratedArgumentsWere(this.Href, "limit=10&orderBy=givenName desc");
-        }
-
-        [Fact]
-        public void Sort_by_multiple_fields()
-        {
-            var query = this.Harness.Queryable
+            await this.Queryable
                 .OrderBy(x => x.GivenName)
-                .ThenByDescending(x => x.Username);
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "orderBy=givenName,username desc");
+            this.FakeHttpClient.Calls.Single().ShouldContain("orderBy=givenName");
+        }
+
+        [Fact]
+        public async Task Sort_by_field_descending()
+        {
+            await this.Queryable
+                .OrderByDescending(x => x.Email)
+                .MoveNextAsync();
+
+            this.FakeHttpClient.Calls.Single().ShouldContain("orderBy=email+desc");
+        }
+
+        [Fact]
+        public async Task Sort_with_additional_expressions_before()
+        {
+            await this.Queryable
+                .Take(10)
+                .OrderBy(x => x.GivenName)
+                .MoveNextAsync();
+
+            this.FakeHttpClient.Calls.Single().ShouldContain("limit=10&orderBy=givenName");
+        }
+
+        [Fact]
+        public async Task Sort_with_additional_expressions_after()
+        {
+            await this.Queryable
+                .OrderByDescending(x => x.GivenName)
+                .Take(10)
+                .MoveNextAsync();
+
+            this.FakeHttpClient.Calls.Single().ShouldContain("limit=10&orderBy=givenName+desc");
+        }
+
+        [Fact]
+        public async Task Sort_by_multiple_fields()
+        {
+            await this.Queryable
+                .OrderBy(x => x.GivenName)
+                .ThenByDescending(x => x.Username)
+                .MoveNextAsync();
+
+            this.FakeHttpClient.Calls.Single().ShouldContain("orderBy=givenName,username+desc");
         }
     }
 }

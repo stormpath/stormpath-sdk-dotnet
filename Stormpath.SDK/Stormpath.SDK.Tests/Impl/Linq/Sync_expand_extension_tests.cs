@@ -14,95 +14,106 @@
 // limitations under the License.
 // </copyright>
 
+using System.Linq;
+using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_expand_extension_tests : Linq_tests
+    public class Sync_expand_extension_tests : Linq_test<IAccount>
     {
         [Fact]
         public void Expand_one_link()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetDirectory);
+                .Expand(x => x.GetDirectory)
+                .ToList();
 
-            query.GeneratedSynchronousArgumentsWere(this.Href, "expand=directory");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory");
         }
 
         [Fact]
         public void Expand_one_link_by_async_method()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetDirectoryAsync);
+                .Expand(x => x.GetDirectoryAsync)
+                .ToList();
 
-            query.GeneratedSynchronousArgumentsWere(this.Href, "expand=directory");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory");
         }
 
         [Fact]
         public void Expand_multiple_links()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .Synchronously()
                 .Expand(x => x.GetDirectory)
-                .Expand(x => x.GetTenant);
+                .Expand(x => x.GetTenant)
+                .ToList();
 
-            query.GeneratedSynchronousArgumentsWere(this.Href, "expand=directory,tenant");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory,tenant");
         }
 
         [Fact]
         public void Expand_collection_query_with_no_parameters()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetGroups);
+                .Expand(x => x.GetGroups)
+                .ToList();
 
-            query.GeneratedSynchronousArgumentsWere(this.Href, "expand=groups");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups");
         }
 
         [Fact]
         public void Expand_collection_query_with_offset()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetGroups, offset: 10);
+                .Expand(x => x.GetGroups, offset: 10)
+                .ToList();
 
-            query.GeneratedSynchronousArgumentsWere(this.Href, "expand=groups(offset:10)");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(offset:10)");
         }
 
         [Fact]
         public void Expand_collection_query_with_limit()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetGroups, limit: 20);
+                .Expand(x => x.GetGroups, limit: 20)
+                .ToList();
 
-            query.GeneratedSynchronousArgumentsWere(this.Href, "expand=groups(limit:20)");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(limit:20)");
         }
 
         [Fact]
         public void Expand_collection_query_with_both_parameters()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetGroups, 5, 15);
+                .Expand(x => x.GetGroups, 5, 15)
+                .ToList();
 
-            query.GeneratedSynchronousArgumentsWere(this.Href, "expand=groups(offset:5,limit:15)");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(offset:5,limit:15)");
         }
 
         [Fact]
         public void Expand_all_the_things()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .Synchronously()
                 .Expand(x => x.GetTenant)
                 .Expand(x => x.GetGroups, 10, 20)
-                .Expand(x => x.GetDirectory);
+                .Expand(x => x.GetDirectory)
+                .ToList();
 
-            query.GeneratedSynchronousArgumentsWere(this.Href, "expand=tenant,groups(offset:10,limit:20),directory");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=tenant,groups(offset:10,limit:20),directory");
         }
     }
 }

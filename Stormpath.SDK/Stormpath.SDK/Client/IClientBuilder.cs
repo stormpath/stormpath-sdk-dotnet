@@ -14,7 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Net;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;

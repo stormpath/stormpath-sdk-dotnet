@@ -18,21 +18,21 @@ using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_Count_tests : Linq_tests
+    public class Sync_Count_tests : Linq_test<IAccount>
     {
         [Fact]
         public void Returns_count()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.C3PO, 73));
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.C3PO, 73));
 
-            var count = harness.Queryable
+            var count = this.Queryable
                 .Synchronously()
                 .Count();
 
@@ -40,13 +40,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Returns_long_count()
+        public void Returns_long_count() // Happy 13.0.0.0.0!
         {
-            // Happy 13.0.0.0.0!
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.C3PO, 150)); // I realize that 150 is not an int64, it's just a simple test
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.C3PO, 150)); // I realize that 150 is not an int64, it's just a simple test
 
-            var count = harness.Queryable
+            var count = this.Queryable
                 .Synchronously()
                 .LongCount();
 

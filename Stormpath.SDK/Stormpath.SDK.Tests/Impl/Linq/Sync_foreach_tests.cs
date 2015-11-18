@@ -18,28 +18,27 @@ using System.Collections.Generic;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_foreach_tests : Linq_tests
+    public class Sync_foreach_tests : Linq_test<IAccount>
     {
         [Fact]
         public void Operates_on_every_item()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                this.Href,
-                new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance));
+            this.InitializeClientWithCollection(TestAccounts.RebelAlliance);
             var gmailAlliance = new List<string>();
 
-            foreach (var rebel in harness.Queryable.Synchronously())
+            foreach (var rebel in this.Queryable.Synchronously())
             {
                 gmailAlliance.Add($"{rebel.GivenName.ToLower()}@gmail.com");
             }
 
-            gmailAlliance.Count.ShouldBe(FakeAccounts.RebelAlliance.Count);
+            gmailAlliance.Count.ShouldBe(TestAccounts.RebelAlliance.Count);
         }
     }
 }

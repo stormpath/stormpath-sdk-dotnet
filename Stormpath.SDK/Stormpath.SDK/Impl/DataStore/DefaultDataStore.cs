@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.cacheResolver = new DefaultCacheResolver(cacheProvider, this.logger);
 
             this.serializer = new JsonSerializationProvider(serializer);
-            this.identityMap = new MemoryCacheIdentityMap<string, ResourceData>(identityMapExpiration);
+            this.identityMap = new MemoryCacheIdentityMap<string, ResourceData>(identityMapExpiration, this.logger);
             this.resourceFactory = new DefaultResourceFactory(this, this.identityMap);
             this.resourceConverter = new DefaultResourceConverter();
 

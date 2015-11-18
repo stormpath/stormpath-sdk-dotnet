@@ -20,24 +20,24 @@ using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_SingleOrDefault_tests : Linq_tests
+    public class Sync_SingleOrDefault_tests : Linq_test<IAccount>
     {
         [Fact]
         public void Returns_one_item()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
+            this.InitializeClientWithCollection(new List<IAccount>()
                 {
-                    FakeAccounts.HanSolo
+                    TestAccounts.HanSolo
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
-            var han = harness.Queryable.Synchronously().SingleOrDefault();
+            var han = this.Queryable.Synchronously().SingleOrDefault();
 
             han.Surname.ShouldBe("Solo");
         }
@@ -45,27 +45,23 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Throws_when_more_than_one_item_exists()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
+            this.InitializeClientWithCollection(new List<IAccount>()
                 {
-                    FakeAccounts.HanSolo,
-                    FakeAccounts.LukeSkywalker
+                    TestAccounts.HanSolo,
+                    TestAccounts.LukeSkywalker
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
             // TODO This should be InvalidOperationException, but under Mono it throws NullReferenceException for some undetermined reason
             Should.Throw<Exception>(() =>
             {
-                var han = harness.Queryable.Synchronously().SingleOrDefault();
+                var han = this.Queryable.Synchronously().SingleOrDefault();
             });
         }
 
         [Fact]
         public void Returns_null_when_no_items_exist()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
-
-            var notHan = harness.Queryable.Synchronously().SingleOrDefault();
+            var notHan = this.Queryable.Synchronously().SingleOrDefault();
 
             notHan.ShouldBeNull();
         }

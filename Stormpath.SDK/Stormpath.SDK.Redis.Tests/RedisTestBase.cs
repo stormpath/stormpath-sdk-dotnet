@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
         private static readonly string BaseUrl = "https://api.stormpath.com/v1";
         protected readonly RedisTestFixture fixture;
 
-        protected FakeHttpClient fakeHttpClient;
+        protected ResourceReturningHttpClient fakeHttpClient;
         protected IClient client;
         protected ILogger logger;
 
@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
                 redisCacheProvider.SetDefaultTimeToIdle(tti.Value);
 
             this.logger = new InMemoryLogger();
-            this.fakeHttpClient = new FakeHttpClient(BaseUrl);
+            this.fakeHttpClient = new ResourceReturningHttpClient(BaseUrl);
 
             this.client = Clients.Builder()
                 .SetHttpClient(this.fakeHttpClient)

@@ -15,73 +15,87 @@
 // </copyright>
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Filter_extension_tests : Linq_tests
+    public class Filter_extension_tests : Linq_test<IAccount>
     {
         [Fact]
-        public void With_simple_parameter()
+        public async Task With_simple_parameter()
         {
             // Act
-            var query = this.Harness.Queryable
-                .Filter("Joe");
-
-            // Assert
-            query.GeneratedArgumentsWere(this.Href, "q=Joe");
-        }
-
-        [Fact]
-        public void Parameters_are_trimmed()
-        {
-            // Act
-            var query = this.Harness.Queryable
-                .Filter("  Joe  ");
-
-            // Assert
-            query.GeneratedArgumentsWere(this.Href, "q=Joe");
-        }
-
-        [Fact]
-        public void Throws_for_multiple_calls()
-        {
-            var query = this.Harness.Queryable
+            await this.Queryable
                 .Filter("Joe")
-                .Filter("Joey");
+                .MoveNextAsync();
 
-            Should.Throw<NotSupportedException>(() =>
+            // Assert
+            this.FakeHttpClient.Calls.Single().ShouldContain("q=Joe");
+        }
+
+        [Fact]
+        public async Task Parameters_are_trimmed()
+        {
+            // Act
+            await this.Queryable
+                .Filter("  Joe  ")
+                .MoveNextAsync();
+
+            // Assert
+            this.FakeHttpClient.Calls.Single().ShouldContain("q=Joe");
+        }
+
+        [Fact]
+        public async Task Throws_for_multiple_calls()
+        {
+            // TODO NotSupportedException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Filter("Joe")
+                    .Filter("Joey")
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
-        public void Throws_for_null()
+        public async Task Throws_for_null()
         {
-            Should.Throw<ArgumentException>(() =>
+            // TODO ArgumentException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                var query = this.Harness.Queryable.Filter(null);
+                await this.Queryable
+                    .Filter(null)
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
-        public void Throws_for_empty_string()
+        public async Task Throws_for_empty_string()
         {
-            Should.Throw<ArgumentException>(() =>
+            // TODO ArgumentException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                var query = this.Harness.Queryable.Filter(string.Empty);
+                await this.Queryable
+                    .Filter(string.Empty)
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
-        public void Throws_for_whitespace()
+        public async Task Throws_for_whitespace()
         {
-            Should.Throw<ArgumentException>(() =>
+            // TODO ArgumentException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                var query = this.Harness.Queryable.Filter("   ");
+                await this.Queryable
+                    .Filter("   ")
+                    .MoveNextAsync();
             });
         }
     }

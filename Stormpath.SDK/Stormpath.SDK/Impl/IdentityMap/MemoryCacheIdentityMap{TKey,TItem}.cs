@@ -17,24 +17,27 @@
 using System;
 using System.Runtime.Caching;
 using System.Threading;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.IdentityMap
 {
     internal class MemoryCacheIdentityMap<TKey, TItem> : IIdentityMap<TKey, TItem>, IDisposable
         where TItem : class
     {
+        private readonly ILogger logger;
         private readonly MemoryCache itemCache;
         private readonly TimeSpan slidingExpiration;
         private long lifetimeItemsAdded;
         private bool isDisposed = false; // To detect redundant calls
 
-        public MemoryCacheIdentityMap(TimeSpan slidingExpiration)
+        public MemoryCacheIdentityMap(TimeSpan slidingExpiration, ILogger logger)
         {
             this.itemCache = new MemoryCache("StormpathSDKIdentityMap");
             this.slidingExpiration = slidingExpiration;
+            this.logger = logger;
         }
 
-        private static string CreateKey(TKey key)
+        private static string CreateCacheKey(TKey key)
             => $"idmap-{key.ToString()}";
 
         public long LifetimeItemsAdded => this.lifetimeItemsAdded;
@@ -49,11 +52,18 @@ namespace Stormpath.SDK.Impl.IdentityMap
                     : this.slidingExpiration
             };
 
-            var existing = this.itemCache.AddOrGetExisting(CreateKey(key), lazyItem, policy);
+            var existing = this.itemCache.AddOrGetExisting(CreateCacheKey(key), lazyItem, policy);
 
             bool added = existing == null;
             if (added)
+            {
                 Interlocked.Increment(ref this.lifetimeItemsAdded);
+                this.logger.Trace($"Added item to identity map with key '{key}'. (Lifetime items: {this.lifetimeItemsAdded})");
+            }
+            else
+            {
+                this.logger.Trace($"Retrieved item from identity map with key '{key}'. (Lifetime items: {this.lifetimeItemsAdded})");
+            }
 
             return existing == null
                 ? lazyItem.Value

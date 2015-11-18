@@ -15,72 +15,82 @@
 // </copyright>
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Skip_tests : Linq_tests
+    public class Skip_tests : Linq_test<IAccount>
     {
         [Fact]
-        public void Skip_becomes_offset()
+        public async Task Skip_becomes_offset()
         {
-            var query = this.Harness.Queryable
-                .Skip(10);
+            await this.Queryable
+                .Skip(10)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "offset=10");
+            this.FakeHttpClient.Calls.Single().ShouldContain("offset=10");
         }
 
         [Fact]
-        public void Skip_with_variable_becomes_offset()
+        public async Task Skip_with_variable_becomes_offset()
         {
             var offset = 20;
-            var query = this.Harness.Queryable
-                .Skip(offset);
+            await this.Queryable
+                .Skip(offset)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "offset=20");
+            this.FakeHttpClient.Calls.Single().ShouldContain("offset=20");
         }
 
         [Fact]
-        public void Skip_with_function_becomes_offset()
+        public async Task Skip_with_function_becomes_offset()
         {
             var offsetFunc = new Func<int>(() => 25);
-            var query = this.Harness.Queryable
-                .Skip(offsetFunc());
+            await this.Queryable
+                .Skip(offsetFunc())
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "offset=25");
+            this.FakeHttpClient.Calls.Single().ShouldContain("offset=25");
         }
 
         [Fact]
-        public void Multiple_calls_are_LIFO()
+        public async Task Multiple_calls_are_LIFO()
         {
-            var query = this.Harness.Queryable
-                .Skip(10).Skip(5);
+            await this.Queryable
+                .Skip(10).Skip(5)
+                .MoveNextAsync();
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(this.Href, "offset=5");
+            this.FakeHttpClient.Calls.Single().ShouldContain("offset=5");
         }
 
         [Fact]
-        public void Zero_is_ignored()
+        public async Task Zero_is_ignored()
         {
-            var query = this.Harness.Queryable
-                .Skip(0);
+            await this.Queryable
+                .Skip(0)
+                .MoveNextAsync();
 
             // Expected behavior: the last call will be kept
-            query.GeneratedArgumentsWere(this.Href, string.Empty);
+            this.FakeHttpClient.Calls.Single().ShouldNotContain("offset");
         }
 
         [Fact]
-        public void Throws_for_invalid_value()
+        public async Task Throws_for_invalid_value()
         {
-            Should.Throw<ArgumentOutOfRangeException>(() =>
+            // TODO ArgumentOutOfRangeException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                var query = this.Harness.Queryable
-                    .Skip(-1);
+                await this.Queryable
+                    .Skip(-1)
+                .MoveNextAsync();
 
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                this.FakeHttpClient.Calls.Single().ShouldContain("<not evaluated>");
             });
         }
     }

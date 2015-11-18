@@ -23,7 +23,7 @@ using Stormpath.SDK.Extensions.Http;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.Client;
-using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl

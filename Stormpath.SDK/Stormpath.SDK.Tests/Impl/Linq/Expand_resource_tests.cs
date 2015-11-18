@@ -15,6 +15,8 @@
 // </copyright>
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
@@ -27,192 +29,232 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 {
 #pragma warning disable SA1402 // File may only contain a single class
 #pragma warning disable SA1649 // File name must match first class
-    public class Expand_account_tests : Linq_tests<IAccount>
+    public class Expand_account_tests : Linq_test<IAccount>
     {
         [Fact]
-        public void Delete_throws()
+        public async Task Delete_throws()
         {
-            var query = this.Harness.Queryable.Expand(x => x.DeleteAsync);
-
-            Should.Throw<NotSupportedException>(() =>
+            // TODO NotSupportedException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Expand(x => x.DeleteAsync)
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
-        public void CustomData_is_expanded()
+        public async Task CustomData_is_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetCustomDataAsync);
+            await this.Queryable
+                .Expand(x => x.GetCustomDataAsync)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=customData");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=customData");
         }
 
         [Fact]
-        public void Directory_is_expanded()
+        public async Task Directory_is_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetDirectoryAsync);
+            await this.Queryable
+                .Expand(x => x.GetDirectoryAsync)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=directory");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory");
         }
 
         [Fact]
-        public void GroupMemberships_are_expanded()
+        public async Task GroupMemberships_are_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetGroupMemberships);
+            await this.Queryable
+                .Expand(x => x.GetGroupMemberships)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=groupMemberships");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groupMemberships");
         }
 
         [Fact]
-        public void GroupMemberships_are_expanded_with_options()
+        public async Task GroupMemberships_are_expanded_with_options()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetGroupMemberships, offset: 7331, limit: 1337);
+            await this.Queryable
+                .Expand(x => x.GetGroupMemberships, offset: 7331, limit: 1337)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=groupMemberships(offset:7331,limit:1337)");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groupMemberships(offset:7331,limit:1337)");
         }
 
         [Fact]
-        public void Groups_are_expanded()
+        public async Task Groups_are_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetGroups);
+            await this.Queryable
+                .Expand(x => x.GetGroups)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=groups");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups");
         }
 
         [Fact]
-        public void Groups_are_expanded_with_options()
+        public async Task Groups_are_expanded_with_options()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetGroups, offset: 123, limit: 321);
+            await this.Queryable
+                .Expand(x => x.GetGroups, offset: 123, limit: 321)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=groups(offset:123,limit:321)");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(offset:123,limit:321)");
         }
 
         [Fact]
-        public void ProviderData_is_expanded()
+        public async Task ProviderData_is_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetProviderDataAsync);
+            await this.Queryable
+                .Expand(x => x.GetProviderDataAsync)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=providerData");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=providerData");
         }
 
         [Fact]
-        public void Tenant_is_expanded()
+        public async Task Tenant_is_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetTenantAsync);
+            await this.Queryable
+                .Expand(x => x.GetTenantAsync)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=tenant");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=tenant");
         }
 
         [Fact]
-        public void Save_throws()
+        public async Task Save_throws()
         {
-            var query = this.Harness.Queryable.Expand(x => x.SaveAsync);
-
-            Should.Throw<NotSupportedException>(() =>
+            // TODO ArgumentOutOfRangeException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Expand(x => x.SaveAsync)
+                    .MoveNextAsync();
             });
         }
     }
 
-    public class Expand_application_tests : Linq_tests<IApplication>
+    public class Expand_application_tests : Linq_test<IApplication>
     {
         [Fact]
-        public void Accounts_are_expanded()
+        public async Task Accounts_are_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetAccounts);
+            await this.Queryable
+                .Expand(x => x.GetAccounts)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=accounts");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=accounts");
         }
 
         [Fact]
-        public void Accounts_are_expanded_with_options()
+        public async Task Accounts_are_expanded_with_options()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetAccounts, offset: 123, limit: 321);
+            await this.Queryable
+                .Expand(x => x.GetAccounts, offset: 123, limit: 321)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=accounts(offset:123,limit:321)");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=accounts(offset:123,limit:321)");
         }
 
         [Fact]
-        public void AccountStoreMappings_are_expanded()
+        public async Task AccountStoreMappings_are_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetAccountStoreMappings);
+            await this.Queryable
+                .Expand(x => x.GetAccountStoreMappings)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=accountStoreMappings");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=accountStoreMappings");
         }
 
         [Fact]
-        public void AccountStoreMappings_are_expanded_with_options()
+        public async Task AccountStoreMappings_are_expanded_with_options()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetAccountStoreMappings, offset: 123, limit: 321);
+            await this.Queryable
+                .Expand(x => x.GetAccountStoreMappings, offset: 123, limit: 321)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=accountStoreMappings(offset:123,limit:321)");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=accountStoreMappings(offset:123,limit:321)");
         }
 
         [Fact]
-        public void DefaultAccountStore_is_expanded()
+        public async Task DefaultAccountStore_is_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetDefaultAccountStoreAsync);
+            await this.Queryable
+                .Expand(x => x.GetDefaultAccountStoreAsync)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=defaultAccountStoreMapping");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=defaultAccountStoreMapping");
         }
 
         [Fact]
-        public void DefaultGroupStore_is_expanded()
+        public async Task DefaultGroupStore_is_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetDefaultGroupStoreAsync);
+            await this.Queryable
+                .Expand(x => x.GetDefaultGroupStoreAsync)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=defaultGroupStoreMapping");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=defaultGroupStoreMapping");
         }
     }
 
-    public class Expand_directory_tests : Linq_tests<IDirectory>
+    public class Expand_directory_tests : Linq_test<IDirectory>
     {
         [Fact]
-        public void Provider_is_expanded()
+        public async Task Provider_is_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetProviderAsync);
+            await this.Queryable
+                .Expand(x => x.GetProviderAsync)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=provider");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=provider");
         }
     }
 
-    public class Expand_group_tests : Linq_tests<IGroup>
+    public class Expand_group_tests : Linq_test<IGroup>
     {
         [Fact]
-        public void AccountMemberships_are_expanded()
+        public async Task AccountMemberships_are_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetAccountMemberships);
+            await this.Queryable
+                .Expand(x => x.GetAccountMemberships)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=accountMemberships");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=accountMemberships");
         }
 
         [Fact]
-        public void AccountMemberships_are_expanded_with_options()
+        public async Task AccountMemberships_are_expanded_with_options()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetAccountMemberships, offset: 7331, limit: 1337);
+            await this.Queryable
+                .Expand(x => x.GetAccountMemberships, offset: 7331, limit: 1337)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=accountMemberships(offset:7331,limit:1337)");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=accountMemberships(offset:7331,limit:1337)");
         }
     }
 
-    public class Expand_group_membership_tests : Linq_tests<IGroupMembership>
+    public class Expand_group_membership_tests : Linq_test<IGroupMembership>
     {
         [Fact]
-        public void Account_is_expanded()
+        public async Task Account_is_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetAccountAsync);
+            await this.Queryable
+                .Expand(x => x.GetAccountAsync)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=account");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=account");
         }
 
         [Fact]
-        public void Group_is_expanded()
+        public async Task Group_is_expanded()
         {
-            var query = this.Harness.Queryable.Expand(x => x.GetGroupAsync);
+            await this.Queryable
+                .Expand(x => x.GetGroupAsync)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=group");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=group");
         }
     }
 #pragma warning restore SA1402 // File may only contain a single class

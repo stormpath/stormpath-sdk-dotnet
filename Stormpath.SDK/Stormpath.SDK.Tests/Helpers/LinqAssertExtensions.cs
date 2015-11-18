@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Tests.Helpers
 {
     public static class LinqAssertExtensions
     {
-        public static string GetGeneratedHref<T>(this IAsyncQueryable<T> queryable)
+        public static string Generate<T>(this IAsyncQueryable<T> queryable)
         {
             var resourceQueryable = queryable as CollectionResourceQueryable<T>;
             if (resourceQueryable == null)
@@ -50,9 +50,9 @@ namespace Stormpath.SDK.Tests.Helpers
         public static void GeneratedArgumentsWere<T>(this IAsyncQueryable<T> queryable, string href, string arguments)
         {
             if (string.IsNullOrEmpty(arguments))
-                queryable.GetGeneratedHref().ShouldBe($"{href}");
+                queryable.Generate().ShouldBe($"{href}");
             else
-                queryable.GetGeneratedHref().ShouldBe($"{href}?{arguments}");
+                queryable.Generate().ShouldBe($"{href}?{arguments}");
         }
 
         public static void GeneratedSynchronousArgumentsWere<T>(this IQueryable<T> queryable, string href, string arguments)

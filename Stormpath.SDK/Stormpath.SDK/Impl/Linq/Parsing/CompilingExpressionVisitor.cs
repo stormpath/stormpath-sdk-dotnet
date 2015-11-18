@@ -50,6 +50,10 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return node; // LIFO behavior
 
             var value = node.Value;
+
+            if (value == 0)
+                return node; // Take(0) is idempotent
+
             this.Model.ExecutionPlan.MaxItems = value;
             this.Model.Limit = value;
 

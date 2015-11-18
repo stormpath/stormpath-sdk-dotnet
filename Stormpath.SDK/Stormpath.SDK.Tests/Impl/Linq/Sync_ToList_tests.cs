@@ -18,21 +18,19 @@ using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_ToList_tests : Linq_tests
+    public class Sync_ToList_tests : Linq_test<IAccount>
     {
         [Fact]
         public void Returns_empty_list_for_no_items()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
-
-            var empty = harness.Queryable.Synchronously().ToList();
+            var empty = this.Queryable.Synchronously().ToList();
 
             empty.ShouldBeEmpty();
         }
@@ -40,12 +38,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Retrieves_all_items()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance);
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(TestAccounts.RebelAlliance);
 
-            var alliance = harness.Queryable.Synchronously().ToList();
+            var alliance = this.Queryable.Synchronously().ToList();
 
-            alliance.Count.ShouldBe(FakeAccounts.RebelAlliance.Count);
+            alliance.Count.ShouldBe(TestAccounts.RebelAlliance.Count);
         }
 
         [Fact]
@@ -55,13 +52,12 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             // so two calls will return 25 items, and the 3rd will return 1. However, ToListAsync
             // will make another call to the server, just to make sure another item hasn't been added
             // to the end while we were enumerating.
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 51));
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.BobaFett, 51));
 
-            var longList = harness.Queryable.Synchronously().ToList();
+            var longList = this.Queryable.Synchronously().ToList();
 
             longList.Count.ShouldBe(51);
-            fakeDataStore.GetCalls().Count().ShouldBe(4);
+            this.FakeHttpClient.Calls.Count().ShouldBe(4);
         }
     }
 }

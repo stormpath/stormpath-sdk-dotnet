@@ -20,25 +20,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class FirstAsync_tests : Linq_tests
+    public class FirstAsync_tests : Linq_test<IAccount>
     {
         [Fact]
         public async Task Returns_first_item()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
+            this.InitializeClientWithCollection(new List<IAccount>()
                 {
-                    FakeAccounts.LukeSkywalker,
-                    FakeAccounts.HanSolo
+                    TestAccounts.LukeSkywalker,
+                    TestAccounts.HanSolo
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
-            var luke = await harness.Queryable.FirstAsync();
+            var luke = await this.Queryable.FirstAsync();
 
             luke.Surname.ShouldBe("Skywalker");
         }
@@ -46,28 +46,24 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Limits_result_to_one_item()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(new List<IAccount>()
+            this.InitializeClientWithCollection(new List<IAccount>()
                 {
-                    FakeAccounts.LukeSkywalker,
-                    FakeAccounts.HanSolo
+                    TestAccounts.LukeSkywalker,
+                    TestAccounts.HanSolo
                 });
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
 
-            var luke = await harness.Queryable.FirstAsync();
+            var luke = await this.Queryable.FirstAsync();
 
-            fakeDataStore.WasCalledWithArguments<IAccount>(this.Href, "limit=1");
+            this.FakeHttpClient.Calls.Single().ShouldContain("limit=1");
         }
 
         [Fact]
-        public void Throws_when_no_items_exist()
+        public async Task Throws_when_no_items_exist()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
-
             // TODO This should be InvalidOperationException, but under Mono it throws NullReferenceException for some undetermined reason
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                var jabba = await harness.Queryable.FirstAsync();
+                var jabba = await this.Queryable.FirstAsync();
             });
         }
     }

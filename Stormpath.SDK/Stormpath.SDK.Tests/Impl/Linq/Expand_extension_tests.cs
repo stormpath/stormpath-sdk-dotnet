@@ -15,91 +15,110 @@
 // </copyright>
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
-using Stormpath.SDK.Tests.Helpers;
+using Stormpath.SDK.Account;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Expand_extension_tests : Linq_tests
+    public class Expand_extension_tests : Linq_test<IAccount>
     {
         [Fact]
-        public void Expand_one_link()
+        public async Task Expand_one_link()
         {
-            var query = this.Harness.Queryable
-                .Expand(x => x.GetDirectoryAsync);
-
-            query.GeneratedArgumentsWere(this.Href, "expand=directory");
-        }
-
-        [Fact]
-        public void Expand_multiple_links()
-        {
-            var query = this.Harness.Queryable
+            await this.Queryable
                 .Expand(x => x.GetDirectoryAsync)
-                .Expand(x => x.GetTenantAsync);
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=directory,tenant");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory");
         }
 
         [Fact]
-        public void Expand_collection_query_with_no_parameters()
+        public async Task Expand_multiple_links()
         {
-            var query = this.Harness.Queryable
-                .Expand(x => x.GetGroups);
+            await this.Queryable
+                .Expand(x => x.GetDirectoryAsync)
+                .Expand(x => x.GetTenantAsync)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=groups");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory,tenant");
         }
 
         [Fact]
-        public void Expand_collection_query_with_offset()
+        public async Task Expand_collection_query_with_no_parameters()
         {
-            var query = this.Harness.Queryable
-                .Expand(x => x.GetGroups, offset: 10);
+            await this.Queryable
+                .Expand(x => x.GetGroups)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=groups(offset:10)");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups");
         }
 
         [Fact]
-        public void Expand_collection_query_with_limit()
+        public async Task Expand_collection_query_with_offset()
         {
-            var query = this.Harness.Queryable
-                .Expand(x => x.GetGroups, limit: 20);
+            await this.Queryable
+                .Expand(x => x.GetGroups, offset: 10)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=groups(limit:20)");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(offset:10)");
         }
 
         [Fact]
-        public void Expand_collection_query_with_both_parameters()
+        public async Task Expand_collection_query_with_limit()
         {
-            var query = this.Harness.Queryable
-                .Expand(x => x.GetGroups, 5, 15);
+            await this.Queryable
+                .Expand(x => x.GetGroups, limit: 20)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=groups(offset:5,limit:15)");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(limit:20)");
         }
 
         [Fact]
-        public void Expand_all_the_things()
+        public async Task Expand_collection_query_with_both_parameters()
         {
-            var query = this.Harness.Queryable
+            await this.Queryable
+                .Expand(x => x.GetGroups, 5, 15)
+                .MoveNextAsync();
+
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(offset:5,limit:15)");
+        }
+
+        [Fact]
+        public async Task Expand_all_the_things()
+        {
+            await this.Queryable
                 .Expand(x => x.GetTenantAsync)
                 .Expand(x => x.GetGroups, 10, 20)
-                .Expand(x => x.GetDirectoryAsync);
+                .Expand(x => x.GetDirectoryAsync)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "expand=tenant,groups(offset:10,limit:20),directory");
+            this.FakeHttpClient.Calls.Single().ShouldContain("expand=tenant,groups(offset:10,limit:20),directory");
         }
 
         [Fact]
-        public void Throws_for_negative_paging_values()
+        public async Task Throws_for_negative_offset()
         {
-            Should.Throw<ArgumentOutOfRangeException>(() =>
+            // TODO ArgumentOutOfRangeException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                var query = this.Harness.Queryable.Expand(x => x.GetGroups, -1, 0);
+                await this.Queryable
+                    .Expand(x => x.GetGroups, -1, 0)
+                    .MoveNextAsync();
             });
+        }
 
-            Should.Throw<ArgumentOutOfRangeException>(() =>
+        [Fact]
+        public void Throws_for_negative_limit()
+        {
+            // TODO ArgumentOutOfRangeException after Shouldly Mono fix
+            Should.Throw<Exception>(async () =>
             {
-                var query = this.Harness.Queryable.Expand(x => x.GetGroups, 0, -1);
+                await this.Queryable
+                    .Expand(x => x.GetGroups, 0, -1)
+                    .MoveNextAsync();
             });
         }
     }

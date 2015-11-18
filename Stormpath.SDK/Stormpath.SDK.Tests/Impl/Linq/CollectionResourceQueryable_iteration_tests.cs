@@ -16,59 +16,51 @@
 
 using System.Linq;
 using System.Threading.Tasks;
+using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Linq;
-using Stormpath.SDK.Tests.Fakes;
-using Stormpath.SDK.Tests.Helpers;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class CollectionResourceQueryable_iteration_tests
+    public class CollectionResourceQueryable_iteration_tests : Linq_test<IAccount>
     {
-        private static string href = "http://f.oo/bar";
-
         [Fact]
         public async Task First_iteration_does_not_modify_pagination_arguments()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                href,
-                new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance));
+            this.InitializeClientWithCollection(TestAccounts.RebelAlliance);
 
-            var query = harness.Queryable
+            var query = this.Queryable
                 .Take(5)
                 .Skip(10);
 
             await (query as IAsyncQueryable<IAccount>).MoveNextAsync();
-            harness.DataStoreAsync.WasCalledWithArguments<IAccount>(href, "limit=5&offset=10");
+            this.FakeHttpClient.Calls.Single().ShouldContain("limit=5&offset=10");
         }
 
         [Fact]
         public async Task First_iteration_does_not_add_pagination_arguments()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                href,
-                new FakeDataStore<IAccount>(FakeAccounts.RebelAlliance));
+            this.InitializeClientWithCollection(TestAccounts.RebelAlliance);
 
-            var query = harness.Queryable;
+            var query = this.Queryable;
 
             await query.MoveNextAsync();
-            harness.DataStoreAsync.WasCalledWithArguments<IAccount>(href, string.Empty);
+            this.FakeHttpClient.Calls.Single().ShouldNotContain("?");
         }
 
         [Fact]
         public async Task Subsequent_iterations_add_pagination_arguments_if_none_exist()
         {
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(
-                href,
-                new FakeDataStore<IAccount>(Enumerable.Repeat(new FakeAccount(), 50)));
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.AdmiralAckbar, 50));
 
-            var query = harness.Queryable;
+            var query = this.Queryable;
 
             await query.MoveNextAsync();
             var firstPageCount = query.CurrentPage.Count();
             await query.MoveNextAsync();
-            harness.DataStoreAsync.WasCalledWithArguments<IAccount>(href, $"offset={firstPageCount}");
+            this.FakeHttpClient.Calls.Last().ShouldContain($"offset={firstPageCount}");
         }
     }
 }

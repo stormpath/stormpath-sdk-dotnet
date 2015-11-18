@@ -1,4 +1,4 @@
-﻿// <copyright file="FakeHttpClient.cs" company="Stormpath, Inc.">
+﻿// <copyright file="AbstractMockHttpClient.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,25 +23,19 @@ using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Tests.Common.Fakes
 {
-    public sealed class FakeHttpClient : IAsynchronousHttpClient, ISynchronousHttpClient
+    public abstract class AbstractMockHttpClient : IAsynchronousHttpClient, ISynchronousHttpClient
     {
-        private static readonly List<HttpMethod> UnsupportedMethods =
-            new List<HttpMethod>() { HttpMethod.Connect, HttpMethod.Head, HttpMethod.Options, HttpMethod.Patch, HttpMethod.Trace };
-
-        private readonly string baseUrl;
-        private readonly string defaultResponse;
+        protected readonly string baseUrl;
         private readonly IDictionary<string, IHttpResponse> responses;
 
-        private int calls;
+        private List<string> calls;
 
-        public FakeHttpClient(string baseUrl, string defaultResponse = null)
+        public AbstractMockHttpClient(string baseUrl)
         {
             baseUrl = EnsureTrailingSlash(baseUrl);
 
             this.baseUrl = baseUrl;
-            this.defaultResponse = defaultResponse;
-
-            this.responses = new Dictionary<string, IHttpResponse>();
+            this.calls = new List<string>();
         }
 
         private ISynchronousHttpClient AsSyncInterface => this;
@@ -56,36 +50,30 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 
         IWebProxy IHttpClient.Proxy => null;
 
-        public int CallCount => this.calls;
+        public IReadOnlyList<string> Calls => this.calls;
 
         void IDisposable.Dispose()
         {
         }
 
-        public FakeHttpClient SetupGet(string resource, int responseCode, string responseBody, string responseBodyContentType = null)
-        {
-            var key = CreateKey(HttpMethod.Get, MergeWithBaseUrl(this.baseUrl, resource));
-            this.responses[key] = new FakeHttpResponse(responseCode, responseBody, responseBodyContentType);
+        protected abstract bool IsSupported(HttpMethod method);
 
-            return this;
-        }
+        protected abstract IHttpResponse GetResponse(IHttpRequest request);
 
         IHttpResponse ISynchronousHttpClient.Execute(IHttpRequest request)
         {
             if (!MatchesBaseUrl(request, this.baseUrl))
                 throw new ArgumentException("BaseUrl does not match.");
 
-            if (UnsupportedMethods.Contains(request.Method))
-                throw new NotImplementedException($"The method {request.Method} is not supported by FakeHttpClient.");
+            if (!this.IsSupported(request.Method))
+                throw new NotImplementedException($"The method {request.Method} is not supported by {this.GetType().Name}.");
 
-            var key = CreateKey(request.Method, request.CanonicalUri.ToString());
-            IHttpResponse response = null;
-            this.calls++;
+            var response = this.GetResponse(request);
+            if (response == null)
+                throw new ApplicationException($"{this.GetType().Name} cannot handle this request.");
 
-            if (this.responses.TryGetValue(key, out response))
-                return response;
-
-            return this.DefaultResponse();
+            this.calls.Add(request.CanonicalUri.ToString());
+            return response;
         }
 
         Task<IHttpResponse> IAsynchronousHttpClient.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
@@ -94,17 +82,6 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 
             return Task.FromResult(this.AsSyncInterface.Execute(request));
         }
-
-        private IHttpResponse DefaultResponse()
-        {
-            if (string.IsNullOrEmpty(this.defaultResponse))
-                throw new ArgumentException("No default response set up in FakeHttpClient.");
-
-            return new FakeHttpResponse(200, this.defaultResponse);
-        }
-
-        private static string CreateKey(HttpMethod method, string url)
-            => $"{method} {url}";
 
         private static string EnsureTrailingSlash(string url)
         {
@@ -117,7 +94,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         private static bool MatchesBaseUrl(IHttpRequest request, string baseUrl)
             => request.CanonicalUri.ToString().StartsWith(baseUrl, StringComparison.InvariantCultureIgnoreCase);
 
-        private static string MergeWithBaseUrl(string baseUrl, string resourceUrl)
+        protected static string MergeWithBaseUrl(string baseUrl, string resourceUrl)
             => baseUrl + resourceUrl.Replace(baseUrl, string.Empty).TrimStart('/');
     }
 }

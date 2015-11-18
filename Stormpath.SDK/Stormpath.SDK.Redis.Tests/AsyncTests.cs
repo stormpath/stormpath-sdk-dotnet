@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
 
             cached.Expiry.ShouldBeNull(); // No TTI
             cached.Value.ToString().ShouldNotBeNullOrEmpty();
-            this.fakeHttpClient.CallCount.ShouldBe(1);
+            this.fakeHttpClient.Calls.Count.ShouldBe(1);
         }
 
         [DebugOnlyFact]
@@ -64,13 +64,13 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             var application = await this.client.GetResourceAsync<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
             await this.client.GetResourceAsync<IApplication>(application.Href);
             await this.client.GetResourceAsync<IApplication>(application.Href);
-            this.fakeHttpClient.CallCount.ShouldBe(1);
+            this.fakeHttpClient.Calls.Count.ShouldBe(1);
 
             await Task.Delay(1500);
 
             await this.client.GetResourceAsync<IApplication>(application.Href);
             await this.client.GetResourceAsync<IApplication>(application.Href);
-            this.fakeHttpClient.CallCount.ShouldBe(2);
+            this.fakeHttpClient.Calls.Count.ShouldBe(2);
         }
 
         [DebugOnlyFact]
@@ -82,13 +82,13 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             var application = await this.client.GetResourceAsync<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
             await this.client.GetResourceAsync<IApplication>(application.Href);
             await this.client.GetResourceAsync<IApplication>(application.Href);
-            this.fakeHttpClient.CallCount.ShouldBe(1);
+            this.fakeHttpClient.Calls.Count.ShouldBe(1);
 
             await Task.Delay(1500);
 
             await this.client.GetResourceAsync<IApplication>(application.Href);
             await this.client.GetResourceAsync<IApplication>(application.Href);
-            this.fakeHttpClient.CallCount.ShouldBe(2);
+            this.fakeHttpClient.Calls.Count.ShouldBe(2);
         }
     }
 }

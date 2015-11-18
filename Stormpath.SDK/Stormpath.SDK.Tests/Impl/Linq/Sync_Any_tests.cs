@@ -18,21 +18,19 @@ using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Sync_Any_tests : Linq_tests
+    public class Sync_Any_tests : Linq_test<IAccount>
     {
         [Fact]
         public void Returns_false_for_empty_collection()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Empty<IAccount>());
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
-
-            harness.Queryable
+            this.Queryable
                 .Synchronously()
                 .Any()
                 .ShouldBeFalse();
@@ -41,10 +39,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Returns_true_for_nonempty_collection()
         {
-            var fakeDataStore = new FakeDataStore<IAccount>(Enumerable.Repeat(FakeAccounts.R2D2, 73));
-            var harness = CollectionTestHarness<IAccount>.Create<IAccount>(this.Href, fakeDataStore);
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.R2D2, 73));
 
-            harness.Queryable
+            this.Queryable
                 .Synchronously()
                 .Any()
                 .ShouldBeTrue();

@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Serialization.FieldConverters;
 using Stormpath.SDK.Serialization;
 
