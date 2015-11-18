@@ -14,57 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Stormpath.SDK.Cache;
 
 namespace Stormpath.SDK.Impl.Cache
 {
-    internal sealed class InMemoryCacheProviderBuilder : ICacheProviderBuilder
+    internal sealed class InMemoryCacheProviderBuilder : AbstractCacheProviderBuilder<InMemoryCacheProvider>
     {
-        private readonly List<ICacheConfiguration> cacheConfigs
-            = new List<ICacheConfiguration>();
-
-        private TimeSpan? defaultTimeToLive;
-        private TimeSpan? defaultTimeToIdle;
-
-        ICacheProviderBuilder ICacheProviderBuilder.WithDefaultTimeToIdle(TimeSpan tti)
-        {
-            this.defaultTimeToIdle = tti;
-            return this;
-        }
-
-        ICacheProviderBuilder ICacheProviderBuilder.WithDefaultTimeToLive(TimeSpan ttl)
-        {
-            this.defaultTimeToLive = ttl;
-            return this;
-        }
-
-        ICacheProviderBuilder ICacheProviderBuilder.WithCache(ICacheConfigurationBuilder builder)
-        {
-            var cacheConfig = builder.Build();
-            if (cacheConfig == null)
-                throw new ApplicationException("The cache configuration is not valid.");
-
-            this.cacheConfigs.Add(cacheConfig);
-            return this;
-        }
-
-        ICacheProvider ICacheProviderBuilder.Build()
-        {
-            var provider = new InMemoryCacheProvider();
-
-            if (this.defaultTimeToLive.HasValue)
-                provider.SetDefaultTimeToLive(this.defaultTimeToLive.Value);
-
-            if (this.defaultTimeToIdle.HasValue)
-                provider.SetDefaultTimeToIdle(this.defaultTimeToIdle.Value);
-
-            if (this.cacheConfigs.Any())
-                provider.SetCacheConfigurations(this.cacheConfigs);
-
-            return provider;
-        }
     }
 }
