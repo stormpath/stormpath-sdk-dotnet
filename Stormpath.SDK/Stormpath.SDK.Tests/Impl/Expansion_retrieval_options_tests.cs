@@ -88,12 +88,12 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
-        public void Throws_for_delete()
+        public async Task Throws_for_delete()
         {
             var dataStore = this.BuildDataStore(FakeJson.Account);
 
             // TODO Mono throws NullReferenceException, should be NotSupportedException
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.DeleteAsync));
             });

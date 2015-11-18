@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_when_more_than_one_item_exists()
+        public async Task Throws_when_more_than_one_item_exists()
         {
             this.InitializeClientWithCollection(new List<IAccount>()
                 {
@@ -52,19 +52,19 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 });
 
             // TODO This should be InvalidOperationException, but under Mono it throws NullReferenceException for some undetermined reason
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 var han = await this.Queryable.SingleAsync();
             });
         }
 
         [Fact]
-        public void Throws_when_no_items_exist()
+        public async Task Throws_when_no_items_exist()
         {
             this.InitializeClientWithCollection(Enumerable.Empty<IAccount>());
 
             // TODO This should be InvalidOperationException, but under Mono it throws NullReferenceException for some undetermined reason
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 var jabba = await this.Queryable.SingleAsync();
             });

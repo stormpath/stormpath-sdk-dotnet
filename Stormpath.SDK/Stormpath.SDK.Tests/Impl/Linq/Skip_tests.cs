@@ -81,10 +81,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_invalid_value()
+        public async Task Throws_for_invalid_value()
         {
             // TODO ArgumentOutOfRangeException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Skip(-1)

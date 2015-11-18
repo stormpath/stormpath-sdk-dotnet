@@ -32,10 +32,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
     public class Expand_account_tests : Linq_test<IAccount>
     {
         [Fact]
-        public void Delete_throws()
+        public async Task Delete_throws()
         {
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Expand(x => x.DeleteAsync)
@@ -124,10 +124,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Save_throws()
+        public async Task Save_throws()
         {
             // TODO ArgumentOutOfRangeException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Expand(x => x.SaveAsync)

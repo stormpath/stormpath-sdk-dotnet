@@ -99,10 +99,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_negative_offset()
+        public async Task Throws_for_negative_offset()
         {
             // TODO ArgumentOutOfRangeException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Expand(x => x.GetGroups, -1, 0)
@@ -114,7 +114,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public void Throws_for_negative_limit()
         {
             // TODO ArgumentOutOfRangeException after Shouldly Mono fix
-            Should.Throw<NullReferenceException>(async () =>
+            Should.Throw<Exception>(async () =>
             {
                 await this.Queryable
                     .Expand(x => x.GetGroups, 0, -1)

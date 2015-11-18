@@ -39,10 +39,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_multiple_series_calls()
+        public async Task Throws_for_multiple_series_calls()
         {
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Where(x => x.CreatedAt.Within(2015))
@@ -52,10 +52,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_multiple_parallel_calls()
+        public async Task Throws_for_multiple_parallel_calls()
         {
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Where(x => x.CreatedAt.Within(2015) && x.CreatedAt.Within(2015, 01, 01))
@@ -64,10 +64,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_when_mixing_Within_and_date_comparison()
+        public async Task Throws_when_mixing_Within_and_date_comparison()
         {
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Where(x => x.CreatedAt.Within(2015))

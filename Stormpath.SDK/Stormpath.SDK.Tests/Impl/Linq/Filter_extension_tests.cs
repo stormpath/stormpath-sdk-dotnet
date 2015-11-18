@@ -51,10 +51,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_multiple_calls()
+        public async Task Throws_for_multiple_calls()
         {
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Filter("Joe")
@@ -64,10 +64,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_null()
+        public async Task Throws_for_null()
         {
             // TODO ArgumentException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Filter(null)
@@ -76,10 +76,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_empty_string()
+        public async Task Throws_for_empty_string()
         {
             // TODO ArgumentException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Filter(string.Empty)
@@ -88,10 +88,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_whitespace()
+        public async Task Throws_for_whitespace()
         {
             // TODO ArgumentException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Filter("   ")

@@ -27,10 +27,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
     public class Where_tests : Linq_test<IAccount>
     {
         [Fact]
-        public void Throws_for_constant_true()
+        public async Task Throws_for_constant_true()
         {
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Where(x => true)
@@ -39,10 +39,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Tthrows_for_constant_false()
+        public async Task Tthrows_for_constant_false()
         {
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Where(x => false)
@@ -51,10 +51,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_unsupported_comparison_operators()
+        public async Task Throws_for_unsupported_comparison_operators()
         {
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Where(x => x.Email != "foo")
@@ -63,10 +63,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_complex_overload_of_Equals()
+        public async Task Throws_for_complex_overload_of_Equals()
         {
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Where(x => x.Email.Equals("bar", StringComparison.CurrentCulture))
@@ -75,10 +75,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_complex_overload_of_StartsWith()
+        public async Task Throws_for_complex_overload_of_StartsWith()
         {
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Where(x => x.Email.StartsWith("foo", StringComparison.InvariantCultureIgnoreCase))
@@ -87,10 +87,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_unsupported_helper_methods()
+        public async Task Throws_for_unsupported_helper_methods()
         {
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Where(x => x.Email.ToUpper() == "FOO")
@@ -99,10 +99,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_for_binary_or()
+        public async Task Throws_for_binary_or()
         {
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Where(x => x.Email == "foo" || x.Email == "bar")
@@ -276,12 +276,12 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Where_date_attribute_equals()
+        public async Task Where_date_attribute_equals()
         {
             var testDate = new DateTime(2016, 01, 01, 12, 00, 00);
 
             // TODO NotSupportedException after Shouldly Mono fix
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
                     .Where(x => x.ModifiedAt == testDate)

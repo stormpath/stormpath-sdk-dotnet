@@ -178,10 +178,10 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 
                 iface.Put("foo", DummyItem);
 
-                Thread.Sleep(250);
+                Thread.Sleep(100);
                 iface.Get("foo").ShouldBe(DummyItem);
 
-                Thread.Sleep(250);
+                Thread.Sleep(500);
                 iface.Get("foo").ShouldBeNull();
             }
 
@@ -364,16 +364,16 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             {
                 var cache = new InMemoryCache(
                     "fooCache",
-                    timeToLive: TimeSpan.FromMilliseconds(500),
+                    timeToLive: TimeSpan.FromMilliseconds(1000),
                     timeToIdle: null);
                 var iface = cache as IAsynchronousCache;
 
                 await iface.PutAsync("foo", DummyItem);
 
-                Thread.Sleep(250);
+                Thread.Sleep(100);
                 (await iface.GetAsync("foo")).ShouldBe(DummyItem);
 
-                Thread.Sleep(250);
+                Thread.Sleep(1000);
                 (await iface.GetAsync("foo")).ShouldBeNull();
             }
 
@@ -433,7 +433,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 
                 iface.Dispose();
 
-                Should.Throw<Exception>(async () =>
+                await Should.ThrowAsync<Exception>(async () =>
                 {
                     (await iface.GetAsync("foo")).ShouldBe(DummyItem);
                 });

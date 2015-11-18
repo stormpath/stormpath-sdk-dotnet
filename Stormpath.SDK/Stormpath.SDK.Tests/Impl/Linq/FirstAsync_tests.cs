@@ -58,10 +58,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public void Throws_when_no_items_exist()
+        public async Task Throws_when_no_items_exist()
         {
             // TODO This should be InvalidOperationException, but under Mono it throws NullReferenceException for some undetermined reason
-            Should.Throw<Exception>(async () =>
+            await Should.ThrowAsync<Exception>(async () =>
             {
                 var jabba = await this.Queryable.FirstAsync();
             });
