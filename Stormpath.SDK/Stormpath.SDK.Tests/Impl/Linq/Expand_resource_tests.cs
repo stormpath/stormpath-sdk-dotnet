@@ -34,7 +34,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Delete_throws()
         {
-            Should.Throw<NotSupportedException>(async () =>
+            // TODO NotSupportedException after Shouldly Mono fix
+            Should.Throw<Exception>(async () =>
             {
                 await this.Queryable
                     .Expand(x => x.DeleteAsync)
@@ -125,7 +126,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Save_throws()
         {
-            Should.Throw<NotSupportedException>(async () =>
+            // TODO ArgumentOutOfRangeException after Shouldly Mono fix
+            Should.Throw<Exception>(async () =>
             {
                 await this.Queryable
                     .Expand(x => x.SaveAsync)
