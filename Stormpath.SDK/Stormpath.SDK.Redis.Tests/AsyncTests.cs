@@ -17,7 +17,9 @@
 using System;
 using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Cache;
 using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Xunit;
@@ -35,7 +37,11 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
         [DebugOnlyFact]
         public async Task Resource_is_cached_indefinitely()
         {
-            this.CreateClient(ttl: null, tti: null);
+            var cacheProvider = RedisCaches.NewRedisCacheProvider()
+                .WithRedisConnection(this.fixture.Connection)
+                .Build();
+
+            this.CreateClient(cacheProvider);
             this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
 
             // Prime the cache
@@ -58,7 +64,12 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
         [DebugOnlyFact]
         public async Task Resource_expired_by_TTL()
         {
-            this.CreateClient(ttl: TimeSpan.FromSeconds(1), tti: null);
+            var cacheProvider = RedisCaches.NewRedisCacheProvider()
+                .WithRedisConnection(this.fixture.Connection)
+                .WithDefaultTimeToLive(TimeSpan.FromSeconds(1))
+                .Build();
+
+            this.CreateClient(cacheProvider);
             this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
 
             var application = await this.client.GetResourceAsync<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
@@ -76,7 +87,12 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
         [DebugOnlyFact]
         public async Task Resource_expired_by_TTI()
         {
-            this.CreateClient(ttl: null, tti: TimeSpan.FromSeconds(1));
+            var cacheProvider = RedisCaches.NewRedisCacheProvider()
+                .WithRedisConnection(this.fixture.Connection)
+                .WithDefaultTimeToIdle(TimeSpan.FromSeconds(1))
+                .Build();
+
+            this.CreateClient(cacheProvider);
             this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
 
             var application = await this.client.GetResourceAsync<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
@@ -89,6 +105,62 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             await this.client.GetResourceAsync<IApplication>(application.Href);
             await this.client.GetResourceAsync<IApplication>(application.Href);
             this.fakeHttpClient.Calls.Count.ShouldBe(2);
+        }
+
+        [DebugOnlyFact]
+        public async Task Resource_with_custom_configuration_expired_by_TTL()
+        {
+            // Make the default TTL 10 minutes, but IAccounts expire in 1 second
+            var cacheProvider = RedisCaches.NewRedisCacheProvider()
+                .WithRedisConnection(this.fixture.Connection)
+                .WithDefaultTimeToLive(TimeSpan.FromMinutes(10))
+                .WithCache(Caches.ForResource<IAccount>()
+                    .WithTimeToLive(TimeSpan.FromSeconds(1)))
+                .Build();
+
+            this.CreateClient(cacheProvider);
+            this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
+            this.fakeHttpClient.SetupGet("/accounts/foobarAccount", 200, FakeJson.Account);
+
+            var application = await this.client.GetResourceAsync<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
+            var account = await this.client.GetResourceAsync<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
+            this.fakeHttpClient.Calls.Count.ShouldBe(2);
+
+            await Task.Delay(1500);
+
+            await this.client.GetResourceAsync<IAccount>(account.Href);
+            this.fakeHttpClient.Calls.Count.ShouldBe(3);
+
+            await this.client.GetResourceAsync<IApplication>(application.Href);
+            this.fakeHttpClient.Calls.Count.ShouldBe(3);
+        }
+
+        [DebugOnlyFact]
+        public async Task Resource_with_custom_configuration_expired_by_TTI()
+        {
+            // Make the default TTL 10 minutes, but IAccounts expire in 1 second
+            var cacheProvider = RedisCaches.NewRedisCacheProvider()
+                .WithRedisConnection(this.fixture.Connection)
+                .WithDefaultTimeToIdle(TimeSpan.FromMinutes(10))
+                .WithCache(Caches.ForResource<IAccount>()
+                    .WithTimeToIdle(TimeSpan.FromSeconds(1)))
+                .Build();
+
+            this.CreateClient(cacheProvider);
+            this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
+            this.fakeHttpClient.SetupGet("/accounts/foobarAccount", 200, FakeJson.Account);
+
+            var application = await this.client.GetResourceAsync<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
+            var account = await this.client.GetResourceAsync<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
+            this.fakeHttpClient.Calls.Count.ShouldBe(2);
+
+            await Task.Delay(1500);
+
+            await this.client.GetResourceAsync<IAccount>(account.Href);
+            this.fakeHttpClient.Calls.Count.ShouldBe(3);
+
+            await this.client.GetResourceAsync<IApplication>(application.Href);
+            this.fakeHttpClient.Calls.Count.ShouldBe(3);
         }
     }
 }

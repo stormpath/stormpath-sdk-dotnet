@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Tests.Common.Fakes;
@@ -37,20 +38,10 @@ namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
             fixture.FlushDatabase();
         }
 
-        protected void CreateClient(TimeSpan? ttl, TimeSpan? tti)
+        protected void CreateClient(ICacheProvider cacheProvider)
         {
-            var builder = RedisCaches.NewRedisCacheProvider()
-                .WithRedisConnection(this.fixture.Connection);
-
-            if (ttl != null)
-                builder.WithDefaultTimeToLive(ttl.Value);
-            if (tti != null)
-                builder.WithDefaultTimeToIdle(tti.Value);
-
             this.logger = new InMemoryLogger();
             this.fakeHttpClient = new ResourceReturningHttpClient(BaseUrl);
-
-            var cacheProvider = builder.Build();
 
             this.client = Clients.Builder()
                 .SetHttpClient(this.fakeHttpClient)
