@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Impl.Http
 
         public abstract string BodyContentType { get; }
 
-        public bool HasBody => !string.IsNullOrEmpty(this.Body) && !string.IsNullOrEmpty(this.BodyContentType);
+        public bool HasBody => !string.IsNullOrEmpty(this.Body);
 
         public abstract HttpHeaders Headers { get; }
     }

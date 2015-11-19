@@ -67,10 +67,12 @@
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
     <Compile Include="Cache\AbstractCacheProvider.cs" />
+    <Compile Include="Http\IHttpRequestBuilder.cs" />
     <Compile Include="IdSite\IIdSiteSyncResultListener.cs" />
     <Compile Include="IdSite\IIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
     <Compile Include="Cache\AbstractCacheProviderBuilder{T}.cs" />
+    <Compile Include="Impl\Http\DefaultHttpRequestBuilder.cs" />
     <Compile Include="Impl\IdentityMap\IdentityMapOptionsResolver.cs" />
     <Compile Include="Impl\Group\DefaultGroup.Membership.cs" />
     <Compile Include="Impl\Group\DefaultGroup.Collections.cs" />
