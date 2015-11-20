@@ -94,6 +94,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Async\Account_tests.vb" />
     <Compile Include="Async\Tenant_tests.vb" />
     <Compile Include="Linq_test.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

@@ -24,6 +24,7 @@ Imports Stormpath.SDK.Account
 Imports Stormpath.SDK.Application
 Imports Stormpath.SDK.Auth
 Imports Stormpath.SDK.Error
+Imports Stormpath.SDK.Tests.Common
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData
 Imports Xunit
@@ -103,13 +104,15 @@ Namespace Stormpath.SDK.Tests.Integration.Async
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Saving_with_response_options(clientBuilder As TestClientProvider) As Task
-            Dim client = clientBuilder.GetClient()
-            Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+            Assertly.Todo()
 
-            Dim chewie = Await application.GetAccounts().Where(Function(a) a.Email = "chewie@kashyyyk.rim").SingleAsync()
+            'Dim client = clientBuilder.GetClient()
+            'Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            chewie.SetUsername("rwaaargh-{this.fixture.TestRunIdentifier}")
-            Await chewie.SaveAsync(Function(response) response.Expand(Function(x) x.GetCustomDataAsync))
+            'Dim chewie = Await application.GetAccounts().Where(Function(a) a.Email = "chewie@kashyyyk.rim").SingleAsync()
+
+            'chewie.SetUsername("rwaaargh-{this.fixture.TestRunIdentifier}")
+            'Await chewie.SaveAsync(Function(response) response.Expand(Function(x) x.GetCustomDataAsync))
         End Function
 
         <Theory>
@@ -390,21 +393,23 @@ Namespace Stormpath.SDK.Tests.Integration.Async
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Creating_account_with_response_options(clientBuilder As TestClientProvider) As Task
-            Dim client = clientBuilder.GetClient()
-            Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+            Assertly.Todo()
 
-            Dim account = client.Instantiate(Of IAccount)().SetGivenName("Galen").SetSurname("Marek").SetEmail("gmarek@kashyyk.rim").SetPassword(New RandomPassword(12))
-            Await application.CreateAccountAsync(account, Sub(opt)
-                                                              opt.ResponseOptions.Expand(Function(x) x.GetCustomDataAsync)
-                                                          End Sub)
+            'Dim client = clientBuilder.GetClient()
+            'Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            account.Href.ShouldNotBeNullOrEmpty()
-            Me.fixture.CreatedAccountHrefs.Add(account.Href)
+            'Dim account = client.Instantiate(Of IAccount)().SetGivenName("Galen").SetSurname("Marek").SetEmail("gmarek@kashyyk.rim").SetPassword(New RandomPassword(12))
+            'Await application.CreateAccountAsync(account, Sub(opt)
+            '                                                  opt.ResponseOptions.Expand(Function(x) x.GetCustomDataAsync)
+            '                                              End Sub)
 
-            ' Clean up
-            Dim result = Await account.DeleteAsync()
-            result.ShouldBeTrue()
-            Me.fixture.CreatedAccountHrefs.Remove(account.Href)
+            'account.Href.ShouldNotBeNullOrEmpty()
+            'Me.fixture.CreatedAccountHrefs.Add(account.Href)
+
+            '' Clean up
+            'Dim result = Await account.DeleteAsync()
+            'result.ShouldBeTrue()
+            'Me.fixture.CreatedAccountHrefs.Remove(account.Href)
         End Function
 
         <Theory>
@@ -425,17 +430,19 @@ Namespace Stormpath.SDK.Tests.Integration.Async
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Authenticating_account_with_response_options(clientBuilder As TestClientProvider) As Task
-            Dim client = clientBuilder.GetClient()
-            Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+            Assertly.Todo()
 
-            Dim request = New UsernamePasswordRequestBuilder()
-            request.SetUsernameOrEmail("sonofthesuns-{this.fixture.TestRunIdentifier}")
-            request.SetPassword("whataPieceofjunk$1138")
+            'Dim client = clientBuilder.GetClient()
+            'Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim result = Await application.AuthenticateAccountAsync(request.Build(), Function(response) response.Expand(Function(x) x.GetAccountAsync))
+            'Dim request = New UsernamePasswordRequestBuilder()
+            'request.SetUsernameOrEmail("sonofthesuns-{this.fixture.TestRunIdentifier}")
+            'request.SetPassword("whataPieceofjunk$1138")
 
-            result.ShouldBeAssignableTo(Of IAuthenticationResult)()
-            result.Success.ShouldBeTrue()
+            'Dim result = Await application.AuthenticateAccountAsync(request.Build(), Function(response) response.Expand(Function(x) x.GetAccountAsync))
+
+            'result.ShouldBeAssignableTo(Of IAuthenticationResult)()
+            'result.Success.ShouldBeTrue()
         End Function
 
         <Theory>
@@ -475,19 +482,21 @@ Namespace Stormpath.SDK.Tests.Integration.Async
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Authenticating_account_in_specified_account_store_with_response_options(clientBuilder As TestClientProvider) As Task
-            Dim client = clientBuilder.GetClient()
-            Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
-            Dim accountStore = Await application.GetDefaultAccountStoreAsync()
+            Assertly.Todo()
 
-            Dim result = Await application.AuthenticateAccountAsync(Sub(request)
-                                                                        request.SetUsernameOrEmail("sonofthesuns-{this.fixture.TestRunIdentifier}")
-                                                                        request.SetPassword("whataPieceofjunk$1138")
-                                                                        request.SetAccountStore(accountStore)
-                                                                    End Sub,
-                                                                    Function(response) response.Expand(Function(x) x.GetAccountAsync))
+            'Dim client = clientBuilder.GetClient()
+            'Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+            'Dim accountStore = Await application.GetDefaultAccountStoreAsync()
 
-            result.ShouldBeAssignableTo(Of IAuthenticationResult)()
-            result.Success.ShouldBeTrue()
+            'Dim result = Await application.AuthenticateAccountAsync(Sub(request)
+            '                                                            request.SetUsernameOrEmail("sonofthesuns-{this.fixture.TestRunIdentifier}")
+            '                                                            request.SetPassword("whataPieceofjunk$1138")
+            '                                                            request.SetAccountStore(accountStore)
+            '                                                        End Sub,
+            '                                                        Function(response) response.Expand(Function(x) x.GetAccountAsync))
+
+            'result.ShouldBeAssignableTo(Of IAuthenticationResult)()
+            'result.Success.ShouldBeTrue()
         End Function
 
         <Theory>
