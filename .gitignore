@@ -25,3 +25,6 @@ Temporary Items
 .apdisk
 *.playlist
 /Stormpath.SDK/LocalDemos
+
+# Output directory for compiled nuget packages
+nuget-pack
