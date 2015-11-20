@@ -66,7 +66,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Sync_chain_terminating_on_first()
             {
-                ISynchronousFilterChain filterChain = new DefaultSynchronousFilterChain()
+                ISynchronousFilterChain filterChain = new DefaultSynchronousFilterChain(Substitute.For<IInternalSyncDataStore>())
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
@@ -80,7 +80,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Sync_chain_terminating_on_second()
             {
-                ISynchronousFilterChain filterChain = new DefaultSynchronousFilterChain()
+                ISynchronousFilterChain filterChain = new DefaultSynchronousFilterChain(Substitute.For<IInternalSyncDataStore>())
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
@@ -94,7 +94,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Sync_with_inline_filter()
             {
-                ISynchronousFilterChain defaultFilterChain = new DefaultSynchronousFilterChain()
+                ISynchronousFilterChain defaultFilterChain = new DefaultSynchronousFilterChain(Substitute.For<IInternalSyncDataStore>())
                     .Add(new DeleteInterceptorFilter());
 
                 ISynchronousFilterChain finalChain = new DefaultSynchronousFilterChain(defaultFilterChain as DefaultSynchronousFilterChain)
@@ -157,7 +157,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public async Task Async_chain_terminating_on_first()
             {
-                IAsynchronousFilterChain filterChain = new DefaultAsynchronousFilterChain()
+                IAsynchronousFilterChain filterChain = new DefaultAsynchronousFilterChain(Substitute.For<IInternalAsyncDataStore>())
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
@@ -171,7 +171,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public async Task Async_chain_terminating_on_second()
             {
-                IAsynchronousFilterChain filterChain = new DefaultAsynchronousFilterChain()
+                IAsynchronousFilterChain filterChain = new DefaultAsynchronousFilterChain(Substitute.For<IInternalAsyncDataStore>())
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
@@ -185,7 +185,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public async Task Async_with_inline_filter()
             {
-                IAsynchronousFilterChain defaultFilterChain = new DefaultAsynchronousFilterChain()
+                IAsynchronousFilterChain defaultFilterChain = new DefaultAsynchronousFilterChain(Substitute.For<IInternalAsyncDataStore>())
                     .Add(new DeleteInterceptorFilter());
 
                 IAsynchronousFilterChain finalChain = new DefaultAsynchronousFilterChain(defaultFilterChain as DefaultAsynchronousFilterChain)

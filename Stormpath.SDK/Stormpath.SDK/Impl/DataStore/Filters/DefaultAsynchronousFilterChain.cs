@@ -26,24 +26,28 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 {
     internal sealed class DefaultAsynchronousFilterChain : IAsynchronousFilterChain
     {
+        private readonly IInternalAsyncDataStore dataStore;
         private readonly List<IAsynchronousFilter> filters;
 
-        public DefaultAsynchronousFilterChain()
+        public DefaultAsynchronousFilterChain(IInternalAsyncDataStore dataStore)
+            : this(dataStore, Enumerable.Empty<IAsynchronousFilter>())
         {
-            this.filters = new List<IAsynchronousFilter>();
         }
 
         public DefaultAsynchronousFilterChain(DefaultAsynchronousFilterChain original)
-            : this(original.filters)
+            : this(original.dataStore, original.filters)
         {
         }
 
-        internal DefaultAsynchronousFilterChain(IEnumerable<IAsynchronousFilter> filters)
+        internal DefaultAsynchronousFilterChain(IInternalAsyncDataStore dataStore, IEnumerable<IAsynchronousFilter> filters)
         {
+            this.dataStore = dataStore;
             this.filters = new List<IAsynchronousFilter>(filters);
         }
 
         private IAsynchronousFilterChain AsInterface => this;
+
+        IInternalAsyncDataStore IAsynchronousFilterChain.DataStore => this.dataStore;
 
         public DefaultAsynchronousFilterChain Add(IAsynchronousFilter asyncFilter)
         {
@@ -66,7 +70,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                     cancellationToken: cancellationToken);
             }
 
-            var remainingChain = new DefaultAsynchronousFilterChain(this.filters.Skip(1).ToList());
+            var remainingChain = new DefaultAsynchronousFilterChain(this.dataStore, this.filters.Skip(1));
             return this.filters.First().FilterAsync(request, remainingChain, logger, cancellationToken);
         }
     }

@@ -102,7 +102,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private IAsynchronousFilterChain BuildDefaultAsyncFilterChain()
         {
-            var asyncFilterChain = new DefaultAsynchronousFilterChain();
+            var asyncFilterChain = new DefaultAsynchronousFilterChain(this);
 
             if (this.IsCachingEnabled())
             {
@@ -111,13 +111,14 @@ namespace Stormpath.SDK.Impl.DataStore
             }
 
             asyncFilterChain.Add(new ProviderAccountResultFilter());
+            asyncFilterChain.Add(new AccountStoreMappingCacheInvalidationFilter());
 
             return asyncFilterChain;
         }
 
         private ISynchronousFilterChain BuildDefaultSyncFilterChain()
         {
-            var syncFilterChain = new DefaultSynchronousFilterChain();
+            var syncFilterChain = new DefaultSynchronousFilterChain(this);
 
             if (this.IsCachingEnabled())
             {
@@ -126,6 +127,7 @@ namespace Stormpath.SDK.Impl.DataStore
             }
 
             syncFilterChain.Add(new ProviderAccountResultFilter());
+            syncFilterChain.Add(new AccountStoreMappingCacheInvalidationFilter());
 
             return syncFilterChain;
         }

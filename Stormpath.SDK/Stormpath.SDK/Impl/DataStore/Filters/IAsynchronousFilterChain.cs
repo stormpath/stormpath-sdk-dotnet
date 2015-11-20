@@ -22,6 +22,8 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 {
     internal interface IAsynchronousFilterChain
     {
+        IInternalAsyncDataStore DataStore { get; }
+
         Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, ILogger logger, CancellationToken cancellationToken);
     }
 }

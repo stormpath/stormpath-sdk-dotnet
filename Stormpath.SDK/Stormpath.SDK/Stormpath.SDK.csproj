@@ -72,6 +72,7 @@
     <Compile Include="IdSite\IIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
     <Compile Include="Cache\AbstractCacheProviderBuilder{T}.cs" />
+    <Compile Include="Impl\DataStore\Filters\AccountStoreMappingCacheInvalidationFilter.cs" />
     <Compile Include="Impl\Http\DefaultHttpRequestBuilder.cs" />
     <Compile Include="Impl\IdentityMap\IdentityMapOptionsResolver.cs" />
     <Compile Include="Impl\Group\DefaultGroup.Membership.cs" />

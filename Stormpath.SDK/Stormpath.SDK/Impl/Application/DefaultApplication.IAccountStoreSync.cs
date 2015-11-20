@@ -177,7 +177,7 @@ namespace Stormpath.SDK.Impl.Application
                 {
                     throw new ArgumentException(
                         "There is both a Directory and a Group matching the provided name in the current tenant. " +
-                        "Please provide the href of the intended Resource instead of its name in order to unambigously identify it.");
+                        "Please provide the href of the intended Resource instead of its name in order to unambiguously identify it.");
                 }
 
                 accountStore = directory != null

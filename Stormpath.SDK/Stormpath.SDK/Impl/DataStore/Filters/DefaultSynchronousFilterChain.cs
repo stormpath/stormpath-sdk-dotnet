@@ -24,24 +24,28 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 {
     internal sealed class DefaultSynchronousFilterChain : ISynchronousFilterChain
     {
+        private readonly IInternalSyncDataStore dataStore;
         private readonly List<ISynchronousFilter> filters;
 
-        public DefaultSynchronousFilterChain()
+        public DefaultSynchronousFilterChain(IInternalSyncDataStore dataStore)
+            : this(dataStore, Enumerable.Empty<ISynchronousFilter>())
         {
-            this.filters = new List<ISynchronousFilter>();
         }
 
         public DefaultSynchronousFilterChain(DefaultSynchronousFilterChain original)
-            : this(original.filters)
+            : this(original.dataStore, original.filters)
         {
         }
 
-        internal DefaultSynchronousFilterChain(IEnumerable<ISynchronousFilter> filters)
+        internal DefaultSynchronousFilterChain(IInternalSyncDataStore dataStore, IEnumerable<ISynchronousFilter> filters)
         {
+            this.dataStore = dataStore;
             this.filters = new List<ISynchronousFilter>(filters);
         }
 
         private ISynchronousFilterChain AsInterface => this;
+
+        IInternalSyncDataStore ISynchronousFilterChain.DataStore => this.dataStore;
 
         public DefaultSynchronousFilterChain Add(ISynchronousFilter filter)
         {
@@ -63,7 +67,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                     logger: logger);
             }
 
-            var remainingChain = new DefaultSynchronousFilterChain(this.filters.Skip(1).ToList());
+            var remainingChain = new DefaultSynchronousFilterChain(this.dataStore, this.filters.Skip(1));
             return this.filters.First().Filter(request, remainingChain, logger);
         }
     }

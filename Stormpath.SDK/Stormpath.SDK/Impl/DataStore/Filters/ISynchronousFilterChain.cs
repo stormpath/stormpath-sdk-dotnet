@@ -20,6 +20,8 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 {
     internal interface ISynchronousFilterChain
     {
+        IInternalSyncDataStore DataStore { get; }
+
         IResourceDataResult Filter(IResourceDataRequest request, ILogger logger);
     }
 }

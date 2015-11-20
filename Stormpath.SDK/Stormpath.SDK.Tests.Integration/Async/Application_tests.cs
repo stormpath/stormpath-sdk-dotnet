@@ -279,6 +279,35 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public async Task Creating_second_account_store_mapping_at_zeroth_index(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier} Adding Two AccountStores Directly Test Application",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            var mapping1 = await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+
+            var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
+            var mapping2 = client.Instantiate<IAccountStoreMapping>();
+            mapping2.SetAccountStore(group);
+            mapping2.SetListIndex(0);
+            await createdApplication.CreateAccountStoreMappingAsync(mapping2);
+
+            mapping2.ListIndex.ShouldBe(0);
+            mapping1.ListIndex.ShouldBe(1);
+
+            // Clean up
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public async Task Adding_directory_as_account_store_to_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
