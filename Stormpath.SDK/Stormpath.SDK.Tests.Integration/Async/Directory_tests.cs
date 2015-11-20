@@ -93,7 +93,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetDescription("Another great directory for my app")
                 .SetStatus(DirectoryStatus.Disabled);
 
-            await tenant.CreateDirectoryAsync(directory, opt => opt.ResponseOptions.Expand(x => x.GetCustomDataAsync));
+            await tenant.CreateDirectoryAsync(directory, opt => opt.ResponseOptions.Expand(x => x.GetCustomDataAsync()));
 
             directory.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
@@ -153,7 +153,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             created.SetDescription("foobar");
             created.CustomData.Put("good", true);
-            await created.SaveAsync(response => response.Expand(x => x.GetCustomDataAsync));
+            await created.SaveAsync(response => response.Expand(x => x.GetCustomDataAsync()));
 
             // Cleanup
             (await created.DeleteAsync()).ShouldBeTrue();

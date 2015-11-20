@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
-                    .Expand(x => x.DeleteAsync)
+                    .Expand(x => x.DeleteAsync())
                     .MoveNextAsync();
             });
         }
@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task CustomData_is_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetCustomDataAsync)
+                .Expand(x => x.GetCustomDataAsync())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=customData");
@@ -56,7 +56,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Directory_is_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetDirectoryAsync)
+                .Expand(x => x.GetDirectoryAsync())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory");
@@ -66,7 +66,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task GroupMemberships_are_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetGroupMemberships)
+                .Expand(x => x.GetGroupMemberships())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=groupMemberships");
@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task GroupMemberships_are_expanded_with_options()
         {
             await this.Queryable
-                .Expand(x => x.GetGroupMemberships, offset: 7331, limit: 1337)
+                .Expand(x => x.GetGroupMemberships(), offset: 7331, limit: 1337)
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=groupMemberships(offset:7331,limit:1337)");
@@ -86,7 +86,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Groups_are_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetGroups)
+                .Expand(x => x.GetGroups())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups");
@@ -96,7 +96,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Groups_are_expanded_with_options()
         {
             await this.Queryable
-                .Expand(x => x.GetGroups, offset: 123, limit: 321)
+                .Expand(x => x.GetGroups(), offset: 123, limit: 321)
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(offset:123,limit:321)");
@@ -106,7 +106,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task ProviderData_is_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetProviderDataAsync)
+                .Expand(x => x.GetProviderDataAsync())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=providerData");
@@ -116,7 +116,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Tenant_is_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetTenantAsync)
+                .Expand(x => x.GetTenantAsync())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=tenant");
@@ -129,7 +129,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
-                    .Expand(x => x.SaveAsync)
+                    .Expand(x => x.SaveAsync())
                     .MoveNextAsync();
             });
         }
@@ -141,7 +141,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Accounts_are_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetAccounts)
+                .Expand(x => x.GetAccounts())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=accounts");
@@ -151,7 +151,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Accounts_are_expanded_with_options()
         {
             await this.Queryable
-                .Expand(x => x.GetAccounts, offset: 123, limit: 321)
+                .Expand(x => x.GetAccounts(), offset: 123, limit: 321)
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=accounts(offset:123,limit:321)");
@@ -161,7 +161,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task AccountStoreMappings_are_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetAccountStoreMappings)
+                .Expand(x => x.GetAccountStoreMappings())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=accountStoreMappings");
@@ -171,7 +171,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task AccountStoreMappings_are_expanded_with_options()
         {
             await this.Queryable
-                .Expand(x => x.GetAccountStoreMappings, offset: 123, limit: 321)
+                .Expand(x => x.GetAccountStoreMappings(), offset: 123, limit: 321)
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=accountStoreMappings(offset:123,limit:321)");
@@ -181,7 +181,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task DefaultAccountStore_is_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetDefaultAccountStoreAsync)
+                .Expand(x => x.GetDefaultAccountStoreAsync())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=defaultAccountStoreMapping");
@@ -191,7 +191,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task DefaultGroupStore_is_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetDefaultGroupStoreAsync)
+                .Expand(x => x.GetDefaultGroupStoreAsync())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=defaultGroupStoreMapping");
@@ -204,7 +204,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Provider_is_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetProviderAsync)
+                .Expand(x => x.GetProviderAsync())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=provider");
@@ -217,7 +217,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task AccountMemberships_are_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetAccountMemberships)
+                .Expand(x => x.GetAccountMemberships())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=accountMemberships");
@@ -227,7 +227,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task AccountMemberships_are_expanded_with_options()
         {
             await this.Queryable
-                .Expand(x => x.GetAccountMemberships, offset: 7331, limit: 1337)
+                .Expand(x => x.GetAccountMemberships(), offset: 7331, limit: 1337)
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=accountMemberships(offset:7331,limit:1337)");
@@ -240,7 +240,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Account_is_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetAccountAsync)
+                .Expand(x => x.GetAccountAsync())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=account");
@@ -250,7 +250,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Group_is_expanded()
         {
             await this.Queryable
-                .Expand(x => x.GetGroupAsync)
+                .Expand(x => x.GetGroupAsync())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=group");

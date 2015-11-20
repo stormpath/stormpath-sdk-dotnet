@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         private IRetrievalOptions<T> AsInterface => this;
 
-        IRetrievalOptions<T> IRetrievalOptions<T>.Expand(Expression<Func<T, Func<CancellationToken, Task>>> selector)
+        IRetrievalOptions<T> IRetrievalOptions<T>.Expand<TExpand>(Func<T, TExpand> selector)
         {
             this.proxy = this.proxy.Expand(selector);
             this.dirty = true;
@@ -41,15 +41,7 @@ namespace Stormpath.SDK.Impl.Resource
             return this;
         }
 
-        IRetrievalOptions<T> IRetrievalOptions<T>.Expand(Expression<Func<T, Func<IResource>>> selector)
-        {
-            this.proxy = this.proxy.Expand(selector);
-            this.dirty = true;
-
-            return this;
-        }
-
-        IRetrievalOptions<T> IRetrievalOptions<T>.Expand(Expression<Func<T, Func<IAsyncQueryable>>> selector, int? offset, int? limit)
+        IRetrievalOptions<T> IRetrievalOptions<T>.Expand<TExpand>(Func<T, TExpand> selector, int? offset, int? limit)
         {
             this.proxy = this.proxy.Expand(selector, offset, limit);
             this.dirty = true;

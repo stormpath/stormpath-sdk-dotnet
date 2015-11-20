@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetDirectory)
+                .Expand(x => x.GetDirectory())
                 .ToList();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory");
@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetDirectoryAsync)
+                .Expand(x => x.GetDirectoryAsync())
                 .ToList();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory");
@@ -51,8 +51,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetDirectory)
-                .Expand(x => x.GetTenant)
+                .Expand(x => x.GetDirectory())
+                .Expand(x => x.GetTenant())
                 .ToList();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory,tenant");
@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetGroups)
+                .Expand(x => x.GetGroups())
                 .ToList();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups");
@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetGroups, offset: 10)
+                .Expand(x => x.GetGroups(), offset: 10)
                 .ToList();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(offset:10)");
@@ -85,7 +85,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetGroups, limit: 20)
+                .Expand(x => x.GetGroups(), limit: 20)
                 .ToList();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(limit:20)");
@@ -96,7 +96,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetGroups, 5, 15)
+                .Expand(x => x.GetGroups(), 5, 15)
                 .ToList();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(offset:5,limit:15)");
@@ -107,9 +107,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var query = this.Queryable
                 .Synchronously()
-                .Expand(x => x.GetTenant)
-                .Expand(x => x.GetGroups, 10, 20)
-                .Expand(x => x.GetDirectory)
+                .Expand(x => x.GetTenant())
+                .Expand(x => x.GetGroups(), 10, 20)
+                .Expand(x => x.GetDirectory())
                 .ToList();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=tenant,groups(offset:10,limit:20),directory");

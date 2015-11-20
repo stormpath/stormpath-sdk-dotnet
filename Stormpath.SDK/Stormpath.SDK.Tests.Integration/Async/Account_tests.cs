@@ -124,7 +124,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SingleAsync();
 
             chewie.SetUsername($"rwaaargh-{this.fixture.TestRunIdentifier}");
-            await chewie.SaveAsync(response => response.Expand(x => x.GetCustomDataAsync));
+            await chewie.SaveAsync(response => response.Expand(x => x.GetCustomDataAsync()));
         }
 
         [Theory]
@@ -479,7 +479,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetPassword(new RandomPassword(12));
             await application.CreateAccountAsync(account, opt =>
             {
-                opt.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+                opt.ResponseOptions.Expand(x => x.GetCustomDataAsync());
             });
 
             account.Href.ShouldNotBeNullOrEmpty();
@@ -517,7 +517,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}");
             request.SetPassword("whataPieceofjunk$1138");
 
-            var result = await application.AuthenticateAccountAsync(request.Build(), response => response.Expand(x => x.GetAccountAsync));
+            var result = await application.AuthenticateAccountAsync(request.Build(), response => response.Expand(x => x.GetAccountAsync()));
 
             result.ShouldBeAssignableTo<IAuthenticationResult>();
             result.Success.ShouldBeTrue();
@@ -577,7 +577,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 request.SetPassword("whataPieceofjunk$1138");
                 request.SetAccountStore(accountStore);
             },
-            response => response.Expand(x => x.GetAccountAsync));
+            response => response.Expand(x => x.GetAccountAsync()));
 
             result.ShouldBeAssignableTo<IAuthenticationResult>();
             result.Success.ShouldBeTrue();

@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             var account = await dataStore.GetResourceAsync<IAccount>(
                 "/foobarAccount",
-                o => o.Expand(x => x.GetDirectoryAsync).Expand(x => x.GetGroupMemberships));
+                o => o.Expand(x => x.GetDirectoryAsync()).Expand(x => x.GetGroupMemberships()));
 
             account.Email.ShouldBe("han.solo@corellia.core");
             account.FullName.ShouldBe("Han Solo");
@@ -80,8 +80,8 @@ namespace Stormpath.SDK.Tests.Impl
                 "/foobarAccount",
                 opt =>
                 {
-                    opt.Expand(x => x.GetDirectoryAsync);
-                    opt.Expand(x => x.GetGroupMemberships, 10, 10);
+                    opt.Expand(x => x.GetDirectoryAsync());
+                    opt.Expand(x => x.GetGroupMemberships(), 10, 10);
                 });
 
             await GeneratedArgumentsWere(dataStore, "expand=directory,groupMemberships(offset:10,limit:10)");
@@ -95,7 +95,7 @@ namespace Stormpath.SDK.Tests.Impl
             // TODO Mono throws NullReferenceException, should be NotSupportedException
             await Should.ThrowAsync<Exception>(async () =>
             {
-                var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.DeleteAsync));
+                var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.DeleteAsync()));
             });
         }
 
@@ -107,7 +107,7 @@ namespace Stormpath.SDK.Tests.Impl
             // TODO Mono throws NullReferenceException, should be NotSupportedException
             await Should.ThrowAsync<Exception>(async () =>
             {
-                var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.SaveAsync));
+                var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.SaveAsync()));
             });
         }
 
@@ -116,7 +116,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Account);
 
-            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetCustomDataAsync));
+            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetCustomDataAsync()));
 
             await GeneratedArgumentsWere(dataStore, "expand=customData");
         }
@@ -126,7 +126,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Account);
 
-            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetDirectoryAsync));
+            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetDirectoryAsync()));
 
             await GeneratedArgumentsWere(dataStore, "expand=directory");
         }
@@ -136,7 +136,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Account);
 
-            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetGroupMemberships));
+            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetGroupMemberships()));
 
             await GeneratedArgumentsWere(dataStore, "expand=groupMemberships");
         }
@@ -146,7 +146,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Account);
 
-            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetGroupMemberships, 10, 10));
+            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetGroupMemberships(), 10, 10));
 
             await GeneratedArgumentsWere(dataStore, "expand=groupMemberships(offset:10,limit:10)");
         }
@@ -156,7 +156,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Account);
 
-            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetGroups));
+            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetGroups()));
 
             await GeneratedArgumentsWere(dataStore, "expand=groups");
         }
@@ -166,7 +166,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Account);
 
-            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetGroups, 10, 10));
+            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetGroups(), 10, 10));
 
             await GeneratedArgumentsWere(dataStore, "expand=groups(offset:10,limit:10)");
         }
@@ -176,7 +176,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Account);
 
-            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetTenantAsync));
+            var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount", o => o.Expand(x => x.GetTenantAsync()));
 
             await GeneratedArgumentsWere(dataStore, "expand=tenant");
         }
@@ -186,7 +186,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.AccountStoreMapping);
 
-            var account = await dataStore.GetResourceAsync<IAccountStoreMapping>("/foobarASM", o => o.Expand(x => x.GetAccountStoreAsync));
+            var account = await dataStore.GetResourceAsync<IAccountStoreMapping>("/foobarASM", o => o.Expand(x => x.GetAccountStoreAsync()));
 
             await GeneratedArgumentsWere(dataStore, "expand=accountStore");
         }
@@ -196,7 +196,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.AccountStoreMapping);
 
-            var account = await dataStore.GetResourceAsync<IAccountStoreMapping>("/foobarASM", o => o.Expand(x => x.GetApplicationAsync));
+            var account = await dataStore.GetResourceAsync<IAccountStoreMapping>("/foobarASM", o => o.Expand(x => x.GetApplicationAsync()));
 
             await GeneratedArgumentsWere(dataStore, "expand=application");
         }
@@ -206,7 +206,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Application);
 
-            var account = await dataStore.GetResourceAsync<IApplication>("/foobarApplication", o => o.Expand(x => x.GetAccounts));
+            var account = await dataStore.GetResourceAsync<IApplication>("/foobarApplication", o => o.Expand(x => x.GetAccounts()));
 
             await GeneratedArgumentsWere(dataStore, "expand=accounts");
         }
@@ -216,7 +216,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Application);
 
-            var account = await dataStore.GetResourceAsync<IApplication>("/foobarApplication", o => o.Expand(x => x.GetAccounts, 10, 10));
+            var account = await dataStore.GetResourceAsync<IApplication>("/foobarApplication", o => o.Expand(x => x.GetAccounts(), 10, 10));
 
             await GeneratedArgumentsWere(dataStore, "expand=accounts(offset:10,limit:10)");
         }
@@ -226,7 +226,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Directory);
 
-            var account = await dataStore.GetResourceAsync<IApplication>("/foobarApplication", o => o.Expand(x => x.GetAccountStoreMappings));
+            var account = await dataStore.GetResourceAsync<IApplication>("/foobarApplication", o => o.Expand(x => x.GetAccountStoreMappings()));
 
             await GeneratedArgumentsWere(dataStore, "expand=accountStoreMappings");
         }
@@ -236,7 +236,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Account);
 
-            var account = await dataStore.GetResourceAsync<IApplication>("/foobarApplication", o => o.Expand(x => x.GetAccountStoreMappings, 10, 10));
+            var account = await dataStore.GetResourceAsync<IApplication>("/foobarApplication", o => o.Expand(x => x.GetAccountStoreMappings(), 10, 10));
 
             await GeneratedArgumentsWere(dataStore, "expand=accountStoreMappings(offset:10,limit:10)");
         }
@@ -246,7 +246,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Group);
 
-            var account = await dataStore.GetResourceAsync<IGroup>("/group1", o => o.Expand(x => x.GetAccountMemberships));
+            var account = await dataStore.GetResourceAsync<IGroup>("/group1", o => o.Expand(x => x.GetAccountMemberships()));
 
             await GeneratedArgumentsWere(dataStore, "expand=accountMemberships");
         }
@@ -256,7 +256,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Group);
 
-            var account = await dataStore.GetResourceAsync<IGroup>("/group1", o => o.Expand(x => x.GetAccountMemberships, 10, 10));
+            var account = await dataStore.GetResourceAsync<IGroup>("/group1", o => o.Expand(x => x.GetAccountMemberships(), 10, 10));
 
             await GeneratedArgumentsWere(dataStore, "expand=accountMemberships(offset:10,limit:10)");
         }
@@ -266,7 +266,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Tenant);
 
-            var account = await dataStore.GetResourceAsync<ITenant>("/tenants/foo-bar", o => o.Expand(x => x.GetApplications));
+            var account = await dataStore.GetResourceAsync<ITenant>("/tenants/foo-bar", o => o.Expand(x => x.GetApplications()));
 
             await GeneratedArgumentsWere(dataStore, "expand=applications");
         }
@@ -276,7 +276,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Tenant);
 
-            var account = await dataStore.GetResourceAsync<ITenant>("/tenants/foo-bar", o => o.Expand(x => x.GetApplications, 10, 10));
+            var account = await dataStore.GetResourceAsync<ITenant>("/tenants/foo-bar", o => o.Expand(x => x.GetApplications(), 10, 10));
 
             await GeneratedArgumentsWere(dataStore, "expand=applications(offset:10,limit:10)");
         }
@@ -286,7 +286,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Tenant);
 
-            var account = await dataStore.GetResourceAsync<ITenant>("/tenants/foo-bar", o => o.Expand(x => x.GetDirectories));
+            var account = await dataStore.GetResourceAsync<ITenant>("/tenants/foo-bar", o => o.Expand(x => x.GetDirectories()));
 
             await GeneratedArgumentsWere(dataStore, "expand=directories");
         }
@@ -296,7 +296,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.Tenant);
 
-            var account = await dataStore.GetResourceAsync<ITenant>("/tenants/foo-bar", o => o.Expand(x => x.GetDirectories, 10, 10));
+            var account = await dataStore.GetResourceAsync<ITenant>("/tenants/foo-bar", o => o.Expand(x => x.GetDirectories(), 10, 10));
 
             await GeneratedArgumentsWere(dataStore, "expand=directories(offset:10,limit:10)");
         }
@@ -306,7 +306,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.GroupMembership);
 
-            var account = await dataStore.GetResourceAsync<IGroupMembership>("/foobarGM", o => o.Expand(x => x.GetAccountAsync));
+            var account = await dataStore.GetResourceAsync<IGroupMembership>("/foobarGM", o => o.Expand(x => x.GetAccountAsync()));
 
             await GeneratedArgumentsWere(dataStore, "expand=account");
         }
@@ -316,7 +316,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = this.BuildDataStore(FakeJson.GroupMembership);
 
-            var account = await dataStore.GetResourceAsync<IGroupMembership>("/foobarGM", o => o.Expand(x => x.GetGroupAsync));
+            var account = await dataStore.GetResourceAsync<IGroupMembership>("/foobarGM", o => o.Expand(x => x.GetGroupAsync()));
 
             await GeneratedArgumentsWere(dataStore, "expand=group");
         }

@@ -124,7 +124,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .Instantiate<IApplication>()
                 .SetName($".NET IT {this.fixture.TestRunIdentifier} Application #3");
 
-            await tenant.CreateApplicationAsync(newApp, opt => opt.ResponseOptions.Expand(x => x.GetCustomDataAsync));
+            await tenant.CreateApplicationAsync(newApp, opt => opt.ResponseOptions.Expand(x => x.GetCustomDataAsync()));
 
             newApp.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(newApp.Href);
@@ -163,7 +163,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SingleAsync();
 
             application.SetStatus(ApplicationStatus.Disabled);
-            await application.SaveAsync(response => response.Expand(x => x.GetAccounts));
+            await application.SaveAsync(response => response.Expand(x => x.GetAccounts()));
         }
 
         [Theory]

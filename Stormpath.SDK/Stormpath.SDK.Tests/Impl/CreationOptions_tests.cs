@@ -99,7 +99,7 @@ namespace Stormpath.SDK.Tests.Impl
             public async Task Create_with_response_options()
             {
                 var optionsBuilder = new ApplicationCreationOptionsBuilder();
-                optionsBuilder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+                optionsBuilder.ResponseOptions.Expand(x => x.GetCustomDataAsync());
                 var options = optionsBuilder.Build();
 
                 await this.VerifyThat(options, resultsInQueryString: "?expand=customData");
@@ -111,7 +111,7 @@ namespace Stormpath.SDK.Tests.Impl
                 var optionsBuilder = new ApplicationCreationOptionsBuilder();
                 optionsBuilder.CreateDirectory = true;
                 optionsBuilder.DirectoryName = "Foobar Directory";
-                optionsBuilder.ResponseOptions.Expand(x => x.GetAccounts, 0, 10);
+                optionsBuilder.ResponseOptions.Expand(x => x.GetAccounts(), 0, 10);
                 var options = optionsBuilder.Build();
 
                 await this.VerifyThat(options, resultsInQueryString: "?createDirectory=Foobar+Directory&expand=accounts(offset:0,limit:10)");
@@ -176,7 +176,7 @@ namespace Stormpath.SDK.Tests.Impl
             public async Task Create_with_response_options()
             {
                 var optionsBuilder = new AccountCreationOptionsBuilder();
-                optionsBuilder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+                optionsBuilder.ResponseOptions.Expand(x => x.GetCustomDataAsync());
                 var options = optionsBuilder.Build();
 
                 await this.VerifyThat(options, resultsInQueryString: "?expand=customData");
@@ -187,7 +187,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 var optionsBuilder = new AccountCreationOptionsBuilder();
                 optionsBuilder.RegistrationWorkflowEnabled = true;
-                optionsBuilder.ResponseOptions.Expand(x => x.GetGroups, 0, 10);
+                optionsBuilder.ResponseOptions.Expand(x => x.GetGroups(), 0, 10);
                 var options = optionsBuilder.Build();
 
                 await this.VerifyThat(options, resultsInQueryString: "?expand=groups(offset:0,limit:10)&registrationWorkflowEnabled=true");
@@ -220,7 +220,7 @@ namespace Stormpath.SDK.Tests.Impl
             public async Task Create_with_response_options()
             {
                 var optionsBuilder = new DirectoryCreationOptionsBuilder();
-                optionsBuilder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+                optionsBuilder.ResponseOptions.Expand(x => x.GetCustomDataAsync());
                 var options = optionsBuilder.Build();
 
                 await this.VerifyThat(options, resultsInQueryString: "?expand=customData");
@@ -230,7 +230,7 @@ namespace Stormpath.SDK.Tests.Impl
             public async Task Create_with_all_options()
             {
                 var optionsBuilder = new DirectoryCreationOptionsBuilder();
-                optionsBuilder.ResponseOptions.Expand(x => x.GetGroups, 0, 10);
+                optionsBuilder.ResponseOptions.Expand(x => x.GetGroups(), 0, 10);
                 var options = optionsBuilder.Build();
 
                 await this.VerifyThat(options, resultsInQueryString: "?expand=groups(offset:0,limit:10)");
@@ -263,7 +263,7 @@ namespace Stormpath.SDK.Tests.Impl
             public async Task Create_with_response_options()
             {
                 var optionsBuilder = new GroupCreationOptionsBuilder();
-                optionsBuilder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+                optionsBuilder.ResponseOptions.Expand(x => x.GetCustomDataAsync());
                 var options = optionsBuilder.Build();
 
                 await this.VerifyThat(options, resultsInQueryString: "?expand=customData");
@@ -273,7 +273,7 @@ namespace Stormpath.SDK.Tests.Impl
             public async Task Create_with_all_options()
             {
                 var optionsBuilder = new GroupCreationOptionsBuilder();
-                optionsBuilder.ResponseOptions.Expand(x => x.GetAccounts, 0, 10);
+                optionsBuilder.ResponseOptions.Expand(x => x.GetAccounts(), 0, 10);
                 var options = optionsBuilder.Build();
 
                 await this.VerifyThat(options, resultsInQueryString: "?expand=accounts(offset:0,limit:10)");

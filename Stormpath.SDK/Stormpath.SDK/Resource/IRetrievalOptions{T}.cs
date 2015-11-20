@@ -28,10 +28,8 @@ namespace Stormpath.SDK.Resource
     /// <typeparam name="T">The resource type being retrieved.</typeparam>
     public interface IRetrievalOptions<T> : ICreationOptions
     {
-        IRetrievalOptions<T> Expand(Expression<Func<T, Func<IResource>>> selector);
+        IRetrievalOptions<T> Expand<TExpand>(Func<T, TExpand> selector);
 
-        IRetrievalOptions<T> Expand(Expression<Func<T, Func<CancellationToken, Task>>> selector);
-
-        IRetrievalOptions<T> Expand(Expression<Func<T, Func<IAsyncQueryable>>> selector, int? offset = null, int? limit = null);
+        IRetrievalOptions<T> Expand<TExpand>(Func<T, TExpand> selector, int? offset = null, int? limit = null);
     }
 }

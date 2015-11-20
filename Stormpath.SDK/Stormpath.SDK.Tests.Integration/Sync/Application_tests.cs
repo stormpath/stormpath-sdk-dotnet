@@ -124,7 +124,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .Instantiate<IApplication>()
                 .SetName($".NET IT {this.fixture.TestRunIdentifier} Application #3 - Sync");
 
-            tenant.CreateApplication(newApp, opt => opt.ResponseOptions.Expand(x => x.GetCustomData));
+            tenant.CreateApplication(newApp, opt => opt.ResponseOptions.Expand(x => x.GetCustomData()));
 
             newApp.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(newApp.Href);
@@ -165,7 +165,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .Single();
 
             application.SetStatus(ApplicationStatus.Disabled);
-            application.Save(response => response.Expand(x => x.GetAccounts));
+            application.Save(response => response.Expand(x => x.GetAccounts()));
         }
 
         [Theory]
