@@ -22,10 +22,10 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Stormpath.SDK.Tests")]
-[assembly: AssemblyDescription("Unit tests for Stormpath C# SDK")]
+[assembly: AssemblyDescription("Unit tests for Stormpath .NET SDK")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Stormpath, Inc.")]
-[assembly: AssemblyProduct("Stormpath C# SDK")]
+[assembly: AssemblyProduct("Stormpath .NET SDK")]
 [assembly: AssemblyCopyright("Copyright © 2015 Stormpath, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

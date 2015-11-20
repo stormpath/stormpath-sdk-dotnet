@@ -25,7 +25,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Unit tests for Stormpath .NET SDK")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Stormpath, Inc.")]
-[assembly: AssemblyProduct("Stormpath C# SDK")]
+[assembly: AssemblyProduct("Stormpath .NET SDK")]
 [assembly: AssemblyCopyright("Copyright © 2015 Stormpath, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
