@@ -32,9 +32,13 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             // Partial evaluation
             var evaluatedExpression = Evaluator.PartialEval(expression);
 
+            // Transform VB.NET generated calls
+            var visualBasicCallTransformer = new VbCallTransformingVisitor();
+            var transformedExpression = visualBasicCallTransformer.Visit(evaluatedExpression);
+
             // Discover
             var discoveringVisitor = new DiscoveringExpressionVisitor();
-            discoveringVisitor.Visit(evaluatedExpression);
+            discoveringVisitor.Visit(transformedExpression);
 
             // Compile
             var compilingVisitor = new CompilingExpressionVisitor();

@@ -245,6 +245,7 @@
     <Compile Include="Impl\Linq\Parsing\QueryModelValidator.cs" />
     <Compile Include="Impl\Linq\Parsing\Translators\DateTimeFieldNameTranslator.cs" />
     <Compile Include="Impl\Linq\Parsing\Translators\MethodNameTranslator.cs" />
+    <Compile Include="Impl\Linq\Parsing\VbCallTransformingVisitor.cs" />
     <Compile Include="Impl\Linq\Parsing\WhereExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\QueryModel\DatetimeShorthandModel.cs" />
     <Compile Include="Impl\Linq\QueryModel\ExpandTerm.cs" />
