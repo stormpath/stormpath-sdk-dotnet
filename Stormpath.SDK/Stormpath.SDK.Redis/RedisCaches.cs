@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Extensions.Cache.Redis
+namespace Stormpath.SDK.Cache.Redis
 {
     public static class RedisCaches
     {

@@ -16,7 +16,7 @@
 
 using System;
 
-namespace Stormpath.SDK.Extensions.Cache.Redis
+namespace Stormpath.SDK.Cache.Redis
 {
     internal sealed class CacheEntry
     {

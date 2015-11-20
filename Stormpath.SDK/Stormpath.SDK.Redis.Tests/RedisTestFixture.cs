@@ -18,7 +18,7 @@ using System;
 using System.Diagnostics;
 using StackExchange.Redis;
 
-namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
+namespace Stormpath.SDK.Cache.Redis.Tests
 {
     public class RedisTestFixture : IDisposable
     {

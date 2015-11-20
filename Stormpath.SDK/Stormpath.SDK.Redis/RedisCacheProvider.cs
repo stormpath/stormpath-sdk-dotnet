@@ -20,7 +20,7 @@ using Stormpath.SDK.Cache;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
 
-namespace Stormpath.SDK.Extensions.Cache.Redis
+namespace Stormpath.SDK.Cache.Redis
 {
     internal class RedisCacheProvider : AbstractCacheProvider, ISerializerConsumer<RedisCacheProvider>, ILoggerConsumer<RedisCacheProvider>
     {

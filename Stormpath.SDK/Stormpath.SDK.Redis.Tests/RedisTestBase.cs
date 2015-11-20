@@ -20,7 +20,7 @@ using Stormpath.SDK.Client;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Tests.Common.Fakes;
 
-namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
+namespace Stormpath.SDK.Cache.Redis.Tests
 {
     public abstract class RedisTestBase
     {

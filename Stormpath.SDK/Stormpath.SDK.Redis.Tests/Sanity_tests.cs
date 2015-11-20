@@ -20,7 +20,7 @@ using Shouldly;
 using Stormpath.SDK.Tests.Common;
 using Xunit;
 
-namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
+namespace Stormpath.SDK.Cache.Redis.Tests
 {
     public class Sanity_tests
     {

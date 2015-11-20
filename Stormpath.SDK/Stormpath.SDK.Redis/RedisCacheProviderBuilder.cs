@@ -18,7 +18,7 @@ using System;
 using StackExchange.Redis;
 using Stormpath.SDK.Cache;
 
-namespace Stormpath.SDK.Extensions.Cache.Redis
+namespace Stormpath.SDK.Cache.Redis
 {
     internal sealed class RedisCacheProviderBuilder : AbstractCacheProviderBuilder<RedisCacheProvider>, IRedisCacheProviderBuilder
     {

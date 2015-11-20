@@ -16,7 +16,7 @@
 
 using Xunit;
 
-namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
+namespace Stormpath.SDK.Cache.Redis.Tests
 {
     [CollectionDefinition(nameof(RedisTestCollection))]
     public class RedisTestCollection : ICollectionFixture<RedisTestFixture>

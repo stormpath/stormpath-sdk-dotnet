@@ -16,7 +16,7 @@
 
 using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
+namespace Stormpath.SDK.Cache.Redis.Tests
 {
     internal static class TestHelper
     {

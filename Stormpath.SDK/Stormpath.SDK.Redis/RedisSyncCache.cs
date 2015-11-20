@@ -21,7 +21,7 @@ using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
-namespace Stormpath.SDK.Extensions.Cache.Redis
+namespace Stormpath.SDK.Cache.Redis
 {
     internal sealed class RedisSyncCache : ISynchronousCache
     {

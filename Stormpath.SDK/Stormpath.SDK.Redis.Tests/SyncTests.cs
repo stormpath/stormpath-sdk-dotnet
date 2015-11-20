@@ -25,7 +25,7 @@ using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Xunit;
 
-namespace Stormpath.SDK.Extensions.Cache.Redis.Tests
+namespace Stormpath.SDK.Cache.Redis.Tests
 {
     [Collection(nameof(RedisTestCollection))]
     public class SyncTests : RedisTestBase
