@@ -47,7 +47,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return result;
 
             var application = chain.DataStore.GetResource<IApplication>(applicationHref);
-            application.GetAccountStoreMappings().Synchronously().ToList();
+            var allMappings = application.GetAccountStoreMappings().Synchronously().ToList();
+
+            logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.Filter");
 
             return result;
         }
@@ -67,7 +69,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return result;
 
             var application = await chain.DataStore.GetResourceAsync<IApplication>(applicationHref, cancellationToken).ConfigureAwait(false);
-            await application.GetAccountStoreMappings().ToListAsync(cancellationToken).ConfigureAwait(false);
+            var allMappings = await application.GetAccountStoreMappings().ToListAsync(cancellationToken).ConfigureAwait(false);
+
+            logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.FilterAsync");
 
             return result;
         }
@@ -80,6 +84,13 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             => typeof(IAccountStoreMapping).IsAssignableFrom(result.Type);
 
         private static string GetApplicationHref(IResourceDataResult result)
-            => (result.Body["application"] as IEmbeddedProperty)?.Href;
+        {
+            object application;
+
+            if (!result.Body.TryGetValue("application", out application))
+                return null;
+
+            return (application as IEmbeddedProperty)?.Href;
+        }
     }
 }
