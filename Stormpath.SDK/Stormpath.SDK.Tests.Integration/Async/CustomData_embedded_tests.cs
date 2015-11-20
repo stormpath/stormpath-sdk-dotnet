@@ -19,6 +19,7 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
@@ -55,7 +56,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Creating_new_account_with_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -75,7 +76,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Creating_new_application_with_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -97,7 +98,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Editing_embedded_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -121,7 +122,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Clearing_embedded_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

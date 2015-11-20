@@ -24,6 +24,8 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
+using Stormpath.SDK.Tests.Common;
+using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Integration.Helpers;
 
 namespace Stormpath.SDK.Tests.Integration
@@ -65,7 +67,7 @@ namespace Stormpath.SDK.Tests.Integration
                     StaticLogger.Instance.Info($"Done cleaning up objects.");
 
                     StaticLogger.Instance.Info("Caching statistics:");
-                    StaticLogger.Instance.Info(IntegrationTestClients.GetSAuthc1Client().GetCacheProvider().ToString());
+                    StaticLogger.Instance.Info(TestClients.GetSAuthc1Client().GetCacheProvider().ToString());
 
                     var filename = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "its.log");
                     StaticLogger.Instance.Info($"Saving log to file {filename}");
@@ -106,7 +108,7 @@ namespace Stormpath.SDK.Tests.Integration
         private async Task AddObjectsToTenantAsync()
         {
             // Get client and tenant
-            var client = IntegrationTestClients.GetSAuthc1Client();
+            var client = TestClients.GetSAuthc1Client();
 
             var tenant = await client.GetCurrentTenantAsync();
             tenant.ShouldNotBe(null);
@@ -203,7 +205,7 @@ namespace Stormpath.SDK.Tests.Integration
 
         private async Task RemoveObjectsFromTenantAsync()
         {
-            var client = IntegrationTestClients.GetSAuthc1Client();
+            var client = TestClients.GetSAuthc1Client();
             var results = new ConcurrentDictionary<string, Exception>();
 
             // Delete applications

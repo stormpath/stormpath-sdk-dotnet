@@ -16,6 +16,7 @@
 
 using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Async
@@ -24,7 +25,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
     public class Tenant_tests
     {
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_current_tenant(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

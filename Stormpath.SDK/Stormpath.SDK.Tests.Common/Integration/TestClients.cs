@@ -1,4 +1,4 @@
-﻿// <copyright file="IntegrationTestClients.cs" company="Stormpath, Inc.">
+﻿// <copyright file="TestClients.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,9 +23,9 @@ using Stormpath.SDK.Client;
 using Stormpath.SDK.Extensions.Http;
 using Stormpath.SDK.Extensions.Serialization;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Common.Integration
 {
-    public static class IntegrationTestClients
+    public static class TestClients
     {
         public static readonly Lazy<IClient> Basic = new Lazy<IClient>(() =>
         {

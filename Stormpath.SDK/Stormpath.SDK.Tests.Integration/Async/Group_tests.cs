@@ -19,6 +19,7 @@ using Shouldly;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Async
@@ -34,7 +35,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_tenant_groups(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -45,7 +46,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_group_tenant(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -57,7 +58,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_application_groups(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -68,7 +69,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_directory_groups(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -79,7 +80,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_account_groups(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -92,7 +93,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_group_accounts(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -103,7 +104,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Modifying_group(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -129,7 +130,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Saving_with_response_options(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -152,7 +153,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Adding_account_to_group(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -171,7 +172,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_group_membership(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -194,7 +195,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Adding_account_to_group_by_group_href(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -209,7 +210,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Adding_account_to_group_by_group_name(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -226,7 +227,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Adding_account_to_group_by_account_href(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -242,7 +243,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Adding_account_to_group_by_account_email(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -258,7 +259,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Creating_group_in_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -282,7 +283,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Creating_group_in_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -307,7 +308,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Creating_group_with_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -330,7 +331,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Creating_group_with_response_options(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

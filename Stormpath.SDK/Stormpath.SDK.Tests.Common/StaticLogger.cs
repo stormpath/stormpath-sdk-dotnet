@@ -17,7 +17,7 @@
 using System;
 using Stormpath.SDK.Logging;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Common
 {
     public static class StaticLogger
     {

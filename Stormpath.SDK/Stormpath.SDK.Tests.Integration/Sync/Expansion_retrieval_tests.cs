@@ -21,6 +21,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
+using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Sync
@@ -36,7 +37,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -45,7 +46,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -54,7 +55,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_group_memberships(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -63,7 +64,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_groups(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -72,7 +73,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_tenant(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -81,7 +82,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -93,7 +94,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -105,7 +106,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_accounts(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -114,7 +115,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_account_store_mappings(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -123,7 +124,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_account_memberships(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -132,7 +133,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_applications(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -141,7 +142,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_directories(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -150,7 +151,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_account(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -162,7 +163,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Expanding_group(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

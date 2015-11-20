@@ -18,6 +18,7 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Sync
@@ -25,7 +26,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
     public class Error_tests
     {
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void When_resource_does_not_exist(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

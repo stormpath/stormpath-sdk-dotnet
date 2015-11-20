@@ -19,6 +19,7 @@ using Shouldly;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Sync
@@ -34,7 +35,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Getting_tenant_directories(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -45,7 +46,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Getting_directory_tenant(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -57,7 +58,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Creating_disabled_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -78,7 +79,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Creating_directory_with_response_options(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -101,7 +102,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Modifying_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -132,7 +133,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Saving_with_response_options(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -158,7 +159,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Creating_facebook_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -194,7 +195,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Creating_github_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -230,7 +231,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Creating_google_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -268,7 +269,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Creating_linkedin_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

@@ -19,6 +19,7 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Sync
@@ -34,7 +35,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Multiple_instances_reference_same_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -49,7 +50,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Reference_is_updated_after_saving(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -75,7 +76,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Original_object_is_updated_after_creating(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -98,7 +99,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Not_capturing_save_result_works(TestClientProvider clientBuilder)
         {
             // This test is a little redundant, but explicitly tests a style

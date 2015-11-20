@@ -15,6 +15,7 @@
 // </copyright>
 
 using Shouldly;
+using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -32,7 +33,7 @@ namespace Stormpath.SDK.Tests.Integration
         [Fact]
         public void Integration_test_API_key_is_valid()
         {
-            var apiKey = IntegrationTestClients.GetApiKey();
+            var apiKey = TestClients.GetApiKey();
 
             apiKey.IsValid().ShouldBeTrue();
             apiKey.GetId().ShouldNotBeNullOrEmpty();

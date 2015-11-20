@@ -18,7 +18,7 @@ using System;
 using Stormpath.SDK.Client;
 using Xunit.Abstractions;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Common.Integration
 {
     [Serializable]
     public class TestClientProvider : IXunitSerializable
@@ -41,14 +41,14 @@ namespace Stormpath.SDK.Tests.Integration
         {
             switch (this.clientName)
             {
-                case nameof(IntegrationTestClients.Basic):
-                    return IntegrationTestClients.Basic.Value;
+                case nameof(TestClients.Basic):
+                    return TestClients.Basic.Value;
 
-                case nameof(IntegrationTestClients.SAuthc1):
-                    return IntegrationTestClients.SAuthc1.Value;
+                case nameof(TestClients.SAuthc1):
+                    return TestClients.SAuthc1.Value;
 
-                case nameof(IntegrationTestClients.SAuthc1Caching):
-                    return IntegrationTestClients.SAuthc1Caching.Value;
+                case nameof(TestClients.SAuthc1Caching):
+                    return TestClients.SAuthc1Caching.Value;
             }
 
             throw new NotImplementedException($"Client '{this.clientName}' is not supported.");

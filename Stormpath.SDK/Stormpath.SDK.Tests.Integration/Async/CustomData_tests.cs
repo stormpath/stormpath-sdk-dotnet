@@ -21,6 +21,7 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
@@ -52,7 +53,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_account_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -67,7 +68,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Putting_account_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -88,7 +89,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Deleting_all_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -115,7 +116,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Clearing_all_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -147,7 +148,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Deleting_single_item(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

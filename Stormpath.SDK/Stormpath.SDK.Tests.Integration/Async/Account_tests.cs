@@ -22,6 +22,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Error;
+using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Integration.Helpers;
 using Xunit;
 
@@ -38,7 +39,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_tenant_accounts(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -50,7 +51,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_accounts(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -74,7 +75,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_account_provider_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -91,7 +92,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Updating_account(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -111,7 +112,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Saving_with_response_options(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -127,7 +128,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_account_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -144,7 +145,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_account_tenant(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -161,7 +162,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Searching_accounts_by_email(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -185,7 +186,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Searching_accounts_by_firstname(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -201,7 +202,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Searching_accounts_by_lastname(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -217,7 +218,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Searching_accounts_by_middle_name(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -233,7 +234,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Searching_accounts_by_username(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -249,7 +250,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Searching_accounts_by_status(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -265,7 +266,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Searching_accounts_by_creation_date(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -290,7 +291,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Searching_accounts_by_creation_date_within_shorthand(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -307,7 +308,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Searching_accounts_using_filter(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -325,7 +326,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Sorting_accounts_by_lastname(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -341,7 +342,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Sorting_accounts_by_username_and_lastname(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -360,7 +361,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Taking_only_two_accounts(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -375,7 +376,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Counting_accounts(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -386,7 +387,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Any_returns_false_for_empty_filtered_set(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -401,7 +402,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Any_returns_true_for_nonempty_filtered_set(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -416,7 +417,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Creating_and_deleting_account(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -440,7 +441,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Creating_account_with_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -464,7 +465,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Creating_account_with_response_options(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -490,7 +491,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Authenticating_account(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -506,7 +507,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Authenticating_account_with_response_options(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -523,7 +524,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Authenticating_account_in_specified_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -540,7 +541,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Authenticating_account_in_specified_account_store_by_href(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -562,7 +563,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Authenticating_account_in_specified_account_store_with_response_options(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -583,7 +584,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task TryAuthenticating_account(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -599,7 +600,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Authenticating_throws_for_invalid_credentials(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
