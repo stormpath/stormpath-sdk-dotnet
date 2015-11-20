@@ -28,3 +28,7 @@ Temporary Items
 
 # Output directory for compiled nuget packages
 nuget-pack
+
+# Xamarin nuget cache
+Stormpath.SDK/.nuget/
+
