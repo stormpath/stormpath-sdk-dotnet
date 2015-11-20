@@ -23,7 +23,9 @@ namespace Stormpath.SDK.Tests.Common.Fakes
     public static class TestAccounts
     {
         private static readonly IClient TestClient =
-            Clients.Builder().Build();
+            Clients.Builder()
+				.SetApiKey(FakeApiKey.Create(valid: true))
+				.Build();
 
         public static IAccount LukeSkywalker = TestClient.Instantiate<IAccount>()
             .SetGivenName("Luke")
