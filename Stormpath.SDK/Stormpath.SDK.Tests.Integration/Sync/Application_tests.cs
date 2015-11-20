@@ -235,6 +235,26 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
+        public void Reset_password_with_encoded_jwt(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var token = application.SendPasswordResetEmail("vader@galacticempire.co");
+
+            // When reset tokens are sent via email, the JWT . separator is encoded as %2E
+            var encodedToken = token.GetValue()
+                .Replace(".", "%2E");
+
+            var validTokenResponse = application.VerifyPasswordResetToken(encodedToken);
+            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+
+            var resetPasswordResponse = application.ResetPassword(encodedToken, "Ifindyourlackofsecuritydisturbing!1");
+            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+        }
+
+        [Theory]
+        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
         public void Reset_password_for_account_in_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
