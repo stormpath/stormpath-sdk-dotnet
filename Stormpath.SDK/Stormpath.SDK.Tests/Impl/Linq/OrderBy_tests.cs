@@ -18,7 +18,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq

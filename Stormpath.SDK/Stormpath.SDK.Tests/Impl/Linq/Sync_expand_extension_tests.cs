@@ -18,7 +18,6 @@ using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq

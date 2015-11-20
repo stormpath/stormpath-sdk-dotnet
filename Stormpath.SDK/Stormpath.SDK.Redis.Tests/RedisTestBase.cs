@@ -14,8 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Tests.Common.Fakes;

@@ -16,7 +16,6 @@
 
 using System;
 using StackExchange.Redis;
-using Stormpath.SDK.Cache;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
 

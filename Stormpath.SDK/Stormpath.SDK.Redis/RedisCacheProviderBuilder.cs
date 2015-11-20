@@ -14,9 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using StackExchange.Redis;
-using Stormpath.SDK.Cache;
 
 namespace Stormpath.SDK.Cache.Redis
 {

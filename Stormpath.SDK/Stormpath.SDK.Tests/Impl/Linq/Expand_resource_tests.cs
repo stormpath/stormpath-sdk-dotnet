@@ -22,7 +22,6 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq

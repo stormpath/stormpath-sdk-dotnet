@@ -20,8 +20,6 @@ using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Tests.Common.Fakes;
-using Stormpath.SDK.Tests.Fakes;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
