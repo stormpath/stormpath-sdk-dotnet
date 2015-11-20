@@ -21,7 +21,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Async
 {
-    [CollectionDefinition("Live tenant tests")]
+    [Collection(nameof(IntegrationTestCollection))]
     public class Tenant_tests
     {
         [Theory]

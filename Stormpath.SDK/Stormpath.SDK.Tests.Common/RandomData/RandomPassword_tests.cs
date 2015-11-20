@@ -18,7 +18,7 @@ using System.Linq;
 using Shouldly;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration.Helpers
+namespace Stormpath.SDK.Tests.Common.RandomData
 {
     public class RandomPassword_tests
     {

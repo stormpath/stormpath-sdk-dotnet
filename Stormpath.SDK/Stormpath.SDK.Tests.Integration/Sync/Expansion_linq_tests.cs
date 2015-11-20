@@ -25,9 +25,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
     [Collection(nameof(IntegrationTestCollection))]
     public class Expansion_linq_tests
     {
-        private readonly IntegrationTestFixture fixture;
+        private readonly TestFixture fixture;
 
-        public Expansion_linq_tests(IntegrationTestFixture fixture)
+        public Expansion_linq_tests(TestFixture fixture)
         {
             this.fixture = fixture;
         }

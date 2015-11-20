@@ -23,7 +23,7 @@ using Stormpath.SDK.Auth;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common.Integration;
-using Stormpath.SDK.Tests.Integration.Helpers;
+using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Sync
@@ -31,9 +31,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
     [Collection(nameof(IntegrationTestCollection))]
     public class Account_tests
     {
-        private readonly IntegrationTestFixture fixture;
+        private readonly TestFixture fixture;
 
-        public Account_tests(IntegrationTestFixture fixture)
+        public Account_tests(TestFixture fixture)
         {
             this.fixture = fixture;
         }

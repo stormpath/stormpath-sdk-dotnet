@@ -30,9 +30,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
     [Collection(nameof(IntegrationTestCollection))]
     public class Application_tests
     {
-        private readonly IntegrationTestFixture fixture;
+        private readonly TestFixture fixture;
 
-        public Application_tests(IntegrationTestFixture fixture)
+        public Application_tests(TestFixture fixture)
         {
             this.fixture = fixture;
         }

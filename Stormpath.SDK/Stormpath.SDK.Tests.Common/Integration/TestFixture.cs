@@ -1,4 +1,4 @@
-﻿// <copyright file="IntegrationTestFixture.cs" company="Stormpath, Inc.">
+﻿// <copyright file="TestFixture.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,21 +24,18 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
-using Stormpath.SDK.Tests.Common;
-using Stormpath.SDK.Tests.Common.Integration;
-using Stormpath.SDK.Tests.Integration.Helpers;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Common.Integration
 {
-    public class IntegrationTestFixture : IDisposable
+    public class TestFixture : IDisposable
     {
-        private IntegrationTestData testData;
+        private TestDataGenerator testData;
 
         private bool isDisposed = false;
 
-        public IntegrationTestFixture()
+        public TestFixture()
         {
-            this.testData = new IntegrationTestData();
+            this.testData = new TestDataGenerator();
             this.TestRunIdentifier = this.testData.Nonce;
             this.CreatedAccountHrefs = new List<string>();
             this.CreatedApplicationHrefs = new List<string>();

@@ -1,4 +1,4 @@
-﻿// <copyright file="RandomString.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IntegrationTestCollection.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,19 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-using System;
+using Stormpath.SDK.Tests.Common.Integration;
+using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration.Helpers
+namespace Stormpath.SDK.Tests.Common.Integration
 {
-    public static class RandomString
+    [CollectionDefinition(nameof(IntegrationTestCollection))]
+    public class IntegrationTestCollection : ICollectionFixture<TestFixture>
     {
-        public static string Create()
-        {
-            return Guid
-                .NewGuid()
-                .ToString()
-                .ToLower()
-                .Replace("-", string.Empty);
-        }
+        // Intentionally left blank. This class only serves as an anchor for CollectionDefinition.
     }
 }

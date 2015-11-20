@@ -1,4 +1,4 @@
-﻿// <copyright file="IntegrationTestData.cs" company="Stormpath, Inc.">
+﻿// <copyright file="TestDataGenerator.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,12 +20,13 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Tests.Common.RandomData;
 
-namespace Stormpath.SDK.Tests.Integration.Helpers
+namespace Stormpath.SDK.Tests.Common.Integration
 {
-    public class IntegrationTestData
+    public class TestDataGenerator
     {
-        public IntegrationTestData()
+        public TestDataGenerator()
         {
             this.Nonce = RandomString.Create().Substring(0, 6);
         }

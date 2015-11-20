@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Tests.Integration.Helpers
+namespace Stormpath.SDK.Tests.Common.RandomData
 {
     public class RandomEmail
     {

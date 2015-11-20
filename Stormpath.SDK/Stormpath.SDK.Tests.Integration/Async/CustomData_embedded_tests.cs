@@ -20,7 +20,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Tests.Common.Integration;
-using Stormpath.SDK.Tests.Integration.Helpers;
+using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Async
@@ -28,9 +28,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
     [Collection(nameof(IntegrationTestCollection))]
     public class CustomData_embedded_tests
     {
-        private readonly IntegrationTestFixture fixture;
+        private readonly TestFixture fixture;
 
-        public CustomData_embedded_tests(IntegrationTestFixture fixture)
+        public CustomData_embedded_tests(TestFixture fixture)
         {
             this.fixture = fixture;
         }

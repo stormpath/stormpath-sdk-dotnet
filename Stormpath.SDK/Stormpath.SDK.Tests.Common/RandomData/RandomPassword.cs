@@ -18,7 +18,7 @@ using System;
 using System.Linq;
 using System.Text;
 
-namespace Stormpath.SDK.Tests.Integration.Helpers
+namespace Stormpath.SDK.Tests.Common.RandomData
 {
     public class RandomPassword
     {

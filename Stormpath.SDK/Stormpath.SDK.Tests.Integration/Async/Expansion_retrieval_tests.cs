@@ -28,9 +28,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
     [Collection(nameof(IntegrationTestCollection))]
     public class Expansion_retrieval_tests
     {
-        private readonly IntegrationTestFixture fixture;
+        private readonly TestFixture fixture;
 
-        public Expansion_retrieval_tests(IntegrationTestFixture fixture)
+        public Expansion_retrieval_tests(TestFixture fixture)
         {
             this.fixture = fixture;
         }
