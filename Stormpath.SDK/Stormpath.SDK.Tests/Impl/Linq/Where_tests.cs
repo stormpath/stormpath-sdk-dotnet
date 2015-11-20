@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public async Task Tthrows_for_constant_false()
+        public async Task Throws_for_constant_false()
         {
             // TODO NotSupportedException after Shouldly Mono fix
             await Should.ThrowAsync<Exception>(async () =>
@@ -291,10 +291,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public async Task Alternate_query_syntax_is_okay()
         {
-            var query = from account in this.Queryable
-                        where account.Email == "tk421@deathstar.co"
-                        select account;
-            await query.MoveNextAsync();
+            await (from account in this.Queryable
+             where account.Email == "tk421@deathstar.co"
+             select account).MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("email=tk421%40deathstar.co");
         }

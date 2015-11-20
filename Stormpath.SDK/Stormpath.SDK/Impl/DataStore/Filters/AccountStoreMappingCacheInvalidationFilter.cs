@@ -80,6 +80,6 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             => typeof(IAccountStoreMapping).IsAssignableFrom(result.Type);
 
         private static string GetApplicationHref(IResourceDataResult result)
-            => (result.Body["application"] as IEmbeddedProperty).Href;
+            => (result.Body["application"] as IEmbeddedProperty)?.Href;
     }
 }
