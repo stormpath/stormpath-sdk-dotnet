@@ -17,11 +17,13 @@
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Common.Integration
+namespace Stormpath.SDK.Tests.Integration
 {
     [CollectionDefinition(nameof(IntegrationTestCollection))]
     public class IntegrationTestCollection : ICollectionFixture<TestFixture>
     {
         // Intentionally left blank. This class only serves as an anchor for CollectionDefinition.
+        // The test fixture is shared in Common between multiple integration test projects,
+        // but due to limitations of xUnit, this CollectionDefinition must be in the local assembly.
     }
 }

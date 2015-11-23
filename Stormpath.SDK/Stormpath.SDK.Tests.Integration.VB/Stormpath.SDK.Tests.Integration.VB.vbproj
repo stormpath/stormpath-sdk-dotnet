@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="Async\Account_tests.vb" />
     <Compile Include="Async\Tenant_tests.vb" />
+    <Compile Include="IntegrationTestCollection.vb" />
     <Compile Include="Linq_test.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -122,6 +123,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

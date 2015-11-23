@@ -68,7 +68,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
 
                     var filename = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "its.log");
                     StaticLogger.Instance.Info($"Saving log to file {filename}");
-                    System.IO.File.WriteAllText(filename, StaticLogger.Instance.ToString());
+                    System.IO.File.WriteAllText(filename, StaticLogger.GetLog());
                 }
 
                 this.isDisposed = true;

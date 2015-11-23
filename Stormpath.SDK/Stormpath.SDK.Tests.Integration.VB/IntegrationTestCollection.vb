@@ -14,25 +14,16 @@
 ' limitations under the License.
 ' </copyright>
 
-Option Strict On
-Option Explicit On
-Option Infer On
-Imports Shouldly
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Async
-    <Collection(NameOf(IntegrationTestCollection))>
-    Public Class Tenant_tests
-        <Theory>
-        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Async Function Getting_current_tenant(clientBuilder As TestClientProvider) As Task
-            Dim client = clientBuilder.GetClient()
-            Dim tenant = Await client.GetCurrentTenantAsync()
+Namespace Stormpath.SDK.Tests.Integration.VB
+    <CollectionDefinition(NameOf(IntegrationTestCollection))>
+    Public Class IntegrationTestCollection
+        Implements ICollectionFixture(Of TestFixture)
 
-            tenant.ShouldNotBe(Nothing)
-            tenant.Href.ShouldNotBe(Nothing)
-            tenant.Name.ShouldNotBe(Nothing)
-        End Function
+        ' Intentionally left blank. This class only serves as an anchor for CollectionDefinition.
+        ' The test fixture Is shared in Common between multiple integration test projects,
+        ' but due to limitations of xUnit, this CollectionDefinition must be in the local assembly.
     End Class
 End Namespace
