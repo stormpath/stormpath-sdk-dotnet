@@ -24,6 +24,7 @@ Imports Stormpath.SDK.Account
 Imports Stormpath.SDK.Application
 Imports Stormpath.SDK.Auth
 Imports Stormpath.SDK.Error
+Imports Stormpath.SDK.Linq
 Imports Stormpath.SDK.Tests.Common
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData
@@ -110,7 +111,7 @@ Namespace Stormpath.SDK.Tests.Integration.Async
             Dim chewie = Await application.GetAccounts().Where(Function(a) a.Email = "chewie@kashyyyk.rim").SingleAsync()
 
             chewie.SetUsername("rwaaargh-{this.fixture.TestRunIdentifier}")
-            Await chewie.SaveAsync(Function(response) response.Expand(Function(x) x.GetCustomDataAsync))
+            Await chewie.SaveAsync(Function(response) response.Expand(Function(x) x.GetCustomData))
         End Function
 
         <Theory>
@@ -119,7 +120,9 @@ Namespace Stormpath.SDK.Tests.Integration.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim luke = Await application.GetAccounts().Filter("Luke").SingleAsync()
+            Dim luke = Await application.GetAccounts().Filter("Luke") _
+                .Expand(Function(x) x.GetGroups(offset:=123, limit:=321)) _
+                .SingleAsync()
 
             ' Verify data from IntegrationTestData
             Dim directoryHref = (Await luke.GetDirectoryAsync()).Href
@@ -396,7 +399,7 @@ Namespace Stormpath.SDK.Tests.Integration.Async
 
             Dim account = client.Instantiate(Of IAccount)().SetGivenName("Galen").SetSurname("Marek").SetEmail("gmarek@kashyyk.rim").SetPassword(New RandomPassword(12))
             Await application.CreateAccountAsync(account, Sub(opt)
-                                                              opt.ResponseOptions.Expand(Function(x) x.GetCustomDataAsync)
+                                                              opt.ResponseOptions.Expand(Function(x) x.GetCustomData)
                                                           End Sub)
 
             account.Href.ShouldNotBeNullOrEmpty()
@@ -433,7 +436,7 @@ Namespace Stormpath.SDK.Tests.Integration.Async
             request.SetUsernameOrEmail("sonofthesuns-{this.fixture.TestRunIdentifier}")
             request.SetPassword("whataPieceofjunk$1138")
 
-            Dim result = Await application.AuthenticateAccountAsync(request.Build(), Function(response) response.Expand(Function(x) x.GetAccountAsync))
+            Dim result = Await application.AuthenticateAccountAsync(request.Build(), Function(response) response.Expand(Function(x) x.GetAccount))
 
             result.ShouldBeAssignableTo(Of IAuthenticationResult)()
             result.Success.ShouldBeTrue()
@@ -485,7 +488,7 @@ Namespace Stormpath.SDK.Tests.Integration.Async
                                                                         request.SetPassword("whataPieceofjunk$1138")
                                                                         request.SetAccountStore(accountStore)
                                                                     End Sub,
-                                                                    Function(response) response.Expand(Function(x) x.GetAccountAsync))
+                                                                    Function(response) response.Expand(Function(x) x.GetAccount))
 
             result.ShouldBeAssignableTo(Of IAuthenticationResult)()
             result.Success.ShouldBeTrue()

@@ -202,36 +202,21 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return false;
 
             var methodCallExpression =
-                (((node.Arguments[1] as UnaryExpression)
+                ((node.Arguments[0] as UnaryExpression)
                     ?.Operand as LambdaExpression)
-                        ?.Body as UnaryExpression)
-                            ?.Operand as MethodCallExpression;
+                        ?.Body as MethodCallExpression;
             if (methodCallExpression == null)
                 throw new ArgumentException("Method selector passed to Expand operator could not be parsed.");
 
-            ConstantExpression methodExpression = null;
-
-            // TODO Mono 4.x bug - it compiles this expression differently
-            if (methodCallExpression.Object == null)
-            {
-                if (methodCallExpression.Arguments.Count > 2)
-                    methodExpression = methodCallExpression.Arguments[2] as ConstantExpression;
-            }
-            else
-            {
-                methodExpression = methodCallExpression.Object as ConstantExpression;
-            }
-
-            var targetMethod = methodExpression?.Value as MethodInfo;
-
+            var targetMethod = methodCallExpression.Method;
             if (targetMethod == null)
                 throw new ArgumentException("Method selector passed to Expand operator is not supported.");
 
             int? offset = null, limit = null;
-            if (node.Arguments.Count > 2)
+            if (methodCallExpression.Arguments.Any())
             {
-                offset = (node.Arguments[2] as ConstantExpression)?.Value as int?;
-                limit = (node.Arguments[3] as ConstantExpression)?.Value as int?;
+                offset = (methodCallExpression.Arguments[0] as ConstantExpression)?.Value as int?;
+                limit = (methodCallExpression.Arguments[1] as ConstantExpression)?.Value as int?;
             }
 
             this.expandExpressions.Push(new ExpandExpression(targetMethod.Name, offset, limit));

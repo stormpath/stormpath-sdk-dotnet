@@ -17,6 +17,7 @@
 using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common.Integration;
@@ -151,7 +152,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             created.SetDescription("foobar");
             created.CustomData.Put("good", true);
-            created.Save(response => response.Expand(x => x.GetCustomDataAsync()));
+            created.Save(response => response.Expand(x => x.GetCustomData()));
 
             // Cleanup
             created.Delete().ShouldBeTrue();

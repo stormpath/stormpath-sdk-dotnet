@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetAccounts()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetCustomDataAsync())
+                .Expand(x => x.GetCustomData())
                 .FirstOrDefaultAsync();
         }
 
@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetAccounts()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetDirectoryAsync())
+                .Expand(x => x.GetDirectory())
                 .FirstOrDefaultAsync();
         }
 
@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetAccounts()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetGroupMemberships(), limit: 10)
+                .Expand(x => x.GetGroupMemberships(null, 10))
                 .FirstOrDefaultAsync();
         }
 
@@ -83,7 +83,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetAccounts()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetGroups(), limit: 10)
+                .Expand(x => x.GetGroups(null, 10))
                 .FirstOrDefaultAsync();
         }
 
@@ -97,7 +97,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetAccounts()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetProviderDataAsync())
+                .Expand(x => x.GetProviderData())
                 .FirstOrDefaultAsync();
         }
 
@@ -111,7 +111,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetAccounts()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetTenantAsync())
+                .Expand(x => x.GetTenant())
                 .FirstOrDefaultAsync();
         }
 
@@ -125,7 +125,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetApplications()
                 .Where(x => x.Description == "The Battle of Endor")
-                .Expand(x => x.GetAccounts(), limit: 10)
+                .Expand(x => x.GetAccounts(null, 10))
                 .FirstOrDefaultAsync();
         }
 
@@ -139,7 +139,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetApplications()
                 .Where(x => x.Description == "The Battle of Endor")
-                .Expand(x => x.GetAccountStoreMappings(), limit: 10)
+                .Expand(x => x.GetAccountStoreMappings(null, 10))
                 .FirstOrDefaultAsync();
         }
 
@@ -153,7 +153,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetApplications()
                 .Where(x => x.Description == "The Battle of Endor")
-                .Expand(x => x.GetDefaultAccountStoreAsync())
+                .Expand(x => x.GetDefaultAccountStore())
                 .FirstOrDefaultAsync();
         }
 
@@ -167,7 +167,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetApplications()
                 .Where(x => x.Description == "The Battle of Endor")
-                .Expand(x => x.GetDefaultGroupStoreAsync())
+                .Expand(x => x.GetDefaultGroupStore())
                 .FirstOrDefaultAsync();
         }
 
@@ -181,7 +181,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetDirectories()
                 .Filter("(primary)")
-                .Expand(x => x.GetProviderAsync())
+                .Expand(x => x.GetProvider())
                 .FirstOrDefaultAsync();
         }
 
@@ -195,7 +195,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await tenant
                 .GetGroups()
                 .Where(x => x.Description == "Humans")
-                .Expand(x => x.GetAccountMemberships(), limit: 10)
+                .Expand(x => x.GetAccountMemberships(null, 10))
                 .FirstOrDefaultAsync();
         }
 
@@ -208,7 +208,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var membership = await group
                 .GetAccountMemberships()
-                .Expand(x => x.GetAccountAsync())
+                .Expand(x => x.GetAccount())
                 .FirstOrDefaultAsync();
         }
 
@@ -221,7 +221,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var membership = await group
                 .GetAccountMemberships()
-                .Expand(x => x.GetGroupAsync())
+                .Expand(x => x.GetGroup())
                 .FirstOrDefaultAsync();
         }
     }

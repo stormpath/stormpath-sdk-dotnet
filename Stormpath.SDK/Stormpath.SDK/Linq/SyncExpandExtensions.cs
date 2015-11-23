@@ -1,4 +1,4 @@
-﻿// <copyright file="AsyncQueryableExpandExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SyncExpandExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,29 +15,28 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Auth;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Linq.Expandables;
-using Stormpath.SDK.Tenant;
 
-namespace Stormpath.SDK
+namespace Stormpath.SDK.Sync
 {
-    public static class AsyncQueryableExpandExtensions
+    public static class SyncExpandExtensions
     {
         /// <summary>
         /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
         /// </summary>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
-        /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
-        public static IAsyncQueryable<IAccount> Expand(this IAsyncQueryable<IAccount> source, Expression<Func<IAccountExpandables, object>> selector)
+        /// <returns>An <see cref="IQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IQueryable<IAccount> Expand(this IQueryable<IAccount> source, Expression<Func<IAccountExpandables, object>> selector)
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace Stormpath.SDK
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
-        public static IAsyncQueryable<IApplication> Expand(this IAsyncQueryable<IApplication> source, Expression<Func<IApplicationExpandables, object>> selector)
+        public static IQueryable<IApplication> Expand(this IQueryable<IApplication> source, Expression<Func<IApplicationExpandables, object>> selector)
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
@@ -55,7 +54,7 @@ namespace Stormpath.SDK
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
-        public static IAsyncQueryable<IDirectory> Expand(this IAsyncQueryable<IDirectory> source, Expression<Func<IDirectoryExpandables, object>> selector)
+        public static IQueryable<IDirectory> Expand(this IQueryable<IDirectory> source, Expression<Func<IDirectoryExpandables, object>> selector)
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
@@ -64,7 +63,7 @@ namespace Stormpath.SDK
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
-        public static IAsyncQueryable<IGroup> Expand(this IAsyncQueryable<IGroup> source, Expression<Func<IGroupExpandables, object>> selector)
+        public static IQueryable<IGroup> Expand(this IQueryable<IGroup> source, Expression<Func<IGroupExpandables, object>> selector)
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
@@ -73,7 +72,7 @@ namespace Stormpath.SDK
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
-        public static IAsyncQueryable<IGroupMembership> Expand(this IAsyncQueryable<IGroupMembership> source, Expression<Func<IGroupMembershipExpandables, object>> selector)
+        public static IQueryable<IGroupMembership> Expand(this IQueryable<IGroupMembership> source, Expression<Func<IGroupMembershipExpandables, object>> selector)
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
@@ -82,25 +81,7 @@ namespace Stormpath.SDK
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
-        public static IAsyncQueryable<IAccountStoreMapping> Expand(this IAsyncQueryable<IAccountStoreMapping> source, Expression<Func<IAccountStoreMappingExpandables, object>> selector)
-            => ExpandCommon.CreateQuery(source, selector);
-
-        /// <summary>
-        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
-        /// </summary>
-        /// <param name="source">The source query.</param>
-        /// <param name="selector">A function to select a resource-returning method to expand.</param>
-        /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
-        public static IAsyncQueryable<ITenant> Expand(this IAsyncQueryable<ITenant> source, Expression<Func<ITenantExpandables, object>> selector)
-            => ExpandCommon.CreateQuery(source, selector);
-
-        /// <summary>
-        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
-        /// </summary>
-        /// <param name="source">The source query.</param>
-        /// <param name="selector">A function to select a resource-returning method to expand.</param>
-        /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
-        public static IAsyncQueryable<IAuthenticationResult> Expand(this IAsyncQueryable<IAuthenticationResult> source, Expression<Func<IAuthenticationResultExpandables, object>> selector)
+        public static IQueryable<IAccountStoreMapping> Expand(this IQueryable<IAccountStoreMapping> source, Expression<Func<IAccountStoreMappingExpandables, object>> selector)
             => ExpandCommon.CreateQuery(source, selector);
     }
 }

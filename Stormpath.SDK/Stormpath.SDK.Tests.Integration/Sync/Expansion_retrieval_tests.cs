@@ -19,6 +19,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Common.Integration;
@@ -60,7 +61,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
 
-            var account = client.GetResource<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetGroupMemberships(), 0, 10));
+            var account = client.GetResource<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetGroupMemberships(0, 10)));
         }
 
         [Theory]
@@ -69,7 +70,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
 
-            var account = client.GetResource<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetGroups(), 0, 10));
+            var account = client.GetResource<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetGroups(0, 10)));
         }
 
         [Theory]
@@ -111,7 +112,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
 
-            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccounts(), 0, 10));
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccounts(0, 10)));
         }
 
         [Theory]
@@ -120,7 +121,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
 
-            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccountStoreMappings(), 0, 10));
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccountStoreMappings(0, 10)));
         }
 
         [Theory]
@@ -129,7 +130,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
 
-            var group = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref, o => o.Expand(x => x.GetAccountMemberships(), 0, 10));
+            var group = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref, o => o.Expand(x => x.GetAccountMemberships(0, 10)));
         }
 
         [Theory]
@@ -138,7 +139,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
 
-            var app = client.GetResource<ITenant>(this.fixture.TenantHref, o => o.Expand(x => x.GetApplications(), 0, 10));
+            var app = client.GetResource<ITenant>(this.fixture.TenantHref, o => o.Expand(x => x.GetApplications(0, 10)));
         }
 
         [Theory]
@@ -147,7 +148,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
 
-            var app = client.GetResource<ITenant>(this.fixture.TenantHref, o => o.Expand(x => x.GetDirectories(), 0, 10));
+            var app = client.GetResource<ITenant>(this.fixture.TenantHref, o => o.Expand(x => x.GetDirectories(0, 10)));
         }
 
         [Theory]

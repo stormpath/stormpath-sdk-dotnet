@@ -22,13 +22,14 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Linq.Executor;
 using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Impl.Linq
 {
     internal sealed class CollectionResourceQueryable<TResult> : IOrderedAsyncQueryable<TResult>, IOrderedQueryable<TResult>
     {
-        private readonly CollectionResourceExecutor<TResult> executor;
+        private readonly IAsyncExecutor<TResult> executor;
         private readonly CollectionResourceQueryProvider<TResult> queryProvider;
         private readonly Expression expression;
 
@@ -36,6 +37,13 @@ namespace Stormpath.SDK.Impl.Linq
         {
             this.expression = Expression.Constant(this);
             this.executor = new CollectionResourceExecutor<TResult>(collectionHref, dataStore, this.expression);
+            this.queryProvider = new CollectionResourceQueryProvider<TResult>(this.executor);
+        }
+
+        private CollectionResourceQueryable(IAsyncExecutor<TResult> executor)
+        {
+            this.expression = Expression.Constant(this);
+            this.executor = executor;
             this.queryProvider = new CollectionResourceQueryProvider<TResult>(this.executor);
         }
 
@@ -55,6 +63,13 @@ namespace Stormpath.SDK.Impl.Linq
             this.queryProvider = concreteProvider;
             this.executor = new CollectionResourceExecutor<TResult>(this.queryProvider.Executor, expression);
             this.queryProvider.Executor = this.executor;
+        }
+
+        // Equivalent to Enumerable.Empty - creates a queryable that will always be of zero length.
+        public static IAsyncQueryable<T> Empty<T>()
+        {
+            var emptyQueryable = new CollectionResourceQueryable<T>(new NullExecutor<T>());
+            return emptyQueryable;
         }
 
         Expression IAsyncQueryable<TResult>.Expression => this.expression;

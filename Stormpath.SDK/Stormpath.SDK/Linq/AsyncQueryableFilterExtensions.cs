@@ -42,7 +42,7 @@ namespace Stormpath.SDK
 
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
-                    LinqHelper.GetMethodInfo(Sync.FilterExtensions.Filter, (IQueryable<TSource>)null, caseInsensitiveMatch),
+                    LinqHelper.GetMethodInfo(Sync.SyncFilterExtensions.Filter, (IQueryable<TSource>)null, caseInsensitiveMatch),
                     source.Expression,
                     Expression.Constant(caseInsensitiveMatch)));
         }

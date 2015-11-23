@@ -21,13 +21,14 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Linq.Executor;
 using Stormpath.SDK.Impl.Linq.Parsing;
 using Stormpath.SDK.Impl.Linq.QueryModel;
 using Stormpath.SDK.Impl.Resource;
 
-namespace Stormpath.SDK.Impl.Linq
+namespace Stormpath.SDK.Impl.Linq.Executor
 {
-    internal sealed class CollectionResourceExecutor<TResult>
+    internal sealed class CollectionResourceExecutor<TResult> : IAsyncExecutor<TResult>
     {
         private readonly string collectionHref;
         private readonly IInternalAsyncDataStore asyncDataStore;
@@ -56,11 +57,16 @@ namespace Stormpath.SDK.Impl.Linq
             this.expression = expression;
         }
 
-        public CollectionResourceExecutor(CollectionResourceExecutor<TResult> executor, Expression newExpression)
+        public CollectionResourceExecutor(IAsyncExecutor<TResult> executor, Expression newExpression)
         {
-            this.collectionHref = executor.collectionHref;
-            this.asyncDataStore = executor.asyncDataStore;
-            this.syncDataStore = executor.syncDataStore;
+            //todo make this better
+            var cre = executor as CollectionResourceExecutor<TResult>;
+            if (cre == null)
+                throw new ArgumentException("Executor type does not match.");
+
+            this.collectionHref = cre.collectionHref;
+            this.asyncDataStore = cre.asyncDataStore;
+            this.syncDataStore = cre.syncDataStore;
             this.expression = newExpression;
         }
 

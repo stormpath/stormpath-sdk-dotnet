@@ -1,4 +1,4 @@
-﻿// <copyright file="FilterExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SyncFilterExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@ using Stormpath.SDK.Impl.Linq;
 
 namespace Stormpath.SDK.Sync
 {
-    public static class FilterExtensions
+    public static class SyncFilterExtensions
     {
         /// <summary>
         /// Filters the items in a collection by searching all fields for a string.

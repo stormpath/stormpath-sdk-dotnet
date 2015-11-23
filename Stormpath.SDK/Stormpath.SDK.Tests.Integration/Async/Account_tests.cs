@@ -22,6 +22,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Error;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
@@ -124,7 +125,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SingleAsync();
 
             chewie.SetUsername($"rwaaargh-{this.fixture.TestRunIdentifier}");
-            await chewie.SaveAsync(response => response.Expand(x => x.GetCustomDataAsync()));
+            await chewie.SaveAsync(response => response.Expand(x => x.GetCustomData()));
         }
 
         [Theory]
@@ -479,7 +480,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetPassword(new RandomPassword(12));
             await application.CreateAccountAsync(account, opt =>
             {
-                opt.ResponseOptions.Expand(x => x.GetCustomDataAsync());
+                opt.ResponseOptions.Expand(x => x.GetCustomData());
             });
 
             account.Href.ShouldNotBeNullOrEmpty();
@@ -517,7 +518,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}");
             request.SetPassword("whataPieceofjunk$1138");
 
-            var result = await application.AuthenticateAccountAsync(request.Build(), response => response.Expand(x => x.GetAccountAsync()));
+            var result = await application.AuthenticateAccountAsync(request.Build(), response => response.Expand(x => x.GetAccount()));
 
             result.ShouldBeAssignableTo<IAuthenticationResult>();
             result.Success.ShouldBeTrue();
@@ -577,7 +578,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 request.SetPassword("whataPieceofjunk$1138");
                 request.SetAccountStore(accountStore);
             },
-            response => response.Expand(x => x.GetAccountAsync()));
+            response => response.Expand(x => x.GetAccount()));
 
             result.ShouldBeAssignableTo<IAuthenticationResult>();
             result.Success.ShouldBeTrue();

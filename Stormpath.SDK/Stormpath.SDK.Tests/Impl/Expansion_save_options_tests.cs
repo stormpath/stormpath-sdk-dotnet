@@ -24,6 +24,7 @@ using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 
@@ -58,7 +59,7 @@ namespace Stormpath.SDK.Tests.Impl
             var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount");
             account.SetEmail("test");
 
-            await account.SaveAsync(response => response.Expand(x => x.GetCustomDataAsync()));
+            await account.SaveAsync(response => response.Expand(x => x.GetCustomData()));
 
             await GeneratedArgumentsWere(dataStore, "expand=customData");
         }
@@ -69,7 +70,7 @@ namespace Stormpath.SDK.Tests.Impl
             var dataStore = this.BuildDataStore(FakeJson.Account);
             var account = await dataStore.GetResourceAsync<IAccount>("/foobarAccount");
 
-            await account.SaveAsync(response => response.Expand(x => x.GetCustomDataAsync()));
+            await account.SaveAsync(response => response.Expand(x => x.GetCustomData()));
 
             await GeneratedArgumentsWere(dataStore, "expand=customData");
         }
@@ -83,8 +84,8 @@ namespace Stormpath.SDK.Tests.Impl
 
             await account.SaveAsync(response =>
             {
-                response.Expand(x => x.GetDirectoryAsync());
-                response.Expand(x => x.GetGroups(), 10, 10);
+                response.Expand(x => x.GetDirectory());
+                response.Expand(x => x.GetGroups(10, 10));
             });
 
             await GeneratedArgumentsWere(dataStore, "expand=directory,groups(offset:10,limit:10)");
@@ -98,8 +99,8 @@ namespace Stormpath.SDK.Tests.Impl
 
             await account.SaveAsync(response =>
             {
-                response.Expand(x => x.GetDirectoryAsync());
-                response.Expand(x => x.GetGroups(), 10, 10);
+                response.Expand(x => x.GetDirectory());
+                response.Expand(x => x.GetGroups(10, 10));
             });
 
             await GeneratedArgumentsWere(dataStore, "expand=directory,groups(offset:10,limit:10)");

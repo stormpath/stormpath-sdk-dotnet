@@ -133,7 +133,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetApplications()
                 .Synchronously()
                 .Where(x => x.Description == "The Battle of Endor")
-                .Expand(x => x.GetAccounts(), limit: 10)
+                .Expand(x => x.GetAccounts())
                 .FirstOrDefault();
         }
 
@@ -148,7 +148,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetApplications()
                 .Synchronously()
                 .Where(x => x.Description == "The Battle of Endor")
-                .Expand(x => x.GetAccountStoreMappings(), limit: 10)
+                .Expand(x => x.GetAccountStoreMappings(null, 10))
                 .FirstOrDefault();
         }
 
@@ -208,7 +208,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetGroups()
                 .Synchronously()
                 .Where(x => x.Description == "Humans")
-                .Expand(x => x.GetAccountMemberships(), limit: 10)
+                .Expand(x => x.GetAccountMemberships(null, 10))
                 .FirstOrDefault();
         }
 

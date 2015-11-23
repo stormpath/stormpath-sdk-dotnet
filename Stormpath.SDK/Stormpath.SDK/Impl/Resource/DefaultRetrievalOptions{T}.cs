@@ -14,47 +14,26 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
+using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Linq.Parsing;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Sync;
 
 namespace Stormpath.SDK.Impl.Resource
 {
     internal sealed class DefaultRetrievalOptions<T> : IRetrievalOptions<T>
     {
-        private IQueryable<T> proxy = Enumerable.Empty<T>().AsQueryable();
+        internal IAsyncQueryable<T> Proxy = CollectionResourceQueryable<T>.Empty<T>();
         private bool dirty = false;
 
         private IRetrievalOptions<T> AsInterface => this;
-
-        IRetrievalOptions<T> IRetrievalOptions<T>.Expand<TExpand>(Func<T, TExpand> selector)
-        {
-            this.proxy = this.proxy.Expand(selector);
-            this.dirty = true;
-
-            return this;
-        }
-
-        IRetrievalOptions<T> IRetrievalOptions<T>.Expand<TExpand>(Func<T, TExpand> selector, int? offset, int? limit)
-        {
-            this.proxy = this.proxy.Expand(selector, offset, limit);
-            this.dirty = true;
-
-            return this;
-        }
 
         string ICreationOptions.GetQueryString()
         {
             if (!this.dirty)
                 return string.Empty;
 
-            var queryModel = QueryModelCompiler.Compile(this.proxy.Expression);
+            var queryModel = QueryModelCompiler.Compile(this.Proxy.Expression);
             var arguments = QueryModelParser.GetArguments(queryModel);
 
             return string.Join(",", arguments);

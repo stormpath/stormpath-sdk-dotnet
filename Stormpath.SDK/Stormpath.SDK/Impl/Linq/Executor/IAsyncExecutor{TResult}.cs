@@ -1,4 +1,4 @@
-﻿// <copyright file="IRetrievalOptions{T}.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAsyncExecutor{TResult}.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,29 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Linq.Expressions;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Linq;
+using Stormpath.SDK.Impl.Linq.QueryModel;
 
-namespace Stormpath.SDK.Resource
+namespace Stormpath.SDK.Impl.Linq.Executor
 {
-    /// <summary>
-    /// Base interface for retrieval request options objects.
-    /// </summary>
-    /// <typeparam name="T">The resource type being retrieved.</typeparam>
-    public interface IRetrievalOptions<T> : ICreationOptions
+    internal interface IAsyncExecutor<TResult>
     {
-        //todo remove?
+        string CurrentHref { get; }
+
+        CollectionResourceQueryModel CompiledModel { get; }
+
+        long Offset { get; }
+
+        long Limit { get; }
+
+        long Size { get; }
+
+        IEnumerable<TResult> CurrentPage { get; }
+
+        Task<bool> MoveNextAsync(CancellationToken cancellationToken);
+
+        bool MoveNext();
     }
 }

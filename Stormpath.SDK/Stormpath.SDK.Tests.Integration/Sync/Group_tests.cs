@@ -19,6 +19,7 @@ using Shouldly;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
@@ -146,7 +147,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedGroupHrefs.Add(newGroup.Href);
 
             newGroup.SetDescription("foobar");
-            newGroup.Save(response => response.Expand(x => x.GetAccounts(), 0, 10));
+            newGroup.Save(response => response.Expand(x => x.GetAccounts(0, 10)));
 
             // Clean up
             newGroup.Delete();

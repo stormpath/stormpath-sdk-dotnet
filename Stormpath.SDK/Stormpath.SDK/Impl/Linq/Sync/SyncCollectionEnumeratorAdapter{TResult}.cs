@@ -17,15 +17,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Stormpath.SDK.Impl.Linq.Executor;
 
 namespace Stormpath.SDK.Impl.Linq.Sync
 {
     internal sealed class SyncCollectionEnumeratorAdapter<TResult> : IEnumerable<TResult>
     {
-        private readonly CollectionResourceExecutor<TResult> executor;
+        private readonly IAsyncExecutor<TResult> executor;
         private readonly CancellationToken cancellationToken;
 
-        public SyncCollectionEnumeratorAdapter(CollectionResourceExecutor<TResult> executor, CancellationToken cancellationToken = default(CancellationToken))
+        public SyncCollectionEnumeratorAdapter(IAsyncExecutor<TResult> executor, CancellationToken cancellationToken = default(CancellationToken))
         {
             this.executor = executor;
             this.cancellationToken = cancellationToken;

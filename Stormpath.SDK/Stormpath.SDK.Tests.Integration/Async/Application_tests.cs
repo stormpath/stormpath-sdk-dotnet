@@ -22,6 +22,7 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 
@@ -124,7 +125,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .Instantiate<IApplication>()
                 .SetName($".NET IT {this.fixture.TestRunIdentifier} Application #3");
 
-            await tenant.CreateApplicationAsync(newApp, opt => opt.ResponseOptions.Expand(x => x.GetCustomDataAsync()));
+            await tenant.CreateApplicationAsync(newApp, opt => opt.ResponseOptions.Expand(x => x.GetCustomData()));
 
             newApp.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(newApp.Href);

@@ -1,4 +1,4 @@
-﻿// <copyright file="IRetrievalOptions{T}.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IExpandableGroups.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Linq;
+using Stormpath.SDK.Group;
 
-namespace Stormpath.SDK.Resource
+namespace Stormpath.SDK.Linq.Expandables
 {
-    /// <summary>
-    /// Base interface for retrieval request options objects.
-    /// </summary>
-    /// <typeparam name="T">The resource type being retrieved.</typeparam>
-    public interface IRetrievalOptions<T> : ICreationOptions
+    public interface IExpandableGroups
     {
-        //todo remove?
+        IAsyncQueryable<IGroup> GetGroups();
+
+        IAsyncQueryable<IGroup> GetGroups(int? offset, int? limit);
     }
 }
