@@ -202,7 +202,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return false;
 
             var methodCallExpression =
-                ((node.Arguments[0] as UnaryExpression)
+                ((node.Arguments[1] as UnaryExpression)
                     ?.Operand as LambdaExpression)
                         ?.Body as MethodCallExpression;
             if (methodCallExpression == null)

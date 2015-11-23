@@ -27,7 +27,8 @@ namespace Stormpath.SDK.Impl.Linq
         {
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
-                    LinqHelper.GetMethodInfo(Expand, selector),
+                    LinqHelper.GetMethodInfo(Expand, (IQueryable<TSource>)null, selector),
+                    source.Expression,
                     Expression.Quote(selector)));
         }
 
@@ -35,12 +36,14 @@ namespace Stormpath.SDK.Impl.Linq
         {
             return source.Provider.CreateQuery<TSource>(
                 LinqHelper.MethodCall(
-                    LinqHelper.GetMethodInfo(Expand, selector),
+                    LinqHelper.GetMethodInfo(Expand, source, selector),
+                    source.Expression,
                     Expression.Quote(selector)));
         }
 
-        private static void Expand(Expression expression)
+        private static IQueryable<TSource> Expand<TSource>(IQueryable<TSource> source, Expression expression)
         {
+            return source;
         }
     }
 }

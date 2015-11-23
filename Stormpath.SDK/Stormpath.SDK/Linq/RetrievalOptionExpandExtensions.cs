@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Linq
         /// <returns>The current instance for method chaining.</returns>
         public static IRetrievalOptions<IAccount> Expand(this IRetrievalOptions<IAccount> options, Expression<Func<IAccountExpandables, object>> selector)
         {
-            (options as DefaultRetrievalOptions<IAccount>).Proxy.Expand(selector);
+            (options as DefaultRetrievalOptions<IAccount>).SetProxy(x => x.Expand(selector));
             return options;
         }
 
@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Linq
         /// <returns>The current instance for method chaining.</returns>
         public static IRetrievalOptions<IApplication> Expand(this IRetrievalOptions<IApplication> options, Expression<Func<IApplicationExpandables, object>> selector)
         {
-            (options as DefaultRetrievalOptions<IApplication>).Proxy.Expand(selector);
+            (options as DefaultRetrievalOptions<IApplication>).SetProxy(x => x.Expand(selector));
             return options;
         }
 
@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Linq
         /// <returns>The current instance for method chaining.</returns>
         public static IRetrievalOptions<IDirectory> Expand(this IRetrievalOptions<IDirectory> options, Expression<Func<IDirectoryExpandables, object>> selector)
         {
-            (options as DefaultRetrievalOptions<IDirectory>).Proxy.Expand(selector);
+            (options as DefaultRetrievalOptions<IDirectory>).SetProxy(x => x.Expand(selector));
             return options;
         }
 
@@ -75,7 +75,7 @@ namespace Stormpath.SDK.Linq
         /// <returns>The current instance for method chaining.</returns>
         public static IRetrievalOptions<IGroup> Expand(this IRetrievalOptions<IGroup> options, Expression<Func<IGroupExpandables, object>> selector)
         {
-            (options as DefaultRetrievalOptions<IGroup>).Proxy.Expand(selector);
+            (options as DefaultRetrievalOptions<IGroup>).SetProxy(x => x.Expand(selector));
             return options;
         }
 
@@ -87,7 +87,7 @@ namespace Stormpath.SDK.Linq
         /// <returns>The current instance for method chaining.</returns>
         public static IRetrievalOptions<IGroupMembership> Expand(this IRetrievalOptions<IGroupMembership> options, Expression<Func<IGroupMembershipExpandables, object>> selector)
         {
-            (options as DefaultRetrievalOptions<IGroupMembership>).Proxy.Expand(selector);
+            (options as DefaultRetrievalOptions<IGroupMembership>).SetProxy(x => x.Expand(selector));
             return options;
         }
 
@@ -99,7 +99,7 @@ namespace Stormpath.SDK.Linq
         /// <returns>The current instance for method chaining.</returns>
         public static IRetrievalOptions<IAccountStoreMapping> Expand(this IRetrievalOptions<IAccountStoreMapping> options, Expression<Func<IAccountStoreMappingExpandables, object>> selector)
         {
-            (options as DefaultRetrievalOptions<IAccountStoreMapping>).Proxy.Expand(selector);
+            (options as DefaultRetrievalOptions<IAccountStoreMapping>).SetProxy(x => x.Expand(selector));
             return options;
         }
 
@@ -111,7 +111,7 @@ namespace Stormpath.SDK.Linq
         /// <returns>The current instance for method chaining.</returns>
         public static IRetrievalOptions<ITenant> Expand(this IRetrievalOptions<ITenant> options, Expression<Func<ITenantExpandables, object>> selector)
         {
-            (options as DefaultRetrievalOptions<ITenant>).Proxy.Expand(selector);
+            (options as DefaultRetrievalOptions<ITenant>).SetProxy(x => x.Expand(selector));
             return options;
         }
 
@@ -123,7 +123,7 @@ namespace Stormpath.SDK.Linq
         /// <returns>The current instance for method chaining.</returns>
         public static IRetrievalOptions<IAuthenticationResult> Expand(this IRetrievalOptions<IAuthenticationResult> options, Expression<Func<IAuthenticationResultExpandables, object>> selector)
         {
-            (options as DefaultRetrievalOptions<IAuthenticationResult>).Proxy.Expand(selector);
+            (options as DefaultRetrievalOptions<IAuthenticationResult>).SetProxy(x => x.Expand(selector));
             return options;
         }
     }

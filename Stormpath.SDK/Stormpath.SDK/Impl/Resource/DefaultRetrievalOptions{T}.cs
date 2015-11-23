@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Linq.Parsing;
 using Stormpath.SDK.Linq;
@@ -23,17 +24,23 @@ namespace Stormpath.SDK.Impl.Resource
 {
     internal sealed class DefaultRetrievalOptions<T> : IRetrievalOptions<T>
     {
-        internal IAsyncQueryable<T> Proxy = CollectionResourceQueryable<T>.Empty<T>();
+        private IAsyncQueryable<T> proxy = CollectionResourceQueryable<T>.Empty<T>();
         private bool dirty = false;
 
         private IRetrievalOptions<T> AsInterface => this;
+
+        public void SetProxy(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> proxyAction)
+        {
+            this.dirty = true;
+            this.proxy = proxyAction(this.proxy);
+        }
 
         string ICreationOptions.GetQueryString()
         {
             if (!this.dirty)
                 return string.Empty;
 
-            var queryModel = QueryModelCompiler.Compile(this.Proxy.Expression);
+            var queryModel = QueryModelCompiler.Compile(this.proxy.Expression);
             var arguments = QueryModelParser.GetArguments(queryModel);
 
             return string.Join(",", arguments);

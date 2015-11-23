@@ -32,9 +32,7 @@ namespace Stormpath.SDK.Impl.Linq.Sync
 
         public object Execute()
         {
-            var hasNext = this.executor.MoveNext();
-            if (!hasNext)
-                return null;
+            this.executor.MoveNext();
 
             var resultOperator = this.executor.CompiledModel.ResultOperator;
 

@@ -59,15 +59,15 @@ namespace Stormpath.SDK.Impl.Linq.Executor
 
         public CollectionResourceExecutor(IAsyncExecutor<TResult> executor, Expression newExpression)
         {
-            //todo make this better
-            var cre = executor as CollectionResourceExecutor<TResult>;
-            if (cre == null)
-                throw new ArgumentException("Executor type does not match.");
-
-            this.collectionHref = cre.collectionHref;
-            this.asyncDataStore = cre.asyncDataStore;
-            this.syncDataStore = cre.syncDataStore;
             this.expression = newExpression;
+
+            var cre = executor as CollectionResourceExecutor<TResult>;
+            if (cre != null)
+            {
+                this.collectionHref = cre.collectionHref;
+                this.asyncDataStore = cre.asyncDataStore;
+                this.syncDataStore = cre.syncDataStore;
+            }
         }
 
         private void ThrowIfNotEnumerated()
