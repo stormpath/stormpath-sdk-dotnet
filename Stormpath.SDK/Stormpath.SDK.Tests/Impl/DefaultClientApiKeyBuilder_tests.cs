@@ -65,24 +65,31 @@ namespace Stormpath.SDK.Tests.Impl
 
         public class With_default_properties_file
         {
-            private readonly string defaultLocation =
-                System.IO.Path.Combine(Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%"), ".stormpath\\", "apiKey.properties");
-
             private readonly string fileContents =
                 "apiKey.id = 144JVZINOF5EBNCMG9EXAMPLE\r\n" +
                 "apiKey.secret = lWxOiKqKPNwJmSldbiSkEbkNjgh2uRSNAb+AEXAMPLE";
 
-            private IClientApiKeyBuilder builder;
-            private IFile file;
+            private readonly IClientApiKeyBuilder builder;
+            private readonly IEnvironment env;
+            private readonly IFile file;
+            private readonly string defaultLocation;
 
             public With_default_properties_file()
             {
+                this.env = Substitute.For<IEnvironment>();
+				this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%").Returns("~fake");
+				this.env.GetEnvironmentVariable("HOME").Returns("~fake");
+
+                this.defaultLocation = PlatformHelper.IsPlatformUnix()
+                    ? @"~fake/.stormpath/apiKey.properties"
+                    : @"~fake\.stormpath\apiKey.properties";
+
                 this.file = Substitute.For<IFile>();
                 this.file.ReadAllText(this.defaultLocation).Returns(this.fileContents);
 
                 this.builder = new DefaultClientApiKeyBuilder(
                     Substitute.For<IConfigurationManager>(),
-                    Substitute.For<IEnvironment>(),
+                    this.env,
                     this.file,
                     Substitute.For<ILogger>());
             }
@@ -534,7 +541,7 @@ namespace Stormpath.SDK.Tests.Impl
                 if (PlatformHelper.IsRunningOnMono())
                     return;
 
-                var homeDir = Environment.ExpandEnvironmentVariables("%homedrive%%homepath%");
+                var homeDir = Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
 
                 this.file = Substitute.For<IFile>();
                 this.file.ReadAllText($"{homeDir}\\test.properties")
