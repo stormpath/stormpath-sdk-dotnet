@@ -1,4 +1,4 @@
-﻿// <copyright file="MemoryCacheIdentityMap{TKey,TItem}.cs" company="Stormpath, Inc.">
+﻿// <copyright file="MemoryCacheIdentityMap{TItem}.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.IdentityMap
 {
-    internal class MemoryCacheIdentityMap<TKey, TItem> : IIdentityMap<TKey, TItem>, IDisposable
+    internal class MemoryCacheIdentityMap<TItem> : IIdentityMap<TItem>, IDisposable
         where TItem : class
     {
         private readonly ILogger logger;
@@ -37,12 +37,12 @@ namespace Stormpath.SDK.Impl.IdentityMap
             this.logger = logger;
         }
 
-        private static string CreateCacheKey(TKey key)
-            => $"idmap-{key.ToString()}";
+        private static string CreateCacheKey(string key)
+            => $"idmap-{key}";
 
         public long LifetimeItemsAdded => this.lifetimeItemsAdded;
 
-        public TItem GetOrAdd(TKey key, Func<TItem> itemFactory, bool storeInfinitely)
+        public TItem GetOrAdd(string key, Func<TItem> itemFactory, bool storeInfinitely)
         {
             var lazyItem = new Lazy<TItem>(() => itemFactory());
             var policy = new CacheItemPolicy()
@@ -74,12 +74,12 @@ namespace Stormpath.SDK.Impl.IdentityMap
         {
             if (!this.isDisposed)
             {
+                this.isDisposed = true;
+
                 if (disposing)
                 {
                     this.itemCache.Dispose();
                 }
-
-                this.isDisposed = true;
             }
         }
 

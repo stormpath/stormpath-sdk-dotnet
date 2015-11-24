@@ -25,13 +25,13 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
 {
     public class Single_threaded_tests : IDisposable
     {
-        private readonly IIdentityMap<string, TestEntity> identityMap;
+        private readonly IIdentityMap<TestEntity> identityMap;
 
         public Single_threaded_tests()
         {
             // Arbitrary expiration policy. We won't be validating expirations in these tests
             // because it's tricky to do so with MemoryCache.
-            this.identityMap = new MemoryCacheIdentityMap<string, TestEntity>(TimeSpan.FromSeconds(10), Substitute.For<ILogger>());
+            this.identityMap = new MemoryCacheIdentityMap<TestEntity>(TimeSpan.FromSeconds(10), Substitute.For<ILogger>());
         }
 
         private TestEntity CreateEntity(string id)

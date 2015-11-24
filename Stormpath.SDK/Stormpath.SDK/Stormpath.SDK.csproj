@@ -90,7 +90,7 @@
     <Compile Include="Impl\Group\DefaultGroup.MembershipSync.cs" />
     <Compile Include="Impl\Group\DefaultGroup.Resources.cs" />
     <Compile Include="Impl\Group\DefaultGroup.ResourcesSync.cs" />
-    <Compile Include="Impl\IdentityMap\MemoryCacheIdentityMap{TKey,TItem}.cs" />
+    <Compile Include="Impl\IdentityMap\MemoryCacheIdentityMap{TItem}.cs" />
     <Compile Include="Impl\IdSite\DefaultAccountResult.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\IdSite\IAccountResultSync.cs" />
@@ -233,7 +233,7 @@
     <Compile Include="Impl\Http\Support\DefaultBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\IBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
-    <Compile Include="Impl\IdentityMap\IIdentityMap{TKey,TItem}.cs" />
+    <Compile Include="Impl\IdentityMap\IIdentityMap{TItem}.cs" />
     <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
     <Compile Include="IdSite\IdSiteRuntimeException.cs" />
     <Compile Include="IdSite\IdSiteSessionTimeoutException.cs" />

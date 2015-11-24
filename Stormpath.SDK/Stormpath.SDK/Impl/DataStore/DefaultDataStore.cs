@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly ILogger logger;
         private readonly IResourceFactory resourceFactory;
         private readonly IResourceConverter resourceConverter;
-        private readonly IIdentityMap<string, ResourceData> identityMap;
+        private readonly IIdentityMap<ResourceData> identityMap;
         private readonly IAsynchronousFilterChain defaultAsyncFilters;
         private readonly ISynchronousFilterChain defaultSyncFilters;
         private readonly UriQualifier uriQualifier;
@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.cacheResolver = new DefaultCacheResolver(cacheProvider, this.logger);
 
             this.serializer = new JsonSerializationProvider(serializer);
-            this.identityMap = new MemoryCacheIdentityMap<string, ResourceData>(identityMapExpiration, this.logger);
+            this.identityMap = new MemoryCacheIdentityMap<ResourceData>(identityMapExpiration, this.logger);
             this.resourceFactory = new DefaultResourceFactory(this, this.identityMap);
             this.resourceConverter = new DefaultResourceConverter();
 
@@ -717,6 +717,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     this.requestExecutor.Dispose();
                     this.resourceFactory.Dispose();
                     this.cacheProvider.Dispose();
+                    this.identityMap.Dispose();
                 }
             }
         }

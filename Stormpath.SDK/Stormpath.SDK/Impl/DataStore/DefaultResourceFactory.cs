@@ -24,10 +24,10 @@ namespace Stormpath.SDK.Impl.DataStore
     internal sealed class DefaultResourceFactory : IResourceFactory
     {
         private readonly IInternalDataStore dataStore;
-        private readonly IIdentityMap<string, ResourceData> identityMap;
+        private readonly IIdentityMap<ResourceData> identityMap;
         private bool isDisposed = false; // To detect redundant calls
 
-        public DefaultResourceFactory(IInternalDataStore dataStore, IIdentityMap<string, ResourceData> identityMap)
+        public DefaultResourceFactory(IInternalDataStore dataStore, IIdentityMap<ResourceData> identityMap)
         {
             this.dataStore = dataStore;
             this.identityMap = identityMap;

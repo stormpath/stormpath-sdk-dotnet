@@ -1,4 +1,4 @@
-﻿// <copyright file="IIdentityMap{TKey,TItem}.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IIdentityMap{TItem}.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,11 +18,11 @@ using System;
 
 namespace Stormpath.SDK.Impl.IdentityMap
 {
-    internal interface IIdentityMap<TKey, TItem> : IDisposable
+    internal interface IIdentityMap<TItem> : IDisposable
         where TItem : class
     {
         long LifetimeItemsAdded { get; }
 
-        TItem GetOrAdd(TKey key, Func<TItem> itemFactory, bool storeInfinitely);
+        TItem GetOrAdd(string key, Func<TItem> itemFactory, bool storeInfinitely);
     }
 }

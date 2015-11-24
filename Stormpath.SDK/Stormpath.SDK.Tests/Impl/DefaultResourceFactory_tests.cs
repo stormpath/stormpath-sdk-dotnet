@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Impl
         public DefaultResourceFactory_tests()
         {
             var dataStore = new StubDataStore(null, "http://api.foo.bar");
-            var identityMap = new MemoryCacheIdentityMap<string, ResourceData>(TimeSpan.FromSeconds(10), Substitute.For<ILogger>()); // arbitrary expiration time
+            var identityMap = new MemoryCacheIdentityMap<ResourceData>(TimeSpan.FromSeconds(10), Substitute.For<ILogger>()); // arbitrary expiration time
             this.factory = new DefaultResourceFactory(dataStore, identityMap);
         }
 
