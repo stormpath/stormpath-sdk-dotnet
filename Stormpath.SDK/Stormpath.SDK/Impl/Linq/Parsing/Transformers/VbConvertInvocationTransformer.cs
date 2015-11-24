@@ -1,4 +1,4 @@
-﻿// <copyright file="LambdaFlatteningTransformer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="LambdaInvocationTransformer.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,24 +18,21 @@ using System.Linq.Expressions;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
 {
-    internal sealed class LambdaInvocationTransformer : AbstractExpressionTransformer
+    internal sealed class VbConvertInvocationTransformer : AbstractExpressionTransformer
     {
         protected override Expression TransformNode(Expression node)
         {
-            var invocationExpression = node as InvocationExpression;
-            if (invocationExpression == null)
+            if (node?.NodeType != ExpressionType.Convert)
                 return node;
 
-            return ReduceTrivialConversions(invocationExpression);
+            return ReduceTrivialConversions(node);
         }
 
         private static Expression ReduceTrivialConversions(Expression invokedExpression)
         {
             var asUnary = invokedExpression as UnaryExpression;
 
-            var reduceFurther = invokedExpression.NodeType == ExpressionType.Convert
-                && invokedExpression.Type == asUnary.Operand.Type
-                && asUnary.Method == null;
+            var reduceFurther = asUnary != null && asUnary.Method == null;
             if (!reduceFurther)
                 return invokedExpression;
 

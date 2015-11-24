@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             {
                 new PartialEvaluationTransformer(),
                 new VbStringCompareTransformer(),
-                new LambdaInvocationTransformer(),
+                new VbConvertInvocationTransformer(),
             };
 
             Expression result = expression;

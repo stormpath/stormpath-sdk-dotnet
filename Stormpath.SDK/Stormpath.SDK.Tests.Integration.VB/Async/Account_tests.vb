@@ -117,9 +117,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim luke = Await application.GetAccounts().Filter("Luke") _
-                .Expand(Function(x) x.GetGroups(offset:=123, limit:=321)) _
-                .SingleAsync()
+            Dim luke = Await application.GetAccounts().Filter("Luke").SingleAsync()
 
             ' Verify data from IntegrationTestData
             Dim directoryHref = (Await luke.GetDirectoryAsync()).Href

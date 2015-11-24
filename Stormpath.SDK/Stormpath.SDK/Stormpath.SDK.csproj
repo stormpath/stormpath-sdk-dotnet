@@ -260,7 +260,7 @@
     <Compile Include="Impl\Linq\Parsing\NameTranslators\MethodNameTranslator.cs" />
     <Compile Include="Impl\Linq\Parsing\Transformers\AbstractExpressionTransformer.cs" />
     <Compile Include="Impl\Linq\Parsing\Transformers\IExpressionTransformer.cs" />
-    <Compile Include="Impl\Linq\Parsing\Transformers\LambdaInvocationTransformer.cs" />
+    <Compile Include="Impl\Linq\Parsing\Transformers\VbConvertInvocationTransformer.cs" />
     <Compile Include="Impl\Linq\Parsing\Transformers\VbStringCompareTransformer.cs" />
     <Compile Include="Impl\Linq\Parsing\WhereExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\QueryModel\DatetimeShorthandModel.cs" />
