@@ -84,10 +84,10 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         {
             var query = this.Queryable
                 .Filter("luke")
-                .Expand(x => x.GetCustomDataAsync)
-                .Expand(x => x.GetDirectoryAsync)
+                .Expand(x => x.GetCustomData())
+                .Expand(x => x.GetDirectory())
                 .Where(x => x.Status == AccountStatus.Unverified)
-                .Expand(x => x.GetGroups, 10, 10)
+                .Expand(x => x.GetGroups(10, 10))
                 .Take(2);
 
             var arguments = GetArguments(query.Generate());

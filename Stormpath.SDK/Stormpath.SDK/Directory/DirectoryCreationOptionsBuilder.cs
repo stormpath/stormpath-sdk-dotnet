@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Directory
         /// <example>
         /// To request and cache custom data along with this request:
         /// <code>
-        /// builder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+        /// builder.ResponseOptions.Expand(x => x.GetCustomDataAsync());
         /// </code>
         /// </example>
         public IRetrievalOptions<IDirectory> ResponseOptions { get; } = new DefaultRetrievalOptions<IDirectory>();

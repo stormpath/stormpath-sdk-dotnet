@@ -21,6 +21,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Error;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
@@ -127,7 +128,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .Single();
 
             chewie.SetUsername($"rwaaargh-{this.fixture.TestRunIdentifier}");
-            chewie.Save(response => response.Expand(x => x.GetCustomData));
+            chewie.Save(response => response.Expand(x => x.GetCustomData()));
         }
 
         [Theory]
@@ -498,7 +499,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .SetPassword(new RandomPassword(12));
             application.CreateAccount(account, opt =>
             {
-                opt.ResponseOptions.Expand(x => x.GetCustomData);
+                opt.ResponseOptions.Expand(x => x.GetCustomData());
             });
 
             account.Href.ShouldNotBeNullOrEmpty();
@@ -536,7 +537,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}");
             request.SetPassword("whataPieceofjunk$1138");
 
-            var result = application.AuthenticateAccount(request.Build(), response => response.Expand(x => x.GetAccount));
+            var result = application.AuthenticateAccount(request.Build(), response => response.Expand(x => x.GetAccount()));
 
             result.ShouldBeAssignableTo<IAuthenticationResult>();
             result.Success.ShouldBeTrue();
@@ -596,7 +597,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                     request.SetPassword("whataPieceofjunk$1138");
                     request.SetAccountStore(accountStore);
                 },
-            response => response.Expand(x => x.GetAccount));
+            response => response.Expand(x => x.GetAccount()));
 
             result.ShouldBeAssignableTo<IAuthenticationResult>();
             result.Success.ShouldBeTrue();

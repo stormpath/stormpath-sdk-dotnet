@@ -35,11 +35,12 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             this.ValidateOffset();
             this.ValidateWheres();
             this.ValidateDatetimeWheres();
+            this.ValidateExpands();
         }
 
         private void ValidateLimit()
         {
-            if (!this.queryModel.Limit.HasValue)
+            if (this.queryModel.Limit == null)
                 return;
 
             if (this.queryModel.Limit.Value < 0)
@@ -48,7 +49,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         private void ValidateOffset()
         {
-            if (!this.queryModel.Offset.HasValue)
+            if (this.queryModel.Offset == null)
                 return;
 
             if (this.queryModel.Offset.Value < 0)
@@ -106,6 +107,16 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
             if (shorthandTermCollisions)
                 throw new NotSupportedException("Multiple Within constrants on the same field are not supported.");
+        }
+
+        private void ValidateExpands()
+        {
+            if (!this.queryModel.ExpandTerms.Any())
+                return;
+
+            if (this.queryModel.ExpandTerms.Any(x => x.Limit < 0)
+                || this.queryModel.ExpandTerms.Any(x => x.Offset < 0))
+                throw new ArgumentOutOfRangeException("Limit and Offset parameters for link expansion must not be negative.");
         }
     }
 }

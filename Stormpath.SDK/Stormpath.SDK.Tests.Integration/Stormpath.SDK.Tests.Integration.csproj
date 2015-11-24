@@ -98,6 +98,7 @@
     <Compile Include="Async\Tenant_tests.cs" />
     <Compile Include="Sanity_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IntegrationTestCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Stormpath.SDK.JsonNetSerializer\Stormpath.SDK.JsonNetSerializer.csproj">

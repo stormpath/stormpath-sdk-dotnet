@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Expand_one_link()
         {
             await this.Queryable
-                .Expand(x => x.GetDirectoryAsync)
+                .Expand(x => x.GetDirectory())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory");
@@ -39,8 +39,8 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Expand_multiple_links()
         {
             await this.Queryable
-                .Expand(x => x.GetDirectoryAsync)
-                .Expand(x => x.GetTenantAsync)
+                .Expand(x => x.GetDirectory())
+                .Expand(x => x.GetTenant())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory,tenant");
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Expand_collection_query_with_no_parameters()
         {
             await this.Queryable
-                .Expand(x => x.GetGroups)
+                .Expand(x => x.GetGroups())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups");
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Expand_collection_query_with_offset()
         {
             await this.Queryable
-                .Expand(x => x.GetGroups, offset: 10)
+                .Expand(x => x.GetGroups(10, null))
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(offset:10)");
@@ -70,7 +70,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Expand_collection_query_with_limit()
         {
             await this.Queryable
-                .Expand(x => x.GetGroups, limit: 20)
+                .Expand(x => x.GetGroups(null, 20))
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(limit:20)");
@@ -80,7 +80,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Expand_collection_query_with_both_parameters()
         {
             await this.Queryable
-                .Expand(x => x.GetGroups, 5, 15)
+                .Expand(x => x.GetGroups(5, 15))
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(offset:5,limit:15)");
@@ -90,9 +90,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         public async Task Expand_all_the_things()
         {
             await this.Queryable
-                .Expand(x => x.GetTenantAsync)
-                .Expand(x => x.GetGroups, 10, 20)
-                .Expand(x => x.GetDirectoryAsync)
+                .Expand(x => x.GetTenant())
+                .Expand(x => x.GetGroups(10, 20))
+                .Expand(x => x.GetDirectory())
                 .MoveNextAsync();
 
             this.FakeHttpClient.Calls.Single().ShouldContain("expand=tenant,groups(offset:10,limit:20),directory");
@@ -105,7 +105,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
-                    .Expand(x => x.GetGroups, -1, 0)
+                    .Expand(x => x.GetGroups(-1, 0))
                     .MoveNextAsync();
             });
         }
@@ -117,7 +117,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Should.Throw<Exception>(async () =>
             {
                 await this.Queryable
-                    .Expand(x => x.GetGroups, 0, -1)
+                    .Expand(x => x.GetGroups(0, -1))
                     .MoveNextAsync();
             });
         }

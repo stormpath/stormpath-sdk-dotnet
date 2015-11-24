@@ -91,7 +91,6 @@
     <Compile Include="Fakes\FakeHttpResponse.cs" />
     <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Fakes\TestAccounts.cs" />
-    <Compile Include="Integration\IntegrationTestCollection.cs" />
     <Compile Include="Integration\TestDataGenerator.cs" />
     <Compile Include="Integration\TestFixture.cs" />
     <Compile Include="Integration\TestClients.cs" />
@@ -104,6 +103,7 @@
     <Compile Include="StaticLogger.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>

@@ -15,13 +15,17 @@
 // </copyright>
 
 using System;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Application;
+using Stormpath.SDK.Auth;
+using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
-using Stormpath.SDK.Resource;
+using Stormpath.SDK.Linq.Expandables;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK
 {
@@ -30,45 +34,73 @@ namespace Stormpath.SDK
         /// <summary>
         /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
-        public static IAsyncQueryable<TSource> Expand<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, Func<CancellationToken, Task>>> selector)
-            where TSource : IResource
-        {
-            return source.Provider.CreateQuery(
-                LinqHelper.MethodCall(
-                    LinqHelper.GetMethodInfo(Sync.ExpandExtensions.Expand, (IQueryable<TSource>)null, selector),
-                    source.Expression,
-                    Expression.Quote(selector)));
-        }
+        public static IAsyncQueryable<IAccount> Expand(this IAsyncQueryable<IAccount> source, Expression<Func<IAccountExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
         /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">The source query.</param>
-        /// <param name="selector">A function to select a collection-returning method to expand.</param>
-        /// <param name="offset">Set the paging offset of the expanded collection, or <c>null</c> to use the default offset.</param>
-        /// <param name="limit">Set the paging limit of the expanded collection, or <c>null</c> to use the default limit.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
-        public static IAsyncQueryable<TSource> Expand<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, Func<IAsyncQueryable>>> selector, int? offset = null, int? limit = null)
-            where TSource : IResource
-        {
-            if (offset != null && offset < 0)
-                throw new ArgumentOutOfRangeException(nameof(offset));
+        public static IAsyncQueryable<IApplication> Expand(this IAsyncQueryable<IApplication> source, Expression<Func<IApplicationExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
 
-            if (limit != null && limit < 0)
-                throw new ArgumentOutOfRangeException(nameof(limit));
+        /// <summary>
+        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// </summary>
+        /// <param name="source">The source query.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
+        /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IAsyncQueryable<IDirectory> Expand(this IAsyncQueryable<IDirectory> source, Expression<Func<IDirectoryExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
 
-            return source.Provider.CreateQuery(
-                LinqHelper.MethodCall(
-                    LinqHelper.GetMethodInfo(Sync.ExpandExtensions.Expand, (IQueryable<TSource>)null, selector, offset, limit),
-                    source.Expression,
-                    Expression.Quote(selector),
-                    Expression.Constant(offset, typeof(int?)),
-                    Expression.Constant(limit, typeof(int?))));
-        }
+        /// <summary>
+        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// </summary>
+        /// <param name="source">The source query.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
+        /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IAsyncQueryable<IGroup> Expand(this IAsyncQueryable<IGroup> source, Expression<Func<IGroupExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
+
+        /// <summary>
+        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// </summary>
+        /// <param name="source">The source query.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
+        /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IAsyncQueryable<IGroupMembership> Expand(this IAsyncQueryable<IGroupMembership> source, Expression<Func<IGroupMembershipExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
+
+        /// <summary>
+        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// </summary>
+        /// <param name="source">The source query.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
+        /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IAsyncQueryable<IAccountStoreMapping> Expand(this IAsyncQueryable<IAccountStoreMapping> source, Expression<Func<IAccountStoreMappingExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
+
+        /// <summary>
+        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// </summary>
+        /// <param name="source">The source query.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
+        /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IAsyncQueryable<ITenant> Expand(this IAsyncQueryable<ITenant> source, Expression<Func<ITenantExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
+
+        /// <summary>
+        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// </summary>
+        /// <param name="source">The source query.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
+        /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IAsyncQueryable<IAuthenticationResult> Expand(this IAsyncQueryable<IAuthenticationResult> source, Expression<Func<IAuthenticationResultExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
     }
 }

@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Sync
         /// var loginRequest = new UsernamePasswordRequestBuilder();
         /// loginRequest.SetUsernameOrEmail("jsmith");
         /// loginRequest.SetPassword("Password123#");
-        /// var result = myApp.AuthenticateAccount(loginRequest.Build(), response => response.Expand(x => x.GetAccount));
+        /// var result = myApp.AuthenticateAccount(loginRequest.Build(), response => response.Expand(x => x.GetAccount()));
         /// </code>
         /// </example>
         public static IAuthenticationResult AuthenticateAccount(this IApplication application, IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions)

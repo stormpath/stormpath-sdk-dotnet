@@ -16,33 +16,22 @@
 
 using System.Collections.Generic;
 
-namespace Stormpath.SDK.Impl.Linq.Parsing.Translators
+namespace Stormpath.SDK.Impl.Linq.Parsing.NameTranslators
 {
     internal class MethodNameTranslator : AbstractNameTranslator
     {
         private static Dictionary<string, string> methodNameMap = new Dictionary<string, string>()
         {
-            ["GetDirectoryAsync"] = "directory",
             ["GetDirectory"] = "directory",
-            ["GetTenantAsync"] = "tenant",
             ["GetTenant"] = "tenant",
-            ["GetCustomDataAsync"] = "customData",
             ["GetCustomData"] = "customData",
-            ["GetProviderDataAsync"] = "providerData",
             ["GetProviderData"] = "providerData",
-            ["GetDefaultAccountStoreAsync"] = "defaultAccountStoreMapping",
             ["GetDefaultAccountStore"] = "defaultAccountStoreMapping",
-            ["GetDefaultGroupStoreAsync"] = "defaultGroupStoreMapping",
             ["GetDefaultGroupStore"] = "defaultGroupStoreMapping",
-            ["GetAccountStoreAsync"] = "accountStore",
             ["GetAccountStore"] = "accountStore",
-            ["GetProviderAsync"] = "provider",
             ["GetProvider"] = "provider",
-            ["GetAccountAsync"] = "account",
             ["GetAccount"] = "account",
-            ["GetGroupAsync"] = "group",
             ["GetGroup"] = "group",
-            ["GetApplicationAsync"] = "application",
             ["GetApplication"] = "application",
 
             ["GetGroups"] = "groups",

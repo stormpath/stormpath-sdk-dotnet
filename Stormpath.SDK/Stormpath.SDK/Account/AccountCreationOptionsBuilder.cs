@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Account
         /// <example>
         /// To request and cache custom data along with this request:
         /// <code>
-        /// builder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+        /// builder.ResponseOptions.Expand(x => x.GetCustomDataAsync());
         /// </code>
         /// </example>
         public IRetrievalOptions<IAccount> ResponseOptions { get; } = new DefaultRetrievalOptions<IAccount>();

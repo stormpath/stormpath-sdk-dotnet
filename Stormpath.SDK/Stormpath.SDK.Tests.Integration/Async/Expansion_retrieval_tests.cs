@@ -19,6 +19,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
@@ -41,7 +42,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
 
-            var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetCustomDataAsync));
+            var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetCustomData()));
         }
 
         [Theory]
@@ -50,7 +51,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
 
-            var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetDirectoryAsync));
+            var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetDirectory()));
         }
 
         [Theory]
@@ -59,7 +60,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
 
-            var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetGroupMemberships, 0, 10));
+            var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetGroupMemberships(0, 10)));
         }
 
         [Theory]
@@ -68,7 +69,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
 
-            var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetGroups, 0, 10));
+            var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetGroups(0, 10)));
         }
 
         [Theory]
@@ -77,7 +78,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
 
-            var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetTenantAsync));
+            var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref, o => o.Expand(x => x.GetTenant()));
         }
 
         [Theory]
@@ -89,7 +90,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var mapping = await app.GetAccountStoreMappings().FirstAsync();
 
-            await client.GetResourceAsync<IAccountStoreMapping>(mapping.Href, o => o.Expand(x => x.GetAccountStoreAsync));
+            await client.GetResourceAsync<IAccountStoreMapping>(mapping.Href, o => o.Expand(x => x.GetAccountStore()));
         }
 
         [Theory]
@@ -101,7 +102,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var mapping = await app.GetAccountStoreMappings().FirstAsync();
 
-            await client.GetResourceAsync<IAccountStoreMapping>(mapping.Href, o => o.Expand(x => x.GetApplicationAsync));
+            await client.GetResourceAsync<IAccountStoreMapping>(mapping.Href, o => o.Expand(x => x.GetApplication()));
         }
 
         [Theory]
@@ -110,7 +111,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
 
-            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccounts, 0, 10));
+            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccounts(0, 10)));
         }
 
         [Theory]
@@ -119,7 +120,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
 
-            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccountStoreMappings, 0, 10));
+            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccountStoreMappings(0, 10)));
         }
 
         [Theory]
@@ -128,7 +129,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
 
-            var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref, o => o.Expand(x => x.GetAccountMemberships, 0, 10));
+            var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref, o => o.Expand(x => x.GetAccountMemberships(0, 10)));
         }
 
         [Theory]
@@ -137,7 +138,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
 
-            var app = await client.GetResourceAsync<ITenant>(this.fixture.TenantHref, o => o.Expand(x => x.GetApplications, 0, 10));
+            var app = await client.GetResourceAsync<ITenant>(this.fixture.TenantHref, o => o.Expand(x => x.GetApplications(0, 10)));
         }
 
         [Theory]
@@ -146,7 +147,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
 
-            var app = await client.GetResourceAsync<ITenant>(this.fixture.TenantHref, o => o.Expand(x => x.GetDirectories, 0, 10));
+            var app = await client.GetResourceAsync<ITenant>(this.fixture.TenantHref, o => o.Expand(x => x.GetDirectories(0, 10)));
         }
 
         [Theory]
@@ -158,7 +159,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref);
             var membership = await account.GetGroupMemberships().FirstAsync();
 
-            await client.GetResourceAsync<IGroupMembership>(membership.Href, o => o.Expand(x => x.GetAccountAsync));
+            await client.GetResourceAsync<IGroupMembership>(membership.Href, o => o.Expand(x => x.GetAccount()));
         }
 
         [Theory]
@@ -170,7 +171,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var account = await client.GetResourceAsync<IAccount>(this.fixture.PrimaryAccountHref);
             var membership = await account.GetGroupMemberships().FirstAsync();
 
-            await client.GetResourceAsync<IGroupMembership>(membership.Href, o => o.Expand(x => x.GetGroupAsync));
+            await client.GetResourceAsync<IGroupMembership>(membership.Href, o => o.Expand(x => x.GetGroup()));
         }
     }
 }

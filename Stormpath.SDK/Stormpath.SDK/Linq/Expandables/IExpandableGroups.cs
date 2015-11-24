@@ -1,4 +1,4 @@
-﻿// <copyright file="DateTimeFieldNameTranslator.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IExpandableGroups.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
+using Stormpath.SDK.Group;
 
-namespace Stormpath.SDK.Impl.Linq.Parsing.Translators
+namespace Stormpath.SDK.Linq.Expandables
 {
-    internal class DateTimeFieldNameTranslator : AbstractNameTranslator
+    public interface IExpandableGroups
     {
-        private static Dictionary<string, string> fieldNameMap = new Dictionary<string, string>()
-        {
-            ["CreatedAt"] = "createdAt",
-            ["ModifiedAt"] = "modifiedAt",
-        };
+        IAsyncQueryable<IGroup> GetGroups();
 
-        public DateTimeFieldNameTranslator()
-            : base(fieldNameMap)
-        {
-        }
+        IAsyncQueryable<IGroup> GetGroups(int? offset, int? limit);
     }
 }

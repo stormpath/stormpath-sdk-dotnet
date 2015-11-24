@@ -1,4 +1,4 @@
-﻿// <copyright file="AbstractNameTranslator.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IExpandableDirectory.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
+using Stormpath.SDK.Directory;
 
-namespace Stormpath.SDK.Impl.Linq.Parsing.Translators
+namespace Stormpath.SDK.Linq.Expandables
 {
-    internal abstract class AbstractNameTranslator
+    public interface IExpandableDirectory
     {
-        private readonly IDictionary<string, string> map;
-
-        public AbstractNameTranslator(IDictionary<string, string> keyValuePairs)
-        {
-            this.map = keyValuePairs;
-        }
-
-        public bool TryGetValue(string key, out string value)
-            => this.map.TryGetValue(key, out value);
+        IDirectory GetDirectory();
     }
 }

@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetAccounts()
                 .Synchronously()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetCustomData)
+                .Expand(x => x.GetCustomData())
                 .FirstOrDefault();
         }
 
@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetAccounts()
                 .Synchronously()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetDirectory)
+                .Expand(x => x.GetDirectory())
                 .FirstOrDefault();
         }
 
@@ -73,7 +73,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetAccounts()
                 .Synchronously()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetGroupMemberships)
+                .Expand(x => x.GetGroupMemberships())
                 .FirstOrDefault();
         }
 
@@ -88,7 +88,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetAccounts()
                 .Synchronously()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetGroups)
+                .Expand(x => x.GetGroups())
                 .FirstOrDefault();
         }
 
@@ -103,7 +103,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetAccounts()
                 .Synchronously()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetProviderData)
+                .Expand(x => x.GetProviderData())
                 .FirstOrDefault();
         }
 
@@ -118,7 +118,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetAccounts()
                 .Synchronously()
                 .Where(x => x.Email.StartsWith("lskywalker"))
-                .Expand(x => x.GetTenant)
+                .Expand(x => x.GetTenant())
                 .FirstOrDefault();
         }
 
@@ -133,7 +133,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetApplications()
                 .Synchronously()
                 .Where(x => x.Description == "The Battle of Endor")
-                .Expand(x => x.GetAccounts, limit: 10)
+                .Expand(x => x.GetAccounts())
                 .FirstOrDefault();
         }
 
@@ -148,7 +148,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetApplications()
                 .Synchronously()
                 .Where(x => x.Description == "The Battle of Endor")
-                .Expand(x => x.GetAccountStoreMappings, limit: 10)
+                .Expand(x => x.GetAccountStoreMappings(null, 10))
                 .FirstOrDefault();
         }
 
@@ -163,7 +163,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetApplications()
                 .Synchronously()
                 .Where(x => x.Description == "The Battle of Endor")
-                .Expand(x => x.GetDefaultAccountStore)
+                .Expand(x => x.GetDefaultAccountStore())
                 .FirstOrDefault();
         }
 
@@ -178,7 +178,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetApplications()
                 .Synchronously()
                 .Where(x => x.Description == "The Battle of Endor")
-                .Expand(x => x.GetDefaultGroupStore)
+                .Expand(x => x.GetDefaultGroupStore())
                 .FirstOrDefault();
         }
 
@@ -193,7 +193,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetDirectories()
                 .Synchronously()
                 .Filter("(primary)")
-                .Expand(x => x.GetProvider)
+                .Expand(x => x.GetProvider())
                 .FirstOrDefault();
         }
 
@@ -208,7 +208,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .GetGroups()
                 .Synchronously()
                 .Where(x => x.Description == "Humans")
-                .Expand(x => x.GetAccountMemberships, limit: 10)
+                .Expand(x => x.GetAccountMemberships(null, 10))
                 .FirstOrDefault();
         }
 
@@ -222,7 +222,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var membership = group
                 .GetAccountMemberships()
                 .Synchronously()
-                .Expand(x => x.GetAccount)
+                .Expand(x => x.GetAccount())
                 .FirstOrDefault();
         }
 
@@ -236,7 +236,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var membership = group
                 .GetAccountMemberships()
                 .Synchronously()
-                .Expand(x => x.GetGroup)
+                .Expand(x => x.GetGroup())
                 .FirstOrDefault();
         }
     }

@@ -25,5 +25,11 @@ namespace Stormpath.SDK.Tests.Common
             new Lazy<ILogger>(() => new InMemoryLogger());
 
         public static ILogger Instance => LoggerInstance.Value;
+
+        private static readonly Lazy<string> LoggerResult =
+            new Lazy<string>(() => Instance.ToString());
+
+        public static string GetLog()
+            => LoggerResult.Value;
     }
 }

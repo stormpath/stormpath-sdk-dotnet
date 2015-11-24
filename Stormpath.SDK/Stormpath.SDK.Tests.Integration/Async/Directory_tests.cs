@@ -17,6 +17,7 @@
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
@@ -93,7 +94,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetDescription("Another great directory for my app")
                 .SetStatus(DirectoryStatus.Disabled);
 
-            await tenant.CreateDirectoryAsync(directory, opt => opt.ResponseOptions.Expand(x => x.GetCustomDataAsync));
+            await tenant.CreateDirectoryAsync(directory, opt => opt.ResponseOptions.Expand(x => x.GetCustomData()));
 
             directory.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
@@ -153,7 +154,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             created.SetDescription("foobar");
             created.CustomData.Put("good", true);
-            await created.SaveAsync(response => response.Expand(x => x.GetCustomDataAsync));
+            await created.SaveAsync(response => response.Expand(x => x.GetCustomData()));
 
             // Cleanup
             (await created.DeleteAsync()).ShouldBeTrue();

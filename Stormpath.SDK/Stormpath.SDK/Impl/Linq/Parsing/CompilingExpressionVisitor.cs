@@ -18,7 +18,7 @@ using System;
 using System.Linq.Expressions;
 using Stormpath.SDK.Impl.Linq.Parsing.Expressions;
 using Stormpath.SDK.Impl.Linq.Parsing.Expressions.ResultOperators;
-using Stormpath.SDK.Impl.Linq.Parsing.Translators;
+using Stormpath.SDK.Impl.Linq.Parsing.NameTranslators;
 using Stormpath.SDK.Impl.Linq.QueryModel;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing

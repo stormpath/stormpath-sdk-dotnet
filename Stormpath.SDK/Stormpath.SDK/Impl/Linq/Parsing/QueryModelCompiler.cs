@@ -15,6 +15,7 @@
 // </copyright>
 
 using System.Linq.Expressions;
+using Stormpath.SDK.Impl.Linq.Parsing.Transformers;
 using Stormpath.SDK.Impl.Linq.QueryModel;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
@@ -29,12 +30,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         private CollectionResourceQueryModel GenerateQueryModel(Expression expression)
         {
-            // Partial evaluation
-            var evaluatedExpression = Evaluator.PartialEval(expression);
-
-            // Transform VB.NET generated calls
-            var visualBasicCallTransformer = new VbCallTransformingVisitor();
-            var transformedExpression = visualBasicCallTransformer.Visit(evaluatedExpression);
+            // Transform
+            var transformedExpression = ApplyTransformations(expression);
 
             // Discover
             var discoveringVisitor = new DiscoveringExpressionVisitor();
@@ -50,6 +47,24 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             validator.Validate();
 
             return compiledModel;
+        }
+
+        private static Expression ApplyTransformations(Expression expression)
+        {
+            var chain = new IExpressionTransformer[]
+            {
+                new PartialEvaluationTransformer(),
+                new VbStringCompareTransformer(),
+                new VbConvertInvocationTransformer(),
+            };
+
+            Expression result = expression;
+            foreach (var transformer in chain)
+            {
+                expression = transformer.Transform(expression);
+            }
+
+            return expression;
         }
     }
 }

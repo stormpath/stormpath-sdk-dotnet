@@ -17,14 +17,15 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Stormpath.SDK.Impl.Linq.Executor;
 
 namespace Stormpath.SDK.Impl.Linq.Sync
 {
     internal sealed class SyncScalarExecutor<TItem>
     {
-        private readonly CollectionResourceExecutor<TItem> executor;
+        private readonly IAsyncExecutor<TItem> executor;
 
-        public SyncScalarExecutor(CollectionResourceExecutor<TItem> executor, Expression expression)
+        public SyncScalarExecutor(IAsyncExecutor<TItem> executor, Expression expression)
         {
             this.executor = new CollectionResourceExecutor<TItem>(executor, expression);
         }
@@ -32,6 +33,7 @@ namespace Stormpath.SDK.Impl.Linq.Sync
         public object Execute()
         {
             this.executor.MoveNext();
+
             var resultOperator = this.executor.CompiledModel.ResultOperator;
 
             if (resultOperator == Parsing.ResultOperator.Any)

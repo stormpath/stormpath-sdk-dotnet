@@ -19,6 +19,7 @@ using Shouldly;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 
@@ -145,7 +146,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedGroupHrefs.Add(newGroup.Href);
 
             newGroup.SetDescription("foobar");
-            await newGroup.SaveAsync(response => response.Expand(x => x.GetAccounts, 0, 10));
+            await newGroup.SaveAsync(response => response.Expand(x => x.GetAccounts(0, 10)));
 
             // Clean up
             (await newGroup.DeleteAsync()).ShouldBeTrue();
@@ -341,7 +342,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .Instantiate<IGroup>()
                 .SetName($".NET ITs Custom Data Group #2 ({this.fixture.TestRunIdentifier} - {clientBuilder.Name})");
 
-            await app.CreateGroupAsync(group, opt => opt.ResponseOptions.Expand(x => x.GetCustomDataAsync));
+            await app.CreateGroupAsync(group, opt => opt.ResponseOptions.Expand(x => x.GetCustomData()));
 
             group.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedGroupHrefs.Add(group.Href);

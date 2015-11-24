@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Group
         /// <example>
         /// To request and cache custom data along with this request:
         /// <code>
-        /// builder.ResponseOptions.Expand(x => x.GetCustomDataAsync);
+        /// builder.ResponseOptions.Expand(x => x.GetCustomDataAsync());
         /// </code>
         /// </example>
         public IRetrievalOptions<IGroup> ResponseOptions { get; } = new DefaultRetrievalOptions<IGroup>();

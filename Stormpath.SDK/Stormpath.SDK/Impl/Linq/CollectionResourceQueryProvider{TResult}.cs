@@ -16,6 +16,7 @@
 
 using System.Linq;
 using System.Linq.Expressions;
+using Stormpath.SDK.Impl.Linq.Executor;
 using Stormpath.SDK.Impl.Linq.Sync;
 using Stormpath.SDK.Linq;
 
@@ -23,14 +24,14 @@ namespace Stormpath.SDK.Impl.Linq
 {
     internal sealed class CollectionResourceQueryProvider<TResult> : IAsyncQueryProvider<TResult>, IQueryProvider
     {
-        private CollectionResourceExecutor<TResult> executor;
+        private IAsyncExecutor<TResult> executor;
 
-        public CollectionResourceQueryProvider(CollectionResourceExecutor<TResult> executor)
+        public CollectionResourceQueryProvider(IAsyncExecutor<TResult> executor)
         {
             this.executor = executor;
         }
 
-        public CollectionResourceExecutor<TResult> Executor
+        public IAsyncExecutor<TResult> Executor
         {
             get { return this.executor; }
             set { this.executor = value; }

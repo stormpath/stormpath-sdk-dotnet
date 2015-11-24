@@ -15,46 +15,24 @@
 // </copyright>
 
 using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
+using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Linq.Parsing;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Sync;
 
 namespace Stormpath.SDK.Impl.Resource
 {
     internal sealed class DefaultRetrievalOptions<T> : IRetrievalOptions<T>
     {
-        private IQueryable<T> proxy = Enumerable.Empty<T>().AsQueryable();
+        private IAsyncQueryable<T> proxy = CollectionResourceQueryable<T>.Empty<T>();
         private bool dirty = false;
 
         private IRetrievalOptions<T> AsInterface => this;
 
-        IRetrievalOptions<T> IRetrievalOptions<T>.Expand(Expression<Func<T, Func<CancellationToken, Task>>> selector)
+        public void SetProxy(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> proxyAction)
         {
-            this.proxy = this.proxy.Expand(selector);
             this.dirty = true;
-
-            return this;
-        }
-
-        IRetrievalOptions<T> IRetrievalOptions<T>.Expand(Expression<Func<T, Func<IResource>>> selector)
-        {
-            this.proxy = this.proxy.Expand(selector);
-            this.dirty = true;
-
-            return this;
-        }
-
-        IRetrievalOptions<T> IRetrievalOptions<T>.Expand(Expression<Func<T, Func<IAsyncQueryable>>> selector, int? offset, int? limit)
-        {
-            this.proxy = this.proxy.Expand(selector, offset, limit);
-            this.dirty = true;
-
-            return this;
+            this.proxy = proxyAction(this.proxy);
         }
 
         string ICreationOptions.GetQueryString()
