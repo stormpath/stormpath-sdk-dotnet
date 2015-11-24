@@ -256,9 +256,12 @@
     <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\LongCountResultOperator.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\WhereMemberExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\QueryModelValidator.cs" />
-    <Compile Include="Impl\Linq\Parsing\Translators\DateTimeFieldNameTranslator.cs" />
-    <Compile Include="Impl\Linq\Parsing\Translators\MethodNameTranslator.cs" />
-    <Compile Include="Impl\Linq\Parsing\VbCallTransformingVisitor.cs" />
+    <Compile Include="Impl\Linq\Parsing\NameTranslators\DateTimeFieldNameTranslator.cs" />
+    <Compile Include="Impl\Linq\Parsing\NameTranslators\MethodNameTranslator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Transformers\AbstractExpressionTransformer.cs" />
+    <Compile Include="Impl\Linq\Parsing\Transformers\IExpressionTransformer.cs" />
+    <Compile Include="Impl\Linq\Parsing\Transformers\LambdaInvocationTransformer.cs" />
+    <Compile Include="Impl\Linq\Parsing\Transformers\VbStringCompareTransformer.cs" />
     <Compile Include="Impl\Linq\Parsing\WhereExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\QueryModel\DatetimeShorthandModel.cs" />
     <Compile Include="Impl\Linq\QueryModel\ExpandTerm.cs" />
@@ -266,7 +269,7 @@
     <Compile Include="Impl\Linq\Sync\SyncCollectionEnumeratorAdapter{TResult}.cs" />
     <Compile Include="Impl\Linq\Parsing\CompilingExpressionVisitor.cs" />
     <Compile Include="Impl\Linq\Parsing\DiscoveringExpressionVisitor.cs" />
-    <Compile Include="Impl\Linq\Parsing\Evaluator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Transformers\PartialEvaluationTransformer.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\FilterExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\OrderByExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\Expressions\ParsedExpression.cs" />
@@ -279,8 +282,8 @@
     <Compile Include="Impl\Linq\Parsing\Expressions\TakeExpression.cs" />
     <Compile Include="Impl\Linq\Parsing\OrderByDirection.cs" />
     <Compile Include="Impl\Linq\Parsing\ResultOperator.cs" />
-    <Compile Include="Impl\Linq\Parsing\Translators\AbstractNameTranslator.cs" />
-    <Compile Include="Impl\Linq\Parsing\Translators\FieldNameTranslator.cs" />
+    <Compile Include="Impl\Linq\Parsing\NameTranslators\AbstractNameTranslator.cs" />
+    <Compile Include="Impl\Linq\Parsing\NameTranslators\FieldNameTranslator.cs" />
     <Compile Include="Impl\Linq\Parsing\WhereComparison.cs" />
     <Compile Include="Impl\Linq\QueryModel\CollectionResourceQueryModel.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler.cs" />

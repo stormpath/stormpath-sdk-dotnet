@@ -1,4 +1,4 @@
-﻿// <copyright file="VbCallTransformingVisitor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="VbStringCompareTransformer.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +16,20 @@
 
 using System.Linq.Expressions;
 
-namespace Stormpath.SDK.Impl.Linq.Parsing
+namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
 {
-    internal sealed class VbCallTransformingVisitor : ExpressionVisitor
+    internal sealed class VbStringCompareTransformer : AbstractExpressionTransformer
     {
         private static readonly string VbStringCompareCallTypeName = "Microsoft.VisualBasic.CompilerServices.Operators";
         private static readonly string VbStringCompareCallName = "CompareString";
 
-        protected override Expression VisitBinary(BinaryExpression node)
+        protected override Expression TransformNode(Expression node)
         {
-            var compareStringCall = GetStringCompareMethodCall(node);
+            var binaryExpression = node as BinaryExpression;
+            if (binaryExpression == null)
+                return node;
 
+            var compareStringCall = GetStringCompareMethodCall(binaryExpression);
             if (compareStringCall == null)
                 return node;
 

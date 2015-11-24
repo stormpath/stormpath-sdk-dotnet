@@ -1,4 +1,4 @@
-﻿// <copyright file="FieldNameTranslator.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DateTimeFieldNameTranslator.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,23 +16,17 @@
 
 using System.Collections.Generic;
 
-namespace Stormpath.SDK.Impl.Linq.Parsing.Translators
+namespace Stormpath.SDK.Impl.Linq.Parsing.NameTranslators
 {
-    internal class FieldNameTranslator : AbstractNameTranslator
+    internal class DateTimeFieldNameTranslator : AbstractNameTranslator
     {
         private static Dictionary<string, string> fieldNameMap = new Dictionary<string, string>()
         {
-            ["Email"] = "email",
-            ["GivenName"] = "givenName",
-            ["MiddleName"] = "middleName",
-            ["Surname"] = "surname",
-            ["Username"] = "username",
-            ["Name"] = "name",
-            ["Description"] = "description",
-            ["Status"] = "status",
+            ["CreatedAt"] = "createdAt",
+            ["ModifiedAt"] = "modifiedAt",
         };
 
-        public FieldNameTranslator()
+        public DateTimeFieldNameTranslator()
             : base(fieldNameMap)
         {
         }

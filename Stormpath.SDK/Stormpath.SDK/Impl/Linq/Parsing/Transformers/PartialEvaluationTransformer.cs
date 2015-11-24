@@ -1,4 +1,4 @@
-﻿// <copyright file="Evaluator.cs" company="Stormpath, Inc.">
+﻿// <copyright file="PartialEvaluationTransformer.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,29 +18,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Stormpath.SDK.Impl.Linq.Parsing
+namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
 {
-    internal sealed class Evaluator
+    /// <summary>
+    /// Performs evaluation & replacement of independent sub-trees.
+    /// Returns a new tree with sub-trees evaluated and replaced.
+    /// </summary>
+    internal sealed class PartialEvaluationTransformer : IExpressionTransformer
     {
-        /// <summary>
-        /// Performs evaluation & replacement of independent sub-trees
-        /// </summary>
-        /// <param name="expression">The root of the expression tree.</param>
-        /// <returns>A new tree with sub-trees evaluated and replaced.</returns>
-        public static Expression PartialEval(Expression expression)
+        public Expression Transform(Expression expression)
         {
-            return PartialEval(expression, CanBeEvaluatedLocally);
-        }
+            var evaluator = new SubtreeEvaluator(
+                new Nominator(CanBeEvaluatedLocally).Nominate(expression));
 
-        /// <summary>
-        /// Performs evaluation & replacement of independent sub-trees
-        /// </summary>
-        /// <param name="expression">The root of the expression tree.</param>
-        /// <param name="canBeEvaluatedFunc">A function that decides whether a given expression node can be part of the local function.</param>
-        /// <returns>A new tree with sub-trees evaluated and replaced.</returns>
-        private static Expression PartialEval(Expression expression, Func<Expression, bool> canBeEvaluatedFunc)
-        {
-            return new SubtreeEvaluator(new Nominator(canBeEvaluatedFunc).Nominate(expression)).Eval(expression);
+            return evaluator.Eval(expression);
         }
 
         private static bool CanBeEvaluatedLocally(Expression expression)

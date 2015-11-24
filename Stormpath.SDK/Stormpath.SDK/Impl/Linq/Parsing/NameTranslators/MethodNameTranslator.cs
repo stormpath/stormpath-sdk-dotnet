@@ -16,7 +16,7 @@
 
 using System.Collections.Generic;
 
-namespace Stormpath.SDK.Impl.Linq.Parsing.Translators
+namespace Stormpath.SDK.Impl.Linq.Parsing.NameTranslators
 {
     internal class MethodNameTranslator : AbstractNameTranslator
     {
