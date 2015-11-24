@@ -270,7 +270,7 @@ namespace Stormpath.SDK.Tests.Integration
                 $"These sync tests do not have a corresponding async test:{NL}{string.Join(", ", syncButNotAsync)}");
         }
 
-        [Common.DebugOnlyFact]
+        [Fact]
         public void Expand_extension_methods_are_consistent_across_namespaces()
         {
             var getMethodInfoFunc = new Func<MethodInfo, string>(m =>
