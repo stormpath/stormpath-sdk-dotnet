@@ -22,6 +22,8 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Linq;
+using Stormpath.SDK.Sync;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
@@ -269,9 +271,44 @@ namespace Stormpath.SDK.Tests.Integration
         }
 
         [Common.DebugOnlyFact]
-        public void Expand_extension_is_consistent_across_methods()
+        public void Expand_extension_methods_are_consistent_across_namespaces()
         {
-            Common.Assertly.Todo();
+            var getMethodInfoFunc = new Func<MethodInfo, string>(m =>
+            {
+                var parameters = m.GetParameters();
+                var nestedType = parameters[0].ParameterType.GenericTypeArguments[0];
+                var expandablesType = parameters[1].ParameterType
+                    .GenericTypeArguments[0]
+                    .GenericTypeArguments[0];
+
+                return $"Expand<{nestedType.Name}>({expandablesType.Name})";
+            });
+
+            var asyncExpandMembers = typeof(AsyncQueryableExpandExtensions)
+                .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+                .Where(m => m.IsDefined(typeof(ExtensionAttribute), false))
+                .Select(getMethodInfoFunc)
+                .ToList();
+
+            var syncExpandMembers = typeof(SyncExpandExtensions)
+                .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+                .Where(m => m.IsDefined(typeof(ExtensionAttribute), false))
+                .Select(getMethodInfoFunc)
+                .ToList();
+
+            var retrievalExpandMembers = typeof(RetrievalOptionExpandExtensions)
+                .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+                .Where(m => m.IsDefined(typeof(ExtensionAttribute), false))
+                .Select(getMethodInfoFunc)
+                .ToList();
+
+            asyncExpandMembers
+                .SequenceEqual(syncExpandMembers)
+                .ShouldBeTrue();
+
+            asyncExpandMembers
+                .SequenceEqual(retrievalExpandMembers)
+                .ShouldBeTrue();
         }
 
         private static string GetQualifiedMethodName(MethodInfo m)
