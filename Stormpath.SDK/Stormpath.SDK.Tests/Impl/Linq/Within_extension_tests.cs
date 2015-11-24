@@ -83,7 +83,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.ModifiedAt.Within(2015, 1))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015&modifiedAt=2015-01");
+            this.ShouldBeCalledWithArgument("createdAt=2015&modifiedAt=2015-01");
         }
 
         [Fact]
@@ -93,7 +93,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt.Within(2015) && x.ModifiedAt.Within(2015, 1))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015&modifiedAt=2015-01");
+            this.ShouldBeCalledWithArgument("createdAt=2015&modifiedAt=2015-01");
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt.Within(2015))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015&email=foo%40bar.co");
+            this.ShouldBeCalledWithArgument("createdAt=2015&email=foo%40bar.co");
         }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.Email == "foo@bar.co" && x.CreatedAt.Within(2015, 1))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015-01&email=foo%40bar.co");
+            this.ShouldBeCalledWithArgument("createdAt=2015-01&email=foo%40bar.co");
         }
 
         [Fact]
@@ -124,7 +124,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt.Within(2015))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015");
+            this.ShouldBeCalledWithArgument("createdAt=2015");
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt.Within(2015, 01))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015-01");
+            this.ShouldBeCalledWithArgument("createdAt=2015-01");
         }
 
         [Fact]
@@ -144,7 +144,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt.Within(2015, 01, 01))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015-01-01");
+            this.ShouldBeCalledWithArgument("createdAt=2015-01-01");
         }
 
         [Fact]
@@ -154,7 +154,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt.Within(2015, 01, 01, 12))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015-01-01T12");
+            this.ShouldBeCalledWithArgument("createdAt=2015-01-01T12");
         }
 
         [Fact]
@@ -164,7 +164,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015-01-01T12:30");
+            this.ShouldBeCalledWithArgument("createdAt=2015-01-01T12:30");
         }
 
         [Fact]
@@ -174,7 +174,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt.Within(2015, 01, 01, 12, 30, 31))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=2015-01-01T12:30:31");
+            this.ShouldBeCalledWithArgument("createdAt=2015-01-01T12:30:31");
         }
     }
 }

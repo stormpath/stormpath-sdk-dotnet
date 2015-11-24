@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             this.InitializeClientWithCollection(Enumerable.Empty<IAccount>());
             await this.Queryable.AnyAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("limit=1");
+            this.ShouldBeCalledWithArgument("limit=1");
         }
     }
 }

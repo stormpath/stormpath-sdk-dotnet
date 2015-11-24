@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Skip(10);
 
             await (query as IAsyncQueryable<IAccount>).MoveNextAsync();
-            this.FakeHttpClient.Calls.Single().ShouldContain("limit=5&offset=10");
+            this.ShouldBeCalledWithArgument("limit=5&offset=10");
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var query = this.Queryable;
 
             await query.MoveNextAsync();
-            this.FakeHttpClient.Calls.Single().ShouldNotContain("?");
+            this.FakeHttpClient.Calls.Single().CanonicalUri.ToString().ShouldNotContain("?");
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             await query.MoveNextAsync();
             var firstPageCount = query.CurrentPage.Count();
             await query.MoveNextAsync();
-            this.FakeHttpClient.Calls.Last().ShouldContain($"offset={firstPageCount}");
+            this.FakeHttpClient.Calls.Last().CanonicalUri.ToString().ShouldContain($"offset={firstPageCount}");
         }
     }
 }

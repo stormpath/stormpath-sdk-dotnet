@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .MoveNextAsync();
 
             // Assert
-            this.FakeHttpClient.Calls.Single().ShouldContain("q=Joe");
+            this.ShouldBeCalledWithArgument("q=Joe");
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .MoveNextAsync();
 
             // Assert
-            this.FakeHttpClient.Calls.Single().ShouldContain("q=Joe");
+            this.ShouldBeCalledWithArgument("q=Joe");
         }
 
         [Fact]

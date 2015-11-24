@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Skip(10)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("offset=10");
+            this.ShouldBeCalledWithArgument("offset=10");
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Skip(offset)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("offset=20");
+            this.ShouldBeCalledWithArgument("offset=20");
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Skip(offsetFunc())
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("offset=25");
+            this.ShouldBeCalledWithArgument("offset=25");
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .MoveNextAsync();
 
             // Expected behavior: the last call will be kept
-            this.FakeHttpClient.Calls.Single().ShouldContain("offset=5");
+            this.ShouldBeCalledWithArgument("offset=5");
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .MoveNextAsync();
 
             // Expected behavior: the last call will be kept
-            this.FakeHttpClient.Calls.Single().ShouldNotContain("offset");
+            this.FakeHttpClient.Calls.Single().CanonicalUri.ToString().ShouldNotContain("offset");
         }
 
         [Fact]
@@ -88,8 +88,6 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 await this.Queryable
                     .Skip(-1)
                 .MoveNextAsync();
-
-                this.FakeHttpClient.Calls.Single().ShouldContain("<not evaluated>");
             });
         }
     }

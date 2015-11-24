@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetDirectory())
                 .ToList();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory");
+            this.ShouldBeCalledWithArgument("expand=directory");
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetDirectory())
                 .ToList();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory");
+            this.ShouldBeCalledWithArgument("expand=directory");
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetTenant())
                 .ToList();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("expand=directory,tenant");
+            this.ShouldBeCalledWithArgument("expand=directory,tenant");
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroups())
                 .ToList();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups");
+            this.ShouldBeCalledWithArgument("expand=groups");
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroups(10, null))
                 .ToList();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(offset:10)");
+            this.ShouldBeCalledWithArgument("expand=groups(offset:10)");
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroups(null, 20))
                 .ToList();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(limit:20)");
+            this.ShouldBeCalledWithArgument("expand=groups(limit:20)");
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroups(5, 15))
                 .ToList();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("expand=groups(offset:5,limit:15)");
+            this.ShouldBeCalledWithArgument("expand=groups(offset:5,limit:15)");
         }
 
         [Fact]
@@ -112,7 +112,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetDirectory())
                 .ToList();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("expand=tenant,groups(offset:10,limit:20),directory");
+            this.ShouldBeCalledWithArgument("expand=tenant,groups(offset:10,limit:20),directory");
         }
     }
 }

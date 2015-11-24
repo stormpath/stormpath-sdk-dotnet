@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             var luke = await this.Queryable.FirstAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("limit=1");
+            this.ShouldBeCalledWithArgument("limit=1");
         }
 
         [Fact]

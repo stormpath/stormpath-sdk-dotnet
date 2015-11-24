@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .OrderBy(x => x.GivenName)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("orderBy=givenName");
+            this.ShouldBeCalledWithArgument("orderBy=givenName");
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .OrderByDescending(x => x.Email)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("orderBy=email+desc");
+            this.ShouldBeCalledWithArgument("orderBy=email+desc");
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .OrderBy(x => x.GivenName)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("limit=10&orderBy=givenName");
+            this.ShouldBeCalledWithArgument("limit=10&orderBy=givenName");
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Take(10)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("limit=10&orderBy=givenName+desc");
+            this.ShouldBeCalledWithArgument("limit=10&orderBy=givenName+desc");
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .ThenByDescending(x => x.Username)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("orderBy=givenName,username+desc");
+            this.ShouldBeCalledWithArgument("orderBy=givenName,username+desc");
         }
     }
 }

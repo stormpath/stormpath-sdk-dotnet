@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             var count = await this.Queryable.CountAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("limit=1");
+            this.ShouldBeCalledWithArgument("limit=1");
         }
     }
 }

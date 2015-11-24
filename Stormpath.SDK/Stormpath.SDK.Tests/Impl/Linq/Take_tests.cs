@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Take(10)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("limit=10");
+            this.ShouldBeCalledWithArgument("limit=10");
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Take(limit)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("limit=20");
+            this.ShouldBeCalledWithArgument("limit=20");
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Take(limitFunc())
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("limit=25");
+            this.ShouldBeCalledWithArgument("limit=25");
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .MoveNextAsync();
 
             // Expected behavior: the last call will be kept
-            this.FakeHttpClient.Calls.Single().ShouldContain("limit=5");
+            this.ShouldBeCalledWithArgument("limit=5");
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .MoveNextAsync();
 
             // Expected behavior: the last call will be kept
-            this.FakeHttpClient.Calls.Single().ShouldNotContain("limit");
+            this.FakeHttpClient.Calls.Single().CanonicalUri.ToString().ShouldNotContain("limit");
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             this.FakeHttpClient.Calls.Count().ShouldBe(1);
 
             // When Taking(<= 100), the limit parameter should match
-            this.FakeHttpClient.Calls.First().ShouldEndWith("?limit=7");
+            this.FakeHttpClient.Calls.First().CanonicalUri.ToString().ShouldEndWith("?limit=7");
         }
 
         [Fact]
@@ -129,7 +129,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             this.FakeHttpClient.Calls.Count().ShouldBe(5); // Max 100 per call
 
             // When Taking(> 100), the limit parameter should be 100
-            this.FakeHttpClient.Calls.First().ShouldEndWith("?limit=100");
+            this.FakeHttpClient.Calls.First().CanonicalUri.ToString().ShouldEndWith("?limit=100");
         }
     }
 }

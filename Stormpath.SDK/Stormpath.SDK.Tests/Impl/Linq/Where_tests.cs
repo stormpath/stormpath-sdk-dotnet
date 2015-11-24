@@ -116,7 +116,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.Email == "tk421@deathstar.co")
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("email=tk421%40deathstar.co");
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co");
         }
 
         [Fact]
@@ -126,7 +126,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.Email.Equals("tk421@deathstar.co"))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("email=tk421%40deathstar.co");
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co");
         }
 
         [Fact]
@@ -138,7 +138,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.Email.Equals(email))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("email=tk421%40deathstar.co");
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co");
         }
 
         [Fact]
@@ -150,7 +150,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.Email.Equals($"tk421@{domain}"))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("email=tk421%40deathstar.co");
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co");
         }
 
         [Fact]
@@ -160,7 +160,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.Email.StartsWith("tk421"))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("email=tk421*");
+            this.ShouldBeCalledWithArgument("email=tk421*");
         }
 
         [Fact]
@@ -170,7 +170,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.Email.EndsWith("deathstar.co"))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("email=*deathstar.co");
+            this.ShouldBeCalledWithArgument("email=*deathstar.co");
         }
 
         [Fact]
@@ -180,7 +180,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.Email.Contains("421"))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("email=*421*");
+            this.ShouldBeCalledWithArgument("email=*421*");
         }
 
         [Fact]
@@ -190,7 +190,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.Email == "tk421@deathstar.co" && x.Username == "tk421")
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("email=tk421%40deathstar.co&username=tk421");
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co&username=tk421");
         }
 
         [Fact]
@@ -201,7 +201,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.Username.StartsWith("tk421"))
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("email=tk421%40deathstar.co&username=tk421*");
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co&username=tk421*");
         }
 
         [Fact]
@@ -212,7 +212,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt > testDate)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=(2015-01-01T06:00:00Z,]");
+            this.ShouldBeCalledWithArgument("createdAt=(2015-01-01T06:00:00Z,]");
         }
 
         [Fact]
@@ -223,7 +223,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt >= testDate)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=[2015-01-01T06:00:00Z,]");
+            this.ShouldBeCalledWithArgument("createdAt=[2015-01-01T06:00:00Z,]");
         }
 
         [Fact]
@@ -234,7 +234,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.ModifiedAt < testDate)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("modifiedAt=[,2016-01-01T12:00:00Z)");
+            this.ShouldBeCalledWithArgument("modifiedAt=[,2016-01-01T12:00:00Z)");
         }
 
         [Fact]
@@ -245,7 +245,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.ModifiedAt <= testDate)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("modifiedAt=[,2016-01-01T12:00:00Z]");
+            this.ShouldBeCalledWithArgument("modifiedAt=[,2016-01-01T12:00:00Z]");
         }
 
         [Fact]
@@ -257,7 +257,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.CreatedAt > testStartDate && x.CreatedAt <= testEndDate)
                 .MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("createdAt=(2015-01-01T00:00:00Z,2015-12-31T23:59:59Z]");
+            this.ShouldBeCalledWithArgument("createdAt=(2015-01-01T00:00:00Z,2015-12-31T23:59:59Z]");
         }
 
         [Fact]
@@ -271,7 +271,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             var timezoneOffset = new DateTimeOffset(testDate).Offset;
             var adjustedHour = (int)(12 - timezoneOffset.TotalHours);
 
-            this.FakeHttpClient.Calls.Single().ShouldContain($"modifiedAt=[,2016-01-01T{adjustedHour}:00:00Z)");
+            this.ShouldBeCalledWithArgument($"modifiedAt=[,2016-01-01T{adjustedHour}:00:00Z)");
         }
 
         [Fact]
@@ -295,7 +295,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
              where account.Email == "tk421@deathstar.co"
              select account).MoveNextAsync();
 
-            this.FakeHttpClient.Calls.Single().ShouldContain("email=tk421%40deathstar.co");
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co");
         }
     }
 }

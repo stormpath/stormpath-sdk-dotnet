@@ -28,14 +28,14 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         protected readonly string baseUrl;
         private readonly IDictionary<string, IHttpResponse> responses;
 
-        private List<string> calls;
+        private List<IHttpRequest> calls;
 
         public AbstractMockHttpClient(string baseUrl)
         {
             baseUrl = EnsureTrailingSlash(baseUrl);
 
             this.baseUrl = baseUrl;
-            this.calls = new List<string>();
+            this.calls = new List<IHttpRequest>();
         }
 
         private ISynchronousHttpClient AsSyncInterface => this;
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 
         IWebProxy IHttpClient.Proxy => null;
 
-        public IReadOnlyList<string> Calls => this.calls;
+        public IReadOnlyList<IHttpRequest> Calls => this.calls;
 
         void IDisposable.Dispose()
         {
@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             if (response == null)
                 throw new ApplicationException($"{this.GetType().Name} cannot handle this request.");
 
-            this.calls.Add(request.CanonicalUri.ToString());
+            this.calls.Add(request);
             return response;
         }
 

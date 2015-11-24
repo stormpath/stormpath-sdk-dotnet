@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Shouldly;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.Linq;
@@ -48,6 +49,11 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Build();
 
             this.Queryable = new CollectionResourceQueryable<T>(this.BaseUrl, (client as DefaultClient).DataStore);
+        }
+
+        protected void ShouldBeCalledWithArgument(string expectedArgument)
+        {
+            this.FakeHttpClient.Calls.Single().CanonicalUri.ToString().ShouldContain(expectedArgument);
         }
     }
 }
