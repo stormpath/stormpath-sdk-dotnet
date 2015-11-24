@@ -102,12 +102,12 @@ namespace Stormpath.SDK.Impl.Cache
         {
             if (!this.isDisposed)
             {
+                this.isDisposed = true;
+
                 if (disposing)
                 {
                     this.memoryCache.Dispose();
                 }
-
-                this.isDisposed = true;
             }
         }
 

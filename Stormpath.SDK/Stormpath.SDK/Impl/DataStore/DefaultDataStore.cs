@@ -710,14 +710,14 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             if (!this.disposed)
             {
+                this.disposed = true;
+
                 if (disposing)
                 {
                     this.requestExecutor.Dispose();
                     this.resourceFactory.Dispose();
                     this.cacheProvider.Dispose();
                 }
-
-                this.disposed = true;
             }
         }
 

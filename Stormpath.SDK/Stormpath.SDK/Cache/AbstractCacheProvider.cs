@@ -201,12 +201,12 @@ namespace Stormpath.SDK.Cache
 
                 if (disposing)
                 {
-                    foreach (var cacheKey in this.caches.Keys)
+                    foreach (KeyValuePair<string, object> entry in this.caches)
                     {
-                        object cache = null;
-                        if (this.caches.TryRemove(cacheKey, out cache))
-                            (cache as IDisposable).Dispose();
+                        (entry.Value as IDisposable)?.Dispose();
                     }
+
+                    this.caches.Clear();
                 }
             }
         }

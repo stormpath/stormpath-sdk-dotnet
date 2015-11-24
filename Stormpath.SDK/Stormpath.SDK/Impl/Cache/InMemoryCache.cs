@@ -214,12 +214,12 @@ namespace Stormpath.SDK.Impl.Cache
         {
             if (!this.isDisposed)
             {
+                this.isDisposed = true;
+
                 if (disposing)
                 {
                     this.cacheManager.Dispose();
                 }
-
-                this.isDisposed = true;
             }
         }
 
