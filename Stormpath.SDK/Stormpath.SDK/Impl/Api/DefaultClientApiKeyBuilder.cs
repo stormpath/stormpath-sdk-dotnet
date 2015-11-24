@@ -31,15 +31,13 @@ namespace Stormpath.SDK.Impl.Api
         private static readonly string DefaultDirectIdPropertyName = "STORMPATH_API_KEY_ID";
         private static readonly string DefaultDirectSecretPropertyName = "STORMPATH_API_KEY_SECRET";
 
-        private static readonly string DefaultApiKeyPropertiesFileLocation =
-            System.IO.Path.Combine(Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%"), ".stormpath\\", "apiKey.properties");
-
         // Wrappers for static .NET Framework calls (for easier unit testing)
         private readonly IConfigurationManager config;
         private readonly IEnvironment env;
         private readonly IFile file;
 
         private readonly ILogger logger;
+        private readonly string defaultApiKeyPropertiesFileLocation;
 
         // Instance fields
         private string apiKeyId;
@@ -58,6 +56,17 @@ namespace Stormpath.SDK.Impl.Api
             this.logger = logger != null
                 ? logger
                 : new NullLogger();
+
+            this.defaultApiKeyPropertiesFileLocation =
+                System.IO.Path.Combine(this.GetHomePath(), ".stormpath\\", "apiKey.properties");
+        }
+
+        private string GetHomePath()
+        {
+            if (PlatformHelper.IsPlatformUnix())
+                return this.env.GetEnvironmentVariable("HOME");
+
+            return this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
         }
 
         IClientApiKeyBuilder IClientApiKeyBuilder.SetId(string id)
@@ -199,13 +208,13 @@ namespace Stormpath.SDK.Impl.Api
         {
             try
             {
-                var source = this.file.ReadAllText(DefaultApiKeyPropertiesFileLocation);
+                var source = this.file.ReadAllText(this.defaultApiKeyPropertiesFileLocation);
                 return new Properties(source);
             }
             catch (Exception ex)
             {
                 var msg =
-                    $"Unable to find or load default API Key properties file [{DefaultApiKeyPropertiesFileLocation}] " +
+                    $"Unable to find or load default API Key properties file [{this.defaultApiKeyPropertiesFileLocation}] " +
                     "This can safely be ignored as this is a fallback location - other more specific locations will be checked.\n" +
                     $"Exception: '{ex.Message}' at '{ex.Source}'";
                 this.logger.Trace(msg);
@@ -304,7 +313,7 @@ namespace Stormpath.SDK.Impl.Api
             if (string.IsNullOrEmpty(input))
                 return input;
 
-            if (PlatformHelper.IsRunningOnMono())
+            if (PlatformHelper.IsPlatformUnix())
                 return input;
 
             if (!input.StartsWith("~"))

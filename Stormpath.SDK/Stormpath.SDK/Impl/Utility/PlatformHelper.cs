@@ -29,9 +29,10 @@ namespace Stormpath.SDK.Impl.Utility
         });
 
         public static bool IsRunningOnMono()
-        {
-            return IsRunningOnMonoValue.Value;
-        }
+            => IsRunningOnMonoValue.Value;
+
+        public static bool IsPlatformUnix()
+            => Environment.OSVersion.Platform == PlatformID.Unix;
 
         public static string GetMonoRuntimeVersion()
         {
