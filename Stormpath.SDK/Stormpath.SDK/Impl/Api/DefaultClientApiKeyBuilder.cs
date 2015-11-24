@@ -104,7 +104,7 @@ namespace Stormpath.SDK.Impl.Api
 
             // 2. Try file location specified by environment variables
             var envFileLocation = this.env.GetEnvironmentVariable("STORMPATH_API_KEY_FILE");
-            envFileLocation = this.ExpandHomePathString(envFileLocation);
+            envFileLocation = this.ResolveHomePath(envFileLocation);
             if (!string.IsNullOrEmpty(envFileLocation))
             {
                 this.logger.Trace($"Found STORMPATH_API_KEY_FILE environment variable. Value: '{envFileLocation}'");
@@ -128,7 +128,7 @@ namespace Stormpath.SDK.Impl.Api
 
             // 4. Try file location specified by web.config/app.config
             var appConfigFileLocation = this.config.AppSettings?["STORMPATH_API_KEY_FILE"];
-            appConfigFileLocation = this.ExpandHomePathString(appConfigFileLocation);
+            appConfigFileLocation = this.ResolveHomePath(appConfigFileLocation);
             if (!string.IsNullOrEmpty(appConfigFileLocation))
             {
                 this.logger.Trace($"Found STORMPATH_API_KEY_FILE key in .config file. Value: '{appConfigFileLocation}'");
@@ -153,7 +153,7 @@ namespace Stormpath.SDK.Impl.Api
             // 6. Try configured property file
             if (!string.IsNullOrEmpty(this.apiKeyFilePath))
             {
-                this.apiKeyFilePath = this.ExpandHomePathString(this.apiKeyFilePath);
+                this.apiKeyFilePath = this.ResolveHomePath(this.apiKeyFilePath);
                 this.logger.Trace($"Using specified API Key file path '{this.apiKeyFilePath}'");
 
                 var fileProperties = this.GetPropertiesFromFile();
@@ -196,7 +196,7 @@ namespace Stormpath.SDK.Impl.Api
 
         private Properties GetDefaultApiKeyFileProperties()
         {
-            var expandedLocation = this.ExpandHomePathString(DefaultApiKeyFileLocation);
+            var expandedLocation = this.ResolveHomePath(DefaultApiKeyFileLocation);
 
             try
             {
@@ -301,20 +301,26 @@ namespace Stormpath.SDK.Impl.Api
             }
         }
 
-        private string ExpandHomePathString(string input)
+        private string ResolveHomePath(string input)
         {
             if (string.IsNullOrEmpty(input))
                 return input;
 
-            if (PlatformHelper.IsPlatformUnix())
-                return input;
+			if (!input.StartsWith("~"))
+				return input;
 
-            if (!input.StartsWith("~"))
-                return input;
+			string homePath = null;
 
-            var homePath = this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+			if (PlatformHelper.IsPlatformUnix())
+			{
+				homePath = this.env.GetEnvironmentVariable("HOME");
+			}
+			else
+			{
+				homePath = this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+			}
 
-            return System.IO.Path.Combine(homePath, input.Replace("~\\", string.Empty));
+			return System.IO.Path.Combine(homePath, input.Replace($"~{System.IO.Path.DirectorySeparatorChar}", string.Empty));
         }
     }
 }

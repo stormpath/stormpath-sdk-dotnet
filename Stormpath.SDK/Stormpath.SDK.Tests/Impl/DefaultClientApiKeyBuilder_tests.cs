@@ -77,11 +77,12 @@ namespace Stormpath.SDK.Tests.Impl
             public With_default_properties_file()
             {
                 this.env = Substitute.For<IEnvironment>();
-                this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%").Returns("~");
+				this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%").Returns("~fake");
+				this.env.GetEnvironmentVariable("HOME").Returns("~fake");
 
                 this.defaultLocation = PlatformHelper.IsPlatformUnix()
-                    ? @"~/.stormpath/apiKey.properties"
-                    : @"~\.stormpath\apiKey.properties";
+                    ? @"~fake/.stormpath/apiKey.properties"
+                    : @"~fake\.stormpath\apiKey.properties";
 
                 this.file = Substitute.For<IFile>();
                 this.file.ReadAllText(this.defaultLocation).Returns(this.fileContents);
