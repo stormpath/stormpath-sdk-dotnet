@@ -27,7 +27,7 @@ using Stormpath.SDK.Linq.Expandables;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
-namespace Stormpath.SDK.Linq
+namespace Stormpath.SDK
 {
     public static class RetrievalOptionExpandExtensions
     {
