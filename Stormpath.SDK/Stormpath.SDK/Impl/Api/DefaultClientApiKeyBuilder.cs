@@ -31,13 +31,14 @@ namespace Stormpath.SDK.Impl.Api
         private static readonly string DefaultDirectIdPropertyName = "STORMPATH_API_KEY_ID";
         private static readonly string DefaultDirectSecretPropertyName = "STORMPATH_API_KEY_SECRET";
 
+        private static readonly string DefaultApiKeyFileLocation = System.IO.Path.Combine("~", ".stormpath", "apiKey.properties");
+
         // Wrappers for static .NET Framework calls (for easier unit testing)
         private readonly IConfigurationManager config;
         private readonly IEnvironment env;
         private readonly IFile file;
 
         private readonly ILogger logger;
-        private readonly string defaultApiKeyPropertiesFileLocation;
 
         // Instance fields
         private string apiKeyId;
@@ -56,9 +57,6 @@ namespace Stormpath.SDK.Impl.Api
             this.logger = logger != null
                 ? logger
                 : new NullLogger();
-
-            this.defaultApiKeyPropertiesFileLocation =
-                System.IO.Path.Combine(this.GetHomePath(), ".stormpath\\", "apiKey.properties");
         }
 
         private string GetHomePath()
@@ -206,15 +204,18 @@ namespace Stormpath.SDK.Impl.Api
 
         private Properties GetDefaultApiKeyFileProperties()
         {
+            var expandedLocation = this.ExpandHomePathString(DefaultApiKeyFileLocation);
+
             try
             {
-                var source = this.file.ReadAllText(this.defaultApiKeyPropertiesFileLocation);
+                var source = this.file.ReadAllText(expandedLocation);
+
                 return new Properties(source);
             }
             catch (Exception ex)
             {
                 var msg =
-                    $"Unable to find or load default API Key properties file [{this.defaultApiKeyPropertiesFileLocation}] " +
+                    $"Unable to find or load default API Key properties file [{expandedLocation}] " +
                     "This can safely be ignored as this is a fallback location - other more specific locations will be checked.\n" +
                     $"Exception: '{ex.Message}' at '{ex.Source}'";
                 this.logger.Trace(msg);
@@ -319,8 +320,9 @@ namespace Stormpath.SDK.Impl.Api
             if (!input.StartsWith("~"))
                 return input;
 
-            var homePath = this.env.ExpandEnvironmentVariables("%homedrive%%homepath%");
-            return homePath + input.TrimStart('~');
+            var homePath = this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+
+            return System.IO.Path.Combine(homePath, input.Replace("~\\", string.Empty));
         }
     }
 }
