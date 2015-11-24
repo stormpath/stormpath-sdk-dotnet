@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Tests.Impl
                 "apiKey.id = 144JVZINOF5EBNCMG9EXAMPLE\r\n" +
                 "apiKey.secret = lWxOiKqKPNwJmSldbiSkEbkNjgh2uRSNAb+AEXAMPLE";
 
-            private IClientApiKeyBuilder builder;
+            private readonly IClientApiKeyBuilder builder;
             private readonly IEnvironment env;
             private readonly IFile file;
             private readonly string defaultLocation;
@@ -77,9 +77,11 @@ namespace Stormpath.SDK.Tests.Impl
             public With_default_properties_file()
             {
                 this.env = Substitute.For<IEnvironment>();
-                this.env.GetEnvironmentVariable("HOME").Returns("~fakes");
-                this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%").Returns("~fakes");
-                this.defaultLocation = @"~fakes\.stormpath\apiKey.properties";
+                this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%").Returns("~");
+
+                this.defaultLocation = PlatformHelper.IsPlatformUnix()
+                    ? @"~/.stormpath/apiKey.properties"
+                    : @"~\.stormpath\apiKey.properties";
 
                 this.file = Substitute.For<IFile>();
                 this.file.ReadAllText(this.defaultLocation).Returns(this.fileContents);

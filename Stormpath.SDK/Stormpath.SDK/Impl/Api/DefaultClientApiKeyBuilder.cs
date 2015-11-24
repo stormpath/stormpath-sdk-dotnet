@@ -59,14 +59,6 @@ namespace Stormpath.SDK.Impl.Api
                 : new NullLogger();
         }
 
-        private string GetHomePath()
-        {
-            if (PlatformHelper.IsPlatformUnix())
-                return this.env.GetEnvironmentVariable("HOME");
-
-            return this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
-        }
-
         IClientApiKeyBuilder IClientApiKeyBuilder.SetId(string id)
         {
             this.apiKeyId = id;
