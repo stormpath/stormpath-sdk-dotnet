@@ -184,6 +184,7 @@
     <Compile Include="Impl\Utility\WindowsVersion_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LoggerExtensions_tests.cs" />
+    <Compile Include="User_agent_tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
