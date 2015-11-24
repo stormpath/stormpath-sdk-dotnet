@@ -95,6 +95,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Async\Account_tests.vb" />
+    <Compile Include="Async\Expansion_linq_tests.vb" />
+    <Compile Include="Async\Expansion_retrieval_tests.vb" />
     <Compile Include="Async\Tenant_tests.vb" />
     <Compile Include="IntegrationTestCollection.vb" />
     <Compile Include="Linq_test.vb" />
@@ -113,6 +115,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Sync\Account_tests.vb" />
+    <Compile Include="Sync\Expansion_linq_tests.vb" />
+    <Compile Include="Sync\Expansion_retrieval_tests.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
