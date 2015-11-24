@@ -14,12 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Linq;
-
 namespace Stormpath.SDK.Resource
 {
     /// <summary>
@@ -28,6 +22,5 @@ namespace Stormpath.SDK.Resource
     /// <typeparam name="T">The resource type being retrieved.</typeparam>
     public interface IRetrievalOptions<T> : ICreationOptions
     {
-        //todo remove?
     }
 }

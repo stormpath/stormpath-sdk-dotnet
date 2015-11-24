@@ -25,7 +25,6 @@ namespace Stormpath.SDK.Impl.Linq.Executor
 {
     internal sealed class NullExecutor<TResult> : IAsyncExecutor<TResult>
     {
-        //todo
         CollectionResourceQueryModel IAsyncExecutor<TResult>.CompiledModel
         {
             get
@@ -34,7 +33,6 @@ namespace Stormpath.SDK.Impl.Linq.Executor
             }
         }
 
-        //todo
         string IAsyncExecutor<TResult>.CurrentHref
         {
             get
