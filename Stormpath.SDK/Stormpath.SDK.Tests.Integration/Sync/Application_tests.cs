@@ -636,12 +636,12 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var testDirectory = client
                 .Instantiate<IDirectory>()
-                .SetName($".NET Test {this.fixture.TestRunIdentifier} Add Directory As AccountStore By Name");
+                .SetName($".NET IT {this.fixture.TestRunIdentifier} Add Directory As AccountStore By Name");
             client.CreateDirectory(testDirectory);
             testDirectory.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedDirectoryHrefs.Add(testDirectory.Href);
 
-            var mapping = createdApplication.AddAccountStore($".NET Test {this.fixture.TestRunIdentifier} Add Directory As AccountStore By Name");
+            var mapping = createdApplication.AddAccountStore($".NET IT {this.fixture.TestRunIdentifier} Add Directory As AccountStore By Name");
 
             mapping.GetAccountStore().Href.ShouldBe(testDirectory.Href);
             mapping.GetApplication().Href.ShouldBe(createdApplication.Href);
@@ -678,12 +678,12 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var testGroup = client
                 .Instantiate<IGroup>()
-                .SetName($".NET Test {this.fixture.TestRunIdentifier} Add Group As AccountStore By Name (Sync)");
+                .SetName($".NET IT {this.fixture.TestRunIdentifier} Add Group As AccountStore By Name (Sync)");
             createdApplication.CreateGroup(testGroup);
             testGroup.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedGroupHrefs.Add(testGroup.Href);
 
-            var newMapping = createdApplication.AddAccountStore($".NET Test {this.fixture.TestRunIdentifier} Add Group As AccountStore By Name (Sync)");
+            var newMapping = createdApplication.AddAccountStore($".NET IT {this.fixture.TestRunIdentifier} Add Group As AccountStore By Name (Sync)");
 
             newMapping.GetAccountStore().Href.ShouldBe(testGroup.Href);
             newMapping.GetApplication().Href.ShouldBe(createdApplication.Href);

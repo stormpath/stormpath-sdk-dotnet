@@ -75,7 +75,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim luke = Await application.GetAccounts().Where(Function(x) x.Email.StartsWith("lskywalker")).SingleAsync()
+            Dim luke = Await application.GetAccounts() _
+                .Where(Function(x) x.Email.StartsWith("lskywalker")) _
+                .SingleAsync()
 
             Dim providerData = Await luke.GetProviderDataAsync()
             providerData.Href.ShouldNotBeNullOrEmpty()
@@ -88,7 +90,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim leia = Await application.GetAccounts().Where(Function(a) a.Email = "leia.organa@alderaan.core").SingleAsync()
+            Dim leia = Await application.GetAccounts() _
+                .Where(Function(a) a.Email = "leia.organa@alderaan.core") _
+                .SingleAsync()
 
             leia.SetMiddleName("Organa")
             leia.SetSurname("Solo")
@@ -104,7 +108,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim chewie = Await application.GetAccounts().Where(Function(a) a.Email = "chewie@kashyyyk.rim").SingleAsync()
+            Dim chewie = Await application.GetAccounts() _
+                .Where(Function(a) a.Email = "chewie@kashyyyk.rim") _
+                .SingleAsync()
 
             chewie.SetUsername($"rwaaargh-{fixture.TestRunIdentifier}")
             Await chewie.SaveAsync(Function(response) response.Expand(Function(x) x.GetCustomData))
@@ -116,7 +122,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim luke = Await application.GetAccounts().Filter("Luke").SingleAsync()
+            Dim luke = Await application.GetAccounts() _
+                .Filter("Luke") _
+                .SingleAsync()
 
             ' Verify data from IntegrationTestData
             Dim directoryHref = (Await luke.GetDirectoryAsync()).Href
@@ -129,7 +137,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim leia = Await application.GetAccounts().Filter("Leia").SingleAsync()
+            Dim leia = Await application.GetAccounts() _
+                .Filter("Leia") _
+                .SingleAsync()
 
             ' Verify data from IntegrationTestData
             Dim tenantHref = (Await leia.GetTenantAsync()).Href
@@ -142,7 +152,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim coreCitizens = Await application.GetAccounts().Where(Function(acct) acct.Email.EndsWith(".core")).ToListAsync()
+            Dim coreCitizens = Await application.GetAccounts() _
+                .Where(Function(acct) acct.Email.EndsWith(".core")) _
+                .ToListAsync()
 
             ' Verify data from IntegrationTestData
             coreCitizens.Count.ShouldBe(2)
@@ -162,7 +174,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim chewie = Await application.GetAccounts().Where(Function(a) a.GivenName = "Chewbacca").SingleAsync()
+            Dim chewie = Await application.GetAccounts() _
+                .Where(Function(a) a.GivenName = "Chewbacca") _
+                .SingleAsync()
 
             ' Verify data from IntegrationTestData
             chewie.FullName.ShouldBe("Chewbacca the Wookiee")
@@ -174,7 +188,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim palpatine = Await application.GetAccounts().Where(Function(a) a.Surname = "Palpatine").SingleAsync()
+            Dim palpatine = Await application.GetAccounts() _
+                .Where(Function(a) a.Surname = "Palpatine") _
+                .SingleAsync()
 
             ' Verify data from IntegrationTestData
             palpatine.FullName.ShouldBe("Emperor Palpatine")
@@ -186,7 +202,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim chewie = Await application.GetAccounts().Where(Function(a) a.MiddleName = "the").SingleAsync()
+            Dim chewie = Await application.GetAccounts() _
+                .Where(Function(a) a.MiddleName = "the") _
+                .SingleAsync()
 
             ' Verify data from IntegrationTestData
             chewie.FullName.ShouldBe("Chewbacca the Wookiee")
@@ -198,7 +216,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim vader = Await application.GetAccounts().Where(Function(a) a.Username.Equals($"lordvader-{fixture.TestRunIdentifier}")).SingleAsync()
+            Dim vader = Await application.GetAccounts() _
+                .Where(Function(a) a.Username.Equals($"lordvader-{fixture.TestRunIdentifier}")) _
+                .SingleAsync()
 
             ' Verify data from IntegrationTestData
             vader.Email.ShouldBe("vader@galacticempire.co")
@@ -210,7 +230,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim tarkin = Await application.GetAccounts().Where(Function(x) x.Status = AccountStatus.Disabled).SingleAsync()
+            Dim tarkin = Await application.GetAccounts() _
+                .Where(Function(x) x.Status = AccountStatus.Disabled) _
+                .SingleAsync()
 
             ' Verify data from IntegrationTestData
             tarkin.FullName.ShouldBe("Wilhuff Tarkin")
@@ -228,7 +250,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Me.fixture.CreatedAccountHrefs.Add(newAccount.Href)
 
             Dim rightBeforeCreation = newAccount.CreatedAt.Subtract(TimeSpan.FromSeconds(1))
-            Dim createdRecently = Await application.GetAccounts().Where(Function(x) x.CreatedAt >= rightBeforeCreation).ToListAsync()
+            Dim createdRecently = Await application.GetAccounts() _
+                .Where(Function(x) x.CreatedAt >= rightBeforeCreation) _
+                .ToListAsync()
             Dim wedge = createdRecently.Where(Function(x) x.Email = "wedge@gus-treta.corellia.core").[Single]()
             wedge.FullName.ShouldBe("Wedge Antilles")
 
@@ -257,7 +281,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim filtered = Await application.GetAccounts().Filter("lo").ToListAsync()
+            Dim filtered = Await application.GetAccounts() _
+                .Filter("lo") _
+                .ToListAsync()
 
             filtered.Count.ShouldBeGreaterThanOrEqualTo(3)
             filtered.ShouldContain(Function(acct) acct.FullName = "Han Solo")
@@ -271,7 +297,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim accountsSortedByLastName = Await application.GetAccounts().OrderBy(Function(x) x.Surname).ToListAsync()
+            Dim accountsSortedByLastName = Await application _
+                .GetAccounts().OrderBy(Function(x) x.Surname) _
+                .ToListAsync()
 
             Dim lando = accountsSortedByLastName.First()
             lando.FullName.ShouldBe("Lando Calrissian")
@@ -283,7 +311,10 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim accountsSortedByMultiple = Await application.GetAccounts().OrderByDescending(Function(x) x.Username).OrderByDescending(Function(x) x.Surname).ToListAsync()
+            Dim accountsSortedByMultiple = Await application.GetAccounts() _
+                .OrderByDescending(Function(x) x.Username) _
+                .OrderByDescending(Function(x) x.Surname) _
+                .ToListAsync()
 
             Dim tarkin = accountsSortedByMultiple.First()
             tarkin.FullName.ShouldBe("Wilhuff Tarkin")
@@ -318,7 +349,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim anyDroids = Await application.GetAccounts().Where(Function(x) x.Email.EndsWith("droids.co")).AnyAsync()
+            Dim anyDroids = Await application.GetAccounts() _
+                .Where(Function(x) x.Email.EndsWith("droids.co")) _
+                .AnyAsync()
 
             anyDroids.ShouldBeFalse()
         End Function
@@ -329,7 +362,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim anyWookiees = Await application.GetAccounts().Where(Function(x) x.Email.EndsWith("kashyyyk.rim")).AnyAsync()
+            Dim anyWookiees = Await application.GetAccounts() _
+                .Where(Function(x) x.Email.EndsWith("kashyyyk.rim")) _
+                .AnyAsync()
 
             anyWookiees.ShouldBeTrue()
         End Function
@@ -391,7 +426,11 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim account = client.Instantiate(Of IAccount)().SetGivenName("Galen").SetSurname("Marek").SetEmail("gmarek@kashyyk.rim").SetPassword(New RandomPassword(12))
+            Dim account = client.Instantiate(Of IAccount)() _
+                .SetGivenName("Galen") _
+                .SetSurname("Marek") _
+                .SetEmail("gmarek@kashyyk.rim") _
+                .SetPassword(New RandomPassword(12))
             Await application.CreateAccountAsync(account, Sub(opt)
                                                               opt.ResponseOptions.Expand(Function(x) x.GetCustomData)
                                                           End Sub)
@@ -443,7 +482,11 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
             Dim accountStore = Await application.GetDefaultAccountStoreAsync()
 
-            Dim result = Await application.AuthenticateAccountAsync(Function(request) request.SetUsernameOrEmail($"sonofthesuns-{fixture.TestRunIdentifier}").SetPassword("whataPieceofjunk$1138").SetAccountStore(accountStore))
+            Dim result = Await application.AuthenticateAccountAsync(Sub(request)
+                                                                        request.SetUsernameOrEmail($"sonofthesuns-{fixture.TestRunIdentifier}")
+                                                                        request.SetPassword("whataPieceofjunk$1138")
+                                                                        request.SetAccountStore(accountStore)
+                                                                    End Sub)
             result.ShouldBeAssignableTo(Of IAuthenticationResult)()
             result.Success.ShouldBeTrue()
 

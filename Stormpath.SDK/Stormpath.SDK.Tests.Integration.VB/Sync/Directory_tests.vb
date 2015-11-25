@@ -60,7 +60,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
-            Dim directoryName = "My New Disabled Directory (.NET IT {this.fixture.TestRunIdentifier})"
+            Dim directoryName = $"My New Disabled Directory (.NET IT {fixture.TestRunIdentifier})"
             Dim created = tenant.CreateDirectory(directoryName, "A great directory for my app", DirectoryStatus.Disabled)
             created.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedDirectoryHrefs.Add(created.Href)
@@ -80,7 +80,10 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
-            Dim directory = client.Instantiate(Of IDirectory)().SetName("My New Directory With Options (.NET IT {this.fixture.TestRunIdentifier}) - Sync").SetDescription("Another great directory for my app").SetStatus(DirectoryStatus.Disabled)
+            Dim directory = client.Instantiate(Of IDirectory)() _
+                .SetName($"My New Directory With Options (.NET IT {fixture.TestRunIdentifier}) - Sync") _
+                .SetDescription("Another great directory for my app") _
+                .SetStatus(DirectoryStatus.Disabled)
 
             tenant.CreateDirectory(directory, Function(opt) opt.ResponseOptions.Expand(Function(x) x.GetCustomData()))
 
@@ -98,7 +101,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
-            Dim directoryName = "My New Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})"
+            Dim directoryName = $"My New Directory (.NET IT {fixture.TestRunIdentifier} - {clientBuilder.Name})"
             Dim newDirectory = client.Instantiate(Of IDirectory)()
             newDirectory.SetName(directoryName)
             newDirectory.SetDescription("Put some accounts here!")
@@ -128,7 +131,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
-            Dim directoryName = "My New Directory #2 (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})"
+            Dim directoryName = $"My New Directory #2 (.NET IT {fixture.TestRunIdentifier} - {clientBuilder.Name})"
             Dim newDirectory = client.Instantiate(Of IDirectory)()
             newDirectory.SetName(directoryName)
             newDirectory.SetDescription("Put some accounts here!")
@@ -153,11 +156,13 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
-            Dim directoryName = "My New Facebook Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name} Sync)"
+            Dim directoryName = $"My New Facebook Directory (.NET IT {fixture.TestRunIdentifier} - {clientBuilder.Name} Sync)"
 
             Dim instance = client.Instantiate(Of IDirectory)()
             instance.SetName(directoryName)
-            Dim created = tenant.CreateDirectory(instance, Function(options) options.ForProvider(client.Providers().Facebook().Builder().SetClientId("foobar").SetClientSecret("secret123!").Build()))
+            Dim created = tenant.CreateDirectory(instance, Function(options)
+                                                               Return options.ForProvider(client.Providers().Facebook().Builder().SetClientId("foobar").SetClientSecret("secret123!").Build())
+                                                           End Function)
 
             created.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedDirectoryHrefs.Add(created.Href)
@@ -183,11 +188,13 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
-            Dim directoryName = "My New Github Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name} Sync)"
+            Dim directoryName = $"My New Github Directory (.NET IT {fixture.TestRunIdentifier} - {clientBuilder.Name} Sync)"
 
             Dim instance = client.Instantiate(Of IDirectory)()
             instance.SetName(directoryName)
-            Dim created = tenant.CreateDirectory(instance, Function(options) options.ForProvider(client.Providers().Github().Builder().SetClientId("foobar").SetClientSecret("secret123!").Build()))
+            Dim created = tenant.CreateDirectory(instance, Function(options)
+                                                               Return options.ForProvider(client.Providers().Github().Builder().SetClientId("foobar").SetClientSecret("secret123!").Build())
+                                                           End Function)
 
             created.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedDirectoryHrefs.Add(created.Href)
@@ -213,11 +220,13 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
-            Dim directoryName = "My New Google Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name} Sync)"
+            Dim directoryName = $"My New Google Directory (.NET IT {fixture.TestRunIdentifier} - {clientBuilder.Name} Sync)"
 
             Dim instance = client.Instantiate(Of IDirectory)()
             instance.SetName(directoryName)
-            Dim created = tenant.CreateDirectory(instance, Function(options) options.ForProvider(client.Providers().Google().Builder().SetClientId("foobar").SetClientSecret("secret123!").SetRedirectUri("foo://bar").Build()))
+            Dim created = tenant.CreateDirectory(instance, Function(options)
+                                                               Return options.ForProvider(client.Providers().Google().Builder().SetClientId("foobar").SetClientSecret("secret123!").SetRedirectUri("foo://bar").Build())
+                                                           End Function)
 
             created.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedDirectoryHrefs.Add(created.Href)
@@ -244,11 +253,13 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
-            Dim directoryName = "My New LinkedIn Directory (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name} Sync)"
+            Dim directoryName = $"My New LinkedIn Directory (.NET IT {fixture.TestRunIdentifier} - {clientBuilder.Name} Sync)"
 
             Dim instance = client.Instantiate(Of IDirectory)()
             instance.SetName(directoryName)
-            Dim created = tenant.CreateDirectory(instance, Function(options) options.ForProvider(client.Providers().LinkedIn().Builder().SetClientId("foobar").SetClientSecret("secret123!").Build()))
+            Dim created = tenant.CreateDirectory(instance, Function(options)
+                                                               Return options.ForProvider(client.Providers().LinkedIn().Builder().SetClientId("foobar").SetClientSecret("secret123!").Build())
+                                                           End Function)
 
             created.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedDirectoryHrefs.Add(created.Href)

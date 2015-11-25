@@ -36,7 +36,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         Private Async Function CreateRandomAccountAsync(client As IClient) As Task(Of IAccount)
             Dim accountObject = client.Instantiate(Of IAccount)()
-            accountObject.SetEmail(New RandomEmail("testing.foo"))
+            accountObject.SetEmail(New RandomEmail("testing.foo.vb"))
             accountObject.SetGivenName("Test")
             accountObject.SetSurname("Testerman")
             accountObject.SetPassword(New RandomPassword(12))

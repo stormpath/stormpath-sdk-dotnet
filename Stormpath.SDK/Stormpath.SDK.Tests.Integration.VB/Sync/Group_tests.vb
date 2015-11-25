@@ -103,7 +103,10 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim directory = client.GetResource(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
 
-            Dim droids = client.Instantiate(Of IGroup)().SetName("Droids (.NET ITs {this.fixture.TestRunIdentifier}) - Sync").SetDescription("Mechanical entities").SetStatus(GroupStatus.Enabled)
+            Dim droids = client.Instantiate(Of IGroup)() _
+                .SetName($"Droids (.NET ITs {fixture.TestRunIdentifier}) - Sync") _
+                .SetDescription("Mechanical entities") _
+                .SetStatus(GroupStatus.Enabled)
 
             directory.CreateGroup(droids)
             Me.fixture.CreatedGroupHrefs.Add(droids.Href)
@@ -124,7 +127,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim directory = client.GetResource(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
 
-            Dim newGroup = client.Instantiate(Of IGroup)().SetName("Another Group (.NET ITs {this.fixture.TestRunIdentifier})").SetStatus(GroupStatus.Disabled)
+            Dim newGroup = client.Instantiate(Of IGroup)() _
+                .SetName($"Another Group (.NET ITs {fixture.TestRunIdentifier})") _
+                .SetStatus(GroupStatus.Disabled)
 
             directory.CreateGroup(newGroup)
             Me.fixture.CreatedGroupHrefs.Add(newGroup.Href)
@@ -144,7 +149,10 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
             Dim humans = client.GetResource(Of IGroup)(Me.fixture.PrimaryGroupHref)
 
-            Dim lando = app.GetAccounts().Synchronously().Where(Function(x) x.Email.StartsWith("lcalrissian")).[Single]()
+            Dim lando = app.GetAccounts() _
+                .Synchronously() _
+                .Where(Function(x) x.Email.StartsWith("lcalrissian")) _
+                .[Single]()
             Dim membership = humans.AddAccount(lando)
 
             membership.ShouldNotBeNull()
@@ -162,7 +170,10 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
             Dim humans = client.GetResource(Of IGroup)(Me.fixture.PrimaryGroupHref)
 
-            Dim lando = app.GetAccounts().Synchronously().Where(Function(x) x.Email.StartsWith("lcalrissian")).[Single]()
+            Dim lando = app.GetAccounts() _
+                .Synchronously() _
+                .Where(Function(x) x.Email.StartsWith("lcalrissian")) _
+                .[Single]()
             Dim membership = humans.AddAccount(lando)
 
             ' Should also be seen in the master membership list
@@ -183,7 +194,10 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim leia = app.GetAccounts().Synchronously().Where(Function(x) x.Email.StartsWith("leia.organa")).[Single]()
+            Dim leia = app.GetAccounts() _
+                .Synchronously() _
+                .Where(Function(x) x.Email.StartsWith("leia.organa")) _
+                .[Single]()
             leia.AddGroup(Me.fixture.PrimaryGroupHref)
 
             leia.IsMemberOfGroup(Me.fixture.PrimaryGroupHref).ShouldBeTrue()
@@ -198,7 +212,10 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
             Dim groupName = client.GetResource(Of IGroup)(Me.fixture.PrimaryGroupHref).Name
 
-            Dim han = app.GetAccounts().Synchronously().Where(Function(x) x.Email.StartsWith("han.solo")).[Single]()
+            Dim han = app.GetAccounts() _
+                .Synchronously() _
+                .Where(Function(x) x.Email.StartsWith("han.solo")) _
+                .[Single]()
             han.AddGroup(groupName)
 
             han.IsMemberOfGroup(Me.fixture.PrimaryGroupHref).ShouldBeTrue()
@@ -213,7 +230,10 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
             Dim humans = client.GetResource(Of IGroup)(Me.fixture.PrimaryGroupHref)
 
-            Dim leia = app.GetAccounts().Synchronously().Where(Function(x) x.Email.StartsWith("leia.organa")).[Single]()
+            Dim leia = app.GetAccounts() _
+                .Synchronously() _
+                .Where(Function(x) x.Email.StartsWith("leia.organa")) _
+                .[Single]()
             humans.AddAccount(leia.Href)
 
             leia.IsMemberOfGroup(Me.fixture.PrimaryGroupHref).ShouldBeTrue()
@@ -228,7 +248,10 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
             Dim humans = client.GetResource(Of IGroup)(Me.fixture.PrimaryGroupHref)
 
-            Dim han = app.GetAccounts().Synchronously().Where(Function(x) x.Email.StartsWith("han.solo")).[Single]()
+            Dim han = app.GetAccounts() _
+                .Synchronously() _
+                .Where(Function(x) x.Email.StartsWith("han.solo")) _
+                .[Single]()
             humans.AddAccount(han.Email)
 
             han.IsMemberOfGroup(Me.fixture.PrimaryGroupHref).ShouldBeTrue()
@@ -243,7 +266,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
             Dim instance = client.Instantiate(Of IGroup)()
-            instance.SetName(".NET ITs New Test Group {this.fixture.TestRunIdentifier} - Sync")
+            instance.SetName($".NET ITs New Test Group {fixture.TestRunIdentifier} - Sync")
             instance.SetDescription("A nu start")
             instance.SetStatus(GroupStatus.Disabled)
 
@@ -251,7 +274,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             created.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedGroupHrefs.Add(created.Href)
 
-            created.Name.ShouldBe(".NET ITs New Test Group {this.fixture.TestRunIdentifier} - Sync")
+            created.Name.ShouldBe($".NET ITs New Test Group {fixture.TestRunIdentifier} - Sync")
             created.Description.ShouldBe("A nu start")
             created.Status.ShouldBe(GroupStatus.Disabled)
 
@@ -266,7 +289,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim directory = client.GetResource(Of IApplication)(Me.fixture.PrimaryDirectoryHref)
 
             Dim instance = client.Instantiate(Of IGroup)()
-            instance.SetName(".NET ITs New Test Group #2 {this.fixture.TestRunIdentifier} - Sync")
+            instance.SetName($".NET ITs New Test Group #2 {fixture.TestRunIdentifier} - Sync")
             instance.SetDescription("A nu start")
             instance.SetStatus(GroupStatus.Enabled)
 
@@ -274,7 +297,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             created.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedGroupHrefs.Add(created.Href)
 
-            created.Name.ShouldBe(".NET ITs New Test Group #2 {this.fixture.TestRunIdentifier} - Sync")
+            created.Name.ShouldBe($".NET ITs New Test Group #2 {fixture.TestRunIdentifier} - Sync")
             created.Description.ShouldBe("A nu start")
             created.Status.ShouldBe(GroupStatus.Enabled)
 
@@ -289,7 +312,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
             Dim instance = client.Instantiate(Of IGroup)()
-            instance.SetName(".NET ITs Custom Data Group {this.fixture.TestRunIdentifier} - Sync")
+            instance.SetName($".NET ITs Custom Data Group {fixture.TestRunIdentifier} - Sync")
             instance.CustomData.Put("isNeat", True)
             instance.CustomData.Put("roleBasedSecurity", "pieceOfCake")
 
@@ -310,7 +333,8 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            Dim group = client.Instantiate(Of IGroup)().SetName(".NET ITs Custom Data Group #2 ({this.fixture.TestRunIdentifier} - {clientBuilder.Name})")
+            Dim group = client.Instantiate(Of IGroup)() _
+                .SetName($".NET ITs Custom Data Group #2 ({fixture.TestRunIdentifier} - {clientBuilder.Name})")
 
             app.CreateGroup(group, Function(opt) opt.ResponseOptions.Expand(Function(x) x.GetCustomData()))
 

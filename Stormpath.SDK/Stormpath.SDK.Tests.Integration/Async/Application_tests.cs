@@ -631,12 +631,12 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var testDirectory = client
                 .Instantiate<IDirectory>()
-                .SetName($".NET Test {this.fixture.TestRunIdentifier} Add Directory As AccountStore By Name");
+                .SetName($".NET IT {this.fixture.TestRunIdentifier} Add Directory As AccountStore By Name");
             await client.CreateDirectoryAsync(testDirectory);
             testDirectory.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedDirectoryHrefs.Add(testDirectory.Href);
 
-            var mapping = await createdApplication.AddAccountStoreAsync($".NET Test {this.fixture.TestRunIdentifier} Add Directory As AccountStore By Name");
+            var mapping = await createdApplication.AddAccountStoreAsync($".NET IT {this.fixture.TestRunIdentifier} Add Directory As AccountStore By Name");
 
             (await mapping.GetAccountStoreAsync()).Href.ShouldBe(testDirectory.Href);
             (await mapping.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
@@ -673,12 +673,12 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var testGroup = client
                 .Instantiate<IGroup>()
-                .SetName($".NET Test {this.fixture.TestRunIdentifier} Add Group As AccountStore By Name");
+                .SetName($".NET IT {this.fixture.TestRunIdentifier} Add Group As AccountStore By Name");
             await createdApplication.CreateGroupAsync(testGroup);
             testGroup.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedGroupHrefs.Add(testGroup.Href);
 
-            var newMapping = await createdApplication.AddAccountStoreAsync($".NET Test {this.fixture.TestRunIdentifier} Add Group As AccountStore By Name");
+            var newMapping = await createdApplication.AddAccountStoreAsync($".NET IT {this.fixture.TestRunIdentifier} Add Group As AccountStore By Name");
 
             (await newMapping.GetAccountStoreAsync()).Href.ShouldBe(testGroup.Href);
             (await newMapping.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);

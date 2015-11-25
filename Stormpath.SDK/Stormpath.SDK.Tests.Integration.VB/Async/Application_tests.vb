@@ -62,7 +62,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim newApplicationName = ".NET IT {this.fixture.TestRunIdentifier} Application #2"
+            Dim newApplicationName = $".NET IT {fixture.TestRunIdentifier} Application #2"
             Dim createdApplication = Await tenant.CreateApplicationAsync(newApplicationName, createDirectory:=False)
 
             createdApplication.Href.ShouldNotBeNullOrEmpty()
@@ -112,7 +112,8 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim newApp = client.Instantiate(Of IApplication)().SetName(".NET IT {this.fixture.TestRunIdentifier} Application #3")
+            Dim newApp = client.Instantiate(Of IApplication)() _
+                .SetName($".NET IT {fixture.TestRunIdentifier} Application #3")
 
             Await tenant.CreateApplicationAsync(newApp, Function(opt) opt.ResponseOptions.Expand(Function(x) x.GetCustomData()))
 
@@ -131,7 +132,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim application = Await tenant.GetApplications().Where(Function(app) app.Name.StartsWith(".NET IT (disabled) {this.fixture.TestRunIdentifier}")).SingleAsync()
+            Dim application = Await tenant.GetApplications() _
+                .Where(Function(app) app.Name.StartsWith($".NET IT (disabled) {fixture.TestRunIdentifier}")) _
+                .SingleAsync()
 
             application.SetDescription("The Battle of Yavin - Victory!")
             Dim saveResult = Await application.SaveAsync()
@@ -145,7 +148,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim application = Await tenant.GetApplications().Where(Function(app) app.Name.StartsWith(".NET IT (disabled) {this.fixture.TestRunIdentifier}")).SingleAsync()
+            Dim application = Await tenant.GetApplications() _
+                .Where(Function(app) app.Name.StartsWith($".NET IT (disabled) {fixture.TestRunIdentifier}")) _
+                .SingleAsync()
 
             application.SetStatus(ApplicationStatus.Disabled)
             Await application.SaveAsync(Function(response) response.Expand(Function(x) x.GetAccounts()))
@@ -157,7 +162,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim application = Await tenant.GetApplications().Where(Function(app) app.Name.StartsWith(".NET IT (primary) {this.fixture.TestRunIdentifier}")).SingleAsync()
+            Dim application = Await tenant.GetApplications() _
+                .Where(Function(app) app.Name.StartsWith($".NET IT (primary) {fixture.TestRunIdentifier}")) _
+                .SingleAsync()
 
             application.Description.ShouldBe("The Battle of Endor")
             application.Status.ShouldBe(ApplicationStatus.Enabled)
@@ -169,9 +176,11 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim applications = Await tenant.GetApplications().Where(Function(app) app.Description = "The Battle Of Endor").ToListAsync()
+            Dim applications = Await tenant.GetApplications() _
+                .Where(Function(app) app.Description = "The Battle Of Endor") _
+                .ToListAsync()
 
-            applications.Any(Function(app) app.Name.StartsWith(".NET IT (primary) {this.fixture.TestRunIdentifier}")).ShouldBeTrue()
+            applications.Any(Function(app) app.Name.StartsWith($".NET IT (primary) {fixture.TestRunIdentifier}")).ShouldBeTrue()
         End Function
 
         <Theory>
@@ -182,7 +191,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
             Dim applications = Await tenant.GetApplications().Where(Function(app) app.Status = ApplicationStatus.Disabled).ToListAsync()
 
-            applications.Any(Function(app) app.Name.StartsWith(".NET IT (disabled) {this.fixture.TestRunIdentifier}")).ShouldBeTrue()
+            applications.Any(Function(app) app.Name.StartsWith($".NET IT (disabled) {fixture.TestRunIdentifier}")).ShouldBeTrue()
         End Function
 
         <Theory>
@@ -240,7 +249,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Directly Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Directly Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -272,7 +281,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Adding Two AccountStores Directly Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Adding Two AccountStores Directly Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -299,7 +308,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Directory Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Directory Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -327,7 +336,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Group Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -355,7 +364,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Setting Existing Directory AccountStore Default Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Setting Existing Directory AccountStore Default Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -379,7 +388,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Setting Existing Group AccountStore Default Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Setting Existing Group AccountStore Default Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -403,7 +412,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Setting Existing AccountStore Default Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Setting Existing AccountStore Default Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -426,7 +435,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Setting Existing AccountStore Default Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Setting Existing AccountStore Default Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -449,7 +458,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Setting Existing Directory AccountStore Default Group Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Setting Existing Directory AccountStore Default Group Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -473,7 +482,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Setting Existing AccountStore Default Group Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Setting Existing AccountStore Default Group Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -496,7 +505,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Setting Group as GroupStore", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Setting Group as GroupStore", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -519,7 +528,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Directory By Href Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Directory By Href Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -546,7 +555,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group Test By Href Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Group Test By Href Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -573,16 +582,16 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Directory By Name Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Directory By Name Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
-            Dim testDirectory = client.Instantiate(Of IDirectory)().SetName(".NET Test {this.fixture.TestRunIdentifier} Add Directory As AccountStore By Name")
+            Dim testDirectory = client.Instantiate(Of IDirectory)().SetName($".NET IT {fixture.TestRunIdentifier} Add Directory As AccountStore By Name")
             Await client.CreateDirectoryAsync(testDirectory)
             testDirectory.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedDirectoryHrefs.Add(testDirectory.Href)
 
-            Dim mapping = Await createdApplication.AddAccountStoreAsync(".NET Test {this.fixture.TestRunIdentifier} Add Directory As AccountStore By Name")
+            Dim mapping = Await createdApplication.AddAccountStoreAsync($".NET IT {fixture.TestRunIdentifier} Add Directory As AccountStore By Name")
 
             Dim result1 = Await mapping.GetAccountStoreAsync()
             result1.Href.ShouldBe(testDirectory.Href)
@@ -609,7 +618,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group By Name Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Group By Name Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -618,12 +627,12 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             mapping.SetDefaultGroupStore(True)
             Await mapping.SaveAsync()
 
-            Dim testGroup = client.Instantiate(Of IGroup)().SetName(".NET Test {this.fixture.TestRunIdentifier} Add Group As AccountStore By Name")
+            Dim testGroup = client.Instantiate(Of IGroup)().SetName($".NET IT {fixture.TestRunIdentifier} Add Group As AccountStore By Name")
             Await createdApplication.CreateGroupAsync(testGroup)
             testGroup.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedGroupHrefs.Add(testGroup.Href)
 
-            Dim newMapping = Await createdApplication.AddAccountStoreAsync(".NET Test {this.fixture.TestRunIdentifier} Add Group As AccountStore By Name")
+            Dim newMapping = Await createdApplication.AddAccountStoreAsync($".NET IT {fixture.TestRunIdentifier} Add Group As AccountStore By Name")
 
             Dim result1 = Await newMapping.GetAccountStoreAsync()
             result1.Href.ShouldBe(testGroup.Href)
@@ -650,7 +659,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Directory By Query Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Directory By Query Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -678,7 +687,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group By Query Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Group By Query Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -706,7 +715,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Directory By Query Throws Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Directory By Query Throws Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -726,11 +735,11 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
-            Dim createdApplication = Await tenant.CreateApplicationAsync(".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group By Query Throws Test Application", createDirectory:=False)
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Group By Query Throws Test Application", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
-            Dim dummyGroup = client.Instantiate(Of IGroup)().SetName(".NET IT {this.fixture.TestRunIdentifier} Dummy Test Group for Adding Multiple Groups as AccountStore")
+            Dim dummyGroup = client.Instantiate(Of IGroup)().SetName($".NET IT {fixture.TestRunIdentifier} Dummy Test Group for Adding Multiple Groups as AccountStore")
             Dim primaryDirectory = Await client.GetResourceAsync(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
             Await primaryDirectory.CreateGroupAsync(dummyGroup)
             dummyGroup.Href.ShouldNotBeNullOrEmpty()

@@ -37,7 +37,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         Private Function CreateRandomAccount(client As IClient) As IAccount
             Dim accountObject = client.Instantiate(Of IAccount)()
-            accountObject.SetEmail(New RandomEmail("testing.foo"))
+            accountObject.SetEmail(New RandomEmail("testing.foo.vb"))
             accountObject.SetGivenName("Test")
             accountObject.SetSurname("Testerman")
             accountObject.SetPassword(New RandomPassword(12))
