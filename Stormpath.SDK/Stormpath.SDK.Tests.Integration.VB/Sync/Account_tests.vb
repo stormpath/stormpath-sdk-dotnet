@@ -375,7 +375,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim customData = account.GetCustomData()
 
             account.FullName.ShouldBe("Mara Jade")
-            customData("quote").ToString().ShouldBe("I'm a fighter. I've always been a fighter.")
+            CStr(customData("quote")).ShouldBe("I'm a fighter. I've always been a fighter.")
             CInt(customData("birth")).ShouldBe(-17)
             CInt(customData("death")).ShouldBe(40)
 
@@ -521,10 +521,3 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
         End Sub
     End Class
 End Namespace
-
-'=======================================================
-'Service provided by Telerik (www.telerik.com)
-'Conversion powered by NRefactory.
-'Twitter: @telerik
-'Facebook: facebook.com/telerik
-'=======================================================

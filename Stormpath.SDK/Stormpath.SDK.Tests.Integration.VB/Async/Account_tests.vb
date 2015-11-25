@@ -375,7 +375,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim customData = Await account.GetCustomDataAsync()
 
             account.FullName.ShouldBe("Mara Jade")
-            customData("quote").ToString().ShouldBe("I'm a fighter. I've always been a fighter.")
+            CStr(customData("quote")).ShouldBe("I'm a fighter. I've always been a fighter.")
             CInt(customData("birth")).ShouldBe(-17)
             CInt(customData("death")).ShouldBe(40)
 

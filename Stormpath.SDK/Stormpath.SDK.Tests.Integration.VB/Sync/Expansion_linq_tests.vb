@@ -158,10 +158,3 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
         End Sub
     End Class
 End Namespace
-
-'=======================================================
-'Service provided by Telerik (www.telerik.com)
-'Conversion powered by NRefactory.
-'Twitter: @telerik
-'Facebook: facebook.com/telerik
-'=======================================================

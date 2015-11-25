@@ -95,6 +95,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Async\Account_tests.vb" />
+    <Compile Include="Async\Application_tests.vb" />
+    <Compile Include="Async\CustomData_embedded_tests.vb" />
+    <Compile Include="Async\CustomData_tests.vb" />
+    <Compile Include="Async\Directory_tests.vb" />
+    <Compile Include="Async\Entity_tests.vb" />
+    <Compile Include="Async\Error_tests.vb" />
     <Compile Include="Async\Expansion_linq_tests.vb" />
     <Compile Include="Async\Expansion_retrieval_tests.vb" />
     <Compile Include="Async\Tenant_tests.vb" />
@@ -116,8 +122,16 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Sync\Account_tests.vb" />
+    <Compile Include="Sync\Application_tests.vb" />
+    <Compile Include="Sync\CustomData_embedded_tests.vb" />
+    <Compile Include="Sync\CustomData_tests.vb" />
+    <Compile Include="Sync\Directory_tests.vb" />
+    <Compile Include="Sync\Entity_tests.vb" />
+    <Compile Include="Sync\Error_tests.vb" />
     <Compile Include="Sync\Expansion_linq_tests.vb" />
     <Compile Include="Sync\Expansion_retrieval_tests.vb" />
+    <Compile Include="Sync\Group_tests.vb" />
+    <Compile Include="Sync\Tenant_tests.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
