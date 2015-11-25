@@ -14,9 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-using System.Linq;
 using System.Threading.Tasks;
-using Shouldly;
 using Stormpath.SDK.Account;
 using Xunit;
 

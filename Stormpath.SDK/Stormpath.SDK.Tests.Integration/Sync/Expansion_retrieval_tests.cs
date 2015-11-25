@@ -19,7 +19,6 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Linq;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Common.Integration;

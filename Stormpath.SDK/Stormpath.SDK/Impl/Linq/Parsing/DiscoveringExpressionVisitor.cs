@@ -34,7 +34,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using Stormpath.SDK.Impl.Linq.Parsing.Expressions;
 using Stormpath.SDK.Impl.Linq.Parsing.Expressions.ResultOperators;
 

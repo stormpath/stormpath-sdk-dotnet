@@ -21,7 +21,6 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Linq.Executor;
 using Stormpath.SDK.Impl.Linq.Parsing;
 using Stormpath.SDK.Impl.Linq.QueryModel;
 using Stormpath.SDK.Impl.Resource;

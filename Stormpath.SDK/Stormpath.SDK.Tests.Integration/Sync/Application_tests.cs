@@ -21,7 +21,6 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Linq;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;

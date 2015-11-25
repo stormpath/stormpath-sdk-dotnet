@@ -17,7 +17,6 @@
 using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common.Integration;

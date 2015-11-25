@@ -28,7 +28,6 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Linq;
 using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;

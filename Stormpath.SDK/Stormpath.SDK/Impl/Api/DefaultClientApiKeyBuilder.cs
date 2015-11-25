@@ -306,21 +306,21 @@ namespace Stormpath.SDK.Impl.Api
             if (string.IsNullOrEmpty(input))
                 return input;
 
-			if (!input.StartsWith("~"))
-				return input;
+            if (!input.StartsWith("~"))
+                return input;
 
-			string homePath = null;
+            string homePath = null;
 
-			if (PlatformHelper.IsPlatformUnix())
-			{
-				homePath = this.env.GetEnvironmentVariable("HOME");
-			}
-			else
-			{
-				homePath = this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
-			}
+            if (PlatformHelper.IsPlatformUnix())
+            {
+                homePath = this.env.GetEnvironmentVariable("HOME");
+            }
+            else
+            {
+                homePath = this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+            }
 
-			return System.IO.Path.Combine(homePath, input.Replace($"~{System.IO.Path.DirectorySeparatorChar}", string.Empty));
+            return System.IO.Path.Combine(homePath, input.Replace($"~{System.IO.Path.DirectorySeparatorChar}", string.Empty));
         }
     }
 }

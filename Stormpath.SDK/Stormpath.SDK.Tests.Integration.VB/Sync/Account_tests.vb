@@ -17,13 +17,11 @@
 Option Strict On
 Option Explicit On
 Option Infer On
-Imports System.Linq
 Imports Shouldly
 Imports Stormpath.SDK.Account
 Imports Stormpath.SDK.Application
 Imports Stormpath.SDK.Auth
 Imports Stormpath.SDK.Error
-Imports Stormpath.SDK.Linq
 Imports Stormpath.SDK.Sync
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData

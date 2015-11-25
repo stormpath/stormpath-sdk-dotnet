@@ -22,7 +22,6 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
-using Stormpath.SDK.Linq;
 using Stormpath.SDK.Sync;
 using Xunit;
 

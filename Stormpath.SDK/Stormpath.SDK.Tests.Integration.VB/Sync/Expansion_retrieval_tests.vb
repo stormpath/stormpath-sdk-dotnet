@@ -21,7 +21,6 @@ Imports Stormpath.SDK.Account
 Imports Stormpath.SDK.AccountStore
 Imports Stormpath.SDK.Application
 Imports Stormpath.SDK.Group
-Imports Stormpath.SDK.Linq
 Imports Stormpath.SDK.Sync
 Imports Stormpath.SDK.Tenant
 Imports Stormpath.SDK.Tests.Common.Integration
