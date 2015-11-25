@@ -358,20 +358,6 @@ namespace Stormpath.SDK.Tests.Impl
         }
 
         [Fact]
-        public void Count_ignores_reserved_keys()
-        {
-            var instanceData = new Dictionary<string, object>()
-            {
-                { "href", "http://foo/bar" },
-                { "createdAt", DateTimeOffset.UtcNow },
-                { "modifiedAt", DateTimeOffset.UtcNow }
-            };
-            var customData = GetInstance(instanceData);
-
-            customData.Count.ShouldBe(0);
-        }
-
-        [Fact]
         public void Count_ignores_pending_deleted_items()
         {
             var instanceData = new Dictionary<string, object>()
