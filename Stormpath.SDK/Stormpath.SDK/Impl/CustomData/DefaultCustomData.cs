@@ -104,7 +104,7 @@ namespace Stormpath.SDK.Impl.CustomData
         }
 
         int ICustomData.Count
-            => this.GetAvailableKeys().Except(ReservedKeys).Count();
+            => this.GetAvailableKeys().Count();
 
         IReadOnlyCollection<string> ICustomData.Keys
             => this.GetAvailableKeys();
