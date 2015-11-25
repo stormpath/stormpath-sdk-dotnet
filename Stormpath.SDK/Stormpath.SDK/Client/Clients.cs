@@ -40,8 +40,8 @@ namespace Stormpath.SDK.Client
             {
                 try
                 {
-                    DetectLanguage.RanOnce = true;
                     DetectLanguage.Result = DetectLanguage.ForAssembly(System.Reflection.Assembly.GetCallingAssembly());
+                    DetectLanguage.RanOnce = true;
                 }
                 catch
                 {
