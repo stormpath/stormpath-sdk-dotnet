@@ -1,19 +1,18 @@
 ﻿// <copyright file="DefaultTenant.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Threading;
@@ -22,8 +21,8 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
@@ -59,23 +58,23 @@ namespace Stormpath.SDK.Impl.Tenant
 
         private ITenantActionsSync AsTenantActionSyncInterface => this;
 
-        internal LinkProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
+        internal IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
-        internal LinkProperty Agents => this.GetLinkProperty(AgentsPropertyName);
+        internal IEmbeddedProperty Agents => this.GetLinkProperty(AgentsPropertyName);
 
-        internal LinkProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
+        internal IEmbeddedProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
-        internal LinkProperty Directories => this.GetLinkProperty(DirectoriesPropertyName);
+        internal IEmbeddedProperty Directories => this.GetLinkProperty(DirectoriesPropertyName);
 
-        internal LinkProperty Groups => this.GetLinkProperty(GroupsPropertyName);
+        internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        internal LinkProperty IdSites => this.GetLinkProperty(IdSitesPropertyName);
+        internal IEmbeddedProperty IdSites => this.GetLinkProperty(IdSitesPropertyName);
 
         string ITenant.Key => this.GetProperty<string>(KeyPropertyName);
 
         string ITenant.Name => this.GetProperty<string>(NamePropertyName);
 
-        internal LinkProperty Organizations => this.GetLinkProperty(OrganizationsPropertyName);
+        internal IEmbeddedProperty Organizations => this.GetLinkProperty(OrganizationsPropertyName);
 
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
@@ -165,7 +164,7 @@ namespace Stormpath.SDK.Impl.Tenant
             if (creationOptions?.Provider != null)
                 (directory as DefaultDirectory).SetProvider(creationOptions.Provider);
 
-            return this.AsInterface.CreateDirectoryAsync(directory, cancellationToken);
+            return this.GetInternalAsyncDataStore().CreateAsync(this.directoriesResourceBase, directory, creationOptions, cancellationToken);
         }
 
         IDirectory ITenantActionsSync.CreateDirectory(IDirectory directory, IDirectoryCreationOptions creationOptions)
@@ -176,7 +175,7 @@ namespace Stormpath.SDK.Impl.Tenant
             if (creationOptions?.Provider != null)
                 (directory as DefaultDirectory).SetProvider(creationOptions.Provider);
 
-            return this.CreateDirectory(directory);
+            return this.GetInternalSyncDataStore().Create(this.directoriesResourceBase, directory, creationOptions);
         }
 
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken)
@@ -203,7 +202,7 @@ namespace Stormpath.SDK.Impl.Tenant
         {
             var href = $"/accounts/emailVerificationTokens/{token}";
 
-            var tokenResponse = await this.GetInternalAsyncDataStore().CreateAsync<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions { SkipIdentityMap = true }, cancellationToken).ConfigureAwait(false);
+            var tokenResponse = await this.GetInternalAsyncDataStore().CreateAsync<IResource, IEmailVerificationToken>(href, null, cancellationToken).ConfigureAwait(false);
             return await this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(tokenResponse.Href, cancellationToken).ConfigureAwait(false);
         }
 
@@ -211,7 +210,7 @@ namespace Stormpath.SDK.Impl.Tenant
         {
             var href = $"/accounts/emailVerificationTokens/{token}";
 
-            var tokenResponse = this.GetInternalSyncDataStore().Create<IResource, IEmailVerificationToken>(href, null, new IdentityMapOptions() { SkipIdentityMap = true });
+            var tokenResponse = this.GetInternalSyncDataStore().Create<IResource, IEmailVerificationToken>(href, null);
             return this.GetInternalSyncDataStore().GetResource<IAccount>(tokenResponse.Href);
         }
 

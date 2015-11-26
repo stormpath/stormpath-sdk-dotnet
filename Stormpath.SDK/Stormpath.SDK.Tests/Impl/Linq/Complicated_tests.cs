@@ -1,19 +1,18 @@
 ﻿// <copyright file="Complicated_tests.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Linq;
@@ -28,17 +27,19 @@ namespace Stormpath.SDK.Tests.Impl.Linq
     /// Tests that combine many different query expressions and formats.
     /// These are especially important for any refactoring of the underlying LINQ code.
     /// </summary>
-    public class Complicated_tests : Linq_tests
+    public class Complicated_tests : Linq_test<IAccount>
     {
         private static string[] GetArguments(string href)
         {
-            return href.Split('?')[1].Split('&');
+            return href
+                .Split('?')[1]
+                .Split('&');
         }
 
         [Fact]
         public void Case_1()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .Filter("vader")
                 .Where(x => x.Email.EndsWith("@galacticempire.co") &&
                             x.Status == AccountStatus.Enabled)
@@ -46,7 +47,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Skip(0)
                 .Take(1);
 
-            var arguments = GetArguments(query.GetGeneratedHref());
+            var arguments = GetArguments(query.Generate());
 
             arguments.ShouldContain("q=vader");
             arguments.ShouldContain("email=*@galacticempire.co");
@@ -59,7 +60,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         [Fact]
         public void Case_2()
         {
-            var query = this.Harness.Queryable
+            var query = this.Queryable
                 .OrderBy(x => x.Email)
                 .ThenByDescending(x => x.Username)
                 .Skip(10)
@@ -67,7 +68,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Where(x => x.GivenName.Equals("foo"))
                 .Where(x => x.CreatedAt >= new DateTimeOffset(2015, 1, 1, 0, 0, 0, TimeSpan.Zero) && x.CreatedAt < new DateTimeOffset(2015, 6, 30, 0, 0, 0, TimeSpan.Zero));
 
-            var arguments = GetArguments(query.GetGeneratedHref());
+            var arguments = GetArguments(query.Generate());
 
             arguments.ShouldContain("orderBy=email,username desc");
             arguments.ShouldContain("offset=10");
@@ -76,6 +77,26 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             arguments.ShouldContain("givenName=foo");
             arguments.ShouldContain("createdAt=[2015-01-01T00:00:00Z,2015-06-30T00:00:00Z)");
             arguments.Count().ShouldBe(6);
+        }
+
+        [Fact]
+        public void Case_3()
+        {
+            var query = this.Queryable
+                .Filter("luke")
+                .Expand(x => x.GetCustomData())
+                .Expand(x => x.GetDirectory())
+                .Where(x => x.Status == AccountStatus.Unverified)
+                .Expand(x => x.GetGroups(10, 10))
+                .Take(2);
+
+            var arguments = GetArguments(query.Generate());
+
+            arguments.ShouldContain("q=luke");
+            arguments.ShouldContain("expand=customData,directory,groups(offset:10,limit:10)");
+            arguments.ShouldContain("status=UNVERIFIED");
+            arguments.ShouldContain("limit=2");
+            arguments.Count().ShouldBe(4);
         }
     }
 }

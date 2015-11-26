@@ -1,25 +1,25 @@
 ﻿// <copyright file="DefaultDataStore.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.DataStore;
@@ -29,14 +29,15 @@ using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.DataStore.Filters;
 using Stormpath.SDK.Impl.Error;
+using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.IdentityMap;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Serialization;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Serialization;
-using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -44,13 +45,13 @@ namespace Stormpath.SDK.Impl.DataStore
     {
         private readonly string baseUrl;
         private readonly IRequestExecutor requestExecutor;
-        private readonly ICacheProvider cacheProvider;
         private readonly ICacheResolver cacheResolver;
+        private readonly ICacheProvider cacheProvider;
         private readonly JsonSerializationProvider serializer;
         private readonly ILogger logger;
         private readonly IResourceFactory resourceFactory;
         private readonly IResourceConverter resourceConverter;
-        private readonly IIdentityMap<string, ResourceData> identityMap;
+        private readonly IIdentityMap<ResourceData> identityMap;
         private readonly IAsynchronousFilterChain defaultAsyncFilters;
         private readonly ISynchronousFilterChain defaultSyncFilters;
         private readonly UriQualifier uriQualifier;
@@ -63,7 +64,13 @@ namespace Stormpath.SDK.Impl.DataStore
 
         IRequestExecutor IInternalDataStore.RequestExecutor => this.requestExecutor;
 
+        ICacheResolver IInternalDataStore.CacheResolver => this.cacheResolver;
+
+        IJsonSerializer IInternalDataStore.Serializer => this.serializer.ExternalSerializer;
+
         string IInternalDataStore.BaseUrl => this.baseUrl;
+
+        IClientApiKey IInternalDataStore.ApiKey => this.requestExecutor.ApiKey;
 
         internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider, TimeSpan identityMapExpiration)
         {
@@ -74,52 +81,53 @@ namespace Stormpath.SDK.Impl.DataStore
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
             if (cacheProvider == null)
-                throw new ArgumentNullException(nameof(cacheProvider), "Use NullCacheManager if you wish to turn off caching.");
+                throw new ArgumentNullException(nameof(cacheProvider), "Use NullCacheProvider if you wish to turn off caching.");
 
             this.baseUrl = baseUrl;
+            this.logger = logger;
             this.requestExecutor = requestExecutor;
             this.cacheProvider = cacheProvider;
-            this.cacheResolver = new DefaultCacheResolver(cacheProvider, new DefaultCacheRegionNameResolver());
+            this.cacheResolver = new DefaultCacheResolver(cacheProvider, this.logger);
 
             this.serializer = new JsonSerializationProvider(serializer);
-            this.identityMap = new MemoryCacheIdentityMap<string, ResourceData>(identityMapExpiration);
+            this.identityMap = new MemoryCacheIdentityMap<ResourceData>(identityMapExpiration, this.logger);
             this.resourceFactory = new DefaultResourceFactory(this, this.identityMap);
             this.resourceConverter = new DefaultResourceConverter();
 
             this.uriQualifier = new UriQualifier(baseUrl);
-            this.logger = logger;
 
             this.defaultAsyncFilters = this.BuildDefaultAsyncFilterChain();
             this.defaultSyncFilters = this.BuildDefaultSyncFilterChain();
         }
 
-        // *** Helper methods ***
         private IAsynchronousFilterChain BuildDefaultAsyncFilterChain()
         {
-            var asyncFilterChain = new DefaultAsynchronousFilterChain();
+            var asyncFilterChain = new DefaultAsynchronousFilterChain(this);
 
             if (this.IsCachingEnabled())
             {
                 asyncFilterChain.Add(new ReadCacheFilter(this.baseUrl, this.cacheResolver));
-                asyncFilterChain.Add(new WriteCacheFilter(this.cacheResolver));
+                asyncFilterChain.Add(new WriteCacheFilter(this.cacheResolver, this.resourceFactory));
             }
 
             asyncFilterChain.Add(new ProviderAccountResultFilter());
+            asyncFilterChain.Add(new AccountStoreMappingCacheInvalidationFilter());
 
             return asyncFilterChain;
         }
 
         private ISynchronousFilterChain BuildDefaultSyncFilterChain()
         {
-            var syncFilterChain = new DefaultSynchronousFilterChain();
+            var syncFilterChain = new DefaultSynchronousFilterChain(this);
 
             if (this.IsCachingEnabled())
             {
                 syncFilterChain.Add(new ReadCacheFilter(this.baseUrl, this.cacheResolver));
-                syncFilterChain.Add(new WriteCacheFilter(this.cacheResolver));
+                syncFilterChain.Add(new WriteCacheFilter(this.cacheResolver, this.resourceFactory));
             }
 
             syncFilterChain.Add(new ProviderAccountResultFilter());
+            syncFilterChain.Add(new AccountStoreMappingCacheInvalidationFilter());
 
             return syncFilterChain;
         }
@@ -142,9 +150,7 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         private bool IsCachingEnabled()
-        {
-            return this.cacheProvider != null && !(this.cacheProvider is NullCacheProvider);
-        }
+            => this.cacheProvider != null && !(this.cacheProvider is NullCacheProvider);
 
         private QueryString CreateQueryStringFromCreationOptions(ICreationOptions options)
         {
@@ -209,6 +215,30 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create<T>(result.Body);
         }
 
+        Task<T> IDataStore.GetResourceAsync<T>(string href, Action<IRetrievalOptions<T>> options, CancellationToken cancellationToken)
+        {
+            var optionsInstance = new DefaultRetrievalOptions<T>();
+            options(optionsInstance);
+
+            var queryString = optionsInstance.ToString();
+            if (!string.IsNullOrEmpty(queryString))
+                href = $"{href}?{queryString}";
+
+            return this.AsAsyncInterface.GetResourceAsync<T>(href, cancellationToken);
+        }
+
+        T IDataStoreSync.GetResource<T>(string href, Action<IRetrievalOptions<T>> options)
+        {
+            var optionsInstance = new DefaultRetrievalOptions<T>();
+            options(optionsInstance);
+
+            var queryString = optionsInstance.ToString();
+            if (!string.IsNullOrEmpty(queryString))
+                href = $"{href}?{queryString}";
+
+            return this.AsSyncInterface.GetResource<T>(href);
+        }
+
         async Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
         {
             var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);
@@ -231,26 +261,6 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create(targetType, result.Body) as T;
         }
 
-        async Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
-        {
-            if (identityMapOptions != null && !identityMapOptions.IsValid())
-                throw new ApplicationException("Bad identity map options specified.");
-
-            var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);
-
-            return this.resourceFactory.Create<T>(result.Body, identityMapOptions);
-        }
-
-        T IInternalSyncDataStore.GetResource<T>(string href, IdentityMapOptions identityMapOptions)
-        {
-            if (identityMapOptions != null && !identityMapOptions.IsValid())
-                throw new ApplicationException("Bad identity map options specified.");
-
-            var result = this.GetResourceData<T>(href);
-
-            return this.resourceFactory.Create<T>(result.Body, identityMapOptions);
-        }
-
         private Task<IResourceDataResult> GetResourceDataAsync<T>(string href, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(href))
@@ -271,7 +281,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri);
-            return chain.ExecuteAsync(request, this.logger, cancellationToken);
+            return chain.FilterAsync(request, this.logger, cancellationToken);
         }
 
         private IResourceDataResult GetResourceData<T>(string href)
@@ -369,7 +379,6 @@ namespace Stormpath.SDK.Impl.DataStore
                 parentHref,
                 queryParams: this.CreateQueryStringFromCreationOptions(options),
                 create: true,
-                identityMapOptions: null,
                 cancellationToken: cancellationToken);
         }
 
@@ -379,58 +388,48 @@ namespace Stormpath.SDK.Impl.DataStore
                 resource,
                 parentHref,
                 queryParams: this.CreateQueryStringFromCreationOptions(options),
-                create: true,
-                identityMapOptions: null);
-        }
-
-        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
-        {
-            return this.SaveCoreAsync<T, TReturned>(
-                resource,
-                parentHref,
-                queryParams: null,
-                create: true,
-                identityMapOptions: identityMapOptions,
-                cancellationToken: cancellationToken);
-        }
-
-        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, IdentityMapOptions identityMapOptions)
-        {
-            return this.SaveCore<T, TReturned>(
-                resource,
-                parentHref,
-                create: true,
-                queryParams: null,
-                identityMapOptions: identityMapOptions);
+                create: true);
         }
 
         Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, CancellationToken cancellationToken)
         {
-            var href = resource?.Href;
-            if (string.IsNullOrEmpty(href))
-                throw new ArgumentNullException(nameof(resource.Href));
-
-            return this.SaveCoreAsync<T, T>(
-                resource,
-                href,
-                queryParams: null,
-                create: false,
-                identityMapOptions: null,
-                cancellationToken: cancellationToken);
+            return this.AsAsyncInterface.SaveAsync<T>(resource, string.Empty, cancellationToken);
         }
 
         T IInternalSyncDataStore.Save<T>(T resource)
         {
+            return this.AsSyncInterface.Save<T>(resource, string.Empty);
+        }
+
+        Task<T> IInternalAsyncDataStore.SaveAsync<T>(T resource, string queryString, CancellationToken cancellationToken)
+        {
             var href = resource?.Href;
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(resource.Href));
+
+            var queryParams = new QueryString(queryString);
+
+            return this.SaveCoreAsync<T, T>(
+                resource,
+                href,
+                queryParams: queryParams,
+                create: false,
+                cancellationToken: cancellationToken);
+        }
+
+        T IInternalSyncDataStore.Save<T>(T resource, string queryString)
+        {
+            var href = resource?.Href;
+            if (string.IsNullOrEmpty(href))
+                throw new ArgumentNullException(nameof(resource.Href));
+
+            var queryParams = new QueryString(queryString);
 
             return this.SaveCore<T, T>(
                 resource,
                 href,
                 create: false,
-                queryParams: null,
-                identityMapOptions: null);
+                queryParams: queryParams);
         }
 
         Task<bool> IInternalAsyncDataStore.DeleteAsync<T>(T resource, CancellationToken cancellationToken)
@@ -463,18 +462,15 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.DeleteCore<T>(resource.Href);
         }
 
-        private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, bool create, IdentityMapOptions identityMapOptions, CancellationToken cancellationToken)
-            where T : IResource
-            where TReturned : class, IResource
+        private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, bool create, CancellationToken cancellationToken)
+            where T : class
+            where TReturned : class
         {
-            if (identityMapOptions != null && !identityMapOptions.IsValid())
-                throw new ApplicationException("Bad identity map options specified.");
-
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
 
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
-            this.logger.Trace($"Asynchronously saving resource of type {typeof(T).Name} to {href}", "DefaultDataStore.SaveCoreAsync");
+            this.logger.Trace($"Asynchronously saving resource of type {typeof(T).Name} to {canonicalUri.ToString()}", "DefaultDataStore.SaveCoreAsync");
 
             IAsynchronousFilterChain chain = new DefaultAsynchronousFilterChain(this.defaultAsyncFilters as DefaultAsynchronousFilterChain)
                 .Add(new DefaultAsynchronousFilter(async (req, next, logger, ct) =>
@@ -500,7 +496,7 @@ namespace Stormpath.SDK.Impl.DataStore
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
 
                     if (responseIsProcessing)
-                        this.logger.Warn($"Received a 202 response, returning empty result. Href: '{href}'", "DefaultDataStore.SaveCoreAsync");
+                        this.logger.Warn($"Received a 202 response, returning empty result. Href: '{canonicalUri.ToString()}'", "DefaultDataStore.SaveCoreAsync");
 
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
@@ -513,58 +509,55 @@ namespace Stormpath.SDK.Impl.DataStore
                 // Serialize properties
                 propertiesMap = this.resourceConverter.ToMap(abstractResource);
 
-                var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
-                bool includesCustomData = extendableInstanceResource != null;
-                if (includesCustomData)
+            var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
+            bool includesCustomData = extendableInstanceResource != null;
+            if (includesCustomData)
+            {
+                var customDataProxy = (extendableInstanceResource as IExtendable).CustomData as DefaultEmbeddedCustomData;
+
+                // Apply custom data deletes
+                if (customDataProxy.HasDeletedProperties())
                 {
-                    var customDataProxy = (extendableInstanceResource as IExtendable).CustomData as DefaultEmbeddedCustomData;
+                    if (customDataProxy.DeleteAll)
+                        await this.DeleteCoreAsync<ICustomData>(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
+                    else
+                        await customDataProxy.DeleteRemovedCustomDataPropertiesAsync(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
+                }
 
-                    // Apply custom data deletes
-                    if (customDataProxy.HasDeletedProperties())
-                    {
-                        if (customDataProxy.DeleteAll)
-                            await this.DeleteCoreAsync<ICustomData>(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
-                        else
-                            await customDataProxy.DeleteRemovedCustomDataPropertiesAsync(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
-                    }
-
-                    // Merge in custom data updates
-                    if (customDataProxy.HasUpdatedCustomDataProperties())
+                // Merge in custom data updates
+                if (customDataProxy.HasUpdatedCustomDataProperties())
                         propertiesMap["customData"] = customDataProxy.UpdatedCustomDataProperties;
 
-                    // Remove custom data updates from proxy
-                    extendableInstanceResource.ResetCustomData();
-                }
+                // Remove custom data updates from proxy
+                extendableInstanceResource.ResetCustomData();
+            }
             }
 
             // In some cases, all we need to save are custom data property deletions, which is taken care of above.
             // So, we should just refresh with the latest data from the server.
-            // This doesn't apply to CREATEs, though, because sometimes we need to POST a null body.
-            bool nothingToPost = !(propertiesMap?.Any() ?? false);
+            // This doesn't apply to CREATEs, though, because sometimes we *need* to POST a null body.
+            bool nothingToPost = propertiesMap.IsNullOrEmpty();
             if (!create && nothingToPost)
-                return await this.AsAsyncInterface.GetResourceAsync<TReturned>(href, cancellationToken).ConfigureAwait(false);
+                return await this.AsAsyncInterface.GetResourceAsync<TReturned>(canonicalUri.ToString(), cancellationToken).ConfigureAwait(false);
 
             var requestAction = create
                 ? ResourceAction.Create
                 : ResourceAction.Update;
             var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
 
-            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
-            return this.resourceFactory.Create<TReturned>(result.Body, identityMapOptions, resource as ILinkable);
+            var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
+            return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
         }
 
-        private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, bool create, IdentityMapOptions identityMapOptions)
-            where T : IResource
-            where TReturned : class, IResource
+        private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, bool create)
+            where T : class
+            where TReturned : class
         {
-            if (identityMapOptions != null && !identityMapOptions.IsValid())
-                throw new ApplicationException("Bad identity map options specified.");
-
             if (string.IsNullOrEmpty(href))
                 throw new ArgumentNullException(nameof(href));
 
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
-            this.logger.Trace($"Synchronously saving resource of type {typeof(T).Name} to {href}", "DefaultDataStore.SaveCore");
+            this.logger.Trace($"Synchronously saving resource of type {typeof(T).Name} to {canonicalUri.ToString()}", "DefaultDataStore.SaveCore");
 
             ISynchronousFilterChain chain = new DefaultSynchronousFilterChain(this.defaultSyncFilters as DefaultSynchronousFilterChain)
                 .Add(new DefaultSynchronousFilter((req, next, logger) =>
@@ -590,7 +583,7 @@ namespace Stormpath.SDK.Impl.DataStore
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
 
                     if (responseIsProcessing)
-                        this.logger.Warn($"Received a 202 response, returning empty result. Href: '{href}'", "DefaultDataStore.SaveCoreAsync");
+                        this.logger.Warn($"Received a 202 response, returning empty result. Href: '{canonicalUri.ToString()}'", "DefaultDataStore.SaveCoreAsync");
 
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
@@ -600,39 +593,39 @@ namespace Stormpath.SDK.Impl.DataStore
             var abstractResource = resource as AbstractResource;
             if (abstractResource != null)
             {
-                // Serialize properties
+            // Serialize properties
                 propertiesMap = this.resourceConverter.ToMap(abstractResource);
 
-                var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
-                bool includesCustomData = extendableInstanceResource != null;
-                if (includesCustomData)
+            var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
+            bool includesCustomData = extendableInstanceResource != null;
+            if (includesCustomData)
+            {
+                var customDataProxy = (extendableInstanceResource as IExtendableSync).CustomData as DefaultEmbeddedCustomData;
+
+                // Apply custom data deletes
+                if (customDataProxy.HasDeletedProperties())
                 {
-                    var customDataProxy = (extendableInstanceResource as IExtendableSync).CustomData as DefaultEmbeddedCustomData;
+                    if (customDataProxy.DeleteAll)
+                        this.DeleteCore<ICustomData>(extendableInstanceResource.CustomData.Href);
+                    else
+                        customDataProxy.DeleteRemovedCustomDataProperties(extendableInstanceResource.CustomData.Href);
+                }
 
-                    // Apply custom data deletes
-                    if (customDataProxy.HasDeletedProperties())
-                    {
-                        if (customDataProxy.DeleteAll)
-                            this.DeleteCore<ICustomData>(extendableInstanceResource.CustomData.Href);
-                        else
-                            customDataProxy.DeleteRemovedCustomDataProperties(extendableInstanceResource.CustomData.Href);
-                    }
-
-                    // Merge in custom data updates
-                    if (customDataProxy.HasUpdatedCustomDataProperties())
+                // Merge in custom data updates
+                if (customDataProxy.HasUpdatedCustomDataProperties())
                         propertiesMap["customData"] = customDataProxy.UpdatedCustomDataProperties;
 
-                    // Remove custom data updates from proxy
-                    extendableInstanceResource.ResetCustomData();
-                }
+                // Remove custom data updates from proxy
+                extendableInstanceResource.ResetCustomData();
+            }
             }
 
             // In some cases, all we need to save are custom data property deletions, which is taken care of above.
             // So, we should just refresh with the latest data from the server.
             // This doesn't apply to CREATEs, though, because sometimes we need to POST a null body.
-            bool nothingToPost = !(propertiesMap?.Any() ?? false);
+            bool nothingToPost = propertiesMap.IsNullOrEmpty();
             if (!create && nothingToPost)
-                return this.AsSyncInterface.GetResource<TReturned>(href);
+                return this.AsSyncInterface.GetResource<TReturned>(canonicalUri.ToString());
 
             var requestAction = create
                 ? ResourceAction.Create
@@ -640,7 +633,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
 
             var result = chain.Filter(request, this.logger);
-            return this.resourceFactory.Create<TReturned>(result.Body, identityMapOptions, resource as ILinkable);
+            return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
         }
 
         private async Task<bool> DeleteCoreAsync<T>(string href, CancellationToken cancellationToken)
@@ -662,7 +655,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }));
 
             var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri);
-            var result = await chain.ExecuteAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
+            var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
 
             bool successfullyDeleted = result.HttpStatus == 204;
             return successfullyDeleted;
@@ -717,13 +710,15 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             if (!this.disposed)
             {
+                this.disposed = true;
+
                 if (disposing)
                 {
                     this.requestExecutor.Dispose();
                     this.resourceFactory.Dispose();
+                    this.cacheProvider.Dispose();
+                    this.identityMap.Dispose();
                 }
-
-                this.disposed = true;
             }
         }
 

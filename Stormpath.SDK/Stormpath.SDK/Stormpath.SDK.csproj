@@ -38,11 +38,17 @@
     <CodeAnalysisRuleSet>stormpath.sdk.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mono|AnyCPU'">
+    <OutputPath>bin\Mono\</OutputPath>
+    <DefineConstants>CODE_ANALYSIS;TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>stormpath.sdk.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Remotion.Linq, Version=1.15.15.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Remotion.Linq.1.15.15.0\lib\portable-net45+wp80+wpa81+win\Remotion.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -70,10 +76,35 @@
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
-    <Compile Include="Auth\UsernamePasswordRequest.cs" />
+    <Compile Include="Cache\AbstractCacheProvider.cs" />
+    <Compile Include="Http\IHttpRequestBuilder.cs" />
+    <Compile Include="IdSite\IIdSiteSyncResultListener.cs" />
+    <Compile Include="IdSite\IIdSiteSyncCallbackHandler.cs" />
+    <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
+    <Compile Include="Cache\AbstractCacheProviderBuilder{T}.cs" />
+    <Compile Include="Impl\DataStore\Filters\AccountStoreMappingCacheInvalidationFilter.cs" />
+    <Compile Include="Impl\Http\DefaultHttpRequestBuilder.cs" />
+    <Compile Include="Impl\IdentityMap\IdentityMapOptionsResolver.cs" />
+    <Compile Include="Impl\Group\DefaultGroup.Membership.cs" />
+    <Compile Include="Impl\Group\DefaultGroup.Collections.cs" />
+    <Compile Include="Impl\Group\DefaultGroup.MembershipSync.cs" />
+    <Compile Include="Impl\Group\DefaultGroup.Resources.cs" />
+    <Compile Include="Impl\Group\DefaultGroup.ResourcesSync.cs" />
+    <Compile Include="Impl\IdentityMap\MemoryCacheIdentityMap{TItem}.cs" />
+    <Compile Include="Impl\IdSite\DefaultAccountResult.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler.cs" />
+    <Compile Include="Impl\IdSite\IAccountResultSync.cs" />
+    <Compile Include="IdSite\IdSiteResultStatus.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.IdSite.cs" />
+    <Compile Include="Impl\Auth\IOrganizationNameKey.cs" />
+    <Compile Include="Impl\Auth\UsernamePasswordRequest.cs" />
+    <Compile Include="Auth\UsernamePasswordRequestBuilder.cs" />
+    <Compile Include="Cache\Caches.cs" />
     <Compile Include="Cache\IAsynchronousCache.cs" />
     <Compile Include="Cache\ICache.cs" />
+    <Compile Include="Cache\ICacheConfigurationBuilder.cs" />
     <Compile Include="Cache\ICacheProvider.cs" />
+    <Compile Include="Cache\ICacheProviderBuilder.cs" />
     <Compile Include="Cache\ISynchronousCache.cs" />
     <Compile Include="Cache\IAsynchronousCacheProvider.cs" />
     <Compile Include="Cache\ISynchronousCacheProvider.cs" />
@@ -89,17 +120,34 @@
     <Compile Include="Directory\IDirectory.cs" />
     <Compile Include="Error\IError.cs" />
     <Compile Include="Error\ResourceException.cs" />
+    <Compile Include="Group\GroupCreationOptionsBuilder.cs" />
     <Compile Include="Group\GroupStatus.cs" />
+    <Compile Include="Group\IGroupCreationActions.cs" />
+    <Compile Include="Group\IGroupCreationOptions.cs" />
     <Compile Include="Group\IGroup.cs" />
     <Compile Include="Group\IGroupMembership.cs" />
     <Compile Include="Http\HttpExtensions.cs" />
+    <Compile Include="Http\HttpRequests.cs" />
     <Compile Include="Http\IAsynchronousHttpClient.cs" />
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Http\ISynchronousHttpClient.cs" />
+    <Compile Include="IdSite\IAccountResult.cs" />
+    <Compile Include="IdSite\IAsynchronousNonceStore.cs" />
+    <Compile Include="IdSite\IIdSiteAsyncCallbackHandler.cs" />
+    <Compile Include="IdSite\IIdSiteAsyncResultListener.cs" />
+    <Compile Include="IdSite\IIdSiteUrlBuilder.cs" />
+    <Compile Include="IdSite\INonce.cs" />
+    <Compile Include="IdSite\INonceStore.cs" />
+    <Compile Include="IdSite\ISynchronousNonceStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreMappingSync.cs" />
     <Compile Include="Impl\Account\AccountCreationActionsShared.cs" />
+    <Compile Include="Impl\Account\DefaultAccount.Collections.cs" />
+    <Compile Include="Impl\Account\DefaultAccount.IGroup.cs" />
+    <Compile Include="Impl\Account\DefaultAccount.IGroupSync.cs" />
+    <Compile Include="Impl\Account\DefaultAccount.Resources.cs" />
+    <Compile Include="Impl\Account\DefaultAccount.ResourcesSync.cs" />
     <Compile Include="Impl\Account\DefaultAccountCreationOptions.cs" />
     <Compile Include="Impl\Account\DefaultEmailVerificationToken.cs" />
     <Compile Include="Impl\Account\DefaultPasswordResetToken.cs" />
@@ -107,7 +155,19 @@
     <Compile Include="Impl\Account\IAccountCreationActionsSync.cs" />
     <Compile Include="Impl\Account\IAccountSync.cs" />
     <Compile Include="Impl\Account\IPasswordResetTokenSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.Collections.cs" />
     <Compile Include="Impl\Application\DefaultApplication.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.EmailVerification.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.EmailVerificationSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.IAccountCreationOptionsSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.IAccountStoreSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.IGroupCreationActions.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.IGroupCreationActionsSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.Login.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.LoginSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.ResetPasswordSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.Resources.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.ResourcesSync.cs" />
     <Compile Include="Impl\Application\DefaultApplicationCreationOptions.cs" />
     <Compile Include="Impl\Application\IApplicationSync.cs" />
     <Compile Include="Impl\Auth\AbstractLoginAttempt.cs" />
@@ -118,21 +178,25 @@
     <Compile Include="Impl\Auth\IAuthenticationResultSync.cs" />
     <Compile Include="Impl\Auth\IBasicLoginAttempt.cs" />
     <Compile Include="Impl\Auth\ILoginAttempt.cs" />
+    <Compile Include="Impl\Cache\DefaultCacheConfiguration.cs" />
+    <Compile Include="Impl\Cache\DefaultCacheConfigurationBuilder.cs" />
+    <Compile Include="Cache\ICacheConfiguration.cs" />
     <Compile Include="Impl\Cache\InMemoryCache.cs" />
     <Compile Include="Impl\Cache\InMemoryCacheManager.cs" />
     <Compile Include="Impl\Cache\InMemoryCacheProvider.cs" />
-    <Compile Include="Impl\Cache\NullCache.cs" />
+    <Compile Include="Impl\Cache\InMemoryCacheProviderBuilder.cs" />
     <Compile Include="Impl\Cache\NullCacheProvider.cs" />
-    <Compile Include="Impl\Cache\DefaultCacheRegionNameResolver.cs" />
     <Compile Include="Impl\Cache\DefaultCacheResolver.cs" />
-    <Compile Include="Impl\Cache\ICacheRegionNameResolver.cs" />
     <Compile Include="Impl\Cache\ICacheResolver.cs" />
-    <Compile Include="Impl\Client\DefaultCacheProviderBuilder.cs" />
+    <Compile Include="Impl\Client\DefaultClient.Collections.cs" />
+    <Compile Include="Impl\Client\DefaultClient.IDataStore.cs" />
+    <Compile Include="Impl\Client\DefaultClient.ITenantActions.cs" />
+    <Compile Include="Impl\Client\DefaultClient.ITenantActionsSync.cs" />
     <Compile Include="Impl\Client\DefaultJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\DefaultHttpClientBuilder.cs" />
     <Compile Include="Impl\CustomData\ICustomDataSync.cs" />
+    <Compile Include="Impl\DataStore\Filters\AbstractCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\ProviderAccountResultFilter.cs" />
-    <Compile Include="Impl\DataStore\ICacheProviderBuilder.cs" />
     <Compile Include="Impl\Client\IClientSync.cs" />
     <Compile Include="Impl\Client\IJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\IHttpClientBuilder.cs" />
@@ -143,16 +207,25 @@
     <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
     <Compile Include="Impl\DataStore\IDataStoreSync.cs" />
-    <Compile Include="Impl\DataStore\IdentityMapOptions.cs" />
+    <Compile Include="Impl\IdentityMap\IdentityMapOptions.cs" />
+    <Compile Include="Impl\Directory\DefaultDirectory.Collections.cs" />
+    <Compile Include="Impl\Directory\DefaultDirectory.CreationActions.cs" />
+    <Compile Include="Impl\Directory\DefaultDirectory.CreationActionsSync.cs" />
+    <Compile Include="Impl\Directory\DefaultDirectory.Resources.cs" />
+    <Compile Include="Impl\Directory\DefaultDirectory.ResourcesSync.cs" />
     <Compile Include="Impl\Directory\DefaultDirectoryCreationOptions.cs" />
     <Compile Include="Impl\Directory\IDirectorySync.cs" />
+    <Compile Include="Impl\Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Impl\Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Impl\Group\DefaultGroupCreationOptions.cs" />
     <Compile Include="Impl\Group\DefaultGroup.cs" />
     <Compile Include="Impl\Group\DefaultGroupMembership.cs" />
+    <Compile Include="Impl\Group\GroupCreationActionsShared.cs" />
+    <Compile Include="Impl\Group\IGroupCreationActionsSync.cs" />
     <Compile Include="Impl\Group\IGroupMembershipSync.cs" />
     <Compile Include="Impl\Group\IGroupSync.cs" />
     <Compile Include="Impl\Group\IInternalGroupMembership.cs" />
     <Compile Include="Impl\DataStore\IInternalAsyncDataStore.cs" />
-    <Compile Include="Impl\IdentityMap\MemoryCacheIdentityMap.cs" />
     <Compile Include="Impl\DataStore\IInternalSyncDataStore.cs" />
     <Compile Include="Impl\Extensions\ConcurrentDictionaryExtensions.cs" />
     <Compile Include="Impl\Http\DefaultHttpClientLoader.cs" />
@@ -160,12 +233,75 @@
     <Compile Include="Impl\Http\Support\DefaultBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\IBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
-    <Compile Include="Impl\IdentityMap\IIdentityMap.cs" />
-    <Compile Include="Impl\Linq\LinqHelper.cs" />
+    <Compile Include="Impl\IdentityMap\IIdentityMap{TItem}.cs" />
     <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
-    <Compile Include="Impl\Provider\AbstractCreateProviderRequestBuilder.cs" />
+    <Compile Include="IdSite\IdSiteRuntimeException.cs" />
+    <Compile Include="IdSite\IdSiteSessionTimeoutException.cs" />
+    <Compile Include="IdSite\InvalidIdSiteTokenException.cs" />
+    <Compile Include="Impl\IdSite\InlineIdSiteSyncResultListener.cs" />
+    <Compile Include="Impl\IdSite\InlineIdSiteAsyncResultListener.cs" />
+    <Compile Include="Impl\Jwt\DefaultJwtSigner.cs" />
+    <Compile Include="Impl\Jwt\IJwtSigner.cs" />
+    <Compile Include="Impl\Jwt\JsonWebToken.cs" />
+    <Compile Include="Impl\Jwt\JwtHeaderParameters.cs" />
+    <Compile Include="Impl\Jwt\JwtSignatureValidator.cs" />
+    <Compile Include="Impl\Linq\Executor\IAsyncExecutor{TResult}.cs" />
+    <Compile Include="Impl\Linq\Executor\NullExecutor{TResult}.cs" />
+    <Compile Include="Impl\Linq\Executor\CollectionResourceExecutor{TResult}.cs" />
+    <Compile Include="Impl\Linq\CollectionResourceQueryable{TResult}.cs" />
+    <Compile Include="Impl\Linq\CollectionResourceQueryProvider{TResult}.cs" />
+    <Compile Include="Impl\Linq\ExpandCommon.cs" />
+    <Compile Include="Impl\Linq\Parsing\DatetimeAttributeTermWorkingModel.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\ExpandExpression.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\LongCountResultOperator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\WhereMemberExpression.cs" />
+    <Compile Include="Impl\Linq\Parsing\QueryModelValidator.cs" />
+    <Compile Include="Impl\Linq\Parsing\NameTranslators\DateTimeFieldNameTranslator.cs" />
+    <Compile Include="Impl\Linq\Parsing\NameTranslators\MethodNameTranslator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Transformers\AbstractExpressionTransformer.cs" />
+    <Compile Include="Impl\Linq\Parsing\Transformers\IExpressionTransformer.cs" />
+    <Compile Include="Impl\Linq\Parsing\Transformers\VbConvertInvocationTransformer.cs" />
+    <Compile Include="Impl\Linq\Parsing\Transformers\VbStringCompareTransformer.cs" />
+    <Compile Include="Impl\Linq\Parsing\WhereExpressionVisitor.cs" />
+    <Compile Include="Impl\Linq\QueryModel\DatetimeShorthandModel.cs" />
+    <Compile Include="Impl\Linq\QueryModel\ExpandTerm.cs" />
+    <Compile Include="Impl\Linq\QueryModel\WhereTerm.cs" />
+    <Compile Include="Impl\Linq\Sync\SyncCollectionEnumeratorAdapter{TResult}.cs" />
+    <Compile Include="Impl\Linq\Parsing\CompilingExpressionVisitor.cs" />
+    <Compile Include="Impl\Linq\Parsing\DiscoveringExpressionVisitor.cs" />
+    <Compile Include="Impl\Linq\Parsing\Transformers\PartialEvaluationTransformer.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\FilterExpression.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\OrderByExpression.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\ParsedExpression.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\AnyResultOperator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\CountResultOperator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\FirstResultOperator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\ResultOperatorExpression.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\ResultOperators\SingleResultOperator.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\SkipExpression.cs" />
+    <Compile Include="Impl\Linq\Parsing\Expressions\TakeExpression.cs" />
+    <Compile Include="Impl\Linq\Parsing\OrderByDirection.cs" />
+    <Compile Include="Impl\Linq\Parsing\ResultOperator.cs" />
+    <Compile Include="Impl\Linq\Parsing\NameTranslators\AbstractNameTranslator.cs" />
+    <Compile Include="Impl\Linq\Parsing\NameTranslators\FieldNameTranslator.cs" />
+    <Compile Include="Impl\Linq\Parsing\WhereComparison.cs" />
+    <Compile Include="Impl\Linq\QueryModel\CollectionResourceQueryModel.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteUrlBuilder.cs" />
+    <Compile Include="Impl\IdSite\DefaultNonce.cs" />
+    <Compile Include="Impl\IdSite\DefaultNonceStore.cs" />
+    <Compile Include="Impl\Jwt\DefaultJwtClaims.cs" />
+    <Compile Include="Impl\Jwt\DefaultJwtClaimsBuilder.cs" />
+    <Compile Include="Impl\IdSite\IdSiteClaims.cs" />
+    <Compile Include="Impl\Linq\LinqHelper.cs" />
+    <Compile Include="Impl\Linq\Parsing\QueryModelCompiler.cs" />
+    <Compile Include="Impl\Linq\Parsing\QueryModelParser.cs" />
+    <Compile Include="Impl\Linq\QueryModel\ExecutionPlanModel.cs" />
+    <Compile Include="Impl\Linq\QueryModel\OrderByTerm.cs" />
+    <Compile Include="Impl\Linq\Sync\SyncScalarExecutor{TItem}.cs" />
+    <Compile Include="Impl\Provider\AbstractCreateProviderRequestBuilder{T}.cs" />
     <Compile Include="Impl\Provider\AbstractProvider.cs" />
-    <Compile Include="Impl\Provider\AbstractProviderAccountRequestBuilder.cs" />
+    <Compile Include="Impl\Provider\AbstractProviderAccountRequestBuilder{T}.cs" />
     <Compile Include="Impl\Provider\AbstractProviderData.cs" />
     <Compile Include="Impl\Provider\DefaultLinkedInProvider.cs" />
     <Compile Include="Impl\Provider\DefaultLinkedInProviderData.cs" />
@@ -198,17 +334,24 @@
     <Compile Include="Impl\Provider\ProviderAccountResolver.cs" />
     <Compile Include="Impl\Provider\ProviderType.cs" />
     <Compile Include="Impl\Provider\ProviderTypeConverter.cs" />
+    <Compile Include="Impl\Resource\CollectionResponsePage{T}.cs" />
+    <Compile Include="Impl\Resource\DefaultRetrievalOptions{T}.cs" />
+    <Compile Include="Impl\Resource\ExpandedProperty.cs" />
+    <Compile Include="Impl\Resource\IEmbeddedProperty.cs" />
     <Compile Include="Impl\Resource\ILinkable.cs" />
     <Compile Include="Impl\Resource\INotifiable.cs" />
+    <Compile Include="Impl\Resource\ISaveableSync{T}.cs" />
+    <Compile Include="Impl\Resource\ISaveableWithOptionsSync{T}.cs" />
     <Compile Include="Impl\Resource\ResourceData.cs" />
     <Compile Include="Impl\Resource\IExtendableSync.cs" />
     <Compile Include="Impl\Resource\IDeletableSync.cs" />
-    <Compile Include="Impl\Resource\ISaveableSync.cs" />
+    <Compile Include="Impl\Resource\IWithProperties.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterResult.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\AbstractFieldConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterList.cs" />
     <Compile Include="DataStore\IDataStore.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FuncFieldConverter.cs" />
+    <Compile Include="Impl\Serialization\FieldConverters\ExpandedPropertyConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\LinkPropertyConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\StatusFieldConverters.cs" />
     <Compile Include="Impl\DataStore\Filters\DefaultSynchronousFilter.cs" />
@@ -225,15 +368,43 @@
     <Compile Include="Impl\Tenant\ITenantActionsSync.cs" />
     <Compile Include="Impl\Tenant\ITenantSync.cs" />
     <Compile Include="Impl\Utility\AnonymousType.cs" />
+    <Compile Include="Impl\Utility\Base64.cs" />
     <Compile Include="Impl\Utility\DetectLanguage.cs" />
-    <Compile Include="Impl\Utility\ITypeLoader.cs" />
+    <Compile Include="Impl\Utility\HmacGenerator.cs" />
+    <Compile Include="Impl\Utility\IMultiValueDictionary{TKey,TValue}.cs" />
+    <Compile Include="Impl\Utility\ITypeLoader{T}.cs" />
     <Compile Include="Impl\Utility\SourceLanguage.cs" />
-    <Compile Include="Impl\Utility\TypeLoader.cs" />
-    <Compile Include="Linq\IOrderedAsyncQueryable.cs" />
-    <Compile Include="Linq\IAsyncQueryProvider.cs" />
+    <Compile Include="Impl\Utility\TypeLoader{T}.cs" />
+    <Compile Include="Impl\Utility\UnixDate.cs" />
+    <Compile Include="Linq\AsyncQueryableExpandExtensions.cs" />
+    <Compile Include="Jwt\IJwtClaims.cs" />
+    <Compile Include="Jwt\IJwtClaimsBuilder.cs" />
+    <Compile Include="Jwt\InvalidJwtException.cs" />
+    <Compile Include="Jwt\Jwts.cs" />
+    <Compile Include="Linq\Expandables\IAccountExpandables.cs" />
+    <Compile Include="Linq\Expandables\IAccountStoreMappingExpandables.cs" />
+    <Compile Include="Linq\Expandables\IApplicationExpandables.cs" />
+    <Compile Include="Linq\Expandables\IAuthenticationResultExpandables.cs" />
+    <Compile Include="Linq\Expandables\IDirectoryExpandables.cs" />
+    <Compile Include="Linq\Expandables\IExpandableAccounts.cs" />
+    <Compile Include="Linq\Expandables\IExpandableAccountStoreMappings.cs" />
+    <Compile Include="Linq\Expandables\IExpandableApplications.cs" />
+    <Compile Include="Linq\Expandables\IExpandableDirectory.cs" />
+    <Compile Include="Linq\Expandables\IExpandableCustomData.cs" />
+    <Compile Include="Linq\Expandables\IExpandableGroupMemberships.cs" />
+    <Compile Include="Linq\Expandables\IExpandableGroups.cs" />
+    <Compile Include="Linq\Expandables\IExpandableTenant.cs" />
+    <Compile Include="Linq\Expandables\IGroupExpandables.cs" />
+    <Compile Include="Linq\Expandables\IGroupMembershipExpandables.cs" />
+    <Compile Include="Linq\Expandables\ITenantExpandables.cs" />
+    <Compile Include="Linq\IAsyncQueryProvider{T}.cs" />
+    <Compile Include="Linq\IOrderedAsyncQueryable{T}.cs" />
+    <Compile Include="Linq\RetrievalOptionExpandExtensions.cs" />
+    <Compile Include="Logging\ILoggerConsumer{T}.cs" />
+    <Compile Include="Logging\InMemoryLogger.cs" />
     <Compile Include="Provider\ClientProviderExtensions.cs" />
     <Compile Include="Provider\ICreateProviderRequest.cs" />
-    <Compile Include="Provider\ICreateProviderRequestBuilder.cs" />
+    <Compile Include="Provider\ICreateProviderRequestBuilder{T}.cs" />
     <Compile Include="Provider\ILinkedInAccountRequestBuilder.cs" />
     <Compile Include="Provider\ILinkedInCreateProviderRequestBuilder.cs" />
     <Compile Include="Provider\ILinkedInRequestFactory.cs" />
@@ -256,16 +427,25 @@
     <Compile Include="Provider\IFacebookProviderData.cs" />
     <Compile Include="Provider\IProvider.cs" />
     <Compile Include="Provider\IProviderAccountRequest.cs" />
-    <Compile Include="Provider\IProviderAccountRequestBuilder.cs" />
+    <Compile Include="Provider\IProviderAccountRequestBuilder{T}.cs" />
     <Compile Include="Provider\IProviderAccountResult.cs" />
     <Compile Include="Provider\IProviderData.cs" />
     <Compile Include="Provider\IProviderFactory.cs" />
-    <Compile Include="Provider\IProviderRequestFactory.cs" />
+    <Compile Include="Provider\IProviderRequestFactory{A,P}.cs" />
     <Compile Include="Resource\IExtendable.cs" />
+    <Compile Include="Resource\IRetrievalOptions{T}.cs" />
+    <Compile Include="Resource\ISaveableWithOptions{T}.cs" />
+    <Compile Include="Resource\ISaveable{T}.cs" />
+    <Compile Include="Serialization\ISerializerConsumer{T}.cs" />
+    <Compile Include="Shared\ImmutableValueObject{T}.cs" />
     <Compile Include="Shared\StringEnumeration.cs" />
-    <Compile Include="Sync\FilterExtensions.cs" />
+    <Compile Include="Linq\SyncExpandExtensions.cs" />
+    <Compile Include="Linq\SyncFilterExtensions.cs" />
     <Compile Include="Sync\SyncAccountCreationActionsExtensions.cs" />
+    <Compile Include="Sync\SyncAccountResultExtensions.cs" />
+    <Compile Include="Sync\SyncAccountStoreExtensions.cs" />
     <Compile Include="Sync\SyncDirectoryExtensions.cs" />
+    <Compile Include="Sync\SyncGroupCreationExtensions.cs" />
     <Compile Include="Sync\SyncGroupMembershipExtensions.cs" />
     <Compile Include="Sync\SyncGroupExtensions.cs" />
     <Compile Include="Sync\SyncAccountExtensions.cs" />
@@ -284,7 +464,6 @@
     <Compile Include="Impl\DataStore\ResourceTypeLookup.cs" />
     <Compile Include="Impl\Directory\DefaultDirectory.cs" />
     <Compile Include="Impl\Error\DefaultError.cs" />
-    <Compile Include="Impl\Extensions\DateExtensions.cs" />
     <Compile Include="Impl\Extensions\UriExtensions.cs" />
     <Compile Include="Impl\Http\Authentication\DefaultRequestAuthenticatorFactory.cs" />
     <Compile Include="Impl\Http\Authentication\IRequestAuthenticatorFactory.cs" />
@@ -316,42 +495,13 @@
     <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Impl\Http\Authentication\RequestAuthenticationException.cs" />
     <Compile Include="Http\RequestException.cs" />
-    <Compile Include="Impl\Linq\CollectionResourceQueryExecutor.cs" />
-    <Compile Include="Impl\Linq\CollectionResourceQueryModelVisitor.cs" />
-    <Compile Include="Impl\Linq\CollectionResourceWhereExpressionVisitor.cs" />
-    <Compile Include="Impl\Linq\Parsing\ExpandExpressionNode.cs" />
-    <Compile Include="Impl\Linq\Parsing\ExpandResultOperator.cs" />
-    <Compile Include="Impl\Linq\Parsing\ExtendedQueryParser.cs" />
-    <Compile Include="Impl\Linq\Parsing\FilterClause.cs" />
-    <Compile Include="Impl\Linq\Parsing\FilterExpressionNode.cs" />
-    <Compile Include="Impl\Linq\CollectionResourceRequestModelCompiler.cs" />
-    <Compile Include="Impl\Linq\RequestModel\AbstractAttributeTermModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\CollectionResourceRequestModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\DatetimeShorthandAttributeTermModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\DatetimeAttributeTermModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\ExecutionPlanModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\ExpansionTerm.cs" />
-    <Compile Include="Impl\Linq\RequestModel\OrderByModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\StringAttributeMatchingType.cs" />
-    <Compile Include="Impl\Linq\RequestModel\StringAttributeTermModel.cs" />
-    <Compile Include="Impl\Linq\RequestModel\WhereAttributeTermInProgressModel.cs" />
-    <Compile Include="Impl\Linq\StaticNameTranslators\CollectionLinkMethodNameTranslator.cs" />
-    <Compile Include="Impl\Linq\StaticNameTranslators\DatetimeFieldNameTranslator.cs" />
-    <Compile Include="Impl\Linq\StaticNameTranslators\FieldNameTranslator.cs" />
-    <Compile Include="Impl\Linq\StaticNameTranslators\LinkMethodNameTranslator.cs" />
-    <Compile Include="Impl\Linq\StaticNameTranslators\StringHelperMethodNameTranslator.cs" />
-    <Compile Include="Impl\Linq\Sync\SyncCollectionEnumeratorAdapter.cs" />
     <Compile Include="Impl\NullLogger.cs" />
     <Compile Include="Impl\Resource\AbstractExtendableInstanceResource.cs" />
     <Compile Include="Impl\Resource\AbstractInstanceResource.cs" />
-    <Compile Include="Impl\Resource\CollectionResourceQueryable.cs" />
-    <Compile Include="Impl\Resource\CollectionResponsePage.cs" />
     <Compile Include="Impl\Resource\LinkProperty.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.cs" />
     <Compile Include="Impl\Utility\ConfigurationManagerWrapper.cs" />
-    <Compile Include="Shared\ImmutableValueObject.cs" />
     <Compile Include="Impl\Utility\Iso8601.cs" />
-    <Compile Include="Impl\Utility\IMultiValueDictionary.cs" />
     <Compile Include="Impl\Utility\RequestHelper.cs" />
     <Compile Include="Impl\Utility\SafeNativeMethods.cs" />
     <Compile Include="Impl\Utility\WindowsVersionHelper.cs" />
@@ -365,21 +515,19 @@
     <Compile Include="Resource\IAuditable.cs" />
     <Compile Include="Resource\ICreationOptions.cs" />
     <Compile Include="Resource\IDeletable.cs" />
-    <Compile Include="Resource\ISaveable.cs" />
     <Compile Include="Impl\Utility\EnvironmentWrapper.cs" />
     <Compile Include="Impl\Utility\FileWrapper.cs" />
     <Compile Include="Impl\Utility\IConfigurationManager.cs" />
     <Compile Include="Impl\Utility\IEnvironment.cs" />
     <Compile Include="Impl\Utility\IFile.cs" />
     <Compile Include="Impl\Utility\Properties.cs" />
-    <Compile Include="Impl\Utility\GenericEqualityComparer.cs" />
     <Compile Include="Impl\Utility\HashCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\IResource.cs" />
-    <Compile Include="Shared\ILogger.cs" />
-    <Compile Include="Shared\LogEntry.cs" />
-    <Compile Include="Shared\LoggerExtensions.cs" />
-    <Compile Include="Shared\LogLevel.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\LogEntry.cs" />
+    <Compile Include="Logging\LoggerExtensions.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Sync\SyncExtendableExtensions.cs" />
     <Compile Include="Sync\SyncResourceExtensions.cs" />
     <Compile Include="Sync\SyncTenantActionsExtensions.cs" />
@@ -387,6 +535,9 @@
     <Compile Include="Tenant\ITenantActions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Impl\Application\DefaultApplication.IAccountStore.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.ResetPassword.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.IAccountCreationOptions.cs" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -396,16 +547,17 @@
   <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta014\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta014\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets" Condition="Exists('..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets')" />
+  <Import Project="..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets" Condition="Exists('..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets'))" />
+    <Error Condition="!Exists('..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,24 +1,24 @@
 ﻿// <copyright file="HttpHeaders.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Stormpath.SDK.Impl.Extensions;
 
 namespace Stormpath.SDK.Http
 {
@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Http
         private static readonly string LocationName = "Location";
         private static readonly string HeaderUserAgentName = "User-Agent";
 
-        private readonly Dictionary<string, List<object>> headers;
+        private readonly IDictionary<string, List<object>> headers;
         private bool readOnly;
 
         /// <summary>
@@ -45,6 +45,21 @@ namespace Stormpath.SDK.Http
         {
             this.headers = new Dictionary<string, List<object>>();
             this.readOnly = false;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpHeaders"/> class
+        /// by copying values from a dictionary.
+        /// </summary>
+        /// <param name="existing">A collection of headers to copy.</param>
+        internal HttpHeaders(IDictionary<string, object> existing)
+        {
+            this.headers = existing
+                .Select(x => new KeyValuePair<string, List<object>>(
+                    x.Key, new List<object>() { x.Value }))
+                .ToDictionary();
+
+            this.readOnly = true;
         }
 
         /// <summary>

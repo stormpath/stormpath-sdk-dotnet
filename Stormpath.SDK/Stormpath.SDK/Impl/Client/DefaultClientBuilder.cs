@@ -1,19 +1,18 @@
 ﻿// <copyright file="DefaultClientBuilder.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Net;
@@ -21,8 +20,8 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
-using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Client
 {
@@ -36,20 +35,18 @@ namespace Stormpath.SDK.Impl.Client
         private readonly IClientApiKeyBuilder clientApiKeyBuilder;
         private readonly IJsonSerializerBuilder serializerBuilder;
         private readonly IHttpClientBuilder httpClientBuilder;
-        private readonly ICacheProviderBuilder cacheProviderBuilder;
 
         private string baseUrl = DefaultBaseUrl;
         private int connectionTimeout = DefaultConnectionTimeout;
         private IWebProxy proxy;
+        private ICacheProvider cacheProvider;
         private AuthenticationScheme authenticationScheme = DefaultAuthenticationScheme;
         private IClientApiKey apiKey;
         private ILogger logger;
-        private TimeSpan? identityMapExpiration;
 
         public DefaultClientBuilder()
         {
             this.serializerBuilder = new DefaultJsonSerializerBuilder();
-            this.cacheProviderBuilder = new DefaultCacheProviderBuilder();
             this.httpClientBuilder = new DefaultHttpClientBuilder();
             this.clientApiKeyBuilder = ClientApiKeys.Builder();
         }
@@ -104,17 +101,17 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
-        IClientBuilder IClientBuilder.UseJsonSerializer(IJsonSerializer serializer)
+        IClientBuilder ISerializerConsumer<IClientBuilder>.SetSerializer(IJsonSerializer serializer)
         {
             if (serializer == null)
                 throw new ArgumentNullException(nameof(serializer));
 
-            this.serializerBuilder.UseSerializer(serializer);
+            this.serializerBuilder.SetSerializer(serializer);
 
             return this;
         }
 
-        IClientBuilder IClientBuilder.UseHttpClient(IHttpClient httpClient)
+        IClientBuilder IClientBuilder.SetHttpClient(IHttpClient httpClient)
         {
             if (httpClient == null)
                 throw new ArgumentNullException(nameof(httpClient));
@@ -124,38 +121,22 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
-        IClientBuilder IClientBuilder.SetLogger(ILogger logger)
+        IClientBuilder ILoggerConsumer<IClientBuilder>.SetLogger(ILogger logger)
         {
             this.logger = logger;
 
             return this;
         }
 
-        IClientBuilder IClientBuilder.SetIdentityMapExpiration(TimeSpan expiration)
-        {
-            if (expiration.TotalSeconds < 10 ||
-                expiration.TotalHours > 24)
-                throw new ArgumentOutOfRangeException($"{nameof(expiration)} must be between 10 seconds and 24 hours.");
-
-            this.identityMapExpiration = expiration;
-
-            return this;
-        }
-
-        internal IClientBuilder SetCache(bool cacheEnabled)
-        {
-            this.cacheProviderBuilder.UseCache(cacheEnabled);
-
-            return this;
-        }
-
-        internal IClientBuilder SetCache(ICacheProvider cacheProvider)
+        IClientBuilder IClientBuilder.SetCacheProvider(ICacheProvider cacheProvider)
         {
             if (cacheProvider == null)
                 throw new ArgumentNullException(nameof(cacheProvider));
 
-            this.cacheProviderBuilder.UseCache(true);
-            this.cacheProviderBuilder.UseProvider(cacheProvider);
+            if (this.cacheProvider != null)
+                throw new ApplicationException("Cache provider already set.");
+
+            this.cacheProvider = cacheProvider;
 
             return this;
         }
@@ -173,6 +154,29 @@ namespace Stormpath.SDK.Impl.Client
             if (this.logger == null)
                 this.logger = new NullLogger();
 
+            var serializer = this.serializerBuilder.Build();
+
+            if (this.cacheProvider == null)
+            {
+                this.logger.Info("No CacheProvider configured. Defaulting to in-memory CacheProvider with default TTL and TTI of one hour.");
+
+                this.cacheProvider = Caches
+                    .NewInMemoryCacheProvider()
+                    .WithDefaultTimeToIdle(TimeSpan.FromHours(1))
+                    .WithDefaultTimeToLive(TimeSpan.FromHours(1))
+                    .Build();
+            }
+            else
+            {
+                var injectableWithSerializer = this.cacheProvider as ISerializerConsumer<ICacheProvider>;
+                if (injectableWithSerializer != null)
+                    injectableWithSerializer.SetSerializer(serializer);
+
+                var injectableWithLogger = this.cacheProvider as ILoggerConsumer<ICacheProvider>;
+                if (injectableWithLogger != null)
+                    injectableWithLogger.SetLogger(this.logger);
+            }
+
             this.httpClientBuilder
                 .SetBaseUrl(this.baseUrl)
                 .SetConnectionTimeout(this.connectionTimeout)
@@ -187,9 +191,9 @@ namespace Stormpath.SDK.Impl.Client
                 this.proxy,
                 this.httpClientBuilder.Build(),
                 this.serializerBuilder.Build(),
-                this.cacheProviderBuilder.Build(),
+                this.cacheProvider,
                 this.logger,
-                this.identityMapExpiration ?? DefaultIdentityMapSlidingExpiration);
+                DefaultIdentityMapSlidingExpiration);
         }
     }
 }

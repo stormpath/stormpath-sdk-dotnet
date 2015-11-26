@@ -1,19 +1,18 @@
 ﻿// <copyright file="FakeJson.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 namespace Stormpath.SDK.Tests.Fakes
 {
@@ -85,6 +84,156 @@ namespace Stormpath.SDK.Tests.Fakes
     },
     ""groups"": {
         ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/groups""
+    },
+    ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount"",
+    ""middleName"": null,
+    ""modifiedAt"": ""2015-07-21T23:50:49.078Z"",
+    ""providerData"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/providerData""
+    },
+    ""refreshTokens"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/refreshTokens""
+    },
+    ""status"": ""ENABLED"",
+    ""surname"": ""Solo"",
+    ""tenant"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
+    },
+    ""username"": ""han.solo@corellia.core""
+}";
+
+        public static readonly string AccountWithExpandedCustomData = @"
+{
+    ""accessTokens"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/accessTokens""
+    },
+    ""apiKeys"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/apiKeys""
+    },
+    ""applications"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/applications""
+    },
+    ""createdAt"": ""2015-07-21T23:50:49.078Z"",
+    ""customData"": {
+        ""createdAt"": ""2015-07-30T02:42:17.833Z"",
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/customData"",
+        ""modifiedAt"": ""2015-07-30T02:42:17.833Z"",
+        ""isAdmin"": false
+    },
+    ""directory"": {
+        ""href"": ""https://api.stormpath.com/v1/directories/foobarDirectory""
+    },
+    ""email"": ""han.solo@corellia.core"",
+    ""emailVerificationToken"": null,
+    ""fullName"": ""Han Solo"",
+    ""givenName"": ""Han"",
+    ""groupMemberships"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/groupMemberships""
+    },
+    ""groups"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/groups""
+    },
+    ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount"",
+    ""middleName"": null,
+    ""modifiedAt"": ""2015-07-21T23:50:49.078Z"",
+    ""providerData"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/providerData""
+    },
+    ""refreshTokens"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/refreshTokens""
+    },
+    ""status"": ""ENABLED"",
+    ""surname"": ""Solo"",
+    ""tenant"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
+    },
+    ""username"": ""han.solo@corellia.core""
+}";
+
+        public static readonly string AccountWithExpandedGroups = @"
+{
+    ""accessTokens"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/accessTokens""
+    },
+    ""apiKeys"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/apiKeys""
+    },
+    ""applications"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/applications""
+    },
+    ""createdAt"": ""2015-07-21T23:50:49.078Z"",
+    ""customData"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/customData""
+    },
+    ""directory"": {
+        ""href"": ""https://api.stormpath.com/v1/directories/foobarDirectory""
+    },
+    ""email"": ""han.solo@corellia.core"",
+    ""emailVerificationToken"": null,
+    ""fullName"": ""Han Solo"",
+    ""givenName"": ""Han"",
+    ""groupMemberships"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/groupMemberships""
+    },
+    ""groups"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant/groups"",
+        ""items"": [
+            {
+                ""accountMemberships"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group1/accountMemberships""
+                },
+                ""accounts"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group1/accounts""
+                },
+                ""applications"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group1/applications""
+                },
+                ""createdAt"": ""2015-08-24T17:02:52.915Z"",
+                ""customData"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group1/customData""
+                },
+                ""description"": ""Those loyal to the Galactic Empire."",
+                ""directory"": {
+                    ""href"": ""https://api.stormpath.com/v1/directories/directory1""
+                },
+                ""href"": ""https://api.stormpath.com/v1/groups/group1"",
+                ""modifiedAt"": ""2015-08-24T17:02:52.915Z"",
+                ""name"": ""Imperials"",
+                ""status"": ""DISABLED"",
+                ""tenant"": {
+                    ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
+                }
+            },
+            {
+                ""accountMemberships"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group2/accountMemberships""
+                },
+                ""accounts"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group2/accounts""
+                },
+                ""applications"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group2/applications""
+                },
+                ""createdAt"": ""2015-08-24T17:02:42.755Z"",
+                ""customData"": {
+                    ""href"": ""https://api.stormpath.com/v1/groups/group2/customData""
+                },
+                ""description"": ""The members of the Rebel Alliance."",
+                ""directory"": {
+                    ""href"": ""https://api.stormpath.com/v1/directories/directory1""
+                },
+                ""href"": ""https://api.stormpath.com/v1/groups/group2"",
+                ""modifiedAt"": ""2015-08-24T17:02:42.755Z"",
+                ""name"": ""Rebels"",
+                ""status"": ""ENABLED"",
+                ""tenant"": {
+                    ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
+                }
+            }
+        ],
+        ""limit"": 25,
+        ""offset"": 0,
+        ""size"": 2
     },
     ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount"",
     ""middleName"": null,
@@ -373,6 +522,24 @@ namespace Stormpath.SDK.Tests.Fakes
     ""limit"": 25,
     ""offset"": 0,
     ""size"": 6
+}";
+
+        #endregion
+
+        #region Account store mapping
+
+        public static readonly string AccountStoreMapping = @"
+{
+    ""accountStore"": {
+        ""href"": ""https://api.stormpath.com/v1/directories/directory1""
+    },
+    ""application"": {
+        ""href"": ""https://api.stormpath.com/v1/applications/foobarApplication""
+    },
+    ""href"": ""https://api.stormpath.com/v1/accountStoreMappings/foobarASM"",
+    ""isDefaultAccountStore"": true,
+    ""isDefaultGroupStore"": true,
+    ""listIndex"": 0
 }";
 
         #endregion
@@ -753,6 +920,21 @@ namespace Stormpath.SDK.Tests.Fakes
     ""limit"": 25,
     ""offset"": 0,
     ""size"": 2
+}";
+
+        #endregion
+
+        #region Group membership
+
+        public static readonly string GroupMembership = @"
+{
+    ""account"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/dcQvuLVsF48MKEnv8lrGU""
+    },
+    ""group"": {
+        ""href"": ""https://api.stormpath.com/v1/groups/56ka3Sg8VIBMnwGg3fw9y""
+    },
+    ""href"": ""https://api.stormpath.com/v1/groupMemberships/dohrFxk4XyyAMQZ6uEfog""
 }";
 
         #endregion

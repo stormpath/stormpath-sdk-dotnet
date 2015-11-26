@@ -1,35 +1,35 @@
 ﻿// <copyright file="LinqAssertExtensions.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System.Linq;
 using System.Threading;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Fakes;
 
 namespace Stormpath.SDK.Tests.Helpers
 {
     public static class LinqAssertExtensions
     {
-        public static string GetGeneratedHref<T>(this IAsyncQueryable<T> queryable)
+        public static string Generate<T>(this IAsyncQueryable<T> queryable)
         {
             var resourceQueryable = queryable as CollectionResourceQueryable<T>;
             if (resourceQueryable == null)
@@ -50,9 +50,9 @@ namespace Stormpath.SDK.Tests.Helpers
         public static void GeneratedArgumentsWere<T>(this IAsyncQueryable<T> queryable, string href, string arguments)
         {
             if (string.IsNullOrEmpty(arguments))
-                queryable.GetGeneratedHref().ShouldBe($"{href}");
+                queryable.Generate().ShouldBe($"{href}");
             else
-                queryable.GetGeneratedHref().ShouldBe($"{href}?{arguments}");
+                queryable.Generate().ShouldBe($"{href}?{arguments}");
         }
 
         public static void GeneratedSynchronousArgumentsWere<T>(this IQueryable<T> queryable, string href, string arguments)

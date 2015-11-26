@@ -37,17 +37,23 @@
     <CodeAnalysisRuleSet>..\Stormpath.SDK\Stormpath.SDK.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mono|AnyCPU'">
+    <OutputPath>bin\Mono\</OutputPath>
+    <DefineConstants>CODE_ANALYSIS;TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>..\Stormpath.SDK\Stormpath.SDK.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NSubstitute, Version=1.9.1.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.1.9.1.0\lib\net45\NSubstitute.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Remotion.Linq, Version=1.15.15.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Remotion.Linq.1.15.15.0\lib\portable-net45+wp80+wpa81+win\Remotion.Linq.dll</HintPath>
+    <Reference Include="NSubstitute, Version=1.9.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.1.9.2.0\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Shouldly, Version=2.6.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
@@ -75,16 +81,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fakes\FakeAccount.cs" />
-    <Compile Include="Fakes\FakeAccounts.cs" />
-    <Compile Include="Fakes\FakeApiKey.cs" />
-    <Compile Include="Fakes\FakeDataStore.cs" />
+    <Compile Include="Fakes\FakeDataStore{TType}.cs" />
     <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Fakes\StubDataStore.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
+    <Compile Include="Helpers\CollectionTestHarness{T}.cs" />
+    <Compile Include="Impl\Cache\Sync_caching_tests.cs" />
+    <Compile Include="Impl\Cache\Async_caching_tests.cs" />
+    <Compile Include="Impl\Cache\InMemoryCacheProviderBuilder_tests.cs" />
+    <Compile Include="Impl\DefaultAccountResult_tests.cs" />
+    <Compile Include="Impl\DefaultHttpRequestBuilder_tests.cs" />
     <Compile Include="Impl\DefaultProviderAccountResult_tests.cs" />
     <Compile Include="Impl\Entity_identity_map_tests.cs" />
-    <Compile Include="Impl\DefaultCacheProviderBuilder_tests.cs" />
     <Compile Include="Impl\DefaultCustomData_persistence_tests.cs" />
     <Compile Include="Impl\DefaultCustomData_tests.cs" />
     <Compile Include="Impl\DefaultJsonSerializerBuilder_tests.cs" />
@@ -92,34 +100,47 @@
     <Compile Include="Impl\DefaultJsonSerializerLoader_tests.cs" />
     <Compile Include="Impl\DefaultHttpClientBuilder_tests.cs" />
     <Compile Include="Impl\DefaultRequestExecutor_tests.cs" />
+    <Compile Include="Impl\Expansion_save_options_tests.cs" />
+    <Compile Include="Impl\Expansion_retrieval_options_tests.cs" />
+    <Compile Include="Impl\Extensions\Dictionary_TryGetValueAsString_tests.cs" />
+    <Compile Include="Impl\Extensions\Enumerable_IsNullOrEmpty_tests.cs" />
+    <Compile Include="Impl\Extensions\String_Nullable_tests.cs" />
+    <Compile Include="Impl\Extensions\Uri_WithoutQueryAndFragment_tests.cs" />
     <Compile Include="Impl\FieldConverter_tests.cs" />
-    <Compile Include="Helpers\Assertly.cs" />
-    <Compile Include="Helpers\CollectionTestHarness.cs" />
     <Compile Include="Helpers\LinqAssertExtensions.cs" />
     <Compile Include="Impl\Authentication\SAuthc1RequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\BasicRequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\DefaultRequestAuthenticatorFactory_tests.cs" />
     <Compile Include="Impl\BackoffStrategy_tests.cs" />
-    <Compile Include="Impl\Cache\DefaultCacheRegionNameResolver_tests.cs" />
     <Compile Include="Impl\Cache\DefaultCacheResolver_tests.cs" />
     <Compile Include="Impl\CanonicalUri_tests.cs" />
     <Compile Include="Impl\ClientApiKey_tests.cs" />
-    <Compile Include="Impl\CollectionResourceQueryable_iteration_tests.cs" />
-    <Compile Include="Impl\CollectionResourceRequestModel_validation_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler_exception_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler_exception_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler_tests.cs" />
+    <Compile Include="Impl\IdSite\InlineIdSiteSyncResultListener_tests.cs" />
+    <Compile Include="Impl\IdSite\InlineIdSiteAsyncResultListener_tests.cs" />
+    <Compile Include="Impl\Jwt\Jwt_tests.cs" />
+    <Compile Include="Impl\Linq\CollectionResourceQueryable_iteration_tests.cs" />
     <Compile Include="Impl\CreationOptions_tests.cs" />
     <Compile Include="Impl\Cache\InMemoryCache_tests.cs" />
     <Compile Include="Impl\DefaultClientApiKeyBuilder_tests.cs" />
     <Compile Include="Impl\DefaultClientBuilder_tests.cs" />
     <Compile Include="Impl\DefaultDataStore_tests.cs" />
     <Compile Include="Impl\DefaultResourceFactory_tests.cs" />
-    <Compile Include="Impl\Extensions_tests.cs" />
     <Compile Include="Impl\FieldConverterList_tests.cs" />
     <Compile Include="Impl\FilterChain_tests.cs" />
     <Compile Include="Impl\HttpHeaders_tests.cs" />
     <Compile Include="Impl\IdentityMap\Multi_threaded_tests.cs" />
     <Compile Include="Impl\IdentityMap\Single_threaded_tests.cs" />
     <Compile Include="Impl\IdentityMap\TestEntity.cs" />
+    <Compile Include="Impl\Jwt\DefaultJwtClaimsBuilder_tests.cs" />
     <Compile Include="Impl\Linq\Complicated_tests.cs" />
+    <Compile Include="Impl\Linq\Expand_resource_tests.cs" />
+    <Compile Include="Impl\Linq\Linq_test{T}.cs" />
+    <Compile Include="Impl\Linq\Sync_expand_extension_tests.cs" />
+    <Compile Include="Impl\Linq\Expand_extension_tests.cs" />
     <Compile Include="Impl\Linq\Sync_SingleOrDefault_tests.cs" />
     <Compile Include="Impl\Linq\Sync_Single_tests.cs" />
     <Compile Include="Impl\Linq\Sync_foreach_tests.cs" />
@@ -136,9 +157,11 @@
     <Compile Include="Impl\Linq\Sync_AsEnumerable_tests.cs" />
     <Compile Include="Impl\Linq\Sync_ToList_tests.cs" />
     <Compile Include="Impl\PasswordResetToken_tests.cs" />
-    <Compile Include="Impl\ResourceTypeLookup_tests.cs" />
+    <Compile Include="Impl\ResourceTypes_tests.cs" />
+    <Compile Include="Impl\Extensions\String_SplitToKeyValuePair_tests.cs" />
     <Compile Include="Impl\UriQualifier_tests.cs" />
     <Compile Include="Impl\Utility\AnonymousType_tests.cs" />
+    <Compile Include="Impl\Utility\Base64_tests.cs" />
     <Compile Include="Impl\Utility\ImmutableValueObject_tests.cs" />
     <Compile Include="Impl\LinkProperty_tests.cs" />
     <Compile Include="Impl\Linq\CountAsync_tests.cs" />
@@ -146,7 +169,6 @@
     <Compile Include="Impl\Linq\FirstAsync_tests.cs" />
     <Compile Include="Impl\Linq\Take_tests.cs" />
     <Compile Include="Impl\Linq\Skip_tests.cs" />
-    <Compile Include="Impl\Linq\Linq_tests.cs" />
     <Compile Include="Impl\Linq\OrderBy_tests.cs" />
     <Compile Include="Impl\Linq\SingleAsync_tests.cs" />
     <Compile Include="Impl\Linq\ToListAsync_tests.cs" />
@@ -158,9 +180,11 @@
     <Compile Include="Impl\Utility\Iso8601_tests.cs" />
     <Compile Include="Impl\Utility\Properties_tests.cs" />
     <Compile Include="Impl\Utility\RequestHelper_tests.cs" />
+    <Compile Include="Impl\Utility\UnixDate_tests.cs" />
     <Compile Include="Impl\Utility\WindowsVersion_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LoggerExtensions_tests.cs" />
+    <Compile Include="User_agent_tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -178,6 +202,10 @@
       <Project>{21f7a025-7bb1-49b0-8ad3-cee8a3b1d542}</Project>
       <Name>Stormpath.SDK.RestSharpClient</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Stormpath.SDK.Tests.Common\Stormpath.SDK.Tests.Common.csproj">
+      <Project>{9ed26d42-2203-46c0-b897-8e3218954170}</Project>
+      <Name>Stormpath.SDK.Tests.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Stormpath.SDK\Stormpath.SDK.csproj">
       <Project>{79a65c37-9db1-413a-ac23-708404530295}</Project>
       <Name>Stormpath.SDK</Name>
@@ -187,8 +215,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta014\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta014\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -196,9 +225,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props'))" />
-    <Error Condition="!Exists('..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets'))" />
+    <Error Condition="!Exists('..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets'))" />
   </Target>
-  <Import Project="..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets" Condition="Exists('..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets')" />
+  <Import Project="..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets" Condition="Exists('..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

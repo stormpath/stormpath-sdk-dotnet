@@ -1,19 +1,18 @@
 ﻿// <copyright file="DefaultClientApiKeyBuilder_tests.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using NSubstitute;
@@ -21,7 +20,7 @@ using Shouldly;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Impl.Api;
 using Stormpath.SDK.Impl.Utility;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -66,24 +65,31 @@ namespace Stormpath.SDK.Tests.Impl
 
         public class With_default_properties_file
         {
-            private readonly string defaultLocation =
-                System.IO.Path.Combine(Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%"), ".stormpath\\", "apiKey.properties");
-
             private readonly string fileContents =
                 "apiKey.id = 144JVZINOF5EBNCMG9EXAMPLE\r\n" +
                 "apiKey.secret = lWxOiKqKPNwJmSldbiSkEbkNjgh2uRSNAb+AEXAMPLE";
 
-            private IClientApiKeyBuilder builder;
-            private IFile file;
+            private readonly IClientApiKeyBuilder builder;
+            private readonly IEnvironment env;
+            private readonly IFile file;
+            private readonly string defaultLocation;
 
             public With_default_properties_file()
             {
+                this.env = Substitute.For<IEnvironment>();
+                this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%").Returns("~fake");
+                this.env.GetEnvironmentVariable("HOME").Returns("~fake");
+
+                this.defaultLocation = PlatformHelper.IsPlatformUnix()
+                    ? @"~fake/.stormpath/apiKey.properties"
+                    : @"~fake\.stormpath\apiKey.properties";
+
                 this.file = Substitute.For<IFile>();
                 this.file.ReadAllText(this.defaultLocation).Returns(this.fileContents);
 
                 this.builder = new DefaultClientApiKeyBuilder(
                     Substitute.For<IConfigurationManager>(),
-                    Substitute.For<IEnvironment>(),
+                    this.env,
                     this.file,
                     Substitute.For<ILogger>());
             }
@@ -535,7 +541,7 @@ namespace Stormpath.SDK.Tests.Impl
                 if (PlatformHelper.IsRunningOnMono())
                     return;
 
-                var homeDir = Environment.ExpandEnvironmentVariables("%homedrive%%homepath%");
+                var homeDir = Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
 
                 this.file = Substitute.For<IFile>();
                 this.file.ReadAllText($"{homeDir}\\test.properties")

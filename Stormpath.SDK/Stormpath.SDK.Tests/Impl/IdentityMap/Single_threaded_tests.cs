@@ -1,36 +1,37 @@
 ﻿// <copyright file="Single_threaded_tests.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
+using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Impl.IdentityMap;
+using Stormpath.SDK.Logging;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.IdentityMap
 {
     public class Single_threaded_tests : IDisposable
     {
-        private readonly IIdentityMap<string, TestEntity> identityMap;
+        private readonly IIdentityMap<TestEntity> identityMap;
 
         public Single_threaded_tests()
         {
             // Arbitrary expiration policy. We won't be validating expirations in these tests
             // because it's tricky to do so with MemoryCache.
-            this.identityMap = new MemoryCacheIdentityMap<string, TestEntity>(TimeSpan.FromSeconds(10));
+            this.identityMap = new MemoryCacheIdentityMap<TestEntity>(TimeSpan.FromSeconds(10), Substitute.For<ILogger>());
         }
 
         private TestEntity CreateEntity(string id)

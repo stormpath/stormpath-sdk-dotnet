@@ -1,22 +1,22 @@
 ﻿// <copyright file="DefaultResourceFactory_tests.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Collections.Generic;
+using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
@@ -28,6 +28,7 @@ using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.IdentityMap;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Fakes;
@@ -42,7 +43,7 @@ namespace Stormpath.SDK.Tests.Impl
         public DefaultResourceFactory_tests()
         {
             var dataStore = new StubDataStore(null, "http://api.foo.bar");
-            var identityMap = new MemoryCacheIdentityMap<string, ResourceData>(TimeSpan.FromSeconds(10)); // arbitrary expiration time
+            var identityMap = new MemoryCacheIdentityMap<ResourceData>(TimeSpan.FromSeconds(10), Substitute.For<ILogger>()); // arbitrary expiration time
             this.factory = new DefaultResourceFactory(dataStore, identityMap);
         }
 

@@ -1,4 +1,20 @@
-﻿using System;
+﻿// <copyright file="EmailVerificationDemo.cs" company="Stormpath, Inc.">
+// Copyright (c) 2015 Stormpath, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
+
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +24,9 @@ using Stormpath.SDK.Client;
 
 namespace Stormpath.Demo
 {
+    // Disabling some StyleCop rules
+#pragma warning disable SA1101 // Prefix local calls with this
+
     public class EmailVerificationDemo : AbstractDemo
     {
         private static bool ShouldContinue()
@@ -48,9 +67,13 @@ namespace Stormpath.Demo
             var createdAccount = await application.CreateAccountAsync("Email", "Test", "test@foo.co", "Changeme123!", cancellationToken);
             Console.WriteLine($"Account {createdAccount.Email} created");
 
+            var accountStore = await application.GetDefaultAccountStoreAsync();
 
-
-            await application.SendVerificationEmailAsync("test@foo.co");
+            await application.SendVerificationEmailAsync(req =>
+            {
+                req.Login = "test@foo.co";
+                req.AccountStore = accountStore;
+            });
             Console.WriteLine($"Verification email resent to {createdAccount.Email}");
 
             var token = createdAccount.EmailVerificationToken.GetValue();
@@ -66,4 +89,6 @@ namespace Stormpath.Demo
             await RemoveAccountsAsync();
         }
     }
+
+#pragma warning restore SA1101 // Prefix local calls with this
 }

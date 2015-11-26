@@ -1,23 +1,21 @@
 ﻿// <copyright file="JsonSerializationProvider.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Collections.Generic;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Serialization.FieldConverters;
 using Stormpath.SDK.Serialization;
 
@@ -25,31 +23,31 @@ namespace Stormpath.SDK.Impl.Serialization
 {
     internal sealed class JsonSerializationProvider
     {
-        private static readonly FieldConverterList ConverterChain =
-            new FieldConverterList(
+        private readonly FieldConverterList converterChain;
+
+        internal readonly IJsonSerializer ExternalSerializer;
+
+        public JsonSerializationProvider(IJsonSerializer externalSerializer)
+        {
+            this.ExternalSerializer = externalSerializer;
+
+            this.converterChain = new FieldConverterList(
                 new LinkPropertyConverter(),
+                new ExpandedPropertyConverter(converter: this.ConvertProperties),
                 new StatusFieldConverters.AccountStatusConverter(),
                 new StatusFieldConverters.ApplicationStatusConverter(),
                 new StatusFieldConverters.DirectoryStatusConverter(),
                 new StatusFieldConverters.GroupStatusConverter());
-
-        private readonly IJsonSerializer externalSerializer;
-        private readonly ResourceTypeLookup typeLookup;
-
-        public JsonSerializationProvider(IJsonSerializer externalSerializer)
-        {
-            this.externalSerializer = externalSerializer;
-            this.typeLookup = new ResourceTypeLookup();
         }
 
         public string Serialize(IDictionary<string, object> map)
         {
-            return this.externalSerializer.Serialize(map);
+            return this.ExternalSerializer.Serialize(map);
         }
 
         public IDictionary<string, object> Deserialize(string json, Type targetType)
         {
-            var stringlyTypedProperties = this.externalSerializer.Deserialize(json);
+            var stringlyTypedProperties = this.ExternalSerializer.Deserialize(json);
             var stronglyTypedProperties = this.ConvertProperties(stringlyTypedProperties, targetType);
 
             return stronglyTypedProperties;
@@ -64,6 +62,7 @@ namespace Stormpath.SDK.Impl.Serialization
                 object value = prop.Value;
 
                 var asListOfObjects = prop.Value as IEnumerable<IDictionary<string, object>>;
+                var asEmbeddedObject = prop.Value as IDictionary<string, object>;
                 if (asListOfObjects != null)
                 {
                     var outputList = new List<IDictionary<string, object>>();
@@ -76,7 +75,7 @@ namespace Stormpath.SDK.Impl.Serialization
                 }
                 else
                 {
-                    var convertResult = ConverterChain.TryConvertField(prop, targetType);
+                    var convertResult = this.converterChain.TryConvertField(prop, targetType);
                     if (convertResult.Success)
                         value = convertResult.Value;
                 }

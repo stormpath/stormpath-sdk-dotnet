@@ -1,19 +1,18 @@
 ﻿// <copyright file="AbstractResource.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System.Collections.Generic;
 using System.Threading;
@@ -26,7 +25,7 @@ namespace Stormpath.SDK.Impl.Resource
 {
     internal abstract class AbstractResource : IResource, ILinkable
     {
-        protected static readonly string HrefPropertyName = "href";
+        public static readonly string HrefPropertyName = "href";
 
         private ResourceData resourceData;
 
@@ -39,6 +38,9 @@ namespace Stormpath.SDK.Impl.Resource
         {
             Interlocked.Exchange(ref this.resourceData, data);
         }
+
+        public bool IsLinkedTo(AbstractResource other)
+            => ReferenceEquals(this.resourceData, other.resourceData);
 
         protected IResource AsInterface => this;
 
@@ -70,10 +72,10 @@ namespace Stormpath.SDK.Impl.Resource
             => this.GetResourceData()?.InternalSyncDataStore;
 
         protected Task<ITenant> GetTenantAsync(string tenantHref, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(tenantHref, new IdentityMapOptions() { StoreWithInfiniteExpiration = true }, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(tenantHref, cancellationToken);
 
         protected ITenant GetTenant(string tenantHref)
-            => this.GetInternalSyncDataStore().GetResource<ITenant>(tenantHref, new IdentityMapOptions() { StoreWithInfiniteExpiration = true });
+            => this.GetInternalSyncDataStore().GetResource<ITenant>(tenantHref);
 
         internal bool IsDirty => this.GetResourceData()?.IsDirty ?? true;
 
@@ -89,8 +91,8 @@ namespace Stormpath.SDK.Impl.Resource
         public T GetProperty<T>(string name)
             => (T)(this.GetProperty(name) ?? default(T));
 
-        public LinkProperty GetLinkProperty(string name)
-            => this.GetProperty<LinkProperty>(name) ?? new LinkProperty(null);
+        public IEmbeddedProperty GetLinkProperty(string name)
+            => this.GetProperty<IEmbeddedProperty>(name) ?? new LinkProperty(null);
 
         public bool ContainsProperty(string name)
             => this.GetResourceData()?.ContainsProperty(name) ?? false;

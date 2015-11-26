@@ -1,19 +1,18 @@
 ﻿// <copyright file="ResourceException.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Runtime.Serialization;
@@ -25,20 +24,16 @@ namespace Stormpath.SDK.Error
     /// Represents an error that occurs during a resource request.
     /// </summary>
     [Serializable]
-    public sealed class ResourceException : ApplicationException, IError, ISerializable
+    public class ResourceException : ApplicationException, IError, ISerializable
     {
-        private readonly DefaultError error;
         private readonly string constructedErrorMessage;
 
-        internal ResourceException(DefaultError error)
-            : this(error, null)
-        {
-        }
+        internal readonly DefaultError Error;
 
-        internal ResourceException(DefaultError error, Exception innerException)
-            : base(BuildExceptionMessage(error), innerException)
+        internal ResourceException(DefaultError error)
+            : base(error.Message)
         {
-            this.error = error;
+            this.Error = error;
             this.constructedErrorMessage = BuildExceptionMessage(error);
         }
 
@@ -46,32 +41,32 @@ namespace Stormpath.SDK.Error
         /// Gets the Stormpath error code associated with the error.
         /// </summary>
         /// <value>The Stormpath error code associated with this error. May be identical to <see cref="HttpStatus"/>.</value>
-        public int Code => this.error.Code;
+        public int Code => this.Error.Code;
 
         /// <summary>
         /// Gets a detailed developer error message.
         /// </summary>
         /// <value>Contains additional details that may be useful for debugging, if any.</value>
-        public string DeveloperMessage => this.error.DeveloperMessage;
+        public string DeveloperMessage => this.Error.DeveloperMessage;
 
         /// <summary>
         /// Gets additional information related to the error from Stormpath.
         /// </summary>
         /// <value>Additional information related to this error, if any.</value>
-        public string MoreInfo => this.error.MoreInfo;
+        public string MoreInfo => this.Error.MoreInfo;
 
         /// <summary>
         /// Gets the HTTP status code associated with the error.
         /// </summary>
         /// <value>The HTTP status code associated with this error.</value>
-        public int HttpStatus => this.error.HttpStatus;
+        public int HttpStatus => this.Error.HttpStatus;
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("code", this.error.Code);
-            info.AddValue("developerMessage", this.error.DeveloperMessage, typeof(string));
-            info.AddValue("moreInfo", this.error.MoreInfo, typeof(string));
-            info.AddValue("status", this.error.HttpStatus);
+            info.AddValue("code", this.Error.Code);
+            info.AddValue("developerMessage", this.Error.DeveloperMessage, typeof(string));
+            info.AddValue("moreInfo", this.Error.MoreInfo, typeof(string));
+            info.AddValue("status", this.Error.HttpStatus);
 
             base.GetObjectData(info, context);
         }

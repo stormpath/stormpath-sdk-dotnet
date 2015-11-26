@@ -1,19 +1,18 @@
 ﻿// <copyright file="Entity_identity_map_tests.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System.Linq;
 using System.Threading;
@@ -23,6 +22,7 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
 
@@ -51,6 +51,8 @@ namespace Stormpath.SDK.Tests.Impl
             var account1 = this.dataStore.Instantiate<IAccount>();
             var account2 = this.dataStore.Instantiate<IAccount>();
 
+            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeFalse();
+
             account1.MiddleName.ShouldBeNullOrEmpty();
             account2.MiddleName.ShouldBeNullOrEmpty();
 
@@ -63,6 +65,8 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/foo");
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/foo");
+
+            (account1 as AbstractResource).IsLinkedTo(account2 as AbstractResource).ShouldBeTrue();
 
             account1.MiddleName.ShouldBeNullOrEmpty();
             account2.MiddleName.ShouldBeNullOrEmpty();

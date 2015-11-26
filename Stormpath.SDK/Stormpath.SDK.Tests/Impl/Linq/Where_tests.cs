@@ -1,214 +1,301 @@
 ﻿// <copyright file="Where_tests.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
-using Stormpath.SDK.Tests.Helpers;
+using Stormpath.SDK.Account;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
-    public class Where_tests : Linq_tests
+    public class Where_tests : Linq_test<IAccount>
     {
         [Fact]
-        public void Where_throws_for_constant()
+        public async Task Throws_for_constant_true()
         {
-            Should.Throw<NotSupportedException>(() =>
+            // TODO NotSupportedException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                var query = this.Harness.Queryable.Where(x => true);
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
-            });
-
-            Should.Throw<NotSupportedException>(() =>
-            {
-                var query = this.Harness.Queryable.Where(x => false);
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Where(x => true)
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
-        public void Where_throws_for_unsupported_comparison_operators()
+        public async Task Throws_for_constant_false()
         {
-            Should.Throw<NotSupportedException>(() =>
+            // TODO NotSupportedException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                var query = this.Harness.Queryable.Where(x => x.Email != "foo");
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Where(x => false)
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
-        public void Where_throws_for_more_complex_overloads_of_helper_methods()
+        public async Task Throws_for_unsupported_comparison_operators()
         {
-            Should.Throw<NotSupportedException>(() =>
+            // TODO NotSupportedException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                var query = this.Harness.Queryable.Where(x => x.Email.Equals("bar", StringComparison.CurrentCulture));
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
-            });
-
-            Should.Throw<NotSupportedException>(() =>
-            {
-                var query = this.Harness.Queryable.Where(x => x.Email.StartsWith("foo", StringComparison.InvariantCultureIgnoreCase));
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Where(x => x.Email != "foo")
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
-        public void Where_throws_for_unsupported_helper_methods()
+        public async Task Throws_for_complex_overload_of_Equals()
         {
-            Should.Throw<NotSupportedException>(() =>
+            // TODO NotSupportedException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                var query = this.Harness.Queryable.Where(x => x.Email.ToUpper() == "FOO");
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Where(x => x.Email.Equals("bar", StringComparison.CurrentCulture))
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
-        public void Where_throws_for_binary_or()
+        public async Task Throws_for_complex_overload_of_StartsWith()
         {
-            Should.Throw<NotSupportedException>(() =>
+            // TODO NotSupportedException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
             {
-                var query = this.Harness.Queryable.Where(x => x.Email == "foo" || x.Email == "bar");
-                query.GeneratedArgumentsWere(this.Href, "<not evaluated>");
+                await this.Queryable
+                    .Where(x => x.Email.StartsWith("foo", StringComparison.InvariantCultureIgnoreCase))
+                    .MoveNextAsync();
             });
         }
 
         [Fact]
-        public void Where_attribute_equals()
+        public async Task Throws_for_unsupported_helper_methods()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.Email == "tk421@deathstar.co");
-
-            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co");
+            // TODO NotSupportedException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
+            {
+                await this.Queryable
+                    .Where(x => x.Email.ToUpper() == "FOO")
+                    .MoveNextAsync();
+            });
         }
 
         [Fact]
-        public void Where_attribute_equals_using_helper_method()
+        public async Task Throws_for_binary_or()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.Email.Equals("tk421@deathstar.co"));
-
-            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co");
+            // TODO NotSupportedException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
+            {
+                await this.Queryable
+                    .Where(x => x.Email == "foo" || x.Email == "bar")
+                    .MoveNextAsync();
+            });
         }
 
         [Fact]
-        public void Where_attribute_starts_with()
+        public async Task Where_attribute_equals()
         {
-            var query = this.Harness.Queryable
-                .Where(x => x.Email.StartsWith("tk421"));
-
-            query.GeneratedArgumentsWere(this.Href, "email=tk421*");
-        }
-
-        [Fact]
-        public void Where_attribute_ends_with()
-        {
-            var query = this.Harness.Queryable
-                .Where(x => x.Email.EndsWith("deathstar.co"));
-
-            query.GeneratedArgumentsWere(this.Href, "email=*deathstar.co");
-        }
-
-        [Fact]
-        public void Where_attribute_contains()
-        {
-            var query = this.Harness.Queryable
-                .Where(x => x.Email.Contains("421"));
-
-            query.GeneratedArgumentsWere(this.Href, "email=*421*");
-        }
-
-        [Fact]
-        public void Where_multiple_attributes_with_and()
-        {
-            var query = this.Harness.Queryable
-                .Where(x => x.Email == "tk421@deathstar.co" && x.Username == "tk421");
-
-            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co&username=tk421");
-        }
-
-        [Fact]
-        public void Where_multiple_wheres()
-        {
-            var query = this.Harness.Queryable
+            await this.Queryable
                 .Where(x => x.Email == "tk421@deathstar.co")
-                .Where(x => x.Username.StartsWith("tk421"));
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co&username=tk421*");
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co");
         }
 
         [Fact]
-        public void Where_date_attribute_greater_than()
+        public async Task Where_attribute_equals_using_helper_method()
+        {
+            await this.Queryable
+                .Where(x => x.Email.Equals("tk421@deathstar.co"))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co");
+        }
+
+        [Fact]
+        public async Task Where_attribute_equals_using_variable()
+        {
+            var email = "tk421@deathstar.co";
+
+            await this.Queryable
+                .Where(x => x.Email.Equals(email))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co");
+        }
+
+        [Fact]
+        public async Task Where_attribute_equals_using_formatted_string()
+        {
+            var domain = "deathstar.co";
+
+            await this.Queryable
+                .Where(x => x.Email.Equals($"tk421@{domain}"))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co");
+        }
+
+        [Fact]
+        public async Task Where_attribute_starts_with()
+        {
+            await this.Queryable
+                .Where(x => x.Email.StartsWith("tk421"))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArgument("email=tk421*");
+        }
+
+        [Fact]
+        public async Task Where_attribute_ends_with()
+        {
+            await this.Queryable
+                .Where(x => x.Email.EndsWith("deathstar.co"))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArgument("email=*deathstar.co");
+        }
+
+        [Fact]
+        public async Task Where_attribute_contains()
+        {
+            await this.Queryable
+                .Where(x => x.Email.Contains("421"))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArgument("email=*421*");
+        }
+
+        [Fact]
+        public async Task Where_multiple_attributes_with_and()
+        {
+            await this.Queryable
+                .Where(x => x.Email == "tk421@deathstar.co" && x.Username == "tk421")
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co&username=tk421");
+        }
+
+        [Fact]
+        public async Task Where_multiple_wheres()
+        {
+            await this.Queryable
+                .Where(x => x.Email == "tk421@deathstar.co")
+                .Where(x => x.Username.StartsWith("tk421"))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co&username=tk421*");
+        }
+
+        [Fact]
+        public async Task Where_date_attribute_greater_than()
         {
             var testDate = new DateTimeOffset(2015, 01, 01, 06, 00, 00, TimeSpan.Zero);
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt > testDate);
+            await this.Queryable
+                .Where(x => x.CreatedAt > testDate)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "createdAt=(2015-01-01T06:00:00Z,]");
+            this.ShouldBeCalledWithArgument("createdAt=(2015-01-01T06:00:00Z,]");
         }
 
         [Fact]
-        public void Where_date_attribute_greater_than_or_equalto()
+        public async Task Where_date_attribute_greater_than_or_equalto()
         {
             var testDate = new DateTimeOffset(2015, 01, 01, 06, 00, 00, TimeSpan.Zero);
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt >= testDate);
+            await this.Queryable
+                .Where(x => x.CreatedAt >= testDate)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "createdAt=[2015-01-01T06:00:00Z,]");
+            this.ShouldBeCalledWithArgument("createdAt=[2015-01-01T06:00:00Z,]");
         }
 
         [Fact]
-        public void Where_date_attribute_less_than()
+        public async Task Where_date_attribute_less_than()
         {
             var testDate = new DateTimeOffset(2016, 01, 01, 12, 00, 00, TimeSpan.Zero);
-            var query = this.Harness.Queryable
-                .Where(x => x.ModifiedAt < testDate);
+            await this.Queryable
+                .Where(x => x.ModifiedAt < testDate)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "modifiedAt=[,2016-01-01T12:00:00Z)");
+            this.ShouldBeCalledWithArgument("modifiedAt=[,2016-01-01T12:00:00Z)");
         }
 
         [Fact]
-        public void Where_date_attribute_less_than_or_equalto()
+        public async Task Where_date_attribute_less_than_or_equalto()
         {
             var testDate = new DateTimeOffset(2016, 01, 01, 12, 00, 00, TimeSpan.Zero);
-            var query = this.Harness.Queryable
-                .Where(x => x.ModifiedAt <= testDate);
+            await this.Queryable
+                .Where(x => x.ModifiedAt <= testDate)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "modifiedAt=[,2016-01-01T12:00:00Z]");
+            this.ShouldBeCalledWithArgument("modifiedAt=[,2016-01-01T12:00:00Z]");
         }
 
         [Fact]
-        public void Where_date_attribute_between()
+        public async Task Where_date_attribute_between()
         {
             var testStartDate = new DateTimeOffset(2015, 01, 01, 00, 00, 00, TimeSpan.Zero);
             var testEndDate = new DateTimeOffset(2015, 12, 31, 23, 59, 59, TimeSpan.Zero);
-            var query = this.Harness.Queryable
-                .Where(x => x.CreatedAt > testStartDate && x.CreatedAt <= testEndDate);
+            await this.Queryable
+                .Where(x => x.CreatedAt > testStartDate && x.CreatedAt <= testEndDate)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "createdAt=(2015-01-01T00:00:00Z,2015-12-31T23:59:59Z]");
+            this.ShouldBeCalledWithArgument("createdAt=(2015-01-01T00:00:00Z,2015-12-31T23:59:59Z]");
         }
 
         [Fact]
-        public void Alternate_query_syntax_is_okay()
+        public async Task Where_date_attribute_using_implicit_DateTime()
         {
-            var query = from account in this.Harness.Queryable
-                        where account.Email == "tk421@deathstar.co"
-                        select account;
+            var testDate = new DateTime(2016, 01, 01, 12, 00, 00);
+            await this.Queryable
+                .Where(x => x.ModifiedAt < testDate)
+                .MoveNextAsync();
 
-            query.GeneratedArgumentsWere(this.Href, "email=tk421@deathstar.co");
+            var timezoneOffset = new DateTimeOffset(testDate).Offset;
+            var adjustedHour = (int)(12 - timezoneOffset.TotalHours);
+
+            this.ShouldBeCalledWithArgument($"modifiedAt=[,2016-01-01T{adjustedHour}:00:00Z)");
+        }
+
+        [Fact]
+        public async Task Where_date_attribute_equals()
+        {
+            var testDate = new DateTime(2016, 01, 01, 12, 00, 00);
+
+            // TODO NotSupportedException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
+            {
+                await this.Queryable
+                    .Where(x => x.ModifiedAt == testDate)
+                    .MoveNextAsync();
+            });
+        }
+
+        [Fact]
+        public async Task Alternate_query_syntax_is_okay()
+        {
+            await (from account in this.Queryable
+             where account.Email == "tk421@deathstar.co"
+             select account).MoveNextAsync();
+
+            this.ShouldBeCalledWithArgument("email=tk421%40deathstar.co");
         }
     }
 }

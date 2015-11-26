@@ -1,19 +1,18 @@
 ﻿// <copyright file="FilterChain_tests.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System.Collections.Generic;
 using System.Threading;
@@ -24,7 +23,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.DataStore.Filters;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Logging;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -67,7 +66,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Sync_chain_terminating_on_first()
             {
-                ISynchronousFilterChain filterChain = new DefaultSynchronousFilterChain()
+                ISynchronousFilterChain filterChain = new DefaultSynchronousFilterChain(dataStore: null)
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
@@ -81,7 +80,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Sync_chain_terminating_on_second()
             {
-                ISynchronousFilterChain filterChain = new DefaultSynchronousFilterChain()
+                ISynchronousFilterChain filterChain = new DefaultSynchronousFilterChain(dataStore: null)
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
@@ -95,7 +94,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void Sync_with_inline_filter()
             {
-                ISynchronousFilterChain defaultFilterChain = new DefaultSynchronousFilterChain()
+                ISynchronousFilterChain defaultFilterChain = new DefaultSynchronousFilterChain(dataStore: null)
                     .Add(new DeleteInterceptorFilter());
 
                 ISynchronousFilterChain finalChain = new DefaultSynchronousFilterChain(defaultFilterChain as DefaultSynchronousFilterChain)
@@ -134,7 +133,7 @@ namespace Stormpath.SDK.Tests.Impl
                     }
                     else
                     {
-                        return chain.ExecuteAsync(request, logger, cancellationToken);
+                        return chain.FilterAsync(request, logger, cancellationToken);
                     }
                 }
             }
@@ -150,7 +149,7 @@ namespace Stormpath.SDK.Tests.Impl
                     }
                     else
                     {
-                        return chain.ExecuteAsync(request, logger, cancellationToken);
+                        return chain.FilterAsync(request, logger, cancellationToken);
                     }
                 }
             }
@@ -158,12 +157,12 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public async Task Async_chain_terminating_on_first()
             {
-                IAsynchronousFilterChain filterChain = new DefaultAsynchronousFilterChain()
+                IAsynchronousFilterChain filterChain = new DefaultAsynchronousFilterChain(dataStore: null)
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
                 var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
-                var result = await filterChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
+                var result = await filterChain.FilterAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Create);
                 result.Body.ShouldContainKeyAndValue("Foo", "bar");
@@ -172,12 +171,12 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public async Task Async_chain_terminating_on_second()
             {
-                IAsynchronousFilterChain filterChain = new DefaultAsynchronousFilterChain()
+                IAsynchronousFilterChain filterChain = new DefaultAsynchronousFilterChain(dataStore: null)
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
                 var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
-                var result = await filterChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
+                var result = await filterChain.FilterAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Delete);
                 result.Body.ShouldBeNull();
@@ -186,7 +185,7 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public async Task Async_with_inline_filter()
             {
-                IAsynchronousFilterChain defaultFilterChain = new DefaultAsynchronousFilterChain()
+                IAsynchronousFilterChain defaultFilterChain = new DefaultAsynchronousFilterChain(dataStore: null)
                     .Add(new DeleteInterceptorFilter());
 
                 IAsynchronousFilterChain finalChain = new DefaultAsynchronousFilterChain(defaultFilterChain as DefaultAsynchronousFilterChain)
@@ -201,7 +200,7 @@ namespace Stormpath.SDK.Tests.Impl
                     }));
 
                 var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
-                var result = await finalChain.ExecuteAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
+                var result = await finalChain.FilterAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Create);
                 result.Body.ShouldContainKeyAndValue("Foo", "bar");

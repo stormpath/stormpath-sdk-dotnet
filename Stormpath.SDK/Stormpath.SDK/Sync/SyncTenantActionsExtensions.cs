@@ -1,19 +1,18 @@
 ﻿// <copyright file="SyncTenantActionsExtensions.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using Stormpath.SDK.Account;
@@ -85,7 +84,7 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
-        /// <param name="creationOptionsAction">An inline builder for aninstance of <see cref="IDirectoryCreationOptions"/>,
+        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
         /// which will be used when sending the request.</param>
         /// <returns>The created <see cref="IDirectory"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
@@ -93,7 +92,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).CreateDirectory(directory, creationOptionsAction);
 
         /// <summary>
-        /// Synchronously creates a new Provider-based Directory resource in the Tenant.
+        /// Synchronously creates a new Cloud- or Provider-based Directory resource in the Tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="directory">The <see cref="IDirectory"/> to create.</param>

@@ -1,19 +1,18 @@
 ﻿// <copyright file="DefaultResourceFactory.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Collections.Generic;
@@ -25,16 +24,13 @@ namespace Stormpath.SDK.Impl.DataStore
     internal sealed class DefaultResourceFactory : IResourceFactory
     {
         private readonly IInternalDataStore dataStore;
-        private readonly IIdentityMap<string, ResourceData> identityMap;
-        private readonly ResourceTypeLookup typeLookup;
+        private readonly IIdentityMap<ResourceData> identityMap;
         private bool isDisposed = false; // To detect redundant calls
 
-        public DefaultResourceFactory(IInternalDataStore dataStore, IIdentityMap<string, ResourceData> identityMap)
+        public DefaultResourceFactory(IInternalDataStore dataStore, IIdentityMap<ResourceData> identityMap)
         {
             this.dataStore = dataStore;
             this.identityMap = identityMap;
-
-            this.typeLookup = new ResourceTypeLookup();
         }
 
         private IResourceFactory AsInterface => this;
@@ -43,36 +39,26 @@ namespace Stormpath.SDK.Impl.DataStore
             => (T)this.AsInterface.Create(typeof(T), null, original);
 
         object IResourceFactory.Create(Type type, ILinkable original)
-            => this.AsInterface.Create(type, null, null, original);
+            => this.AsInterface.Create(type, null, original);
 
         T IResourceFactory.Create<T>(IDictionary<string, object> properties, ILinkable original)
-            => (T)this.AsInterface.Create(typeof(T), properties, null, original);
+            => (T)this.AsInterface.Create(typeof(T), properties, original);
 
         object IResourceFactory.Create(Type type, IDictionary<string, object> properties, ILinkable original)
-            => this.AsInterface.Create(type, properties, null, original);
-
-        T IResourceFactory.Create<T>(IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
-            => (T)this.AsInterface.Create(typeof(T), properties, options, original);
-
-        object IResourceFactory.Create(Type type, IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
         {
-            bool isCollection =
-                type.IsGenericType &&
-                type.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
-            if (isCollection)
+            if (ResourceTypeLookup.IsCollectionResponse(type))
                 return this.InstantiateCollection(type, properties);
 
-            return this.InstantiateSingle(type, properties, options, original);
+            return this.InstantiateSingle(type, properties, original);
         }
 
-        private object InstantiateSingle(Type type, IDictionary<string, object> properties, IdentityMapOptions options, ILinkable original)
+        private object InstantiateSingle(Type type, IDictionary<string, object> properties, ILinkable original)
         {
-            if (options == null)
-                options = new IdentityMapOptions(); // with default values
-
-            var targetType = this.typeLookup.GetConcrete(type);
+            var targetType = new ResourceTypeLookup().GetConcrete(type);
             if (targetType == null)
                 throw new ApplicationException($"Unknown resource type {type.Name}");
+
+            var identityMapOptions = new IdentityMapOptionsResolver().GetOptions(type);
 
             AbstractResource targetObject;
             try
@@ -87,14 +73,14 @@ namespace Stormpath.SDK.Impl.DataStore
                     properties.TryGetValue("href", out href) &&
                     href != null;
                 if (propertiesContainsHref)
-                    id = href.ToString();
+                    id = $"{type.Name}/{href.ToString()}";
 
                 if (!propertiesContainsHref)
                     properties["href"] = id;
 
-                var resourceData = options.SkipIdentityMap
+                var resourceData = identityMapOptions.SkipIdentityMap
                     ? new ResourceData(this.dataStore)
-                    : this.identityMap.GetOrAdd(id, () => new ResourceData(this.dataStore), options.StoreWithInfiniteExpiration);
+                    : this.identityMap.GetOrAdd(id, () => new ResourceData(this.dataStore), identityMapOptions.StoreWithInfiniteExpiration);
 
                 if (properties != null)
                     resourceData.Update(properties);
@@ -118,8 +104,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private object InstantiateCollection(Type collectionType, IDictionary<string, object> properties)
         {
-            Type innerType = this.typeLookup.GetInnerCollectionInterface(collectionType);
-            var targetType = this.typeLookup.GetConcrete(innerType);
+            Type innerType = new ResourceTypeLookup().GetInnerCollectionInterface(collectionType);
+            var targetType = new ResourceTypeLookup().GetConcrete(innerType);
             if (innerType == null || targetType == null)
                 throw new ApplicationException($"Error creating collection resource: unknown inner type '{innerType?.Name}'.");
 
@@ -170,7 +156,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
                 foreach (var itemMap in items)
                 {
-                    var materialized = this.InstantiateSingle(innerType, itemMap, options: null, original: null);
+                    var materialized = this.InstantiateSingle(innerType, itemMap, original: null);
                     addMethod.Invoke(materializedItems, new object[] { materialized });
                 }
 

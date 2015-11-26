@@ -1,19 +1,18 @@
 ﻿// <copyright file="ITenantActions.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Threading;
@@ -85,7 +84,7 @@ namespace Stormpath.SDK.Tenant
         /// Creates a new Provider-based Directory resource in the Tenant.
         /// </summary>
         /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
-        /// <param name="creationOptionsAction">An inline builder for aninstance of <see cref="IDirectoryCreationOptions"/>,
+        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
         /// which will be used when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
@@ -93,7 +92,7 @@ namespace Stormpath.SDK.Tenant
         Task<IDirectory> CreateDirectoryAsync(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new Provider-based Directory resource in the Tenant.
+        /// Creates a new Cloud- or Provider-based Directory resource in the Tenant.
         /// </summary>
         /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
         /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
@@ -140,7 +139,7 @@ namespace Stormpath.SDK.Tenant
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
         /// <example>
-        ///     var allAccounts = await myTenant.GetAccounts().ToListAsync();
+        /// var allAccounts = await myTenant.GetAccounts().ToListAsync();
         /// </example>
         IAsyncQueryable<IAccount> GetAccounts();
 
@@ -149,7 +148,7 @@ namespace Stormpath.SDK.Tenant
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to asynchronously list or search applications.</returns>
         /// <example>
-        ///     var allApplications = await myTenant.GetApplications().ToListAsync();
+        /// var allApplications = await myTenant.GetApplications().ToListAsync();
         /// </example>
         IAsyncQueryable<IApplication> GetApplications();
 
@@ -158,7 +157,7 @@ namespace Stormpath.SDK.Tenant
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IDirectory}"/> that may be used to asynchronously list or search directories.</returns>
         /// <example>
-        ///     var allDirectories = await myTenant.GetDirectories().ToListAsync();
+        /// var allDirectories = await myTenant.GetDirectories().ToListAsync();
         /// </example>
         IAsyncQueryable<IDirectory> GetDirectories();
 
@@ -167,7 +166,7 @@ namespace Stormpath.SDK.Tenant
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
         /// <example>
-        ///     var allGroups = await myTenant.GetGroups().ToListAsync();
+        /// var allGroups = await myTenant.GetGroups().ToListAsync();
         /// </example>
         IAsyncQueryable<IGroup> GetGroups();
     }

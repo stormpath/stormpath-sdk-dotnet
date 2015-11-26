@@ -1,19 +1,18 @@
 ﻿// <copyright file="IAccount.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +28,7 @@ namespace Stormpath.SDK.Account
     /// <summary>
     /// An Account is a unique identity within a <see cref="IDirectory"/>. Accounts within a <see cref="IDirectory"/> or <see cref="IGroup"/> mapped to an <see cref="Application.IApplication"/> may log in to that Application.
     /// </summary>
-    public interface IAccount : IResource, ISaveable<IAccount>, IDeletable, IAuditable, IExtendable
+    public interface IAccount : IResource, ISaveableWithOptions<IAccount>, IDeletable, IAuditable, IExtendable
     {
         /// <summary>
         /// Gets the account's username. Unless otherwise specified, this is the same as <see cref="Email"/>.
@@ -215,7 +214,9 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
         /// <example>
-        ///     var allGroups = await account.GetGroups().ToListAsync();
+        /// <code>
+        /// var allGroups = await account.GetGroups().ToListAsync();
+        /// </code>
         /// </example>
         IAsyncQueryable<IGroup> GetGroups();
 

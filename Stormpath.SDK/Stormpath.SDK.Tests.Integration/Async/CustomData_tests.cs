@@ -1,19 +1,18 @@
 ﻿// <copyright file="CustomData_tests.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Linq;
@@ -22,17 +21,18 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
-using Stormpath.SDK.Tests.Integration.Helpers;
+using Stormpath.SDK.Tests.Common.Integration;
+using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Async
 {
-    [Collection("Live tenant tests")]
+    [Collection(nameof(IntegrationTestCollection))]
     public class CustomData_tests
     {
-        private readonly IntegrationTestFixture fixture;
+        private readonly TestFixture fixture;
 
-        public CustomData_tests(IntegrationTestFixture fixture)
+        public CustomData_tests(TestFixture fixture)
         {
             this.fixture = fixture;
         }
@@ -53,10 +53,10 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Getting_account_custom_data(TestClientBuilder clientBuilder)
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_account_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = await client.GetResourceAsync<IAccount>(this.fixture.CreatedAccountHrefs.First());
             var customData = await account.GetCustomDataAsync();
@@ -68,10 +68,10 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Putting_account_custom_data(TestClientBuilder clientBuilder)
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Putting_account_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = await this.CreateRandomAccountAsync(client);
             var customData = await account.GetCustomDataAsync();
@@ -84,14 +84,15 @@ namespace Stormpath.SDK.Tests.Integration.Async
             updated.Count().ShouldBe(4);
 
             // Cleanup
-            await account.DeleteAsync();
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Deleting_all_custom_data(TestClientBuilder clientBuilder)
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Deleting_all_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = await this.CreateRandomAccountAsync(client);
             var customData = await account.GetCustomDataAsync();
@@ -110,14 +111,15 @@ namespace Stormpath.SDK.Tests.Integration.Async
             newCustomData.Count().ShouldBe(3);
 
             // Cleanup
-            await account.DeleteAsync();
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Clearing_all_custom_data(TestClientBuilder clientBuilder)
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Clearing_all_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = await this.CreateRandomAccountAsync(client);
             var customData = await account.GetCustomDataAsync();
@@ -133,18 +135,23 @@ namespace Stormpath.SDK.Tests.Integration.Async
             // Expected behavior: works the same as calling DeleteAsync (see Deleting_all_custom_data)
             updated.Clear();
             var result = await updated.SaveAsync();
+
+            // Let the cache update
+            await Task.Delay(100);
+
             var newCustomData = await account.GetCustomDataAsync();
             newCustomData.Count().ShouldBe(3);
 
             // Cleanup
-            await account.DeleteAsync();
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Deleting_single_item(TestClientBuilder clientBuilder)
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Deleting_single_item(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var account = await this.CreateRandomAccountAsync(client);
             var customData = await account.GetCustomDataAsync();
@@ -163,7 +170,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             updated2.Get("text").ShouldBe("fizzbuzz");
 
             // Cleanup
-            await account.DeleteAsync();
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
     }
 }

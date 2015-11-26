@@ -1,23 +1,23 @@
 ﻿// <copyright file="QueryString.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Shared;
 
@@ -90,8 +90,25 @@ namespace Stormpath.SDK.Http
         /// </summary>
         /// <returns><c>true</c> if this instance contains one or more query parameters.</returns>
         public bool Any()
+            => !this.queryStringItems.IsNullOrEmpty();
+
+        public bool ContainsKey(string key)
+            => this.queryStringItems?.ContainsKey(key) ?? false;
+
+        /// <summary>
+        /// Gets a named parameter in the query string.
+        /// </summary>
+        /// <param name="parameter">The name of the parameter.</param>
+        /// <returns>The parameter value, or <c>null</c>.</returns>
+        public string this[string parameter]
         {
-            return this.queryStringItems?.Any() ?? false;
+            get
+            {
+                string value = null;
+                this.queryStringItems.TryGetValue(parameter, out value);
+
+                return value;
+            }
         }
 
         public string ToString(bool canonical)
@@ -105,8 +122,8 @@ namespace Stormpath.SDK.Http
                 var key = RequestHelper.UrlEncode(x.Key, false, canonical);
                 var value = RequestHelper.UrlEncode(x.Value, false, canonical);
 
-                if (IsDatetimeSearchCriteria(key) && !canonical)
-                    value = FixDatetimeSearchEncoding(value);
+                if (!canonical)
+                    value = FixSearchSyntaxEncoding(value);
 
                 return $"{key}={value}";
             });
@@ -183,17 +200,19 @@ namespace Stormpath.SDK.Http
         }
 
         /// <summary>
-        /// The URLEncoded version of a datetime search criteria string is over-encoded; we need to leave some symbols unencoded.
+        /// <see cref="RequestHelper.UrlEncode(string, bool, bool)"/> over-encodes some symbols used in search syntax; we want to revert them.
         /// </summary>
         /// <param name="encodedValue">URLEncoded datetime search criteria string</param>
         /// <returns>Properly encoded Stormpath datetime search criteria string</returns>
-        private static string FixDatetimeSearchEncoding(string encodedValue)
+        private static string FixSearchSyntaxEncoding(string encodedValue)
         {
             return encodedValue
                 .Replace("%5B", "[")
                 .Replace("%5D", "]")
                 .Replace("%3A", ":")
-                .Replace("%2C", ",");
+                .Replace("%2C", ",")
+                .Replace("%28", "(")
+                .Replace("%29", ")");
         }
 
         private static Dictionary<string, string> ToSortedDictionary(IEnumerable<KeyValuePair<string, string>> queryParams)

@@ -1,19 +1,18 @@
 ﻿// <copyright file="AsyncQueryableExtensions.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System;
 using System.Collections.Generic;
@@ -22,7 +21,6 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Linq;
-using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK
@@ -38,7 +36,7 @@ namespace Stormpath.SDK
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <typeparam name="TKey">The type of the key returned by the function that is represented by <paramref name="keySelector"/>.</typeparam>
-        /// <param name="source">A sequence of values to order.</param>
+        /// <param name="source">An <see cref="IOrderedAsyncQueryable{T}"/> that contains elements to sort.</param>
         /// <param name="keySelector">A function to extract a key from an element.</param>
         /// <returns>An <see cref="IOrderedAsyncQueryable{T}"/> whose elements are sorted according to a key.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
@@ -61,7 +59,7 @@ namespace Stormpath.SDK
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <typeparam name="TKey">The type of the key returned by the function that is represented by <paramref name="keySelector"/>.</typeparam>
-        /// <param name="source">A sequence of values to order.</param>
+        /// <param name="source">An <see cref="IOrderedAsyncQueryable{T}"/> that contains elements to sort.</param>
         /// <param name="keySelector">A function to extract a key from an element.</param>
         /// <returns>An <see cref="IOrderedAsyncQueryable{T}"/> whose elements are sorted in descending order according to a key.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
@@ -353,7 +351,7 @@ namespace Stormpath.SDK
                 throw new ArgumentNullException(nameof(action));
 
             return source.ForEachAsync(
-                (item, _) =>
+                item =>
             {
                 action(item);
                 return false;
@@ -362,58 +360,19 @@ namespace Stormpath.SDK
 
         /// <summary>
         /// Asynchronously iterates over the input sequence and performs the specified action on each element of the <see cref="IAsyncQueryable{T}"/>.
+        /// Return <c>true</c> from <paramref name="action"/> to cause the loop to gracefully break; <c>false</c> to continue looping.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">An <see cref="IAsyncQueryable{T}"/> containing items to operate on.</param>
-        /// <param name="action">The action to perform on each element. Return <c>true</c> to cause the loop to gracefully <c>break</c>.</param>
+        /// <param name="action">The action to perform each element. Return <c>true</c> to cause the loop to gracefully break.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task indicating that the asynchronous operation is complete.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
-        public static Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Func<TSource, bool> action, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Func<TSource, bool> action, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return source.ForEachAsync((item, _) => action(item), cancellationToken);
-        }
-
-        /// <summary>
-        /// Asynchronously iterates over the input sequence and performs the specified action on each indexed element of the <see cref="IAsyncQueryable{T}"/>.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <param name="source">An <see cref="IAsyncQueryable{T}"/> containing items to operate on.</param>
-        /// <param name="action">The action to perform on the element with the specified index.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task indicating that the asynchronous operation is complete.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
-        public static Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
-
-            return source.ForEachAsync(
-                (item, index) =>
-                {
-                    action(item, index);
-                    return false;
-                }, cancellationToken);
-        }
-
-        /// <summary>
-        /// Asynchronously iterates over the input sequence and performs the specified action on each indexed element of the <see cref="IAsyncQueryable{T}"/>.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <param name="source">An <see cref="IAsyncQueryable{T}"/> containing items to operate on.</param>
-        /// <param name="action">The action to perform on the element with the specified index. Return <c>true</c> to cause the loop to gracefully <c>break</c>.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task indicating that the asynchronous operation is complete.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
-        public static async Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Func<TSource, int, bool> action, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
-
-            var index = 0;
             while (await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
             {
                 bool breakRequested = false;
@@ -421,7 +380,7 @@ namespace Stormpath.SDK
                 foreach (var item in source.CurrentPage)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    breakRequested |= action(item, index++);
+                    breakRequested |= action(item);
 
                     if (breakRequested)
                         break;

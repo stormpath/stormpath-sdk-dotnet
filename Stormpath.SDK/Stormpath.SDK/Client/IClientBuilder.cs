@@ -1,41 +1,50 @@
 ﻿// <copyright file="IClientBuilder.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
-using System;
 using System.Net;
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Cache;
 using Stormpath.SDK.Http;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
-using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Client
 {
     /// <summary>
     /// A Builder design pattern used to construct <see cref="IClient"/> instances.
+    /// <para>
+    /// Unless otherwise specified, an in-memory cache will be used to improve performance,
+    /// with a default TTL (Time to Live) and TTI (Time to Idle) of 1 hour. Caching can be disabled
+    /// by passing <see cref="Caches.NewDisabledCacheProvider"/> to <see cref="SetCacheProvider(ICacheProvider)"/>.
+    /// </para>
+    /// <para>
+    /// Note: The default in-memory cache might not be sufficient for an application that runs on multiple servers,
+    /// due to cache-coherency issues. If your application runs in multiple instances, consider plugging in a
+    /// distributed cache like Redis.
+    /// </para>
     /// </summary>
     /// <example>
-    /// Create a client with a specified API Key:
+    /// Create a client with a specified API Key and default caching options:
     /// <code>
-    ///     IClient client = Clients.Builder()
-    ///         .SetApiKey(apiKey)
-    ///         .Build();
+    /// IClient client = Clients.Builder()
+    ///     .SetApiKey(apiKey)
+    ///     .Build();
     /// </code>
     /// </example>
-    public interface IClientBuilder
+    public interface IClientBuilder : ILoggerConsumer<IClientBuilder>, ISerializerConsumer<IClientBuilder>
     {
         /// <summary>
         /// Sets the <see cref="IClientApiKey"/> to use when making requests.
@@ -80,13 +89,12 @@ namespace Stormpath.SDK.Client
         IClientBuilder SetProxy(IWebProxy proxy);
 
         /// <summary>
-        /// Sets the JSON serializer to use when serializing and deserializing request data.
-        /// Don't call this method unless you want to use a different serializer than the default.
+        /// Sets the cache provider that should be used to cache Stormpath REST resources, reducing round-trips
+        /// to the Stormpath API server and enhancing application performance.
         /// </summary>
-        /// <param name="serializer">A valid <see cref="IJsonSerializer"/> instance.</param>
+        /// <param name="cacheProvider">The cache provider to use.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="System.ArgumentNullException"><paramref name="serializer"/> is null.</exception>
-        IClientBuilder UseJsonSerializer(IJsonSerializer serializer);
+        IClientBuilder SetCacheProvider(ICacheProvider cacheProvider);
 
         /// <summary>
         /// Sets the HTTP client to use when making requests.
@@ -95,22 +103,7 @@ namespace Stormpath.SDK.Client
         /// <param name="httpClient">A valid <see cref="IHttpClient"/> instance.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="System.ArgumentNullException"><paramref name="httpClient"/> is null.</exception>
-        IClientBuilder UseHttpClient(IHttpClient httpClient);
-
-        /// <summary>
-        /// Sets an optional logger to send trace and debug messages to.
-        /// </summary>
-        /// <param name="logger">A logger instance for capturing trace output; pass <c>null</c> to disable logging.</param>
-        /// <returns>This instance for method chaining.</returns>
-        IClientBuilder SetLogger(ILogger logger);
-
-        /// <summary>
-        /// Advanced use; only change this if you know what you are doing. Sets the internal identity map expiration time.
-        /// </summary>
-        /// <param name="expiration">Identity map expiration timeout.</param>
-        /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="expiration"/> is less than 10 seconds or more than 24 hours.</exception>
-        IClientBuilder SetIdentityMapExpiration(TimeSpan expiration);
+        IClientBuilder SetHttpClient(IHttpClient httpClient);
 
         /// <summary>
         /// Constructs a new <see cref="IClient"/> instance based on the builder's current configuration state.

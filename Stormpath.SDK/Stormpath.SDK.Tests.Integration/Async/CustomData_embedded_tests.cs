@@ -1,36 +1,36 @@
 ﻿// <copyright file="CustomData_embedded_tests.cs" company="Stormpath, Inc.">
-//      Copyright (c) 2015 Stormpath, Inc.
-// </copyright>
-// <remarks>
+// Copyright (c) 2015 Stormpath, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </remarks>
+// </copyright>
 
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
-using Stormpath.SDK.Tests.Integration.Helpers;
+using Stormpath.SDK.Tests.Common.Integration;
+using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Async
 {
-    [Collection("Live tenant tests")]
+    [Collection(nameof(IntegrationTestCollection))]
     public class CustomData_embedded_tests
     {
-        private readonly IntegrationTestFixture fixture;
+        private readonly TestFixture fixture;
 
-        public CustomData_embedded_tests(IntegrationTestFixture fixture)
+        public CustomData_embedded_tests(TestFixture fixture)
         {
             this.fixture = fixture;
         }
@@ -56,10 +56,10 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_new_account_with_custom_data(TestClientBuilder clientBuilder)
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Creating_new_account_with_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var newAccount = this.CreateRandomAccountInstance(client);
             newAccount.CustomData.Put("status", 1337);
@@ -71,14 +71,15 @@ namespace Stormpath.SDK.Tests.Integration.Async
             customData["status"].ShouldBe(1337);
             customData["isAwesome"].ShouldBe(true);
 
-            await created.DeleteAsync();
+            (await created.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(created.Href);
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Creating_new_application_with_custom_data(TestClientBuilder clientBuilder)
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Creating_new_application_with_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var newApp = client.Instantiate<IApplication>();
             newApp.SetName(".NET IT App with CustomData Test " + RandomString.Create());
@@ -92,14 +93,15 @@ namespace Stormpath.SDK.Tests.Integration.Async
             customData["isCool"].ShouldBe(true);
             customData["my-custom-data"].ShouldBe(1234);
 
-            await created.DeleteAsync();
+            (await created.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(created.Href);
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Editing_embedded_custom_data(TestClientBuilder clientBuilder)
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Editing_embedded_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var newAccount = this.CreateRandomAccountInstance(client);
             newAccount.CustomData.Put("status", 1337);
@@ -115,14 +117,15 @@ namespace Stormpath.SDK.Tests.Integration.Async
             customData["isAwesome"].ShouldBe(null);
             customData["phrase"].ShouldBe("testing is neet");
 
-            await created.DeleteAsync();
+            (await created.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(created.Href);
         }
 
         [Theory]
-        [MemberData(nameof(IntegrationTestClients.GetClients), MemberType = typeof(IntegrationTestClients))]
-        public async Task Clearing_embedded_custom_data(TestClientBuilder clientBuilder)
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Clearing_embedded_custom_data(TestClientProvider clientBuilder)
         {
-            var client = clientBuilder.Build();
+            var client = clientBuilder.GetClient();
 
             var newAccount = this.CreateRandomAccountInstance(client);
             newAccount.CustomData.Put("foo", "bar");
@@ -138,7 +141,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             customData = await created.GetCustomDataAsync();
             customData.IsEmptyOrDefault().ShouldBeTrue();
 
-            await created.DeleteAsync();
+            (await created.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(created.Href);
         }
     }
 }
