@@ -28,7 +28,7 @@
     <CleanIntermediates>True</CleanIntermediates>
     <HelpFileVersion>0.3</HelpFileVersion>
     <MaximumGroupParts>2</MaximumGroupParts>
-    <NamespaceGrouping>False</NamespaceGrouping>
+    <NamespaceGrouping>True</NamespaceGrouping>
     <SyntaxFilters>C#, Visual Basic</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>True</RootNamespaceContainer>
@@ -37,6 +37,7 @@
     <NamingMethod>MemberName</NamingMethod>
     <HelpTitle>Stormpath .NET SDK API</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, TypeParameter, AutoDocumentDispose</MissingTags>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
