@@ -20,6 +20,9 @@ using Stormpath.SDK.Impl.Account;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IAccountCreationActions"/>.
+    /// </summary>
     public static class SyncAccountCreationActionsExtensions
     {
         /// <summary>
@@ -73,7 +76,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="source">The source object.</param>
         /// <param name="givenName">The given name (aka 'first name' in Western cultures).</param>
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
-        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="IDirectory"/>.</param>
+        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory"/>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
         /// <returns>A Task whose result is the persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
@@ -88,7 +91,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="source">The source object.</param>
         /// <param name="givenName">The given name (aka 'first name' in Western cultures).</param>
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
-        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="IDirectory"/>.</param>
+        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory"/>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
         /// <param name="customData">An anonymous type containing name/value pairs to be stored in this account's <see cref="SDK.CustomData.ICustomData"/>.</param>
         /// <returns>The persisted account.</returns>

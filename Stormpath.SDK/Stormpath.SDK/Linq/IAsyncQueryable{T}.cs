@@ -1,4 +1,4 @@
-﻿// <copyright file="IAsyncQueryable.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAsyncQueryable{T}.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,15 +21,11 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Linq
 {
-    public interface IAsyncQueryable
-    {
-    }
-
     /// <summary>
     /// Represents a collection of items in a data source that can be queried asynchronously.
     /// </summary>
     /// <typeparam name="T">The type of elements in the collection.</typeparam>
-    public interface IAsyncQueryable<T> : IAsyncQueryable
+    public interface IAsyncQueryable<T>
     {
         /// <summary>
         /// Gets the current page of results after a call to <see cref="MoveNextAsync(CancellationToken)"/>.

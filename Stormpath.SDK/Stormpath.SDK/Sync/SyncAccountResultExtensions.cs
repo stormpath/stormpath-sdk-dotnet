@@ -20,6 +20,9 @@ using Stormpath.SDK.Impl.IdSite;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IAccountResult"/>.
+    /// </summary>
     public static class SyncAccountResultExtensions
     {
         /// <summary>

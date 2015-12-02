@@ -29,6 +29,9 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK
 {
+    /// <summary>
+    /// Provides a set of static methods for making expanded resource requests within asynchronous LINQ-to-Stormpath queries.
+    /// </summary>
     public static class AsyncQueryableExpandExtensions
     {
         /// <summary>

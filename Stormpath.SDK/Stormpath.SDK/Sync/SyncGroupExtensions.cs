@@ -21,10 +21,13 @@ using Stormpath.SDK.Impl.Group;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IGroup"/>.
+    /// </summary>
     public static class SyncGroupExtensions
     {
         /// <summary>
-        /// Synchronously assigns the specified <see cref="IAccount"/> to this <see cref="IGroup"/>.
+        /// Synchronously assigns the specified <see cref="IAccount"/> to this <see cref="Group.IGroup"/>.
         /// </summary>
         /// <param name="group">The group.</param>
         /// <param name="account">The account to assignt to this group.</param>
@@ -36,7 +39,7 @@ namespace Stormpath.SDK.Sync
              => (group as IGroupSync).AddAccount(account);
 
         /// <summary>
-        /// Synchronously assigns this <see cref="IGroup"/> to the specified <see cref="IAccount"/>
+        /// Synchronously assigns this <see cref="Group.IGroup"/> to the specified <see cref="IAccount"/>
         /// represented by its (case-insensitive) <c>username</c>, <c>email</c>, or <c>href</c>
         /// </summary>
         /// <param name="group">The group.</param>
@@ -45,7 +48,7 @@ namespace Stormpath.SDK.Sync
         /// The new <see cref="IGroupMembership"/> resource created
         /// reflecting the group-to-account association.
         /// </returns>
-        /// <exception cref="InvalidOperationException">The specified account could not be found.</exception>
+        /// <exception cref="System.InvalidOperationException">The specified account could not be found.</exception>
         public static IGroupMembership AddAccount(this IGroup group, string hrefOrEmailOrUsername)
             => (group as IGroupSync).AddAccount(hrefOrEmailOrUsername);
 
@@ -55,7 +58,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="group">The group.</param>
         /// <param name="account">The <see cref="IAccount"/> object to disassociate.</param>
         /// <returns>Whether the operation succeeded.</returns>
-        /// <exception cref="InvalidOperationException">The specified account does not belong to this group.</exception>
+        /// <exception cref="System.InvalidOperationException">The specified account does not belong to this group.</exception>
         public static bool RemoveAccount(this IGroup group, IAccount account)
             => (group as IGroupSync).RemoveAccount(account);
 
@@ -66,15 +69,15 @@ namespace Stormpath.SDK.Sync
         /// <param name="group">The group.</param>
         /// <param name="hrefOrEmailOrUsername">The <see cref="IAccount"/> object to disassociate.</param>
         /// <returns>Whether the operation succeeded.</returns>
-        /// <exception cref="InvalidOperationException">The specified account does not belong to this group.</exception>
+        /// <exception cref="System.InvalidOperationException">The specified account does not belong to this group.</exception>
         public static bool RemoveAccount(this IGroup group, string hrefOrEmailOrUsername)
             => (group as IGroupSync).RemoveAccount(hrefOrEmailOrUsername);
 
         /// <summary>
-        /// Synchronously gets the group's parent <see cref="IDirectory"/> (where the group is stored).
+        /// Synchronously gets the group's parent <see cref="Directory.IDirectory"/> (where the group is stored).
         /// </summary>
         /// <param name="group">The group.</param>
-        /// <returns>This group's parent <see cref="IDirectory"/>.</returns>
+        /// <returns>This group's parent <see cref="Directory.IDirectory"/>.</returns>
         public static IDirectory GetDirectory(this IGroup group)
             => (group as IGroupSync).GetDirectory();
     }

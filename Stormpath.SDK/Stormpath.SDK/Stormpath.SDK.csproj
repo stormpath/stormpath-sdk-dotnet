@@ -26,8 +26,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>stormpath.sdk.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>bin\Debug\Stormpath.SDK.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -514,7 +513,7 @@
     <Compile Include="Linq\AsyncQueryableExtensions.cs" />
     <Compile Include="Linq\AsyncQueryableFilterExtensions.cs" />
     <Compile Include="Linq\WithinExpressionExtensions.cs" />
-    <Compile Include="Linq\IAsyncQueryable.cs" />
+    <Compile Include="Linq\IAsyncQueryable{T}.cs" />
     <Compile Include="Impl\Resource\AbstractResource.cs" />
     <Compile Include="Resource\IAuditable.cs" />
     <Compile Include="Resource\ICreationOptions.cs" />

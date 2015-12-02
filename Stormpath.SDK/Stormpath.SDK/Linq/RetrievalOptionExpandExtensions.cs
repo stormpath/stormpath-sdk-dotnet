@@ -29,6 +29,9 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK
 {
+    /// <summary>
+    /// Provides a set of static methods for getting expanded responses from creation and update requests.
+    /// </summary>
     public static class RetrievalOptionExpandExtensions
     {
         /// <summary>

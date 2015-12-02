@@ -20,6 +20,9 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IResource"/>.
+    /// </summary>
     public static class SyncResourceExtensions
     {
         /// <summary>

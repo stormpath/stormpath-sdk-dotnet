@@ -18,6 +18,9 @@ using System;
 
 namespace Stormpath.SDK
 {
+    /// <summary>
+    /// Provides a set of static methods for making shorthand date queries within LINQ-to-Stormpath.
+    /// </summary>
     public static class WithinExpressionExtensions
     {
         /// <summary>

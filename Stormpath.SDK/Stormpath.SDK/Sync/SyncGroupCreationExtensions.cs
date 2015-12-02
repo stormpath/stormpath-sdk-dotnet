@@ -19,36 +19,39 @@ using Stormpath.SDK.Group;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IGroupCreationActions"/>.
+    /// </summary>
     public static class SyncGroupCreationExtensions
     {
         /// <summary>
-        /// Synchronously creates a new <see cref="IGroup"/>.
+        /// Synchronously creates a new <see cref="Group.IGroup"/>.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="group">The group to create.</param>
-        /// <returns>The new <see cref="IGroup"/>.</returns>
+        /// <returns>The new <see cref="Group.IGroup"/>.</returns>
         public static IGroup CreateGroup(this IGroupCreationActions source, IGroup group)
             => (source as IGroupCreationActionsSync).CreateGroup(group);
 
         /// <summary>
-        /// Synchronously creates a new <see cref="IGroup"/>.
+        /// Synchronously creates a new <see cref="Group.IGroup"/>.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="group">The group to create.</param>
         /// <param name="creationOptionsAction">
         /// An inline builder for an instance of <see cref="IGroupCreationOptions"/>, which will be used when sending the request.
         /// </param>
-        /// <returns>The new <see cref="IGroup"/>.</returns>
+        /// <returns>The new <see cref="Group.IGroup"/>.</returns>
         public static IGroup CreateGroup(this IGroupCreationActions source, IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction)
             => (source as IGroupCreationActionsSync).CreateGroup(group, creationOptionsAction);
 
         /// <summary>
-        /// Synchronously reates a new <see cref="IGroup"/>.
+        /// Synchronously reates a new <see cref="Group.IGroup"/>.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="group">The group to create.</param>
         /// <param name="creationOptions">An <see cref="IGroupCreationOptions"/> instance to use when sending the request.</param>
-        /// <returns>The new <see cref="IGroup"/>.</returns>
+        /// <returns>The new <see cref="Group.IGroup"/>.</returns>
         public static IGroup CreateGroup(this IGroupCreationActions source, IGroup group, IGroupCreationOptions creationOptions)
             => (source as IGroupCreationActionsSync).CreateGroup(group, creationOptions);
     }

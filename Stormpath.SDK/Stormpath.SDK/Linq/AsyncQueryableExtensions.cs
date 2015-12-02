@@ -26,8 +26,7 @@ using Stormpath.SDK.Linq;
 namespace Stormpath.SDK
 {
     /// <summary>
-    /// Provides a set of static methods for querying asynchronous data structures
-    /// that implement <see cref="IAsyncQueryable{T}"/>.
+    /// Provides a set of static methods for querying asynchronous data structures that implement <see cref="IAsyncQueryable{T}"/>.
     /// </summary>
     public static class AsyncQueryableExtensions
     {
@@ -167,7 +166,7 @@ namespace Stormpath.SDK
         /// Filters a sequence of values based on a predicate.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <param name="source">An <see cref=IAsyncQueryable{TSource}"/> to filter.</param>
+        /// <param name="source">An <see cref="IAsyncQueryable{TSource}"/> to filter.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> that contains elements from the input sequence that satisfy the condition specified by <paramref name="predicate"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>

@@ -22,6 +22,9 @@ using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IAsyncQueryable{TSource}"/>.
+    /// </summary>
     public static class SyncQueryableExtensions
     {
         /// <summary>

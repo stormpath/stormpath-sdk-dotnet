@@ -20,6 +20,9 @@ using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IDirectory"/>.
+    /// </summary>
     public static class SyncDirectoryExtensions
     {
         /// <summary>

@@ -28,6 +28,9 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IApplication"/>.
+    /// </summary>
     public static class SyncApplicationExtensions
     {
         /// <summary>
@@ -36,10 +39,10 @@ namespace Stormpath.SDK.Sync
         /// If not in an assigned account store, the authentication attempt will fail.
         /// </summary>
         /// <param name="application">The application.</param>
-        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. <see cref="UsernamePasswordRequest"/>).</param>
+        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
         /// <returns>
         /// The result of the authentication.
-        /// The authenticated account can be obtained from <see cref="Sync.SyncAuthenticationResultExtensions.GetAccount()"/>.
+        /// The authenticated account can be obtained from <see cref="SyncAuthenticationResultExtensions.GetAccount(IAuthenticationResult)"/>.
         /// </returns>
         /// <exception cref="SDK.Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -143,7 +146,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="password">The account's raw (plaintext) password.</param>
         /// <returns>
         /// The result of the authentication.
-        /// The authenticated account can be obtained from <see cref="Sync.SyncAuthenticationResultExtensions.GetAccount()"/>.
+        /// The authenticated account can be obtained from <see cref="SyncAuthenticationResultExtensions.GetAccount(IAuthenticationResult)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -233,7 +236,7 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).GetDefaultAccountStore();
 
         /// <summary>
-        /// Synchronously sets the <see cref="IAccountStore"/> (either a <see cref="IGroup"/> or a <see cref="Directory.IDirectory"/>)
+        /// Synchronously sets the <see cref="IAccountStore"/> (either a <see cref="Group.IGroup"/> or a <see cref="Directory.IDirectory"/>)
         /// used to persist new accounts created by the Application.
         /// <para>
         /// Because an Application is not an <see cref="IAccountStore"/> itself, it delegates to a Group or Directory
@@ -306,7 +309,7 @@ namespace Stormpath.SDK.Sync
         /// the new fourth item will be at index 3).
         /// <code>
         /// IAccountStore directoryOrGroup = GetDirectoryOrGroup();
-        /// IAccountStoreMapping mapping = client.Instantiate<IAccountStoreMapping>();
+        /// IAccountStoreMapping mapping = client.Instantiate&lt;IAccountStoreMapping&gt;();
         /// mapping.SetAccountStore(directoryOrGroup);
         /// mapping.SetListIndex(500);
         /// mapping = application.CreateAccountStoreMapping(mapping);
@@ -337,7 +340,7 @@ namespace Stormpath.SDK.Sync
 
         /// <summary>
         /// Synchronously adds a new <see cref="IAccountStore"/> to this Application. The given string can either be an <c>href</c> or a <c>name</c> of a
-        /// <see cref="Directory.IDirectory"/> or <see cref="IGroup"/> belonging to the current <see cref="ITenant"/>.
+        /// <see cref="Directory.IDirectory"/> or <see cref="Group.IGroup"/> belonging to the current <see cref="ITenant"/>.
         /// <para>
         /// If the provided value is an <c>href</c>, this method will get the proper Resource and add it as a new AccountStore in this
         /// Application without much effort. However, if the provided value is not an <c>href</c>, it will be considered as a <c>name</c>. In this case,
@@ -353,7 +356,7 @@ namespace Stormpath.SDK.Sync
         /// </para>
         /// </summary>
         /// <param name="application">The application.</param>
-        /// <param name="hrefOrName">Either the <c>href</c> or <c>name</c> of the desired <see cref="Directory.IDirectory"/> or <see cref="IGroup"/>.</param>
+        /// <param name="hrefOrName">Either the <c>href</c> or <c>name</c> of the desired <see cref="Directory.IDirectory"/> or <see cref="Group.IGroup"/>.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
         /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application.</exception>
         /// <exception cref="ArgumentException">The given <paramref name="hrefOrName"/> matches more than one resource in the current Tenant.</exception>
@@ -371,19 +374,19 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).AddAccountStore(hrefOrName);
 
         /// <summary>
-        /// Synchronously adds a resource of type <typeparamref name="T"/> as a new <see cref="IAccountStore"/> to this Application. The provided <see cref="IAsyncQueryable{T}"/>
+        /// Synchronously adds a resource of type <typeparamref name="T"/> as a new <see cref="IAccountStore"/> to this Application. The provided <see cref="Linq.IAsyncQueryable{T}"/>
         /// must match a single <typeparamref name="T"/> in the current Tenant. If no compatible resource matches the query, this method will return <c>null</c>.
         /// </summary>
         /// <param name="application">The application.</param>
         /// <param name="query">Query to search for a resource of type <typeparamref name="T"/> in the current Tenant.</param>
-        /// <typeparam name="T">The type of resource (either a <see cref="IDirectory"/> or a <see cref="IGroup"/>) to query for.</typeparam>
+        /// <typeparam name="T">The type of resource (either a <see cref="Directory.IDirectory"/> or a <see cref="Group.IGroup"/>) to query for.</typeparam>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <c>null</c> if there is no resource matching the query.</returns>
         /// <exception cref="Error.ResourceException">The found resource already exists as an account store in the application.</exception>
         /// <exception cref="ArgumentException">The query matches more than one resource in the current Tenant.</exception>
         /// <example>
         /// Adding a directory by partial name:
         /// <code>
-        /// IAccountStoreMapping mapping = application.AddAccountStore<IDirectory>(dirs => dirs.Where(d => d.Name.StartsWith(partialName)));
+        /// IAccountStoreMapping mapping = application.AddAccountStore&lt;IDirectory&gt;(dirs => dirs.Where(d => d.Name.StartsWith(partialName)));
         /// </code>
         /// </example>
         public static IAccountStoreMapping AddAccountStore<T>(this IApplication application, Func<IQueryable<T>, IQueryable<T>> query)
@@ -399,7 +402,7 @@ namespace Stormpath.SDK.Sync
         /// An instance of <see cref="Http.IHttpRequest"/>.
         /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
         /// </param>
-        /// <returns>An <see cref="IIdSiteAsyncCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
+        /// <returns>An <see cref="IdSite.IIdSiteAsyncCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
         public static IdSite.IIdSiteSyncCallbackHandler NewIdSiteSyncCallbackHandler(this IApplication application, IHttpRequest request)
             => (application as IApplicationSync).NewIdSiteSyncCallbackHandler(request);
 
@@ -425,7 +428,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="application">The application.</param>
         /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
         /// <returns>The created <see cref="IPasswordResetToken"/>.
-        /// You can obtain the associated account via <see cref="SyncPasswordResetTokenExtensions.GetAccount()"/>.</returns>
+        /// You can obtain the associated account via <see cref="SyncPasswordResetTokenExtensions.GetAccount(IPasswordResetToken)"/>.</returns>
         /// <exception cref="SDK.Error.ResourceException">There is no account that matches the specified email address.</exception>
         public static IPasswordResetToken SendPasswordResetEmail(this IApplication application, string email)
             => (application as IApplicationSync).SendPasswordResetEmail(email);
@@ -442,7 +445,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
         /// <param name="accountStore">The AccountStore expected to contain an account with the specified email address.</param>
         /// <returns>A public static  whose result is the created <see cref="IPasswordResetToken"/>.
-        /// You can obtain the associated account via <see cref="SyncPasswordResetTokenExtensions.GetAccount()"/>.</returns>
+        /// You can obtain the associated account via <see cref="SyncPasswordResetTokenExtensions.GetAccount(IPasswordResetToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">
         /// The specified <see cref="IAccountStore"/> is not mapped to this application, or there is no account that matches the specified email address in the specified <paramref name="accountStore"/>.
         /// </exception>
@@ -462,7 +465,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
         /// <param name="hrefOrNameKey">The href of the AccountStore, or the name key of the Organization, expected to contain an account with the specified email address.</param>
         /// <returns>A public static  whose result is the created <see cref="IPasswordResetToken"/>.
-        /// You can obtain the associated account via <see cref="SyncPasswordResetTokenExtensions.GetAccount()"/>.</returns>
+        /// You can obtain the associated account via <see cref="SyncPasswordResetTokenExtensions.GetAccount(IPasswordResetToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">
         /// The specified AccountStore or Organization is not mapped to this application, or there is no account that matches the specified email address in the AccountStore or Organization.
         /// </exception>
