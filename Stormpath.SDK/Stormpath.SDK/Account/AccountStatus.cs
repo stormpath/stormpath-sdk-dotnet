@@ -39,10 +39,6 @@ namespace Stormpath.SDK.Account
         /// </summary>
         public static AccountStatus Unverified = new AccountStatus("UNVERIFIED");
 
-        private AccountStatus()
-        {
-        }
-
         private AccountStatus(string value)
             : base(value)
         {

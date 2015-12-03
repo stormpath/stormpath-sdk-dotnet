@@ -106,22 +106,6 @@ namespace Stormpath.SDK.Impl.CustomData
         int ICustomData.Count
             => this.GetAvailableKeys().Count();
 
-        IReadOnlyCollection<string> ICustomData.Keys
-            => this.GetAvailableKeys();
-
-        IReadOnlyCollection<object> ICustomData.Values
-        {
-            get
-            {
-                var values = new List<object>();
-
-                this.GetAvailableKeys().ForEach(x =>
-                    values.Add(this.AsInterface.Get(x)));
-
-                return values;
-            }
-        }
-
         internal IReadOnlyDictionary<string, object> GetUpdatedProperties()
             => this.GetResourceData()?.GetUpdatedProperties();
 

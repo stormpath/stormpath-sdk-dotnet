@@ -132,7 +132,7 @@ namespace Stormpath.SDK.Application
         /// against the specified account store.
         /// If the account does not exist in the account store, the authentication attempt will fail.
         /// </summary>
-        /// <param name="requestBuilder">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
+        /// <param name="requestBuilder">Sets the login request parameters.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the result of the authentication.
@@ -157,7 +157,7 @@ namespace Stormpath.SDK.Application
         /// against the specified account store.
         /// If the account does not exist in the account store, the authentication attempt will fail.
         /// </summary>
-        /// <param name="requestBuilder">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
+        /// <param name="requestBuilder">Sets the login request parameters.</param>
         /// <param name="responseOptions">The options to apply to this request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
@@ -345,7 +345,7 @@ namespace Stormpath.SDK.Application
         /// Setting a new <see cref="IAccountStoreMapping"/>'s <see cref="IAccountStoreMapping.ListIndex"/> to <c>500</c> and then adding the mapping to
         /// an application with an existing 3-item list will automatically save the <see cref="IAccountStoreMapping"/>
         /// at the end of the list and set its <see cref="IAccountStoreMapping.ListIndex"/> value to <c>3</c> (items at index 0, 1, 2 were the original items,
-        /// the new fourth item will be at index 3).
+        /// the new fourth item will be at index 3):
         /// <code>
         /// IAccountStore directoryOrGroup = GetDirectoryOrGroupAsync();
         /// IAccountStoreMapping mapping = client.Instantiate&lt;IAccountStoreMapping&gt;();

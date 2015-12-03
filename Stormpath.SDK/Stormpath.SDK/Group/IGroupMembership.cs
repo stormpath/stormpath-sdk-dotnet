@@ -21,6 +21,13 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Group
 {
+    /// <summary>
+    /// A {@code GroupMembership} represents the association of an {@link Account} and a {@link Group}.
+    /// <para>
+    /// Calling <see cref="IDeletable.DeleteAsync(CancellationToken)"/> on this resource will only
+    /// delete the association - it will not delete the <see cref="IAccount"/> or <see cref="IGroup"/>.
+    /// </para>
+    /// </summary>
     public interface IGroupMembership : IResource, IDeletable
     {
         /// <summary>

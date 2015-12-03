@@ -24,11 +24,20 @@ namespace Stormpath.SDK.Http
     [Serializable]
     public class RequestException : ApplicationException
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestException"/> class with the specified <paramref name="message"/>.
+        /// </summary>
+        /// <param name="message">The message.</param>
         public RequestException(string message)
             : base(message)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestException"/> class with the specified <paramref name="message"/> and <paramref name="innerException"/>.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="innerException">The inner exception.</param>
         public RequestException(string message, Exception innerException)
             : base(message, innerException)
         {

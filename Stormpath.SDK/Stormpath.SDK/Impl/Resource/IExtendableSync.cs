@@ -18,10 +18,23 @@ using Stormpath.SDK.CustomData;
 
 namespace Stormpath.SDK.Impl.Resource
 {
+    /// <summary>
+    /// Represents resources that have CustomData resources that can store arbitrary name/value pairs.
+    /// </summary>
     internal interface IExtendableSync
     {
+        /// <summary>
+        /// Provides access to convenience methods that can manipulate this resource's custom data.
+        /// </summary>
+        /// <value>
+        /// Access to convenience methods that can manipulate this resource's custom data.
+        /// </value>
         IEmbeddedCustomData CustomData { get; }
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Resource.IExtendable.GetCustomDataAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>Tthe <see cref="ICustomData"/> associated with this resource.</returns>
         ICustomData GetCustomData();
     }
 }

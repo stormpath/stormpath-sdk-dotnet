@@ -19,6 +19,8 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.IdSite
 {
+    /// <inheritdoc/>
+    /// <seealso cref="IIdSiteAsyncCallbackHandler.SetNonceStore(INonceStore)"/>
     public interface IAsynchronousNonceStore : INonceStore
     {
         /// <summary>
@@ -34,7 +36,7 @@ namespace Stormpath.SDK.IdSite
         /// </summary>
         /// <param name="nonce">The nonce to add.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <seealso cref="ContainsNonceAsync(string)"/>
+        /// <seealso cref="ContainsNonceAsync(string, CancellationToken)"/>
         /// <returns>A Task indicating the completion of the method.</returns>
         Task PutNonceAsync(string nonce, CancellationToken cancellationToken = default(CancellationToken));
     }

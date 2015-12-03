@@ -25,7 +25,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>stormpath.sdk.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Stormpath.SDK.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>bin\Debug\Stormpath.SDK.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -36,7 +36,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <CodeAnalysisRuleSet>stormpath.sdk.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <DocumentationFile>bin\Release\Stormpath.SDK.XML</DocumentationFile>
   </PropertyGroup>
@@ -48,7 +49,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>stormpath.sdk.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
     <DocumentationFile>bin\Mono\Stormpath.SDK.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
@@ -129,7 +131,7 @@
     <Compile Include="Group\IGroupCreationOptions.cs" />
     <Compile Include="Group\IGroup.cs" />
     <Compile Include="Group\IGroupMembership.cs" />
-    <Compile Include="Http\HttpExtensions.cs" />
+    <Compile Include="Impl\Extensions\HttpExtensions.cs" />
     <Compile Include="Http\HttpRequests.cs" />
     <Compile Include="Http\IAsynchronousHttpClient.cs" />
     <Compile Include="Http\IHttpClient.cs" />
@@ -348,7 +350,6 @@
     <Compile Include="Impl\Resource\ResourceData.cs" />
     <Compile Include="Impl\Resource\IExtendableSync.cs" />
     <Compile Include="Impl\Resource\IDeletableSync.cs" />
-    <Compile Include="Impl\Resource\IWithProperties.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterResult.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\AbstractFieldConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterList.cs" />
@@ -374,7 +375,6 @@
     <Compile Include="Impl\Utility\Base64.cs" />
     <Compile Include="Impl\Utility\DetectLanguage.cs" />
     <Compile Include="Impl\Utility\HmacGenerator.cs" />
-    <Compile Include="Impl\Utility\IMultiValueDictionary{TKey,TValue}.cs" />
     <Compile Include="Impl\Utility\ITypeLoader{T}.cs" />
     <Compile Include="Impl\Utility\SourceLanguage.cs" />
     <Compile Include="Impl\Utility\TypeLoader{T}.cs" />

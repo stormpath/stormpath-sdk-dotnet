@@ -19,8 +19,16 @@ using Stormpath.SDK.Impl.DataStore;
 
 namespace Stormpath.SDK.Impl.Resource
 {
+    /// <summary>
+    /// Represents an update callback that can be fired.
+    /// </summary>
     internal interface INotifiable
     {
+        /// <summary>
+        /// Notifies the target object that an update is occurring.
+        /// </summary>
+        /// <param name="properties">The new resource properties.</param>
+        /// <param name="dataStore">The parent data store.</param>
         void OnUpdate(IDictionary<string, object> properties, IInternalDataStore dataStore);
     }
 }

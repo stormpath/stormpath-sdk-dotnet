@@ -18,8 +18,16 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="SDK.AccountStore.IAccountStore"/>.
+    /// </summary>
     internal interface IAccountStoreSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.AccountStore.IAccountStore.GetTenantAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Tenant.</returns>
         ITenant GetTenant();
     }
 }

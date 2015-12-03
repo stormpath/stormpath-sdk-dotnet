@@ -34,10 +34,6 @@ namespace Stormpath.SDK.Group
         /// </summary>
         public static GroupStatus Disabled = new GroupStatus("DISABLED");
 
-        private GroupStatus()
-        {
-        }
-
         private GroupStatus(string value)
             : base(value)
         {

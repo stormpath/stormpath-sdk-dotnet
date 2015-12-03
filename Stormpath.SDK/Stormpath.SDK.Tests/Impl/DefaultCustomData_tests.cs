@@ -204,7 +204,7 @@ namespace Stormpath.SDK.Tests.Impl
                     () => customData.Put("bad", x), $"This should not be allowed in customData: {x}");
             });
 
-            customData.Values.Count.ShouldBe(validValueTypes.Count);
+            customData.Count.ShouldBe(validValueTypes.Count);
         }
 
         [Fact]
@@ -220,7 +220,7 @@ namespace Stormpath.SDK.Tests.Impl
                     () => customData.Put(new KeyValuePair<string, object>("bad", x)), $"This should not be allowed in customData: {x}");
             });
 
-            customData.Values.Count.ShouldBe(validValueTypes.Count);
+            customData.Count.ShouldBe(validValueTypes.Count);
         }
 
         [Fact]
@@ -237,7 +237,7 @@ namespace Stormpath.SDK.Tests.Impl
                 customData.Put(invalidItems);
             });
 
-            customData.Values.Count.ShouldBe(validValueTypes.Count);
+            customData.Count.ShouldBe(validValueTypes.Count);
         }
 
         [Fact]
@@ -282,7 +282,7 @@ namespace Stormpath.SDK.Tests.Impl
                 customData.Put(invalidValueTypesAnon);
             });
 
-            customData.Values.Count.ShouldBe(validValueTypes.Count);
+            customData.Count.ShouldBe(validValueTypes.Count);
         }
 
         [Fact]

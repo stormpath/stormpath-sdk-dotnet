@@ -78,7 +78,13 @@ namespace Stormpath.SDK.Tests.Impl
         [MemberData(nameof(ResourceTypes))]
         public void Create_returns_concrete_type(Type @interface, Type expected)
         {
-            this.factory.Create(@interface).ShouldBeOfType(expected);
+            var createMethod = typeof(IResourceFactory)
+                .GetMethod("Create", Type.EmptyTypes)
+                .MakeGenericMethod(new Type[] { @interface });
+
+            var result = createMethod.Invoke(this.factory, new object[] { });
+
+            result.ShouldBeOfType(expected);
         }
 
         public static IEnumerable<object[]> ResourceTypes()

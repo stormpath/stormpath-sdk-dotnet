@@ -14,13 +14,21 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
 using Stormpath.SDK.Impl.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
+    /// <summary>
+    /// Converts resources into <see cref="Map"/> instances.
+    /// </summary>
     internal interface IResourceConverter
     {
-        IDictionary<string, object> ToMap(AbstractResource resource);
+        /// <summary>
+        /// Converts an <see cref="AbstractResource"/> instance into a <see cref="Map"/>.
+        /// </summary>
+        /// <param name="resource">The resource.</param>
+        /// <returns>A <see cref="Map"/> of key-value pairs.</returns>
+        Map ToMap(AbstractResource resource);
     }
 }

@@ -18,9 +18,15 @@ using System.Collections.Specialized;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    // A simple subset of ConfigurationManager for unit testing
+    /// <summary>
+    /// An abstraction over System.Configuration.ConfigurationManager.
+    /// </summary>
     internal interface IConfigurationManager
     {
+        /// <summary>
+        /// An abstraction over <see cref="System.Configuration.ConfigurationManager.AppSettings"/>.
+        /// </summary>
+        /// <value>The configuration data.</value>
         NameValueCollection AppSettings { get; }
     }
 }

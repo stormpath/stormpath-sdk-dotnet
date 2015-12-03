@@ -18,8 +18,15 @@ using Stormpath.SDK.Directory;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents an expandable <see cref="IDirectory"/> resource.
+    /// </summary>
     public interface IExpandableDirectory
     {
+        /// <summary>
+        /// Expands the <c>directory</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IDirectory GetDirectory();
     }
 }

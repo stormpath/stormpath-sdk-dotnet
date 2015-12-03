@@ -14,9 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Http
+using Stormpath.SDK.Http;
+
+namespace Stormpath.SDK.Impl.Extensions
 {
-    public static class HttpExtensions
+    internal static class HttpExtensions
     {
         /// <summary>
         /// Determines whether an HTTP response resulted in a client-side (HTTP 4xx) error.

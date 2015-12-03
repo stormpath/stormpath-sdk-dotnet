@@ -69,10 +69,6 @@ namespace Stormpath.SDK.Http
         /// </summary>
         public static HttpMethod Connect = new HttpMethod("CONNECT");
 
-        private HttpMethod()
-        {
-        }
-
         private HttpMethod(string value)
             : base(value)
         {

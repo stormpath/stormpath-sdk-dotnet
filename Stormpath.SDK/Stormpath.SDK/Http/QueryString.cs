@@ -92,6 +92,11 @@ namespace Stormpath.SDK.Http
         public bool Any()
             => !this.queryStringItems.IsNullOrEmpty();
 
+        /// <summary>
+        /// Determines whether the <see cref="QueryString"/> contains the specified key.
+        /// </summary>
+        /// <param name="key">The key to locate.</param>
+        /// <returns><c>true</c> if the <see cref="QueryString"/> contains an element with the specified key; otherwise, <c>false</c>.</returns>
         public bool ContainsKey(string key)
             => this.queryStringItems?.ContainsKey(key) ?? false;
 
@@ -111,6 +116,11 @@ namespace Stormpath.SDK.Http
             }
         }
 
+        /// <summary>
+        /// Returns a string version of this QueryString.
+        /// </summary>
+        /// <param name="canonical">Whether to use canonical encoding.</param>
+        /// <returns>The string version of this QueryString.</returns>
         public string ToString(bool canonical)
         {
             bool isEmpty = this.queryStringItems == null || this.queryStringItems.Count == 0;
@@ -131,6 +141,7 @@ namespace Stormpath.SDK.Http
             return string.Join("&", items);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return this.ToString(false);

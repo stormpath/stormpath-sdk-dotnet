@@ -116,7 +116,7 @@ namespace Stormpath.SDK.Impl.Client
             if (httpClient == null)
                 throw new ArgumentNullException(nameof(httpClient));
 
-            this.httpClientBuilder.UseHttpClient(httpClient);
+            this.httpClientBuilder.SetHttpClient(httpClient);
 
             return this;
         }

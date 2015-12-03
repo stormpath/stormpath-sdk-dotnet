@@ -19,8 +19,8 @@ namespace Stormpath.SDK.Provider
     /// <summary>
     /// Interface describing the builder capabilities that Providers implement in Stormpath.
     /// </summary>
-    /// <typeparam name="A">An implementation of <see cref="IProviderAccountRequestBuilder"/>.</typeparam>
-    /// <typeparam name="P">An implementation of <see cref="ICreateProviderRequestBuilder"/>.</typeparam>
+    /// <typeparam name="A">An implementation of <see cref="IProviderAccountRequestBuilder{T}"/>.</typeparam>
+    /// <typeparam name="P">An implementation of <see cref="ICreateProviderRequestBuilder{T}"/>.</typeparam>
     public interface IProviderRequestFactory<A, P>
         where A : IProviderAccountRequestBuilder<A>
         where P : ICreateProviderRequestBuilder<P>

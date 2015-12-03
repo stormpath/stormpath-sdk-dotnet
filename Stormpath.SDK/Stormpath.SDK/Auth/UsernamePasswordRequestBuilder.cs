@@ -20,6 +20,9 @@ using Stormpath.SDK.Impl.Auth;
 
 namespace Stormpath.SDK.Auth
 {
+    /// <summary>
+    /// Constructs an <see cref="IAuthenticationRequest"/> given a username and password.
+    /// </summary>
     public sealed class UsernamePasswordRequestBuilder
     {
         private string usernameOrEmail;
@@ -27,6 +30,11 @@ namespace Stormpath.SDK.Auth
         private IAccountStore accountStore;
         private string organizationNameKey;
 
+        /// <summary>
+        /// Sets the username or email address.
+        /// </summary>
+        /// <param name="usernameOrEmail">The username or email address.</param>
+        /// <returns>This instance for method chaining.</returns>
         public UsernamePasswordRequestBuilder SetUsernameOrEmail(string usernameOrEmail)
         {
             if (string.IsNullOrEmpty(usernameOrEmail))
@@ -36,6 +44,11 @@ namespace Stormpath.SDK.Auth
             return this;
         }
 
+        /// <summary>
+        /// Sets the password.
+        /// </summary>
+        /// <param name="password">The password.</param>
+        /// <returns>This instance for method chaining.</returns>
         public UsernamePasswordRequestBuilder SetPassword(string password)
         {
             if (string.IsNullOrEmpty(password))
@@ -45,6 +58,11 @@ namespace Stormpath.SDK.Auth
             return this;
         }
 
+        /// <summary>
+        /// Sets the Account Store to use when locating the account.
+        /// </summary>
+        /// <param name="accountStore">The Account Store.</param>
+        /// <returns>This instance for method chaining.</returns>
         public UsernamePasswordRequestBuilder SetAccountStore(IAccountStore accountStore)
         {
             if (string.IsNullOrEmpty(accountStore?.Href))
@@ -57,6 +75,11 @@ namespace Stormpath.SDK.Auth
             return this;
         }
 
+        /// <summary>
+        /// Sets the Account Store href or Organization nameKey to use when locating the account.
+        /// </summary>
+        /// <param name="hrefOrNameKey">The href or nameKey.</param>
+        /// <returns>This instance for method chaining.</returns>
         public UsernamePasswordRequestBuilder SetAccountStore(string hrefOrNameKey)
         {
             if (string.IsNullOrEmpty(hrefOrNameKey))
@@ -69,6 +92,10 @@ namespace Stormpath.SDK.Auth
             return this;
         }
 
+        /// <summary>
+        /// Creates a new <see cref="IAuthenticationRequest"/> instance based on the current builder state.
+        /// </summary>
+        /// <returns>A new <see cref="IAuthenticationRequest"/> instance.</returns>
         public IAuthenticationRequest Build()
         {
             return new UsernamePasswordRequest(this.usernameOrEmail, this.password, this.accountStore, this.organizationNameKey);

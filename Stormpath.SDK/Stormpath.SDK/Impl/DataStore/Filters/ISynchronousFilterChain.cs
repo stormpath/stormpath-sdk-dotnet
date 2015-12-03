@@ -18,10 +18,23 @@ using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
 {
+    /// <summary>
+    /// Represents an ordered chain of filters to execute for a synchronous request.
+    /// </summary>
     internal interface ISynchronousFilterChain
     {
+        /// <summary>
+        /// Gets the data store invoking this filter chain.
+        /// </summary>
+        /// <value>The data store.</value>
         IInternalSyncDataStore DataStore { get; }
 
+        /// <summary>
+        /// Executes each filter in the chain for a synchronous request.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="logger">The logger.</param>
+        /// <returns>The result of the filtered request.</returns>
         IResourceDataResult Filter(IResourceDataRequest request, ILogger logger);
     }
 }

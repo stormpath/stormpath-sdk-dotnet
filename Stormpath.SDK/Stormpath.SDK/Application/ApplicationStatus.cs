@@ -34,10 +34,6 @@ namespace Stormpath.SDK.Application
         /// </summary>
         public static ApplicationStatus Disabled = new ApplicationStatus("DISABLED");
 
-        private ApplicationStatus()
-        {
-        }
-
         private ApplicationStatus(string value)
             : base(value)
         {

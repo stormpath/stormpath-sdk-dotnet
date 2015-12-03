@@ -16,6 +16,8 @@
 
 namespace Stormpath.SDK.IdSite
 {
+    /// <inheritdoc/>
+    /// <seealso cref="IIdSiteAsyncCallbackHandler.SetNonceStore(INonceStore)"/>
     public interface ISynchronousNonceStore : INonceStore
     {
         /// <summary>

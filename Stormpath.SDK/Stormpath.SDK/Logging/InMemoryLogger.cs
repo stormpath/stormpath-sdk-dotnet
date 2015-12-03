@@ -19,15 +19,22 @@ using System.Text;
 
 namespace Stormpath.SDK.Logging
 {
+    /// <summary>
+    /// Simple in-memory logging target.
+    /// </summary>
     public sealed class InMemoryLogger : ILogger
     {
         private readonly StringBuilder builder
             = new StringBuilder();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InMemoryLogger"/> class.
+        /// </summary>
         public InMemoryLogger()
         {
         }
 
+        /// <inheritdoc/>
         void ILogger.Log(LogEntry entry)
         {
             var logEntryBuilder = new StringBuilder()
@@ -44,6 +51,7 @@ namespace Stormpath.SDK.Logging
             this.builder.AppendLine(logEntryBuilder.ToString());
         }
 
+        /// <inheritdoc/>
         public override string ToString()
             => this.builder.ToString();
     }

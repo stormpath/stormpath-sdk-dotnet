@@ -41,10 +41,6 @@ namespace Stormpath.SDK.Client
 
         private readonly Type authenticatorType;
 
-        private AuthenticationScheme()
-        {
-        }
-
         private AuthenticationScheme(string value, Type authenticatorType)
             : base(value)
         {

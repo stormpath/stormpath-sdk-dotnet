@@ -35,7 +35,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\Stormpath.SDK\Stormpath.SDK.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
     <DocumentationFile>bin\Release\Stormpath.SDK.RestSharpClient.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mono|AnyCPU'">
@@ -46,7 +47,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>..\Stormpath.SDK\Stormpath.SDK.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
     <DocumentationFile>bin\Mono\Stormpath.SDK.RestSharpClient.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>

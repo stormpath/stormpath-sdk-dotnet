@@ -18,8 +18,15 @@ using Stormpath.SDK.Account;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents resources that can be expanded from an <see cref="Auth.IAuthenticationResult"/>.
+    /// </summary>
     public interface IAuthenticationResultExpandables
     {
+        /// <summary>
+        /// Expands the <c>account</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IAccount GetAccount();
     }
 }

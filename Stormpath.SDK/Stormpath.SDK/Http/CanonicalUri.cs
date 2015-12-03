@@ -102,6 +102,7 @@ namespace Stormpath.SDK.Http
         /// <value>The query string (any values after '?') of this <see cref="CanonicalUri"/>.</value>
         public QueryString QueryString => this.query;
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             if (this.query.Any())

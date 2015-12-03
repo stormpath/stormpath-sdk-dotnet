@@ -18,10 +18,23 @@ using Stormpath.SDK.Group;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents an expandable <see cref="IGroupMembership"/> collection.
+    /// </summary>
     public interface IExpandableGroupMemberships
     {
+        /// <summary>
+        /// Expands the <c>groupMemberships</c> collection with the default pagination options.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IAsyncQueryable<IGroupMembership> GetGroupMemberships();
 
+        /// <summary>
+        /// Expands the <c>groupMemberships</c> collection with the specified pagination options.
+        /// </summary>
+        /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <returns>Not applicable.</returns>
         IAsyncQueryable<IGroupMembership> GetGroupMemberships(int? offset, int? limit);
     }
 }

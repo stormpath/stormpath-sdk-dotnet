@@ -18,8 +18,17 @@ using Stormpath.SDK.Client;
 
 namespace Stormpath.SDK.Impl.Http.Authentication
 {
+    /// <summary>
+    /// Represents a factory that can create the appropriate <see cref="IRequestAuthenticator"/>
+    /// given an <see cref="AuthenticationScheme"/>.
+    /// </summary>
     internal interface IRequestAuthenticatorFactory
     {
+        /// <summary>
+        /// Creates the appropriate <see cref="IRequestAuthenticator" /> for this <see cref="AuthenticationScheme"/>.
+        /// </summary>
+        /// <param name="scheme">The authentication scheme.</param>
+        /// <returns>A new <see cref="IRequestAuthenticator"/> instance.</returns>
         IRequestAuthenticator Create(AuthenticationScheme scheme);
     }
 }

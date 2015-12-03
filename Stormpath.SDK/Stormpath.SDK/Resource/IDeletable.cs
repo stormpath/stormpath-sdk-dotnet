@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Resource
         /// Deletes the resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result determines if the delete operation succeeded.</returns>
+        /// <returns>A Task whose result determines whether the delete operation succeeded.</returns>
         /// <exception cref="Error.ResourceException">The delete operation failed.</exception>
         Task<bool> DeleteAsync(CancellationToken cancellationToken = default(CancellationToken));
     }

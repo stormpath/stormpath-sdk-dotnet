@@ -18,10 +18,23 @@ using Stormpath.SDK.Application;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents an expandable <see cref="IApplication"/> collection.
+    /// </summary>
     public interface IExpandableApplications
     {
+        /// <summary>
+        /// Expands the <c>applications</c> collection with the default pagination options.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IAsyncQueryable<IApplication> GetApplications();
 
+        /// <summary>
+        /// Expands the <c>applications</c> collection with the specified pagination options.
+        /// </summary>
+        /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <returns>Not applicable.</returns>
         IAsyncQueryable<IApplication> GetApplications(int? offset, int? limit);
     }
 }

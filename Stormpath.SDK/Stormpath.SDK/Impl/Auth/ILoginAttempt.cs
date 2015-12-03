@@ -20,16 +20,40 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Auth
 {
+    /// <summary>
+    /// Represents an abstract login attempt against an Account Store.
+    /// </summary>
     internal interface ILoginAttempt : IResource
     {
+        /// <summary>
+        /// Gets the login attempt type.
+        /// </summary>
+        /// <value>The login attempt type.</value>
         string Type { get; }
 
+        /// <summary>
+        /// Gets the <see cref="IAccountStore"/> this login will be performed against.
+        /// </summary>
+        /// <value>The Acccount Store this login will be performed against.
+        /// If <c>null</c>, the login request will use the default Stormpath login flow.</value>
         IEmbeddedProperty AccountStore { get; }
 
+        /// <summary>
+        /// Sets the <see cref="Type"/>.
+        /// </summary>
+        /// <param name="type">The type.</param>
         void SetType(string type);
 
+        /// <summary>
+        /// Sets the <see cref="AccountStore"/>.
+        /// </summary>
+        /// <param name="accountStore">The Account Store.</param>
         void SetAccountStore(IAccountStore accountStore);
 
+        /// <summary>
+        /// Sets the <see cref="AccountStore"/> by <c>href</c> or <c>nameKey</c>.
+        /// </summary>
+        /// <param name="hrefOrNameKey">The AccountStore href or Organization nameKey.</param>
         void SetAccountStore(string hrefOrNameKey);
     }
 }

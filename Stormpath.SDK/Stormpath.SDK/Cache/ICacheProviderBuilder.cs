@@ -91,7 +91,7 @@ namespace Stormpath.SDK.Cache
         /// <code>
         /// var cacheProvider = Caches.NewInMemoryCacheProvider()
         ///     .WithCache(Caches
-        ///         .ForResource<Account.IAccount>()
+        ///         .ForResource&lt;Account.IAccount&gt;()
         ///         .WithTimeToLive(TimeSpan.FromHours(2))
         ///         .WithTimeToIdle(TimeSpan.FromHours(2)))
         ///     .Build();

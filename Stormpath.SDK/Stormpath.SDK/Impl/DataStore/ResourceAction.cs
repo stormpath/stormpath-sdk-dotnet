@@ -26,10 +26,6 @@ namespace Stormpath.SDK.Impl.DataStore
         public static ResourceAction Update = new ResourceAction("UPDATE");
         public static ResourceAction Delete = new ResourceAction("DELETE");
 
-        private ResourceAction()
-        {
-        }
-
         private ResourceAction(string value)
             : base(value)
         {

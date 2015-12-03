@@ -16,8 +16,15 @@
 
 namespace Stormpath.SDK.Impl.Resource
 {
+    /// <summary>
+    /// Represents a resource proxy that can be linked to different underlying data.
+    /// </summary>
     internal interface ILinkable
     {
+        /// <summary>
+        /// Updates the underlying data reference this resource proxy points to.
+        /// </summary>
+        /// <param name="data">The resource data.</param>
         void Link(ResourceData data);
     }
 }

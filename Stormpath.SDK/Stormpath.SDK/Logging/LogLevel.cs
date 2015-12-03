@@ -16,6 +16,9 @@
 
 namespace Stormpath.SDK.Logging
 {
+    /// <summary>
+    /// Represents the log levels handled by <see cref="ILogger"/>.
+    /// </summary>
     public enum LogLevel
     {
         /// <summary>

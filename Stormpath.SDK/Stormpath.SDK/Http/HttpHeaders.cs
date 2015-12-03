@@ -184,6 +184,7 @@ namespace Stormpath.SDK.Http
             this.headers[key].Add(value);
         }
 
+        /// <inheritdoc/>
         public IEnumerator<KeyValuePair<string, IEnumerable<string>>> GetEnumerator()
         {
             foreach (var header in this.headers)
@@ -194,6 +195,7 @@ namespace Stormpath.SDK.Http
             }
         }
 
+        /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();

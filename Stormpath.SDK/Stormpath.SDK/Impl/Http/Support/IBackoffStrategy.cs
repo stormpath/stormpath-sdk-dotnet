@@ -16,8 +16,16 @@
 
 namespace Stormpath.SDK.Impl.Http.Support
 {
+    /// <summary>
+    /// Represents a progressive retry backoff algorithm.
+    /// </summary>
     internal interface IBackoffStrategy
     {
+        /// <summary>
+        /// Gets the number of milliseconds to wait for the specified <paramref name="retryCount"/>.
+        /// </summary>
+        /// <param name="retryCount">The number of retries.</param>
+        /// <returns>The number of milliseconds to wait.</returns>
         int GetDelayMilliseconds(int retryCount);
     }
 }

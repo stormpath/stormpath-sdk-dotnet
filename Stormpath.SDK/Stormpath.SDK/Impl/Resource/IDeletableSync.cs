@@ -16,8 +16,15 @@
 
 namespace Stormpath.SDK.Impl.Resource
 {
+    /// <summary>
+    /// Represents resources that can be deleted synchronously.
+    /// </summary>
     internal interface IDeletableSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Resource.IDeletable.DeleteAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>Whether the delete operation succeeded.</returns>
         bool Delete();
     }
 }

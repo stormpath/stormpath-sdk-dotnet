@@ -15,19 +15,33 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using Stormpath.SDK.Impl.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
+    /// <summary>
+    /// Creates local resource instances from <see cref="Map"/>s of properties.
+    /// </summary>
     internal interface IResourceFactory : IDisposable
     {
-        object Create(Type type, ILinkable original = null);
-
+        /// <summary>
+        /// Creates an empty resource of the specified type,
+        /// and links it to a previous instance of the resource.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <param name="original">A previously-instantiated version of the resource to link to.</param>
+        /// <returns>The new resource.</returns>
         T Create<T>(ILinkable original = null);
 
-        object Create(Type type, IDictionary<string, object> properties, ILinkable original = null);
-
-        T Create<T>(IDictionary<string, object> properties, ILinkable original = null);
+        /// <summary>
+        /// Creates a resource of the specified type with the specified <paramref name="properties"/>,
+        /// and links it to a previous instance of the resource.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <param name="properties">The resource properties.</param>
+        /// <param name="original">A previously-instantiated version of the resource to link to.</param>
+        /// <returns>The new resource.</returns>
+        T Create<T>(Map properties, ILinkable original = null);
     }
 }

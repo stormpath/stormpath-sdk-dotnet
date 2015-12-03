@@ -23,7 +23,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.IdSite
 {
-    internal sealed class DefaultNonce : INonce, IWithProperties
+    internal sealed class DefaultNonce : INonce
     {
         public static readonly string ValuePropertyName = "value";
 

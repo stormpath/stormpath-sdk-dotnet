@@ -20,6 +20,9 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Group
 {
+    /// <summary>
+    /// Represents common Group creation actions.
+    /// </summary>
     public interface IGroupCreationActions
     {
         /// <summary>

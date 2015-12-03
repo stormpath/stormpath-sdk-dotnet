@@ -16,10 +16,21 @@
 
 namespace Stormpath.SDK.Impl.Auth
 {
+    /// <summary>
+    /// Represents a basic authentication request.
+    /// </summary>
     internal interface IBasicLoginAttempt : ILoginAttempt
     {
+        /// <summary>
+        /// Gets the value of the authorization request.
+        /// </summary>
+        /// <value>The authorization request value.</value>
         string Value { get; }
 
+        /// <summary>
+        /// Sets the authorization request value.
+        /// </summary>
+        /// <param name="value">The request value.</param>
         void SetValue(string value);
     }
 }

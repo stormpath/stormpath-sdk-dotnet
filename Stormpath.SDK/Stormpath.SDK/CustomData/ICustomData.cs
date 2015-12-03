@@ -26,13 +26,18 @@ namespace Stormpath.SDK.CustomData
     /// </summary>
     public interface ICustomData : IResource, ISaveable<ICustomData>, IDeletable, IAuditable, IEnumerable<KeyValuePair<string, object>>
     {
+        /// <summary>
+        /// Gets the total number of items in this custom data resource.
+        /// </summary>
+        /// <value>The total number of items.</value>
         int Count { get; }
 
+        /// <summary>
+        /// Looks up a custom data value by key.
+        /// </summary>
+        /// <param name="key">The key to retrieve.</param>
+        /// <returns>The value associated with <paramref name="key"/>, or <c>null</c> if the key does not exist.</returns>
         object this[string key] { get; set; }
-
-        IReadOnlyCollection<string> Keys { get; }
-
-        IReadOnlyCollection<object> Values { get; }
 
         /// <summary>
         /// Removes all custom data items when this custom data resource is saved.

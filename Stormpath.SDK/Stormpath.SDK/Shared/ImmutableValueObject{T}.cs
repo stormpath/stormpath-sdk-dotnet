@@ -63,11 +63,18 @@ namespace Stormpath.SDK.Shared
                 return true;
             };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImmutableValueObject{T}"/> class.
+        /// </summary>
         public ImmutableValueObject()
         {
             this.customEqualityFunction = null;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImmutableValueObject{T}"/> class given an equality function.
+        /// </summary>
+        /// <param name="equalityFunction">The delegate to use when checking value equality.</param>
         public ImmutableValueObject(Func<T, T, bool> equalityFunction)
         {
             this.customEqualityFunction = equalityFunction;
@@ -79,12 +86,15 @@ namespace Stormpath.SDK.Shared
         public static bool operator !=(ImmutableValueObject<T> x, ImmutableValueObject<T> y)
             => !(x == y);
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
             => EqualsImpl(this as T, obj as T);
 
+        /// <inheritdoc/>
         public virtual bool Equals(T other)
             => EqualsImpl(this as T, other);
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             var fields = GetFields(this);

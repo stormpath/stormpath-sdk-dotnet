@@ -20,6 +20,9 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Account
 {
+    /// <summary>
+    /// Represents common Account creation actions.
+    /// </summary>
     public interface IAccountCreationActions
     {
         /// <summary>
@@ -69,7 +72,7 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <param name="givenName">The given name (aka 'first name' in Western cultures).</param>
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
-        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="IDirectory"/>.</param>
+        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory"/>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the persisted account.</returns>
@@ -83,7 +86,7 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <param name="givenName">The given name (aka 'first name' in Western cultures).</param>
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
-        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="IDirectory"/>.</param>
+        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory"/>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
         /// <param name="customData">An anonymous type containing name/value pairs to be stored in this account's <see cref="SDK.CustomData.ICustomData"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>

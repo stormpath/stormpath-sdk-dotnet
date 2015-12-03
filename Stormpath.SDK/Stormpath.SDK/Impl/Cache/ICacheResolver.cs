@@ -19,14 +19,35 @@ using Stormpath.SDK.Cache;
 
 namespace Stormpath.SDK.Impl.Cache
 {
+    /// <summary>
+    /// Resolves resource types to cache regions.
+    /// </summary>
     internal interface ICacheResolver
     {
+        /// <summary>
+        /// Gets whether a synchronous cache path is supported.
+        /// </summary>
+        /// <value><see langword="true"/> if a synchronous cache path is supported; <see langword="false"/> otherwise.</value>
         bool IsSynchronousSupported { get; }
 
+        /// <summary>
+        /// Gets whether an asynchronous cache path is supported.
+        /// </summary>
+        /// <value><see langword="true"/> if an asynchronous cache path is supported; <see langword="false"/> otherwise.</value>
         bool IsAsynchronousSupported { get; }
 
+        /// <summary>
+        /// Gets the synchronous cache region used to store <paramref name="resourceType"/>.
+        /// </summary>
+        /// <param name="resourceType">The resource type.</param>
+        /// <returns>The <see cref="ISynchronousCache"/> used to store the resource.</returns>
         ISynchronousCache GetSyncCache(Type resourceType);
 
+        /// <summary>
+        /// Gets the asynchronous cache region used to store <paramref name="resourceType"/>.
+        /// </summary>
+        /// <param name="resourceType">The resource type.</param>
+        /// <returns>The <see cref="IAsynchronousCache"/> used to store the resource.</returns>
         IAsynchronousCache GetAsyncCache(Type resourceType);
     }
 }

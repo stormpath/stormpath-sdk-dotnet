@@ -18,21 +18,33 @@ using System;
 
 namespace Stormpath.SDK.Shared
 {
+    /// <summary>
+    /// Represents an enumeration backed by a string value.
+    /// </summary>
     public abstract class StringEnumeration : IComparable
     {
         private readonly string value;
 
-        protected StringEnumeration()
+        private StringEnumeration()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StringEnumeration"/> class given a backing value.
+        /// </summary>
+        /// <param name="value">The enumeration value.</param>
         protected StringEnumeration(string value)
         {
             this.value = value;
         }
 
+        /// <summary>
+        /// Gets the value of this enumeration member.
+        /// </summary>
+        /// <value>The enumeration value.</value>
         public string Value => this.value;
 
+        /// <inheritdoc/>
         public override string ToString() => this.Value;
 
         public static implicit operator string(StringEnumeration @enum) => @enum.Value;
@@ -54,6 +66,7 @@ namespace Stormpath.SDK.Shared
 
         public static bool operator !=(StringEnumeration a, StringEnumeration b) => !(a == b);
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             var otherValue = obj as StringEnumeration;
@@ -69,8 +82,10 @@ namespace Stormpath.SDK.Shared
             return typeMatches && valueMatches;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode() => this.value.GetHashCode();
 
+        /// <inheritdoc/>
         public int CompareTo(object other) => this.Value.CompareTo(((StringEnumeration)other).Value);
     }
 }

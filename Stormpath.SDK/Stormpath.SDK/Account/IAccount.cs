@@ -180,7 +180,7 @@ namespace Stormpath.SDK.Account
         /// <param name="group">The group object from which the account must be removed.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result determines whether the operation succeeded.</returns>
-        /// <exception cref="InvalidOperationException">The account does not belong to the specified group.</exception>
+        /// <exception cref="System.InvalidOperationException">The account does not belong to the specified group.</exception>
         Task<bool> RemoveGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace Stormpath.SDK.Account
         /// <param name="hrefOrName">The <c>href</c> or name of the group object from which the account must be removed.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result determines whether the operation succeeded.</returns>
-        /// <exception cref="InvalidOperationException">The account does not belong to the specified group.</exception>
+        /// <exception cref="System.InvalidOperationException">The account does not belong to the specified group.</exception>
         Task<bool> RemoveGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Impl.Client
             this.defaultLibraryLoader = defaultLibraryLoader;
         }
 
-        IHttpClientBuilder IHttpClientBuilder.UseHttpClient(IHttpClient client)
+        IHttpClientBuilder IHttpClientBuilder.SetHttpClient(IHttpClient client)
         {
             this.instance = client;
             return this;

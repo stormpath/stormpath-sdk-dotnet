@@ -16,10 +16,21 @@
 
 namespace Stormpath.SDK.Impl.Group
 {
+    /// <summary>
+    /// Represents an abstract group membership object with a raw Account and Group href.
+    /// </summary>
     internal interface IInternalGroupMembership
     {
+        /// <summary>
+        /// Gets the Account href.
+        /// </summary>
+        /// <value>The Account href.</value>
         string AccountHref { get; }
 
+        /// <summary>
+        /// Gets the Group href.
+        /// </summary>
+        /// <value>The Group href.</value>
         string GroupHref { get; }
     }
 }
