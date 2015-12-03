@@ -274,7 +274,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ApplicationException("No type mapping could be found for this resource.");
             }
 
-            return this.resourceFactory.Create<T>(result.Body);
+            return (T)this.resourceFactory.Create(targetType, result.Body);
         }
 
         T IInternalSyncDataStore.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
@@ -287,7 +287,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ApplicationException("No type mapping could be found for this resource.");
             }
 
-            return this.resourceFactory.Create<T>(result.Body);
+            return (T)this.resourceFactory.Create(targetType, result.Body);
         }
 
         private Task<IResourceDataResult> GetResourceDataAsync<T>(string href, CancellationToken cancellationToken)

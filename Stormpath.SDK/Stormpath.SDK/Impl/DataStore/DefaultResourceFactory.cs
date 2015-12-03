@@ -36,15 +36,15 @@ namespace Stormpath.SDK.Impl.DataStore
         private IResourceFactory AsInterface => this;
 
         T IResourceFactory.Create<T>(ILinkable original)
-            => (T)this.Create(typeof(T), null, original);
+            => (T)this.AsInterface.Create(typeof(T), null, original);
 
         private object Create(Type type, ILinkable original)
-            => this.Create(type, null, original);
+            => this.AsInterface.Create(type, null, original);
 
         T IResourceFactory.Create<T>(IDictionary<string, object> properties, ILinkable original)
-            => (T)this.Create(typeof(T), properties, original);
+            => (T)this.AsInterface.Create(typeof(T), properties, original);
 
-        private object Create(Type type, IDictionary<string, object> properties, ILinkable original)
+        object IResourceFactory.Create(Type type, IDictionary<string, object> properties, ILinkable original)
         {
             if (ResourceTypeLookup.IsCollectionResponse(type))
             {

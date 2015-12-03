@@ -38,6 +38,16 @@ namespace Stormpath.SDK.Impl.DataStore
         /// Creates a resource of the specified type with the specified <paramref name="properties"/>,
         /// and links it to a previous instance of the resource.
         /// </summary>
+        /// <param name="targetType">The resource type.</param>
+        /// <param name="properties">The resource properties.</param>
+        /// <param name="original">A previously-instantiated version of the resource to link to.</param>
+        /// <returns>The new resource.</returns>
+        object Create(Type targetType, Map properties, ILinkable original = null);
+
+        /// <summary>
+        /// Creates a resource of the specified type with the specified <paramref name="properties"/>,
+        /// and links it to a previous instance of the resource.
+        /// </summary>
         /// <typeparam name="T">The resource type.</typeparam>
         /// <param name="properties">The resource properties.</param>
         /// <param name="original">A previously-instantiated version of the resource to link to.</param>
