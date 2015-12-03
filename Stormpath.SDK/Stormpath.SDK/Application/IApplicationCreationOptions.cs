@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Application
     public interface IApplicationCreationOptions : ICreationOptions
     {
         /// <summary>
-        /// Gets whether to create a new <see cref="Directory.IDirectory"/> for the new application's needs.
+        /// Gets a value indicating whether to create a new <see cref="Directory.IDirectory"/> for the new application's needs.
         /// </summary>
         /// <value>
         /// <para>
@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Application
         bool CreateDirectory { get; }
 
         /// <summary>
-        /// Gets or sets the name to use when creating a new <see cref="Directory.IDirectory"/>.
+        /// Gets the name to use when creating a new <see cref="Directory.IDirectory"/>.
         /// </summary>
         /// <value>
         /// The name to assign to the new directory. This only has an effect if <see cref="CreateDirectory"/> is <c>true</c>.

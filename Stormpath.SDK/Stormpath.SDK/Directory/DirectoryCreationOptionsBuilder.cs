@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Directory
         }
 
         /// <summary>
-        /// Gets or sets the response options to apply to the request.
+        /// Gets the response options to apply to the request.
         /// </summary>
         /// <value>The response options to apply to the request.</value>
         /// <example>

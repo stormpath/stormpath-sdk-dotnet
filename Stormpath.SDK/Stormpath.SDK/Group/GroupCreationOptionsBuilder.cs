@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Group
     public sealed class GroupCreationOptionsBuilder
     {
         /// <summary>
-        /// Gets or sets the response options to apply to the request.
+        /// Gets the response options to apply to the request.
         /// </summary>
         /// <value>The response options to apply to the request.</value>
         /// <example>

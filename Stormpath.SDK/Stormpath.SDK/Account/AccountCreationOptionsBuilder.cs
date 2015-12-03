@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Account
         public bool? RegistrationWorkflowEnabled { get; set; }
 
         /// <summary>
-        /// Gets or sets the response options to apply to the request.
+        /// Gets the response options to apply to the request.
         /// </summary>
         /// <value>The response options to apply to the request.</value>
         /// <example>

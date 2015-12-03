@@ -77,9 +77,9 @@ namespace Stormpath.SDK.IdSite
         /// The listener must be set before the method <see cref="GetAccountResult()"/> is invoked.
         /// </para>
         /// </summary>
-        /// <param name="onRegistered">The action to run for <see cref="IIdSiteSyncResultListener.OnRegistered(IAccountResult)"/>.</param>
-        /// <param name="onAuthenticated">The action to run for <see cref="IIdSiteSyncResultListener.OnAuthenticated(IAccountResult)"/>.</param>
-        /// <param name="onLogout">The action to run for <see cref="IIdSiteSyncResultListener.OnLogout(IAccountResult)"/>.</param>
+        /// <param name="onRegistered">The action to run for new account registration.</param>
+        /// <param name="onAuthenticated">The action to run for successful authentication.</param>
+        /// <param name="onLogout">The action to run for account logout.</param>
         /// <returns>This instance for method chaining.</returns>
         IIdSiteSyncCallbackHandler SetResultListener(
             Action<IAccountResult> onRegistered = null,

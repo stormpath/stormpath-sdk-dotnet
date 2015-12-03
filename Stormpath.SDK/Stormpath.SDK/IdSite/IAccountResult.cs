@@ -27,7 +27,7 @@ namespace Stormpath.SDK.IdSite
     public interface IAccountResult
     {
         /// <summary>
-        /// Returns any original application-specific state that was applied when the user was redirected to the ID Site, or
+        /// Gets any original application-specific state that was applied when the user was redirected to the ID Site, or
         /// <c>null</c> if no state was specified.
         /// </summary>
         /// <seealso cref="Application.IApplication.NewIdSiteUrlBuilder"/>
@@ -36,7 +36,7 @@ namespace Stormpath.SDK.IdSite
         string State { get; }
 
         /// <summary>
-        /// Determines whether the account returned by <see cref="GetAccountAsync(CancellationToken)"/> was
+        /// Gets a value indicating whether the account returned by <see cref="GetAccountAsync(CancellationToken)"/> was
         /// newly created (registered) on the ID Site, or was an existing account that logged in successfully.
         /// </summary>
         /// <value><c>true</c> if the returned <see cref="IAccount"/> was registered on the ID Site;
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.IdSite
         bool IsNewAccount { get; }
 
         /// <summary>
-        /// Returns the status of the ID Site invocation (registered, authenticated, logged out).
+        /// Gets the status of the ID Site invocation (registered, authenticated, logged out).
         /// </summary>
         /// <value>The status of the ID Site invocation.</value>
         IdSiteResultStatus Status { get; }

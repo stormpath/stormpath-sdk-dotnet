@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Http
         int StatusCode { get; }
 
         /// <summary>
-        /// Gets whether the request failed due to a transport (non-HTTP) error.
+        /// Gets a value indicating whether the request failed due to a transport (non-HTTP) error.
         /// </summary>
         /// <value><c>true</c> for requests that failed due to transport problems (e.g. connection timeout, DNS resolution errors).</value>
         bool TransportError { get; }

@@ -43,13 +43,13 @@ namespace Stormpath.SDK.Http
         IWebProxy Proxy { get; }
 
         /// <summary>
-        /// Gets whether this client instance is capable of making synchronous requests.
+        /// Gets a value indicating whether this client instance is capable of making synchronous requests.
         /// </summary>
         /// <value>Should return <c>true</c> for clients implementing <see cref="ISynchronousHttpClient"/>.</value>
         bool IsSynchronousSupported { get; }
 
         /// <summary>
-        /// Gets whether this client instance is capable of making asynchronous requests.
+        /// Gets a value indicating whether this client instance is capable of making asynchronous requests.
         /// </summary>
         /// <value>Should return <c>true</c> for clients implementing <see cref="IAsynchronousHttpClient"/>.</value>
         bool IsAsynchronousSupported { get; }

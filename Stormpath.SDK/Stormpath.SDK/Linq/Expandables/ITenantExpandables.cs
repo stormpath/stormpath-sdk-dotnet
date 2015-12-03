@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Linq.Expandables
         /// Expands the <c>directories</c> collection with the specified pagination options.
         /// </summary>
         /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
-        /// <param name="limit">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
         /// <returns>Not applicable.</returns>
         IAsyncQueryable<IDirectory> GetDirectories(int? offset, int? limit);
     }

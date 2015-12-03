@@ -79,9 +79,9 @@ namespace Stormpath.SDK.IdSite
         /// The listener must be set before the method <see cref="GetAccountResultAsync(CancellationToken)"/> is invoked.
         /// </para>
         /// </summary>
-        /// <param name="onRegistered">The action to run for <see cref="IIdSiteAsyncResultListener.OnRegisteredAsync(IAccountResult, CancellationToken)"/>.</param>
-        /// <param name="onAuthenticated">The action to run for <see cref="IIdSiteAsyncResultListener.OnAuthenticatedAsync(IAccountResult, CancellationToken)"/>.</param>
-        /// <param name="onLogout">The action to run for <see cref="IIdSiteAsyncResultListener.OnLogoutAsync(IAccountResult, CancellationToken)"/>.</param>
+        /// <param name="onRegistered">The action to run for new account registration.</param>
+        /// <param name="onAuthenticated">The action to run for successful authentication.</param>
+        /// <param name="onLogout">The action to run for account logout.</param>
         /// <returns>This instance for method chaining.</returns>
         IIdSiteAsyncCallbackHandler SetResultListener(
             Func<IAccountResult, CancellationToken, Task> onRegistered = null,

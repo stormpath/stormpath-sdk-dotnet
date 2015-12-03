@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Auth
     public interface IAuthenticationResult
     {
         /// <summary>
-        /// Gets whether the authentication was successful.
+        /// Gets a value indicating whether the authentication was successful.
         /// </summary>
         /// <returns><c>true</c> if the authentication was successful; <c>false</c> otherwise.</returns>
         /// <value>Whether the authentication was successful.</value>

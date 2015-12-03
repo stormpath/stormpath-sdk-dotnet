@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Application
     public sealed class ApplicationCreationOptionsBuilder
     {
         /// <summary>
-        /// Gets whether to create a new <see cref="Directory.IDirectory"/> for the new application's needs.
+        /// Gets or sets a value indicating whether to create a new <see cref="Directory.IDirectory"/> for the new application's needs.
         /// </summary>
         /// <value>
         /// Default value: <c>false</c>.
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Application
         public bool CreateDirectory { get; set; } = false;
 
         /// <summary>
-        /// Gets or sets the response options to apply to the request.
+        /// Gets the response options to apply to the request.
         /// </summary>
         /// <value>The response options to apply to the request.</value>
         /// <example>

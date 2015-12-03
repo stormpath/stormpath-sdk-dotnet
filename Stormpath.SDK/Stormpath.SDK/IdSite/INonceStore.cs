@@ -36,7 +36,7 @@ namespace Stormpath.SDK.IdSite
     public interface INonceStore
     {
         /// <summary>
-        /// Gets whether this <see cref="INonceStore"/> instance supports synchronous operations.
+        /// Gets a value indicating whether this <see cref="INonceStore"/> instance supports synchronous operations.
         /// </summary>
         /// <value>
         /// For any objects implementing <see cref="ISynchronousNonceStore"/>, this should return <c>true</c>.
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.IdSite
         bool IsSynchronousSupported { get; }
 
         /// <summary>
-        /// Gets whether this <see cref="INonceStore"/> instance supports asynchronous operations.
+        /// Gets a value indicating whether this <see cref="INonceStore"/> instance supports asynchronous operations.
         /// </summary>
         /// <value>
         /// For any objects implementing <see cref="IAsynchronousNonceStore"/>, this should return <c>true</c>.

@@ -24,10 +24,11 @@ namespace Stormpath.SDK.Impl.Resource
     internal interface IExtendableSync
     {
         /// <summary>
-        /// Provides access to convenience methods that can manipulate this resource's custom data.
+        /// Gets a proxy that can be used to manipulate the Custom Data for this resource.
         /// </summary>
+        /// <seealso cref="GetCustomData"/>
         /// <value>
-        /// Access to convenience methods that can manipulate this resource's custom data.
+        /// A proxy that can be used to manipulate the Custom Data for this resource.
         /// </value>
         IEmbeddedCustomData CustomData { get; }
 

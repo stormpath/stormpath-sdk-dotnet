@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Linq.Expandables
         /// Expands the <c>accountMemberships</c> collection with the specified pagination options.
         /// </summary>
         /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
-        /// <param name="limit">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
         /// <returns>Not applicable.</returns>
         IAsyncQueryable<IGroupMembership> GetAccountMemberships(int? offset, int? limit);
 
@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Linq.Expandables
         /// Expands the <c>applicationMappings</c> collection with the specified pagination options.
         /// </summary>
         /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
-        /// <param name="limit">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
         /// <returns>Not applicable.</returns>
         IAsyncQueryable<IGroupMembership> GetApplicationMappings(int? offset, int? limit);
     }

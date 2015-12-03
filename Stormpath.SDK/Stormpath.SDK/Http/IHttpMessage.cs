@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Http
         HttpHeaders Headers { get; }
 
         /// <summary>
-        /// Gets whether this HTTP message contains a body.
+        /// Gets a value indicating whether this HTTP message contains a body.
         /// </summary>
         /// <value><c>true</c> if <see cref="Body"/> is not null or empty.</value>
         bool HasBody { get; }

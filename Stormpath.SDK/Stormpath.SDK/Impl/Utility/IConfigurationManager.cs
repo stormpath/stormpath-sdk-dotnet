@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Impl.Utility
     internal interface IConfigurationManager
     {
         /// <summary>
-        /// An abstraction over <see cref="System.Configuration.ConfigurationManager.AppSettings"/>.
+        /// Gets an abstraction over <see cref="System.Configuration.ConfigurationManager.AppSettings"/>.
         /// </summary>
         /// <value>The configuration data.</value>
         NameValueCollection AppSettings { get; }

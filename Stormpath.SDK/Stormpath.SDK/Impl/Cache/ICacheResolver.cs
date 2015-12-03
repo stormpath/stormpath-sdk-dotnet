@@ -25,13 +25,13 @@ namespace Stormpath.SDK.Impl.Cache
     internal interface ICacheResolver
     {
         /// <summary>
-        /// Gets whether a synchronous cache path is supported.
+        /// Gets a value indicating whether a synchronous cache path is supported.
         /// </summary>
         /// <value><see langword="true"/> if a synchronous cache path is supported; <see langword="false"/> otherwise.</value>
         bool IsSynchronousSupported { get; }
 
         /// <summary>
-        /// Gets whether an asynchronous cache path is supported.
+        /// Gets a value indicating whether an asynchronous cache path is supported.
         /// </summary>
         /// <value><see langword="true"/> if an asynchronous cache path is supported; <see langword="false"/> otherwise.</value>
         bool IsAsynchronousSupported { get; }

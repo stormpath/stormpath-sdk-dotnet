@@ -92,7 +92,7 @@ namespace Stormpath.SDK.AccountStore
         IAccountStoreMapping SetDefaultGroupStore(bool defaultGroupStore);
 
         /// <summary>
-        /// Gets whether the associated <see cref="IAccountStore"/> is designated as the application's default account store.
+        /// Gets a value indicating whether the associated <see cref="IAccountStore"/> is designated as the application's default account store.
         /// </summary>
         /// <value>
         /// True if the associated <see cref="IAccountStore"/> is designated as the application's default account store, false otherwise.
@@ -101,7 +101,7 @@ namespace Stormpath.SDK.AccountStore
         bool IsDefaultAccountStore { get; }
 
         /// <summary>
-        /// Gets whether the associated <see cref="IAccountStore"/> is designated as the application's default group store.
+        /// Gets a value indicating whether the associated <see cref="IAccountStore"/> is designated as the application's default group store.
         /// </summary>
         /// <value>
         /// True if the associated <see cref="IAccountStore"/> is designated as the application's default group store, false otherwise.

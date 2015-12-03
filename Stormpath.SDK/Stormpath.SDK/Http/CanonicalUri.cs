@@ -53,8 +53,8 @@ namespace Stormpath.SDK.Http
         /// Initializes a new instance of the <see cref="CanonicalUri"/> class
         /// with the specified <see cref="ResourcePath"/> and <see cref="QueryString"/> components.
         /// </summary>
-        /// <param name="href">The value for <see cref="ResourcePath"/>.</param>
-        /// <param name="queryParams">The value for <see cref="QueryString"/>.</param>
+        /// <param name="href">The resource path.</param>
+        /// <param name="queryParams">The query string parameters.</param>
         public CanonicalUri(string href, QueryString queryParams)
             : this(href)
         {
@@ -91,7 +91,7 @@ namespace Stormpath.SDK.Http
         public Uri ResourcePath => this.resourcePath;
 
         /// <summary>
-        /// Gets whether this <see cref="CanonicalUri"/> has a <see cref="QueryString"/> component.
+        /// Gets a value indicating whether this <see cref="CanonicalUri"/> has a <see cref="QueryString"/> component.
         /// </summary>
         /// <value><c>true</c> if <see cref="QueryString"/> is not null; <c>false</c> otherwise.</value>
         public bool HasQuery => this.query == null;
