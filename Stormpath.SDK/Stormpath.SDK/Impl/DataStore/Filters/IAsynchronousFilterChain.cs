@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         /// <param name="request">The request.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the result of the filtered request.</returns>
+        /// <returns>The result of the filtered request.</returns>
         Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, ILogger logger, CancellationToken cancellationToken);
     }
 }

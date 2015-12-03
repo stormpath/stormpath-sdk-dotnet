@@ -89,7 +89,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="application">The application.</param>
         /// <param name="requestBuilder">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
         /// <returns>
-        /// A Task whose result is the result of the authentication.
+        /// The result of the authentication.
         /// The authenticated account can be obtained from <see cref="SyncAuthenticationResultExtensions.GetAccount(IAuthenticationResult)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
@@ -116,7 +116,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="requestBuilder">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
         /// <param name="responseOptions">The options to apply to this request.</param>
         /// <returns>
-        /// A Task whose result is the result of the authentication.
+        /// The result of the authentication.
         /// The authenticated account can be obtained from <see cref="SyncAuthenticationResultExtensions.GetAccount(IAuthenticationResult)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>

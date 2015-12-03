@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Account
         /// await IApplication.CreateAccountAsync(theAccount, options => options.RegistrationWorkflowEnabled = false, cancellationToken);
         /// </code>
         /// </example>
-        /// <returns>A Task whose result is the persisted account.</returns>
+        /// <returns>The persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Account
         /// <param name="account">The account to create/persist.</param>
         /// <param name="creationOptions">An <see cref="IAccountCreationOptions"/> instance to use when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted account.</returns>
+        /// <returns>The persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <param name="account">The account to create/persist.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted account.</returns>
+        /// <returns>The persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
@@ -75,7 +75,7 @@ namespace Stormpath.SDK.Account
         /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory"/>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted account.</returns>
+        /// <returns>The persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Account
         /// <param name="password">The account's raw (plaintext) password.</param>
         /// <param name="customData">An anonymous type containing name/value pairs to be stored in this account's <see cref="SDK.CustomData.ICustomData"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted account.</returns>
+        /// <returns>The persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>

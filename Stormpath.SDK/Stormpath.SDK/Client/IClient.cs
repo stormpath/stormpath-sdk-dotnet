@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Client
         /// Gets the sole <see cref="ITenant"/> associated to this <see cref="IClient"/>.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the <see cref="ITenant"/> associated to this client.</returns>
+        /// <returns>The <see cref="ITenant"/> associated to this client.</returns>
         Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

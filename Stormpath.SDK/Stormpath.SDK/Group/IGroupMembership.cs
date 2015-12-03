@@ -34,14 +34,14 @@ namespace Stormpath.SDK.Group
         /// Gets this membership's <see cref="IAccount"/> resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is this membership's <see cref="IAccount"/> resource.</returns>
+        /// <returns>This membership's <see cref="IAccount"/> resource.</returns>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets this membership's <see cref="IGroup"/> resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is this membership's <see cref="IGroup"/> resource.</returns>
+        /// <returns>This membership's <see cref="IGroup"/> resource.</returns>
         Task<IGroup> GetGroupAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

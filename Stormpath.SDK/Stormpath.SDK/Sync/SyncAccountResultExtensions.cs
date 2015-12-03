@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Sync
         /// that has logged in.
         /// </summary>
         /// <param name="source">The account result.</param>
-        /// <returns>A Task whose result is the user's <see cref="IAccount"/> resource.</returns>
+        /// <returns>The user's <see cref="IAccount"/> resource.</returns>
         /// <exception cref="System.ApplicationException">The account is not present.</exception>
         public static IAccount GetAccount(this IAccountResult source)
             => (source as IAccountResultSync).GetAccount();

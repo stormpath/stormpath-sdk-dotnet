@@ -141,14 +141,14 @@ namespace Stormpath.SDK.Account
         /// Gets the account's parent <see cref="IDirectory"/> (where the account is stored).
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is this account's directory.</returns>
+        /// <returns>This account's directory.</returns>
         Task<IDirectory> GetDirectoryAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is this account's tenant.</returns>
+        /// <returns>This account's tenant.</returns>
         Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Stormpath.SDK.Account
         /// <param name="group">The Group this account will be added to.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// A Task whose result is the new <see cref="IGroupMembership"/> resource created reflecting
+        /// The new <see cref="IGroupMembership"/> resource created reflecting
         /// the account-to-group association.
         /// </returns>
         Task<IGroupMembership> AddGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
@@ -169,7 +169,7 @@ namespace Stormpath.SDK.Account
         /// <param name="hrefOrName">The <c>href</c> or name of the group to add.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// A Task whose result is the new <see cref="IGroupMembership"/> resource created reflecting
+        /// The new <see cref="IGroupMembership"/> resource created reflecting
         /// the account-to-group association.
         /// </returns>
         Task<IGroupMembership> AddGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
@@ -179,7 +179,7 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <param name="group">The group object from which the account must be removed.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result determines whether the operation succeeded.</returns>
+        /// <returns>Whether the operation succeeded.</returns>
         /// <exception cref="System.InvalidOperationException">The account does not belong to the specified group.</exception>
         Task<bool> RemoveGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -189,7 +189,7 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <param name="hrefOrName">The <c>href</c> or name of the group object from which the account must be removed.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result determines whether the operation succeeded.</returns>
+        /// <returns>Whether the operation succeeded.</returns>
         /// <exception cref="System.InvalidOperationException">The account does not belong to the specified group.</exception>
         Task<bool> RemoveGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -199,14 +199,14 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <param name="hrefOrName">The <c>href</c> or name of the group to check.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is <c>true</c> if the account belongs to the specified group.</returns>
+        /// <returns><c>true</c> if the account belongs to the specified group; <c>false</c> otherwise.</returns>
         Task<bool> IsMemberOfGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the ProviderData Resource belonging to the account.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the ProviderData Resource belonging to the account.</returns>
+        /// <returns>The ProviderData Resource belonging to the account.</returns>
         Task<IProviderData> GetProviderDataAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

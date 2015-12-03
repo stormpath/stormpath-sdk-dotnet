@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         /// <param name="chain">The remaining filters in the chain.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the result of the resource request (and any upstream filters).</returns>
+        /// <returns>The result of the resource request (and any upstream filters).</returns>
         Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken);
     }
 }

@@ -210,7 +210,7 @@ namespace Stormpath.SDK
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">The <see cref="IAsyncQueryable{T}"/> that contains the elements to be counted.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the number of elements in the input sequence.</returns>
+        /// <returns>The number of elements in the input sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="OverflowException">The number of elements in <paramref name="source"/> is larger than <see cref="int.MaxValue"/>.</exception>
         /// <exception cref="System.InvalidOperationException">The underlying provider does not support this operation.</exception>
@@ -237,7 +237,7 @@ namespace Stormpath.SDK
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">The <see cref="IAsyncQueryable{T}"/> to return the first element of.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the first element in <paramref name="source"/>.</returns>
+        /// <returns>The first element in <paramref name="source"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="System.InvalidOperationException">The <paramref name="source"/> sequence is empty.</exception>
         public static async Task<TSource> FirstAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
@@ -258,7 +258,7 @@ namespace Stormpath.SDK
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">The <see cref="IAsyncQueryable{T}"/> to return the first element of.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is <c>default(TSource)</c> if <paramref name="source"/> is empty; otherwise, the first element in <paramref name="source"/>.</returns>
+        /// <returns><c>default(TSource)</c> if <paramref name="source"/> is empty; otherwise, the first element in <paramref name="source"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static async Task<TSource> FirstOrDefaultAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -278,7 +278,7 @@ namespace Stormpath.SDK
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">An <see cref="IAsyncQueryable{T}"/> to return the single element of.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the single element of the input sequence.</returns>
+        /// <returns>The single element of the input sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="System.InvalidOperationException"><paramref name="source"/> has more than one element.</exception>
         public static async Task<TSource> SingleAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
@@ -299,7 +299,7 @@ namespace Stormpath.SDK
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">An <see cref="IAsyncQueryable{T}"/> to return the single element of.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the single element of the input sequence, or <c>default(TSource)</c> if the sequence contains no elements.</returns>
+        /// <returns>The single element of the input sequence, or <c>default(TSource)</c> if the sequence contains no elements.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="System.InvalidOperationException"><paramref name="source"/> has more than one element.</exception>
         public static async Task<TSource> SingleOrDefaultAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
@@ -319,7 +319,7 @@ namespace Stormpath.SDK
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">An <see cref="IAsyncQueryable{T}"/> to get items from.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is a list of all items from the input sequence.</returns>
+        /// <returns>A list of all items from the input sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static async Task<List<TSource>> ToListAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -342,7 +342,7 @@ namespace Stormpath.SDK
         /// <param name="source">An <see cref="IAsyncQueryable{T}"/> containing items to operate on.</param>
         /// <param name="action">The action to perform on each element.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task indicating that the asynchronous operation is complete.</returns>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
         public static Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Action<TSource> action, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -365,7 +365,7 @@ namespace Stormpath.SDK
         /// <param name="source">An <see cref="IAsyncQueryable{T}"/> containing items to operate on.</param>
         /// <param name="action">The action to perform each element. Return <c>true</c> to cause the loop to gracefully break.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task indicating that the asynchronous operation is complete.</returns>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
         public static async Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Func<TSource, bool> action, CancellationToken cancellationToken = default(CancellationToken))
         {

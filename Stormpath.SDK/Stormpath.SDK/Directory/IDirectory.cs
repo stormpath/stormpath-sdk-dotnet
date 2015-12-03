@@ -84,7 +84,7 @@ namespace Stormpath.SDK.Directory
         /// Gets the <see cref="IProvider"/> of this Directory.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the Provider of this Directory.</returns>
+        /// <returns>The Provider of this Directory.</returns>
         Task<IProvider> GetProviderAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

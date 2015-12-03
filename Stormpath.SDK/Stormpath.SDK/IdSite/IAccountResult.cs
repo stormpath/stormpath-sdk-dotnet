@@ -56,7 +56,7 @@ namespace Stormpath.SDK.IdSite
         /// that has logged in.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the user's <see cref="IAccount"/> resource.</returns>
+        /// <returns>The user's <see cref="IAccount"/> resource.</returns>
         /// <exception cref="System.ApplicationException">The account is not present.</exception>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }

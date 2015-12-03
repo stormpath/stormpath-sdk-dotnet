@@ -93,7 +93,7 @@ namespace Stormpath.SDK.IdSite
         /// the account that logged in or registered.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the resolved identity in the form of an <see cref="IAccountResult"/>.</returns>
+        /// <returns>The resolved identity in the form of an <see cref="IAccountResult"/>.</returns>
         /// <exception cref="Jwt.InvalidJwtException">The returned token is invalid.</exception>
         /// <exception cref="ApplicationException">The current nonce store does not support asynchronous operations.</exception>
         Task<IAccountResult> GetAccountResultAsync(CancellationToken cancellationToken = default(CancellationToken));

@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Http
         /// </summary>
         /// <param name="request">The HTTP request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the HTTP response.</returns>
+        /// <returns>The HTTP response.</returns>
         Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Resource
         /// Creates or updates the resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted resource data.</returns>
+        /// <returns>The persisted resource data.</returns>
         /// <exception cref="Error.ResourceException">The save operation failed.</exception>
         Task<T> SaveAsync(CancellationToken cancellationToken = default(CancellationToken));
     }

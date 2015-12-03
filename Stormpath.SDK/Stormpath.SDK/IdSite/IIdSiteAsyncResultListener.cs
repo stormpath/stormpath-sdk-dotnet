@@ -30,7 +30,7 @@ namespace Stormpath.SDK.IdSite
         /// </summary>
         /// <param name="result">The data specific to this event.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task that indicates the completion of the method.</returns>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task OnRegisteredAsync(IAccountResult result, CancellationToken cancellationToken);
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Stormpath.SDK.IdSite
         /// </summary>
         /// <param name="result">The data specific to this event.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task that indicates the completion of the method.</returns>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task OnAuthenticatedAsync(IAccountResult result, CancellationToken cancellationToken);
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Stormpath.SDK.IdSite
         /// </summary>
         /// <param name="result">The data specific to this event.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task that indicates the completion of the method.</returns>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task OnLogoutAsync(IAccountResult result, CancellationToken cancellationToken);
     }
 }

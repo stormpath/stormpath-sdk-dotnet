@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Resource
         /// </summary>
         /// <param name="responseOptions">The options to apply to this request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted resource data.</returns>
+        /// <returns>The persisted resource data.</returns>
         /// <exception cref="Error.ResourceException">The save operation failed.</exception>
         Task<T> SaveAsync(Action<IRetrievalOptions<T>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
     }

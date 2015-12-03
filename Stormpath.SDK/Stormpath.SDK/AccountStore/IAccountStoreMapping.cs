@@ -123,14 +123,14 @@ namespace Stormpath.SDK.AccountStore
         /// Gets this mapping's <see cref="IAccountStore"/> (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>), to be assigned to the application.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the mapping's <see cref="IAccountStore"/>.</returns>
+        /// <returns>The mapping's <see cref="IAccountStore"/>.</returns>
         Task<IAccountStore> GetAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the <see cref="IApplication"/> represented by this mapping.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the mapping's <see cref="IApplication"/>.</returns>
+        /// <returns>The mapping's <see cref="IApplication"/>.</returns>
         Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

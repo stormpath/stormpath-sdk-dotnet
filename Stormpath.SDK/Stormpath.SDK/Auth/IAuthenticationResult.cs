@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Auth
         /// Gets the successfully authenticated <see cref="IAccount"/>.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the <see cref="IAccount"/> that was successfully authenticated.</returns>
+        /// <returns>The <see cref="IAccount"/> that was successfully authenticated.</returns>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

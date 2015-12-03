@@ -78,7 +78,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
         /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory"/>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
-        /// <returns>A Task whose result is the persisted account.</returns>
+        /// <returns>The persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>

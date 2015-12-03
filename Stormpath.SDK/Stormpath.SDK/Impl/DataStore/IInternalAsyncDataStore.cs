@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <typeparam name="T">The inner resource type.</typeparam>
         /// <param name="href">The collection URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is a <see cref="CollectionResponsePage{T}"/> containing a single page of results.</returns>
+        /// <returns>A <see cref="CollectionResponsePage{T}"/> containing a single page of results.</returns>
         Task<CollectionResponsePage<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken);
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="href">The resource URL.</param>
         /// <param name="typeLookup">The type lookup</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the resource.</returns>
+        /// <returns>The resource.</returns>
         Task<T> GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
             where T : class, IResource;
 
@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
         /// <param name="resource">The resource to persist.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted resource.</returns>
+        /// <returns>The persisted resource.</returns>
         Task<T> CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
             where T : class;
 
@@ -67,7 +67,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="resource">The resource to persist.</param>
         /// <param name="options">The creation options to use for the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted resource.</returns>
+        /// <returns>The persisted resource.</returns>
         Task<T> CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
             where T : class;
 
@@ -79,7 +79,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
         /// <param name="resource">The resource to persist.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted resource.</returns>
+        /// <returns>The persisted resource.</returns>
         Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
             where T : class
             where TReturned : class;
@@ -93,7 +93,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="resource">The resource to persist.</param>
         /// <param name="options">The creation options to use for the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the persisted resource.</returns>
+        /// <returns>The persisted resource.</returns>
         Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
             where T : class
             where TReturned : class;
@@ -104,7 +104,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <typeparam name="T">The resource type.</typeparam>
         /// <param name="resource">The resource to persist.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the updated resource.</returns>
+        /// <returns>The updated resource.</returns>
         Task<T> SaveAsync<T>(T resource, CancellationToken cancellationToken)
             where T : class, IResource, ISaveable<T>;
 
@@ -115,7 +115,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="resource">The resource to persist.</param>
         /// <param name="queryString">The additional query string arguments to use in the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the updated resource.</returns>
+        /// <returns>The updated resource.</returns>
         Task<T> SaveAsync<T>(T resource, string queryString, CancellationToken cancellationToken)
             where T : class, IResource, ISaveable<T>;
 
@@ -125,7 +125,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <typeparam name="T">The resource type.</typeparam>
         /// <param name="resource">The resource to delete.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is <see langword="true"/> if the delete operation succeeded; <see langword="false"/> otherwise.</returns>
+        /// <returns><see langword="true"/> if the delete operation succeeded; <see langword="false"/> otherwise.</returns>
         Task<bool> DeleteAsync<T>(T resource, CancellationToken cancellationToken)
             where T : class, IResource, IDeletable;
 
@@ -135,7 +135,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="parentHref">The parent resource URL.</param>
         /// <param name="propertyName">The name of the property to delete</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is <see langword="true"/> if the delete operation succeeded; <see langword="false"/> otherwise.</returns>
+        /// <returns><see langword="true"/> if the delete operation succeeded; <see langword="false"/> otherwise.</returns>
         Task<bool> DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken);
     }
 }

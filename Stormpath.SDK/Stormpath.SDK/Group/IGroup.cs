@@ -82,7 +82,7 @@ namespace Stormpath.SDK.Group
         /// <param name="account">The account to assign to this group.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// A Task whose result is the new <see cref="IGroupMembership"/> resource created
+        /// The new <see cref="IGroupMembership"/> resource created
         /// reflecting the group-to-account association.
         /// </returns>
         Task<IGroupMembership> AddAccountAsync(IAccount account, CancellationToken cancellationToken = default(CancellationToken));
@@ -94,7 +94,7 @@ namespace Stormpath.SDK.Group
         /// <param name="hrefOrEmailOrUsername">The <c>href</c>, email, or username of the <see cref="IAccount"/> to associate.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// A Task whose result is the new <see cref="IGroupMembership"/> resource created
+        /// The new <see cref="IGroupMembership"/> resource created
         /// reflecting the group-to-account association.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">The specified account could not be found.</exception>
@@ -105,7 +105,7 @@ namespace Stormpath.SDK.Group
         /// </summary>
         /// <param name="account">The <see cref="IAccount"/> object to disassociate.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result determines whether the operation succeeded.</returns>
+        /// <returns>Whether the operation succeeded.</returns>
         /// <exception cref="System.InvalidOperationException">The specified account does not belong to this group.</exception>
         Task<bool> RemoveAccountAsync(IAccount account, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -115,7 +115,7 @@ namespace Stormpath.SDK.Group
         /// </summary>
         /// <param name="hrefOrEmailOrUsername">The <see cref="IAccount"/> object to disassociate.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result determines whether the operation succeeded.</returns>
+        /// <returns>Whether the operation succeeded.</returns>
         /// <exception cref="System.InvalidOperationException">The specified account does not belong to this group.</exception>
         Task<bool> RemoveAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -123,7 +123,7 @@ namespace Stormpath.SDK.Group
         /// Gets the group's parent <see cref="IDirectory"/> (where the group is stored).
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is this group's parent <see cref="IDirectory"/>.</returns>
+        /// <returns>This group's parent <see cref="IDirectory"/>.</returns>
         Task<IDirectory> GetDirectoryAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

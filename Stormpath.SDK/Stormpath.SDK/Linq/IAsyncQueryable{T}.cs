@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Linq
         /// Attempts to asynchronously retrieve the next page of items from the data source.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result represents whether the collection retrieved items.</returns>
+        /// <returns><see langword="true"/> if the enumerator was successfully advanced to the next page; <see langword="false"/> if the enumerator has passed the end of the collection.</returns>
         Task<bool> MoveNextAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
