@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Account
         /// Gets the account's email verification token. This will only be non-null if the account holder
         /// has been asked to verify their email account by clicking a link in an email.
         /// </summary>
-        /// <value>An <see cref="IEmailVerificationToken"/>, or <c>null</c> if this account does not need to verify its email address.</value>
+        /// <value>An <see cref="IEmailVerificationToken"/>, or <see langword="null"/> if this account does not need to verify its email address.</value>
         IEmailVerificationToken EmailVerificationToken { get; }
 
         /// <summary>

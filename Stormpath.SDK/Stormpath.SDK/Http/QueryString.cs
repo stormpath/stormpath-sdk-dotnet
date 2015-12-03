@@ -104,7 +104,7 @@ namespace Stormpath.SDK.Http
         /// Gets a named parameter in the query string.
         /// </summary>
         /// <param name="parameter">The name of the parameter.</param>
-        /// <returns>The parameter value, or <c>null</c>.</returns>
+        /// <returns>The parameter value, or <see langword="null"/>.</returns>
         public string this[string parameter]
         {
             get

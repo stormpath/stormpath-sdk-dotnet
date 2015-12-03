@@ -28,11 +28,11 @@ namespace Stormpath.SDK.IdSite
     {
         /// <summary>
         /// Gets any original application-specific state that was applied when the user was redirected to the ID Site, or
-        /// <c>null</c> if no state was specified.
+        /// <see langword="null"/> if no state was specified.
         /// </summary>
         /// <seealso cref="Application.IApplication.NewIdSiteUrlBuilder"/>
         /// <seealso cref="IIdSiteUrlBuilder.SetState(string)"/>
-        /// <value>Application-specific state that was applied to the ID Site redirect, or <c>null</c> if no state data was set.</value>
+        /// <value>Application-specific state that was applied to the ID Site redirect, or <see langword="null"/> if no state data was set.</value>
         string State { get; }
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Api
         /// <summary>
         /// Gets a new <see cref="IClientApiKeyBuilder"/> instance, used to fluently construct <see cref="IClientApiKey"/> instances to authenticate calls to Stormpath.
         /// </summary>
-        /// <param name="logger">A logger instance for capturing trace output; pass <c>null</c> to disable logging.</param>
+        /// <param name="logger">A logger instance for capturing trace output; pass <see langword="null"/> to disable logging.</param>
         /// <returns>A new <see cref="IClientApiKeyBuilder"/> instance.</returns>
         /// <example>
         /// <code>

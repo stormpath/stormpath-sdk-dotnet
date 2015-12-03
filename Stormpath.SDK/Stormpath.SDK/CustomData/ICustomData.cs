@@ -36,7 +36,7 @@ namespace Stormpath.SDK.CustomData
         /// Looks up a custom data value by key.
         /// </summary>
         /// <param name="key">The key to retrieve.</param>
-        /// <returns>The value associated with <paramref name="key"/>, or <c>null</c> if the key does not exist.</returns>
+        /// <returns>The value associated with <paramref name="key"/>, or <see langword="null"/> if the key does not exist.</returns>
         object this[string key] { get; set; }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Stormpath.SDK.CustomData
         /// Gets the custom data item with the specified <paramref name="key"/>.
         /// </summary>
         /// <param name="key">The name (key) of the custom data item to find.</param>
-        /// <returns>The value associated with <paramref name="key"/> if it exists; <c>null</c> otherwise.</returns>
+        /// <returns>The value associated with <paramref name="key"/> if it exists; <see langword="null"/> otherwise.</returns>
         object Get(string key);
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Stormpath.SDK.CustomData
         /// <para>You must call <see cref="ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/> to save the changes.</para>
         /// </summary>
         /// <param name="key">The name (key) of the custom data item to remove.</param>
-        /// <returns>The value of the removed item if it exists; <c>null</c> otherwise.</returns>
+        /// <returns>The value of the removed item if it exists; <see langword="null"/> otherwise.</returns>
         object Remove(string key);
 
         /// <summary>

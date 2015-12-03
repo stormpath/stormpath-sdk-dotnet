@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Http
         /// <summary>
         /// Gets the message body content type, if any.
         /// </summary>
-        /// <value>The HTTP message body content type (e.g. application/json). Null if <see cref="Body"/> is null or empty.</value>
+        /// <value>The HTTP message body content type (e.g. application/json). <see langword="null"/> if <see cref="Body"/> is null or empty.</value>
         string BodyContentType { get; }
     }
 }

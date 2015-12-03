@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Cache
         /// </summary>
         /// <param name="key">The key that the value was added with.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The cached object, or <c>null</c> if there is no entry for the specified key.</returns>
+        /// <returns>The cached object, or <see langword="null"/> if there is no entry for the specified key.</returns>
         Task<Map> GetAsync(string key, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Cache
         /// <param name="key">The key used to identify the object being stored.</param>
         /// <param name="value">The value to be stored in the cache.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The previous value associated with the given key, or <c>null</c> if there was no previous value.</returns>
+        /// <returns>The previous value associated with the given key, or <see langword="null"/> if there was no previous value.</returns>
         Task<Map> PutAsync(string key, Map value, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Cache
         /// </summary>
         /// <param name="key">The key used to identify the object being stored.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The removed value, or <c>null</c> if there was no value cached.</returns>
+        /// <returns>The removed value, or <see langword="null"/> if there was no value cached.</returns>
         Task<Map> RemoveAsync(string key, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

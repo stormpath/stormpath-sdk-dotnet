@@ -59,7 +59,7 @@ namespace Stormpath.SDK.Directory
         /// <summary>
         /// Sets the directory description.
         /// </summary>
-        /// <param name="description">The directory's description. This is an optional property and may be <c>null</c> or empty.</param>
+        /// <param name="description">The directory's description. This is an optional property and may be <see langword="null"/> or empty.</param>
         /// <returns>This instance for method chaining.</returns>
         IDirectory SetDescription(string description);
 

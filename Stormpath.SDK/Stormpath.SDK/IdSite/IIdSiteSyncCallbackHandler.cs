@@ -55,7 +55,7 @@ namespace Stormpath.SDK.IdSite
         /// </remarks>
         /// <param name="nonceStore">The <see cref="INonceStore"/> implementation to use when processing this request.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="ArgumentException"><paramref name="nonceStore"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="nonceStore"/> is <see langword="null"/>.</exception>
         IIdSiteSyncCallbackHandler SetNonceStore(INonceStore nonceStore);
 
         /// <summary>

@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Cache
         /// Gets the cached value stored under the specified key.
         /// </summary>
         /// <param name="key">The key that the value was added with.</param>
-        /// <returns>The cached object, or <c>null</c> if there is no entry for the specified key.</returns>
+        /// <returns>The cached object, or <see langword="null"/> if there is no entry for the specified key.</returns>
         Map Get(string key);
 
         /// <summary>
@@ -35,14 +35,14 @@ namespace Stormpath.SDK.Cache
         /// </summary>
         /// <param name="key">The key used to identify the object being stored.</param>
         /// <param name="value">The value to be stored in the cache.</param>
-        /// <returns>The previous value associated with the given key, or <c>null</c> if there was no previous value.</returns>
+        /// <returns>The previous value associated with the given key, or <see langword="null"/> if there was no previous value.</returns>
         Map Put(string key, Map value);
 
         /// <summary>
         /// Removes the cached value stored under the specified key.
         /// </summary>
         /// <param name="key">The key used to identify the object being stored.</param>
-        /// <returns>The removed value, or <c>null</c> if there was no value cached.</returns>
+        /// <returns>The removed value, or <see langword="null"/> if there was no value cached.</returns>
         Map Remove(string key);
     }
 }

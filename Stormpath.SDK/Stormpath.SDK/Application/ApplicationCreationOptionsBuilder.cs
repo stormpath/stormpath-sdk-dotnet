@@ -57,9 +57,9 @@ namespace Stormpath.SDK.Application
         /// Gets or sets the name to use when creating a new <see cref="Directory.IDirectory"/>.
         /// </summary>
         /// <value>
-        /// Default value: <c>null</c>.
+        /// Default value: <see langword="null"/>.
         /// <para>The name to assign to the new directory. This only has an effect if <see cref="CreateDirectory"/> is <see langword="true"/>.</para>
-        /// <para>If you want to have a default name assigned automatically, set this to <see cref="string.Empty"/> or <c>null</c>.</para>
+        /// <para>If you want to have a default name assigned automatically, set this to <see cref="string.Empty"/> or <see langword="null"/>.</para>
         /// </value>
         public string DirectoryName { get; set; } = null;
 

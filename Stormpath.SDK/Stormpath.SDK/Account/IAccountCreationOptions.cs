@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Account
         /// <value>
         /// If set to <see langword="true"/>, the account registration workflow will be triggered no matter what the Login Source configuration is.
         /// If set to <see langword="false"/>, the account registration workflow will <b>NOT</b> be triggered, no matter what the Login Source configuration is.
-        /// If you want to ensure the registration workflow behavior matches the Login Source default, leave this <c>null</c>.
+        /// If you want to ensure the registration workflow behavior matches the Login Source default, leave this <see langword="null"/>.
         /// </value>
         bool? RegistrationWorkflowEnabled { get; }
     }

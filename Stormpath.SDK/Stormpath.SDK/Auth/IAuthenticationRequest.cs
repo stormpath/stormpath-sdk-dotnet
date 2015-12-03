@@ -46,11 +46,11 @@ namespace Stormpath.SDK.Auth
         C Credentials { get; }
 
         /// <summary>
-        /// Gets the account store that should process this request, or <c>null</c> if the application's default
+        /// Gets the account store that should process this request, or <see langword="null"/> if the application's default
         /// account store authentication flow should execute. If non-null, the account store must be assigned
         /// to the application making the request.
         /// </summary>
-        /// <value>The account store that should process this request, or <c>null</c> if the application's default
+        /// <value>The account store that should process this request, or <see langword="null"/> if the application's default
         /// account store authentication flow should execute.</value>
         IAccountStore AccountStore { get; }
     }

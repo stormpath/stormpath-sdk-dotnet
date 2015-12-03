@@ -103,7 +103,7 @@ namespace Stormpath.SDK.Impl.Application
         /// <summary>
         /// Synchronous counterpart to <see cref="IApplication.GetDefaultAccountStoreAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <returns>The default Account store, or <c>null</c>.</returns>
+        /// <returns>The default Account store, or <see langword="null"/>.</returns>
         IAccountStore GetDefaultAccountStore();
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Stormpath.SDK.Impl.Application
         /// <summary>
         /// Synchronous counterpart to <see cref="IApplication.GetDefaultGroupStoreAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <returns>The default Group store, or <c>null</c>.</returns>
+        /// <returns>The default Group store, or <see langword="null"/>.</returns>
         IAccountStore GetDefaultGroupStore();
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Stormpath.SDK.Impl.Application
         /// </summary>
         /// <typeparam name="T">The type of resource (either a <see cref="SDK.Directory.IDirectory"/> or a <see cref="IGroup"/>) to query for.</typeparam>
         /// <param name="query">Query to search for a resource of type <typeparamref name="T"/> in the current Tenant.</param>
-        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <c>null</c> if there is no resource matching the query..</returns>
+        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <see langword="null"/> if there is no resource matching the query..</returns>
         IAccountStoreMapping AddAccountStore<T>(Func<IQueryable<T>, IQueryable<T>> query)
             where T : IAccountStore;
 

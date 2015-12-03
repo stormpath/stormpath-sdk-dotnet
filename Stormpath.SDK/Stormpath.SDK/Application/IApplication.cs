@@ -256,11 +256,11 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Gets the <see cref="IAccountStore"/> (either a <see cref="IGroup"/> or <see cref="Directory.IDirectory"/>)
-        /// used to persist new accounts created by the application, or <c>null</c> if no account store has been designated.
+        /// used to persist new accounts created by the application, or <see langword="null"/> if no account store has been designated.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The default <see cref="IAccountStore"/>,
-        /// or <c>null</c> if no default <see cref="IAccountStore"/> has been designated.</returns>
+        /// or <see langword="null"/> if no default <see cref="IAccountStore"/> has been designated.</returns>
         /// <example>
         /// Getting and using the default account store:
         /// <code>
@@ -290,7 +290,7 @@ namespace Stormpath.SDK.Application
         Task SetDefaultAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
+        /// Gets the <see cref="IAccountStore"/> used to persist new groups created by the application, or <see langword="null"/>
         /// if no account store has been designated.
         /// <para>
         /// Stormpath's current REST API requires this to be a <see cref="Directory.IDirectory"/>.
@@ -299,7 +299,7 @@ namespace Stormpath.SDK.Application
         /// </para>
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
+        /// <returns>The <see cref="IAccountStore"/> used to persist new groups created by the application, or <see langword="null"/>
         /// if no account store has been designated.</returns>
         /// <example>
         /// Getting and using the default group store:
@@ -411,12 +411,12 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Adds a resource of type <typeparamref name="T"/> as a new <see cref="IAccountStore"/> to this Application. The provided <see cref="IAsyncQueryable{T}"/>
-        /// must match a single <typeparamref name="T"/> in the current Tenant. If no compatible resource matches the query, this method will return <c>null</c>.
+        /// must match a single <typeparamref name="T"/> in the current Tenant. If no compatible resource matches the query, this method will return <see langword="null"/>.
         /// </summary>
         /// <param name="query">Query to search for a resource of type <typeparamref name="T"/> in the current Tenant.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <typeparam name="T">The type of resource (either a <see cref="Directory.IDirectory"/> or a <see cref="IGroup"/>) to query for.</typeparam>
-        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <c>null</c> if there is no resource matching the query.</returns>
+        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <see langword="null"/> if there is no resource matching the query.</returns>
         /// <exception cref="Error.ResourceException">The found resource already exists as an account store in the application.</exception>
         /// <exception cref="ArgumentException">The query matches more than one resource in the current Tenant.</exception>
         /// <example>

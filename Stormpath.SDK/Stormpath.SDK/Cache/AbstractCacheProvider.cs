@@ -84,8 +84,8 @@ namespace Stormpath.SDK.Cache
         /// Creates a new synchronous cache.
         /// </summary>
         /// <param name="name">The cache name.</param>
-        /// <param name="ttl">The time to live value, or <c>null</c> to use <see cref="DefaultTimeToLive"/>.</param>
-        /// <param name="tti">The time to idle value, or <c>null</c> to use <see cref="DefaultTimeToIdle"/>.</param>
+        /// <param name="ttl">The time to live value, or <see langword="null"/> to use <see cref="DefaultTimeToLive"/>.</param>
+        /// <param name="tti">The time to idle value, or <see langword="null"/> to use <see cref="DefaultTimeToIdle"/>.</param>
         /// <returns>A new <see cref="ISynchronousCache"/> instance.</returns>
         protected abstract ISynchronousCache CreateSyncCache(string name, TimeSpan? ttl, TimeSpan? tti);
 
@@ -93,8 +93,8 @@ namespace Stormpath.SDK.Cache
         /// Creates a new asynchronous cache.
         /// </summary>
         /// <param name="name">The cache name.</param>
-        /// <param name="ttl">The time to live value, or <c>null</c> to use <see cref="DefaultTimeToLive"/>.</param>
-        /// <param name="tti">The time to idle value, or <c>null</c> to use <see cref="DefaultTimeToIdle"/>.</param>
+        /// <param name="ttl">The time to live value, or <see langword="null"/> to use <see cref="DefaultTimeToLive"/>.</param>
+        /// <param name="tti">The time to idle value, or <see langword="null"/> to use <see cref="DefaultTimeToIdle"/>.</param>
         /// <returns>A new <see cref="IAsynchronousCache"/> instance.</returns>
         protected abstract IAsynchronousCache CreateAsyncCache(string name, TimeSpan? ttl, TimeSpan? tti);
 

@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Group
         /// <summary>
         /// Sets the group's description.
         /// </summary>
-        /// <param name="description">The group's description. This is an optional property and may be <c>null</c> or empty.</param>
+        /// <param name="description">The group's description. This is an optional property and may be <see langword="null"/> or empty.</param>
         /// <returns>This instance for method chaining.</returns>
         IGroup SetDescription(string description);
 

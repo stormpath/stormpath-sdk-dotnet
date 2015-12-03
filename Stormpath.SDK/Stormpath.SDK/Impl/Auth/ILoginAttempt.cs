@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Impl.Auth
         /// Gets the <see cref="IAccountStore"/> this login will be performed against.
         /// </summary>
         /// <value>The Account Store this login will be performed against.
-        /// If <c>null</c>, the login request will use the default Stormpath login flow.</value>
+        /// If <see langword="null"/>, the login request will use the default Stormpath login flow.</value>
         IEmbeddedProperty AccountStore { get; }
 
         /// <summary>

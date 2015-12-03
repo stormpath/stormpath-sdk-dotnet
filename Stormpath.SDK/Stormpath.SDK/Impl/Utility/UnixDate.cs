@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Impl.Utility
         /// Gets this datetime as a Unix epoch timestamp (seconds since Jan 1, 1970, midnight UTC).
         /// </summary>
         /// <param name="date">The date to convert.</param>
-        /// <returns>Seconds since Unix epoch, or <c>null</c> if <paramref name="date"/> is null.</returns>
+        /// <returns>Seconds since Unix epoch, or <see langword="null"/> if <paramref name="date"/> is null.</returns>
         public static long? ToLong(DateTimeOffset? date)
         {
             if (!date.HasValue)

@@ -206,7 +206,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// Gets a resource interface type given a resource attribute name.
         /// </summary>
         /// <param name="nestedItemKey">A resource attribute name (e.g. "directory").</param>
-        /// <returns>The associated interface type (e.g., <see cref="IDirectory"/>, or <c>null</c> if no type could be found.</returns>
+        /// <returns>The associated interface type (e.g., <see cref="IDirectory"/>, or <see langword="null"/> if no type could be found.</returns>
         public Type GetInterface(string nestedItemKey)
         {
             Type foundType = null;

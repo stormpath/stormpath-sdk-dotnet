@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Logging
         public readonly string Source;
 
         /// <summary>
-        /// The exception associated with the event, or <c>null</c>.
+        /// The exception associated with the event, or <see langword="null"/>.
         /// </summary>
         public readonly Exception Exception;
 
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Logging
         /// <param name="severity">The severity of the event.</param>
         /// <param name="message">The log message.</param>
         /// <param name="source">The source of the event.</param>
-        /// <param name="exception">The exception associated with the event, or <c>null</c>.</param>
+        /// <param name="exception">The exception associated with the event, or <see langword="null"/>.</param>
         public LogEntry(LogLevel severity, string message, string source, Exception exception)
         {
             if (string.IsNullOrEmpty(message))
