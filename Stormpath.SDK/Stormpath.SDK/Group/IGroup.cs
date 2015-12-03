@@ -79,7 +79,7 @@ namespace Stormpath.SDK.Group
         /// <summary>
         /// Assigns the specified <see cref="IAccount"/> to this <see cref="IGroup"/>.
         /// </summary>
-        /// <param name="account">The account to assignt to this group.</param>
+        /// <param name="account">The account to assign to this group.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// A Task whose result is the new <see cref="IGroupMembership"/> resource created

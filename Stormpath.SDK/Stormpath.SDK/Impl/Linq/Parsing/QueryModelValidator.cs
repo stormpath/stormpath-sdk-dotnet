@@ -106,7 +106,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 .Count() != shorthandTerms.Count;
 
             if (shorthandTermCollisions)
-                throw new NotSupportedException("Multiple Within constrants on the same field are not supported.");
+                throw new NotSupportedException("Multiple Within constraints on the same field are not supported.");
         }
 
         private void ValidateExpands()

@@ -65,7 +65,7 @@ namespace Stormpath.SDK.Impl.Cache
             }
             catch (Exception e)
             {
-                this.logger.Warn($"Could not get sync cache for type {resourceType.Name}: {e.Message} (Source: {e.Source})", "DefaultCacheResolver.GetSyncCache");
+                this.logger.Warn($"Could not get synchronous cache for type {resourceType.Name}: {e.Message} (Source: {e.Source})", "DefaultCacheResolver.GetSyncCache");
             }
 
             return string.IsNullOrEmpty(cacheRegionName)
@@ -85,7 +85,7 @@ namespace Stormpath.SDK.Impl.Cache
             }
             catch (Exception e)
             {
-                this.logger.Warn($"Could not get async cache for type {resourceType.Name}: {e.Message} (Source: {e.Source})", "DefaultCacheResolver.GetAsyncCache");
+                this.logger.Warn($"Could not get asynchronous cache for type {resourceType.Name}: {e.Message} (Source: {e.Source})", "DefaultCacheResolver.GetAsyncCache");
             }
 
             return string.IsNullOrEmpty(cacheRegionName)

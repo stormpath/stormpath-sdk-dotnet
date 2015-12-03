@@ -490,7 +490,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 // Must be a resource
                 IsResource(result?.Body) &&
 
-                // Don't cache password reset or email verificaiton requests
+                // Don't cache password reset or email verification requests
                 result.Type != typeof(IPasswordResetToken) &&
                 result.Type != typeof(IEmailVerificationToken) &&
                 result.Type != typeof(IEmailVerificationRequest) &&

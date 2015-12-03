@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Http
 {
     /// <summary>
-    /// Represents an HTTP response mesasge.
+    /// Represents an HTTP response message.
     /// </summary>
     public interface IHttpResponse : IHttpMessage
     {

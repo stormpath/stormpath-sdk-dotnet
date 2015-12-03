@@ -65,7 +65,7 @@ namespace Stormpath.SDK.Impl.Linq
             this.queryProvider.Executor = this.executor;
         }
 
-        // Equivalent to Enumerable.Empty - creates a queryable that will always be of zero length.
+        // Equivalent to Enumerable.Empty - creates an IAsyncQueryable that will always be of zero length.
         public static IAsyncQueryable<T> Empty<T>()
         {
             var emptyQueryable = new CollectionResourceQueryable<T>(new NullExecutor<T>());

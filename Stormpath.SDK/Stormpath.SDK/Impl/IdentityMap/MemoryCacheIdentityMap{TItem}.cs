@@ -85,7 +85,6 @@ namespace Stormpath.SDK.Impl.IdentityMap
 
         public void Dispose()
         {
-            // Don't change this method. Change Dispose(bool disposing) instead
             this.Dispose(true);
         }
     }

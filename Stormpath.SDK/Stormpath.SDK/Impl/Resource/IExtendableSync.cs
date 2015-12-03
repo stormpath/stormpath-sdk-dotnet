@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Impl.Resource
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Resource.IExtendable.GetCustomDataAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <returns>Tthe <see cref="ICustomData"/> associated with this resource.</returns>
+        /// <returns>The <see cref="ICustomData"/> associated with this resource.</returns>
         ICustomData GetCustomData();
     }
 }

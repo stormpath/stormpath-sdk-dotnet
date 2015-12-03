@@ -20,7 +20,7 @@ using Stormpath.SDK.Shared;
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// Respresents the various states an <see cref="IAccount"/> may be in.
+    /// Represents the various states an <see cref="IAccount"/> may be in.
     /// </summary>
     public sealed class AccountStatus : StringEnumeration
     {

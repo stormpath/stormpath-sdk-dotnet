@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Sync
             => (source as IGroupCreationActionsSync).CreateGroup(group, creationOptionsAction);
 
         /// <summary>
-        /// Synchronously reates a new <see cref="Group.IGroup"/>.
+        /// Synchronously creates a new <see cref="Group.IGroup"/>.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="group">The group to create.</param>

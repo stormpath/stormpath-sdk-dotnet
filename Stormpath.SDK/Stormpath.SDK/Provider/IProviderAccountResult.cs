@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Provider
     /// Represents the result of the attempt to access the Provider's account. Stormpath maps common fields of the
     /// Provider user to the <see cref="IAccount"/> Resource.
     /// <para>
-    /// If the user retrieved from the Provider did not previously exist in Stormapth as an Account, common Provider user fields
+    /// If the user retrieved from the Provider did not previously exist in Stormpath as an Account, common Provider user fields
     /// will be used to create a new <see cref="IAccount"/> in Stormpath.
     /// </para>
     /// </summary>

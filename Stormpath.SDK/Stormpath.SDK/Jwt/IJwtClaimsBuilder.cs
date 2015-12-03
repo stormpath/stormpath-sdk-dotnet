@@ -19,7 +19,7 @@ using System;
 namespace Stormpath.SDK.Jwt
 {
     /// <summary>
-    /// Builder patternt to construct <see cref="IJwtClaims"/> instances.
+    /// Builder pattern to construct <see cref="IJwtClaims"/> instances.
     /// </summary>
     public interface IJwtClaimsBuilder
     {

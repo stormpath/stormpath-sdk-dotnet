@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Impl.Jwt
         {
             var parts = jwt.Split(Separator);
             if (parts.Length != 3)
-                throw new ArgumentException("Token must consist of 3 delimeted parts.");
+                throw new ArgumentException("Token must consist of 3 delimited parts.");
 
             var headerJson = Base64.Decode(parts[0], Encoding.UTF8);
             var payloadJson = Base64.Decode(parts[1], Encoding.UTF8);

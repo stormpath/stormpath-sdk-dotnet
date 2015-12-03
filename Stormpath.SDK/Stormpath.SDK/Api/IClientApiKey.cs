@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Api
 
         /// <summary>
         /// Checks whether the key/secret pair represented by this <see cref="IClientApiKey"/> is valid.
-        /// This is a client-side check for convenience only. It does <b>not</b> make a request to the Stormapth server.
+        /// This is a client-side check for convenience only. It does <b>not</b> make a request to the Stormpath server.
         /// </summary>
         /// <returns>True if the API Key ID and Secret are not empty; false otherwise.</returns>
         bool IsValid();

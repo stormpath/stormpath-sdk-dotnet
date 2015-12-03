@@ -226,7 +226,7 @@ namespace Stormpath.SDK
 
             var collection = sourceLimitQuery as CollectionResourceQueryable<TSource>;
             if (collection == null)
-                throw new InvalidOperationException("This queryable is not a supported collection resource.");
+                throw new InvalidOperationException("This object is not a supported collection resource.");
 
             return collection.Size;
         }

@@ -513,7 +513,7 @@ namespace Stormpath.SDK.Application
         /// <summary>
         /// Verifies a password reset token.
         /// </summary>
-        /// <param name="token">The verification token, usually obtained as a request paramter by your application.</param>
+        /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task whose result is the <see cref="IAccount"/> matching the specified token.</returns>
         /// <exception cref="Error.ResourceException">The token is not valid.</exception>

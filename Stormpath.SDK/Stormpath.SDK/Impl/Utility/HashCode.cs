@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Impl.Utility
 {
     // Borrowed from Şafak Gür (http://stackoverflow.com/a/18613926/3191599)
-    // Helper extension that allows hashcodes to be calcualated fluently
+    // Helper extension that allows hash codes to be calculated fluently
     internal struct HashCode
     {
         private readonly int hashCode;

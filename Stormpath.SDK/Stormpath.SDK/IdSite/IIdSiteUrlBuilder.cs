@@ -90,10 +90,10 @@ namespace Stormpath.SDK.IdSite
         IIdSiteUrlBuilder SetShowOrganizationField(bool showOrganizationField);
 
         /// <summary>
-        /// Sets application-specific state data that should be retained and made availabe to your <c>callbackUri</c>
+        /// Sets application-specific state data that should be retained and made available to your <c>callbackUri</c>
         /// when the user returns from the ID Site.
         /// </summary>
-        /// <param name="state">Application-specific state data that should be retained and made availabe to your <c>callbackUri</c> when the user returns from the ID Site.</param>
+        /// <param name="state">Application-specific state data that should be retained and made available to your <c>callbackUri</c> when the user returns from the ID Site.</param>
         /// <returns>This instance for method chaining.</returns>
         IIdSiteUrlBuilder SetState(string state);
 

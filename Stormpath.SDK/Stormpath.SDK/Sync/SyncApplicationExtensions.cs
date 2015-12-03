@@ -476,7 +476,7 @@ namespace Stormpath.SDK.Sync
         /// Synchronously verifies a password reset token.
         /// </summary>
         /// <param name="application">The application.</param>
-        /// <param name="token">The verification token, usually obtained as a request paramter by your application.</param>
+        /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
         /// <returns>The <see cref="IAccount"/> matching the specified token.</returns>
         /// <exception cref="SDK.Error.ResourceException">The token is not valid.</exception>
         public static IAccount VerifyPasswordResetToken(this IApplication application, string token)

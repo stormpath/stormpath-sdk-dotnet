@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Sync
         /// Synchronously assigns the specified <see cref="IAccount"/> to this <see cref="Group.IGroup"/>.
         /// </summary>
         /// <param name="group">The group.</param>
-        /// <param name="account">The account to assignt to this group.</param>
+        /// <param name="account">The account to assign to this group.</param>
         /// <returns>
         /// The new <see cref="IGroupMembership"/> resource created
         /// reflecting the group-to-account association.

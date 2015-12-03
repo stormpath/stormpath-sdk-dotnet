@@ -146,7 +146,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var items = properties["items"] as IEnumerable<IDictionary<string, object>>;
             if (items == null)
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: items subcollection is invalid.");
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: 'items' sub-collection is invalid.");
 
             try
             {
@@ -189,7 +189,6 @@ namespace Stormpath.SDK.Impl.DataStore
 
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
         }
     }

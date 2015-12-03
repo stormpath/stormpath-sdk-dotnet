@@ -22,7 +22,7 @@ namespace Stormpath.SDK.Impl
     {
         void ILogger.Log(LogEntry entry)
         {
-            // noop.
+            ; // noop
         }
     }
 }

@@ -118,7 +118,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).CreateDirectory(name, description, status);
 
         /// <summary>
-        /// Synchronously verifies an account's email address based on a <c>sptoken</c> parameter embedded in a clickable URL
+        /// Synchronously verifies an account's email address based on a <c>sptoken</c> parameter embedded in a URL
         /// found in an account's verification email.
         /// <para>
         /// For example:

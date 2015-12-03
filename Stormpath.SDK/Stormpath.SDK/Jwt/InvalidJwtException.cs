@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Jwt
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidJwtException"/> class with the given <paramref name="message"/>.
         /// </summary>
-        /// <param name="message">The error m essage.</param>
+        /// <param name="message">The error message.</param>
         public InvalidJwtException(string message)
             : base(message)
         {

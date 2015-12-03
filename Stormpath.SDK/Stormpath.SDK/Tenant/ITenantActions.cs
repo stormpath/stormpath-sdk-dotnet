@@ -113,7 +113,7 @@ namespace Stormpath.SDK.Tenant
         Task<IDirectory> CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Verifies an account's email address based on a <c>sptoken</c> parameter embedded in a clickable URL
+        /// Verifies an account's email address based on a <c>sptoken</c> parameter embedded in a URL
         /// found in an account's verification email.
         /// <para>
         /// For example:

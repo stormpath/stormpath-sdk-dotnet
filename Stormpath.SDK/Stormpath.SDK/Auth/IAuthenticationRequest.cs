@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Auth
         P Principals { get; }
 
         /// <summary>
-        /// Gets the credentials (information that proves authenticity) of the the specific Account to be authenticated. For example, a password.
+        /// Gets the credentials (information that proves authenticity) of the specific Account to be authenticated. For example, a password.
         /// </summary>
         /// <value>The account's credentials.</value>
         C Credentials { get; }

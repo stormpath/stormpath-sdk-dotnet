@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Group
         /// <summary>
         /// Synchronous counterpart to <see cref="IGroup.AddAccountAsync(IAccount, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="account">The account to assignt to this group.</param>
+        /// <param name="account">The account to assign to this group.</param>
         /// <returns>
         /// The new <see cref="IGroupMembership"/> resource created reflecting the group-to-account association.
         /// </returns>

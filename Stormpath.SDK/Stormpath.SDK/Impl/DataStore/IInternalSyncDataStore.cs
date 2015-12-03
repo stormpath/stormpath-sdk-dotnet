@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <typeparam name="TReturned">The resource type to return.</typeparam>
         /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
         /// <param name="resource">The resource to persist.</param>
-        /// <returns>Tthe persisted resource.</returns>
+        /// <returns>The persisted resource.</returns>
         TReturned Create<T, TReturned>(string parentHref, T resource)
             where T : class
             where TReturned : class;

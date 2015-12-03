@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Http
         /// Initializes a new instance of the <see cref="AuthorizationHeaderValue"/> class
         /// with the specified <see cref="Scheme"/> and <see cref="Parameter"/>.
         /// </summary>
-        /// <param name="schemeAndParameter">A combined scheme and paramter value.</param>
+        /// <param name="schemeAndParameter">A combined scheme and parameter value.</param>
         /// <exception cref="ArgumentException"><paramref name="schemeAndParameter"/> cannot be parsed.</exception>
         internal AuthorizationHeaderValue(string schemeAndParameter)
         {

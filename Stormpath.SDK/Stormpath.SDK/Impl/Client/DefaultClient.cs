@@ -156,7 +156,6 @@ namespace Stormpath.SDK.Impl.Client
 
         void IDisposable.Dispose()
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
         }
     }

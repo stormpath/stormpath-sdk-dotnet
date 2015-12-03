@@ -40,7 +40,7 @@ namespace Stormpath.SDK.IdSite
         /// if you have caching enabled in the SDK. Because nonces are stored in a cache region, it is very important to
         /// ensure that the nonce store cache region has an entry TTL <em>longer</em> than the response message valid life span.
         /// For Stormpath, response messages are valid for 1 minute, so your default cache region settings must use a
-        /// TTL longer than 1 minute (most caching system defaults are ~ 30 minutes or an hour, so odds are high that you're 'ok').
+        /// TTL longer than 1 minute (most caching system defaults are ~ 30 minutes or an hour, so odds are high that you're okay).
         /// </para>
         /// <para>
         /// Custom Nonce Store: If you have not enabled caching in the SDK, or you don't want to use your SDK cache as a nonce store,
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.IdSite
 
         /// <summary>
         /// Sets the <see cref="IIdSiteSyncResultListener"/> that will be notified about the actual operation
-        /// of the ID Site invokation: registration, authentication, or logout.
+        /// of the ID Site invocation: registration, authentication, or logout.
         /// <para>
         /// The listener must be set before the method <see cref="GetAccountResult()"/> is invoked.
         /// </para>
@@ -71,7 +71,7 @@ namespace Stormpath.SDK.IdSite
 
         /// <summary>
         /// Sets the <see cref="IIdSiteSyncResultListener"/> that will be notified about the actual operation
-        /// of the ID Site invokation: registration, authentication, or logout. This overload
+        /// of the ID Site invocation: registration, authentication, or logout. This overload
         /// constructs an inline <see cref="IIdSiteSyncResultListener"/> based on the delegate parameters.
         /// <para>
         /// The listener must be set before the method <see cref="GetAccountResult()"/> is invoked.

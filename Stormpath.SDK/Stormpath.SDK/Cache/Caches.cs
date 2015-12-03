@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Cache
     {
         /// <summary>
         /// Instantiates a new <see cref="ICacheProviderBuilder"/> suitable for single-instance applications. If your application
-        /// is deployed on multiple instances (e.g. for a distributed/clustered web app), you might not want to use this method
+        /// is deployed on multiple instances (e.g. for a distributed/clustered web application), you might not want to use this method
         /// and instead implement the <see cref="ICacheProvider"/> API directly to use your distributed/clustered cache technology of choice.
         /// </summary>
         /// <returns>A new <see cref="ICacheProviderBuilder"/> suitable for single-instance applications.</returns>

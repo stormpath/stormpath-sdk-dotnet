@@ -198,7 +198,7 @@ namespace Stormpath.SDK.Impl.Application
         /// <summary>
         /// Synchronous counterpart to <see cref="IApplication.VerifyPasswordResetTokenAsync(string, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="token">The verification token, usually obtained as a request paramter by your application.</param>
+        /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
         /// <returns>The <see cref="IAccount"/> matching the specified token.</returns>
         IAccount VerifyPasswordResetToken(string token);
 
