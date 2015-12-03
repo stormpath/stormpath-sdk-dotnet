@@ -28,7 +28,9 @@ namespace Stormpath.SDK.Impl.Cache
         public DefaultCacheConfigurationBuilder(string name)
         {
             if (string.IsNullOrEmpty(name))
+            {
                 throw new ArgumentNullException(nameof(name));
+            }
 
             this.name = name;
         }

@@ -42,9 +42,14 @@ namespace Stormpath.SDK
         public static IOrderedAsyncQueryable<TSource> OrderBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return (IOrderedAsyncQueryable<TSource>)source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
@@ -65,9 +70,14 @@ namespace Stormpath.SDK
         public static IOrderedAsyncQueryable<TSource> OrderByDescending<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return (IOrderedAsyncQueryable<TSource>)source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
@@ -88,9 +98,14 @@ namespace Stormpath.SDK
         public static IOrderedAsyncQueryable<TSource> ThenBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return (IOrderedAsyncQueryable<TSource>)source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
@@ -111,9 +126,14 @@ namespace Stormpath.SDK
         public static IOrderedAsyncQueryable<TSource> ThenByDescending<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return (IOrderedAsyncQueryable<TSource>)source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
@@ -133,7 +153,9 @@ namespace Stormpath.SDK
         public static IAsyncQueryable<TSource> Skip<TSource>(this IAsyncQueryable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
@@ -153,7 +175,9 @@ namespace Stormpath.SDK
         public static IAsyncQueryable<TSource> Take<TSource>(this IAsyncQueryable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
@@ -173,9 +197,14 @@ namespace Stormpath.SDK
         public static IAsyncQueryable<TSource> Where<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(
@@ -195,11 +224,15 @@ namespace Stormpath.SDK
         public static async Task<bool> AnyAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             var sourceLimitQuery = source.Take(1);
             if (!await sourceLimitQuery.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            {
                 return false;
+            }
 
             return sourceLimitQuery.CurrentPage.Any();
         }
@@ -217,16 +250,22 @@ namespace Stormpath.SDK
         public static async Task<long> CountAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             var sourceLimitQuery = source.Take(1);
 
             if (!await sourceLimitQuery.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            {
                 return 0;
+            }
 
             var collection = sourceLimitQuery as CollectionResourceQueryable<TSource>;
             if (collection == null)
+            {
                 throw new InvalidOperationException("This object is not a supported collection resource.");
+            }
 
             return collection.Size;
         }
@@ -243,11 +282,15 @@ namespace Stormpath.SDK
         public static async Task<TSource> FirstAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             var sourceLimitQuery = source.Take(1);
             if (!await sourceLimitQuery.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            {
                 throw new InvalidOperationException("The sequence has no elements.");
+            }
 
             return sourceLimitQuery.CurrentPage.First();
         }
@@ -263,11 +306,15 @@ namespace Stormpath.SDK
         public static async Task<TSource> FirstOrDefaultAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             var sourceLimitQuery = source.Take(1);
             if (!await sourceLimitQuery.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            {
                 return default(TSource);
+            }
 
             return sourceLimitQuery.CurrentPage.FirstOrDefault();
         }
@@ -284,10 +331,14 @@ namespace Stormpath.SDK
         public static async Task<TSource> SingleAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            {
                 throw new InvalidOperationException("The sequence has no elements.");
+            }
 
             return source.CurrentPage.Single();
         }
@@ -305,10 +356,14 @@ namespace Stormpath.SDK
         public static async Task<TSource> SingleOrDefaultAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             if (!await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+            {
                 return default(TSource);
+            }
 
             return source.CurrentPage.SingleOrDefault();
         }
@@ -324,7 +379,9 @@ namespace Stormpath.SDK
         public static async Task<List<TSource>> ToListAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             var results = new List<TSource>();
             while (await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
@@ -347,7 +404,9 @@ namespace Stormpath.SDK
         public static Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Action<TSource> action, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return source.ForEachAsync(
                 item =>
@@ -370,7 +429,9 @@ namespace Stormpath.SDK
         public static async Task ForEachAsync<TSource>(this IAsyncQueryable<TSource> source, Func<TSource, bool> action, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             while (await source.MoveNextAsync(cancellationToken).ConfigureAwait(false))
             {
@@ -382,11 +443,15 @@ namespace Stormpath.SDK
                     breakRequested |= action(item);
 
                     if (breakRequested)
+                    {
                         break;
+                    }
                 }
 
                 if (breakRequested)
+                {
                     break;
+                }
             }
         }
     }

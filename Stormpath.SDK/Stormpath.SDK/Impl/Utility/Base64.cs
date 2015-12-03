@@ -24,7 +24,9 @@ namespace Stormpath.SDK.Impl.Utility
         public static string Encode(string plaintext, Encoding encoding)
         {
             if (plaintext == null)
+            {
                 throw new ArgumentNullException(nameof(plaintext));
+            }
 
             return Encode(encoding.GetBytes(plaintext));
         }
@@ -35,7 +37,9 @@ namespace Stormpath.SDK.Impl.Utility
         public static string EncodeUrlSafe(string plaintext, Encoding encoding)
         {
             if (plaintext == null)
+            {
                 throw new ArgumentNullException(nameof(plaintext));
+            }
 
             return EncodeUrlSafe(encoding.GetBytes(plaintext));
         }
@@ -64,7 +68,9 @@ namespace Stormpath.SDK.Impl.Utility
         public static string Decode(string encoded, Encoding encoding)
         {
             if (encoded == null)
+            {
                 throw new ArgumentNullException(nameof(encoded));
+            }
 
             encoded = encoded
                 .Replace('-', '+')

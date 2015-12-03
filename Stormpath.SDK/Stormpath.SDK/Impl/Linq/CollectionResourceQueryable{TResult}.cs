@@ -51,13 +51,20 @@ namespace Stormpath.SDK.Impl.Linq
         public CollectionResourceQueryable(IQueryProvider provider, Expression expression)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException("provider");
+            }
+
             if (expression == null)
+            {
                 throw new ArgumentNullException("expression");
+            }
 
             var concreteProvider = provider as CollectionResourceQueryProvider<TResult>;
             if (concreteProvider == null)
+            {
                 throw new NotSupportedException("Source and destination provider types do not match.");
+            }
 
             this.expression = expression;
             this.queryProvider = concreteProvider;

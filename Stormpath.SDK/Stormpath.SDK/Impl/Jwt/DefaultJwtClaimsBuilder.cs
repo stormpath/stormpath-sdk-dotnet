@@ -33,7 +33,9 @@ namespace Stormpath.SDK.Impl.Jwt
         private void SetOrRemove<T>(string claimName, T value)
         {
             if (string.IsNullOrEmpty(claimName))
+            {
                 throw new ArgumentNullException(nameof(claimName));
+            }
 
             var type = typeof(T);
 

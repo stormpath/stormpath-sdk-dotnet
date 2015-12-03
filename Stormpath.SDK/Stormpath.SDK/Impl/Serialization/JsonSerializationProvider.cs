@@ -77,7 +77,9 @@ namespace Stormpath.SDK.Impl.Serialization
                 {
                     var convertResult = this.converterChain.TryConvertField(prop, targetType);
                     if (convertResult.Success)
+                    {
                         value = convertResult.Value;
+                    }
                 }
 
                 result.Add(prop.Key, value);

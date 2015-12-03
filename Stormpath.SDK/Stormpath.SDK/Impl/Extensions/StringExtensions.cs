@@ -24,7 +24,10 @@ namespace Stormpath.SDK.Impl.Extensions
         public static string Nullable(this string source)
         {
             if (string.IsNullOrEmpty(source))
+            {
                 return null;
+            }
+
             return source;
         }
 
@@ -34,7 +37,9 @@ namespace Stormpath.SDK.Impl.Extensions
 
             if (string.IsNullOrEmpty(source)
                 || !int.TryParse(source, out result))
+            {
                 return null;
+            }
 
             return result;
         }
@@ -42,11 +47,15 @@ namespace Stormpath.SDK.Impl.Extensions
         public static KeyValuePair<string, string> SplitToKeyValuePair(this string source, char separator)
         {
             if (string.IsNullOrEmpty(source) || !source.Contains(separator.ToString()))
+            {
                 throw new FormatException($"Input string is not a '{separator}'-separated string.");
+            }
 
             var pair = source.Split(separator);
             if (pair.Length != 2)
+            {
                 throw new FormatException($"Input string is not a key-value pair.");
+            }
 
             return new KeyValuePair<string, string>(pair[0], pair[1]);
         }

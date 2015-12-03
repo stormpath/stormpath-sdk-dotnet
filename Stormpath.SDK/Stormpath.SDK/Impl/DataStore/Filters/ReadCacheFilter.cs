@@ -32,7 +32,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             : base(cacheResolver)
         {
             if (string.IsNullOrEmpty(baseUrl))
+            {
                 throw new ArgumentNullException(nameof(baseUrl));
+            }
 
             this.baseUrl = baseUrl;
         }
@@ -90,7 +92,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             var data = await this.GetCachedValueAsync(request.Type, cacheKey, cancellationToken).ConfigureAwait(false);
 
             if (data == null)
+            {
                 return null;
+            }
 
             return new DefaultResourceDataResult(request.Action, request.Type, request.Uri, 200, data);
         }
@@ -108,7 +112,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             var data = this.GetCachedValue(request.Type, cacheKey);
 
             if (data == null)
+            {
                 return null;
+            }
 
             return new DefaultResourceDataResult(request.Action, request.Type, request.Uri, 200, data);
         }

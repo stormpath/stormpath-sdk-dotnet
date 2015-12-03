@@ -42,9 +42,14 @@ namespace Stormpath.SDK.Impl.IdSite
         public DefaultIdSiteUrlBuilder(IInternalDataStore internalDataStore, string applicationHref)
         {
             if (internalDataStore == null)
+            {
                 throw new ArgumentNullException(nameof(internalDataStore));
+            }
+
             if (string.IsNullOrEmpty(applicationHref))
+            {
                 throw new ArgumentNullException(nameof(applicationHref));
+            }
 
             this.internalDataStore = internalDataStore;
             this.applicationHref = applicationHref;
@@ -77,7 +82,9 @@ namespace Stormpath.SDK.Impl.IdSite
             }
 
             if (string.IsNullOrEmpty(baseUrl))
+            {
                 throw new ApplicationException("ID Site base URL could not be constructed.");
+            }
 
             return baseUrl;
         }
@@ -133,7 +140,9 @@ namespace Stormpath.SDK.Impl.IdSite
         string IIdSiteUrlBuilder.Build()
         {
             if (string.IsNullOrEmpty(this.callbackUri))
+            {
                 throw new ApplicationException($"{nameof(this.callbackUri)} cannot be null or empty.");
+            }
 
             var jti = Guid.NewGuid().ToString();
             var now = DateTimeOffset.UtcNow;
@@ -147,19 +156,29 @@ namespace Stormpath.SDK.Impl.IdSite
                 .SetClaim(IdSiteClaims.RedirectUri, this.callbackUri);
 
             if (!string.IsNullOrEmpty(this.path))
+            {
                 jwtBuilder.SetClaim(IdSiteClaims.Path, this.path);
+            }
 
             if (!string.IsNullOrEmpty(this.state))
+            {
                 jwtBuilder.SetClaim(IdSiteClaims.State, this.state);
+            }
 
             if (!string.IsNullOrEmpty(this.organizationNameKey))
+            {
                 jwtBuilder.SetClaim(IdSiteClaims.OrganizationNameKey, this.organizationNameKey);
+            }
 
             if (this.useSubdomain.HasValue)
+            {
                 jwtBuilder.SetClaim(IdSiteClaims.UseSubdomain, this.useSubdomain.Value);
+            }
 
             if (this.showOrganizationField.HasValue)
+            {
                 jwtBuilder.SetClaim(IdSiteClaims.ShowOrganizationField, this.showOrganizationField.Value);
+            }
 
             string jwt = JsonWebToken
                 .Encode(jwtBuilder.Build().ToDictionary(), apiKey.GetSecret(), this.internalDataStore.Serializer)
@@ -168,7 +187,9 @@ namespace Stormpath.SDK.Impl.IdSite
             var urlBuilder = new StringBuilder(this.ssoEndpoint);
 
             if (this.logout)
+            {
                 urlBuilder.Append(logoutSuffix);
+            }
 
             urlBuilder.Append($"?{IdSiteClaims.JwtRequest}={jwt}");
 

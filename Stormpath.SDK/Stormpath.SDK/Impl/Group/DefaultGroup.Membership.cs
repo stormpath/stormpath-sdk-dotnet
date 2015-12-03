@@ -32,11 +32,15 @@ namespace Stormpath.SDK.Impl.Group
         async Task<IGroupMembership> IGroup.AddAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrEmailOrUsername))
+            {
                 throw new ArgumentNullException(nameof(hrefOrEmailOrUsername));
+            }
 
             var account = await this.FindAccountAsync(hrefOrEmailOrUsername, cancellationToken).ConfigureAwait(false);
             if (account == null)
+            {
                 throw new InvalidOperationException($"No matching account for {nameof(hrefOrEmailOrUsername)} '{hrefOrEmailOrUsername}' found.");
+            }
 
             return await DefaultGroupMembership.CreateAsync(account, this, this.GetInternalAsyncDataStore(), cancellationToken).ConfigureAwait(false);
         }
@@ -44,20 +48,26 @@ namespace Stormpath.SDK.Impl.Group
         async Task<bool> IGroup.RemoveAccountAsync(IAccount account, CancellationToken cancellationToken)
         {
             if (account == null)
+            {
                 throw new ArgumentNullException(nameof(account));
+            }
 
             IGroupMembership foundMembership = null;
             await this.AsInterface.GetAccountMemberships().ForEachAsync(
                 item =>
                 {
                     if ((item as IInternalGroupMembership).AccountHref.Equals(account.Href, StringComparison.InvariantCultureIgnoreCase))
+                    {
                         foundMembership = item;
+                    }
 
                     return foundMembership != null;
                 }, cancellationToken).ConfigureAwait(false);
 
             if (foundMembership == null)
+            {
                 throw new InvalidOperationException("The specified account does not belong to this group.");
+            }
 
             return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -65,7 +75,9 @@ namespace Stormpath.SDK.Impl.Group
         async Task<bool> IGroup.RemoveAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrEmailOrUsername))
+            {
                 throw new ArgumentNullException(nameof(hrefOrEmailOrUsername));
+            }
 
             IGroupMembership foundMembership = null;
             var iterator = this.AsInterface.GetAccountMemberships();
@@ -77,18 +89,26 @@ namespace Stormpath.SDK.Impl.Group
                     if (account.Href.Equals(hrefOrEmailOrUsername, StringComparison.InvariantCultureIgnoreCase) ||
                         account.Email.Equals(hrefOrEmailOrUsername, StringComparison.InvariantCultureIgnoreCase) ||
                         account.Username.Equals(hrefOrEmailOrUsername, StringComparison.InvariantCultureIgnoreCase))
+                    {
                         foundMembership = item;
+                    }
 
                     if (foundMembership != null)
+                    {
                         break;
+                    }
                 }
 
                 if (foundMembership != null)
+                {
                     break;
+                }
             }
 
             if (foundMembership == null)
+            {
                 throw new InvalidOperationException("The specified account does not belong to this group.");
+            }
 
             return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -96,7 +116,9 @@ namespace Stormpath.SDK.Impl.Group
         private async Task<IAccount> FindAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrEmailOrUsername))
+            {
                 throw new ArgumentNullException(nameof(hrefOrEmailOrUsername));
+            }
 
             IAccount account = null;
 
@@ -108,7 +130,9 @@ namespace Stormpath.SDK.Impl.Group
                     account = await this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(hrefOrEmailOrUsername).ConfigureAwait(false);
 
                     if ((account as DefaultAccount)?.Directory.Href == this.Directory.Href)
+                    {
                         return account;
+                    }
                 }
                 catch (ResourceException)
                 {

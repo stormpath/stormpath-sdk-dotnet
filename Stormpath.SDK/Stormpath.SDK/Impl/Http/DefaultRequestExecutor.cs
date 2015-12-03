@@ -74,7 +74,9 @@ namespace Stormpath.SDK.Impl.Http
             IBackoffStrategy throttlingBackoffStrategy)
         {
             if (!apiKey.IsValid())
+            {
                 throw new ApplicationException("API Key is invalid.");
+            }
 
             this.httpClient = httpClient;
             this.syncHttpClient = httpClient as ISynchronousHttpClient;
@@ -96,7 +98,9 @@ namespace Stormpath.SDK.Impl.Http
         Task<IHttpResponse> IRequestExecutor.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
         {
             if (!this.httpClient.IsAsynchronousSupported || this.asyncHttpClient == null)
+            {
                 throw new ApplicationException("This HTTP client does not support asynchronous requests.");
+            }
 
             return this.CoreRequestLoopAsync(
                 request,
@@ -108,7 +112,9 @@ namespace Stormpath.SDK.Impl.Http
         IHttpResponse IRequestExecutor.Execute(IHttpRequest request)
         {
             if (!this.httpClient.IsSynchronousSupported || this.syncHttpClient == null)
+            {
                 throw new ApplicationException("This HTTP client does not support synchronous requests.");
+            }
 
             // We know what we're doing here, even though this looks like async-over-sync.
             // The synchronous path will only ever create completed tasks, so awaiting
@@ -251,9 +257,13 @@ namespace Stormpath.SDK.Impl.Http
             var delayMilliseconds = 0;
 
             if (isThrottling)
+            {
                 delayMilliseconds = this.throttlingBackoffStrategy.GetDelayMilliseconds(retryCount);
+            }
             else
+            {
                 delayMilliseconds = this.defaultBackoffStrategy.GetDelayMilliseconds(retryCount);
+            }
 
             return delayMilliseconds;
         }

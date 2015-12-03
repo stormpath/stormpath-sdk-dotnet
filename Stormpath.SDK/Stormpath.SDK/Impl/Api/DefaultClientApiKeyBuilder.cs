@@ -280,7 +280,9 @@ namespace Stormpath.SDK.Impl.Api
         private Properties GetPropertiesFromStream()
         {
             if (!this.apiKeyFileInputStream.CanRead)
+            {
                 return null;
+            }
 
             try
             {
@@ -304,10 +306,14 @@ namespace Stormpath.SDK.Impl.Api
         private string ResolveHomePath(string input)
         {
             if (string.IsNullOrEmpty(input))
+            {
                 return input;
+            }
 
             if (!input.StartsWith("~"))
+            {
                 return input;
+            }
 
             string homePath = null;
 

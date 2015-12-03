@@ -27,11 +27,15 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
         {
             var binaryExpression = node as BinaryExpression;
             if (binaryExpression == null)
+            {
                 return node;
+            }
 
             var compareStringCall = GetStringCompareMethodCall(binaryExpression);
             if (compareStringCall == null)
+            {
                 return node;
+            }
 
             var arg1 = compareStringCall.Arguments[0];
             var arg2 = compareStringCall.Arguments[1];
@@ -69,10 +73,14 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
                     && rightAsMethodCall.Method.Name == VbStringCompareCallName;
 
             if (isLeftCall)
+            {
                 return leftAsMethodCall;
+            }
 
             if (isRightCall)
+            {
                 return rightAsMethodCall;
+            }
 
             return null;
         }

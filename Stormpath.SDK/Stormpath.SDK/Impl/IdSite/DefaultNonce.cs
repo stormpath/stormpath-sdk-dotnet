@@ -32,7 +32,9 @@ namespace Stormpath.SDK.Impl.IdSite
         public DefaultNonce(string nonce)
         {
             if (string.IsNullOrEmpty(nonce))
+            {
                 throw new ArgumentNullException(nameof(nonce));
+            }
 
             this.properties = new Dictionary<string, object>();
             this.properties.Add(ValuePropertyName, nonce);
@@ -41,14 +43,20 @@ namespace Stormpath.SDK.Impl.IdSite
         public DefaultNonce(IDictionary<string, object> properties)
         {
             if (properties == null || !properties.Any())
+            {
                 throw new ArgumentNullException(nameof(properties));
+            }
 
             object value = null;
             if (!properties.TryGetValue(ValuePropertyName, out value))
+            {
                 throw new ArgumentException(nameof(properties), $"The dictionary must contain the key '{ValuePropertyName}'.");
+            }
 
             if (!(value is string))
+            {
                 throw new ArgumentException("Cannot parse nonce value.");
+            }
 
             this.properties = properties;
         }

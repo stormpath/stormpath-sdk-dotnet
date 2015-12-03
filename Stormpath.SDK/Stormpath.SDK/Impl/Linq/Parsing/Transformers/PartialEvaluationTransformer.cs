@@ -60,14 +60,20 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
             public override Expression Visit(Expression expression)
             {
                 if (expression == null)
+                {
                     return null;
+                }
 
                 Expression result = null;
 
                 if (this.candidates.Contains(expression))
+                {
                     result = this.Evaluate(expression);
+                }
                 else
+                {
                     result = base.Visit(expression);
+                }
 
                 // Skip the root node, only evaluate child nodes (if any)
                 this.passedRootNode = true;

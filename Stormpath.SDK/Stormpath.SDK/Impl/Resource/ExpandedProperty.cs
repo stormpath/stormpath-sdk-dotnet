@@ -30,7 +30,9 @@ namespace Stormpath.SDK.Impl.Resource
         {
             object href;
             if (data.TryGetValue("href", out href))
+            {
                 this.href = href.ToString();
+            }
 
             this.data = data;
         }

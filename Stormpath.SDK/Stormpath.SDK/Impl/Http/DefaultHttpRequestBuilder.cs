@@ -84,7 +84,9 @@ namespace Stormpath.SDK.Impl.Http
         private void ThrowIfNotEnoughData()
         {
             if (this.method == null || this.uri == null)
+            {
                 throw new ArgumentNullException("The HTTP method and URI must be specified when building an HTTP request descriptor.");
+            }
         }
     }
 }

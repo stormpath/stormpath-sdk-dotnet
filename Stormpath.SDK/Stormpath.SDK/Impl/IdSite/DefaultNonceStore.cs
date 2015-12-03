@@ -29,7 +29,9 @@ namespace Stormpath.SDK.Impl.IdSite
         public DefaultNonceStore(ICacheResolver cacheResolver)
         {
             if (cacheResolver == null)
+            {
                 throw new ArgumentNullException(nameof(cacheResolver));
+            }
 
             this.cacheResolver = cacheResolver;
         }
@@ -41,7 +43,9 @@ namespace Stormpath.SDK.Impl.IdSite
         bool ISynchronousNonceStore.ContainsNonce(string nonce)
         {
             if (string.IsNullOrEmpty(nonce))
+            {
                 throw new ArgumentNullException(nameof(nonce));
+            }
 
             var cache = this.cacheResolver.GetSyncCache(typeof(INonce));
             var value = cache.Get(nonce);
@@ -52,7 +56,9 @@ namespace Stormpath.SDK.Impl.IdSite
         async Task<bool> IAsynchronousNonceStore.ContainsNonceAsync(string nonce, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(nonce))
+            {
                 throw new ArgumentNullException(nameof(nonce));
+            }
 
             var cache = this.cacheResolver.GetAsyncCache(typeof(INonce));
             var value = await cache.GetAsync(nonce).ConfigureAwait(false);
@@ -63,7 +69,9 @@ namespace Stormpath.SDK.Impl.IdSite
         void ISynchronousNonceStore.PutNonce(string nonce)
         {
             if (string.IsNullOrEmpty(nonce))
+            {
                 throw new ArgumentNullException(nameof(nonce));
+            }
 
             var cache = this.cacheResolver.GetSyncCache(typeof(INonce));
 
@@ -74,7 +82,9 @@ namespace Stormpath.SDK.Impl.IdSite
         async Task IAsynchronousNonceStore.PutNonceAsync(string nonce, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(nonce))
+            {
                 throw new ArgumentNullException(nameof(nonce));
+            }
 
             var cache = this.cacheResolver.GetAsyncCache(typeof(INonce));
 

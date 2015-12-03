@@ -97,11 +97,18 @@ namespace Stormpath.SDK.Extensions.Serialization
                         long longResult;
 
                         if (int.TryParse(raw, out intResult))
+                        {
                             value = intResult;
+                        }
                         else if (long.TryParse(raw, out longResult))
+                        {
                             value = longResult;
+                        }
                         else
+                        {
                             throw new ArgumentException("Unknown integer type encountered during parsing.");
+                        }
+
                         break;
 
                     case JTokenType.Boolean:

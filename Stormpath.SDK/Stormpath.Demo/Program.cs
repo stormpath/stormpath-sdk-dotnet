@@ -46,10 +46,14 @@ namespace Stormpath.Demo
                 Thread.Sleep(50); // let the CancellationToken "catch up"
 
                 if (cts.Token.IsCancellationRequested)
+                {
                     return;
+                }
 
                 if (input.Equals("quit", StringComparison.CurrentCultureIgnoreCase))
+                {
                     return;
+                }
 
                 switch (input)
                 {

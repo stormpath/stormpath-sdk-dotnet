@@ -45,7 +45,9 @@ namespace Stormpath.SDK.Impl.Provider
             object rawProviderId = null;
 
             if (!properties.TryGetValue("providerId", out rawProviderId))
+            {
                 return null;
+            }
 
             return ((string)rawProviderId).ToLower();
         }
@@ -54,7 +56,9 @@ namespace Stormpath.SDK.Impl.Provider
         {
             var providerId = GetProviderId(properties);
             if (string.IsNullOrEmpty(providerId))
+            {
                 return null;
+            }
 
             Type provider = null;
             TypeLookupTable.TryGetValue(providerId, out provider);
@@ -66,7 +70,9 @@ namespace Stormpath.SDK.Impl.Provider
         {
             var providerId = GetProviderId(properties);
             if (string.IsNullOrEmpty(providerId))
+            {
                 return null;
+            }
 
             Type providerData = null;
             DataTypeLookupTable.TryGetValue(providerId, out providerData);

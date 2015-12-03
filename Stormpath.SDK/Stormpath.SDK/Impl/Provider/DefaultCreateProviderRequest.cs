@@ -26,9 +26,14 @@ namespace Stormpath.SDK.Impl.Provider
         internal DefaultCreateProviderRequest(IProvider provider)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (string.IsNullOrEmpty(provider.ProviderId))
+            {
                 throw new ArgumentException($"{nameof(provider.ProviderId)} within Provider instance must be specified.");
+            }
 
             this.provider = provider;
         }

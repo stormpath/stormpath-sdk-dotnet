@@ -36,12 +36,16 @@ namespace Stormpath.SDK.Shared
             (a, b) =>
             {
                 if (b == null)
+                {
                     return false;
+                }
 
                 var type = a.GetType();
                 var otherType = b.GetType();
                 if (type != otherType)
+                {
                     return false;
+                }
 
                 var fields = GetFields(a);
 
@@ -51,13 +55,19 @@ namespace Stormpath.SDK.Shared
                     var value2 = field.GetValue(b);
 
                     if (value1 == null && value2 == null)
+                    {
                         return true;
+                    }
 
                     if (value1 == null && value2 != null)
+                    {
                         return false;
+                    }
 
                     if (!value1.Equals(value2))
+                    {
                         return false;
+                    }
                 }
 
                 return true;
@@ -116,14 +126,20 @@ namespace Stormpath.SDK.Shared
         {
             bool areSameReference = ReferenceEquals(x, y);
             if (areSameReference)
+            {
                 return true;
+            }
 
             bool eitherIsNull = ReferenceEquals(x, null) || ReferenceEquals(y, null);
             if (eitherIsNull)
+            {
                 return false;
+            }
 
             if (x.customEqualityFunction != null)
+            {
                 return x.customEqualityFunction(x, y);
+            }
 
             return DefaultEqualityFunction(x, y);
         }

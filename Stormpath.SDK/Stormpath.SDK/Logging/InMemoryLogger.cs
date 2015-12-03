@@ -41,12 +41,16 @@ namespace Stormpath.SDK.Logging
                 .Append($"{DateTimeOffset.Now.ToString()} [{entry.Severity.ToString().ToUpper()}] ");
 
             if (!string.IsNullOrEmpty(entry.Source))
+            {
                 logEntryBuilder.Append($"{entry.Source} - ");
+            }
 
             logEntryBuilder.Append(entry.Message);
 
             if (entry.Exception != null)
+            {
                 logEntryBuilder.Append($" (Exception: '{entry.Exception.Message}' in {entry.Exception.Source} (Inner: {entry.Exception.InnerException?.ToString()}))");
+            }
 
             this.builder.AppendLine(logEntryBuilder.ToString());
         }

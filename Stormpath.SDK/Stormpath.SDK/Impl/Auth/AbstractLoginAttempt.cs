@@ -40,7 +40,9 @@ namespace Stormpath.SDK.Impl.Auth
         void ILoginAttempt.SetAccountStore(IAccountStore accountStore)
         {
             if (string.IsNullOrEmpty(accountStore?.Href))
+            {
                 throw new ArgumentNullException(nameof(accountStore.Href));
+            }
 
             this.SetLinkProperty(AccountStorePropertyName, accountStore.Href);
         }
@@ -48,7 +50,9 @@ namespace Stormpath.SDK.Impl.Auth
         void ILoginAttempt.SetAccountStore(string hrefOrNameKey)
         {
             if (string.IsNullOrEmpty(hrefOrNameKey))
+            {
                 throw new ArgumentNullException(nameof(hrefOrNameKey));
+            }
 
             bool looksLikeHref = hrefOrNameKey.Split('/').Length > 4;
             if (looksLikeHref)

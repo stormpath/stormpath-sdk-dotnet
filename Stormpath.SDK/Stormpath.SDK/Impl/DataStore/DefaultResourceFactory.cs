@@ -47,7 +47,9 @@ namespace Stormpath.SDK.Impl.DataStore
         private object Create(Type type, IDictionary<string, object> properties, ILinkable original)
         {
             if (ResourceTypeLookup.IsCollectionResponse(type))
+            {
                 return this.InstantiateCollection(type, properties);
+            }
 
             return this.InstantiateSingle(type, properties, original);
         }
@@ -56,7 +58,9 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             var targetType = new ResourceTypeLookup().GetConcrete(type);
             if (targetType == null)
+            {
                 throw new ApplicationException($"Unknown resource type {type.Name}");
+            }
 
             var identityMapOptions = new IdentityMapOptionsResolver().GetOptions(type);
 
@@ -66,33 +70,45 @@ namespace Stormpath.SDK.Impl.DataStore
                 string id = RandomResourceId(type.Name);
 
                 if (properties == null)
+                {
                     properties = new Dictionary<string, object>();
+                }
 
                 object href = null;
                 bool propertiesContainsHref =
                     properties.TryGetValue("href", out href) &&
                     href != null;
                 if (propertiesContainsHref)
+                {
                     id = $"{type.Name}/{href.ToString()}";
+                }
 
                 if (!propertiesContainsHref)
+                {
                     properties["href"] = id;
+                }
 
                 var resourceData = identityMapOptions.SkipIdentityMap
                     ? new ResourceData(this.dataStore)
                     : this.identityMap.GetOrAdd(id, () => new ResourceData(this.dataStore), identityMapOptions.StoreWithInfiniteExpiration);
 
                 if (properties != null)
+                {
                     resourceData.Update(properties);
+                }
 
                 targetObject = Activator.CreateInstance(targetType, new object[] { resourceData }) as AbstractResource;
 
                 var notifyableTarget = targetObject as INotifiable;
                 if (notifyableTarget != null)
+                {
                     notifyableTarget.OnUpdate(properties, this.dataStore);
+                }
 
                 if (original != null)
+                {
                     original.Link(resourceData);
+                }
             }
             catch (Exception e)
             {
@@ -107,10 +123,14 @@ namespace Stormpath.SDK.Impl.DataStore
             Type innerType = new ResourceTypeLookup().GetInnerCollectionInterface(collectionType);
             var targetType = new ResourceTypeLookup().GetConcrete(innerType);
             if (innerType == null || targetType == null)
+            {
                 throw new ApplicationException($"Error creating collection resource: unknown inner type '{innerType?.Name}'.");
+            }
 
             if (properties == null)
+            {
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: no properties to materialize with.");
+            }
 
             long offset, limit, size;
             try
@@ -142,11 +162,15 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var href = properties["href"]?.ToString();
             if (string.IsNullOrEmpty(href))
+            {
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'href' value.");
+            }
 
             var items = properties["items"] as IEnumerable<IDictionary<string, object>>;
             if (items == null)
+            {
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: 'items' sub-collection is invalid.");
+            }
 
             try
             {

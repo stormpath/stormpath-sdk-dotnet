@@ -75,13 +75,24 @@ namespace Stormpath.SDK.Impl.DataStore
         internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider, TimeSpan identityMapExpiration)
         {
             if (requestExecutor == null)
+            {
                 throw new ArgumentNullException(nameof(requestExecutor));
+            }
+
             if (string.IsNullOrEmpty(baseUrl))
+            {
                 throw new ArgumentNullException(nameof(baseUrl));
+            }
+
             if (logger == null)
+            {
                 throw new ArgumentNullException(nameof(logger));
+            }
+
             if (cacheProvider == null)
+            {
                 throw new ArgumentNullException(nameof(cacheProvider), "Use NullCacheProvider if you wish to turn off caching.");
+            }
 
             this.baseUrl = baseUrl;
             this.logger = logger;
@@ -141,12 +152,18 @@ namespace Stormpath.SDK.Impl.DataStore
         private IDictionary<string, object> GetBody<T>(IHttpResponse response)
         {
             if (response == null)
+            {
                 throw new ArgumentNullException(nameof(response));
+            }
 
             if (response.HasBody)
+            {
                 return this.serializer.Deserialize(response.Body, typeof(T));
+            }
             else
+            {
                 return new Dictionary<string, object>();
+            }
         }
 
         private bool IsCachingEnabled()
@@ -156,7 +173,9 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             QueryString queryParams = null;
             if (options != null)
+            {
                 queryParams = new QueryString(options.GetQueryString());
+            }
 
             return queryParams;
         }
@@ -164,7 +183,9 @@ namespace Stormpath.SDK.Impl.DataStore
         private ResourceAction GetPostAction(IResourceDataRequest request, IHttpResponse httpResponse)
         {
             if (httpResponse.StatusCode == 201)
+            {
                 return ResourceAction.Create;
+            }
 
             return request.Action;
         }
@@ -222,7 +243,9 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var queryString = optionsInstance.ToString();
             if (!string.IsNullOrEmpty(queryString))
+            {
                 href = $"{href}?{queryString}";
+            }
 
             return this.AsAsyncInterface.GetResourceAsync<T>(href, cancellationToken);
         }
@@ -234,7 +257,9 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var queryString = optionsInstance.ToString();
             if (!string.IsNullOrEmpty(queryString))
+            {
                 href = $"{href}?{queryString}";
+            }
 
             return this.AsSyncInterface.GetResource<T>(href);
         }
@@ -245,7 +270,9 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var targetType = typeLookup(result.Body);
             if (targetType == null)
+            {
                 throw new ApplicationException("No type mapping could be found for this resource.");
+            }
 
             return this.resourceFactory.Create<T>(result.Body);
         }
@@ -256,7 +283,9 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var targetType = typeLookup(result.Body);
             if (targetType == null)
+            {
                 throw new ApplicationException("No type mapping could be found for this resource.");
+            }
 
             return this.resourceFactory.Create<T>(result.Body);
         }
@@ -264,7 +293,9 @@ namespace Stormpath.SDK.Impl.DataStore
         private Task<IResourceDataResult> GetResourceDataAsync<T>(string href, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(href))
+            {
                 throw new ArgumentNullException(nameof(href));
+            }
 
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href));
             this.logger.Trace($"Asynchronously getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResourceAsync<T>");
@@ -287,7 +318,9 @@ namespace Stormpath.SDK.Impl.DataStore
         private IResourceDataResult GetResourceData<T>(string href)
         {
             if (string.IsNullOrEmpty(href))
+            {
                 throw new ArgumentNullException(nameof(href));
+            }
 
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href));
             this.logger.Trace($"Synchronously getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResource<T>");
@@ -405,7 +438,9 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             var href = resource?.Href;
             if (string.IsNullOrEmpty(href))
+            {
                 throw new ArgumentNullException(nameof(resource.Href));
+            }
 
             var queryParams = new QueryString(queryString);
 
@@ -421,7 +456,9 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             var href = resource?.Href;
             if (string.IsNullOrEmpty(href))
+            {
                 throw new ArgumentNullException(nameof(resource.Href));
+            }
 
             var queryParams = new QueryString(queryString);
 
@@ -440,7 +477,9 @@ namespace Stormpath.SDK.Impl.DataStore
         Task<bool> IInternalAsyncDataStore.DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(propertyName))
+            {
                 throw new ArgumentNullException(nameof(propertyName));
+            }
 
             var propertyHref = $"{parentHref}/{propertyName}";
 
@@ -450,7 +489,9 @@ namespace Stormpath.SDK.Impl.DataStore
         bool IInternalSyncDataStore.DeleteProperty(string parentHref, string propertyName)
         {
             if (string.IsNullOrEmpty(propertyName))
+            {
                 throw new ArgumentNullException(nameof(propertyName));
+            }
 
             var propertyHref = $"{parentHref}/{propertyName}";
 
@@ -467,7 +508,9 @@ namespace Stormpath.SDK.Impl.DataStore
             where TReturned : class
         {
             if (string.IsNullOrEmpty(href))
+            {
                 throw new ArgumentNullException(nameof(href));
+            }
 
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
             this.logger.Trace($"Asynchronously saving resource of type {typeof(T).Name} to {canonicalUri.ToString()}", "DefaultDataStore.SaveCoreAsync");
@@ -493,10 +536,14 @@ namespace Stormpath.SDK.Impl.DataStore
                     bool responseOkay = responseHasData || responseIsProcessing;
 
                     if (!responseOkay)
+                    {
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
+                    }
 
                     if (responseIsProcessing)
+                    {
                         this.logger.Warn($"Received a 202 response, returning empty result. Href: '{canonicalUri.ToString()}'", "DefaultDataStore.SaveCoreAsync");
+                    }
 
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
@@ -519,17 +566,23 @@ namespace Stormpath.SDK.Impl.DataStore
                 if (customDataProxy.HasDeletedProperties())
                 {
                     if (customDataProxy.DeleteAll)
-                        await this.DeleteCoreAsync<ICustomData>(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
-                    else
-                        await customDataProxy.DeleteRemovedCustomDataPropertiesAsync(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
-                }
+                        {
+                            await this.DeleteCoreAsync<ICustomData>(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            await customDataProxy.DeleteRemovedCustomDataPropertiesAsync(extendableInstanceResource.CustomData.Href, cancellationToken).ConfigureAwait(false);
+                        }
+                    }
 
                 // Merge in custom data updates
                 if (customDataProxy.HasUpdatedCustomDataProperties())
+                    {
                         propertiesMap["customData"] = customDataProxy.UpdatedCustomDataProperties;
+                    }
 
-                // Remove custom data updates from proxy
-                extendableInstanceResource.ResetCustomData();
+                    // Remove custom data updates from proxy
+                    extendableInstanceResource.ResetCustomData();
             }
             }
 
@@ -538,7 +591,9 @@ namespace Stormpath.SDK.Impl.DataStore
             // This doesn't apply to CREATEs, though, because sometimes we *need* to POST a null body.
             bool nothingToPost = propertiesMap.IsNullOrEmpty();
             if (!create && nothingToPost)
+            {
                 return await this.AsAsyncInterface.GetResourceAsync<TReturned>(canonicalUri.ToString(), cancellationToken).ConfigureAwait(false);
+            }
 
             var requestAction = create
                 ? ResourceAction.Create
@@ -554,7 +609,9 @@ namespace Stormpath.SDK.Impl.DataStore
             where TReturned : class
         {
             if (string.IsNullOrEmpty(href))
+            {
                 throw new ArgumentNullException(nameof(href));
+            }
 
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href), queryParams);
             this.logger.Trace($"Synchronously saving resource of type {typeof(T).Name} to {canonicalUri.ToString()}", "DefaultDataStore.SaveCore");
@@ -580,10 +637,14 @@ namespace Stormpath.SDK.Impl.DataStore
                     bool responseOkay = responseHasData || responseIsProcessing;
 
                     if (!responseOkay)
+                    {
                         throw new ResourceException(DefaultError.WithMessage("Unable to obtain resource data from the API server."));
+                    }
 
                     if (responseIsProcessing)
+                    {
                         this.logger.Warn($"Received a 202 response, returning empty result. Href: '{canonicalUri.ToString()}'", "DefaultDataStore.SaveCoreAsync");
+                    }
 
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
@@ -606,17 +667,23 @@ namespace Stormpath.SDK.Impl.DataStore
                 if (customDataProxy.HasDeletedProperties())
                 {
                     if (customDataProxy.DeleteAll)
-                        this.DeleteCore<ICustomData>(extendableInstanceResource.CustomData.Href);
-                    else
-                        customDataProxy.DeleteRemovedCustomDataProperties(extendableInstanceResource.CustomData.Href);
-                }
+                        {
+                            this.DeleteCore<ICustomData>(extendableInstanceResource.CustomData.Href);
+                        }
+                        else
+                        {
+                            customDataProxy.DeleteRemovedCustomDataProperties(extendableInstanceResource.CustomData.Href);
+                        }
+                    }
 
                 // Merge in custom data updates
                 if (customDataProxy.HasUpdatedCustomDataProperties())
+                    {
                         propertiesMap["customData"] = customDataProxy.UpdatedCustomDataProperties;
+                    }
 
-                // Remove custom data updates from proxy
-                extendableInstanceResource.ResetCustomData();
+                    // Remove custom data updates from proxy
+                    extendableInstanceResource.ResetCustomData();
             }
             }
 
@@ -625,7 +692,9 @@ namespace Stormpath.SDK.Impl.DataStore
             // This doesn't apply to CREATEs, though, because sometimes we need to POST a null body.
             bool nothingToPost = propertiesMap.IsNullOrEmpty();
             if (!create && nothingToPost)
+            {
                 return this.AsSyncInterface.GetResource<TReturned>(canonicalUri.ToString());
+            }
 
             var requestAction = create
                 ? ResourceAction.Create
@@ -640,7 +709,9 @@ namespace Stormpath.SDK.Impl.DataStore
             where T : IResource
         {
             if (string.IsNullOrEmpty(href))
+            {
                 throw new ArgumentNullException(nameof(href));
+            }
 
             var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href));
             this.logger.Trace($"Asynchronously deleting resource {uri.ToString()}", "DefaultDataStore.DeleteCoreAsync");
@@ -665,7 +736,9 @@ namespace Stormpath.SDK.Impl.DataStore
             where T : IResource
         {
             if (string.IsNullOrEmpty(href))
+            {
                 throw new ArgumentNullException(nameof(href));
+            }
 
             var uri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href));
             this.logger.Trace($"Synchronously deleting resource {uri.ToString()}", "DefaultDataStore.DeleteCore");

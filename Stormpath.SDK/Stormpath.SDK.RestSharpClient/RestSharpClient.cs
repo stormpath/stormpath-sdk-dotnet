@@ -80,7 +80,9 @@ namespace Stormpath.SDK.Extensions.Http
             client.UserAgent = request.Headers?.UserAgent;
 
             if (this.proxy != null)
+            {
                 client.Proxy = this.proxy;
+            }
 
             return client;
         }
@@ -97,7 +99,9 @@ namespace Stormpath.SDK.Extensions.Http
         {
             var client = this.CreateClientForRequest(request);
             if (!IsValidBaseUrl(client, request))
+            {
                 throw new ApplicationException($"Request URI '{request.CanonicalUri.ToString()}' does not match client base URI '{client.BaseUrl}");
+            }
 
             var restRequest = this.adapter.ToRestRequest(this.baseUrl, request);
             var response = client.Execute(restRequest);
@@ -110,7 +114,9 @@ namespace Stormpath.SDK.Extensions.Http
         {
             var client = this.CreateClientForRequest(request);
             if (!IsValidBaseUrl(client, request))
+            {
                 throw new ApplicationException($"Request URI '{request.CanonicalUri.ToString()}' does not match client base URI '{client.BaseUrl}");
+            }
 
             var restRequest = this.adapter.ToRestRequest(this.baseUrl, request);
             var response = await client.ExecuteTaskAsync(restRequest, cancellationToken).ConfigureAwait(false);

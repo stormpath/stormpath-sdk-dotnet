@@ -24,11 +24,15 @@ namespace Stormpath.SDK.Impl.Utility
         public static IDictionary<string, object> ToDictionary(object nameValuePairs)
         {
             if (nameValuePairs == null)
+            {
                 return null;
+            }
 
             bool isConcreteType = !string.IsNullOrEmpty(nameValuePairs.GetType().Namespace);
             if (isConcreteType)
+            {
                 return null;
+            }
 
             var dictionary = new Dictionary<string, object>();
             foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(nameValuePairs))

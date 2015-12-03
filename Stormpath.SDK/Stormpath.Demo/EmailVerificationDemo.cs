@@ -43,7 +43,9 @@ namespace Stormpath.Demo
         public override async Task RunAsync(CancellationToken cancellationToken)
         {
             if (!ShouldContinue())
+            {
                 return;
+            }
 
             var apiKey = ClientApiKeys.Builder()
                 .SetFileLocation("~\\.stormpath\\apiKey.properties")

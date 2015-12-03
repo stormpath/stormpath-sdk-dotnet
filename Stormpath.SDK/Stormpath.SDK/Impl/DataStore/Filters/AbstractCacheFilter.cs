@@ -31,7 +31,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         public AbstractCacheFilter(ICacheResolver cacheResolver)
         {
             if (cacheResolver == null)
+            {
                 throw new ArgumentNullException(nameof(cacheResolver));
+            }
 
             this.cacheResolver = cacheResolver;
         }
@@ -43,13 +45,20 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         protected async Task<IDictionary<string, object>> GetCachedValueAsync(Type resourceType, string cacheKey, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(cacheKey))
+            {
                 throw new ArgumentNullException(nameof(cacheKey));
+            }
+
             if (resourceType == null)
+            {
                 throw new ArgumentNullException(nameof(resourceType));
+            }
 
             var cache = this.GetAsyncCache(resourceType);
             if (cache == null)
+            {
                 return null;
+            }
 
             return await cache.GetAsync(cacheKey, cancellationToken)
                 .ConfigureAwait(false);
@@ -58,13 +67,20 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         protected IDictionary<string, object> GetCachedValue(Type resourceType, string cacheKey)
         {
             if (string.IsNullOrEmpty(cacheKey))
+            {
                 throw new ArgumentNullException(nameof(cacheKey));
+            }
+
             if (resourceType == null)
+            {
                 throw new ArgumentNullException(nameof(resourceType));
+            }
 
             var cache = this.GetSyncCache(resourceType);
             if (cache == null)
+            {
                 return null;
+            }
 
             return cache.Get(cacheKey);
         }

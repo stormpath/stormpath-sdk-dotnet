@@ -38,10 +38,14 @@ namespace Stormpath.SDK.Impl.Account
             var thisHref = this.AsInterface.Href;
 
             if (string.IsNullOrEmpty(thisHref))
+            {
                 return null;
+            }
 
             if (!thisHref.Contains(TokenDelimiter))
+            {
                 return null;
+            }
 
             // Return everything after /emailVerificationTokens/
             return thisHref.Substring(thisHref.IndexOf(TokenDelimiter) + TokenDelimiter.Length);

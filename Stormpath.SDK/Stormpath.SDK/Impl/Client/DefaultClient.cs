@@ -65,11 +65,19 @@ namespace Stormpath.SDK.Impl.Client
             TimeSpan identityMapExpiration)
         {
             if (apiKey == null || !apiKey.IsValid())
+            {
                 throw new ArgumentException("API Key is not valid.");
+            }
+
             if (string.IsNullOrEmpty(baseUrl))
+            {
                 throw new ArgumentNullException("Base URL cannot be empty.");
+            }
+
             if (connectionTimeout < 0)
+            {
                 throw new ArgumentException("Timeout cannot be negative.");
+            }
 
             this.logger = logger;
             this.apiKey = apiKey;
@@ -113,13 +121,17 @@ namespace Stormpath.SDK.Impl.Client
         private async Task EnsureTenantAsync(CancellationToken cancellationToken)
         {
             if (this.tenant == null)
+            {
                 await this.AsInterface.GetCurrentTenantAsync(cancellationToken).ConfigureAwait(false);
+            }
         }
 
         private void EnsureTenant()
         {
             if (this.tenant == null)
+            {
                 this.GetCurrentTenant();
+            }
         }
 
         ICacheProvider IClient.GetCacheProvider()

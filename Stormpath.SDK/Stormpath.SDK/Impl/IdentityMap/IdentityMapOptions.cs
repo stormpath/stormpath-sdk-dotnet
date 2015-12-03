@@ -32,7 +32,9 @@ namespace Stormpath.SDK.Impl.IdentityMap
         {
             // Can't be both at the same time!
             if (this.SkipIdentityMap && this.StoreWithInfiniteExpiration)
+            {
                 return false;
+            }
 
             return true;
         }

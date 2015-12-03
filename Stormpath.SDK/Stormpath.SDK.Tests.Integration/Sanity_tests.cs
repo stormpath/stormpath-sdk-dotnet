@@ -316,7 +316,9 @@ namespace Stormpath.SDK.Tests.Integration
         private static string PrettyMethodOutput(IEnumerable<MethodInfo> methods)
         {
             if (!methods.Any())
+            {
                 return null;
+            }
 
             var prettyMethods = methods.Select(m =>
             {
@@ -340,7 +342,9 @@ namespace Stormpath.SDK.Tests.Integration
         private static bool IsCompilerGenerated(Type t)
         {
             if (t == null)
+            {
                 return false;
+            }
 
             return t.IsDefined(typeof(CompilerGeneratedAttribute), false)
                 || IsCompilerGenerated(t.DeclaringType);

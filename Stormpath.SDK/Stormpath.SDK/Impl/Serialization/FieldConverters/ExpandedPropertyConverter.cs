@@ -35,13 +35,19 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
         {
             var asEmbeddedResource = token.Value as IDictionary<string, object>;
             if (asEmbeddedResource == null)
+            {
                 return FieldConverterResult.Failed;
+            }
 
             if (asEmbeddedResource.Count <= 1)
+            {
                 return FieldConverterResult.Failed;
+            }
 
             if (this.converter == null)
+            {
                 throw new ApplicationException($"Could not parse expanded property data from attribute '{token.Key}'.");
+            }
 
             var embeddedType = new ResourceTypeLookup().GetInterface(token.Key);
             var convertedData = this.converter(asEmbeddedResource, embeddedType);

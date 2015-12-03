@@ -33,7 +33,9 @@ namespace Stormpath.SDK.IdSite
             : base(error)
         {
             if (!Supports(error))
+            {
                 throw new ArgumentException("Error type not supported; must be one of: " + string.Join(",", SupportedErrors));
+            }
         }
 
         private static bool Supports(IError error)

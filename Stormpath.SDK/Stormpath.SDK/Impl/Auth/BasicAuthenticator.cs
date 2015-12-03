@@ -40,15 +40,22 @@ namespace Stormpath.SDK.Impl.Auth
 
             if (this.dataStore == null ||
                 this.dataStoreSync == null)
+            {
                 throw new ArgumentNullException("Internal data store could not be initialized.");
+            }
         }
 
         private static void Validate(string parentHref, IAuthenticationRequest request)
         {
             if (string.IsNullOrEmpty(parentHref))
+            {
                 throw new ArgumentNullException(nameof(parentHref));
+            }
+
             if (!(request is UsernamePasswordRequest))
+            {
                 throw new ArgumentException("Only UsernamePasswordRequest instances are supported by this by this authenticator.");
+            }
         }
 
         private IBasicLoginAttempt BuildRequest(string parentHref, IAuthenticationRequest request)
@@ -63,7 +70,9 @@ namespace Stormpath.SDK.Impl.Auth
             attempt.SetValue(value);
 
             if (request.AccountStore != null)
+            {
                 attempt.SetAccountStore(request.AccountStore);
+            }
 
             var supportsNameKey = request as IOrganizationNameKey;
             if (supportsNameKey != null && !string.IsNullOrEmpty(supportsNameKey.OrganizationNameKey))

@@ -70,19 +70,26 @@ namespace Stormpath.SDK.Impl.Client
         IHttpClientBuilder ILoggerConsumer<IHttpClientBuilder>.SetLogger(ILogger logger)
         {
             if (logger != null)
+            {
                 this.logger = logger;
+            }
+
             return this;
         }
 
         IHttpClient IHttpClientBuilder.Build()
         {
             if (this.instance != null)
+            {
                 return this.instance;
+            }
 
             IHttpClient defaultClient = null;
             bool foundDefaultLibrary = this.defaultLibraryLoader.TryLoad(out defaultClient, new object[] { this.baseUrl, this.connectionTimeout, this.proxy, this.logger });
             if (!foundDefaultLibrary)
+            {
                 throw new ApplicationException("Could not find a valid HTTP client. Include Stormpath.SDK.RestSharpClient.dll in the application path.");
+            }
 
             return defaultClient;
         }

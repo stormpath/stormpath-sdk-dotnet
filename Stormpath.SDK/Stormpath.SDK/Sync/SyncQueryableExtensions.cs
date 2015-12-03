@@ -37,13 +37,17 @@ namespace Stormpath.SDK.Sync
         {
             var collection = source as CollectionResourceQueryable<TSource>;
             if (collection == null)
+            {
                 throw new InvalidOperationException("This queryable is not a supported collection resource.");
+            }
 
             bool isEmptyExpressionTree =
                 source.Expression.NodeType == ExpressionType.Constant &&
                 source.Expression.Type == typeof(CollectionResourceQueryable<TSource>);
             if (!isEmptyExpressionTree)
+            {
                 throw new NotSupportedException("Synchronously must be called first.");
+            }
 
             return source as IQueryable<TSource>;
         }

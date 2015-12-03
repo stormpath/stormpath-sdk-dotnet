@@ -197,7 +197,9 @@ namespace Stormpath.SDK.Impl.DataStore
         public Type GetInterface(Type possiblyConcrete)
         {
             if (IsInterface(possiblyConcrete))
+            {
                 return possiblyConcrete;
+            }
 
             return GetInterfaceForConcreteType(possiblyConcrete);
         }
@@ -234,7 +236,9 @@ namespace Stormpath.SDK.Impl.DataStore
         public Type GetConcrete(Type possiblyInterface)
         {
             if (IsConcrete(possiblyInterface))
+            {
                 return possiblyInterface;
+            }
 
             return GetConcreteTypeForInterface(possiblyInterface);
         }

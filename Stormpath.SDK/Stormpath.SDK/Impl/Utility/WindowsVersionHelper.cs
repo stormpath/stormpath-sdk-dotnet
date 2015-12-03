@@ -55,7 +55,9 @@ namespace Stormpath.SDK.Impl.Utility
 
             string version;
             if (!WindowsVersionLookupTable.TryGetValue(new WindowsVersion(major, minor, productType), out version))
+            {
                 return $"unknown-{major}.{minor}.{productType}";
+            }
 
             return version;
         }
@@ -66,7 +68,9 @@ namespace Stormpath.SDK.Impl.Utility
             operatingSystemVersionInfo.dwOSVersionInfoSize = Marshal.SizeOf(typeof(SafeNativeMethods.OSVERSIONINFOEX));
 
             if (!SafeNativeMethods.GetVersionEx(ref operatingSystemVersionInfo))
+            {
                 return null;
+            }
 
             return operatingSystemVersionInfo.wProductType;
         }

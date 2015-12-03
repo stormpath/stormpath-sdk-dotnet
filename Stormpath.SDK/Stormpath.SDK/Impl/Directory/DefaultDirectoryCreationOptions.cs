@@ -37,7 +37,9 @@ namespace Stormpath.SDK.Impl.Directory
         public string GetQueryString()
         {
             if (this.responseOptions == null)
+            {
                 return string.Empty;
+            }
 
             return this.responseOptions.ToString();
         }

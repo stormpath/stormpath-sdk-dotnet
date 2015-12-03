@@ -78,25 +78,40 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
                 onAuthenticated: (result, ct) =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Authenticated)
+                    {
                         accountResultFromListener = result;
+                    }
                     else
+                    {
                         throw new InvalidOperationException("This method should not have been executed");
+                    }
+
                     return Task.FromResult(true);
                 },
                 onLogout: (result, ct) =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Logout)
+                    {
                         accountResultFromListener = result;
+                    }
                     else
+                    {
                         throw new InvalidOperationException("This method should not have been executed");
+                    }
+
                     return Task.FromResult(true);
                 },
                 onRegistered: (result, ct) =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Registered)
+                    {
                         accountResultFromListener = result;
+                    }
                     else
+                    {
                         throw new InvalidOperationException("This method should not have been executed");
+                    }
+
                     return Task.FromResult(true);
                 });
 

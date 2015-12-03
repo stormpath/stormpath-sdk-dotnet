@@ -46,12 +46,16 @@ namespace Stormpath.SDK.Impl.Client
         IJsonSerializer IJsonSerializerBuilder.Build()
         {
             if (this.instance != null)
+            {
                 return this.instance;
+            }
 
             IJsonSerializer defaultSerializer = null;
             bool foundDefaultLibrary = this.defaultLibraryLoader.TryLoad(out defaultSerializer);
             if (!foundDefaultLibrary)
+            {
                 throw new ApplicationException("Could not find a valid JSON serializer. Include Stormpath.SDK.JsonNetSerializer.dll in the application path.");
+            }
 
             return defaultSerializer;
         }

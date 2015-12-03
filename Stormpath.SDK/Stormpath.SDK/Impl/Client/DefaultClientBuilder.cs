@@ -60,9 +60,14 @@ namespace Stormpath.SDK.Impl.Client
         IClientBuilder IClientBuilder.SetApiKey(IClientApiKey apiKey)
         {
             if (apiKey == null)
+            {
                 throw new ArgumentNullException("API Key cannot be null.");
+            }
+
             if (!apiKey.IsValid())
+            {
                 throw new ArgumentException("API Key is not valid.");
+            }
 
             this.apiKey = apiKey;
             return this;
@@ -77,7 +82,9 @@ namespace Stormpath.SDK.Impl.Client
         IClientBuilder IClientBuilder.SetBaseUrl(string baseUrl)
         {
             if (string.IsNullOrEmpty(baseUrl))
+            {
                 throw new ArgumentNullException("Base URL cannot be empty.");
+            }
 
             this.baseUrl = baseUrl;
 
@@ -87,7 +94,9 @@ namespace Stormpath.SDK.Impl.Client
         IClientBuilder IClientBuilder.SetConnectionTimeout(int timeout)
         {
             if (timeout < 0)
+            {
                 throw new ArgumentOutOfRangeException("Timeout cannot be negative.");
+            }
 
             this.connectionTimeout = timeout;
 
@@ -104,7 +113,9 @@ namespace Stormpath.SDK.Impl.Client
         IClientBuilder ISerializerConsumer<IClientBuilder>.SetSerializer(IJsonSerializer serializer)
         {
             if (serializer == null)
+            {
                 throw new ArgumentNullException(nameof(serializer));
+            }
 
             this.serializerBuilder.SetSerializer(serializer);
 
@@ -114,7 +125,9 @@ namespace Stormpath.SDK.Impl.Client
         IClientBuilder IClientBuilder.SetHttpClient(IHttpClient httpClient)
         {
             if (httpClient == null)
+            {
                 throw new ArgumentNullException(nameof(httpClient));
+            }
 
             this.httpClientBuilder.SetHttpClient(httpClient);
 
@@ -131,10 +144,14 @@ namespace Stormpath.SDK.Impl.Client
         IClientBuilder IClientBuilder.SetCacheProvider(ICacheProvider cacheProvider)
         {
             if (cacheProvider == null)
+            {
                 throw new ArgumentNullException(nameof(cacheProvider));
+            }
 
             if (this.cacheProvider != null)
+            {
                 throw new ApplicationException("Cache provider already set.");
+            }
 
             this.cacheProvider = cacheProvider;
 
@@ -146,13 +163,19 @@ namespace Stormpath.SDK.Impl.Client
             if (this.apiKey == null)
             {
                 if (this.clientApiKeyBuilder != null)
+                {
                     this.apiKey = this.clientApiKeyBuilder.Build();
+                }
                 else
+                {
                     throw new ApplicationException("No valid API Key and Secret could be found.");
+                }
             }
 
             if (this.logger == null)
+            {
                 this.logger = new NullLogger();
+            }
 
             var serializer = this.serializerBuilder.Build();
 
@@ -170,11 +193,15 @@ namespace Stormpath.SDK.Impl.Client
             {
                 var injectableWithSerializer = this.cacheProvider as ISerializerConsumer<ICacheProvider>;
                 if (injectableWithSerializer != null)
+                {
                     injectableWithSerializer.SetSerializer(serializer);
+                }
 
                 var injectableWithLogger = this.cacheProvider as ILoggerConsumer<ICacheProvider>;
                 if (injectableWithLogger != null)
+                {
                     injectableWithLogger.SetLogger(this.logger);
+                }
             }
 
             this.httpClientBuilder

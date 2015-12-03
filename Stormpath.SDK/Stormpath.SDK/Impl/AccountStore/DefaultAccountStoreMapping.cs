@@ -52,7 +52,9 @@ namespace Stormpath.SDK.Impl.AccountStore
         IAccountStoreMapping IAccountStoreMapping.SetApplication(IApplication application)
         {
             if (string.IsNullOrEmpty(application?.Href))
+            {
                 throw new ArgumentNullException(nameof(application.Href));
+            }
 
             this.SetLinkProperty(ApplicationPropertyName, application.Href);
 
@@ -62,7 +64,9 @@ namespace Stormpath.SDK.Impl.AccountStore
         IAccountStoreMapping IAccountStoreMapping.SetAccountStore(IAccountStore accountStore)
         {
             if (string.IsNullOrEmpty(accountStore?.Href))
+            {
                 throw new ArgumentNullException(nameof(accountStore.Href));
+            }
 
             this.SetLinkProperty(AccountStorePropertyName, accountStore.Href);
 
@@ -72,7 +76,9 @@ namespace Stormpath.SDK.Impl.AccountStore
         IAccountStoreMapping IAccountStoreMapping.SetListIndex(int listIndex)
         {
             if (listIndex < 0)
+            {
                 throw new ArgumentException("Must be greater than 0.", nameof(listIndex));
+            }
 
             this.SetProperty(ListIndexPropertyName, listIndex);
 
@@ -99,9 +105,13 @@ namespace Stormpath.SDK.Impl.AccountStore
             IAccountStore accountStore = null;
 
             if (href.Contains("directories"))
+            {
                 accountStore = await this.GetInternalAsyncDataStore().GetResourceAsync<IDirectory>(href, cancellationToken).ConfigureAwait(false);
+            }
             else if (href.Contains("groups"))
+            {
                 accountStore = await this.GetInternalAsyncDataStore().GetResourceAsync<IGroup>(href, cancellationToken).ConfigureAwait(false);
+            }
 
             return accountStore;
         }
@@ -112,9 +122,13 @@ namespace Stormpath.SDK.Impl.AccountStore
             IAccountStore accountStore = null;
 
             if (href.Contains("directories"))
+            {
                 accountStore = this.GetInternalSyncDataStore().GetResource<IDirectory>(href);
+            }
             else if (href.Contains("groups"))
+            {
                 accountStore = this.GetInternalSyncDataStore().GetResource<IGroup>(href);
+            }
 
             return accountStore;
         }

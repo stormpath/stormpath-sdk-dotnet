@@ -66,9 +66,14 @@ namespace Stormpath.SDK.Impl.Application
         async Task<IAccount> IApplication.ResetPasswordAsync(string token, string newPassword, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(token))
+            {
                 throw new ArgumentNullException(nameof(token));
+            }
+
             if (string.IsNullOrEmpty(newPassword))
+            {
                 throw new ArgumentNullException(nameof(newPassword));
+            }
 
             var href = $"{this.PasswordResetToken.Href}/{token}";
             var passwordResetToken = this.GetInternalAsyncDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;

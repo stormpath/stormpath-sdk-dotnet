@@ -54,9 +54,14 @@ namespace Stormpath.SDK.Logging
         public LogEntry(LogLevel severity, string message, string source, Exception exception)
         {
             if (string.IsNullOrEmpty(message))
+            {
                 throw new ArgumentNullException(nameof(message));
+            }
+
             if (severity < LogLevel.Trace || severity > LogLevel.Fatal)
+            {
                 throw new ArgumentOutOfRangeException(nameof(severity));
+            }
 
             this.Severity = severity;
             this.Message = message;

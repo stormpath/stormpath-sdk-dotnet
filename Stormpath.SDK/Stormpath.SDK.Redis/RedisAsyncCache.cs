@@ -76,7 +76,9 @@ namespace Stormpath.SDK.Cache.Redis
                 await transaction.ExecuteAsync().ConfigureAwait(false);
 
                 if (value.Result.IsNullOrEmpty)
+                {
                     return null;
+                }
 
                 var entry = CacheEntry.Parse(value.Result);
                 if (this.IsExpired(entry))
@@ -138,7 +140,9 @@ namespace Stormpath.SDK.Cache.Redis
                 var committed = await transaction.ExecuteAsync().ConfigureAwait(false);
 
                 if (!committed)
+                {
                     return null;
+                }
 
                 var entry = CacheEntry.Parse(lastValue.Result);
                 var map = this.serializer.Deserialize(entry.Data);
@@ -162,7 +166,9 @@ namespace Stormpath.SDK.Cache.Redis
         private bool IsExpired(CacheEntry entry)
         {
             if (this.ttl == null)
+            {
                 return false;
+            }
 
             return (DateTimeOffset.UtcNow - entry.CreatedAt) > this.ttl.Value;
         }

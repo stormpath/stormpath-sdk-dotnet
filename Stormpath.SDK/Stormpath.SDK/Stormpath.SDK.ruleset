@@ -74,20 +74,13 @@
     <Rule Id="IDE0003" Action="None" />
   </Rules>
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
-    <Rule Id="SA1133" Action="Warning" />
-    <Rule Id="SA1134" Action="Warning" />
     <Rule Id="SA1200" Action="None" />
     <Rule Id="SA1201" Action="None" />
     <Rule Id="SA1202" Action="None" />
     <Rule Id="SA1204" Action="None" />
     <Rule Id="SA1305" Action="Warning" />
     <Rule Id="SA1401" Action="None" />
-    <Rule Id="SA1503" Action="None" />
     <Rule Id="SA1609" Action="Warning" />
-    <Rule Id="SA1623" Action="Warning" />
-    <Rule Id="SA1624" Action="Warning" />
-    <Rule Id="SA1625" Action="Warning" />
-    <Rule Id="SA1627" Action="Warning" />
     <Rule Id="SA1629" Action="Warning" />
     <Rule Id="SA1644" Action="Warning" />
     <Rule Id="SA1652" Action="None" />

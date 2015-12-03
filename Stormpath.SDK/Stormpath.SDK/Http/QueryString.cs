@@ -72,7 +72,9 @@ namespace Stormpath.SDK.Http
             : this()
         {
             if (queryParams != null)
+            {
                 this.queryStringItems = ToSortedDictionary(queryParams);
+            }
         }
 
         /// <summary>
@@ -125,7 +127,9 @@ namespace Stormpath.SDK.Http
         {
             bool isEmpty = this.queryStringItems == null || this.queryStringItems.Count == 0;
             if (isEmpty)
+            {
                 return string.Empty;
+            }
 
             var items = this.queryStringItems.Select(x =>
             {
@@ -133,7 +137,9 @@ namespace Stormpath.SDK.Http
                 var value = RequestHelper.UrlEncode(x.Value, false, canonical);
 
                 if (!canonical)
+                {
                     value = FixSearchSyntaxEncoding(value);
+                }
 
                 return $"{key}={value}";
             });
@@ -157,10 +163,14 @@ namespace Stormpath.SDK.Http
         internal QueryString Merge(QueryString replacementParams)
         {
             if (replacementParams == null)
+            {
                 return this;
+            }
 
             if (!replacementParams.queryStringItems.Any())
+            {
                 return this;
+            }
 
             var mergedItems = new List<KeyValuePair<string, string>>(this.queryStringItems);
             foreach (var param in replacementParams.queryStringItems)
@@ -181,22 +191,31 @@ namespace Stormpath.SDK.Http
             var resultItems = new Dictionary<string, string>();
 
             if (queryString.Contains("?"))
+            {
                 queryString = queryString.Split('?')?[1];
+            }
 
             if (string.IsNullOrEmpty(queryString))
+            {
                 return resultItems; // empty
+            }
 
             foreach (var token in queryString.Split('&'))
             {
                 var pair = token.Split('=');
 
                 if (pair == null)
+                {
                     resultItems.Add(token, null);
+                }
 
                 var key = pair[0];
                 var value = string.Empty;
                 if (pair.Length > 1 && !string.IsNullOrEmpty(pair[1]))
+                {
                     value = pair[1];
+                }
+
                 resultItems.Add(key, value);
             }
 

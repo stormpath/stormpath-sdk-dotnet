@@ -49,7 +49,9 @@ namespace Stormpath.SDK.Http
         {
             var segments = schemeAndParameter.Split(' ');
             if (segments.Length != 2)
+            {
                 throw new ArgumentException("Invalid Authorization header format.", nameof(schemeAndParameter));
+            }
 
             this.scheme = segments[0];
             this.parameter = segments[1];

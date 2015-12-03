@@ -52,7 +52,9 @@ namespace Stormpath.SDK.Cache
         {
             var cacheConfig = builder.Build();
             if (cacheConfig == null)
+            {
                 throw new ApplicationException("The cache configuration is not valid.");
+            }
 
             this.cacheConfigs.Add(cacheConfig);
             return this;
@@ -75,13 +77,19 @@ namespace Stormpath.SDK.Cache
             var provider = new T();
 
             if (this.defaultTimeToLive.HasValue)
+            {
                 provider.SetDefaultTimeToLive(this.defaultTimeToLive.Value);
+            }
 
             if (this.defaultTimeToIdle.HasValue)
+            {
                 provider.SetDefaultTimeToIdle(this.defaultTimeToIdle.Value);
+            }
 
             if (this.cacheConfigs.Any())
+            {
                 provider.SetCacheConfigurations(this.cacheConfigs);
+            }
 
             return this.OnBuilding(provider);
         }

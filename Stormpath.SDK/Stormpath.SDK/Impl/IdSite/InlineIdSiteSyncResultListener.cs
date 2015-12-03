@@ -38,19 +38,25 @@ namespace Stormpath.SDK.Impl.IdSite
         void IIdSiteSyncResultListener.OnRegistered(IAccountResult result)
         {
             if (this.onRegistered != null)
+            {
                 this.onRegistered(result);
+            }
         }
 
         void IIdSiteSyncResultListener.OnAuthenticated(IAccountResult result)
         {
             if (this.onAuthenticated != null)
+            {
                 this.onAuthenticated(result);
+            }
         }
 
         void IIdSiteSyncResultListener.OnLogout(IAccountResult result)
         {
             if (this.onLogout != null)
+            {
                 this.onLogout(result);
+            }
         }
     }
 }

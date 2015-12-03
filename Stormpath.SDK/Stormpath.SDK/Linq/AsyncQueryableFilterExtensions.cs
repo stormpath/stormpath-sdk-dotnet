@@ -41,7 +41,9 @@ namespace Stormpath.SDK
         {
             caseInsensitiveMatch = caseInsensitiveMatch?.Trim();
             if (string.IsNullOrWhiteSpace(caseInsensitiveMatch))
+            {
                 throw new ArgumentNullException(nameof(caseInsensitiveMatch), "Filter string cannot be null or whitespace-only.");
+            }
 
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(

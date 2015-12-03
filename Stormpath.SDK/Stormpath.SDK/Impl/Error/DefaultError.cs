@@ -41,7 +41,9 @@ namespace Stormpath.SDK.Impl.Error
         {
             object value = null;
             if (!this.properties.TryGetValue(propertyName, out value))
+            {
                 return default(T);
+            }
 
             return (T)value;
         }

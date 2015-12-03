@@ -65,15 +65,21 @@ namespace Stormpath.SDK.Impl.Resource
         public object GetProperty(string name)
         {
             if (this.deletedProperties.ContainsKey(name))
+            {
                 return null;
+            }
 
             object value;
 
             if (this.dirtyProperties.TryGetValue(name, out value))
+            {
                 return value;
+            }
 
             if (this.properties.TryGetValue(name, out value))
+            {
                 return value;
+            }
 
             return null;
         }
@@ -119,7 +125,9 @@ namespace Stormpath.SDK.Impl.Resource
         public void Update(IDictionary<string, object> properties = null)
         {
             if (properties == null)
+            {
                 properties = new Dictionary<string, object>();
+            }
 
             this.properties = new ConcurrentDictionary<string, object>(properties);
             this.dirtyProperties = new ConcurrentDictionary<string, object>();

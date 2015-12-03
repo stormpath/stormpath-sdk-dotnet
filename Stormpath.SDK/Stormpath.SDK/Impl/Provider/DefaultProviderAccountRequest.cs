@@ -26,9 +26,14 @@ namespace Stormpath.SDK.Impl.Provider
         internal DefaultProviderAccountRequest(IProviderData providerData)
         {
             if (providerData == null)
+            {
                 throw new ArgumentNullException(nameof(providerData));
+            }
+
             if (string.IsNullOrEmpty(providerData.ProviderId))
+            {
                 throw new ArgumentException($"{nameof(providerData.ProviderId)} within ProviderData instance must be specified.");
+            }
 
             this.providerData = providerData;
         }

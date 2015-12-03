@@ -32,16 +32,22 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
         {
             var asEmbeddedObject = token.Value as IDictionary<string, object>;
             if (asEmbeddedObject == null)
+            {
                 return FieldConverterResult.Failed;
+            }
 
             if (asEmbeddedObject.Count > 1)
+            {
                 return FieldConverterResult.Failed;
+            }
 
             var firstItem = asEmbeddedObject.FirstOrDefault();
             var hasHref = string.Equals(firstItem.Key, "href", StringComparison.InvariantCultureIgnoreCase);
 
             if (!hasHref)
+            {
                 return FieldConverterResult.Failed;
+            }
 
             return new FieldConverterResult(true, new LinkProperty(firstItem.Value.ToString()));
         }

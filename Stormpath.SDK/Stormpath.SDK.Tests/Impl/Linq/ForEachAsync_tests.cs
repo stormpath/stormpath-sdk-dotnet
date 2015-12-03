@@ -57,7 +57,9 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                     reachedIndex++;
 
                     if (reachedIndex == 2)
+                    {
                         cts.Cancel();
+                    }
                 }, cts.Token);
 
                 Assertly.Fail("Should not reach here!");

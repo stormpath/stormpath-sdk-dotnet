@@ -59,7 +59,9 @@ namespace Stormpath.SDK.Impl.Account
         public IPasswordResetToken SetAccountStore(IAccountStore accountStore)
         {
             if (string.IsNullOrEmpty(accountStore?.Href))
+            {
                 throw new ArgumentNullException(nameof(accountStore.Href));
+            }
 
             this.SetLinkProperty(AccountStorePropertyName, accountStore.Href);
             return this;
@@ -68,7 +70,9 @@ namespace Stormpath.SDK.Impl.Account
         public IPasswordResetToken SetAccountStore(string hrefOrNameKey)
         {
             if (string.IsNullOrEmpty(hrefOrNameKey))
+            {
                 throw new ArgumentNullException(nameof(hrefOrNameKey));
+            }
 
             bool looksLikeHref = hrefOrNameKey.Split('/').Length > 4;
             if (looksLikeHref)
@@ -96,7 +100,9 @@ namespace Stormpath.SDK.Impl.Account
             var thisHref = this.AsInterface.Href;
 
             if (string.IsNullOrEmpty(thisHref))
+            {
                 return null;
+            }
 
             // Return everything after /passwordResetToken/
             return thisHref.Substring(thisHref.IndexOf(TokenDelimiter) + TokenDelimiter.Length);

@@ -38,7 +38,9 @@ namespace Stormpath.SDK.Impl.Utility
         public static long? ToLong(DateTimeOffset? date)
         {
             if (!date.HasValue)
+            {
                 return null;
+            }
 
             return ToLong(date.Value);
         }
@@ -49,7 +51,9 @@ namespace Stormpath.SDK.Impl.Utility
         public static DateTimeOffset? FromLong(long? timestamp)
         {
             if (!timestamp.HasValue)
+            {
                 return null;
+            }
 
             return FromLong(timestamp.Value);
         }

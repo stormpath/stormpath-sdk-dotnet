@@ -75,7 +75,9 @@ namespace Stormpath.SDK.Error
         private static string BuildExceptionMessage(IError error)
         {
             if (error == null)
+            {
                 throw new ArgumentNullException(nameof(error));
+            }
 
             return $"HTTP {error.HttpStatus}, Stormpath {error.Code} ({error.MoreInfo}): {error.DeveloperMessage}";
         }

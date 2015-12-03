@@ -29,11 +29,15 @@ namespace Stormpath.SDK.Impl.Application
         IAccountStore IApplicationSync.GetDefaultAccountStore()
         {
             if (this.DefaultAccountStoreMapping.Href == null)
+            {
                 return null;
+            }
 
             var accountStoreMapping = this.GetInternalAsyncDataStore().GetResource<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href);
             if (accountStoreMapping == null)
+            {
                 return null;
+            }
 
             return accountStoreMapping.GetAccountStore();
         }
@@ -41,7 +45,9 @@ namespace Stormpath.SDK.Impl.Application
         IAccountStore IApplicationSync.GetDefaultGroupStore()
         {
             if (this.DefaultGroupStoreMapping.Href == null)
+            {
                 return null;
+            }
 
             var groupStoreMapping = this.GetInternalSyncDataStore().GetResource<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href);
 
@@ -54,7 +60,9 @@ namespace Stormpath.SDK.Impl.Application
         void IApplicationSync.SetDefaultAccountStore(IAccountStore accountStore)
         {
             if (string.IsNullOrEmpty(accountStore?.Href))
+            {
                 throw new ArgumentNullException(nameof(accountStore.Href));
+            }
 
             IAccountStoreMapping newOrExistingMapping = null;
 
@@ -62,10 +70,14 @@ namespace Stormpath.SDK.Impl.Application
             {
                 bool isPassedAccountStore = (mapping as AccountStore.DefaultAccountStoreMapping)?.AccountStore?.Href.Equals(accountStore.Href) ?? false;
                 if (isPassedAccountStore)
+                {
                     newOrExistingMapping = mapping;
+                }
 
                 if (newOrExistingMapping != null)
+                {
                     break;
+                }
             }
 
             if (newOrExistingMapping == null)
@@ -84,7 +96,9 @@ namespace Stormpath.SDK.Impl.Application
         void IApplicationSync.SetDefaultGroupStore(IAccountStore accountStore)
         {
             if (string.IsNullOrEmpty(accountStore?.Href))
+            {
                 throw new ArgumentNullException(nameof(accountStore.Href));
+            }
 
             IAccountStoreMapping newOrExistingMapping = null;
 
@@ -92,10 +106,14 @@ namespace Stormpath.SDK.Impl.Application
             {
                 bool isPassedAccountStore = (mapping as AccountStore.DefaultAccountStoreMapping)?.AccountStore?.Href.Equals(accountStore.Href) ?? false;
                 if (isPassedAccountStore)
+                {
                     newOrExistingMapping = mapping;
+                }
 
                 if (newOrExistingMapping != null)
+                {
                     break;
+                }
             }
 
             if (newOrExistingMapping == null)
@@ -133,7 +151,9 @@ namespace Stormpath.SDK.Impl.Application
         IAccountStoreMapping IApplicationSync.AddAccountStore(string hrefOrName)
         {
             if (string.IsNullOrEmpty(hrefOrName))
+            {
                 throw new ArgumentNullException(nameof(hrefOrName));
+            }
 
             IAccountStore accountStore = null;
 
@@ -145,9 +165,13 @@ namespace Stormpath.SDK.Impl.Application
                 if (splitHrefOrName.Length == this.AsInterface.Href.Split('/').Length)
                 {
                     if (splitHrefOrName[4].Equals("directories", StringComparison.InvariantCultureIgnoreCase))
+                    {
                         isDirectoryType = true;
+                    }
                     else if (splitHrefOrName[4].Equals("groups", StringComparison.InvariantCultureIgnoreCase))
+                    {
                         isDirectoryType = false;
+                    }
                 }
 
                 if (isDirectoryType != null)
@@ -155,9 +179,13 @@ namespace Stormpath.SDK.Impl.Application
                     try
                     {
                         if (isDirectoryType == true)
+                        {
                             accountStore = this.GetInternalSyncDataStore().GetResource<IDirectory>(hrefOrName);
+                        }
                         else if (isDirectoryType == false)
+                        {
                             accountStore = this.GetInternalSyncDataStore().GetResource<IGroup>(hrefOrName);
+                        }
                     }
                     catch (ResourceException)
                     {
@@ -186,7 +214,9 @@ namespace Stormpath.SDK.Impl.Application
             }
 
             if (accountStore != null)
+            {
                 return this.AsInterface.AddAccountStore(accountStore);
+            }
 
             // Could not find any resource matching the hrefOrName value
             return null;
@@ -195,7 +225,9 @@ namespace Stormpath.SDK.Impl.Application
         IAccountStoreMapping IApplicationSync.AddAccountStore<T>(Func<IQueryable<T>, IQueryable<T>> query)
         {
             if (query == null)
+            {
                 throw new ArgumentNullException(nameof(query));
+            }
 
             IAccountStore foundAccountStore = null;
             if (typeof(T) == typeof(IDirectory))
@@ -210,7 +242,9 @@ namespace Stormpath.SDK.Impl.Application
             }
 
             if (foundAccountStore != null)
+            {
                 return this.AsInterface.AddAccountStore(foundAccountStore);
+            }
 
             // No account store can be added
             return null;
@@ -219,7 +253,9 @@ namespace Stormpath.SDK.Impl.Application
         private IDirectory GetSingleTenantDirectory(Func<IQueryable<IDirectory>, IQueryable<IDirectory>> queryAction)
         {
             if (queryAction == null)
+            {
                 throw new ArgumentNullException(nameof(queryAction));
+            }
 
             var tenant = this.AsInterface.GetTenant();
             var queryable = tenant.GetDirectories().Synchronously();
@@ -229,7 +265,9 @@ namespace Stormpath.SDK.Impl.Application
             foreach (var dir in queryable)
             {
                 if (foundDirectory != null)
+                {
                     throw new ArgumentException("The provided query matched more than one Directory in the current Tenant.", nameof(queryAction));
+                }
 
                 foundDirectory = dir;
             }
@@ -240,7 +278,9 @@ namespace Stormpath.SDK.Impl.Application
         private IGroup GetSingleTenantGroup(Func<IQueryable<IGroup>, IQueryable<IGroup>> queryAction)
         {
             if (queryAction == null)
+            {
                 throw new ArgumentNullException(nameof(queryAction));
+            }
 
             var tenant = this.AsInterface.GetTenant();
             var queryable = tenant.GetGroups().Synchronously();
@@ -250,7 +290,9 @@ namespace Stormpath.SDK.Impl.Application
             foreach (var group in queryable)
             {
                 if (foundGroup != null)
+                {
                     throw new ArgumentException("The provided query matched more than one Directory in the current Tenant.", nameof(queryAction));
+                }
 
                 foundGroup = group;
             }

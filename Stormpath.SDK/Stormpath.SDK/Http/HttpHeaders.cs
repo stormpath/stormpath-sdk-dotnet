@@ -133,7 +133,9 @@ namespace Stormpath.SDK.Http
             {
                 var location = this.GetFirst<string>(LocationName);
                 if (string.IsNullOrEmpty(location))
+                {
                     return null;
+                }
 
                 return new Uri(location, UriKind.Absolute);
             }
@@ -163,7 +165,9 @@ namespace Stormpath.SDK.Http
         public T GetFirst<T>(string key)
         {
             if (!this.headers.ContainsKey(key) || !this.headers[key].Any())
+            {
                 return default(T);
+            }
 
             return (T)this.headers[key][0];
         }
@@ -176,10 +180,14 @@ namespace Stormpath.SDK.Http
         public void Add(string key, object value)
         {
             if (this.readOnly)
+            {
                 throw new InvalidOperationException("This headers collection is read-only.");
+            }
 
             if (!this.headers.ContainsKey(key))
+            {
                 this.headers.Add(key, new List<object>());
+            }
 
             this.headers[key].Add(value);
         }

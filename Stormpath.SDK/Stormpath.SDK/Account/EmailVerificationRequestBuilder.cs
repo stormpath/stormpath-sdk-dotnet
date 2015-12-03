@@ -59,7 +59,9 @@ namespace Stormpath.SDK.Account
             request.SetLogin(this.Login);
 
             if (this.AccountStore != null)
+            {
                 request.SetAccountStore(this.AccountStore);
+            }
 
             return request;
         }

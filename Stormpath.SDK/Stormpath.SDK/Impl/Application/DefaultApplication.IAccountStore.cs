@@ -35,7 +35,9 @@ namespace Stormpath.SDK.Impl.Application
         async Task<IAccountStore> IApplication.GetDefaultAccountStoreAsync(CancellationToken cancellationToken)
         {
             if (this.DefaultAccountStoreMapping.Href == null)
+            {
                 return null;
+            }
 
             var accountStoreMapping = await this.GetInternalAsyncDataStore()
                 .GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken)
@@ -49,7 +51,9 @@ namespace Stormpath.SDK.Impl.Application
         async Task<IAccountStore> IApplication.GetDefaultGroupStoreAsync(CancellationToken cancellationToken)
         {
             if (this.DefaultGroupStoreMapping.Href == null)
+            {
                 return null;
+            }
 
             var groupStoreMapping = await this.GetInternalAsyncDataStore().GetResourceAsync<IAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, cancellationToken).ConfigureAwait(false);
 
@@ -61,7 +65,9 @@ namespace Stormpath.SDK.Impl.Application
         async Task IApplication.SetDefaultAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(accountStore?.Href))
+            {
                 throw new ArgumentNullException(nameof(accountStore.Href));
+            }
 
             IAccountStoreMapping newOrExistingMapping = null;
 
@@ -70,7 +76,9 @@ namespace Stormpath.SDK.Impl.Application
             {
                 bool isPassedAccountStore = (mapping as AccountStore.DefaultAccountStoreMapping)?.AccountStore?.Href.Equals(accountStore.Href) ?? false;
                 if (isPassedAccountStore)
+                {
                     newOrExistingMapping = mapping;
+                }
 
                 return newOrExistingMapping != null; // break if found
             }, cancellationToken).ConfigureAwait(false);
@@ -91,7 +99,9 @@ namespace Stormpath.SDK.Impl.Application
         async Task IApplication.SetDefaultGroupStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(accountStore?.Href))
+            {
                 throw new ArgumentNullException(nameof(accountStore.Href));
+            }
 
             IAccountStoreMapping newOrExistingMapping = null;
 
@@ -100,7 +110,9 @@ namespace Stormpath.SDK.Impl.Application
                 {
                     bool isPassedAccountStore = (mapping as AccountStore.DefaultAccountStoreMapping)?.AccountStore?.Href.Equals(accountStore.Href) ?? false;
                     if (isPassedAccountStore)
+                    {
                         newOrExistingMapping = mapping;
+                    }
 
                     return newOrExistingMapping != null; // break if found
                 }, cancellationToken).ConfigureAwait(false);
@@ -140,7 +152,9 @@ namespace Stormpath.SDK.Impl.Application
         async Task<IAccountStoreMapping> IApplication.AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrName))
+            {
                 throw new ArgumentNullException(nameof(hrefOrName));
+            }
 
             IAccountStore accountStore = null;
 
@@ -152,9 +166,13 @@ namespace Stormpath.SDK.Impl.Application
                 if (splitHrefOrName.Length == this.AsInterface.Href.Split('/').Length)
                 {
                     if (splitHrefOrName[4].Equals("directories", StringComparison.InvariantCultureIgnoreCase))
+                    {
                         isDirectoryType = true;
+                    }
                     else if (splitHrefOrName[4].Equals("groups", StringComparison.InvariantCultureIgnoreCase))
+                    {
                         isDirectoryType = false;
+                    }
                 }
 
                 if (isDirectoryType != null)
@@ -162,9 +180,13 @@ namespace Stormpath.SDK.Impl.Application
                     try
                     {
                         if (isDirectoryType == true)
+                        {
                             accountStore = await this.GetInternalAsyncDataStore().GetResourceAsync<IDirectory>(hrefOrName, cancellationToken).ConfigureAwait(false);
+                        }
                         else if (isDirectoryType == false)
+                        {
                             accountStore = await this.GetInternalAsyncDataStore().GetResourceAsync<IGroup>(hrefOrName, cancellationToken).ConfigureAwait(false);
+                        }
                     }
                     catch (ResourceException)
                     {
@@ -193,7 +215,9 @@ namespace Stormpath.SDK.Impl.Application
             }
 
             if (accountStore != null)
+            {
                 return await this.AsInterface.AddAccountStoreAsync(accountStore, cancellationToken).ConfigureAwait(false);
+            }
 
             // Could not find any resource matching the hrefOrName value
             return null;
@@ -202,7 +226,9 @@ namespace Stormpath.SDK.Impl.Application
         async Task<IAccountStoreMapping> IApplication.AddAccountStoreAsync<T>(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query, CancellationToken cancellationToken)
         {
             if (query == null)
+            {
                 throw new ArgumentNullException(nameof(query));
+            }
 
             IAccountStore foundAccountStore = null;
             if (typeof(T) == typeof(IDirectory))
@@ -217,7 +243,9 @@ namespace Stormpath.SDK.Impl.Application
             }
 
             if (foundAccountStore != null)
+            {
                 return await this.AsInterface.AddAccountStoreAsync(foundAccountStore, cancellationToken).ConfigureAwait(false);
+            }
 
             // No account store can be added
             return null;
@@ -226,7 +254,9 @@ namespace Stormpath.SDK.Impl.Application
         private async Task<IDirectory> GetSingleTenantDirectoryAsync(Func<IAsyncQueryable<IDirectory>, IAsyncQueryable<IDirectory>> queryAction, CancellationToken cancellationToken)
         {
             if (queryAction == null)
+            {
                 throw new ArgumentNullException(nameof(queryAction));
+            }
 
             var tenant = await this.AsInterface.GetTenantAsync(cancellationToken).ConfigureAwait(false);
             var queryable = tenant.GetDirectories();
@@ -237,7 +267,9 @@ namespace Stormpath.SDK.Impl.Application
                 dir =>
             {
                 if (foundDirectory != null)
+                {
                     throw new ArgumentException("The provided query matched more than one Directory in the current Tenant.", nameof(queryAction));
+                }
 
                 foundDirectory = dir;
             }, cancellationToken).ConfigureAwait(false);
@@ -248,7 +280,9 @@ namespace Stormpath.SDK.Impl.Application
         private async Task<IGroup> GetSingleTenantGroupAsync(Func<IAsyncQueryable<IGroup>, IAsyncQueryable<IGroup>> queryAction, CancellationToken cancellationToken)
         {
             if (queryAction == null)
+            {
                 throw new ArgumentNullException(nameof(queryAction));
+            }
 
             var tenant = await this.AsInterface.GetTenantAsync(cancellationToken).ConfigureAwait(false);
             var queryable = tenant.GetGroups();
@@ -259,7 +293,9 @@ namespace Stormpath.SDK.Impl.Application
                 group =>
                 {
                     if (foundGroup != null)
+                    {
                         throw new ArgumentException("The provided query matched more than one Directory in the current Tenant.", nameof(queryAction));
+                    }
 
                     foundGroup = group;
                 }, cancellationToken).ConfigureAwait(false);

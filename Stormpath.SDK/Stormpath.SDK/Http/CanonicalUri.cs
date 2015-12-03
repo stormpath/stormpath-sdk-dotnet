@@ -35,14 +35,20 @@ namespace Stormpath.SDK.Http
         public CanonicalUri(string href)
         {
             if (string.IsNullOrEmpty(href))
+            {
                 throw new ArgumentNullException(nameof(href));
+            }
 
             if (!UriQualifier.IsFullyQualified(href))
+            {
                 throw new ArgumentException("URI must be fully-qualified.", nameof(href));
+            }
 
             Uri parsedUri = null;
             if (!Uri.TryCreate(href, UriKind.Absolute, out parsedUri))
+            {
                 throw new ArgumentException("URI is invalid.", nameof(href));
+            }
 
             this.resourcePath = parsedUri.WithoutQueryAndFragment();
             var queryPart = GetQueryParametersFromHref(href) ?? string.Empty;
@@ -106,9 +112,13 @@ namespace Stormpath.SDK.Http
         public override string ToString()
         {
             if (this.query.Any())
+            {
                 return $"{this.resourcePath}?{this.query}";
+            }
             else
+            {
                 return this.resourcePath.ToString();
+            }
         }
 
         /// <summary>

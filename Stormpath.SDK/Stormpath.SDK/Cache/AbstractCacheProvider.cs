@@ -77,7 +77,9 @@ namespace Stormpath.SDK.Cache
         protected void ThrowIfDisposed()
         {
             if (this.disposed)
+            {
                 throw new ApplicationException("This cache provider has been disposed.");
+            }
         }
 
         /// <summary>
@@ -104,10 +106,14 @@ namespace Stormpath.SDK.Cache
             this.ThrowIfDisposed();
 
             if (!this.syncSupported)
+            {
                 throw new ApplicationException("This cache provider does not support a synchronous execution path.");
+            }
 
             if (string.IsNullOrEmpty(name))
+            {
                 throw new ArgumentNullException(nameof(name));
+            }
 
             Func<string, TimeSpan?, TimeSpan?, object> callback =
                 (n, ttl, tti) => this.CreateSyncCache(n, ttl, tti);
@@ -123,10 +129,14 @@ namespace Stormpath.SDK.Cache
             this.ThrowIfDisposed();
 
             if (!this.asyncSupported)
+            {
                 throw new ApplicationException("This cache provider does not support an asynchronous execution path.");
+            }
 
             if (string.IsNullOrEmpty(name))
+            {
                 throw new ArgumentNullException(nameof(name));
+            }
 
             Func<string, TimeSpan?, TimeSpan?, object> callback =
                 (n, ttl, tti) => this.CreateAsyncCache(n, ttl, tti);
@@ -147,10 +157,14 @@ namespace Stormpath.SDK.Cache
             if (this.cacheConfigs.TryGetValue(name, out config))
             {
                 if (config.TimeToLive.HasValue)
+                {
                     ttl = config.TimeToLive;
+                }
 
                 if (config.TimeToIdle.HasValue)
+                {
                     tti = config.TimeToIdle;
+                }
             }
 
             return delegated(name, ttl, tti);
@@ -166,7 +180,9 @@ namespace Stormpath.SDK.Cache
             this.ThrowIfDisposed();
 
             if (defaultTimeToLive.TotalMilliseconds <= 0)
+            {
                 throw new ArgumentOutOfRangeException("TTL duration must be greater than zero.", nameof(defaultTimeToLive));
+            }
 
             this.defaultTimeToLive = defaultTimeToLive;
         }
@@ -181,7 +197,9 @@ namespace Stormpath.SDK.Cache
             this.ThrowIfDisposed();
 
             if (defaultTimeToIdle.TotalMilliseconds <= 0)
+            {
                 throw new ArgumentOutOfRangeException("TTL duration must be greater than zero.", nameof(defaultTimeToIdle));
+            }
 
             this.defaultTimeToIdle = defaultTimeToIdle;
         }
@@ -195,13 +213,17 @@ namespace Stormpath.SDK.Cache
             this.ThrowIfDisposed();
 
             if (configs == null)
+            {
                 throw new ArgumentNullException(nameof(configs));
+            }
 
             this.cacheConfigs.Clear();
             foreach (var config in configs)
             {
                 if (!this.cacheConfigs.TryAdd(config.Name, config))
+                {
                     throw new ApplicationException("Unable to load cache configuration.");
+                }
             }
         }
 
