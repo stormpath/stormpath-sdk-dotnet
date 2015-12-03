@@ -79,10 +79,10 @@ namespace Stormpath.SDK.Tests.Impl
         public void Create_returns_concrete_type(Type @interface, Type expected)
         {
             var createMethod = typeof(IResourceFactory)
-                .GetMethod("Create", Type.EmptyTypes)
+                .GetMethod("Create", new Type[] { typeof(ILinkable) })
                 .MakeGenericMethod(new Type[] { @interface });
 
-            var result = createMethod.Invoke(this.factory, new object[] { });
+            var result = createMethod.Invoke(this.factory, new object[] { null });
 
             result.ShouldBeOfType(expected);
         }
