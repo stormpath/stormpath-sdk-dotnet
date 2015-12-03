@@ -125,11 +125,11 @@ namespace Stormpath.SDK.Sync
         /// <code>
         /// var result = await myApp.AuthenticateAccount(
         ///     request =>
-        /// {
-        ///     request.SetUsernameOrEmail("jsmith");
-        ///     request.SetPassword("Password123#");
-        ///     request.SetAccountStore(myAccountStore);
-        /// },
+        ///     {
+        ///         request.SetUsernameOrEmail("jsmith");
+        ///         request.SetPassword("Password123#");
+        ///         request.SetAccountStore(myAccountStore);
+        ///     },
         ///     response => response.Expand(x => x.GetAccountAsync));
         /// </code>
         /// </example>

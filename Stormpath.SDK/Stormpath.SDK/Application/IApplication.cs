@@ -170,11 +170,11 @@ namespace Stormpath.SDK.Application
         /// <code>
         /// var result = await myApp.AuthenticateAccountAsync(
         ///     request =>
-        /// {
-        ///     request.SetUsernameOrEmail("jsmith");
-        ///     request.SetPassword("Password123#");
-        ///     request.SetAccountStore(myAccountStore);
-        /// },
+        ///     {
+        ///         request.SetUsernameOrEmail("jsmith");
+        ///         request.SetPassword("Password123#");
+        ///         request.SetAccountStore(myAccountStore);
+        ///     },
         ///     response => response.Expand(x => x.GetAccountAsync));
         /// </code>
         /// </example>
