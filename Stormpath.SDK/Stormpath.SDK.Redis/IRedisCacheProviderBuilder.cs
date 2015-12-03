@@ -18,10 +18,24 @@ using StackExchange.Redis;
 
 namespace Stormpath.SDK.Cache.Redis
 {
+    /// <summary>
+    /// Represents a <see cref="ICacheProviderBuilder"/> that can construct
+    /// Redis-backed <see cref="ICacheProvider"/> instances.
+    /// </summary>
     public interface IRedisCacheProviderBuilder : ICacheProviderBuilder
     {
+        /// <summary>
+        /// Sets the Redis connection parameters.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <returns>This instance for method chaining.</returns>
         IRedisCacheProviderBuilder WithRedisConnection(string connectionString);
 
+        /// <summary>
+        /// Sets the Redis connection parameters.
+        /// </summary>
+        /// <param name="connection">The existing Redis connection.</param>
+        /// <returns>This instance for method chaining.</returns>
         IRedisCacheProviderBuilder WithRedisConnection(IConnectionMultiplexer connection);
     }
 }

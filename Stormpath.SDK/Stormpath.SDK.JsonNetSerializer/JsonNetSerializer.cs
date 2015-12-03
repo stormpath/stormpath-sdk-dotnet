@@ -22,10 +22,16 @@ using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Extensions.Serialization
 {
+    /// <summary>
+    /// JSON.NET-based deserializer for Stormpath.SDK.
+    /// </summary>
     public sealed class JsonNetSerializer : IJsonSerializer
     {
         private readonly JsonSerializerSettings serializerSettings;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonNetSerializer"/> class.
+        /// </summary>
         public JsonNetSerializer()
         {
             this.serializerSettings = new JsonSerializerSettings();
@@ -33,6 +39,7 @@ namespace Stormpath.SDK.Extensions.Serialization
             this.serializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
         }
 
+        /// <inheritdoc/>
         string IJsonSerializer.Serialize(IDictionary<string, object> map)
         {
             var serialized = JsonConvert.SerializeObject(map);
@@ -40,6 +47,7 @@ namespace Stormpath.SDK.Extensions.Serialization
             return serialized;
         }
 
+        /// <inheritdoc/>
         IDictionary<string, object> IJsonSerializer.Deserialize(string json)
         {
             var deserializedMap = (JObject)JsonConvert.DeserializeObject(json, this.serializerSettings);
@@ -49,10 +57,11 @@ namespace Stormpath.SDK.Extensions.Serialization
         }
 
         /// <summary>
-        /// JSON.NET deserializes everything into nested JObjects. We want IDictionaries all the way down.
+        /// Converts a nested tree of <see cref="JObject"/>s into nested <see cref="IDictionary{TKey, TValue}"/>s.
         /// </summary>
+        /// <remarks>JSON.NET deserializes everything into nested JObjects. We want IDictionaries all the way down.</remarks>
         /// <param name="map">Deserialized <see cref="JObject"/> from JSON.NET</param>
-        /// <returns><see cref="IDictionary{string, object}"/> of primitive items, and embedded objects as nested <see cref="IDictionary{string, object}"/></returns>
+        /// <returns><see cref="IDictionary{TKey, TValue}"/> of primitive items, and embedded objects as nested <see cref="IDictionary{TKey, TValue}"/></returns>
         private IDictionary<string, object> Sanitize(JObject map)
         {
             var result = new Dictionary<string, object>(map.Count);

@@ -23,6 +23,9 @@ using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Extensions.Http
 {
+    /// <summary>
+    /// RestSharp-based HTTP client for Stormpath.SDK.
+    /// </summary>
     public sealed class RestSharpClient : SDK.Http.ISynchronousHttpClient, SDK.Http.IAsynchronousHttpClient
     {
         private readonly RestSharpAdapter adapter;
@@ -33,16 +36,28 @@ namespace Stormpath.SDK.Extensions.Http
 
         private bool alreadyDisposed = false;
 
+        /// <inheritdoc/>
         string SDK.Http.IHttpClient.BaseUrl => this.baseUrl;
 
+        /// <inheritdoc/>
         int SDK.Http.IHttpClient.ConnectionTimeout => this.connectionTimeout;
 
+        /// <inheritdoc/>
         IWebProxy SDK.Http.IHttpClient.Proxy => this.proxy;
 
+        /// <inheritdoc/>
         bool SDK.Http.IHttpClient.IsSynchronousSupported => true;
 
+        /// <inheritdoc/>
         bool SDK.Http.IHttpClient.IsAsynchronousSupported => true;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RestSharpClient"/> class.
+        /// </summary>
+        /// <param name="baseUrl">The base URL of the remote API.</param>
+        /// <param name="connectionTimeout">The connection timeout (in milliseconds).</param>
+        /// <param name="proxy">The proxy, or <see langword="null"/> to connect directly.</param>
+        /// <param name="logger">The logger.</param>
         public RestSharpClient(string baseUrl, int connectionTimeout, IWebProxy proxy, ILogger logger)
         {
             this.adapter = new RestSharpAdapter();
@@ -77,6 +92,7 @@ namespace Stormpath.SDK.Extensions.Http
                 .Contains(client.BaseUrl.ToString());
         }
 
+        /// <inheritdoc/>
         SDK.Http.IHttpResponse SDK.Http.ISynchronousHttpClient.Execute(SDK.Http.IHttpRequest request)
         {
             var client = this.CreateClientForRequest(request);
@@ -89,6 +105,7 @@ namespace Stormpath.SDK.Extensions.Http
             return this.adapter.ToHttpResponse(response);
         }
 
+        /// <inheritdoc/>
         async Task<SDK.Http.IHttpResponse> SDK.Http.IAsynchronousHttpClient.ExecuteAsync(SDK.Http.IHttpRequest request, CancellationToken cancellationToken)
         {
             var client = this.CreateClientForRequest(request);
@@ -115,6 +132,7 @@ namespace Stormpath.SDK.Extensions.Http
             }
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             this.Dispose(true);
