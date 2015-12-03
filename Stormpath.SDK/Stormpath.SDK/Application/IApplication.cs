@@ -207,7 +207,7 @@ namespace Stormpath.SDK.Application
         /// <param name="username">The account's username.</param>
         /// <param name="password">The account's raw (plaintext) password</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns><c>true</c> if the authentication attempt succeeded; <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if the authentication attempt succeeded; <see langword="false"/> otherwise.</returns>
         /// <example>
         /// if (await myApp.TryAuthenticateAccountAsync("jsmith", "Password123#"))
         /// {

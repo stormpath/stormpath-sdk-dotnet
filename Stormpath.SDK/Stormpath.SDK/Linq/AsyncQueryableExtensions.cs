@@ -190,7 +190,7 @@ namespace Stormpath.SDK
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">A sequence to check for being empty.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns><c>true</c> if the source sequence contains any elements; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the source sequence contains any elements; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static async Task<bool> AnyAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -359,11 +359,11 @@ namespace Stormpath.SDK
 
         /// <summary>
         /// Asynchronously iterates over the input sequence and performs the specified action on each element of the <see cref="IAsyncQueryable{T}"/>.
-        /// Return <c>true</c> from <paramref name="action"/> to cause the loop to gracefully break; <c>false</c> to continue looping.
+        /// Return <see langword="true"/> from <paramref name="action"/> to cause the loop to gracefully break; <see langword="false"/> to continue looping.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">An <see cref="IAsyncQueryable{T}"/> containing items to operate on.</param>
-        /// <param name="action">The action to perform each element. Return <c>true</c> to cause the loop to gracefully break.</param>
+        /// <param name="action">The action to perform each element. Return <see langword="true"/> to cause the loop to gracefully break.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>

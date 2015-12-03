@@ -249,7 +249,7 @@ namespace Stormpath.SDK.Cache
         /// <summary>
         /// Disposes this object.
         /// </summary>
-        /// <param name="disposing"><c>true</c> if this object is currently disposing.</param>
+        /// <param name="disposing"><see langword="true"/> if this object is currently disposing.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!this.disposed)

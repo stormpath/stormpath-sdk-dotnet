@@ -28,12 +28,12 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <value>
         /// <para>
-        /// If <c>true</c>, a new directory will be created. The new directory will automatically be assigned as the application's default login source.
+        /// If <see langword="true"/>, a new directory will be created. The new directory will automatically be assigned as the application's default login source.
         /// If the <see cref="DirectoryName"/> property is not null, the new directory will be created with that name.
         /// Otherwise, the directory will be automatically named based on heuristics to ensure a guaranteed unique name based on the application.
         /// </para>
         /// <para>
-        /// If <c>false</c>, no directory will be created.
+        /// If <see langword="false"/>, no directory will be created.
         /// </para>
         /// </value>
         bool CreateDirectory { get; }
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Application
         /// Gets the name to use when creating a new <see cref="Directory.IDirectory"/>.
         /// </summary>
         /// <value>
-        /// The name to assign to the new directory. This only has an effect if <see cref="CreateDirectory"/> is <c>true</c>.
+        /// The name to assign to the new directory. This only has an effect if <see cref="CreateDirectory"/> is <see langword="true"/>.
         /// </value>
         string DirectoryName { get; }
     }

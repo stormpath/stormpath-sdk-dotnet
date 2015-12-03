@@ -94,7 +94,7 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="hrefOrName">The <c>href</c> or name of the group to check.</param>
-        /// <returns><c>true</c> if The account. belongs to the specified group.</returns>
+        /// <returns><see langword="true"/> if The account. belongs to the specified group.</returns>
         public static bool IsMemberOfGroup(this IAccount account, string hrefOrName)
             => (account as IAccountSync).IsMemberOfGroup(hrefOrName);
 

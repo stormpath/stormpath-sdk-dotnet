@@ -28,7 +28,7 @@ namespace Stormpath.SDK.IdSite
         /// </summary>
         /// <param name="nonce">The nonce to check.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns><c>true</c> if the specified nonce is present in this <see cref="INonceStore"/>; <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if the specified nonce is present in this <see cref="INonceStore"/>; <see langword="false"/> otherwise.</returns>
         Task<bool> ContainsNonceAsync(string nonce, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

@@ -93,7 +93,7 @@ namespace Stormpath.SDK.Http
         /// <summary>
         /// Gets a value indicating whether this <see cref="CanonicalUri"/> has a <see cref="QueryString"/> component.
         /// </summary>
-        /// <value><c>true</c> if <see cref="QueryString"/> is not null; <c>false</c> otherwise.</value>
+        /// <value><see langword="true"/> if <see cref="QueryString"/> is not null; <see langword="false"/> otherwise.</value>
         public bool HasQuery => this.query == null;
 
         /// <summary>

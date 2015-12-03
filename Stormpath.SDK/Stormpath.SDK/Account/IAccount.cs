@@ -199,7 +199,7 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <param name="hrefOrName">The <c>href</c> or name of the group to check.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns><c>true</c> if the account belongs to the specified group; <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if the account belongs to the specified group; <see langword="false"/> otherwise.</returns>
         Task<bool> IsMemberOfGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

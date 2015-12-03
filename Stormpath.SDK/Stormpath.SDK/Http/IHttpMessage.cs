@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Http
         /// <summary>
         /// Gets a value indicating whether this HTTP message contains a body.
         /// </summary>
-        /// <value><c>true</c> if <see cref="Body"/> is not null or empty.</value>
+        /// <value><see langword="true"/> if <see cref="Body"/> is not null or empty.</value>
         bool HasBody { get; }
 
         /// <summary>

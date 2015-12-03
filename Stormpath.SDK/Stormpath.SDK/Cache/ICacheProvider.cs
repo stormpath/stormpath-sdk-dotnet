@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Cache
         /// Gets a value indicating whether this <see cref="ICacheProvider"/> instance supports synchronous operations.
         /// </summary>
         /// <value>
-        /// For any objects implementing <see cref="ISynchronousCacheProvider"/>, this should return <c>true</c>.
+        /// For any objects implementing <see cref="ISynchronousCacheProvider"/>, this should return <see langword="true"/>.
         /// </value>
         bool IsSynchronousSupported { get; }
 
@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Cache
         /// Gets a value indicating whether this <see cref="ICacheProvider"/> instance supports asynchronous operations.
         /// </summary>
         /// <value>
-        /// For any objects implementing <see cref="IAsynchronousCacheProvider"/>, this should return <c>true</c>.
+        /// For any objects implementing <see cref="IAsynchronousCacheProvider"/>, this should return <see langword="true"/>.
         /// </value>
         bool IsAsynchronousSupported { get; }
     }

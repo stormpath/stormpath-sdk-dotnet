@@ -28,7 +28,7 @@ namespace Stormpath.SDK
         /// </summary>
         /// <param name="field">The date field to compare.</param>
         /// <param name="year">The year.</param>
-        /// <returns><c>true</c> if this <see cref="DateTimeOffset"/> falls within the specified <paramref name="year"/>.</returns>
+        /// <returns><see langword="true"/> if this <see cref="DateTimeOffset"/> falls within the specified <paramref name="year"/>.</returns>
         /// <exception cref="NotSupportedException">This method can only be used from inside a LINQ Where predicate.</exception>
         public static bool Within(this DateTimeOffset field, int year)
         {
@@ -41,7 +41,7 @@ namespace Stormpath.SDK
         /// <param name="field">The date field to compare.</param>
         /// <param name="year">The year.</param>
         /// <param name="month">The month.</param>
-        /// <returns><c>true</c> if this <see cref="DateTimeOffset"/> falls within the specified
+        /// <returns><see langword="true"/> if this <see cref="DateTimeOffset"/> falls within the specified
         /// <paramref name="month"/> and <paramref name="year"/>.</returns>
         /// <exception cref="NotSupportedException">This method can only be used from inside a LINQ Where predicate.</exception>
         public static bool Within(this DateTimeOffset field, int year, int month)
@@ -56,7 +56,7 @@ namespace Stormpath.SDK
         /// <param name="year">The year.</param>
         /// <param name="month">The month.</param>
         /// <param name="day">The day.</param>
-        /// <returns><c>true</c> if this <see cref="DateTimeOffset"/> falls within the specified
+        /// <returns><see langword="true"/> if this <see cref="DateTimeOffset"/> falls within the specified
         /// <paramref name="day"/>, <paramref name="month"/>, and <paramref name="year"/>.</returns>
         /// <exception cref="NotSupportedException">This method can only be used from inside a LINQ Where predicate.</exception>
         public static bool Within(this DateTimeOffset field, int year, int month, int day)
@@ -73,7 +73,7 @@ namespace Stormpath.SDK
         /// <param name="month">The month.</param>
         /// <param name="day">The day.</param>
         /// <param name="hour">The hour.</param>
-        /// <returns><c>true</c> if this <see cref="DateTimeOffset"/> falls within the specified <paramref name="hour"/>
+        /// <returns><see langword="true"/> if this <see cref="DateTimeOffset"/> falls within the specified <paramref name="hour"/>
         /// on the specified <paramref name="day"/>, <paramref name="month"/>, and <paramref name="year"/>.</returns>
         /// <exception cref="NotSupportedException">This method can only be used from inside a LINQ Where predicate.</exception>
         public static bool Within(this DateTimeOffset field, int year, int month, int day, int hour)
@@ -91,7 +91,7 @@ namespace Stormpath.SDK
         /// <param name="day">The day.</param>
         /// <param name="hour">The hour.</param>
         /// <param name="minute">The minute.</param>
-        /// <returns><c>true</c> if this <see cref="DateTimeOffset"/> falls within the specified <paramref name="minute"/> and <paramref name="hour"/>
+        /// <returns><see langword="true"/> if this <see cref="DateTimeOffset"/> falls within the specified <paramref name="minute"/> and <paramref name="hour"/>
         /// on the specified <paramref name="day"/>, <paramref name="month"/>, and <paramref name="year"/>.</returns>
         /// <exception cref="NotSupportedException">This method can only be used from inside a LINQ Where predicate.</exception>
         public static bool Within(this DateTimeOffset field, int year, int month, int day, int hour, int minute)
@@ -110,7 +110,7 @@ namespace Stormpath.SDK
         /// <param name="hour">The hour.</param>
         /// <param name="minute">The minute.</param>
         /// <param name="second">The second.</param>
-        /// <returns><c>true</c> if this <see cref="DateTimeOffset"/> falls within the specified
+        /// <returns><see langword="true"/> if this <see cref="DateTimeOffset"/> falls within the specified
         /// <paramref name="second"/>, <paramref name="minute"/>, and <paramref name="hour"/>
         /// on the specified <paramref name="day"/>, <paramref name="month"/>, and <paramref name="year"/>.</returns>
         /// <exception cref="NotSupportedException">This method can only be used from inside a LINQ Where predicate.</exception>

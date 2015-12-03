@@ -39,8 +39,8 @@ namespace Stormpath.SDK.IdSite
         /// Gets a value indicating whether the account returned by <see cref="GetAccountAsync(CancellationToken)"/> was
         /// newly created (registered) on the ID Site, or was an existing account that logged in successfully.
         /// </summary>
-        /// <value><c>true</c> if the returned <see cref="IAccount"/> was registered on the ID Site;
-        /// <c>false</c> if the account was an existing account that logged in successfully.</value>
+        /// <value><see langword="true"/> if the returned <see cref="IAccount"/> was registered on the ID Site;
+        /// <see langword="false"/> if the account was an existing account that logged in successfully.</value>
         bool IsNewAccount { get; }
 
         /// <summary>
@@ -51,8 +51,8 @@ namespace Stormpath.SDK.IdSite
 
         /// <summary>
         /// Returns the user account that either logged in or was created as a result of registration on the ID Site.
-        /// You can determine if the account is newly registered if <see cref="IsNewAccount"/> is <c>true</c>.
-        /// If <see cref="IsNewAccount"/> is <c>false</c>, the account reflects a previously-registered user
+        /// You can determine if the account is newly registered if <see cref="IsNewAccount"/> is <see langword="true"/>.
+        /// If <see cref="IsNewAccount"/> is <see langword="false"/>, the account reflects a previously-registered user
         /// that has logged in.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>

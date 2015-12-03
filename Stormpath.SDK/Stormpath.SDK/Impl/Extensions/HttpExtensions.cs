@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Impl.Extensions
         /// Determines whether an HTTP response resulted in a client-side (HTTP 4xx) error.
         /// </summary>
         /// <param name="response">The HTTP response to check.</param>
-        /// <returns>True if the response represents a client-side (HTTP 4xx) error.</returns>
+        /// <returns><see langword="true"/> if the response represents a client-side (HTTP 4xx) error; <see langword="false"/> otherwise.</returns>
         public static bool IsClientError(this IHttpResponse response)
         {
             return response.StatusCode >= 400 && response.StatusCode < 500;
@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Impl.Extensions
         /// Determines whether an HTTP response resulted in a server-side (HTTP 5xx) error.
         /// </summary>
         /// <param name="response">The HTTP response to check.</param>
-        /// <returns>True if the response represents a server-side (HTTP 5xx) error.</returns>
+        /// <returns><see langword="true"/> if the response represents a server-side (HTTP 5xx) error; <see langword="false"/> otherwise.</returns>
         public static bool IsServerError(this IHttpResponse response)
         {
             return response.StatusCode >= 500 && response.StatusCode < 600;

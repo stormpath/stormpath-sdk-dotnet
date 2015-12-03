@@ -63,7 +63,7 @@ namespace Stormpath.SDK.AccountStore
         /// Sets whether or not the associated <see cref="IAccountStore"/> is designated as the Application's
         /// default account store.
         /// <para>
-        /// A <c>true</c> value indicates that any accounts created directly by the application will be dispatched
+        /// A <see langword="true"/> value indicates that any accounts created directly by the application will be dispatched
         /// to and saved in the associated <see cref="IAccountStore"/>, since an application cannot store accounts directly.
         /// </para>
         /// <para>
@@ -79,7 +79,7 @@ namespace Stormpath.SDK.AccountStore
         /// Sets whether or not the associated <see cref="IAccountStore"/> is designated as the Application's
         /// default group store.
         /// <para>
-        /// A <c>true</c> value indicates that any groups created directly by the application will be dispatched
+        /// A <see langword="true"/> value indicates that any groups created directly by the application will be dispatched
         /// to and saved in the associated <see cref="IAccountStore"/>, since an application cannot store groups directly.
         /// </para>
         /// <para>
@@ -95,8 +95,8 @@ namespace Stormpath.SDK.AccountStore
         /// Gets a value indicating whether the associated <see cref="IAccountStore"/> is designated as the application's default account store.
         /// </summary>
         /// <value>
-        /// True if the associated <see cref="IAccountStore"/> is designated as the application's default account store, false otherwise.
-        /// <para>A <c>true</c> value indicates that any accounts created directly by the application will be dispatched to and saved in the associated <see cref="IAccountStore"/>, since an <see cref="IApplication"/> cannot store accounts directly.</para>
+        /// <see langword="true"/> if the associated <see cref="IAccountStore"/> is designated as the application's default account store; <see langword="false"/> otherwise.
+        /// <para>A <see langword="true"/> value indicates that any accounts created directly by the application will be dispatched to and saved in the associated <see cref="IAccountStore"/>, since an <see cref="IApplication"/> cannot store accounts directly.</para>
         /// </value>
         bool IsDefaultAccountStore { get; }
 
@@ -104,8 +104,8 @@ namespace Stormpath.SDK.AccountStore
         /// Gets a value indicating whether the associated <see cref="IAccountStore"/> is designated as the application's default group store.
         /// </summary>
         /// <value>
-        /// True if the associated <see cref="IAccountStore"/> is designated as the application's default group store, false otherwise.
-        /// <para>A <c>true</c> value indicates that any groups created directly by the application will be dispatched to and saved in the associated <see cref="IAccountStore"/>, since an <see cref="IApplication"/> cannot store accounts directly.</para>
+        /// <see langword="true"/> if the associated <see cref="IAccountStore"/> is designated as the application's default group store; <see langword="false"/> otherwise.
+        /// <para>A <see langword="true"/> value indicates that any groups created directly by the application will be dispatched to and saved in the associated <see cref="IAccountStore"/>, since an <see cref="IApplication"/> cannot store accounts directly.</para>
         /// </value>
         bool IsDefaultGroupStore { get; }
 

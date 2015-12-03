@@ -71,8 +71,8 @@ namespace Stormpath.SDK.IdSite
         /// <see cref="SetOrganizationNameKey(string)"/> instead of the standard base domain.
         /// </summary>
         /// <param name="useSubdomain">
-        /// <c>true</c> to ensure that the user will visit ID Site using a subdomain equal to the
-        /// <see cref="SetOrganizationNameKey(string)"/>, <c>false</c> to ensure that the standard ID Site domain.
+        /// <see langword="true"/> to ensure that the user will visit ID Site using a subdomain equal to the
+        /// <see cref="SetOrganizationNameKey(string)"/>, <see langword="false"/> to ensure that the standard ID Site domain.
         /// </param>
         /// <returns>This instance for method chaining.</returns>
         IIdSiteUrlBuilder SetUseSubdomain(bool useSubdomain);
@@ -82,9 +82,9 @@ namespace Stormpath.SDK.IdSite
         /// the end-user in the ID Site user interface.
         /// </summary>
         /// <param name="showOrganizationField">
-        /// <c>true</c> the ID Site will show the
+        /// <see langword="true"/> the ID Site will show the
         /// <see cref="SetOrganizationNameKey(string)"/> field to end-user in
-        /// the ID Site user interface, <c>false</c> otherwise.
+        /// the ID Site user interface, <see langword="false"/> otherwise.
         /// </param>
         /// <returns>This instance for method chaining.</returns>
         IIdSiteUrlBuilder SetShowOrganizationField(bool showOrganizationField);

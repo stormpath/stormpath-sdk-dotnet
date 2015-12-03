@@ -88,7 +88,7 @@ namespace Stormpath.SDK.Http
         /// <summary>
         /// Returns whether the <see cref="QueryString"/> instance contains any query parameters.
         /// </summary>
-        /// <returns><c>true</c> if this instance contains one or more query parameters.</returns>
+        /// <returns><see langword="true"/> if this instance contains one or more query parameters.</returns>
         public bool Any()
             => !this.queryStringItems.IsNullOrEmpty();
 
@@ -96,7 +96,7 @@ namespace Stormpath.SDK.Http
         /// Determines whether the <see cref="QueryString"/> contains the specified key.
         /// </summary>
         /// <param name="key">The key to locate.</param>
-        /// <returns><c>true</c> if the <see cref="QueryString"/> contains an element with the specified key; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the <see cref="QueryString"/> contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
         public bool ContainsKey(string key)
             => this.queryStringItems?.ContainsKey(key) ?? false;
 

@@ -27,8 +27,8 @@ namespace Stormpath.SDK.Sync
     {
         /// <summary>
         /// Synchronously returns the user account that either logged in or was created as a result of registration on the ID Site.
-        /// You can determine if the account is newly registered if <see cref="IAccountResult.IsNewAccount"/> is <c>true</c>.
-        /// If <see cref="IAccountResult.IsNewAccount"/> is <c>false</c>, the account reflects a previously-registered user
+        /// You can determine if the account is newly registered if <see cref="IAccountResult.IsNewAccount"/> is <see langword="true"/>.
+        /// If <see cref="IAccountResult.IsNewAccount"/> is <see langword="false"/>, the account reflects a previously-registered user
         /// that has logged in.
         /// </summary>
         /// <param name="source">The account result.</param>

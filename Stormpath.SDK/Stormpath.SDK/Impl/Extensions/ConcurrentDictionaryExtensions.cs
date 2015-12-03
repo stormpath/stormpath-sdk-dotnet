@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Impl.Extensions
         /// <param name="dictionary">The source dictionary.</param>
         /// <param name="key">The key to attempt to remove.</param>
         /// <param name="value">The value to conditionally match.</param>
-        /// <returns><c>true</c> if <paramref name="key"/> was removed from the dictionary.</returns>
+        /// <returns><see langword="true"/> if <paramref name="key"/> was removed from the dictionary.</returns>
         public static bool TryRemove<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key, TValue value)
         {
             if (dictionary == null)

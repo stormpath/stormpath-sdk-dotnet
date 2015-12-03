@@ -50,7 +50,7 @@ namespace Stormpath.SDK.CustomData
         /// item with the specified name (key).
         /// </summary>
         /// <param name="key">The key to locate.</param>
-        /// <returns><c>true</c> if an item with the <paramref name="key"/> exists; <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if an item with the <paramref name="key"/> exists; <see langword="false"/> otherwise.</returns>
         bool ContainsKey(string key);
 
         /// <summary>
@@ -102,15 +102,15 @@ namespace Stormpath.SDK.CustomData
         /// </summary>
         /// <param name="key">The name (key) of the custom data item to find.</param>
         /// <param name="value">If found, this <c>out</c> parameter will be set to the found value.</param>
-        /// <returns><c>true</c> if the custom data item exists; <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if the custom data item exists; <see langword="false"/> otherwise.</returns>
         bool TryGetValue(string key, out object value);
 
         /// <summary>
         /// Determines whether any user-defined custom data items have been added.
         /// </summary>
         /// <returns>
-        /// <c>true</c> if only the default (system-generated) items exist;
-        /// <c>false</c> if at least one user-defined custom data item has been added.
+        /// <see langword="true"/> if only the default (system-generated) items exist;
+        /// <see langword="false"/> if at least one user-defined custom data item has been added.
         /// </returns>
         bool IsEmptyOrDefault();
     }

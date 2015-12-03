@@ -164,7 +164,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="application">The application.</param>
         /// <param name="username">The account's username.</param>
         /// <param name="password">The account's raw (plaintext) password</param>
-        /// <returns><c>true</c> if the authentication attempt succeeded; <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if the authentication attempt succeeded; <see langword="false"/> otherwise.</returns>
         /// <example>
         /// if (myApp.TryAuthenticateAccount("jsmith", "Password123#"))
         /// {

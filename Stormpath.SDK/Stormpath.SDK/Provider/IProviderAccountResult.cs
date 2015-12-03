@@ -40,8 +40,8 @@ namespace Stormpath.SDK.Provider
         /// Gets a value indicating whether this request generated a new account in Stormpath.
         /// </summary>
         /// <value>
-        /// <c>true</c> if a new <see cref="IAccount"/> was generated in Stormpath as a result of the request;
-        /// <c>false</c> otherwise.
+        /// <see langword="true"/> if a new <see cref="IAccount"/> was generated in Stormpath as a result of the request;
+        /// <see langword="false"/> otherwise.
         /// </value>
         bool IsNewAccount { get; }
     }

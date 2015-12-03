@@ -27,8 +27,8 @@ namespace Stormpath.SDK.Account
         /// Gets whether to override the default registration workflow of the Login Source.
         /// </summary>
         /// <value>
-        /// If set to <c>true</c>, the account registration workflow will be triggered no matter what the Login Source configuration is.
-        /// If set to <c>false</c>, the account registration workflow will <b>NOT</b> be triggered, no matter what the Login Source configuration is.
+        /// If set to <see langword="true"/>, the account registration workflow will be triggered no matter what the Login Source configuration is.
+        /// If set to <see langword="false"/>, the account registration workflow will <b>NOT</b> be triggered, no matter what the Login Source configuration is.
         /// If you want to ensure the registration workflow behavior matches the Login Source default, leave this <c>null</c>.
         /// </value>
         bool? RegistrationWorkflowEnabled { get; }

@@ -63,21 +63,21 @@ namespace Stormpath.SDK.Impl.Account
         /// Synchronous counterpart to <see cref="IAccount.RemoveGroupAsync(IGroup, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="group">The group object from which the account must be removed.</param>
-        /// <returns><c>true</c> if the operation succeeded; <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if the operation succeeded; <see langword="false"/> otherwise.</returns>
         bool RemoveGroup(IGroup group);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccount.RemoveGroupAsync(string, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="hrefOrName">The <c>href</c> or name of the group object from which the account must be removed.</param>
-        /// <returns><c>true</c> if the operation succeeded; <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if the operation succeeded; <see langword="false"/> otherwise.</returns>
         bool RemoveGroup(string hrefOrName);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccount.IsMemberOfGroupAsync(string, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="hrefOrName">The <c>href</c> or name of the group to check.</param>
-        /// <returns><c>true</c> if the account belongs to the specified group.</returns>
+        /// <returns><see langword="true"/> if the account belongs to the specified group.</returns>
         bool IsMemberOfGroup(string hrefOrName);
 
         /// <summary>

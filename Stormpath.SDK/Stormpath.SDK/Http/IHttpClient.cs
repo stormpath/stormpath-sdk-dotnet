@@ -45,13 +45,13 @@ namespace Stormpath.SDK.Http
         /// <summary>
         /// Gets a value indicating whether this client instance is capable of making synchronous requests.
         /// </summary>
-        /// <value>Should return <c>true</c> for clients implementing <see cref="ISynchronousHttpClient"/>.</value>
+        /// <value>Should return <see langword="true"/> for clients implementing <see cref="ISynchronousHttpClient"/>.</value>
         bool IsSynchronousSupported { get; }
 
         /// <summary>
         /// Gets a value indicating whether this client instance is capable of making asynchronous requests.
         /// </summary>
-        /// <value>Should return <c>true</c> for clients implementing <see cref="IAsynchronousHttpClient"/>.</value>
+        /// <value>Should return <see langword="true"/> for clients implementing <see cref="IAsynchronousHttpClient"/>.</value>
         bool IsAsynchronousSupported { get; }
     }
 }
