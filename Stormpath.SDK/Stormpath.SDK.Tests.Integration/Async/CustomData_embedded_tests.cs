@@ -19,6 +19,7 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
@@ -112,6 +113,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             created.CustomData.Put("phrase", "testing is neet");
             await created.SaveAsync();
 
+            await Task.Delay(Delay.UpdatePropogation);
+
             var customData = await created.GetCustomDataAsync();
             customData["status"].ShouldBe(1337);
             customData["isAwesome"].ShouldBe(null);
@@ -137,6 +140,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             created.CustomData.Clear();
             await created.SaveAsync();
+
+            await Task.Delay(Delay.UpdatePropogation);
 
             customData = await created.GetCustomDataAsync();
             customData.IsEmptyOrDefault().ShouldBeTrue();

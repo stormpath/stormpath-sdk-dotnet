@@ -22,6 +22,7 @@ Imports Stormpath.SDK.Account
 Imports Stormpath.SDK.Application
 Imports Stormpath.SDK.Auth
 Imports Stormpath.SDK.Error
+Imports Stormpath.SDK.Tests.Common
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData
 Imports Xunit
@@ -244,22 +245,17 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
-            ' Make a new account that's created now
-            Dim createdAfter = DateTime.Now.Subtract(TimeSpan.FromSeconds(10))
-            Dim newAccount = Await application.CreateAccountAsync("Wedge", "Antilles", "wedge@gus-treta.corellia.core", New RandomPassword(12))
-            Me.fixture.CreatedAccountHrefs.Add(newAccount.Href)
-
-            Dim rightBeforeCreation = newAccount.CreatedAt.Subtract(TimeSpan.FromSeconds(1))
-            Dim createdRecently = Await application.GetAccounts() _
-                .Where(Function(x) x.CreatedAt >= rightBeforeCreation) _
+            Dim longTimeAgo = Await application _
+                .GetAccounts() _
+                .Where(Function(x) x.CreatedAt < Date.Now.Subtract(TimeSpan.FromHours(1))) _
                 .ToListAsync()
-            Dim wedge = createdRecently.Where(Function(x) x.Email = "wedge@gus-treta.corellia.core").[Single]()
-            wedge.FullName.ShouldBe("Wedge Antilles")
+            longTimeAgo.ShouldBeEmpty()
 
-            ' Clean up
-            Dim result = Await newAccount.DeleteAsync()
-            result.ShouldBeTrue()
-            Me.fixture.CreatedAccountHrefs.Remove(newAccount.Href)
+            Dim createdRecently = Await application _
+                .GetAccounts() _
+                .Where(Function(x) x.CreatedAt >= Date.Now.Subtract(TimeSpan.FromHours(1))) _
+                .ToListAsync()
+            createdRecently.ShouldNotBeEmpty()
         End Function
 
         <Theory>
