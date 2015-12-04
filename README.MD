@@ -96,7 +96,7 @@ Next, create a simple Visual Studio project and add the Stormpath SDK.
 
 The Stormpath SDK performs `await`able asynchronous operations by default. This makes it possible to make requests to the Stormpath API without tying up a worker thread - super cool for ASP.NET projects!
 
-In the Console Application template, however, the entry point is `static void Main()`, so you can't use the `await` keyword. (In an ASP.NET application, you could just change the method signature to `async Task`, but that doesn't work well in a console app.)
+In the Console Application template, however, the entry point is `static void Main()`, so you can't use the `await` keyword. (In an ASP.NET application, you could just change the method signature to `async Task`, but that doesn't work in a console app.)
 
 You can work around this by writing a separate method instead:
 
@@ -126,13 +126,13 @@ IClientApiKey myApiKey = ClientApiKeys.Builder()
     .SetFileLocation("path\\to\\apiKey.properties")
     .Build();
 
-// Create an IClient object. Everything starts here!
+// Create an IClient. Everything starts here!
 IClient client = Clients.Builder()
     .SetApiKey(myApiKey)
     .Build();
 ```
 
-> :bulb: You can skip building the `IClientApiKey` object and the call to `.SetApiKey()` if you put your API Key and Secret in environment variables, or stored the `apiKey.properties` file in the default location. Calling `client.Build()` without specifying an API Key will check the default location. :thumbsup:
+> :bulb: You can skip building the `IClientApiKey` object and the call to `.SetApiKey()` if you put your API Key and Secret in environment variables, or stored the `apiKey.properties` file in the default location. Calling `client.Build()` without specifying an API Key will check the default location.
 
 Once you have built a `IClient`, keep it around! You should only need to create it **once** per application. It's thread-safe, so you can safely reuse it, even in an ASP.NET application.
 
@@ -186,7 +186,7 @@ catch (ResourceException rex)
 }
 ```
 
-:bulb: You can also use the `TryAuthenticateAccountAsync(username, password)` overload to get a `bool` result if you don't need to access the account's data after login.
+> :bulb: You can also use the `TryAuthenticateAccountAsync(username, password)` overload to get a `bool` result if you don't need to access the account's data after login.
 
 #### Clean up
 
