@@ -376,23 +376,23 @@ namespace Stormpath.SDK.Application
         Task<IAccountStoreMapping> AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Adds a new <see cref="IAccountStore"/> to this Application. The given string can either be an <c>href</c> or a <c>name</c> of a
+        /// Adds a new <see cref="IAccountStore"/> to this Application. The given string can either be an <c>href</c> or a name of a
         /// <see cref="Directory.IDirectory"/> or <see cref="IGroup"/> belonging to the current <see cref="ITenant"/>.
         /// <para>
         /// If the provided value is an <c>href</c>, this method will get the proper Resource and add it as a new AccountStore in this
-        /// Application without much effort. However, if the provided value is not an <c>href</c>, it will be considered as a <c>name</c>. In this case,
+        /// Application without much effort. However, if the provided value is not an <c>href</c>, it will be considered as a name. In this case,
         /// this method will search for both a Directory and a Group whose names equal the provided <paramref name="hrefOrName"/>. If only
         /// one resource exists (either a Directory or a Group), then it will be added as a new AccountStore in this Application. However,
         /// if there are two resources (a Directory and a Group) matching that name, a <see cref="Error.ResourceException"/> will be thrown.
         /// </para>
         /// <para>
-        /// Note: When using <c>names</c> this method is not efficient as it will search for both Directories and Groups within this Tenant
+        /// Note: When using names this method is not efficient as it will search for both Directories and Groups within this Tenant
         /// for a matching name. In order to do so, some looping takes place at the client side: groups exist within directories, therefore we need
         /// to loop through every existing directory in order to find the required Group. In contrast, providing the Group's <c>href</c> is much more
         /// efficient as no actual search operation needs to be carried out.
         /// </para>
         /// </summary>
-        /// <param name="hrefOrName">Either the <c>href</c> or <c>name</c> of the desired <see cref="Directory.IDirectory"/> or <see cref="IGroup"/>.</param>
+        /// <param name="hrefOrName">Either the <c>href</c> or name of the desired <see cref="Directory.IDirectory"/> or <see cref="IGroup"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
         /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application.</exception>

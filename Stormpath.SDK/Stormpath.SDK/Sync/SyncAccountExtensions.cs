@@ -57,7 +57,7 @@ namespace Stormpath.SDK.Sync
 
         /// <summary>
         /// Synchronously assigns this account to the specified <see cref="Group.IGroup"/> represented
-        /// by its (case-insensitive) <c>name</c> or <c>href</c>.
+        /// by its (case-insensitive) name or <c>href</c>.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="hrefOrName">The <c>href</c> or name of the group to add.</param>
@@ -79,7 +79,7 @@ namespace Stormpath.SDK.Sync
 
         /// <summary>
         /// Synchronously removes this <see cref="IAccount"/> from the specified <see cref="Group.IGroup"/>
-        /// represented by its (case-insensitive) <c>name</c> or <c>href</c>.
+        /// represented by its (case-insensitive) name or <c>href</c>.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="hrefOrName">The <c>href</c> or name of the group object from which The account. must be removed.</param>

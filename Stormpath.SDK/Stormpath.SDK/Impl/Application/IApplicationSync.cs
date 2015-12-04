@@ -141,7 +141,7 @@ namespace Stormpath.SDK.Impl.Application
         /// <summary>
         /// Synchronous counterpart to <see cref="IApplication.AddAccountStoreAsync(string, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="hrefOrName">Either the <c>href</c> or <c>name</c> of the desired <see cref="SDK.Directory.IDirectory"/> or <see cref="IGroup"/>.</param>
+        /// <param name="hrefOrName">Either the <c>href</c> or name of the desired <see cref="SDK.Directory.IDirectory"/> or <see cref="IGroup"/>.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
         IAccountStoreMapping AddAccountStore(string hrefOrName);
 

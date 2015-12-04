@@ -164,7 +164,7 @@ namespace Stormpath.SDK.Account
 
         /// <summary>
         /// Assigns this account to the specified <see cref="IGroup"/> represented
-        /// by its (case-insensitive) <c>name</c> or <c>href</c>.
+        /// by its (case-insensitive) name or <c>href</c>.
         /// </summary>
         /// <param name="hrefOrName">The <c>href</c> or name of the group to add.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -185,7 +185,7 @@ namespace Stormpath.SDK.Account
 
         /// <summary>
         /// Removes this <see cref="IAccount"/> from the specified <see cref="IGroup"/>
-        /// represented by its (case-insensitive) <c>name</c> or <c>href</c>.
+        /// represented by its (case-insensitive) name or <c>href</c>.
         /// </summary>
         /// <param name="hrefOrName">The <c>href</c> or name of the group object from which the account must be removed.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
