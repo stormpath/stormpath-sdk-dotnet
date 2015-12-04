@@ -35,9 +35,58 @@
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
-    <HelpTitle>Stormpath .NET SDK API</HelpTitle>
+    <HelpTitle>Stormpath .NET Documentation</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
-    <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, TypeParameter, AutoDocumentDispose</MissingTags>
+    <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter, AutoDocumentDispose</MissingTags>
+    <RootNamespaceTitle>API Reference</RootNamespaceTitle>
+    <HeaderText>
+    </HeaderText>
+    <FeedbackEMailAddress>
+    </FeedbackEMailAddress>
+    <CopyrightText>
+    </CopyrightText>
+    <ProjectSummary>
+    </ProjectSummary>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="Stormpath.SDK" isDocumented="True">The &lt;b&gt;Stormpath.SDK&lt;/b&gt; namespace provides classes and extension methods that are used to implement the common behavior of the SDK.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Account" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Account&lt;/b&gt; namespace provides classes that are used to interact with &lt;a href="https://docs.stormpath.com/rest/product-guide/latest/reference.html#account"&gt;Account&lt;/a&gt; resources.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.AccountStore" isDocumented="True">The &lt;b&gt;Stormpath.SDK.AccountStore&lt;/b&gt; namespace provides classes that are used to interact with AccountStore resources (Directories and Groups), and &lt;a href="https://docs.stormpath.com/rest/product-guide/latest/reference.html#account-store-mapping"&gt;AccountStoreMapping&lt;/a&gt; resources.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Api" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Api&lt;/b&gt; namespace provides classes that interact with Stormpath API Key instances.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Application" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Application&lt;/b&gt; namespace provides classes that are used to interact with &lt;a href="https://docs.stormpath.com/rest/product-guide/latest/reference.html#application"&gt;Application&lt;/a&gt; resources.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Auth" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Auth&lt;/b&gt; namespace provides classes that represent authentication requests and results.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Cache" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Cache&lt;/b&gt; namespace provides classes that are used to implement client-side caching of API resources.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Client" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Client&lt;/b&gt; namespace provides classes that are used to interact with the Stormpath REST API.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.CustomData" isDocumented="True">The &lt;b&gt;Stormpath.SDK.CustomData&lt;/b&gt; namespace provides classes that are used to interact with &lt;a href="https://docs.stormpath.com/rest/product-guide/latest/reference.html#custom-data"&gt;Custom Data&lt;/a&gt; resources.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.DataStore" isDocumented="True">The &lt;b&gt;Stormpath.SDK.DataStore&lt;/b&gt; namespace provides classes that handle the underlying communication with the Stormpath REST API.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Directory" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Directory&lt;/b&gt; namespace provides classes that are used to interact with &lt;a href="https://docs.stormpath.com/rest/product-guide/latest/reference.html#directory"&gt;Directory&lt;/a&gt; resources.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Error" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Error&lt;/b&gt; namespace provides classes that represent Stormpath API errors.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Group" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Group&lt;/b&gt; namespace provides classes that are used to interact with &lt;a href="https://docs.stormpath.com/rest/product-guide/latest/reference.html#group"&gt;Group&lt;/a&gt; resources.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Http" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Http&lt;/b&gt; namespace provides classes that represent HTTP requests and responses.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.IdSite" isDocumented="True">The &lt;b&gt;Stormpath.SDK.IdSite&lt;/b&gt; namespace provides classes that are used to interact with &lt;a href="https://docs.stormpath.com/rest/product-guide/latest/008_idsite.html"&gt;ID Site&lt;/a&gt;.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Jwt" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Jwt&lt;/b&gt; namespace provides classes that are used to interact with JSON Web Token (JWT) objects.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Linq" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Linq&lt;/b&gt; namespace provides classes that are used to implement LINQ to Stormpath.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Linq.Expandables" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Linq.Expandables&lt;/b&gt; namespace provides interfaces that represent resources and collections that can be &lt;a  href="https://docs.stormpath.com/rest/product-guide/latest/reference.html#links"&gt;expanded&lt;/a&gt;.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Logging" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Logging&lt;/b&gt; namespace provides classes that are used for debug logging.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Provider" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Provider&lt;/b&gt; namespace provides classes that are used to interact with Stormpath Providers.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Resource" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Resource&lt;/b&gt; namespace provides interfaces that represent abstract Stormpath resources.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Serialization" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Serialization&lt;/b&gt; namespace provides classes that are used to serialize and deserialize JSON data.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Shared" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Shared&lt;/b&gt; namespace provides classes that are shared by the SDK.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Sync" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Sync&lt;/b&gt; namespace provides synchronous access to all SDK API methods.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Stormpath.SDK.Tenant" isDocumented="True">The &lt;b&gt;Stormpath.SDK.Tenant&lt;/b&gt; namespace provides classes that are used to interact with &lt;a href="https://docs.stormpath.com/rest/product-guide/latest/reference.html#tenant"&gt;Tenant&lt;/a&gt; resources.</NamespaceSummaryItem></NamespaceSummaries>
+    <FeedbackEMailLinkText>
+    </FeedbackEMailLinkText>
+    <FooterText>Copyright 2015 &amp;lt%3ba href=&amp;quot%3bhttps://stormpath.com&amp;quot%3b&amp;gt%3bStormpath, Inc&amp;lt%3b/a&amp;gt%3b. Questions or comments%3f Send us &amp;lt%3ba href=&amp;quot%3bmailto:support%40stormpath.com&amp;quot%3b&amp;gt%3ban email&amp;lt%3b/a&amp;gt%3b!</FooterText>
+    <TransformComponentArguments>
+      <Argument Key="logoFile" Value="" />
+      <Argument Key="logoHeight" Value="" />
+      <Argument Key="logoWidth" Value="" />
+      <Argument Key="logoAltText" Value="Stormpath" />
+      <Argument Key="logoPlacement" Value="left" />
+      <Argument Key="logoAlignment" Value="left" />
+      <Argument Key="maxVersionParts" Value="" />
+      <Argument Key="defaultLanguage" Value="cs" />
+      <Argument Key="includeEnumValues" Value="true" />
+    </TransformComponentArguments>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
@@ -68,4 +117,10 @@
     </PostBuildEvent>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="Introduction.aml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ContentLayout Include="doc.content" />
+  </ItemGroup>
 </Project>
