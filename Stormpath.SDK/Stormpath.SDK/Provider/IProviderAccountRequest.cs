@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
-    /// Represents an attempt to get or create a Provider-based {@link com.stormpath.sdk.account.Account} record in Stormpath.
+    /// Represents an attempt to get or create a Provider-based <see cref="Account.IAccount"/> record in Stormpath.
     /// <para>
     /// NOTE: A Provider-specific <see cref="Directory.IDirectory"/>
     /// must previously exist in Stormpath and it must also

@@ -17,8 +17,8 @@
 namespace Stormpath.SDK.IdSite
 {
     /// <summary>
-    ///  Store {@code nonce} values and provides methods to check if a nonce has already been used, and to
-    /// add it to the {@code nonceStore} to ensure that the same nonce cannot be used again.
+    ///  Store <see cref="INonce"/> values and provides methods to check if a nonce has already been used, and to
+    /// add it to the <see cref="INonceStore"/> to ensure that the same nonce cannot be used again.
     /// </summary>
     /// <remarks>
     /// <see cref="INonceStore"/> implementations <b>MUST</b> support time to live (TTL) policies and automatic eviction of entries

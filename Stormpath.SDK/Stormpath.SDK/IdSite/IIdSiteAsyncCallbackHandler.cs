@@ -31,7 +31,7 @@ namespace Stormpath.SDK.IdSite
         /// cryptographic nonces, eliminating the possibility of a replay attack. This ensures
         /// any ID Site message cannot be intercepted and used again later.
         /// <para>
-        /// Because this ensures strong security, a {@code NonceStore} is enabled by default if
+        /// Because this ensures strong security, a <see cref="INonceStore"/> is enabled by default if
         /// you have caching enabled for the SDK: a cache region will be used to store nonces over time, and those nonces
         /// will be used to assert that ID Site replies are not used more than once.
         /// </para>
