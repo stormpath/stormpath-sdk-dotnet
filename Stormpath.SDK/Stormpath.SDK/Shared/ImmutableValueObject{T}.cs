@@ -90,9 +90,21 @@ namespace Stormpath.SDK.Shared
             this.customEqualityFunction = equalityFunction;
         }
 
+        /// <summary>
+        /// Compares two <see cref="ImmutableValueObject{T}"/> instances for value equality.
+        /// </summary>
+        /// <param name="x">The left operand.</param>
+        /// <param name="y">The right operand.</param>
+        /// <returns><see langword="true"/> if the instances have equal values; <see langword="false"/> otherwise.</returns>
         public static bool operator ==(ImmutableValueObject<T> x, ImmutableValueObject<T> y)
             => EqualsImpl(x as T, y as T);
 
+        /// <summary>
+        /// Compares two <see cref="ImmutableValueObject{T}"/> instances for value inequality.
+        /// </summary>
+        /// <param name="x">The left operand.</param>
+        /// <param name="y">The right operand.</param>
+        /// <returns><see langword="true"/> if the instances do not have equal values; <see langword="true"/> otherwise.</returns>
         public static bool operator !=(ImmutableValueObject<T> x, ImmutableValueObject<T> y)
             => !(x == y);
 

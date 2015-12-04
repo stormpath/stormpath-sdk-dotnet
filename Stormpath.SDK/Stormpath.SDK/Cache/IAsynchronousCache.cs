@@ -21,7 +21,7 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 namespace Stormpath.SDK.Cache
 {
     /// <summary>
-    /// This interface provides an abstraction (wrapper) API on top of an underlying asynchronous cache framework's cache instance.
+    /// This interface provides access to an underlying asynchronous cache framework's cache instance.
     /// </summary>
     public interface IAsynchronousCache : ICache
     {
