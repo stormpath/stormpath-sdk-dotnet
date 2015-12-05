@@ -16,12 +16,13 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Utility
 {
     internal static class AnonymousType
     {
-        public static IDictionary<string, object> ToDictionary(object nameValuePairs)
+        public static Map ToDictionary(object nameValuePairs)
         {
             if (nameValuePairs == null)
             {

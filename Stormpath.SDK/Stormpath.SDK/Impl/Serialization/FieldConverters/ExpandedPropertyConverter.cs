@@ -18,14 +18,15 @@ using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 {
     internal sealed class ExpandedPropertyConverter : AbstractFieldConverter
     {
-        private readonly Func<IDictionary<string, object>, Type, IDictionary<string, object>> converter;
+        private readonly Func<Map, Type, Map> converter;
 
-        public ExpandedPropertyConverter(Func<IDictionary<string, object>, Type, IDictionary<string, object>> converter)
+        public ExpandedPropertyConverter(Func<Map, Type, Map> converter)
             : base(nameof(ExpandedPropertyConverter), appliesToTargetType: AnyType)
         {
             this.converter = converter;
@@ -33,7 +34,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 
         protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
         {
-            var asEmbeddedResource = token.Value as IDictionary<string, object>;
+            var asEmbeddedResource = token.Value as Map;
             if (asEmbeddedResource == null)
             {
                 return FieldConverterResult.Failed;

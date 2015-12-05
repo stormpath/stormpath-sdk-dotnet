@@ -22,6 +22,7 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -48,7 +49,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.AsSyncInterface.GetResource<T>(href);
         }
 
-        T IInternalSyncDataStore.GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+        T IInternalSyncDataStore.GetResource<T>(string href, Func<Map, Type> typeLookup)
         {
             var result = this.GetResourceData<T>(href);
 

@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -45,7 +46,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="typeLookup">The type lookup</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The resource.</returns>
-        Task<T> GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
+        Task<T> GetResourceAsync<T>(string href, Func<Map, Type> typeLookup, CancellationToken cancellationToken)
             where T : class, IResource;
 
         /// <summary>

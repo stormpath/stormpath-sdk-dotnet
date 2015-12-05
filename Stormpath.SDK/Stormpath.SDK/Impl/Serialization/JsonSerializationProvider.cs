@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Impl.Serialization.FieldConverters;
 using Stormpath.SDK.Serialization;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Serialization
 {
@@ -40,12 +41,12 @@ namespace Stormpath.SDK.Impl.Serialization
                 new StatusFieldConverters.GroupStatusConverter());
         }
 
-        public string Serialize(IDictionary<string, object> map)
+        public string Serialize(Map map)
         {
             return this.ExternalSerializer.Serialize(map);
         }
 
-        public IDictionary<string, object> Deserialize(string json, Type targetType)
+        public Map Deserialize(string json, Type targetType)
         {
             var stringlyTypedProperties = this.ExternalSerializer.Deserialize(json);
             var stronglyTypedProperties = this.ConvertProperties(stringlyTypedProperties, targetType);
@@ -53,7 +54,7 @@ namespace Stormpath.SDK.Impl.Serialization
             return stronglyTypedProperties;
         }
 
-        private IDictionary<string, object> ConvertProperties(IDictionary<string, object> properties, Type targetType)
+        private Map ConvertProperties(Map properties, Type targetType)
         {
             var result = new Dictionary<string, object>(properties.Count);
 
@@ -61,11 +62,11 @@ namespace Stormpath.SDK.Impl.Serialization
             {
                 object value = prop.Value;
 
-                var asListOfObjects = prop.Value as IEnumerable<IDictionary<string, object>>;
-                var asEmbeddedObject = prop.Value as IDictionary<string, object>;
+                var asListOfObjects = prop.Value as IEnumerable<Map>;
+                var asEmbeddedObject = prop.Value as Map;
                 if (asListOfObjects != null)
                 {
-                    var outputList = new List<IDictionary<string, object>>();
+                    var outputList = new List<Map>();
                     foreach (var item in asListOfObjects)
                     {
                         outputList.Add(this.ConvertProperties(item, targetType));

@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using Stormpath.SDK.Impl.DataStore;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Resource
 {
@@ -29,6 +30,6 @@ namespace Stormpath.SDK.Impl.Resource
         /// </summary>
         /// <param name="properties">The new resource properties.</param>
         /// <param name="dataStore">The parent data store.</param>
-        void OnUpdate(IDictionary<string, object> properties, IInternalDataStore dataStore);
+        void OnUpdate(Map properties, IInternalDataStore dataStore);
     }
 }

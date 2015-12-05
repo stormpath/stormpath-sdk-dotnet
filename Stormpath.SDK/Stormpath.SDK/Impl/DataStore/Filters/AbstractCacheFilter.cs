@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Logging;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
 {
@@ -42,7 +43,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         public abstract Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken);
 
-        protected async Task<IDictionary<string, object>> GetCachedValueAsync(Type resourceType, string cacheKey, CancellationToken cancellationToken)
+        protected async Task<Map> GetCachedValueAsync(Type resourceType, string cacheKey, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(cacheKey))
             {
@@ -64,7 +65,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 .ConfigureAwait(false);
         }
 
-        protected IDictionary<string, object> GetCachedValue(Type resourceType, string cacheKey)
+        protected Map GetCachedValue(Type resourceType, string cacheKey)
         {
             if (string.IsNullOrEmpty(cacheKey))
             {

@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Impl.IdentityMap;
 using Stormpath.SDK.Impl.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -41,10 +42,10 @@ namespace Stormpath.SDK.Impl.DataStore
         private object Create(Type type, ILinkable original)
             => this.AsInterface.Create(type, null, original);
 
-        T IResourceFactory.Create<T>(IDictionary<string, object> properties, ILinkable original)
+        T IResourceFactory.Create<T>(Map properties, ILinkable original)
             => (T)this.AsInterface.Create(typeof(T), properties, original);
 
-        object IResourceFactory.Create(Type type, IDictionary<string, object> properties, ILinkable original)
+        object IResourceFactory.Create(Type type, Map properties, ILinkable original)
         {
             if (ResourceTypeLookup.IsCollectionResponse(type))
             {
@@ -54,7 +55,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.InstantiateSingle(type, properties, original);
         }
 
-        private object InstantiateSingle(Type type, IDictionary<string, object> properties, ILinkable original)
+        private object InstantiateSingle(Type type, Map properties, ILinkable original)
         {
             var targetType = new ResourceTypeLookup().GetConcrete(type);
             if (targetType == null)
@@ -118,7 +119,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return targetObject;
         }
 
-        private object InstantiateCollection(Type collectionType, IDictionary<string, object> properties)
+        private object InstantiateCollection(Type collectionType, Map properties)
         {
             Type innerType = new ResourceTypeLookup().GetInnerCollectionInterface(collectionType);
             var targetType = new ResourceTypeLookup().GetConcrete(innerType);
@@ -166,7 +167,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'href' value.");
             }
 
-            var items = properties["items"] as IEnumerable<IDictionary<string, object>>;
+            var items = properties["items"] as IEnumerable<Map>;
             if (items == null)
             {
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: 'items' sub-collection is invalid.");

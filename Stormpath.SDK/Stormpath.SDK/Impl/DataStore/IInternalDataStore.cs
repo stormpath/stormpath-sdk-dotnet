@@ -21,6 +21,7 @@ using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Serialization;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -78,6 +79,6 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <typeparam name="T">The <see cref="IResource"/> type to instantiate.</typeparam>
         /// <param name="properties">The properties to initialize the object with.</param>
         /// <returns>A new instance of the specified resource type</returns>
-        T InstantiateWithData<T>(IDictionary<string, object> properties);
+        T InstantiateWithData<T>(Map properties);
     }
 }

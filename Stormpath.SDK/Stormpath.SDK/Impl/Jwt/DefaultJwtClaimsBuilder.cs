@@ -18,12 +18,13 @@ using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Jwt
 {
     internal sealed class DefaultJwtClaimsBuilder : IJwtClaimsBuilder
     {
-        private readonly IDictionary<string, object> claimsInProgress;
+        private readonly Map claimsInProgress;
 
         public DefaultJwtClaimsBuilder()
         {

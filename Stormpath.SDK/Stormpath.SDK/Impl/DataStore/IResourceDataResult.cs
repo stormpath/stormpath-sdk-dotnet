@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Http;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -53,6 +54,6 @@ namespace Stormpath.SDK.Impl.DataStore
         /// Gets the body of the response.
         /// </summary>
         /// <value>The response body.</value>
-        IDictionary<string, object> Body { get; }
+        Map Body { get; }
     }
 }

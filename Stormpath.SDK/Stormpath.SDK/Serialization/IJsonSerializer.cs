@@ -15,6 +15,7 @@
 // </copyright>
 
 using System.Collections.Generic;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Serialization
 {
@@ -28,13 +29,13 @@ namespace Stormpath.SDK.Serialization
         /// </summary>
         /// <param name="map">The property data to serialize.</param>
         /// <returns>A JSON string representation of <paramref name="map"/></returns>
-        string Serialize(IDictionary<string, object> map);
+        string Serialize(Map map);
 
         /// <summary>
         /// Deserializes a JSON string to a property dictionary.
         /// </summary>
         /// <param name="json">The JSON string to deserialize.</param>
         /// <returns>A tree of name-value pairs stored in an <see cref="IDictionary{TKey, TValue}"/>.</returns>
-        IDictionary<string, object> Deserialize(string json);
+        Map Deserialize(string json);
     }
 }

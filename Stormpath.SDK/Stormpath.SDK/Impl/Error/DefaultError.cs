@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Http;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Error
 {
@@ -32,7 +33,7 @@ namespace Stormpath.SDK.Impl.Error
 
         private readonly IReadOnlyDictionary<string, object> properties;
 
-        public DefaultError(IDictionary<string, object> properties)
+        public DefaultError(Map properties)
         {
             this.properties = new Dictionary<string, object>(properties);
         }

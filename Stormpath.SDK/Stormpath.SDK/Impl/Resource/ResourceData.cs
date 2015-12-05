@@ -18,6 +18,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Impl.DataStore;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Resource
 {
@@ -122,7 +123,7 @@ namespace Stormpath.SDK.Impl.Resource
                 this.properties.ContainsKey(name);
         }
 
-        public void Update(IDictionary<string, object> properties = null)
+        public void Update(Map properties = null)
         {
             if (properties == null)
             {

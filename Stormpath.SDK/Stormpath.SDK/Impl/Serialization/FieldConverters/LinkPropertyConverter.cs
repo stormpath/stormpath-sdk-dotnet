@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Impl.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 {
@@ -30,7 +31,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 
         protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
         {
-            var asEmbeddedObject = token.Value as IDictionary<string, object>;
+            var asEmbeddedObject = token.Value as Map;
             if (asEmbeddedObject == null)
             {
                 return FieldConverterResult.Failed;

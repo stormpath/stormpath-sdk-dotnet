@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Shared;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -25,7 +26,7 @@ namespace Stormpath.SDK.Impl.DataStore
     {
         private IResourceConverter AsInterface => this;
 
-        IDictionary<string, object> IResourceConverter.ToMap(AbstractResource resource)
+        Map IResourceConverter.ToMap(AbstractResource resource)
         {
             var propertyNames = resource.GetUpdatedPropertyNames();
 

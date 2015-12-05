@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -41,7 +42,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="href">The resource URL.</param>
         /// <param name="typeLookup">The type lookup</param>
         /// <returns>The resource.</returns>
-        T GetResource<T>(string href, Func<IDictionary<string, object>, Type> typeLookup)
+        T GetResource<T>(string href, Func<Map, Type> typeLookup)
             where T : class, IResource;
 
         /// <summary>

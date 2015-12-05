@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Jwt
 {
@@ -70,6 +71,6 @@ namespace Stormpath.SDK.Jwt
         /// Builds a <see cref="IDictionary{TKey, TValue}"/> from the current JWT fields.
         /// </summary>
         /// <returns>A new <see cref="IDictionary{TKey, TValue}"/> instance.</returns>
-        IDictionary<string, object> ToDictionary();
+        Map ToDictionary();
     }
 }

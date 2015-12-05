@@ -25,6 +25,7 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -51,7 +52,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.AsAsyncInterface.GetResourceAsync<T>(href, cancellationToken);
         }
 
-        async Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
+        async Task<T> IInternalAsyncDataStore.GetResourceAsync<T>(string href, Func<Map, Type> typeLookup, CancellationToken cancellationToken)
         {
             var result = await this.GetResourceDataAsync<T>(href, cancellationToken).ConfigureAwait(false);
 

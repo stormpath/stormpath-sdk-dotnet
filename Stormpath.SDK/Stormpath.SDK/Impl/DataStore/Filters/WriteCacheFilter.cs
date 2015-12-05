@@ -27,6 +27,7 @@ using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Provider;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
 {
@@ -141,7 +142,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             return result;
         }
 
-        private async Task CacheAsync(Type resourceType, IDictionary<string, object> data, ILogger logger, CancellationToken cancellationToken)
+        private async Task CacheAsync(Type resourceType, Map data, ILogger logger, CancellationToken cancellationToken)
         {
             string href = data[AbstractResource.HrefPropertyName].ToString();
 
@@ -165,7 +166,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 // TODO DefaultModelMap edge case
                 // TODO ApiEncryptionMetadata edge case
                 var asNestedResource = value as ExpandedProperty;
-                var asNestedArray = value as IEnumerable<IDictionary<string, object>>;
+                var asNestedArray = value as IEnumerable<Map>;
 
                 if (asNestedResource != null && IsResource(asNestedResource.Data))
                 {
@@ -196,7 +197,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                     foreach (var element in asNestedArray)
                     {
                         object canonicalElement = element;
-                        var resourceElement = canonicalElement as IDictionary<string, object>;
+                        var resourceElement = canonicalElement as Map;
                         if (resourceElement != null)
                         {
                             if (IsResource(resourceElement))
@@ -232,7 +233,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             }
         }
 
-        private void Cache(Type resourceType, IDictionary<string, object> data, ILogger logger)
+        private void Cache(Type resourceType, Map data, ILogger logger)
         {
             string href = data[AbstractResource.HrefPropertyName].ToString();
 
@@ -256,7 +257,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 // TODO DefaultModelMap edge case
                 // TODO ApiEncryptionMetadata edge case
                 var asNestedResource = value as ExpandedProperty;
-                var asNestedArray = value as IEnumerable<IDictionary<string, object>>;
+                var asNestedArray = value as IEnumerable<Map>;
 
                 if (asNestedResource != null && IsResource(asNestedResource.Data))
                 {
@@ -287,7 +288,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                     foreach (var element in asNestedArray)
                     {
                         object canonicalElement = element;
-                        var resourceElement = canonicalElement as IDictionary<string, object>;
+                        var resourceElement = canonicalElement as Map;
                         if (resourceElement != null)
                         {
                             if (IsResource(resourceElement))
@@ -326,14 +327,14 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         private async Task CacheNestedCustomDataUpdatesAsync(IResourceDataRequest request, IResourceDataResult result, ILogger logger, CancellationToken cancellationToken)
         {
             object customDataObj = null;
-            IDictionary<string, object> customData = null;
+            Map customData = null;
 
             if (!request.Properties.TryGetValue(AbstractExtendableInstanceResource.CustomDataPropertyName, out customDataObj))
             {
                 return;
             }
 
-            customData = customDataObj as IDictionary<string, object>;
+            customData = customDataObj as Map;
             if (customData.IsNullOrEmpty())
             {
                 return;
@@ -377,14 +378,14 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         private void CacheNestedCustomDataUpdates(IResourceDataRequest request, IResourceDataResult result, ILogger logger)
         {
             object customDataObj = null;
-            IDictionary<string, object> customData = null;
+            Map customData = null;
 
             if (!request.Properties.TryGetValue(AbstractExtendableInstanceResource.CustomDataPropertyName, out customDataObj))
             {
                 return;
             }
 
-            customData = customDataObj as IDictionary<string, object>;
+            customData = customDataObj as Map;
             if (customData.IsNullOrEmpty())
             {
                 return;
@@ -570,7 +571,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 result.Type != typeof(IProviderAccountResult);
         }
 
-        private static bool IsResource(IDictionary<string, object> data)
+        private static bool IsResource(Map data)
         {
             if (data == null)
             {
@@ -583,7 +584,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             return hasHref && hasItems;
         }
 
-        private static object ToCanonicalReference(string propertyName, IDictionary<string, object> resourceData)
+        private static object ToCanonicalReference(string propertyName, Map resourceData)
         {
             if (IsResource(resourceData))
             {

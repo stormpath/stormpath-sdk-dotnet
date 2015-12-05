@@ -20,6 +20,7 @@ using System.Linq;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.IdSite
 {
@@ -27,7 +28,7 @@ namespace Stormpath.SDK.Impl.IdSite
     {
         public static readonly string ValuePropertyName = "value";
 
-        private readonly IDictionary<string, object> properties;
+        private readonly Map properties;
 
         public DefaultNonce(string nonce)
         {
@@ -40,7 +41,7 @@ namespace Stormpath.SDK.Impl.IdSite
             this.properties.Add(ValuePropertyName, nonce);
         }
 
-        public DefaultNonce(IDictionary<string, object> properties)
+        public DefaultNonce(Map properties)
         {
             if (properties == null || !properties.Any())
             {
@@ -61,7 +62,7 @@ namespace Stormpath.SDK.Impl.IdSite
             this.properties = properties;
         }
 
-        public IDictionary<string, object> GetProperties()
+        public Map GetProperties()
             => new Dictionary<string, object>(this.properties);
 
         string IResource.Href => this.GetValue();

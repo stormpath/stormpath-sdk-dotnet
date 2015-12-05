@@ -27,6 +27,7 @@ using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Serialization;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -84,7 +85,7 @@ namespace Stormpath.SDK.Impl.DataStore
         T IDataStore.Instantiate<T>()
             => this.resourceFactory.Create<T>();
 
-        T IInternalDataStore.InstantiateWithData<T>(IDictionary<string, object> properties)
+        T IInternalDataStore.InstantiateWithData<T>(Map properties)
             => this.resourceFactory.Create<T>(properties);
 
         T IInternalDataStore.InstantiateWithHref<T>(string href)

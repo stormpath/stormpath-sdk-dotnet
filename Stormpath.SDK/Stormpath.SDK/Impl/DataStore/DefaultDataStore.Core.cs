@@ -35,6 +35,7 @@ using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Serialization;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -97,7 +98,7 @@ namespace Stormpath.SDK.Impl.DataStore
             request.Headers.UserAgent = UserAgentBuilder.GetUserAgent();
         }
 
-        private IDictionary<string, object> GetBody<T>(IHttpResponse response)
+        private Map GetBody<T>(IHttpResponse response)
         {
             if (response == null)
             {
@@ -200,7 +201,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
 
-            IDictionary<string, object> propertiesMap = null;
+            Map propertiesMap = null;
 
             var abstractResource = resource as AbstractResource;
             if (abstractResource != null)
@@ -301,7 +302,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     return new DefaultResourceDataResult(responseAction, typeof(TReturned), req.Uri, response.StatusCode, responseBody);
                 }));
 
-            IDictionary<string, object> propertiesMap = null;
+            Map propertiesMap = null;
 
             var abstractResource = resource as AbstractResource;
             if (abstractResource != null)

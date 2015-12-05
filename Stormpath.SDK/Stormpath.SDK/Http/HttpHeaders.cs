@@ -19,6 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Impl.Extensions;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Http
 {
@@ -52,7 +53,7 @@ namespace Stormpath.SDK.Http
         /// by copying values from a dictionary.
         /// </summary>
         /// <param name="existing">A collection of headers to copy.</param>
-        internal HttpHeaders(IDictionary<string, object> existing)
+        internal HttpHeaders(Map existing)
         {
             this.headers = existing
                 .Select(x => new KeyValuePair<string, List<object>>(

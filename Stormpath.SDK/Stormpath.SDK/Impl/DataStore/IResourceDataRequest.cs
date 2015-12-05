@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Http;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -47,6 +48,6 @@ namespace Stormpath.SDK.Impl.DataStore
         /// Gets additional resource properties used in the request.
         /// </summary>
         /// <value>Additional resource properties.</value>
-        IDictionary<string, object> Properties { get; }
+        Map Properties { get; }
     }
 }

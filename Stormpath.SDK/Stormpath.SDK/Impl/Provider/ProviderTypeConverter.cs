@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Provider;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Provider
 {
@@ -40,7 +41,7 @@ namespace Stormpath.SDK.Impl.Provider
             ["linkedin"] = typeof(ILinkedInProviderData),
         };
 
-        private static string GetProviderId(IDictionary<string, object> properties)
+        private static string GetProviderId(Map properties)
         {
             object rawProviderId = null;
 
@@ -52,7 +53,7 @@ namespace Stormpath.SDK.Impl.Provider
             return ((string)rawProviderId).ToLower();
         }
 
-        public static Type TypeLookup(IDictionary<string, object> properties)
+        public static Type TypeLookup(Map properties)
         {
             var providerId = GetProviderId(properties);
             if (string.IsNullOrEmpty(providerId))
@@ -66,7 +67,7 @@ namespace Stormpath.SDK.Impl.Provider
             return provider;
         }
 
-        public static Type DataTypeLookup(IDictionary<string, object> properties)
+        public static Type DataTypeLookup(Map properties)
         {
             var providerId = GetProviderId(properties);
             if (string.IsNullOrEmpty(providerId))
