@@ -23,6 +23,7 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore.Filters;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
@@ -94,6 +95,5 @@ namespace Stormpath.SDK.Impl.DataStore
             var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri);
             return chain.FilterAsync(request, this.logger, cancellationToken);
         }
-
     }
 }

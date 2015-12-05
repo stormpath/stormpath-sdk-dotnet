@@ -67,6 +67,5 @@ namespace Stormpath.SDK.Impl.DataStore
                 create: false,
                 queryParams: queryParams);
         }
-
     }
 }

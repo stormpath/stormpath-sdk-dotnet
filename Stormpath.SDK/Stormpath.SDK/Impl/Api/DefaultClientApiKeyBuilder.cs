@@ -16,6 +16,7 @@
 
 using System;
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Impl.Logging;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Logging;
 

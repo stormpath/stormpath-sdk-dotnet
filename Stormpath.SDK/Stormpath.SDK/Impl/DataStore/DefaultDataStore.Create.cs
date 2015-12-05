@@ -91,6 +91,5 @@ namespace Stormpath.SDK.Impl.DataStore
                 queryParams: this.CreateQueryStringFromCreationOptions(options),
                 create: true);
         }
-
     }
 }

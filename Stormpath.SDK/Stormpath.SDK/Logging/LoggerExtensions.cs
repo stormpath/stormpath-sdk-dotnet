@@ -16,9 +16,8 @@
 
 using System;
 using Stormpath.SDK.Impl.Extensions;
-using Stormpath.SDK.Logging;
 
-namespace Stormpath.SDK
+namespace Stormpath.SDK.Logging
 {
     /// <summary>
     /// Provides a set of static methods for sending log messages to an <see cref="ILogger"/>.

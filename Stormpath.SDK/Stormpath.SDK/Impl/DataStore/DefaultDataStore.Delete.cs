@@ -56,6 +56,5 @@ namespace Stormpath.SDK.Impl.DataStore
 
             return this.DeleteCore<IResource>(propertyHref);
         }
-
     }
 }

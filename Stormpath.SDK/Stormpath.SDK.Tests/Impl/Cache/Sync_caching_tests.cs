@@ -30,6 +30,7 @@ using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Linq;
+using Stormpath.SDK.Impl.Logging;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;

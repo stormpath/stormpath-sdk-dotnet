@@ -504,7 +504,7 @@
     <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Impl\Http\Authentication\RequestAuthenticationException.cs" />
     <Compile Include="Http\RequestException.cs" />
-    <Compile Include="Impl\NullLogger.cs" />
+    <Compile Include="Impl\Logging\NullLogger.cs" />
     <Compile Include="Impl\Resource\AbstractExtendableInstanceResource.cs" />
     <Compile Include="Impl\Resource\AbstractInstanceResource.cs" />
     <Compile Include="Impl\Resource\LinkProperty.cs" />

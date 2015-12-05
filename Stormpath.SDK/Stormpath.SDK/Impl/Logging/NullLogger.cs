@@ -16,7 +16,7 @@
 
 using Stormpath.SDK.Logging;
 
-namespace Stormpath.SDK.Impl
+namespace Stormpath.SDK.Impl.Logging
 {
     internal sealed class NullLogger : ILogger
     {
