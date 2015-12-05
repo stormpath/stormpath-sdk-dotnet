@@ -20,8 +20,19 @@ using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
 {
+    /// <summary>
+    /// Represents a filter that can be used to intercept asynchronous resource requests.
+    /// </summary>
     internal interface IAsynchronousFilter
     {
+        /// <summary>
+        /// Execute this filter for a request, and any subsequent chained filters.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="chain">The remaining filters in the chain.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The result of the resource request (and any upstream filters).</returns>
         Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken);
     }
 }

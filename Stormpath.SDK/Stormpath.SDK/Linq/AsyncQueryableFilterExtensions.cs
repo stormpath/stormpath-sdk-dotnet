@@ -23,13 +23,16 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK
 {
+    /// <summary>
+    /// Provides a set of static methods for querying Stormpath resources via asynchronous LINQ.
+    /// </summary>
     public static class AsyncQueryableFilterExtensions
     {
         /// <summary>
         /// Filters the items in a collection by searching all fields for a string.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <param name="source">An <see cref=IAsyncQueryable{TSource}"/> to filter.</param>
+        /// <param name="source">An <see cref="IAsyncQueryable{TSource}"/> to filter.</param>
         /// <param name="caseInsensitiveMatch">The string to search for. Matching is case-insensitive.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> that contains elements from the input sequence that contain <paramref name="caseInsensitiveMatch"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="caseInsensitiveMatch"/> is null or empty.</exception>
@@ -38,7 +41,9 @@ namespace Stormpath.SDK
         {
             caseInsensitiveMatch = caseInsensitiveMatch?.Trim();
             if (string.IsNullOrWhiteSpace(caseInsensitiveMatch))
+            {
                 throw new ArgumentNullException(nameof(caseInsensitiveMatch), "Filter string cannot be null or whitespace-only.");
+            }
 
             return source.Provider.CreateQuery(
                 LinqHelper.MethodCall(

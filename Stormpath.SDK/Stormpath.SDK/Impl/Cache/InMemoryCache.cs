@@ -46,11 +46,19 @@ namespace Stormpath.SDK.Impl.Cache
         public InMemoryCache(string region, TimeSpan? timeToLive, TimeSpan? timeToIdle)
         {
             if (string.IsNullOrEmpty(region))
+            {
                 throw new ArgumentNullException(nameof(region));
+            }
+
             if (timeToLive.HasValue && timeToLive.Value.TotalMilliseconds <= 0)
+            {
                 throw new ArgumentException("TTL duration must be greater than zero.", nameof(timeToLive));
+            }
+
             if (timeToIdle.HasValue && timeToIdle.Value.TotalMilliseconds <= 0)
+            {
                 throw new ArgumentException("TTI duration must be greater than zero.", nameof(timeToIdle));
+            }
 
             this.cacheManager = new InMemoryCacheManager();
             this.region = region;
@@ -65,7 +73,9 @@ namespace Stormpath.SDK.Impl.Cache
         private void ThrowIfDisposed()
         {
             if (this.isDisposed)
+            {
                 throw new ApplicationException($"The object ({this.GetType().Name}) has been disposed.");
+            }
         }
 
         private string CreateCompositeKey(string key)
@@ -119,9 +129,13 @@ namespace Stormpath.SDK.Impl.Cache
             Map value = this.cacheManager.Get(compositeKey);
 
             if (value == null)
+            {
                 Interlocked.Increment(ref this.missCount);
+            }
             else
+            {
                 Interlocked.Increment(ref this.hitCount);
+            }
 
             return value;
         }
@@ -153,9 +167,13 @@ namespace Stormpath.SDK.Impl.Cache
             var value = this.cacheManager.Remove(compositeKey);
 
             if (value == null)
+            {
                 Interlocked.Increment(ref this.missCount);
+            }
             else
+            {
                 Interlocked.Increment(ref this.hitCount);
+            }
 
             return value;
         }
@@ -188,7 +206,9 @@ namespace Stormpath.SDK.Impl.Cache
         {
             double accessCount = this.AccessCount;
             if (accessCount == 0)
+            {
                 return 0;
+            }
 
             double hitCount = this.HitCount;
             return hitCount / accessCount;

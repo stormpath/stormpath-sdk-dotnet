@@ -53,7 +53,9 @@ namespace Stormpath.SDK.Cache.Redis
         private void ThrowIfNotConfigured()
         {
             if (this.connection == null)
+            {
                 throw new ApplicationException("No connection present. Set up the cache provider with NewRedisCacheProvider first.");
+            }
         }
 
         protected override IAsynchronousCache CreateAsyncCache(string name, TimeSpan? ttl, TimeSpan? tti)

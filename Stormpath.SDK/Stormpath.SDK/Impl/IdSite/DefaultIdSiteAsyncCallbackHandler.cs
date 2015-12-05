@@ -47,9 +47,14 @@ namespace Stormpath.SDK.Impl.IdSite
         public DefaultIdSiteAsyncCallbackHandler(IInternalDataStore internalDataStore, IHttpRequest httpRequest)
         {
             if (internalDataStore == null)
+            {
                 throw new ArgumentNullException(nameof(internalDataStore));
+            }
+
             if (httpRequest == null)
+            {
                 throw new ArgumentNullException(nameof(httpRequest));
+            }
 
             this.internalDataStore = internalDataStore;
             this.jwtResponse = GetJwtResponse(httpRequest);
@@ -61,12 +66,16 @@ namespace Stormpath.SDK.Impl.IdSite
         private static string GetJwtResponse(IHttpRequest request)
         {
             if (request.Method != HttpMethod.Get)
+            {
                 throw new ApplicationException("Only HTTP GET method is supported.");
+            }
 
             var jwtResponse = request.CanonicalUri.QueryString[IdSiteClaims.JwtResponse];
 
             if (string.IsNullOrEmpty(jwtResponse))
+            {
                 throw InvalidJwtException.JwtRequired;
+            }
 
             return jwtResponse;
         }
@@ -74,7 +83,9 @@ namespace Stormpath.SDK.Impl.IdSite
         IIdSiteAsyncCallbackHandler IIdSiteAsyncCallbackHandler.SetNonceStore(INonceStore nonceStore)
         {
             if (nonceStore == null)
+            {
                 throw new ArgumentNullException(nameof(nonceStore));
+            }
 
             this.nonceStore = nonceStore;
 
@@ -106,9 +117,13 @@ namespace Stormpath.SDK.Impl.IdSite
 
             string apiKeyFromJwt = null;
             if (IsError(jwt.Payload))
+            {
                 jwt.Header.TryGetValueAsString(JwtHeaderParameters.KeyId, out apiKeyFromJwt);
+            }
             else
+            {
                 jwt.Payload.TryGetValueAsString(DefaultJwtClaims.Audience, out apiKeyFromJwt);
+            }
 
             ThrowIfJwtSignatureInvalid(apiKeyFromJwt, dataStoreApiKey, jwt);
             ThrowIfJwtIsExpired(jwt.Payload);
@@ -116,7 +131,9 @@ namespace Stormpath.SDK.Impl.IdSite
             IfErrorThrowIdSiteException(jwt.Payload);
 
             if (!this.nonceStore.IsAsynchronousSupported || this.asyncNonceStore == null)
+            {
                 throw new ApplicationException("The current nonce store does not support asynchronous operations.");
+            }
 
             var responseNonce = (string)jwt.Payload[IdSiteClaims.ResponseId];
             await this.ThrowIfNonceIsAlreadyUsedAsync(responseNonce, cancellationToken).ConfigureAwait(false);
@@ -128,7 +145,9 @@ namespace Stormpath.SDK.Impl.IdSite
             var resultStatus = GetResultStatus(jwt.Payload);
 
             if (this.resultListener != null)
+            {
                 await this.DispatchResponseStatusAsync(resultStatus, accountResult, cancellationToken).ConfigureAwait(false);
+            }
 
             return accountResult;
         }
@@ -154,7 +173,9 @@ namespace Stormpath.SDK.Impl.IdSite
         internal static bool IsError(Map payload)
         {
             if (payload == null)
+            {
                 throw new ArgumentNullException(nameof(payload));
+            }
 
             object error = null;
 
@@ -186,16 +207,22 @@ namespace Stormpath.SDK.Impl.IdSite
             bool isError = IsError(payload);
             bool valid = requiredKeys?.All(x => payload.ContainsKey(x)) ?? false;
             if (!isError && !valid)
+            {
                 throw InvalidJwtException.ResponseMissingParameter;
+            }
         }
 
         internal static void ThrowIfJwtSignatureInvalid(string jwtApiKey, IClientApiKey clientApiKey, JsonWebToken jwt)
         {
             if (!clientApiKey.GetId().Equals(jwtApiKey, StringComparison.InvariantCultureIgnoreCase))
+            {
                 throw InvalidJwtException.ResponseInvalidApiKeyId;
+            }
 
             if (!new JwtSignatureValidator(clientApiKey).IsValid(jwt))
+            {
                 throw InvalidJwtException.SignatureError;
+            }
         }
 
         internal static void ThrowIfJwtIsExpired(Map payload)
@@ -204,23 +231,31 @@ namespace Stormpath.SDK.Impl.IdSite
             var now = UnixDate.ToLong(DateTimeOffset.Now);
 
             if (now > expiration)
+            {
                 throw InvalidJwtException.Expired;
+            }
         }
 
         internal static void IfErrorThrowIdSiteException(Map payload)
         {
             if (!IsError(payload))
+            {
                 return;
+            }
 
             var errorData = payload[IdSiteClaims.Error] as Map;
             if (errorData == null)
+            {
                 throw new ApplicationException("Error parsing ID Site error response.");
+            }
 
             object codeRaw;
             int code;
             if (!errorData.TryGetValue("code", out codeRaw) ||
                 !int.TryParse(codeRaw.ToString(), out code))
+            {
                 throw new ApplicationException($"Error type is unrecognized: '{codeRaw ?? "<null>"}'");
+            }
 
             if (code == 10011
                 || code == 10012
@@ -244,7 +279,9 @@ namespace Stormpath.SDK.Impl.IdSite
         {
             bool alreadyUsed = await this.asyncNonceStore.ContainsNonceAsync(nonce, cancellationToken).ConfigureAwait(false);
             if (alreadyUsed)
+            {
                 throw InvalidJwtException.AlreadyUsed;
+            }
         }
 
         internal static void ThrowIfSubjectIsMissing(Map payload)
@@ -256,7 +293,9 @@ namespace Stormpath.SDK.Impl.IdSite
             // The 'sub' claim (accountHref) can be null if calling /sso/logout when the subject is already logged out,
             // but this is only legal during the logout scenario, so assert:
             if (subMissing && resultStatus != IdSiteResultStatus.Logout)
+            {
                 throw InvalidJwtException.ResponseMissingParameter;
+            }
         }
 
         internal static IAccountResult CreateAccountResult(Map payload, IInternalDataStore dataStore)
@@ -276,7 +315,9 @@ namespace Stormpath.SDK.Impl.IdSite
 
             var accountHref = GetAccountHref(payload);
             if (!string.IsNullOrEmpty(accountHref))
+            {
                 properties[DefaultAccountResult.AccountPropertyName] = new LinkProperty(accountHref);
+            }
 
             return dataStore.InstantiateWithData<IAccountResult>(properties);
         }

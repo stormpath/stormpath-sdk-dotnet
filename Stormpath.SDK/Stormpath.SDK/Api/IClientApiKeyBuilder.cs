@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Api
     {
         /// <summary>
         /// Allows specifying the client's API Key ID value directly instead of reading it from a file or stream.
-        /// <para><b>Usage Warning:</b>It is almost always advisable to NOT use this method and instead use
+        /// <para><b>Usage Warning:</b> It is almost always advisable to NOT use this method and instead use
         /// methods that accept a file or stream: these other methods would ideally acquire the API Key
         /// from a secure and private apiKey.properties file that is readable only by the process that uses the Stormpath SDK.</para>
         /// </summary>

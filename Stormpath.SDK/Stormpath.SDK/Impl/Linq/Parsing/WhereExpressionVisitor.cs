@@ -42,7 +42,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         {
             // .Where(x => true) doesn't mean anything to us.
             if (node.Body.NodeType == ExpressionType.Constant)
+            {
                 throw new NotSupportedException("This query type is not supported.");
+            }
 
             return base.VisitLambda<T>(node);
         }
@@ -52,7 +54,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             var comparison = this.GetBinaryComparisonType(node.NodeType);
 
             if (!comparison.HasValue)
+            {
                 throw new NotSupportedException($"The comparison operator {node.NodeType} is not supported.");
+            }
 
             if (comparison.Value == WhereComparison.AndAlso)
             {
@@ -94,13 +98,17 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
             if (node.Method.Name == "Within")
+            {
                 return this.HandleWithinExtensionMethod(node);
+            }
 
             bool correctOverload =
                 node.Arguments.Count == 1 &&
                 node.Arguments[0].NodeType == ExpressionType.Constant;
             if (!correctOverload)
+            {
                 throw new NotSupportedException($"The {node.Method.Name} with these overloads is not supported.");
+            }
 
             if (node.Method.Name == "Equals")
             {
@@ -156,7 +164,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
             bool isDateTimeField = methodCallMember?.Type == typeof(DateTimeOffset);
             if (!isDateTimeField)
+            {
                 throw new NotSupportedException("Within must be used on a supported datetime field.");
+            }
 
             var numberOfConstantArgs = node.Arguments.Count - 1;
             var yearArg = (int)(node.Arguments[1] as ConstantExpression).Value;
@@ -167,15 +177,29 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 secondArg = null;
 
             if (node.Arguments.Count >= 3)
+            {
                 monthArg = (node.Arguments?[2] as ConstantExpression)?.Value as int?;
+            }
+
             if (node.Arguments.Count >= 4)
+            {
                 dayArg = (node.Arguments?[3] as ConstantExpression)?.Value as int?;
+            }
+
             if (node.Arguments.Count >= 5)
+            {
                 hourArg = (node.Arguments?[4] as ConstantExpression)?.Value as int?;
+            }
+
             if (node.Arguments.Count >= 6)
+            {
                 minuteArg = (node.Arguments?[5] as ConstantExpression)?.Value as int?;
+            }
+
             if (node.Arguments.Count == 7)
+            {
                 secondArg = (node.Arguments?[6] as ConstantExpression)?.Value as int?;
+            }
 
             var shorthandModel = new DatetimeShorthandModel(fieldName, yearArg, monthArg, dayArg, hourArg, minuteArg, secondArg);
             this.parsedExpressions.Add(new WhereMemberExpression(fieldName, shorthandModel, WhereComparison.Equal));
@@ -198,7 +222,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         {
             WhereComparison found;
             if (!comparisonLookup.TryGetValue(type, out found))
+            {
                 return null;
+            }
 
             return found;
         }

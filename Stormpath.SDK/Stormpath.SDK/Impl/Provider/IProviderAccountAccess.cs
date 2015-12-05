@@ -19,6 +19,9 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Provider
 {
+    /// <summary>
+    /// Represents a request for an Account given a specified Provider.
+    /// </summary>
     internal interface IProviderAccountAccess : IResource
     {
         /// <summary>

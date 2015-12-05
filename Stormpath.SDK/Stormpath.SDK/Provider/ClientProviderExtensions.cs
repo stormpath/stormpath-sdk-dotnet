@@ -20,8 +20,16 @@ using Stormpath.SDK.Impl.Provider;
 
 namespace Stormpath.SDK.Provider
 {
+    /// <summary>
+    /// Provides a set of static methods for making Provider-based requests.
+    /// </summary>
     public static class ClientProviderExtensions
     {
+        /// <summary>
+        /// Returns a new <see cref="IProviderFactory"/>, used to construct Provider-based requests.
+        /// </summary>
+        /// <param name="client">The client.</param>
+        /// <returns>A new <see cref="IProviderFactory"/>.</returns>
         public static IProviderFactory Providers(this IClient client)
             => new DefaultProviderFactory((client as DefaultClient).DataStore);
     }

@@ -94,13 +94,25 @@ namespace Stormpath.SDK.Tests.Common.RandomData
 
                 var test = generated.ToString();
                 if (!enoughUppercase)
+                {
                     enoughUppercase = test.Count(c => Uppercase.Contains(c)) >= MinimumUpper;
+                }
+
                 if (!enoughLowercase)
+                {
                     enoughLowercase = test.Count(c => Lowercase.Contains(c)) >= MinimumLower;
+                }
+
                 if (!enoughSymbols)
+                {
                     enoughSymbols = test.Count(c => Symbols.Contains(c)) >= MinimumSymbols;
+                }
+
                 if (!enoughNumbers)
+                {
                     enoughNumbers = test.Count(c => Numbers.Contains(c)) >= MinimumNumbers;
+                }
+
                 meetsRequirements =
                     enoughUppercase &&
                     enoughLowercase &&

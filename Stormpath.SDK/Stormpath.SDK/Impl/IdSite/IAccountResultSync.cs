@@ -18,8 +18,16 @@ using Stormpath.SDK.Account;
 
 namespace Stormpath.SDK.Impl.IdSite
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="SDK.IdSite.IAccountResult"/>.
+    /// </summary>
     internal interface IAccountResultSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.IdSite.IAccountResult.GetAccountAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Account.</returns>
         IAccount GetAccount();
     }
 }

@@ -23,8 +23,16 @@ using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Directory
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IDirectory"/>.
+    /// </summary>
     internal interface IDirectorySync : ISaveableWithOptionsSync<IDirectory>, IDeletableSync, IExtendableSync, IAccountCreationActionsSync, IGroupCreationActionsSync, IAccountStoreSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IDirectory.GetProviderAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Provider.</returns>
         IProvider GetProvider();
     }
 }

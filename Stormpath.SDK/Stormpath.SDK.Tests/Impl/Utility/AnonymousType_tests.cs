@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using Shouldly;
 using Stormpath.SDK.Impl;
+using Stormpath.SDK.Impl.Logging;
 using Stormpath.SDK.Impl.Utility;
 using Xunit;
 

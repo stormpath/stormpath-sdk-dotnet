@@ -23,10 +23,13 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IAccount"/>.
+    /// </summary>
     public static class SyncAccountExtensions
     {
         /// <summary>
-        /// Synchronously gets The account.'s parent <see cref="IDirectory"/> (where The account. is stored).
+        /// Synchronously gets The account.'s parent <see cref="Directory.IDirectory"/> (where The account. is stored).
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>This account's directory.</returns>
@@ -42,7 +45,7 @@ namespace Stormpath.SDK.Sync
             => (account as IAccountSync).GetTenant();
 
         /// <summary>
-        /// Synchronously assigns this account to the specified <see cref="IGroup"/>.
+        /// Synchronously assigns this account to the specified <see cref="Group.IGroup"/>.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="group">The Group this account will be added to.</param>
@@ -53,8 +56,8 @@ namespace Stormpath.SDK.Sync
             => (account as IAccountSync).AddGroup(group);
 
         /// <summary>
-        /// Synchronously assigns this account to the specified <see cref="IGroup"/> represented
-        /// by its (case-insensitive) <c>name</c> or <c>href</c>.
+        /// Synchronously assigns this account to the specified <see cref="Group.IGroup"/> represented
+        /// by its (case-insensitive) name or <c>href</c>.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="hrefOrName">The <c>href</c> or name of the group to add.</param>
@@ -65,23 +68,23 @@ namespace Stormpath.SDK.Sync
             => (account as IAccountSync).AddGroup(hrefOrName);
 
         /// <summary>
-        /// Synchronously removes this <see cref="IAccount"/> from the specified <see cref="IGroup"/>.
+        /// Synchronously removes this <see cref="IAccount"/> from the specified <see cref="Group.IGroup"/>.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="group">The group object from which The account. must be removed.</param>
         /// <returns>Whether the operation succeeded.</returns>
-        /// <exception cref="InvalidOperationException">The account. does not belong to the specified group.</exception>
+        /// <exception cref="System.InvalidOperationException">The account. does not belong to the specified group.</exception>
         public static bool RemoveGroup(this IAccount account, IGroup group)
             => (account as IAccountSync).RemoveGroup(group);
 
         /// <summary>
-        /// Synchronously removes this <see cref="IAccount"/> from the specified <see cref="IGroup"/>
-        /// represented by its (case-insensitive) <c>name</c> or <c>href</c>.
+        /// Synchronously removes this <see cref="IAccount"/> from the specified <see cref="Group.IGroup"/>
+        /// represented by its (case-insensitive) name or <c>href</c>.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="hrefOrName">The <c>href</c> or name of the group object from which The account. must be removed.</param>
         /// <returns>Whether the operation succeeded.</returns>
-        /// <exception cref="InvalidOperationException">The account. does not belong to the specified group.</exception>
+        /// <exception cref="System.InvalidOperationException">The account. does not belong to the specified group.</exception>
         public static bool RemoveGroup(this IAccount account, string hrefOrName)
             => (account as IAccountSync).RemoveGroup(hrefOrName);
 
@@ -91,7 +94,7 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="hrefOrName">The <c>href</c> or name of the group to check.</param>
-        /// <returns><c>true</c> if The account. belongs to the specified group.</returns>
+        /// <returns><see langword="true"/> if The account. belongs to the specified group.</returns>
         public static bool IsMemberOfGroup(this IAccount account, string hrefOrName)
             => (account as IAccountSync).IsMemberOfGroup(hrefOrName);
 

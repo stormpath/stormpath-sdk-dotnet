@@ -29,7 +29,9 @@ namespace Stormpath.SDK.Cache.Redis.Tests
         public RedisTestFixture()
         {
             if (!Debugger.IsAttached)
+            {
                 throw new NotImplementedException();
+            }
 
             this.Connection = ConnectionMultiplexer.Connect(RedisConnectionString);
         }

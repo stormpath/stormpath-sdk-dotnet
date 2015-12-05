@@ -83,7 +83,9 @@ namespace Stormpath.SDK.Impl.Application
         IApplication IApplication.SetDescription(string description)
         {
             if (string.IsNullOrEmpty(description))
+            {
                 throw new ArgumentNullException(nameof(description));
+            }
 
             this.SetProperty(DescriptionPropertyName, description);
             return this;
@@ -92,7 +94,9 @@ namespace Stormpath.SDK.Impl.Application
         IApplication IApplication.SetName(string name)
         {
             if (string.IsNullOrEmpty(name))
+            {
                 throw new ArgumentNullException(nameof(name));
+            }
 
             this.SetProperty(NamePropertyName, name);
             return this;

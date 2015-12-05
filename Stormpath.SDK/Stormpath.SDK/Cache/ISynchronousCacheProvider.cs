@@ -27,6 +27,9 @@ namespace Stormpath.SDK.Cache
         /// </summary>
         /// <param name="name">The name of the cache to acquire.</param>
         /// <returns>The cache with the given name.</returns>
+        /// <exception cref="System.ApplicationException">The cache provider has been disposed.</exception>
+        /// <exception cref="System.ApplicationException">A synchronous path is not supported.</exception>
+        /// <exception cref="System.ArgumentNullException"><paramref name="name"/> is null or empty.</exception>
         ISynchronousCache GetSyncCache(string name);
     }
 }

@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Http;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
@@ -26,9 +27,9 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly Type type;
         private readonly CanonicalUri uri;
         private readonly int httpStatus;
-        private readonly IDictionary<string, object> body;
+        private readonly Map body;
 
-        public DefaultResourceDataResult(ResourceAction action, Type returnType, CanonicalUri uri, int httpStatus, IDictionary<string, object> body)
+        public DefaultResourceDataResult(ResourceAction action, Type returnType, CanonicalUri uri, int httpStatus, Map body)
         {
             this.action = action;
             this.type = returnType;
@@ -39,7 +40,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         ResourceAction IResourceDataResult.Action => this.action;
 
-        IDictionary<string, object> IResourceDataResult.Body => this.body;
+        Map IResourceDataResult.Body => this.body;
 
         Type IResourceDataResult.Type => this.type;
 

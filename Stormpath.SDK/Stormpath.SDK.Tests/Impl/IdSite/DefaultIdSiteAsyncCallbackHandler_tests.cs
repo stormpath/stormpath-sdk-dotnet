@@ -29,6 +29,7 @@ using Stormpath.SDK.Impl;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.IdSite;
+using Stormpath.SDK.Impl.Logging;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.IdSite
@@ -78,25 +79,40 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
                 onAuthenticated: (result, ct) =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Authenticated)
+                    {
                         accountResultFromListener = result;
+                    }
                     else
+                    {
                         throw new InvalidOperationException("This method should not have been executed");
+                    }
+
                     return Task.FromResult(true);
                 },
                 onLogout: (result, ct) =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Logout)
+                    {
                         accountResultFromListener = result;
+                    }
                     else
+                    {
                         throw new InvalidOperationException("This method should not have been executed");
+                    }
+
                     return Task.FromResult(true);
                 },
                 onRegistered: (result, ct) =>
                 {
                     if (expectedStatus == IdSiteResultStatus.Registered)
+                    {
                         accountResultFromListener = result;
+                    }
                     else
+                    {
                         throw new InvalidOperationException("This method should not have been executed");
+                    }
+
                     return Task.FromResult(true);
                 });
 

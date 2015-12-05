@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Group
     public sealed class GroupCreationOptionsBuilder
     {
         /// <summary>
-        /// Gets or sets the response options to apply to the request.
+        /// Gets the response options to apply to the request.
         /// </summary>
         /// <value>The response options to apply to the request.</value>
         /// <example>
@@ -38,9 +38,9 @@ namespace Stormpath.SDK.Group
         public IRetrievalOptions<IGroup> ResponseOptions { get; } = new DefaultRetrievalOptions<IGroup>();
 
         /// <summary>
-        /// Creates a new <see cref="IApplicationCreationOptions"/> instance based on the current builder state.
+        /// Creates a new <see cref="IGroupCreationOptions"/> instance based on the current builder state.
         /// </summary>
-        /// <returns>A new <see cref="IApplicationCreationOptions"/> instance.</returns>
+        /// <returns>A new <see cref="IGroupCreationOptions"/> instance.</returns>
         public IGroupCreationOptions Build()
         {
             return new DefaultGroupCreationOptions(this.ResponseOptions);

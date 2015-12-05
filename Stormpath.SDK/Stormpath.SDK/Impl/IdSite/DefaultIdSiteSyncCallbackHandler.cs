@@ -40,9 +40,14 @@ namespace Stormpath.SDK.Impl.IdSite
         public DefaultIdSiteSyncCallbackHandler(IInternalDataStore internalDataStore, IHttpRequest httpRequest)
         {
             if (internalDataStore == null)
+            {
                 throw new ArgumentNullException(nameof(internalDataStore));
+            }
+
             if (httpRequest == null)
+            {
                 throw new ArgumentNullException(nameof(httpRequest));
+            }
 
             this.internalDataStore = internalDataStore;
             this.jwtResponse = GetJwtResponse(httpRequest);
@@ -54,12 +59,16 @@ namespace Stormpath.SDK.Impl.IdSite
         private static string GetJwtResponse(IHttpRequest request)
         {
             if (request.Method != HttpMethod.Get)
+            {
                 throw new ApplicationException("Only HTTP GET method is supported.");
+            }
 
             var jwtResponse = request.CanonicalUri.QueryString[IdSiteClaims.JwtResponse];
 
             if (string.IsNullOrEmpty(jwtResponse))
+            {
                 throw InvalidJwtException.JwtRequired;
+            }
 
             return jwtResponse;
         }
@@ -67,7 +76,9 @@ namespace Stormpath.SDK.Impl.IdSite
         IIdSiteSyncCallbackHandler IIdSiteSyncCallbackHandler.SetNonceStore(INonceStore nonceStore)
         {
             if (nonceStore == null)
+            {
                 throw new ArgumentNullException(nameof(nonceStore));
+            }
 
             this.nonceStore = nonceStore;
 
@@ -99,9 +110,13 @@ namespace Stormpath.SDK.Impl.IdSite
 
             string apiKeyFromJwt = null;
             if (HandlerShared.IsError(jwt.Payload))
+            {
                 jwt.Header.TryGetValueAsString(JwtHeaderParameters.KeyId, out apiKeyFromJwt);
+            }
             else
+            {
                 jwt.Payload.TryGetValueAsString(DefaultJwtClaims.Audience, out apiKeyFromJwt);
+            }
 
             HandlerShared.ThrowIfJwtSignatureInvalid(apiKeyFromJwt, dataStoreApiKey, jwt);
             HandlerShared.ThrowIfJwtIsExpired(jwt.Payload);
@@ -109,7 +124,9 @@ namespace Stormpath.SDK.Impl.IdSite
             HandlerShared.IfErrorThrowIdSiteException(jwt.Payload);
 
             if (!this.nonceStore.IsAsynchronousSupported || this.syncNonceStore == null)
+            {
                 throw new ApplicationException("The current nonce store does not support synchronous operations.");
+            }
 
             var responseNonce = (string)jwt.Payload[IdSiteClaims.ResponseId];
             this.ThrowIfNonceIsAlreadyUsed(responseNonce);
@@ -121,7 +138,9 @@ namespace Stormpath.SDK.Impl.IdSite
             var resultStatus = HandlerShared.GetResultStatus(jwt.Payload);
 
             if (this.resultListener != null)
+            {
                 this.DispatchResponseStatus(resultStatus, accountResult);
+            }
 
             return accountResult;
         }
@@ -151,7 +170,9 @@ namespace Stormpath.SDK.Impl.IdSite
         {
             bool alreadyUsed = this.syncNonceStore.ContainsNonce(nonce);
             if (alreadyUsed)
+            {
                 throw InvalidJwtException.AlreadyUsed;
+            }
         }
     }
 }

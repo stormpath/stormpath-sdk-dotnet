@@ -32,7 +32,9 @@ namespace Stormpath.SDK.Impl.Application
             requestBuilderAction(builder);
 
             if (string.IsNullOrEmpty(builder.Login))
+            {
                 throw new ArgumentNullException(nameof(builder.Login));
+            }
 
             var href = $"{(this as IResource).Href}/verificationEmails";
 

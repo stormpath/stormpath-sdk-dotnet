@@ -62,25 +62,33 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private void HandleFilter()
         {
             if (!string.IsNullOrEmpty(this.queryModel.FilterTerm))
+            {
                 this.arguments.Add("q", this.queryModel.FilterTerm);
+            }
         }
 
         private void HandleLimit()
         {
             if (this.queryModel.Limit > 0)
+            {
                 this.arguments.Add("limit", this.queryModel.Limit.Value.ToString());
+            }
         }
 
         private void HandleOffset()
         {
             if (this.queryModel.Offset > 0)
+            {
                 this.arguments.Add("offset", this.queryModel.Offset.Value.ToString());
+            }
         }
 
         private void HandleOrderByThenBy()
         {
             if (!this.queryModel.OrderByTerms.Any())
+            {
                 return;
+            }
 
             var orderByArgument = new StringBuilder();
             bool addedOne = false;
@@ -88,14 +96,19 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             foreach (var clause in this.queryModel.OrderByTerms)
             {
                 if (addedOne)
+                {
                     orderByArgument.Append(",");
+                }
+
                 var direction = clause.Direction == OrderByDirection.Descending ? " desc" : string.Empty;
                 orderByArgument.Append($"{clause.FieldName}{direction}");
                 addedOne = true;
             }
 
             if (addedOne)
+            {
                 this.arguments.Add("orderBy", orderByArgument.ToString());
+            }
         }
 
         private void HandleWhere()
@@ -144,7 +157,10 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             foreach (var term in terms)
             {
                 if (!workingModels.ContainsKey(term.FieldName))
+                {
                     workingModels.Add(term.FieldName, new DatetimeAttributeTermWorkingModel());
+                }
+
                 var workingModel = workingModels[term.FieldName];
 
                 bool isStartTerm =
@@ -154,7 +170,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                     (isStartTerm && (workingModel.Start.HasValue || workingModel.StartInclusive.HasValue)) ||
                     (!isStartTerm && (workingModel.End.HasValue || workingModel.EndInclusive.HasValue));
                 if (collision)
+                {
                     throw new ArgumentException("Error compiling date terms.");
+                }
 
                 workingModel.FieldName = term.FieldName;
 
@@ -178,7 +196,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             foreach (var term in workingModels.Values)
             {
                 if (this.arguments.ContainsKey(term.FieldName))
+                {
                     throw new NotSupportedException($"Multiple date constraints on field {term.FieldName} are not supported");
+                }
 
                 datetimeAttributeBuilder.Clear();
 
@@ -216,7 +236,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             {
                 var shorthandModel = term.Value as DatetimeShorthandModel;
                 if (shorthandModel == null)
+                {
                     throw new ArgumentException("One or more Within constraints are invalid.");
+                }
 
                 shorthandAttributeBuilder.Clear();
 
@@ -263,7 +285,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private void HandleExpand()
         {
             if (!this.queryModel.ExpandTerms.Any())
+            {
                 return;
+            }
 
             var expansionArgument = new StringBuilder();
             bool addedOne = false;
@@ -271,32 +295,45 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             foreach (var item in this.queryModel.ExpandTerms)
             {
                 if (addedOne)
+                {
                     expansionArgument.Append(",");
+                }
 
                 expansionArgument.Append(item.PropertyName);
 
                 bool hasSubparameters = item.Offset.HasValue || item.Limit.HasValue;
                 if (hasSubparameters)
+                {
                     expansionArgument.Append("(");
+                }
 
                 if (item.Offset.HasValue)
+                {
                     expansionArgument.Append($"offset:{item.Offset.Value}");
+                }
 
                 if (item.Limit.HasValue)
                 {
                     if (item.Offset.HasValue)
+                    {
                         expansionArgument.Append(",");
+                    }
+
                     expansionArgument.Append($"limit:{item.Limit.Value}");
                 }
 
                 if (hasSubparameters)
+                {
                     expansionArgument.Append(")");
+                }
 
                 addedOne = true;
             }
 
             if (addedOne)
+            {
                 this.arguments.Add("expand", expansionArgument.ToString());
+            }
         }
     }
 }

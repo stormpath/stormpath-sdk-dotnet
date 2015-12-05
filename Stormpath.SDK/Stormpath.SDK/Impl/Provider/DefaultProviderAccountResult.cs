@@ -20,6 +20,7 @@ using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Provider
 {
@@ -39,7 +40,7 @@ namespace Stormpath.SDK.Impl.Provider
         bool IProviderAccountResult.IsNewAccount
             => this.GetProperty<bool>(IsNewAccountPropertyName);
 
-        void INotifiable.OnUpdate(IDictionary<string, object> properties, IInternalDataStore dataStore)
+        void INotifiable.OnUpdate(Map properties, IInternalDataStore dataStore)
         {
             var newProperties = new Dictionary<string, object>(2);
 

@@ -37,13 +37,19 @@ namespace Stormpath.SDK.Impl.Linq.Sync
             var resultOperator = this.executor.CompiledModel.ResultOperator;
 
             if (resultOperator == Parsing.ResultOperator.Any)
+            {
                 return this.executor.CurrentPage.Any();
+            }
 
             if (resultOperator == Parsing.ResultOperator.Count)
+            {
                 return Convert.ToInt32(this.executor.Size);
+            }
 
             if (resultOperator == Parsing.ResultOperator.LongCount)
+            {
                 return this.executor.Size;
+            }
 
             if (resultOperator == Parsing.ResultOperator.First)
             {

@@ -19,10 +19,21 @@ using Stormpath.SDK.Group;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents resources that can be expanded from a <see cref="Group.IGroupMembership"/>.
+    /// </summary>
     public interface IGroupMembershipExpandables
     {
+        /// <summary>
+        /// Expands the <c>account</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IAccount GetAccount();
 
+        /// <summary>
+        /// Expands the <c>group</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IGroup GetGroup();
     }
 }

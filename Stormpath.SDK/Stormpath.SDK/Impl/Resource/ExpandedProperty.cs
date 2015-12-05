@@ -15,6 +15,7 @@
 // </copyright>
 
 using System.Collections.Generic;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Resource
 {
@@ -23,20 +24,22 @@ namespace Stormpath.SDK.Impl.Resource
     /// </summary>
     internal sealed class ExpandedProperty : IEmbeddedProperty
     {
-        private readonly IDictionary<string, object> data;
+        private readonly Map data;
         private readonly string href;
 
-        public ExpandedProperty(IDictionary<string, object> data)
+        public ExpandedProperty(Map data)
         {
             object href;
             if (data.TryGetValue("href", out href))
+            {
                 this.href = href.ToString();
+            }
 
             this.data = data;
         }
 
         public string Href => this.href;
 
-        public IDictionary<string, object> Data => this.data;
+        public Map Data => this.data;
     }
 }

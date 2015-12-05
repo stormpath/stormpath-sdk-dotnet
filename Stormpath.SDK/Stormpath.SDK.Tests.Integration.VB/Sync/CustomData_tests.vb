@@ -22,6 +22,7 @@ Imports Stormpath.SDK.Account
 Imports Stormpath.SDK.Application
 Imports Stormpath.SDK.Client
 Imports Stormpath.SDK.Sync
+Imports Stormpath.SDK.Tests.Common
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData
 Imports Xunit
@@ -100,7 +101,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             updated.Count().ShouldBe(6)
 
             ' Try deleting
-            Dim result = updated.Delete()
+            updated.Delete()
+            Threading.Thread.Sleep(Delay.UpdatePropogation)
+
             Dim newCustomData = account.GetCustomData()
             newCustomData.Count().ShouldBe(3)
 
@@ -129,8 +132,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             updated.Clear()
             Dim result = updated.Save()
 
-            ' Let the cache update
-            System.Threading.Thread.Sleep(100)
+            System.Threading.Thread.Sleep(Delay.UpdatePropogation)
 
             Dim newCustomData = account.GetCustomData()
             newCustomData.Count().ShouldBe(3)
@@ -157,7 +159,11 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
             ' ... and then delete one
             updated.Remove("claims")
-            Dim updated2 = updated.Save()
+            updated.Save()
+
+            Threading.Thread.Sleep(Delay.UpdatePropogation)
+
+            Dim updated2 = account.GetCustomData()
             Assert.Null(updated2.[Get]("claims"))
             CStr(updated2.[Get]("text")).ShouldBe("fizzbuzz")
 
@@ -165,6 +171,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             account.Delete().ShouldBeTrue()
             Me.fixture.CreatedAccountHrefs.Remove(account.Href)
         End Sub
+
         Private Shared Function InlineAssignHelper(Of T)(ByRef target As T, value As T) As T
             target = value
             Return value

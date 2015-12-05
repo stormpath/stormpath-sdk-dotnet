@@ -20,6 +20,9 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IAccountStore"/>.
+    /// </summary>
     public static class SyncAccountStoreExtensions
     {
         /// <summary>

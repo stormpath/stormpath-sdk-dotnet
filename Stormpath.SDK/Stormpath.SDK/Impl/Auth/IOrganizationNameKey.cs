@@ -16,8 +16,15 @@
 
 namespace Stormpath.SDK.Impl.Auth
 {
+    /// <summary>
+    /// Represents an Organization nameKey.
+    /// </summary>
     internal interface IOrganizationNameKey
     {
+        /// <summary>
+        /// Gets the Organization nameKey value.
+        /// </summary>
+        /// <value>The nameKey.</value>
         string OrganizationNameKey { get; }
     }
 }

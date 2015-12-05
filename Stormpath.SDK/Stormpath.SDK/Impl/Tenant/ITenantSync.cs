@@ -18,6 +18,10 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="SDK.Tenant.ITenant"/>.
+    /// </summary>
     internal interface ITenantSync : IExtendableSync, ITenantActionsSync
     {
     }

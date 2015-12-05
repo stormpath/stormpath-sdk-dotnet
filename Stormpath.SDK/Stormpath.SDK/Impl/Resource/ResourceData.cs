@@ -18,6 +18,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Impl.DataStore;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Resource
 {
@@ -65,15 +66,21 @@ namespace Stormpath.SDK.Impl.Resource
         public object GetProperty(string name)
         {
             if (this.deletedProperties.ContainsKey(name))
+            {
                 return null;
+            }
 
             object value;
 
             if (this.dirtyProperties.TryGetValue(name, out value))
+            {
                 return value;
+            }
 
             if (this.properties.TryGetValue(name, out value))
+            {
                 return value;
+            }
 
             return null;
         }
@@ -116,10 +123,12 @@ namespace Stormpath.SDK.Impl.Resource
                 this.properties.ContainsKey(name);
         }
 
-        public void Update(IDictionary<string, object> properties = null)
+        public void Update(Map properties = null)
         {
             if (properties == null)
+            {
                 properties = new Dictionary<string, object>();
+            }
 
             this.properties = new ConcurrentDictionary<string, object>(properties);
             this.dirtyProperties = new ConcurrentDictionary<string, object>();

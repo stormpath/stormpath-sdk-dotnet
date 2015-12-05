@@ -19,10 +19,27 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="SDK.DataStore.IDataStore"/>.
+    /// </summary>
     internal interface IDataStoreSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.DataStore.IDataStore.GetResourceAsync{T}(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <param name="href">The resource URL of the resource to retrieve.</param>
+        /// <returns>The Resource.</returns>
         T GetResource<T>(string href);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.DataStore.IDataStore.GetResourceAsync{T}(string, Action{IRetrievalOptions{T}}, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <param name="href">The resource URL of the resource to retrieve.</param>
+        /// <param name="responseOptions">The options to apply to this request.</param>
+        /// <returns>The Resource.</returns>
         T GetResource<T>(string href, Action<IRetrievalOptions<T>> responseOptions);
     }
 }

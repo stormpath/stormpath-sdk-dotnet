@@ -16,9 +16,19 @@
 
 namespace Stormpath.SDK.Impl.Utility
 {
+    /// <summary>
+    /// Represents an assembly loader that can instantiate an object from a given assembly.
+    /// </summary>
+    /// <typeparam name="T">The type to instantiate.</typeparam>
     internal interface ITypeLoader<T>
         where T : class
     {
+        /// <summary>
+        /// Attempts to instantiate the object.
+        /// </summary>
+        /// <param name="instance">The new object instance.</param>
+        /// <param name="constructorArguments">Arguments to pass to the target constructor.</param>
+        /// <returns><see langword="true"/> if the object was instantiated successfully; <see langword="false"/> otherwise.</returns>
         bool TryLoad(out T instance, object[] constructorArguments = null);
     }
 }

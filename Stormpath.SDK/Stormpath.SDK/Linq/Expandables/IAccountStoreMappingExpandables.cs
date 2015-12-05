@@ -19,10 +19,21 @@ using Stormpath.SDK.Application;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents resources that can be expanded from an <see cref="AccountStore.IAccountStoreMapping"/>.
+    /// </summary>
     public interface IAccountStoreMappingExpandables
     {
+        /// <summary>
+        /// Expands the <c>accountStore</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IAccountStore GetAccountStore();
 
+        /// <summary>
+        /// Expands the <c>application</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IApplication GetApplication();
     }
 }

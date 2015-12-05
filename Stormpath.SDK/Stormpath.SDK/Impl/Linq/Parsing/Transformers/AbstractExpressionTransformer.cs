@@ -27,7 +27,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
         {
             var transformed = this.TransformNode(node);
             if (transformed != node)
+            {
                 return transformed;
+            }
 
             return base.Visit(node);
         }

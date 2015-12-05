@@ -19,9 +19,18 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
+    /// <summary>
+    /// Represents a resource that can be saved with additional options.
+    /// </summary>
+    /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
     internal interface ISaveableWithOptionsSync<T> : ISaveableSync<T>
         where T : IResource
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="ISaveableWithOptions{T}.SaveAsync(Action{IRetrievalOptions{T}}, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="responseOptions">The options to apply to this request.</param>
+        /// <returns>The persisted resource data.</returns>
         T Save(Action<IRetrievalOptions<T>> responseOptions);
     }
 }

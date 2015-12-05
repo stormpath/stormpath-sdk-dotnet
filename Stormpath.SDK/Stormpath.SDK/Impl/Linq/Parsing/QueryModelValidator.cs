@@ -41,25 +41,35 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private void ValidateLimit()
         {
             if (this.queryModel.Limit == null)
+            {
                 return;
+            }
 
             if (this.queryModel.Limit.Value < 0)
+            {
                 throw new ArgumentOutOfRangeException("Take must be greater than zero.");
+            }
         }
 
         private void ValidateOffset()
         {
             if (this.queryModel.Offset == null)
+            {
                 return;
+            }
 
             if (this.queryModel.Offset.Value < 0)
+            {
                 throw new ArgumentOutOfRangeException("Skip must be greater than zero.");
+            }
         }
 
         private void ValidateWheres()
         {
             if (!this.queryModel.WhereTerms.Any())
+            {
                 return;
+            }
 
             bool termsUseValidComparisonOperators = this.queryModel.WhereTerms
                 .Where(x => x.Type != typeof(DateTimeOffset))
@@ -69,13 +79,17 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                         x.Comparison == WhereComparison.Equal);
 
             if (!termsUseValidComparisonOperators)
+            {
                 throw new NotSupportedException($"One or more Where terms use unsupported comparison operators.");
+            }
         }
 
         private void ValidateDatetimeWheres()
         {
             if (!this.queryModel.WhereTerms.Any())
+            {
                 return;
+            }
 
             var datetimeTerms = this.queryModel.WhereTerms
                 .Where(x => x.Type == typeof(DateTimeOffset))
@@ -92,13 +106,17 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                         x.Comparison == WhereComparison.LessThanOrEqual);
 
             if (!datetimeTermsUseValidComparisonOperators)
+            {
                 throw new NotSupportedException($"One or more Where terms use unsupported comparison operators.");
+            }
 
             var shorthandAndDatetimeTermsCollisions = shorthandTerms
                 .Where(x => datetimeTerms.Any(y => y.FieldName == x.FieldName));
 
             if (shorthandAndDatetimeTermsCollisions.Any())
+            {
                 throw new NotSupportedException($"Multiple date constraints on field {shorthandAndDatetimeTermsCollisions.First().FieldName} are not supported.");
+            }
 
             bool shorthandTermCollisions = shorthandTerms
                 .GroupBy(x => x.FieldName)
@@ -106,17 +124,23 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 .Count() != shorthandTerms.Count;
 
             if (shorthandTermCollisions)
-                throw new NotSupportedException("Multiple Within constrants on the same field are not supported.");
+            {
+                throw new NotSupportedException("Multiple Within constraints on the same field are not supported.");
+            }
         }
 
         private void ValidateExpands()
         {
             if (!this.queryModel.ExpandTerms.Any())
+            {
                 return;
+            }
 
             if (this.queryModel.ExpandTerms.Any(x => x.Limit < 0)
                 || this.queryModel.ExpandTerms.Any(x => x.Offset < 0))
+            {
                 throw new ArgumentOutOfRangeException("Limit and Offset parameters for link expansion must not be negative.");
+            }
         }
     }
 }

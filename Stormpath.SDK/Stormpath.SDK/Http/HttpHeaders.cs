@@ -19,6 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Impl.Extensions;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Http
 {
@@ -52,7 +53,7 @@ namespace Stormpath.SDK.Http
         /// by copying values from a dictionary.
         /// </summary>
         /// <param name="existing">A collection of headers to copy.</param>
-        internal HttpHeaders(IDictionary<string, object> existing)
+        internal HttpHeaders(Map existing)
         {
             this.headers = existing
                 .Select(x => new KeyValuePair<string, List<object>>(
@@ -133,7 +134,9 @@ namespace Stormpath.SDK.Http
             {
                 var location = this.GetFirst<string>(LocationName);
                 if (string.IsNullOrEmpty(location))
+                {
                     return null;
+                }
 
                 return new Uri(location, UriKind.Absolute);
             }
@@ -163,7 +166,9 @@ namespace Stormpath.SDK.Http
         public T GetFirst<T>(string key)
         {
             if (!this.headers.ContainsKey(key) || !this.headers[key].Any())
+            {
                 return default(T);
+            }
 
             return (T)this.headers[key][0];
         }
@@ -176,14 +181,19 @@ namespace Stormpath.SDK.Http
         public void Add(string key, object value)
         {
             if (this.readOnly)
+            {
                 throw new InvalidOperationException("This headers collection is read-only.");
+            }
 
             if (!this.headers.ContainsKey(key))
+            {
                 this.headers.Add(key, new List<object>());
+            }
 
             this.headers[key].Add(value);
         }
 
+        /// <inheritdoc/>
         public IEnumerator<KeyValuePair<string, IEnumerable<string>>> GetEnumerator()
         {
             foreach (var header in this.headers)
@@ -194,6 +204,7 @@ namespace Stormpath.SDK.Http
             }
         }
 
+        /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();

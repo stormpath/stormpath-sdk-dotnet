@@ -37,7 +37,9 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
             {
                 if (!IsStatusField(token))
+                {
                     return FieldConverterResult.Failed;
+                }
 
                 return new FieldConverterResult(true, SDK.Account.AccountStatus.Parse(token.Value.ToString()));
             }
@@ -53,7 +55,9 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
             {
                 if (!IsStatusField(token))
+                {
                     return FieldConverterResult.Failed;
+                }
 
                 return new FieldConverterResult(true, SDK.Application.ApplicationStatus.Parse(token.Value.ToString()));
             }
@@ -69,7 +73,9 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
             {
                 if (!IsStatusField(token))
+                {
                     return FieldConverterResult.Failed;
+                }
 
                 return new FieldConverterResult(true, SDK.Directory.DirectoryStatus.Parse(token.Value.ToString()));
             }
@@ -85,7 +91,9 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
             {
                 if (!IsStatusField(token))
+                {
                     return FieldConverterResult.Failed;
+                }
 
                 return new FieldConverterResult(true, SDK.Group.GroupStatus.Parse(token.Value.ToString()));
             }

@@ -24,7 +24,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Expressions
         {
             var parsedVisitor = visitor as CompilingExpressionVisitor;
             if (parsedVisitor != null)
+            {
                 return this.Accept(parsedVisitor);
+            }
 
             return base.Accept(visitor);
         }

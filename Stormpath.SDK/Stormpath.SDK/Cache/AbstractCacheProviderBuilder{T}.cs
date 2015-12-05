@@ -20,6 +20,10 @@ using System.Linq;
 
 namespace Stormpath.SDK.Cache
 {
+    /// <summary>
+    /// Base class for implementations of <see cref="ICacheProviderBuilder"/>.
+    /// </summary>
+    /// <typeparam name="T">The cache provider type.</typeparam>
     public abstract class AbstractCacheProviderBuilder<T> : ICacheProviderBuilder
         where T : AbstractCacheProvider, new()
     {
@@ -29,45 +33,63 @@ namespace Stormpath.SDK.Cache
         private TimeSpan? defaultTimeToLive;
         private TimeSpan? defaultTimeToIdle;
 
+        /// <inheritdoc/>
         ICacheProviderBuilder ICacheProviderBuilder.WithDefaultTimeToIdle(TimeSpan tti)
         {
             this.defaultTimeToIdle = tti;
             return this;
         }
 
+        /// <inheritdoc/>
         ICacheProviderBuilder ICacheProviderBuilder.WithDefaultTimeToLive(TimeSpan ttl)
         {
             this.defaultTimeToLive = ttl;
             return this;
         }
 
+        /// <inheritdoc/>
         ICacheProviderBuilder ICacheProviderBuilder.WithCache(ICacheConfigurationBuilder builder)
         {
             var cacheConfig = builder.Build();
             if (cacheConfig == null)
+            {
                 throw new ApplicationException("The cache configuration is not valid.");
+            }
 
             this.cacheConfigs.Add(cacheConfig);
             return this;
         }
 
+        /// <summary>
+        /// Fired when the builder is constructing a provider.
+        /// </summary>
+        /// <remarks>Override in a derived class to perform additional configuration on the provider.</remarks>
+        /// <param name="provider">The constructed provider.</param>
+        /// <returns>The provider.</returns>
         protected virtual ICacheProvider OnBuilding(T provider)
         {
             return provider;
         }
 
+        /// <inheritdoc/>
         ICacheProvider ICacheProviderBuilder.Build()
         {
             var provider = new T();
 
             if (this.defaultTimeToLive.HasValue)
+            {
                 provider.SetDefaultTimeToLive(this.defaultTimeToLive.Value);
+            }
 
             if (this.defaultTimeToIdle.HasValue)
+            {
                 provider.SetDefaultTimeToIdle(this.defaultTimeToIdle.Value);
+            }
 
             if (this.cacheConfigs.Any())
+            {
                 provider.SetCacheConfigurations(this.cacheConfigs);
+            }
 
             return this.OnBuilding(provider);
         }

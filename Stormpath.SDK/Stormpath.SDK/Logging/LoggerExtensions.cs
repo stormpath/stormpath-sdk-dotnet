@@ -16,10 +16,12 @@
 
 using System;
 using Stormpath.SDK.Impl.Extensions;
-using Stormpath.SDK.Logging;
 
-namespace Stormpath.SDK
+namespace Stormpath.SDK.Logging
 {
+    /// <summary>
+    /// Provides a set of static methods for sending log messages to an <see cref="ILogger"/>.
+    /// </summary>
     public static class LoggerExtensions
     {
         /// <summary>
@@ -82,8 +84,8 @@ namespace Stormpath.SDK
         /// </summary>
         /// <param name="logger">The logger interface.</param>
         /// <param name="exception">The exception associated with this event.</param>
-        /// <param name="message">The log message; or <c>null</c> to use <see cref="Exception.Message"/>.</param>
-        /// <param name="source">The source of the event, or <c>null</c> to use <see cref="Exception.Source"/>.</param>
+        /// <param name="message">The log message; or <see langword="null"/> to use <see cref="Exception.Message"/>.</param>
+        /// <param name="source">The source of the event, or <see langword="null"/> to use <see cref="Exception.Source"/>.</param>
         public static void Warn(this ILogger logger, Exception exception, string message = null, string source = null)
         {
             var logMessage = message.Nullable() ?? exception.Message;
@@ -96,8 +98,8 @@ namespace Stormpath.SDK
         /// </summary>
         /// <param name="logger">The logger interface.</param>
         /// <param name="exception">The exception associated with this event.</param>
-        /// <param name="message">The log message; or <c>null</c> to use <see cref="Exception.Message"/>.</param>
-        /// <param name="source">The source of the event, or <c>null</c> to use <see cref="Exception.Source"/>.</param>
+        /// <param name="message">The log message; or <see langword="null"/> to use <see cref="Exception.Message"/>.</param>
+        /// <param name="source">The source of the event, or <see langword="null"/> to use <see cref="Exception.Source"/>.</param>
         public static void Error(this ILogger logger, Exception exception, string message = null, string source = null)
         {
             var logMessage = message.Nullable() ?? exception.Message;
@@ -110,8 +112,8 @@ namespace Stormpath.SDK
         /// </summary>
         /// <param name="logger">The logger interface.</param>
         /// <param name="exception">The exception associated with this event.</param>
-        /// <param name="message">The log message; or <c>null</c> to use <see cref="Exception.Message"/>.</param>
-        /// <param name="source">The source of the event, or <c>null</c> to use <see cref="Exception.Source"/>.</param>
+        /// <param name="message">The log message; or <see langword="null"/> to use <see cref="Exception.Message"/>.</param>
+        /// <param name="source">The source of the event, or <see langword="null"/> to use <see cref="Exception.Source"/>.</param>
         public static void Fatal(this ILogger logger, Exception exception, string message = null, string source = null)
         {
             var logMessage = message.Nullable() ?? exception.Message;

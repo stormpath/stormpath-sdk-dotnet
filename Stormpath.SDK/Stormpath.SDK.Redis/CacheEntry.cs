@@ -35,7 +35,9 @@ namespace Stormpath.SDK.Cache.Redis
             var tokens = serialized.Split(new string[] { Separator }, StringSplitOptions.None);
 
             if (tokens.Length != 2)
+            {
                 throw new ArgumentException("Cached data is invalid.", nameof(serialized));
+            }
 
             return new CacheEntry(
                 tokens[1],

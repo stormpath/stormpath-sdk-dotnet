@@ -17,12 +17,23 @@
 namespace Stormpath.SDK.Impl.Jwt
 {
     /// <summary>
-    /// Signs an access token using the JWT spec.
+    /// Signs a payload using the JSON Web Tokens (JWT) spec.
     /// </summary>
     internal interface IJwtSigner
     {
+        /// <summary>
+        /// Signs a payload using the JSON Web Tokens (JWT) spec.
+        /// </summary>
+        /// <param name="jsonPayload">The payload to sign.</param>
+        /// <returns>The signed token.</returns>
         string Sign(string jsonPayload);
 
+        /// <summary>
+        /// Calculates a signature given a header and payload.
+        /// </summary>
+        /// <param name="base64Header">The Base-64 header.</param>
+        /// <param name="base64JsonPayload">The Base-64 payload.</param>
+        /// <returns>The signature.</returns>
         string CalculateSignature(string base64Header, string base64JsonPayload);
     }
 }

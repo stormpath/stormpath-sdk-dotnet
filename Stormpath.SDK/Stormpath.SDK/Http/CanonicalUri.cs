@@ -35,14 +35,20 @@ namespace Stormpath.SDK.Http
         public CanonicalUri(string href)
         {
             if (string.IsNullOrEmpty(href))
+            {
                 throw new ArgumentNullException(nameof(href));
+            }
 
             if (!UriQualifier.IsFullyQualified(href))
+            {
                 throw new ArgumentException("URI must be fully-qualified.", nameof(href));
+            }
 
             Uri parsedUri = null;
             if (!Uri.TryCreate(href, UriKind.Absolute, out parsedUri))
+            {
                 throw new ArgumentException("URI is invalid.", nameof(href));
+            }
 
             this.resourcePath = parsedUri.WithoutQueryAndFragment();
             var queryPart = GetQueryParametersFromHref(href) ?? string.Empty;
@@ -53,8 +59,8 @@ namespace Stormpath.SDK.Http
         /// Initializes a new instance of the <see cref="CanonicalUri"/> class
         /// with the specified <see cref="ResourcePath"/> and <see cref="QueryString"/> components.
         /// </summary>
-        /// <param name="href">The value for <see cref="ResourcePath"/>.</param>
-        /// <param name="queryParams">The value for <see cref="QueryString"/>.</param>
+        /// <param name="href">The resource path.</param>
+        /// <param name="queryParams">The query string parameters.</param>
         public CanonicalUri(string href, QueryString queryParams)
             : this(href)
         {
@@ -91,9 +97,9 @@ namespace Stormpath.SDK.Http
         public Uri ResourcePath => this.resourcePath;
 
         /// <summary>
-        /// Gets whether this <see cref="CanonicalUri"/> has a <see cref="QueryString"/> component.
+        /// Gets a value indicating whether this <see cref="CanonicalUri"/> has a <see cref="QueryString"/> component.
         /// </summary>
-        /// <value><c>true</c> if <see cref="QueryString"/> is not null; <c>false</c> otherwise.</value>
+        /// <value><see langword="true"/> if <see cref="QueryString"/> is not null; <see langword="false"/> otherwise.</value>
         public bool HasQuery => this.query == null;
 
         /// <summary>
@@ -102,12 +108,17 @@ namespace Stormpath.SDK.Http
         /// <value>The query string (any values after '?') of this <see cref="CanonicalUri"/>.</value>
         public QueryString QueryString => this.query;
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             if (this.query.Any())
+            {
                 return $"{this.resourcePath}?{this.query}";
+            }
             else
+            {
                 return this.resourcePath.ToString();
+            }
         }
 
         /// <summary>

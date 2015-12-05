@@ -20,10 +20,24 @@ using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
 {
+    /// <summary>
+    /// Represents an ordered chain of filters to execute for an asynchronous request.
+    /// </summary>
     internal interface IAsynchronousFilterChain
     {
+        /// <summary>
+        /// Gets the data store invoking this filter chain.
+        /// </summary>
+        /// <value>The data store.</value>
         IInternalAsyncDataStore DataStore { get; }
 
+        /// <summary>
+        /// Executes each filter in the chain for an asynchronous request.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The result of the filtered request.</returns>
         Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, ILogger logger, CancellationToken cancellationToken);
     }
 }

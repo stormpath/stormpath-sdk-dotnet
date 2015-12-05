@@ -17,19 +17,43 @@
 using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Http;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
+    /// <summary>
+    /// Represents the result of an API request for a Stormpath resource.
+    /// </summary>
     internal interface IResourceDataResult
     {
+        /// <summary>
+        /// Gets the resulting HTTP action.
+        /// </summary>
+        /// <value>The HTTP action.</value>
         ResourceAction Action { get; }
 
-        Type Type { get; }
-
+        /// <summary>
+        /// Gets the request URL.
+        /// </summary>
+        /// <value>The request URL.</value>
         CanonicalUri Uri { get; }
 
+        /// <summary>
+        /// Gets the resource type as a .NET <see cref="System.Type"/>.
+        /// </summary>
+        /// <value>The resource type.</value>
+        Type Type { get; }
+
+        /// <summary>
+        /// Gets the response HTTP status code.
+        /// </summary>
+        /// <value>The response HTTP status code.</value>
         int HttpStatus { get; }
 
-        IDictionary<string, object> Body { get; }
+        /// <summary>
+        /// Gets the body of the response.
+        /// </summary>
+        /// <value>The response body.</value>
+        Map Body { get; }
     }
 }

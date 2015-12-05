@@ -89,7 +89,7 @@ namespace Stormpath.SDK.Application
         /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// A Task whose result is the result of the authentication.
+        /// The result of the authentication.
         /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
@@ -112,7 +112,7 @@ namespace Stormpath.SDK.Application
         /// <param name="responseOptions">The options to apply to this request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// A Task whose result is the result of the authentication.
+        /// The result of the authentication.
         /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
@@ -132,10 +132,10 @@ namespace Stormpath.SDK.Application
         /// against the specified account store.
         /// If the account does not exist in the account store, the authentication attempt will fail.
         /// </summary>
-        /// <param name="requestBuilder">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
+        /// <param name="requestBuilder">Sets the login request parameters.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// A Task whose result is the result of the authentication.
+        /// The result of the authentication.
         /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
@@ -157,11 +157,11 @@ namespace Stormpath.SDK.Application
         /// against the specified account store.
         /// If the account does not exist in the account store, the authentication attempt will fail.
         /// </summary>
-        /// <param name="requestBuilder">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
+        /// <param name="requestBuilder">Sets the login request parameters.</param>
         /// <param name="responseOptions">The options to apply to this request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// A Task whose result is the result of the authentication.
+        /// The result of the authentication.
         /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
@@ -170,11 +170,11 @@ namespace Stormpath.SDK.Application
         /// <code>
         /// var result = await myApp.AuthenticateAccountAsync(
         ///     request =>
-        /// {
-        ///     request.SetUsernameOrEmail("jsmith");
-        ///     request.SetPassword("Password123#");
-        ///     request.SetAccountStore(myAccountStore);
-        /// },
+        ///     {
+        ///         request.SetUsernameOrEmail("jsmith");
+        ///         request.SetPassword("Password123#");
+        ///         request.SetAccountStore(myAccountStore);
+        ///     },
         ///     response => response.Expand(x => x.GetAccountAsync));
         /// </code>
         /// </example>
@@ -189,7 +189,7 @@ namespace Stormpath.SDK.Application
         /// <param name="password">The account's raw (plaintext) password.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// A Task whose result is the result of the authentication.
+        /// The result of the authentication.
         /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
@@ -207,7 +207,7 @@ namespace Stormpath.SDK.Application
         /// <param name="username">The account's username.</param>
         /// <param name="password">The account's raw (plaintext) password</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is <c>true</c> if the authentication attempt succeeded; <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if the authentication attempt succeeded; <see langword="false"/> otherwise.</returns>
         /// <example>
         /// if (await myApp.TryAuthenticateAccountAsync("jsmith", "Password123#"))
         /// {
@@ -230,7 +230,7 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <param name="requestBuilderAction">Sets the options required for the verification email request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task that determines when the operation is complete.</returns>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task SendVerificationEmailAsync(Action<EmailVerificationRequestBuilder> requestBuilderAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -244,23 +244,23 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <param name="usernameOrEmail">The username or email identifying the account to send the verification email to.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task that determines when the operation is complete.</returns>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task SendVerificationEmailAsync(string usernameOrEmail, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the Stormpath <see cref="ITenant"/> that owns this Application resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is this application's tenant.</returns>
+        /// <returns>This application's tenant.</returns>
         Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the <see cref="IAccountStore"/> (either a <see cref="IGroup"/> or <see cref="Directory.IDirectory"/>)
-        /// used to persist new accounts created by the application, or <c>null</c> if no account store has been designated.
+        /// used to persist new accounts created by the application, or <see langword="null"/> if no account store has been designated.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the default <see cref="IAccountStore"/>,
-        /// or <c>null</c> if no default <see cref="IAccountStore"/> has been designated.</returns>
+        /// <returns>The default <see cref="IAccountStore"/>,
+        /// or <see langword="null"/> if no default <see cref="IAccountStore"/> has been designated.</returns>
         /// <example>
         /// Getting and using the default account store:
         /// <code>
@@ -276,7 +276,7 @@ namespace Stormpath.SDK.Application
         Task<IAccountStore> GetDefaultAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Sets the <see cref="IAccountStore"/> (either a <see cref="IGroup"/> or a <see cref="IDirectory"/>)
+        /// Sets the <see cref="IAccountStore"/> (either a <see cref="IGroup"/> or a <see cref="Directory.IDirectory"/>)
         /// used to persist new accounts created by the Application.
         /// <para>
         /// Because an Application is not an <see cref="IAccountStore"/> itself, it delegates to a Group or Directory
@@ -286,11 +286,11 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <param name="accountStore">The <see cref="IAccountStore"/> used to persist new accounts.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task indicating the completion of the method.</returns>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task SetDefaultAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
+        /// Gets the <see cref="IAccountStore"/> used to persist new groups created by the application, or <see langword="null"/>
         /// if no account store has been designated.
         /// <para>
         /// Stormpath's current REST API requires this to be a <see cref="Directory.IDirectory"/>.
@@ -299,7 +299,7 @@ namespace Stormpath.SDK.Application
         /// </para>
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the <see cref="IAccountStore"/> used to persist new groups created by the application, or <c>null</c>
+        /// <returns>The <see cref="IAccountStore"/> used to persist new groups created by the application, or <see langword="null"/>
         /// if no account store has been designated.</returns>
         /// <example>
         /// Getting and using the default group store:
@@ -316,7 +316,7 @@ namespace Stormpath.SDK.Application
         Task<IAccountStore> GetDefaultGroupStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Sets the <see cref="IAccountStore"/> (a <see cref="IDirectory"/>)
+        /// Sets the <see cref="IAccountStore"/> (a <see cref="Directory.IDirectory"/>)
         /// used to persist new groups created by the Application.
         /// <para>
         /// Stormpath's current REST API requires this to be a Directory. However, this could be a Group in the future,
@@ -330,7 +330,7 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <param name="accountStore">The <see cref="IAccountStore"/> used to persist new groups.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task indicating the completion of the method.</returns>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task SetDefaultGroupStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -339,16 +339,16 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <param name="mapping">The new <see cref="IAccountStoreMapping"/> resource to add to the Application's AccountStoreMapping list.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>.</returns>
+        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
         /// <exception cref="Error.ResourceException">The AccountStoreMapping's ListIndex is negative, or the mapping could not be added to the Application.</exception>
         /// <example>
         /// Setting a new <see cref="IAccountStoreMapping"/>'s <see cref="IAccountStoreMapping.ListIndex"/> to <c>500</c> and then adding the mapping to
         /// an application with an existing 3-item list will automatically save the <see cref="IAccountStoreMapping"/>
         /// at the end of the list and set its <see cref="IAccountStoreMapping.ListIndex"/> value to <c>3</c> (items at index 0, 1, 2 were the original items,
-        /// the new fourth item will be at index 3).
+        /// the new fourth item will be at index 3):
         /// <code>
         /// IAccountStore directoryOrGroup = GetDirectoryOrGroupAsync();
-        /// IAccountStoreMapping mapping = client.Instantiate<IAccountStoreMapping>();
+        /// IAccountStoreMapping mapping = client.Instantiate&lt;IAccountStoreMapping&gt;();
         /// mapping.SetAccountStore(directoryOrGroup);
         /// mapping.SetListIndex(500);
         /// mapping = await application.CreateAccountStoreMappingAsync(mapping);
@@ -365,7 +365,7 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <param name="accountStore">The new <see cref="IAccountStore"/> resource to add to the Application's AccountStoreMapping list.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>.</returns>
+        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
         /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application.</exception>
         /// <example>
         /// <code>
@@ -376,25 +376,25 @@ namespace Stormpath.SDK.Application
         Task<IAccountStoreMapping> AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Adds a new <see cref="IAccountStore"/> to this Application. The given string can either be an <c>href</c> or a <c>name</c> of a
-        /// <see cref="IDirectory"/> or <see cref="IGroup"/> belonging to the current <see cref="ITenant"/>.
+        /// Adds a new <see cref="IAccountStore"/> to this Application. The given string can either be an <c>href</c> or a name of a
+        /// <see cref="Directory.IDirectory"/> or <see cref="IGroup"/> belonging to the current <see cref="ITenant"/>.
         /// <para>
         /// If the provided value is an <c>href</c>, this method will get the proper Resource and add it as a new AccountStore in this
-        /// Application without much effort. However, if the provided value is not an <c>href</c>, it will be considered as a <c>name</c>. In this case,
+        /// Application without much effort. However, if the provided value is not an <c>href</c>, it will be considered as a name. In this case,
         /// this method will search for both a Directory and a Group whose names equal the provided <paramref name="hrefOrName"/>. If only
         /// one resource exists (either a Directory or a Group), then it will be added as a new AccountStore in this Application. However,
         /// if there are two resources (a Directory and a Group) matching that name, a <see cref="Error.ResourceException"/> will be thrown.
         /// </para>
         /// <para>
-        /// Note: When using <c>names</c> this method is not efficient as it will search for both Directories and Groups within this Tenant
+        /// Note: When using names this method is not efficient as it will search for both Directories and Groups within this Tenant
         /// for a matching name. In order to do so, some looping takes place at the client side: groups exist within directories, therefore we need
         /// to loop through every existing directory in order to find the required Group. In contrast, providing the Group's <c>href</c> is much more
         /// efficient as no actual search operation needs to be carried out.
         /// </para>
         /// </summary>
-        /// <param name="hrefOrName">Either the <c>href</c> or <c>name</c> of the desired <see cref="IDirectory"/> or <see cref="IGroup"/>.</param>
+        /// <param name="hrefOrName">Either the <c>href</c> or name of the desired <see cref="Directory.IDirectory"/> or <see cref="IGroup"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>.</returns>
+        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
         /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application.</exception>
         /// <exception cref="ArgumentException">The given <paramref name="hrefOrName"/> matches more than one resource in the current Tenant.</exception>
         /// <example>
@@ -411,18 +411,18 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Adds a resource of type <typeparamref name="T"/> as a new <see cref="IAccountStore"/> to this Application. The provided <see cref="IAsyncQueryable{T}"/>
-        /// must match a single <typeparamref name="T"/> in the current Tenant. If no compatible resource matches the query, this method will return <c>null</c>.
+        /// must match a single <typeparamref name="T"/> in the current Tenant. If no compatible resource matches the query, this method will return <see langword="null"/>.
         /// </summary>
         /// <param name="query">Query to search for a resource of type <typeparamref name="T"/> in the current Tenant.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <typeparam name="T">The type of resource (either a <see cref="IDirectory"/> or a <see cref="IGroup"/>) to query for.</typeparam>
-        /// <returns>A Task whose result is the newly-created <see cref="IAccountStoreMapping"/>, or <c>null</c> if there is no resource matching the query.</returns>
+        /// <typeparam name="T">The type of resource (either a <see cref="Directory.IDirectory"/> or a <see cref="IGroup"/>) to query for.</typeparam>
+        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <see langword="null"/> if there is no resource matching the query.</returns>
         /// <exception cref="Error.ResourceException">The found resource already exists as an account store in the application.</exception>
         /// <exception cref="ArgumentException">The query matches more than one resource in the current Tenant.</exception>
         /// <example>
         /// Adding a directory by partial name:
         /// <code>
-        /// IAccountStoreMapping mapping = await application.AddAccountStoreAsync<IDirectory>(dirs => dirs.Where(d => d.Name.StartsWith(partialName)));
+        /// IAccountStoreMapping mapping = await application.AddAccountStoreAsync&lt;IDirectory&gt;(dirs => dirs.Where(d => d.Name.StartsWith(partialName)));
         /// </code>
         /// </example>
         Task<IAccountStoreMapping> AddAccountStoreAsync<T>(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query, CancellationToken cancellationToken = default(CancellationToken))
@@ -458,7 +458,7 @@ namespace Stormpath.SDK.Application
         /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
         /// <param name="newPassword">The new password that will be set to the <see cref="IAccount"/> if the token is successfully validated.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the account matching the specified token.</returns>
+        /// <returns>The account matching the specified token.</returns>
         /// <exception cref="Error.ResourceException">The token is not valid.</exception>
         Task<IAccount> ResetPasswordAsync(string token, string newPassword, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -468,7 +468,7 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IPasswordResetToken"/>.
+        /// <returns>The created <see cref="IPasswordResetToken"/>.
         /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">There is no account that matches the specified email address.</exception>
         Task<IPasswordResetToken> SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken = default(CancellationToken));
@@ -484,7 +484,7 @@ namespace Stormpath.SDK.Application
         /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
         /// <param name="accountStore">The AccountStore expected to contain an account with the specified email address.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IPasswordResetToken"/>.
+        /// <returns>The created <see cref="IPasswordResetToken"/>.
         /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">
         /// The specified <see cref="IAccountStore"/> is not mapped to this application, or there is no account that matches the specified email address in the specified <paramref name="accountStore"/>.
@@ -503,7 +503,7 @@ namespace Stormpath.SDK.Application
         /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
         /// <param name="hrefOrNameKey">The href of the AccountStore, or the name key of the Organization, expected to contain an account with the specified email address.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IPasswordResetToken"/>.
+        /// <returns>The created <see cref="IPasswordResetToken"/>.
         /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">
         /// The specified AccountStore or Organization is not mapped to this application, or there is no account that matches the specified email address in the AccountStore or Organization.
@@ -513,9 +513,9 @@ namespace Stormpath.SDK.Application
         /// <summary>
         /// Verifies a password reset token.
         /// </summary>
-        /// <param name="token">The verification token, usually obtained as a request paramter by your application.</param>
+        /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the <see cref="IAccount"/> matching the specified token.</returns>
+        /// <returns>The <see cref="IAccount"/> matching the specified token.</returns>
         /// <exception cref="Error.ResourceException">The token is not valid.</exception>
         Task<IAccount> VerifyPasswordResetTokenAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -529,7 +529,7 @@ namespace Stormpath.SDK.Application
         /// (e.g. an <c>accessToken</c>) used to verify the identity.
         /// </param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the result of the access request.</returns>
+        /// <returns>The result of the access request.</returns>
         /// <exception cref="Error.ResourceException">The access attempt failed.</exception>
         Task<IProviderAccountResult> GetAccountAsync(IProviderAccountRequest request, CancellationToken cancellationToken = default(CancellationToken));
 

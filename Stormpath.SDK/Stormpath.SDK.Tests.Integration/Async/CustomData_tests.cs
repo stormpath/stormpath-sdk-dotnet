@@ -21,6 +21,7 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
@@ -106,7 +107,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
             updated.Count().ShouldBe(6);
 
             // Try deleting
-            var result = await updated.DeleteAsync();
+            await updated.DeleteAsync();
+            await Task.Delay(Delay.UpdatePropogation);
+
             var newCustomData = await account.GetCustomDataAsync();
             newCustomData.Count().ShouldBe(3);
 
@@ -136,8 +139,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             updated.Clear();
             var result = await updated.SaveAsync();
 
-            // Let the cache update
-            await Task.Delay(100);
+            await Task.Delay(Delay.UpdatePropogation);
 
             var newCustomData = await account.GetCustomDataAsync();
             newCustomData.Count().ShouldBe(3);
@@ -165,7 +167,11 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // ... and then delete one
             updated.Remove("claims");
-            var updated2 = await updated.SaveAsync();
+            await updated.SaveAsync();
+
+            await Task.Delay(Delay.UpdatePropogation);
+
+            var updated2 = await account.GetCustomDataAsync();
             updated2.Get("claims").ShouldBeNull();
             updated2.Get("text").ShouldBe("fizzbuzz");
 

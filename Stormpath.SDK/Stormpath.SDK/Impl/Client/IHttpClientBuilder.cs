@@ -20,16 +20,43 @@ using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.Client
 {
+    /// <summary>
+    /// Builder pattern for <see cref="IHttpClient"/> instances.
+    /// </summary>
     internal interface IHttpClientBuilder : ILoggerConsumer<IHttpClientBuilder>
     {
-        IHttpClientBuilder UseHttpClient(IHttpClient client);
+        /// <summary>
+        /// Sets the HTTP client object to use.
+        /// </summary>
+        /// <param name="client">The HTTP client.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IHttpClientBuilder SetHttpClient(IHttpClient client);
 
+        /// <summary>
+        /// Sets the remote base URL.
+        /// </summary>
+        /// <param name="baseUrl">The base URL.</param>
+        /// <returns>This instance for method chaining.</returns>
         IHttpClientBuilder SetBaseUrl(string baseUrl);
 
+        /// <summary>
+        /// Sets the connection timeout.
+        /// </summary>
+        /// <param name="connectionTimeout">The timeout in milliseconds.</param>
+        /// <returns>This instance for method chaining.</returns>
         IHttpClientBuilder SetConnectionTimeout(int connectionTimeout);
 
+        /// <summary>
+        /// Sets the connection proxy.
+        /// </summary>
+        /// <param name="proxy">The proxy.</param>
+        /// <returns>This instance for method chaining.</returns>
         IHttpClientBuilder SetProxy(IWebProxy proxy);
 
+        /// <summary>
+        /// Builds a new <see cref="IHttpClient"/> instance from the current builder state.
+        /// </summary>
+        /// <returns>A new <see cref="IHttpClient"/> instance.</returns>
         IHttpClient Build();
     }
 }

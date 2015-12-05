@@ -20,40 +20,49 @@ using System.Linq;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.IdSite
 {
-    internal sealed class DefaultNonce : INonce, IWithProperties
+    internal sealed class DefaultNonce : INonce
     {
         public static readonly string ValuePropertyName = "value";
 
-        private readonly IDictionary<string, object> properties;
+        private readonly Map properties;
 
         public DefaultNonce(string nonce)
         {
             if (string.IsNullOrEmpty(nonce))
+            {
                 throw new ArgumentNullException(nameof(nonce));
+            }
 
             this.properties = new Dictionary<string, object>();
             this.properties.Add(ValuePropertyName, nonce);
         }
 
-        public DefaultNonce(IDictionary<string, object> properties)
+        public DefaultNonce(Map properties)
         {
             if (properties == null || !properties.Any())
+            {
                 throw new ArgumentNullException(nameof(properties));
+            }
 
             object value = null;
             if (!properties.TryGetValue(ValuePropertyName, out value))
+            {
                 throw new ArgumentException(nameof(properties), $"The dictionary must contain the key '{ValuePropertyName}'.");
+            }
 
             if (!(value is string))
+            {
                 throw new ArgumentException("Cannot parse nonce value.");
+            }
 
             this.properties = properties;
         }
 
-        public IDictionary<string, object> GetProperties()
+        public Map GetProperties()
             => new Dictionary<string, object>(this.properties);
 
         string IResource.Href => this.GetValue();

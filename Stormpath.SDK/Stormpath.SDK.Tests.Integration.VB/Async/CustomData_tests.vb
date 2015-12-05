@@ -21,6 +21,7 @@ Imports Shouldly
 Imports Stormpath.SDK.Account
 Imports Stormpath.SDK.Application
 Imports Stormpath.SDK.Client
+Imports Stormpath.SDK.Tests.Common
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData
 Imports Xunit
@@ -99,7 +100,9 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             updated.Count().ShouldBe(6)
 
             ' Try deleting
-            Dim result = Await updated.DeleteAsync()
+            Await updated.DeleteAsync()
+            Await Task.Delay(Delay.UpdatePropogation)
+
             Dim newCustomData = Await account.GetCustomDataAsync()
             newCustomData.Count().ShouldBe(3)
 
@@ -128,8 +131,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             updated.Clear()
             Dim result = Await updated.SaveAsync()
 
-            ' Let the cache update
-            Await Task.Delay(100)
+            Await Task.Delay(Delay.UpdatePropogation)
 
             Dim newCustomData = Await account.GetCustomDataAsync()
             newCustomData.Count().ShouldBe(3)
@@ -156,7 +158,11 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
             ' ... and then delete one
             updated.Remove("claims")
-            Dim updated2 = Await updated.SaveAsync()
+            Await updated.SaveAsync()
+
+            Await Task.Delay(Delay.UpdatePropogation)
+
+            Dim updated2 = Await account.GetCustomDataAsync()
             Assert.Null(updated2.[Get]("claims"))
             CStr(updated2.[Get]("text")).ShouldBe("fizzbuzz")
 
@@ -164,6 +170,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Assert.True(Await account.DeleteAsync())
             Me.fixture.CreatedAccountHrefs.Remove(account.Href)
         End Function
+
         Private Shared Function InlineAssignHelper(Of T)(ByRef target As T, value As T) As T
             target = value
             Return value

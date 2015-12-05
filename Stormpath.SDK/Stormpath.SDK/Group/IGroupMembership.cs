@@ -21,20 +21,27 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Group
 {
+    /// <summary>
+    /// A <see cref="IGroupMembership"/> represents the association of an <see cref="IAccount"/> and a <see cref="IGroup"/>.
+    /// <para>
+    /// Calling <see cref="IDeletable.DeleteAsync(CancellationToken)"/> on this resource will only
+    /// delete the association - it will not delete the <see cref="IAccount"/> or <see cref="IGroup"/>.
+    /// </para>
+    /// </summary>
     public interface IGroupMembership : IResource, IDeletable
     {
         /// <summary>
         /// Gets this membership's <see cref="IAccount"/> resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is this membership's <see cref="IAccount"/> resource.</returns>
+        /// <returns>This membership's <see cref="IAccount"/> resource.</returns>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets this membership's <see cref="IGroup"/> resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is this membership's <see cref="IGroup"/> resource.</returns>
+        /// <returns>This membership's <see cref="IGroup"/> resource.</returns>
         Task<IGroup> GetGroupAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

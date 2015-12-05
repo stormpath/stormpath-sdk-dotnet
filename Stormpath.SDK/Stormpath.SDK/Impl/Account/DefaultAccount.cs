@@ -68,7 +68,9 @@ namespace Stormpath.SDK.Impl.Account
             get
             {
                 if (string.IsNullOrEmpty(this.EmailVerificationToken.Href))
+                {
                     return null;
+                }
 
                 var emailVerificationToken = this.GetInternalAsyncDataStore()
                     .InstantiateWithHref<IEmailVerificationToken>(this.EmailVerificationToken.Href);
@@ -101,7 +103,9 @@ namespace Stormpath.SDK.Impl.Account
         IAccount IAccount.SetEmail(string email)
         {
             if (string.IsNullOrEmpty(email))
+            {
                 throw new ArgumentNullException(nameof(email));
+            }
 
             this.SetProperty(EmailPropertyName, email);
             return this;
@@ -110,7 +114,9 @@ namespace Stormpath.SDK.Impl.Account
         IAccount IAccount.SetGivenName(string givenName)
         {
             if (string.IsNullOrEmpty(givenName))
+            {
                 throw new ArgumentNullException(nameof(givenName));
+            }
 
             this.SetProperty(GivenNamePropertyName, givenName);
             return this;
@@ -125,7 +131,9 @@ namespace Stormpath.SDK.Impl.Account
         IAccount IAccount.SetPassword(string password)
         {
             if (string.IsNullOrEmpty(password))
+            {
                 throw new ArgumentNullException(nameof(password));
+            }
 
             this.SetProperty(PasswordPropertyName, password);
             return this;
@@ -140,7 +148,9 @@ namespace Stormpath.SDK.Impl.Account
         IAccount IAccount.SetSurname(string surname)
         {
             if (string.IsNullOrEmpty(surname))
+            {
                 throw new ArgumentNullException(nameof(surname));
+            }
 
             this.SetProperty(SurnamePropertyName, surname);
             return this;
@@ -149,7 +159,9 @@ namespace Stormpath.SDK.Impl.Account
         IAccount IAccount.SetUsername(string username)
         {
             if (string.IsNullOrEmpty(username))
+            {
                 throw new ArgumentNullException(nameof(username));
+            }
 
             this.SetProperty(UsernamePropertyName, username);
             return this;

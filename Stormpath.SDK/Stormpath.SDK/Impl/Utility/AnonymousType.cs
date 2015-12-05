@@ -16,19 +16,24 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Utility
 {
     internal static class AnonymousType
     {
-        public static IDictionary<string, object> ToDictionary(object nameValuePairs)
+        public static Map ToDictionary(object nameValuePairs)
         {
             if (nameValuePairs == null)
+            {
                 return null;
+            }
 
             bool isConcreteType = !string.IsNullOrEmpty(nameValuePairs.GetType().Namespace);
             if (isConcreteType)
+            {
                 return null;
+            }
 
             var dictionary = new Dictionary<string, object>();
             foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(nameValuePairs))

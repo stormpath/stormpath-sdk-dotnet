@@ -1,4 +1,4 @@
-﻿// <copyright file="IAsyncQueryable.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAsyncQueryable{T}.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,15 +21,11 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Linq
 {
-    public interface IAsyncQueryable
-    {
-    }
-
     /// <summary>
     /// Represents a collection of items in a data source that can be queried asynchronously.
     /// </summary>
     /// <typeparam name="T">The type of elements in the collection.</typeparam>
-    public interface IAsyncQueryable<T> : IAsyncQueryable
+    public interface IAsyncQueryable<T>
     {
         /// <summary>
         /// Gets the current page of results after a call to <see cref="MoveNextAsync(CancellationToken)"/>.
@@ -42,7 +38,7 @@ namespace Stormpath.SDK.Linq
         /// Attempts to asynchronously retrieve the next page of items from the data source.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result represents whether the collection retrieved items.</returns>
+        /// <returns><see langword="true"/> if the enumerator was successfully advanced to the next page; <see langword="false"/> if the enumerator has passed the end of the collection.</returns>
         Task<bool> MoveNextAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

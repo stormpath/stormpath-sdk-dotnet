@@ -34,10 +34,6 @@ namespace Stormpath.SDK.Directory
         /// </summary>
         public static DirectoryStatus Disabled = new DirectoryStatus("DISABLED");
 
-        private DirectoryStatus()
-        {
-        }
-
         private DirectoryStatus(string value)
             : base(value)
         {

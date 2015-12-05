@@ -20,6 +20,9 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IResource"/>.
+    /// </summary>
     public static class SyncResourceExtensions
     {
         /// <summary>
@@ -34,7 +37,7 @@ namespace Stormpath.SDK.Sync
             => (resource as ISaveableSync<T>).Save();
 
         /// <summary>
-        /// Synchronously reates or updates the resource, and returns the persisted resource data with the specified <paramref name="responseOptions"/>.
+        /// Synchronously creates or updates the resource, and returns the persisted resource data with the specified <paramref name="responseOptions"/>.
         /// </summary>
         /// <param name="resource">The resource.</param>
         /// <param name="responseOptions">The options to apply to this request.</param>

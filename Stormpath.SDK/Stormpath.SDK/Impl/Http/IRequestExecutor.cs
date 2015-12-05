@@ -22,12 +22,30 @@ using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.Http
 {
+    /// <summary>
+    /// Coordinates the low-level execution of API requests.
+    /// </summary>
     internal interface IRequestExecutor : IDisposable
     {
+        /// <summary>
+        /// Gets the API Key used to sign requests.
+        /// </summary>
+        /// <value>The API Key used to sign requests.</value>
         IClientApiKey ApiKey { get; }
 
+        /// <summary>
+        /// Executes a request asynchronously.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The HTTP response.</returns>
         Task<IHttpResponse> ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Executes a request synchronously.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>The HTTP response.</returns>
         IHttpResponse Execute(IHttpRequest request);
     }
 }

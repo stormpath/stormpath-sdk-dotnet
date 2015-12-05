@@ -40,7 +40,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         private static IResourceDataResult FilterCore(IResourceDataResult result)
         {
             if (typeof(IProviderAccountResult).IsAssignableFrom(result.Type))
+            {
                 result.Body.Add("isNewAccount", result.HttpStatus == 201);
+            }
 
             return result;
         }

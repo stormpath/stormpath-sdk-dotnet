@@ -32,3 +32,5 @@ nuget-pack
 # Xamarin nuget cache
 Stormpath.SDK/.nuget/
 
+# Generated API docs
+docs/api

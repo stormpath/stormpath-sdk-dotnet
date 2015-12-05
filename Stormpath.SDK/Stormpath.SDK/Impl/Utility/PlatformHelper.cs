@@ -40,26 +40,38 @@ namespace Stormpath.SDK.Impl.Utility
         public static string GetMonoRuntimeVersion()
         {
             if (!IsRunningOnMono())
+            {
                 return "unknown-1";
+            }
 
             var monoRuntimeType = Type.GetType("Mono.Runtime");
             if (monoRuntimeType == null)
+            {
                 return "unknown-2";
+            }
 
             var displayNameMethod = monoRuntimeType.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
             if (displayNameMethod == null)
+            {
                 return "unknown-3";
+            }
 
             var fullVersionString = displayNameMethod.Invoke(null, null)?.ToString();
             if (string.IsNullOrEmpty(fullVersionString))
+            {
                 return "unknown-4";
+            }
 
             if (!fullVersionString.Contains(" "))
+            {
                 return fullVersionString;
+            }
 
             var version = fullVersionString.Split(' ')?[0];
             if (string.IsNullOrEmpty(version))
+            {
                 return fullVersionString;
+            }
 
             return version;
         }
@@ -67,7 +79,9 @@ namespace Stormpath.SDK.Impl.Utility
         public static string GetMonoDotNetFrameworkVersion()
         {
             if (!IsRunningOnMono())
+            {
                 return "unknown";
+            }
 
             var version = $"{Environment.Version.Major}.{Environment.Version.Minor}";
 
@@ -80,10 +94,14 @@ namespace Stormpath.SDK.Impl.Utility
             var newerFrameworkVersion = GetDotNet45OrNewerVersion();
 
             if (!string.IsNullOrEmpty(newerFrameworkVersion))
+            {
                 return newerFrameworkVersion;
+            }
 
             if (!string.IsNullOrEmpty(olderFrameworkVersion))
+            {
                 return olderFrameworkVersion;
+            }
 
             return "unknown";
         }
@@ -97,14 +115,18 @@ namespace Stormpath.SDK.Impl.Utility
                 var installedVersionNames = installedVersions?.GetSubKeyNames();
                 var latestVersion = installedVersionNames?.LastOrDefault();
                 if (string.IsNullOrEmpty(latestVersion))
+                {
                     return string.Empty;
+                }
 
                 var frameworkVersion = latestVersion.Remove(0, 1); // trim leading 'v'
 
                 int servicePackVersion = 0;
                 bool servicePackExists = int.TryParse(installedVersions.OpenSubKey(latestVersion)?.GetValue("SP", 0)?.ToString(), out servicePackVersion);
                 if (!servicePackExists || servicePackVersion == 0)
+                {
                     return frameworkVersion;
+                }
 
                 return $"{frameworkVersion}-SP{servicePackVersion}";
             }
@@ -125,16 +147,29 @@ namespace Stormpath.SDK.Impl.Utility
                 {
                     int releaseKey;
                     if (!int.TryParse(ndpKey?.GetValue("Release")?.ToString(), out releaseKey))
+                    {
                         return string.Empty;
+                    }
 
                     if (releaseKey >= 393273)
+                    {
                         return "4.6RC+";
+                    }
+
                     if (releaseKey >= 379893)
+                    {
                         return "4.5.2";
+                    }
+
                     if (releaseKey >= 378675)
+                    {
                         return "4.5.1";
+                    }
+
                     if (releaseKey >= 378389)
+                    {
                         return "4.5";
+                    }
 
                     return string.Empty;
                 }
@@ -179,7 +214,9 @@ namespace Stormpath.SDK.Impl.Utility
             var operatingSystemVersion = Environment.OSVersion.Version;
             var version = $"{operatingSystemVersion.Major}.{operatingSystemVersion.Minor}.{operatingSystemVersion.MajorRevision}.{operatingSystemVersion.MinorRevision}";
             if (!string.IsNullOrEmpty(Environment.OSVersion.ServicePack))
+            {
                 version = $"{version}-{Environment.OSVersion.ServicePack}";
+            }
 
             return version;
         }

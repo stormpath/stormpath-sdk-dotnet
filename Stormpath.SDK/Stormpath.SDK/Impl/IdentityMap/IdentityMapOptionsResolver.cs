@@ -42,7 +42,9 @@ namespace Stormpath.SDK.Impl.IdentityMap
 
             var options = new IdentityMapOptions(skip, storeInfinitely);
             if (!options.IsValid())
+            {
                 throw new ApplicationException($"Bad identity map options specified for type {interfaceType.Name}");
+            }
 
             return options;
         }

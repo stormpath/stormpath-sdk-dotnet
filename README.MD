@@ -14,9 +14,9 @@ library gives your ASP.NET, C#, or VB.NET application access to all of Stormpath
 In addition to these core Stormpath features, this SDK provides:
 
 - Support for .NET 4.5 and later
-- Support for Mono on Linux
-- Easy installation using NuGet
-- Fully dual-stack design for native asynchronous ([TPL](https://msdn.microsoft.com/en-us/library/dd460717(v=vs.110).aspx)) and native synchronous access
+- Support for Linux and OS X via Mono
+- LINQ to Stormpath for readable, expressive queries
+- Fully dual-stack design for native asynchronous and native synchronous access
 
 If you have feedback about this library, please get in touch and share your
 thoughts! support@stormpath.com
@@ -26,10 +26,6 @@ thoughts! support@stormpath.com
 This library is currently under active development. If you would like to be notified when we publish releases, watch this repository or send an email to support@stormpath.com.
 
 ## Installation instructions
-
-The Stormpath C# SDK consists of three packages: `Stormpath.SDK.Core`, `Stormpath.SDK.JsonNetSerializer`, and `Stormpath.SDK.RestSharpClient`. The latter two contain dependencies on external libraries ([JSON.NET](https://github.com/JamesNK/Newtonsoft.Json) and [RestSharp](https://github.com/restsharp/RestSharp)). These are required for the SDK to run properly.
-
-For convenience, the meta-package `Stormpath.SDK` contains everything you need to get up an running quickly. :thumbsup:
 
 #### Using the Nuget Package Manager
 
@@ -50,28 +46,37 @@ In this quickstart, you'll use Visual Studio to make a simple console applicatio
 
 #### Get an API Key
 
- 1. If you haven't already, [sign up for Stormpath here](https://api.stormpath.com/register). Check your email for a verification link.
- 2. Click the link in the verification email.
- 3. Log in to the [Stormpath Admin Console](https://api.stormpath.com/) using the email address and password you used to register with Stormpath.
- 4. Click the **Create API Key** or **Manage Existing Keys** button in the middle of the page.
- 5. Under **Security Credentials**, click **Create API Key**. This will generate your API Key and download it to your computer as an `apiKey.properties` file. If you open the file in a text editor, you will see something similar to the following:
- ```
- apiKey.id = 144JVZINOF5EBNCMG9EXAMPLE
- apiKey.secret = lWxOiKqKPNwJmSldbiSkEbkNjgh2uRSNAb+AEXAMPLE
- ```
- 
- Save this file in a secure location, such as a `.stormpath` directory in your home directory. (This is the default location the SDK checks, but you can specify a different location if you'd like.)
- 
- For example:
- 
- ```
- C:\>cd %homedrive%%homepath%
- C:\Users\yourname>mkdir .stormpath
- C:\Users\yourname>cd .stormpath
- C:\Users\yourname\.stormpath>copy C:\Users\yourname\Downloads\apiKey.properties apiKey.Properties
- ```
+All API requests to Stormpath require a valid API Key and Secret. The Stormpath .NET SDK does this automatically; all you have to do is generate an API Key in the Stormpath Admin Console.
 
-The `apiKey.properties` file holds your API key information, and can be used to easily authenticate with the Stormpath SDK. Treat it as a sensitive file!
+ 1. If you haven't already, [sign up for Stormpath here](https://api.stormpath.com/register), and click the link in the verification email.
+ 2. Log in to the [Stormpath Admin Console](https://api.stormpath.com/).
+ 3. Click the **Create API Key** or **Manage Existing Keys** under Developer Tools on the right side of the page.
+ 4. Scroll down to Security Credentials and click **Create API Key**. This will generate your API Key and download it to your computer as an `apiKey.properties` file.
+ 
+We recommend you store the API Key and Secret values as environment variables, or place the downloaded file into a hidden folder in your home directory. (In a production environment, environment variables are highly preferred!)
+
+* To store the API Key and Secret as secure environment variables, open the `apiKey.properties` file in a text editor and execute these commands in a terminal window (Command Prompt or PowerShell both work)
+
+```
+setx STORMPATH_API_KEY_ID "[value-from-properties-file]"
+setx STORMPATH_API_KEY_SECRET "[value-from-properties-file]"
+```
+
+* To store the file in a hidden home directory folder, execute these commands instead:
+
+```
+cd [folder-you-downloaded-the-file-to]
+mkdir %homedrive%%homepath%\.stormpath
+copy apiKey.properties %homedrive%%homepath%\.stormpath\
+```
+
+Or, in PowerShell:
+
+```
+cd [folder-you-downloaded-the-file-to]
+mkdir ~\.stormpath
+copy apiKey.properties ~\.stormpath\
+```
 
 #### Creating a project
 
@@ -91,7 +96,7 @@ Next, create a simple Visual Studio project and add the Stormpath SDK.
 
 The Stormpath SDK performs `await`able asynchronous operations by default. This makes it possible to make requests to the Stormpath API without tying up a worker thread - super cool for ASP.NET projects!
 
-In the Console Application template, however, the entry point is `static void Main()`, so you can't use the `await` keyword. (In an ASP.NET application, you could just change the method signature to `async Task`, but that doesn't work well in a console app.)
+In the Console Application template, however, the entry point is `static void Main()`, so you can't use the `await` keyword. (In an ASP.NET application, you could just change the method signature to `async Task`, but that doesn't work in a console app.)
 
 You can work around this by writing a separate method instead:
 
@@ -117,19 +122,17 @@ If you are confused by all this `async` business, check out Stephen Cleary's [ex
 The first thing you need to connect to the Stormpath API is a `IClient` object. Create one in your new `MainAsync` method:
 
 ```csharp
-// If you put the apiKey.properties file in the default location
-// (%homedrive%%homepath\.stormpath\apiKey.properties), you can skip this!
 IClientApiKey myApiKey = ClientApiKeys.Builder()
     .SetFileLocation("path\\to\\apiKey.properties")
     .Build();
 
-// Create an IClient object. Everything starts here!
+// Create an IClient. Everything starts here!
 IClient client = Clients.Builder()
     .SetApiKey(myApiKey)
     .Build();
 ```
 
-You can skip building the `IClientApiKey` object and the call to `.SetApiKey()` if you put your `apiKey.properties` file in the default location. Calling `client.Build()` without specifying an API Key will check the default location. :thumbsup:
+> :bulb: You can skip building the `IClientApiKey` object and the call to `.SetApiKey()` if you put your API Key and Secret in environment variables, or stored the `apiKey.properties` file in the default location. Calling `client.Build()` without specifying an API Key will check the default location.
 
 Once you have built a `IClient`, keep it around! You should only need to create it **once** per application. It's thread-safe, so you can safely reuse it, even in an ASP.NET application.
 
@@ -183,7 +186,7 @@ catch (ResourceException rex)
 }
 ```
 
-:bulb: You can also use the `TryAuthenticateAccountAsync(username, password)` overload to get a `bool` result if you don't need to access the account's data after login.
+> :bulb: You can also use the `TryAuthenticateAccountAsync(username, password)` overload to get a `bool` result if you don't need to access the account's data after login.
 
 #### Clean up
 

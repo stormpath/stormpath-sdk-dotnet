@@ -36,7 +36,10 @@ namespace Stormpath.SDK.Impl.Provider
         public Task<IProviderAccountResult> ResolveProviderAccountAsync(string parentHref, IProviderAccountRequest request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(parentHref))
+            {
                 throw new ArgumentNullException(nameof(parentHref));
+            }
+
             var providerAccountAccess = this.BuildRequest(request);
             var href = $"{parentHref}/accounts";
 
@@ -51,7 +54,10 @@ namespace Stormpath.SDK.Impl.Provider
         public IProviderAccountResult ResolveProviderAccount(string parentHref, IProviderAccountRequest request)
         {
             if (string.IsNullOrEmpty(parentHref))
+            {
                 throw new ArgumentNullException(nameof(parentHref));
+            }
+
             var providerAccountAccess = this.BuildRequest(request);
             var href = $"{parentHref}/accounts";
 
@@ -65,9 +71,14 @@ namespace Stormpath.SDK.Impl.Provider
         private IProviderAccountAccess BuildRequest(IProviderAccountRequest request)
         {
             if (request == null)
+            {
                 throw new ArgumentNullException(nameof(request));
+            }
+
             if (request.GetProviderData() == null)
+            {
                 throw new ArgumentNullException("ProviderData");
+            }
 
             var providerAccountAccess = this.dataStoreAsync.Instantiate<IProviderAccountAccess>();
             providerAccountAccess.SetProviderData(request.GetProviderData());

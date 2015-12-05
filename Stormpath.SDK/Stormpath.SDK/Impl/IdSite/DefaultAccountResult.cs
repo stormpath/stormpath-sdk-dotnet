@@ -60,7 +60,9 @@ namespace Stormpath.SDK.Impl.IdSite
         private void ThrowIfAccountNotPresent()
         {
             if (!this.ContainsProperty(AccountPropertyName))
+            {
                 throw new ApplicationException("The account is not present.");
+            }
         }
     }
 }

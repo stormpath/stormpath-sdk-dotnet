@@ -18,14 +18,27 @@ using Stormpath.SDK.Directory;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents resources that can be expanded from an <see cref="Account.IAccount"/>.
+    /// </summary>
     public interface ITenantExpandables :
         IExpandableAccounts,
         IExpandableApplications,
         IExpandableCustomData,
         IExpandableGroups
     {
+        /// <summary>
+        /// Expands the <c>directories</c> collection with the default pagination options.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IAsyncQueryable<IDirectory> GetDirectories();
 
+        /// <summary>
+        /// Expands the <c>directories</c> collection with the specified pagination options.
+        /// </summary>
+        /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
+        /// <returns>Not applicable.</returns>
         IAsyncQueryable<IDirectory> GetDirectories(int? offset, int? limit);
     }
 }

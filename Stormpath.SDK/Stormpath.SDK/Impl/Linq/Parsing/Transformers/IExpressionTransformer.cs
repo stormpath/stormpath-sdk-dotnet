@@ -18,8 +18,16 @@ using System.Linq.Expressions;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
 {
+    /// <summary>
+    /// Represents a transformer that operates on an <see cref="Expression"/>.
+    /// </summary>
     internal interface IExpressionTransformer
     {
+        /// <summary>
+        /// Transformers the given expression.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <returns>The updated expression.</returns>
         Expression Transform(Expression expression);
     }
 }

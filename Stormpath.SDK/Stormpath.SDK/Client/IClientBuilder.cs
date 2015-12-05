@@ -82,7 +82,7 @@ namespace Stormpath.SDK.Client
 
         /// <summary>
         /// Sets the proxy server to use when making requests.
-        /// To connect without a proxy server, don't call this method, or call with <paramref name="proxy"/> set to <c>null</c>.
+        /// To connect without a proxy server, don't call this method, or call with <paramref name="proxy"/> set to <see langword="null"/>.
         /// </summary>
         /// <param name="proxy">The proxy server to use.</param>
         /// <returns>This instance for method chaining.</returns>

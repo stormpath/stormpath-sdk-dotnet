@@ -18,6 +18,9 @@ using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents resources that can be expanded from a <see cref="Directory.IDirectory"/>.
+    /// </summary>
     public interface IDirectoryExpandables :
         IExpandableAccounts,
         IExpandableApplications,
@@ -25,6 +28,10 @@ namespace Stormpath.SDK.Linq.Expandables
         IExpandableGroups,
         IExpandableTenant
     {
+        /// <summary>
+        /// Expands the <c>provider</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IProvider GetProvider();
     }
 }

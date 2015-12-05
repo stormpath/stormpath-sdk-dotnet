@@ -41,14 +41,20 @@ namespace Stormpath.SDK.Impl.Provider
         protected override IProviderAccountRequest BuildConcrete()
         {
             if (string.IsNullOrEmpty(this.accessToken) && string.IsNullOrEmpty(this.code))
+            {
                 throw new ApplicationException($"Either '{nameof(this.code)}' or '{nameof(this.accessToken)}' properties must exist in a Google account request.");
+            }
 
             var providerData = this.dataStore.Instantiate<IGoogleProviderData>() as DefaultGoogleProviderData;
 
             if (!string.IsNullOrEmpty(this.accessToken))
+            {
                 providerData.SetAccessToken(this.accessToken);
+            }
             else
+            {
                 providerData.SetCode(this.code);
+            }
 
             return new DefaultProviderAccountRequest(providerData);
         }

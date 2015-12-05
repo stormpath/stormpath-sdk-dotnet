@@ -18,6 +18,9 @@ using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents resources that can be expanded from an <see cref="Account.IAccount"/>.
+    /// </summary>
     public interface IAccountExpandables :
         IExpandableApplications,
         IExpandableCustomData,
@@ -26,6 +29,10 @@ namespace Stormpath.SDK.Linq.Expandables
         IExpandableGroups,
         IExpandableTenant
     {
+        /// <summary>
+        /// Expands the <c>providerData</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IProviderData GetProviderData();
     }
 }

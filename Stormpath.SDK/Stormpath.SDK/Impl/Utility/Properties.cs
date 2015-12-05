@@ -58,7 +58,9 @@ namespace Stormpath.SDK.Impl.Utility
         {
             input = input?.Trim();
             if (string.IsNullOrEmpty(input))
+            {
                 return new Dictionary<string, string>();
+            }
 
             var goodLines = input
                 .Split(PossibleNewlines(), StringSplitOptions.RemoveEmptyEntries)

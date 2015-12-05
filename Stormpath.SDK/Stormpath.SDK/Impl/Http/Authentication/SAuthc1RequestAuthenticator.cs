@@ -46,14 +46,20 @@ namespace Stormpath.SDK.Impl.Http.Authentication
         internal void AuthenticateCore(IHttpRequest request, IClientApiKey apiKey, DateTimeOffset now, string nonce)
         {
             if (request == null)
+            {
                 throw new RequestAuthenticationException("Request must not be null.");
+            }
 
             if (string.IsNullOrEmpty(request.CanonicalUri?.ToString()))
+            {
                 throw new RequestAuthenticationException("URL must not be empty.");
+            }
 
             var uri = request.CanonicalUri.ToUri();
             if (!uri.IsAbsoluteUri)
+            {
                 throw new RequestAuthenticationException("URL must be an absolute path.");
+            }
 
             var relativeResourcePath = uri.AbsolutePath;
 
@@ -63,7 +69,10 @@ namespace Stormpath.SDK.Impl.Http.Authentication
             // Add HOST header before signing
             var hostHeader = uri.Host;
             if (!uri.IsDefaultPort)
+            {
                 hostHeader = $"{hostHeader}:{uri.Port}";
+            }
+
             request.Headers.Host = hostHeader;
 
             // Add X-Stormpath-Date before signing
@@ -170,7 +179,10 @@ namespace Stormpath.SDK.Impl.Http.Authentication
         private static string CanonicalizeResourcePath(string relativeResourcePath)
         {
             if (string.IsNullOrEmpty(relativeResourcePath))
+            {
                 return "/";
+            }
+
             return RequestHelper.UrlEncode(relativeResourcePath, isPath: true, canonicalize: true);
         }
 
@@ -192,7 +204,10 @@ namespace Stormpath.SDK.Impl.Http.Authentication
                     foreach (var value in header.Value)
                     {
                         if (!first)
+                        {
                             buffer.Append(",");
+                        }
+
                         buffer.Append(value);
                         first = false;
                     }

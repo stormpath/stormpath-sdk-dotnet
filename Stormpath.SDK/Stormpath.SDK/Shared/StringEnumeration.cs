@@ -18,42 +18,72 @@ using System;
 
 namespace Stormpath.SDK.Shared
 {
+    /// <summary>
+    /// Represents an enumeration backed by a string value.
+    /// </summary>
     public abstract class StringEnumeration : IComparable
     {
         private readonly string value;
 
-        protected StringEnumeration()
+        private StringEnumeration()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StringEnumeration"/> class given a backing value.
+        /// </summary>
+        /// <param name="value">The enumeration value.</param>
         protected StringEnumeration(string value)
         {
             this.value = value;
         }
 
+        /// <summary>
+        /// Gets the value of this enumeration member.
+        /// </summary>
+        /// <value>The enumeration value.</value>
         public string Value => this.value;
 
+        /// <inheritdoc/>
         public override string ToString() => this.Value;
 
+        /// <summary>
+        /// Gets the <see cref="string"/> value of a <see cref="StringEnumeration"/> instance.
+        /// </summary>
+        /// <param name="enum">The instance.</param>
+        /// <returns>The string value.</returns>
         public static implicit operator string(StringEnumeration @enum) => @enum.Value;
 
-        public static bool operator ==(StringEnumeration a, StringEnumeration b)
+        /// <summary>
+        /// Compares two <see cref="StringEnumeration"/> instances for value equality.
+        /// </summary>
+        /// <param name="x">The left operand.</param>
+        /// <param name="y">The right operand.</param>
+        /// <returns><see langword="true"/> if the instances have equal values; <see langword="false"/> otherwise.</returns>
+        public static bool operator ==(StringEnumeration x, StringEnumeration y)
         {
-            if ((object)a == null && (object)b == null)
+            if ((object)x == null && (object)y == null)
             {
                 return true;
             }
 
-            if ((object)a == null || (object)b == null)
+            if ((object)x == null || (object)y == null)
             {
                 return false;
             }
 
-            return a.Value.Equals(b.value, StringComparison.InvariantCultureIgnoreCase);
+            return x.Value.Equals(y.value, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool operator !=(StringEnumeration a, StringEnumeration b) => !(a == b);
+        /// <summary>
+        /// Compares two <see cref="StringEnumeration"/> instances for value inequality.
+        /// </summary>
+        /// <param name="x">The left operand.</param>
+        /// <param name="y">The right operand.</param>
+        /// <returns><see langword="true"/> if the instances do not have equal values; <see langword="true"/> otherwise.</returns>
+        public static bool operator !=(StringEnumeration x, StringEnumeration y) => !(x == y);
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             var otherValue = obj as StringEnumeration;
@@ -69,8 +99,11 @@ namespace Stormpath.SDK.Shared
             return typeMatches && valueMatches;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode() => this.value.GetHashCode();
 
+        /// <inheritdoc/>
+        /// <param name="other">The object to compare to.</param>
         public int CompareTo(object other) => this.Value.CompareTo(((StringEnumeration)other).Value);
     }
 }

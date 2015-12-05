@@ -23,22 +23,67 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IAccount"/>.
+    /// </summary>
     internal interface IAccountSync : ISaveableWithOptionsSync<IAccount>, IDeletableSync, IExtendableSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccount.GetDirectoryAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Directory.</returns>
         IDirectory GetDirectory();
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccount.GetTenantAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Tenant.</returns>
         ITenant GetTenant();
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccount.AddGroupAsync(IGroup, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="group">The Group this account will be added to.</param>
+        /// <returns>
+        /// The new <see cref="IGroupMembership"/> resource created reflecting the account-to-group association.
+        /// </returns>
         IGroupMembership AddGroup(IGroup group);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccount.AddGroupAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="hrefOrName">The <c>href</c> or name of the group to add.</param>
+        /// <returns>
+        /// The new <see cref="IGroupMembership"/> resource created reflecting the account-to-group association.
+        /// </returns>
         IGroupMembership AddGroup(string hrefOrName);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccount.RemoveGroupAsync(IGroup, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="group">The group object from which the account must be removed.</param>
+        /// <returns><see langword="true"/> if the operation succeeded; <see langword="false"/> otherwise.</returns>
         bool RemoveGroup(IGroup group);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccount.RemoveGroupAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="hrefOrName">The <c>href</c> or name of the group object from which the account must be removed.</param>
+        /// <returns><see langword="true"/> if the operation succeeded; <see langword="false"/> otherwise.</returns>
         bool RemoveGroup(string hrefOrName);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccount.IsMemberOfGroupAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="hrefOrName">The <c>href</c> or name of the group to check.</param>
+        /// <returns><see langword="true"/> if the account belongs to the specified group.</returns>
         bool IsMemberOfGroup(string hrefOrName);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccount.GetProviderDataAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The provider data.</returns>
         IProviderData GetProviderData();
     }
 }

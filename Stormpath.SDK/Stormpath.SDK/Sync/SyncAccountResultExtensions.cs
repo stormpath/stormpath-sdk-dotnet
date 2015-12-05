@@ -20,16 +20,19 @@ using Stormpath.SDK.Impl.IdSite;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IAccountResult"/>.
+    /// </summary>
     public static class SyncAccountResultExtensions
     {
         /// <summary>
         /// Synchronously returns the user account that either logged in or was created as a result of registration on the ID Site.
-        /// You can determine if the account is newly registered if <see cref="IAccountResult.IsNewAccount"/> is <c>true</c>.
-        /// If <see cref="IAccountResult.IsNewAccount"/> is <c>false</c>, the account reflects a previously-registered user
+        /// You can determine if the account is newly registered if <see cref="IAccountResult.IsNewAccount"/> is <see langword="true"/>.
+        /// If <see cref="IAccountResult.IsNewAccount"/> is <see langword="false"/>, the account reflects a previously-registered user
         /// that has logged in.
         /// </summary>
         /// <param name="source">The account result.</param>
-        /// <returns>A Task whose result is the user's <see cref="IAccount"/> resource.</returns>
+        /// <returns>The user's <see cref="IAccount"/> resource.</returns>
         /// <exception cref="System.ApplicationException">The account is not present.</exception>
         public static IAccount GetAccount(this IAccountResult source)
             => (source as IAccountResultSync).GetAccount();

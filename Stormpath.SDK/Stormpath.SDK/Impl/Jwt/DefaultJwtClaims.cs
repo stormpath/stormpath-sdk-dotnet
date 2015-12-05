@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Jwt
 {
@@ -31,9 +32,9 @@ namespace Stormpath.SDK.Impl.Jwt
         public static readonly string IssuedAt = "iat";
         public static readonly string Id = "jti";
 
-        private readonly IDictionary<string, object> claims;
+        private readonly Map claims;
 
-        public DefaultJwtClaims(IDictionary<string, object> claims)
+        public DefaultJwtClaims(Map claims)
         {
             this.claims = claims;
         }
@@ -72,7 +73,7 @@ namespace Stormpath.SDK.Impl.Jwt
 
         string IJwtClaims.Subject => this.GetStringClaim(Subject);
 
-        IDictionary<string, object> IJwtClaims.ToDictionary()
+        Map IJwtClaims.ToDictionary()
             => new Dictionary<string, object>(this.claims);
     }
 }

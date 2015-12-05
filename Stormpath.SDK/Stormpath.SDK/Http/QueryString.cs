@@ -72,7 +72,9 @@ namespace Stormpath.SDK.Http
             : this()
         {
             if (queryParams != null)
+            {
                 this.queryStringItems = ToSortedDictionary(queryParams);
+            }
         }
 
         /// <summary>
@@ -88,10 +90,15 @@ namespace Stormpath.SDK.Http
         /// <summary>
         /// Returns whether the <see cref="QueryString"/> instance contains any query parameters.
         /// </summary>
-        /// <returns><c>true</c> if this instance contains one or more query parameters.</returns>
+        /// <returns><see langword="true"/> if this instance contains one or more query parameters.</returns>
         public bool Any()
             => !this.queryStringItems.IsNullOrEmpty();
 
+        /// <summary>
+        /// Determines whether the <see cref="QueryString"/> contains the specified key.
+        /// </summary>
+        /// <param name="key">The key to locate.</param>
+        /// <returns><see langword="true"/> if the <see cref="QueryString"/> contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
         public bool ContainsKey(string key)
             => this.queryStringItems?.ContainsKey(key) ?? false;
 
@@ -99,7 +106,7 @@ namespace Stormpath.SDK.Http
         /// Gets a named parameter in the query string.
         /// </summary>
         /// <param name="parameter">The name of the parameter.</param>
-        /// <returns>The parameter value, or <c>null</c>.</returns>
+        /// <returns>The parameter value, or <see langword="null"/>.</returns>
         public string this[string parameter]
         {
             get
@@ -111,11 +118,18 @@ namespace Stormpath.SDK.Http
             }
         }
 
+        /// <summary>
+        /// Returns a string version of this QueryString.
+        /// </summary>
+        /// <param name="canonical">Whether to use canonical encoding.</param>
+        /// <returns>The string version of this QueryString.</returns>
         public string ToString(bool canonical)
         {
             bool isEmpty = this.queryStringItems == null || this.queryStringItems.Count == 0;
             if (isEmpty)
+            {
                 return string.Empty;
+            }
 
             var items = this.queryStringItems.Select(x =>
             {
@@ -123,7 +137,9 @@ namespace Stormpath.SDK.Http
                 var value = RequestHelper.UrlEncode(x.Value, false, canonical);
 
                 if (!canonical)
+                {
                     value = FixSearchSyntaxEncoding(value);
+                }
 
                 return $"{key}={value}";
             });
@@ -131,6 +147,7 @@ namespace Stormpath.SDK.Http
             return string.Join("&", items);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return this.ToString(false);
@@ -146,10 +163,14 @@ namespace Stormpath.SDK.Http
         internal QueryString Merge(QueryString replacementParams)
         {
             if (replacementParams == null)
+            {
                 return this;
+            }
 
             if (!replacementParams.queryStringItems.Any())
+            {
                 return this;
+            }
 
             var mergedItems = new List<KeyValuePair<string, string>>(this.queryStringItems);
             foreach (var param in replacementParams.queryStringItems)
@@ -170,22 +191,31 @@ namespace Stormpath.SDK.Http
             var resultItems = new Dictionary<string, string>();
 
             if (queryString.Contains("?"))
+            {
                 queryString = queryString.Split('?')?[1];
+            }
 
             if (string.IsNullOrEmpty(queryString))
+            {
                 return resultItems; // empty
+            }
 
             foreach (var token in queryString.Split('&'))
             {
                 var pair = token.Split('=');
 
                 if (pair == null)
+                {
                     resultItems.Add(token, null);
+                }
 
                 var key = pair[0];
                 var value = string.Empty;
                 if (pair.Length > 1 && !string.IsNullOrEmpty(pair[1]))
+                {
                     value = pair[1];
+                }
+
                 resultItems.Add(key, value);
             }
 

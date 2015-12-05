@@ -16,8 +16,15 @@
 
 namespace Stormpath.SDK.Impl.Resource
 {
+    /// <summary>
+    /// Represents a property that contains a link to another property.
+    /// </summary>
     internal interface IEmbeddedProperty
     {
+        /// <summary>
+        /// Gets the URL of linked property.
+        /// </summary>
+        /// <value>The URL of the linked property.</value>
         string Href { get; }
     }
 }

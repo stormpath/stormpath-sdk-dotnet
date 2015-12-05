@@ -28,7 +28,9 @@ namespace Stormpath.SDK.Impl.Cache
         public DefaultCacheConfiguration(string name, TimeSpan? timeToLive, TimeSpan? timeToIdle)
         {
             if (string.IsNullOrEmpty(name))
+            {
                 throw new ArgumentNullException(nameof(name));
+            }
 
             this.name = name;
             this.ttl = timeToLive;

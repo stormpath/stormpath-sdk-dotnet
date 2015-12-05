@@ -18,8 +18,16 @@ using Stormpath.SDK.Account;
 
 namespace Stormpath.SDK.Impl.Account
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IPasswordResetToken"/>.
+    /// </summary>
     internal interface IPasswordResetTokenSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IPasswordResetTokenSync.GetAccount"/>.
+        /// </summary>
+        /// <returns>The Account.</returns>
         IAccount GetAccount();
     }
 }

@@ -57,7 +57,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
         {
             bool hasFilters = !this.filters.IsNullOrEmpty();
             if (!hasFilters)
+            {
                 throw new ApplicationException("Empty filter chain");
+            }
 
             if (this.filters.Count == 1)
             {

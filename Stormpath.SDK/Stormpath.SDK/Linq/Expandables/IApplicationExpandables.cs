@@ -18,6 +18,9 @@ using Stormpath.SDK.AccountStore;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents resources that can be expanded from an <see cref="Application.IApplication"/>.
+    /// </summary>
     public interface IApplicationExpandables :
         IExpandableAccountStoreMappings,
         IExpandableAccounts,
@@ -25,8 +28,16 @@ namespace Stormpath.SDK.Linq.Expandables
         IExpandableGroups,
         IExpandableTenant
     {
+        /// <summary>
+        /// Expands the <c>defaultAccountStore</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IAccountStore GetDefaultAccountStore();
 
+        /// <summary>
+        /// Expands the <c>defaultGroupStore</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IAccountStore GetDefaultGroupStore();
     }
 }

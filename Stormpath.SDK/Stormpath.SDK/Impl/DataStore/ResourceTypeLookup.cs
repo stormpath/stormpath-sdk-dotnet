@@ -158,15 +158,15 @@ namespace Stormpath.SDK.Impl.DataStore
         /// Checks whether this type is a known resource interface (e.g. <see cref="IAccount"/>).
         /// </summary>
         /// <param name="possiblyInterface">The type to check</param>
-        /// <returns>True if this type is a known resource interface</returns>
+        /// <returns><see langword="true"/> if this type is a known resource interface; <see langword="false"/> otherwise.</returns>
         private static bool IsInterface(Type possiblyInterface)
             => ConcreteLookup.ContainsKey(possiblyInterface);
 
         /// <summary>
         /// Checks whether this type is a known concrete instance class (e.g., <see cref="DefaultAccount"/>).
         /// </summary>
-        /// <param name="possiblyConcrete">The type to check</param>
-        /// <returns>True if this type is a known concrete type</returns>
+        /// <param name="possiblyConcrete">The type to check.</param>
+        /// <returns><see langword="true"/> if this type is a known concrete type; <see langword="false"/> otherwise.</returns>
         private static bool IsConcrete(Type possiblyConcrete)
             => InterfaceLookup.ContainsKey(possiblyConcrete);
 
@@ -174,7 +174,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// Checks whether this type represents a paged collection response.
         /// </summary>
         /// <param name="type">The type to check</param>
-        /// <returns><c>true</c> if this type represents a paged collection response; <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if this type represents a paged collection response; <see langword="false"/> otherwise.</returns>
         public static bool IsCollectionResponse(Type type)
             => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
 
@@ -197,7 +197,9 @@ namespace Stormpath.SDK.Impl.DataStore
         public Type GetInterface(Type possiblyConcrete)
         {
             if (IsInterface(possiblyConcrete))
+            {
                 return possiblyConcrete;
+            }
 
             return GetInterfaceForConcreteType(possiblyConcrete);
         }
@@ -206,7 +208,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// Gets a resource interface type given a resource attribute name.
         /// </summary>
         /// <param name="nestedItemKey">A resource attribute name (e.g. "directory").</param>
-        /// <returns>The associated interface type (e.g., <see cref="IDirectory"/>, or <c>null</c> if no type could be found.</returns>
+        /// <returns>The associated interface type (e.g., <see cref="IDirectory"/>, or <see langword="null"/> if no type could be found.</returns>
         public Type GetInterface(string nestedItemKey)
         {
             Type foundType = null;
@@ -234,7 +236,9 @@ namespace Stormpath.SDK.Impl.DataStore
         public Type GetConcrete(Type possiblyInterface)
         {
             if (IsConcrete(possiblyInterface))
+            {
                 return possiblyInterface;
+            }
 
             return GetConcreteTypeForInterface(possiblyInterface);
         }

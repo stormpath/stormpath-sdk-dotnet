@@ -20,7 +20,7 @@ using Stormpath.SDK.Shared;
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// Respresents the various states an <see cref="IAccount"/> may be in.
+    /// Represents the various states an <see cref="IAccount"/> may be in.
     /// </summary>
     public sealed class AccountStatus : StringEnumeration
     {
@@ -38,10 +38,6 @@ namespace Stormpath.SDK.Account
         /// An unverified account is a disabled account that does not have a verified email address.
         /// </summary>
         public static AccountStatus Unverified = new AccountStatus("UNVERIFIED");
-
-        private AccountStatus()
-        {
-        }
 
         private AccountStatus(string value)
             : base(value)

@@ -18,6 +18,9 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Account
 {
+    /// <summary>
+    /// Represents a token that can verify the email address for an <see cref="IAccount"/>.
+    /// </summary>
     public interface IEmailVerificationToken : IResource, ISaveable<IEmailVerificationToken>
     {
         /// <summary>

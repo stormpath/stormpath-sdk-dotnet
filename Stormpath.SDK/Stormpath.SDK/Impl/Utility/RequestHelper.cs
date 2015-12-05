@@ -23,7 +23,9 @@ namespace Stormpath.SDK.Impl.Utility
         public static string UrlEncode(string value, bool isPath = false, bool canonicalize = false)
         {
             if (string.IsNullOrEmpty(value))
+            {
                 return string.Empty;
+            }
 
             var encoded = WebUtility.UrlEncode(value);
 
@@ -39,7 +41,9 @@ namespace Stormpath.SDK.Impl.Utility
                     .Replace(")", "%29");
 
                 if (isPath)
+                {
                     encoded = encoded.Replace("%2F", "/");
+                }
             }
 
             return encoded;

@@ -20,10 +20,22 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IAccountStoreMapping"/>.
+    /// </summary>
     internal interface IAccountStoreMappingSync : ISaveableSync<IAccountStoreMapping>, IDeletableSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccountStoreMapping.GetAccountStoreAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Account Store.</returns>
         IAccountStore GetAccountStore();
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccountStoreMapping.GetApplicationAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Application.</returns>
         IApplication GetApplication();
     }
 }

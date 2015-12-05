@@ -20,6 +20,9 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Group
 {
+    /// <summary>
+    /// Represents common Group creation actions.
+    /// </summary>
     public interface IGroupCreationActions
     {
         /// <summary>
@@ -27,7 +30,7 @@ namespace Stormpath.SDK.Group
         /// </summary>
         /// <param name="group">The group to create.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the new <see cref="IGroup"/>.</returns>
+        /// <returns>The new <see cref="IGroup"/>.</returns>
         Task<IGroup> CreateGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -38,7 +41,7 @@ namespace Stormpath.SDK.Group
         /// An inline builder for an instance of <see cref="IGroupCreationOptions"/>, which will be used when sending the request.
         /// </param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the new <see cref="IGroup"/>.</returns>
+        /// <returns>The new <see cref="IGroup"/>.</returns>
         Task<IGroup> CreateGroupAsync(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace Stormpath.SDK.Group
         /// <param name="group">The group to create.</param>
         /// <param name="creationOptions">An <see cref="IGroupCreationOptions"/> instance to use when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the new <see cref="IGroup"/>.</returns>
+        /// <returns>The new <see cref="IGroup"/>.</returns>
         Task<IGroup> CreateGroupAsync(IGroup group, IGroupCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

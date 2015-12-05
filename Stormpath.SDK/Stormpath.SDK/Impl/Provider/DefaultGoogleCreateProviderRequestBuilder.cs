@@ -41,7 +41,9 @@ namespace Stormpath.SDK.Impl.Provider
         protected override ICreateProviderRequest BuildConcrete()
         {
             if (string.IsNullOrEmpty(this.redirectUri))
+            {
                 throw new ApplicationException($"{nameof(this.redirectUri)} is a required property. It must be provided before building.");
+            }
 
             var provider = this.dataStore.Instantiate<IGoogleProvider>() as DefaultGoogleProvider;
             provider.SetClientId(this.clientId);

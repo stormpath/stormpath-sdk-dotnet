@@ -38,7 +38,9 @@ namespace Stormpath.SDK.Impl.Resource
         string ICreationOptions.GetQueryString()
         {
             if (!this.dirty)
+            {
                 return string.Empty;
+            }
 
             var queryModel = QueryModelCompiler.Compile(this.proxy.Expression);
             var arguments = QueryModelParser.GetArguments(queryModel);
