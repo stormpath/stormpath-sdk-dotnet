@@ -26,13 +26,13 @@ namespace Stormpath.SDK.Resource
     public interface IExtendable
     {
         /// <summary>
-        /// Gets a proxy that can be used to manipulate the Custom Data for this resource.
+        /// Gets a proxy that can be used to write to Custom Data for this resource.
         /// </summary>
         /// <seealso cref="GetCustomDataAsync(CancellationToken)"/>
         /// <value>
-        /// A proxy that can be used to manipulate the Custom Data for this resource.
+        /// A proxy that can be used to write to Custom Data for this resource.
         /// </value>
-        IEmbeddedCustomData CustomData { get; }
+        ICustomDataProxy CustomData { get; }
 
         /// <summary>
         /// Gets the custom data associated with this resource.

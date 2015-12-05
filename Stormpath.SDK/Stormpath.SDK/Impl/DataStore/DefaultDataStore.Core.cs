@@ -213,7 +213,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 bool includesCustomData = extendableInstanceResource != null;
                 if (includesCustomData)
                 {
-                    var customDataProxy = (extendableInstanceResource as IExtendable).CustomData as DefaultEmbeddedCustomData;
+                    var customDataProxy = (extendableInstanceResource as IExtendable).CustomData as DefaultCustomDataProxy;
 
                     // Apply custom data deletes
                     if (customDataProxy.HasDeletedProperties())
@@ -314,7 +314,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 bool includesCustomData = extendableInstanceResource != null;
                 if (includesCustomData)
                 {
-                    var customDataProxy = (extendableInstanceResource as IExtendableSync).CustomData as DefaultEmbeddedCustomData;
+                    var customDataProxy = (extendableInstanceResource as IExtendableSync).CustomData as DefaultCustomDataProxy;
 
                     // Apply custom data deletes
                     if (customDataProxy.HasDeletedProperties())

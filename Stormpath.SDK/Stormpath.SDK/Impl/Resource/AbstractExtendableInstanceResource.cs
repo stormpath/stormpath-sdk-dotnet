@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Impl.Resource
     {
         public static readonly string CustomDataPropertyName = "customData";
 
-        private IEmbeddedCustomData customDataProxy;
+        private ICustomDataProxy customDataProxy;
 
         protected AbstractExtendableInstanceResource(ResourceData data)
             : base(data)
@@ -40,9 +40,9 @@ namespace Stormpath.SDK.Impl.Resource
 
         internal IEmbeddedProperty CustomData => this.GetLinkProperty(CustomDataPropertyName);
 
-        IEmbeddedCustomData IExtendable.CustomData => this.customDataProxy;
+        ICustomDataProxy IExtendable.CustomData => this.customDataProxy;
 
-        IEmbeddedCustomData IExtendableSync.CustomData => this.customDataProxy;
+        ICustomDataProxy IExtendableSync.CustomData => this.customDataProxy;
 
         Task<ICustomData> IExtendable.GetCustomDataAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<ICustomData>(this.CustomData.Href, cancellationToken);
@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         public void ResetCustomData()
         {
-            this.customDataProxy = new DefaultEmbeddedCustomData(this.GetInternalAsyncDataStore(), this.AsInterface.Href);
+            this.customDataProxy = new DefaultCustomDataProxy(this.GetInternalAsyncDataStore(), this.AsInterface.Href);
         }
     }
 }

@@ -124,7 +124,7 @@
     <Compile Include="Client\IClient.cs" />
     <Compile Include="Client\IClientBuilder.cs" />
     <Compile Include="CustomData\ICustomData.cs" />
-    <Compile Include="CustomData\IEmbeddedCustomData.cs" />
+    <Compile Include="CustomData\ICustomDataProxy.cs" />
     <Compile Include="Directory\DirectoryCreationOptionsBuilder.cs" />
     <Compile Include="Directory\DirectoryStatus.cs" />
     <Compile Include="Directory\IDirectoryCreationOptions.cs" />
@@ -245,7 +245,7 @@
     <Compile Include="Impl\Http\Support\IBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
     <Compile Include="Impl\IdentityMap\IIdentityMap{TItem}.cs" />
-    <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
+    <Compile Include="Impl\CustomData\DefaultCustomDataProxy.cs" />
     <Compile Include="IdSite\IdSiteRuntimeException.cs" />
     <Compile Include="IdSite\IdSiteSessionTimeoutException.cs" />
     <Compile Include="IdSite\InvalidIdSiteTokenException.cs" />

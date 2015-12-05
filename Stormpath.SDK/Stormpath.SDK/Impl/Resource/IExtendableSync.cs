@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Impl.Resource
         /// <value>
         /// A proxy that can be used to manipulate the Custom Data for this resource.
         /// </value>
-        IEmbeddedCustomData CustomData { get; }
+        ICustomDataProxy CustomData { get; }
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Resource.IExtendable.GetCustomDataAsync(System.Threading.CancellationToken)"/>.
