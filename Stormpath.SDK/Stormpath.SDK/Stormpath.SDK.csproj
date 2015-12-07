@@ -411,6 +411,8 @@
     <Compile Include="Linq\RetrievalOptionExpandExtensions.cs" />
     <Compile Include="Logging\ILoggerConsumer{T}.cs" />
     <Compile Include="Logging\InMemoryLogger.cs" />
+    <Compile Include="Organization\OrganizationStatus.cs" />
+    <Compile Include="Organization\IOrganization.cs" />
     <Compile Include="Provider\ClientProviderExtensions.cs" />
     <Compile Include="Provider\ICreateProviderRequest.cs" />
     <Compile Include="Provider\ICreateProviderRequestBuilder{T}.cs" />
