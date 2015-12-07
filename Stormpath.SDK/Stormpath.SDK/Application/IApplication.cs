@@ -36,45 +36,45 @@ namespace Stormpath.SDK.Application
     public interface IApplication : IResource, ISaveableWithOptions<IApplication>, IDeletable, IAuditable, IExtendable, IAccountCreationActions, IGroupCreationActions
     {
         /// <summary>
-        /// Gets the application's name.
+        /// Gets the Application's name.
         /// </summary>
-        /// <value>This application's name. An application's name must be unique across all other applications in the owning <see cref="Tenant.ITenant"/>.</value>
+        /// <value>The application's name. An application's name must be unique across all other applications within a Stormpath <see cref="ITenant"/>.</value>
         string Name { get; }
 
         /// <summary>
-        /// Gets the application description.
+        /// Gets the Application description.
         /// </summary>
-        /// <value>This application's description text.</value>
+        /// <value>The application's description text.</value>
         string Description { get; }
 
         /// <summary>
-        /// Gets the application's status.
+        /// Gets the Application's status.
         /// </summary>
         /// <value>
-        /// This application's status.
+        /// The Application's status.
         /// Application users may login to an <see cref="ApplicationStatus.Enabled"/> application.
         /// They may not login to a <see cref="ApplicationStatus.Disabled"/> application.
         /// </value>
         ApplicationStatus Status { get; }
 
         /// <summary>
-        /// Sets the application description.
+        /// Sets the Application description.
         /// </summary>
-        /// <param name="description">The application's description text.</param>
+        /// <param name="description">The Application's description text.</param>
         /// <returns>This instance for method chaining.</returns>
         IApplication SetDescription(string description);
 
         /// <summary>
-        /// Sets the application's name.
+        /// Sets the Application's name.
         /// </summary>
-        /// <param name="name">The application's name. Application names must be unique within a <see cref="Tenant.ITenant"/>.</param>
+        /// <param name="name">The Application's name. Application names must be unique within a Stormpath <see cref="ITenant"/>.</param>
         /// <returns>This instance for method chaining.</returns>
         IApplication SetName(string name);
 
         /// <summary>
-        /// Sets the application's status.
+        /// Sets the Application's status.
         /// </summary>
-        /// <param name="status">The application's status.
+        /// <param name="status">The Application's status.
         /// Application users may login to an <see cref="ApplicationStatus.Enabled"/> application.
         /// They may not login to a <see cref="ApplicationStatus.Disabled"/> application.
         /// </param>
@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// The result of the authentication.
-        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -101,7 +101,7 @@ namespace Stormpath.SDK.Application
         /// var result = await myApp.AuthenticateAccountAsync(loginRequest.Build());
         /// </code>
         /// </example>
-        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password).
@@ -113,7 +113,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// The result of the authentication.
-        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -125,7 +125,7 @@ namespace Stormpath.SDK.Application
         /// var result = await myApp.AuthenticateAccountAsync(loginRequest.Build(), response => response.Expand(x => x.GetAccountAsync));
         /// </code>
         /// </example>
-        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, Action<IRetrievalOptions<Auth.IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password)
@@ -136,7 +136,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// The result of the authentication.
-        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -150,7 +150,7 @@ namespace Stormpath.SDK.Application
         /// });
         /// </code>
         /// </example>
-        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password)
@@ -162,7 +162,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// The result of the authentication.
-        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -178,7 +178,7 @@ namespace Stormpath.SDK.Application
         ///     response => response.Expand(x => x.GetAccountAsync));
         /// </code>
         /// </example>
-        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<Auth.IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password).
@@ -190,7 +190,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// The result of the authentication.
-        /// The authenticated account can be obtained from <see cref="Auth.IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
+        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
         /// </returns>
         /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
         /// <example>
@@ -198,7 +198,7 @@ namespace Stormpath.SDK.Application
         /// var result = await myApp.AuthenticateAccountAsync("jsmith", "Password123#");
         /// </code>
         /// </example>
-        Task<Auth.IAuthenticationResult> AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IAuthenticationResult> AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Attempts to authenticate an account with the specified username and password.
@@ -256,7 +256,7 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Gets the <see cref="IAccountStore"/> (either a <see cref="IGroup"/> or <see cref="Directory.IDirectory"/>)
-        /// used to persist new accounts created by the application, or <see langword="null"/> if no account store has been designated.
+        /// used to persist new <see cref="Account.IAccount"/>s created by the Application, or <see langword="null"/> if no Account Store has been designated.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The default <see cref="IAccountStore"/>,
@@ -277,7 +277,7 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Sets the <see cref="IAccountStore"/> (either a <see cref="IGroup"/> or a <see cref="Directory.IDirectory"/>)
-        /// used to persist new accounts created by the Application.
+        /// used to persist new <see cref="IAccount"/>s created by the Application.
         /// <para>
         /// Because an Application is not an <see cref="IAccountStore"/> itself, it delegates to a Group or Directory
         /// when creating accounts; this method sets the <see cref="IAccountStore"/> to which the Application delegates
@@ -290,8 +290,8 @@ namespace Stormpath.SDK.Application
         Task SetDefaultAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets the <see cref="IAccountStore"/> used to persist new groups created by the application, or <see langword="null"/>
-        /// if no account store has been designated.
+        /// Gets the <see cref="IAccountStore"/> used to persist new <see cref="IGroup"/>s created by the Application, or <see langword="null"/>
+        /// if no Account Store has been designated.
         /// <para>
         /// Stormpath's current REST API requires this to be a <see cref="Directory.IDirectory"/>.
         /// However, this could be a Group in the future, so do not assume it is always a
@@ -317,7 +317,7 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Sets the <see cref="IAccountStore"/> (a <see cref="Directory.IDirectory"/>)
-        /// used to persist new groups created by the Application.
+        /// used to persist new <see cref="IGroup"/>s created by the Application.
         /// <para>
         /// Stormpath's current REST API requires this to be a Directory. However, this could be a Group in the future,
         /// so do not assume it is always a Directory if you want your code to function properly if/when this support is added.
@@ -334,7 +334,7 @@ namespace Stormpath.SDK.Application
         Task SetDefaultGroupStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new <see cref="IAccountStoreMapping"/> for this Application, allowing the associated AccountStore
+        /// Creates a new <see cref="IAccountStoreMapping"/> for this Application, allowing the associated Account Store
         /// to be used a source of accounts that may login to the Application.
         /// </summary>
         /// <param name="mapping">The new <see cref="IAccountStoreMapping"/> resource to add to the Application's AccountStoreMapping list.</param>
@@ -534,26 +534,29 @@ namespace Stormpath.SDK.Application
         Task<IProviderAccountResult> GetAccountAsync(IProviderAccountRequest request, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets a queryable list of all accounts in this application.
+        /// Gets a queryable list of all Accounts in this Application.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search <see cref="Account.IAccount"/>s.</returns>
         /// <example>
         /// var allAccounts = await myApp.GetAccounts().ToListAsync();
         /// </example>
         IAsyncQueryable<IAccount> GetAccounts();
 
         /// <summary>
-        /// Gets a queryable list of all groups accessible to this application.
+        /// Gets a queryable list of all Groups accessible to this application.
         /// It will not only return any group associated directly as an <see cref="IAccountStore"/>
-        /// but also every group that exists inside every directory associated as an account store.
+        /// but also every group that exists inside every directory associated as an Account Store.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search <see cref="IGroup"/>s.</returns>
+        /// <example>
+        /// var allGroups = await myApp.GetGroups().ToListAsync();
+        /// </example>
         IAsyncQueryable<IGroup> GetGroups();
 
         /// <summary>
-        /// Gets a queryable list of all account store mappings accessible to the application.
+        /// Gets a queryable list of all Account Store Mappings accessible to the Application.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccountStoreMapping}"/> that may be used to asynchronously list or search account store mappings.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IAccountStoreMapping}"/> that may be used to asynchronously list or search <see cref="IAccountStoreMapping"/>s.</returns>
         IAsyncQueryable<IAccountStoreMapping> GetAccountStoreMappings();
     }
 }
