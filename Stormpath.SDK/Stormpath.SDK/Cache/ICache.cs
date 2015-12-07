@@ -25,10 +25,22 @@ namespace Stormpath.SDK.Cache
     /// <seealso cref="ISynchronousCache"/>
     public interface ICache : IDisposable
     {
+        /// <summary>
+        /// Gets the cache name.
+        /// </summary>
+        /// <value>The cache name.</value>
         string Name { get; }
 
+        /// <summary>
+        /// Gets the time to live (TTL) of cache entries.
+        /// </summary>
+        /// <value>The time to live of cache entries.</value>
         TimeSpan? TimeToLive { get; }
 
+        /// <summary>
+        /// Gets the time to idle (TTI) of cache entries.
+        /// </summary>
+        /// <value>The time to idle of cache entries.</value>
         TimeSpan? TimeToIdle { get; }
     }
 }

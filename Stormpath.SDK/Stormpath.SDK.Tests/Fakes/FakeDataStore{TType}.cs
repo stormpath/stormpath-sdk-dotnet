@@ -111,7 +111,9 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             bool typesMatch = typeof(T) == typeof(TType);
             if (!typesMatch)
+            {
                 throw new ArgumentException("Requested type must match type of fake data.");
+            }
 
             this.calls.Add(href);
 
@@ -144,9 +146,14 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             var match = limitRegex.Match(href);
             if (!match.Success)
+            {
                 return null;
+            }
+
             if (string.IsNullOrEmpty(match.Groups?[1].Value))
+            {
                 return null;
+            }
 
             return int.Parse(match.Groups[1].Value);
         }
@@ -157,9 +164,14 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             var match = offsetRegex.Match(href);
             if (!match.Success)
+            {
                 return null;
+            }
+
             if (string.IsNullOrEmpty(match.Groups?[1].Value))
+            {
                 return null;
+            }
 
             return int.Parse(match.Groups[1].Value);
         }

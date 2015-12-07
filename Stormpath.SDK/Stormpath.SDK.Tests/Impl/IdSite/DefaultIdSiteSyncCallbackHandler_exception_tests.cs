@@ -27,6 +27,7 @@ using Stormpath.SDK.Impl;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.IdSite;
+using Stormpath.SDK.Impl.Logging;
 using Stormpath.SDK.Jwt;
 using Xunit;
 

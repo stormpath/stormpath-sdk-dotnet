@@ -14,15 +14,17 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Http
+using Stormpath.SDK.Http;
+
+namespace Stormpath.SDK.Impl.Extensions
 {
-    public static class HttpExtensions
+    internal static class HttpExtensions
     {
         /// <summary>
         /// Determines whether an HTTP response resulted in a client-side (HTTP 4xx) error.
         /// </summary>
         /// <param name="response">The HTTP response to check.</param>
-        /// <returns>True if the response represents a client-side (HTTP 4xx) error.</returns>
+        /// <returns><see langword="true"/> if the response represents a client-side (HTTP 4xx) error; <see langword="false"/> otherwise.</returns>
         public static bool IsClientError(this IHttpResponse response)
         {
             return response.StatusCode >= 400 && response.StatusCode < 500;
@@ -32,7 +34,7 @@ namespace Stormpath.SDK.Http
         /// Determines whether an HTTP response resulted in a server-side (HTTP 5xx) error.
         /// </summary>
         /// <param name="response">The HTTP response to check.</param>
-        /// <returns>True if the response represents a server-side (HTTP 5xx) error.</returns>
+        /// <returns><see langword="true"/> if the response represents a server-side (HTTP 5xx) error; <see langword="false"/> otherwise.</returns>
         public static bool IsServerError(this IHttpResponse response)
         {
             return response.StatusCode >= 500 && response.StatusCode < 600;

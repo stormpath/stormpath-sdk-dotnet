@@ -23,9 +23,11 @@ namespace Stormpath.SDK.Jwt
     /// </summary>
     public static class Jwts
     {
+        /// <summary>
+        /// Creates a new <see cref="IJwtClaimsBuilder"/>, used to construct <see cref="IJwtClaims"/> instances.
+        /// </summary>
+        /// <returns>A new <see cref="IJwtClaimsBuilder"/>.</returns>
         public static IJwtClaimsBuilder NewClaimsBuilder()
-        {
-            return new DefaultJwtClaimsBuilder();
-        }
+            => new DefaultJwtClaimsBuilder();
     }
 }

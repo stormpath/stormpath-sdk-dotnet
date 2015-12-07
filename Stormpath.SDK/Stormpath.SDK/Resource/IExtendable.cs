@@ -26,18 +26,19 @@ namespace Stormpath.SDK.Resource
     public interface IExtendable
     {
         /// <summary>
-        /// Provides access to convenience methods that can manipulate this resource's custom data.
+        /// Gets a proxy that can be used to write to Custom Data for this resource.
         /// </summary>
+        /// <seealso cref="GetCustomDataAsync(CancellationToken)"/>
         /// <value>
-        /// Access to convenience methods that can manipulate this resource's custom data.
+        /// A proxy that can be used to write to Custom Data for this resource.
         /// </value>
-        IEmbeddedCustomData CustomData { get; }
+        ICustomDataProxy CustomData { get; }
 
         /// <summary>
         /// Gets the custom data associated with this resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the <see cref="ICustomData"/> associated with this resource.</returns>
+        /// <returns>The <see cref="ICustomData"/> associated with this resource.</returns>
         /// <exception cref="Error.ResourceException">The custom data could not be loaded.</exception>
         Task<ICustomData> GetCustomDataAsync(CancellationToken cancellationToken = default(CancellationToken));
     }

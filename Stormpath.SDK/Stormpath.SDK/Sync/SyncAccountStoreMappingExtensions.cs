@@ -20,6 +20,9 @@ using Stormpath.SDK.Impl.AccountStore;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IAccountStoreMapping"/>.
+    /// </summary>
     public static class SyncAccountStoreMappingExtensions
     {
         /// <summary>

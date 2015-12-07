@@ -18,12 +18,35 @@ using System;
 
 namespace Stormpath.SDK.Group
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IGroupCreationActions"/>.
+    /// </summary>
     internal interface IGroupCreationActionsSync
     {
+        /// <summary>
+        /// Creates a new <see cref="IGroup"/>.
+        /// </summary>
+        /// <param name="group">The group to create.</param>
+        /// <returns>The new <see cref="IGroup"/>.</returns>
         IGroup CreateGroup(IGroup group);
 
+        /// <summary>
+        /// Creates a new <see cref="IGroup"/>.
+        /// </summary>
+        /// <param name="group">The group to create.</param>
+        /// <param name="creationOptionsAction">
+        /// An inline builder for an instance of <see cref="IGroupCreationOptions"/>, which will be used when sending the request.
+        /// </param>
+        /// <returns>The new <see cref="IGroup"/>.</returns>
         IGroup CreateGroup(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction);
 
+        /// <summary>
+        /// Creates a new <see cref="IGroup"/>.
+        /// </summary>
+        /// <param name="group">The group to create.</param>
+        /// <param name="creationOptions">An <see cref="IGroupCreationOptions"/> instance to use when sending the request.</param>
+        /// <returns>The new <see cref="IGroup"/>.</returns>
         IGroup CreateGroup(IGroup group, IGroupCreationOptions creationOptions);
     }
 }

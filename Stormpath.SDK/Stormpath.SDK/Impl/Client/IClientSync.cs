@@ -20,8 +20,16 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="SDK.Client.IClient"/>.
+    /// </summary>
     internal interface IClientSync : ITenantActionsSync, IDataStoreSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Client.IClient.GetCurrentTenantAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The current Tenant.</returns>
         ITenant GetCurrentTenant();
     }
 }

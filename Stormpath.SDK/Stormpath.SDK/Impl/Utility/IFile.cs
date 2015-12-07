@@ -16,9 +16,17 @@
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    // A subset of methods on System.IO.File, for easy unit testing
+    /// <summary>
+    /// An abstraction over System.IO.File.
+    /// </summary>
     internal interface IFile
     {
+        /// <summary>
+        /// An abstraction over <see cref="System.IO.File.ReadAllText(string)"/>.
+        /// Opens a text file, reads all lines of the file, and then closes the file.
+        /// </summary>
+        /// <param name="path">The file to open for reading.</param>
+        /// <returns>A string containing all lines of the file.</returns>
         string ReadAllText(string path);
     }
 }

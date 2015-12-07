@@ -37,14 +37,20 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             var result = chain.Filter(request, logger);
 
             if (!IsCreateOrUpdate(request))
+            {
                 return result;
+            }
 
             if (!IsAccountStoreMapping(result))
+            {
                 return result;
+            }
 
             var applicationHref = GetApplicationHref(result);
             if (string.IsNullOrEmpty(applicationHref))
+            {
                 return result;
+            }
 
             var application = chain.DataStore.GetResource<IApplication>(applicationHref);
             var allMappings = application.GetAccountStoreMappings().Synchronously().ToList();
@@ -59,14 +65,20 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             var result = await chain.FilterAsync(request, logger, cancellationToken).ConfigureAwait(false);
 
             if (!IsCreateOrUpdate(request))
+            {
                 return result;
+            }
 
             if (!IsAccountStoreMapping(result))
+            {
                 return result;
+            }
 
             var applicationHref = GetApplicationHref(result);
             if (string.IsNullOrEmpty(applicationHref))
+            {
                 return result;
+            }
 
             var application = await chain.DataStore.GetResourceAsync<IApplication>(applicationHref, cancellationToken).ConfigureAwait(false);
             var allMappings = await application.GetAccountStoreMappings().ToListAsync(cancellationToken).ConfigureAwait(false);
@@ -88,7 +100,9 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             object application;
 
             if (!result.Body.TryGetValue("application", out application))
+            {
                 return null;
+            }
 
             return (application as IEmbeddedProperty)?.Href;
         }

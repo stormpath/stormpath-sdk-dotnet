@@ -53,15 +53,21 @@ namespace Stormpath.SDK.Impl.CustomData
         private static bool IsValidKey(string possibleKey)
         {
             if (possibleKey.Length > 255)
+            {
                 return false;
+            }
 
             bool isValidCharacters = ValidKeyCharactersRegex.IsMatch(possibleKey);
             if (!isValidCharacters)
+            {
                 return false;
+            }
 
             bool isReservedKeyword = ReservedKeys.Contains(possibleKey) || FutureReservedKeys.Contains(possibleKey);
             if (isReservedKeyword)
+            {
                 return false;
+            }
 
             return true;
         }
@@ -73,7 +79,9 @@ namespace Stormpath.SDK.Impl.CustomData
             if (type.IsPrimitive ||
                 type == typeof(string) ||
                 type == typeof(decimal))
-            return true;
+            {
+                return true;
+            }
 
             return false;
         }
@@ -106,22 +114,6 @@ namespace Stormpath.SDK.Impl.CustomData
         int ICustomData.Count
             => this.GetAvailableKeys().Count();
 
-        IReadOnlyCollection<string> ICustomData.Keys
-            => this.GetAvailableKeys();
-
-        IReadOnlyCollection<object> ICustomData.Values
-        {
-            get
-            {
-                var values = new List<object>();
-
-                this.GetAvailableKeys().ForEach(x =>
-                    values.Add(this.AsInterface.Get(x)));
-
-                return values;
-            }
-        }
-
         internal IReadOnlyDictionary<string, object> GetUpdatedProperties()
             => this.GetResourceData()?.GetUpdatedProperties();
 
@@ -144,13 +136,19 @@ namespace Stormpath.SDK.Impl.CustomData
         void ICustomData.Put(string key, object value)
         {
             if (string.IsNullOrEmpty(key))
+            {
                 throw new ArgumentNullException(nameof(key));
+            }
 
             if (!IsValidKey(key))
+            {
                 throw new ArgumentOutOfRangeException($"{key} is not a valid key name.");
+            }
 
             if (!IsValidValue(value))
+            {
                 throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'. Only primitives and strings can be stored in Custom Data.");
+            }
 
             this.GetResourceData()?.RemoveProperty(key);
 
@@ -161,7 +159,9 @@ namespace Stormpath.SDK.Impl.CustomData
         {
             bool isEmpty = !keyValuePairs?.Any() ?? true;
             if (isEmpty)
+            {
                 return;
+            }
 
             foreach (var kvp in keyValuePairs)
             {
@@ -176,7 +176,9 @@ namespace Stormpath.SDK.Impl.CustomData
             // we need to do a little investigation to find out
             // (fail fast if it's just a null)
             if (customData == null)
+            {
                 return;
+            }
 
             var asEnumerable = customData as IEnumerable<KeyValuePair<object, string>>;
             if (asEnumerable != null)
@@ -202,7 +204,9 @@ namespace Stormpath.SDK.Impl.CustomData
         object ICustomData.Remove(string key)
         {
             if (ReservedKeys.Contains(key))
+            {
                 throw new ArgumentOutOfRangeException(nameof(key), $"{key} is a reserved key and cannot be removed.");
+            }
 
             return this.GetResourceData()?.RemoveProperty(key);
         }
@@ -259,7 +263,9 @@ namespace Stormpath.SDK.Impl.CustomData
         async Task<ICustomData> ISaveable<ICustomData>.SaveAsync(CancellationToken cancellationToken)
         {
             if (this.HasDeletedProperties())
+            {
                 await this.DeleteRemovedPropertiesAsync(this.AsInterface.Href, cancellationToken).ConfigureAwait(false);
+            }
 
             return await this.GetInternalAsyncDataStore().SaveAsync<ICustomData>(this, cancellationToken).ConfigureAwait(false);
         }
@@ -267,7 +273,9 @@ namespace Stormpath.SDK.Impl.CustomData
         ICustomData ISaveableSync<ICustomData>.Save()
         {
             if (this.HasDeletedProperties())
+            {
                 this.DeleteRemovedProperties(this.AsInterface.Href);
+            }
 
             return this.GetInternalSyncDataStore().Save<ICustomData>(this);
         }

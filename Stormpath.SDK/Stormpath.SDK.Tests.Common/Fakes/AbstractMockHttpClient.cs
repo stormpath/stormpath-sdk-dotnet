@@ -63,14 +63,20 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         IHttpResponse ISynchronousHttpClient.Execute(IHttpRequest request)
         {
             if (!MatchesBaseUrl(request, this.baseUrl))
+            {
                 throw new ArgumentException("BaseUrl does not match.");
+            }
 
             if (!this.IsSupported(request.Method))
+            {
                 throw new NotImplementedException($"The method {request.Method} is not supported by {this.GetType().Name}.");
+            }
 
             var response = this.GetResponse(request);
             if (response == null)
+            {
                 throw new ApplicationException($"{this.GetType().Name} cannot handle this request.");
+            }
 
             this.calls.Add(request);
             return response;
@@ -86,7 +92,9 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         private static string EnsureTrailingSlash(string url)
         {
             if (!url.EndsWith("/"))
+            {
                 url = url + "/";
+            }
 
             return url;
         }

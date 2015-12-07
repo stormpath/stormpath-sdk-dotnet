@@ -51,13 +51,20 @@ namespace Stormpath.SDK.Impl.Linq
         public CollectionResourceQueryable(IQueryProvider provider, Expression expression)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException("provider");
+            }
+
             if (expression == null)
+            {
                 throw new ArgumentNullException("expression");
+            }
 
             var concreteProvider = provider as CollectionResourceQueryProvider<TResult>;
             if (concreteProvider == null)
+            {
                 throw new NotSupportedException("Source and destination provider types do not match.");
+            }
 
             this.expression = expression;
             this.queryProvider = concreteProvider;
@@ -65,7 +72,7 @@ namespace Stormpath.SDK.Impl.Linq
             this.queryProvider.Executor = this.executor;
         }
 
-        // Equivalent to Enumerable.Empty - creates a queryable that will always be of zero length.
+        // Equivalent to Enumerable.Empty - creates an IAsyncQueryable that will always be of zero length.
         public static IAsyncQueryable<T> Empty<T>()
         {
             var emptyQueryable = new CollectionResourceQueryable<T>(new NullExecutor<T>());

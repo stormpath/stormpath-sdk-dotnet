@@ -21,7 +21,7 @@ using System.Linq.Expressions;
 namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
 {
     /// <summary>
-    /// Performs evaluation & replacement of independent sub-trees.
+    /// Performs evaluation and replacement of independent sub-trees.
     /// Returns a new tree with sub-trees evaluated and replaced.
     /// </summary>
     internal sealed class PartialEvaluationTransformer : IExpressionTransformer
@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
         }
 
         /// <summary>
-        /// Evaluates & replaces sub-trees when first candidate is reached (top-down)
+        /// Evaluates and replaces sub-trees when first candidate is reached (top-down)
         /// </summary>
         private class SubtreeEvaluator : ExpressionVisitor
         {
@@ -60,14 +60,20 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
             public override Expression Visit(Expression expression)
             {
                 if (expression == null)
+                {
                     return null;
+                }
 
                 Expression result = null;
 
                 if (this.candidates.Contains(expression))
+                {
                     result = this.Evaluate(expression);
+                }
                 else
+                {
                     result = base.Visit(expression);
+                }
 
                 // Skip the root node, only evaluate child nodes (if any)
                 this.passedRootNode = true;

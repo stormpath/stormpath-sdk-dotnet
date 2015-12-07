@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Account
         public IAccountStore AccountStore { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="IInternalDataStore"/> used to construct this request.
+        /// Gets the <see cref="IInternalDataStore"/> used to construct this request.
         /// </summary>
         /// <value>The internal data store used by this client.</value>
         internal IInternalDataStore InternalDataStore { get; }
@@ -59,7 +59,9 @@ namespace Stormpath.SDK.Account
             request.SetLogin(this.Login);
 
             if (this.AccountStore != null)
+            {
                 request.SetAccountStore(this.AccountStore);
+            }
 
             return request;
         }

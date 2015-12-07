@@ -20,10 +20,22 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Group
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IGroupMembership"/>.
+    /// </summary>
     internal interface IGroupMembershipSync : IDeletableSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IGroupMembership.GetAccountAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Account.</returns>
         IAccount GetAccount();
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IGroupMembership.GetGroupAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Group.</returns>
         IGroup GetGroup();
     }
 }

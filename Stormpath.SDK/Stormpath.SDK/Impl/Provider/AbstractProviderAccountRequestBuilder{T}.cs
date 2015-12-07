@@ -48,7 +48,9 @@ namespace Stormpath.SDK.Impl.Provider
         {
             var providerId = this.ConcreteProviderId;
             if (string.IsNullOrEmpty(providerId))
+            {
                 throw new ApplicationException("The Provider ID is missing.");
+            }
 
             return this.BuildConcrete();
         }
@@ -57,7 +59,7 @@ namespace Stormpath.SDK.Impl.Provider
         /// Delegates responsibility to Provider-specific subclasses when constructing <see cref="IProviderAccountRequest"/> instances,
         /// so subclasses can add their own properties.
         /// </summary>
-        /// <returns>The actual request based on the subclassed builder's current state.</returns>
+        /// <returns>The actual request based on the derived builder's current state.</returns>
         protected abstract IProviderAccountRequest BuildConcrete();
     }
 }

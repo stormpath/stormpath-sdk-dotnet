@@ -16,11 +16,23 @@
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    // A subset of methods available on the static Environment object (used for testing)
+    /// <summary>
+    /// An abstraction over System.Environment.
+    /// </summary>
     internal interface IEnvironment
     {
+        /// <summary>
+        /// An abstraction over <see cref="System.Environment.ExpandEnvironmentVariables(string)"/>.
+        /// </summary>
+        /// <param name="name">The environment variable name to expand.</param>
+        /// <returns>The expanded environment variable string.</returns>
         string ExpandEnvironmentVariables(string name);
 
+        /// <summary>
+        /// An abstraction over <see cref="System.Environment.GetEnvironmentVariable(string)"/>.
+        /// </summary>
+        /// <param name="variable">The environment variable name.</param>
+        /// <returns>The environment variable value.</returns>
         string GetEnvironmentVariable(string variable);
     }
 }

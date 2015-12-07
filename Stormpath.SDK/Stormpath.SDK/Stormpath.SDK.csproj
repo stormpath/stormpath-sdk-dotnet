@@ -25,7 +25,8 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>stormpath.sdk.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Stormpath.SDK.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\Stormpath.SDK.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,18 +36,22 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <CodeAnalysisRuleSet>stormpath.sdk.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <DocumentationFile>bin\Release\Stormpath.SDK.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mono|AnyCPU'">
     <OutputPath>bin\Mono\</OutputPath>
-    <DefineConstants>CODE_ANALYSIS;TRACE</DefineConstants>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>stormpath.sdk.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Mono\Stormpath.SDK.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -82,6 +87,12 @@
     <Compile Include="IdSite\IIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
     <Compile Include="Cache\AbstractCacheProviderBuilder{T}.cs" />
+    <Compile Include="Impl\DataStore\DefaultDataStore.Core.cs" />
+    <Compile Include="Impl\DataStore\DefaultDataStore.Create.cs" />
+    <Compile Include="Impl\DataStore\DefaultDataStore.Delete.cs" />
+    <Compile Include="Impl\DataStore\DefaultDataStore.GetAsync.cs" />
+    <Compile Include="Impl\DataStore\DefaultDataStore.GetSync.cs" />
+    <Compile Include="Impl\DataStore\DefaultDataStore.Save.cs" />
     <Compile Include="Impl\DataStore\Filters\AccountStoreMappingCacheInvalidationFilter.cs" />
     <Compile Include="Impl\Http\DefaultHttpRequestBuilder.cs" />
     <Compile Include="Impl\IdentityMap\IdentityMapOptionsResolver.cs" />
@@ -113,7 +124,7 @@
     <Compile Include="Client\IClient.cs" />
     <Compile Include="Client\IClientBuilder.cs" />
     <Compile Include="CustomData\ICustomData.cs" />
-    <Compile Include="CustomData\IEmbeddedCustomData.cs" />
+    <Compile Include="CustomData\ICustomDataProxy.cs" />
     <Compile Include="Directory\DirectoryCreationOptionsBuilder.cs" />
     <Compile Include="Directory\DirectoryStatus.cs" />
     <Compile Include="Directory\IDirectoryCreationOptions.cs" />
@@ -126,7 +137,7 @@
     <Compile Include="Group\IGroupCreationOptions.cs" />
     <Compile Include="Group\IGroup.cs" />
     <Compile Include="Group\IGroupMembership.cs" />
-    <Compile Include="Http\HttpExtensions.cs" />
+    <Compile Include="Impl\Extensions\HttpExtensions.cs" />
     <Compile Include="Http\HttpRequests.cs" />
     <Compile Include="Http\IAsynchronousHttpClient.cs" />
     <Compile Include="Http\IHttpClient.cs" />
@@ -234,7 +245,7 @@
     <Compile Include="Impl\Http\Support\IBackoffStrategy.cs" />
     <Compile Include="Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
     <Compile Include="Impl\IdentityMap\IIdentityMap{TItem}.cs" />
-    <Compile Include="Impl\CustomData\DefaultEmbeddedCustomData.cs" />
+    <Compile Include="Impl\CustomData\DefaultCustomDataProxy.cs" />
     <Compile Include="IdSite\IdSiteRuntimeException.cs" />
     <Compile Include="IdSite\IdSiteSessionTimeoutException.cs" />
     <Compile Include="IdSite\InvalidIdSiteTokenException.cs" />
@@ -345,7 +356,6 @@
     <Compile Include="Impl\Resource\ResourceData.cs" />
     <Compile Include="Impl\Resource\IExtendableSync.cs" />
     <Compile Include="Impl\Resource\IDeletableSync.cs" />
-    <Compile Include="Impl\Resource\IWithProperties.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterResult.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\AbstractFieldConverter.cs" />
     <Compile Include="Impl\Serialization\FieldConverters\FieldConverterList.cs" />
@@ -371,7 +381,6 @@
     <Compile Include="Impl\Utility\Base64.cs" />
     <Compile Include="Impl\Utility\DetectLanguage.cs" />
     <Compile Include="Impl\Utility\HmacGenerator.cs" />
-    <Compile Include="Impl\Utility\IMultiValueDictionary{TKey,TValue}.cs" />
     <Compile Include="Impl\Utility\ITypeLoader{T}.cs" />
     <Compile Include="Impl\Utility\SourceLanguage.cs" />
     <Compile Include="Impl\Utility\TypeLoader{T}.cs" />
@@ -487,7 +496,7 @@
     <Compile Include="Impl\Api\DefaultClientApiKeyBuilder.cs" />
     <Compile Include="Impl\Client\DefaultClient.cs" />
     <Compile Include="Impl\Client\DefaultClientBuilder.cs" />
-    <Compile Include="Impl\DataStore\DefaultDataStore.cs" />
+    <Compile Include="Impl\DataStore\DefaultDataStore.Api.cs" />
     <Compile Include="Impl\Extensions\StringExtensions.cs" />
     <Compile Include="Impl\Http\Authentication\BasicRequestAuthenticator.cs" />
     <Compile Include="Impl\Http\Authentication\IRequestAuthenticator.cs" />
@@ -495,7 +504,7 @@
     <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Impl\Http\Authentication\RequestAuthenticationException.cs" />
     <Compile Include="Http\RequestException.cs" />
-    <Compile Include="Impl\NullLogger.cs" />
+    <Compile Include="Impl\Logging\NullLogger.cs" />
     <Compile Include="Impl\Resource\AbstractExtendableInstanceResource.cs" />
     <Compile Include="Impl\Resource\AbstractInstanceResource.cs" />
     <Compile Include="Impl\Resource\LinkProperty.cs" />
@@ -510,7 +519,7 @@
     <Compile Include="Linq\AsyncQueryableExtensions.cs" />
     <Compile Include="Linq\AsyncQueryableFilterExtensions.cs" />
     <Compile Include="Linq\WithinExpressionExtensions.cs" />
-    <Compile Include="Linq\IAsyncQueryable.cs" />
+    <Compile Include="Linq\IAsyncQueryable{T}.cs" />
     <Compile Include="Impl\Resource\AbstractResource.cs" />
     <Compile Include="Resource\IAuditable.cs" />
     <Compile Include="Resource\ICreationOptions.cs" />
@@ -547,18 +556,11 @@
   <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc1\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc1\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc1\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets" Condition="Exists('..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

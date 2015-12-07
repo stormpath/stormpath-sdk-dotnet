@@ -37,7 +37,9 @@ namespace Stormpath.SDK.Tests.Impl.IdentityMap
         private TestEntity CreateEntity(string id)
         {
             if (string.IsNullOrEmpty(id))
+            {
                 id = Guid.NewGuid().ToString();
+            }
 
             return new TestEntity(id);
         }

@@ -18,9 +18,17 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
+    /// <summary>
+    /// Represents a resource that can be created or modified.
+    /// </summary>
+    /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
     internal interface ISaveableSync<T>
         where T : IResource
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Resource.ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The persisted resource data.</returns>
         T Save();
     }
 }

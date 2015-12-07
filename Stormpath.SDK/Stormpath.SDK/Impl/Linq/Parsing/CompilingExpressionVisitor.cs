@@ -47,18 +47,24 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         internal Expression VisitTake(TakeExpression node)
         {
             if (this.Model.Limit.HasValue)
+            {
                 return node; // LIFO behavior
+            }
 
             var value = node.Value;
 
             if (value == 0)
+            {
                 return node; // Take(0) is idempotent
+            }
 
             this.Model.ExecutionPlan.MaxItems = value;
             this.Model.Limit = value;
 
             if (value > DefaultApiPageLimit)
+            {
                 this.Model.Limit = DefaultApiPageLimit;
+            }
 
             return node;
         }
@@ -66,7 +72,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         internal Expression VisitSkip(SkipExpression node)
         {
             if (this.Model.Offset.HasValue)
+            {
                 return node; // LIFO behavior
+            }
 
             this.Model.Offset = node.Value;
 
@@ -77,7 +85,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         {
             string translatedFieldName = null;
             if (!this.fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
+            {
                 throw new NotSupportedException($"{node.FieldName} is not a supported field.");
+            }
 
             this.Model.OrderByTerms.Add(new OrderByTerm()
             {
@@ -91,7 +101,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         internal Expression VisitFilter(FilterExpression node)
         {
             if (!string.IsNullOrEmpty(this.Model.FilterTerm))
+            {
                 throw new NotSupportedException("Multiple Filter terms are not supported");
+            }
 
             this.Model.FilterTerm = node.Value;
 
@@ -102,7 +114,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         {
             string translatedMethodName = null;
             if (!this.methodNameTranslator.TryGetValue(node.MethodName, out translatedMethodName))
+            {
                 throw new NotSupportedException($"{node.MethodName} does not support expansion.");
+            }
 
             this.Model.ExpandTerms.Add(new ExpandTerm()
             {
@@ -117,7 +131,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             string translatedFieldName = null;
             if (!this.fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName) &&
                 !this.datetimeFieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
+            {
                 throw new NotSupportedException($"{node.FieldName} is not a supported field.");
+            }
 
             this.Model.WhereTerms.Add(new WhereTerm()
             {

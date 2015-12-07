@@ -21,6 +21,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
@@ -106,7 +107,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             updated.Count().ShouldBe(6);
 
             // Try deleting
-            var result = updated.Delete();
+            updated.Delete();
+            System.Threading.Thread.Sleep(Delay.UpdatePropogation);
+
             var newCustomData = account.GetCustomData();
             newCustomData.Count().ShouldBe(3);
 
@@ -136,8 +139,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             updated.Clear();
             var result = updated.Save();
 
-            // Let the cache update
-            System.Threading.Thread.Sleep(100);
+            System.Threading.Thread.Sleep(Delay.UpdatePropogation);
 
             var newCustomData = account.GetCustomData();
             newCustomData.Count().ShouldBe(3);
@@ -165,7 +167,11 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // ... and then delete one
             updated.Remove("claims");
-            var updated2 = updated.Save();
+            updated.Save();
+
+            System.Threading.Thread.Sleep(Delay.UpdatePropogation);
+
+            var updated2 = account.GetCustomData();
             updated2.Get("claims").ShouldBeNull();
             updated2.Get("text").ShouldBe("fizzbuzz");
 

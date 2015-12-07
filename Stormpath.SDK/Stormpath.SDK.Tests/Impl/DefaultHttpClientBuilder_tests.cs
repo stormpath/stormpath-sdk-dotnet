@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             IHttpClientBuilder builder = new DefaultHttpClientBuilder(this.GetFailingLoader());
 
-            builder.UseHttpClient(new RestSharpClient("http://api.foo.bar", 0, null, Substitute.For<ILogger>()));
+            builder.SetHttpClient(new RestSharpClient("http://api.foo.bar", 0, null, Substitute.For<ILogger>()));
 
             var instance = builder.Build();
             instance.ShouldBeAssignableTo<IHttpClient>();

@@ -43,9 +43,14 @@ namespace Stormpath.SDK.Impl.Application
         IAccount IApplicationSync.ResetPassword(string token, string newPassword)
         {
             if (string.IsNullOrEmpty(token))
+            {
                 throw new ArgumentNullException(nameof(token));
+            }
+
             if (string.IsNullOrEmpty(newPassword))
+            {
                 throw new ArgumentNullException(nameof(newPassword));
+            }
 
             var href = $"{this.PasswordResetToken.Href}/{token}";
             var passwordResetToken = this.GetInternalSyncDataStore().Instantiate<IPasswordResetToken>() as DefaultPasswordResetToken;

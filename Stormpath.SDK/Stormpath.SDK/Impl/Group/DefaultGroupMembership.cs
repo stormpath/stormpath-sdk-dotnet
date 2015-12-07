@@ -71,9 +71,14 @@ namespace Stormpath.SDK.Impl.Group
         public static Task<IGroupMembership> CreateAsync(IAccount account, IGroup group, IInternalAsyncDataStore dataStore, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(account.Href))
+            {
                 throw new ApplicationException("You must persist the account first before assigning it to a group.");
+            }
+
             if (string.IsNullOrEmpty(group.Href))
+            {
                 throw new ApplicationException("You must persist the group first because assigning it to a group.");
+            }
 
             var groupMembership = (DefaultGroupMembership)dataStore.Instantiate<IGroupMembership>();
             groupMembership.SetGroup(group);
@@ -87,9 +92,14 @@ namespace Stormpath.SDK.Impl.Group
         public static IGroupMembership Create(IAccount account, IGroup group, IInternalSyncDataStore dataStore)
         {
             if (string.IsNullOrEmpty(account.Href))
+            {
                 throw new ApplicationException("You must persist the account first before assigning it to a group.");
+            }
+
             if (string.IsNullOrEmpty(group.Href))
+            {
                 throw new ApplicationException("You must persist the group first because assigning it to a group.");
+            }
 
             var groupMembership = (DefaultGroupMembership)(dataStore as IDataStore).Instantiate<IGroupMembership>();
             groupMembership.SetGroup(group);

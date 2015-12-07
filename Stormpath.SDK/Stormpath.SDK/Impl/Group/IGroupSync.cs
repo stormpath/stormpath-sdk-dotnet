@@ -22,16 +22,51 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Group
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IGroup"/>.
+    /// </summary>
     internal interface IGroupSync : ISaveableWithOptionsSync<IGroup>, IDeletableSync, IExtendableSync, IAccountStoreSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IGroup.AddAccountAsync(IAccount, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="account">The account to assign to this group.</param>
+        /// <returns>
+        /// The new <see cref="IGroupMembership"/> resource created reflecting the group-to-account association.
+        /// </returns>
         IGroupMembership AddAccount(IAccount account);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IGroup.AddAccountAsync(IAccount, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="hrefOrEmailOrUsername">The <c>href</c>, email, or username of the <see cref="IAccount"/> to associate.</param>
+        /// <returns>
+        /// The new <see cref="IGroupMembership"/> resource created reflecting the group-to-account association.
+        /// </returns>
+        /// <exception cref="System.InvalidOperationException">The specified account could not be found.</exception>
         IGroupMembership AddAccount(string hrefOrEmailOrUsername);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IGroup.RemoveAccountAsync(IAccount, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="account">The <see cref="IAccount"/> object to disassociate.</param>
+        /// <returns>Whether the operation succeeded.</returns>
+        /// <exception cref="System.InvalidOperationException">The specified account does not belong to this group.</exception>
         bool RemoveAccount(IAccount account);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IGroup.RemoveAccountAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="hrefOrEmailOrUsername">The <see cref="IAccount"/> object to disassociate.</param>
+        /// <returns>Whether the operation succeeded.</returns>
+        /// <exception cref="System.InvalidOperationException">The specified account does not belong to this group.</exception>
         bool RemoveAccount(string hrefOrEmailOrUsername);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IGroup.GetDirectoryAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Directory.</returns>
         IDirectory GetDirectory();
     }
 }

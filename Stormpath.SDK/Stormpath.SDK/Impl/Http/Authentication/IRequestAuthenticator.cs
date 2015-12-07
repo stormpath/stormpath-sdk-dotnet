@@ -19,8 +19,16 @@ using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.Http.Authentication
 {
+    /// <summary>
+    /// Represents an abstract authenticator that can authenticate a request.
+    /// </summary>
     internal interface IRequestAuthenticator
     {
+        /// <summary>
+        /// Authenticates the request.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="apiKey">The client API Key.</param>
         void Authenticate(IHttpRequest request, IClientApiKey apiKey);
     }
 }

@@ -26,7 +26,9 @@ namespace Stormpath.SDK.Impl.Http.Support
         public UriQualifier(string baseUrl)
         {
             if (string.IsNullOrEmpty(baseUrl))
+            {
                 throw new ArgumentNullException("baseUrl");
+            }
 
             this.baseUrl = baseUrl;
         }
@@ -34,14 +36,20 @@ namespace Stormpath.SDK.Impl.Http.Support
         public string EnsureFullyQualified(string href)
         {
             if (string.IsNullOrEmpty(href))
+            {
                 return href;
+            }
 
             if (IsFullyQualified(href))
+            {
                 return href;
+            }
 
             var fullyQualified = new StringBuilder(this.baseUrl);
             if (!href.StartsWith("/"))
+            {
                 fullyQualified.Append("/");
+            }
 
             fullyQualified.Append(href);
             return fullyQualified.ToString();
@@ -51,7 +59,9 @@ namespace Stormpath.SDK.Impl.Http.Support
         {
             bool tooShort = string.IsNullOrEmpty(href) || href.Length < 5;
             if (tooShort)
+            {
                 return false;
+            }
 
             bool startsWithHttp = href.Substring(0, 4).Equals("http", StringComparison.InvariantCultureIgnoreCase);
             return startsWithHttp;

@@ -35,7 +35,9 @@ namespace Stormpath.SDK.Impl.Jwt
         public string Sign(string jsonPayload)
         {
             if (string.IsNullOrEmpty(jsonPayload))
+            {
                 throw new ArgumentNullException(nameof(jsonPayload));
+            }
 
             var base64UrlSafeJsonPayload = Base64.EncodeUrlSafe(jsonPayload, Encoding.UTF8);
             var signature = this.CalculateSignature(Base64UrlSafeJwtSignHeader, base64UrlSafeJsonPayload);

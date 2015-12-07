@@ -1,4 +1,4 @@
-﻿// <copyright file="IEmbeddedCustomData.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ICustomDataProxy.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,9 +19,9 @@ using System.Collections.Generic;
 namespace Stormpath.SDK.CustomData
 {
     /// <summary>
-    /// Provides access to convenience methods that manipulate the custom data of the parent resource.
+    /// Provides access to a proxy that can manipulate the custom data of the parent resource.
     /// </summary>
-    public interface IEmbeddedCustomData
+    public interface ICustomDataProxy
     {
         /// <summary>
         /// Removes all custom data items when the resource is saved.

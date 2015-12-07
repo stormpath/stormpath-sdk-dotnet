@@ -31,7 +31,9 @@ namespace Stormpath.SDK.Impl.Group
         public string GetQueryString()
         {
             if (this.responseOptions == null)
+            {
                 return string.Empty;
+            }
 
             return this.responseOptions.ToString();
         }

@@ -16,8 +16,15 @@
 
 namespace Stormpath.SDK.Cache.Redis
 {
+    /// <summary>
+    /// Static entry point for working with Redis cache providers.
+    /// </summary>
     public static class RedisCaches
     {
+        /// <summary>
+        /// Instantiates a new <see cref="IRedisCacheProviderBuilder"/>, used to build Redis-backed cache providers.
+        /// </summary>
+        /// <returns>A new <see cref="IRedisCacheProviderBuilder"/> instance.</returns>
         public static IRedisCacheProviderBuilder NewRedisCacheProvider()
             => new RedisCacheProviderBuilder();
     }

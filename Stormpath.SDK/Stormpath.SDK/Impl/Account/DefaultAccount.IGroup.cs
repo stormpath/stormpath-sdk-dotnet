@@ -32,11 +32,15 @@ namespace Stormpath.SDK.Impl.Account
         async Task<IGroupMembership> IAccount.AddGroupAsync(string hrefOrName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrName))
+            {
                 throw new ArgumentNullException(nameof(hrefOrName));
+            }
 
             var group = await this.FindGroupInDirectoryAsync(hrefOrName, this.Directory.Href, cancellationToken).ConfigureAwait(false);
             if (group == null)
+            {
                 throw new InvalidOperationException("The specified group was not found in the account's directory.");
+            }
 
             return await DefaultGroupMembership.CreateAsync(this, group, this.GetInternalAsyncDataStore(), cancellationToken).ConfigureAwait(false);
         }
@@ -44,20 +48,26 @@ namespace Stormpath.SDK.Impl.Account
         async Task<bool> IAccount.RemoveGroupAsync(IGroup group, CancellationToken cancellationToken)
         {
             if (group == null)
+            {
                 throw new ArgumentNullException(nameof(group));
+            }
 
             IGroupMembership foundMembership = null;
             await this.AsInterface.GetGroupMemberships().ForEachAsync(
                 item =>
                 {
                     if ((item as IInternalGroupMembership).GroupHref.Equals(group.Href, StringComparison.InvariantCultureIgnoreCase))
+                    {
                         foundMembership = item;
+                    }
 
                     return foundMembership != null;
                 }, cancellationToken).ConfigureAwait(false);
 
             if (foundMembership == null)
+            {
                 throw new InvalidOperationException("This account does not belong to the specified group.");
+            }
 
             return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -65,7 +75,9 @@ namespace Stormpath.SDK.Impl.Account
         async Task<bool> IAccount.RemoveGroupAsync(string hrefOrName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrName))
+            {
                 throw new ArgumentNullException(nameof(hrefOrName));
+            }
 
             IGroupMembership foundMembership = null;
             var iterator = this.AsInterface.GetGroupMemberships();
@@ -76,18 +88,26 @@ namespace Stormpath.SDK.Impl.Account
                     IGroup group = await item.GetGroupAsync(cancellationToken).ConfigureAwait(false);
                     if (group.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
                         group.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                    {
                         foundMembership = item;
+                    }
 
                     if (foundMembership != null)
+                    {
                         break;
+                    }
                 }
 
                 if (foundMembership != null)
+                {
                     break;
+                }
             }
 
             if (foundMembership == null)
+            {
                 throw new InvalidOperationException("This account does not belong to the specified group.");
+            }
 
             return await foundMembership.DeleteAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -95,7 +115,9 @@ namespace Stormpath.SDK.Impl.Account
         async Task<bool> IAccount.IsMemberOfGroupAsync(string hrefOrName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrName))
+            {
                 throw new ArgumentNullException(nameof(hrefOrName));
+            }
 
             IGroup foundGroup = null;
             await this.AsInterface.GetGroups().ForEachAsync(
@@ -103,7 +125,9 @@ namespace Stormpath.SDK.Impl.Account
                 {
                     if (item.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
                         item.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                    {
                         foundGroup = item;
+                    }
 
                     return foundGroup != null;
                 }, cancellationToken).ConfigureAwait(false);
@@ -114,9 +138,14 @@ namespace Stormpath.SDK.Impl.Account
         private async Task<IGroup> FindGroupInDirectoryAsync(string hrefOrName, string directoryHref, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(hrefOrName))
+            {
                 throw new ArgumentNullException(nameof(hrefOrName));
+            }
+
             if (string.IsNullOrEmpty(directoryHref))
+            {
                 throw new ArgumentNullException(nameof(directoryHref));
+            }
 
             IGroup group = null;
 
@@ -128,7 +157,9 @@ namespace Stormpath.SDK.Impl.Account
                     group = await this.GetInternalAsyncDataStore().GetResourceAsync<IGroup>(hrefOrName, cancellationToken).ConfigureAwait(false);
 
                     if ((group as DefaultGroup)?.Directory.Href == directoryHref)
+                    {
                         return group;
+                    }
                 }
                 catch (ResourceException)
                 {

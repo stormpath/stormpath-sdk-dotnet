@@ -26,7 +26,9 @@ namespace Stormpath.SDK.Impl.Jwt
         public JwtSignatureValidator(string signingKey)
         {
             if (signingKey == null)
+            {
                 throw new ArgumentNullException(nameof(signingKey));
+            }
 
             this.jwtSigner = new DefaultJwtSigner(signingKey);
         }
@@ -39,7 +41,9 @@ namespace Stormpath.SDK.Impl.Jwt
         public bool IsValid(JsonWebToken jwt)
         {
             if (jwt == null)
+            {
                 throw new ArgumentNullException(nameof(jwt));
+            }
 
             var calculatedSignature = this.jwtSigner.CalculateSignature(jwt.Base64Header, jwt.Base64Payload);
 

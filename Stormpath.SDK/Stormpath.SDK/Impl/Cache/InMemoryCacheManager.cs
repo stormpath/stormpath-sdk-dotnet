@@ -41,7 +41,9 @@ namespace Stormpath.SDK.Impl.Cache
         private void ThrowIfDisposed()
         {
             if (this.isDisposed)
+            {
                 throw new ApplicationException($"The object ({this.GetType().Name}) has been disposed.");
+            }
         }
 
         public Map Get(string key)
@@ -57,9 +59,13 @@ namespace Stormpath.SDK.Impl.Cache
                 (tokenAndItem.ContainsKey(key) && tokenAndItem[key] != null);
 
             if (itemHasNotExpired)
+            {
                 return tokenAndItem[key] as Map;
+            }
             else
+            {
                 return null;
+            }
         }
 
         public Map Put(string key, Map value, DateTimeOffset absoluteExpiration, TimeSpan slidingExpiration)

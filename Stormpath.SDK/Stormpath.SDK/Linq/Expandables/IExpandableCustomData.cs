@@ -18,8 +18,15 @@ using Stormpath.SDK.CustomData;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents an expandable <see cref="ICustomData"/> resource.
+    /// </summary>
     public interface IExpandableCustomData
     {
+        /// <summary>
+        /// Expands the <c>customData</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         ICustomData GetCustomData();
     }
 }

@@ -21,6 +21,9 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IDataStore"/>.
+    /// </summary>
     public static class SyncDataStoreExtensions
     {
         /// <summary>
@@ -35,7 +38,7 @@ namespace Stormpath.SDK.Sync
             => (dataStore as IDataStoreSync).GetResource<T>(href);
 
         /// <summary>
-        /// Synchronously retrieves the resource at the specified <paramref name="href"/> URL with the specified <see cref="options"/>,
+        /// Synchronously retrieves the resource at the specified <paramref name="href"/> URL with the specified <paramref name="responseOptions"/>,
         /// and returns the resource as an instance of the specified class <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>

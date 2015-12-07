@@ -1,4 +1,4 @@
-﻿// <copyright file="IMultiValueDictionary{TKey,TValue}.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Delay.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
-
-namespace Stormpath.SDK.Impl.Utility
+namespace Stormpath.SDK.Tests.Common
 {
-    internal interface IMultiValueDictionary<TKey, TValue> : IDictionary<TKey, IList<TValue>>
+    public static class Delay
     {
-        TValue GetFirst(TKey key);
-
-        void Add(TKey key, TValue value);
-
-        void Set(TKey key, TValue value);
-
-        void SetAll(Dictionary<TKey, TValue> values);
-
-        IDictionary<TKey, TValue> ToSingleValueDictionary();
+        public static readonly int UpdatePropogation = 250;
     }
 }

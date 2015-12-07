@@ -18,10 +18,23 @@ using Stormpath.SDK.Account;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents an expandable <see cref="IAccount"/> collection.
+    /// </summary>
     public interface IExpandableAccounts
     {
+        /// <summary>
+        /// Expands the <c>accounts</c> collection with the default pagination options.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         IAsyncQueryable<IAccount> GetAccounts();
 
+        /// <summary>
+        /// Expands the <c>accounts</c> collection with the specified pagination options.
+        /// </summary>
+        /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
+        /// <returns>Not applicable.</returns>
         IAsyncQueryable<IAccount> GetAccounts(int? offset, int? limit);
     }
 }

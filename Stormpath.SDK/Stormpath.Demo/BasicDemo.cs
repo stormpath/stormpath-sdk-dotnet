@@ -60,7 +60,9 @@ namespace Stormpath.Demo
             }
 
             if (!Helpers.SpacebarToContinue(cancellationToken))
+            {
                 return;
+            }
 
             // Add some users
             var myApp = applications.Where(x => x.Name == "My Application").Single();
@@ -89,7 +91,9 @@ namespace Stormpath.Demo
             Console.WriteLine($"{Strings.NL}Application accounts:");
             await myApp.GetAccounts().ForEachAsync(account => Console.WriteLine($"{Helpers.TrimWithEllipse(account.Email, 25), -25} {Helpers.TrimWithEllipse(account.FullName, 20), -20} {account.Status.ToString().ToLower()}"), cancellationToken);
             if (!Helpers.SpacebarToContinue(cancellationToken))
+            {
                 return;
+            }
 
             // Authenticate a user
             Console.WriteLine($"{Strings.NL}Logging in as vader@galacticempire.co");
@@ -107,7 +111,9 @@ namespace Stormpath.Demo
             }
 
             if (!Helpers.SpacebarToContinue(cancellationToken))
+            {
                 return;
+            }
         }
 
         public override async Task CleanupAsync()

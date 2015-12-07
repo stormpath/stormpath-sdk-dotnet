@@ -1,4 +1,4 @@
-﻿// <copyright file="IWithProperties.cs" company="Stormpath, Inc.">
+﻿// <copyright file="NullLogger.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
+using Stormpath.SDK.Logging;
 
-namespace Stormpath.SDK.Impl.Resource
+namespace Stormpath.SDK.Impl.Logging
 {
-    internal interface IWithProperties
+    internal sealed class NullLogger : ILogger
     {
-        IDictionary<string, object> GetProperties();
+        void ILogger.Log(LogEntry entry)
+        {
+        }
     }
 }

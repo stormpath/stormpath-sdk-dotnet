@@ -39,15 +39,21 @@ namespace Stormpath.SDK.Impl.Account
         {
             if (this.registrationWorkflowEnabled == null &&
                 this.responseOptions == null)
+            {
                 return string.Empty;
+            }
 
             var arguments = new List<string>(2);
 
             if (this.registrationWorkflowEnabled != null)
+            {
                 arguments.Add("registrationWorkflowEnabled=" + (this.registrationWorkflowEnabled.Value ? "true" : "false"));
+            }
 
             if (this.responseOptions != null)
+            {
                 arguments.Add(this.responseOptions.ToString());
+            }
 
             return arguments
                 .Where(x => !string.IsNullOrEmpty(x))

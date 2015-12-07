@@ -43,7 +43,9 @@ namespace Stormpath.SDK.Impl.Account
         public IEmailVerificationRequest SetAccountStore(IAccountStore accountStore)
         {
             if (string.IsNullOrEmpty(accountStore?.Href))
+            {
                 throw new ArgumentNullException(accountStore.Href);
+            }
 
             this.SetLinkProperty(AccountStorePropertyName, accountStore.Href);
             return this;

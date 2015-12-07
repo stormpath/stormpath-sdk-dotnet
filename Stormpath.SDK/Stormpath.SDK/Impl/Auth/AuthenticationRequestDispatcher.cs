@@ -29,11 +29,19 @@ namespace Stormpath.SDK.Impl.Auth
         private static void Validate(IInternalDataStore dataStore, IApplication application, IAuthenticationRequest request)
         {
             if (dataStore == null)
+            {
                 throw new ArgumentNullException(nameof(dataStore));
+            }
+
             if (application == null)
+            {
                 throw new ArgumentNullException(nameof(application));
+            }
+
             if (request == null)
+            {
                 throw new ArgumentNullException(nameof(request));
+            }
         }
 
         public Task<IAuthenticationResult> AuthenticateAsync(IInternalDataStore dataStore, IApplication application, IAuthenticationRequest request, IRetrievalOptions<IAuthenticationResult> options, CancellationToken cancellationToken)
@@ -41,7 +49,9 @@ namespace Stormpath.SDK.Impl.Auth
             Validate(dataStore, application, request);
 
             if (request is UsernamePasswordRequest)
+            {
                 return new BasicAuthenticator(dataStore).AuthenticateAsync(application.Href, request, options, cancellationToken);
+            }
 
             throw new InvalidOperationException($"The AuthenticationRequest {request.GetType().Name} is not supported by this implementation.");
         }
@@ -51,7 +61,9 @@ namespace Stormpath.SDK.Impl.Auth
             Validate(dataStore, application, request);
 
             if (request is UsernamePasswordRequest)
+            {
                 return new BasicAuthenticator(dataStore).Authenticate(application.Href, request, options);
+            }
 
             throw new InvalidOperationException($"The AuthenticationRequest {request.GetType().Name} is not supported by this implementation.");
         }

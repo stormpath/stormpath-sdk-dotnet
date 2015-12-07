@@ -61,6 +61,7 @@ namespace Stormpath.SDK.Error
         /// <value>The HTTP status code associated with this error.</value>
         public int HttpStatus => this.Error.HttpStatus;
 
+        /// <inheritdoc/>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("code", this.Error.Code);
@@ -74,7 +75,9 @@ namespace Stormpath.SDK.Error
         private static string BuildExceptionMessage(IError error)
         {
             if (error == null)
+            {
                 throw new ArgumentNullException(nameof(error));
+            }
 
             return $"HTTP {error.HttpStatus}, Stormpath {error.Code} ({error.MoreInfo}): {error.DeveloperMessage}";
         }

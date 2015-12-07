@@ -43,7 +43,9 @@ namespace Stormpath.SDK.Impl.Http
         private static string GetLanguageInfo()
         {
             if (!DetectLanguage.Result.HasValue)
+            {
                 return null;
+            }
 
             return $"lang/{DetectLanguage.Result.Value.ToString().ToLower()}";
         }

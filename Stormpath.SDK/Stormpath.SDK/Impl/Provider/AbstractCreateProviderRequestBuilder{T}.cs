@@ -48,9 +48,14 @@ namespace Stormpath.SDK.Impl.Provider
         ICreateProviderRequest ICreateProviderRequestBuilder<T>.Build()
         {
             if (string.IsNullOrEmpty(this.clientId))
+            {
                 throw new ApplicationException($"{nameof(this.clientId)} is a required property. It must be provided before building.");
+            }
+
             if (string.IsNullOrEmpty(this.clientSecret))
+            {
                 throw new ApplicationException($"{nameof(this.clientSecret)} is a required property. It must be provided before building.");
+            }
 
             return this.BuildConcrete();
         }

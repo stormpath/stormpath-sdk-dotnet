@@ -56,7 +56,9 @@ namespace Stormpath.SDK.Impl.Http
 
             this.headers = headers;
             if (headers == null)
+            {
                 this.headers = new HttpHeaders();
+            }
 
             this.body = body;
             this.bodyContentType = bodyContentType;

@@ -23,7 +23,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
         protected override Expression TransformNode(Expression node)
         {
             if (node?.NodeType != ExpressionType.Convert)
+            {
                 return node;
+            }
 
             return ReduceTrivialConversions(node);
         }
@@ -34,7 +36,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
 
             var reduceFurther = asUnary != null && asUnary.Method == null;
             if (!reduceFurther)
+            {
                 return invokedExpression;
+            }
 
             return ReduceTrivialConversions(asUnary.Operand);
         }

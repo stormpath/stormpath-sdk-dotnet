@@ -54,7 +54,9 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             }
 
             if (!isSupported)
+            {
                 return FieldConverterResult.Failed;
+            }
 
             var result = this.ConvertImpl(token);
             return result;

@@ -24,6 +24,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Tests.Common.Integration
 {

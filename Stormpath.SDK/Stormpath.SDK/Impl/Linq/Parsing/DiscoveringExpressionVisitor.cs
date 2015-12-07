@@ -99,7 +99,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private bool HandleWhereMethod(MethodCallExpression node)
         {
             if (node.Method.Name != "Where")
+            {
                 return false;
+            }
 
             var whereExpressions = WhereExpressionVisitor.GetParsedExpressions(node.Arguments[1]);
             whereExpressions.ForEach(e => this.whereExpressions.Push(e));
@@ -112,18 +114,28 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             OrderByDirection? direction = null;
 
             if (node.Method.Name == "OrderBy")
+            {
                 direction = OrderByDirection.Ascending;
+            }
             else if (node.Method.Name == "OrderByDescending")
+            {
                 direction = OrderByDirection.Descending;
+            }
             else
+            {
                 return false;
+            }
 
             if (node.Arguments.Count > 2)
+            {
                 throw new NotSupportedException("This overload of OrderBy is not supported.");
+            }
 
             var field = ((node.Arguments[1] as UnaryExpression)?.Operand as LambdaExpression)?.Body as MemberExpression;
             if (field == null)
+            {
                 throw new NotSupportedException($"{node.Method.Name} must operate on a supported field.");
+            }
 
             this.orderByExpressions.Push(new OrderByExpression(field.Member.Name, direction.Value));
 
@@ -135,18 +147,28 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             OrderByDirection? direction = null;
 
             if (node.Method.Name == "ThenBy")
+            {
                 direction = OrderByDirection.Ascending;
+            }
             else if (node.Method.Name == "ThenByDescending")
+            {
                 direction = OrderByDirection.Descending;
+            }
             else
+            {
                 return false;
+            }
 
             if (node.Arguments.Count > 2)
+            {
                 throw new NotSupportedException("This overload of ThenBy is not supported.");
+            }
 
             var field = ((node.Arguments[1] as UnaryExpression)?.Operand as LambdaExpression)?.Body as MemberExpression;
             if (field == null)
+            {
                 throw new NotSupportedException($"{node.Method.Name} must operate on a supported field.");
+            }
 
             this.orderByExpressions.Push(new OrderByExpression(field.Member.Name, direction.Value));
 
@@ -156,11 +178,15 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private bool HandleTakeMethod(MethodCallExpression node)
         {
             if (node.Method.Name != "Take")
+            {
                 return false;
+            }
 
             var value = node.Arguments[1] as ConstantExpression;
             if (value == null)
+            {
                 throw new ArgumentException("Value passed to Take operator is not supported.");
+            }
 
             this.expressions.Add(new TakeExpression((int)value.Value));
 
@@ -170,11 +196,15 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private bool HandleSkipMethod(MethodCallExpression node)
         {
             if (node.Method.Name != "Skip")
+            {
                 return false;
+            }
 
             var value = node.Arguments[1] as ConstantExpression;
             if (value == null)
+            {
                 throw new ArgumentException("Value passed to Take operator is not supported.");
+            }
 
             this.expressions.Add(new SkipExpression((int)value.Value));
 
@@ -184,11 +214,15 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private bool HandleFilterExtensionMethod(MethodCallExpression node)
         {
             if (node.Method.Name != "Filter")
+            {
                 return false;
+            }
 
             var value = (node.Arguments[1] as ConstantExpression)?.Value as string;
             if (string.IsNullOrWhiteSpace(value))
+            {
                 throw new ArgumentException("Value passed to Filter operator is not supported.");
+            }
 
             this.expressions.Add(new FilterExpression(value));
 
@@ -198,18 +232,24 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private bool HandleExpandExtensionMethod(MethodCallExpression node)
         {
             if (node.Method.Name != "Expand")
+            {
                 return false;
+            }
 
             var methodCallExpression =
                 ((node.Arguments[1] as UnaryExpression)
                     ?.Operand as LambdaExpression)
                         ?.Body as MethodCallExpression;
             if (methodCallExpression == null)
+            {
                 throw new ArgumentException("Method selector passed to Expand operator could not be parsed.");
+            }
 
             var targetMethod = methodCallExpression.Method;
             if (targetMethod == null)
+            {
                 throw new ArgumentException("Method selector passed to Expand operator is not supported.");
+            }
 
             int? offset = null, limit = null;
             if (methodCallExpression.Arguments.Any())
@@ -226,7 +266,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private bool HandleAnyResultOperator(MethodCallExpression node)
         {
             if (node.Method.Name != "Any")
+            {
                 return false;
+            }
 
             this.expressions.Add(new AnyResultOperator());
 
@@ -236,7 +278,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private bool HandleCountResultOperator(MethodCallExpression node)
         {
             if (node.Method.Name != "Count")
+            {
                 return false;
+            }
 
             this.expressions.Add(new CountResultOperator());
 
@@ -246,7 +290,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private bool HandleLongCountResultOperator(MethodCallExpression node)
         {
             if (node.Method.Name != "LongCount")
+            {
                 return false;
+            }
 
             this.expressions.Add(new LongCountResultOperator());
 
@@ -258,11 +304,17 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             bool? defaultIfEmpty = null;
 
             if (node.Method.Name == "First")
+            {
                 defaultIfEmpty = false;
+            }
             else if (node.Method.Name == "FirstOrDefault")
+            {
                 defaultIfEmpty = true;
+            }
             else
+            {
                 return false;
+            }
 
             this.expressions.Add(new FirstResultOperator(defaultIfEmpty.Value));
 
@@ -274,11 +326,17 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             bool? defaultIfEmpty = null;
 
             if (node.Method.Name == "Single")
+            {
                 defaultIfEmpty = false;
+            }
             else if (node.Method.Name == "SingleOrDefault")
+            {
                 defaultIfEmpty = true;
+            }
             else
+            {
                 return false;
+            }
 
             this.expressions.Add(new SingleResultOperator(defaultIfEmpty.Value));
 

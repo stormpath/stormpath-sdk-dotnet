@@ -61,7 +61,9 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             {
                 result = converter.TryConvertField(token, targetType);
                 if (result.Success)
+                {
                     break;
+                }
             }
 
             return result;

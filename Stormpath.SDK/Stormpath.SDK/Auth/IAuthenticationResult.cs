@@ -27,9 +27,9 @@ namespace Stormpath.SDK.Auth
     public interface IAuthenticationResult
     {
         /// <summary>
-        /// Gets whether the authentication was successful.
+        /// Gets a value indicating whether the authentication was successful.
         /// </summary>
-        /// <returns><c>true</c> if the authentication was successful; <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if the authentication was successful; <see langword="false"/> otherwise.</returns>
         /// <value>Whether the authentication was successful.</value>
         bool Success { get; }
 
@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Auth
         /// Gets the successfully authenticated <see cref="IAccount"/>.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the <see cref="IAccount"/> that was successfully authenticated.</returns>
+        /// <returns>The <see cref="IAccount"/> that was successfully authenticated.</returns>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

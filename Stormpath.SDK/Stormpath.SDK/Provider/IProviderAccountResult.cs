@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Provider
     /// Represents the result of the attempt to access the Provider's account. Stormpath maps common fields of the
     /// Provider user to the <see cref="IAccount"/> Resource.
     /// <para>
-    /// If the user retrieved from the Provider did not previously exist in Stormapth as an Account, common Provider user fields
+    /// If the user retrieved from the Provider did not previously exist in Stormpath as an Account, common Provider user fields
     /// will be used to create a new <see cref="IAccount"/> in Stormpath.
     /// </para>
     /// </summary>
@@ -37,11 +37,11 @@ namespace Stormpath.SDK.Provider
         IAccount Account { get; }
 
         /// <summary>
-        /// Gets whether this request generated a new account in Stormpath.
+        /// Gets a value indicating whether this request generated a new account in Stormpath.
         /// </summary>
         /// <value>
-        /// <c>true</c> if a new <see cref="IAccount"/> was generated in Stormpath as a result of the request;
-        /// <c>false</c> otherwise.
+        /// <see langword="true"/> if a new <see cref="IAccount"/> was generated in Stormpath as a result of the request;
+        /// <see langword="false"/> otherwise.
         /// </value>
         bool IsNewAccount { get; }
     }

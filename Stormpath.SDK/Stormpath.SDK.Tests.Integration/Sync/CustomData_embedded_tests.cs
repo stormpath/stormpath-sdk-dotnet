@@ -14,11 +14,13 @@
 // limitations under the License.
 // </copyright>
 
+using System.Threading;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
@@ -112,6 +114,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             created.CustomData.Put("phrase", "testing is neet");
             created.Save();
 
+            Thread.Sleep(Delay.UpdatePropogation);
+
             var customData = created.GetCustomData();
             customData["status"].ShouldBe(1337);
             customData["isAwesome"].ShouldBe(null);
@@ -137,6 +141,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             created.CustomData.Clear();
             created.Save();
+
+            Thread.Sleep(Delay.UpdatePropogation);
 
             customData = created.GetCustomData();
             customData.IsEmptyOrDefault().ShouldBeTrue();

@@ -46,10 +46,14 @@ namespace Stormpath.SDK.Impl.Application
             var arguments = new List<string>(2);
 
             if (this.createDirectory)
+            {
                 arguments.Add("createDirectory=" + (this.IsDirectoryNameSpecified ? this.directoryName : "true"));
+            }
 
             if (this.responseOptions != null)
+            {
                 arguments.Add(this.responseOptions.ToString());
+            }
 
             return arguments
                 .Where(x => !string.IsNullOrEmpty(x))

@@ -23,6 +23,9 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="ITenantActions"/>.
+    /// </summary>
     public static class SyncTenantActionsExtensions
     {
         /// <summary>
@@ -74,7 +77,7 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="directory">The Directory resource to create.</param>
-        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="Directory.IDirectory"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         public static IDirectory CreateDirectory(this ITenantActions tenantActions, IDirectory directory)
             => (tenantActions as ITenantActionsSync).CreateDirectory(directory);
@@ -83,10 +86,10 @@ namespace Stormpath.SDK.Sync
         /// Synchronously creates a new Provider-based Directory resource in the Tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
-        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="directory">The <see cref="Directory.IDirectory"/> to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
         /// which will be used when sending the request.</param>
-        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="Directory.IDirectory"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         public static IDirectory CreateDirectory(this ITenantActions tenantActions, IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction)
             => (tenantActions as ITenantActionsSync).CreateDirectory(directory, creationOptionsAction);
@@ -95,9 +98,9 @@ namespace Stormpath.SDK.Sync
         /// Synchronously creates a new Cloud- or Provider-based Directory resource in the Tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
-        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="directory">The <see cref="Directory.IDirectory"/> to create.</param>
         /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
-        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="Directory.IDirectory"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         public static IDirectory CreateDirectory(this ITenantActions tenantActions, IDirectory directory, IDirectoryCreationOptions creationOptions)
             => (tenantActions as ITenantActionsSync).CreateDirectory(directory, creationOptions);
@@ -109,13 +112,13 @@ namespace Stormpath.SDK.Sync
         /// <param name="name">The directory name.</param>
         /// <param name="description">The directory description.</param>
         /// <param name="status">The initial directory status.</param>
-        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="Directory.IDirectory"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         public static IDirectory CreateDirectory(this ITenantActions tenantActions, string name, string description, DirectoryStatus status)
             => (tenantActions as ITenantActionsSync).CreateDirectory(name, description, status);
 
         /// <summary>
-        /// Synchronously verifies an account's email address based on a <c>sptoken</c> parameter embedded in a clickable URL
+        /// Synchronously verifies an account's email address based on a <c>sptoken</c> parameter embedded in a URL
         /// found in an account's verification email.
         /// <para>
         /// For example:

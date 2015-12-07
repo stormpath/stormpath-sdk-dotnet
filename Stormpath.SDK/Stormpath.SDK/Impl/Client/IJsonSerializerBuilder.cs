@@ -18,8 +18,15 @@ using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Impl.Client
 {
+    /// <summary>
+    /// Builder pattern for <see cref="IJsonSerializerBuilder"/> instances.
+    /// </summary>
     internal interface IJsonSerializerBuilder : ISerializerConsumer<IJsonSerializerBuilder>
     {
+        /// <summary>
+        /// Builds a new <see cref="IJsonSerializer"/> from the current builder state.
+        /// </summary>
+        /// <returns>A new <see cref="IJsonSerializer"/> instance.</returns>
         IJsonSerializer Build();
     }
 }

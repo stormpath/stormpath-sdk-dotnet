@@ -20,6 +20,9 @@ using Stormpath.SDK.Impl.Group;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IGroupMembership"/>.
+    /// </summary>
     public static class SyncGroupMembershipExtensions
     {
         /// <summary>
@@ -31,10 +34,10 @@ namespace Stormpath.SDK.Sync
             => (groupMembership as IGroupMembershipSync).GetAccount();
 
         /// <summary>
-        /// Synchronously gets this membership's <see cref="IGroup"/> resource.
+        /// Synchronously gets this membership's <see cref="Group.IGroup"/> resource.
         /// </summary>
         /// <param name="groupMembership">The group membership object.</param>
-        /// <returns>This membership's <see cref="IGroup"/> resource.</returns>
+        /// <returns>This membership's <see cref="Group.IGroup"/> resource.</returns>
         public static IGroup GetGroup(this IGroupMembership groupMembership)
             => (groupMembership as IGroupMembershipSync).GetGroup();
     }

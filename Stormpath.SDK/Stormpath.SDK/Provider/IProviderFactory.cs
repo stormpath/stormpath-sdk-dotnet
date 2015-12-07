@@ -16,6 +16,9 @@
 
 namespace Stormpath.SDK.Provider
 {
+    /// <summary>
+    /// Represents a factory that can construct Provider-specific <see cref="IProviderRequestFactory{A, P}"/> instances.
+    /// </summary>
     public interface IProviderFactory
     {
         /// <summary>

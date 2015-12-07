@@ -57,9 +57,13 @@ namespace Stormpath.SDK.Tests.Impl
                 IResourceDataResult ISynchronousFilter.Filter(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
                 {
                     if (request.Action == ResourceAction.Delete)
+                    {
                         return new DefaultResourceDataResult(ResourceAction.Delete, null, null, 204, null);
+                    }
                     else
+                    {
                         return chain.Filter(request, logger);
+                    }
                 }
             }
 

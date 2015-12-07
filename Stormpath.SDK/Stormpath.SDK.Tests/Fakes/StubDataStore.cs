@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             var fakeRequestExecutor = new StubRequestExecutor(resourceJson);
             var useLogger = logger == null
-                ? new SDK.Impl.NullLogger()
+                ? new SDK.Impl.Logging.NullLogger()
                 : logger;
 
             this.proxyInstance = new DefaultDataStore(fakeRequestExecutor.Object, baseHref, new JsonNetSerializer(), useLogger, new NullCacheProvider(), TimeSpan.FromMinutes(10));

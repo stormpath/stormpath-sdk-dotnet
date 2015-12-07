@@ -20,39 +20,123 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
+    /// <summary>
+    /// Represents the asynchronous actions a data store can perform.
+    /// </summary>
     internal interface IInternalAsyncDataStore : IInternalDataStore
     {
+        /// <summary>
+        /// Gets a collection resource.
+        /// </summary>
+        /// <typeparam name="T">The inner resource type.</typeparam>
+        /// <param name="href">The collection URL.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A <see cref="CollectionResponsePage{T}"/> containing a single page of results.</returns>
         Task<CollectionResponsePage<T>> GetCollectionAsync<T>(string href, CancellationToken cancellationToken);
 
-        Task<T> GetResourceAsync<T>(string href, Func<IDictionary<string, object>, Type> typeLookup, CancellationToken cancellationToken)
+        /// <summary>
+        /// Gets a resource, and apply a specified type lookup to the returned object.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <param name="href">The resource URL.</param>
+        /// <param name="typeLookup">The type lookup</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The resource.</returns>
+        Task<T> GetResourceAsync<T>(string href, Func<Map, Type> typeLookup, CancellationToken cancellationToken)
             where T : class, IResource;
 
+        /// <summary>
+        /// Creates a new resource on the server.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
+        /// <param name="resource">The resource to persist.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The persisted resource.</returns>
         Task<T> CreateAsync<T>(string parentHref, T resource, CancellationToken cancellationToken)
             where T : class;
 
+        /// <summary>
+        /// Creates a new resource on the server with the specified options.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
+        /// <param name="resource">The resource to persist.</param>
+        /// <param name="options">The creation options to use for the request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The persisted resource.</returns>
         Task<T> CreateAsync<T>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
             where T : class;
 
+        /// <summary>
+        /// Creates a new resource on the server.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <typeparam name="TReturned">The resource type to return.</typeparam>
+        /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
+        /// <param name="resource">The resource to persist.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The persisted resource.</returns>
         Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, CancellationToken cancellationToken)
             where T : class
             where TReturned : class;
 
+        /// <summary>
+        /// Creates a new resource on the server with the specified options.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <typeparam name="TReturned">The resource type to return.</typeparam>
+        /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
+        /// <param name="resource">The resource to persist.</param>
+        /// <param name="options">The creation options to use for the request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The persisted resource.</returns>
         Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
             where T : class
             where TReturned : class;
 
+        /// <summary>
+        /// Saves local resource changes to the server.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <param name="resource">The resource to persist.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The updated resource.</returns>
         Task<T> SaveAsync<T>(T resource, CancellationToken cancellationToken)
             where T : class, IResource, ISaveable<T>;
 
+        /// <summary>
+        /// Saves local resource changes to the server.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <param name="resource">The resource to persist.</param>
+        /// <param name="queryString">The additional query string arguments to use in the request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The updated resource.</returns>
         Task<T> SaveAsync<T>(T resource, string queryString, CancellationToken cancellationToken)
             where T : class, IResource, ISaveable<T>;
 
+        /// <summary>
+        /// Deletes a resource from the server.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <param name="resource">The resource to delete.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns><see langword="true"/> if the delete operation succeeded; <see langword="false"/> otherwise.</returns>
         Task<bool> DeleteAsync<T>(T resource, CancellationToken cancellationToken)
             where T : class, IResource, IDeletable;
 
+        /// <summary>
+        /// Deletes a single resource property.
+        /// </summary>
+        /// <param name="parentHref">The parent resource URL.</param>
+        /// <param name="propertyName">The name of the property to delete</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns><see langword="true"/> if the delete operation succeeded; <see langword="false"/> otherwise.</returns>
         Task<bool> DeletePropertyAsync(string parentHref, string propertyName, CancellationToken cancellationToken);
     }
 }

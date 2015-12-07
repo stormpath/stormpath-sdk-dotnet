@@ -21,6 +21,7 @@ using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
+using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Logging;

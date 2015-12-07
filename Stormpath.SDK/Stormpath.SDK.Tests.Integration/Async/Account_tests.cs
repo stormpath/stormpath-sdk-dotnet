@@ -22,6 +22,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Error;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
@@ -272,22 +273,17 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            // Make a new account that's created now
-            var createdAfter = DateTime.Now.Subtract(TimeSpan.FromSeconds(10));
-            var newAccount = await application.CreateAccountAsync("Wedge", "Antilles", "wedge@gus-treta.corellia.core", new RandomPassword(12));
-            this.fixture.CreatedAccountHrefs.Add(newAccount.Href);
+            var longTimeAgo = await application
+                .GetAccounts()
+                .Where(x => x.CreatedAt < DateTime.Now.Subtract(TimeSpan.FromHours(1)))
+                .ToListAsync();
+            longTimeAgo.ShouldBeEmpty();
 
-            var rightBeforeCreation = newAccount.CreatedAt.Subtract(TimeSpan.FromSeconds(1));
             var createdRecently = await application
                 .GetAccounts()
-                .Where(x => x.CreatedAt >= rightBeforeCreation)
+                .Where(x => x.CreatedAt >= DateTime.Now.Subtract(TimeSpan.FromHours(1)))
                 .ToListAsync();
-            var wedge = createdRecently.Where(x => x.Email == "wedge@gus-treta.corellia.core").Single();
-            wedge.FullName.ShouldBe("Wedge Antilles");
-
-            // Clean up
-            (await newAccount.DeleteAsync()).ShouldBeTrue();
-            this.fixture.CreatedAccountHrefs.Remove(newAccount.Href);
+            createdRecently.ShouldNotBeEmpty();
         }
 
         [Theory]

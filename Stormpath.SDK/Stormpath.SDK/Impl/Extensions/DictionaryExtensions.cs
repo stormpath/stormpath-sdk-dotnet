@@ -15,19 +15,22 @@
 // </copyright>
 
 using System.Collections.Generic;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Extensions
 {
     internal static class DictionaryExtensions
     {
-        public static bool TryGetValueAsString(this IDictionary<string, object> source, string key, out string value)
+        public static bool TryGetValueAsString(this Map source, string key, out string value)
         {
             value = null;
             object raw = null;
 
             var keyExists = source.TryGetValue(key, out raw);
             if (keyExists)
+            {
                 value = raw?.ToString();
+            }
 
             return keyExists;
         }

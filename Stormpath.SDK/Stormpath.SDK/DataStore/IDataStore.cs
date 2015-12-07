@@ -50,7 +50,7 @@ namespace Stormpath.SDK.DataStore
         Task<T> GetResourceAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Retrieves the resource at the specified <paramref name="href"/> URL with the specified <see cref="options"/>,
+        /// Retrieves the resource at the specified <paramref name="href"/> URL with the specified <paramref name="responseOptions"/>,
         /// and returns the resource as an instance of the specified class <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>

@@ -63,7 +63,7 @@ namespace Stormpath.SDK.AccountStore
         /// Sets whether or not the associated <see cref="IAccountStore"/> is designated as the Application's
         /// default account store.
         /// <para>
-        /// A <c>true</c> value indicates that any accounts created directly by the application will be dispatched
+        /// A <see langword="true"/> value indicates that any accounts created directly by the application will be dispatched
         /// to and saved in the associated <see cref="IAccountStore"/>, since an application cannot store accounts directly.
         /// </para>
         /// <para>
@@ -79,7 +79,7 @@ namespace Stormpath.SDK.AccountStore
         /// Sets whether or not the associated <see cref="IAccountStore"/> is designated as the Application's
         /// default group store.
         /// <para>
-        /// A <c>true</c> value indicates that any groups created directly by the application will be dispatched
+        /// A <see langword="true"/> value indicates that any groups created directly by the application will be dispatched
         /// to and saved in the associated <see cref="IAccountStore"/>, since an application cannot store groups directly.
         /// </para>
         /// <para>
@@ -92,20 +92,20 @@ namespace Stormpath.SDK.AccountStore
         IAccountStoreMapping SetDefaultGroupStore(bool defaultGroupStore);
 
         /// <summary>
-        /// Gets whether the associated <see cref="IAccountStore"/> is designated as the application's default account store.
+        /// Gets a value indicating whether the associated <see cref="IAccountStore"/> is designated as the application's default account store.
         /// </summary>
         /// <value>
-        /// True if the associated <see cref="IAccountStore"/> is designated as the application's default account store, false otherwise.
-        /// <para>A <c>true</c> value indicates that any accounts created directly by the application will be dispatched to and saved in the associated <see cref="IAccountStore"/>, since an <see cref="IApplication"/> cannot store accounts directly.</para>
+        /// <see langword="true"/> if the associated <see cref="IAccountStore"/> is designated as the application's default account store; <see langword="false"/> otherwise.
+        /// <para>A <see langword="true"/> value indicates that any accounts created directly by the application will be dispatched to and saved in the associated <see cref="IAccountStore"/>, since an <see cref="IApplication"/> cannot store accounts directly.</para>
         /// </value>
         bool IsDefaultAccountStore { get; }
 
         /// <summary>
-        /// Gets whether the associated <see cref="IAccountStore"/> is designated as the application's default group store.
+        /// Gets a value indicating whether the associated <see cref="IAccountStore"/> is designated as the application's default group store.
         /// </summary>
         /// <value>
-        /// True if the associated <see cref="IAccountStore"/> is designated as the application's default group store, false otherwise.
-        /// <para>A <c>true</c> value indicates that any groups created directly by the application will be dispatched to and saved in the associated <see cref="IAccountStore"/>, since an <see cref="IApplication"/> cannot store accounts directly.</para>
+        /// <see langword="true"/> if the associated <see cref="IAccountStore"/> is designated as the application's default group store; <see langword="false"/> otherwise.
+        /// <para>A <see langword="true"/> value indicates that any groups created directly by the application will be dispatched to and saved in the associated <see cref="IAccountStore"/>, since an <see cref="IApplication"/> cannot store accounts directly.</para>
         /// </value>
         bool IsDefaultGroupStore { get; }
 
@@ -123,14 +123,14 @@ namespace Stormpath.SDK.AccountStore
         /// Gets this mapping's <see cref="IAccountStore"/> (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>), to be assigned to the application.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the mapping's <see cref="IAccountStore"/>.</returns>
+        /// <returns>The mapping's <see cref="IAccountStore"/>.</returns>
         Task<IAccountStore> GetAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the <see cref="IApplication"/> represented by this mapping.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the mapping's <see cref="IApplication"/>.</returns>
+        /// <returns>The mapping's <see cref="IApplication"/>.</returns>
         Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

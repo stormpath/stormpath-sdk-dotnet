@@ -80,7 +80,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var defaultAccountStore = await createdApplication.GetDefaultAccountStoreAsync();
             if (!string.IsNullOrEmpty(defaultAccountStore?.Href))
+            {
                 this.fixture.CreatedDirectoryHrefs.Add(defaultAccountStore.Href);
+            }
 
             defaultAccountStore.ShouldBeNull(); // no auto-created directory = no default account store
 

@@ -74,7 +74,9 @@ namespace Stormpath.SDK.Impl.Directory
         IDirectory IDirectory.SetName(string name)
         {
             if (string.IsNullOrEmpty(name))
+            {
                 throw new ArgumentNullException(nameof(name));
+            }
 
             this.SetProperty(NamePropertyName, name);
             return this;
@@ -89,7 +91,9 @@ namespace Stormpath.SDK.Impl.Directory
         internal IDirectory SetProvider(IProvider provider)
         {
             if (!string.IsNullOrEmpty(this.AsInterface.Href))
+            {
                 throw new ApplicationException("Cannot change the provider of an existing Directory");
+            }
 
             this.SetProperty(ProviderPropertyName, provider);
             return this;

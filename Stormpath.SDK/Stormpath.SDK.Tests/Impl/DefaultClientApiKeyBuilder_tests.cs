@@ -539,7 +539,9 @@ namespace Stormpath.SDK.Tests.Impl
             public void File_location_interprets_tilde_as_home_directory_on_windows()
             {
                 if (PlatformHelper.IsRunningOnMono())
+                {
                     return;
+                }
 
                 var homeDir = Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
 

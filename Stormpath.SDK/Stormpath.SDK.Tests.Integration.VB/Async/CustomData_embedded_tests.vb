@@ -21,6 +21,7 @@ Imports Shouldly
 Imports Stormpath.SDK.Account
 Imports Stormpath.SDK.Application
 Imports Stormpath.SDK.Client
+Imports Stormpath.SDK.Tests.Common
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData
 Imports Xunit
@@ -107,6 +108,8 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             created.CustomData.Put("phrase", "testing is neet")
             Await created.SaveAsync()
 
+            Await Task.Delay(Delay.UpdatePropogation)
+
             Dim customData = Await created.GetCustomDataAsync()
             CInt(customData("status")).ShouldBe(1337)
             Assert.True(customData("isAwesome") Is Nothing)
@@ -131,6 +134,8 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
             created.CustomData.Clear()
             Await created.SaveAsync()
+
+            Await Task.Delay(Delay.UpdatePropogation)
 
             customData = Await created.GetCustomDataAsync()
             customData.IsEmptyOrDefault().ShouldBeTrue()

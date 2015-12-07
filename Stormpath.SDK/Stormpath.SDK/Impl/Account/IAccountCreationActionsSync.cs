@@ -19,14 +19,45 @@ using Stormpath.SDK.Account;
 
 namespace Stormpath.SDK.Impl.Account
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IAccountCreationActions"/>.
+    /// </summary>
     internal interface IAccountCreationActionsSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccountCreationActions.CreateAccountAsync(IAccount, Action{AccountCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="account">The account to create/persist.</param>
+        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IAccountCreationOptions"/>,
+        /// which will be used when sending the request.</param>
+        /// <returns>The persisted account.</returns>
         IAccount CreateAccount(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccountCreationActions.CreateAccountAsync(IAccount, IAccountCreationOptions, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="account">The account to create/persist.</param>
+        /// <param name="creationOptions">An <see cref="IAccountCreationOptions"/> instance to use when sending the request.</param>
+        /// <returns>The persisted account.</returns>
         IAccount CreateAccount(IAccount account, IAccountCreationOptions creationOptions);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccountCreationActions.CreateAccountAsync(IAccount, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="account">The account to create/persist.</param>
+        /// <returns>The persisted account.</returns>
         IAccount CreateAccount(IAccount account);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccountCreationActions.CreateAccountAsync(string, string, string, string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="givenName">The given name (aka 'first name' in Western cultures).</param>
+        /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
+        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="SDK.Directory.IDirectory"/>.</param>
+        /// <param name="password">The account's raw (plaintext) password.</param>
+        /// <param name="customData">An anonymous type containing name/value pairs to be stored in this account's <see cref="SDK.CustomData.ICustomData"/>.</param>
+        /// <returns>The persisted account.</returns>
         IAccount CreateAccount(string givenName, string surname, string email, string password, object customData = null);
     }
 }

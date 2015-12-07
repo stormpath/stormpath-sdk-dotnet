@@ -31,11 +31,15 @@ namespace Stormpath.SDK.Impl.Account
         IGroupMembership IAccountSync.AddGroup(string hrefOrName)
         {
             if (string.IsNullOrEmpty(hrefOrName))
+            {
                 throw new ArgumentNullException(nameof(hrefOrName));
+            }
 
             var group = this.FindGroupInDirectory(hrefOrName, this.Directory.Href);
             if (group == null)
+            {
                 throw new InvalidOperationException("The specified group was not found in the account's directory.");
+            }
 
             return DefaultGroupMembership.Create(this, group, this.GetInternalSyncDataStore());
         }
@@ -43,21 +47,29 @@ namespace Stormpath.SDK.Impl.Account
         bool IAccountSync.RemoveGroup(IGroup group)
         {
             if (group == null)
+            {
                 throw new ArgumentNullException(nameof(group));
+            }
 
             IGroupMembership foundMembership = null;
 
             foreach (var item in this.AsInterface.GetGroupMemberships().Synchronously())
             {
                 if ((item as IInternalGroupMembership).GroupHref.Equals(group.Href, StringComparison.InvariantCultureIgnoreCase))
+                {
                     foundMembership = item;
+                }
 
                 if (foundMembership != null)
+                {
                     break;
+                }
             }
 
             if (foundMembership == null)
+            {
                 throw new InvalidOperationException("This account does not belong to the specified group.");
+            }
 
             return foundMembership.Delete();
         }
@@ -65,7 +77,9 @@ namespace Stormpath.SDK.Impl.Account
         bool IAccountSync.RemoveGroup(string hrefOrName)
         {
             if (string.IsNullOrEmpty(hrefOrName))
+            {
                 throw new ArgumentNullException(nameof(hrefOrName));
+            }
 
             IGroupMembership foundMembership = null;
             foreach (var item in this.AsInterface.GetGroupMemberships().Synchronously())
@@ -73,14 +87,20 @@ namespace Stormpath.SDK.Impl.Account
                 IGroup group = item.GetGroup();
                 if (group.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
                     group.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                {
                     foundMembership = item;
+                }
 
                 if (foundMembership != null)
+                {
                     break;
+                }
             }
 
             if (foundMembership == null)
+            {
                 throw new InvalidOperationException("This account does not belong to the specified group.");
+            }
 
             return foundMembership.Delete();
         }
@@ -88,17 +108,23 @@ namespace Stormpath.SDK.Impl.Account
         bool IAccountSync.IsMemberOfGroup(string hrefOrName)
         {
             if (string.IsNullOrEmpty(hrefOrName))
+            {
                 throw new ArgumentNullException(nameof(hrefOrName));
+            }
 
             IGroup foundGroup = null;
             foreach (var item in this.AsInterface.GetGroups().Synchronously())
             {
                 if (item.Name.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase) ||
                         item.Href.Equals(hrefOrName, StringComparison.InvariantCultureIgnoreCase))
+                {
                     foundGroup = item;
+                }
 
                 if (foundGroup != null)
+                {
                     break;
+                }
             }
 
             return foundGroup != null;
@@ -107,9 +133,14 @@ namespace Stormpath.SDK.Impl.Account
         private IGroup FindGroupInDirectory(string hrefOrName, string directoryHref)
         {
             if (string.IsNullOrEmpty(hrefOrName))
+            {
                 throw new ArgumentNullException(nameof(hrefOrName));
+            }
+
             if (string.IsNullOrEmpty(directoryHref))
+            {
                 throw new ArgumentNullException(nameof(directoryHref));
+            }
 
             IGroup group = null;
 
@@ -121,7 +152,9 @@ namespace Stormpath.SDK.Impl.Account
                     group = this.GetInternalSyncDataStore().GetResource<IGroup>(hrefOrName);
 
                     if ((group as DefaultGroup)?.Directory.Href == directoryHref)
+                    {
                         return group;
+                    }
                 }
                 catch (ResourceException)
                 {

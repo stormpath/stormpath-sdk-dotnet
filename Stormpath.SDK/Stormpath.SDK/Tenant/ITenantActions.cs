@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Tenant
         /// </summary>
         /// <param name="application">The <see cref="IApplication"/> to create.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
         Task<IApplication> CreateApplicationAsync(IApplication application, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Tenant
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IApplicationCreationOptions"/>,
         /// which will be used when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
         Task<IApplication> CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -57,7 +57,7 @@ namespace Stormpath.SDK.Tenant
         /// <param name="application">The <see cref="IApplication"/> to create.</param>
         /// <param name="creationOptions">An <see cref="IApplicationCreationOptions"/> instance to use when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
         Task<IApplication> CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -67,7 +67,7 @@ namespace Stormpath.SDK.Tenant
         /// <param name="name">The name of the application.</param>
         /// <param name="createDirectory">Whether a default directory should be created automatically.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
         Task<IApplication> CreateApplicationAsync(string name, bool createDirectory, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Tenant
         /// </summary>
         /// <param name="directory">The Directory resource to create.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         Task<IDirectory> CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -87,7 +87,7 @@ namespace Stormpath.SDK.Tenant
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
         /// which will be used when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         Task<IDirectory> CreateDirectoryAsync(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -97,7 +97,7 @@ namespace Stormpath.SDK.Tenant
         /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
         /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         Task<IDirectory> CreateDirectoryAsync(IDirectory directory, IDirectoryCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -108,12 +108,12 @@ namespace Stormpath.SDK.Tenant
         /// <param name="description">The directory description.</param>
         /// <param name="status">The initial directory status.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="IDirectory"/>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         Task<IDirectory> CreateDirectoryAsync(string name, string description, DirectoryStatus status, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Verifies an account's email address based on a <c>sptoken</c> parameter embedded in a clickable URL
+        /// Verifies an account's email address based on a <c>sptoken</c> parameter embedded in a URL
         /// found in an account's verification email.
         /// <para>
         /// For example:

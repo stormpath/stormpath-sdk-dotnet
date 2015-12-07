@@ -31,7 +31,9 @@ namespace Stormpath.SDK.Impl.Cache
         public DefaultCacheResolver(ICacheProvider cacheProvider, ILogger logger)
         {
             if (cacheProvider == null)
+            {
                 throw new ArgumentNullException(nameof(cacheProvider));
+            }
 
             this.cacheProvider = cacheProvider;
             this.syncCacheProvider = cacheProvider as ISynchronousCacheProvider;
@@ -48,7 +50,9 @@ namespace Stormpath.SDK.Impl.Cache
             var iface = new ResourceTypeLookup().GetInterface(type);
 
             if (iface == null)
+            {
                 throw new ApplicationException($"Could not locate a cache region for resource type {type.Name}. Resource type unknown.");
+            }
 
             return iface.Name;
         }
@@ -56,7 +60,9 @@ namespace Stormpath.SDK.Impl.Cache
         ISynchronousCache ICacheResolver.GetSyncCache(Type resourceType)
         {
             if (!this.cacheProvider.IsSynchronousSupported || this.syncCacheProvider == null)
+            {
                 return null;
+            }
 
             var cacheRegionName = string.Empty;
             try
@@ -65,7 +71,7 @@ namespace Stormpath.SDK.Impl.Cache
             }
             catch (Exception e)
             {
-                this.logger.Warn($"Could not get sync cache for type {resourceType.Name}: {e.Message} (Source: {e.Source})", "DefaultCacheResolver.GetSyncCache");
+                this.logger.Warn($"Could not get synchronous cache for type {resourceType.Name}: {e.Message} (Source: {e.Source})", "DefaultCacheResolver.GetSyncCache");
             }
 
             return string.IsNullOrEmpty(cacheRegionName)
@@ -76,7 +82,9 @@ namespace Stormpath.SDK.Impl.Cache
         IAsynchronousCache ICacheResolver.GetAsyncCache(Type resourceType)
         {
             if (!this.cacheProvider.IsAsynchronousSupported || this.asyncCacheProvider == null)
+            {
                 return null;
+            }
 
             var cacheRegionName = string.Empty;
             try
@@ -85,7 +93,7 @@ namespace Stormpath.SDK.Impl.Cache
             }
             catch (Exception e)
             {
-                this.logger.Warn($"Could not get async cache for type {resourceType.Name}: {e.Message} (Source: {e.Source})", "DefaultCacheResolver.GetAsyncCache");
+                this.logger.Warn($"Could not get asynchronous cache for type {resourceType.Name}: {e.Message} (Source: {e.Source})", "DefaultCacheResolver.GetAsyncCache");
             }
 
             return string.IsNullOrEmpty(cacheRegionName)

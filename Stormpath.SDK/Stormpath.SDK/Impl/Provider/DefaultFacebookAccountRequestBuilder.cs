@@ -33,7 +33,9 @@ namespace Stormpath.SDK.Impl.Provider
         protected override IProviderAccountRequest BuildConcrete()
         {
             if (string.IsNullOrEmpty(this.accessToken))
+            {
                 throw new ApplicationException($"{nameof(this.accessToken)} is a required property. It must be provided before building.");
+            }
 
             var providerData = this.dataStore.Instantiate<IFacebookProviderData>() as DefaultFacebookProviderData;
             providerData.SetAccessToken(this.accessToken);

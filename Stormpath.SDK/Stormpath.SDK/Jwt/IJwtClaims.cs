@@ -16,25 +16,61 @@
 
 using System;
 using System.Collections.Generic;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Jwt
 {
+    /// <summary>
+    /// Represents the fields of a JSON Web Token.
+    /// </summary>
     public interface IJwtClaims
     {
+        /// <summary>
+        /// Gets the issuer (iss) field.
+        /// </summary>
+        /// <value>The value of the issuer field.</value>
         string Issuer { get; }
 
+        /// <summary>
+        /// Gets the subject (sub) field.
+        /// </summary>
+        /// <value>The value of the subject field.</value>
         string Subject { get; }
 
+        /// <summary>
+        /// Gets the audience (aud) field.
+        /// </summary>
+        /// <value>The value of the audience field.</value>
         string Audience { get; }
 
+        /// <summary>
+        /// Gets the expiration (exp) field.
+        /// </summary>
+        /// <value>The value of the expiration field.</value>
         DateTimeOffset? Expiration { get; }
 
+        /// <summary>
+        /// Gets the not-before (nbf) field.
+        /// </summary>
+        /// <value>The value of the not-before field.</value>
         DateTimeOffset? NotBefore { get; }
 
+        /// <summary>
+        /// Gets the JWT ID (jti) field.
+        /// </summary>
+        /// <value>The value of the issued-at field.</value>
         DateTimeOffset? IssuedAt { get; }
 
+        /// <summary>
+        /// Gets the issued-at (IAT) claim.
+        /// </summary>
+        /// <value>The value of the issued-at field.</value>
         string Id { get; }
 
-        IDictionary<string, object> ToDictionary();
+        /// <summary>
+        /// Builds a <see cref="IDictionary{TKey, TValue}"/> from the current JWT fields.
+        /// </summary>
+        /// <returns>A new <see cref="IDictionary{TKey, TValue}"/> instance.</returns>
+        Map ToDictionary();
     }
 }

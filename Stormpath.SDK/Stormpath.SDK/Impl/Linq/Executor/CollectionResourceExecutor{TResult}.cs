@@ -72,7 +72,9 @@ namespace Stormpath.SDK.Impl.Linq.Executor
         private void ThrowIfNotEnumerated()
         {
             if (!this.enumeratedOnce)
+            {
                 throw new InvalidOperationException("Call MoveNextAsync() first to retrieve the collection.");
+            }
         }
 
         public long Offset
@@ -133,7 +135,9 @@ namespace Stormpath.SDK.Impl.Linq.Executor
             this.CompileModelOrUseDefaultValues();
 
             if (this.AlreadyRetrievedEnoughItems())
+            {
                 return false;
+            }
 
             this.AdjustPagingOffset();
 
@@ -150,7 +154,9 @@ namespace Stormpath.SDK.Impl.Linq.Executor
             this.CompileModelOrUseDefaultValues();
 
             if (this.AlreadyRetrievedEnoughItems())
+            {
                 return false;
+            }
 
             this.AdjustPagingOffset();
 
@@ -186,7 +192,10 @@ namespace Stormpath.SDK.Impl.Linq.Executor
             if (atLeastOnePageRetrieved)
             {
                 if (!this.compiledModel.Offset.HasValue)
+                {
                     this.compiledModel.Offset = 0;
+                }
+
                 this.compiledModel.Offset += this.currentItems.Count();
             }
         }
@@ -200,7 +209,9 @@ namespace Stormpath.SDK.Impl.Linq.Executor
 
             bool anyNewItems = response.Items.Any();
             if (!anyNewItems)
+            {
                 return false;
+            }
 
             this.totalItemsRetrieved += response.Items.Count;
             return true;
@@ -209,11 +220,15 @@ namespace Stormpath.SDK.Impl.Linq.Executor
         private string GenerateRequestUrlFromModel()
         {
             if (this.compiledModel == null)
+            {
                 this.CompileModelOrUseDefaultValues();
+            }
 
             var argumentList = QueryModelParser.GetArguments(this.compiledModel);
             if (!argumentList.Any())
+            {
                 return this.collectionHref;
+            }
 
             var arguments = string.Join("&", argumentList);
             return $"{this.collectionHref}?{arguments}";

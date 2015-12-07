@@ -18,8 +18,15 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
+    /// <summary>
+    /// Represents an expandable <see cref="ITenant"/> resource.
+    /// </summary>
     public interface IExpandableTenant
     {
+        /// <summary>
+        /// Expands the <c>tenant</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
         ITenant GetTenant();
     }
 }

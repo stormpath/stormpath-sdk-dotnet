@@ -24,15 +24,20 @@ namespace Stormpath.SDK.IdSite
     /// </summary>
     public sealed class IdSiteResultStatus : StringEnumeration
     {
+        /// <summary>
+        /// A new account registration via ID Site.
+        /// </summary>
         public static IdSiteResultStatus Registered = new IdSiteResultStatus("REGISTERED");
 
+        /// <summary>
+        /// A successful account authentication via ID Site.
+        /// </summary>
         public static IdSiteResultStatus Authenticated = new IdSiteResultStatus("AUTHENTICATED");
 
+        /// <summary>
+        /// A logout action via ID Site.
+        /// </summary>
         public static IdSiteResultStatus Logout = new IdSiteResultStatus("LOGOUT");
-
-        private IdSiteResultStatus()
-        {
-        }
 
         private IdSiteResultStatus(string value)
             : base(value)

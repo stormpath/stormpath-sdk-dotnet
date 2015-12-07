@@ -27,13 +27,14 @@ namespace Stormpath.SDK.Client
     /// you must first build a <see cref="IClient"/> instance. After obtaining an instance, the REST API may be
     /// used by making simple calls on objects returned from the <see cref="IClient"/> (or any child objects).
     /// </summary>
+    /// <threadsafety instance="true"/>
     public interface IClient : ITenantActions, IDataStore
     {
         /// <summary>
         /// Gets the sole <see cref="ITenant"/> associated to this <see cref="IClient"/>.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is the <see cref="ITenant"/> associated to this client.</returns>
+        /// <returns>The <see cref="ITenant"/> associated to this client.</returns>
         Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

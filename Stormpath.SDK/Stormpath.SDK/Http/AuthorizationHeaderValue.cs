@@ -43,13 +43,15 @@ namespace Stormpath.SDK.Http
         /// Initializes a new instance of the <see cref="AuthorizationHeaderValue"/> class
         /// with the specified <see cref="Scheme"/> and <see cref="Parameter"/>.
         /// </summary>
-        /// <param name="schemeAndParameter">A combined scheme and paramter value.</param>
-        /// <exception cref="ArgumentException"><paramref name="schemeAndParamter"/> cannot be parsed.</exception>
+        /// <param name="schemeAndParameter">A combined scheme and parameter value.</param>
+        /// <exception cref="ArgumentException"><paramref name="schemeAndParameter"/> cannot be parsed.</exception>
         internal AuthorizationHeaderValue(string schemeAndParameter)
         {
             var segments = schemeAndParameter.Split(' ');
             if (segments.Length != 2)
+            {
                 throw new ArgumentException("Invalid Authorization header format.", nameof(schemeAndParameter));
+            }
 
             this.scheme = segments[0];
             this.parameter = segments[1];
@@ -67,6 +69,7 @@ namespace Stormpath.SDK.Http
         /// <value>The authorization token.</value>
         public string Parameter => this.parameter;
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"{this.scheme} {this.parameter}";

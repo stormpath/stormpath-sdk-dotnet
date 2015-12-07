@@ -52,7 +52,9 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             IHttpResponse response = null;
 
             if (this.responses.TryGetValue(key, out response))
+            {
                 return response;
+            }
 
             return this.DefaultResponse();
         }
@@ -60,7 +62,9 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         private IHttpResponse DefaultResponse()
         {
             if (string.IsNullOrEmpty(this.defaultResponse))
+            {
                 throw new ArgumentException("No default response set up in FakeHttpClient.");
+            }
 
             return new FakeHttpResponse(200, this.defaultResponse);
         }

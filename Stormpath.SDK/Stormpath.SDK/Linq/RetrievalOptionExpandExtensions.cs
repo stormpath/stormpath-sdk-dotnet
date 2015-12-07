@@ -29,10 +29,13 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK
 {
+    /// <summary>
+    /// Provides a set of static methods for getting expanded responses from creation and update requests.
+    /// </summary>
     public static class RetrievalOptionExpandExtensions
     {
         /// <summary>
-        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
         /// </summary>
         /// <param name="options">The options for this request.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -44,7 +47,7 @@ namespace Stormpath.SDK
         }
 
         /// <summary>
-        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
         /// </summary>
         /// <param name="options">The options for this request.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -56,7 +59,7 @@ namespace Stormpath.SDK
         }
 
         /// <summary>
-        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
         /// </summary>
         /// <param name="options">The options for this request.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -68,7 +71,7 @@ namespace Stormpath.SDK
         }
 
         /// <summary>
-        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
         /// </summary>
         /// <param name="options">The options for this request.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -80,7 +83,7 @@ namespace Stormpath.SDK
         }
 
         /// <summary>
-        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
         /// </summary>
         /// <param name="options">The options for this request.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -92,7 +95,7 @@ namespace Stormpath.SDK
         }
 
         /// <summary>
-        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
         /// </summary>
         /// <param name="options">The options for this request.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -104,7 +107,7 @@ namespace Stormpath.SDK
         }
 
         /// <summary>
-        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
         /// </summary>
         /// <param name="options">The options for this request.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -116,7 +119,7 @@ namespace Stormpath.SDK
         }
 
         /// <summary>
-        /// Retrives additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
         /// </summary>
         /// <param name="options">The options for this request.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>

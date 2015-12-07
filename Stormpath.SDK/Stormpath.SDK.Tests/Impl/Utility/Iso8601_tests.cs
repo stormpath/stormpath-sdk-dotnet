@@ -28,7 +28,9 @@ namespace Stormpath.SDK.Tests.Impl.Utility
         {
             var pacificTimeZoneName = "Pacific Standard Time";
             if (PlatformHelper.IsRunningOnMono())
+            {
                 pacificTimeZoneName = "US/Pacific";
+            }
 
             // Midnight Pacific Time, Jan 1, 2015 = 2015-01-01 08:00 UTC
             var midnightPacificTimeJan1 = new DateTimeOffset(2015, 01, 01, 00, 00, 00, 00, TimeSpan.FromHours(-8));

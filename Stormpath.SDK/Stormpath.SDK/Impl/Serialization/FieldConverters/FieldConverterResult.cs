@@ -30,7 +30,9 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
         private FieldConverterResult(bool success)
         {
             if (success == true)
+            {
                 throw new ApplicationException("Use this constructor only for failed results. For successful results, use ConverterResult(success: true, result: object)");
+            }
 
             this.success = success;
         }

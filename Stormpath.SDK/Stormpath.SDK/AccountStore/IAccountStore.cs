@@ -32,7 +32,7 @@ namespace Stormpath.SDK.AccountStore
         /// Gets the Stormpath <see cref="ITenant"/> that owns this Account Store resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Task whose result is this account store's tenant.</returns>
+        /// <returns>This account store's tenant.</returns>
         Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

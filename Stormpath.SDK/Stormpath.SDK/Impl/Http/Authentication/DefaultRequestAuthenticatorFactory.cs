@@ -24,10 +24,14 @@ namespace Stormpath.SDK.Impl.Http.Authentication
         {
             if (scheme == null ||
                 scheme == AuthenticationScheme.SAuthc1)
+            {
                 return new SAuthc1RequestAuthenticator();
+            }
 
             if (scheme == AuthenticationScheme.Basic)
+            {
                 return new BasicRequestAuthenticator();
+            }
 
             throw new RequestAuthenticationException("Unknown authentication scheme.");
         }

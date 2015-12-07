@@ -33,7 +33,9 @@ namespace Stormpath.SDK.Tests.Helpers
         {
             var resourceQueryable = queryable as CollectionResourceQueryable<T>;
             if (resourceQueryable == null)
+            {
                 Assertly.Fail("This queryable is not a CollectionResourceQueryable.");
+            }
 
             return resourceQueryable.CurrentHref;
         }
@@ -42,7 +44,9 @@ namespace Stormpath.SDK.Tests.Helpers
         {
             var resourceQueryable = queryable as CollectionResourceQueryable<T>;
             if (resourceQueryable == null)
+            {
                 Assertly.Fail("This queryable is not a CollectionResourceQueryable.");
+            }
 
             return resourceQueryable.CurrentHref;
         }
@@ -50,17 +54,25 @@ namespace Stormpath.SDK.Tests.Helpers
         public static void GeneratedArgumentsWere<T>(this IAsyncQueryable<T> queryable, string href, string arguments)
         {
             if (string.IsNullOrEmpty(arguments))
+            {
                 queryable.Generate().ShouldBe($"{href}");
+            }
             else
+            {
                 queryable.Generate().ShouldBe($"{href}?{arguments}");
+            }
         }
 
         public static void GeneratedSynchronousArgumentsWere<T>(this IQueryable<T> queryable, string href, string arguments)
         {
             if (string.IsNullOrEmpty(arguments))
+            {
                 queryable.GetGeneratedHref().ShouldBe($"{href}");
+            }
             else
+            {
                 queryable.GetGeneratedHref().ShouldBe($"{href}?{arguments}");
+            }
         }
 
         // The same thing as above, but for testing whether a FakeDataStore received a particular URL call
@@ -71,18 +83,28 @@ namespace Stormpath.SDK.Tests.Helpers
             if (asFake != null)
             {
                 if (string.IsNullOrEmpty(arguments))
+                {
                     asFake.GetCalls().ShouldContain($"{href}");
+                }
                 else
+                {
                     asFake.GetCalls().ShouldContain($"{href}?{arguments}");
+                }
+
                 return;
             }
             else
             {
                 // Maybe it's an NSubstitute mock
                 if (string.IsNullOrEmpty(arguments))
+                {
                     ds.Received().GetCollectionAsync<T>($"{href}", CancellationToken.None);
+                }
                 else
+                {
                     ds.Received().GetCollectionAsync<T>($"{href}?{arguments}", CancellationToken.None);
+                }
+
                 return;
             }
         }
