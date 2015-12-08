@@ -283,6 +283,25 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Creating_group_in_application_with_convenience_method(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim app = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+
+            Dim name = $".NET ITs New Convenient Test Group {fixture.TestRunIdentifier}"
+            Dim created = Await app.CreateGroupAsync(name, "I can has lazy")
+            created.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedGroupHrefs.Add(created.Href)
+
+            created.Name.ShouldBe(name)
+            created.Description.ShouldBe("I can has lazy")
+            created.Status.ShouldBe(GroupStatus.Enabled)
+
+            Call (Await created.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedGroupHrefs.Remove(created.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Creating_group_in_directory(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim directory = Await client.GetResourceAsync(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)

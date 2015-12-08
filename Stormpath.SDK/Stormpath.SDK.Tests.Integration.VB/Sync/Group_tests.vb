@@ -284,6 +284,25 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Creating_group_in_application_with_convenience_method(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+
+            Dim name = $".NET ITs New Convenient Test Group {fixture.TestRunIdentifier}"
+            Dim created = app.CreateGroup(name, "I can has lazy")
+            created.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedGroupHrefs.Add(created.Href)
+
+            created.Name.ShouldBe(name)
+            created.Description.ShouldBe("I can has lazy")
+            created.Status.ShouldBe(GroupStatus.Enabled)
+
+            created.Delete().ShouldBeTrue()
+            Me.fixture.CreatedGroupHrefs.Remove(created.Href)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Creating_group_in_directory(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim directory = client.GetResource(Of IApplication)(Me.fixture.PrimaryDirectoryHref)
