@@ -14,8 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading;
-using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
@@ -29,7 +27,7 @@ namespace Stormpath.SDK.AccountStore
     public interface IAccountStore : IResource, IHasTenant
     {
         /// <summary>
-        /// Gets a queryable list of all accounts in this Account Store.
+        /// Gets a queryable list of all accounts in the Account Store.
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
         IAsyncQueryable<IAccount> GetAccounts();

@@ -21,16 +21,24 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Organization
 {
     /// <summary>
-    /// An Organization is a top-level container for <see cref="Directory.IDirectory"/> and <see cref="Group.IGroup"/> resources,
-    /// and is an <see cref="AccountStore.IAccountStore"/> that can be mapped to an <see cref="Application.IApplication"/>
+    /// An Organization is a top-level container for <see cref="Directory.IDirectory"/> and <see cref="IGroup"/> resources,
+    /// and is an <see cref="IAccountStore"/> that can be mapped to an <see cref="Application.IApplication"/>
     /// just like a Directory or Group.
     /// <para>Organizations are primarily intended to represent tenants in multi-tenant applications.</para>
     /// </summary>
-    public interface IOrganization : IResource, IDeletable, IAuditable, IExtendable
+    public interface IOrganization :
+        IResource,
+        IHasTenant,
+        ISaveable<IOrganization>,
+        IDeletable,
+        IAuditable,
+        IExtendable,
+        IAccountStoreContainer
     {
         /// <summary>
         /// Gets the Organization's name.
@@ -94,30 +102,6 @@ namespace Stormpath.SDK.Organization
         /// <param name="description">The Organization's description text.</param>
         /// <returns>This instance for method chaining.</returns>
         IOrganization SetDescription(string description);
-
-        /// <summary>
-        /// Gets the <see cref="IAccountStore"/> (either a <see cref="IGroup"/> or <see cref="Directory.IDirectory"/>)
-        /// used to persist new Accounts created in the Organization, or <see langword="null"/> if no default account store has been designated.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The default <see cref="IAccountStore"/>,
-        /// or <see langword="null"/> if no default <see cref="IAccountStore"/> has been designated.</returns>
-        Task<IAccountStore> GetDefaultAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Gets the <see cref="IAccountStore"/> used to persist new <see cref="IGroup"/>s created in the Organization,
-        /// or <see langword="null"/> if no default group store has been designated.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The default <see cref="IAccountStore"/> used to persist new Groups,
-        /// or <see langword="null"/> if no default <see cref="IAccountStore"/> has been designated.</returns>
-        Task<IAccountStore> GetDefaultGroupStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Gets a queryable list of all Account Store Mappings accessible to the Organization.
-        /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccountStoreMapping}"/> that may be used to asynchronously list or search <see cref="IAccountStoreMapping"/>s.</returns>
-        IAsyncQueryable<IAccountStoreMapping> GetAccountStoreMappings();
 
         /// <summary>
         /// Gets a queryable list of all Accounts in the Organization.

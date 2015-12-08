@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultApplication.IGroupCreationActionsSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultApplication.GroupCreationActionsSync.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,5 +30,8 @@ namespace Stormpath.SDK.Impl.Application
 
         IGroup IGroupCreationActionsSync.CreateGroup(IGroup group, IGroupCreationOptions creationOptions)
             => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, group, creationOptions);
+
+        IGroup IGroupCreationActionsSync.CreateGroup(string name, string description)
+            => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, name, description);
     }
 }

@@ -175,8 +175,8 @@
     <Compile Include="Impl\Application\DefaultApplication.EmailVerificationSync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.IAccountCreationOptionsSync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.AccountStoreContainerSync.cs" />
-    <Compile Include="Impl\Application\DefaultApplication.IGroupCreationActions.cs" />
-    <Compile Include="Impl\Application\DefaultApplication.IGroupCreationActionsSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.GroupCreationActions.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.GroupCreationActionsSync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.Login.cs" />
     <Compile Include="Impl\Application\DefaultApplication.LoginSync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.ResetPasswordSync.cs" />
@@ -315,6 +315,7 @@
     <Compile Include="Impl\Linq\Sync\SyncScalarExecutor{TItem}.cs" />
     <Compile Include="Impl\Organization\DefaultOrganization.AccountStore.cs" />
     <Compile Include="Impl\Organization\DefaultOrganization.Collections.cs" />
+    <Compile Include="Impl\Organization\DefaultOrganization.CreationActions.cs" />
     <Compile Include="Impl\Organization\DefaultOrganization.cs" />
     <Compile Include="Impl\Provider\AbstractCreateProviderRequestBuilder{T}.cs" />
     <Compile Include="Impl\Provider\AbstractProvider.cs" />

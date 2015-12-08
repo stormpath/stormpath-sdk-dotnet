@@ -25,14 +25,14 @@ namespace Stormpath.SDK.Group
     internal interface IGroupCreationActionsSync
     {
         /// <summary>
-        /// Creates a new <see cref="IGroup"/>.
+        /// Synchronous counterpart to <see cref="IGroupCreationActions.CreateGroupAsync(IGroup, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="group">The group to create.</param>
         /// <returns>The new <see cref="IGroup"/>.</returns>
         IGroup CreateGroup(IGroup group);
 
         /// <summary>
-        /// Creates a new <see cref="IGroup"/>.
+        /// Synchronous counterpart to <see cref="IGroupCreationActions.CreateGroupAsync(IGroup, Action{GroupCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="group">The group to create.</param>
         /// <param name="creationOptionsAction">
@@ -42,11 +42,19 @@ namespace Stormpath.SDK.Group
         IGroup CreateGroup(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction);
 
         /// <summary>
-        /// Creates a new <see cref="IGroup"/>.
+        /// Synchronous counterpart to <see cref="IGroupCreationActions.CreateGroupAsync(IGroup, IGroupCreationOptions, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="group">The group to create.</param>
         /// <param name="creationOptions">An <see cref="IGroupCreationOptions"/> instance to use when sending the request.</param>
         /// <returns>The new <see cref="IGroup"/>.</returns>
         IGroup CreateGroup(IGroup group, IGroupCreationOptions creationOptions);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IGroupCreationActions.CreateGroupAsync(string, string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="name">The new Group's name.</param>
+        /// <param name="description">The new Group's description text.</param>
+        /// <returns>The new <see cref="IGroup">Group</see>.</returns>
+        IGroup CreateGroup(string name, string description);
     }
 }

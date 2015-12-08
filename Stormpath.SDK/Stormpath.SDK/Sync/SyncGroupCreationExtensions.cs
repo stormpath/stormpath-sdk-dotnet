@@ -54,5 +54,15 @@ namespace Stormpath.SDK.Sync
         /// <returns>The new <see cref="Group.IGroup"/>.</returns>
         public static IGroup CreateGroup(this IGroupCreationActions source, IGroup group, IGroupCreationOptions creationOptions)
             => (source as IGroupCreationActionsSync).CreateGroup(group, creationOptions);
+
+        /// <summary>
+        /// Creates a new enabled <see cref="IGroup">Group</see> that may be used by the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
+        /// </summary>
+        /// <param name="source">The source object.</param>
+        /// <param name="name">The new Group's name.</param>
+        /// <param name="description">The new Group's description text.</param>
+        /// <returns>The new <see cref="IGroup">Group</see>.</returns>
+        public static IGroup CreateGroup(IGroupCreationActions source, string name, string description)
+            => (source as IGroupCreationActionsSync).CreateGroup(name, description);
     }
 }
