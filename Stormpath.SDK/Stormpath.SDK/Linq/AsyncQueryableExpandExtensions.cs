@@ -25,6 +25,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Linq.Expandables;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK
@@ -68,6 +69,15 @@ namespace Stormpath.SDK
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
         public static IAsyncQueryable<IGroup> Expand(this IAsyncQueryable<IGroup> source, Expression<Func<IGroupExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
+
+        /// <summary>
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// </summary>
+        /// <param name="source">The source query.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
+        /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IAsyncQueryable<IOrganization> Expand(this IAsyncQueryable<IOrganization> source, Expression<Func<IOrganizationExpandables, object>> selector)
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>

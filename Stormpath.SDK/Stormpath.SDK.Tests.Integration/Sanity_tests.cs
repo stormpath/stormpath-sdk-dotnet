@@ -295,7 +295,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .Select(getMethodInfoFunc)
                 .ToList();
 
-            var retrievalExpandMembers = typeof(RetrievalOptionExpandExtensions)
+            var retrievalExpandMembers = typeof(RetrievalOptionsExpandExtensions)
                 .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
                 .Where(m => m.IsDefined(typeof(ExtensionAttribute), false))
                 .Select(getMethodInfoFunc)

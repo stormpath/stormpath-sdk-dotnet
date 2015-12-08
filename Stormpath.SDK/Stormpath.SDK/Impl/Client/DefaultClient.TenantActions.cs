@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultClient.ITenantActions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultClient.TenantActions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
@@ -80,6 +81,34 @@ namespace Stormpath.SDK.Impl.Client
             await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.CreateDirectoryAsync(name, description, status, cancellationToken).ConfigureAwait(false);
+        }
+
+        async Task<IOrganization> ITenantActions.CreateOrganizationAsync(IOrganization organization, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.CreateOrganizationAsync(organization, cancellationToken).ConfigureAwait(false);
+        }
+
+        async Task<IOrganization> ITenantActions.CreateOrganizationAsync(IOrganization organization, Action<OrganizationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.CreateOrganizationAsync(organization, creationOptionsAction, cancellationToken).ConfigureAwait(false);
+        }
+
+        async Task<IOrganization> ITenantActions.CreateOrganizationAsync(IOrganization organization, IOrganizationCreationOptions creationOptions, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.CreateOrganizationAsync(organization, creationOptions, cancellationToken).ConfigureAwait(false);
+        }
+
+        async Task<IOrganization> ITenantActions.CreateOrganizationAsync(string name, string description, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.CreateOrganizationAsync(name, description, cancellationToken).ConfigureAwait(false);
         }
 
         async Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)

@@ -173,8 +173,8 @@
     <Compile Include="Impl\Application\DefaultApplication.cs" />
     <Compile Include="Impl\Application\DefaultApplication.EmailVerification.cs" />
     <Compile Include="Impl\Application\DefaultApplication.EmailVerificationSync.cs" />
-    <Compile Include="Impl\Application\DefaultApplication.IAccountCreationOptionsSync.cs" />
-    <Compile Include="Impl\Application\DefaultApplication.AccountStoreContainerSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.AccountCreationActionsSync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.AccountStoreSync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.GroupCreationActions.cs" />
     <Compile Include="Impl\Application\DefaultApplication.GroupCreationActionsSync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.Login.cs" />
@@ -203,9 +203,9 @@
     <Compile Include="Impl\Cache\DefaultCacheResolver.cs" />
     <Compile Include="Impl\Cache\ICacheResolver.cs" />
     <Compile Include="Impl\Client\DefaultClient.Collections.cs" />
-    <Compile Include="Impl\Client\DefaultClient.IDataStore.cs" />
-    <Compile Include="Impl\Client\DefaultClient.ITenantActions.cs" />
-    <Compile Include="Impl\Client\DefaultClient.ITenantActionsSync.cs" />
+    <Compile Include="Impl\Client\DefaultClient.DataStore.cs" />
+    <Compile Include="Impl\Client\DefaultClient.TenantActions.cs" />
+    <Compile Include="Impl\Client\DefaultClient.TenantActionsSync.cs" />
     <Compile Include="Impl\Client\DefaultJsonSerializerBuilder.cs" />
     <Compile Include="Impl\Client\DefaultHttpClientBuilder.cs" />
     <Compile Include="Impl\CustomData\ICustomDataSync.cs" />
@@ -314,9 +314,13 @@
     <Compile Include="Impl\Linq\QueryModel\OrderByTerm.cs" />
     <Compile Include="Impl\Linq\Sync\SyncScalarExecutor{TItem}.cs" />
     <Compile Include="Impl\Organization\DefaultOrganization.AccountStore.cs" />
+    <Compile Include="Impl\Organization\DefaultOrganization.AccountStoreSync.cs" />
     <Compile Include="Impl\Organization\DefaultOrganization.Collections.cs" />
     <Compile Include="Impl\Organization\DefaultOrganization.CreationActions.cs" />
+    <Compile Include="Impl\Organization\DefaultOrganization.CreationActionsSync.cs" />
     <Compile Include="Impl\Organization\DefaultOrganization.cs" />
+    <Compile Include="Impl\Organization\DefaultOrganizationCreationOptions.cs" />
+    <Compile Include="Impl\Organization\IOrganizationSync.cs" />
     <Compile Include="Impl\Provider\AbstractCreateProviderRequestBuilder{T}.cs" />
     <Compile Include="Impl\Provider\AbstractProvider.cs" />
     <Compile Include="Impl\Provider\AbstractProviderAccountRequestBuilder{T}.cs" />
@@ -356,6 +360,9 @@
     <Compile Include="Impl\Resource\DefaultRetrievalOptions{T}.cs" />
     <Compile Include="Impl\Resource\ExpandedProperty.cs" />
     <Compile Include="Impl\Resource\IEmbeddedProperty.cs" />
+    <Compile Include="Impl\Tenant\DefaultTenant.Collections.cs" />
+    <Compile Include="Impl\Tenant\DefaultTenant.TenantActions.cs" />
+    <Compile Include="Impl\Tenant\DefaultTenant.TenantActionsSync.cs" />
     <Compile Include="Impl\Tenant\IHasTenantSync.cs" />
     <Compile Include="Impl\Resource\ILinkable.cs" />
     <Compile Include="Impl\Resource\INotifiable.cs" />
@@ -406,6 +413,7 @@
     <Compile Include="Linq\Expandables\IExpandableAccounts.cs" />
     <Compile Include="Linq\Expandables\IExpandableAccountStoreMappings.cs" />
     <Compile Include="Linq\Expandables\IExpandableApplications.cs" />
+    <Compile Include="Linq\Expandables\IExpandableDefaultStores.cs" />
     <Compile Include="Linq\Expandables\IExpandableDirectory.cs" />
     <Compile Include="Linq\Expandables\IExpandableCustomData.cs" />
     <Compile Include="Linq\Expandables\IExpandableGroupMemberships.cs" />
@@ -413,12 +421,15 @@
     <Compile Include="Linq\Expandables\IExpandableTenant.cs" />
     <Compile Include="Linq\Expandables\IGroupExpandables.cs" />
     <Compile Include="Linq\Expandables\IGroupMembershipExpandables.cs" />
+    <Compile Include="Linq\Expandables\IOrganizationExpandables.cs" />
     <Compile Include="Linq\Expandables\ITenantExpandables.cs" />
     <Compile Include="Linq\IAsyncQueryProvider{T}.cs" />
     <Compile Include="Linq\IOrderedAsyncQueryable{T}.cs" />
-    <Compile Include="Linq\RetrievalOptionExpandExtensions.cs" />
+    <Compile Include="Linq\RetrievalOptionsExpandExtensions.cs" />
     <Compile Include="Logging\ILoggerConsumer{T}.cs" />
     <Compile Include="Logging\InMemoryLogger.cs" />
+    <Compile Include="Organization\IOrganizationCreationOptions.cs" />
+    <Compile Include="Organization\OrganizationCreationOptionsBuilder.cs" />
     <Compile Include="Organization\OrganizationStatus.cs" />
     <Compile Include="Organization\IOrganization.cs" />
     <Compile Include="Provider\ClientProviderExtensions.cs" />
@@ -557,9 +568,9 @@
     <Compile Include="Tenant\ITenantActions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Impl\Application\DefaultApplication.AccountStoreContainer.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.AccountStore.cs" />
     <Compile Include="Impl\Application\DefaultApplication.ResetPassword.cs" />
-    <Compile Include="Impl\Application\DefaultApplication.IAccountCreationOptions.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.AccountCreationActions.cs" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

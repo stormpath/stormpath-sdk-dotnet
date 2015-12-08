@@ -1,4 +1,4 @@
-﻿// <copyright file="RetrievalOptionExpandExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="RetrievalOptionsExpandExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq.Expandables;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
@@ -32,7 +33,7 @@ namespace Stormpath.SDK
     /// <summary>
     /// Provides a set of static methods for getting expanded responses from creation and update requests.
     /// </summary>
-    public static class RetrievalOptionExpandExtensions
+    public static class RetrievalOptionsExpandExtensions
     {
         /// <summary>
         /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
@@ -79,6 +80,18 @@ namespace Stormpath.SDK
         public static IRetrievalOptions<IGroup> Expand(this IRetrievalOptions<IGroup> options, Expression<Func<IGroupExpandables, object>> selector)
         {
             (options as DefaultRetrievalOptions<IGroup>).SetProxy(x => x.Expand(selector));
+            return options;
+        }
+
+        /// <summary>
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// </summary>
+        /// <param name="options">The options for this request.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
+        /// <returns>The current instance for method chaining.</returns>
+        public static IRetrievalOptions<IOrganization> Expand(this IRetrievalOptions<IOrganization> options, Expression<Func<IOrganizationExpandables, object>> selector)
+        {
+            (options as DefaultRetrievalOptions<IOrganization>).SetProxy(x => x.Expand(selector));
             return options;
         }
 

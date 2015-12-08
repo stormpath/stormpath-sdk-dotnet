@@ -18,6 +18,7 @@ using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Organization;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
@@ -91,6 +92,42 @@ namespace Stormpath.SDK.Impl.Tenant
         /// <param name="status">The initial directory status.</param>
         /// <returns>The created <see cref="IDirectory"/>.</returns>
         IDirectory CreateDirectory(string name, string description, DirectoryStatus status);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateOrganizationAsync(IOrganization, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="organization">The Organization to create.</param>
+        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">There was a problem creating the Organization.</exception>
+        IOrganization CreateOrganization(IOrganization organization);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateOrganizationAsync(IOrganization, Action{OrganizationCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="organization">The Organization to create.</param>
+        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
+        /// which will be used when sending the request.</param>
+        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">There was a problem creating the Organization.</exception>
+        IOrganization CreateOrganization(IOrganization organization, Action<OrganizationCreationOptionsBuilder> creationOptionsAction);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateOrganizationAsync(IOrganization, IOrganizationCreationOptions, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="organization">The Organization to create.</param>
+        /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
+        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">There was a problem creating the Organization.</exception>
+        IOrganization CreateOrganization(IOrganization organization, IOrganizationCreationOptions creationOptions);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateOrganizationAsync(string, string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="name">The Organization's name.</param>
+        /// <param name="description">The Organization's description text.</param>
+        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">There was a problem creating the Organization.</exception>
+        IOrganization CreateOrganization(string name, string description);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.VerifyAccountEmailAsync(string, System.Threading.CancellationToken)"/>.

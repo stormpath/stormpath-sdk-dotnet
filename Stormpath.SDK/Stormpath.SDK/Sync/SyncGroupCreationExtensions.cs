@@ -62,7 +62,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="name">The new Group's name.</param>
         /// <param name="description">The new Group's description text.</param>
         /// <returns>The new <see cref="IGroup">Group</see>.</returns>
-        public static IGroup CreateGroup(IGroupCreationActions source, string name, string description)
+        public static IGroup CreateGroup(this IGroupCreationActions source, string name, string description)
             => (source as IGroupCreationActionsSync).CreateGroup(name, description);
     }
 }

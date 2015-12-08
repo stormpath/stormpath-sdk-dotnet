@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultClient.Collections.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultTenant.Collections.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,47 +18,28 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
 
-namespace Stormpath.SDK.Impl.Client
+namespace Stormpath.SDK.Impl.Tenant
 {
-    internal sealed partial class DefaultClient
+    internal sealed partial class DefaultTenant
     {
         IAsyncQueryable<IApplication> ITenantActions.GetApplications()
-        {
-            this.EnsureTenant();
-
-            return this.tenant.GetApplications();
-        }
+            => new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IDirectory> ITenantActions.GetDirectories()
-        {
-            this.EnsureTenant();
-
-            return this.tenant.GetDirectories();
-        }
+            => new CollectionResourceQueryable<IDirectory>(this.Directories.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IAccount> ITenantActions.GetAccounts()
-        {
-            this.EnsureTenant();
-
-            return this.tenant.GetAccounts();
-        }
+            => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IGroup> ITenantActions.GetGroups()
-        {
-            this.EnsureTenant();
-
-            return this.tenant.GetGroups();
-        }
+            => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IOrganization> ITenantActions.GetOrganizations()
-        {
-            this.EnsureTenant();
-
-            return this.tenant.GetOrganizations();
-        }
+            => new CollectionResourceQueryable<IOrganization>(this.Organizations.Href, this.GetInternalAsyncDataStore());
     }
 }

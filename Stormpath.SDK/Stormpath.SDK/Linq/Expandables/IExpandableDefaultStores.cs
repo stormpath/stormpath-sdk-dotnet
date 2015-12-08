@@ -1,4 +1,4 @@
-﻿// <copyright file="IApplicationExpandables.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IExpandableDefaultStores.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +14,25 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.SDK.AccountStore;
+
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents resources that can be expanded from an <see cref="Application.IApplication"/>.
+    /// Represents expandable <see cref="IAccountStore"/> resources.
     /// </summary>
-    public interface IApplicationExpandables :
-        IExpandableAccountStoreMappings,
-        IExpandableAccounts,
-        IExpandableCustomData,
-        IExpandableGroups,
-        IExpandableTenant,
-        IExpandableDefaultStores
+    public interface IExpandableDefaultStores
     {
+        /// <summary>
+        /// Expands the <c>defaultAccountStore</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
+        IAccountStore GetDefaultAccountStore();
+
+        /// <summary>
+        /// Expands the <c>defaultGroupStore</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
+        IAccountStore GetDefaultGroupStore();
     }
 }

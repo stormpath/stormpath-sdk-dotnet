@@ -1,4 +1,4 @@
-﻿// <copyright file="IApplicationExpandables.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IOrganizationExpandables.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,15 +17,15 @@
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents resources that can be expanded from an <see cref="Application.IApplication"/>.
+    /// Represents resources that can be expanded from an <see cref="Organization.IOrganization">Organization</see> resource.
     /// </summary>
-    public interface IApplicationExpandables :
+    public interface IOrganizationExpandables :
         IExpandableAccountStoreMappings,
         IExpandableAccounts,
         IExpandableCustomData,
+        IExpandableDefaultStores,
         IExpandableGroups,
-        IExpandableTenant,
-        IExpandableDefaultStores
+        IExpandableTenant
     {
     }
 }
