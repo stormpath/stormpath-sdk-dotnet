@@ -41,7 +41,6 @@ namespace Stormpath.SDK.Impl.Account
         private static readonly string RefreshTokensPropertyName = "refreshTokens";
         private static readonly string StatusPropertyName = "status";
         private static readonly string SurnamePropertyName = "surname";
-        private static readonly string TenantPropertyName = "tenant";
         private static readonly string UsernamePropertyName = "username";
 
         public DefaultAccount(ResourceData data)

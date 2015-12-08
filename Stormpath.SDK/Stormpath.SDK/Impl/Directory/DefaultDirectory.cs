@@ -36,7 +36,6 @@ namespace Stormpath.SDK.Impl.Directory
         private static readonly string PasswordPolicyPropertyName = "passwordPolicy";
         private static readonly string ProviderPropertyName = "provider";
         private static readonly string StatusPropertyName = "status";
-        private static readonly string TenantPropertyName = "tenant";
 
         public DefaultDirectory(ResourceData data)
             : base(data)

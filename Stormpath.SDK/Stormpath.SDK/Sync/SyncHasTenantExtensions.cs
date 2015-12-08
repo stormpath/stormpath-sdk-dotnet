@@ -1,4 +1,4 @@
-﻿// <copyright file="SyncAccountStoreExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SyncHasTenantExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,22 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.AccountStore;
-using Stormpath.SDK.Impl.AccountStore;
+using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {
     /// <summary>
-    /// Provides synchronous access to the methods available on <see cref="IAccountStore"/>.
+    /// Provides synchronous access to the methods available on <see cref="IHasTenant"/>.
     /// </summary>
-    public static class SyncAccountStoreExtensions
+    public static class SyncHasTenantExtensions
     {
+        /// <summary>
+        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this resource.
+        /// </summary>
+        /// <param name="resource">The resource.</param>
+        /// <returns>The tenant.</returns>
+        public static ITenant GetTenant(this IHasTenant resource)
+            => (resource as IHasTenantSync).GetTenant();
     }
 }

@@ -25,8 +25,5 @@ namespace Stormpath.SDK.Impl.Directory
     {
         IProvider IDirectorySync.GetProvider()
             => this.GetInternalSyncDataStore().GetResource<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup);
-
-        ITenant IAccountStoreSync.GetTenant()
-            => this.GetTenant(this.Tenant.Href);
     }
 }

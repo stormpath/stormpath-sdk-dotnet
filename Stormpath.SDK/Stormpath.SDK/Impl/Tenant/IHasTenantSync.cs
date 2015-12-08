@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultApplication.ResourcesSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IHasTenantSync.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Impl.Provider;
-using Stormpath.SDK.Provider;
 using Stormpath.SDK.Tenant;
 
-namespace Stormpath.SDK.Impl.Application
+namespace Stormpath.SDK.Impl.Tenant
 {
-    internal sealed partial class DefaultApplication
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IHasTenant"/>.
+    /// </summary>
+    internal interface IHasTenantSync
     {
-        IProviderAccountResult IApplicationSync.GetAccount(IProviderAccountRequest request)
-            => new ProviderAccountResolver(this.GetInternalSyncDataStore()).ResolveProviderAccount(this.AsInterface.Href, request);
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IHasTenant.GetTenantAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Tenant.</returns>
+        ITenant GetTenant();
     }
 }

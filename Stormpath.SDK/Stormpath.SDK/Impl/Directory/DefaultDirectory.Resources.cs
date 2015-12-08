@@ -28,8 +28,5 @@ namespace Stormpath.SDK.Impl.Directory
     {
         Task<IProvider> IDirectory.GetProviderAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup, cancellationToken);
-
-        Task<ITenant> IAccountStore.GetTenantAsync(CancellationToken cancellationToken)
-            => this.GetTenantAsync(this.Tenant.Href, cancellationToken);
     }
 }

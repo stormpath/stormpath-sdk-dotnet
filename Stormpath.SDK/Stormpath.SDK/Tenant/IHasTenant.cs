@@ -1,4 +1,4 @@
-﻿// <copyright file="SyncAccountStoreExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IHasTenant.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,23 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.AccountStore;
-using Stormpath.SDK.Impl.AccountStore;
+using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Tenant;
 
-namespace Stormpath.SDK.Sync
+namespace Stormpath.SDK.Tenant
 {
     /// <summary>
-    /// Provides synchronous access to the methods available on <see cref="IAccountStore"/>.
+    /// Represents <see cref="Resource.IResource">Resources</see> that have a link property that points
+    /// to the owning <see cref="ITenant">Tenant</see>.
     /// </summary>
-    public static class SyncAccountStoreExtensions
+    public interface IHasTenant
     {
+        /// <summary>
+        /// Gets the Stormpath <see cref="ITenant"/> that owns this resource.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The tenant.</returns>
+        Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Impl.AccountStore
 
         int IAccountStoreMapping.ListIndex => this.GetProperty<int>(ListIndexPropertyName);
 
-        IAccountStoreMapping IAccountStoreMapping.SetApplication(IApplication application)
+        IAccountStoreMapping IAccountStoreMapping.SetApplication(IAccountStoreContainer application)
         {
             if (string.IsNullOrEmpty(application?.Href))
             {

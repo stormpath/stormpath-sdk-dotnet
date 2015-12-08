@@ -18,6 +18,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Tenant;
 
@@ -27,19 +28,17 @@ namespace Stormpath.SDK.Impl.Account
     /// Represents the synchronous actions that correspond to the default asynchronous actions
     /// available on <see cref="IAccount"/>.
     /// </summary>
-    internal interface IAccountSync : ISaveableWithOptionsSync<IAccount>, IDeletableSync, IExtendableSync
+    internal interface IAccountSync :
+        IHasTenantSync,
+        ISaveableWithOptionsSync<IAccount>,
+        IDeletableSync,
+        IExtendableSync
     {
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccount.GetDirectoryAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <returns>The Directory.</returns>
         IDirectory GetDirectory();
-
-        /// <summary>
-        /// Synchronous counterpart to <see cref="IAccount.GetTenantAsync(System.Threading.CancellationToken)"/>.
-        /// </summary>
-        /// <returns>The Tenant.</returns>
-        ITenant GetTenant();
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccount.AddGroupAsync(IGroup, System.Threading.CancellationToken)"/>.

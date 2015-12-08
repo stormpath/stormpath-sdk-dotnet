@@ -28,11 +28,12 @@ namespace Stormpath.SDK.AccountStore
     public interface IAccountStoreMapping : IResource, ISaveable<IAccountStoreMapping>, IDeletable
     {
         /// <summary>
-        /// Sets the <see cref="IApplication"/> represented by this <see cref="IAccountStoreMapping"/> resource.
+        /// Sets the container (an <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>
+        /// represented by this <see cref="IAccountStoreMapping"/> resource.
         /// </summary>
-        /// <param name="application">The <see cref="IApplication"/> represented by this <see cref="IAccountStoreMapping"/> resource.</param>
+        /// <param name="container">The <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see> represented by this <see cref="IAccountStoreMapping">Account Store Mapping</see>.</param>
         /// <returns>This instance for method chaining.</returns>
-        IAccountStoreMapping SetApplication(IApplication application);
+        IAccountStoreMapping SetApplication(IAccountStoreContainer container);
 
         /// <summary>
         /// Sets this mapping's <see cref="IAccountStore"/> (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>),
@@ -60,58 +61,50 @@ namespace Stormpath.SDK.AccountStore
         IAccountStoreMapping SetListIndex(int listIndex);
 
         /// <summary>
-        /// Sets whether or not the associated <see cref="IAccountStore"/> is designated as the Application's
-        /// default account store.
+        /// Sets whether or not the associated <see cref="IAccountStore"/> is designated as the
+        /// default Account Store for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// <para>
-        /// A <see langword="true"/> value indicates that any accounts created directly by the application will be dispatched
-        /// to and saved in the associated <see cref="IAccountStore"/>, since an application cannot store accounts directly.
-        /// </para>
-        /// <para>
-        /// If you use this setter, you will invalidate the cache for all of the associated Application's
-        /// other AccountStoreMappings.
+        /// A <see langword="true"/> value indicates that any accounts created directly by the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see> will be dispatched
+        /// to and saved in the associated <see cref="IAccountStore"/>, since Applications and Organizations cannot store Accounts directly.
         /// </para>
         /// </summary>
-        /// <param name="defaultAccountStore">Whether or not the associated <see cref="IAccountStore"/> is designated as the Application's default account store.</param>
+        /// <param name="defaultAccountStore">Whether or not the associated <see cref="IAccountStore"/> is designated as the default Account Store for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.</param>
         /// <returns>This instance for method chaining.</returns>
         IAccountStoreMapping SetDefaultAccountStore(bool defaultAccountStore);
 
         /// <summary>
-        /// Sets whether or not the associated <see cref="IAccountStore"/> is designated as the Application's
-        /// default group store.
+        /// Sets whether or not the associated <see cref="IAccountStore"/> is designated as the default Group Store
+        /// for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// <para>
-        /// A <see langword="true"/> value indicates that any groups created directly by the application will be dispatched
-        /// to and saved in the associated <see cref="IAccountStore"/>, since an application cannot store groups directly.
-        /// </para>
-        /// <para>
-        /// If you use this setter, you will invalidate the cache for all of the associated Application's
-        /// other AccountStoreMappings.
+        /// A <see langword="true"/> value indicates that any groups created directly by the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see> will be dispatched
+        /// to and saved in the associated <see cref="IAccountStore"/>, since Applications and Organizations cannot store Accounts directly.
         /// </para>
         /// </summary>
-        /// <param name="defaultGroupStore">Whether or not the associated <see cref="IAccountStore"/> is designated as the Application's default group store.</param>
+        /// <param name="defaultGroupStore">Whether or not the associated <see cref="IAccountStore"/> is designated as the default Group Store for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.</param>
         /// <returns>This instance for method chaining.</returns>
         IAccountStoreMapping SetDefaultGroupStore(bool defaultGroupStore);
 
         /// <summary>
-        /// Gets a value indicating whether the associated <see cref="IAccountStore"/> is designated as the application's default account store.
+        /// Gets a value indicating whether the associated <see cref="IAccountStore"/> is designated as the default Account Store for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> if the associated <see cref="IAccountStore"/> is designated as the application's default account store; <see langword="false"/> otherwise.
-        /// <para>A <see langword="true"/> value indicates that any accounts created directly by the application will be dispatched to and saved in the associated <see cref="IAccountStore"/>, since an <see cref="IApplication"/> cannot store accounts directly.</para>
+        /// <see langword="true"/> if the associated <see cref="IAccountStore"/> is designated as the default Account Store; <see langword="false"/> otherwise.
+        /// <para>A <see langword="true"/> value indicates that any Accounts created directly by the for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see> will be dispatched to and saved in the associated <see cref="IAccountStore"/>.</para>
         /// </value>
         bool IsDefaultAccountStore { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the associated <see cref="IAccountStore"/> is designated as the application's default group store.
+        /// Gets a value indicating whether the associated <see cref="IAccountStore"/> is designated as the default Group Store for the for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> if the associated <see cref="IAccountStore"/> is designated as the application's default group store; <see langword="false"/> otherwise.
-        /// <para>A <see langword="true"/> value indicates that any groups created directly by the application will be dispatched to and saved in the associated <see cref="IAccountStore"/>, since an <see cref="IApplication"/> cannot store accounts directly.</para>
+        /// <see langword="true"/> if the associated <see cref="IAccountStore"/> is designated as the default Group Store; <see langword="false"/> otherwise.
+        /// <para>A <see langword="true"/> value indicates that any groups created directly by the for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see> will be dispatched to and saved in the associated <see cref="IAccountStore"/>.</para>
         /// </value>
         bool IsDefaultGroupStore { get; }
 
         /// <summary>
         /// Gets the zero-based order in which the associated <see cref="IAccountStore"/> will be consulted
-        /// by the linked <see cref="IApplication"/> during an account authentication attempt.
+        /// by the linked for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see> during an account authentication attempt.
         /// </summary>
         /// <value>
         /// The lower the index, the higher precedence (the earlier it will be accessed) during an authentication attempt.

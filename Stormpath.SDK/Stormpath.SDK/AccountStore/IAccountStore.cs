@@ -26,15 +26,8 @@ namespace Stormpath.SDK.AccountStore
     /// <summary>
     /// An abstract representation of a <see cref="Directory.IDirectory"/> or <see cref="Group.IGroup"/>.
     /// </summary>
-    public interface IAccountStore : IResource
+    public interface IAccountStore : IResource, IHasTenant
     {
-        /// <summary>
-        /// Gets the Stormpath <see cref="ITenant"/> that owns this Account Store resource.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>This account store's tenant.</returns>
-        Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
-
         /// <summary>
         /// Gets a queryable list of all accounts in this Account Store.
         /// </summary>

@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Group
 {
@@ -29,7 +30,6 @@ namespace Stormpath.SDK.Impl.Group
         private static readonly string DescriptionPropertyName = "description";
         private static readonly string StatusPropertyName = "status";
         private static readonly string DirectoryPropertyName = "directory";
-        private static readonly string TenantPropertyName = "tenant";
         private static readonly string AccountsPropertyName = "accounts";
         private static readonly string AccountMembershipsPropertyName = "accountMemberships";
 

@@ -15,7 +15,6 @@
 // </copyright>
 
 using System;
-using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
@@ -23,10 +22,11 @@ using Stormpath.SDK.Auth;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Account;
+using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -34,7 +34,14 @@ namespace Stormpath.SDK.Impl.Application
     /// Represents the synchronous actions that correspond to the default asynchronous actions
     /// available on <see cref="IApplication"/>.
     /// </summary>
-    internal interface IApplicationSync : ISaveableWithOptionsSync<IApplication>, IDeletableSync, IExtendableSync, IAccountCreationActionsSync, IGroupCreationActionsSync
+    internal interface IApplicationSync :
+        IHasTenantSync,
+        ISaveableWithOptionsSync<IApplication>,
+        IDeletableSync,
+        IExtendableSync,
+        IAccountCreationActionsSync,
+        IGroupCreationActionsSync,
+        IAccountStoreContainerSync
     {
         /// <summary>
         /// Synchronous counterpart to <see cref="IApplication.AuthenticateAccountAsync(IAuthenticationRequest, System.Threading.CancellationToken)"/>.
@@ -93,66 +100,6 @@ namespace Stormpath.SDK.Impl.Application
         /// </summary>
         /// <param name="usernameOrEmail">The username or email identifying the account to send the verification email to.</param>
         void SendVerificationEmail(string usernameOrEmail);
-
-        /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.GetTenantAsync(System.Threading.CancellationToken)"/>.
-        /// </summary>
-        /// <returns>The Tenant.</returns>
-        ITenant GetTenant();
-
-        /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.GetDefaultAccountStoreAsync(System.Threading.CancellationToken)"/>.
-        /// </summary>
-        /// <returns>The default Account store, or <see langword="null"/>.</returns>
-        IAccountStore GetDefaultAccountStore();
-
-        /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.SetDefaultAccountStoreAsync(IAccountStore, System.Threading.CancellationToken)"/>.
-        /// </summary>
-        /// <param name="accountStore">The <see cref="IAccountStore"/> used to persist new accounts.</param>
-        void SetDefaultAccountStore(IAccountStore accountStore);
-
-        /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.GetDefaultGroupStoreAsync(System.Threading.CancellationToken)"/>.
-        /// </summary>
-        /// <returns>The default Group store, or <see langword="null"/>.</returns>
-        IAccountStore GetDefaultGroupStore();
-
-        /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.SetDefaultGroupStoreAsync(IAccountStore, System.Threading.CancellationToken)"/>.
-        /// </summary>
-        /// <param name="accountStore">The <see cref="IAccountStore"/> used to persist new groups.</param>
-        void SetDefaultGroupStore(IAccountStore accountStore);
-
-        /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.CreateAccountStoreMappingAsync(IAccountStoreMapping, System.Threading.CancellationToken)"/>.
-        /// </summary>
-        /// <param name="mapping">The new <see cref="IAccountStoreMapping"/> resource to add to the Application's AccountStoreMapping list.</param>
-        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
-        IAccountStoreMapping CreateAccountStoreMapping(IAccountStoreMapping mapping);
-
-        /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.AddAccountStoreAsync(IAccountStore, System.Threading.CancellationToken)"/>.
-        /// </summary>
-        /// <param name="accountStore">The new <see cref="IAccountStore"/> resource to add to the Application's AccountStoreMapping list.</param>
-        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
-        IAccountStoreMapping AddAccountStore(IAccountStore accountStore);
-
-        /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.AddAccountStoreAsync(string, System.Threading.CancellationToken)"/>.
-        /// </summary>
-        /// <param name="hrefOrName">Either the <c>href</c> or name of the desired <see cref="SDK.Directory.IDirectory"/> or <see cref="IGroup"/>.</param>
-        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
-        IAccountStoreMapping AddAccountStore(string hrefOrName);
-
-        /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.AddAccountStoreAsync{T}(Func{SDK.Linq.IAsyncQueryable{T}, SDK.Linq.IAsyncQueryable{T}}, System.Threading.CancellationToken)"/>.
-        /// </summary>
-        /// <typeparam name="T">The type of resource (either a <see cref="SDK.Directory.IDirectory"/> or a <see cref="IGroup"/>) to query for.</typeparam>
-        /// <param name="query">Query to search for a resource of type <typeparamref name="T"/> in the current Tenant.</param>
-        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <see langword="null"/> if there is no resource matching the query..</returns>
-        IAccountStoreMapping AddAccountStore<T>(Func<IQueryable<T>, IQueryable<T>> query)
-            where T : IAccountStore;
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IApplication.NewIdSiteAsyncCallbackHandler(IHttpRequest)"/>.

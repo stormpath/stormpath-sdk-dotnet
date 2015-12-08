@@ -37,12 +37,12 @@ namespace Stormpath.SDK.Impl.AccountStore
             throw new ApplicationException("Access this resource through the IDirectory or IGroup interface to enumerate accounts.");
         }
 
-        ITenant IAccountStoreSync.GetTenant()
+        public new ITenant GetTenant()
         {
             throw new ApplicationException("Access this resource through the IDirectory or IGroup interface to get the current tenant.");
         }
 
-        Task<ITenant> IAccountStore.GetTenantAsync(CancellationToken cancellationToken)
+        public new Task<ITenant> GetTenantAsync(CancellationToken cancellationToken)
         {
             throw new ApplicationException("Access this resource through the IDirectory or IGroup interface to get the current tenant.");
         }

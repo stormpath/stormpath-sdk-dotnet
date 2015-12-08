@@ -21,13 +21,21 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Group
 {
     /// <summary>
     /// A Group is a uniquely-named collection of <see cref="IAccount"/>s within a <see cref="IDirectory"/>.
     /// </summary>
-    public interface IGroup : IResource, ISaveableWithOptions<IGroup>, IDeletable, IAuditable, IExtendable, IAccountStore
+    public interface IGroup :
+        IResource,
+        IHasTenant,
+        ISaveableWithOptions<IGroup>,
+        IDeletable,
+        IAuditable,
+        IExtendable,
+        IAccountStore
     {
         /// <summary>
         /// Gets the group's name, guaranteed to be unique for all groups within a <see cref="IDirectory"/>.
