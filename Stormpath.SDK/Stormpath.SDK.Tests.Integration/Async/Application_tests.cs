@@ -99,8 +99,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var defaultAccountStore = await app.GetDefaultAccountStoreAsync();
-            var asDirectory = defaultAccountStore as IDirectory;
-            asDirectory.ShouldNotBeNull();
+            defaultAccountStore.ShouldNotBeNull();
         }
 
         [Theory]
@@ -111,8 +110,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var defaultGroupStore = await app.GetDefaultGroupStoreAsync();
-            var asDirectory = defaultGroupStore as IDirectory;
-            asDirectory.ShouldNotBeNull();
+            defaultGroupStore.ShouldNotBeNull();
         }
 
         [Theory]
@@ -405,6 +403,43 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             mapping.IsDefaultAccountStore.ShouldBeTrue();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
+
+            // Clean up
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        //move to all ITs
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Saving_new_mapping_as_default(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier} Creating New AccountStore as Default Test Application",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
+            var mapping = client.Instantiate<IAccountStoreMapping>()
+                .SetAccountStore(directory)
+                .SetApplication(createdApplication)
+                .SetDefaultAccountStore(true)
+                .SetDefaultGroupStore(true);
+
+            await createdApplication.CreateAccountStoreMappingAsync(mapping);
+
+            // Default links should be updated without having to re-retrieve the Application resource
+            (await createdApplication.GetDefaultAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+            (await createdApplication.GetDefaultGroupStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+
+            // Retrieving it again should have the same result
+            var updated = await client.GetResourceAsync<IApplication>(createdApplication.Href);
+            (await updated.GetDefaultAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+            (await updated.GetDefaultGroupStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
 
             // Clean up
             (await createdApplication.DeleteAsync()).ShouldBeTrue();

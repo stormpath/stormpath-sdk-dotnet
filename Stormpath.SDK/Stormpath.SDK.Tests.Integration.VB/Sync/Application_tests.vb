@@ -90,8 +90,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
             Dim defaultAccountStore = app.GetDefaultAccountStore()
-            Dim asDirectory = TryCast(defaultAccountStore, IDirectory)
-            asDirectory.ShouldNotBeNull()
+            defaultAccountStore.ShouldNotBeNull()
         End Sub
 
         <Theory>
@@ -101,8 +100,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
             Dim defaultGroupStore = app.GetDefaultGroupStore()
-            Dim asDirectory = TryCast(defaultGroupStore, IDirectory)
-            asDirectory.ShouldNotBeNull()
+            defaultGroupStore.ShouldNotBeNull()
         End Sub
 
         <Theory>

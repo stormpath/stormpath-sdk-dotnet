@@ -15,7 +15,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using Stormpath.SDK.Http;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
@@ -27,18 +26,20 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly Type resourceType;
         private readonly CanonicalUri uri;
         private readonly Map properties;
+        private readonly bool skipCache;
 
-        public DefaultResourceDataRequest(ResourceAction action, Type resourceType, CanonicalUri uri)
-            : this(action, resourceType, uri, null)
+        public DefaultResourceDataRequest(ResourceAction action, Type resourceType, CanonicalUri uri, bool skipCache)
+            : this(action, resourceType, uri, null, skipCache)
         {
         }
 
-        public DefaultResourceDataRequest(ResourceAction action, Type resourceType, CanonicalUri uri, Map properties)
+        public DefaultResourceDataRequest(ResourceAction action, Type resourceType, CanonicalUri uri, Map properties, bool skipCache)
         {
             this.action = action;
             this.uri = uri;
             this.resourceType = resourceType;
             this.properties = properties;
+            this.skipCache = skipCache;
         }
 
         ResourceAction IResourceDataRequest.Action => this.action;
@@ -48,5 +49,7 @@ namespace Stormpath.SDK.Impl.DataStore
         Type IResourceDataRequest.Type => this.resourceType;
 
         CanonicalUri IResourceDataRequest.Uri => this.uri;
+
+        bool IResourceDataRequest.SkipCache => this.skipCache;
     }
 }

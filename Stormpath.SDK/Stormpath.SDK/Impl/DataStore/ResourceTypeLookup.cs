@@ -53,7 +53,6 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(IDirectory)] = typeof(DefaultDirectory),
             [typeof(IGroup)] = typeof(DefaultGroup),
             [typeof(IGroupMembership)] = typeof(DefaultGroupMembership),
-            [typeof(IAccountStoreMapping)] = typeof(DefaultAccountStoreMapping),
             [typeof(IAccountStore)] = typeof(DefaultAccountStore),
             [typeof(IBasicLoginAttempt)] = typeof(DefaultBasicLoginAttempt),
             [typeof(SDK.Auth.IAuthenticationResult)] = typeof(DefaultAuthenticationResult),
@@ -75,6 +74,11 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(ILinkedInProviderData)] = typeof(DefaultLinkedInProviderData),
             [typeof(IAccountResult)] = typeof(DefaultAccountResult),
             [typeof(INonce)] = typeof(DefaultNonce),
+
+            // TODO these will be greatly simplified on a breaking version change
+            [typeof(IAccountStoreMapping)] = typeof(DefaultAccountStoreMapping),
+            [typeof(IAccountStoreMapping<IApplicationAccountStoreMapping>)] = typeof(DefaultAccountStoreMapping),
+            [typeof(IApplicationAccountStoreMapping)] = typeof(DefaultAccountStoreMapping),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> InterfaceLookup = new Dictionary<Type, Type>()
@@ -86,7 +90,6 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultDirectory)] = typeof(IDirectory),
             [typeof(DefaultGroup)] = typeof(IGroup),
             [typeof(DefaultGroupMembership)] = typeof(IGroupMembership),
-            [typeof(DefaultAccountStoreMapping)] = typeof(IAccountStoreMapping),
             [typeof(DefaultAccountStore)] = typeof(IAccountStore),
             [typeof(DefaultBasicLoginAttempt)] = typeof(IBasicLoginAttempt),
             [typeof(DefaultAuthenticationResult)] = typeof(SDK.Auth.IAuthenticationResult),
@@ -106,7 +109,10 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultGoogleProviderData)] = typeof(IGoogleProviderData),
             [typeof(DefaultLinkedInProvider)] = typeof(ILinkedInProvider),
             [typeof(DefaultLinkedInProviderData)] = typeof(ILinkedInProviderData),
-            [typeof(DefaultAccountResult)] = typeof(IAccountResult)
+            [typeof(DefaultAccountResult)] = typeof(IAccountResult),
+
+            // TODO these will be greatly simplified on a breaking version change
+            [typeof(DefaultAccountStoreMapping)] = typeof(IAccountStoreMapping),
         };
 
         private static readonly IReadOnlyDictionary<string, Type> InterfaceLookupByAttributeName = new Dictionary<string, Type>()
@@ -141,7 +147,9 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(CollectionResponsePage<IDirectory>)] = typeof(IDirectory),
             [typeof(CollectionResponsePage<IGroup>)] = typeof(IGroup),
             [typeof(CollectionResponsePage<IGroupMembership>)] = typeof(IGroupMembership),
-            [typeof(CollectionResponsePage<IAccountStoreMapping>)] = typeof(IAccountStoreMapping),
+
+            //[typeof(CollectionResponsePage<IAccountStoreMapping>)] = typeof(IAccountStoreMapping),
+            [typeof(CollectionResponsePage<IApplicationAccountStoreMapping>)] = typeof(IApplicationAccountStoreMapping),
         };
 
         private static Type GetConcreteTypeForInterface(Type iface)

@@ -173,5 +173,15 @@ namespace Stormpath.SDK.Tests.Fakes
         {
             throw new NotImplementedException();
         }
+
+        Task<T> IInternalAsyncDataStore.GetResourceSkipCacheAsync<T>(string href, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        T IInternalSyncDataStore.GetResourceSkipCache<T>(string href)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

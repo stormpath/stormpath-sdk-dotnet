@@ -50,6 +50,17 @@ namespace Stormpath.SDK.Impl.DataStore
             where T : class, IResource;
 
         /// <summary>
+        /// Directly retrieves the resource at the specified <paramref name="href"/> URL and returns the resource
+        /// as an instance of the specified class <typeparamref name="T"/>. The cache is not consulted for reads;
+        /// but any returned value <b>is</b> cached.
+        /// </summary>
+        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <param name="href">The resource URL of the resource to retrieve.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
+        Task<T> GetResourceSkipCacheAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Creates a new resource on the server.
         /// </summary>
         /// <typeparam name="T">The resource type.</typeparam>

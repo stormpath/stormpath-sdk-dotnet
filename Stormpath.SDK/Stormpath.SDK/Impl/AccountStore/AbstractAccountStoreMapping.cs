@@ -22,6 +22,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
@@ -105,6 +106,10 @@ namespace Stormpath.SDK.Impl.AccountStore
             {
                 accountStore = await this.GetInternalAsyncDataStore().GetResourceAsync<IGroup>(href, cancellationToken).ConfigureAwait(false);
             }
+            else if (href.Contains("organizations"))
+            {
+                accountStore = await this.GetInternalAsyncDataStore().GetResourceAsync<IOrganization>(href, cancellationToken).ConfigureAwait(false);
+            }
 
             return accountStore;
         }
@@ -121,6 +126,10 @@ namespace Stormpath.SDK.Impl.AccountStore
             else if (href.Contains("groups"))
             {
                 accountStore = this.GetInternalSyncDataStore().GetResource<IGroup>(href);
+            }
+            else if (href.Contains("organizations"))
+            {
+                accountStore = this.GetInternalSyncDataStore().GetResource<IOrganization>(href);
             }
 
             return accountStore;

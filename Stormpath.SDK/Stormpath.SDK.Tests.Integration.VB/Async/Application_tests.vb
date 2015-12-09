@@ -91,8 +91,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim app = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
             Dim defaultAccountStore = Await app.GetDefaultAccountStoreAsync()
-            Dim asDirectory = TryCast(defaultAccountStore, IDirectory)
-            asDirectory.ShouldNotBeNull()
+            defaultAccountStore.ShouldNotBeNull()
         End Function
 
         <Theory>
@@ -102,8 +101,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim app = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
             Dim defaultGroupStore = Await app.GetDefaultGroupStoreAsync()
-            Dim asDirectory = TryCast(defaultGroupStore, IDirectory)
-            asDirectory.ShouldNotBeNull()
+            defaultGroupStore.ShouldNotBeNull()
         End Function
 
         <Theory>

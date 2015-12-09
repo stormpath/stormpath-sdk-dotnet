@@ -57,10 +57,12 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private object InstantiateSingle(Type type, Map properties, ILinkable original)
         {
+            var typeName = new TypeNameResolver().GetTypeName(type);
+
             var targetType = new ResourceTypeLookup().GetConcrete(type);
             if (targetType == null)
             {
-                throw new ApplicationException($"Unknown resource type {type.Name}");
+                throw new ApplicationException($"Unknown resource type {typeName}");
             }
 
             var identityMapOptions = new IdentityMapOptionsResolver().GetOptions(type);
@@ -68,7 +70,7 @@ namespace Stormpath.SDK.Impl.DataStore
             AbstractResource targetObject;
             try
             {
-                string id = RandomResourceId(type.Name);
+                string id = RandomResourceId(typeName);
 
                 if (properties == null)
                 {
@@ -81,7 +83,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     href != null;
                 if (propertiesContainsHref)
                 {
-                    id = $"{type.Name}/{href.ToString()}";
+                    id = $"{typeName}/{href.ToString()}";
                 }
 
                 if (!propertiesContainsHref)

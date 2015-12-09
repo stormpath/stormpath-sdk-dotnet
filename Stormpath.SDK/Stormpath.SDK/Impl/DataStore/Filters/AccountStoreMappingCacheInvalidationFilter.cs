@@ -21,6 +21,7 @@ using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Sync;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
@@ -52,7 +53,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return result;
             }
 
-            var application = chain.DataStore.GetResource<IApplication>(applicationHref);
+            var application = chain.DataStore.GetResourceSkipCache<IApplication>(applicationHref);
             var allMappings = application.GetAccountStoreMappings().Synchronously().ToList();
 
             logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.Filter");
@@ -80,7 +81,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return result;
             }
 
-            var application = await chain.DataStore.GetResourceAsync<IApplication>(applicationHref, cancellationToken).ConfigureAwait(false);
+            var application = await chain.DataStore.GetResourceSkipCacheAsync<IApplication>(applicationHref, cancellationToken).ConfigureAwait(false);
             var allMappings = await application.GetAccountStoreMappings().ToListAsync(cancellationToken).ConfigureAwait(false);
 
             logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.FilterAsync");
@@ -93,7 +94,12 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             || request.Action == ResourceAction.Update;
 
         private static bool IsAccountStoreMapping(IResourceDataResult result)
-            => typeof(IAccountStoreMapping).IsAssignableFrom(result.Type);
+        {
+            var type = result.Type;
+            return typeof(IAccountStoreMapping).IsAssignableFrom(type)
+                || typeof(IAccountStoreMapping<IApplicationAccountStoreMapping>).IsAssignableFrom(type)
+                || typeof(IAccountStoreMapping<IOrganizationAccountStoreMapping>).IsAssignableFrom(type);
+        }
 
         private static string GetApplicationHref(IResourceDataResult result)
         {

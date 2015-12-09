@@ -173,7 +173,12 @@ namespace Stormpath.SDK.Tests.Common.Integration
 
             // Add primary organization to primary application as an account store
             var primaryApplication = await client.GetResourceAsync<IApplication>(this.PrimaryApplicationHref);
-            await primaryApplication.AddAccountStoreAsync(primaryOrganization);
+            var mapping = client.Instantiate<IApplicationAccountStoreMapping>()
+                .SetAccountStore(primaryOrganization)
+                .SetApplication(primaryApplication)
+                .SetDefaultAccountStore(true)
+                .SetDefaultGroupStore(true);
+            await primaryApplication.CreateAccountStoreMappingAsync(mapping);
 
             // Create accounts in primary organization
             try

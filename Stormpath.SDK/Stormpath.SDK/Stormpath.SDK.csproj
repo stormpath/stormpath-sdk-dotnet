@@ -95,10 +95,10 @@
     <Compile Include="Impl\DataStore\DefaultDataStore.Core.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Create.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Delete.cs" />
-    <Compile Include="Impl\DataStore\DefaultDataStore.GetAsync.cs" />
-    <Compile Include="Impl\DataStore\DefaultDataStore.GetSync.cs" />
+    <Compile Include="Impl\DataStore\DefaultDataStore.Get.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Save.cs" />
     <Compile Include="Impl\DataStore\Filters\AccountStoreMappingCacheInvalidationFilter.cs" />
+    <Compile Include="Impl\DataStore\TypeNameResolver.cs" />
     <Compile Include="Impl\Http\DefaultHttpRequestBuilder.cs" />
     <Compile Include="Impl\IdentityMap\IdentityMapOptionsResolver.cs" />
     <Compile Include="Impl\Group\DefaultGroup.Membership.cs" />
@@ -525,7 +525,7 @@
     <Compile Include="Impl\Api\DefaultClientApiKeyBuilder.cs" />
     <Compile Include="Impl\Client\DefaultClient.cs" />
     <Compile Include="Impl\Client\DefaultClientBuilder.cs" />
-    <Compile Include="Impl\DataStore\DefaultDataStore.Api.cs" />
+    <Compile Include="Impl\DataStore\DefaultDataStore.cs" />
     <Compile Include="Impl\Extensions\StringExtensions.cs" />
     <Compile Include="Impl\Http\Authentication\BasicRequestAuthenticator.cs" />
     <Compile Include="Impl\Http\Authentication\IRequestAuthenticator.cs" />

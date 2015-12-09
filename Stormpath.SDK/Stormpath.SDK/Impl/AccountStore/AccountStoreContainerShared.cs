@@ -75,7 +75,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="accountStoreMappingHref">The AccountStoreMapping <c>href</c>.</param>
         /// <param name="internalDataStore">The <see cref="IInternalAsyncDataStore"/>.</param>
         /// <returns>The <see cref="IAccountStore"/>, or <see langword="null"/>.</returns>
-        public static IAccountStore GetDefaultAccountStore(string accountStoreMappingHref, IInternalSyncDataStore internalDataStore)
+        public static IAccountStore GetDefaultStore(string accountStoreMappingHref, IInternalSyncDataStore internalDataStore)
         {
             if (string.IsNullOrEmpty(accountStoreMappingHref))
             {
@@ -226,7 +226,12 @@ namespace Stormpath.SDK.Impl.AccountStore
             where TMapping : class, IAccountStoreMapping<TMapping>
         {
             SetContainer(mapping, container);
-            return (TMapping)(await internalDataStore.CreateAsync(AccountStoreMappingResourceBaseHref, mapping, cancellationToken).ConfigureAwait(false));
+            var newMapping = (TMapping)(await internalDataStore.CreateAsync(AccountStoreMappingResourceBaseHref, mapping, cancellationToken).ConfigureAwait(false));
+
+            // Refresh any cached applications
+            //todo
+
+            return newMapping;
         }
 
         /// <summary>
