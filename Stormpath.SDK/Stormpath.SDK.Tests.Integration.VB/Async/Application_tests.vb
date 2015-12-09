@@ -358,6 +358,39 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Saving_new_mapping_as_default(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = Await client.GetCurrentTenantAsync()
+
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier} Creating New AccountStore as Default Test Application", createDirectory:=False)
+            createdApplication.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
+
+            Dim directory = Await client.GetResourceAsync(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
+            Dim mapping = client.Instantiate(Of IAccountStoreMapping)() _
+                .SetAccountStore(directory) _
+                .SetApplication(createdApplication) _
+                .SetDefaultAccountStore(True) _
+                .SetDefaultGroupStore(True)
+
+            Await createdApplication.CreateAccountStoreMappingAsync(mapping)
+
+            ' Default links should be updated without having to re-retrieve the Application resource
+            Call (Await createdApplication.GetDefaultAccountStoreAsync()).Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+            Call (Await createdApplication.GetDefaultGroupStoreAsync()).Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+
+            ' Retrieving it again should have the same result
+            Dim updated = Await client.GetResourceAsync(Of IApplication)(createdApplication.Href)
+            Call (Await updated.GetDefaultAccountStoreAsync()).Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+            Call (Await updated.GetDefaultGroupStoreAsync()).Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+
+            ' Clean up
+            Call (Await createdApplication.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Setting_mapped_directory_to_default_account_store(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()

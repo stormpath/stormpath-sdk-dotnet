@@ -385,33 +385,6 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Setting_mapped_directory_to_default_account_store(TestClientProvider clientBuilder)
-        {
-            var client = clientBuilder.GetClient();
-            var tenant = await client.GetCurrentTenantAsync();
-
-            var createdApplication = await tenant.CreateApplicationAsync(
-                $".NET IT {this.fixture.TestRunIdentifier} Setting Existing Directory AccountStore Default Test Application",
-                createDirectory: false);
-            createdApplication.Href.ShouldNotBeNullOrEmpty();
-            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
-
-            var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
-            var mapping = await createdApplication.AddAccountStoreAsync(directory);
-
-            await createdApplication.SetDefaultAccountStoreAsync(directory);
-
-            mapping.IsDefaultAccountStore.ShouldBeTrue();
-            mapping.IsDefaultGroupStore.ShouldBeFalse();
-
-            // Clean up
-            (await createdApplication.DeleteAsync()).ShouldBeTrue();
-            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
-        }
-
-        //move to all ITs
-        [Theory]
-        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Saving_new_mapping_as_default(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -440,6 +413,32 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var updated = await client.GetResourceAsync<IApplication>(createdApplication.Href);
             (await updated.GetDefaultAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
             (await updated.GetDefaultGroupStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+
+            // Clean up
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Setting_mapped_directory_to_default_account_store(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier} Setting Existing Directory AccountStore Default Test Application",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
+            var mapping = await createdApplication.AddAccountStoreAsync(directory);
+
+            await createdApplication.SetDefaultAccountStoreAsync(directory);
+
+            mapping.IsDefaultAccountStore.ShouldBeTrue();
+            mapping.IsDefaultGroupStore.ShouldBeFalse();
 
             // Clean up
             (await createdApplication.DeleteAsync()).ShouldBeTrue();

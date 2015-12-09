@@ -390,6 +390,42 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Saving_new_mapping_as_default(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier} Creating New AccountStore as Default Test Application - Sync",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
+            var mapping = client.Instantiate<IAccountStoreMapping>()
+                .SetAccountStore(directory)
+                .SetApplication(createdApplication)
+                .SetDefaultAccountStore(true)
+                .SetDefaultGroupStore(true);
+
+            createdApplication.CreateAccountStoreMapping(mapping);
+
+            // Default links should be updated without having to re-retrieve the Application resource
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+            createdApplication.GetDefaultGroupStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+
+            // Retrieving it again should have the same result
+            var updated = client.GetResource<IApplication>(createdApplication.Href);
+            updated.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+            updated.GetDefaultGroupStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+
+            // Clean up
+            createdApplication.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Setting_mapped_directory_to_default_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

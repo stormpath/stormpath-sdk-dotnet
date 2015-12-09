@@ -351,6 +351,39 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Saving_new_mapping_as_default(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier} Creating New AccountStore As Default Test Application - Sync", createDirectory:=False)
+            createdApplication.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
+
+            Dim directory = client.GetResource(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
+            Dim mapping = client.Instantiate(Of IAccountStoreMapping)() _
+                .SetAccountStore(directory) _
+                .SetApplication(createdApplication) _
+                .SetDefaultAccountStore(True) _
+                .SetDefaultGroupStore(True)
+
+            createdApplication.CreateAccountStoreMapping(mapping)
+
+            ' Default links should be updated without having to re-retrieve the Application resource
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+            createdApplication.GetDefaultGroupStore().Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+
+            ' Retrieving it again should have the same result
+            Dim updated = client.GetResource(Of IApplication)(createdApplication.Href)
+            updated.GetDefaultAccountStore().Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+            updated.GetDefaultGroupStore().Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+
+            ' Clean up
+            createdApplication.Delete().ShouldBeTrue()
+            Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Setting_mapped_directory_to_default_account_store(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
@@ -490,7 +523,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
-            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier} Setting Group as GroupStore (Sync)", createDirectory:=False)
+            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier} Setting Group As GroupStore (Sync)", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -702,7 +735,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
-            Dim dummyGroup = client.Instantiate(Of IGroup)().SetName($".NET IT {fixture.TestRunIdentifier} Dummy Test Group for Adding Multiple Groups as AccountStore (Sync)")
+            Dim dummyGroup = client.Instantiate(Of IGroup)().SetName($".NET IT {fixture.TestRunIdentifier} Dummy Test Group For Adding Multiple Groups As AccountStore (Sync)")
             Dim primaryDirectory = client.GetResource(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
             primaryDirectory.CreateGroup(dummyGroup)
             dummyGroup.Href.ShouldNotBeNullOrEmpty()
