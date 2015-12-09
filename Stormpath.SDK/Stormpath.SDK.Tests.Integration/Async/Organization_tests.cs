@@ -259,7 +259,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             IAccountStore directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
 
-            var mapping = client.Instantiate<IAccountStoreMapping>();
+            var mapping = client.Instantiate<IOrganizationAccountStoreMapping>();
             mapping.SetAccountStore(directory);
             mapping.SetListIndex(500);
             await createdOrganization.CreateAccountStoreMappingAsync(mapping);
@@ -294,7 +294,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var mapping1 = await createdOrganization.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
-            var mapping2 = client.Instantiate<IAccountStoreMapping>();
+            var mapping2 = client.Instantiate<IOrganizationAccountStoreMapping>();
             mapping2.SetAccountStore(group);
             mapping2.SetListIndex(0);
             await createdOrganization.CreateAccountStoreMappingAsync(mapping2);

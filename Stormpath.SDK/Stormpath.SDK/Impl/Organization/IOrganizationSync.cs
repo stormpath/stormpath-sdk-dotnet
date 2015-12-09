@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Impl.Organization
         IDeletableSync,
         IExtendableSync,
         IAccountStoreSync,
-        IAccountStoreContainerSync,
+        IAccountStoreContainerSync<IOrganizationAccountStoreMapping>,
         IAccountCreationActionsSync,
         IGroupCreationActionsSync
     {

@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.AccountStore;
 
 namespace Stormpath.SDK.Sync
@@ -45,8 +46,9 @@ namespace Stormpath.SDK.Sync
         ///     // use as group
         /// </code>
         /// </example>
-        public static IAccountStore GetDefaultAccountStore(this IAccountStoreContainer container)
-            => (container as IAccountStoreContainerSync).GetDefaultAccountStore();
+        public static IAccountStore GetDefaultAccountStore<TMapping>(this IAccountStoreContainer<TMapping> container)
+            where TMapping : IAccountStoreMapping<TMapping>
+            => (container as IAccountStoreContainerSync<TMapping>).GetDefaultAccountStore();
 
         /// <summary>
         /// Synchronously sets the <see cref="IAccountStore"/> (either a <see cref="Group.IGroup"/> or a <see cref="Directory.IDirectory"/>)
@@ -58,8 +60,9 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="container">The Account Store container.</param>
         /// <param name="accountStore">The <see cref="IAccountStore"/> used to persist new accounts.</param>
-        public static void SetDefaultAccountStore(this IAccountStoreContainer container, IAccountStore accountStore)
-            => (container as IAccountStoreContainerSync).SetDefaultAccountStore(accountStore);
+        public static void SetDefaultAccountStore<TMapping>(this IAccountStoreContainer<TMapping> container, IAccountStore accountStore)
+            where TMapping : IAccountStoreMapping<TMapping>
+            => (container as IAccountStoreContainerSync<TMapping>).SetDefaultAccountStore(accountStore);
 
         /// <summary>
         /// Synchronously gets the <see cref="IAccountStore"/> used to persist new <see cref="Group.IGroup">Groups</see>, or <see langword="null"/>
@@ -85,8 +88,9 @@ namespace Stormpath.SDK.Sync
         ///     // use as group
         /// </code>
         /// </example>
-        public static IAccountStore GetDefaultGroupStore(this IAccountStoreContainer container)
-            => (container as IAccountStoreContainerSync).GetDefaultGroupStore();
+        public static IAccountStore GetDefaultGroupStore<TMapping>(this IAccountStoreContainer<TMapping> container)
+            where TMapping : IAccountStoreMapping<TMapping>
+            => (container as IAccountStoreContainerSync<TMapping>).GetDefaultGroupStore();
 
         /// <summary>
         /// Synchronously sets the <see cref="IAccountStore"/> (a <see cref="Directory.IDirectory"/>)
@@ -102,8 +106,9 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="container">The Account Store container.</param>
         /// <param name="accountStore">The <see cref="IAccountStore"/> used to persist new groups.</param>
-        public static void SetDefaultGroupStore(this IAccountStoreContainer container, IAccountStore accountStore)
-            => (container as IAccountStoreContainerSync).SetDefaultGroupStore(accountStore);
+        public static void SetDefaultGroupStore<TMapping>(this IAccountStoreContainer<TMapping> container, IAccountStore accountStore)
+            where TMapping : IAccountStoreMapping<TMapping>
+            => (container as IAccountStoreContainerSync<TMapping>).SetDefaultGroupStore(accountStore);
 
         /// <summary>
         /// Synchronously creates a new <see cref="IAccountStoreMapping"/>, allowing the associated Account Store
@@ -126,8 +131,9 @@ namespace Stormpath.SDK.Sync
         /// mapping = application.CreateAccountStoreMapping(mapping);
         /// </code>
         /// </example>
-        public static IAccountStoreMapping CreateAccountStoreMapping(this IAccountStoreContainer container, IAccountStoreMapping mapping)
-            => (container as IAccountStoreContainerSync).CreateAccountStoreMapping(mapping);
+        public static TMapping CreateAccountStoreMapping<TMapping>(this IAccountStoreContainer<TMapping> container, TMapping mapping)
+            where TMapping : IAccountStoreMapping<TMapping>
+            => (container as IAccountStoreContainerSync<TMapping>).CreateAccountStoreMapping(mapping);
 
         /// <summary>
         /// Synchronously adds a new <see cref="IAccountStore"/> to the Application or Organization and appends the resulting <see cref="IAccountStoreMapping"/>
@@ -146,8 +152,9 @@ namespace Stormpath.SDK.Sync
         /// IAccountStoreMapping mapping = application.AddAccountStore(directoryOrGroup);
         /// </code>
         /// </example>
-        public static IAccountStoreMapping AddAccountStore(this IAccountStoreContainer container, IAccountStore accountStore)
-            => (container as IAccountStoreContainerSync).AddAccountStore(accountStore);
+        public static TMapping AddAccountStore<TMapping>(this IAccountStoreContainer<TMapping> container, IAccountStore accountStore)
+            where TMapping : IAccountStoreMapping<TMapping>
+            => (container as IAccountStoreContainerSync<TMapping>).AddAccountStore(accountStore);
 
         /// <summary>
         /// Synchronously adds a new <see cref="IAccountStore"/> to this Application. The given string can either be an <c>href</c> or a name of a
@@ -181,27 +188,36 @@ namespace Stormpath.SDK.Sync
         /// IAccountStoreMapping accountStoreMapping = application.AddAccountStore("Foo Name");
         /// </code>
         /// </example>
-        public static IAccountStoreMapping AddAccountStore(this IAccountStoreContainer container, string hrefOrName)
-            => (container as IAccountStoreContainerSync).AddAccountStore(hrefOrName);
+        public static TMapping AddAccountStore<TMapping>(this IAccountStoreContainer<TMapping> container, string hrefOrName)
+            where TMapping : IAccountStoreMapping<TMapping>
+            => (container as IAccountStoreContainerSync<TMapping>).AddAccountStore(hrefOrName);
 
-        /// <summary>
-        /// Synchronously adds a resource of type <typeparamref name="T"/> as a new <see cref="IAccountStore"/> to this Application or Organization. The provided query
-        /// must match a single <typeparamref name="T"/> in the current <see cref="Tenant.ITenant">Tenant</see>. If no compatible resource matches the query, this method will return <see langword="null"/>.
-        /// </summary>
-        /// <param name="container">The Account Store container.</param>
-        /// <param name="query">Query to search for a resource of type <typeparamref name="T"/> in the current Tenant.</param>
-        /// <typeparam name="T">The type of resource (either a <see cref="Directory.IDirectory"/> or a <see cref="Group.IGroup"/>) to query for.</typeparam>
-        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <see langword="null"/> if there is no resource matching the query.</returns>
-        /// <exception cref="Error.ResourceException">The found resource already exists as an account store in the application.</exception>
-        /// <exception cref="ArgumentException">The query matches more than one resource in the current Tenant.</exception>
-        /// <example>
-        /// Adding a directory by partial name:
-        /// <code>
-        /// IAccountStoreMapping mapping = application.AddAccountStore&lt;IDirectory&gt;(dirs => dirs.Where(d => d.Name.StartsWith(partialName)));
-        /// </code>
-        /// </example>
-        public static IAccountStoreMapping AddAccountStore<T>(this IAccountStoreContainer container, Func<IQueryable<T>, IQueryable<T>> query)
+        ///// <summary>
+        ///// Synchronously adds a resource of type <typeparamref name="T"/> as a new <see cref="IAccountStore"/> to this Application or Organization. The provided query
+        ///// must match a single <typeparamref name="T"/> in the current <see cref="Tenant.ITenant">Tenant</see>. If no compatible resource matches the query, this method will return <see langword="null"/>.
+        ///// </summary>
+        ///// <param name="container">The Account Store container.</param>
+        ///// <param name="query">Query to search for a resource of type <typeparamref name="T"/> in the current Tenant.</param>
+        ///// <typeparam name="T">The type of resource (either a <see cref="Directory.IDirectory"/> or a <see cref="Group.IGroup"/>) to query for.</typeparam>
+        ///// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <see langword="null"/> if there is no resource matching the query.</returns>
+        ///// <exception cref="Error.ResourceException">The found resource already exists as an account store in the application.</exception>
+        ///// <exception cref="ArgumentException">The query matches more than one resource in the current Tenant.</exception>
+        ///// <example>
+        ///// Adding a directory by partial name:
+        ///// <code>
+        ///// IAccountStoreMapping mapping = application.AddAccountStore&lt;IDirectory&gt;(dirs => dirs.Where(d => d.Name.StartsWith(partialName)));
+        ///// </code>
+        ///// </example>
+        //public static TMapping AddAccountStore<T, TMapping>(this IAccountStoreContainer<TMapping> container, Func<IQueryable<T>, IQueryable<T>> query)
+        //    where T : IAccountStore
+        //    where TMapping : IAccountStoreMapping<TMapping>
+        //    => (container as IAccountStoreContainerSync<TMapping>).AddAccountStore(query);
+    }
+
+    public static class SyncApplicationAccountStoreContainerExtensions
+    {
+        public static IApplicationAccountStoreMapping AddAccountStore<T>(this IAccountStoreContainer<IApplicationAccountStoreMapping> container, Func<IQueryable<T>, IQueryable<T>> query)
             where T : IAccountStore
-            => (container as IAccountStoreContainerSync).AddAccountStore(query);
+            => (container as IAccountStoreContainerSync<IApplicationAccountStoreMapping>).AddAccountStore(query);
     }
 }

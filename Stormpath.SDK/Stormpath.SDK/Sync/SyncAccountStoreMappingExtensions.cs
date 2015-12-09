@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="accountStoreMapping">The account store mapping.</param>
         /// <returns>The mapping's <see cref="IAccountStore"/>.</returns>
-        public static IAccountStore GetAccountStore(this IAccountStoreMapping accountStoreMapping)
+        public static IAccountStore GetAccountStore(this IApplicationAccountStoreMapping accountStoreMapping)
             => (accountStoreMapping as IAccountStoreMappingSync).GetAccountStore();
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="accountStoreMapping">The account store mapping.</param>
         /// <returns>The mapping's <see cref="IApplication"/>.</returns>
-        public static IApplication GetApplication(this IAccountStoreMapping accountStoreMapping)
+        public static IApplication GetApplication(this IApplicationAccountStoreMapping accountStoreMapping)
             => (accountStoreMapping as IAccountStoreMappingSync).GetApplication();
     }
 }

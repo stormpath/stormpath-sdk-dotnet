@@ -68,7 +68,7 @@ namespace Stormpath.SDK.Impl.Organization
             throw new NotSupportedException("Use IApplicationAccountStoreMapping.GetApplicationAsync instead.");
         }
 
-        public override IAccountStoreMapping SetApplication(IApplication application)
+        public override IOrganizationAccountStoreMapping SetApplication(IApplication application)
         {
             throw new NotSupportedException("Use IApplicationAccountStoreMapping.SetApplication instead.");
         }

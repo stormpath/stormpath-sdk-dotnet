@@ -18,33 +18,34 @@ using System;
 using System.Linq;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.AccountStore;
+using Stormpath.SDK.Organization;
 
 namespace Stormpath.SDK.Impl.Organization
 {
     internal sealed partial class DefaultOrganization
     {
-        IAccountStore IAccountStoreContainerSync.GetDefaultAccountStore()
+        IAccountStore IAccountStoreContainerSync<IOrganizationAccountStoreMapping>.GetDefaultAccountStore()
             => AccountStoreContainerShared.GetDefaultAccountStore(this.DefaultAccountStoreMapping.Href, this.GetInternalSyncDataStore());
 
-        IAccountStore IAccountStoreContainerSync.GetDefaultGroupStore()
+        IAccountStore IAccountStoreContainerSync<IOrganizationAccountStoreMapping>.GetDefaultGroupStore()
             => AccountStoreContainerShared.GetDefaultAccountStore(this.DefaultGroupStoreMapping.Href, this.GetInternalSyncDataStore());
 
-        void IAccountStoreContainerSync.SetDefaultAccountStore(IAccountStore accountStore)
-            => AccountStoreContainerShared.SetDefaultStore(this, accountStore, isAccountStore: true);
+        void IAccountStoreContainerSync<IOrganizationAccountStoreMapping>.SetDefaultAccountStore(IAccountStore accountStore)
+            => AccountStoreContainerShared.SetDefaultStore<IOrganization, IOrganizationAccountStoreMapping>(this, accountStore, isAccountStore: true);
 
-        void IAccountStoreContainerSync.SetDefaultGroupStore(IAccountStore accountStore)
-            => AccountStoreContainerShared.SetDefaultStore(this, accountStore, isAccountStore: false);
+        void IAccountStoreContainerSync<IOrganizationAccountStoreMapping>.SetDefaultGroupStore(IAccountStore accountStore)
+            => AccountStoreContainerShared.SetDefaultStore<IOrganization, IOrganizationAccountStoreMapping>(this, accountStore, isAccountStore: false);
 
-        IAccountStoreMapping IAccountStoreContainerSync.CreateAccountStoreMapping(IAccountStoreMapping mapping)
+        IOrganizationAccountStoreMapping IAccountStoreContainerSync<IOrganizationAccountStoreMapping>.CreateAccountStoreMapping(IOrganizationAccountStoreMapping mapping)
             => AccountStoreContainerShared.CreateAccountStoreMapping(this, this.GetInternalSyncDataStore(), mapping);
 
-        IAccountStoreMapping IAccountStoreContainerSync.AddAccountStore(IAccountStore accountStore)
+        IOrganizationAccountStoreMapping IAccountStoreContainerSync<IOrganizationAccountStoreMapping>.AddAccountStore(IAccountStore accountStore)
             => AccountStoreContainerShared.AddAccountStore(this, this.GetInternalSyncDataStore(), accountStore);
 
-        IAccountStoreMapping IAccountStoreContainerSync.AddAccountStore(string hrefOrName)
+        IOrganizationAccountStoreMapping IAccountStoreContainerSync<IOrganizationAccountStoreMapping>.AddAccountStore(string hrefOrName)
             => AccountStoreContainerShared.AddAccountStore(this, this.GetInternalSyncDataStore(), hrefOrName);
 
-        IAccountStoreMapping IAccountStoreContainerSync.AddAccountStore<T>(Func<IQueryable<T>, IQueryable<T>> query)
+        IOrganizationAccountStoreMapping IAccountStoreContainerSync<IOrganizationAccountStoreMapping>.AddAccountStore<TSource>(Func<IQueryable<TSource>, IQueryable<TSource>> query)
             => AccountStoreContainerShared.AddAccountStore(this, this.GetInternalSyncDataStore(), query);
     }
 }

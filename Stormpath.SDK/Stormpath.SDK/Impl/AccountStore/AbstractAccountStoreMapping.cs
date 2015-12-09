@@ -29,6 +29,7 @@ namespace Stormpath.SDK.Impl.AccountStore
     internal abstract class AbstractAccountStoreMapping<T> :
         AbstractInstanceResource,
         IAccountStoreMapping<T>,
+        IAccountStoreMappingSync<T>,
         ISaveable<T>,
         ISaveableSync<T>,
         IDeletable,

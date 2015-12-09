@@ -20,13 +20,18 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
+    //todo is this necessary?!
+    internal interface IAccountStoreMappingSync : IAccountStoreMappingSync<IApplicationAccountStoreMapping>
+    {
+    }
+
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
     /// available on <see cref="IAccountStoreMapping{T}"/>.
     /// </summary>
     /// <typeparam name="T">The Account Store type.</typeparam>
     internal interface IAccountStoreMappingSync<T> :
-        ISaveableSync<IAccountStoreMapping<T>>,
+        ISaveableSync<T>,
         IDeletableSync
         where T : IAccountStoreMapping<T>
     {

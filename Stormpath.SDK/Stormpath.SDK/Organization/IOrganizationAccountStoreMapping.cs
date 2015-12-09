@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Organization
     /// </para>
     /// </remarks>
     /// <seealso cref="IAccountStoreContainer.CreateAccountStoreMappingAsync(IAccountStoreMapping, System.Threading.CancellationToken)"/>
-    public interface IOrganizationAccountStoreMapping : IAccountStoreMapping
+    public interface IOrganizationAccountStoreMapping : IAccountStoreMapping<IOrganizationAccountStoreMapping>
     {
         /// <summary>
         /// Sets the <see cref="IOrganization">Organization</see> represented by this <see cref="IOrganizationAccountStoreMapping"/> resource.

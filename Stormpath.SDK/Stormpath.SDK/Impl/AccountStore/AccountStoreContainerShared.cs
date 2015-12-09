@@ -159,21 +159,22 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="parent">The parent resource.</param>
         /// <param name="store">The new default Account or Group store.</param>
         /// <param name="isAccountStore">Determines whether this store should be the default Account (<see langword="true"/>) or Group (<see langword="false"/>) Store.</param>
-        public static void SetDefaultStore<T>(ISaveable<T> parent, IAccountStore store, bool isAccountStore)
-            where T : IResource, IAccountStoreContainer
+        public static void SetDefaultStore<T, TMapping>(ISaveable<T> parent, IAccountStore store, bool isAccountStore)
+            where T : IResource, IAccountStoreContainer<TMapping>
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             if (string.IsNullOrEmpty(store?.Href))
             {
                 throw new ArgumentNullException(nameof(store.Href));
             }
 
-            var container = parent as IAccountStoreContainer;
+            var container = parent as IAccountStoreContainer<TMapping>;
             if (parent == null)
             {
                 throw new ApplicationException("SetDefaultStore must be used with a supported AccountStoreContainer.");
             }
 
-            IAccountStoreMapping newOrExistingMapping = null;
+            TMapping newOrExistingMapping = null;
             foreach (var mapping in container.GetAccountStoreMappings().Synchronously())
             {
                 bool isPassedAccountStore = (mapping as DefaultAccountStoreMapping)?.AccountStore?.Href.Equals(store.Href) ?? false;
@@ -217,14 +218,15 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="mapping">The new mapping to create.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The new <see cref="IAccountStoreMapping"/>.</returns>
-        public static Task<IAccountStoreMapping> CreateAccountStoreMappingAsync(
-            IAccountStoreContainer container,
+        public static async Task<TMapping> CreateAccountStoreMappingAsync<TMapping>(
+            IAccountStoreContainer<TMapping> container,
             IInternalAsyncDataStore internalDataStore,
-            IAccountStoreMapping mapping,
+            IAccountStoreMapping<TMapping> mapping,
             CancellationToken cancellationToken)
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             SetContainer(mapping, container);
-            return internalDataStore.CreateAsync(AccountStoreMappingResourceBaseHref, mapping, cancellationToken);
+            return (TMapping)(await internalDataStore.CreateAsync(AccountStoreMappingResourceBaseHref, mapping, cancellationToken).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -234,13 +236,14 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="internalDataStore">The internal data store.</param>
         /// <param name="mapping">The new mapping to create.</param>
         /// <returns>The new <see cref="IAccountStoreMapping"/>.</returns>
-        public static IAccountStoreMapping CreateAccountStoreMapping(
-            IAccountStoreContainer container,
+        public static TMapping CreateAccountStoreMapping<TMapping>(
+            IAccountStoreContainer<TMapping> container,
             IInternalSyncDataStore internalDataStore,
-            IAccountStoreMapping mapping)
+            IAccountStoreMapping<TMapping> mapping)
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             SetContainer(mapping, container);
-            return internalDataStore.Create(AccountStoreMappingResourceBaseHref, mapping);
+            return (TMapping)internalDataStore.Create(AccountStoreMappingResourceBaseHref, mapping);
         }
 
         /// <summary>
@@ -251,19 +254,20 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="accountStore">The Account Store to add.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The new <see cref="IAccountStoreMapping"/>.</returns>
-        public static Task<IAccountStoreMapping> AddAccountStoreAsync(
-            IAccountStoreContainer container,
+        public static async Task<TMapping> AddAccountStoreAsync<TMapping>(
+            IAccountStoreContainer<TMapping> container,
             IInternalAsyncDataStore internalDataStore,
             IAccountStore accountStore,
             CancellationToken cancellationToken)
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             var accountStoreMapping = internalDataStore
-                .Instantiate<IAccountStoreMapping>()
+                .Instantiate<IAccountStoreMapping<TMapping>>()
                 .SetAccountStore(accountStore)
                 .SetListIndex(int.MaxValue);
             SetContainer(accountStoreMapping, container);
 
-            return CreateAccountStoreMappingAsync(container, internalDataStore, accountStoreMapping, cancellationToken);
+            return (TMapping)(await CreateAccountStoreMappingAsync(container, internalDataStore, accountStoreMapping, cancellationToken).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -273,13 +277,14 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="internalDataStore">The internal data store.</param>
         /// <param name="accountStore">The Account Store to add.</param>
         /// <returns>The new <see cref="IAccountStoreMapping"/>.</returns>
-        public static IAccountStoreMapping AddAccountStore(
-            IAccountStoreContainer container,
+        public static TMapping AddAccountStore<TMapping>(
+            IAccountStoreContainer<TMapping> container,
             IInternalSyncDataStore internalDataStore,
             IAccountStore accountStore)
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             var accountStoreMapping = internalDataStore
-                .Instantiate<IAccountStoreMapping>()
+                .Instantiate<IAccountStoreMapping<TMapping>>()
                 .SetAccountStore(accountStore)
                 .SetListIndex(int.MaxValue);
             SetContainer(accountStoreMapping, container);
@@ -295,11 +300,12 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="hrefOrName">The name or <c>href</c> of the Account Store to add.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The new <see cref="IAccountStoreMapping"/>.</returns>
-        public static async Task<IAccountStoreMapping> AddAccountStoreAsync(
-            IAccountStoreContainer container,
+        public static async Task<TMapping> AddAccountStoreAsync<TMapping>(
+            IAccountStoreContainer<TMapping> container,
             IInternalAsyncDataStore internalDataStore,
             string hrefOrName,
             CancellationToken cancellationToken)
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             if (string.IsNullOrEmpty(hrefOrName))
             {
@@ -366,7 +372,7 @@ namespace Stormpath.SDK.Impl.AccountStore
 
             if (accountStore != null)
             {
-                return await AddAccountStoreAsync(container, internalDataStore, accountStore, cancellationToken).ConfigureAwait(false);
+                return (TMapping)await AddAccountStoreAsync(container, internalDataStore, accountStore, cancellationToken).ConfigureAwait(false);
             }
 
             // Could not find any resource matching the hrefOrName value
@@ -380,10 +386,11 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="internalDataStore">The internal data store.</param>
         /// <param name="hrefOrName">The name or <c>href</c> of the Account Store to add.</param>
         /// <returns>The new <see cref="IAccountStoreMapping"/>.</returns>
-        public static IAccountStoreMapping AddAccountStore(
-            IAccountStoreContainer container,
+        public static TMapping AddAccountStore<TMapping>(
+            IAccountStoreContainer<TMapping> container,
             IInternalSyncDataStore internalDataStore,
             string hrefOrName)
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             if (string.IsNullOrEmpty(hrefOrName))
             {
@@ -466,11 +473,12 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="query">A query that selects a single Account Store.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The new <see cref="IAccountStoreMapping"/>.</returns>
-        public static async Task<IAccountStoreMapping> AddAccountStoreAsync<T>(
-            IAccountStoreContainer container,
+        public static async Task<TMapping> AddAccountStoreAsync<T, TMapping>(
+            IAccountStoreContainer<TMapping> container,
             IInternalAsyncDataStore internalDataStore,
             Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query,
             CancellationToken cancellationToken)
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             if (query == null)
             {
@@ -491,7 +499,7 @@ namespace Stormpath.SDK.Impl.AccountStore
 
             if (foundAccountStore != null)
             {
-                return await AddAccountStoreAsync(container, internalDataStore, foundAccountStore, cancellationToken).ConfigureAwait(false);
+                return (TMapping)await AddAccountStoreAsync(container, internalDataStore, foundAccountStore, cancellationToken).ConfigureAwait(false);
             }
 
             // No account store can be added
@@ -506,10 +514,11 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="internalDataStore">The internal data store.</param>
         /// <param name="query">A query that selects a single Account Store.</param>
         /// <returns>The new <see cref="IAccountStoreMapping"/>.</returns>
-        public static IAccountStoreMapping AddAccountStore<T>(
-            IAccountStoreContainer container,
+        public static TMapping AddAccountStore<T, TMapping>(
+            IAccountStoreContainer<TMapping> container,
             IInternalSyncDataStore internalDataStore,
             Func<IQueryable<T>, IQueryable<T>> query)
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             if (query == null)
             {
@@ -680,7 +689,8 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// </summary>
         /// <param name="mapping">The account store mapping.</param>
         /// <param name="container">The container object (an Application or Organization).</param>
-        private static void SetContainer(IAccountStoreMapping mapping, IAccountStoreContainer container)
+        private static void SetContainer<TMapping>(IAccountStoreMapping<TMapping> mapping, IAccountStoreContainer<TMapping> container)
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             var asApplication = container as IApplication;
             if (asApplication != null)

@@ -24,7 +24,8 @@ namespace Stormpath.SDK.Impl.AccountStore
     /// Represents the synchronous actions that correspond to the default asynchronous actions
     /// available on <see cref="IAccountStoreContainer"/>.
     /// </summary>
-    internal interface IAccountStoreContainerSync
+    internal interface IAccountStoreContainerSync<T>
+        where T : IAccountStoreMapping<T>
     {
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccountStoreContainer.GetDefaultAccountStoreAsync(System.Threading.CancellationToken)"/>.
@@ -55,29 +56,29 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// </summary>
         /// <param name="mapping">The new <see cref="IAccountStoreMapping"/> resource to add to the AccountStoreMapping list.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
-        IAccountStoreMapping CreateAccountStoreMapping(IAccountStoreMapping mapping);
+        T CreateAccountStoreMapping(T mapping);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccountStoreContainer.AddAccountStoreAsync(IAccountStore, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="accountStore">The new <see cref="IAccountStore"/> resource to add to the AccountStoreMapping list.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
-        IAccountStoreMapping AddAccountStore(IAccountStore accountStore);
+        T AddAccountStore(IAccountStore accountStore);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccountStoreContainer.AddAccountStoreAsync(string, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="hrefOrName">Either the <c>href</c> or name of the desired <see cref="SDK.Directory.IDirectory"/> or <see cref="SDK.Group.IGroup"/>.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
-        IAccountStoreMapping AddAccountStore(string hrefOrName);
+        T AddAccountStore(string hrefOrName);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccountStoreContainer.AddAccountStoreAsync{T}(Func{SDK.Linq.IAsyncQueryable{T}, SDK.Linq.IAsyncQueryable{T}}, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <typeparam name="T">The type of resource (either a <see cref="SDK.Directory.IDirectory"/> or a <see cref="SDK.Group.IGroup"/>) to query for.</typeparam>
-        /// <param name="query">Query to search for a resource of type <typeparamref name="T"/> in the current Tenant.</param>
+        /// <typeparam name="TSource">The type of resource (either a <see cref="SDK.Directory.IDirectory"/> or a <see cref="SDK.Group.IGroup"/>) to query for.</typeparam>
+        /// <param name="query">Query to search for a resource of type <typeparamref name="TSource"/> in the current Tenant.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <see langword="null"/> if there is no resource matching the query.</returns>
-        IAccountStoreMapping AddAccountStore<T>(Func<IQueryable<T>, IQueryable<T>> query)
-            where T : IAccountStore;
+        T AddAccountStore<TSource>(Func<IQueryable<TSource>, IQueryable<TSource>> query)
+            where TSource : IAccountStore;
     }
 }

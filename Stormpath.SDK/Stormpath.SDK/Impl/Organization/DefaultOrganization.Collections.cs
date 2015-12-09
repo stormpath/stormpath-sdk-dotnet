@@ -25,8 +25,8 @@ namespace Stormpath.SDK.Impl.Organization
 {
     internal sealed partial class DefaultOrganization
     {
-        IAsyncQueryable<IAccountStoreMapping> IAccountStoreContainer.GetAccountStoreMappings()
-            => new CollectionResourceQueryable<IAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalAsyncDataStore());
+        IAsyncQueryable<IOrganizationAccountStoreMapping> IAccountStoreContainer<IOrganizationAccountStoreMapping>.GetAccountStoreMappings()
+            => new CollectionResourceQueryable<IOrganizationAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IAccount> IAccountStore.GetAccounts()
             => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());

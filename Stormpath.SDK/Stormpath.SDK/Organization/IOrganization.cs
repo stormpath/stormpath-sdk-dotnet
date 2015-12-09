@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Organization
         IAuditable,
         IExtendable,
         IAccountStore,
-        IAccountStoreContainer,
+        IAccountStoreContainer<IOrganizationAccountStoreMapping>,
         IAccountCreationActions,
         IGroupCreationActions
     {

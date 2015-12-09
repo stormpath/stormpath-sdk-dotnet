@@ -23,7 +23,11 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
-    internal sealed class DefaultAccountStoreMapping : AbstractAccountStoreMapping<IAccountStoreMapping>, IAccountStoreMapping, IAccountStoreMappingSync
+    internal sealed class DefaultAccountStoreMapping :
+        AbstractAccountStoreMapping<IApplicationAccountStoreMapping>,
+        IAccountStoreMapping,
+        IAccountStoreMappingSync,
+        IApplicationAccountStoreMapping
     {
         private static readonly string ApplicationPropertyName = "application";
 
@@ -34,7 +38,7 @@ namespace Stormpath.SDK.Impl.AccountStore
 
         internal IEmbeddedProperty Application => this.GetLinkProperty(ApplicationPropertyName);
 
-        public override IAccountStoreMapping SetApplication(IApplication application)
+        public override IApplicationAccountStoreMapping SetApplication(IApplication application)
         {
             if (string.IsNullOrEmpty(application?.Href))
             {

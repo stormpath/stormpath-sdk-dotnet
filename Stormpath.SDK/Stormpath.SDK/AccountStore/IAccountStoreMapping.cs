@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Application;
@@ -21,6 +22,11 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.AccountStore
 {
+    [Obsolete("This interface will be removed in 1.0. Use IApplicationAccountStoreMapping instead.")]
+    public interface IAccountStoreMapping : IApplicationAccountStoreMapping
+    {
+    }
+
     /// <summary>
     /// Represents the assignment of an <see cref="IAccountStore"/> AccountStore (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>) to an <see cref="IApplication"/>.
     /// <para>When an <see cref="IAccountStoreMapping{T}"/> is created, the accounts in the account store are granted access to become users of the linked <see cref="IApplication"/>.

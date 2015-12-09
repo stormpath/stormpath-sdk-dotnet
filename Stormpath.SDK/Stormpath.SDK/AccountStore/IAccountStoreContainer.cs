@@ -135,7 +135,7 @@ namespace Stormpath.SDK.AccountStore
         /// mapping = await application.CreateAccountStoreMappingAsync(mapping);
         /// </code>
         /// </example>
-        Task<IAccountStoreMapping<T>> CreateAccountStoreMappingAsync(IAccountStoreMapping<T> mapping, CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> CreateAccountStoreMappingAsync(T mapping, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Adds a new <see cref="IAccountStore"/> to the Application or Organization and appends the resulting <see cref="IAccountStoreMapping{T}"/>
@@ -154,7 +154,7 @@ namespace Stormpath.SDK.AccountStore
         /// IAccountStoreMapping mapping = await application.AddAccountStoreAsync(directoryOrGroup);
         /// </code>
         /// </example>
-        Task<IAccountStoreMapping<T>> AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Adds a new <see cref="IAccountStore"/> to this Application. The given string can either be an <c>href</c> or a name of a
@@ -188,7 +188,7 @@ namespace Stormpath.SDK.AccountStore
         /// IAccountStoreMapping accountStoreMapping = await application.AddAccountStoreAsync("Foo Name");
         /// </code>
         /// </example>
-        Task<IAccountStoreMapping<T>> AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Adds a resource of type <typeparamref name="TSource"/> as a new <see cref="IAccountStore"/> to this Application or Organization. The provided query
@@ -206,7 +206,7 @@ namespace Stormpath.SDK.AccountStore
         /// IAccountStoreMapping mapping = await application.AddAccountStoreAsync&lt;IDirectory&gt;(dirs => dirs.Where(d => d.Name.StartsWith(partialName)));
         /// </code>
         /// </example>
-        Task<IAccountStoreMapping<T>> AddAccountStoreAsync<TSource>(Func<IAsyncQueryable<TSource>, IAsyncQueryable<TSource>> query, CancellationToken cancellationToken = default(CancellationToken))
+        Task<T> AddAccountStoreAsync<TSource>(Func<IAsyncQueryable<TSource>, IAsyncQueryable<TSource>> query, CancellationToken cancellationToken = default(CancellationToken))
             where TSource : IAccountStore;
     }
 }

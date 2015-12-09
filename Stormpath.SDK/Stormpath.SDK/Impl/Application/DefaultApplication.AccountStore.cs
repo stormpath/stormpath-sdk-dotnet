@@ -19,9 +19,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Directory;
-using Stormpath.SDK.Error;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
@@ -30,31 +27,31 @@ namespace Stormpath.SDK.Impl.Application
 {
     internal sealed partial class DefaultApplication
     {
-        IAsyncQueryable<IAccountStoreMapping> IAccountStoreContainer.GetAccountStoreMappings()
-            => new CollectionResourceQueryable<IAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalAsyncDataStore());
+        IAsyncQueryable<IApplicationAccountStoreMapping> IAccountStoreContainer<IApplicationAccountStoreMapping>.GetAccountStoreMappings()
+            => new CollectionResourceQueryable<IApplicationAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalAsyncDataStore());
 
-        Task<IAccountStore> IAccountStoreContainer.GetDefaultAccountStoreAsync(CancellationToken cancellationToken)
+        Task<IAccountStore> IAccountStoreContainer<IApplicationAccountStoreMapping>.GetDefaultAccountStoreAsync(CancellationToken cancellationToken)
             => AccountStoreContainerShared.GetDefaultStoreAsync(this.DefaultAccountStoreMapping.Href, this.GetInternalAsyncDataStore(), cancellationToken);
 
-        Task<IAccountStore> IAccountStoreContainer.GetDefaultGroupStoreAsync(CancellationToken cancellationToken)
+        Task<IAccountStore> IAccountStoreContainer<IApplicationAccountStoreMapping>.GetDefaultGroupStoreAsync(CancellationToken cancellationToken)
             => AccountStoreContainerShared.GetDefaultStoreAsync(this.DefaultGroupStoreMapping.Href, this.GetInternalAsyncDataStore(), cancellationToken);
 
-        Task IAccountStoreContainer.SetDefaultAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken)
-            => AccountStoreContainerShared.SetDefaultStoreAsync(this, accountStore, isAccountStore: true, cancellationToken: cancellationToken);
+        Task IAccountStoreContainer<IApplicationAccountStoreMapping>.SetDefaultAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken)
+            => AccountStoreContainerShared.SetDefaultStoreAsync<IApplication, IApplicationAccountStoreMapping>(this, accountStore, isAccountStore: true, cancellationToken: cancellationToken);
 
-        Task IAccountStoreContainer.SetDefaultGroupStoreAsync(IAccountStore groupStore, CancellationToken cancellationToken)
-            => AccountStoreContainerShared.SetDefaultStoreAsync(this, groupStore, isAccountStore: false, cancellationToken: cancellationToken);
+        Task IAccountStoreContainer<IApplicationAccountStoreMapping>.SetDefaultGroupStoreAsync(IAccountStore groupStore, CancellationToken cancellationToken)
+            => AccountStoreContainerShared.SetDefaultStoreAsync<IApplication, IApplicationAccountStoreMapping>(this, groupStore, isAccountStore: false, cancellationToken: cancellationToken);
 
-        Task<IAccountStoreMapping> IAccountStoreContainer.CreateAccountStoreMappingAsync(IAccountStoreMapping mapping, CancellationToken cancellationToken)
+        Task<IApplicationAccountStoreMapping> IAccountStoreContainer<IApplicationAccountStoreMapping>.CreateAccountStoreMappingAsync(IApplicationAccountStoreMapping mapping, CancellationToken cancellationToken)
             => AccountStoreContainerShared.CreateAccountStoreMappingAsync(this, this.GetInternalAsyncDataStore(), mapping, cancellationToken);
 
-        Task<IAccountStoreMapping> IAccountStoreContainer.AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken)
+        Task<IApplicationAccountStoreMapping> IAccountStoreContainer<IApplicationAccountStoreMapping>.AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken)
             => AccountStoreContainerShared.AddAccountStoreAsync(this, this.GetInternalAsyncDataStore(), accountStore, cancellationToken);
 
-        Task<IAccountStoreMapping> IAccountStoreContainer.AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken)
+        Task<IApplicationAccountStoreMapping> IAccountStoreContainer<IApplicationAccountStoreMapping>.AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken)
             => AccountStoreContainerShared.AddAccountStoreAsync(this, this.GetInternalAsyncDataStore(), hrefOrName, cancellationToken);
 
-        Task<IAccountStoreMapping> IAccountStoreContainer.AddAccountStoreAsync<T>(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query, CancellationToken cancellationToken)
+        Task<IApplicationAccountStoreMapping> IAccountStoreContainer<IApplicationAccountStoreMapping>.AddAccountStoreAsync<T>(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query, CancellationToken cancellationToken)
             => AccountStoreContainerShared.AddAccountStoreAsync(this, this.GetInternalAsyncDataStore(), query, cancellationToken);
     }
 }

@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Impl.Application
         IExtendableSync,
         IAccountCreationActionsSync,
         IGroupCreationActionsSync,
-        IAccountStoreContainerSync
+        IAccountStoreContainerSync<IApplicationAccountStoreMapping>
     {
         /// <summary>
         /// Synchronous counterpart to <see cref="IApplication.AuthenticateAccountAsync(IAuthenticationRequest, System.Threading.CancellationToken)"/>.
