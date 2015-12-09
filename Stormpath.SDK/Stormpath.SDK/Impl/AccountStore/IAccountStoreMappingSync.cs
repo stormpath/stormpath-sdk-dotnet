@@ -22,18 +22,22 @@ namespace Stormpath.SDK.Impl.AccountStore
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="IAccountStoreMapping"/>.
+    /// available on <see cref="IAccountStoreMapping{T}"/>.
     /// </summary>
-    internal interface IAccountStoreMappingSync : ISaveableSync<IAccountStoreMapping>, IDeletableSync
+    /// <typeparam name="T">The Account Store type.</typeparam>
+    internal interface IAccountStoreMappingSync<T> :
+        ISaveableSync<IAccountStoreMapping<T>>,
+        IDeletableSync
+        where T : IAccountStoreMapping<T>
     {
         /// <summary>
-        /// Synchronous counterpart to <see cref="IAccountStoreMapping.GetAccountStoreAsync(System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <see cref="IAccountStoreMapping{T}.GetAccountStoreAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <returns>The Account Store.</returns>
         IAccountStore GetAccountStore();
 
         /// <summary>
-        /// Synchronous counterpart to <see cref="IAccountStoreMapping.GetApplicationAsync(System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <see cref="IAccountStoreMapping{T}.GetApplicationAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <returns>The Application.</returns>
         IApplication GetApplication();

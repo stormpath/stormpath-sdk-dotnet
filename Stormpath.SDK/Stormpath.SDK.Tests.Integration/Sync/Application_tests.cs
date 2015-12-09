@@ -336,7 +336,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_directory_as_account_store_to_application(TestClientProvider clientBuilder)
+        public void Adding_directory_as_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -364,7 +364,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_group_as_account_store_to_application(TestClientProvider clientBuilder)
+        public void Adding_group_as_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -571,7 +571,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_directory_as_account_store_by_href_to_application(TestClientProvider clientBuilder)
+        public void Adding_directory_as_account_store_by_href(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -598,7 +598,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_group_as_account_store_by_href_to_application(TestClientProvider clientBuilder)
+        public void Adding_group_as_account_store_by_href(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -625,7 +625,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_directory_as_account_store_by_name_to_application(TestClientProvider clientBuilder)
+        public void Adding_directory_as_account_store_by_name(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -662,7 +662,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_group_as_account_store_by_name_to_application(TestClientProvider clientBuilder)
+        public void Adding_group_as_account_store_by_name(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -704,7 +704,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_directory_as_account_store_to_application_by_query(TestClientProvider clientBuilder)
+        public void Adding_directory_as_account_store_by_query(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -733,7 +733,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_group_as_account_store_to_application_by_query(TestClientProvider clientBuilder)
+        public void Adding_group_as_account_store_by_query(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -762,7 +762,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_directory_as_account_store_to_application_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
+        public void Adding_directory_as_account_store_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -786,7 +786,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_group_as_account_store_to_application_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
+        public void Adding_group_as_account_store_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();

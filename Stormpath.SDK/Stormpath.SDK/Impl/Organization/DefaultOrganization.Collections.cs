@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Impl.Organization
         IAsyncQueryable<IAccountStoreMapping> IAccountStoreContainer.GetAccountStoreMappings()
             => new CollectionResourceQueryable<IAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalAsyncDataStore());
 
-        IAsyncQueryable<IAccount> IOrganization.GetAccounts()
+        IAsyncQueryable<IAccount> IAccountStore.GetAccounts()
             => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());
 
         IAsyncQueryable<IGroup> IOrganization.GetGroups()

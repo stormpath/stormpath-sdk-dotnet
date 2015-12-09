@@ -19,12 +19,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
@@ -97,25 +99,26 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="isAccountStore">Determines whether this store should be the default Account (<see langword="true"/>) or Group (<see langword="false"/>) Store.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task SetDefaultStoreAsync<T>(
+        public static async Task SetDefaultStoreAsync<T, TStore>(
             ISaveable<T> parent,
             IAccountStore store,
             bool isAccountStore,
             CancellationToken cancellationToken)
-            where T : IResource, IAccountStoreContainer
+            where T : IResource, IAccountStoreContainer<TStore>
+            where TStore : IAccountStoreMapping<TStore>
         {
             if (string.IsNullOrEmpty(store?.Href))
             {
                 throw new ArgumentNullException(nameof(store.Href));
             }
 
-            var container = parent as IAccountStoreContainer;
+            var container = parent as IAccountStoreContainer<TStore>;
             if (parent == null)
             {
                 throw new ApplicationException("SetDefaultStore must be used with a supported AccountStoreContainer.");
             }
 
-            IAccountStoreMapping newOrExistingMapping = null;
+            IAccountStoreMapping<TStore> newOrExistingMapping = null;
             await container.GetAccountStoreMappings().ForEachAsync(
                 mapping =>
                 {
@@ -220,7 +223,7 @@ namespace Stormpath.SDK.Impl.AccountStore
             IAccountStoreMapping mapping,
             CancellationToken cancellationToken)
         {
-            mapping.SetApplication(container);
+            SetContainer(mapping, container);
             return internalDataStore.CreateAsync(AccountStoreMappingResourceBaseHref, mapping, cancellationToken);
         }
 
@@ -236,7 +239,7 @@ namespace Stormpath.SDK.Impl.AccountStore
             IInternalSyncDataStore internalDataStore,
             IAccountStoreMapping mapping)
         {
-            mapping.SetApplication(container);
+            SetContainer(mapping, container);
             return internalDataStore.Create(AccountStoreMappingResourceBaseHref, mapping);
         }
 
@@ -257,8 +260,8 @@ namespace Stormpath.SDK.Impl.AccountStore
             var accountStoreMapping = internalDataStore
                 .Instantiate<IAccountStoreMapping>()
                 .SetAccountStore(accountStore)
-                .SetApplication(container)
                 .SetListIndex(int.MaxValue);
+            SetContainer(accountStoreMapping, container);
 
             return CreateAccountStoreMappingAsync(container, internalDataStore, accountStoreMapping, cancellationToken);
         }
@@ -278,8 +281,8 @@ namespace Stormpath.SDK.Impl.AccountStore
             var accountStoreMapping = internalDataStore
                 .Instantiate<IAccountStoreMapping>()
                 .SetAccountStore(accountStore)
-                .SetApplication(container)
                 .SetListIndex(int.MaxValue);
+            SetContainer(accountStoreMapping, container);
 
             return CreateAccountStoreMapping(container, internalDataStore, accountStoreMapping);
         }
@@ -670,6 +673,30 @@ namespace Stormpath.SDK.Impl.AccountStore
             }
 
             return foundGroup;
+        }
+
+        /// <summary>
+        /// TODO: Remove this when refactoring AbstractAccountStoreMapping (breaking change)
+        /// </summary>
+        /// <param name="mapping">The account store mapping.</param>
+        /// <param name="container">The container object (an Application or Organization).</param>
+        private static void SetContainer(IAccountStoreMapping mapping, IAccountStoreContainer container)
+        {
+            var asApplication = container as IApplication;
+            if (asApplication != null)
+            {
+                mapping.SetApplication(asApplication);
+                return;
+            }
+
+            var asOrganization = container as IOrganization;
+            if (asOrganization != null)
+            {
+                (mapping as IOrganizationAccountStoreMapping).SetOrganization(asOrganization);
+                return;
+            }
+
+            throw new NotImplementedException("Unknown container type!");
         }
     }
 }

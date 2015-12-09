@@ -78,6 +78,7 @@
     <Compile Include="Api\IClientApiKey.cs" />
     <Compile Include="Api\IClientApiKeyBuilder.cs" />
     <Compile Include="Application\ApplicationStatus.cs" />
+    <Compile Include="Application\IApplicationAccountStoreMapping.cs" />
     <Compile Include="Application\IApplicationCreationOptions.cs" />
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Auth\IAuthenticationResult.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Http\IHttpRequestBuilder.cs" />
     <Compile Include="IdSite\IIdSiteSyncResultListener.cs" />
     <Compile Include="IdSite\IIdSiteSyncCallbackHandler.cs" />
+    <Compile Include="Impl\AccountStore\AbstractAccountStoreMapping.cs" />
     <Compile Include="Impl\AccountStore\AccountStoreContainerShared.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreContainerSync.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
@@ -319,7 +321,9 @@
     <Compile Include="Impl\Organization\DefaultOrganization.CreationActions.cs" />
     <Compile Include="Impl\Organization\DefaultOrganization.CreationActionsSync.cs" />
     <Compile Include="Impl\Organization\DefaultOrganization.cs" />
+    <Compile Include="Impl\Organization\DefaultOrganizationAccountStoreMapping.cs" />
     <Compile Include="Impl\Organization\DefaultOrganizationCreationOptions.cs" />
+    <Compile Include="Impl\Organization\IOrganizationAccountStoreMappingSync.cs" />
     <Compile Include="Impl\Organization\IOrganizationSync.cs" />
     <Compile Include="Impl\Provider\AbstractCreateProviderRequestBuilder{T}.cs" />
     <Compile Include="Impl\Provider\AbstractProvider.cs" />
@@ -428,6 +432,7 @@
     <Compile Include="Linq\RetrievalOptionsExpandExtensions.cs" />
     <Compile Include="Logging\ILoggerConsumer{T}.cs" />
     <Compile Include="Logging\InMemoryLogger.cs" />
+    <Compile Include="Organization\IOrganizationAccountStoreMapping.cs" />
     <Compile Include="Organization\IOrganizationCreationOptions.cs" />
     <Compile Include="Organization\OrganizationCreationOptionsBuilder.cs" />
     <Compile Include="Organization\OrganizationStatus.cs" />

@@ -23,17 +23,22 @@ namespace Stormpath.SDK.AccountStore
 {
     /// <summary>
     /// Represents the assignment of an <see cref="IAccountStore"/> AccountStore (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>) to an <see cref="IApplication"/>.
-    /// <para>When an <see cref="IAccountStoreMapping"/> is created, the accounts in the account store are granted access to become users of the linked <see cref="IApplication"/>. The order in which AccountStores are assigned to an application determines how login attempts work in Stormpath.</para>
+    /// <para>When an <see cref="IAccountStoreMapping{T}"/> is created, the accounts in the account store are granted access to become users of the linked <see cref="IApplication"/>.
+    /// The order in which Account Stores are assigned to an application determines how login attempts work in Stormpath.</para>
     /// </summary>
-    public interface IAccountStoreMapping : IResource, ISaveable<IAccountStoreMapping>, IDeletable
+    /// <typeparam name="T">The Account Store type.</typeparam>
+    public interface IAccountStoreMapping<T> :
+        IResource,
+        ISaveable<T>,
+        IDeletable
+        where T : IAccountStoreMapping<T>, ISaveable<T>
     {
         /// <summary>
-        /// Sets the container (an <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>
-        /// represented by this <see cref="IAccountStoreMapping"/> resource.
+        /// Sets the <see cref="IApplication">Application</see> represented by this <see cref="IAccountStoreMapping{T}"/> resource.
         /// </summary>
-        /// <param name="container">The <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see> represented by this <see cref="IAccountStoreMapping">Account Store Mapping</see>.</param>
+        /// <param name="application">The <see cref="IApplication">Application</see> represented by this <see cref="IAccountStoreMapping{T}">Account Store Mapping</see>.</param>
         /// <returns>This instance for method chaining.</returns>
-        IAccountStoreMapping SetApplication(IAccountStoreContainer container);
+        T SetApplication(IApplication application);
 
         /// <summary>
         /// Sets this mapping's <see cref="IAccountStore"/> (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>),
@@ -41,7 +46,7 @@ namespace Stormpath.SDK.AccountStore
         /// </summary>
         /// <param name="accountStore">The <see cref="IAccountStore"/> to be assigned to the application.</param>
         /// <returns>This instance for method chaining.</returns>
-        IAccountStoreMapping SetAccountStore(IAccountStore accountStore);
+        T SetAccountStore(IAccountStore accountStore);
 
         /// <summary>
         /// Updates the zero-based order in which the associated <see cref="IAccountStore"/> will be consulted
@@ -58,7 +63,7 @@ namespace Stormpath.SDK.AccountStore
         /// If a negative number is passed, an <see cref="System.ArgumentException"/> will be thrown.
         /// </param>
         /// <returns>This instance for method chaining.</returns>
-        IAccountStoreMapping SetListIndex(int listIndex);
+        T SetListIndex(int listIndex);
 
         /// <summary>
         /// Sets whether or not the associated <see cref="IAccountStore"/> is designated as the
@@ -70,7 +75,7 @@ namespace Stormpath.SDK.AccountStore
         /// </summary>
         /// <param name="defaultAccountStore">Whether or not the associated <see cref="IAccountStore"/> is designated as the default Account Store for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.</param>
         /// <returns>This instance for method chaining.</returns>
-        IAccountStoreMapping SetDefaultAccountStore(bool defaultAccountStore);
+        T SetDefaultAccountStore(bool defaultAccountStore);
 
         /// <summary>
         /// Sets whether or not the associated <see cref="IAccountStore"/> is designated as the default Group Store
@@ -82,7 +87,7 @@ namespace Stormpath.SDK.AccountStore
         /// </summary>
         /// <param name="defaultGroupStore">Whether or not the associated <see cref="IAccountStore"/> is designated as the default Group Store for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.</param>
         /// <returns>This instance for method chaining.</returns>
-        IAccountStoreMapping SetDefaultGroupStore(bool defaultGroupStore);
+        T SetDefaultGroupStore(bool defaultGroupStore);
 
         /// <summary>
         /// Gets a value indicating whether the associated <see cref="IAccountStore"/> is designated as the default Account Store for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
@@ -120,7 +125,7 @@ namespace Stormpath.SDK.AccountStore
         Task<IAccountStore> GetAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets the <see cref="IApplication"/> represented by this mapping.
+        /// Gets the <see cref="IApplication">Application</see> represented by this mapping.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The mapping's <see cref="IApplication"/>.</returns>

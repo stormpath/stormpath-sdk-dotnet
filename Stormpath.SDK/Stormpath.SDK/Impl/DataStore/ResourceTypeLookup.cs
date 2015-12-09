@@ -31,9 +31,11 @@ using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.IdSite;
+using Stormpath.SDK.Impl.Organization;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -44,6 +46,7 @@ namespace Stormpath.SDK.Impl.DataStore
     {
         private static readonly IReadOnlyDictionary<Type, Type> ConcreteLookup = new Dictionary<Type, Type>()
         {
+            [typeof(IOrganization)] = typeof(DefaultOrganization),
             [typeof(IAccount)] = typeof(DefaultAccount),
             [typeof(IApplication)] = typeof(DefaultApplication),
             [typeof(ITenant)] = typeof(DefaultTenant),
@@ -76,6 +79,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private static readonly IReadOnlyDictionary<Type, Type> InterfaceLookup = new Dictionary<Type, Type>()
         {
+            [typeof(DefaultOrganization)] = typeof(IOrganization),
             [typeof(DefaultAccount)] = typeof(IAccount),
             [typeof(DefaultApplication)] = typeof(IApplication),
             [typeof(DefaultTenant)] = typeof(ITenant),
@@ -119,6 +123,7 @@ namespace Stormpath.SDK.Impl.DataStore
             ["defaultGroupStoreMapping"] = typeof(IAccountStoreMapping),
             ["accountStore"] = typeof(IAccountStore),
 
+            ["organizations"] = typeof(CollectionResponsePage<IOrganization>),
             ["applications"] = typeof(CollectionResponsePage<IApplication>),
             ["directories"] = typeof(CollectionResponsePage<IDirectory>),
             ["accounts"] = typeof(CollectionResponsePage<IAccount>),
@@ -130,6 +135,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()
         {
+            [typeof(CollectionResponsePage<IOrganization>)] = typeof(IOrganization),
             [typeof(CollectionResponsePage<IAccount>)] = typeof(IAccount),
             [typeof(CollectionResponsePage<IApplication>)] = typeof(IApplication),
             [typeof(CollectionResponsePage<IDirectory>)] = typeof(IDirectory),

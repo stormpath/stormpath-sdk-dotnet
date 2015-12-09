@@ -18,6 +18,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Organization;
@@ -26,12 +27,12 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Organization
 {
-    internal sealed partial class DefaultOrganization : AbstractExtendableInstanceResource, IOrganization
+    internal sealed partial class DefaultOrganization : AbstractExtendableInstanceResource, IOrganization, IOrganizationSync
     {
         private static readonly string AccountStoreMappingsPropertyName = "accountStoreMappings";
         private static readonly string AccountsPropertyName = "accounts";
-        private static readonly string DefaultAccountStoreMappingPropertyName = "defaultAccountStoreMapping";
-        private static readonly string DefaultGroupStoreMappingPropertyName = "defaultGroupStoreMapping";
+        private static readonly string DefaultAccountStoreMappingPropertyName = AccountStoreContainerShared.DefaultAccountStoreMappingPropertyName;
+        private static readonly string DefaultGroupStoreMappingPropertyName = AccountStoreContainerShared.DefaultGroupStoreMappingPropertyName;
         private static readonly string DescriptionPropertyName = "description";
         private static readonly string GroupsPropertyName = "groups";
         private static readonly string NamePropertyName = "name";
@@ -100,7 +101,19 @@ namespace Stormpath.SDK.Impl.Organization
         Task<IOrganization> ISaveable<IOrganization>.SaveAsync(CancellationToken cancellationToken)
             => this.SaveAsync<IOrganization>(cancellationToken);
 
+        Task<IOrganization> ISaveableWithOptions<IOrganization>.SaveAsync(Action<IRetrievalOptions<IOrganization>> options, CancellationToken cancellationToken)
+            => this.SaveAsync(options, cancellationToken);
+
+        IOrganization ISaveableSync<IOrganization>.Save()
+            => this.Save<IOrganization>();
+
+        IOrganization ISaveableWithOptionsSync<IOrganization>.Save(Action<IRetrievalOptions<IOrganization>> options)
+             => this.Save(options);
+
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
+
+        bool IDeletableSync.Delete()
+            => this.GetInternalSyncDataStore().Delete(this);
     }
 }

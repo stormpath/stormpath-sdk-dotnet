@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Application
         IDeletable,
         IAuditable,
         IExtendable,
-        IAccountStoreContainer,
+        IAccountStoreContainer<IApplicationAccountStoreMapping>,
         IAccountCreationActions,
         IGroupCreationActions
     {

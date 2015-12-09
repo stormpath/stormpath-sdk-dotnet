@@ -34,11 +34,14 @@ namespace Stormpath.SDK.Organization
     public interface IOrganization :
         IResource,
         IHasTenant,
-        ISaveable<IOrganization>,
+        ISaveableWithOptions<IOrganization>,
         IDeletable,
         IAuditable,
         IExtendable,
-        IAccountStoreContainer
+        IAccountStore,
+        IAccountStoreContainer,
+        IAccountCreationActions,
+        IGroupCreationActions
     {
         /// <summary>
         /// Gets the Organization's name.
@@ -102,15 +105,6 @@ namespace Stormpath.SDK.Organization
         /// <param name="description">The Organization's description text.</param>
         /// <returns>This instance for method chaining.</returns>
         IOrganization SetDescription(string description);
-
-        /// <summary>
-        /// Gets a queryable list of all Accounts in the Organization.
-        /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search <see cref="IAccount"/>s.</returns>
-        /// <example>
-        /// var allOrganizationAccounts = await myOrg.GetAccounts().ToListAsync();
-        /// </example>
-        IAsyncQueryable<IAccount> GetAccounts();
 
         /// <summary>
         /// Gets a queryable list of all Groups accessible to this Organization.

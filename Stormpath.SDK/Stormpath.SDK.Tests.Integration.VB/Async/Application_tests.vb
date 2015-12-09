@@ -304,7 +304,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Async Function Adding_directory_as_account_store_to_application(clientBuilder As TestClientProvider) As Task
+        Public Async Function Adding_directory_as_account_store(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
@@ -332,7 +332,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Async Function Adding_group_as_account_store_to_application(clientBuilder As TestClientProvider) As Task
+        Public Async Function Adding_group_as_account_store(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
@@ -524,7 +524,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Async Function Adding_directory_as_account_store_by_href_to_application(clientBuilder As TestClientProvider) As Task
+        Public Async Function Adding_directory_as_account_store_by_href(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
@@ -551,7 +551,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Async Function Adding_group_as_account_store_by_href_to_application(clientBuilder As TestClientProvider) As Task
+        Public Async Function Adding_group_as_account_store_by_href(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
@@ -578,7 +578,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Async Function Adding_directory_as_account_store_by_name_to_application(clientBuilder As TestClientProvider) As Task
+        Public Async Function Adding_directory_as_account_store_by_name(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
@@ -614,7 +614,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Async Function Adding_group_as_account_store_by_name_to_application(clientBuilder As TestClientProvider) As Task
+        Public Async Function Adding_group_as_account_store_by_name(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
@@ -655,7 +655,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Async Function Adding_directory_as_account_store_to_application_by_query(clientBuilder As TestClientProvider) As Task
+        Public Async Function Adding_directory_as_account_store_by_query(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
@@ -683,7 +683,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Async Function Adding_group_as_account_store_to_application_by_query(clientBuilder As TestClientProvider) As Task
+        Public Async Function Adding_group_as_account_store_by_query(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
@@ -711,7 +711,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Async Function Adding_directory_as_account_store_to_application_by_query_throws_for_multiple_results(clientBuilder As TestClientProvider) As Task
+        Public Async Function Adding_directory_as_account_store_by_query_throws_for_multiple_results(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 
@@ -731,7 +731,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Async Function Adding_group_as_account_store_to_application_by_query_throws_for_multiple_results(clientBuilder As TestClientProvider) As Task
+        Public Async Function Adding_group_as_account_store_by_query_throws_for_multiple_results(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
 

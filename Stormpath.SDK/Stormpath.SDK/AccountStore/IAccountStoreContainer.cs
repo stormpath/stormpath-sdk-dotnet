@@ -27,13 +27,15 @@ namespace Stormpath.SDK.AccountStore
     /// Represents <see cref="IResource">Resources</see> that are capable of storing <see cref="IAccountStore">AccountStores</see>,
     /// such as <see cref="Application.IApplication">Applications</see> and <see cref="Organization.IOrganization">Organizations</see>.
     /// </summary>
-    public interface IAccountStoreContainer : IResource, IHasTenant
+    /// <typeparam name="T">The Account Store type.</typeparam>
+    public interface IAccountStoreContainer<T> : IResource, IHasTenant
+        where T : IAccountStoreMapping<T>, ISaveable<T>
     {
         /// <summary>
         /// Gets a queryable list of all Account Store Mappings accessible to the resource.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccountStoreMapping}"/> that may be used to asynchronously list or search <see cref="IAccountStoreMapping">AccountStoreMappings</see>.</returns>
-        IAsyncQueryable<IAccountStoreMapping> GetAccountStoreMappings();
+        /// <returns>An <see cref="IAsyncQueryable{IAccountStoreMapping}"/> that may be used to asynchronously list or search <see cref="IAccountStoreMapping{T}">AccountStoreMappings</see>.</returns>
+        IAsyncQueryable<T> GetAccountStoreMappings();
 
         /// <summary>
         /// Gets the <see cref="IAccountStore"/> (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>)
@@ -113,16 +115,16 @@ namespace Stormpath.SDK.AccountStore
         Task SetDefaultGroupStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new <see cref="IAccountStoreMapping"/>, allowing the associated Account Store
+        /// Creates a new <see cref="IAccountStoreMapping{T}"/>, allowing the associated Account Store
         /// to be used a source of accounts that may log in to the Application or Organization.
         /// </summary>
-        /// <param name="mapping">The new <see cref="IAccountStoreMapping"/> resource to add to the AccountStoreMapping list.</param>
+        /// <param name="mapping">The new <see cref="IAccountStoreMapping{T}"/> resource to add to the AccountStoreMapping list.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
+        /// <returns>The newly-created <see cref="IAccountStoreMapping{T}"/>.</returns>
         /// <exception cref="Error.ResourceException">The AccountStoreMapping's ListIndex is negative, or the mapping could not be added to the Application or Organization.</exception>
         /// <example>
-        /// Setting a new <see cref="IAccountStoreMapping"/>'s <see cref="IAccountStoreMapping.ListIndex"/> to <c>500</c> and then adding the mapping to
-        /// an application with an existing 3-item list will automatically save the <see cref="IAccountStoreMapping"/>
+        /// Setting a new <see cref="IAccountStoreMapping{T}"/>'s <see cref="IAccountStoreMapping.ListIndex"/> to <c>500</c> and then adding the mapping to
+        /// an application with an existing 3-item list will automatically save the <see cref="IAccountStoreMapping{T}"/>
         /// at the end of the list and set its <see cref="IAccountStoreMapping.ListIndex"/> value to <c>3</c> (items at index 0, 1, 2 were the original items,
         /// the new fourth item will be at index 3):
         /// <code>
@@ -133,10 +135,10 @@ namespace Stormpath.SDK.AccountStore
         /// mapping = await application.CreateAccountStoreMappingAsync(mapping);
         /// </code>
         /// </example>
-        Task<IAccountStoreMapping> CreateAccountStoreMappingAsync(IAccountStoreMapping mapping, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IAccountStoreMapping<T>> CreateAccountStoreMappingAsync(IAccountStoreMapping<T> mapping, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Adds a new <see cref="IAccountStore"/> to the Application or Organization and appends the resulting <see cref="IAccountStoreMapping"/>
+        /// Adds a new <see cref="IAccountStore"/> to the Application or Organization and appends the resulting <see cref="IAccountStoreMapping{T}"/>
         /// to the end of the AccountStoreMapping list.
         /// <para>
         /// If you need to control the order of the added AccountStore, use the <see cref="CreateAccountStoreMappingAsync(IAccountStoreMapping, CancellationToken)"/> method.
@@ -144,7 +146,7 @@ namespace Stormpath.SDK.AccountStore
         /// </summary>
         /// <param name="accountStore">The new <see cref="IAccountStore"/> resource to add to the AccountStoreMapping list.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
+        /// <returns>The newly-created <see cref="IAccountStoreMapping{T}"/>.</returns>
         /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application or Organization.</exception>
         /// <example>
         /// <code>
@@ -152,7 +154,7 @@ namespace Stormpath.SDK.AccountStore
         /// IAccountStoreMapping mapping = await application.AddAccountStoreAsync(directoryOrGroup);
         /// </code>
         /// </example>
-        Task<IAccountStoreMapping> AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IAccountStoreMapping<T>> AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Adds a new <see cref="IAccountStore"/> to this Application. The given string can either be an <c>href</c> or a name of a
@@ -173,7 +175,7 @@ namespace Stormpath.SDK.AccountStore
         /// </summary>
         /// <param name="hrefOrName">Either the <c>href</c> or name of the desired <see cref="Directory.IDirectory"/> or <see cref="Group.IGroup"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
+        /// <returns>The newly-created <see cref="IAccountStoreMapping{T}"/>.</returns>
         /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application or Organization.</exception>
         /// <exception cref="ArgumentException">The given <paramref name="hrefOrName"/> matches more than one resource in the current Tenant.</exception>
         /// <example>
@@ -186,16 +188,16 @@ namespace Stormpath.SDK.AccountStore
         /// IAccountStoreMapping accountStoreMapping = await application.AddAccountStoreAsync("Foo Name");
         /// </code>
         /// </example>
-        Task<IAccountStoreMapping> AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IAccountStoreMapping<T>> AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Adds a resource of type <typeparamref name="T"/> as a new <see cref="IAccountStore"/> to this Application or Organization. The provided query
-        /// must match a single <typeparamref name="T"/> in the current <see cref="Tenant.ITenant">Tenant</see>. If no compatible resource matches the query, this method will return <see langword="null"/>.
+        /// Adds a resource of type <typeparamref name="TSource"/> as a new <see cref="IAccountStore"/> to this Application or Organization. The provided query
+        /// must match a single <typeparamref name="TSource"/> in the current <see cref="Tenant.ITenant">Tenant</see>. If no compatible resource matches the query, this method will return <see langword="null"/>.
         /// </summary>
-        /// <param name="query">Query to search for a resource of type <typeparamref name="T"/> in the current Tenant.</param>
+        /// <param name="query">Query to search for a resource of type <typeparamref name="TSource"/> in the current Tenant.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <typeparam name="T">The type of resource (either a <see cref="Directory.IDirectory"/> or a <see cref="Group.IGroup"/>) to query for.</typeparam>
-        /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <see langword="null"/> if there is no resource matching the query.</returns>
+        /// <typeparam name="TSource">The type of resource (either a <see cref="Directory.IDirectory"/> or a <see cref="Group.IGroup"/>) to query for.</typeparam>
+        /// <returns>The newly-created <see cref="IAccountStoreMapping{T}"/>, or <see langword="null"/> if there is no resource matching the query.</returns>
         /// <exception cref="Error.ResourceException">The found resource already exists as an account store in the application.</exception>
         /// <exception cref="ArgumentException">The query matches more than one resource in the current Tenant.</exception>
         /// <example>
@@ -204,7 +206,7 @@ namespace Stormpath.SDK.AccountStore
         /// IAccountStoreMapping mapping = await application.AddAccountStoreAsync&lt;IDirectory&gt;(dirs => dirs.Where(d => d.Name.StartsWith(partialName)));
         /// </code>
         /// </example>
-        Task<IAccountStoreMapping> AddAccountStoreAsync<T>(Func<IAsyncQueryable<T>, IAsyncQueryable<T>> query, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IAccountStore;
+        Task<IAccountStoreMapping<T>> AddAccountStoreAsync<TSource>(Func<IAsyncQueryable<TSource>, IAsyncQueryable<TSource>> query, CancellationToken cancellationToken = default(CancellationToken))
+            where TSource : IAccountStore;
     }
 }
