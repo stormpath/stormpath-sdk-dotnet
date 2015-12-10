@@ -75,10 +75,6 @@ namespace Stormpath.SDK.Tests.Integration
         [Fact]
         public void All_Impl_async_methods_have_required_CancellationToken_parameters()
         {
-            // Whitelist some methods that legitimately have optional CancellationToken parameters
-            // Nothing here yet!
-            var whitelistedMethods = Enumerable.Empty<string>();
-
             var methodsInAssembly = Assembly
                 .GetAssembly(typeof(Client.IClient))
                 .GetTypes()
@@ -94,8 +90,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .Where(method => method.DeclaringType.Namespace.StartsWith("Stormpath.SDK.Impl"));
 
             var violatingMethods = asyncMethodsWithOptionalCT
-                .Select(m => PrettyPrintMethod($"{m.DeclaringType.Name}.{m.Name}", m.GetParameters()))
-                .Except(whitelistedMethods);
+                .Select(m => PrettyPrintMethod($"{m.DeclaringType.Name}.{m.Name}", m.GetParameters()));
 
             // No optional/default values here!
             violatingMethods
@@ -165,7 +160,6 @@ namespace Stormpath.SDK.Tests.Integration
             {
                 "IQueryable`1.Filter(String)",
                 "IQueryable`1.Expand(Expression`1)",
-                "IQueryable`1.Expand(Expression`1, Nullable`1, Nullable`1)",
                 "IAsyncQueryable`1.Synchronously()",
                 "IApplication.NewIdSiteSyncCallbackHandler(IHttpRequest)"
             };
