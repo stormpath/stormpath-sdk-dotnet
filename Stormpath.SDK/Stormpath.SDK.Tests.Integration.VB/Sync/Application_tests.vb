@@ -716,11 +716,24 @@ Namespace Sync
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
-            Should.[Throw](Of Exception)(Sub()
-                                             Dim mapping = createdApplication.AddAccountStore(Of IDirectory)(Function(allDirs) allDirs)
-                                         End Sub)
+            Dim dir1 = client.CreateDirectory($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results1", String.Empty, DirectoryStatus.Enabled)
+            Dim dir2 = client.CreateDirectory($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results2", String.Empty, DirectoryStatus.Enabled)
+
+            Me.fixture.CreatedDirectoryHrefs.Add(dir1.Href)
+            Me.fixture.CreatedDirectoryHrefs.Add(dir2.Href)
+
+            Should.[Throw](Of ArgumentException)(Sub()
+                                                     ' Throws because multiple matching results exist
+                                                     Dim mapping = createdApplication.AddAccountStore(Of IDirectory)(Function(dirs) dirs.Where(Function(d) d.Name.StartsWith($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results")))
+                                                 End Sub)
 
             ' Clean up
+            dir1.Delete().ShouldBeTrue()
+            Me.fixture.CreatedDirectoryHrefs.Remove(dir1.Href)
+
+            dir2.Delete().ShouldBeTrue()
+            Me.fixture.CreatedDirectoryHrefs.Remove(dir2.Href)
+
             createdApplication.Delete().ShouldBeTrue()
             Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
         End Sub
@@ -731,23 +744,35 @@ Namespace Sync
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
-            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Group By Query Throws Test Application (Sync)", createDirectory:=False)
+            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Group By Query Throws Test Application (Sync)", createDirectory:=True)
+
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
-            Dim dummyGroup = client.Instantiate(Of IGroup)().SetName($".NET IT {fixture.TestRunIdentifier} Dummy Test Group For Adding Multiple Groups As AccountStore (Sync)")
-            Dim primaryDirectory = client.GetResource(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
-            primaryDirectory.CreateGroup(dummyGroup)
-            dummyGroup.Href.ShouldNotBeNullOrEmpty()
-            Me.fixture.CreatedGroupHrefs.Add(dummyGroup.Href)
+            Dim defaultGroupStore = TryCast(createdApplication.GetDefaultGroupStore(), IDirectory)
+            defaultGroupStore.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedDirectoryHrefs.Add(defaultGroupStore.Href)
 
-            Should.[Throw](Of Exception)(Sub()
-                                             Dim mapping = createdApplication.AddAccountStore(Of IGroup)(Function(allGroups) allGroups)
-                                         End Sub)
+            Dim group1 = createdApplication.CreateGroup($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results1", String.Empty)
+            Dim group2 = createdApplication.CreateGroup($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results2", String.Empty)
+
+            Me.fixture.CreatedGroupHrefs.Add(group1.Href)
+            Me.fixture.CreatedGroupHrefs.Add(group2.Href)
+
+            Should.[Throw](Of ArgumentException)(Sub()
+                                                     ' Throws because multiple matching results exist
+                                                     Dim mapping = createdApplication.AddAccountStore(Of IGroup)(Function(groups) groups.Where(Function(g) g.Name.StartsWith($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results")))
+                                                 End Sub)
 
             ' Clean up
-            dummyGroup.Delete().ShouldBeTrue()
-            Me.fixture.CreatedGroupHrefs.Remove(dummyGroup.Href)
+            group1.Delete().ShouldBeTrue()
+            Me.fixture.CreatedGroupHrefs.Remove(group1.Href)
+
+            group2.Delete().ShouldBeTrue()
+            Me.fixture.CreatedGroupHrefs.Remove(group2.Href)
+
+            defaultGroupStore.Delete().ShouldBeTrue()
+            Me.fixture.CreatedDirectoryHrefs.Remove(defaultGroupStore.Href)
 
             createdApplication.Delete().ShouldBeTrue()
             Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)

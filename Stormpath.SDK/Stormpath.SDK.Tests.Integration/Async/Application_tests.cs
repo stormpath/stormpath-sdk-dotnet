@@ -802,13 +802,26 @@ namespace Stormpath.SDK.Tests.Integration.Async
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
-            Should.Throw<Exception>(async () =>
+            var dir1 = await client.CreateDirectoryAsync($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results1", string.Empty, DirectoryStatus.Enabled);
+            var dir2 = await client.CreateDirectoryAsync($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results2", string.Empty, DirectoryStatus.Enabled);
+
+            this.fixture.CreatedDirectoryHrefs.Add(dir1.Href);
+            this.fixture.CreatedDirectoryHrefs.Add(dir2.Href);
+
+            Should.Throw<ArgumentException>(async () =>
             {
+                // Throws because multiple matching results exist
                 var mapping = await createdApplication
-                    .AddAccountStoreAsync<IDirectory>(allDirs => allDirs);
+                    .AddAccountStoreAsync<IDirectory>(dirs => dirs.Where(d => d.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results")));
             });
 
             // Clean up
+            (await dir1.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(dir1.Href);
+
+            (await dir2.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(dir2.Href);
+
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
@@ -822,27 +835,37 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var createdApplication = await tenant.CreateApplicationAsync(
                 $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group By Query Throws Test Application",
-                createDirectory: false);
+                createDirectory: true);
+
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
-            var dummyGroup = client
-                .Instantiate<IGroup>()
-                .SetName($".NET IT {this.fixture.TestRunIdentifier} Dummy Test Group for Adding Multiple Groups as AccountStore");
-            var primaryDirectory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
-            await primaryDirectory.CreateGroupAsync(dummyGroup);
-            dummyGroup.Href.ShouldNotBeNullOrEmpty();
-            this.fixture.CreatedGroupHrefs.Add(dummyGroup.Href);
+            var defaultGroupStore = await createdApplication.GetDefaultGroupStoreAsync() as IDirectory;
+            defaultGroupStore.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(defaultGroupStore.Href);
 
-            Should.Throw<Exception>(async () =>
+            var group1 = await createdApplication.CreateGroupAsync($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results1", string.Empty);
+            var group2 = await createdApplication.CreateGroupAsync($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results2", string.Empty);
+
+            this.fixture.CreatedGroupHrefs.Add(group1.Href);
+            this.fixture.CreatedGroupHrefs.Add(group2.Href);
+
+            Should.Throw<ArgumentException>(async () =>
             {
+                // Throws because multiple matching results exist
                 var mapping = await createdApplication
-                    .AddAccountStoreAsync<IGroup>(allGroups => allGroups);
+                    .AddAccountStoreAsync<IGroup>(groups => groups.Where(x => x.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results")));
             });
 
             // Clean up
-            (await dummyGroup.DeleteAsync()).ShouldBeTrue();
-            this.fixture.CreatedGroupHrefs.Remove(dummyGroup.Href);
+            (await group1.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedGroupHrefs.Remove(group1.Href);
+
+            (await group2.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedGroupHrefs.Remove(group2.Href);
+
+            (await defaultGroupStore.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(defaultGroupStore.Href);
 
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
