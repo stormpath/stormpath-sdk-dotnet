@@ -159,7 +159,7 @@ namespace Stormpath.SDK.Tests.Integration
                 "IIdSiteAsyncCallbackHandler.GetAccountResult()",
                 "IIdSiteAsyncResultListener.OnRegistered(IAccountResult)",
                 "IIdSiteAsyncResultListener.OnAuthenticated(IAccountResult)",
-                "IIdSiteAsyncResultListener.OnLogout(IAccountResult)"
+                "IIdSiteAsyncResultListener.OnLogout(IAccountResult)",
             };
             var whitelistedSyncMethods = new List<string>()
             {
@@ -228,7 +228,7 @@ namespace Stormpath.SDK.Tests.Integration
 
             asyncButNotSync.Count.ShouldBe(
                 0,
-                $"These async method do not have a corresponding sync method:{NL}{string.Join(NL, asyncButNotSync)}");
+                $"These async methods do not have a corresponding sync method:{NL}{string.Join(NL, asyncButNotSync)}");
 
             syncButNotAsync.Count.ShouldBe(
                 0,

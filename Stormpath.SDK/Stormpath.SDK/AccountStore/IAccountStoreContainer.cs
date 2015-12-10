@@ -27,15 +27,15 @@ namespace Stormpath.SDK.AccountStore
     /// Represents <see cref="IResource">Resources</see> that are capable of storing <see cref="IAccountStore">AccountStores</see>,
     /// such as <see cref="Application.IApplication">Applications</see> and <see cref="Organization.IOrganization">Organizations</see>.
     /// </summary>
-    /// <typeparam name="T">The Account Store type.</typeparam>
-    public interface IAccountStoreContainer<T> : IResource, IHasTenant
-        where T : IAccountStoreMapping<T>, ISaveable<T>
+    /// <typeparam name="TMapping">The Account Store type.</typeparam>
+    public interface IAccountStoreContainer<TMapping> : IResource, IHasTenant
+        where TMapping : IAccountStoreMapping<TMapping>, ISaveable<TMapping>
     {
         /// <summary>
         /// Gets a queryable list of all Account Store Mappings accessible to the resource.
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IAccountStoreMapping}"/> that may be used to asynchronously list or search <see cref="IAccountStoreMapping{T}">AccountStoreMappings</see>.</returns>
-        IAsyncQueryable<T> GetAccountStoreMappings();
+        IAsyncQueryable<TMapping> GetAccountStoreMappings();
 
         /// <summary>
         /// Gets the <see cref="IAccountStore"/> (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>)
@@ -135,13 +135,13 @@ namespace Stormpath.SDK.AccountStore
         /// mapping = await application.CreateAccountStoreMappingAsync(mapping);
         /// </code>
         /// </example>
-        Task<T> CreateAccountStoreMappingAsync(T mapping, CancellationToken cancellationToken = default(CancellationToken));
+        Task<TMapping> CreateAccountStoreMappingAsync(TMapping mapping, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Adds a new <see cref="IAccountStore"/> to the Application or Organization and appends the resulting <see cref="IAccountStoreMapping{T}"/>
         /// to the end of the AccountStoreMapping list.
         /// <para>
-        /// If you need to control the order of the added AccountStore, use the <see cref="CreateAccountStoreMappingAsync(T, CancellationToken)"/> method.
+        /// If you need to control the order of the added AccountStore, use the <see cref="CreateAccountStoreMappingAsync(TMapping, CancellationToken)"/> method.
         /// </para>
         /// </summary>
         /// <param name="accountStore">The new <see cref="IAccountStore"/> resource to add to the AccountStoreMapping list.</param>
@@ -154,7 +154,7 @@ namespace Stormpath.SDK.AccountStore
         /// IAccountStoreMapping mapping = await application.AddAccountStoreAsync(directoryOrGroup);
         /// </code>
         /// </example>
-        Task<T> AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
+        Task<TMapping> AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Adds a new <see cref="IAccountStore"/> to this Application. The given string can either be an <c>href</c> or a name of a
@@ -188,7 +188,7 @@ namespace Stormpath.SDK.AccountStore
         /// IAccountStoreMapping accountStoreMapping = await application.AddAccountStoreAsync("Foo Name");
         /// </code>
         /// </example>
-        Task<T> AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
+        Task<TMapping> AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Adds a resource of type <typeparamref name="TSource"/> as a new <see cref="IAccountStore"/> to this Application or Organization. The provided query
@@ -206,7 +206,7 @@ namespace Stormpath.SDK.AccountStore
         /// IAccountStoreMapping mapping = await application.AddAccountStoreAsync&lt;IDirectory&gt;(dirs => dirs.Where(d => d.Name.StartsWith(partialName)));
         /// </code>
         /// </example>
-        Task<T> AddAccountStoreAsync<TSource>(Func<IAsyncQueryable<TSource>, IAsyncQueryable<TSource>> query, CancellationToken cancellationToken = default(CancellationToken))
+        Task<TMapping> AddAccountStoreAsync<TSource>(Func<IAsyncQueryable<TSource>, IAsyncQueryable<TSource>> query, CancellationToken cancellationToken = default(CancellationToken))
             where TSource : IAccountStore;
     }
 }
