@@ -145,6 +145,20 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Expanding_organization_account_store_mappings(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var account = await tenant
+                .GetOrganizations()
+                .Where(x => x.Description == "Star Wars")
+                .Expand(x => x.GetAccountStoreMappings(null, 10))
+                .FirstOrDefaultAsync();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Expanding_default_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -224,7 +238,5 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .Expand(x => x.GetGroup())
                 .FirstOrDefaultAsync();
         }
-
-        //expand organization stuff
     }
 }

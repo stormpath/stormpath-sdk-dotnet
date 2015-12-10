@@ -128,6 +128,19 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Expanding_organization_account_store_mappings(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = Await client.GetCurrentTenantAsync()
+
+            Dim account = Await tenant _
+                .GetOrganizations() _
+                .Where(Function(x) x.Description = "Star Wars") _
+                .Expand(Function(x) x.GetAccountStoreMappings(Nothing, 10)) _
+                .FirstOrDefaultAsync()
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Expanding_default_account_store(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
