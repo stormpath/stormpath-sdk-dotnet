@@ -404,6 +404,7 @@ Namespace Async
 
             Await createdApplication.SetDefaultAccountStoreAsync(directory)
 
+            Call (Await createdApplication.GetDefaultAccountStoreAsync()).Href.ShouldBe(fixture.PrimaryDirectoryHref)
             mapping.IsDefaultAccountStore.ShouldBeTrue()
             mapping.IsDefaultGroupStore.ShouldBeFalse()
 
@@ -428,6 +429,7 @@ Namespace Async
 
             Await createdApplication.SetDefaultAccountStoreAsync(group)
 
+            Call (Await createdApplication.GetDefaultAccountStoreAsync()).Href.ShouldBe(fixture.PrimaryGroupHref)
             mapping.IsDefaultAccountStore.ShouldBeTrue()
             mapping.IsDefaultGroupStore.ShouldBeFalse()
 
@@ -449,6 +451,8 @@ Namespace Async
 
             Dim directory = Await client.GetResourceAsync(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
             Await createdApplication.SetDefaultAccountStoreAsync(directory)
+
+            Call (Await createdApplication.GetDefaultAccountStoreAsync()).Href.ShouldBe(fixture.PrimaryDirectoryHref)
 
             Dim mapping = Await createdApplication.GetAccountStoreMappings().SingleAsync()
             mapping.IsDefaultAccountStore.ShouldBeTrue()
@@ -472,6 +476,8 @@ Namespace Async
 
             Dim group = Await client.GetResourceAsync(Of IGroup)(Me.fixture.PrimaryGroupHref)
             Await createdApplication.SetDefaultAccountStoreAsync(group)
+
+            Call (Await createdApplication.GetDefaultAccountStoreAsync()).Href.ShouldBe(fixture.PrimaryGroupHref)
 
             Dim mapping = Await createdApplication.GetAccountStoreMappings().SingleAsync()
             mapping.IsDefaultAccountStore.ShouldBeTrue()
@@ -498,6 +504,7 @@ Namespace Async
 
             Await createdApplication.SetDefaultGroupStoreAsync(directory)
 
+            Call (Await createdApplication.GetDefaultGroupStoreAsync()).Href.ShouldBe(fixture.PrimaryDirectoryHref)
             mapping.IsDefaultAccountStore.ShouldBeFalse()
             mapping.IsDefaultGroupStore.ShouldBeTrue()
 
@@ -519,6 +526,8 @@ Namespace Async
 
             Dim directory = Await client.GetResourceAsync(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
             Await createdApplication.SetDefaultGroupStoreAsync(directory)
+
+            Call (Await createdApplication.GetDefaultGroupStoreAsync()).Href.ShouldBe(fixture.PrimaryDirectoryHref)
 
             Dim mapping = Await createdApplication.GetAccountStoreMappings().SingleAsync()
             mapping.IsDefaultAccountStore.ShouldBeFalse()

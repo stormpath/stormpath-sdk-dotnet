@@ -437,6 +437,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             await createdApplication.SetDefaultAccountStoreAsync(directory);
 
+            (await createdApplication.GetDefaultAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
             mapping.IsDefaultAccountStore.ShouldBeTrue();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
 
@@ -463,6 +464,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             await createdApplication.SetDefaultAccountStoreAsync(group);
 
+            (await createdApplication.GetDefaultAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryGroupHref);
             mapping.IsDefaultAccountStore.ShouldBeTrue();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
 
@@ -486,6 +488,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
             await createdApplication.SetDefaultAccountStoreAsync(directory);
+
+            (await createdApplication.GetDefaultAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
 
             var mapping = await createdApplication.GetAccountStoreMappings().SingleAsync();
             mapping.IsDefaultAccountStore.ShouldBeTrue();
@@ -511,6 +515,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
             await createdApplication.SetDefaultAccountStoreAsync(group);
+
+            (await createdApplication.GetDefaultAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryGroupHref);
 
             var mapping = await createdApplication.GetAccountStoreMappings().SingleAsync();
             mapping.IsDefaultAccountStore.ShouldBeTrue();
@@ -539,6 +545,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             await createdApplication.SetDefaultGroupStoreAsync(directory);
 
+            (await createdApplication.GetDefaultGroupStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
             mapping.IsDefaultAccountStore.ShouldBeFalse();
             mapping.IsDefaultGroupStore.ShouldBeTrue();
 
@@ -562,6 +569,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var directory = await client.GetResourceAsync<IDirectory>(this.fixture.PrimaryDirectoryHref);
             await createdApplication.SetDefaultGroupStoreAsync(directory);
+
+            (await createdApplication.GetDefaultGroupStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
 
             var mapping = await createdApplication.GetAccountStoreMappings().SingleAsync();
             mapping.IsDefaultAccountStore.ShouldBeFalse();

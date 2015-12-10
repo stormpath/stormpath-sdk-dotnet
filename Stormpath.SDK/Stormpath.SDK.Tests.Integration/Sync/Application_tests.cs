@@ -442,6 +442,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             createdApplication.SetDefaultAccountStore(directory);
 
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
             mapping.IsDefaultAccountStore.ShouldBeTrue();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
 
@@ -468,6 +469,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             createdApplication.SetDefaultAccountStore(group);
 
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryGroupHref);
             mapping.IsDefaultAccountStore.ShouldBeTrue();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
 
@@ -491,6 +493,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
             createdApplication.SetDefaultAccountStore(directory);
+
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
 
             var mapping = createdApplication.GetAccountStoreMappings().Synchronously().Single();
             mapping.IsDefaultAccountStore.ShouldBeTrue();
@@ -516,6 +520,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var group = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
             createdApplication.SetDefaultAccountStore(group);
+
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryGroupHref);
 
             var mapping = createdApplication.GetAccountStoreMappings().Synchronously().Single();
             mapping.IsDefaultAccountStore.ShouldBeTrue();
@@ -544,6 +550,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             createdApplication.SetDefaultGroupStore(directory);
 
+            createdApplication.GetDefaultGroupStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
             mapping.IsDefaultAccountStore.ShouldBeFalse();
             mapping.IsDefaultGroupStore.ShouldBeTrue();
 
@@ -567,6 +574,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
             createdApplication.SetDefaultGroupStore(directory);
+
+            createdApplication.GetDefaultGroupStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
 
             var mapping = createdApplication.GetAccountStoreMappings().Synchronously().Single();
             mapping.IsDefaultAccountStore.ShouldBeFalse();

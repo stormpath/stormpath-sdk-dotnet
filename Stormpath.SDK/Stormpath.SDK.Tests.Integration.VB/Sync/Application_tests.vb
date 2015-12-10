@@ -397,6 +397,7 @@ Namespace Sync
 
             createdApplication.SetDefaultAccountStore(directory)
 
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(fixture.PrimaryDirectoryHref)
             mapping.IsDefaultAccountStore.ShouldBeTrue()
             mapping.IsDefaultGroupStore.ShouldBeFalse()
 
@@ -420,6 +421,7 @@ Namespace Sync
 
             createdApplication.SetDefaultAccountStore(group)
 
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(fixture.PrimaryGroupHref)
             mapping.IsDefaultAccountStore.ShouldBeTrue()
             mapping.IsDefaultGroupStore.ShouldBeFalse()
 
@@ -440,6 +442,8 @@ Namespace Sync
 
             Dim directory = client.GetResource(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
             createdApplication.SetDefaultAccountStore(directory)
+
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(fixture.PrimaryDirectoryHref)
 
             Dim mapping = createdApplication.GetAccountStoreMappings().Synchronously().[Single]()
             mapping.IsDefaultAccountStore.ShouldBeTrue()
@@ -462,6 +466,8 @@ Namespace Sync
 
             Dim group = client.GetResource(Of IGroup)(Me.fixture.PrimaryGroupHref)
             createdApplication.SetDefaultAccountStore(group)
+
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(fixture.PrimaryGroupHref)
 
             Dim mapping = createdApplication.GetAccountStoreMappings().Synchronously().[Single]()
             mapping.IsDefaultAccountStore.ShouldBeTrue()
@@ -487,6 +493,7 @@ Namespace Sync
 
             createdApplication.SetDefaultGroupStore(directory)
 
+            createdApplication.GetDefaultGroupStore().Href.ShouldBe(fixture.PrimaryDirectoryHref)
             mapping.IsDefaultAccountStore.ShouldBeFalse()
             mapping.IsDefaultGroupStore.ShouldBeTrue()
 
@@ -507,6 +514,8 @@ Namespace Sync
 
             Dim directory = client.GetResource(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
             createdApplication.SetDefaultGroupStore(directory)
+
+            createdApplication.GetDefaultGroupStore().Href.ShouldBe(fixture.PrimaryDirectoryHref)
 
             Dim mapping = createdApplication.GetAccountStoreMappings().Synchronously().[Single]()
             mapping.IsDefaultAccountStore.ShouldBeFalse()
