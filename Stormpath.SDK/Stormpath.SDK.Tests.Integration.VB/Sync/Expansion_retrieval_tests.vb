@@ -114,7 +114,7 @@ Namespace Sync
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Expanding_organization(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
-            Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+            Dim app = client.GetResource(Of IOrganization)(Me.fixture.PrimaryOrganizationHref)
 
             Dim mapping = app.GetAccountStoreMappings().Synchronously().First()
 

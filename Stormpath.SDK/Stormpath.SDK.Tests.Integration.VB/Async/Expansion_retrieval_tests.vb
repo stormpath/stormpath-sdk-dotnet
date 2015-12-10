@@ -113,7 +113,7 @@ Namespace Async
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Expanding_organization(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
-            Dim app = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+            Dim app = Await client.GetResourceAsync(Of IOrganization)(Me.fixture.PrimaryOrganizationHref)
 
             Dim mapping = Await app.GetAccountStoreMappings().FirstAsync()
 
