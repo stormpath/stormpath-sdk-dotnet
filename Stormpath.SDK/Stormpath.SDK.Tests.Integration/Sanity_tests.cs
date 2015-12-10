@@ -269,6 +269,42 @@ namespace Stormpath.SDK.Tests.Integration
                 $"These sync tests do not have a corresponding async test:{NL}{string.Join(", ", syncButNotAsync)}");
         }
 
+        [Theory]
+        [InlineData("Async")]
+        [InlineData("Sync")]
+        public void Equal_numbers_of_Csharp_and_Vb_tests(string @namespace)
+        {
+            var csharpTests = this.GetType().Assembly
+                .GetTypes()
+                .Where(x => x.Namespace == $"Stormpath.SDK.Tests.Integration.{@namespace}")
+                .SelectMany(x => x.GetMethods())
+                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
+                .Select(x => GetQualifiedMethodName(x));
+
+            var vbTests = typeof(VB.IntegrationTestCollection).Assembly
+                .GetTypes()
+                .Where(x => x.Namespace == $"Stormpath.SDK.Tests.Integration.VB.{@namespace}")
+                .SelectMany(x => x.GetMethods())
+                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
+                .Select(x => GetQualifiedMethodName(x));
+
+            var csharpButNotVb = csharpTests
+                .Except(vbTests)
+                .ToList();
+
+            var vbButNotCsharp = vbTests
+                .Except(csharpTests)
+                .ToList();
+
+            csharpButNotVb.Count.ShouldBe(
+                0,
+                $"These {@namespace} C# tests do not have a corresponding VB test:{NL}{string.Join(", ", csharpButNotVb)}");
+
+            vbButNotCsharp.Count.ShouldBe(
+                0,
+                $"These {@namespace} VB tests do not have a corresponding C# test:{NL}{string.Join(", ", vbButNotCsharp)}");
+        }
+
         [Fact]
         public void Expand_extension_methods_are_consistent_across_namespaces()
         {

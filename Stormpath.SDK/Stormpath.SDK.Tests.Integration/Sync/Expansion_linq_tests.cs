@@ -154,7 +154,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Expanding_organizationaccount_store_mappings(TestClientProvider clientBuilder)
+        public void Expanding_organization_account_store_mappings(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
