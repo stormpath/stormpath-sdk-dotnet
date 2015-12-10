@@ -550,7 +550,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
             // If this errors, the server-side API behavior has changed.
-            Should.Throw<ResourceException>(async () =>
+            // TOTO ResourceException after Shouldly Mono update
+            Should.Throw<Exception>(async () =>
             {
                 await createdOrganization.SetDefaultGroupStoreAsync(group);
             });
@@ -786,7 +787,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedDirectoryHrefs.Add(dir1.Href);
             this.fixture.CreatedDirectoryHrefs.Add(dir2.Href);
 
-            Should.Throw<ArgumentException>(async () =>
+            // TODO ArgumentException after Shouldly Mono update
+            Should.Throw<Exception>(async () =>
             {
                 // Throws because multiple matching results exist
                 var mapping = await createdOrganization
@@ -829,7 +831,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedGroupHrefs.Add(group1.Href);
             this.fixture.CreatedGroupHrefs.Add(group2.Href);
 
-            Should.Throw<ArgumentException>(async () =>
+            // TODO ArgumentException after Shouldly Mono update
+            Should.Throw<Exception>(async () =>
             {
                 // Throws because multiple matching results exist
                 var mapping = await createdOrganization

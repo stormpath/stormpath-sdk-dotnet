@@ -551,7 +551,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var group = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
             // If this errors, the server-side API behavior has changed.
-            Should.Throw<ResourceException>(() =>
+            // TODO ResourceException after Shouldly Mono update
+            Should.Throw<Exception>(() =>
             {
                 createdOrganization.SetDefaultGroupStore(group);
             });
@@ -787,7 +788,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedDirectoryHrefs.Add(dir1.Href);
             this.fixture.CreatedDirectoryHrefs.Add(dir2.Href);
 
-            Should.Throw<ArgumentException>(() =>
+            // TODO ArgumentException after Shouldly Mono update
+            Should.Throw<Exception>(() =>
             {
                 // Throws because multiple matching results exist
                 var mapping = createdOrganization
@@ -830,7 +832,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedGroupHrefs.Add(group1.Href);
             this.fixture.CreatedGroupHrefs.Add(group2.Href);
 
-            Should.Throw<ArgumentException>(() =>
+            // TODO ArgumentException after Shouldly Mono update
+            Should.Throw<Exception>(() =>
             {
                 // Throws because multiple matching results exist
                 var mapping = createdOrganization
