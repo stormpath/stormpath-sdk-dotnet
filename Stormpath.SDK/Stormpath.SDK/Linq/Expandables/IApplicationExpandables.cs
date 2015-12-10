@@ -14,18 +14,32 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.SDK.Application;
+
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents resources that can be expanded from an <see cref="Application.IApplication"/>.
+    /// Represents resources that can be expanded from an <see cref="IApplication"/>.
     /// </summary>
     public interface IApplicationExpandables :
-        IExpandableAccountStoreMappings,
         IExpandableAccounts,
         IExpandableCustomData,
         IExpandableGroups,
         IExpandableTenant,
         IExpandableDefaultStores
     {
+        /// <summary>
+        /// Expands the <c>accountStoreMappings</c> collection with the default pagination options.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
+        IAsyncQueryable<IApplicationAccountStoreMapping> GetAccountStoreMappings();
+
+        /// <summary>
+        /// Expands the <c>accountStoreMappings</c> collection with the specified pagination options.
+        /// </summary>
+        /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
+        /// <returns>Not applicable.</returns>
+        IAsyncQueryable<IApplicationAccountStoreMapping> GetAccountStoreMappings(int? offset, int? limit);
     }
 }

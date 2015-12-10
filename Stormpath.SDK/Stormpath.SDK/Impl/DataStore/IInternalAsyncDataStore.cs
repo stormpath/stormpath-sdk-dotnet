@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
-        Task<T> GetResourceSkipCacheAsync<T>(string href, CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> GetResourceSkipCacheAsync<T>(string href, CancellationToken cancellationToken);
 
         /// <summary>
         /// Creates a new resource on the server.

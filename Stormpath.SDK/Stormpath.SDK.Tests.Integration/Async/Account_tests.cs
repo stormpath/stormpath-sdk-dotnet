@@ -549,7 +549,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             {
                 request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}");
                 request.SetPassword("whataPieceofjunk$1138");
-                request.SetAccountStore(this.fixture.PrimaryDirectoryHref);
+                request.SetAccountStore(this.fixture.PrimaryOrganizationHref);
             });
             result.ShouldBeAssignableTo<IAuthenticationResult>();
             result.Success.ShouldBeTrue();

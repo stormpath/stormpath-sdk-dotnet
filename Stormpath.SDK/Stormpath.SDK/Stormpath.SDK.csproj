@@ -92,6 +92,7 @@
     <Compile Include="Impl\AccountStore\IAccountStoreContainerSync.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
     <Compile Include="Cache\AbstractCacheProviderBuilder{T}.cs" />
+    <Compile Include="Impl\Application\DefaultApplicationAccountStoreMapping.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Core.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Create.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Delete.cs" />
@@ -156,7 +157,6 @@
     <Compile Include="IdSite\INonceStore.cs" />
     <Compile Include="IdSite\ISynchronousNonceStore.cs" />
     <Compile Include="Impl\AccountStore\DefaultAccountStore.cs" />
-    <Compile Include="Impl\AccountStore\DefaultAccountStoreMapping.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreMappingSync.cs" />
     <Compile Include="Impl\Account\AccountCreationActionsShared.cs" />
     <Compile Include="Impl\Account\DefaultAccount.Collections.cs" />
@@ -415,7 +415,6 @@
     <Compile Include="Linq\Expandables\IAuthenticationResultExpandables.cs" />
     <Compile Include="Linq\Expandables\IDirectoryExpandables.cs" />
     <Compile Include="Linq\Expandables\IExpandableAccounts.cs" />
-    <Compile Include="Linq\Expandables\IExpandableAccountStoreMappings.cs" />
     <Compile Include="Linq\Expandables\IExpandableApplications.cs" />
     <Compile Include="Linq\Expandables\IExpandableDefaultStores.cs" />
     <Compile Include="Linq\Expandables\IExpandableDirectory.cs" />

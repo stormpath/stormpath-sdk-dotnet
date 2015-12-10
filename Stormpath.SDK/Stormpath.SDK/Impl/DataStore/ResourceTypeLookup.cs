@@ -76,9 +76,11 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(INonce)] = typeof(DefaultNonce),
 
             // TODO these will be greatly simplified on a breaking version change
-            [typeof(IAccountStoreMapping)] = typeof(DefaultAccountStoreMapping),
-            [typeof(IAccountStoreMapping<IApplicationAccountStoreMapping>)] = typeof(DefaultAccountStoreMapping),
-            [typeof(IApplicationAccountStoreMapping)] = typeof(DefaultAccountStoreMapping),
+            [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
+            [typeof(IAccountStoreMapping<IApplicationAccountStoreMapping>)] = typeof(DefaultApplicationAccountStoreMapping),
+            [typeof(IApplicationAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
+            [typeof(IOrganizationAccountStoreMapping)] = typeof(DefaultOrganizationAccountStoreMapping),
+            [typeof(IAccountStoreMapping<IOrganizationAccountStoreMapping>)] = typeof(DefaultOrganizationAccountStoreMapping),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> InterfaceLookup = new Dictionary<Type, Type>()
@@ -112,7 +114,8 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultAccountResult)] = typeof(IAccountResult),
 
             // TODO these will be greatly simplified on a breaking version change
-            [typeof(DefaultAccountStoreMapping)] = typeof(IAccountStoreMapping),
+            [typeof(DefaultApplicationAccountStoreMapping)] = typeof(IApplicationAccountStoreMapping),
+            [typeof(DefaultOrganizationAccountStoreMapping)] = typeof(IOrganizationAccountStoreMapping),
         };
 
         private static readonly IReadOnlyDictionary<string, Type> InterfaceLookupByAttributeName = new Dictionary<string, Type>()
@@ -150,6 +153,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
             //[typeof(CollectionResponsePage<IAccountStoreMapping>)] = typeof(IAccountStoreMapping),
             [typeof(CollectionResponsePage<IApplicationAccountStoreMapping>)] = typeof(IApplicationAccountStoreMapping),
+            [typeof(CollectionResponsePage<IAccountStoreMapping>)] = typeof(IApplicationAccountStoreMapping),
+            [typeof(CollectionResponsePage<IOrganizationAccountStoreMapping>)] = typeof(IOrganizationAccountStoreMapping),
         };
 
         private static Type GetConcreteTypeForInterface(Type iface)

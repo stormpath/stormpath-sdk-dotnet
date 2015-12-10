@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultAccountStoreMapping.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultApplicationAccountStoreMapping.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +19,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 
-namespace Stormpath.SDK.Impl.AccountStore
+namespace Stormpath.SDK.Impl.Application
 {
-    internal sealed class DefaultAccountStoreMapping :
+    internal sealed class DefaultApplicationAccountStoreMapping :
         AbstractAccountStoreMapping<IApplicationAccountStoreMapping>,
         IAccountStoreMapping,
         IAccountStoreMappingSync,
@@ -31,7 +32,7 @@ namespace Stormpath.SDK.Impl.AccountStore
     {
         private static readonly string ApplicationPropertyName = "application";
 
-        public DefaultAccountStoreMapping(ResourceData data)
+        public DefaultApplicationAccountStoreMapping(ResourceData data)
             : base(data)
         {
         }

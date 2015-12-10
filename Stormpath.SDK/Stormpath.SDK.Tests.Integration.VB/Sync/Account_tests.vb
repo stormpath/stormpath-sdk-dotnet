@@ -459,7 +459,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim result = application.AuthenticateAccount(Sub(request)
                                                              request.SetUsernameOrEmail($"sonofthesuns-{fixture.TestRunIdentifier}")
                                                              request.SetPassword("whataPieceofjunk$1138")
-                                                             request.SetAccountStore(Me.fixture.PrimaryDirectoryHref)
+                                                             request.SetAccountStore(Me.fixture.PrimaryOrganizationHref)
                                                          End Sub)
             result.ShouldBeAssignableTo(Of IAuthenticationResult)()
             result.Success.ShouldBeTrue()

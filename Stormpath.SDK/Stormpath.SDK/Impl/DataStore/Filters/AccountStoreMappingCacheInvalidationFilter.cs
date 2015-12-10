@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,26 +40,37 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             if (!IsCreateOrUpdate(request))
             {
-                return result;
+                return result; // short-circuit
             }
 
             if (!IsAccountStoreMapping(result))
             {
-                return result;
+                return result; // short-circuit
             }
 
-            var applicationHref = GetApplicationHref(result);
-            if (string.IsNullOrEmpty(applicationHref))
+            var applicationHref = GetContainerHref("application", result);
+            if (!string.IsNullOrEmpty(applicationHref))
             {
-                return result;
+                var application = chain.DataStore.GetResourceSkipCache<IApplication>(applicationHref);
+                var allMappings = application.GetAccountStoreMappings().Synchronously().ToList();
+
+                logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for Application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.Filter");
+
+                return result; // done
             }
 
-            var application = chain.DataStore.GetResourceSkipCache<IApplication>(applicationHref);
-            var allMappings = application.GetAccountStoreMappings().Synchronously().ToList();
+            var organizationHref = GetContainerHref("organization", result);
+            if (!string.IsNullOrEmpty(organizationHref))
+            {
+                var organization = chain.DataStore.GetResourceSkipCache<IOrganization>(organizationHref);
+                var allMappings = organization.GetAccountStoreMappings().Synchronously().ToList();
 
-            logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.Filter");
+                logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for Organization '{organizationHref}'", "AccountStoreMappingCacheInvalidationFilter.Filter");
 
-            return result;
+                return result; // done
+            }
+
+            throw new NotSupportedException($"Unsupported AccountStore container type: {request.Type.Name}");
         }
 
         async Task<IResourceDataResult> IAsynchronousFilter.FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
@@ -67,26 +79,37 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             if (!IsCreateOrUpdate(request))
             {
-                return result;
+                return result; // short-circuit
             }
 
             if (!IsAccountStoreMapping(result))
             {
-                return result;
+                return result; // short-circuit
             }
 
-            var applicationHref = GetApplicationHref(result);
-            if (string.IsNullOrEmpty(applicationHref))
+            var applicationHref = GetContainerHref("application", result);
+            if (!string.IsNullOrEmpty(applicationHref))
             {
-                return result;
+                var application = await chain.DataStore.GetResourceSkipCacheAsync<IApplication>(applicationHref, cancellationToken).ConfigureAwait(false);
+                var allMappings = await application.GetAccountStoreMappings().ToListAsync(cancellationToken).ConfigureAwait(false);
+
+                logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for Application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.FilterAsync");
+
+                return result; // done
             }
 
-            var application = await chain.DataStore.GetResourceSkipCacheAsync<IApplication>(applicationHref, cancellationToken).ConfigureAwait(false);
-            var allMappings = await application.GetAccountStoreMappings().ToListAsync(cancellationToken).ConfigureAwait(false);
+            var organizationHref = GetContainerHref("organization", result);
+            if (!string.IsNullOrEmpty(organizationHref))
+            {
+                var organization = await chain.DataStore.GetResourceSkipCacheAsync<IOrganization>(organizationHref, cancellationToken).ConfigureAwait(false);
+                var allMappings = await organization.GetAccountStoreMappings().ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.FilterAsync");
+                logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for Organization '{organizationHref}'", "AccountStoreMappingCacheInvalidationFilter.FilterAsync");
 
-            return result;
+                return result; // done
+            }
+
+            throw new NotSupportedException($"Unsupported AccountStore container type: {request.Type.Name}");
         }
 
         private static bool IsCreateOrUpdate(IResourceDataRequest request)
@@ -101,16 +124,16 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 || typeof(IAccountStoreMapping<IOrganizationAccountStoreMapping>).IsAssignableFrom(type);
         }
 
-        private static string GetApplicationHref(IResourceDataResult result)
+        private static string GetContainerHref(string key, IResourceDataResult result)
         {
-            object application;
+            object container;
 
-            if (!result.Body.TryGetValue("application", out application))
+            if (!result.Body.TryGetValue(key, out container))
             {
                 return null;
             }
 
-            return (application as IEmbeddedProperty)?.Href;
+            return (container as IEmbeddedProperty)?.Href;
         }
     }
 }

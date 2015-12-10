@@ -224,5 +224,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .Expand(x => x.GetGroup())
                 .FirstOrDefaultAsync();
         }
+
+        //expand organization stuff
     }
 }

@@ -265,7 +265,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdOrganization.CreateAccountStoreMappingAsync(mapping);
 
             (await mapping.GetAccountStoreAsync()).Href.ShouldBe(directory.Href);
-            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdOrganization.Href);
+            (await mapping.GetOrganizationAsync()).Href.ShouldBe(createdOrganization.Href);
 
             mapping.IsDefaultAccountStore.ShouldBeFalse();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
@@ -326,7 +326,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var mapping = await createdOrganization.AddAccountStoreAsync(directory);
 
             (await mapping.GetAccountStoreAsync()).Href.ShouldBe(directory.Href);
-            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdOrganization.Href);
+            (await mapping.GetOrganizationAsync()).Href.ShouldBe(createdOrganization.Href);
 
             mapping.IsDefaultAccountStore.ShouldBeFalse();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
@@ -356,7 +356,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var mapping = await createdOrganization.AddAccountStoreAsync(group);
 
             (await mapping.GetAccountStoreAsync()).Href.ShouldBe(group.Href);
-            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdOrganization.Href);
+            (await mapping.GetOrganizationAsync()).Href.ShouldBe(createdOrganization.Href);
 
             mapping.IsDefaultAccountStore.ShouldBeFalse();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
@@ -578,7 +578,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var mapping = await createdOrganization.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             (await mapping.GetAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
-            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdOrganization.Href);
+            (await mapping.GetOrganizationAsync()).Href.ShouldBe(createdOrganization.Href);
 
             mapping.IsDefaultAccountStore.ShouldBeFalse();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
@@ -607,7 +607,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var mapping = await createdOrganization.AddAccountStoreAsync(this.fixture.PrimaryGroupHref);
 
             (await mapping.GetAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryGroupHref);
-            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdOrganization.Href);
+            (await mapping.GetOrganizationAsync()).Href.ShouldBe(createdOrganization.Href);
 
             mapping.IsDefaultAccountStore.ShouldBeFalse();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
@@ -644,7 +644,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var mapping = await createdOrganization.AddAccountStoreAsync(directoryName);
 
             (await mapping.GetAccountStoreAsync()).Href.ShouldBe(testDirectory.Href);
-            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdOrganization.Href);
+            (await mapping.GetOrganizationAsync()).Href.ShouldBe(createdOrganization.Href);
 
             mapping.IsDefaultAccountStore.ShouldBeFalse();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
@@ -689,7 +689,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var newMapping = await createdOrganization.AddAccountStoreAsync(groupName);
 
             (await newMapping.GetAccountStoreAsync()).Href.ShouldBe(testGroup.Href);
-            (await newMapping.GetApplicationAsync()).Href.ShouldBe(createdOrganization.Href);
+            (await newMapping.GetOrganizationAsync()).Href.ShouldBe(createdOrganization.Href);
 
             newMapping.IsDefaultAccountStore.ShouldBeFalse();
             newMapping.IsDefaultGroupStore.ShouldBeFalse();
@@ -723,7 +723,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .AddAccountStoreAsync<IDirectory>(dirs => dirs.Where(d => d.Name.EndsWith(directoryName.Substring(1))));
 
             (await mapping.GetAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
-            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdOrganization.Href);
+            (await mapping.GetOrganizationAsync()).Href.ShouldBe(createdOrganization.Href);
 
             mapping.IsDefaultAccountStore.ShouldBeFalse();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
@@ -754,7 +754,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .AddAccountStoreAsync<IGroup>(groups => groups.Where(g => g.Name.EndsWith(groupName.Substring(1))));
 
             (await mapping.GetAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryGroupHref);
-            (await mapping.GetApplicationAsync()).Href.ShouldBe(createdOrganization.Href);
+            (await mapping.GetOrganizationAsync()).Href.ShouldBe(createdOrganization.Href);
 
             mapping.IsDefaultAccountStore.ShouldBeFalse();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
@@ -786,11 +786,11 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedDirectoryHrefs.Add(dir1.Href);
             this.fixture.CreatedDirectoryHrefs.Add(dir2.Href);
 
-            Should.Throw<ResourceException>(async () =>
+            Should.Throw<ArgumentException>(async () =>
             {
                 // Throws because multiple matching results exist
                 var mapping = await createdOrganization
-                    .AddAccountStoreAsync<IDirectory>(dirs => dirs.Where(d => d.Name == $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Organization Multiple Directory Query Results"));
+                    .AddAccountStoreAsync<IDirectory>(dirs => dirs.Where(d => d.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Organization Multiple Directory Query Results")));
             });
 
             // Clean up
@@ -814,10 +814,14 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var createdOrganization = client.Instantiate<IOrganization>()
                 .SetName($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Adding AccountStore Group By Query Throws Test Organization")
                 .SetNameKey($"dotnet-test22-{this.fixture.TestRunIdentifier}-{clientBuilder.Name}");
-            await tenant.CreateOrganizationAsync(createdOrganization, opt => opt.CreateDirectory = false);
+            await tenant.CreateOrganizationAsync(createdOrganization, opt => opt.CreateDirectory = true);
 
             createdOrganization.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedOrganizationHrefs.Add(createdOrganization.Href);
+
+            var defaultGroupStore = await createdOrganization.GetDefaultGroupStoreAsync() as IDirectory;
+            defaultGroupStore.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(defaultGroupStore.Href);
 
             var group1 = await createdOrganization.CreateGroupAsync($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Organization Multiple Group Query Results1", string.Empty);
             var group2 = await createdOrganization.CreateGroupAsync($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Organization Multiple Group Query Results2", string.Empty);
@@ -825,11 +829,11 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedGroupHrefs.Add(group1.Href);
             this.fixture.CreatedGroupHrefs.Add(group2.Href);
 
-            Should.Throw<ResourceException>(async () =>
+            Should.Throw<ArgumentException>(async () =>
             {
                 // Throws because multiple matching results exist
                 var mapping = await createdOrganization
-                    .AddAccountStoreAsync<IGroup>(groups => groups.Where(x => x.Name == $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Organization Multiple Group Query Results"));
+                    .AddAccountStoreAsync<IGroup>(groups => groups.Where(x => x.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Organization Multiple Group Query Results")));
             });
 
             // Clean up
@@ -838,6 +842,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             (await group2.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedGroupHrefs.Remove(group2.Href);
+
+            (await defaultGroupStore.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(defaultGroupStore.Href);
 
             (await createdOrganization.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedOrganizationHrefs.Remove(createdOrganization.Href);

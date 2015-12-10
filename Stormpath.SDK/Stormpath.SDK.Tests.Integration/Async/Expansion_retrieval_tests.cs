@@ -172,5 +172,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             await client.GetResourceAsync<IGroupMembership>(membership.Href, o => o.Expand(x => x.GetGroup()));
         }
+
+        //expand organization stuff
     }
 }

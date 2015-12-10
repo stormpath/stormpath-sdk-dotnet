@@ -150,7 +150,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         // TODO These methods will be moved out of this class when we do a breaking version change
         public abstract T SetApplication(IApplication application);
 
-        public abstract Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken = default(CancellationToken));
+        public abstract Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken);
 
         public abstract IApplication GetApplication();
     }

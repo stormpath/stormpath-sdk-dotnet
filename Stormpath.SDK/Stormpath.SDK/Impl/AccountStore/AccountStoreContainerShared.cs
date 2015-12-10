@@ -38,8 +38,6 @@ namespace Stormpath.SDK.Impl.AccountStore
     /// </summary>
     internal static class AccountStoreContainerShared
     {
-        private static readonly string AccountStoreMappingResourceBaseHref = "/accountStoreMappings";
-
         public static readonly string DefaultAccountStoreMappingPropertyName = "defaultAccountStoreMapping";
         public static readonly string DefaultGroupStoreMappingPropertyName = "defaultGroupStoreMapping";
 
@@ -99,30 +97,30 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="isAccountStore">Determines whether this store should be the default Account (<see langword="true"/>) or Group (<see langword="false"/>) Store.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task SetDefaultStoreAsync<T, TStore>(
+        public static async Task SetDefaultStoreAsync<T, TMapping>(
             ISaveable<T> parent,
             IAccountStore store,
             bool isAccountStore,
             CancellationToken cancellationToken)
-            where T : IResource, IAccountStoreContainer<TStore>
-            where TStore : IAccountStoreMapping<TStore>
+            where T : IResource, IAccountStoreContainer<TMapping>
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             if (string.IsNullOrEmpty(store?.Href))
             {
                 throw new ArgumentNullException(nameof(store.Href));
             }
 
-            var container = parent as IAccountStoreContainer<TStore>;
+            var container = parent as IAccountStoreContainer<TMapping>;
             if (parent == null)
             {
                 throw new ApplicationException("SetDefaultStore must be used with a supported AccountStoreContainer.");
             }
 
-            IAccountStoreMapping<TStore> newOrExistingMapping = null;
+            IAccountStoreMapping<TMapping> newOrExistingMapping = null;
             await container.GetAccountStoreMappings().ForEachAsync(
                 mapping =>
                 {
-                    bool isPassedAccountStore = (mapping as DefaultAccountStoreMapping)?.AccountStore?.Href.Equals(store.Href) ?? false;
+                    bool isPassedAccountStore = (mapping as AbstractAccountStoreMapping<TMapping>)?.AccountStore?.Href.Equals(store.Href) ?? false;
                     if (isPassedAccountStore)
                     {
                         newOrExistingMapping = mapping;
@@ -177,7 +175,7 @@ namespace Stormpath.SDK.Impl.AccountStore
             TMapping newOrExistingMapping = null;
             foreach (var mapping in container.GetAccountStoreMappings().Synchronously())
             {
-                bool isPassedAccountStore = (mapping as DefaultAccountStoreMapping)?.AccountStore?.Href.Equals(store.Href) ?? false;
+                bool isPassedAccountStore = (mapping as AbstractAccountStoreMapping<TMapping>)?.AccountStore?.Href.Equals(store.Href) ?? false;
                 if (isPassedAccountStore)
                 {
                     newOrExistingMapping = mapping;
@@ -226,12 +224,9 @@ namespace Stormpath.SDK.Impl.AccountStore
             where TMapping : class, IAccountStoreMapping<TMapping>
         {
             SetContainer(mapping, container);
-            var newMapping = (TMapping)(await internalDataStore.CreateAsync(AccountStoreMappingResourceBaseHref, mapping, cancellationToken).ConfigureAwait(false));
+            var href = ResolveEndpointHref(container);
 
-            // Refresh any cached applications
-            //todo
-
-            return newMapping;
+            return (TMapping)(await internalDataStore.CreateAsync(href, mapping, cancellationToken).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -248,7 +243,9 @@ namespace Stormpath.SDK.Impl.AccountStore
             where TMapping : class, IAccountStoreMapping<TMapping>
         {
             SetContainer(mapping, container);
-            return (TMapping)internalDataStore.Create(AccountStoreMappingResourceBaseHref, mapping);
+            var href = ResolveEndpointHref(container);
+
+            return (TMapping)internalDataStore.Create(href, mapping);
         }
 
         /// <summary>
@@ -712,6 +709,22 @@ namespace Stormpath.SDK.Impl.AccountStore
             }
 
             throw new NotImplementedException("Unknown container type!");
+        }
+
+        private static string ResolveEndpointHref<TMapping>(IAccountStoreContainer<TMapping> container)
+            where TMapping : IAccountStoreMapping<TMapping>
+        {
+            if (container is IApplication)
+            {
+                return "/accountStoreMappings";
+            }
+
+            if (container is IOrganization)
+            {
+                return "/organizationAccountStoreMappings";
+            }
+
+            throw new NotSupportedException($"This Account Store container type is not supported: {container.GetType().Name}");
         }
     }
 }

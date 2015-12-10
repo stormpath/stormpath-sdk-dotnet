@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Impl.Organization
             throw new NotSupportedException("Use IApplicationAccountStoreMapping.GetApplication instead.");
         }
 
-        public override Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken)
         {
             throw new NotSupportedException("Use IApplicationAccountStoreMapping.GetApplicationAsync instead.");
         }
