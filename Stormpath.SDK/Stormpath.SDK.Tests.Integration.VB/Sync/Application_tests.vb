@@ -246,6 +246,22 @@ Namespace Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Reset_password_for_account_in_organization_by_nameKey(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim application = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+            Dim accountStore = application.GetDefaultAccountStore()
+
+            Dim token = application.SendPasswordResetEmail("vader@galacticempire.co", fixture.PrimaryOrganizationNameKey)
+
+            Dim validTokenResponse = application.VerifyPasswordResetToken(token.GetValue())
+            validTokenResponse.Email.ShouldBe("vader@galacticempire.co")
+
+            Dim resetPasswordResponse = application.ResetPassword(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1")
+            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co")
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Creating_account_store_mapping(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()

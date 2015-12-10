@@ -1,4 +1,4 @@
-﻿// <copyright file="IOrganizationNameKey.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IHasOrganizationNameKey.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ namespace Stormpath.SDK.Impl.Auth
     /// <summary>
     /// Represents an Organization nameKey.
     /// </summary>
-    internal interface IOrganizationNameKey
+    internal interface IHasOrganizationNameKey
     {
         /// <summary>
         /// Gets the Organization nameKey value.

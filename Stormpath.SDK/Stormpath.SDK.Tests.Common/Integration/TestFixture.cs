@@ -95,6 +95,8 @@ namespace Stormpath.SDK.Tests.Common.Integration
 
         public string PrimaryOrganizationHref { get; private set; }
 
+        public string PrimaryOrganizationNameKey { get; private set; }
+
         public string PrimaryAccountHref { get; private set; }
 
         public string TestRunIdentifier { get; private set; }
@@ -163,6 +165,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 // Grab the one marked as primary
                 primaryOrganization = resultingOrgs.Where(x => x.Name.Contains("primary")).Single();
                 this.PrimaryOrganizationHref = primaryOrganization.Href;
+                this.PrimaryOrganizationNameKey = primaryOrganization.NameKey;
                 this.PrimaryDirectoryHref = (await primaryOrganization.GetDefaultAccountStoreAsync()).Href;
             }
             catch (Exception e)

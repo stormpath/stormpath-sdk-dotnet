@@ -560,6 +560,28 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Authenticating_account_in_specified_organization_by_nameKey(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+            var accountStore = await application.GetDefaultAccountStoreAsync();
+
+            var result = await application.AuthenticateAccountAsync(
+                request =>
+                {
+                    request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}");
+                    request.SetPassword("whataPieceofjunk$1138");
+                    request.SetAccountStore(this.fixture.PrimaryOrganizationNameKey);
+                });
+            result.ShouldBeAssignableTo<IAuthenticationResult>();
+            result.Success.ShouldBeTrue();
+
+            var account = await result.GetAccountAsync();
+            account.FullName.ShouldBe("Luke Skywalker");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Authenticating_account_in_specified_account_store_with_response_options(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

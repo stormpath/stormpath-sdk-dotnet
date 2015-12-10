@@ -243,6 +243,22 @@ Namespace Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Reset_password_for_account_in_organization_by_nameKey(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+            Dim accountStore = Await application.GetDefaultAccountStoreAsync()
+
+            Dim token = Await application.SendPasswordResetEmailAsync("vader@galacticempire.co", fixture.PrimaryOrganizationNameKey)
+
+            Dim validTokenResponse = Await application.VerifyPasswordResetTokenAsync(token.GetValue())
+            validTokenResponse.Email.ShouldBe("vader@galacticempire.co")
+
+            Dim resetPasswordResponse = Await application.ResetPasswordAsync(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1")
+            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co")
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Creating_account_store_mapping(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()

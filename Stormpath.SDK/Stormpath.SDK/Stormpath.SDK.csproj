@@ -114,7 +114,7 @@
     <Compile Include="Impl\IdSite\IAccountResultSync.cs" />
     <Compile Include="IdSite\IdSiteResultStatus.cs" />
     <Compile Include="Impl\Application\DefaultApplication.IdSite.cs" />
-    <Compile Include="Impl\Auth\IOrganizationNameKey.cs" />
+    <Compile Include="Impl\Auth\IHasOrganizationNameKey.cs" />
     <Compile Include="Impl\Auth\UsernamePasswordRequest.cs" />
     <Compile Include="Auth\UsernamePasswordRequestBuilder.cs" />
     <Compile Include="Cache\Caches.cs" />

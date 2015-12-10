@@ -273,6 +273,23 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Reset_password_for_account_in_organization_by_nameKey(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+            var accountStore = application.GetDefaultAccountStore();
+
+            var token = application.SendPasswordResetEmail("vader@galacticempire.co", this.fixture.PrimaryOrganizationNameKey);
+
+            var validTokenResponse = application.VerifyPasswordResetToken(token.GetValue());
+            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+
+            var resetPasswordResponse = application.ResetPassword(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
+            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Creating_account_store_mapping(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

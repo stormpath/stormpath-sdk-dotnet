@@ -78,7 +78,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 {
                     client.Instantiate<IOrganization>()
                         .SetName($".NET IT Test Organization (primary) {this.Nonce} - {timeString}")
-                        .SetNameKey($"dotnet-it-test-org1-{this.Nonce}")
+                        .SetNameKey($"dotnet-it-test-org-{this.Nonce}")
                         .SetDescription("Star Wars")
                 },
             };
