@@ -21,36 +21,45 @@ using System.Threading.Tasks;
 namespace Stormpath.SDK.Group
 {
     /// <summary>
-    /// Represents common Group creation actions.
+    /// Represents common <see cref="IGroup">Group</see> creation actions.
     /// </summary>
     public interface IGroupCreationActions
     {
         /// <summary>
-        /// Creates a new <see cref="IGroup"/>.
+        /// Creates a new <see cref="IGroup">Group</see> that may be used by the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>
-        /// <param name="group">The group to create.</param>
+        /// <param name="group">The Group to create.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The new <see cref="IGroup"/>.</returns>
+        /// <returns>The new <see cref="IGroup">Group</see>.</returns>
         Task<IGroup> CreateGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new <see cref="IGroup"/>.
+        /// Creates a new <see cref="IGroup">Group</see> that may be used by the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>
         /// <param name="group">The group to create.</param>
         /// <param name="creationOptionsAction">
         /// An inline builder for an instance of <see cref="IGroupCreationOptions"/>, which will be used when sending the request.
         /// </param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The new <see cref="IGroup"/>.</returns>
+        /// <returns>The new <see cref="IGroup">Group</see>.</returns>
         Task<IGroup> CreateGroupAsync(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new <see cref="IGroup"/>.
+        /// Creates a new <see cref="IGroup">Group</see> that may be used by the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>
-        /// <param name="group">The group to create.</param>
+        /// <param name="group">The Group to create.</param>
         /// <param name="creationOptions">An <see cref="IGroupCreationOptions"/> instance to use when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The new <see cref="IGroup"/>.</returns>
+        /// <returns>The new <see cref="IGroup">Group</see>.</returns>
         Task<IGroup> CreateGroupAsync(IGroup group, IGroupCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Creates a new enabled <see cref="IGroup">Group</see> that may be used by the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
+        /// </summary>
+        /// <param name="name">The new Group's name.</param>
+        /// <param name="description">The new Group's description text.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The new <see cref="IGroup">Group</see>.</returns>
+        Task<IGroup> CreateGroupAsync(string name, string description, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

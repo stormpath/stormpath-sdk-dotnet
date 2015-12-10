@@ -24,25 +24,26 @@ namespace Stormpath.SDK.Application
     public interface IApplicationCreationOptions : ICreationOptions
     {
         /// <summary>
-        /// Gets a value indicating whether to create a new <see cref="Directory.IDirectory"/> for the new application's needs.
+        /// Gets a value indicating whether to create a new <see cref="Directory.IDirectory">Directory</see> along with the new Application.
         /// </summary>
         /// <value>
         /// <para>
-        /// If <see langword="true"/>, a new directory will be created. The new directory will automatically be assigned as the application's default login source.
-        /// If the <see cref="DirectoryName"/> property is not null, the new directory will be created with that name.
-        /// Otherwise, the directory will be automatically named based on heuristics to ensure a guaranteed unique name based on the application.
+        /// If <see langword="true"/>, a new Directory will be created. The new Directory will automatically be assigned as the Application's
+        /// default Account and Group store.
+        /// If the <see cref="DirectoryName"/> property is not null, the new Directory will be created with that name.
+        /// Otherwise, the Directory will be automatically named based on heuristics to ensure a guaranteed unique name based on the Application.
         /// </para>
         /// <para>
-        /// If <see langword="false"/>, no directory will be created.
+        /// If <see langword="false"/>, no Directory will be created.
         /// </para>
         /// </value>
         bool CreateDirectory { get; }
 
         /// <summary>
-        /// Gets the name to use when creating a new <see cref="Directory.IDirectory"/>.
+        /// Gets the name to use when creating a new <see cref="Directory.IDirectory">Directory</see> for this Application.
         /// </summary>
         /// <value>
-        /// The name to assign to the new directory. This only has an effect if <see cref="CreateDirectory"/> is <see langword="true"/>.
+        /// The name to assign to the new Directory. This only has an effect if <see cref="CreateDirectory"/> is <see langword="true"/>.
         /// </value>
         string DirectoryName { get; }
     }

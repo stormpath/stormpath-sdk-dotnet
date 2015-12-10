@@ -23,7 +23,7 @@ Imports Stormpath.SDK.Provider
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Async
+Namespace Async
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Directory_tests
         Private ReadOnly fixture As TestFixture

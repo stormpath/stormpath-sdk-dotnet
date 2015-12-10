@@ -24,8 +24,5 @@ namespace Stormpath.SDK.Impl.Group
     {
         IDirectory IGroupSync.GetDirectory()
             => this.GetInternalSyncDataStore().GetResource<IDirectory>(this.Directory.Href);
-
-        ITenant IAccountStoreSync.GetTenant()
-            => this.GetTenant(this.Tenant.Href);
     }
 }

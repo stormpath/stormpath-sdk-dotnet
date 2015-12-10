@@ -27,8 +27,5 @@ namespace Stormpath.SDK.Impl.Group
     {
         Task<IDirectory> IGroup.GetDirectoryAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
-
-        Task<ITenant> IAccountStore.GetTenantAsync(CancellationToken cancellationToken)
-            => this.GetTenantAsync(this.Tenant.Href, cancellationToken);
     }
 }

@@ -15,7 +15,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 using Map = System.Collections.Generic.IDictionary<string, object>;
@@ -44,6 +43,16 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <returns>The resource.</returns>
         T GetResource<T>(string href, Func<Map, Type> typeLookup)
             where T : class, IResource;
+
+        /// <summary>
+        /// Directly retrieves the resource at the specified <paramref name="href"/> URL and returns the resource
+        /// as an instance of the specified class <typeparamref name="T"/>. The cache is not consulted for reads;
+        /// but any returned value <b>is</b> cached.
+        /// </summary>
+        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <param name="href">The resource URL of the resource to retrieve.</param>
+        /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
+        T GetResourceSkipCache<T>(string href);
 
         /// <summary>
         /// Creates a new resource on the server.

@@ -19,6 +19,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
@@ -116,6 +117,50 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         public static IDirectory CreateDirectory(this ITenantActions tenantActions, string name, string description, DirectoryStatus status)
             => (tenantActions as ITenantActionsSync).CreateDirectory(name, description, status);
+
+        /// <summary>
+        /// Synchronously creates a new <see cref="IOrganization">Organization</see> resource in the Tenant.
+        /// </summary>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="organization">The Organization to create.</param>
+        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the Organization.</exception>
+        public static IOrganization CreateOrganization(this ITenantActions tenantActions, IOrganization organization)
+            => (tenantActions as ITenantActionsSync).CreateOrganization(organization);
+
+        /// <summary>
+        /// Synchronously creates a new <see cref="IOrganization">Organization</see> resource in the Tenant.
+        /// </summary>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="organization">The Organization to create.</param>
+        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
+        /// which will be used when sending the request.</param>
+        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the Organization.</exception>
+        public static IOrganization CreateOrganization(this ITenantActions tenantActions, IOrganization organization, Action<OrganizationCreationOptionsBuilder> creationOptionsAction)
+            => (tenantActions as ITenantActionsSync).CreateOrganization(organization, creationOptionsAction);
+
+        /// <summary>
+        /// Synchronously creates a new <see cref="IOrganization">Organization</see> resource in the Tenant.
+        /// </summary>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="organization">The Organization to create.</param>
+        /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
+        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the Organization.</exception>
+        public static IOrganization CreateOrganization(this ITenantActions tenantActions, IOrganization organization, IOrganizationCreationOptions creationOptions)
+            => (tenantActions as ITenantActionsSync).CreateOrganization(organization, creationOptions);
+
+        /// <summary>
+        /// Synchronously creates a new <see cref="IOrganization">Organization</see> resource in the Tenant.
+        /// </summary>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="name">The Organization's name.</param>
+        /// <param name="description">The Organization's description text.</param>
+        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="Error.ResourceException">There was a problem creating the Organization.</exception>
+        public static IOrganization CreateOrganization(this ITenantActions tenantActions, string name, string description)
+            => (tenantActions as ITenantActionsSync).CreateOrganization(name, description);
 
         /// <summary>
         /// Synchronously verifies an account's email address based on a <c>sptoken</c> parameter embedded in a URL

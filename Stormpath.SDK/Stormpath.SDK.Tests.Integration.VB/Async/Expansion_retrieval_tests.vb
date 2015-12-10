@@ -21,11 +21,12 @@ Imports Stormpath.SDK.Account
 Imports Stormpath.SDK.AccountStore
 Imports Stormpath.SDK.Application
 Imports Stormpath.SDK.Group
+Imports Stormpath.SDK.Organization
 Imports Stormpath.SDK.Tenant
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Async
+Namespace Async
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Expansion_retrieval_tests
         Private ReadOnly fixture As TestFixture
@@ -87,13 +88,36 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Async Function Expanding_application(clientBuilder As TestClientProvider) As Task
+        <Obsolete("Remove this test after 1.0 breaking change.")>
+        Public Async Function Expanding_application_from_generic_mapping(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim app = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
             Dim mapping = Await app.GetAccountStoreMappings().FirstAsync()
 
             Await client.GetResourceAsync(Of IAccountStoreMapping)(mapping.Href, Function(o) o.Expand(Function(x) x.GetApplication()))
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Expanding_application(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim app = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+
+            Dim mapping = Await app.GetAccountStoreMappings().FirstAsync()
+
+            Await client.GetResourceAsync(Of IApplicationAccountStoreMapping)(mapping.Href, Function(o) o.Expand(Function(x) x.GetApplication()))
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Expanding_organization(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim app = Await client.GetResourceAsync(Of IOrganization)(Me.fixture.PrimaryOrganizationHref)
+
+            Dim mapping = Await app.GetAccountStoreMappings().FirstAsync()
+
+            Await client.GetResourceAsync(Of IOrganizationAccountStoreMapping)(mapping.Href, Function(o) o.Expand(Function(x) x.GetOrganization()))
         End Function
 
         <Theory>
@@ -110,6 +134,14 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim client = clientBuilder.GetClient()
 
             Dim app = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref, Function(o) o.Expand(Function(x) x.GetAccountStoreMappings(0, 10)))
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Expanding_organization_account_store_mappings(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+
+            Dim app = Await client.GetResourceAsync(Of IOrganization)(Me.fixture.PrimaryOrganizationHref, Function(o) o.Expand(Function(x) x.GetAccountStoreMappings(0, 10)))
         End Function
 
         <Theory>

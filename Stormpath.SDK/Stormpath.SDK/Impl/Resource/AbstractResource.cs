@@ -26,6 +26,7 @@ namespace Stormpath.SDK.Impl.Resource
     internal abstract class AbstractResource : IResource, ILinkable
     {
         public static readonly string HrefPropertyName = "href";
+        public static readonly string TenantPropertyName = "tenant";
 
         private ResourceData resourceData;
 
@@ -71,11 +72,11 @@ namespace Stormpath.SDK.Impl.Resource
         protected IInternalSyncDataStore GetInternalSyncDataStore()
             => this.GetResourceData()?.InternalSyncDataStore;
 
-        protected Task<ITenant> GetTenantAsync(string tenantHref, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(tenantHref, cancellationToken);
+        public Task<ITenant> GetTenantAsync(CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(this.GetProperty<IEmbeddedProperty>(TenantPropertyName).Href, cancellationToken);
 
-        protected ITenant GetTenant(string tenantHref)
-            => this.GetInternalSyncDataStore().GetResource<ITenant>(tenantHref);
+        public ITenant GetTenant()
+            => this.GetInternalSyncDataStore().GetResource<ITenant>(this.GetProperty<IEmbeddedProperty>(TenantPropertyName).Href);
 
         internal bool IsDirty => this.GetResourceData()?.IsDirty ?? true;
 

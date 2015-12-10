@@ -41,7 +41,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         public override IResourceDataResult Filter(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
         {
-            bool cacheEnabled = this.cacheResolver.IsAsynchronousSupported && this.IsCacheRetrievalEnabled(request);
+            bool cacheEnabled =
+                this.cacheResolver.IsAsynchronousSupported
+                && this.IsCacheRetrievalEnabled(request)
+                && !request.SkipCache;
             if (cacheEnabled)
             {
                 logger.Trace($"Checking cache for resource {request.Uri}", "ReadCacheFilter.Filter");
@@ -61,7 +64,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         public override async Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
         {
-            bool cacheEnabled = this.cacheResolver.IsAsynchronousSupported && this.IsCacheRetrievalEnabled(request);
+            bool cacheEnabled =
+                this.cacheResolver.IsAsynchronousSupported
+                && this.IsCacheRetrievalEnabled(request)
+                && !request.SkipCache;
             if (cacheEnabled)
             {
                 logger.Trace($"Checking cache for resource {request.Uri}", "ReadCacheFilter.FilterAsync");

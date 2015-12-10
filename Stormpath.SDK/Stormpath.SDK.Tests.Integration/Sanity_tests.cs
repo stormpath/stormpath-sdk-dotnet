@@ -75,10 +75,6 @@ namespace Stormpath.SDK.Tests.Integration
         [Fact]
         public void All_Impl_async_methods_have_required_CancellationToken_parameters()
         {
-            // Whitelist some methods that legitimately have optional CancellationToken parameters
-            // Nothing here yet!
-            var whitelistedMethods = Enumerable.Empty<string>();
-
             var methodsInAssembly = Assembly
                 .GetAssembly(typeof(Client.IClient))
                 .GetTypes()
@@ -94,8 +90,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .Where(method => method.DeclaringType.Namespace.StartsWith("Stormpath.SDK.Impl"));
 
             var violatingMethods = asyncMethodsWithOptionalCT
-                .Select(m => PrettyPrintMethod($"{m.DeclaringType.Name}.{m.Name}", m.GetParameters()))
-                .Except(whitelistedMethods);
+                .Select(m => PrettyPrintMethod($"{m.DeclaringType.Name}.{m.Name}", m.GetParameters()));
 
             // No optional/default values here!
             violatingMethods
@@ -159,13 +154,12 @@ namespace Stormpath.SDK.Tests.Integration
                 "IIdSiteAsyncCallbackHandler.GetAccountResult()",
                 "IIdSiteAsyncResultListener.OnRegistered(IAccountResult)",
                 "IIdSiteAsyncResultListener.OnAuthenticated(IAccountResult)",
-                "IIdSiteAsyncResultListener.OnLogout(IAccountResult)"
+                "IIdSiteAsyncResultListener.OnLogout(IAccountResult)",
             };
             var whitelistedSyncMethods = new List<string>()
             {
                 "IQueryable`1.Filter(String)",
                 "IQueryable`1.Expand(Expression`1)",
-                "IQueryable`1.Expand(Expression`1, Nullable`1, Nullable`1)",
                 "IAsyncQueryable`1.Synchronously()",
                 "IApplication.NewIdSiteSyncCallbackHandler(IHttpRequest)"
             };
@@ -228,7 +222,7 @@ namespace Stormpath.SDK.Tests.Integration
 
             asyncButNotSync.Count.ShouldBe(
                 0,
-                $"These async method do not have a corresponding sync method:{NL}{string.Join(NL, asyncButNotSync)}");
+                $"These async methods do not have a corresponding sync method:{NL}{string.Join(NL, asyncButNotSync)}");
 
             syncButNotAsync.Count.ShouldBe(
                 0,
@@ -269,6 +263,42 @@ namespace Stormpath.SDK.Tests.Integration
                 $"These sync tests do not have a corresponding async test:{NL}{string.Join(", ", syncButNotAsync)}");
         }
 
+        [Theory]
+        [InlineData("Async")]
+        [InlineData("Sync")]
+        public void Equal_numbers_of_Csharp_and_Vb_tests(string @namespace)
+        {
+            var csharpTests = this.GetType().Assembly
+                .GetTypes()
+                .Where(x => x.Namespace == $"Stormpath.SDK.Tests.Integration.{@namespace}")
+                .SelectMany(x => x.GetMethods())
+                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
+                .Select(x => GetQualifiedMethodName(x));
+
+            var vbTests = typeof(VB.IntegrationTestCollection).Assembly
+                .GetTypes()
+                .Where(x => x.Namespace == $"Stormpath.SDK.Tests.Integration.VB.{@namespace}")
+                .SelectMany(x => x.GetMethods())
+                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
+                .Select(x => GetQualifiedMethodName(x));
+
+            var csharpButNotVb = csharpTests
+                .Except(vbTests)
+                .ToList();
+
+            var vbButNotCsharp = vbTests
+                .Except(csharpTests)
+                .ToList();
+
+            csharpButNotVb.Count.ShouldBe(
+                0,
+                $"These {@namespace} C# tests do not have a corresponding VB test:{NL}{string.Join(", ", csharpButNotVb)}");
+
+            vbButNotCsharp.Count.ShouldBe(
+                0,
+                $"These {@namespace} VB tests do not have a corresponding C# test:{NL}{string.Join(", ", vbButNotCsharp)}");
+        }
+
         [Fact]
         public void Expand_extension_methods_are_consistent_across_namespaces()
         {
@@ -295,7 +325,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .Select(getMethodInfoFunc)
                 .ToList();
 
-            var retrievalExpandMembers = typeof(RetrievalOptionExpandExtensions)
+            var retrievalExpandMembers = typeof(RetrievalOptionsExpandExtensions)
                 .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
                 .Where(m => m.IsDefined(typeof(ExtensionAttribute), false))
                 .Select(getMethodInfoFunc)

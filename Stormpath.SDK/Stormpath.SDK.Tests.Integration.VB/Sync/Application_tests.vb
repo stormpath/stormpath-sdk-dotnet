@@ -26,7 +26,7 @@ Imports Stormpath.SDK.Sync
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Sync
+Namespace Sync
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Application_tests
         Private ReadOnly fixture As TestFixture
@@ -90,8 +90,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
             Dim defaultAccountStore = app.GetDefaultAccountStore()
-            Dim asDirectory = TryCast(defaultAccountStore, IDirectory)
-            asDirectory.ShouldNotBeNull()
+            defaultAccountStore.ShouldNotBeNull()
         End Sub
 
         <Theory>
@@ -101,8 +100,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
 
             Dim defaultGroupStore = app.GetDefaultGroupStore()
-            Dim asDirectory = TryCast(defaultGroupStore, IDirectory)
-            asDirectory.ShouldNotBeNull()
+            defaultGroupStore.ShouldNotBeNull()
         End Sub
 
         <Theory>
@@ -248,6 +246,22 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Reset_password_for_account_in_organization_by_nameKey(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim application = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+            Dim accountStore = application.GetDefaultAccountStore()
+
+            Dim token = application.SendPasswordResetEmail("vader@galacticempire.co", fixture.PrimaryOrganizationNameKey)
+
+            Dim validTokenResponse = application.VerifyPasswordResetToken(token.GetValue())
+            validTokenResponse.Email.ShouldBe("vader@galacticempire.co")
+
+            Dim resetPasswordResponse = application.ResetPassword(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1")
+            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co")
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Creating_account_store_mapping(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
@@ -303,7 +317,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Sub Adding_directory_as_account_store_to_application(clientBuilder As TestClientProvider)
+        Public Sub Adding_directory_as_account_store(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
@@ -328,7 +342,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Sub Adding_group_as_account_store_to_application(clientBuilder As TestClientProvider)
+        Public Sub Adding_group_as_account_store(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
@@ -353,6 +367,39 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Saving_new_mapping_as_default(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier} Creating New AccountStore As Default Test Application - Sync", createDirectory:=False)
+            createdApplication.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
+
+            Dim directory = client.GetResource(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
+            Dim mapping = client.Instantiate(Of IAccountStoreMapping)() _
+                .SetAccountStore(directory) _
+                .SetApplication(createdApplication) _
+                .SetDefaultAccountStore(True) _
+                .SetDefaultGroupStore(True)
+
+            createdApplication.CreateAccountStoreMapping(mapping)
+
+            ' Default links should be updated without having to re-retrieve the Application resource
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+            createdApplication.GetDefaultGroupStore().Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+
+            ' Retrieving it again should have the same result
+            Dim updated = client.GetResource(Of IApplication)(createdApplication.Href)
+            updated.GetDefaultAccountStore().Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+            updated.GetDefaultGroupStore().Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+
+            ' Clean up
+            createdApplication.Delete().ShouldBeTrue()
+            Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Setting_mapped_directory_to_default_account_store(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
@@ -366,6 +413,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
             createdApplication.SetDefaultAccountStore(directory)
 
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(fixture.PrimaryDirectoryHref)
             mapping.IsDefaultAccountStore.ShouldBeTrue()
             mapping.IsDefaultGroupStore.ShouldBeFalse()
 
@@ -389,6 +437,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
             createdApplication.SetDefaultAccountStore(group)
 
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(fixture.PrimaryGroupHref)
             mapping.IsDefaultAccountStore.ShouldBeTrue()
             mapping.IsDefaultGroupStore.ShouldBeFalse()
 
@@ -409,6 +458,8 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
             Dim directory = client.GetResource(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
             createdApplication.SetDefaultAccountStore(directory)
+
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(fixture.PrimaryDirectoryHref)
 
             Dim mapping = createdApplication.GetAccountStoreMappings().Synchronously().[Single]()
             mapping.IsDefaultAccountStore.ShouldBeTrue()
@@ -431,6 +482,8 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
             Dim group = client.GetResource(Of IGroup)(Me.fixture.PrimaryGroupHref)
             createdApplication.SetDefaultAccountStore(group)
+
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(fixture.PrimaryGroupHref)
 
             Dim mapping = createdApplication.GetAccountStoreMappings().Synchronously().[Single]()
             mapping.IsDefaultAccountStore.ShouldBeTrue()
@@ -456,6 +509,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
             createdApplication.SetDefaultGroupStore(directory)
 
+            createdApplication.GetDefaultGroupStore().Href.ShouldBe(fixture.PrimaryDirectoryHref)
             mapping.IsDefaultAccountStore.ShouldBeFalse()
             mapping.IsDefaultGroupStore.ShouldBeTrue()
 
@@ -477,6 +531,8 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim directory = client.GetResource(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
             createdApplication.SetDefaultGroupStore(directory)
 
+            createdApplication.GetDefaultGroupStore().Href.ShouldBe(fixture.PrimaryDirectoryHref)
+
             Dim mapping = createdApplication.GetAccountStoreMappings().Synchronously().[Single]()
             mapping.IsDefaultAccountStore.ShouldBeFalse()
             mapping.IsDefaultGroupStore.ShouldBeTrue()
@@ -492,7 +548,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
-            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier} Setting Group as GroupStore (Sync)", createDirectory:=False)
+            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier} Setting Group As GroupStore (Sync)", createDirectory:=False)
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
@@ -510,7 +566,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Sub Adding_directory_as_account_store_by_href_to_application(clientBuilder As TestClientProvider)
+        Public Sub Adding_directory_as_account_store_by_href(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
@@ -534,7 +590,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Sub Adding_group_as_account_store_by_href_to_application(clientBuilder As TestClientProvider)
+        Public Sub Adding_group_as_account_store_by_href(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
@@ -558,7 +614,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Sub Adding_directory_as_account_store_by_name_to_application(clientBuilder As TestClientProvider)
+        Public Sub Adding_directory_as_account_store_by_name(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
@@ -590,7 +646,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Sub Adding_group_as_account_store_by_name_to_application(clientBuilder As TestClientProvider)
+        Public Sub Adding_group_as_account_store_by_name(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
@@ -627,7 +683,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Sub Adding_directory_as_account_store_to_application_by_query(clientBuilder As TestClientProvider)
+        Public Sub Adding_directory_as_account_store_by_query(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
@@ -652,7 +708,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Sub Adding_group_as_account_store_to_application_by_query(clientBuilder As TestClientProvider)
+        Public Sub Adding_group_as_account_store_by_query(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
@@ -677,7 +733,7 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Sub Adding_directory_as_account_store_to_application_by_query_throws_for_multiple_results(clientBuilder As TestClientProvider)
+        Public Sub Adding_directory_as_account_store_by_query_throws_for_multiple_results(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
@@ -685,38 +741,63 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
-            Should.[Throw](Of Exception)(Sub()
-                                             Dim mapping = createdApplication.AddAccountStore(Of IDirectory)(Function(allDirs) allDirs)
-                                         End Sub)
+            Dim dir1 = client.CreateDirectory($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results1", String.Empty, DirectoryStatus.Enabled)
+            Dim dir2 = client.CreateDirectory($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results2", String.Empty, DirectoryStatus.Enabled)
+
+            Me.fixture.CreatedDirectoryHrefs.Add(dir1.Href)
+            Me.fixture.CreatedDirectoryHrefs.Add(dir2.Href)
+
+            Should.[Throw](Of ArgumentException)(Sub()
+                                                     ' Throws because multiple matching results exist
+                                                     Dim mapping = createdApplication.AddAccountStore(Of IDirectory)(Function(dirs) dirs.Where(Function(d) d.Name.StartsWith($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results")))
+                                                 End Sub)
 
             ' Clean up
+            dir1.Delete().ShouldBeTrue()
+            Me.fixture.CreatedDirectoryHrefs.Remove(dir1.Href)
+
+            dir2.Delete().ShouldBeTrue()
+            Me.fixture.CreatedDirectoryHrefs.Remove(dir2.Href)
+
             createdApplication.Delete().ShouldBeTrue()
             Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
         End Sub
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
-        Public Sub Adding_group_as_account_store_to_application_by_query_throws_for_multiple_results(clientBuilder As TestClientProvider)
+        Public Sub Adding_group_as_account_store_by_query_throws_for_multiple_results(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
 
-            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Group By Query Throws Test Application (Sync)", createDirectory:=False)
+            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier} Adding AccountStore Group By Query Throws Test Application (Sync)", createDirectory:=True)
+
             createdApplication.Href.ShouldNotBeNullOrEmpty()
             Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
 
-            Dim dummyGroup = client.Instantiate(Of IGroup)().SetName($".NET IT {fixture.TestRunIdentifier} Dummy Test Group for Adding Multiple Groups as AccountStore (Sync)")
-            Dim primaryDirectory = client.GetResource(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)
-            primaryDirectory.CreateGroup(dummyGroup)
-            dummyGroup.Href.ShouldNotBeNullOrEmpty()
-            Me.fixture.CreatedGroupHrefs.Add(dummyGroup.Href)
+            Dim defaultGroupStore = TryCast(createdApplication.GetDefaultGroupStore(), IDirectory)
+            defaultGroupStore.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedDirectoryHrefs.Add(defaultGroupStore.Href)
 
-            Should.[Throw](Of Exception)(Sub()
-                                             Dim mapping = createdApplication.AddAccountStore(Of IGroup)(Function(allGroups) allGroups)
-                                         End Sub)
+            Dim group1 = createdApplication.CreateGroup($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results1", String.Empty)
+            Dim group2 = createdApplication.CreateGroup($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results2", String.Empty)
+
+            Me.fixture.CreatedGroupHrefs.Add(group1.Href)
+            Me.fixture.CreatedGroupHrefs.Add(group2.Href)
+
+            Should.[Throw](Of ArgumentException)(Sub()
+                                                     ' Throws because multiple matching results exist
+                                                     Dim mapping = createdApplication.AddAccountStore(Of IGroup)(Function(groups) groups.Where(Function(g) g.Name.StartsWith($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results")))
+                                                 End Sub)
 
             ' Clean up
-            dummyGroup.Delete().ShouldBeTrue()
-            Me.fixture.CreatedGroupHrefs.Remove(dummyGroup.Href)
+            group1.Delete().ShouldBeTrue()
+            Me.fixture.CreatedGroupHrefs.Remove(group1.Href)
+
+            group2.Delete().ShouldBeTrue()
+            Me.fixture.CreatedGroupHrefs.Remove(group2.Href)
+
+            defaultGroupStore.Delete().ShouldBeTrue()
+            Me.fixture.CreatedDirectoryHrefs.Remove(defaultGroupStore.Href)
 
             createdApplication.Delete().ShouldBeTrue()
             Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)

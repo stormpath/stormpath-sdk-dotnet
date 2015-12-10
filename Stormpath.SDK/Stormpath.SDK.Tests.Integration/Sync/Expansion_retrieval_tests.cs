@@ -14,11 +14,13 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
 using Stormpath.SDK.Tests.Common.Integration;
@@ -95,7 +97,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Expanding_application(TestClientProvider clientBuilder)
+        [Obsolete("Remove this test after 1.0 breaking change.")]
+        public void Expanding_application_from_generic_mapping(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
@@ -103,6 +106,30 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var mapping = app.GetAccountStoreMappings().Synchronously().First();
 
             client.GetResource<IAccountStoreMapping>(mapping.Href, o => o.Expand(x => x.GetApplication()));
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Expanding_application(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var mapping = app.GetAccountStoreMappings().Synchronously().First();
+
+            client.GetResource<IApplicationAccountStoreMapping>(mapping.Href, o => o.Expand(x => x.GetApplication()));
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Expanding_organization(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = client.GetResource<IOrganization>(this.fixture.PrimaryOrganizationHref);
+
+            var mapping = app.GetAccountStoreMappings().Synchronously().First();
+
+            client.GetResource<IOrganizationAccountStoreMapping>(mapping.Href, o => o.Expand(x => x.GetOrganization()));
         }
 
         [Theory]
@@ -121,6 +148,15 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var client = clientBuilder.GetClient();
 
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetAccountStoreMappings(0, 10)));
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Expanding_organization_account_store_mappings(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var app = client.GetResource<IOrganization>(this.fixture.PrimaryOrganizationHref, o => o.Expand(x => x.GetAccountStoreMappings(0, 10)));
         }
 
         [Theory]

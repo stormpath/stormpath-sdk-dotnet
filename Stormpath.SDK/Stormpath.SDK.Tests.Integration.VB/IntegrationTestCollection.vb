@@ -17,13 +17,11 @@
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB
-    <CollectionDefinition(NameOf(IntegrationTestCollection))>
+<CollectionDefinition(NameOf(IntegrationTestCollection))>
     Public Class IntegrationTestCollection
         Implements ICollectionFixture(Of TestFixture)
 
-        ' Intentionally left blank. This class only serves as an anchor for CollectionDefinition.
-        ' The test fixture Is shared in Common between multiple integration test projects,
-        ' but due to limitations of xUnit, this CollectionDefinition must be in the local assembly.
-    End Class
-End Namespace
+    ' Intentionally left blank. This class only serves as an anchor for CollectionDefinition.
+    ' The test fixture Is shared in Common between multiple integration test projects,
+    ' but due to limitations of xUnit, this CollectionDefinition must be in the local assembly.
+End Class

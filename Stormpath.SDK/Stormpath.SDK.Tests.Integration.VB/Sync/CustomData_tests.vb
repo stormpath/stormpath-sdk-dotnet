@@ -27,7 +27,7 @@ Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Sync
+Namespace Sync
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class CustomData_tests
         Private ReadOnly fixture As TestFixture

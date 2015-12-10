@@ -28,17 +28,21 @@ namespace Stormpath.SDK.Sync
         /// <summary>
         /// Synchronously gets this mapping's <see cref="IAccountStore"/> (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>), to be assigned to the application.
         /// </summary>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="accountStoreMapping">The account store mapping.</param>
         /// <returns>The mapping's <see cref="IAccountStore"/>.</returns>
-        public static IAccountStore GetAccountStore(this IAccountStoreMapping accountStoreMapping)
-            => (accountStoreMapping as IAccountStoreMappingSync).GetAccountStore();
+        public static IAccountStore GetAccountStore<TMapping>(this IAccountStoreMapping<TMapping> accountStoreMapping)
+            where TMapping : class, IAccountStoreMapping<TMapping>
+            => (accountStoreMapping as IAccountStoreMappingSync<TMapping>).GetAccountStore();
 
         /// <summary>
         /// Synchronously gets the <see cref="IApplication"/> represented by this mapping.
         /// </summary>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="accountStoreMapping">The account store mapping.</param>
         /// <returns>The mapping's <see cref="IApplication"/>.</returns>
-        public static IApplication GetApplication(this IAccountStoreMapping accountStoreMapping)
-            => (accountStoreMapping as IAccountStoreMappingSync).GetApplication();
+        public static IApplication GetApplication<TMapping>(this IAccountStoreMapping<TMapping> accountStoreMapping)
+            where TMapping : class, IAccountStoreMapping<TMapping>
+            => (accountStoreMapping as IAccountStoreMappingSync<TMapping>).GetApplication();
     }
 }

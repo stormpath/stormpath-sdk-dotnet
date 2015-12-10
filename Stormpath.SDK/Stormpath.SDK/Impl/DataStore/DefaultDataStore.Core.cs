@@ -157,8 +157,8 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, bool create, CancellationToken cancellationToken)
-    where T : class
-    where TReturned : class
+            where T : class
+            where TReturned : class
         {
             if (string.IsNullOrEmpty(href))
             {
@@ -251,7 +251,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var requestAction = create
                 ? ResourceAction.Create
                 : ResourceAction.Update;
-            var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
+            var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap, false);
 
             var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
             return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
@@ -352,7 +352,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var requestAction = create
                 ? ResourceAction.Create
                 : ResourceAction.Update;
-            var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap);
+            var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap, false);
 
             var result = chain.Filter(request, this.logger);
             return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
@@ -378,7 +378,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.StatusCode, body: null);
                 }));
 
-            var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri);
+            var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri, false);
             var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
 
             bool successfullyDeleted = result.HttpStatus == 204;
@@ -405,7 +405,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     return new DefaultResourceDataResult(req.Action, typeof(T), req.Uri, response.StatusCode, body: null);
                 }));
 
-            var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri);
+            var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(T), uri, false);
             var result = chain.Filter(request, this.logger);
 
             bool successfullyDeleted = result.HttpStatus == 204;

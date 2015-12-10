@@ -25,7 +25,7 @@ Imports Stormpath.SDK.Sync
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Sync
+Namespace Sync
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Group_tests
         Private ReadOnly fixture As TestFixture
@@ -277,6 +277,25 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             created.Name.ShouldBe($".NET ITs New Test Group {fixture.TestRunIdentifier} - Sync")
             created.Description.ShouldBe("A nu start")
             created.Status.ShouldBe(GroupStatus.Disabled)
+
+            created.Delete().ShouldBeTrue()
+            Me.fixture.CreatedGroupHrefs.Remove(created.Href)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Creating_group_in_application_with_convenience_method(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+
+            Dim name = $".NET ITs New Convenient Test Group {fixture.TestRunIdentifier}"
+            Dim created = app.CreateGroup(name, "I can has lazy")
+            created.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedGroupHrefs.Add(created.Href)
+
+            created.Name.ShouldBe(name)
+            created.Description.ShouldBe("I can has lazy")
+            created.Status.ShouldBe(GroupStatus.Enabled)
 
             created.Delete().ShouldBeTrue()
             Me.fixture.CreatedGroupHrefs.Remove(created.Href)

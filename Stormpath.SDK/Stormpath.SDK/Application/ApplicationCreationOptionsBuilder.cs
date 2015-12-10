@@ -21,22 +21,22 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Application
 {
     /// <summary>
-    /// A builder to construct <see cref="IApplicationCreationOptions"/> objects.
+    /// A builder to construct <see cref="IApplicationCreationOptions"/> instances.
     /// </summary>
     public sealed class ApplicationCreationOptionsBuilder
     {
         /// <summary>
-        /// Gets or sets a value indicating whether to create a new <see cref="Directory.IDirectory"/> for the new application's needs.
+        /// Gets or sets a value indicating whether to create a new <see cref="Directory.IDirectory">Directory</see> along with the new Application.
         /// </summary>
         /// <value>
-        /// Default value: <see langword="false"/>.
         /// <para>
-        /// If <see langword="true"/>, a new directory will be created. The new directory will automatically be assigned as the application's default login source.
-        /// The directory will be automatically named based on heuristics to ensure a guaranteed unique name based on the application.
-        /// If you want to specify the directory's name, set the <see cref="DirectoryName"/> property.
+        /// If <see langword="true"/>, a new Directory will be created. The new Directory will automatically be assigned as the Application's
+        /// default Account and Group store.
+        /// If the <see cref="DirectoryName"/> property is not null, the new Directory will be created with that name.
+        /// Otherwise, the Directory will be automatically named based on heuristics to ensure a guaranteed unique name based on the Application.
         /// </para>
         /// <para>
-        /// If <see langword="false"/>, no directory will be created.
+        /// If <see langword="false"/>, no Directory will be created.
         /// </para>
         /// </value>
         public bool CreateDirectory { get; set; } = false;
@@ -54,11 +54,11 @@ namespace Stormpath.SDK.Application
         public IRetrievalOptions<IApplication> ResponseOptions { get; } = new DefaultRetrievalOptions<IApplication>();
 
         /// <summary>
-        /// Gets or sets the name to use when creating a new <see cref="Directory.IDirectory"/>.
+        /// Gets or sets the name to use when creating a new <see cref="Directory.IDirectory">Directory</see> for this Application.
         /// </summary>
         /// <value>
         /// Default value: <see langword="null"/>.
-        /// <para>The name to assign to the new directory. This only has an effect if <see cref="CreateDirectory"/> is <see langword="true"/>.</para>
+        /// <para>The name to assign to the new Directory. This only has an effect if <see cref="CreateDirectory"/> is <see langword="true"/>.</para>
         /// <para>If you want to have a default name assigned automatically, set this to <see cref="string.Empty"/> or <see langword="null"/>.</para>
         /// </value>
         public string DirectoryName { get; set; } = null;

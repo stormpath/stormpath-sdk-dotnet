@@ -1,4 +1,4 @@
-﻿// <copyright file="IOrganizationNameKey.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IOrganizationAccountStoreMappingExpandables.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +14,26 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Impl.Auth
+using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Organization;
+
+namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents an Organization nameKey.
+    /// Represents resources that can be expanded from an <see cref="IAccountStoreMapping"/>.
     /// </summary>
-    internal interface IOrganizationNameKey
+    public interface IOrganizationAccountStoreMappingExpandables
     {
         /// <summary>
-        /// Gets the Organization nameKey value.
+        /// Expands the <c>accountStore</c> resource.
         /// </summary>
-        /// <value>The nameKey.</value>
-        string OrganizationNameKey { get; }
+        /// <returns>Not applicable.</returns>
+        IAccountStore GetAccountStore();
+
+        /// <summary>
+        /// Expands the <c>organization</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
+        IOrganization GetOrganization();
     }
 }

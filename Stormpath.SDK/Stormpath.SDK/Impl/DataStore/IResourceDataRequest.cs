@@ -49,5 +49,11 @@ namespace Stormpath.SDK.Impl.DataStore
         /// </summary>
         /// <value>Additional resource properties.</value>
         Map Properties { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether to skip the cache for this request.
+        /// </summary>
+        /// <value><see langword="true"/> if the cache should be skipped on this request; <see langword="false"/> otherwise. Default: <see langword="false"/>.</value>
+        bool SkipCache { get; }
     }
 }

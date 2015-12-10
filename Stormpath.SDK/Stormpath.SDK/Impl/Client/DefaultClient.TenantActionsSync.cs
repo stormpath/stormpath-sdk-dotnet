@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultClient.ITenantActionsSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultClient.TenantActionsSync.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Sync;
 
 namespace Stormpath.SDK.Impl.Client
@@ -79,6 +80,34 @@ namespace Stormpath.SDK.Impl.Client
             this.EnsureTenant();
 
             return this.tenant.CreateDirectory(name, description, status);
+        }
+
+        IOrganization ITenantActionsSync.CreateOrganization(IOrganization directory)
+        {
+            this.EnsureTenant();
+
+            return this.tenant.CreateOrganization(directory);
+        }
+
+        IOrganization ITenantActionsSync.CreateOrganization(IOrganization organization, Action<OrganizationCreationOptionsBuilder> creationOptionsAction)
+        {
+            this.EnsureTenant();
+
+            return this.tenant.CreateOrganization(organization, creationOptionsAction);
+        }
+
+        IOrganization ITenantActionsSync.CreateOrganization(IOrganization organization, IOrganizationCreationOptions creationOptions)
+        {
+            this.EnsureTenant();
+
+            return this.tenant.CreateOrganization(organization, creationOptions);
+        }
+
+        IOrganization ITenantActionsSync.CreateOrganization(string name, string description)
+        {
+            this.EnsureTenant();
+
+            return this.tenant.CreateOrganization(name, description);
         }
 
         IAccount ITenantActionsSync.VerifyAccountEmail(string token)

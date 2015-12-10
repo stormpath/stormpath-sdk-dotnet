@@ -22,7 +22,7 @@ Imports Stormpath.SDK.Sync
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Sync
+Namespace Sync
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Expansion_linq_tests
         Private ReadOnly fixture As TestFixture
@@ -101,6 +101,20 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim tenant = client.GetCurrentTenant()
 
             Dim account = tenant.GetApplications().Synchronously().Where(Function(x) x.Description = "The Battle of Endor").Expand(Function(x) x.GetAccountStoreMappings(Nothing, 10)).FirstOrDefault()
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Expanding_organization_account_store_mappings(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            Dim account = tenant _
+                .GetOrganizations() _
+                .Synchronously() _
+                .Where(Function(x) x.Description = "The Battle of Endor") _
+                .Expand(Function(x) x.GetAccountStoreMappings(Nothing, 10)) _
+                .FirstOrDefault()
         End Sub
 
         <Theory>

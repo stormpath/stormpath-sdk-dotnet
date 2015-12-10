@@ -24,8 +24,5 @@ namespace Stormpath.SDK.Impl.Application
     {
         IProviderAccountResult IApplicationSync.GetAccount(IProviderAccountRequest request)
             => new ProviderAccountResolver(this.GetInternalSyncDataStore()).ResolveProviderAccount(this.AsInterface.Href, request);
-
-        ITenant IApplicationSync.GetTenant()
-            => this.GetTenant(this.Tenant.Href);
     }
 }

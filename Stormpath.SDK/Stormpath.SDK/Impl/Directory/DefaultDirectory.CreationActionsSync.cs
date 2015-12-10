@@ -44,5 +44,8 @@ namespace Stormpath.SDK.Impl.Directory
 
         IGroup IGroupCreationActionsSync.CreateGroup(IGroup group, IGroupCreationOptions creationOptions)
             => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, group, creationOptions);
+
+        IGroup IGroupCreationActionsSync.CreateGroup(string name, string description)
+            => GroupCreationActionsShared.CreateGroup(this.GetInternalSyncDataStore(), this.Groups.Href, name, description);
     }
 }

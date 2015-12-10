@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultApplication.IGroupCreationActions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultApplication.GroupCreationActions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,5 +32,8 @@ namespace Stormpath.SDK.Impl.Application
 
         Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, IGroupCreationOptions creationOptions, CancellationToken cancellationToken)
             => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, creationOptions, cancellationToken);
+
+        Task<IGroup> IGroupCreationActions.CreateGroupAsync(string name, string description, CancellationToken cancellationToken)
+            => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, name, description, cancellationToken);
     }
 }

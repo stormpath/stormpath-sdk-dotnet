@@ -37,14 +37,6 @@ namespace Stormpath.SDK.Sync
             => (account as IAccountSync).GetDirectory();
 
         /// <summary>
-        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
-        /// </summary>
-        /// <param name="account">The account.</param>
-        /// <returns>This account's tenant.</returns>
-        public static ITenant GetTenant(this IAccount account)
-            => (account as IAccountSync).GetTenant();
-
-        /// <summary>
         /// Synchronously assigns this account to the specified <see cref="Group.IGroup"/>.
         /// </summary>
         /// <param name="account">The account.</param>

@@ -21,7 +21,7 @@ Imports Shouldly
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Async
+Namespace Async
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Tenant_tests
         <Theory>

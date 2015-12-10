@@ -284,6 +284,26 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Creating_group_in_application_with_convenience_method(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var name = $".NET ITs New Convenient Test Group {this.fixture.TestRunIdentifier} Sync";
+            var created = app.CreateGroup(name, "I can has lazy");
+            created.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedGroupHrefs.Add(created.Href);
+
+            created.Name.ShouldBe(name);
+            created.Description.ShouldBe("I can has lazy");
+            created.Status.ShouldBe(GroupStatus.Enabled);
+
+            created.Delete().ShouldBeTrue();
+            this.fixture.CreatedGroupHrefs.Remove(created.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Creating_group_in_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

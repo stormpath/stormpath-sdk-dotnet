@@ -27,8 +27,5 @@ namespace Stormpath.SDK.Impl.Application
     {
         Task<IProviderAccountResult> IApplication.GetAccountAsync(IProviderAccountRequest request, CancellationToken cancellationToken)
             => new ProviderAccountResolver(this.GetInternalAsyncDataStore()).ResolveProviderAccountAsync(this.AsInterface.Href, request, cancellationToken);
-
-        Task<ITenant> IApplication.GetTenantAsync(CancellationToken cancellationToken)
-            => this.GetTenantAsync(this.Tenant.Href, cancellationToken);
     }
 }

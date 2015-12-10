@@ -27,7 +27,7 @@ Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Async
+Namespace Async
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Account_tests
         Private ReadOnly fixture As TestFixture
@@ -500,7 +500,26 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim result = Await application.AuthenticateAccountAsync(Sub(request)
                                                                         request.SetUsernameOrEmail($"sonofthesuns-{fixture.TestRunIdentifier}")
                                                                         request.SetPassword("whataPieceofjunk$1138")
-                                                                        request.SetAccountStore(Me.fixture.PrimaryDirectoryHref)
+                                                                        request.SetAccountStore(Me.fixture.PrimaryOrganizationHref)
+                                                                    End Sub)
+            result.ShouldBeAssignableTo(Of IAuthenticationResult)()
+            result.Success.ShouldBeTrue()
+
+            Dim account = Await result.GetAccountAsync()
+            account.FullName.ShouldBe("Luke Skywalker")
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Authenticating_account_in_specified_organization_by_nameKey(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+            Dim accountStore = Await application.GetDefaultAccountStoreAsync()
+
+            Dim result = Await application.AuthenticateAccountAsync(Sub(request)
+                                                                        request.SetUsernameOrEmail($"sonofthesuns-{fixture.TestRunIdentifier}")
+                                                                        request.SetPassword("whataPieceofjunk$1138")
+                                                                        request.SetAccountStore(Me.fixture.PrimaryOrganizationNameKey)
                                                                     End Sub)
             result.ShouldBeAssignableTo(Of IAuthenticationResult)()
             result.Success.ShouldBeTrue()

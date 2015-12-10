@@ -20,6 +20,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tests.Common.RandomData;
 
 namespace Stormpath.SDK.Tests.Common.Integration
@@ -64,6 +65,21 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     client.Instantiate<IGroup>()
                         .SetName($".NET IT Test Group (primary) {this.Nonce} - {timeString}")
                         .SetDescription("Humans")
+                },
+            };
+        }
+
+        public List<IOrganization> GetTestOrganizations(IClient client)
+        {
+            var timeString = DateTimeOffset.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+
+            return new List<IOrganization>()
+            {
+                {
+                    client.Instantiate<IOrganization>()
+                        .SetName($".NET IT Test Organization (primary) {this.Nonce} - {timeString}")
+                        .SetNameKey($"dotnet-it-test-org-{this.Nonce}")
+                        .SetDescription("Star Wars")
                 },
             };
         }

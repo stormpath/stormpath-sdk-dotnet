@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultDataStore.Api.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultDataStore.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.DataStore;

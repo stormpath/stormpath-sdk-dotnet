@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultAccountStoreMapping.cs" company="Stormpath, Inc.">
+﻿// <copyright file="AbstractAccountStoreMapping.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,46 +22,40 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
-    internal sealed class DefaultAccountStoreMapping : AbstractInstanceResource, IAccountStoreMapping, IAccountStoreMappingSync
+    internal abstract class AbstractAccountStoreMapping<T> :
+        AbstractInstanceResource,
+        IAccountStoreMapping<T>,
+        IAccountStoreMappingSync<T>,
+        ISaveable<T>,
+        ISaveableSync<T>,
+        IDeletable,
+        IDeletableSync
+        where T : class, IAccountStoreMapping<T>
     {
         private static readonly string AccountStorePropertyName = "accountStore";
-        private static readonly string ApplicationPropertyName = "application";
         private static readonly string IsDefaultAccountStorePropertyName = "isDefaultAccountStore";
         private static readonly string IsDefaultGroupStorePropertyName = "isDefaultGroupStore";
         private static readonly string ListIndexPropertyName = "listIndex";
 
-        public DefaultAccountStoreMapping(ResourceData data)
+        public AbstractAccountStoreMapping(ResourceData data)
             : base(data)
         {
         }
 
         internal IEmbeddedProperty AccountStore => this.GetLinkProperty(AccountStorePropertyName);
 
-        internal IEmbeddedProperty Application => this.GetLinkProperty(ApplicationPropertyName);
+        bool IAccountStoreMapping<T>.IsDefaultAccountStore => this.GetProperty<bool>(IsDefaultAccountStorePropertyName);
 
-        bool IAccountStoreMapping.IsDefaultAccountStore => this.GetProperty<bool>(IsDefaultAccountStorePropertyName);
+        bool IAccountStoreMapping<T>.IsDefaultGroupStore => this.GetProperty<bool>(IsDefaultGroupStorePropertyName);
 
-        bool IAccountStoreMapping.IsDefaultGroupStore => this.GetProperty<bool>(IsDefaultGroupStorePropertyName);
+        int IAccountStoreMapping<T>.ListIndex => this.GetProperty<int>(ListIndexPropertyName);
 
-        int IAccountStoreMapping.ListIndex => this.GetProperty<int>(ListIndexPropertyName);
-
-        IAccountStoreMapping IAccountStoreMapping.SetApplication(IApplication application)
-        {
-            if (string.IsNullOrEmpty(application?.Href))
-            {
-                throw new ArgumentNullException(nameof(application.Href));
-            }
-
-            this.SetLinkProperty(ApplicationPropertyName, application.Href);
-
-            return this;
-        }
-
-        IAccountStoreMapping IAccountStoreMapping.SetAccountStore(IAccountStore accountStore)
+        T IAccountStoreMapping<T>.SetAccountStore(IAccountStore accountStore)
         {
             if (string.IsNullOrEmpty(accountStore?.Href))
             {
@@ -70,10 +64,10 @@ namespace Stormpath.SDK.Impl.AccountStore
 
             this.SetLinkProperty(AccountStorePropertyName, accountStore.Href);
 
-            return this;
+            return this as T;
         }
 
-        IAccountStoreMapping IAccountStoreMapping.SetListIndex(int listIndex)
+        T IAccountStoreMapping<T>.SetListIndex(int listIndex)
         {
             if (listIndex < 0)
             {
@@ -82,24 +76,24 @@ namespace Stormpath.SDK.Impl.AccountStore
 
             this.SetProperty(ListIndexPropertyName, listIndex);
 
-            return this;
+            return this as T;
         }
 
-        IAccountStoreMapping IAccountStoreMapping.SetDefaultAccountStore(bool defaultAccountStore)
+        T IAccountStoreMapping<T>.SetDefaultAccountStore(bool defaultAccountStore)
         {
             this.SetProperty(IsDefaultAccountStorePropertyName, defaultAccountStore);
 
-            return this;
+            return this as T;
         }
 
-        IAccountStoreMapping IAccountStoreMapping.SetDefaultGroupStore(bool defaultGroupStore)
+        T IAccountStoreMapping<T>.SetDefaultGroupStore(bool defaultGroupStore)
         {
             this.SetProperty(IsDefaultGroupStorePropertyName, defaultGroupStore);
 
-            return this;
+            return this as T;
         }
 
-        async Task<IAccountStore> IAccountStoreMapping.GetAccountStoreAsync(CancellationToken cancellationToken)
+        async Task<IAccountStore> IAccountStoreMapping<T>.GetAccountStoreAsync(CancellationToken cancellationToken)
         {
             var href = this.AccountStore?.Href ?? string.Empty;
             IAccountStore accountStore = null;
@@ -112,11 +106,15 @@ namespace Stormpath.SDK.Impl.AccountStore
             {
                 accountStore = await this.GetInternalAsyncDataStore().GetResourceAsync<IGroup>(href, cancellationToken).ConfigureAwait(false);
             }
+            else if (href.Contains("organizations"))
+            {
+                accountStore = await this.GetInternalAsyncDataStore().GetResourceAsync<IOrganization>(href, cancellationToken).ConfigureAwait(false);
+            }
 
             return accountStore;
         }
 
-        IAccountStore IAccountStoreMappingSync.GetAccountStore()
+        IAccountStore IAccountStoreMappingSync<T>.GetAccountStore()
         {
             var href = this.AccountStore?.Href ?? string.Empty;
             IAccountStore accountStore = null;
@@ -129,26 +127,31 @@ namespace Stormpath.SDK.Impl.AccountStore
             {
                 accountStore = this.GetInternalSyncDataStore().GetResource<IGroup>(href);
             }
+            else if (href.Contains("organizations"))
+            {
+                accountStore = this.GetInternalSyncDataStore().GetResource<IOrganization>(href);
+            }
 
             return accountStore;
         }
 
-        Task<IApplication> IAccountStoreMapping.GetApplicationAsync(CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IApplication>(this.Application.Href, cancellationToken);
+        Task<T> ISaveable<T>.SaveAsync(CancellationToken cancellationToken)
+            => this.SaveAsync<T>(cancellationToken);
 
-        IApplication IAccountStoreMappingSync.GetApplication()
-            => this.GetInternalSyncDataStore().GetResource<IApplication>(this.Application.Href);
-
-        Task<IAccountStoreMapping> ISaveable<IAccountStoreMapping>.SaveAsync(CancellationToken cancellationToken)
-            => this.SaveAsync<IAccountStoreMapping>(cancellationToken);
-
-        IAccountStoreMapping ISaveableSync<IAccountStoreMapping>.Save()
-            => this.Save<IAccountStoreMapping>();
+        T ISaveableSync<T>.Save()
+            => this.Save<T>();
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
 
         bool IDeletableSync.Delete()
             => this.GetInternalSyncDataStore().Delete(this);
+
+        // TODO These methods will be moved out of this class when we do a breaking version change
+        public abstract T SetApplication(IApplication application);
+
+        public abstract Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken);
+
+        public abstract IApplication GetApplication();
     }
 }

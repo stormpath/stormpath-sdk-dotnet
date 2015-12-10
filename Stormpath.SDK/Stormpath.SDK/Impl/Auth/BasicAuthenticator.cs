@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Impl.Auth
                 attempt.SetAccountStore(request.AccountStore);
             }
 
-            var supportsNameKey = request as IOrganizationNameKey;
+            var supportsNameKey = request as IHasOrganizationNameKey;
             if (supportsNameKey != null && !string.IsNullOrEmpty(supportsNameKey.OrganizationNameKey))
             {
                 attempt.SetAccountStore(supportsNameKey.OrganizationNameKey);
