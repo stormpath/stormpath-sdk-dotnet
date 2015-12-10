@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Application
     /// </summary>
     /// <remarks>
     /// When an <see cref="IApplicationAccountStoreMapping"/> is created, the Accounts in the Account Store are granted access to become users
-    /// of the linked <see cref="IApplication">Application</see>. The <see cref="IAccountStoreMapping.ListIndex">order</see> in which Account Stores are assigned
+    /// of the linked <see cref="IApplication">Application</see>. The <see cref="IAccountStoreMapping{T}.ListIndex">order</see> in which Account Stores are assigned
     /// to an Application determines how login attempts work in Stormpath.
     /// <para>
     /// Additionally, an <see cref="IApplicationAccountStoreMapping"/> may be designated as the default Account Store.
@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Application
     /// <b>Note:</b> A Group cannot store other Groups.  Therefore, the default group store must be a <see cref="Directory.IDirectory">Directory</see>.
     /// </para>
     /// </remarks>
-    /// <seealso cref="IAccountStoreContainer{T}.CreateAccountStoreMappingAsync(IAccountStoreMapping{T}, System.Threading.CancellationToken)"/>
+    /// <seealso cref="IAccountStoreContainer{T}.CreateAccountStoreMappingAsync(T, System.Threading.CancellationToken)"/>
     public interface IApplicationAccountStoreMapping : IAccountStoreMapping<IApplicationAccountStoreMapping>
     {
     }

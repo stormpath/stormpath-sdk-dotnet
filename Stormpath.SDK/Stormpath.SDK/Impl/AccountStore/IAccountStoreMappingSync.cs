@@ -14,13 +14,18 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {
-    //todo is this necessary?!
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IAccountStoreMapping{T}"/>.
+    /// </summary>
+    [Obsolete("This interface will be removed in 1.0. Use IApplicationAccountStoreMappingSync instead.")]
     internal interface IAccountStoreMappingSync : IAccountStoreMappingSync<IApplicationAccountStoreMapping>
     {
     }

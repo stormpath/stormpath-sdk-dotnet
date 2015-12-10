@@ -123,9 +123,9 @@ namespace Stormpath.SDK.AccountStore
         /// <returns>The newly-created <see cref="IAccountStoreMapping{T}"/>.</returns>
         /// <exception cref="Error.ResourceException">The AccountStoreMapping's ListIndex is negative, or the mapping could not be added to the Application or Organization.</exception>
         /// <example>
-        /// Setting a new <see cref="IAccountStoreMapping{T}"/>'s <see cref="IAccountStoreMapping.ListIndex"/> to <c>500</c> and then adding the mapping to
+        /// Setting a new <see cref="IAccountStoreMapping{T}"/>'s <see cref="IAccountStoreMapping{T}.ListIndex"/> to <c>500</c> and then adding the mapping to
         /// an application with an existing 3-item list will automatically save the <see cref="IAccountStoreMapping{T}"/>
-        /// at the end of the list and set its <see cref="IAccountStoreMapping.ListIndex"/> value to <c>3</c> (items at index 0, 1, 2 were the original items,
+        /// at the end of the list and set its <see cref="IAccountStoreMapping{T}.ListIndex"/> value to <c>3</c> (items at index 0, 1, 2 were the original items,
         /// the new fourth item will be at index 3):
         /// <code>
         /// IAccountStore directoryOrGroup = await GetDirectoryOrGroupAsync();
@@ -141,7 +141,7 @@ namespace Stormpath.SDK.AccountStore
         /// Adds a new <see cref="IAccountStore"/> to the Application or Organization and appends the resulting <see cref="IAccountStoreMapping{T}"/>
         /// to the end of the AccountStoreMapping list.
         /// <para>
-        /// If you need to control the order of the added AccountStore, use the <see cref="CreateAccountStoreMappingAsync(IAccountStoreMapping, CancellationToken)"/> method.
+        /// If you need to control the order of the added AccountStore, use the <see cref="CreateAccountStoreMappingAsync(T, CancellationToken)"/> method.
         /// </para>
         /// </summary>
         /// <param name="accountStore">The new <see cref="IAccountStore"/> resource to add to the AccountStoreMapping list.</param>

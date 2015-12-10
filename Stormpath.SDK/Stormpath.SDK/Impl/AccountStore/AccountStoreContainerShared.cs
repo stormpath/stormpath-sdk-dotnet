@@ -92,6 +92,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// Sets the default Account or Group store.
         /// </summary>
         /// <typeparam name="T">The parent resource type.</typeparam>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="parent">The parent resource.</param>
         /// <param name="store">The new default Account or Group store.</param>
         /// <param name="isAccountStore">Determines whether this store should be the default Account (<see langword="true"/>) or Group (<see langword="false"/>) Store.</param>
@@ -154,6 +155,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// Synchronously sets the default Account or Group store.
         /// </summary>
         /// <typeparam name="T">The parent resource type.</typeparam>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="parent">The parent resource.</param>
         /// <param name="store">The new default Account or Group store.</param>
         /// <param name="isAccountStore">Determines whether this store should be the default Account (<see langword="true"/>) or Group (<see langword="false"/>) Store.</param>
@@ -211,6 +213,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// Creates a new Account Store Mapping.
         /// </summary>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="container">The Account Store container.</param>
         /// <param name="internalDataStore">The internal data store.</param>
         /// <param name="mapping">The new mapping to create.</param>
@@ -232,6 +235,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// Synchronously creates a new Account Store Mapping.
         /// </summary>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="container">The Account Store container.</param>
         /// <param name="internalDataStore">The internal data store.</param>
         /// <param name="mapping">The new mapping to create.</param>
@@ -251,6 +255,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// Adds an Account Store to this resource.
         /// </summary>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="container">The Account Store container.</param>
         /// <param name="internalDataStore">The internal data store.</param>
         /// <param name="accountStore">The Account Store to add.</param>
@@ -275,6 +280,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// Synchronously adds an Account Store to this resource.
         /// </summary>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="container">The Account Store container.</param>
         /// <param name="internalDataStore">The internal data store.</param>
         /// <param name="accountStore">The Account Store to add.</param>
@@ -297,6 +303,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// Adds an Account Store to this resource by <c>href</c> or name.
         /// </summary>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="container">The Account Store container.</param>
         /// <param name="internalDataStore">The internal data store.</param>
         /// <param name="hrefOrName">The name or <c>href</c> of the Account Store to add.</param>
@@ -384,6 +391,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// Synchronously adds an Account Store to this resource by <c>href</c> or name.
         /// </summary>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="container">The Account Store container.</param>
         /// <param name="internalDataStore">The internal data store.</param>
         /// <param name="hrefOrName">The name or <c>href</c> of the Account Store to add.</param>
@@ -470,6 +478,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// Adds an Account Store to this resource based on the result of a query.
         /// </summary>
         /// <typeparam name="T">The Account Store type.</typeparam>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="container">The Account Store container.</param>
         /// <param name="internalDataStore">The internal data store.</param>
         /// <param name="query">A query that selects a single Account Store.</param>
@@ -512,6 +521,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// Synchronously adds an Account Store to this resource based on the result of a query.
         /// </summary>
         /// <typeparam name="T">The Account Store type.</typeparam>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="container">The Account Store container.</param>
         /// <param name="internalDataStore">The internal data store.</param>
         /// <param name="query">A query that selects a single Account Store.</param>
@@ -689,6 +699,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// TODO: Remove this when refactoring AbstractAccountStoreMapping (breaking change)
         /// </summary>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="mapping">The account store mapping.</param>
         /// <param name="container">The container object (an Application or Organization).</param>
         private static void SetContainer<TMapping>(IAccountStoreMapping<TMapping> mapping, IAccountStoreContainer<TMapping> container)

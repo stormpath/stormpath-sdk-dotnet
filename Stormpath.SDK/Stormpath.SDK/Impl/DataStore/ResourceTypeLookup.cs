@@ -151,7 +151,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(CollectionResponsePage<IGroup>)] = typeof(IGroup),
             [typeof(CollectionResponsePage<IGroupMembership>)] = typeof(IGroupMembership),
 
-            //[typeof(CollectionResponsePage<IAccountStoreMapping>)] = typeof(IAccountStoreMapping),
+            // TODO these will be greatly simplified on a breaking version change
             [typeof(CollectionResponsePage<IApplicationAccountStoreMapping>)] = typeof(IApplicationAccountStoreMapping),
             [typeof(CollectionResponsePage<IAccountStoreMapping>)] = typeof(IApplicationAccountStoreMapping),
             [typeof(CollectionResponsePage<IOrganizationAccountStoreMapping>)] = typeof(IOrganizationAccountStoreMapping),

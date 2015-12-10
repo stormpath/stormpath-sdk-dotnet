@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Organization
     /// </summary>
     /// <remarks>
     /// When an <see cref="IOrganizationAccountStoreMapping"/> is created, the Accounts in the Account Store are granted access to become users
-    /// of the linked <see cref="IOrganization">Organization</see>. The <see cref="IAccountStoreMapping.ListIndex">order</see> in which Account Stores are assigned
+    /// of the linked <see cref="IOrganization">Organization</see>. The <see cref="IAccountStoreMapping{T}.ListIndex">order</see> in which Account Stores are assigned
     /// to an Organization determines how login attempts work in Stormpath.
     /// <para>
     /// Additionally, an <see cref="IOrganizationAccountStoreMapping"/> may be designated as the default Account Store.
@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Organization
     /// <b>Note:</b> A Group cannot store other Groups.  Therefore, the default group store must be a <see cref="Directory.IDirectory">Directory</see>.
     /// </para>
     /// </remarks>
-    /// <seealso cref="IAccountStoreContainer.CreateAccountStoreMappingAsync(IAccountStoreMapping, System.Threading.CancellationToken)"/>
+    /// <seealso cref="IAccountStoreContainer{T}.CreateAccountStoreMappingAsync(T, CancellationToken)"/>
     public interface IOrganizationAccountStoreMapping : IAccountStoreMapping<IOrganizationAccountStoreMapping>
     {
         /// <summary>

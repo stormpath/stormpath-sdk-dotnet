@@ -110,7 +110,7 @@ namespace Stormpath.SDK.Tests.Impl
             yield return new object[] { typeof(IDirectory), typeof(DefaultDirectory) };
             yield return new object[] { typeof(IGroup), typeof(DefaultGroup) };
             yield return new object[] { typeof(IGroupMembership), typeof(DefaultGroupMembership) };
-            yield return new object[] { typeof(IAccountStoreMapping), typeof(DefaultApplicationAccountStoreMapping) };
+            yield return new object[] { typeof(IApplicationAccountStoreMapping), typeof(DefaultApplicationAccountStoreMapping) };
             yield return new object[] { typeof(IAccountStore), typeof(DefaultAccountStore) };
             yield return new object[] { typeof(IBasicLoginAttempt), typeof(DefaultBasicLoginAttempt) };
             yield return new object[] { typeof(IAuthenticationResult), typeof(DefaultAuthenticationResult) };

@@ -22,6 +22,11 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.AccountStore
 {
+    /// <summary>
+    /// Represents the assignment of an <see cref="IAccountStore"/> AccountStore (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>) to an <see cref="IApplication"/>.
+    /// <para>When an <see cref="IAccountStoreMapping{T}"/> is created, the accounts in the account store are granted access to become users of the linked <see cref="IApplication"/>.
+    /// The order in which Account Stores are assigned to an application determines how login attempts work in Stormpath.</para>
+    /// </summary>
     [Obsolete("This interface will be removed in 1.0. Use IApplicationAccountStoreMapping instead.")]
     public interface IAccountStoreMapping : IApplicationAccountStoreMapping
     {

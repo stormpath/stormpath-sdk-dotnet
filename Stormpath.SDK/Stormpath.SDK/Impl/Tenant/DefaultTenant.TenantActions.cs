@@ -132,6 +132,5 @@ namespace Stormpath.SDK.Impl.Tenant
             var tokenResponse = await this.GetInternalAsyncDataStore().CreateAsync<IResource, IEmailVerificationToken>(href, null, cancellationToken).ConfigureAwait(false);
             return await this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(tokenResponse.Href, cancellationToken).ConfigureAwait(false);
         }
-
     }
 }
