@@ -146,9 +146,6 @@ namespace Stormpath.SDK.Impl.AccountStore
             }
 
             await newOrExistingMapping.SaveAsync(cancellationToken).ConfigureAwait(false);
-            (container as AbstractResource).SetLinkProperty(DefaultAccountStoreMappingPropertyName, newOrExistingMapping.Href);
-
-            await parent.SaveAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -205,9 +202,6 @@ namespace Stormpath.SDK.Impl.AccountStore
             }
 
             newOrExistingMapping.Save();
-            (container as AbstractResource).SetLinkProperty(DefaultAccountStoreMappingPropertyName, newOrExistingMapping.Href);
-
-            parent.Save();
         }
 
         /// <summary>
