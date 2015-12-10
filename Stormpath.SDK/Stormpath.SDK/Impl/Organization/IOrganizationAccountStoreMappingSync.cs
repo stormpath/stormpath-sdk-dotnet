@@ -15,6 +15,8 @@
 // </copyright>
 
 using System.Threading;
+using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Organization;
 
 namespace Stormpath.SDK.Impl.Organization
@@ -23,7 +25,7 @@ namespace Stormpath.SDK.Impl.Organization
     /// Represents the synchronous actions that correspond to the default asynchronous actions
     /// available on <see cref="IOrganizationAccountStoreMapping"/>.
     /// </summary>
-    internal interface IOrganizationAccountStoreMappingSync
+    internal interface IOrganizationAccountStoreMappingSync : IAccountStoreMappingSync<IOrganizationAccountStoreMapping>
     {
         /// <summary>
         /// Synchronous counterpart to <see cref="IOrganizationAccountStoreMapping.GetOrganizationAsync(CancellationToken)"/>.

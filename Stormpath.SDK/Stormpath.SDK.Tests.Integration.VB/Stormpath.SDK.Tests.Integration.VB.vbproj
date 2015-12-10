@@ -109,6 +109,7 @@
     <Compile Include="Async\Expansion_linq_tests.vb" />
     <Compile Include="Async\Expansion_retrieval_tests.vb" />
     <Compile Include="Async\Group_tests.vb" />
+    <Compile Include="Async\Organization_tests.vb" />
     <Compile Include="Async\Tenant_tests.vb" />
     <Compile Include="IntegrationTestCollection.vb" />
     <Compile Include="Linq_test.vb" />
@@ -137,6 +138,7 @@
     <Compile Include="Sync\Expansion_linq_tests.vb" />
     <Compile Include="Sync\Expansion_retrieval_tests.vb" />
     <Compile Include="Sync\Group_tests.vb" />
+    <Compile Include="Sync\Organization_tests.vb" />
     <Compile Include="Sync\Tenant_tests.vb" />
   </ItemGroup>
   <ItemGroup>

@@ -471,6 +471,7 @@
     <Compile Include="Resource\IRetrievalOptions{T}.cs" />
     <Compile Include="Resource\ISaveableWithOptions{T}.cs" />
     <Compile Include="Resource\ISaveable{T}.cs" />
+    <Compile Include="Sync\SyncOrganizationAccountStoreMappingExtensions.cs" />
     <Compile Include="Sync\SyncHasTenantExtensions.cs" />
     <Compile Include="Tenant\IHasTenant.cs" />
     <Compile Include="Serialization\ISerializerConsumer{T}.cs" />
