@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -23,6 +24,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration
@@ -263,6 +265,13 @@ namespace Stormpath.SDK.Tests.Integration
                 $"These sync tests do not have a corresponding async test:{NL}{string.Join(", ", syncButNotAsync)}");
         }
 
+        [DebugOnlyFact]
+        public void Equal_numbers_of_Csharp_and_Vb_tests_run()
+        {
+            // TODO terrible hacks. The Equal_numbers_of_Csharp_and_Vb_tests theory can't use DebugOnly
+            // so this test is just a flag.
+        }
+
         [Theory]
         [InlineData("Async")]
         [InlineData("Sync")]
@@ -275,7 +284,18 @@ namespace Stormpath.SDK.Tests.Integration
                 .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
                 .Select(x => GetQualifiedMethodName(x));
 
-            var vbTests = typeof(VB.IntegrationTestCollection).Assembly
+            var vbAssembly = GetVisualBasicIntegrationTestAssembly();
+            if (vbAssembly == null)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Assertly.Fail("Could not locate VB IT assembly.");
+                }
+
+                return;
+            }
+
+            var vbTests = vbAssembly
                 .GetTypes()
                 .Where(x => x.Namespace == $"Stormpath.SDK.Tests.Integration.VB.{@namespace}")
                 .SelectMany(x => x.GetMethods())
@@ -378,6 +398,31 @@ namespace Stormpath.SDK.Tests.Integration
 
             return t.IsDefined(typeof(CompilerGeneratedAttribute), false)
                 || IsCompilerGenerated(t.DeclaringType);
+        }
+
+        /// <summary>
+        /// Tries to get the VB.NET Integration Test assembly.
+        /// </summary>
+        /// <remarks>We are intentionally not adding this as a simple project reference, because
+        /// Mono is currently unable to build the VB project. This gets around that limitation,
+        /// although it means that the associated test(s) can only run under Windows.</remarks>
+        /// <returns>The VB.NET IT assembly, or <see langword="null"/>.</returns>
+        private static Assembly GetVisualBasicIntegrationTestAssembly()
+        {
+            Assembly foundAssembly = null;
+            try
+            {
+                var s = System.IO.Path.DirectorySeparatorChar;
+                var relativePath = $"..{s}..{s}..{s}Stormpath.SDK.Tests.Integration.VB{s}bin{s}Debug{s}Stormpath.SDK.Tests.Integration.VB.dll";
+                var absolutePath = System.IO.Path.GetFullPath(System.IO.Path.Combine(Environment.CurrentDirectory, relativePath));
+
+                foundAssembly = Assembly.LoadFile(absolutePath);
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+            }
+
+            return foundAssembly;
         }
     }
 }

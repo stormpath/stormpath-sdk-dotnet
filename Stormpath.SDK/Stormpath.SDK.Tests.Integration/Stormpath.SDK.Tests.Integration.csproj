@@ -116,10 +116,6 @@
       <Project>{9ed26d42-2203-46c0-b897-8e3218954170}</Project>
       <Name>Stormpath.SDK.Tests.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Stormpath.SDK.Tests.Integration.VB\Stormpath.SDK.Tests.Integration.VB.vbproj">
-      <Project>{c4f65760-c192-4ead-a556-04b00e8696df}</Project>
-      <Name>Stormpath.SDK.Tests.Integration.VB</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Stormpath.SDK\Stormpath.SDK.csproj">
       <Project>{79a65c37-9db1-413a-ac23-708404530295}</Project>
       <Name>Stormpath.SDK</Name>
