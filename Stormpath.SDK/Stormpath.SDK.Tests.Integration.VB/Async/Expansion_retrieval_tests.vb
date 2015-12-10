@@ -26,7 +26,7 @@ Imports Stormpath.SDK.Tenant
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Async
+Namespace Async
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Expansion_retrieval_tests
         Private ReadOnly fixture As TestFixture

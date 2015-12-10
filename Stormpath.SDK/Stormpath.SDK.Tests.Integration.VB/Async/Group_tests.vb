@@ -24,7 +24,7 @@ Imports Stormpath.SDK.Group
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Async
+Namespace Async
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Group_tests
         Private ReadOnly fixture As TestFixture
