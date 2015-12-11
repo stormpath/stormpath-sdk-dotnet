@@ -16,6 +16,7 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
@@ -209,9 +210,20 @@ namespace Stormpath.SDK.Account
         Task<IProviderData> GetProviderDataAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets a queryable list of the account's assigned groups.
+        /// Gets a queryable list of the <see cref="IApplication">Applications</see> the Account may log in to.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to asynchronously list or search Applications.</returns>
+        /// <example>
+        /// <code>
+        /// var allApplications = await account.GetApplications().ToListAsync();
+        /// </code>
+        /// </example>
+        IAsyncQueryable<IApplication> GetApplications();
+
+        /// <summary>
+        /// Gets a queryable list of the account's assigned <see cref="IGroup">Groups</see>.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search Groups.</returns>
         /// <example>
         /// <code>
         /// var allGroups = await account.GetGroups().ToListAsync();
@@ -220,11 +232,11 @@ namespace Stormpath.SDK.Account
         IAsyncQueryable<IGroup> GetGroups();
 
         /// <summary>
-        /// Returns all <see cref="IGroupMembership"/>s that reflect this account.
+        /// Returns all <see cref="IGroupMembership">Group Memberships</see> that reflect this account.
         /// This method is an alternative to <see cref="GetGroups"/> that returns the actual
-        /// association entity representing the account and a group.
+        /// association entity representing the Account and a <see cref="IGroup">Group</see>.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to asynchronously list or search group memberships.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to asynchronously list or search Group Memberships.</returns>
         IAsyncQueryable<IGroupMembership> GetGroupMemberships();
     }
 }

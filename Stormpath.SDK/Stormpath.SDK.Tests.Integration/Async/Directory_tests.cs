@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Directory;
@@ -54,6 +55,17 @@ namespace Stormpath.SDK.Tests.Integration.Async
             // Verify data from IntegrationTestData
             var tenantHref = (await directory.GetTenantAsync()).Href;
             tenantHref.ShouldBe(this.fixture.TenantHref);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_directory_applications(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
+
+            var apps = await directory.GetApplications().ToListAsync();
+            apps.Where(x => x.Href == this.fixture.PrimaryApplicationHref).Any().ShouldBeTrue();
         }
 
         [Theory]

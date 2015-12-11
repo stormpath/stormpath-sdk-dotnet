@@ -71,6 +71,17 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_group_applications(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var group = client.GetGroup(this.fixture.PrimaryGroupHref);
+
+            var apps = group.GetApplications().Synchronously().ToList();
+            apps.Where(x => x.Href == this.fixture.PrimaryApplicationHref).Any().ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Getting_directory_groups(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

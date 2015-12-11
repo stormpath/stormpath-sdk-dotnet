@@ -67,6 +67,16 @@ Namespace Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Getting_group_applications(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim group = client.GetGroup(Me.fixture.PrimaryGroupHref)
+
+            Dim apps = group.GetApplications().Synchronously().ToList()
+            apps.Where(Function(x) x.Href = Me.fixture.PrimaryApplicationHref).Any().ShouldBeTrue()
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Getting_directory_groups(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim directory = client.GetResource(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)

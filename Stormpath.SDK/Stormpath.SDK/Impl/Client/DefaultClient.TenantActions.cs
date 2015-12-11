@@ -153,6 +153,5 @@ namespace Stormpath.SDK.Impl.Client
 
             return await this.tenant.GetOrganizationAsync(href).ConfigureAwait(false);
         }
-
     }
 }

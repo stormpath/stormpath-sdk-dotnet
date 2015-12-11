@@ -56,6 +56,16 @@ Namespace Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Getting_directory_applications(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim directory = client.GetDirectory(Me.fixture.PrimaryDirectoryHref)
+
+            Dim apps = directory.GetApplications().Synchronously().ToList()
+            apps.Where(Function(x) x.Href = Me.fixture.PrimaryApplicationHref).Any().ShouldBeTrue()
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Creating_disabled_directory(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()

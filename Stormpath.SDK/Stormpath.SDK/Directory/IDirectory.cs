@@ -18,10 +18,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Directory
 {
@@ -32,7 +34,16 @@ namespace Stormpath.SDK.Directory
     /// You can map one or more directories (or groups within a directory) to an <see cref="Application.IApplication"/>.
     /// This forms the application's effective 'user base' of all <see cref="IAccount"/> that may use the application.</para>
     /// </summary>
-    public interface IDirectory : IResource, ISaveableWithOptions<IDirectory>, IDeletable, IAuditable, IExtendable, IAccountStore, IAccountCreationActions, IGroupCreationActions
+    public interface IDirectory :
+        IResource,
+        IHasTenant,
+        ISaveableWithOptions<IDirectory>,
+        IDeletable,
+        IAuditable,
+        IExtendable,
+        IAccountStore,
+        IAccountCreationActions,
+        IGroupCreationActions
     {
         /// <summary>
         /// Gets the directory's name.
@@ -88,9 +99,25 @@ namespace Stormpath.SDK.Directory
         Task<IProvider> GetProviderAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets a queryable list of all groups in this directory.
+        /// Gets a queryable list of all <see cref="IGroup">Groups</see> in this Directory.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search Groups.</returns>
+        /// <example>
+        /// <code>
+        /// var directoryGroups = await directory.GetGroups().ToListAsync();
+        /// </code>
+        /// </example>
         IAsyncQueryable<IGroup> GetGroups();
+
+        /// <summary>
+        /// Gets a queryable list of the <see cref="IApplication">Applications</see> the Directory is mapped to as an <see cref="IAccountStore">Account Store</see>.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to asynchronously list or search Applications.</returns>
+        /// <example>
+        /// <code>
+        /// var directoryApplications = await directory.GetApplications().ToListAsync();
+        /// </code>
+        /// </example>
+        IAsyncQueryable<IApplication> GetApplications();
     }
 }

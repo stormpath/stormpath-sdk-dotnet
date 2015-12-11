@@ -118,6 +118,17 @@ Namespace Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Getting_account_applications(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+
+            Dim luke = Await client.GetAccountAsync(Me.fixture.PrimaryAccountHref)
+
+            Dim apps = Await luke.GetApplications().ToListAsync()
+            apps.Where(Function(x) x.Href = Me.fixture.PrimaryApplicationHref).Any().ShouldBeTrue()
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Getting_account_directory(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim application = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)

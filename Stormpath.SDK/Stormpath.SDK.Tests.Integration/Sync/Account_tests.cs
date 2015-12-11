@@ -132,6 +132,18 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_account_applications(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var luke = client.GetAccount(this.fixture.PrimaryAccountHref);
+
+            var apps = luke.GetApplications().Synchronously().ToList();
+            apps.Where(x => x.Href == this.fixture.PrimaryApplicationHref).Any().ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Getting_account_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

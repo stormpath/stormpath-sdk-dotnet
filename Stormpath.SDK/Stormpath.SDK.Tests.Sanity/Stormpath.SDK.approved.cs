@@ -40,6 +40,7 @@ namespace Stormpath.SDK.Account
         string Username { get; }
         System.Threading.Tasks.Task<Stormpath.SDK.Group.IGroupMembership> AddGroupAsync(Stormpath.SDK.Group.IGroup group, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<Stormpath.SDK.Group.IGroupMembership> AddGroupAsync(string hrefOrName, System.Threading.CancellationToken cancellationToken = null);
+        Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Application.IApplication> GetApplications();
         System.Threading.Tasks.Task<Stormpath.SDK.Directory.IDirectory> GetDirectoryAsync(System.Threading.CancellationToken cancellationToken = null);
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Group.IGroupMembership> GetGroupMemberships();
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Group.IGroup> GetGroups();
@@ -462,6 +463,7 @@ namespace Stormpath.SDK.Directory
         string Description { get; }
         string Name { get; }
         Stormpath.SDK.Directory.DirectoryStatus Status { get; }
+        Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Application.IApplication> GetApplications();
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Group.IGroup> GetGroups();
         System.Threading.Tasks.Task<Stormpath.SDK.Provider.IProvider> GetProviderAsync(System.Threading.CancellationToken cancellationToken = null);
         Stormpath.SDK.Directory.IDirectory SetDescription(string description);
@@ -516,6 +518,7 @@ namespace Stormpath.SDK.Group
         System.Threading.Tasks.Task<Stormpath.SDK.Group.IGroupMembership> AddAccountAsync(Stormpath.SDK.Account.IAccount account, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<Stormpath.SDK.Group.IGroupMembership> AddAccountAsync(string hrefOrEmailOrUsername, System.Threading.CancellationToken cancellationToken = null);
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Group.IGroupMembership> GetAccountMemberships();
+        Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Application.IApplication> GetApplications();
         System.Threading.Tasks.Task<Stormpath.SDK.Directory.IDirectory> GetDirectoryAsync(System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<bool> RemoveAccountAsync(Stormpath.SDK.Account.IAccount account, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<bool> RemoveAccountAsync(string hrefOrEmailOrUsername, System.Threading.CancellationToken cancellationToken = null);

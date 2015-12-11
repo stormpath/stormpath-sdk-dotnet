@@ -66,6 +66,16 @@ Namespace Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Getting_group_applications(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim group = Await client.GetGroupAsync(Me.fixture.PrimaryGroupHref)
+
+            Dim apps = Await group.GetApplications().ToListAsync()
+            apps.Where(Function(x) x.Href = Me.fixture.PrimaryApplicationHref).Any().ShouldBeTrue()
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Getting_directory_groups(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim directory = Await client.GetResourceAsync(Of IDirectory)(Me.fixture.PrimaryDirectoryHref)

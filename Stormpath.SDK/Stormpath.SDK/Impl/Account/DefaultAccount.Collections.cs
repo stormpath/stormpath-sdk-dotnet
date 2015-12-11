@@ -15,6 +15,7 @@
 // </copyright>
 
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
@@ -23,6 +24,9 @@ namespace Stormpath.SDK.Impl.Account
 {
     internal sealed partial class DefaultAccount
     {
+        IAsyncQueryable<IApplication> IAccount.GetApplications()
+            => new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetInternalAsyncDataStore());
+
         IAsyncQueryable<IGroup> IAccount.GetGroups()
             => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalAsyncDataStore());
 

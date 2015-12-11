@@ -129,6 +129,18 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_account_applications(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var luke = await client.GetAccountAsync(this.fixture.PrimaryAccountHref);
+
+            var apps = await luke.GetApplications().ToListAsync();
+            apps.Where(x => x.Href == this.fixture.PrimaryApplicationHref).Any().ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_account_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

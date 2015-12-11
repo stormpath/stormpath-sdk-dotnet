@@ -55,6 +55,16 @@ Namespace Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Getting_directory_applications(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim directory = Await client.GetDirectoryAsync(Me.fixture.PrimaryDirectoryHref)
+
+            Dim apps = Await directory.GetApplications().ToListAsync()
+            apps.Where(Function(x) x.Href = Me.fixture.PrimaryApplicationHref).Any().ShouldBeTrue()
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Creating_disabled_directory(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()

@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Application;
@@ -66,6 +67,17 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var groups = await app.GetGroups().ToListAsync();
 
             groups.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_group_applications(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var group = await client.GetGroupAsync(this.fixture.PrimaryGroupHref);
+
+            var apps = await group.GetApplications().ToListAsync();
+            apps.Where(x => x.Href == this.fixture.PrimaryApplicationHref).Any().ShouldBeTrue();
         }
 
         [Theory]

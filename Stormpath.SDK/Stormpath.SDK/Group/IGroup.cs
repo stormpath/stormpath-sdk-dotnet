@@ -18,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
@@ -139,5 +140,16 @@ namespace Stormpath.SDK.Group
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to asynchronously list or search memberships.</returns>
         IAsyncQueryable<IGroupMembership> GetAccountMemberships();
+
+        /// <summary>
+        /// Gets a queryable list of the <see cref="IApplication">Applications</see> the Group is mapped to as an <see cref="IAccountStore">Account Store</see>.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to asynchronously list or search Applications.</returns>
+        /// <example>
+        /// <code>
+        /// var groupApplications = await group.GetApplications().ToListAsync();
+        /// </code>
+        /// </example>
+        IAsyncQueryable<IApplication> GetApplications();
     }
 }

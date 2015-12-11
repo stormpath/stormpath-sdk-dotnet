@@ -31,6 +31,7 @@ namespace Stormpath.SDK.Impl.Group
         private static readonly string DirectoryPropertyName = "directory";
         private static readonly string AccountsPropertyName = "accounts";
         private static readonly string AccountMembershipsPropertyName = "accountMemberships";
+        private static readonly string ApplicationsPropertyName = "applications";
 
         public DefaultGroup(ResourceData data)
             : base(data)
@@ -52,6 +53,8 @@ namespace Stormpath.SDK.Impl.Group
         internal IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
         internal IEmbeddedProperty AccountMemberships => this.GetLinkProperty(AccountMembershipsPropertyName);
+
+        internal IEmbeddedProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
         IGroup IGroup.SetDescription(string description)
         {

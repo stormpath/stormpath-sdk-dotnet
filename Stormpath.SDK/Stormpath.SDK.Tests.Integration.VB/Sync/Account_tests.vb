@@ -113,6 +113,17 @@ Namespace Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Getting_account_applications(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+
+            Dim luke = client.GetAccount(Me.fixture.PrimaryAccountHref)
+
+            Dim apps = luke.GetApplications().Synchronously().ToList()
+            apps.Where(Function(x) x.Href = Me.fixture.PrimaryApplicationHref).Any().ShouldBeTrue()
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Getting_account_directory(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim application = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
