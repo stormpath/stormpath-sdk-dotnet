@@ -87,9 +87,11 @@
   <ItemGroup>
     <Compile Include="Fakes\FakeDataStore{TType}.cs" />
     <Compile Include="Fakes\FakeJson.cs" />
+    <Compile Include="Fakes\FakeUserAgentBuilder.cs" />
     <Compile Include="Fakes\StubDataStore.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
     <Compile Include="Helpers\CollectionTestHarness{T}.cs" />
+    <Compile Include="Helpers\TestDataStore.cs" />
     <Compile Include="Impl\Cache\Sync_caching_tests.cs" />
     <Compile Include="Impl\Cache\Async_caching_tests.cs" />
     <Compile Include="Impl\Cache\InMemoryCacheProviderBuilder_tests.cs" />
@@ -185,7 +187,7 @@
     <Compile Include="Impl\Utility\Properties_tests.cs" />
     <Compile Include="Impl\Utility\RequestHelper_tests.cs" />
     <Compile Include="Impl\Utility\UnixDate_tests.cs" />
-    <Compile Include="Impl\Utility\WindowsVersion_tests.cs" />
+    <Compile Include="Impl\Introspection\WindowsVersion_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LoggerExtensions_tests.cs" />
     <Compile Include="User_agent_tests.cs" />

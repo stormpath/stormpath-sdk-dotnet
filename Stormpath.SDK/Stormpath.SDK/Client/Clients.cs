@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Client
@@ -36,20 +37,12 @@ namespace Stormpath.SDK.Client
         /// </example>
         public static IClientBuilder Builder()
         {
-            if (!DetectLanguage.RanOnce)
-            {
-                try
-                {
-                    DetectLanguage.Result = DetectLanguage.ForAssembly(System.Reflection.Assembly.GetCallingAssembly());
-                    DetectLanguage.RanOnce = true;
-                }
-                catch
-                {
-                    // swallow
-                }
-            }
+            var userAgentBuilder = new UserAgentBuilder(
+                Impl.Introspection.Platform.Analyze(),
+                Impl.Introspection.Sdk.Anaylze(),
+                Impl.Introspection.SourceLanguage.Analyze(System.Reflection.Assembly.GetCallingAssembly()));
 
-            return new Impl.Client.DefaultClientBuilder();
+            return new DefaultClientBuilder(userAgentBuilder);
         }
     }
 }

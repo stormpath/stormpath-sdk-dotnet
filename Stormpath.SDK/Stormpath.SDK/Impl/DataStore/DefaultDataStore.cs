@@ -20,6 +20,8 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Impl.Cache;
+using Stormpath.SDK.Impl.Client;
+using Stormpath.SDK.Impl.DataStore.Filters;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.IdentityMap;
@@ -33,6 +35,26 @@ namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed partial class DefaultDataStore : IInternalDataStore, IInternalAsyncDataStore, IInternalSyncDataStore, IDisposable
     {
+        private readonly string baseUrl;
+        private readonly IRequestExecutor requestExecutor;
+        private readonly ICacheResolver cacheResolver;
+        private readonly ICacheProvider cacheProvider;
+        private readonly IUserAgentBuilder userAgentBuilder;
+        private readonly JsonSerializationProvider serializer;
+        private readonly ILogger logger;
+        private readonly IResourceFactory resourceFactory;
+        private readonly IResourceConverter resourceConverter;
+        private readonly IIdentityMap<ResourceData> identityMap;
+        private readonly IAsynchronousFilterChain defaultAsyncFilters;
+        private readonly ISynchronousFilterChain defaultSyncFilters;
+        private readonly UriQualifier uriQualifier;
+
+        private bool disposed = false;
+
+        private IInternalAsyncDataStore AsAsyncInterface => this;
+
+        private IInternalSyncDataStore AsSyncInterface => this;
+
         IRequestExecutor IInternalDataStore.RequestExecutor => this.requestExecutor;
 
         ICacheResolver IInternalDataStore.CacheResolver => this.cacheResolver;
@@ -43,7 +65,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         IClientApiKey IInternalDataStore.ApiKey => this.requestExecutor.ApiKey;
 
-        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, ICacheProvider cacheProvider, TimeSpan identityMapExpiration)
+        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, IUserAgentBuilder userAgentBuilder, ICacheProvider cacheProvider, TimeSpan identityMapExpiration)
         {
             if (requestExecutor == null)
             {
@@ -70,6 +92,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.requestExecutor = requestExecutor;
             this.cacheProvider = cacheProvider;
             this.cacheResolver = new DefaultCacheResolver(cacheProvider, this.logger);
+            this.userAgentBuilder = userAgentBuilder;
 
             this.serializer = new JsonSerializationProvider(serializer);
             this.identityMap = new MemoryCacheIdentityMap<ResourceData>(identityMapExpiration, this.logger);

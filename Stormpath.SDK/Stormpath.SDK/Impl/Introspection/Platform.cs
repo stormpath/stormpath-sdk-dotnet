@@ -1,4 +1,4 @@
-﻿// <copyright file="PlatformHelper.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Platform.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,35 +15,65 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Stormpath.SDK.Impl.Utility
+namespace Stormpath.SDK.Impl.Introspection
 {
-    internal static class PlatformHelper
+    internal sealed class Platform : IPlatform
     {
-        // Lazy will cache this result so the semi-expensive reflection call only happens once.
-        private static readonly Lazy<bool> IsRunningOnMonoValue = new Lazy<bool>(() =>
+        public bool IsPlatformUnix { get; private set; }
+
+        public bool IsRunningOnMono { get; private set; }
+
+        public string MonoRuntimeVersion { get; private set; }
+
+        public string FrameworkVersion { get; private set; }
+
+        public string OsName { get; private set; }
+
+        public string OsVersion { get; private set; }
+
+        private Platform()
         {
-            return Type.GetType("Mono.Runtime") != null;
-        });
+        }
 
-        public static bool IsRunningOnMono()
-            => IsRunningOnMonoValue.Value;
+        public static Platform Analyze()
+        {
+            var info = new Platform();
 
-        public static bool IsPlatformUnix()
+            info.IsPlatformUnix = GetIsPlatformUnix();
+
+            info.IsRunningOnMono = Type.GetType("Mono.Runtime") != null;
+
+            info.MonoRuntimeVersion = info.IsRunningOnMono
+                ? GetMonoRuntimeVersion()
+                : string.Empty;
+
+            info.FrameworkVersion = info.IsRunningOnMono
+                ? GetMonoDotNetFrameworkVersion()
+                : GetDotNetFrameworkVersion();
+
+            info.OsName = GetOSName();
+
+            info.OsVersion = info.IsRunningOnMono
+                ? GetMonoOSVersion()
+                : GetWindowsOSVersion();
+
+            return info;
+        }
+
+        private static bool GetIsPlatformUnix()
         {
             var p = (int)Environment.OSVersion.Platform;
             return (p == 4) || (p == 6) || (p == 128);
         }
 
-        public static string GetMonoRuntimeVersion()
+        private static string GetMonoRuntimeVersion()
         {
-            if (!IsRunningOnMono())
-            {
-                return "unknown-1";
-            }
-
             var monoRuntimeType = Type.GetType("Mono.Runtime");
             if (monoRuntimeType == null)
             {
@@ -76,19 +106,14 @@ namespace Stormpath.SDK.Impl.Utility
             return version;
         }
 
-        public static string GetMonoDotNetFrameworkVersion()
+        private static string GetMonoDotNetFrameworkVersion()
         {
-            if (!IsRunningOnMono())
-            {
-                return "unknown";
-            }
-
             var version = $"{Environment.Version.Major}.{Environment.Version.Minor}";
 
             return version;
         }
 
-        public static string GetDotNetFrameworkVersion()
+        private static string GetDotNetFrameworkVersion()
         {
             var olderFrameworkVersion = GetDotNet1Thru4Version();
             var newerFrameworkVersion = GetDotNet45OrNewerVersion();
@@ -180,7 +205,7 @@ namespace Stormpath.SDK.Impl.Utility
             }
         }
 
-        public static string GetOSName()
+        private static string GetOSName()
         {
             int platformID = (int)Environment.OSVersion.Platform;
 
@@ -202,13 +227,6 @@ namespace Stormpath.SDK.Impl.Utility
             }
         }
 
-        public static string GetOSVersion()
-        {
-            return IsRunningOnMono()
-                ? GetMonoOSVersion()
-                : WindowsVersionHelper.GetWindowsOSVersion();
-        }
-
         private static string GetMonoOSVersion()
         {
             var operatingSystemVersion = Environment.OSVersion.Version;
@@ -219,6 +237,11 @@ namespace Stormpath.SDK.Impl.Utility
             }
 
             return version;
+        }
+
+        private static string GetWindowsOSVersion()
+        {
+            return WindowsVersion.Analyze().ToString();
         }
     }
 }

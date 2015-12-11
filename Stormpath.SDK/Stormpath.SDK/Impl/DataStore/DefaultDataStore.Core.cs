@@ -41,25 +41,6 @@ namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed partial class DefaultDataStore
     {
-        private readonly string baseUrl;
-        private readonly IRequestExecutor requestExecutor;
-        private readonly ICacheResolver cacheResolver;
-        private readonly ICacheProvider cacheProvider;
-        private readonly JsonSerializationProvider serializer;
-        private readonly ILogger logger;
-        private readonly IResourceFactory resourceFactory;
-        private readonly IResourceConverter resourceConverter;
-        private readonly IIdentityMap<ResourceData> identityMap;
-        private readonly IAsynchronousFilterChain defaultAsyncFilters;
-        private readonly ISynchronousFilterChain defaultSyncFilters;
-        private readonly UriQualifier uriQualifier;
-
-        private bool disposed = false;
-
-        private IInternalAsyncDataStore AsAsyncInterface => this;
-
-        private IInternalSyncDataStore AsSyncInterface => this;
-
         private IAsynchronousFilterChain BuildDefaultAsyncFilterChain()
         {
             var asyncFilterChain = new DefaultAsynchronousFilterChain(this);
@@ -95,7 +76,7 @@ namespace Stormpath.SDK.Impl.DataStore
         private void ApplyDefaultRequestHeaders(IHttpRequest request)
         {
             request.Headers.Accept = "application/json";
-            request.Headers.UserAgent = UserAgentBuilder.GetUserAgent();
+            request.Headers.UserAgent = this.userAgentBuilder.GetUserAgent();
         }
 
         private Map GetBody<T>(IHttpResponse response)

@@ -28,6 +28,7 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.IdSite;
 using Stormpath.SDK.Impl.Logging;
 using Stormpath.SDK.Jwt;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.IdSite
@@ -98,13 +99,7 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
             var fakeRequestExecutor = Substitute.For<IRequestExecutor>();
             fakeRequestExecutor.ApiKey.Returns(testApiKey);
 
-            this.dataStore = new DefaultDataStore(
-                fakeRequestExecutor,
-                "https://api.stormpath.com/v1",
-                new JsonNetSerializer(),
-                new NullLogger(),
-                Caches.NewInMemoryCacheProvider().Build(),
-                TimeSpan.FromMinutes(10));
+            this.dataStore = TestDataStore.Create(fakeRequestExecutor, Caches.NewInMemoryCacheProvider().Build());
 
             var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri($"https://foo.bar?{IdSiteClaims.JwtResponse}={jwtResponse}"));
 

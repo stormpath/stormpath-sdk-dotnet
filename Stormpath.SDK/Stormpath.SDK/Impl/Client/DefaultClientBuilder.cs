@@ -20,6 +20,7 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
+using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Logging;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
@@ -36,6 +37,7 @@ namespace Stormpath.SDK.Impl.Client
         private readonly IClientApiKeyBuilder clientApiKeyBuilder;
         private readonly IJsonSerializerBuilder serializerBuilder;
         private readonly IHttpClientBuilder httpClientBuilder;
+        private readonly IUserAgentBuilder userAgentBuilder;
 
         private string baseUrl = DefaultBaseUrl;
         private int connectionTimeout = DefaultConnectionTimeout;
@@ -45,15 +47,17 @@ namespace Stormpath.SDK.Impl.Client
         private IClientApiKey apiKey;
         private ILogger logger;
 
-        public DefaultClientBuilder()
+        public DefaultClientBuilder(IUserAgentBuilder userAgentBuilder)
         {
+            this.userAgentBuilder = userAgentBuilder;
+
             this.serializerBuilder = new DefaultJsonSerializerBuilder();
             this.httpClientBuilder = new DefaultHttpClientBuilder();
             this.clientApiKeyBuilder = ClientApiKeys.Builder();
         }
 
-        internal DefaultClientBuilder(IClientApiKeyBuilder clientApiKeyBuilder)
-            : this()
+        internal DefaultClientBuilder(IClientApiKeyBuilder clientApiKeyBuilder, IUserAgentBuilder userAgentBuilder)
+            : this(userAgentBuilder)
         {
             this.clientApiKeyBuilder = clientApiKeyBuilder;
         }
@@ -220,6 +224,7 @@ namespace Stormpath.SDK.Impl.Client
                 this.httpClientBuilder.Build(),
                 this.serializerBuilder.Build(),
                 this.cacheProvider,
+                this.userAgentBuilder,
                 this.logger,
                 DefaultIdentityMapSlidingExpiration);
         }

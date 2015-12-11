@@ -1,4 +1,4 @@
-﻿// <copyright file="SourceLanguage.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ISourceLanguage.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +14,13 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Impl.Utility
+namespace Stormpath.SDK.Impl.Introspection
 {
-    internal enum SourceLanguage
+    /// <summary>
+    /// Represents the original source language of a compiled assembly.
+    /// </summary>
+    internal interface ISourceLanguage
     {
-        CSharp,
-        Vb
+        string ToString();
     }
 }

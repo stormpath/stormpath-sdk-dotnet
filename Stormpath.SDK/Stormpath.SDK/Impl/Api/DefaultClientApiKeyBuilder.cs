@@ -40,6 +40,7 @@ namespace Stormpath.SDK.Impl.Api
         private readonly IFile file;
 
         private readonly ILogger logger;
+        private readonly Introspection.Platform platform;
 
         // Instance fields
         private string apiKeyId;
@@ -58,6 +59,8 @@ namespace Stormpath.SDK.Impl.Api
             this.logger = logger != null
                 ? logger
                 : new NullLogger();
+
+            this.platform = Introspection.Platform.Analyze();
         }
 
         IClientApiKeyBuilder IClientApiKeyBuilder.SetId(string id)
@@ -318,7 +321,7 @@ namespace Stormpath.SDK.Impl.Api
 
             string homePath = null;
 
-            if (PlatformHelper.IsPlatformUnix())
+            if (this.platform.IsPlatformUnix)
             {
                 homePath = this.env.GetEnvironmentVariable("HOME");
             }

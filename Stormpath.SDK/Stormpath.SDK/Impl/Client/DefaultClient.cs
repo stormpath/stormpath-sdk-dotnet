@@ -61,6 +61,7 @@ namespace Stormpath.SDK.Impl.Client
             IHttpClient httpClient,
             IJsonSerializer serializer,
             ICacheProvider cacheProvider,
+            IUserAgentBuilder userAgentBuilder,
             ILogger logger,
             TimeSpan identityMapExpiration)
         {
@@ -91,7 +92,7 @@ namespace Stormpath.SDK.Impl.Client
 
             var requestExecutor = new DefaultRequestExecutor(httpClient, apiKey, authenticationScheme, this.logger);
 
-            this.dataStore = new DefaultDataStore(requestExecutor, baseUrl, this.serializer, this.logger, cacheProvider, identityMapExpiration);
+            this.dataStore = new DefaultDataStore(requestExecutor, baseUrl, this.serializer, this.logger, userAgentBuilder, cacheProvider, identityMapExpiration);
             this.dataStoreAsync = this.dataStore as IInternalAsyncDataStore;
             this.dataStoreSync = this.dataStore as IInternalSyncDataStore;
         }

@@ -95,6 +95,7 @@
     <Compile Include="Cache\AbstractCacheProviderBuilder{T}.cs" />
     <Compile Include="Impl\Application\DefaultApplicationAccountStoreMapping.cs" />
     <Compile Include="Impl\Application\IApplicationAccountStoreMappingSync.cs" />
+    <Compile Include="Impl\Client\IUserAgentBuilder.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Core.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Create.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Delete.cs" />
@@ -258,6 +259,12 @@
     <Compile Include="IdSite\InvalidIdSiteTokenException.cs" />
     <Compile Include="Impl\IdSite\InlineIdSiteSyncResultListener.cs" />
     <Compile Include="Impl\IdSite\InlineIdSiteAsyncResultListener.cs" />
+    <Compile Include="Impl\Introspection\Integration.cs" />
+    <Compile Include="Impl\Introspection\IPlatform.cs" />
+    <Compile Include="Impl\Introspection\ISdk.cs" />
+    <Compile Include="Impl\Introspection\ISourceLanguage.cs" />
+    <Compile Include="Impl\Introspection\Platform.cs" />
+    <Compile Include="Impl\Introspection\Sdk.cs" />
     <Compile Include="Impl\Jwt\DefaultJwtSigner.cs" />
     <Compile Include="Impl\Jwt\IJwtSigner.cs" />
     <Compile Include="Impl\Jwt\JsonWebToken.cs" />
@@ -400,10 +407,9 @@
     <Compile Include="Impl\Tenant\ITenantSync.cs" />
     <Compile Include="Impl\Utility\AnonymousType.cs" />
     <Compile Include="Impl\Utility\Base64.cs" />
-    <Compile Include="Impl\Utility\DetectLanguage.cs" />
     <Compile Include="Impl\Utility\HmacGenerator.cs" />
     <Compile Include="Impl\Utility\ITypeLoader{T}.cs" />
-    <Compile Include="Impl\Utility\SourceLanguage.cs" />
+    <Compile Include="Impl\Introspection\SourceLanguage.cs" />
     <Compile Include="Impl\Utility\TypeLoader{T}.cs" />
     <Compile Include="Impl\Utility\UnixDate.cs" />
     <Compile Include="Linq\AsyncQueryableExpandExtensions.cs" />
@@ -519,7 +525,7 @@
     <Compile Include="Http\HttpMethod.cs" />
     <Compile Include="Http\QueryString.cs" />
     <Compile Include="Impl\Http\Support\UriQualifier.cs" />
-    <Compile Include="Impl\Http\UserAgentBuilder.cs" />
+    <Compile Include="Impl\Client\UserAgentBuilder.cs" />
     <Compile Include="Impl\Http\IRequestExecutor.cs" />
     <Compile Include="Impl\DataStore\IResourceFactory.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceFactory.cs" />
@@ -545,9 +551,7 @@
     <Compile Include="Impl\Utility\Iso8601.cs" />
     <Compile Include="Impl\Utility\RequestHelper.cs" />
     <Compile Include="Impl\Utility\SafeNativeMethods.cs" />
-    <Compile Include="Impl\Utility\WindowsVersionHelper.cs" />
-    <Compile Include="Impl\Utility\PlatformHelper.cs" />
-    <Compile Include="Impl\Utility\WindowsVersion.cs" />
+    <Compile Include="Impl\Introspection\WindowsVersion.cs" />
     <Compile Include="Linq\AsyncQueryableExtensions.cs" />
     <Compile Include="Linq\AsyncQueryableFilterExtensions.cs" />
     <Compile Include="Linq\WithinExpressionExtensions.cs" />

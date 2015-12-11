@@ -48,7 +48,7 @@ namespace Stormpath.SDK.Tests.Fakes
                 ? new SDK.Impl.Logging.NullLogger()
                 : logger;
 
-            this.proxyInstance = new DefaultDataStore(fakeRequestExecutor.Object, baseHref, new JsonNetSerializer(), useLogger, new NullCacheProvider(), TimeSpan.FromMinutes(10));
+            this.proxyInstance = new DefaultDataStore(fakeRequestExecutor.Object, baseHref, new JsonNetSerializer(), useLogger, new FakeUserAgentBuilder(), new NullCacheProvider(), TimeSpan.FromMinutes(10));
         }
 
         string IInternalDataStore.BaseUrl => this.ProxyDataStore.BaseUrl;

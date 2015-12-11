@@ -35,31 +35,20 @@ using Stormpath.SDK.Linq;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Cache
 {
     public class Async_caching_tests : IDisposable
     {
-        private static readonly string BaseUrl = "https://api.stormpath.com/v1";
         private IInternalDataStore dataStore;
 
         private void BuildDataStore(string resourceResponse, ICacheProvider cacheProviderUnderTest)
         {
             var fakeRequestExecutor = new StubRequestExecutor(resourceResponse);
 
-            this.BuildDataStore(fakeRequestExecutor.Object, cacheProviderUnderTest);
-        }
-
-        private void BuildDataStore(IRequestExecutor requestExecutor, ICacheProvider cacheProviderUnderTest)
-        {
-            this.dataStore = new DefaultDataStore(
-                requestExecutor,
-                baseUrl: BaseUrl,
-                serializer: new JsonNetSerializer(),
-                logger: new NullLogger(),
-                cacheProvider: cacheProviderUnderTest,
-                identityMapExpiration: TimeSpan.FromMinutes(10));
+            this.dataStore = TestDataStore.Create(fakeRequestExecutor.Object, cacheProviderUnderTest);
         }
 
         [Fact]
@@ -226,7 +215,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             // GET returns original
             requestExecutor
@@ -259,7 +248,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             // GET returns expanded request
             requestExecutor
@@ -335,7 +324,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
 
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             // GET returns expanded request
             requestExecutor
@@ -364,7 +353,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             var emailVerificationTokenResponse = @"
 {
@@ -420,7 +409,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             var emailVerificationTokenResponse = @"
 {
@@ -448,7 +437,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             var passwordResetTokenResponse = @"
 {
@@ -484,7 +473,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             var authResponse = @"
 {

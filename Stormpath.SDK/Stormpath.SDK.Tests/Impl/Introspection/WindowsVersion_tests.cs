@@ -15,10 +15,10 @@
 // </copyright>
 
 using Shouldly;
-using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Impl.Introspection;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Impl.Utility
+namespace Stormpath.SDK.Tests.Impl.Introspection
 {
     public class WindowsVersion_tests
     {

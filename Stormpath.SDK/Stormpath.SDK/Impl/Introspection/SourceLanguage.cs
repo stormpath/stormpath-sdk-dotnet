@@ -1,4 +1,4 @@
-﻿// <copyright file="DetectLanguage.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SourceLanguage.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,15 +17,24 @@
 using System.Linq;
 using System.Reflection;
 
-namespace Stormpath.SDK.Impl.Utility
+namespace Stormpath.SDK.Impl.Introspection
 {
-    internal static class DetectLanguage
+    internal sealed class SourceLanguage : ISourceLanguage
     {
-        public static bool RanOnce = false;
+        private static readonly SourceLanguage CSharp = new SourceLanguage("CSharp");
+        private static readonly SourceLanguage Vb = new SourceLanguage("VB");
 
-        public static SourceLanguage? Result;
+        private readonly string language;
 
-        public static SourceLanguage ForAssembly(Assembly assembly)
+        private SourceLanguage(string language)
+        {
+            this.language = language;
+        }
+
+        public override string ToString()
+            => this.language;
+
+        public static SourceLanguage Analyze(Assembly assembly)
         {
             var referencedAssemblies = assembly
                 .GetReferencedAssemblies()
@@ -49,8 +58,8 @@ namespace Stormpath.SDK.Impl.Utility
             var scoreForVb = evidenceForVb.Count(x => x) - evidenceForCsharp.Count(x => x);
 
             return scoreForVb > 0
-                ? SourceLanguage.Vb
-                : SourceLanguage.CSharp;
+                ? Vb
+                : CSharp;
         }
     }
 }

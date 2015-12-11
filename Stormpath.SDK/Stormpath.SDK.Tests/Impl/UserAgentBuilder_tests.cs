@@ -15,7 +15,8 @@
 // </copyright>
 
 using Shouldly;
-using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Impl.Client;
+using Stormpath.SDK.Impl.Introspection;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -33,7 +34,10 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void UserAgent_is_known()
         {
-            var userAgent = UserAgentBuilder.GetUserAgent();
+            var userAgent = new UserAgentBuilder(
+                Platform.Analyze(),
+                Sdk.Anaylze(),
+                SourceLanguage.Analyze(this.GetType().Assembly)).GetUserAgent();
 
             userAgent.ShouldNotContain("unknown");
 

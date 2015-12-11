@@ -1,4 +1,4 @@
-﻿// <copyright file="WindowsVersionHelper.cs" company="Stormpath, Inc.">
+﻿// <copyright file="WindowsVersion.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,12 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Shared;
 
-namespace Stormpath.SDK.Impl.Utility
+namespace Stormpath.SDK.Impl.Introspection
 {
-    internal static class WindowsVersionHelper
+    internal class WindowsVersion : ImmutableValueObject<WindowsVersion>
     {
         // List from https://msdn.microsoft.com/en-us/library/windows/desktop/ms724833(v=vs.85).aspx
         private static readonly int NTWorkstation = 1;
@@ -47,19 +49,34 @@ namespace Stormpath.SDK.Impl.Utility
                 { new WindowsVersion(10, 0), "10" },
             };
 
-        public static string GetWindowsOSVersion()
+        public int Major { get; private set; }
+
+        public int Minor { get; private set; }
+
+        public int? ProductType { get; private set; }
+
+        internal WindowsVersion(int major, int minor, int? productType = null)
+        {
+            this.Major = major;
+            this.Minor = minor;
+            this.ProductType = productType;
+        }
+
+        public override string ToString()
+        {
+            string version = $"{this.Major}.{this.Minor}" + (this.ProductType == null ? string.Empty : "." + this.ProductType);
+            WindowsVersionLookupTable.TryGetValue(this, out version);
+
+            return version;
+        }
+
+        public static WindowsVersion Analyze()
         {
             var major = Environment.OSVersion.Version.Major;
             var minor = Environment.OSVersion.Version.Minor;
             var productType = GetProductType();
 
-            string version;
-            if (!WindowsVersionLookupTable.TryGetValue(new WindowsVersion(major, minor, productType), out version))
-            {
-                return $"unknown-{major}.{minor}.{productType}";
-            }
-
-            return version;
+            return new WindowsVersion(major, minor, productType);
         }
 
         private static int? GetProductType()

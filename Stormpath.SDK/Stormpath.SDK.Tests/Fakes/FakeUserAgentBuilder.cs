@@ -1,4 +1,4 @@
-﻿// <copyright file="WindowsVersion.cs" company="Stormpath, Inc.">
+﻿// <copyright file="FakeUserAgentBuilder.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,13 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Impl.Client;
 
-namespace Stormpath.SDK.Impl.Utility
+namespace Stormpath.SDK.Tests.Fakes
 {
-    internal class WindowsVersion : ImmutableValueObject<WindowsVersion>
+    public sealed class FakeUserAgentBuilder : IUserAgentBuilder
     {
-        private readonly int major;
-        private readonly int minor;
-        private readonly int? productType;
-
-        public WindowsVersion(int major, int minor, int? productType = null)
-        {
-            this.major = major;
-            this.minor = minor;
-            this.productType = productType;
-        }
+        string IUserAgentBuilder.GetUserAgent()
+            => "fake/testing";
     }
 }
