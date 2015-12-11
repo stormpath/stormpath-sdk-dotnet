@@ -18,6 +18,7 @@ using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
@@ -184,5 +185,60 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="Error.ResourceException">The token was not valid.</exception>
         public static IAccount VerifyAccountEmail(this ITenantActions tenantActions, string token)
             => (tenantActions as ITenantActionsSync).VerifyAccountEmail(token);
+
+        /// <summary>
+        /// Retrieves the <see cref="IAccount">Account</see> at the specified URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IAccount}(DataStore.IDataStore, string)"/>.</remarks>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="href">The resource URL of the <see cref="IAccount">Account</see> to retrieve.</param>
+        /// <returns>The <see cref="IAccount">Account</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        public static IAccount GetAccount(this ITenantActions tenantActions, string href)
+            => (tenantActions as ITenantActionsSync).GetAccount(href);
+
+        /// <summary>
+        /// Retrieves the <see cref="IApplication">Application</see> at the specified URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IApplication}(DataStore.IDataStore, string)"/>.</remarks>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="href">The resource URL of the <see cref="IApplication">Application</see> to retrieve.</param>
+        /// <returns>The <see cref="IApplication">Application</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        public static IApplication GetApplication(this ITenantActions tenantActions, string href)
+            => (tenantActions as ITenantActionsSync).GetApplication(href);
+
+        /// <summary>
+        /// Retrieves the <see cref="IDirectory">Directory</see> at the specified URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IDirectory}(DataStore.IDataStore, string)"/>.</remarks>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="href">The resource URL of the <see cref="IDirectory">Directory</see> to retrieve.</param>
+        /// <returns>The <see cref="IDirectory">Directory</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        public static IDirectory GetDirectory(this ITenantActions tenantActions, string href)
+            => (tenantActions as ITenantActionsSync).GetDirectory(href);
+
+        /// <summary>
+        /// Retrieves the <see cref="IGroup">Group</see> at the specified URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IGroup}(DataStore.IDataStore, string)"/>.</remarks>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="href">The resource URL of the <see cref="IGroup">Group</see> to retrieve.</param>
+        /// <returns>The <see cref="IGroup">Group</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        public static IGroup GetGroup(this ITenantActions tenantActions, string href)
+            => (tenantActions as ITenantActionsSync).GetGroup(href);
+
+        /// <summary>
+        /// Retrieves the <see cref="IOrganization">Organization</see> at the specified URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IOrganization}(DataStore.IDataStore, string)"/>.</remarks>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="href">The resource URL of the <see cref="IOrganization">Organization</see> to retrieve.</param>
+        /// <returns>The <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        public static IOrganization GetOrganization(this ITenantActions tenantActions, string href)
+            => (tenantActions as ITenantActionsSync).GetOrganization(href);
     }
 }

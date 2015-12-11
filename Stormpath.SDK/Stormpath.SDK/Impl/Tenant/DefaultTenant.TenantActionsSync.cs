@@ -18,6 +18,7 @@ using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Resource;
@@ -130,5 +131,20 @@ namespace Stormpath.SDK.Impl.Tenant
             var tokenResponse = this.GetInternalSyncDataStore().Create<IResource, IEmailVerificationToken>(href, null);
             return this.GetInternalSyncDataStore().GetResource<IAccount>(tokenResponse.Href);
         }
+
+        IAccount ITenantActionsSync.GetAccount(string href)
+            => this.GetInternalSyncDataStore().GetResource<IAccount>(href);
+
+        IApplication ITenantActionsSync.GetApplication(string href)
+            => this.GetInternalSyncDataStore().GetResource<IApplication>(href);
+
+        IDirectory ITenantActionsSync.GetDirectory(string href)
+            => this.GetInternalSyncDataStore().GetResource<IDirectory>(href);
+
+        IGroup ITenantActionsSync.GetGroup(string href)
+            => this.GetInternalSyncDataStore().GetResource<IGroup>(href);
+
+        IOrganization ITenantActionsSync.GetOrganization(string href)
+            => this.GetInternalSyncDataStore().GetResource<IOrganization>(href);
     }
 }

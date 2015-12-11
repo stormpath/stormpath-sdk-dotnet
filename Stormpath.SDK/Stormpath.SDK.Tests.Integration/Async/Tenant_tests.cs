@@ -24,6 +24,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
     [Collection(nameof(IntegrationTestCollection))]
     public class Tenant_tests
     {
+        private readonly TestFixture fixture;
+
+        public Tenant_tests(TestFixture fixture)
+        {
+            this.fixture = fixture;
+        }
+
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Getting_current_tenant(TestClientProvider clientBuilder)
@@ -34,6 +41,64 @@ namespace Stormpath.SDK.Tests.Integration.Async
             tenant.ShouldNotBe(null);
             tenant.Href.ShouldNotBe(null);
             tenant.Name.ShouldNotBe(null);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_account(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var account = await tenant.GetAccountAsync(this.fixture.PrimaryAccountHref);
+            account.Href.ShouldBe(this.fixture.PrimaryAccountHref);
+            account.FullName.ShouldBe("Luke Skywalker");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_application(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var app = await tenant.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
+            app.Href.ShouldBe(this.fixture.PrimaryApplicationHref);
+            app.Description.ShouldBe("The Battle of Endor");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_directory(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var directory = await tenant.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
+            directory.Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_group(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var group = await tenant.GetGroupAsync(this.fixture.PrimaryGroupHref);
+            group.Href.ShouldBe(this.fixture.PrimaryGroupHref);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_organization(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var org = await tenant.GetOrganizationAsync(this.fixture.PrimaryOrganizationHref);
+            org.NameKey.ShouldBe(this.fixture.PrimaryOrganizationNameKey);
+            org.Href.ShouldBe(this.fixture.PrimaryOrganizationHref);
         }
     }
 }

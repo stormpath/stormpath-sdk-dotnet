@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Resource;
@@ -132,5 +133,20 @@ namespace Stormpath.SDK.Impl.Tenant
             var tokenResponse = await this.GetInternalAsyncDataStore().CreateAsync<IResource, IEmailVerificationToken>(href, null, cancellationToken).ConfigureAwait(false);
             return await this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(tokenResponse.Href, cancellationToken).ConfigureAwait(false);
         }
+
+        Task<IAccount> ITenantActions.GetAccountAsync(string href, CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(href);
+
+        Task<IApplication> ITenantActions.GetApplicationAsync(string href, CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IApplication>(href);
+
+        Task<IDirectory> ITenantActions.GetDirectoryAsync(string href, CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IDirectory>(href);
+
+        Task<IGroup> ITenantActions.GetGroupAsync(string href, CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IGroup>(href);
+
+        Task<IOrganization> ITenantActions.GetOrganizationAsync(string href, CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IOrganization>(href);
     }
 }

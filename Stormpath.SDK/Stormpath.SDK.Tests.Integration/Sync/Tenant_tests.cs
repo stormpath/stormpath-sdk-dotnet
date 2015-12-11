@@ -24,6 +24,13 @@ namespace Stormpath.SDK.Tests.Integration.Sync
     [Collection(nameof(IntegrationTestCollection))]
     public class Tenant_tests
     {
+        private readonly TestFixture fixture;
+
+        public Tenant_tests(TestFixture fixture)
+        {
+            this.fixture = fixture;
+        }
+
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Getting_current_tenant(TestClientProvider clientBuilder)
@@ -34,6 +41,64 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             tenant.ShouldNotBe(null);
             tenant.Href.ShouldNotBe(null);
             tenant.Name.ShouldNotBe(null);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_account(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var account = tenant.GetAccount(this.fixture.PrimaryAccountHref);
+            account.Href.ShouldBe(this.fixture.PrimaryAccountHref);
+            account.FullName.ShouldBe("Luke Skywalker");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_application(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var app = tenant.GetApplication(this.fixture.PrimaryApplicationHref);
+            app.Href.ShouldBe(this.fixture.PrimaryApplicationHref);
+            app.Description.ShouldBe("The Battle of Endor");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_directory(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var directory = tenant.GetDirectory(this.fixture.PrimaryDirectoryHref);
+            directory.Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_group(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var group = tenant.GetGroup(this.fixture.PrimaryGroupHref);
+            group.Href.ShouldBe(this.fixture.PrimaryGroupHref);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_organization(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var org = tenant.GetOrganization(this.fixture.PrimaryOrganizationHref);
+            org.NameKey.ShouldBe(this.fixture.PrimaryOrganizationNameKey);
+            org.Href.ShouldBe(this.fixture.PrimaryOrganizationHref);
         }
     }
 }

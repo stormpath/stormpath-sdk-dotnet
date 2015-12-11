@@ -18,6 +18,7 @@ using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Sync;
@@ -115,6 +116,41 @@ namespace Stormpath.SDK.Impl.Client
             this.EnsureTenant();
 
             return this.tenant.VerifyAccountEmail(token);
+        }
+
+        IAccount ITenantActionsSync.GetAccount(string href)
+        {
+            this.EnsureTenant();
+
+            return this.tenant.GetAccount(href);
+        }
+
+        IApplication ITenantActionsSync.GetApplication(string href)
+        {
+            this.EnsureTenant();
+
+            return this.tenant.GetApplication(href);
+        }
+
+        IDirectory ITenantActionsSync.GetDirectory(string href)
+        {
+            this.EnsureTenant();
+
+            return this.tenant.GetDirectory(href);
+        }
+
+        IGroup ITenantActionsSync.GetGroup(string href)
+        {
+            this.EnsureTenant();
+
+            return this.tenant.GetGroup(href);
+        }
+
+        IOrganization ITenantActionsSync.GetOrganization(string href)
+        {
+            this.EnsureTenant();
+
+            return this.tenant.GetOrganization(href);
         }
     }
 }

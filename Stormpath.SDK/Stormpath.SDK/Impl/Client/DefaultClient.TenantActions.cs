@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
 
@@ -117,5 +118,41 @@ namespace Stormpath.SDK.Impl.Client
 
             return await this.tenant.VerifyAccountEmailAsync(token, cancellationToken).ConfigureAwait(false);
         }
+
+        async Task<IAccount> ITenantActions.GetAccountAsync(string href, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.GetAccountAsync(href).ConfigureAwait(false);
+        }
+
+        async Task<IApplication> ITenantActions.GetApplicationAsync(string href, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.GetApplicationAsync(href).ConfigureAwait(false);
+        }
+
+        async Task<IDirectory> ITenantActions.GetDirectoryAsync(string href, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.GetDirectoryAsync(href).ConfigureAwait(false);
+        }
+
+        async Task<IGroup> ITenantActions.GetGroupAsync(string href, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.GetGroupAsync(href).ConfigureAwait(false);
+        }
+
+        async Task<IOrganization> ITenantActions.GetOrganizationAsync(string href, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.GetOrganizationAsync(href).ConfigureAwait(false);
+        }
+
     }
 }
