@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Impl.Introspection
 
             info.MonoRuntimeVersion = info.IsRunningOnMono
                 ? GetMonoRuntimeVersion()
-                : string.Empty;
+                : null;
 
             info.FrameworkVersion = info.IsRunningOnMono
                 ? GetMonoDotNetFrameworkVersion()

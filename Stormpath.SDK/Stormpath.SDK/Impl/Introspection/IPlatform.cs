@@ -21,16 +21,40 @@ namespace Stormpath.SDK.Impl.Introspection
     /// </summary>
     internal interface IPlatform
     {
+        /// <summary>
+        /// Gets the .NET Framework version.
+        /// </summary>
+        /// <value>The .NET Framework version.</value>
         string FrameworkVersion { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether the current platform is *nix.
+        /// </summary>
+        /// <value><see langword="true"/> if the current platform is *nix; <see langword="false"/> otherwise.</value>
         bool IsPlatformUnix { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether the current environment is running on the Mono interpreter.
+        /// </summary>
+        /// <value><see langword="true"/> if the current environment is running on the Mono interpreter; <see langword="false"/> otherwise.</value>
         bool IsRunningOnMono { get; }
 
+        /// <summary>
+        /// Gets the Mono runtime version, if applicable.
+        /// </summary>
+        /// <value>The Mono runtime version, or <see langword="null"/> if the current environment is not running on the Mono interpreter.</value>
         string MonoRuntimeVersion { get; }
 
+        /// <summary>
+        /// Gets the operating system name.
+        /// </summary>
+        /// <value>The operating system name.</value>
         string OsName { get; }
 
+        /// <summary>
+        /// Gets the operating system version.
+        /// </summary>
+        /// <value>The operating system version.</value>
         string OsVersion { get; }
     }
 }

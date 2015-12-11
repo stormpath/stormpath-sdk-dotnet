@@ -21,6 +21,10 @@ namespace Stormpath.SDK.Impl.Introspection
     /// </summary>
     internal interface ISourceLanguage
     {
+        /// <summary>
+        /// Gets the name of the source language.
+        /// </summary>
+        /// <returns>The name of the source language.</returns>
         string ToString();
     }
 }

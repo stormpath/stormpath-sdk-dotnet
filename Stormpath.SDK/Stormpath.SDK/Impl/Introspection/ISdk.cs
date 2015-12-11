@@ -23,8 +23,16 @@ namespace Stormpath.SDK.Impl.Introspection
     /// </summary>
     internal interface ISdk
     {
+        /// <summary>
+        /// Gets a list of the currently-active Stormpath integrations.
+        /// </summary>
+        /// <value>The currently-active Stormpath integrations.</value>
         IReadOnlyList<Integration> InstalledIntegrations { get; }
 
+        /// <summary>
+        /// Gets the Stormpath .NET SDK library version.
+        /// </summary>
+        /// <value>The Stormpath .NET SDK library version.</value>
         string Version { get; }
     }
 }
