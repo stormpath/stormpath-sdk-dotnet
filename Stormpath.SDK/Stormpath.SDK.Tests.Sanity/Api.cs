@@ -26,13 +26,14 @@ using ApiApprover;
 using ApprovalTests.Reporters;
 using Shouldly;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Sanity
 {
     public class Api
     {
-        [Fact]
+        [DebugOnlyFact]
         [UseReporter(typeof(DiffReporter))]
         public void No_public_api_changes()
         {
