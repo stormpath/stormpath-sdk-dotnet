@@ -53,7 +53,16 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
         protected void ShouldBeCalledWithArgument(string expectedArgument)
         {
+            //todo remove
             this.FakeHttpClient.Calls.Single().CanonicalUri.ToString().ShouldContain(expectedArgument);
+        }
+
+        protected void ShouldBeCalledWithArguments(params string[] expected)
+        {
+            var query = this.FakeHttpClient.Calls.Single().CanonicalUri.QueryString.ToString();
+            var args = query.Split('&');
+
+            expected.ShouldAllBe(x => args.Contains(x));
         }
     }
 }
