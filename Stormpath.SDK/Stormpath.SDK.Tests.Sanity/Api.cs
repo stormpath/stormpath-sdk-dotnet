@@ -1,4 +1,4 @@
-﻿// <copyright file="Sanity_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Api.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,23 +16,20 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Sync;
-using Stormpath.SDK.Tests.Common;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration
+namespace Stormpath.SDK.Tests.Sanity
 {
-    public class Sanity_tests
+    public class Api
     {
-        public static readonly string NL = Environment.NewLine;
-
         [Fact]
         public void All_Impl_members_are_hidden()
         {
@@ -56,7 +53,7 @@ namespace Stormpath.SDK.Tests.Integration
             var methodsInAssembly = Assembly
                 .GetAssembly(typeof(Client.IClient))
                 .GetTypes()
-                .Where(x => !IsCompilerGenerated(x))
+                .Where(x => !Helpers.IsCompilerGenerated(x))
                 .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
 
             var asyncMethods = methodsInAssembly
@@ -71,7 +68,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .Any()
                 .ShouldBe(
                     expected: false,
-                    customMessage: "These methods do not have a CancellationToken parameter:" + NL + PrettyMethodOutput(asyncMethodsWithoutCancellationToken));
+                    customMessage: "These methods do not have a CancellationToken parameter:" + Helpers.NL + Helpers.PrettyMethodOutput(asyncMethodsWithoutCancellationToken));
         }
 
         [Fact]
@@ -92,14 +89,14 @@ namespace Stormpath.SDK.Tests.Integration
                 .Where(method => method.DeclaringType.Namespace.StartsWith("Stormpath.SDK.Impl"));
 
             var violatingMethods = asyncMethodsWithOptionalCT
-                .Select(m => PrettyPrintMethod($"{m.DeclaringType.Name}.{m.Name}", m.GetParameters()));
+                .Select(m => Helpers.PrettyPrintMethod($"{m.DeclaringType.Name}.{m.Name}", m.GetParameters()));
 
             // No optional/default values here!
             violatingMethods
                 .Any()
                 .ShouldBe(
                     expected: false,
-                    customMessage: "These methods should not have an optional CancellationToken parameter:" + NL + string.Join(NL, violatingMethods));
+                    customMessage: "These methods should not have an optional CancellationToken parameter:" + Helpers.NL + string.Join(Helpers.NL, violatingMethods));
         }
 
         [Fact]
@@ -128,7 +125,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .Where(method => !method.DeclaringType.Namespace.StartsWith("Stormpath.SDK.Impl"));
 
             var violatingMethods = asyncMethodsWithRequiredCT
-                .Select(m => PrettyPrintMethod($"{m.DeclaringType.Name}.{m.Name}", m.GetParameters()))
+                .Select(m => Helpers.PrettyPrintMethod($"{m.DeclaringType.Name}.{m.Name}", m.GetParameters()))
                 .Except(whitelistedMethods);
 
             // Must be all optional
@@ -136,7 +133,7 @@ namespace Stormpath.SDK.Tests.Integration
                 .Any()
                 .ShouldBe(
                     expected: false,
-                    customMessage: "These methods must have an optional CancellationToken parameter:" + NL + string.Join(NL, violatingMethods));
+                    customMessage: "These methods must have an optional CancellationToken parameter:" + Helpers.NL + string.Join(Helpers.NL, violatingMethods));
         }
 
         [Fact]
@@ -185,7 +182,7 @@ namespace Stormpath.SDK.Tests.Integration
                         .GetParameters()
                         .Where(p => p.ParameterType != typeof(CancellationToken));
 
-                    return PrettyPrintMethod($"{m.DeclaringType.Name}.{nameWithoutAsync}", argList);
+                    return Helpers.PrettyPrintMethod($"{m.DeclaringType.Name}.{nameWithoutAsync}", argList);
                 })
                 .ToList();
 
@@ -224,99 +221,11 @@ namespace Stormpath.SDK.Tests.Integration
 
             asyncButNotSync.Count.ShouldBe(
                 0,
-                $"These async methods do not have a corresponding sync method:{NL}{string.Join(NL, asyncButNotSync)}");
+                $"These async methods do not have a corresponding sync method:{Helpers.NL}{string.Join(Helpers.NL, asyncButNotSync)}");
 
             syncButNotAsync.Count.ShouldBe(
                 0,
-                $"These sync methods do not have a corresponding async method:{NL}{string.Join(NL, syncButNotAsync)}");
-        }
-
-        [Fact]
-        public void Equal_numbers_of_sync_and_async_tests()
-        {
-            var asyncTests = this.GetType().Assembly
-                .GetTypes()
-                .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Async")
-                .SelectMany(x => x.GetMethods())
-                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-                .Select(x => GetQualifiedMethodName(x));
-
-            var syncTests = this.GetType().Assembly
-                .GetTypes()
-                .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Sync")
-                .SelectMany(x => x.GetMethods())
-                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-                .Select(x => GetQualifiedMethodName(x));
-
-            var asyncButNotSync = asyncTests
-                .Except(syncTests)
-                .ToList();
-
-            var syncButNotAsync = syncTests
-                .Except(asyncTests)
-                .ToList();
-
-            asyncButNotSync.Count.ShouldBe(
-                0,
-                $"These async tests do not have a corresponding sync test:{NL}{string.Join(", ", asyncButNotSync)}");
-
-            syncButNotAsync.Count.ShouldBe(
-                0,
-                $"These sync tests do not have a corresponding async test:{NL}{string.Join(", ", syncButNotAsync)}");
-        }
-
-        [DebugOnlyFact]
-        public void Equal_numbers_of_Csharp_and_Vb_tests_run()
-        {
-            // TODO terrible hacks. The Equal_numbers_of_Csharp_and_Vb_tests theory can't use DebugOnly
-            // so this test is just a flag.
-        }
-
-        [Theory]
-        [InlineData("Async")]
-        [InlineData("Sync")]
-        public void Equal_numbers_of_Csharp_and_Vb_tests(string @namespace)
-        {
-            var csharpTests = this.GetType().Assembly
-                .GetTypes()
-                .Where(x => x.Namespace == $"Stormpath.SDK.Tests.Integration.{@namespace}")
-                .SelectMany(x => x.GetMethods())
-                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-                .Select(x => GetQualifiedMethodName(x));
-
-            var vbAssembly = GetVisualBasicIntegrationTestAssembly();
-            if (vbAssembly == null)
-            {
-                if (Debugger.IsAttached)
-                {
-                    Assertly.Fail("Could not locate VB IT assembly.");
-                }
-
-                return;
-            }
-
-            var vbTests = vbAssembly
-                .GetTypes()
-                .Where(x => x.Namespace == $"Stormpath.SDK.Tests.Integration.VB.{@namespace}")
-                .SelectMany(x => x.GetMethods())
-                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-                .Select(x => GetQualifiedMethodName(x));
-
-            var csharpButNotVb = csharpTests
-                .Except(vbTests)
-                .ToList();
-
-            var vbButNotCsharp = vbTests
-                .Except(csharpTests)
-                .ToList();
-
-            csharpButNotVb.Count.ShouldBe(
-                0,
-                $"These {@namespace} C# tests do not have a corresponding VB test:{NL}{string.Join(", ", csharpButNotVb)}");
-
-            vbButNotCsharp.Count.ShouldBe(
-                0,
-                $"These {@namespace} VB tests do not have a corresponding C# test:{NL}{string.Join(", ", vbButNotCsharp)}");
+                $"These sync methods do not have a corresponding async method:{Helpers.NL}{string.Join(Helpers.NL, syncButNotAsync)}");
         }
 
         [Fact]
@@ -358,71 +267,6 @@ namespace Stormpath.SDK.Tests.Integration
             asyncExpandMembers
                 .SequenceEqual(retrievalExpandMembers)
                 .ShouldBeTrue();
-        }
-
-        private static string GetQualifiedMethodName(MethodInfo m)
-            => $"{m.DeclaringType.Name}.{m.Name}";
-
-        private static string PrettyMethodOutput(IEnumerable<MethodInfo> methods)
-        {
-            if (!methods.Any())
-            {
-                return null;
-            }
-
-            var prettyMethods = methods.Select(m =>
-            {
-                return $"{m.Name} (in {m.DeclaringType.Name})";
-            });
-
-            return string.Join(NL, prettyMethods);
-        }
-
-        private static string PrettyPrintMethod(string qualifiedMethodName, IEnumerable<ParameterInfo> args)
-        {
-            return $"{qualifiedMethodName}({string.Join(", ", args.Select(p => p.ParameterType.Name))})";
-        }
-
-        /// <summary>
-        /// Determines whether a particular type is compiler-generated.
-        /// <para>Courtesy of Cameron MacFarland at http://stackoverflow.com/a/11839713/3191599</para>
-        /// </summary>
-        /// <param name="t">The type.</param>
-        /// <returns><see langword="true"/> if this type is generated by the compiler; <see langword="false"/> otherwise.</returns>
-        private static bool IsCompilerGenerated(Type t)
-        {
-            if (t == null)
-            {
-                return false;
-            }
-
-            return t.IsDefined(typeof(CompilerGeneratedAttribute), false)
-                || IsCompilerGenerated(t.DeclaringType);
-        }
-
-        /// <summary>
-        /// Tries to get the VB.NET Integration Test assembly.
-        /// </summary>
-        /// <remarks>We are intentionally not adding this as a simple project reference, because
-        /// Mono is currently unable to build the VB project. This gets around that limitation,
-        /// although it means that the associated test(s) can only run under Windows.</remarks>
-        /// <returns>The VB.NET IT assembly, or <see langword="null"/>.</returns>
-        private static Assembly GetVisualBasicIntegrationTestAssembly()
-        {
-            Assembly foundAssembly = null;
-            try
-            {
-                var s = System.IO.Path.DirectorySeparatorChar;
-                var relativePath = $"..{s}..{s}..{s}Stormpath.SDK.Tests.Integration.VB{s}bin{s}Debug{s}Stormpath.SDK.Tests.Integration.VB.dll";
-                var absolutePath = System.IO.Path.GetFullPath(System.IO.Path.Combine(Environment.CurrentDirectory, relativePath));
-
-                foundAssembly = Assembly.LoadFile(absolutePath);
-            }
-            catch (System.IO.FileNotFoundException)
-            {
-            }
-
-            return foundAssembly;
         }
     }
 }

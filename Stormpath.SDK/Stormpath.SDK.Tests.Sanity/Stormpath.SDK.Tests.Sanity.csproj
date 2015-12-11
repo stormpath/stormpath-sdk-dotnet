@@ -4,16 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{09B79235-D67F-4FCA-9991-5AE30838EECE}</ProjectGuid>
+    <ProjectGuid>{64665E9B-1A9A-4B2A-A3A8-22A382978A7F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Stormpath.SDK.Tests.Integration</RootNamespace>
-    <AssemblyName>Stormpath.SDK.Tests.Integration</AssemblyName>
+    <RootNamespace>Stormpath.SDK.Tests.Sanity</RootNamespace>
+    <AssemblyName>Stormpath.SDK.Tests.Sanity</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,7 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\Stormpath.SDK\Stormpath.SDK.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,20 +31,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>
-    </CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mono|AnyCPU'">
-    <OutputPath>bin\Mono\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>
-    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Shouldly, Version=2.6.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
@@ -55,7 +39,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
       <Private>True</Private>
@@ -74,58 +63,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Async\Account_tests.cs" />
-    <Compile Include="Async\Application_tests.cs" />
-    <Compile Include="Async\Entity_tests.cs" />
-    <Compile Include="Async\CustomData_embedded_tests.cs" />
-    <Compile Include="Async\CustomData_tests.cs" />
-    <Compile Include="Async\Expansion_linq_tests.cs" />
-    <Compile Include="Async\Expansion_retrieval_tests.cs" />
-    <Compile Include="Async\Group_tests.cs" />
-    <Compile Include="Async\Directory_tests.cs" />
-    <Compile Include="Async\Error_tests.cs" />
-    <Compile Include="Async\Organization_tests.cs" />
-    <Compile Include="Sync\Expansion_linq_tests.cs" />
-    <Compile Include="Sync\Expansion_retrieval_tests.cs" />
-    <Compile Include="Meta_tests.cs" />
-    <Compile Include="Sync\Entity_tests.cs" />
-    <Compile Include="Sync\Group_tests.cs" />
-    <Compile Include="Sync\CustomData_embedded_tests.cs" />
-    <Compile Include="Sync\CustomData_tests.cs" />
-    <Compile Include="Sync\Application_tests.cs" />
-    <Compile Include="Sync\Directory_tests.cs" />
-    <Compile Include="Sync\Account_tests.cs" />
-    <Compile Include="Sync\Error_tests.cs" />
-    <Compile Include="Sync\Organization_tests.cs" />
-    <Compile Include="Sync\Tenant_tests.cs" />
-    <Compile Include="Async\Tenant_tests.cs" />
+    <Compile Include="Api.cs" />
+    <Compile Include="Helpers.cs" />
+    <Compile Include="Integration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IntegrationTestCollection.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Stormpath.SDK.JsonNetSerializer\Stormpath.SDK.JsonNetSerializer.csproj">
-      <Project>{4011b5ea-ceb5-4212-b8e6-d18c63ab6acf}</Project>
-      <Name>Stormpath.SDK.JsonNetSerializer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Stormpath.SDK.RestSharpClient\Stormpath.SDK.RestSharpClient.csproj">
-      <Project>{21f7a025-7bb1-49b0-8ad3-cee8a3b1d542}</Project>
-      <Name>Stormpath.SDK.RestSharpClient</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Stormpath.SDK.Tests.Common\Stormpath.SDK.Tests.Common.csproj">
       <Project>{9ed26d42-2203-46c0-b897-8e3218954170}</Project>
       <Name>Stormpath.SDK.Tests.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stormpath.SDK.Tests.Integration\Stormpath.SDK.Tests.Integration.csproj">
+      <Project>{09b79235-d67f-4fca-9991-5ae30838eece}</Project>
+      <Name>Stormpath.SDK.Tests.Integration</Name>
     </ProjectReference>
     <ProjectReference Include="..\Stormpath.SDK\Stormpath.SDK.csproj">
       <Project>{79a65c37-9db1-413a-ac23-708404530295}</Project>
       <Name>Stormpath.SDK</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
