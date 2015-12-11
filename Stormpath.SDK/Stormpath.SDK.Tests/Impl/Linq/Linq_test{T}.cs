@@ -51,12 +51,6 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             this.Queryable = new CollectionResourceQueryable<T>(this.BaseUrl, (client as DefaultClient).DataStore);
         }
 
-        protected void ShouldBeCalledWithArgument(string expectedArgument)
-        {
-            //todo remove
-            this.FakeHttpClient.Calls.Single().CanonicalUri.ToString().ShouldContain(expectedArgument);
-        }
-
         protected void ShouldBeCalledWithArguments(params string[] expected)
         {
             var query = this.FakeHttpClient.Calls.Single().CanonicalUri.QueryString.ToString();

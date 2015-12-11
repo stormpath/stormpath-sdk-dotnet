@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .MoveNextAsync();
 
             // Assert
-            this.ShouldBeCalledWithArgument("q=Joe");
+            this.ShouldBeCalledWithArguments("q=Joe");
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .MoveNextAsync();
 
             // Assert
-            this.ShouldBeCalledWithArgument("q=Joe");
+            this.ShouldBeCalledWithArguments("q=Joe");
         }
 
         [Fact]

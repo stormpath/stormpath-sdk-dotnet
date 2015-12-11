@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Take(10)
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("limit=10");
+            this.ShouldBeCalledWithArguments("limit=10");
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Take(limit)
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("limit=20");
+            this.ShouldBeCalledWithArguments("limit=20");
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Take(limitFunc())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("limit=25");
+            this.ShouldBeCalledWithArguments("limit=25");
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .MoveNextAsync();
 
             // Expected behavior: the last call will be kept
-            this.ShouldBeCalledWithArgument("limit=5");
+            this.ShouldBeCalledWithArguments("limit=5");
         }
 
         [Fact]

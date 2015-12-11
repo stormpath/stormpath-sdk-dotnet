@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetCustomData())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=customData");
+            this.ShouldBeCalledWithArguments("expand=customData");
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetDirectory())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=directory");
+            this.ShouldBeCalledWithArguments("expand=directory");
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroupMemberships())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=groupMemberships");
+            this.ShouldBeCalledWithArguments("expand=groupMemberships");
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroupMemberships(7331, 1337))
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=groupMemberships(offset:7331,limit:1337)");
+            this.ShouldBeCalledWithArguments("expand=groupMemberships(offset:7331,limit:1337)");
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroups())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=groups");
+            this.ShouldBeCalledWithArguments("expand=groups");
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroups(123, 321))
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=groups(offset:123,limit:321)");
+            this.ShouldBeCalledWithArguments("expand=groups(offset:123,limit:321)");
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetProviderData())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=providerData");
+            this.ShouldBeCalledWithArguments("expand=providerData");
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetTenant())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=tenant");
+            this.ShouldBeCalledWithArguments("expand=tenant");
         }
     }
 
@@ -117,7 +117,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetAccounts())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=accounts");
+            this.ShouldBeCalledWithArguments("expand=accounts");
         }
 
         [Fact]
@@ -127,7 +127,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetAccounts(123, 321))
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=accounts(offset:123,limit:321)");
+            this.ShouldBeCalledWithArguments("expand=accounts(offset:123,limit:321)");
         }
 
         [Fact]
@@ -137,7 +137,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetAccountStoreMappings())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=accountStoreMappings");
+            this.ShouldBeCalledWithArguments("expand=accountStoreMappings");
         }
 
         [Fact]
@@ -147,7 +147,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetAccountStoreMappings(123, 321))
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=accountStoreMappings(offset:123,limit:321)");
+            this.ShouldBeCalledWithArguments("expand=accountStoreMappings(offset:123,limit:321)");
         }
 
         [Fact]
@@ -157,7 +157,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetDefaultAccountStore())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=defaultAccountStoreMapping");
+            this.ShouldBeCalledWithArguments("expand=defaultAccountStoreMapping");
         }
 
         [Fact]
@@ -167,7 +167,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetDefaultGroupStore())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=defaultGroupStoreMapping");
+            this.ShouldBeCalledWithArguments("expand=defaultGroupStoreMapping");
         }
     }
 
@@ -180,7 +180,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetProvider())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=provider");
+            this.ShouldBeCalledWithArguments("expand=provider");
         }
     }
 
@@ -193,7 +193,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetAccountMemberships())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=accountMemberships");
+            this.ShouldBeCalledWithArguments("expand=accountMemberships");
         }
 
         [Fact]
@@ -203,7 +203,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetAccountMemberships(7331, 1337))
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=accountMemberships(offset:7331,limit:1337)");
+            this.ShouldBeCalledWithArguments("expand=accountMemberships(offset:7331,limit:1337)");
         }
     }
 
@@ -216,7 +216,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetAccount())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=account");
+            this.ShouldBeCalledWithArguments("expand=account");
         }
 
         [Fact]
@@ -226,7 +226,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroup())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("expand=group");
+            this.ShouldBeCalledWithArguments("expand=group");
         }
     }
 #pragma warning restore SA1402 // File may only contain a single class

@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetDirectory())
                 .ToList();
 
-            this.ShouldBeCalledWithArgument("expand=directory");
+            this.ShouldBeCalledWithArguments("expand=directory");
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetDirectory())
                 .ToList();
 
-            this.ShouldBeCalledWithArgument("expand=directory");
+            this.ShouldBeCalledWithArguments("expand=directory");
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetTenant())
                 .ToList();
 
-            this.ShouldBeCalledWithArgument("expand=directory,tenant");
+            this.ShouldBeCalledWithArguments("expand=directory,tenant");
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroups())
                 .ToList();
 
-            this.ShouldBeCalledWithArgument("expand=groups");
+            this.ShouldBeCalledWithArguments("expand=groups");
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroups(10, null))
                 .ToList();
 
-            this.ShouldBeCalledWithArgument("expand=groups(offset:10)");
+            this.ShouldBeCalledWithArguments("expand=groups(offset:10)");
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroups(null, 20))
                 .ToList();
 
-            this.ShouldBeCalledWithArgument("expand=groups(limit:20)");
+            this.ShouldBeCalledWithArguments("expand=groups(limit:20)");
         }
 
         [Fact]
@@ -98,7 +98,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetGroups(5, 15))
                 .ToList();
 
-            this.ShouldBeCalledWithArgument("expand=groups(offset:5,limit:15)");
+            this.ShouldBeCalledWithArguments("expand=groups(offset:5,limit:15)");
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Expand(x => x.GetDirectory())
                 .ToList();
 
-            this.ShouldBeCalledWithArgument("expand=tenant,groups(offset:10,limit:20),directory");
+            this.ShouldBeCalledWithArguments("expand=tenant,groups(offset:10,limit:20),directory");
         }
     }
 }

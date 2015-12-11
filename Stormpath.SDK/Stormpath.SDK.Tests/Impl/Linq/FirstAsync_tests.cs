@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             var luke = await this.Queryable.FirstAsync();
 
-            this.ShouldBeCalledWithArgument("limit=1");
+            this.ShouldBeCalledWithArguments("limit=1");
         }
 
         [Fact]
