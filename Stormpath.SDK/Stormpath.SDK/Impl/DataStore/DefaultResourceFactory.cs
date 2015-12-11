@@ -26,12 +26,15 @@ namespace Stormpath.SDK.Impl.DataStore
     {
         private readonly IInternalDataStore dataStore;
         private readonly IIdentityMap<ResourceData> identityMap;
+        private readonly ResourceTypeLookup typeLookup;
+
         private bool isDisposed = false; // To detect redundant calls
 
         public DefaultResourceFactory(IInternalDataStore dataStore, IIdentityMap<ResourceData> identityMap)
         {
             this.dataStore = dataStore;
             this.identityMap = identityMap;
+            this.typeLookup = new ResourceTypeLookup();
         }
 
         private IResourceFactory AsInterface => this;
@@ -47,7 +50,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         object IResourceFactory.Create(Type type, Map properties, ILinkable original)
         {
-            if (ResourceTypeLookup.IsCollectionResponse(type))
+            if (this.typeLookup.IsCollectionResponse(type))
             {
                 return this.InstantiateCollection(type, properties);
             }
@@ -59,7 +62,7 @@ namespace Stormpath.SDK.Impl.DataStore
         {
             var typeName = new TypeNameResolver().GetTypeName(type);
 
-            var targetType = new ResourceTypeLookup().GetConcrete(type);
+            var targetType = this.typeLookup.GetConcrete(type);
             if (targetType == null)
             {
                 throw new ApplicationException($"Unknown resource type {typeName}");
@@ -123,8 +126,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private object InstantiateCollection(Type collectionType, Map properties)
         {
-            Type innerType = new ResourceTypeLookup().GetInnerCollectionInterface(collectionType);
-            var targetType = new ResourceTypeLookup().GetConcrete(innerType);
+            Type innerType = this.typeLookup.GetInnerCollectionInterface(collectionType);
+            var targetType = this.typeLookup.GetConcrete(innerType);
             if (innerType == null || targetType == null)
             {
                 throw new ApplicationException($"Error creating collection resource: unknown inner type '{innerType?.Name}'.");

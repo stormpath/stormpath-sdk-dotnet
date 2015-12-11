@@ -34,6 +34,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
     internal sealed class WriteCacheFilter : AbstractCacheFilter, IAsynchronousFilter, ISynchronousFilter
     {
         private readonly IResourceFactory resourceFactory;
+        private readonly ResourceTypeLookup typeLookup;
 
         public WriteCacheFilter(ICacheResolver cacheResolver, IResourceFactory resourceFactory)
             : base(cacheResolver)
@@ -44,6 +45,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             }
 
             this.resourceFactory = resourceFactory;
+            this.typeLookup = new ResourceTypeLookup();
         }
 
         public override async Task<IResourceDataResult> FilterAsync(IResourceDataRequest request, IAsynchronousFilterChain chain, ILogger logger, CancellationToken cancellationToken)
@@ -172,7 +174,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 {
                     logger.Trace($"Attribute {key} on response {href} is an expanded resource, caching recursively", "WriteCacheFilter.CacheAsync");
 
-                    var nestedType = new ResourceTypeLookup().GetInterface(item.Key);
+                    var nestedType = this.typeLookup.GetInterface(item.Key);
                     if (nestedType == null)
                     {
                         throw new ApplicationException($"Cannot cache nested item. Item type for '{item.Key}' unknown.");
@@ -186,7 +188,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                     logger.Trace($"Attribute {key} on response {href} is an array, caching items recursively", "WriteCacheFilter.CacheAsync");
 
                     // This is a CollectionResponsePage<T>.Items property. Find the type of objects to expect
-                    var nestedType = new ResourceTypeLookup().GetInnerCollectionInterface(resourceType);
+                    var nestedType = this.typeLookup.GetInnerCollectionInterface(resourceType);
                     if (nestedType == null)
                     {
                         throw new ApplicationException($"Can not cache array '{key}'. Item type for '{resourceType.Name}' unknown.");
@@ -218,7 +220,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 }
             }
 
-            if (!ResourceTypeLookup.IsCollectionResponse(resourceType))
+            if (!this.typeLookup.IsCollectionResponse(resourceType))
             {
                 logger.Trace($"Caching {href} as type {resourceType.Name}", "WriteCacheFilter.CacheAsync");
 
@@ -263,7 +265,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 {
                     logger.Trace($"Attribute {key} on response {href} is an expanded resource, caching recursively", "WriteCacheFilter.Cache");
 
-                    var nestedType = new ResourceTypeLookup().GetInterface(item.Key);
+                    var nestedType = this.typeLookup.GetInterface(item.Key);
                     if (nestedType == null)
                     {
                         throw new ApplicationException($"Cannot cache nested item. Item type for '{item.Key}' unknown.");
@@ -277,7 +279,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                     logger.Trace($"Attribute {key} on response {href} is an array, caching items recursively", "WriteCacheFilter.Cache");
 
                     // This is a CollectionResponsePage<T>.Items property. Find the type of objects to expect
-                    var nestedType = new ResourceTypeLookup().GetInnerCollectionInterface(resourceType);
+                    var nestedType = this.typeLookup.GetInnerCollectionInterface(resourceType);
                     if (nestedType == null)
                     {
                         throw new ApplicationException($"Can not cache array '{key}'. Item type for '{resourceType.Name}' unknown.");
@@ -309,7 +311,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 }
             }
 
-            if (!ResourceTypeLookup.IsCollectionResponse(resourceType))
+            if (!this.typeLookup.IsCollectionResponse(resourceType))
             {
                 logger.Trace($"Caching {href} as type {resourceType.Name}", "WriteCacheFilter.Cache");
 

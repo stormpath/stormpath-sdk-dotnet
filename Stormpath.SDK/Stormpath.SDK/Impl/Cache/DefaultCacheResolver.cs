@@ -27,6 +27,7 @@ namespace Stormpath.SDK.Impl.Cache
         private readonly ICacheProvider cacheProvider;
         private readonly ISynchronousCacheProvider syncCacheProvider;
         private readonly IAsynchronousCacheProvider asyncCacheProvider;
+        private readonly ResourceTypeLookup typeLookup;
 
         public DefaultCacheResolver(ICacheProvider cacheProvider, ILogger logger)
         {
@@ -39,6 +40,7 @@ namespace Stormpath.SDK.Impl.Cache
             this.syncCacheProvider = cacheProvider as ISynchronousCacheProvider;
             this.asyncCacheProvider = cacheProvider as IAsynchronousCacheProvider;
             this.logger = logger;
+            this.typeLookup = new ResourceTypeLookup();
         }
 
         bool ICacheResolver.IsSynchronousSupported => this.cacheProvider.IsAsynchronousSupported;
@@ -47,7 +49,7 @@ namespace Stormpath.SDK.Impl.Cache
 
         private string GetCacheRegionName(Type type)
         {
-            var iface = new ResourceTypeLookup().GetInterface(type);
+            var iface = this.typeLookup.GetInterface(type);
 
             if (iface == null)
             {

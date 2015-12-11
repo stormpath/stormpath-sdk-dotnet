@@ -195,7 +195,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// </summary>
         /// <param name="type">The type to check</param>
         /// <returns><see langword="true"/> if this type represents a paged collection response; <see langword="false"/> otherwise.</returns>
-        public static bool IsCollectionResponse(Type type)
+        public bool IsCollectionResponse(Type type)
             => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
 
         /// <summary>

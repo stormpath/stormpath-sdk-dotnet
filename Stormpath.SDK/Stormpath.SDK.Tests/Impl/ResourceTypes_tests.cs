@@ -41,64 +41,64 @@ namespace Stormpath.SDK.Tests.Impl
 {
     public class ResourceTypes_tests
     {
-        private readonly ResourceTypeLookup lookup;
+        private readonly ResourceTypeLookup typeLookup;
 
         public ResourceTypes_tests()
         {
-            this.lookup = new ResourceTypeLookup();
+            this.typeLookup = new ResourceTypeLookup();
         }
 
         [Fact]
         public void Returns_null_for_unknown_concrete_type()
         {
-            this.lookup.GetConcrete(typeof(ResourceTypeLookup)).ShouldBeNull();
+            this.typeLookup.GetConcrete(typeof(ResourceTypeLookup)).ShouldBeNull();
         }
 
         [Fact]
         public void Returns_null_for_unknown_interface_type()
         {
-            this.lookup.GetInterface(typeof(IAppDomainSetup)).ShouldBeNull();
+            this.typeLookup.GetInterface(typeof(IAppDomainSetup)).ShouldBeNull();
         }
 
         [Fact]
         public void Returns_null_for_unknown_collection_type()
         {
-            this.lookup.GetInnerCollectionInterface(typeof(ResourceTypeLookup)).ShouldBeNull();
-            this.lookup.GetInnerCollectionInterface(typeof(CollectionResponsePage<>)).ShouldBeNull();
-            this.lookup.GetInnerCollectionInterface(typeof(CollectionResponsePage<IBasicLoginAttempt>)).ShouldBeNull();
+            this.typeLookup.GetInnerCollectionInterface(typeof(ResourceTypeLookup)).ShouldBeNull();
+            this.typeLookup.GetInnerCollectionInterface(typeof(CollectionResponsePage<>)).ShouldBeNull();
+            this.typeLookup.GetInnerCollectionInterface(typeof(CollectionResponsePage<IBasicLoginAttempt>)).ShouldBeNull();
         }
 
         [Fact]
         public void Getting_concrete_type_from_type_parameter()
         {
-            this.lookup.GetConcrete<IAccount>().ShouldBe(typeof(DefaultAccount));
+            this.typeLookup.GetConcrete<IAccount>().ShouldBe(typeof(DefaultAccount));
         }
 
         [Fact]
         public void Getting_interface_type_from_type_parameter()
         {
-            this.lookup.GetInterface<DefaultAccount>().ShouldBe(typeof(IAccount));
+            this.typeLookup.GetInterface<DefaultAccount>().ShouldBe(typeof(IAccount));
         }
 
         [Theory]
         [MemberData(nameof(InterfaceToConcreteMapping))]
         public void Getting_concrete_type_from_interface(Type @interface, Type expectedConcrete)
         {
-            this.lookup.GetConcrete(@interface).ShouldBe(expectedConcrete);
+            this.typeLookup.GetConcrete(@interface).ShouldBe(expectedConcrete);
         }
 
         [Theory]
         [MemberData(nameof(InterfaceToConcreteMapping))]
         public void Getting_interface_from_concrete_type(Type expectedInterface, Type concrete)
         {
-            this.lookup.GetInterface(concrete).ShouldBe(expectedInterface);
+            this.typeLookup.GetInterface(concrete).ShouldBe(expectedInterface);
         }
 
         [Theory]
         [MemberData(nameof(CollectionInterfaceTypes))]
         public void Getting_inner_interface_from_collection(Type collectionType, Type expectedInterface)
         {
-            this.lookup.GetInnerCollectionInterface(collectionType).ShouldBe(expectedInterface);
+            this.typeLookup.GetInnerCollectionInterface(collectionType).ShouldBe(expectedInterface);
         }
 
         public static IEnumerable<object[]> InterfaceToConcreteMapping()

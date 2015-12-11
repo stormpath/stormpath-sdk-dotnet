@@ -27,6 +27,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
     internal sealed class ReadCacheFilter : AbstractCacheFilter
     {
         private readonly string baseUrl;
+        private readonly ResourceTypeLookup typeLookup;
 
         public ReadCacheFilter(string baseUrl, ICacheResolver cacheResolver)
             : base(cacheResolver)
@@ -37,6 +38,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             }
 
             this.baseUrl = baseUrl;
+            this.typeLookup = new ResourceTypeLookup();
         }
 
         public override IResourceDataResult Filter(IResourceDataRequest request, ISynchronousFilterChain chain, ILogger logger)
@@ -130,7 +132,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             bool isRead = request.Action == ResourceAction.Read;
             bool isLoginAttempt = request.Type == typeof(ILoginAttempt);
             bool isProviderAccountAccess = request.Type == typeof(IProviderAccountAccess);
-            bool isCollectionResource = ResourceTypeLookup.IsCollectionResponse(request.Type);
+            bool isCollectionResource = this.typeLookup.IsCollectionResponse(request.Type);
             bool isExpandedRequest = request.Uri.ToString().Contains("expand=");
 
             return
