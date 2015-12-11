@@ -17,7 +17,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;

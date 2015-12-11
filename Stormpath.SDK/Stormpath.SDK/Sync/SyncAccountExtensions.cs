@@ -19,7 +19,6 @@ using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Provider;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {

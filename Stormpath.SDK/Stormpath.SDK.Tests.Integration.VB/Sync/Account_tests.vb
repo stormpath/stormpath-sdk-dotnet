@@ -23,7 +23,6 @@ Imports Stormpath.SDK.Application
 Imports Stormpath.SDK.Auth
 Imports Stormpath.SDK.Error
 Imports Stormpath.SDK.Sync
-Imports Stormpath.SDK.Tests.Common
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData
 Imports Xunit

@@ -20,7 +20,6 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Group
 {

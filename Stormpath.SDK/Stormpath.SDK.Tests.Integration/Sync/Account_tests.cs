@@ -16,14 +16,12 @@
 
 using System;
 using System.Linq;
-using System.Threading;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Sync;
-using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;

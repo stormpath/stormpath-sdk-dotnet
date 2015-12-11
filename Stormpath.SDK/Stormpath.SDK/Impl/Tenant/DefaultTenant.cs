@@ -14,15 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Account;
-using Stormpath.SDK.Application;
-using Stormpath.SDK.Directory;
-using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Tenant
@@ -38,12 +30,6 @@ namespace Stormpath.SDK.Impl.Tenant
         private static readonly string KeyPropertyName = "key";
         private static readonly string NamePropertyName = "name";
         private static readonly string OrganizationsPropertyName = "organizations";
-
-        /*
-        private static readonly string ApplicationsResourceBase = "applications";
-        private static readonly string DirectoriesResourceBase = "directories";
-        private static readonly string GroupsResourceBase = "groups";
-        */
 
         public DefaultTenant(ResourceData data)
             : base(data)

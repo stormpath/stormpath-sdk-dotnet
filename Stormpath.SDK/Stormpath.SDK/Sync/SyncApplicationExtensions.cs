@@ -15,7 +15,6 @@
 // </copyright>
 
 using System;
-using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
@@ -24,7 +23,6 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {

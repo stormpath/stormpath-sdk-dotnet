@@ -17,13 +17,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Linq;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Organization
 {

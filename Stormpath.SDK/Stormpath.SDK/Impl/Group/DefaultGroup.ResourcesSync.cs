@@ -15,8 +15,6 @@
 // </copyright>
 
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Impl.AccountStore;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Group
 {

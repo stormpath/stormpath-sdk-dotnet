@@ -19,7 +19,6 @@ using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Error;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tests.Common.Integration;

@@ -15,8 +15,6 @@
 // </copyright>
 
 using Stormpath.SDK.AccountStore;
-using Stormpath.SDK.Impl.AccountStore;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {

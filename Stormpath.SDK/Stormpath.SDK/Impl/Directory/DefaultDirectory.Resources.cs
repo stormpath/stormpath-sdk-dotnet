@@ -16,11 +16,9 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Provider;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Directory
 {

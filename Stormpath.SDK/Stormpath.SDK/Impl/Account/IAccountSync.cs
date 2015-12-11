@@ -20,7 +20,6 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Provider;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
 {

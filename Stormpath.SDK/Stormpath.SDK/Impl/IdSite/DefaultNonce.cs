@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.IdSite;
-using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 

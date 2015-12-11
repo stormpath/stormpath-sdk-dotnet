@@ -14,10 +14,8 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Provider;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Directory
 {

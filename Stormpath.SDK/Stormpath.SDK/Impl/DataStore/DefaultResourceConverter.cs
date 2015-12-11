@@ -14,7 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Shared;

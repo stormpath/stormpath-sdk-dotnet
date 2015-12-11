@@ -23,7 +23,6 @@ using Stormpath.SDK.Cache;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.IdSite;
-using Stormpath.SDK.Impl;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.IdSite;

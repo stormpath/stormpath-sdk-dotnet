@@ -15,7 +15,6 @@
 // </copyright>
 
 using Stormpath.SDK.Impl.Tenant;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.AccountStore
 {

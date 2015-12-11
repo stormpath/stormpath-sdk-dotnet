@@ -17,7 +17,6 @@
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Provider;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
 {

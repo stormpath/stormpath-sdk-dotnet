@@ -14,7 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Impl.Cache;
