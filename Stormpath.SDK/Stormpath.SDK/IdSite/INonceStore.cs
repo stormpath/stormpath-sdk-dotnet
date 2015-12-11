@@ -29,7 +29,7 @@ namespace Stormpath.SDK.IdSite
     /// </para>
     /// <para>
     /// <b>NOTE:</b>If you enable caching in the Stormpath SDK, the SDK will automatically enable a default cache-based
-    /// NonceStore implementation for you.Just ensure that your caching configuration uses a default cache TTL slightly
+    /// NonceStore implementation for you. Just ensure that your caching configuration uses a default cache TTL slightly
     /// greater than 1 minute (the valid lifespan of a ID Site reply message).
     /// </para>
     /// </remarks>
