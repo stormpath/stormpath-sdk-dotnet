@@ -22,6 +22,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ApiApprover;
+using ApprovalTests.Reporters;
 using Shouldly;
 using Stormpath.SDK.Sync;
 using Xunit;
@@ -30,6 +32,13 @@ namespace Stormpath.SDK.Tests.Sanity
 {
     public class Api
     {
+        [Fact]
+        [UseReporter(typeof(DiffReporter))]
+        public void No_public_api_changes()
+        {
+            PublicApiApprover.ApprovePublicApi(typeof(Client.IClient).Assembly.Location);
+        }
+
         [Fact]
         public void All_Impl_members_are_hidden()
         {

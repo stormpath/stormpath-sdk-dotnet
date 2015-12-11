@@ -7,6 +7,7 @@ install:
 script:
 - xbuild /p:Configuration="Mono" ./Stormpath.SDK/Stormpath.SDK.sln
 - mono ./Stormpath.SDK/packages/xunit.runner.console*/tools/xunit.console.exe ./Stormpath.SDK/Stormpath.SDK.Tests.Common/bin/Mono/Stormpath.SDK.Tests.Common.dll -noappdomain
+- mono ./Stormpath.SDK/packages/xunit.runner.console*/tools/xunit.console.exe ./Stormpath.SDK/Stormpath.SDK.Tests.Sanity/bin/Mono/Stormpath.SDK.Tests.Sanity.dll -noappdomain
 - mono ./Stormpath.SDK/packages/xunit.runner.console*/tools/xunit.console.exe ./Stormpath.SDK/Stormpath.SDK.JsonNetSerializer.Tests/bin/Mono/Stormpath.SDK.JsonNetSerializer.Tests.dll -noappdomain
 - mono ./Stormpath.SDK/packages/xunit.runner.console*/tools/xunit.console.exe ./Stormpath.SDK/Stormpath.SDK.RestSharpClient.Tests/bin/Mono/Stormpath.SDK.RestSharpClient.Tests.dll -noappdomain
 - mono ./Stormpath.SDK/packages/xunit.runner.console*/tools/xunit.console.exe ./Stormpath.SDK/Stormpath.SDK.Tests/bin/Mono/Stormpath.SDK.Tests.dll -noappdomain
