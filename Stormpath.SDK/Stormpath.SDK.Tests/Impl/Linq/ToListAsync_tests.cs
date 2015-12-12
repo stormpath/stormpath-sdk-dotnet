@@ -44,18 +44,16 @@ namespace Stormpath.SDK.Tests.Impl.Linq
         }
 
         [Fact]
-        public async Task Checks_for_new_items_after_last_page()
+        public async Task Correct_number_of_calls()
         {
             // Scenario: 51 items in a server-side collection. The default limit is 25,
-            // so two calls will return 25 items, and the 3rd will return 1. However, ToListAsync
-            // will make another call to the server, just to make sure another item hasn't been added
-            // to the end while we were enumerating.
+            // so two calls will return 25 items, and the 3rd will return 1.
             this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.Chewbacca, 51));
 
             var longList = await this.Queryable.ToListAsync();
 
             longList.Count.ShouldBe(51);
-            this.FakeHttpClient.Calls.Count().ShouldBe(4);
+            this.FakeHttpClient.Calls.Count().ShouldBe(3);
         }
     }
 }
