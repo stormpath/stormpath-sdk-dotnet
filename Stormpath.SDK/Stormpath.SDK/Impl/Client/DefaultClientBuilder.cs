@@ -20,7 +20,6 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Logging;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;

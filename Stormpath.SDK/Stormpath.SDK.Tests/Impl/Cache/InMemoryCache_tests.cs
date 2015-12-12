@@ -23,7 +23,6 @@ using Shouldly;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Tests.Common;
-using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Cache
 {

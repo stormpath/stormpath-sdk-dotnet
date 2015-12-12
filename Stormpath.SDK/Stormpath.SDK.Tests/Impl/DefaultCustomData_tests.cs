@@ -17,13 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
 using Shouldly;
 using Stormpath.SDK.CustomData;
-using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 

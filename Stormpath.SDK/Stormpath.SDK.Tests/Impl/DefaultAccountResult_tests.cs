@@ -22,7 +22,6 @@ using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.IdSite;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;

@@ -15,7 +15,6 @@
 // </copyright>
 
 using Stormpath.SDK.Impl.Client;
-using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Client
 {

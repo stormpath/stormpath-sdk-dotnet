@@ -15,10 +15,8 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Impl.Introspection;
-using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Client
 {
