@@ -93,6 +93,7 @@
     <Compile Include="Impl\AccountStore\IAccountStoreContainerSync.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
     <Compile Include="Cache\AbstractCacheProviderBuilder{T}.cs" />
+    <Compile Include="Impl\Account\IEmailVerificationRequestSync.cs" />
     <Compile Include="Impl\Application\DefaultApplicationAccountStoreMapping.cs" />
     <Compile Include="Impl\Application\IApplicationAccountStoreMappingSync.cs" />
     <Compile Include="Impl\Client\IUserAgentBuilder.cs" />
@@ -481,6 +482,7 @@
     <Compile Include="Resource\ISaveable{T}.cs" />
     <Compile Include="Sync\SyncOrganizationAccountStoreMappingExtensions.cs" />
     <Compile Include="Sync\SyncHasTenantExtensions.cs" />
+    <Compile Include="Sync\SyncEmailVerificationRequestExtensions.cs" />
     <Compile Include="Tenant\IHasTenant.cs" />
     <Compile Include="Serialization\ISerializerConsumer{T}.cs" />
     <Compile Include="Shared\ImmutableValueObject{T}.cs" />

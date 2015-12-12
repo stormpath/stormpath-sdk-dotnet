@@ -1,4 +1,4 @@
-﻿// <copyright file="IEmailVerificationRequest.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IEmailVerificationRequestSync.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,29 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading;
-using System.Threading.Tasks;
 using Stormpath.SDK.AccountStore;
-using Stormpath.SDK.Resource;
 
-namespace Stormpath.SDK.Account
+namespace Stormpath.SDK.Impl.Account
 {
     /// <summary>
-    /// Represents options for an <see cref="IAccount"/> verification email resend request.
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="SDK.Account.IEmailVerificationRequest"/>.
     /// </summary>
-    public interface IEmailVerificationRequest : IResource
+    internal interface IEmailVerificationRequestSync
     {
-        /// <summary>
-        /// Gets the username or email associated with this request.
-        /// </summary>
-        /// <value>The username or email.</value>
-        string Login { get; }
-
         /// <summary>
         /// Gets the <see cref="IAccountStore">Account Store</see> used for this request.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The <see cref="IAccountStore">Account Store</see>, or <see langword="null"/> if no Account Store was set.</returns>
-        Task<IAccountStore> GetAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
+        IAccountStore GetAccountStore();
     }
 }

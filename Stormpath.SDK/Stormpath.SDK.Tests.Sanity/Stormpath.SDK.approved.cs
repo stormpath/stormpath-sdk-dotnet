@@ -71,6 +71,7 @@ namespace Stormpath.SDK.Account
     public interface IEmailVerificationRequest : Stormpath.SDK.Resource.IResource
     {
         string Login { get; }
+        System.Threading.Tasks.Task<Stormpath.SDK.AccountStore.IAccountStore> GetAccountStoreAsync(System.Threading.CancellationToken cancellationToken = null);
     }
     public interface IEmailVerificationToken : Stormpath.SDK.Resource.IResource, Stormpath.SDK.Resource.ISaveable<Stormpath.SDK.Account.IEmailVerificationToken>
     {
@@ -1242,6 +1243,10 @@ namespace Stormpath.SDK.Sync
     public class static SyncDirectoryExtensions
     {
         public static Stormpath.SDK.Provider.IProvider GetProvider(this Stormpath.SDK.Directory.IDirectory directory) { }
+    }
+    public class static SyncEmailVerificationRequestExtensions
+    {
+        public static Stormpath.SDK.AccountStore.IAccountStore GetAccountStore(this Stormpath.SDK.Account.IEmailVerificationRequest request) { }
     }
     public class static SyncExpandExtensions
     {

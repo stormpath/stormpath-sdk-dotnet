@@ -15,13 +15,15 @@
 // </copyright>
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Account
 {
-    internal sealed class DefaultEmailVerificationRequest : AbstractResource, IEmailVerificationRequest
+    internal sealed class DefaultEmailVerificationRequest : AbstractResource, IEmailVerificationRequest, IEmailVerificationRequestSync
     {
         private static readonly string LoginPropertyName = "login";
         private static readonly string AccountStorePropertyName = "accountStore";
@@ -49,6 +51,28 @@ namespace Stormpath.SDK.Impl.Account
 
             this.SetLinkProperty(AccountStorePropertyName, accountStore.Href);
             return this;
+        }
+
+        Task<IAccountStore> IEmailVerificationRequest.GetAccountStoreAsync(CancellationToken cancellationToken)
+        {
+            var accountStoreHref = this.GetLinkProperty(AccountStorePropertyName)?.Href;
+            if (string.IsNullOrEmpty(accountStoreHref))
+            {
+                return null;
+            }
+
+            return this.GetInternalAsyncDataStore().GetResourceAsync<IAccountStore>(accountStoreHref);
+        }
+
+        IAccountStore IEmailVerificationRequestSync.GetAccountStore()
+        {
+            var accountStoreHref = this.GetLinkProperty(AccountStorePropertyName)?.Href;
+            if (string.IsNullOrEmpty(accountStoreHref))
+            {
+                return null;
+            }
+
+            return this.GetInternalSyncDataStore().GetResource<IAccountStore>(accountStoreHref);
         }
     }
 }
