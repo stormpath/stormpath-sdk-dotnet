@@ -21,6 +21,7 @@ using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Logging;
+using Stormpath.SDK.Logging;
 using Stormpath.SDK.Tests.Fakes;
 
 namespace Stormpath.SDK.Tests.Helpers
@@ -29,13 +30,13 @@ namespace Stormpath.SDK.Tests.Helpers
     {
         private static readonly string BaseUrl = "https://api.stormpath.com/v1";
 
-        internal static IInternalDataStore Create(IRequestExecutor requestExecutor = null, ICacheProvider cacheProvider = null)
+        internal static IInternalDataStore Create(IRequestExecutor requestExecutor = null, ICacheProvider cacheProvider = null, ILogger logger = null)
         {
             return new DefaultDataStore(
                 requestExecutor ?? Substitute.For<IRequestExecutor>(),
                 baseUrl: BaseUrl,
                 serializer: new JsonNetSerializer(),
-                logger: new NullLogger(),
+                logger: logger ?? new NullLogger(),
                 userAgentBuilder: new FakeUserAgentBuilder(),
                 cacheProvider: cacheProvider ?? Caches.NewDisabledCacheProvider(),
                 identityMapExpiration: TimeSpan.FromMinutes(10));

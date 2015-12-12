@@ -24,6 +24,7 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -34,7 +35,7 @@ namespace Stormpath.SDK.Tests.Impl
 
         public Entity_identity_map_tests()
         {
-            this.dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            this.dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object);
         }
 
         [Fact]

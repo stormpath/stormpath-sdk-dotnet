@@ -18,6 +18,7 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -27,7 +28,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void GetValue_returns_token_value()
         {
-            IInternalDataStore dataStore = new StubDataStore(null, "https://api.foo.bar");
+            var dataStore = TestDataStore.Create();
 
             var href = "https://api.foobar.com/v1/applications/WpM9nyZ2TbaEzfbRvLk9KA/passwordResetTokens/my-token-value-here";
 

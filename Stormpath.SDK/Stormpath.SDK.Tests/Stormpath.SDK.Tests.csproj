@@ -87,7 +87,6 @@
   <ItemGroup>
     <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Fakes\FakeUserAgentBuilder.cs" />
-    <Compile Include="Fakes\StubDataStore.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
     <Compile Include="Helpers\TestDataStore.cs" />
     <Compile Include="Impl\Cache\Sync_caching_tests.cs" />

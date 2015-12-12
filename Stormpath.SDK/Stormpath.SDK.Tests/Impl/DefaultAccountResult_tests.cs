@@ -25,6 +25,7 @@ using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -34,7 +35,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task When_getting_account()
         {
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "https://foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object);
 
             var accountResult = dataStore.InstantiateWithData<IAccountResult>(
                 new Dictionary<string, object>()
@@ -53,7 +54,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task When_getting_account_and_no_account_present_throws()
         {
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "https://foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object);
 
             var accountResult = dataStore.InstantiateWithData<IAccountResult>(
                 new Dictionary<string, object>()

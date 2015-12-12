@@ -24,6 +24,7 @@ using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -33,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task Only_diff_is_sent_for_updates()
         {
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.CustomData, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.CustomData).Object);
 
             var customData = await dataStore.GetResourceAsync<ICustomData>("/customData", CancellationToken.None);
             customData.Count().ShouldBe(5);
@@ -54,7 +55,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task Deletes_are_performed_with_updates()
         {
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.CustomData, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.CustomData).Object);
 
             var customData = await dataStore.GetResourceAsync<ICustomData>("/customData", CancellationToken.None);
 
@@ -80,7 +81,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task Simultaneous_delete_and_update_only_performs_update()
         {
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.CustomData, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.CustomData).Object);
 
             var customData = await dataStore.GetResourceAsync<ICustomData>("/customData", CancellationToken.None);
 
@@ -106,7 +107,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task Embedded_custom_data_is_cleared_after_reload()
         {
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object);
 
             var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
             account.CustomData.Put("foo", 123);
@@ -124,7 +125,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task Embedded_custom_data_is_cleared_after_save()
         {
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object);
 
             var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
             account.CustomData.Put("foo", 123);
@@ -154,7 +155,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task Embedded_custom_data_is_cleared_for_all_instances_after_save()
         {
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object);
 
             var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
             var account2 = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
