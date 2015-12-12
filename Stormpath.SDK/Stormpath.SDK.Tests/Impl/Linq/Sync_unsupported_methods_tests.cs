@@ -19,14 +19,26 @@ using System.Linq;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Sync;
-using Stormpath.SDK.Tests.Helpers;
+using Stormpath.SDK.Tests.Common;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
 {
     public class Sync_unsupported_methods_tests : Linq_test<IAccount>
     {
+        private static string GetGeneratedHref<T>(IQueryable<T> queryable)
+        {
+            var resourceQueryable = queryable as CollectionResourceQueryable<T>;
+            if (resourceQueryable == null)
+            {
+                Assertly.Fail("This queryable is not a CollectionResourceQueryable.");
+            }
+
+            return resourceQueryable.CurrentHref;
+        }
+
         [Fact]
         public void Aggregate_is_unsupported()
         {
@@ -60,7 +72,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = this.Queryable.Synchronously().Cast<Tenant.ITenant>();
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -71,7 +83,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -91,7 +103,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -102,7 +114,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -112,7 +124,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = this.Queryable.Synchronously().GroupBy(x => x.Email);
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -126,7 +138,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                     outer => outer.Email,
                     inner => inner.Username,
                     (outer, results) => new { outer.CreatedAt, results });
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -137,7 +149,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -151,7 +163,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                     outer => outer.Email,
                     inner => inner.Username,
                     (outer, inner) => outer.CreatedAt);
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -198,7 +210,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -211,7 +223,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -225,7 +237,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -236,7 +248,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -248,7 +260,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 var query = this.Queryable
                     .Synchronously()
                     .Select(x => x.Email);
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -258,7 +270,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
             Should.Throw<NotSupportedException>(() =>
             {
                 var query = this.Queryable.Synchronously().SelectMany(x => x.Email);
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -278,7 +290,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -298,7 +310,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -309,7 +321,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
 
             Should.Throw<NotSupportedException>(() =>
             {
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
 
@@ -321,7 +333,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 var query = this.Queryable.Synchronously().Zip(
                     Enumerable.Empty<IAccount>(),
                     (first, second) => first.Email == second.Email);
-                query.GetGeneratedHref();
+                GetGeneratedHref(query);
             });
         }
     }

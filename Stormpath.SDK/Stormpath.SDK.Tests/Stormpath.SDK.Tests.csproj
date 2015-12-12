@@ -110,7 +110,6 @@
     <Compile Include="Impl\Extensions\String_Nullable_tests.cs" />
     <Compile Include="Impl\Extensions\Uri_WithoutQueryAndFragment_tests.cs" />
     <Compile Include="Impl\FieldConverter_tests.cs" />
-    <Compile Include="Helpers\LinqAssertExtensions.cs" />
     <Compile Include="Impl\Authentication\SAuthc1RequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\BasicRequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\DefaultRequestAuthenticatorFactory_tests.cs" />
