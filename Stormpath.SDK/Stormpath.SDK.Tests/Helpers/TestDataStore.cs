@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using NSubstitute;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Impl.DataStore;
@@ -28,10 +29,10 @@ namespace Stormpath.SDK.Tests.Helpers
     {
         private static readonly string BaseUrl = "https://api.stormpath.com/v1";
 
-        internal static IInternalDataStore Create(IRequestExecutor requestExecutor, ICacheProvider cacheProvider = null)
+        internal static IInternalDataStore Create(IRequestExecutor requestExecutor = null, ICacheProvider cacheProvider = null)
         {
             return new DefaultDataStore(
-                requestExecutor,
+                requestExecutor ?? Substitute.For<IRequestExecutor>(),
                 baseUrl: BaseUrl,
                 serializer: new JsonNetSerializer(),
                 logger: new NullLogger(),

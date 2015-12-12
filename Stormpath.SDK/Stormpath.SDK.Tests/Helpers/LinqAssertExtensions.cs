@@ -74,39 +74,5 @@ namespace Stormpath.SDK.Tests.Helpers
                 queryable.GetGeneratedHref().ShouldBe($"{href}?{arguments}");
             }
         }
-
-        // The same thing as above, but for testing whether a FakeDataStore received a particular URL call
-        internal static void WasCalledWithArguments<T>(this IInternalAsyncDataStore ds, string href, string arguments)
-            where T : class, IResource
-        {
-            var asFake = ds as FakeDataStore<T>;
-            if (asFake != null)
-            {
-                if (string.IsNullOrEmpty(arguments))
-                {
-                    asFake.GetCalls().ShouldContain($"{href}");
-                }
-                else
-                {
-                    asFake.GetCalls().ShouldContain($"{href}?{arguments}");
-                }
-
-                return;
-            }
-            else
-            {
-                // Maybe it's an NSubstitute mock
-                if (string.IsNullOrEmpty(arguments))
-                {
-                    ds.Received().GetCollectionAsync<T>($"{href}", CancellationToken.None);
-                }
-                else
-                {
-                    ds.Received().GetCollectionAsync<T>($"{href}?{arguments}", CancellationToken.None);
-                }
-
-                return;
-            }
-        }
     }
 }

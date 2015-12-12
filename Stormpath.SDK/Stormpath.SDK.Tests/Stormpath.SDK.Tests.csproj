@@ -85,12 +85,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fakes\FakeDataStore{TType}.cs" />
     <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Fakes\FakeUserAgentBuilder.cs" />
     <Compile Include="Fakes\StubDataStore.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
-    <Compile Include="Helpers\CollectionTestHarness{T}.cs" />
     <Compile Include="Helpers\TestDataStore.cs" />
     <Compile Include="Impl\Cache\Sync_caching_tests.cs" />
     <Compile Include="Impl\Cache\Async_caching_tests.cs" />
