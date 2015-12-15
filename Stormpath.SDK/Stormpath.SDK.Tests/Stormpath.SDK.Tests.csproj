@@ -88,6 +88,7 @@
     <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Fakes\FakeUserAgentBuilder.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
+    <Compile Include="Helpers\SerializableTimeSpan.cs" />
     <Compile Include="Helpers\TestDataStore.cs" />
     <Compile Include="Impl\Cache\Sync_caching_tests.cs" />
     <Compile Include="Impl\Cache\Async_caching_tests.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Impl\Linq\Within_extension_tests.cs" />
     <Compile Include="Impl\QueryString_tests.cs" />
     <Compile Include="Impl\UserAgentBuilder_tests.cs" />
+    <Compile Include="Impl\Utility\Iso8601Duration_tests.cs" />
     <Compile Include="Impl\Utility\Iso8601_tests.cs" />
     <Compile Include="Impl\Utility\Properties_tests.cs" />
     <Compile Include="Impl\Utility\RequestHelper_tests.cs" />

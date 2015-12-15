@@ -408,7 +408,10 @@
     <Compile Include="Impl\Tenant\ITenantSync.cs" />
     <Compile Include="Impl\Utility\AnonymousType.cs" />
     <Compile Include="Impl\Utility\Base64.cs" />
+    <Compile Include="Impl\Utility\DurationVisitor.Api.cs" />
+    <Compile Include="Impl\Utility\DurationVisitor.cs" />
     <Compile Include="Impl\Utility\HmacGenerator.cs" />
+    <Compile Include="Impl\Utility\Iso8601Duration.cs" />
     <Compile Include="Impl\Utility\ITypeLoader{T}.cs" />
     <Compile Include="Impl\Introspection\SourceLanguage.cs" />
     <Compile Include="Impl\Utility\TypeLoader{T}.cs" />
@@ -441,6 +444,7 @@
     <Compile Include="Linq\RetrievalOptionsExpandExtensions.cs" />
     <Compile Include="Logging\ILoggerConsumer{T}.cs" />
     <Compile Include="Logging\InMemoryLogger.cs" />
+    <Compile Include="Oauth\IOauthPolicy.cs" />
     <Compile Include="Organization\IOrganizationAccountStoreMapping.cs" />
     <Compile Include="Organization\IOrganizationCreationOptions.cs" />
     <Compile Include="Organization\OrganizationCreationOptionsBuilder.cs" />
