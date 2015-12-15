@@ -325,7 +325,10 @@
     <Compile Include="Impl\Linq\QueryModel\ExecutionPlanModel.cs" />
     <Compile Include="Impl\Linq\QueryModel\OrderByTerm.cs" />
     <Compile Include="Impl\Linq\Sync\SyncScalarExecutor{TItem}.cs" />
+    <Compile Include="Impl\Oauth\DefaultOauthPolicy.Async.cs" />
     <Compile Include="Impl\Oauth\DefaultOauthPolicy.cs" />
+    <Compile Include="Impl\Oauth\DefaultOauthPolicy.Sync.cs" />
+    <Compile Include="Impl\Oauth\IOauthPolicySync.cs" />
     <Compile Include="Impl\Organization\DefaultOrganization.AccountStore.cs" />
     <Compile Include="Impl\Organization\DefaultOrganization.AccountStoreSync.cs" />
     <Compile Include="Impl\Organization\DefaultOrganization.Collections.cs" />
@@ -485,6 +488,7 @@
     <Compile Include="Resource\IRetrievalOptions{T}.cs" />
     <Compile Include="Resource\ISaveableWithOptions{T}.cs" />
     <Compile Include="Resource\ISaveable{T}.cs" />
+    <Compile Include="Sync\SyncOauthPolicyExtensions.cs" />
     <Compile Include="Sync\SyncOrganizationAccountStoreMappingExtensions.cs" />
     <Compile Include="Sync\SyncHasTenantExtensions.cs" />
     <Compile Include="Sync\SyncEmailVerificationRequestExtensions.cs" />

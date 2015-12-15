@@ -15,17 +15,16 @@
 // </copyright>
 
 using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Oauth;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
-    internal sealed class DefaultOauthPolicy : AbstractInstanceResource, IOauthPolicy
+    internal sealed partial class DefaultOauthPolicy :
+        AbstractInstanceResource,
+        IOauthPolicy,
+        IOauthPolicySync
     {
         private static readonly string AccessTokenTtlPropertyName = "accessTokenTtl";
         private static readonly string RefreshTokenTtlPropertyName = "refreshTokenTtl";
@@ -72,11 +71,5 @@ namespace Stormpath.SDK.Impl.Oauth
             this.SetProperty(AccessTokenTtlPropertyName, refreshTokenTtl);
             return this;
         }
-
-        Task<IApplication> IOauthPolicy.GetApplicationAsync(CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IApplication>(this.Application.Href, cancellationToken);
-
-        Task<IOauthPolicy> ISaveable<IOauthPolicy>.SaveAsync(CancellationToken cancellationToken)
-            => this.SaveAsync<IOauthPolicy>(cancellationToken);
     }
 }

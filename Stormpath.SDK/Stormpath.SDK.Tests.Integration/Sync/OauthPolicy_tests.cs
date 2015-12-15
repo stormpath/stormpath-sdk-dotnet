@@ -15,12 +15,12 @@
 // </copyright>
 
 using System;
-using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Tests.Common.Integration;
+using Stormpath.SDK.Sync;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration.Async
+namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection(nameof(IntegrationTestCollection))]
     public class OauthPolicy_tests
@@ -34,45 +34,45 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Getting_policy_application(TestClientProvider clientBuilder)
+        public void Getting_policy_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
+            var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
 
-            var policy = await app.GetOauthPolicyAsync();
+            var policy = app.GetOauthPolicy();
             policy.ShouldNotBeNull();
 
-            var associatedApp = await policy.GetApplicationAsync();
+            var associatedApp = policy.GetApplication();
             associatedApp.ShouldNotBeNull();
             associatedApp.Href.ShouldBe(app.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Getting_policy_tenant(TestClientProvider clientBuilder)
+        public void Getting_policy_tenant(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
+            var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
 
-            var policy = await app.GetOauthPolicyAsync();
+            var policy = app.GetOauthPolicy();
             policy.ShouldNotBeNull();
 
-            var tenant = await policy.GetTenantAsync();
-            tenant.Href.ShouldBe((await app.GetTenantAsync()).Href);
+            var tenant = policy.GetTenant();
+            tenant.Href.ShouldBe(app.GetTenant().Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Getting_policy(TestClientProvider clientBuilder)
+        public void Getting_policy(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var app = await client.CreateApplicationAsync(
+            var app = client.CreateApplication(
                 $".NET ITs Default OAuth Policy Application {this.fixture.TestRunIdentifier}-{clientBuilder.Name}",
                 createDirectory: false);
             app.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(app.Href);
 
-            var policy = await app.GetOauthPolicyAsync();
+            var policy = app.GetOauthPolicy();
 
             // Default OAuth policy values are managed by Stormpath.
             policy.ShouldNotBeNull();
@@ -81,33 +81,33 @@ namespace Stormpath.SDK.Tests.Integration.Async
             policy.TokenEndpointHref.ShouldEndWith("oauth/token");
 
             // Clean up
-            (await app.DeleteAsync()).ShouldBeTrue();
+            app.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(app.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Updating_policy(TestClientProvider clientBuilder)
+        public void Updating_policy(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var app = await client.CreateApplicationAsync(
+            var app = client.CreateApplication(
                 $".NET ITs Modified OAuth Policy Application {this.fixture.TestRunIdentifier}-{clientBuilder.Name}",
                 createDirectory: false);
             app.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(app.Href);
 
-            var policy = await app.GetOauthPolicyAsync();
+            var policy = app.GetOauthPolicy();
 
             policy.SetAccessTokenTimeToLive(TimeSpan.FromDays(8));
             policy.SetRefreshTokenTimeToLive(TimeSpan.FromDays(180));
-            await policy.SaveAsync();
+            policy.Save();
 
-            var policyUpdated = await app.GetOauthPolicyAsync();
+            var policyUpdated = app.GetOauthPolicy();
             policyUpdated.AccessTokenTimeToLive.ShouldBe(TimeSpan.FromDays(8));
             policyUpdated.RefreshTokenTimeToLive.ShouldBe(TimeSpan.FromDays(180));
 
             // Clean up
-            (await app.DeleteAsync()).ShouldBeTrue();
+            app.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(app.Href);
         }
     }

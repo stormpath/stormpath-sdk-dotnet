@@ -178,6 +178,7 @@ namespace Stormpath.SDK.Application
         System.Threading.Tasks.Task<Stormpath.SDK.Provider.IProviderAccountResult> GetAccountAsync(Stormpath.SDK.Provider.IProviderAccountRequest request, System.Threading.CancellationToken cancellationToken = null);
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Account.IAccount> GetAccounts();
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Group.IGroup> GetGroups();
+        System.Threading.Tasks.Task<Stormpath.SDK.Oauth.IOauthPolicy> GetOauthPolicyAsync(System.Threading.CancellationToken cancellationToken = null);
         Stormpath.SDK.IdSite.IIdSiteAsyncCallbackHandler NewIdSiteAsyncCallbackHandler(Stormpath.SDK.Http.IHttpRequest request);
         Stormpath.SDK.IdSite.IIdSiteUrlBuilder NewIdSiteUrlBuilder();
         System.Threading.Tasks.Task<Stormpath.SDK.Account.IAccount> ResetPasswordAsync(string token, string newPassword, System.Threading.CancellationToken cancellationToken = null);
@@ -929,6 +930,21 @@ namespace Stormpath.SDK.Logging
         Fatal = 4,
     }
 }
+namespace Stormpath.SDK.Oauth
+{
+    
+    public interface IOauthPolicy : Stormpath.SDK.Resource.IAuditable, Stormpath.SDK.Resource.IResource, Stormpath.SDK.Resource.ISaveable<Stormpath.SDK.Oauth.IOauthPolicy>, Stormpath.SDK.Tenant.IHasTenant
+    {
+        System.TimeSpan AccessTokenTimeToLive { get; }
+        System.TimeSpan RefreshTokenTimeToLive { get; }
+        string TokenEndpointHref { get; }
+        System.Threading.Tasks.Task<Stormpath.SDK.Application.IApplication> GetApplicationAsync(System.Threading.CancellationToken cancellationToken = null);
+        Stormpath.SDK.Oauth.IOauthPolicy SetAccessTokenTimeToLive(System.TimeSpan accessTokenTtl);
+        Stormpath.SDK.Oauth.IOauthPolicy SetAccessTokenTimeToLive(string accessTokenTtl);
+        Stormpath.SDK.Oauth.IOauthPolicy SetRefreshTokenTimeToLive(System.TimeSpan refreshTokenTtl);
+        Stormpath.SDK.Oauth.IOauthPolicy SetRefreshTokenTimeToLive(string refreshTokenTtl);
+    }
+}
 namespace Stormpath.SDK.Organization
 {
     
@@ -1217,6 +1233,7 @@ namespace Stormpath.SDK.Sync
         public static Stormpath.SDK.Auth.IAuthenticationResult AuthenticateAccount(this Stormpath.SDK.Application.IApplication application, System.Action<Stormpath.SDK.Auth.UsernamePasswordRequestBuilder> requestBuilder, System.Action<Stormpath.SDK.Resource.IRetrievalOptions<Stormpath.SDK.Auth.IAuthenticationResult>> responseOptions) { }
         public static Stormpath.SDK.Auth.IAuthenticationResult AuthenticateAccount(this Stormpath.SDK.Application.IApplication application, string username, string password) { }
         public static Stormpath.SDK.Provider.IProviderAccountResult GetAccount(this Stormpath.SDK.Application.IApplication application, Stormpath.SDK.Provider.IProviderAccountRequest request) { }
+        public static Stormpath.SDK.Oauth.IOauthPolicy GetOauthPolicy(this Stormpath.SDK.Application.IApplication application) { }
         public static Stormpath.SDK.IdSite.IIdSiteSyncCallbackHandler NewIdSiteSyncCallbackHandler(this Stormpath.SDK.Application.IApplication application, Stormpath.SDK.Http.IHttpRequest request) { }
         public static Stormpath.SDK.Account.IAccount ResetPassword(this Stormpath.SDK.Application.IApplication application, string token, string newPassword) { }
         public static Stormpath.SDK.Account.IPasswordResetToken SendPasswordResetEmail(this Stormpath.SDK.Application.IApplication application, string email) { }
@@ -1293,6 +1310,10 @@ namespace Stormpath.SDK.Sync
     public class static SyncHasTenantExtensions
     {
         public static Stormpath.SDK.Tenant.ITenant GetTenant(this Stormpath.SDK.Tenant.IHasTenant resource) { }
+    }
+    public class static SyncOauthPolicyExtensions
+    {
+        public static Stormpath.SDK.Application.IApplication GetApplication(this Stormpath.SDK.Oauth.IOauthPolicy policy) { }
     }
     public class static SyncOrganizationAccountStoreContainerExtensions
     {

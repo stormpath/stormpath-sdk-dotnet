@@ -25,6 +25,7 @@ using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 
@@ -158,5 +159,11 @@ namespace Stormpath.SDK.Impl.Application
         /// </param>
         /// <returns>The result of the access request.</returns>
         IProviderAccountResult GetAccount(IProviderAccountRequest request);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IApplication.GetOauthPolicyAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
+        IOauthPolicy GetOauthPolicy();
     }
 }

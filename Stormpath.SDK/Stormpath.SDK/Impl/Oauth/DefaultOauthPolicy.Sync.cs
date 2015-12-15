@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultApplication.ResourcesSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultOauthPolicy.Sync.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +14,18 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Impl.Provider;
+using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Oauth;
-using Stormpath.SDK.Provider;
 
-namespace Stormpath.SDK.Impl.Application
+namespace Stormpath.SDK.Impl.Oauth
 {
-    internal sealed partial class DefaultApplication
+    internal sealed partial class DefaultOauthPolicy
     {
-        IProviderAccountResult IApplicationSync.GetAccount(IProviderAccountRequest request)
-            => new ProviderAccountResolver(this.GetInternalSyncDataStore()).ResolveProviderAccount(this.AsInterface.Href, request);
+        IApplication IOauthPolicySync.GetApplication()
+            => this.GetInternalSyncDataStore().GetResource<IApplication>(this.Application.Href);
 
-        IOauthPolicy IApplicationSync.GetOauthPolicy()
-            => this.GetInternalSyncDataStore().GetResource<IOauthPolicy>(this.OAuthPolicy.Href);
+        IOauthPolicy ISaveableSync<IOauthPolicy>.Save()
+            => this.Save<IOauthPolicy>();
     }
 }
