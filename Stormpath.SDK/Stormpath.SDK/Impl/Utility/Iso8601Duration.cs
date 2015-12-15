@@ -22,7 +22,7 @@ namespace Stormpath.SDK.Impl.Utility
     /// <summary>
     /// Contains methods useful for interacting with ISO 8601 durations.
     /// </summary>
-    public static class Iso8601Duration
+    internal static class Iso8601Duration
     {
         /// <summary>
         /// Converts the ISO 8601 string representation of a duration to its equivalent
