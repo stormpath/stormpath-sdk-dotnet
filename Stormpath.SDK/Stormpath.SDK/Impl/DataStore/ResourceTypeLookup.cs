@@ -31,10 +31,12 @@ using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.IdSite;
+using Stormpath.SDK.Impl.Oauth;
 using Stormpath.SDK.Impl.Organization;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
@@ -74,6 +76,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(ILinkedInProviderData)] = typeof(DefaultLinkedInProviderData),
             [typeof(IAccountResult)] = typeof(DefaultAccountResult),
             [typeof(INonce)] = typeof(DefaultNonce),
+            [typeof(IOauthPolicy)] = typeof(DefaultOauthPolicy),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
@@ -112,6 +115,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultLinkedInProvider)] = typeof(ILinkedInProvider),
             [typeof(DefaultLinkedInProviderData)] = typeof(ILinkedInProviderData),
             [typeof(DefaultAccountResult)] = typeof(IAccountResult),
+            [typeof(DefaultOauthPolicy)] = typeof(IOauthPolicy),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(DefaultApplicationAccountStoreMapping)] = typeof(IApplicationAccountStoreMapping),
