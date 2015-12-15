@@ -15,6 +15,7 @@
 // </copyright>
 
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Oauth;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
@@ -41,5 +42,11 @@ namespace Stormpath.SDK.Linq.Expandables
         /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
         /// <returns>Not applicable.</returns>
         IAsyncQueryable<IApplicationAccountStoreMapping> GetAccountStoreMappings(int? offset, int? limit);
+
+        /// <summary>
+        /// Expands the <c>oAuthPolicy</c> resource.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
+        IOauthPolicy GetOauthPolicy();
     }
 }

@@ -190,5 +190,13 @@ Namespace Sync
 
             client.GetResource(Of IGroupMembership)(membership.Href, Function(o) o.Expand(Function(x) x.GetGroup()))
         End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Expanding_oAuthPolicy(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+
+            Dim app = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref, Function(o) o.Expand(Function(x) x.GetOauthPolicy()))
+        End Sub
     End Class
 End Namespace

@@ -793,6 +793,7 @@ namespace Stormpath.SDK.Linq.Expandables
     {
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Application.IApplicationAccountStoreMapping> GetAccountStoreMappings();
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Application.IApplicationAccountStoreMapping> GetAccountStoreMappings(System.Nullable<int> offset, System.Nullable<int> limit);
+        Stormpath.SDK.Oauth.IOauthPolicy GetOauthPolicy();
     }
     public interface IAuthenticationResultExpandables
     {

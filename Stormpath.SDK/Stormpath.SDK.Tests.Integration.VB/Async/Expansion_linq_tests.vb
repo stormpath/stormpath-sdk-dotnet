@@ -208,5 +208,17 @@ Namespace Async
                 .Expand(Function(x) x.GetGroup()) _
                 .FirstOrDefaultAsync()
         End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Expanding_oAuthPolicy(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = Await client.GetCurrentTenantAsync()
+
+            Dim app = Await tenant _
+                .GetApplications() _
+                .Expand(Function(x) x.GetOauthPolicy()) _
+                .FirstOrDefaultAsync()
+        End Function
     End Class
 End Namespace

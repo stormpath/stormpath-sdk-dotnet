@@ -16,8 +16,8 @@
 
 using System;
 using Shouldly;
-using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Sync

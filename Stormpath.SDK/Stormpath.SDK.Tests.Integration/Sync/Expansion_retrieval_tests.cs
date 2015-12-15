@@ -209,5 +209,14 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             client.GetResource<IGroupMembership>(membership.Href, o => o.Expand(x => x.GetGroup()));
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Expanding_oAuthPolicy(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref, o => o.Expand(x => x.GetOauthPolicy()));
+        }
     }
 }

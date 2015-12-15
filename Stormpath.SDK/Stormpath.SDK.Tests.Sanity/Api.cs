@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Tests.Sanity
 {
     public class Api
     {
-        [DebugOnlyFact]
+        [Fact(Skip = "Run this test manually.")]
         [UseReporter(typeof(DiffReporter))]
         public void No_public_api_changes()
         {

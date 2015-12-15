@@ -136,6 +136,7 @@ namespace Stormpath.SDK.Impl.DataStore
             ["defaultAccountStoreMapping"] = typeof(IAccountStoreMapping),
             ["defaultGroupStoreMapping"] = typeof(IAccountStoreMapping),
             ["accountStore"] = typeof(IAccountStore),
+            ["oAuthPolicy"] = typeof(IOauthPolicy),
 
             ["organizations"] = typeof(CollectionResponsePage<IOrganization>),
             ["applications"] = typeof(CollectionResponsePage<IApplication>),
