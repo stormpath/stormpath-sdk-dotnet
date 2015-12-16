@@ -183,7 +183,9 @@ namespace Stormpath.SDK.Impl.Linq.Executor
 
         private bool AlreadyRetrievedEnoughItems()
         {
-            return this.totalItemsRetrieved >= this.compiledModel.ExecutionPlan.MaxItems;
+            return
+                this.totalItemsRetrieved >= this.compiledModel.ExecutionPlan.MaxItems
+                || (this.enumeratedOnce && this.totalItemsRetrieved == this.Size);
         }
 
         private void AdjustPagingOffset()
