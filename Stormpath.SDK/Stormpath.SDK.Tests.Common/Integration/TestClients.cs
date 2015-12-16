@@ -27,13 +27,23 @@ namespace Stormpath.SDK.Tests.Common.Integration
 {
     public static class TestClients
     {
+        private static readonly Lazy<string> ApiBaseUrl = new Lazy<string>(() =>
+        {
+            var fromEnvironment = Environment.GetEnvironmentVariable("STORMPATH_IT_API_URL");
+
+            return string.IsNullOrEmpty(fromEnvironment)
+                ? "https://api.stormpath.com/v1"
+                : fromEnvironment;
+        });
+
         public static readonly Lazy<IClient> Basic = new Lazy<IClient>(() =>
         {
             return Clients.Builder()
                 .SetApiKey(GetApiKey())
-                .SetHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
+                .SetHttpClient(new RestSharpClient(ApiBaseUrl.Value, 20000, null, null))
                 .SetSerializer(new JsonNetSerializer())
                 .SetAuthenticationScheme(AuthenticationScheme.Basic)
+                .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(Caches.NewDisabledCacheProvider())
                 .Build();
@@ -43,9 +53,10 @@ namespace Stormpath.SDK.Tests.Common.Integration
         {
             return Clients.Builder()
                 .SetApiKey(GetApiKey())
-                .SetHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
+                .SetHttpClient(new RestSharpClient(ApiBaseUrl.Value, 20000, null, null))
                 .SetSerializer(new JsonNetSerializer())
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
+                .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(Caches.NewDisabledCacheProvider())
                 .Build();
@@ -55,9 +66,10 @@ namespace Stormpath.SDK.Tests.Common.Integration
         {
             return Clients.Builder()
                 .SetApiKey(GetApiKey())
-                .SetHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
+                .SetHttpClient(new RestSharpClient(ApiBaseUrl.Value, 20000, null, null))
                 .SetSerializer(new JsonNetSerializer())
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
+                .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(Caches.NewInMemoryCacheProvider()
                     .WithDefaultTimeToIdle(TimeSpan.FromMinutes(10))
