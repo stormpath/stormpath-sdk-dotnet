@@ -21,6 +21,16 @@ namespace Stormpath.SDK.Oauth
     /// authenticate an account and exchange its credentials for a valid OAuth 2.0 token.
     /// </summary>
     /// <example>
+    /// // Create a new Password Grant request
+    /// var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+    ///     .SetLogin("lskywalker@tattooine.rim")
+    ///     .SetPassword("whataPieceofjunk$1138")
+    ///     .Build();
+    ///
+    /// // Execute it against the application
+    /// var authenticateResult = await myApplication
+    ///     .NewPasswordGrantAuthenticator()
+    ///     .AuthenticateAsync(passwordGrantRequest);
     /// </example>
     public interface IPasswordGrantAuthenticator : IOauthAuthenticator<IPasswordGrantRequest, IOauthGrantAuthenticationResult>
     {

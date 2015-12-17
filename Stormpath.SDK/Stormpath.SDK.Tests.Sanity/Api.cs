@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Tests.Sanity
 {
     public class Api
     {
-        [Fact(Skip = "Run this test manually.")]
+        [Fact]
         [UseReporter(typeof(DiffReporter))]
         public void No_public_api_changes()
         {
@@ -163,13 +163,19 @@ namespace Stormpath.SDK.Tests.Sanity
                 "IIdSiteAsyncResultListener.OnRegistered(IAccountResult)",
                 "IIdSiteAsyncResultListener.OnAuthenticated(IAccountResult)",
                 "IIdSiteAsyncResultListener.OnLogout(IAccountResult)",
+
+                // This generic method is provided by specific sync extension methods
+                "IOauthAuthenticator`2.Authenticate(TRequest)",
             };
             var whitelistedSyncMethods = new List<string>()
             {
                 "IQueryable`1.Filter(String)",
                 "IQueryable`1.Expand(Expression`1)",
                 "IAsyncQueryable`1.Synchronously()",
-                "IApplication.NewIdSiteSyncCallbackHandler(IHttpRequest)"
+                "IApplication.NewIdSiteSyncCallbackHandler(IHttpRequest)",
+
+                // These methods correspond to IOauthAuthenticator`2.Authenticate(TRequest)
+                "IPasswordGrantAuthenticator.Authenticate(IPasswordGrantRequest)"
             };
 
             // Get normal async API from interfaces

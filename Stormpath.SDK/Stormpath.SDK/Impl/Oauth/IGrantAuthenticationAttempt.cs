@@ -19,24 +19,64 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
+    /// <summary>
+    /// Represents the information required to build a Grant Authentication request.
+    /// </summary>
     internal interface IGrantAuthenticationAttempt : IResource
     {
+        /// <summary>
+        /// Gets the <see cref="IAccountStore">Account Store</see> <c>href</c> that will used for the token exchange request.
+        /// </summary>
+        /// <value>The <see cref="IAccountStore">Account Store</see> <c>href</c> that will used for the token exchange request.</value>
         string AccountStoreHref { get; }
 
+        /// <summary>
+        /// Gets the grant type that will used for the token exchange request.
+        /// </summary>
+        /// <value>The grant type that will used for the token exchange request.</value>
         string GrantType { get; }
 
+        /// <summary>
+        /// Gets the username to be used in the token exchange request.
+        /// </summary>
+        /// <value>The username to be used in the token exchange request.</value>
         string Login { get; }
 
+        /// <summary>
+        /// Gets the password to be used in the token exchange request.
+        /// </summary>
+        /// <value>The password to be used in the token exchange request.</value>
         string Password { get; }
 
+        /// <summary>
+        /// Sets the <see cref="IAccountStore">Account Store</see> that will be used for the token exchange request.
+        /// </summary>
+        /// <param name="accountStore">The Account Store.</param>
         void SetAccountStore(IAccountStore accountStore);
 
+        /// <summary>
+        /// Sets the <see cref="IAccountStore">Account Store</see> <c>href</c> that will be used for the token exchange request.
+        /// </summary>
+        /// <param name="accountStoreHref">The Account Store <c>href</c>.</param>
         void SetAccountStore(string accountStoreHref);
 
+        /// <summary>
+        /// Sets the Authentication Grant Type that will be used for the token exchange request.
+        /// </summary>
+        /// <remarks>Currently only the <c>password</c> grant type is supported for this operation.</remarks>
+        /// <param name="grantType">The grant type.</param>
         void SetGrantType(string grantType);
 
+        /// <summary>
+        /// Sets the username to be used in the token exchange request.
+        /// </summary>
+        /// <param name="login">The username.</param>
         void SetLogin(string login);
 
+        /// <summary>
+        /// Sets the password to be used in the token exchange request.
+        /// </summary>
+        /// <param name="password">The password.</param>
         void SetPassword(string password);
     }
 }

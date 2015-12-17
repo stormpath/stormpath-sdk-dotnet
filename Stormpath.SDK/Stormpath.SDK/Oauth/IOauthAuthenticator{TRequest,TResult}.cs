@@ -25,15 +25,13 @@ namespace Stormpath.SDK.Oauth
     /// <typeparam name="TRequest">The request kind that the authenticator will accept.</typeparam>
     /// <typeparam name="TResult">The response kind that the authenticator will return.</typeparam>
     public interface IOauthAuthenticator<TRequest, TResult>
-        where TRequest : IOauthAuthenticationRequest
-        where TResult : IOauthAuthenticationResult
     {
         /// <summary>
         /// Executes the OAuth 2.0 Authentication Request and returns the result.
         /// </summary>
-        /// <param name="authenticationRequest">The <see cref="IOauthAuthenticationRequest">Authentication Request</see> this authenticator will attempt.</param>
+        /// <param name="authenticationRequest">The Authentication Request this authenticator will attempt.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>An <see cref="IOauthAuthenticationResult">Authentication Result</see> representing the successful authentication.</returns>
+        /// <returns>An Authentication Result representing the successful authentication.</returns>
         /// <exception cref="Error.ResourceException">The authentication failed.</exception>
         Task<TResult> AuthenticateAsync(TRequest authenticationRequest, CancellationToken cancellationToken = default(CancellationToken));
     }

@@ -16,8 +16,16 @@
 
 namespace Stormpath.SDK.Oauth
 {
+    /// <summary>
+    /// Represents a request for Stormpath to create a new OAuth 2.0 <see cref="IAccessToken">Access Token</see>
+    /// for a previously authenticated account.
+    /// </summary>
     public interface IRefreshGrantRequest : IOauthGrantRequest
     {
+        /// <summary>
+        /// Gets the string representation of the JSON Web Token used to generate new OAuth 2.0 access tokens.
+        /// </summary>
+        /// <value>The string representation of the JSON Web Token used to generate new OAuth 2.0 access tokens.</value>
         string RefreshToken { get; }
     }
 }

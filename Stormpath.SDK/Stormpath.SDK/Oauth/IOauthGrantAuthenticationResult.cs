@@ -22,7 +22,7 @@ namespace Stormpath.SDK.Oauth
     /// <summary>
     /// Represents the result of a successful Password or Refresh Grant request.
     /// </summary>
-    public interface IOauthGrantAuthenticationResult : IOauthAuthenticationResult
+    public interface IOauthGrantAuthenticationResult
     {
         /// <summary>
         /// Gets the string representation of the OAuth 2.0 Access Token created during the Create Grant Authentication operation.

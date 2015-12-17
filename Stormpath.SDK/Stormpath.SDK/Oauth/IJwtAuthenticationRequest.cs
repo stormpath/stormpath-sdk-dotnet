@@ -16,8 +16,16 @@
 
 namespace Stormpath.SDK.Oauth
 {
-    public interface IJwtAuthenticationRequest : IOauthAuthenticationRequest
+    /// <summary>
+    /// Represents a JSON Web Token validation request, which can be executed either locally
+    /// or against the Stormpath API.
+    /// </summary>
+    public interface IJwtAuthenticationRequest
     {
+        /// <summary>
+        /// Gets the string representation of the JSON Web Token.
+        /// </summary>
+        /// <value>The string representation of the JSON Web Token.</value>
         string Jwt { get; }
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="IGrantRequest.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IOauthGrantRequest.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ namespace Stormpath.SDK.Oauth
     /// <summary>
     /// Represents an OAuth 2.0 Grant Request.
     /// </summary>
-    public interface IOauthGrantRequest : IOauthAuthenticationRequest
+    public interface IOauthGrantRequest
     {
         /// <summary>
         /// Gets the OAuth 2.0 method used for the request.

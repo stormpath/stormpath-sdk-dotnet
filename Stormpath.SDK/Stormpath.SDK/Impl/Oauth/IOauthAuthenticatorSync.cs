@@ -25,14 +25,12 @@ namespace Stormpath.SDK.Impl.Oauth
     /// <typeparam name="TRequest">The request kind that the authenticator will accept.</typeparam>
     /// <typeparam name="TResult">The response kind that the authenticator will return.</typeparam>
     internal interface IOauthAuthenticatorSync<TRequest, TResult>
-        where TRequest : IOauthAuthenticationRequest
-        where TResult : IOauthAuthenticationResult
     {
         /// <summary>
         /// Synchronous counterpart to <see cref="IOauthAuthenticator{TRequest, TResult}.AuthenticateAsync(TRequest, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="authenticationRequest">The <see cref="IOauthAuthenticationRequest">Authentication Request</see> this authenticator will attempt.</param>
-        /// <returns>An <see cref="IOauthAuthenticationResult">Authentication Result</see> representing the successful authentication.</returns>
+        /// <param name="authenticationRequest">The Authentication Request this authenticator will attempt.</param>
+        /// <returns>An Authentication Result representing the successful authentication.</returns>
         /// <exception cref="SDK.Error.ResourceException">The authentication failed.</exception>
         TResult Authenticate(TRequest authenticationRequest);
     }

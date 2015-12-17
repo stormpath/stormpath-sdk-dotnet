@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Oauth
     /// </summary>
     /// <remarks>
     /// This validation is performed against the Stormpath server. If you want to validate the token locally
-    /// (no network request), call the <see cref=""/> method before performing the authentication.
+    /// (no network request), call the <see cref="WithLocalValidation()"/> method before performing the authentication.
     /// </remarks>
     /// <example>
     /// </example>

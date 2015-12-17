@@ -467,9 +467,7 @@
     <Compile Include="Oauth\IJwtAuthenticationRequest.cs" />
     <Compile Include="Oauth\IJwtAuthenticationResult.cs" />
     <Compile Include="Oauth\IJwtAuthenticator.cs" />
-    <Compile Include="Oauth\IOauthAuthenticationRequest.cs" />
     <Compile Include="Oauth\IOauthAuthenticationRequestBuilder{TRequest}.cs" />
-    <Compile Include="Oauth\IOauthAuthenticationResult.cs" />
     <Compile Include="Oauth\IOauthAuthenticator{TRequest,TResult}.cs" />
     <Compile Include="Oauth\IOauthGrantAuthenticationResult.cs" />
     <Compile Include="Oauth\IOauthGrantRequest.cs" />

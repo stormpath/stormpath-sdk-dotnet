@@ -111,10 +111,25 @@ namespace Stormpath.SDK.Application
         /// <returns>An <see cref="IIdSiteAsyncCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
         IIdSiteAsyncCallbackHandler NewIdSiteAsyncCallbackHandler(IHttpRequest request);
 
+        /// <summary>
+        /// Creates a new <see cref="IPasswordGrantAuthenticator">Password Grant Authenticator</see> that allows you to
+        /// authenticate an account and exchange its credentials for a valid OAuth 2.0 token.
+        /// </summary>
+        /// <returns>A new <see cref="IPasswordGrantAuthenticator"/></returns> instance.
         IPasswordGrantAuthenticator NewPasswordGrantAuthenticator();
 
+        /// <summary>
+        /// Creates a new <see cref="IRefreshGrantAuthenticator">Refresh Grant Authenticator</see> that allows you to
+        /// refresh an OAuth 2.0 token created in Stormpath.
+        /// </summary>
+        /// <returns>A new <see cref="IRefreshGrantAuthenticator"/></returns> instance.
         IRefreshGrantAuthenticator NewRefreshGrantAuthenticator();
 
+        /// <summary>
+        /// Creates a new <see cref="IJwtAuthenticator">JWT Authenticator</see> that allows you to validate
+        /// a JSON Web Token locally or against Stormpath.
+        /// </summary>
+        /// <returns>A new <see cref="IJwtAuthenticator"/></returns> instance.
         IJwtAuthenticator NewJwtAuthenticator();
 
         /// <summary>

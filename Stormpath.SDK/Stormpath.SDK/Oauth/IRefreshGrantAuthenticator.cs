@@ -17,8 +17,7 @@
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
-    /// Represents a Refresh Grant-specific <see cref="IOauthAuthenticator{TResult}">OAuth 2.0 Authenticator</see> used to
-    /// refresh an OAuth 2.0 token created in Stormpath.
+    /// Represents a Refresh Grant-specific OAuth 2.0 Authenticator used to refresh an OAuth 2.0 token created in Stormpath.
     /// </summary>
     /// <example>
     /// </example>

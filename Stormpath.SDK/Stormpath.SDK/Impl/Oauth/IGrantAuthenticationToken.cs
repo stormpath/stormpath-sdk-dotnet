@@ -14,25 +14,15 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading;
-using System.Threading.Tasks;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
+    /// <summary>
+    /// Represents the result of a Grant Authentication operation.
+    /// </summary>
     internal interface IGrantAuthenticationToken : IResource, IOauthGrantAuthenticationResult
     {
-        string AccessTokenString { get; }
-
-        string RefreshTokenString { get; }
-
-        string TokenType { get; }
-
-        long ExpiresIn { get; }
-
-        string AccessTokenHref { get; }
-
-        Task<IAccessToken> GetAccessTokenAsync(CancellationToken cancellationToken);
     }
 }

@@ -28,8 +28,8 @@ namespace Stormpath.SDK.Sync
         /// Synchronously executes the OAuth 2.0 Authentication Request and returns the result.
         /// </summary>
         /// <param name="authenticator">The <see cref="IPasswordGrantAuthenticator"/>.</param>
-        /// <param name="authenticationRequest">The <see cref="IOauthAuthenticationRequest">Authentication Request</see> this authenticator will attempt.</param>
-        /// <returns>An <see cref="IOauthAuthenticationResult">Authentication Result</see> representing the successful authentication.</returns>
+        /// <param name="authenticationRequest">The Authentication Request this authenticator will attempt.</param>
+        /// <returns>An Authentication Result representing the successful authentication.</returns>
         /// <exception cref="Error.ResourceException">The authentication failed.</exception>
         public static IOauthGrantAuthenticationResult Authenticate(this IPasswordGrantAuthenticator authenticator, IPasswordGrantRequest authenticationRequest)
             => (authenticator as IPasswordGrantAuthenticatorSync).Authenticate(authenticationRequest);

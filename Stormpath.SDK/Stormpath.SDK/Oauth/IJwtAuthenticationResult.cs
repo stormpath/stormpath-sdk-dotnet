@@ -19,7 +19,7 @@ namespace Stormpath.SDK.Oauth
     /// <summary>
     /// Represents the result of a JSON Web Token authentication request.
     /// </summary>
-    public interface IJwtAuthenticationResult : IOauthAuthenticationResult
+    public interface IJwtAuthenticationResult
     {
         //TODO
     }

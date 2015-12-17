@@ -17,12 +17,11 @@
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
-    /// Builder pattern used to construct <see cref="IOauthAuthenticationRequest"/> instances.
+    /// Builder pattern used to construct Authentication Request instances.
     /// </summary>
     /// <typeparam name="TRequest">The builder type.</typeparam>
     /// <seealso cref="IPasswordGrantRequestBuilder"/>
     public interface IOauthAuthenticationRequestBuilder<TRequest>
-        where TRequest : IOauthAuthenticationRequest
     {
         /// <summary>
         /// Builds a new <typeparamref name="TRequest"/> instance based on the current builder state.
