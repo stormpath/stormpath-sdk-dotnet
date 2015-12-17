@@ -77,6 +77,10 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(IAccountResult)] = typeof(DefaultAccountResult),
             [typeof(INonce)] = typeof(DefaultNonce),
             [typeof(IOauthPolicy)] = typeof(DefaultOauthPolicy),
+            [typeof(IAccessToken)] = typeof(DefaultAccessToken),
+            [typeof(IRefreshToken)] = typeof(DefaultRefreshToken),
+            [typeof(IGrantAuthenticationAttempt)] = typeof(DefaultGrantAuthenticationAttempt),
+            [typeof(IGrantAuthenticationToken)] = typeof(DefaultGrantAuthenticationToken),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
@@ -116,6 +120,10 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultLinkedInProviderData)] = typeof(ILinkedInProviderData),
             [typeof(DefaultAccountResult)] = typeof(IAccountResult),
             [typeof(DefaultOauthPolicy)] = typeof(IOauthPolicy),
+            [typeof(DefaultAccessToken)] = typeof(IAccessToken),
+            [typeof(DefaultRefreshToken)] = typeof(IRefreshToken),
+            [typeof(DefaultGrantAuthenticationAttempt)] = typeof(IGrantAuthenticationAttempt),
+            [typeof(DefaultGrantAuthenticationToken)] = typeof(IGrantAuthenticationToken),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(DefaultApplicationAccountStoreMapping)] = typeof(IApplicationAccountStoreMapping),
@@ -156,6 +164,8 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(CollectionResponsePage<IDirectory>)] = typeof(IDirectory),
             [typeof(CollectionResponsePage<IGroup>)] = typeof(IGroup),
             [typeof(CollectionResponsePage<IGroupMembership>)] = typeof(IGroupMembership),
+            [typeof(CollectionResponsePage<IAccessToken>)] = typeof(IAccessToken),
+            [typeof(CollectionResponsePage<IRefreshToken>)] = typeof(IRefreshToken),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(CollectionResponsePage<IApplicationAccountStoreMapping>)] = typeof(IApplicationAccountStoreMapping),

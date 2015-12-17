@@ -21,7 +21,7 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 namespace Stormpath.SDK.Jwt
 {
     /// <summary>
-    /// Represents the fields of a JSON Web Token.
+    /// Represents the claims of a JSON Web Token.
     /// </summary>
     public interface IJwtClaims
     {

@@ -20,6 +20,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -238,5 +239,27 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to asynchronously list or search Group Memberships.</returns>
         IAsyncQueryable<IGroupMembership> GetGroupMemberships();
+
+        /// <summary>
+        /// Gets a queryable list of the active <see cref="IAccessToken">Access Tokens</see> that belong to the account.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IAccessToken}"/> that may be used to asynchronously list or search Access Tokens.</returns>
+        /// <example>
+        /// <code>
+        /// var activeAccessTokens = await account.GetAccessTokens().ToListAsync();
+        /// </code>
+        /// </example>
+        IAsyncQueryable<IAccessToken> GetAccessTokens();
+
+        /// <summary>
+        /// Gets a queryable list of the active <see cref="IRefreshToken">Refresh Tokens</see> that belong to the account.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IRefreshToken}"/> that may be used to asynchronously list or search Refresh Tokens.</returns>
+        /// <example>
+        /// <code>
+        /// var refreshTokens = await account.GetRefreshTokens().ToListAsync();
+        /// </code>
+        /// </example>
+        IAsyncQueryable<IRefreshToken> GetRefreshTokens();
     }
 }

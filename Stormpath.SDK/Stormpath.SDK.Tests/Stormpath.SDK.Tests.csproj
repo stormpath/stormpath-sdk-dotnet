@@ -118,6 +118,7 @@
     <Compile Include="Impl\Cache\DefaultCacheResolver_tests.cs" />
     <Compile Include="Impl\CanonicalUri_tests.cs" />
     <Compile Include="Impl\ClientApiKey_tests.cs" />
+    <Compile Include="Impl\FormUrlEncoder_tests.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler_exception_tests.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler_exception_tests.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler_tests.cs" />

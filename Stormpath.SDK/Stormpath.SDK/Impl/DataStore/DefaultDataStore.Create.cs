@@ -16,6 +16,7 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.DataStore
@@ -28,6 +29,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 parentHref,
                 resource,
                 options: null,
+                headers: null,
                 cancellationToken: cancellationToken);
         }
 
@@ -37,6 +39,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 parentHref,
                 resource,
                 options: options,
+                headers: null,
                 cancellationToken: cancellationToken);
         }
 
@@ -46,15 +49,27 @@ namespace Stormpath.SDK.Impl.DataStore
                 parentHref,
                 resource,
                 options: null,
+                headers: null,
                 cancellationToken: cancellationToken);
         }
 
-        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
+        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, HttpHeaders headers, CancellationToken cancellationToken)
+        {
+            return this.AsAsyncInterface.CreateAsync<T, TReturned>(
+                parentHref,
+                resource,
+                options: null,
+                headers: headers,
+                cancellationToken: cancellationToken);
+        }
+
+        Task<TReturned> IInternalAsyncDataStore.CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, HttpHeaders headers, CancellationToken cancellationToken)
         {
             return this.SaveCoreAsync<T, TReturned>(
                 resource,
                 parentHref,
                 queryParams: this.CreateQueryStringFromCreationOptions(options),
+                headers: headers,
                 create: true,
                 cancellationToken: cancellationToken);
         }

@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.CustomData;
@@ -37,6 +38,8 @@ namespace Stormpath.SDK.Impl.DataStore
 {
     internal sealed partial class DefaultDataStore
     {
+        private static readonly string DefaultContentType = "application/json";
+
         private IAsynchronousFilterChain BuildDefaultAsyncFilterChain()
         {
             var asyncFilterChain = new DefaultAsynchronousFilterChain(this);
@@ -133,7 +136,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return response;
         }
 
-        private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, bool create, CancellationToken cancellationToken)
+        private async Task<TReturned> SaveCoreAsync<T, TReturned>(T resource, string href, QueryString queryParams, HttpHeaders headers, bool create, CancellationToken cancellationToken)
             where T : class
             where TReturned : class
         {
@@ -148,14 +151,23 @@ namespace Stormpath.SDK.Impl.DataStore
             IAsynchronousFilterChain chain = new DefaultAsynchronousFilterChain(this.defaultAsyncFilters as DefaultAsynchronousFilterChain)
                 .Add(new DefaultAsynchronousFilter(async (req, next, logger, ct) =>
                 {
-                    var postBody = this.serializer.Serialize(req.Properties);
+                    bool contentTypeIsPresent = !string.IsNullOrEmpty(req.Headers?.ContentType);
+
+                    bool contentTypeIsFormUrlEncoded =
+                        contentTypeIsPresent &&
+                        string.Equals(req.Headers.ContentType, HttpHeaders.MediaTypeApplicationFormUrlEncoded, StringComparison.OrdinalIgnoreCase);
+
+                    string postBody = contentTypeIsFormUrlEncoded
+                        ? new FormUrlEncoder(req.Properties).ToString()
+                        : this.serializer.Serialize(req.Properties);
+
                     var httpRequest = new DefaultHttpRequest(
                         HttpMethod.Post,
                         req.Uri,
                         queryParams: null,
-                        headers: null,
+                        headers: req.Headers,
                         body: postBody,
-                        bodyContentType: "application/json");
+                        bodyContentType: contentTypeIsPresent ? req.Headers.ContentType : DefaultContentType);
 
                     var response = await this.ExecuteAsync(httpRequest, ct).ConfigureAwait(false);
                     var responseBody = this.GetBody<T>(response);
@@ -228,7 +240,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var requestAction = create
                 ? ResourceAction.Create
                 : ResourceAction.Update;
-            var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap, false);
+            var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, headers, propertiesMap, false);
 
             var result = await chain.FilterAsync(request, this.logger, cancellationToken).ConfigureAwait(false);
             return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
@@ -329,7 +341,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var requestAction = create
                 ? ResourceAction.Create
                 : ResourceAction.Update;
-            var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, propertiesMap, false);
+            var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, null /*todo*/ , propertiesMap, false);
 
             var result = chain.Filter(request, this.logger);
             return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);

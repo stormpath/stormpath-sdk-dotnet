@@ -43,6 +43,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 href,
                 queryParams: queryParams,
                 create: false,
+                headers: null,
                 cancellationToken: cancellationToken);
         }
 

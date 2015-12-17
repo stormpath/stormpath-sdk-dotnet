@@ -28,6 +28,11 @@ namespace Stormpath.SDK.Http
     /// </summary>
     public sealed class HttpHeaders : IEnumerable<KeyValuePair<string, IEnumerable<string>>>
     {
+        /// <summary>
+        /// A string representation of the Content-Type header indicating x-www-form-urlencoded data.
+        /// </summary>
+        public static readonly string MediaTypeApplicationFormUrlEncoded = "application/x-www-form-urlencoded";
+
         private static readonly string HeaderAcceptName = "Accept";
         private static readonly string HeaderAuthorizationName = "Authorization";
         private static readonly string HeaderContentLengthName = "Content-Length";

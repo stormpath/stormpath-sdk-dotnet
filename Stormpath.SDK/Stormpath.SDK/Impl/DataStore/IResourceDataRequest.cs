@@ -38,6 +38,12 @@ namespace Stormpath.SDK.Impl.DataStore
         CanonicalUri Uri { get; }
 
         /// <summary>
+        /// Gets the request's HTTP headers.
+        /// </summary>
+        /// <value>The HTTP headers.</value>
+        HttpHeaders Headers { get; }
+
+        /// <summary>
         /// Gets the resource type as a .NET <see cref="System.Type"/>.
         /// </summary>
         /// <value>The resource type.</value>
