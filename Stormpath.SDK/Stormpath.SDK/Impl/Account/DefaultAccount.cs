@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Impl.Account
 
         internal IEmbeddedProperty Directory => this.GetLinkProperty(DirectoryPropertyName);
 
-        string IAccount.Email => this.GetProperty<string>(EmailPropertyName);
+        string IAccount.Email => this.GetStringProperty(EmailPropertyName);
 
         internal IEmbeddedProperty EmailVerificationToken => this.GetLinkProperty(EmailVerificationTokenPropertyName);
 
@@ -77,15 +77,15 @@ namespace Stormpath.SDK.Impl.Account
             }
         }
 
-        string IAccount.FullName => this.GetProperty<string>(FullNamePropertyName);
+        string IAccount.FullName => this.GetStringProperty(FullNamePropertyName);
 
-        string IAccount.GivenName => this.GetProperty<string>(GivenNamePropertyName);
+        string IAccount.GivenName => this.GetStringProperty(GivenNamePropertyName);
 
         internal IEmbeddedProperty GroupMemberships => this.GetLinkProperty(GroupMembershipsPropertyName);
 
         internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        string IAccount.MiddleName => this.GetProperty<string>(MiddleNamePropertyName);
+        string IAccount.MiddleName => this.GetStringProperty(MiddleNamePropertyName);
 
         internal IEmbeddedProperty ProviderData => this.GetLinkProperty(ProviderDataPropertyName);
 
@@ -93,11 +93,11 @@ namespace Stormpath.SDK.Impl.Account
 
         AccountStatus IAccount.Status => this.GetProperty<AccountStatus>(StatusPropertyName);
 
-        string IAccount.Surname => this.GetProperty<string>(SurnamePropertyName);
+        string IAccount.Surname => this.GetStringProperty(SurnamePropertyName);
 
         internal IEmbeddedProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
-        string IAccount.Username => this.GetProperty<string>(UsernamePropertyName);
+        string IAccount.Username => this.GetStringProperty(UsernamePropertyName);
 
         IAccount IAccount.SetEmail(string email)
         {

@@ -40,9 +40,9 @@ namespace Stormpath.SDK.Impl.Group
 
         private new IGroup AsInterface => this;
 
-        string IGroup.Name => this.GetProperty<string>(NamePropertyName);
+        string IGroup.Name => this.GetStringProperty(NamePropertyName);
 
-        string IGroup.Description => this.GetProperty<string>(DescriptionPropertyName);
+        string IGroup.Description => this.GetStringProperty(DescriptionPropertyName);
 
         GroupStatus IGroup.Status => this.GetProperty<GroupStatus>(StatusPropertyName);
 

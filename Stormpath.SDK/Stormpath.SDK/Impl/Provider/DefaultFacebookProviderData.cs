@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Impl.Provider
             => ProviderType.Facebook;
 
         string IFacebookProviderData.AccessToken
-            => this.GetProperty<string>(AccessTokenPropertyName);
+            => this.GetStringProperty(AccessTokenPropertyName);
 
         internal IFacebookProviderData SetAccessToken(string accessToken)
         {

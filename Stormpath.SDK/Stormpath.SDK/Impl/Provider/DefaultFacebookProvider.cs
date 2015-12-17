@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Impl.Provider
             => ProviderType.Facebook;
 
         string IFacebookProvider.ClientId
-            => this.GetProperty<string>(ClientIdPropertyName);
+            => this.GetStringProperty(ClientIdPropertyName);
 
         internal IFacebookProvider SetClientId(string clientId)
         {
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         string IFacebookProvider.ClientSecret
-            => this.GetProperty<string>(ClientSecretPropertyName);
+            => this.GetStringProperty(ClientSecretPropertyName);
 
         internal IFacebookProvider SetClientSecret(string clientSecret)
         {

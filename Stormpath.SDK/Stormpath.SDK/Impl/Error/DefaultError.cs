@@ -38,26 +38,29 @@ namespace Stormpath.SDK.Impl.Error
             this.properties = new Dictionary<string, object>(properties);
         }
 
-        private T GetProperty<T>(string propertyName)
+        // TODO dry this up with ResourceData
+        private string GetStringProperty(string name)
+            => this.GetProperty(name)?.ToString();
+
+        private int GetIntProperty(string name)
+             => Convert.ToInt32(this.GetProperty(name) ?? default(int));
+
+        private object GetProperty(string propertyName)
         {
             object value = null;
-            if (!this.properties.TryGetValue(propertyName, out value))
-            {
-                return default(T);
-            }
-
-            return (T)value;
+            this.properties.TryGetValue(propertyName, out value);
+            return value;
         }
 
-        public int Code => this.GetProperty<int>(CodePropertyName);
+        public int Code => this.GetIntProperty(CodePropertyName);
 
-        public string DeveloperMessage => this.GetProperty<string>(DevMessagePropertyName);
+        public string DeveloperMessage => this.GetStringProperty(DevMessagePropertyName);
 
-        public string Message => this.GetProperty<string>(MessagePropertyName);
+        public string Message => this.GetStringProperty(MessagePropertyName);
 
-        public string MoreInfo => this.GetProperty<string>(MoreInfoPropertyName);
+        public string MoreInfo => this.GetStringProperty(MoreInfoPropertyName);
 
-        public int HttpStatus => this.GetProperty<int>(StatusPropertyName);
+        public int HttpStatus => this.GetIntProperty(StatusPropertyName);
 
         public static DefaultError FromHttpResponse(IHttpResponse response)
         {

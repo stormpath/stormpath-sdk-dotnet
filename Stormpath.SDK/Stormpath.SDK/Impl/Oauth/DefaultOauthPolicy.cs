@@ -36,10 +36,10 @@ namespace Stormpath.SDK.Impl.Oauth
         internal IEmbeddedProperty TokenEndpoint => this.GetLinkProperty(TokenEndpointPropertyName);
 
         TimeSpan IOauthPolicy.AccessTokenTimeToLive
-            => Iso8601Duration.Parse(this.GetProperty<string>(AccessTokenTtlPropertyName));
+            => Iso8601Duration.Parse(this.GetStringProperty(AccessTokenTtlPropertyName));
 
         TimeSpan IOauthPolicy.RefreshTokenTimeToLive
-            => Iso8601Duration.Parse(this.GetProperty<string>(RefreshTokenTtlPropertyName));
+            => Iso8601Duration.Parse(this.GetStringProperty(RefreshTokenTtlPropertyName));
 
         string IOauthPolicy.TokenEndpointHref => this.TokenEndpoint.Href;
 

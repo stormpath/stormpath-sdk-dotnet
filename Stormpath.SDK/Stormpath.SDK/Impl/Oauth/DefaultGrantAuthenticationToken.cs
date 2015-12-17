@@ -40,19 +40,19 @@ namespace Stormpath.SDK.Impl.Oauth
         private new IGrantAuthenticationToken AsInterface => this;
 
         public string AccessTokenString
-            => this.GetProperty<string>(AccessTokenPropertyName);
+            => this.GetStringProperty(AccessTokenPropertyName);
 
         public string RefreshTokenString
-            => this.GetProperty<string>(RefreshTokenPropertyName);
+            => this.GetStringProperty(RefreshTokenPropertyName);
 
         public string TokenType
-            => this.GetProperty<string>(TokenTypePropertyName);
+            => this.GetStringProperty(TokenTypePropertyName);
 
         public long ExpiresIn
-            => this.GetProperty<long>(ExpiresInPropertyName);
+            => this.GetLongProperty(ExpiresInPropertyName);
 
         public string AccessTokenHref
-            => this.GetProperty<string>(AccessTokenHrefPropertyName);
+            => this.GetStringProperty(AccessTokenHrefPropertyName);
 
         public Task<IAccessToken> GetAccessTokenAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IAccessToken>(this.AsInterface.AccessTokenHref, cancellationToken);

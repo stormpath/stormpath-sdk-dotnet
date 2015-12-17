@@ -50,11 +50,11 @@ namespace Stormpath.SDK.Impl.Directory
 
         internal IEmbeddedProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
-        string IDirectory.Description => this.GetProperty<string>(DescriptionPropertyName);
+        string IDirectory.Description => this.GetStringProperty(DescriptionPropertyName);
 
         internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        string IDirectory.Name => this.GetProperty<string>(NamePropertyName);
+        string IDirectory.Name => this.GetStringProperty(NamePropertyName);
 
         internal IEmbeddedProperty PasswordPolicy => this.GetLinkProperty(PasswordPolicyPropertyName);
 

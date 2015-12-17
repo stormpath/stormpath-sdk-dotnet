@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Impl.Oauth
 
         internal IEmbeddedProperty Application => this.GetLinkProperty(ApplicationPropertyName);
 
-        string IAccessToken.Jwt => this.GetProperty<string>(JwtPropertyName);
+        string IAccessToken.Jwt => this.GetStringProperty(JwtPropertyName);
 
         Task<IAccount> IAccessToken.GetAccountAsync(CancellationToken cancellationToken)
         {

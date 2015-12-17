@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Impl.Provider
             => ProviderType.LinkedIn;
 
         string ILinkedInProvider.ClientId
-            => this.GetProperty<string>(ClientIdPropertyName);
+            => this.GetStringProperty(ClientIdPropertyName);
 
         internal ILinkedInProvider SetClientId(string clientId)
         {
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         string ILinkedInProvider.ClientSecret
-            => this.GetProperty<string>(ClientSecretPropertyName);
+            => this.GetStringProperty(ClientSecretPropertyName);
 
         internal ILinkedInProvider SetClientSecret(string clientSecret)
         {

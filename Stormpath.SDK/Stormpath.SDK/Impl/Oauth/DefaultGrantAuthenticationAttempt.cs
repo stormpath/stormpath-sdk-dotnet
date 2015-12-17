@@ -32,16 +32,16 @@ namespace Stormpath.SDK.Impl.Oauth
         }
 
         string IGrantAuthenticationAttempt.AccountStoreHref
-            => this.GetProperty<string>(AccountStoreHrefPropertyName);
+            => this.GetStringProperty(AccountStoreHrefPropertyName);
 
         string IGrantAuthenticationAttempt.GrantType
-            => this.GetProperty<string>(GrantTypePropertyName);
+            => this.GetStringProperty(GrantTypePropertyName);
 
         string IGrantAuthenticationAttempt.Login
-            => this.GetProperty<string>(LoginPropertyName);
+            => this.GetStringProperty(LoginPropertyName);
 
         string IGrantAuthenticationAttempt.Password
-            => this.GetProperty<string>(PasswordPropertyName);
+            => this.GetStringProperty(PasswordPropertyName);
 
         void IGrantAuthenticationAttempt.SetLogin(string login)
             => this.SetProperty(LoginPropertyName, login);

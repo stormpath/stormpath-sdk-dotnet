@@ -64,11 +64,11 @@ namespace Stormpath.SDK.Impl.Application
 
         internal IEmbeddedProperty DefaultGroupStoreMapping => this.GetLinkProperty(DefaultGroupStoreMappingPropertyName);
 
-        string IApplication.Description => this.GetProperty<string>(DescriptionPropertyName);
+        string IApplication.Description => this.GetStringProperty(DescriptionPropertyName);
 
         internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        string IApplication.Name => this.GetProperty<string>(NamePropertyName);
+        string IApplication.Name => this.GetStringProperty(NamePropertyName);
 
         internal IEmbeddedProperty LoginAttempts => this.GetLinkProperty(LoginAttemptsPropertyName);
 

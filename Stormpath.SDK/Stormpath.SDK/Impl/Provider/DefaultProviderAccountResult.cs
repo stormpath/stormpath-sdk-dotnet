@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Impl.Provider
             => this.GetProperty<IAccount>(AccountPropertyName);
 
         bool IProviderAccountResult.IsNewAccount
-            => this.GetProperty<bool>(IsNewAccountPropertyName);
+            => this.GetBoolProperty(IsNewAccountPropertyName);
 
         void INotifiable.OnUpdate(Map properties, IInternalDataStore dataStore)
         {
