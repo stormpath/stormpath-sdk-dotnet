@@ -43,9 +43,9 @@ namespace Stormpath.SDK.Tests.Impl
                 .Split('&');
 
             result.ShouldContain("grant_type=password");
-            result.ShouldContain("username=tom@stormpath.com");
+            result.ShouldContain("username=tom%40stormpath.com");
             result.ShouldContain("password=Secret1");
-            result.ShouldContain("accountStore=https://api.stormpath.com/v1/directories/1bcd23ec1d0a8wa6");
+            result.ShouldContain("accountStore=https%3A%2F%2Fapi.stormpath.com%2Fv1%2Fdirectories%2F1bcd23ec1d0a8wa6");
         }
     }
 }

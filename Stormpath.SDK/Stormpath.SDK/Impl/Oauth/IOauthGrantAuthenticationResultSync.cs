@@ -1,4 +1,4 @@
-﻿// <copyright file="IGrantAuthenticationToken.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IOauthGrantAuthenticationResultSync.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,25 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading;
-using System.Threading.Tasks;
 using Stormpath.SDK.Oauth;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
-    internal interface IGrantAuthenticationToken : IResource, IOauthGrantAuthenticationResult
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IOauthGrantAuthenticationResult"/>.
+    /// </summary>
+    internal interface IOauthGrantAuthenticationResultSync
     {
-        string AccessTokenString { get; }
-
-        string RefreshTokenString { get; }
-
-        string TokenType { get; }
-
-        long ExpiresIn { get; }
-
-        string AccessTokenHref { get; }
-
-        Task<IAccessToken> GetAccessTokenAsync(CancellationToken cancellationToken);
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IOauthGrantAuthenticationResult.GetAccessTokenAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The <see cref="IAccessToken">Access Token</see>.</returns>
+        IAccessToken GetAccessToken();
     }
 }

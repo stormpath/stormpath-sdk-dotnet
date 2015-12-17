@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -36,6 +37,18 @@ namespace Stormpath.SDK.Oauth
         /// </summary>
         /// <value>The string representation of the JSON Web Token.</value>
         string Jwt { get; }
+
+        /// <summary>
+        /// Gets the <c>href</c> of the associated <see cref="IApplication">Application</see>.
+        /// </summary>
+        /// <value>The <c>href</c> of the associated <see cref="IApplication">Application</see>.</value>
+        string ApplicationHref { get; }
+
+        /// <summary>
+        /// Gets the creation date of the token.
+        /// </summary>
+        /// <value>The creation <see cref="DateTimeOffset"/> of this resource.</value>
+        DateTimeOffset CreatedAt { get; }
 
         /// <summary>
         /// Retrieves the <see cref="IAccount">Account</see> associated with this <see cref="IRefreshToken">RefreshToken</see>.

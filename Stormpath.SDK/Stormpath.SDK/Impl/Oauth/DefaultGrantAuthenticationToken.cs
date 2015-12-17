@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Resource;
@@ -24,7 +25,8 @@ namespace Stormpath.SDK.Impl.Oauth
     internal sealed class DefaultGrantAuthenticationToken :
         AbstractInstanceResource,
         IGrantAuthenticationToken,
-        IOauthGrantAuthenticationResult
+        IOauthGrantAuthenticationResult,
+        IOauthGrantAuthenticationResultSync
     {
         private static readonly string AccessTokenPropertyName = "access_token";
         private static readonly string RefreshTokenPropertyName = "refresh_token";
@@ -57,7 +59,7 @@ namespace Stormpath.SDK.Impl.Oauth
         public Task<IAccessToken> GetAccessTokenAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IAccessToken>(this.AsInterface.AccessTokenHref, cancellationToken);
 
-        public Task<IRefreshToken> GetRefreshTokenAsync(CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IRefreshToken>(this.AsInterface.AccessTokenHref, cancellationToken);
+        IAccessToken IOauthGrantAuthenticationResultSync.GetAccessToken()
+            => this.GetInternalSyncDataStore().GetResource<IAccessToken>(this.AsInterface.AccessTokenHref);
     }
 }

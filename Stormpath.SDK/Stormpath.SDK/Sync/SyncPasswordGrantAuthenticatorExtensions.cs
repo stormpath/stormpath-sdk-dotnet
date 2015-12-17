@@ -1,4 +1,4 @@
-﻿// <copyright file="IOauthAuthenticator{TResult}.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SyncPasswordGrantAuthenticatorExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,24 +14,24 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading;
-using System.Threading.Tasks;
+using Stormpath.SDK.Impl.Oauth;
+using Stormpath.SDK.Oauth;
 
-namespace Stormpath.SDK.Oauth
+namespace Stormpath.SDK.Sync
 {
     /// <summary>
-    /// Represents the operations that every OAuth 2.0 Authenticator type must support.
+    /// Provides synchronous access to the methods available on <see cref="IPasswordGrantAuthenticator"/>.
     /// </summary>
-    /// <typeparam name="TRequest">The request kind that the authenticator will accept.</typeparam>
-    /// <typeparam name="TResult">The response kind that the authenticator will return.</typeparam>
-    public interface IOauthAuthenticator<TRequest, TResult>
-        where TRequest : IOauthAuthenticationRequest
-        where TResult : IOauthAuthenticationResult
+    public static class SyncPasswordGrantAuthenticatorExtensions
     {
+        /// <summary>
+        /// Synchronously executes the OAuth 2.0 Authentication Request and returns the result.
+        /// </summary>
+        /// <param name="authenticator">The <see cref="IPasswordGrantAuthenticator"/>.</param>
         /// <param name="authenticationRequest">The <see cref="IOauthAuthenticationRequest">Authentication Request</see> this authenticator will attempt.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>An <see cref="IOauthAuthenticationResult">Authentication Result</see> representing the successful authentication.</returns>
-        /// <exception cref=""></exception>
-        Task<TResult> AuthenticateAsync(TRequest authenticationRequest, CancellationToken cancellationToken = default(CancellationToken));
+        /// <exception cref="Error.ResourceException">The authentication failed.</exception>
+        public static IOauthGrantAuthenticationResult Authenticate(this IPasswordGrantAuthenticator authenticator, IPasswordGrantRequest authenticationRequest)
+            => (authenticator as IPasswordGrantAuthenticatorSync).Authenticate(authenticationRequest);
     }
 }

@@ -16,14 +16,14 @@
 
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Oauth;
+using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration.Async
+namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection(nameof(IntegrationTestCollection))]
     public class Oauth_tests
@@ -37,28 +37,28 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Creating_token_with_password_grant(TestClientProvider clientBuilder)
+        public void Creating_token_with_password_grant(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var tenant = await client.GetCurrentTenantAsync();
+            var tenant = client.GetCurrentTenant();
 
             // Create a dummy application
-            var createdApplication = await tenant.CreateApplicationAsync(
-                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Creating Token With Password Grant Flow",
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Creating Token With Password Grant Flow - Sync",
                 createDirectory: false);
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
             // Add the test accounts
-            await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+            createdApplication.AddAccountStore(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
                 .SetLogin("lskywalker@tattooine.rim")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
-            var authenticateResult = await createdApplication.NewPasswordGrantAuthenticator()
-                .AuthenticateAsync(passwordGrantRequest);
+            var authenticateResult = createdApplication.NewPasswordGrantAuthenticator()
+                .Authenticate(passwordGrantRequest);
 
             // Verify authentication response
             authenticateResult.AccessTokenHref.ShouldContain("/accessTokens/");
@@ -68,75 +68,75 @@ namespace Stormpath.SDK.Tests.Integration.Async
             authenticateResult.RefreshTokenString.ShouldNotBeNullOrEmpty();
 
             // Verify generated access token
-            var accessToken = await authenticateResult.GetAccessTokenAsync();
+            var accessToken = authenticateResult.GetAccessToken();
             accessToken.CreatedAt.ShouldNotBe(default(DateTimeOffset));
             accessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
             accessToken.Jwt.ShouldBe(authenticateResult.AccessTokenString);
             accessToken.ApplicationHref.ShouldBe(createdApplication.Href);
 
             // Clean up
-            (await accessToken.DeleteAsync()).ShouldBeTrue();
+            accessToken.Delete().ShouldBeTrue();
 
-            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            createdApplication.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Failed_password_grant_throws_ResourceException(TestClientProvider clientBuilder)
+        public void Failed_password_grant_throws_ResourceException(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var tenant = await client.GetCurrentTenantAsync();
+            var tenant = client.GetCurrentTenant();
 
             // Create a dummy application
-            var createdApplication = await tenant.CreateApplicationAsync(
-                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Failed Password Grant Throws",
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Failed Password Grant Throws - Sync",
                 createDirectory: false);
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
             // Add the test accounts
-            await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+            createdApplication.AddAccountStore(this.fixture.PrimaryDirectoryHref);
 
             var badPasswordGrantRequest = OauthRequests.NewPasswordGrantRequest()
                 .SetLogin("lskywalker@tattooine.rim")
                 .SetPassword("notLukesPassword")
                 .Build();
 
-            await Should.ThrowAsync<ResourceException>(async () => await createdApplication.NewPasswordGrantAuthenticator().AuthenticateAsync(badPasswordGrantRequest));
+            Should.Throw<ResourceException>(() => createdApplication.NewPasswordGrantAuthenticator().AuthenticateAsync(badPasswordGrantRequest));
 
-            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            createdApplication.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Listing_account_tokens(TestClientProvider clientBuilder)
+        public void Listing_account_tokens(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var tenant = await client.GetCurrentTenantAsync();
+            var tenant = client.GetCurrentTenant();
 
             // Create a dummy application
-            var createdApplication = await tenant.CreateApplicationAsync(
-                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Listing Tokens",
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Listing Tokens - Sync",
                 createDirectory: false);
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
             // Add the test accounts
-            await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+            createdApplication.AddAccountStore(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
                 .SetLogin("lskywalker@tattooine.rim")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
-            var authenticateResult = await createdApplication.NewPasswordGrantAuthenticator()
-                .AuthenticateAsync(passwordGrantRequest);
+            var authenticateResult = createdApplication.NewPasswordGrantAuthenticator()
+                .Authenticate(passwordGrantRequest);
 
-            var account = await tenant.GetAccountAsync(this.fixture.PrimaryAccountHref);
-            var accessTokens = await account.GetAccessTokens().ToListAsync();
-            var refreshTokens = await account.GetRefreshTokens().ToListAsync();
+            var account = tenant.GetAccount(this.fixture.PrimaryAccountHref);
+            var accessTokens = account.GetAccessTokens().Synchronously().ToList();
+            var refreshTokens = account.GetRefreshTokens().Synchronously().ToList();
 
             var accessToken = accessTokens.Where(x => x.Jwt == authenticateResult.AccessTokenString).SingleOrDefault();
             var refreshToken = refreshTokens.Where(x => x.Jwt == authenticateResult.RefreshTokenString).SingleOrDefault();
@@ -144,98 +144,100 @@ namespace Stormpath.SDK.Tests.Integration.Async
             refreshToken.ShouldNotBeNull();
 
             // Clean up
-            (await accessToken.DeleteAsync()).ShouldBeTrue();
-            (await refreshToken.DeleteAsync()).ShouldBeTrue();
+            accessToken.Delete().ShouldBeTrue();
+            refreshToken.Delete().ShouldBeTrue();
 
-            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            createdApplication.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Getting_access_token_for_application(TestClientProvider clientBuilder)
+        public void Getting_access_token_for_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var tenant = await client.GetCurrentTenantAsync();
+            var tenant = client.GetCurrentTenant();
 
             // Create a dummy application
-            var createdApplication = await tenant.CreateApplicationAsync(
-                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Getting Access Token for Application",
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Getting Access Token for Application - Sync",
                 createDirectory: false);
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
             // Add the test accounts
-            await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+            createdApplication.AddAccountStore(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
                 .SetLogin("lskywalker@tattooine.rim")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
-            var authenticateResult = await createdApplication.NewPasswordGrantAuthenticator()
-                .AuthenticateAsync(passwordGrantRequest);
+            var authenticateResult = createdApplication.NewPasswordGrantAuthenticator()
+                .Authenticate(passwordGrantRequest);
 
-            var account = await tenant.GetAccountAsync(this.fixture.PrimaryAccountHref);
-            var accessTokenForApplication = await account
+            var account = tenant.GetAccount(this.fixture.PrimaryAccountHref);
+            var accessTokenForApplication = account
                 .GetAccessTokens()
                 .Where(x => x.ApplicationHref == createdApplication.Href)
-                .SingleOrDefaultAsync();
+                .Synchronously()
+                .SingleOrDefault();
 
             accessTokenForApplication.ShouldNotBeNull();
 
-            (await accessTokenForApplication.GetAccountAsync()).Href.ShouldBe(this.fixture.PrimaryAccountHref);
-            (await accessTokenForApplication.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
-            (await accessTokenForApplication.GetTenantAsync()).Href.ShouldBe(this.fixture.TenantHref);
+            accessTokenForApplication.GetAccount().Href.ShouldBe(this.fixture.PrimaryAccountHref);
+            accessTokenForApplication.GetApplication().Href.ShouldBe(createdApplication.Href);
+            accessTokenForApplication.GetTenant().Href.ShouldBe(this.fixture.TenantHref);
 
             // Clean up
-            (await accessTokenForApplication.DeleteAsync()).ShouldBeTrue();
+            accessTokenForApplication.Delete().ShouldBeTrue();
 
-            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            createdApplication.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Getting_refresh_token_for_application(TestClientProvider clientBuilder)
+        public void Getting_refresh_token_for_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var tenant = await client.GetCurrentTenantAsync();
+            var tenant = client.GetCurrentTenant();
 
             // Create a dummy application
-            var createdApplication = await tenant.CreateApplicationAsync(
-                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Getting Refresh Token for Application",
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Getting Refresh Token for Application - Sync",
                 createDirectory: false);
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
             // Add the test accounts
-            await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+            createdApplication.AddAccountStore(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
                 .SetLogin("lskywalker@tattooine.rim")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
-            var authenticateResult = await createdApplication.NewPasswordGrantAuthenticator()
-                .AuthenticateAsync(passwordGrantRequest);
+            var authenticateResult = createdApplication.NewPasswordGrantAuthenticator()
+                .Authenticate(passwordGrantRequest);
 
-            var account = await tenant.GetAccountAsync(this.fixture.PrimaryAccountHref);
-            var refreshTokenForApplication = await account
+            var account = tenant.GetAccount(this.fixture.PrimaryAccountHref);
+            var refreshTokenForApplication = account
                 .GetRefreshTokens()
                 .Where(x => x.ApplicationHref == createdApplication.Href)
-                .SingleOrDefaultAsync();
+                .Synchronously()
+                .SingleOrDefault();
 
             refreshTokenForApplication.ShouldNotBeNull();
 
-            (await refreshTokenForApplication.GetAccountAsync()).Href.ShouldBe(this.fixture.PrimaryAccountHref);
-            (await refreshTokenForApplication.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
-            (await refreshTokenForApplication.GetTenantAsync()).Href.ShouldBe(this.fixture.TenantHref);
+            refreshTokenForApplication.GetAccount().Href.ShouldBe(this.fixture.PrimaryAccountHref);
+            refreshTokenForApplication.GetApplication().Href.ShouldBe(createdApplication.Href);
+            refreshTokenForApplication.GetTenant().Href.ShouldBe(this.fixture.TenantHref);
 
             // Clean up
-            (await refreshTokenForApplication.DeleteAsync()).ShouldBeTrue();
+            refreshTokenForApplication.Delete().ShouldBeTrue();
 
-            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            createdApplication.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
     }

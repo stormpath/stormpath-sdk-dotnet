@@ -99,6 +99,7 @@
     <Compile Include="Sync\Account_tests.cs" />
     <Compile Include="Sync\Error_tests.cs" />
     <Compile Include="Sync\OauthPolicy_tests.cs" />
+    <Compile Include="Sync\Oauth_tests.cs" />
     <Compile Include="Sync\Organization_tests.cs" />
     <Compile Include="Sync\Tenant_tests.cs" />
     <Compile Include="Async\Tenant_tests.cs" />

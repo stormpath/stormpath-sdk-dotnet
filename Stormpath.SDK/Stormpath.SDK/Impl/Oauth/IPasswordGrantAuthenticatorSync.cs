@@ -1,4 +1,4 @@
-﻿// <copyright file="IGrantAuthenticationToken.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IPasswordGrantAuthenticatorSync.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,25 +14,15 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading;
-using System.Threading.Tasks;
 using Stormpath.SDK.Oauth;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
-    internal interface IGrantAuthenticationToken : IResource, IOauthGrantAuthenticationResult
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IPasswordGrantAuthenticator"/>.
+    /// </summary>
+    internal interface IPasswordGrantAuthenticatorSync : IOauthAuthenticatorSync<IPasswordGrantRequest, IOauthGrantAuthenticationResult>
     {
-        string AccessTokenString { get; }
-
-        string RefreshTokenString { get; }
-
-        string TokenType { get; }
-
-        long ExpiresIn { get; }
-
-        string AccessTokenHref { get; }
-
-        Task<IAccessToken> GetAccessTokenAsync(CancellationToken cancellationToken);
     }
 }

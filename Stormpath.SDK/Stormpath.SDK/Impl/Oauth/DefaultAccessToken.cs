@@ -14,7 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -25,7 +24,10 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
-    internal sealed class DefaultAccessToken : AbstractInstanceResource, IAccessToken
+    internal sealed class DefaultAccessToken :
+        AbstractInstanceResource,
+        IAccessToken,
+        IAccessTokenSync
     {
         private static readonly string AccountPropertyName = "account";
         private static readonly string ApplicationPropertyName = "application";
@@ -42,15 +44,24 @@ namespace Stormpath.SDK.Impl.Oauth
 
         string IAccessToken.Jwt => this.GetStringProperty(JwtPropertyName);
 
+        string IAccessToken.ApplicationHref => this.Application?.Href;
+
         Task<IAccount> IAccessToken.GetAccountAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href);
+
+        IAccount IAccessTokenSync.GetAccount()
+            => this.GetInternalSyncDataStore().GetResource<IAccount>(this.Account.Href);
 
         Task<IApplication> IAccessToken.GetApplicationAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IApplication>(this.Application.Href);
 
+        IApplication IAccessTokenSync.GetApplication()
+            => this.GetInternalSyncDataStore().GetResource<IApplication>(this.Application.Href);
+
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
+
+        bool IDeletableSync.Delete()
+            => this.GetInternalSyncDataStore().Delete(this);
     }
 }

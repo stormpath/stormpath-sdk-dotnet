@@ -56,8 +56,11 @@ namespace Stormpath.SDK.Oauth
         /// </value>
         long ExpiresIn { get; }
 
-        Task<IAccessToken> GetAccessTokenAsync(CancellationToken cancellationToken);
-
-        Task<IRefreshToken> GetRefreshTokenAsync(CancellationToken cancellationToken);
+        /// <summary>
+        /// Retrieves the <see cref="IAccessToken">Access Token</see> created during the Create Grant Authentication operation.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IAccessToken">Access Token</see>.</returns>
+        Task<IAccessToken> GetAccessTokenAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }
