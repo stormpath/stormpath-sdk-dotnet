@@ -74,8 +74,16 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private void ApplyDefaultRequestHeaders(IHttpRequest request)
         {
-            request.Headers.Accept = "application/json";
+            request.Headers.Accept = DefaultContentType;
             request.Headers.UserAgent = this.userAgentBuilder.GetUserAgent();
+
+            if (request.HasBody
+                && string.IsNullOrEmpty(request.Headers.ContentType))
+            {
+                request.Headers.ContentType = string.IsNullOrEmpty(request.BodyContentType)
+                    ? request.BodyContentType
+                    : DefaultContentType;
+            }
         }
 
         private Map GetBody<T>(IHttpResponse response)
@@ -110,14 +118,7 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         private ResourceAction GetPostAction(IResourceDataRequest request, IHttpResponse httpResponse)
-        {
-            if (httpResponse.StatusCode == 201)
-            {
-                return ResourceAction.Create;
-            }
-
-            return request.Action;
-        }
+            => httpResponse.StatusCode == 201 ? ResourceAction.Create : request.Action;
 
         private IHttpResponse HandleResponseOrError(IHttpResponse response)
         {

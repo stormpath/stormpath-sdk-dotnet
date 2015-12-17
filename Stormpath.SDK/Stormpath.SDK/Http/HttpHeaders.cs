@@ -31,15 +31,50 @@ namespace Stormpath.SDK.Http
         /// <summary>
         /// A string representation of the Content-Type header indicating x-www-form-urlencoded data.
         /// </summary>
+        /// <value>application/x-www-form-urlencoded</value>
         public static readonly string MediaTypeApplicationFormUrlEncoded = "application/x-www-form-urlencoded";
 
-        private static readonly string HeaderAcceptName = "Accept";
-        private static readonly string HeaderAuthorizationName = "Authorization";
-        private static readonly string HeaderContentLengthName = "Content-Length";
-        private static readonly string HeaderContentTypeName = "Content-Type";
-        private static readonly string HeaderHostName = "Host";
-        private static readonly string LocationName = "Location";
-        private static readonly string HeaderUserAgentName = "User-Agent";
+        /// <summary>
+        /// The HTTP Accept header.
+        /// </summary>
+        /// <value>Accept</value>
+        public static readonly string HeaderAcceptName = "Accept";
+
+        /// <summary>
+        /// The HTTP Authorization header.
+        /// </summary>
+        /// <value>Accept</value>
+        public static readonly string HeaderAuthorizationName = "Authorization";
+
+        /// <summary>
+        /// The HTTP Content-Length header.
+        /// </summary>
+        /// <value>Content-Length</value>
+        public static readonly string HeaderContentLengthName = "Content-Length";
+
+        /// <summary>
+        /// The HTTP Content-Type header.
+        /// </summary>
+        /// <value>Content-Type</value>
+        public static readonly string HeaderContentTypeName = "Content-Type";
+
+        /// <summary>
+        /// The HTTP Host header.
+        /// </summary>
+        /// <value>Host</value>
+        public static readonly string HeaderHostName = "Host";
+
+        /// <summary>
+        /// The HTTP Location header.
+        /// </summary>
+        /// <value>Location</value>
+        public static readonly string LocationName = "Location";
+
+        /// <summary>
+        /// The HTTP User-Agent header.
+        /// </summary>
+        /// <value>User-Agent</value>
+        public static readonly string HeaderUserAgentName = "User-Agent";
 
         private readonly IDictionary<string, List<object>> headers;
         private bool readOnly;

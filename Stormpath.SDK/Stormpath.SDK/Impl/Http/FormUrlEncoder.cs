@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Utility;
@@ -36,8 +37,10 @@ namespace Stormpath.SDK.Impl.Http
 
         private static string Build(Map properties)
         {
-            var urlEncoded = properties
-                .Select(entry => $"{RequestHelper.UrlEncode(entry.Key)}={entry.Value.ToString()}")
+            var sortedProperties = new SortedDictionary<string, object>(properties);
+
+            var urlEncoded = sortedProperties
+                .Select(entry => $"{RequestHelper.UrlEncode(entry.Key)}={RequestHelper.UrlEncode(entry.Value.ToString())}")
                 .Join("&");
             return urlEncoded;
         }
