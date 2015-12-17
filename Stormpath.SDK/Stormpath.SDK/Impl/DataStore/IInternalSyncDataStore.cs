@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 using Map = System.Collections.Generic.IDictionary<string, object>;
@@ -94,9 +95,23 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <typeparam name="TReturned">The resource type to return.</typeparam>
         /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
         /// <param name="resource">The resource to persist.</param>
-        /// <param name="options">The creation options to use for the request.</param>
+        /// <param name="headers">The HTTP headers to use for the request.</param>
         /// <returns>The persisted resource.</returns>
-        TReturned Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
+        TReturned Create<T, TReturned>(string parentHref, T resource, HttpHeaders headers)
+            where T : class
+            where TReturned : class;
+
+        /// <summary>
+        /// Creates a new resource on the server with the specified options.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <typeparam name="TReturned">The resource type to return.</typeparam>
+        /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
+        /// <param name="resource">The resource to persist.</param>
+        /// <param name="options">The creation options to use for the request.</param>
+        /// <param name="headers">The HTTP headers to use for the request.</param>
+        /// <returns>The persisted resource.</returns>
+        TReturned Create<T, TReturned>(string parentHref, T resource, ICreationOptions options, HttpHeaders headers)
             where T : class
             where TReturned : class;
 

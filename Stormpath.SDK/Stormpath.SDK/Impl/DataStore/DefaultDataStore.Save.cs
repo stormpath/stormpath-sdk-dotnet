@@ -65,8 +65,9 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.SaveCore<T, T>(
                 resource,
                 href,
+                queryParams: queryParams,
                 create: false,
-                queryParams: queryParams);
+                headers: null);
         }
     }
 }

@@ -247,7 +247,7 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);
         }
 
-        private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, bool create)
+        private TReturned SaveCore<T, TReturned>(T resource, string href, QueryString queryParams, HttpHeaders headers, bool create)
             where T : class
             where TReturned : class
         {
@@ -262,14 +262,23 @@ namespace Stormpath.SDK.Impl.DataStore
             ISynchronousFilterChain chain = new DefaultSynchronousFilterChain(this.defaultSyncFilters as DefaultSynchronousFilterChain)
                 .Add(new DefaultSynchronousFilter((req, next, logger) =>
                 {
-                    var postBody = this.serializer.Serialize(req.Properties);
+                    bool contentTypeIsPresent = !string.IsNullOrEmpty(req.Headers?.ContentType);
+
+                    bool contentTypeIsFormUrlEncoded =
+                        contentTypeIsPresent &&
+                        string.Equals(req.Headers.ContentType, HttpHeaders.MediaTypeApplicationFormUrlEncoded, StringComparison.OrdinalIgnoreCase);
+
+                    string postBody = contentTypeIsFormUrlEncoded
+                        ? new FormUrlEncoder(req.Properties).ToString()
+                        : this.serializer.Serialize(req.Properties);
+
                     var httpRequest = new DefaultHttpRequest(
                         HttpMethod.Post,
                         req.Uri,
                         queryParams: null,
-                        headers: null,
+                        headers: req.Headers,
                         body: postBody,
-                        bodyContentType: "application/json");
+                        bodyContentType: contentTypeIsPresent ? req.Headers.ContentType : DefaultContentType);
 
                     var response = this.Execute(httpRequest);
                     var responseBody = this.GetBody<T>(response);
@@ -342,7 +351,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var requestAction = create
                 ? ResourceAction.Create
                 : ResourceAction.Update;
-            var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, null /*todo*/ , propertiesMap, false);
+            var request = new DefaultResourceDataRequest(requestAction, typeof(T), canonicalUri, headers, propertiesMap, false);
 
             var result = chain.Filter(request, this.logger);
             return this.resourceFactory.Create<TReturned>(result.Body, resource as ILinkable);

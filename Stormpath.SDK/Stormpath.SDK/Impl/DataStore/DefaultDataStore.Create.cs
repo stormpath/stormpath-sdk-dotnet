@@ -79,7 +79,8 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.AsSyncInterface.Create<T, T>(
                 parentHref,
                 resource,
-                options: null);
+                options: null,
+                headers: null);
         }
 
         T IInternalSyncDataStore.Create<T>(string parentHref, T resource, ICreationOptions options)
@@ -87,7 +88,8 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.AsSyncInterface.Create<T, T>(
                 parentHref,
                 resource,
-                options: options);
+                options: options,
+                headers: null);
         }
 
         TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource)
@@ -95,15 +97,26 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.AsSyncInterface.Create<T, TReturned>(
                 parentHref,
                 resource,
-                options: null);
+                options: null,
+                headers: null);
         }
 
-        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
+        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, HttpHeaders headers)
+        {
+            return this.AsSyncInterface.Create<T, TReturned>(
+                parentHref,
+                resource,
+                options: null,
+                headers: headers);
+        }
+
+        TReturned IInternalSyncDataStore.Create<T, TReturned>(string parentHref, T resource, ICreationOptions options, HttpHeaders headers)
         {
             return this.SaveCore<T, TReturned>(
                 resource,
                 parentHref,
                 queryParams: this.CreateQueryStringFromCreationOptions(options),
+                headers: headers,
                 create: true);
         }
     }
