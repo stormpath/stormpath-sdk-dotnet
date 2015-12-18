@@ -103,7 +103,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .SetPassword("notLukesPassword")
                 .Build();
 
-            Should.Throw<ResourceException>(() => createdApplication.NewPasswordGrantAuthenticator().AuthenticateAsync(badPasswordGrantRequest));
+            // TODO Mono Shouldly support - should be ResourceException
+            Should.Throw<Exception>(() => createdApplication.NewPasswordGrantAuthenticator().AuthenticateAsync(badPasswordGrantRequest));
 
             createdApplication.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
