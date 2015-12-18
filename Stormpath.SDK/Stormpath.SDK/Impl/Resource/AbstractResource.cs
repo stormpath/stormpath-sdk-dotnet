@@ -107,7 +107,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         public T GetProperty<T>(string name)
             where T : class
-            => (T)this.GetProperty(name) ?? default(T);
+            => (T)(this.GetProperty(name) ?? default(T));
 
         public IEmbeddedProperty GetLinkProperty(string name)
             => (this.GetProperty(name) as IEmbeddedProperty) ?? new LinkProperty(null);
