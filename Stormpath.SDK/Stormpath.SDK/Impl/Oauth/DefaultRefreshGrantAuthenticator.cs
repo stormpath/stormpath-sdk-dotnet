@@ -25,25 +25,15 @@ using Stormpath.SDK.Oauth;
 namespace Stormpath.SDK.Impl.Oauth
 {
     internal sealed class DefaultRefreshGrantAuthenticator :
+        AbstractGrantAuthenticator<IRefreshGrantRequest>,
         IRefreshGrantAuthenticator,
         IRefreshGrantAuthenticatorSync
     {
-        private static readonly string OauthTokenPath = "/oauth/token";
-
-        private readonly IApplication application;
-        private readonly IInternalDataStore internalDataStore;
 
         public DefaultRefreshGrantAuthenticator(IApplication application, IInternalDataStore internalDataStore)
+            : base(application, internalDataStore)
         {
-            this.application = application;
-            this.internalDataStore = internalDataStore;
         }
-
-        private IInternalAsyncDataStore InternalAsyncDataStore
-            => this.internalDataStore as IInternalAsyncDataStore;
-
-        private IInternalSyncDataStore InternalSyncDataStore
-            => this.internalDataStore as IInternalSyncDataStore;
 
         async Task<IOauthGrantAuthenticationResult> IOauthAuthenticator<IRefreshGrantRequest, IOauthGrantAuthenticationResult>
             .AuthenticateAsync(IRefreshGrantRequest authenticationRequest, CancellationToken cancellationToken)
@@ -51,7 +41,7 @@ namespace Stormpath.SDK.Impl.Oauth
             this.ThrowIfInvalid(authenticationRequest);
 
             var refreshGrantAttempt = this.BuildGrantAttempt(authenticationRequest);
-            var headers = GetHeaders();
+            var headers = this.GetHeaderWithMediaType();
 
             return await this.InternalAsyncDataStore.CreateAsync<IRefreshGrantAuthenticationAttempt, IGrantAuthenticationToken>(
                 $"{this.application.Href}{OauthTokenPath}",
@@ -66,25 +56,12 @@ namespace Stormpath.SDK.Impl.Oauth
             this.ThrowIfInvalid(authenticationRequest);
 
             var refreshGrantAttempt = this.BuildGrantAttempt(authenticationRequest);
-            var headers = GetHeaders();
+            var headers = this.GetHeaderWithMediaType();
 
             return this.InternalSyncDataStore.Create<IRefreshGrantAuthenticationAttempt, IGrantAuthenticationToken>(
                 $"{this.application.Href}{OauthTokenPath}",
                 refreshGrantAttempt,
                 headers);
-        }
-
-        private void ThrowIfInvalid(IRefreshGrantRequest authenticationRequest)
-        {
-            if (this.application == null)
-            {
-                throw new ApplicationException($"{nameof(this.application)} cannot be null.");
-            }
-
-            if (authenticationRequest == null)
-            {
-                throw new ApplicationException($"{nameof(authenticationRequest)} cannot be null.");
-            }
         }
 
         private IRefreshGrantAuthenticationAttempt BuildGrantAttempt(IRefreshGrantRequest authenticationRequest)
@@ -94,13 +71,6 @@ namespace Stormpath.SDK.Impl.Oauth
             refreshGrantRequest.SetRefreshToken(authenticationRequest.RefreshToken);
 
             return refreshGrantRequest;
-        }
-
-        private static HttpHeaders GetHeaders()
-        {
-            var headers = new HttpHeaders();
-            headers.ContentType = HttpHeaders.MediaTypeApplicationFormUrlEncoded;
-            return headers;
         }
     }
 }

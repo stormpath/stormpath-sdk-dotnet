@@ -25,25 +25,14 @@ using Stormpath.SDK.Oauth;
 namespace Stormpath.SDK.Impl.Oauth
 {
     internal sealed class DefaultPasswordGrantAuthenticator :
+        AbstractGrantAuthenticator<IPasswordGrantRequest>,
         IPasswordGrantAuthenticator,
         IPasswordGrantAuthenticatorSync
     {
-        private static readonly string OauthTokenPath = "/oauth/token";
-
-        private readonly IApplication application;
-        private readonly IInternalDataStore internalDataStore;
-
         public DefaultPasswordGrantAuthenticator(IApplication application, IInternalDataStore internalDataStore)
+            : base(application, internalDataStore)
         {
-            this.application = application;
-            this.internalDataStore = internalDataStore;
         }
-
-        private IInternalAsyncDataStore InternalAsyncDataStore
-            => this.internalDataStore as IInternalAsyncDataStore;
-
-        private IInternalSyncDataStore InternalSyncDataStore
-            => this.internalDataStore as IInternalSyncDataStore;
 
         async Task<IOauthGrantAuthenticationResult> IOauthAuthenticator<IPasswordGrantRequest, IOauthGrantAuthenticationResult>
             .AuthenticateAsync(IPasswordGrantRequest authenticationRequest, CancellationToken cancellationToken)
@@ -51,7 +40,7 @@ namespace Stormpath.SDK.Impl.Oauth
             this.ThrowIfInvalid(authenticationRequest);
 
             var createGrantAttempt = this.BuildGrantAttempt(authenticationRequest);
-            var headers = GetHeaders();
+            var headers = this.GetHeaderWithMediaType();
 
             return await this.InternalAsyncDataStore.CreateAsync<IGrantAuthenticationAttempt, IGrantAuthenticationToken>(
                 $"{this.application.Href}{OauthTokenPath}",
@@ -66,25 +55,12 @@ namespace Stormpath.SDK.Impl.Oauth
             this.ThrowIfInvalid(authenticationRequest);
 
             var createGrantAttempt = this.BuildGrantAttempt(authenticationRequest);
-            var headers = GetHeaders();
+            var headers = this.GetHeaderWithMediaType();
 
             return this.InternalSyncDataStore.Create<IGrantAuthenticationAttempt, IGrantAuthenticationToken>(
                 $"{this.application.Href}{OauthTokenPath}",
                 createGrantAttempt,
                 headers);
-        }
-
-        private void ThrowIfInvalid(IPasswordGrantRequest authenticationRequest)
-        {
-            if (this.application == null)
-            {
-                throw new ApplicationException($"{nameof(this.application)} cannot be null.");
-            }
-
-            if (authenticationRequest == null)
-            {
-                throw new ApplicationException($"{nameof(authenticationRequest)} cannot be null.");
-            }
         }
 
         private IGrantAuthenticationAttempt BuildGrantAttempt(IPasswordGrantRequest authenticationRequest)
@@ -100,13 +76,6 @@ namespace Stormpath.SDK.Impl.Oauth
             }
 
             return createGrantAttempt;
-        }
-
-        private static HttpHeaders GetHeaders()
-        {
-            var headers = new HttpHeaders();
-            headers.ContentType = HttpHeaders.MediaTypeApplicationFormUrlEncoded;
-            return headers;
         }
     }
 }
