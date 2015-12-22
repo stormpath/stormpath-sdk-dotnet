@@ -1,0 +1,43 @@
+﻿// <copyright file="DefaultRefreshGrantAuthenticationAttempt.cs" company="Stormpath, Inc.">
+// Copyright (c) 2015 Stormpath, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
+
+using Stormpath.SDK.Impl.Resource;
+
+namespace Stormpath.SDK.Impl.Oauth
+{
+    internal sealed class DefaultRefreshGrantAuthenticationAttempt : AbstractResource, IRefreshGrantAuthenticationAttempt
+    {
+        private static readonly string RefreshTokenPropertyName = "token";
+        private static readonly string GrantTypePropertyName = "grant_type";
+
+        public DefaultRefreshGrantAuthenticationAttempt(ResourceData data)
+            : base(data)
+        {
+        }
+
+        string IRefreshGrantAuthenticationAttempt.GrantType
+            => this.GetStringProperty(GrantTypePropertyName);
+
+        string IRefreshGrantAuthenticationAttempt.RefreshToken
+            => this.GetStringProperty(RefreshTokenPropertyName);
+
+        void IRefreshGrantAuthenticationAttempt.SetGrantType(string grantType)
+            => this.SetProperty(GrantTypePropertyName, grantType);
+
+        void IRefreshGrantAuthenticationAttempt.SetRefreshToken(string refreshToken)
+            => this.SetProperty(RefreshTokenPropertyName, refreshToken);
+    }
+}

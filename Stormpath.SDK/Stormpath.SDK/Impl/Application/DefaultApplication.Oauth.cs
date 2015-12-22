@@ -30,10 +30,7 @@ namespace Stormpath.SDK.Impl.Application
             => new DefaultPasswordGrantAuthenticator(this, this.GetInternalDataStore());
 
         IRefreshGrantAuthenticator IApplication.NewRefreshGrantAuthenticator()
-        {
-            //TODO
-            throw new NotImplementedException();
-        }
+            => new DefaultRefreshGrantAuthenticator(this, this.GetInternalDataStore());
 
         IJwtAuthenticator IApplication.NewJwtAuthenticator()
             => new DefaultJwtAuthenticator(this, this.GetInternalDataStore());

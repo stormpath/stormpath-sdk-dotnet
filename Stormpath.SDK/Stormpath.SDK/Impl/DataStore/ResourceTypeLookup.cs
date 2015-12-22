@@ -81,6 +81,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(IRefreshToken)] = typeof(DefaultRefreshToken),
             [typeof(IGrantAuthenticationAttempt)] = typeof(DefaultGrantAuthenticationAttempt),
             [typeof(IGrantAuthenticationToken)] = typeof(DefaultGrantAuthenticationToken),
+            [typeof(IRefreshGrantAuthenticationAttempt)] = typeof(DefaultRefreshGrantAuthenticationAttempt),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
@@ -124,6 +125,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultRefreshToken)] = typeof(IRefreshToken),
             [typeof(DefaultGrantAuthenticationAttempt)] = typeof(IGrantAuthenticationAttempt),
             [typeof(DefaultGrantAuthenticationToken)] = typeof(IGrantAuthenticationToken),
+            [typeof(DefaultRefreshGrantAuthenticationAttempt)] = typeof(IRefreshGrantAuthenticationAttempt),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(DefaultApplicationAccountStoreMapping)] = typeof(IApplicationAccountStoreMapping),

@@ -49,5 +49,14 @@ namespace Stormpath.SDK.Oauth
         /// </returns>
         public static IIdSiteTokenAuthenticationRequestBuilder NewIdSiteTokenAuthenticationRequest()
             => new DefaultIdSiteTokenAuthenticationRequestBuilder();
+
+        /// <summary>
+        /// Start a new Refresh Grant request.
+        /// </summary>
+        /// <returns>
+        /// A new <see cref="IRefreshGrantRequestBuilder"/> instance, used to construct <see cref="IRefreshGrantRequest">Refresh Grant requests</see>.
+        /// </returns>
+        public static IRefreshGrantRequestBuilder NewRefreshGrantRequest()
+            => new DefaultRefreshGrantRequestBuilder();
     }
 }
