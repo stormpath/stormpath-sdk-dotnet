@@ -323,5 +323,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
+
+        //TODO: ID Site Token Authentication exchange
+
+        //TODO: Refresh token grant
     }
 }

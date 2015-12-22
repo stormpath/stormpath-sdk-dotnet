@@ -23,6 +23,9 @@ namespace Stormpath.SDK.Impl.Application
 {
     internal sealed partial class DefaultApplication
     {
+        IIdSiteTokenAuthenticator IApplication.NewIdSiteTokenAuthenticator()
+            => new DefaultIdSiteTokenAuthenticator(this, this.GetInternalDataStore());
+
         IPasswordGrantAuthenticator IApplication.NewPasswordGrantAuthenticator()
             => new DefaultPasswordGrantAuthenticator(this, this.GetInternalDataStore());
 

@@ -40,5 +40,14 @@ namespace Stormpath.SDK.Oauth
         /// </returns>
         public static IJwtAuthenticationRequestBuilder NewJwtAuthenticationRequest()
             => new DefaultJwtAuthenticationRequestBuilder();
+
+        /// <summary>
+        /// Start a new ID Site Token Authentication request.
+        /// </summary>
+        /// <returns>
+        /// A new <see cref="IIdSiteTokenAuthenticationRequestBuilder"/> instance, used to construct <see cref="IIdSiteTokenAuthenticationRequest">ID Site Token Authentication requests</see>.
+        /// </returns>
+        public static IIdSiteTokenAuthenticationRequestBuilder NewIdSiteTokenAuthenticationRequest()
+            => new DefaultIdSiteTokenAuthenticationRequestBuilder();
     }
 }

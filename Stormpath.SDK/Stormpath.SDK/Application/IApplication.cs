@@ -112,6 +112,13 @@ namespace Stormpath.SDK.Application
         IIdSiteAsyncCallbackHandler NewIdSiteAsyncCallbackHandler(IHttpRequest request);
 
         /// <summary>
+        /// Creates a new <see cref="IIdSiteTokenAuthenticator">ID Site Token Authenticator</see> that can
+        /// exchange an ID Site result for an OAuth 2.0 access token.
+        /// </summary>
+        /// <returns>A new <see cref="IIdSiteTokenAuthenticator"/> instance.</returns>
+        IIdSiteTokenAuthenticator NewIdSiteTokenAuthenticator();
+
+        /// <summary>
         /// Creates a new <see cref="IPasswordGrantAuthenticator">Password Grant Authenticator</see> that allows you to
         /// authenticate an account and exchange its credentials for a valid OAuth 2.0 token.
         /// </summary>
