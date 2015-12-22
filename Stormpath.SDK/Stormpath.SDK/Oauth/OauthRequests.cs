@@ -26,8 +26,19 @@ namespace Stormpath.SDK.Oauth
         /// <summary>
         /// Start a new Password Grant request.
         /// </summary>
-        /// <returns>A new <see cref="IPasswordGrantRequestBuilder"/> instance, used to construct Password Grant requests.</returns>
+        /// <returns>
+        /// A new <see cref="IPasswordGrantRequestBuilder"/> instance, used to construct <see cref="IPasswordGrantRequest">Password Grant requests</see>.
+        /// </returns>
         public static IPasswordGrantRequestBuilder NewPasswordGrantRequest()
             => new DefaultPasswordGrantRequestBuilder();
+
+        /// <summary>
+        /// Start a new JSON Web Token Authentication request.
+        /// </summary>
+        /// <returns>
+        /// A new <see cref="IJwtAuthenticationRequestBuilder"/> instance, used to construct <see cref="IJwtAuthenticationRequest">JWT Authentication requests</see>.
+        /// </returns>
+        public static IJwtAuthenticationRequestBuilder NewJwtAuthenticationRequest()
+            => new DefaultJwtAuthenticationRequestBuilder();
     }
 }

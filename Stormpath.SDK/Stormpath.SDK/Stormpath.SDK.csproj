@@ -330,6 +330,9 @@
     <Compile Include="Impl\Oauth\DefaultAccessToken.cs" />
     <Compile Include="Impl\Oauth\DefaultGrantAuthenticationAttempt.cs" />
     <Compile Include="Impl\Oauth\DefaultGrantAuthenticationToken.cs" />
+    <Compile Include="Impl\Oauth\DefaultJwtAuthenticationRequest.cs" />
+    <Compile Include="Impl\Oauth\DefaultJwtAuthenticationRequestBuilder.cs" />
+    <Compile Include="Impl\Oauth\DefaultJwtAuthenticator.cs" />
     <Compile Include="Impl\Oauth\DefaultOauthPolicy.Async.cs" />
     <Compile Include="Impl\Oauth\DefaultOauthPolicy.cs" />
     <Compile Include="Impl\Oauth\DefaultOauthPolicy.Sync.cs" />
@@ -337,6 +340,7 @@
     <Compile Include="Impl\Oauth\DefaultPasswordGrantRequest.cs" />
     <Compile Include="Impl\Oauth\DefaultPasswordGrantRequestBuilder.cs" />
     <Compile Include="Impl\Oauth\DefaultRefreshToken.cs" />
+    <Compile Include="Impl\Oauth\IJwtAuthenticatorSync.cs" />
     <Compile Include="Impl\Oauth\IRefreshTokenSync.cs" />
     <Compile Include="Impl\Oauth\IAccessTokenSync.cs" />
     <Compile Include="Impl\Oauth\IGrantAuthenticationAttempt.cs" />
@@ -465,7 +469,7 @@
     <Compile Include="Logging\ILoggerConsumer{T}.cs" />
     <Compile Include="Logging\InMemoryLogger.cs" />
     <Compile Include="Oauth\IJwtAuthenticationRequest.cs" />
-    <Compile Include="Oauth\IJwtAuthenticationResult.cs" />
+    <Compile Include="Oauth\IJwtAuthenticationRequestBuilder.cs" />
     <Compile Include="Oauth\IJwtAuthenticator.cs" />
     <Compile Include="Oauth\IOauthAuthenticationRequestBuilder{TRequest}.cs" />
     <Compile Include="Oauth\IOauthAuthenticator{TRequest,TResult}.cs" />
@@ -519,6 +523,7 @@
     <Compile Include="Resource\IRetrievalOptions{T}.cs" />
     <Compile Include="Resource\ISaveableWithOptions{T}.cs" />
     <Compile Include="Resource\ISaveable{T}.cs" />
+    <Compile Include="Sync\SyncJwtAuthenticatorExtensions.cs" />
     <Compile Include="Sync\SyncRefreshTokenExtensions.cs" />
     <Compile Include="Sync\SyncAccessTokenExtensions.cs" />
     <Compile Include="Sync\SyncOauthGrantAuthenticationResult.cs" />

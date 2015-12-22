@@ -1,4 +1,4 @@
-﻿// <copyright file="IJwtAuthenticationResult.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IJwtAuthenticationRequestBuilder.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,16 @@
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
-    /// Represents the result of a JSON Web Token authentication request.
+    /// Builder pattern used to construct <see cref="IJwtAuthenticationRequest"/> instances.
     /// </summary>
-    public interface IJwtAuthenticationResult
+    public interface IJwtAuthenticationRequestBuilder : IOauthAuthenticationRequestBuilder<IJwtAuthenticationRequest>
     {
-        //TODO
+        /// <summary>
+        /// Sets the JWT string to be used for the request.
+        /// </summary>
+        /// <param name="jwt">The JSON Web Token.</param>
+        /// <returns>This instance for method chaining.</returns>
+        /// <exception cref="System.ArgumentNullException">JWT is null or empty.</exception>
+        IJwtAuthenticationRequestBuilder SetJwt(string jwt);
     }
 }

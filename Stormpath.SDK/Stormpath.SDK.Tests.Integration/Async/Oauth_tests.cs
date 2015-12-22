@@ -238,5 +238,90 @@ namespace Stormpath.SDK.Tests.Integration.Async
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Validating_jwt(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            // Create a dummy application
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Validating JWT",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            // Add the test accounts
+            await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin("lskywalker@tattooine.rim")
+                .SetPassword("whataPieceofjunk$1138")
+                .SetAccountStore(this.fixture.PrimaryDirectoryHref)
+                .Build();
+            var authenticateResult = await createdApplication.NewPasswordGrantAuthenticator()
+                .AuthenticateAsync(passwordGrantRequest);
+            var accessTokenJwt = authenticateResult.AccessTokenString;
+
+            var jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest()
+                .SetJwt(accessTokenJwt)
+                .Build();
+            var validAccessToken = await createdApplication.NewJwtAuthenticator()
+                .AuthenticateAsync(jwtAuthenticationRequest);
+
+            validAccessToken.ShouldNotBeNull();
+            validAccessToken.Href.ShouldNotBeNullOrEmpty();
+
+            // Clean up
+            (await validAccessToken.DeleteAsync()).ShouldBeTrue();
+
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Validating_jwt_locally(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            // Create a dummy application
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Validating JWT Locally",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            // Add the test accounts
+            await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin("lskywalker@tattooine.rim")
+                .SetPassword("whataPieceofjunk$1138")
+                .SetAccountStore(this.fixture.PrimaryDirectoryHref)
+                .Build();
+            var authenticateResult = await createdApplication.NewPasswordGrantAuthenticator()
+                .AuthenticateAsync(passwordGrantRequest);
+            var accessTokenJwt = authenticateResult.AccessTokenString;
+
+            var jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest()
+                .SetJwt(accessTokenJwt)
+                .Build();
+            var validAccessToken = await createdApplication.NewJwtAuthenticator()
+                .WithLocalValidation()
+                .AuthenticateAsync(jwtAuthenticationRequest);
+
+            validAccessToken.ShouldNotBeNull();
+            validAccessToken.Href.ShouldNotBeNullOrEmpty();
+
+            // Clean up
+            (await validAccessToken.DeleteAsync()).ShouldBeTrue();
+
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
     }
 }

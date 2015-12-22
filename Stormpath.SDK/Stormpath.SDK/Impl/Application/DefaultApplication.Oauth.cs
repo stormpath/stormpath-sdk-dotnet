@@ -33,9 +33,6 @@ namespace Stormpath.SDK.Impl.Application
         }
 
         IJwtAuthenticator IApplication.NewJwtAuthenticator()
-        {
-            //TODo
-            throw new NotImplementedException();
-        }
+            => new DefaultJwtAuthenticator(this, this.GetInternalDataStore());
     }
 }

@@ -14,12 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
@@ -32,7 +26,7 @@ namespace Stormpath.SDK.Oauth
     /// </remarks>
     /// <example>
     /// </example>
-    public interface IJwtAuthenticator : IOauthAuthenticator<IJwtAuthenticationRequest, IJwtAuthenticationResult>
+    public interface IJwtAuthenticator : IOauthAuthenticator<IJwtAuthenticationRequest, IAccessToken>
     {
         /// <summary>
         /// Instructs the authenticator to use local validation rather than making a network call to the Stormpath API.
