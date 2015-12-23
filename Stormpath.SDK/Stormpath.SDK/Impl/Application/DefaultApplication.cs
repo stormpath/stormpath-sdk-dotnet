@@ -20,9 +20,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
 {

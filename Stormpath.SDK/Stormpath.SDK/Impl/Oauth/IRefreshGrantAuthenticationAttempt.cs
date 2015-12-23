@@ -14,7 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Oauth

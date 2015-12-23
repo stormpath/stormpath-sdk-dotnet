@@ -26,7 +26,6 @@ using Stormpath.SDK.Impl.Jwt;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Oauth;
-//using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
@@ -119,7 +118,7 @@ namespace Stormpath.SDK.Impl.Oauth
                 throw new InvalidCastException("JWT failed issuer validation.");
             }
 
-            // Build an IAccessToken instance from scratch 
+            // Build an IAccessToken instance from scratch
             var properties = new Dictionary<string, object>();
 
             var accessTokenHref = this.application.Href.Replace(ApplicationPath, AccessTokenPath);
