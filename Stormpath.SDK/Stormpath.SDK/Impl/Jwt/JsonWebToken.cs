@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Serialization;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
@@ -36,6 +37,8 @@ namespace Stormpath.SDK.Impl.Jwt
         public Map Header { get; private set; }
 
         public Map Payload { get; private set; }
+
+        public IJwtClaims Claims { get; private set; }
 
         private JsonWebToken()
         {
@@ -84,13 +87,16 @@ namespace Stormpath.SDK.Impl.Jwt
             var payloadJson = Base64.Decode(parts[1], Encoding.UTF8);
             var signature = Base64.Decode(parts[2], Encoding.UTF8);
 
+            var deserializedPayload = jsonSerializer.Deserialize(payloadJson);
+
             return new JsonWebToken()
             {
                 Base64Header = parts[0],
                 Base64Payload = parts[1],
                 Base64Signature = parts[2],
                 Header = jsonSerializer.Deserialize(headerJson),
-                Payload = jsonSerializer.Deserialize(payloadJson),
+                Payload = deserializedPayload,
+                Claims = new DefaultJwtClaims(deserializedPayload),
             };
        }
     }

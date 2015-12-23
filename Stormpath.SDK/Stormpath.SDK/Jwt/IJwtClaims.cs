@@ -56,13 +56,13 @@ namespace Stormpath.SDK.Jwt
         DateTimeOffset? NotBefore { get; }
 
         /// <summary>
-        /// Gets the JWT ID (jti) field.
+        /// Gets the issued-at (IAT) claim.
         /// </summary>
         /// <value>The value of the issued-at field.</value>
         DateTimeOffset? IssuedAt { get; }
 
         /// <summary>
-        /// Gets the issued-at (IAT) claim.
+        /// Gets the JWT ID (jti) field.
         /// </summary>
         /// <value>The value of the issued-at field.</value>
         string Id { get; }

@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Impl.Jwt
 
             var calculatedSignature = this.jwtSigner.CalculateSignature(jwt.Base64Header, jwt.Base64Payload);
 
-            return jwt.Base64Signature.Equals(calculatedSignature, StringComparison.InvariantCultureIgnoreCase);
+            return jwt.Base64Signature.Equals(calculatedSignature, StringComparison.Ordinal);
         }
     }
 }

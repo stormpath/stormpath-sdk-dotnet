@@ -29,9 +29,9 @@ namespace Stormpath.SDK.Impl.Oauth
         IAccessToken,
         IAccessTokenSync
     {
-        private static readonly string AccountPropertyName = "account";
-        private static readonly string ApplicationPropertyName = "application";
-        private static readonly string JwtPropertyName = "jwt";
+        public static readonly string AccountPropertyName = "account";
+        public static readonly string ApplicationPropertyName = "application";
+        public static readonly string JwtPropertyName = "jwt";
 
         public DefaultAccessToken(ResourceData data)
             : base(data)

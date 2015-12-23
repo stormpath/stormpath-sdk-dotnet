@@ -16,13 +16,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Jwt;
+using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Oauth;
+//using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
@@ -101,7 +105,36 @@ namespace Stormpath.SDK.Impl.Oauth
         {
             var apiKeySecret = this.internalDataStore.ApiKey.GetSecret();
 
-            throw new NotImplementedException();
+            // Verify JWT signature
+            var jwt = JsonWebToken.Decode(request.Jwt, this.internalDataStore.Serializer);
+            var signatureValidator = new JwtSignatureValidator(this.internalDataStore.ApiKey);
+            if (!signatureValidator.IsValid(jwt))
+            {
+                throw new InvalidJwtException("JWT failed signature validation.");
+            }
+
+            // Verify JWT issuer
+            if (!jwt.Claims.Issuer.Equals(this.application.Href, StringComparison.Ordinal))
+            {
+                throw new InvalidCastException("JWT failed issuer validation.");
+            }
+
+            // Build an IAccessToken instance from scratch 
+            var properties = new Dictionary<string, object>();
+
+            var accessTokenHref = this.application.Href.Replace(ApplicationPath, AccessTokenPath);
+            var accessTokenIdStartingPoint = accessTokenHref.LastIndexOf("/") + 1;
+            accessTokenHref = accessTokenHref.Substring(0, accessTokenIdStartingPoint);
+            accessTokenHref = accessTokenHref + jwt.Claims.Id;
+
+            properties.Add(AbstractResource.HrefPropertyName, accessTokenHref);
+            properties.Add(DefaultAccessToken.AccountPropertyName, new LinkProperty(jwt.Claims.Subject));
+            properties.Add(DefaultAccessToken.ApplicationPropertyName, new LinkProperty(this.application.Href));
+            properties.Add(DefaultAccessToken.JwtPropertyName, request.Jwt);
+            properties.Add(AbstractResource.TenantPropertyName, (this.application as DefaultApplication).Tenant);
+
+            var accessToken = this.internalDataStore.InstantiateWithData<IAccessToken>(properties);
+            return accessToken;
         }
 
         private void ThrowIfInvalid(IJwtAuthenticationRequest request)
