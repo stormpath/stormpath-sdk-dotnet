@@ -457,7 +457,7 @@
     <Compile Include="Jwt\IClaimsMutator.cs" />
     <Compile Include="Jwt\IJwtBuilder.cs" />
     <Compile Include="Jwt\MalformedJwtException.cs" />
-    <Compile Include="Jwt\InvalidClaimException.cs" />
+    <Compile Include="Jwt\MismatchedClaimException.cs" />
     <Compile Include="Jwt\MissingClaimException.cs" />
     <Compile Include="Jwt\JwtSignatureException.cs" />
     <Compile Include="Jwt\PrematureJwtException.cs" />

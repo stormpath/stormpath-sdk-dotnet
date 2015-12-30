@@ -18,16 +18,39 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Jwt
 {
+    /// <summary>
+    /// Represents a JSON Web Token.
+    /// </summary>
     public interface IJwt
     {
+        /// <summary>
+        /// Gets the original base64-encoded header value.
+        /// </summary>
+        /// <value>The original base64-encoded header value.</value>
         string Base64Header { get; }
 
+        /// <summary>
+        /// Gets the original base64-encoded payload (body) value.
+        /// </summary>
+        /// <value>The original base64-encoded payload (body) value.</value>
         string Base64Payload { get; }
 
+        /// <summary>
+        /// Gets the original base64-encoded digest (signature) value.
+        /// </summary>
+        /// <value>The original base64-encoded digest (signature) value.</value>
         string Base64Digest { get; }
 
+        /// <summary>
+        /// Gets the JWT header.
+        /// </summary>
+        /// <value>The JWT header.</value>
         Map Header { get; }
 
+        /// <summary>
+        /// Gets the JWT body (payload) claims.
+        /// </summary>
+        /// <value>The JWT claims.</value>
         IJwtClaims Body { get; }
     }
 }

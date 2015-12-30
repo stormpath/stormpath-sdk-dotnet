@@ -20,7 +20,11 @@ namespace Stormpath.SDK.Impl.Utility
 {
     internal static class UnixDate
     {
-        private static readonly DateTimeOffset UnixEpoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
+        private static readonly DateTimeOffset UnixEpoch 
+            = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
+
+        private static readonly long MaxValue =
+            ToLong(new DateTimeOffset(9999, 12, 31, 23, 59, 59, TimeSpan.Zero));
 
         /// <summary>
         /// Get this datetime as a Unix epoch timestamp (seconds since Jan 1, 1970, midnight UTC).
@@ -47,9 +51,9 @@ namespace Stormpath.SDK.Impl.Utility
 
         public static DateTimeOffset FromLong(long timestamp)
         {
-            bool isInMilliseconds = timestamp > 100000000000;
+            bool decodeAsMilliseconds = timestamp > MaxValue;
 
-            return isInMilliseconds
+            return decodeAsMilliseconds
                 ? UnixEpoch.AddSeconds(timestamp / 1000)
                 : UnixEpoch.AddSeconds(timestamp);
         }

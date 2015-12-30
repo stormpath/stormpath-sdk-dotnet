@@ -67,11 +67,19 @@ namespace Stormpath.SDK.Jwt
         /// <value>The value of the issued-at field.</value>
         string Id { get; }
 
+        /// <summary>
+        /// Determines whether the claims collection contains the specified <paramref name="claimName"/>.
+        /// </summary>
+        /// <param name="claimName">The claim name.</param>
+        /// <returns><see langword="true"/> if the claim exists; <see langword="false"/> otherwise.</returns>
         bool ContainsClaim(string claimName);
 
+        /// <summary>
+        /// Gets a claim from the collection.
+        /// </summary>
+        /// <param name="claimName">The claim name.</param>
+        /// <returns>The claim value, or <see langword="null"/> if the claim does not exist.</returns>
         object GetClaim(string claimName);
-
-        bool TryGetClaim(string claimName, out object value);
 
         /// <summary>
         /// Builds a <see cref="IDictionary{TKey, TValue}"/> from the current JWT fields.

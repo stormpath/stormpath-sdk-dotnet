@@ -19,20 +19,53 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Jwt
 {
+    /// <summary>
+    /// A Builder used to construct <see cref="IJwt"/> instances.
+    /// </summary>
     public interface IJwtBuilder : IClaimsMutator<IJwtBuilder>
     {
+        /// <summary>
+        /// Sets the JWT header.
+        /// </summary>
+        /// <param name="header">The header key/value pairs.</param>
+        /// <returns>This instance for method chaining.</returns>
         IJwtBuilder SetHeader(Map header);
 
+        /// <summary>
+        /// Sets the JWT claims.
+        /// </summary>
+        /// <param name="claims">An instance of <see cref="IJwtClaims"/> representing the claims.</param>
+        /// <returns>This instance for method chaining.</returns>
         IJwtBuilder SetClaims(IJwtClaims claims);
 
+        /// <summary>
+        /// Sets the JWT claims.
+        /// </summary>
+        /// <param name="claims">The key/value pairs representing the claims.</param>
+        /// <returns>This instance for method chaining.</returns>
         IJwtBuilder SetClaims(Map claims);
 
-        // Note: only HS256 atm
-        IJwtBuilder SignWith(byte[] secretKey);
+        /// <summary>
+        /// Sets the key used to sign the JWT.
+        /// </summary>
+        /// <remarks>Only the HMAC SHA-256 (HS256) algorithm is currently supported.</remarks>
+        /// <param name="signingKey">The signing key bytes.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IJwtBuilder SignWith(byte[] signingKey);
 
-        // Note: only HS256 atm
-        IJwtBuilder SignWith(string secretKeyString, Encoding encoding);
+        /// <summary>
+        /// Sets the key used to sign the JWT.
+        /// </summary>
+        /// <remarks>Only the HMAC SHA-256 (HS256) algorithm is currently supported.</remarks>
+        /// <param name="signingKeyString">The string representation of the signing key.</param>
+        /// <param name="encoding">The <see cref="Encoding"/> to use when getting the byte representation of the <paramref name="signingKeyString"/>.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IJwtBuilder SignWith(string signingKeyString, Encoding encoding);
 
+        /// <summary>
+        /// Constructs a new <see cref="IJwt"/> instance from the current builder state.
+        /// </summary>
+        /// <returns>A new <see cref="IJwt"/>.</returns>
         IJwt Build();
     }
 }

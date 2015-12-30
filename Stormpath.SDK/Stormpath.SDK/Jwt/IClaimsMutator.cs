@@ -22,6 +22,10 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Jwt
 {
+    /// <summary>
+    /// Represents common actions that set JWT claims.
+    /// </summary>
+    /// <typeparam name="T">The type containing claims..</typeparam>
     public interface IClaimsMutator<T>
         where T : IClaimsMutator<T>
     {

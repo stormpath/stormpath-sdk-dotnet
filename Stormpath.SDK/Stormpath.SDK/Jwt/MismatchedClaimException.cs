@@ -1,4 +1,4 @@
-﻿// <copyright file="InvalidClaimException.cs" company="Stormpath, Inc.">
+﻿// <copyright file="MismatchedClaimException.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +19,13 @@ namespace Stormpath.SDK.Jwt
     /// <summary>
     /// Represents an error indicating that a JSON Web Token has a missing claim.
     /// </summary>
-    public class InvalidClaimException : InvalidJwtException
+    public class MismatchedClaimException : InvalidJwtException
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidClaimException"/> class with the given <paramref name="message"/>.
+        /// Initializes a new instance of the <see cref="MismatchedClaimException"/> class with the given <paramref name="message"/>.
         /// </summary>
         /// <param name="message">The error message.</param>
-        public InvalidClaimException(string message)
+        public MismatchedClaimException(string message)
             : base(message)
         {
         }

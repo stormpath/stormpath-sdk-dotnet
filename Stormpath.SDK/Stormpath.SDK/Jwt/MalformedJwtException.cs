@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Jwt
 {
     /// <summary>
@@ -27,6 +29,16 @@ namespace Stormpath.SDK.Jwt
         /// <param name="message">The error message.</param>
         public MalformedJwtException(string message)
             : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MalformedJwtException"/> class with the given <paramref name="message"/>.
+        /// </summary>
+        /// <param name="message">The error message.</param>
+        /// <param name="innerException">The inner exception, if any.</param>
+        public MalformedJwtException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
     }

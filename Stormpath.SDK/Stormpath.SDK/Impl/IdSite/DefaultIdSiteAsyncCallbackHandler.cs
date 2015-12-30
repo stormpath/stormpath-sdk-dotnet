@@ -182,18 +182,11 @@ namespace Stormpath.SDK.Impl.IdSite
                 throw new ArgumentNullException(nameof(claims));
             }
 
-            object error = null;
-            return claims.TryGetClaim(IdSiteClaims.Error, out error)
-                && error != null;
+            return claims.GetClaim(IdSiteClaims.Error) != null;
         }
 
         internal static string GetAccountHref(IJwtClaims claims)
-        {
-            object accountHref = null;
-            claims.TryGetClaim(DefaultJwtClaims.Subject, out accountHref);
-
-            return (string)accountHref;
-        }
+            => claims.GetClaim(DefaultJwtClaims.Subject)?.ToString();
 
         internal static void ThrowIfRequiredParametersMissing(IJwtClaims claims)
         {
@@ -210,7 +203,6 @@ namespace Stormpath.SDK.Impl.IdSite
 
             bool isError = IsError(claims);
 
-            object dummy = null;
             bool valid = requiredKeys?.All(x => claims.ContainsClaim(x)) ?? false;
             if (!isError && !valid)
             {
@@ -232,16 +224,11 @@ namespace Stormpath.SDK.Impl.IdSite
             }
         }
 
-        //todo DRY up 
         internal static void ThrowIfJwtIsExpired(IJwtClaims claims)
         {
-            var expiration = Convert.ToInt64(claims.GetClaim(DefaultJwtClaims.Expiration));
-            var now = UnixDate.ToLong(DateTimeOffset.Now);
+            var validator = new JwtLifetimeValidator(DateTimeOffset.Now);
 
-            if (now > expiration)
-            {
-                throw new ExpiredJwtException("The JWT has already expired.");
-            }
+            validator.Validate(claims);
         }
 
         internal static void IfErrorThrowIdSiteException(IJwtClaims claims)
@@ -308,8 +295,7 @@ namespace Stormpath.SDK.Impl.IdSite
 
         internal static IAccountResult CreateAccountResult(IJwtClaims claims, IInternalDataStore dataStore)
         {
-            object state = null;
-            claims.TryGetClaim(IdSiteClaims.State, out state);
+            var state = claims.GetClaim(IdSiteClaims.State);
 
             bool isNewAccount = (bool)claims.GetClaim(IdSiteClaims.IsNewSubject);
             var resultStatus = GetResultStatus(claims);

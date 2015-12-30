@@ -93,12 +93,9 @@ namespace Stormpath.SDK.Impl.Jwt
         object IJwtClaims.GetClaim(string claimName)
         {
             object value = null;
-            this.AsInterface.TryGetClaim(claimName, out value);
+            this.claims.TryGetValue(claimName, out value);
 
             return value;
         }
-
-        bool IJwtClaims.TryGetClaim(string claimName, out object value)
-            => this.claims.TryGetValue(claimName, out value);
     }
 }

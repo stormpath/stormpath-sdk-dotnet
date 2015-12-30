@@ -32,9 +32,17 @@ namespace Stormpath.SDK.Jwt
         public static IJwtClaimsBuilder NewClaimsBuilder()
             => new DefaultJwtClaimsBuilder();
 
+        /// <summary>
+        /// Creates a new <see cref="IJwtBuilder">JWT Builder</see>, which can create <see cref="IJwt">JWTs</see>.
+        /// </summary>
+        /// <returns>A new <see cref="IJwtBuilder"/> instance.</returns>
         public static IJwtBuilder Builder()
             => new DefaultJwtBuilder();
 
+        /// <summary>
+        /// Creates a new <see cref="IJwtParser">JWT Parser</see>, which can parse JWT strings.
+        /// </summary>
+        /// <returns>A new <see cref="IJwtParser"/> instance.</returns>
         public static IJwtParser Parser()
             => new DefaultJwtParser();
     }

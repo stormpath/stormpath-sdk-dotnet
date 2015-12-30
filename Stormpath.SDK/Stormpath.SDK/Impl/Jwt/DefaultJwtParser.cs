@@ -43,16 +43,16 @@ namespace Stormpath.SDK.Impl.Jwt
         {
         }
 
-        IJwtParser IJwtParser.RequireAudience(string audience)
+        IJwtParser IJwtParser.RequireClaim(string claimName, object value)
         {
-            this.expectedClaims.SetAudience(audience);
+            this.expectedClaims.SetClaim(claimName, value);
 
             return this;
         }
 
-        IJwtParser IJwtParser.RequireClaim(string claimName, object value)
+        IJwtParser IJwtParser.RequireAudience(string audience)
         {
-            this.expectedClaims.SetClaim(claimName, value);
+            this.expectedClaims.SetAudience(audience);
 
             return this;
         }
@@ -106,9 +106,9 @@ namespace Stormpath.SDK.Impl.Jwt
             return this;
         }
 
-        IJwtParser IJwtParser.SetSigningKey(string base64EncodedSigningKey)
+        IJwtParser IJwtParser.SetSigningKey(string signingKeyString, Encoding encoding)
         {
-            this.keyBytes = Convert.FromBase64String(base64EncodedSigningKey);
+            this.keyBytes = encoding.GetBytes(signingKeyString);
 
             return this;
         }
@@ -135,8 +135,26 @@ namespace Stormpath.SDK.Impl.Jwt
                 throw new MalformedJwtException("JWT string is missing a body/payload.");
             }
 
-            Map header = this.serializer.Deserialize(Base64.Decode(base64UrlEncodedHeader, Encoding.UTF8));
-            Map payload = this.serializer.Deserialize(Base64.Decode(base64UrlEncodedPayload, Encoding.UTF8));
+            Map header = null;
+            Map payload = null;
+            try
+            {
+                header = this.serializer.Deserialize(Base64.Decode(base64UrlEncodedHeader, Encoding.UTF8));
+            }
+            catch (Exception e)
+            {
+                throw new MalformedJwtException("Could not decode JWT header.", e);
+            }
+
+            try
+            {
+                payload = this.serializer.Deserialize(Base64.Decode(base64UrlEncodedPayload, Encoding.UTF8));
+            }
+            catch (Exception e)
+            {
+                throw new MalformedJwtException("Could not decode JWT payload.", e);
+            }
+
             IJwtClaims claims = new DefaultJwtClaims(payload);
 
             // Validate signing algorithm. Currently only HS256 is supported
@@ -160,7 +178,11 @@ namespace Stormpath.SDK.Impl.Jwt
                 }
             }
 
-            var jwtInstance = new DefaultJwt(header, claims, base64UrlEncodedHeader, base64UrlEncodedPayload, base64UrlEncodedDigest);
+            IJwt jwtInstance = new DefaultJwt(header, claims, base64UrlEncodedHeader, base64UrlEncodedPayload, base64UrlEncodedDigest);
+
+            // Validate lifetime (exp, iat, nbf claims)
+            var lifetimeValidator = new JwtLifetimeValidator(DateTimeOffset.Now);
+            lifetimeValidator.Validate(jwtInstance.Body);
 
             // Validate expected claims
             this.ValidateExpectedClaims(jwtInstance);
@@ -181,9 +203,36 @@ namespace Stormpath.SDK.Impl.Jwt
                     throw new MissingClaimException($"The claim '{claim.Key}' was expected, but was not found in the JWT.");
                 }
 
-                if (claim.Value != actualValue)
+                // Special handling of integer comparisons. This fails for .Equals() because
+                // one value may be type Int64 and the other type Int32 (for example).
+                if (claim.Value.GetType() == typeof(long)
+                    || claim.Value.GetType() == typeof(int)
+                    || claim.Value.GetType() == typeof(short))
                 {
-                    throw new InvalidClaimException($"The claim '{claim.Key}' should have a value of '{claim.Value}', but instead was '{actualValue}'.");
+                    long unboxedExpectedValue = default(long);
+                    long unboxedActualValue = default(long);
+
+                    try
+                    {
+                        unboxedExpectedValue = Convert.ToInt64(claim.Value);
+                        unboxedActualValue = Convert.ToInt64(actualValue);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new InvalidJwtException($"Could not decode the claim '{claim.Key}'.", e);
+                    }
+
+                    if (unboxedExpectedValue != unboxedActualValue)
+                    {
+                        throw new MismatchedClaimException($"The claim '{claim.Key}' should have a value of '{claim.Value}', but instead was '{actualValue}'.");
+                    }
+
+                    continue;
+                }
+
+                if (!claim.Value.Equals(actualValue))
+                {
+                    throw new MismatchedClaimException($"The claim '{claim.Key}' should have a value of '{claim.Value}', but instead was '{actualValue}'.");
                 }
             }
         }

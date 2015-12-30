@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Impl.Oauth
         /// Sets the Authentication Grant Type that will be used for the token exchange request.
         /// </summary>
         /// <remarks>Currently only the <c>refresh</c> grant type is supported for this operation.
-        ///todo 
+        ///todo
         /// </remarks>
         /// <param name="grantType">The grant type.</param>
         void SetGrantType(string grantType);

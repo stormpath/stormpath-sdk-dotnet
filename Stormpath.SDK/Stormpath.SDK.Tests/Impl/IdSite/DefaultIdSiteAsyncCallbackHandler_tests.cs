@@ -114,7 +114,10 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
                     return Task.FromResult(true);
                 });
 
-            var testApiKey = ClientApiKeys.Builder().SetId("2EV70AHRTYF0JOA7OEFO3SM29").SetSecret("goPUHQMkS4dlKwl5wtbNd91I+UrRehCsEDJrIrMruK8").Build();
+            var testApiKey = ClientApiKeys.Builder()
+                .SetId("2EV70AHRTYF0JOA7OEFO3SM29")
+                .SetSecret("goPUHQMkS4dlKwl5wtbNd91I+UrRehCsEDJrIrMruK8")
+                .Build();
             var fakeRequestExecutor = Substitute.For<IRequestExecutor>();
             fakeRequestExecutor.ApiKey.Returns(testApiKey);
 

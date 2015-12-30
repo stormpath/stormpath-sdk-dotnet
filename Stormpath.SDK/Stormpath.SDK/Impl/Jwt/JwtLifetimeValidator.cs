@@ -29,26 +29,30 @@ namespace Stormpath.SDK.Impl.Jwt
             this.now = now;
         }
 
-        public void Validate(IJwt jwt)
+        /// <summary>
+        /// Ensures that the token is not premature and has not expired.
+        /// </summary>
+        /// <param name="claims">The JWT claims.</param>
+        public void Validate(IJwtClaims claims)
         {
-            if (jwt?.Body == null)
+            if (claims == null)
             {
-                throw new ArgumentNullException(nameof(jwt));
+                throw new ArgumentNullException(nameof(claims));
             }
 
-            this.ValidateExpiration(jwt);
-            this.ValidateNotBefore(jwt);
+            this.ValidateExpiration(claims);
+            this.ValidateNotBefore(claims);
         }
 
         /// <summary>
         /// Ensures the token is not accepted on or after any specified <c>exp</c> time.
         /// </summary>
         /// <see href="https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-30#section-4.1.4"/>
-        /// <param name="jwt">The JWT.</param>
-        private void ValidateExpiration(IJwt jwt)
+        /// <param name="claims">The JWT claims.</param>
+        private void ValidateExpiration(IJwtClaims claims)
         {
-            var expiration = jwt.Body.Expiration;
-            if (expiration != null && expiration >= this.now)
+            var expiration = claims.Expiration;
+            if (expiration != null && expiration <= this.now)
             {
                 var msg = $"JWT expired at {Iso8601.Format(expiration.Value)}. Current time: {Iso8601.Format(this.now)}";
                 throw new ExpiredJwtException(msg);
@@ -59,11 +63,11 @@ namespace Stormpath.SDK.Impl.Jwt
         /// Ensures the token is not accepted before any specified <c>nbf</c> time.
         /// </summary>
         /// <see href="https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-30#section-4.1.5"/>
-        /// <param name="jwt">The JWT.</param>
-        private void ValidateNotBefore(IJwt jwt)
+        /// <param name="claims">The JWT claims.</param>
+        private void ValidateNotBefore(IJwtClaims claims)
         {
-            var notBefore = jwt.Body.NotBefore;
-            if (notBefore != null && this.now < notBefore)
+            var notBefore = claims.NotBefore;
+            if (notBefore != null && notBefore >= this.now)
             {
                 var msg = $"JWT must not be accepted before {Iso8601.Format(notBefore.Value)}. Current time: {Iso8601.Format(this.now)}";
                 throw new PrematureJwtException(msg);
