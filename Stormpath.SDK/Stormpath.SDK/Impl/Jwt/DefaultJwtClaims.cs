@@ -39,24 +39,35 @@ namespace Stormpath.SDK.Impl.Jwt
             this.claims = claims;
         }
 
-        private object GetClaim(string claimName)
-        {
-            object value = null;
-            this.claims.TryGetValue(claimName, out value);
-
-            return value;
-        }
+        private IJwtClaims AsInterface => this;
 
         private string GetStringClaim(string claimName)
         {
-            return (string)this.GetClaim(claimName);
+            return (string)this.AsInterface.GetClaim(claimName);
         }
 
         private DateTimeOffset? GetDateClaim(string claimName)
         {
-            var unixTimestamp = (long?)this.GetClaim(claimName);
+            object value = this.AsInterface.GetClaim(claimName);
 
-            return UnixDate.FromLong(unixTimestamp);
+            if (value == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                var unixTimestamp = Convert.ToInt64(value);
+                return UnixDate.FromLong(unixTimestamp);
+            }
+            catch (FormatException)
+            {
+                return null;
+            }
+            catch (OverflowException)
+            {
+                return null;
+            }
         }
 
         string IJwtClaims.Audience => this.GetStringClaim(Audience);
@@ -75,5 +86,19 @@ namespace Stormpath.SDK.Impl.Jwt
 
         Map IJwtClaims.ToDictionary()
             => new Dictionary<string, object>(this.claims);
+
+        bool IJwtClaims.ContainsClaim(string claimName)
+            => this.claims.ContainsKey(claimName);
+
+        object IJwtClaims.GetClaim(string claimName)
+        {
+            object value = null;
+            this.AsInterface.TryGetClaim(claimName, out value);
+
+            return value;
+        }
+
+        bool IJwtClaims.TryGetClaim(string claimName, out object value)
+            => this.claims.TryGetValue(claimName, out value);
     }
 }

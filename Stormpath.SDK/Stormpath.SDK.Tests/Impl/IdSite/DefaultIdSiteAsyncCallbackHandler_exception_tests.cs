@@ -88,14 +88,17 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
             yield return new object[] { nameof(IatAfterCurrentTime), IatAfterCurrentTime, typeof(InvalidIdSiteTokenException), 10012, 400, "Token is invalid", "Token is invalid because the issued at time (iat) is after the current time." };
             yield return new object[] { nameof(OrganizationNameKeyNotAssigned), OrganizationNameKeyNotAssigned, typeof(InvalidIdSiteTokenException), 11003, 400, "Token is invalid", "Token is invalid because the specified organization nameKey is not one of the application's assigned account stores." };
             yield return new object[] { nameof(SessionTimedOut), SessionTimedOut, typeof(IdSiteSessionTimeoutException), 12001, 401, "The session on ID Site has timed out.", "The session on ID Site has timed out. This can occur if the user stays on ID Site without logging in, registering, or resetting a password." };
-            yield return new object[] { nameof(ExpiredJwt), ExpiredJwt, typeof(InvalidJwtException), 0, 0, "The JWT has already expired.", null };
+            yield return new object[] { nameof(ExpiredJwt), ExpiredJwt, typeof(ExpiredJwtException), 0, 0, "The JWT has already expired.", null };
         }
 
         [Theory]
         [MemberData(nameof(TestCases))]
         public async Task Handle_error(string id_, string jwtResponse, Type expectedExceptionType, int expectedCode, int expectedStatus, string expectedMessage, string expectedDeveloperMessage)
         {
-            var testApiKey = ClientApiKeys.Builder().SetId("2EV70AHRTYF0JOA7OEFO3SM29").SetSecret("goPUHQMkS4dlKwl5wtbNd91I+UrRehCsEDJrIrMruK8").Build();
+            var testApiKey = ClientApiKeys.Builder()
+                .SetId("2EV70AHRTYF0JOA7OEFO3SM29")
+                .SetSecret("goPUHQMkS4dlKwl5wtbNd91I+UrRehCsEDJrIrMruK8")
+                .Build();
             var fakeRequestExecutor = Substitute.For<IRequestExecutor>();
             fakeRequestExecutor.ApiKey.Returns(testApiKey);
 

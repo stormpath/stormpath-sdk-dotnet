@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Impl.Jwt
 {
     internal sealed class DefaultJwtClaimsBuilder : IJwtClaimsBuilder
     {
-        private readonly Map claimsInProgress;
+        private Map claimsInProgress;
 
         public DefaultJwtClaimsBuilder()
         {
@@ -49,54 +49,60 @@ namespace Stormpath.SDK.Impl.Jwt
             this.claimsInProgress[claimName] = value;
         }
 
-        IJwtClaimsBuilder IJwtClaimsBuilder.SetAudience(string aud)
+        public void ReplaceAll(Map claims)
+        {
+            this.claimsInProgress = claims;
+        }
+
+        IJwtClaimsBuilder IClaimsMutator<IJwtClaimsBuilder>.SetAudience(string aud)
         {
             this.SetOrRemove(DefaultJwtClaims.Audience, aud);
             return this;
         }
 
-        IJwtClaimsBuilder IJwtClaimsBuilder.SetExpiration(DateTimeOffset? exp)
+        IJwtClaimsBuilder IClaimsMutator<IJwtClaimsBuilder>.SetExpiration(DateTimeOffset? exp)
         {
             this.SetOrRemove(DefaultJwtClaims.Expiration, UnixDate.ToLong(exp));
             return this;
         }
 
-        IJwtClaimsBuilder IJwtClaimsBuilder.SetId(string jti)
+        IJwtClaimsBuilder IClaimsMutator<IJwtClaimsBuilder>.SetId(string jti)
         {
             this.SetOrRemove(DefaultJwtClaims.Id, jti);
             return this;
         }
 
-        IJwtClaimsBuilder IJwtClaimsBuilder.SetIssuedAt(DateTimeOffset? iat)
+        IJwtClaimsBuilder IClaimsMutator<IJwtClaimsBuilder>.SetIssuedAt(DateTimeOffset? iat)
         {
             this.SetOrRemove(DefaultJwtClaims.IssuedAt, UnixDate.ToLong(iat));
             return this;
         }
 
-        IJwtClaimsBuilder IJwtClaimsBuilder.SetIssuer(string iss)
+        IJwtClaimsBuilder IClaimsMutator<IJwtClaimsBuilder>.SetIssuer(string iss)
         {
             this.SetOrRemove(DefaultJwtClaims.Issuer, iss);
             return this;
         }
 
-        IJwtClaimsBuilder IJwtClaimsBuilder.SetNotBeforeDate(DateTimeOffset? nbf)
+        IJwtClaimsBuilder IClaimsMutator<IJwtClaimsBuilder>.SetNotBeforeDate(DateTimeOffset? nbf)
         {
             this.SetOrRemove(DefaultJwtClaims.NotBefore, UnixDate.ToLong(nbf));
             return this;
         }
 
-        IJwtClaimsBuilder IJwtClaimsBuilder.SetSubject(string sub)
+        IJwtClaimsBuilder IClaimsMutator<IJwtClaimsBuilder>.SetSubject(string sub)
         {
             this.SetOrRemove(DefaultJwtClaims.Subject, sub);
             return this;
         }
 
-        IJwtClaimsBuilder IJwtClaimsBuilder.SetClaim(string claimName, object value)
+        IJwtClaimsBuilder IClaimsMutator<IJwtClaimsBuilder>.SetClaim(string claimName, object value)
         {
             this.SetOrRemove(claimName, value);
             return this;
         }
 
-        IJwtClaims IJwtClaimsBuilder.Build() => new DefaultJwtClaims(this.claimsInProgress);
+        IJwtClaims IJwtClaimsBuilder.Build()
+            => new DefaultJwtClaims(this.claimsInProgress);
     }
 }

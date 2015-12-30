@@ -272,7 +272,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .AuthenticateAsync(jwtAuthenticationRequest);
 
             validAccessToken.ShouldNotBeNull();
-            validAccessToken.Href.ShouldNotBeNullOrEmpty();
+            validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
 
             // Clean up
             (await validAccessToken.DeleteAsync()).ShouldBeTrue();
@@ -315,7 +315,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .AuthenticateAsync(jwtAuthenticationRequest);
 
             validAccessToken.ShouldNotBeNull();
-            validAccessToken.Href.ShouldNotBeNullOrEmpty();
+            validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
 
             // Clean up
             (await validAccessToken.DeleteAsync()).ShouldBeTrue();

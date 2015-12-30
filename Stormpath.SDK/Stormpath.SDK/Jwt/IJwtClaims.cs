@@ -67,6 +67,12 @@ namespace Stormpath.SDK.Jwt
         /// <value>The value of the issued-at field.</value>
         string Id { get; }
 
+        bool ContainsClaim(string claimName);
+
+        object GetClaim(string claimName);
+
+        bool TryGetClaim(string claimName, out object value);
+
         /// <summary>
         /// Builds a <see cref="IDictionary{TKey, TValue}"/> from the current JWT fields.
         /// </summary>

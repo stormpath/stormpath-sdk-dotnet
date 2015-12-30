@@ -1,4 +1,4 @@
-﻿// <copyright file="IJwtClaimsBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="MissingClaimException.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,14 +17,17 @@
 namespace Stormpath.SDK.Jwt
 {
     /// <summary>
-    /// Builder pattern to construct <see cref="IJwtClaims"/> instances.
+    /// Represents an error indicating that a JSON Web Token has a missing claim.
     /// </summary>
-    public interface IJwtClaimsBuilder : IClaimsMutator<IJwtClaimsBuilder>
+    public class MissingClaimException : InvalidJwtException
     {
         /// <summary>
-        /// Constructs a new <see cref="IJwtClaims"/> instance based on the current builder state.
+        /// Initializes a new instance of the <see cref="MissingClaimException"/> class with the given <paramref name="message"/>.
         /// </summary>
-        /// <returns>A new <see cref="IJwtClaims"/> instance based on the current builder state.</returns>
-        IJwtClaims Build();
+        /// <param name="message">The error message.</param>
+        public MissingClaimException(string message)
+            : base(message)
+        {
+        }
     }
 }

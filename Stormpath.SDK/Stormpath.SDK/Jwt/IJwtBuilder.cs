@@ -1,4 +1,4 @@
-﻿// <copyright file="IJwtClaimsBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IJwtBuilder.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +14,25 @@
 // limitations under the License.
 // </copyright>
 
+using System.Text;
+using Map = System.Collections.Generic.IDictionary<string, object>;
+
 namespace Stormpath.SDK.Jwt
 {
-    /// <summary>
-    /// Builder pattern to construct <see cref="IJwtClaims"/> instances.
-    /// </summary>
-    public interface IJwtClaimsBuilder : IClaimsMutator<IJwtClaimsBuilder>
+    public interface IJwtBuilder : IClaimsMutator<IJwtBuilder>
     {
-        /// <summary>
-        /// Constructs a new <see cref="IJwtClaims"/> instance based on the current builder state.
-        /// </summary>
-        /// <returns>A new <see cref="IJwtClaims"/> instance based on the current builder state.</returns>
-        IJwtClaims Build();
+        IJwtBuilder SetHeader(Map header);
+
+        IJwtBuilder SetClaims(IJwtClaims claims);
+
+        IJwtBuilder SetClaims(Map claims);
+
+        // Note: only HS256 atm
+        IJwtBuilder SignWith(byte[] secretKey);
+
+        // Note: only HS256 atm
+        IJwtBuilder SignWith(string secretKeyString, Encoding encoding);
+
+        IJwt Build();
     }
 }

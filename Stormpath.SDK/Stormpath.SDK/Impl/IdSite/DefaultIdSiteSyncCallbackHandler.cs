@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Text;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.DataStore;
@@ -50,27 +51,10 @@ namespace Stormpath.SDK.Impl.IdSite
             }
 
             this.internalDataStore = internalDataStore;
-            this.jwtResponse = GetJwtResponse(httpRequest);
+            this.jwtResponse = HandlerShared.GetJwtResponse(httpRequest);
 
             this.nonceStore = new DefaultNonceStore(internalDataStore.CacheResolver);
             this.syncNonceStore = this.nonceStore as ISynchronousNonceStore;
-        }
-
-        private static string GetJwtResponse(IHttpRequest request)
-        {
-            if (request.Method != HttpMethod.Get)
-            {
-                throw new ApplicationException("Only HTTP GET method is supported.");
-            }
-
-            var jwtResponse = request.CanonicalUri.QueryString[IdSiteClaims.JwtResponse];
-
-            if (string.IsNullOrEmpty(jwtResponse))
-            {
-                throw InvalidJwtException.JwtRequired;
-            }
-
-            return jwtResponse;
         }
 
         IIdSiteSyncCallbackHandler IIdSiteSyncCallbackHandler.SetNonceStore(INonceStore nonceStore)
@@ -102,40 +86,44 @@ namespace Stormpath.SDK.Impl.IdSite
 
         IAccountResult IIdSiteSyncCallbackHandler.GetAccountResult()
         {
-            var dataStoreApiKey = this.internalDataStore.ApiKey;
+            var signingKeyBytes = Encoding.UTF8.GetBytes(
+                this.internalDataStore.ApiKey.GetSecret());
 
-            var jwt = JsonWebToken.Decode(this.jwtResponse, this.internalDataStore.Serializer);
+            IJwtParser parser = new DefaultJwtParser(this.internalDataStore.Serializer);
+            var jwt = parser
+                .SetSigningKey(signingKeyBytes)
+                .Parse(this.jwtResponse);
 
-            HandlerShared.ThrowIfRequiredParametersMissing(jwt.Payload);
+            HandlerShared.ThrowIfRequiredParametersMissing(jwt.Body);
 
             string apiKeyFromJwt = null;
-            if (HandlerShared.IsError(jwt.Payload))
+            if (HandlerShared.IsError(jwt.Body))
             {
                 jwt.Header.TryGetValueAsString(JwtHeaderParameters.KeyId, out apiKeyFromJwt);
             }
             else
             {
-                jwt.Payload.TryGetValueAsString(DefaultJwtClaims.Audience, out apiKeyFromJwt);
+                apiKeyFromJwt = (string)jwt.Body.GetClaim(DefaultJwtClaims.Audience);
             }
 
-            HandlerShared.ThrowIfJwtSignatureInvalid(apiKeyFromJwt, dataStoreApiKey, jwt);
-            HandlerShared.ThrowIfJwtIsExpired(jwt.Payload);
+            HandlerShared.ThrowIfJwtSignatureInvalid(apiKeyFromJwt, this.internalDataStore.ApiKey, jwt);
+            HandlerShared.ThrowIfJwtIsExpired(jwt.Body);
 
-            HandlerShared.IfErrorThrowIdSiteException(jwt.Payload);
+            HandlerShared.IfErrorThrowIdSiteException(jwt.Body);
 
             if (!this.nonceStore.IsAsynchronousSupported || this.syncNonceStore == null)
             {
                 throw new ApplicationException("The current nonce store does not support synchronous operations.");
             }
 
-            var responseNonce = (string)jwt.Payload[IdSiteClaims.ResponseId];
+            var responseNonce = (string)jwt.Body.GetClaim(IdSiteClaims.ResponseId);
             this.ThrowIfNonceIsAlreadyUsed(responseNonce);
             this.syncNonceStore.PutNonce(responseNonce);
 
-            HandlerShared.ThrowIfSubjectIsMissing(jwt.Payload);
+            HandlerShared.ThrowIfSubjectIsMissing(jwt.Body);
 
-            var accountResult = HandlerShared.CreateAccountResult(jwt.Payload, this.internalDataStore);
-            var resultStatus = HandlerShared.GetResultStatus(jwt.Payload);
+            var accountResult = HandlerShared.CreateAccountResult(jwt.Body, this.internalDataStore);
+            var resultStatus = HandlerShared.GetResultStatus(jwt.Body);
 
             if (this.resultListener != null)
             {
@@ -171,7 +159,7 @@ namespace Stormpath.SDK.Impl.IdSite
             bool alreadyUsed = this.syncNonceStore.ContainsNonce(nonce);
             if (alreadyUsed)
             {
-                throw InvalidJwtException.AlreadyUsed;
+                throw new ExpiredJwtException("This JWT has already been used.");
             }
         }
     }

@@ -46,7 +46,13 @@ namespace Stormpath.SDK.Impl.Utility
         }
 
         public static DateTimeOffset FromLong(long timestamp)
-            => UnixEpoch.AddSeconds(timestamp);
+        {
+            bool isInMilliseconds = timestamp > 100000000000;
+
+            return isInMilliseconds
+                ? UnixEpoch.AddSeconds(timestamp / 1000)
+                : UnixEpoch.AddSeconds(timestamp);
+        }
 
         public static DateTimeOffset? FromLong(long? timestamp)
         {

@@ -148,7 +148,8 @@ namespace Stormpath.SDK.Impl.IdSite
             var now = DateTimeOffset.UtcNow;
             var apiKey = this.internalDataStore.ApiKey;
 
-            var jwtBuilder = Jwts.NewClaimsBuilder()
+            IJwtBuilder jwtBuilder = new DefaultJwtBuilder(this.internalDataStore.Serializer);
+            jwtBuilder
                 .SetId(jti)
                 .SetIssuedAt(DateTimeOffset.Now)
                 .SetIssuer(apiKey.GetId())
@@ -180,8 +181,7 @@ namespace Stormpath.SDK.Impl.IdSite
                 jwtBuilder.SetClaim(IdSiteClaims.ShowOrganizationField, this.showOrganizationField.Value);
             }
 
-            string jwt = JsonWebToken
-                .Encode(jwtBuilder.Build().ToDictionary(), apiKey.GetSecret(), this.internalDataStore.Serializer)
+            string jwt = jwtBuilder.Build()
                 .ToString();
 
             var urlBuilder = new StringBuilder(this.ssoEndpoint);
