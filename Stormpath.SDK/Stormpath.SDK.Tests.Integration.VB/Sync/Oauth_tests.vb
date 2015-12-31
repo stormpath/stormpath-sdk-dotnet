@@ -376,5 +376,91 @@ Namespace Sync
             Call (createdApplication.Delete()).ShouldBeTrue()
             Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
         End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Refreshing_access_token_with_jwt(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            ' Create a dummy application
+            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Refreshing Access Token - Sync (VB)", createDirectory:=False)
+            createdApplication.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
+
+            ' Add the test accounts
+            createdApplication.AddAccountStore(Me.fixture.PrimaryDirectoryHref)
+
+            Dim passwordGrantRequest = OauthRequests.NewPasswordGrantRequest() _
+                .SetLogin("lskywalker@tattooine.rim") _
+                .SetPassword("whataPieceofjunk$1138") _
+                .SetAccountStore(Me.fixture.PrimaryDirectoryHref) _
+                .Build()
+            Dim originalGrantResult = createdApplication.NewPasswordGrantAuthenticator() _
+                .Authenticate(passwordGrantRequest)
+
+            Dim refreshGrantRequest = OauthRequests.NewRefreshGrantRequest() _
+                .SetRefreshToken(originalGrantResult.RefreshTokenString) _
+                .Build()
+
+            Dim refreshGrantResult = createdApplication.NewRefreshGrantAuthenticator() _
+                .Authenticate(refreshGrantRequest)
+
+            refreshGrantResult.AccessTokenHref.ShouldNotBe(originalGrantResult.AccessTokenHref)
+            refreshGrantResult.AccessTokenString.ShouldNotBe(originalGrantResult.AccessTokenString)
+            refreshGrantResult.RefreshTokenString.ShouldBe(originalGrantResult.RefreshTokenString)
+
+            ' Clean up
+            Call (createdApplication.Delete()).ShouldBeTrue()
+            Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Refreshing_access_token_with_instance(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            ' Create a dummy application
+            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Getting Refresh Token for Application - Sync (VB)", createDirectory:=False)
+            createdApplication.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
+
+            ' Add the test accounts
+            createdApplication.AddAccountStore(Me.fixture.PrimaryDirectoryHref)
+
+            Dim passwordGrantRequest = OauthRequests.NewPasswordGrantRequest() _
+                .SetLogin("lskywalker@tattooine.rim") _
+                .SetPassword("whataPieceofjunk$1138") _
+                .SetAccountStore(Me.fixture.PrimaryDirectoryHref) _
+                .Build()
+            Dim originalGrantResult = createdApplication.NewPasswordGrantAuthenticator() _
+                .Authenticate(passwordGrantRequest)
+
+            Dim account = tenant.GetAccount(Me.fixture.PrimaryAccountHref)
+            Dim refreshToken = account _
+                .GetRefreshTokens() _
+                .Where(Function(x) x.ApplicationHref = createdApplication.Href) _
+                .Synchronously() _
+                .SingleOrDefault()
+            refreshToken.ShouldNotBeNull()
+
+            Dim refreshGrantRequest = OauthRequests.NewRefreshGrantRequest() _
+                .SetRefreshToken(refreshToken) _
+                .Build()
+
+            Dim refreshGrantResult = createdApplication.NewRefreshGrantAuthenticator() _
+                .Authenticate(refreshGrantRequest)
+
+            refreshGrantResult.AccessTokenHref.ShouldNotBe(originalGrantResult.AccessTokenHref)
+            refreshGrantResult.AccessTokenString.ShouldNotBe(originalGrantResult.AccessTokenString)
+            refreshGrantResult.RefreshTokenString.ShouldBe(originalGrantResult.RefreshTokenString)
+
+            ' Clean up
+            Call (refreshToken.Delete()).ShouldBeTrue()
+
+            Call (createdApplication.Delete()).ShouldBeTrue()
+            Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
+        End Sub
     End Class
 End Namespace

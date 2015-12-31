@@ -34,3 +34,6 @@ Stormpath.SDK/.nuget/
 
 # Generated API docs
 docs/api
+
+# Diff backup files from ApiApprover
+.cs.bak

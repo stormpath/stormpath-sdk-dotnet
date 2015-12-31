@@ -22,10 +22,17 @@ namespace Stormpath.SDK.Oauth
     public interface IRefreshGrantRequestBuilder : IOauthAuthenticationRequestBuilder<IRefreshGrantRequest>
     {
         /// <summary>
-        /// Sets the Refresh Token that will be used to generate a new Access Token.
+        /// Sets the <see cref="IRefreshToken">Refresh Token</see> string (JWT) that will be used to generate a new <see cref="IAccessToken">Access Token</see>..
         /// </summary>
-        /// <param name="refreshToken">The string representation of the Refresh Token.</param>
+        /// <param name="refreshTokenString">The string representation of the Refresh Token.</param>
         /// <returns>This instance for method chaining.</returns>
-        IRefreshGrantRequestBuilder SetRefreshToken(string refreshToken);
+        IRefreshGrantRequestBuilder SetRefreshToken(string refreshTokenString);
+
+        /// <summary>
+        /// Sets the <see cref="IRefreshToken">Refresh Token</see> that will be used to generate a new <see cref="IAccessToken">Access Token</see>.
+        /// </summary>
+        /// <param name="refreshToken">The Refresh Token.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IRefreshGrantRequestBuilder SetRefreshToken(IRefreshToken refreshToken);
     }
 }

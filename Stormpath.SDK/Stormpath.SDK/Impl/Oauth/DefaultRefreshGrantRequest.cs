@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Impl.Oauth
             this.refreshToken = refreshToken;
         }
 
-        string IOauthGrantRequest.GrantType => "refresh";
+        string IOauthGrantRequest.GrantType => "refresh_token";
 
         string IRefreshGrantRequest.RefreshToken => this.refreshToken;
     }

@@ -20,7 +20,7 @@ namespace Stormpath.SDK.Impl.Oauth
 {
     internal sealed class DefaultRefreshGrantAuthenticationAttempt : AbstractResource, IRefreshGrantAuthenticationAttempt
     {
-        private static readonly string RefreshTokenPropertyName = "token";
+        private static readonly string RefreshTokenPropertyName = "refresh_token";
         private static readonly string GrantTypePropertyName = "grant_type";
 
         public DefaultRefreshGrantAuthenticationAttempt(ResourceData data)

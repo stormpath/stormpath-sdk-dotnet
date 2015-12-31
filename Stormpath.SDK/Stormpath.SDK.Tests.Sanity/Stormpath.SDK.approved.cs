@@ -1096,7 +1096,8 @@ namespace Stormpath.SDK.Oauth
     }
     public interface IRefreshGrantRequestBuilder : Stormpath.SDK.Oauth.IOauthAuthenticationRequestBuilder<Stormpath.SDK.Oauth.IRefreshGrantRequest>
     {
-        Stormpath.SDK.Oauth.IRefreshGrantRequestBuilder SetRefreshToken(string refreshToken);
+        Stormpath.SDK.Oauth.IRefreshGrantRequestBuilder SetRefreshToken(string refreshTokenString);
+        Stormpath.SDK.Oauth.IRefreshGrantRequestBuilder SetRefreshToken(Stormpath.SDK.Oauth.IRefreshToken refreshToken);
     }
     public interface IRefreshToken : Stormpath.SDK.Resource.IDeletable, Stormpath.SDK.Resource.IResource, Stormpath.SDK.Tenant.IHasTenant
     {

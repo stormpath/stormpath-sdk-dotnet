@@ -413,5 +413,97 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             createdApplication.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Refreshing_access_token_with_jwt(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            // Create a dummy application
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Refreshing Access Token - Sync",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            // Add the test accounts
+            createdApplication.AddAccountStore(this.fixture.PrimaryDirectoryHref);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin("lskywalker@tattooine.rim")
+                .SetPassword("whataPieceofjunk$1138")
+                .SetAccountStore(this.fixture.PrimaryDirectoryHref)
+                .Build();
+            var originalGrantResult = createdApplication.NewPasswordGrantAuthenticator()
+                .Authenticate(passwordGrantRequest);
+
+            var refreshGrantRequest = OauthRequests.NewRefreshGrantRequest()
+                .SetRefreshToken(originalGrantResult.RefreshTokenString)
+                .Build();
+
+            var refreshGrantResult = createdApplication.NewRefreshGrantAuthenticator()
+                .Authenticate(refreshGrantRequest);
+
+            refreshGrantResult.AccessTokenHref.ShouldNotBe(originalGrantResult.AccessTokenHref);
+            refreshGrantResult.AccessTokenString.ShouldNotBe(originalGrantResult.AccessTokenString);
+            refreshGrantResult.RefreshTokenString.ShouldBe(originalGrantResult.RefreshTokenString);
+
+            // Clean up
+            createdApplication.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Refreshing_access_token_with_instance(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            // Create a dummy application
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Getting Refresh Token for Application - Sync",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            // Add the test accounts
+            createdApplication.AddAccountStore(this.fixture.PrimaryDirectoryHref);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin("lskywalker@tattooine.rim")
+                .SetPassword("whataPieceofjunk$1138")
+                .SetAccountStore(this.fixture.PrimaryDirectoryHref)
+                .Build();
+            var originalGrantResult = createdApplication.NewPasswordGrantAuthenticator()
+                .Authenticate(passwordGrantRequest);
+
+            var account = tenant.GetAccount(this.fixture.PrimaryAccountHref);
+            var refreshToken = account
+                .GetRefreshTokens()
+                .Where(x => x.ApplicationHref == createdApplication.Href)
+                .Synchronously()
+                .SingleOrDefault();
+            refreshToken.ShouldNotBeNull();
+
+            var refreshGrantRequest = OauthRequests.NewRefreshGrantRequest()
+                .SetRefreshToken(refreshToken)
+                .Build();
+
+            var refreshGrantResult = createdApplication.NewRefreshGrantAuthenticator()
+                .Authenticate(refreshGrantRequest);
+
+            refreshGrantResult.AccessTokenHref.ShouldNotBe(originalGrantResult.AccessTokenHref);
+            refreshGrantResult.AccessTokenString.ShouldNotBe(originalGrantResult.AccessTokenString);
+            refreshGrantResult.RefreshTokenString.ShouldBe(originalGrantResult.RefreshTokenString);
+
+            // Clean up
+            refreshToken.Delete().ShouldBeTrue();
+
+            createdApplication.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
     }
 }

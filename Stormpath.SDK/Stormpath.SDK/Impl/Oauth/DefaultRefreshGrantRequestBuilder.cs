@@ -23,15 +23,27 @@ namespace Stormpath.SDK.Impl.Oauth
     {
         private string refreshToken;
 
-        IRefreshGrantRequestBuilder IRefreshGrantRequestBuilder.SetRefreshToken(string refreshToken)
+        private IRefreshGrantRequestBuilder AsInterface => this;
+
+        IRefreshGrantRequestBuilder IRefreshGrantRequestBuilder.SetRefreshToken(string refreshTokenString)
         {
-            if (string.IsNullOrEmpty(this.refreshToken))
+            if (string.IsNullOrEmpty(refreshTokenString))
             {
-                throw new ArgumentNullException(nameof(DefaultRefreshGrantRequestBuilder.refreshToken));
+                throw new ArgumentNullException(nameof(refreshTokenString));
             }
 
-            this.refreshToken = refreshToken;
+            this.refreshToken = refreshTokenString;
             return this;
+        }
+
+        IRefreshGrantRequestBuilder IRefreshGrantRequestBuilder.SetRefreshToken(IRefreshToken refreshToken)
+        {
+            if (refreshToken == null)
+            {
+                throw new ArgumentNullException(nameof(refreshToken));
+            }
+
+            return this.AsInterface.SetRefreshToken(refreshToken.Jwt);
         }
 
         IRefreshGrantRequest IOauthAuthenticationRequestBuilder<IRefreshGrantRequest>.Build()

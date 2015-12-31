@@ -411,8 +411,97 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
-        //TODO: ID Site Token Authentication exchange
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Refreshing_access_token_with_jwt(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
 
-        //TODO: Refresh token grant
+            // Create a dummy application
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Refreshing Access Token",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            // Add the test accounts
+            await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin("lskywalker@tattooine.rim")
+                .SetPassword("whataPieceofjunk$1138")
+                .SetAccountStore(this.fixture.PrimaryDirectoryHref)
+                .Build();
+            var originalGrantResult = await createdApplication.NewPasswordGrantAuthenticator()
+                .AuthenticateAsync(passwordGrantRequest);
+
+            var refreshGrantRequest = OauthRequests.NewRefreshGrantRequest()
+                .SetRefreshToken(originalGrantResult.RefreshTokenString)
+                .Build();
+
+            var refreshGrantResult = await createdApplication.NewRefreshGrantAuthenticator()
+                .AuthenticateAsync(refreshGrantRequest);
+
+            refreshGrantResult.AccessTokenHref.ShouldNotBe(originalGrantResult.AccessTokenHref);
+            refreshGrantResult.AccessTokenString.ShouldNotBe(originalGrantResult.AccessTokenString);
+            refreshGrantResult.RefreshTokenString.ShouldBe(originalGrantResult.RefreshTokenString);
+
+            // Clean up
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Refreshing_access_token_with_instance(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            // Create a dummy application
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Getting Refresh Token for Application",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            // Add the test accounts
+            await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin("lskywalker@tattooine.rim")
+                .SetPassword("whataPieceofjunk$1138")
+                .SetAccountStore(this.fixture.PrimaryDirectoryHref)
+                .Build();
+            var originalGrantResult = await createdApplication.NewPasswordGrantAuthenticator()
+                .AuthenticateAsync(passwordGrantRequest);
+
+            var account = await tenant.GetAccountAsync(this.fixture.PrimaryAccountHref);
+            var refreshToken = await account
+                .GetRefreshTokens()
+                .Where(x => x.ApplicationHref == createdApplication.Href)
+                .SingleOrDefaultAsync();
+            refreshToken.ShouldNotBeNull();
+
+            var refreshGrantRequest = OauthRequests.NewRefreshGrantRequest()
+                .SetRefreshToken(refreshToken)
+                .Build();
+
+            var refreshGrantResult = await createdApplication.NewRefreshGrantAuthenticator()
+                .AuthenticateAsync(refreshGrantRequest);
+
+            refreshGrantResult.AccessTokenHref.ShouldNotBe(originalGrantResult.AccessTokenHref);
+            refreshGrantResult.AccessTokenString.ShouldNotBe(originalGrantResult.AccessTokenString);
+            refreshGrantResult.RefreshTokenString.ShouldBe(originalGrantResult.RefreshTokenString);
+
+            // Clean up
+            (await refreshToken.DeleteAsync()).ShouldBeTrue();
+
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        //TODO: ID Site Token Authentication exchange
     }
 }
