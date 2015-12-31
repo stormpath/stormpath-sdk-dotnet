@@ -89,7 +89,7 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
             yield return new object[] { nameof(IatAfterCurrentTime), IatAfterCurrentTime, typeof(InvalidIdSiteTokenException), 10012, 400, "Token is invalid", "Token is invalid because the issued at time (iat) is after the current time." };
             yield return new object[] { nameof(OrganizationNameKeyNotAssigned), OrganizationNameKeyNotAssigned, typeof(InvalidIdSiteTokenException), 11003, 400, "Token is invalid", "Token is invalid because the specified organization nameKey is not one of the application's assigned account stores." };
             yield return new object[] { nameof(SessionTimedOut), SessionTimedOut, typeof(IdSiteSessionTimeoutException), 12001, 401, "The session on ID Site has timed out.", "The session on ID Site has timed out. This can occur if the user stays on ID Site without logging in, registering, or resetting a password." };
-            yield return new object[] { nameof(ExpiredJwt), ExpiredJwt, typeof(ExpiredJwtException), 0, 0, $"JWT expired at 2015-08-27T19:51:00Z. Current time: {Iso8601.Format(DateTimeOffset.Now)}", null };
+            yield return new object[] { nameof(ExpiredJwt), ExpiredJwt, typeof(ExpiredJwtException), 0, 0, $"JWT expired at 2015-08-27T19:51:00Z. Current time: ", null };
         }
 
         [Theory]
@@ -124,7 +124,7 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
             }
             catch (Exception e) when (expectedExceptionType.IsAssignableFrom(e.GetType()))
             {
-                e.Message.ShouldBe(expectedMessage);
+                e.Message.ShouldStartWith(expectedMessage);
             }
         }
     }
