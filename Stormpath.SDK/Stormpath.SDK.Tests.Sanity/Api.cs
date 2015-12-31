@@ -163,7 +163,7 @@ namespace Stormpath.SDK.Tests.Sanity
                 "IIdSiteAsyncResultListener.OnAuthenticated(IAccountResult)",
                 "IIdSiteAsyncResultListener.OnLogout(IAccountResult)",
 
-                // This generic method is provided by specific sync extension methods
+                // This generic method is provided by specific sync extension methods (false positive)
                 "IOauthAuthenticator`2.Authenticate(TRequest)",
             };
             var whitelistedSyncMethods = new List<string>()
@@ -173,8 +173,11 @@ namespace Stormpath.SDK.Tests.Sanity
                 "IAsyncQueryable`1.Synchronously()",
                 "IApplication.NewIdSiteSyncCallbackHandler(IHttpRequest)",
 
-                // These methods correspond to IOauthAuthenticator`2.Authenticate(TRequest)
-                "IPasswordGrantAuthenticator.Authenticate(IPasswordGrantRequest)"
+                // These methods correspond to IOauthAuthenticator`2.Authenticate(TRequest) (false positive)
+                "IPasswordGrantAuthenticator.Authenticate(IPasswordGrantRequest)",
+                "IJwtAuthenticator.Authenticate(IJwtAuthenticationRequest)",
+                "IIdSiteTokenAuthenticator.Authenticate(IIdSiteTokenAuthenticationRequest)",
+                "IRefreshGrantAuthenticator.Authenticate(IRefreshGrantRequest)",
             };
 
             // Get normal async API from interfaces
