@@ -25,32 +25,28 @@ using Stormpath.SDK.Oauth;
 namespace Stormpath.SDK.Impl.Oauth
 {
     internal sealed class DefaultIdSiteTokenAuthenticator :
+        AbstractGrantAuthenticator<IIdSiteTokenAuthenticationRequest>,
         IIdSiteTokenAuthenticator,
         IIdSiteTokenAuthenticatorSync
     {
-        private static readonly string OauthTokenPath = "/oauth/token";
-
-        private readonly IApplication application;
-        private readonly IInternalDataStore internalDataStore;
-
         public DefaultIdSiteTokenAuthenticator(IApplication application, IInternalDataStore internalDataStore)
+            : base(application, internalDataStore)
         {
-            this.application = application;
-            this.internalDataStore = internalDataStore;
         }
 
-        private IInternalAsyncDataStore InternalAsyncDataStore
-            => this.internalDataStore as IInternalAsyncDataStore;
-
-        private IInternalSyncDataStore InternalSyncDataStore
-            => this.internalDataStore as IInternalSyncDataStore;
-
-        Task<IOauthGrantAuthenticationResult> IOauthAuthenticator<IIdSiteTokenAuthenticationRequest, IOauthGrantAuthenticationResult>
+        async Task<IOauthGrantAuthenticationResult> IOauthAuthenticator<IIdSiteTokenAuthenticationRequest, IOauthGrantAuthenticationResult>
             .AuthenticateAsync(IIdSiteTokenAuthenticationRequest authenticationRequest, CancellationToken cancellationToken)
         {
             this.ThrowIfInvalid(authenticationRequest);
 
-            throw new NotImplementedException();
+            var idsiteExchangeAttempt = this.BuildExchangeAttempt(authenticationRequest);
+            var headers = this.GetHeaderWithMediaType();
+
+            return await this.InternalAsyncDataStore.CreateAsync<IIdSiteTokenAuthenticationAttempt, IGrantAuthenticationToken>(
+                $"{this.application.Href}{OauthTokenPath}",
+                idsiteExchangeAttempt,
+                headers,
+                cancellationToken).ConfigureAwait(false);
         }
 
         IOauthGrantAuthenticationResult IOauthAuthenticatorSync<IIdSiteTokenAuthenticationRequest, IOauthGrantAuthenticationResult>
@@ -58,27 +54,22 @@ namespace Stormpath.SDK.Impl.Oauth
         {
             this.ThrowIfInvalid(authenticationRequest);
 
-            throw new NotImplementedException();
+            var idsiteExchangeAttempt = this.BuildExchangeAttempt(authenticationRequest);
+            var headers = this.GetHeaderWithMediaType();
+
+            return this.InternalSyncDataStore.Create<IIdSiteTokenAuthenticationAttempt, IGrantAuthenticationToken>(
+                $"{this.application.Href}{OauthTokenPath}",
+                idsiteExchangeAttempt,
+                headers);
         }
 
-        private void ThrowIfInvalid(IIdSiteTokenAuthenticationRequest authenticationRequest)
+        private IIdSiteTokenAuthenticationAttempt BuildExchangeAttempt(IIdSiteTokenAuthenticationRequest authenticationRequest)
         {
-            if (this.application == null)
-            {
-                throw new ApplicationException($"{nameof(this.application)} cannot be null.");
-            }
+            var exchangeAttempt = this.internalDataStore.Instantiate<IIdSiteTokenAuthenticationAttempt>();
+            exchangeAttempt.SetGrantType(authenticationRequest.GrantType);
+            exchangeAttempt.SetToken(authenticationRequest.Jwt);
 
-            if (authenticationRequest == null)
-            {
-                throw new ApplicationException($"{nameof(authenticationRequest)} cannot be null.");
-            }
-        }
-
-        private static HttpHeaders GetHeaders()
-        {
-            var headers = new HttpHeaders();
-            headers.ContentType = HttpHeaders.MediaTypeApplicationFormUrlEncoded;
-            return headers;
+            return exchangeAttempt;
         }
     }
 }

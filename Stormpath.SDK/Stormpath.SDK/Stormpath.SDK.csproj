@@ -332,6 +332,7 @@
     <Compile Include="Impl\Linq\Sync\SyncScalarExecutor{TItem}.cs" />
     <Compile Include="Impl\Oauth\AbstractGrantAuthenticator.cs" />
     <Compile Include="Impl\Oauth\DefaultAccessToken.cs" />
+    <Compile Include="Impl\Oauth\DefaultIdSiteTokenAuthenticationAttempt.cs" />
     <Compile Include="Impl\Oauth\DefaultRefreshGrantAuthenticationAttempt.cs" />
     <Compile Include="Impl\Oauth\DefaultGrantAuthenticationAttempt.cs" />
     <Compile Include="Impl\Oauth\DefaultGrantAuthenticationToken.cs" />
@@ -351,6 +352,7 @@
     <Compile Include="Impl\Oauth\DefaultPasswordGrantRequest.cs" />
     <Compile Include="Impl\Oauth\DefaultPasswordGrantRequestBuilder.cs" />
     <Compile Include="Impl\Oauth\DefaultRefreshToken.cs" />
+    <Compile Include="Impl\Oauth\IIdSiteTokenAuthenticationAttempt.cs" />
     <Compile Include="Impl\Oauth\IRefreshGrantAuthenticationAttempt.cs" />
     <Compile Include="Impl\Oauth\IJwtAuthenticatorSync.cs" />
     <Compile Include="Impl\Oauth\IIdSiteTokenAuthenticatorSync.cs" />
