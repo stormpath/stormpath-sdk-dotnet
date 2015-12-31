@@ -102,22 +102,16 @@ namespace Stormpath.SDK.Impl.Oauth
 
         private IAccessToken ValidateLocallySync(IJwtAuthenticationRequest request)
         {
-            IJwtParser parser = new DefaultJwtParser(this.internalDataStore.Serializer);
+            var parser = Jwts.Parser()
+
+                // Require secret key signature
+                .SetSigningKey(this.internalDataStore.ApiKey.GetSecret(), Encoding.UTF8)
+
+                // Require this application to be the issuer
+                .RequireIssuer(this.application.Href);
+
+            // During parsing, the JWT is validated for lifetime, signature, and tampering
             var jwt = parser.Parse(request.Jwt);
-
-            // Verify JWT signature
-            var signingKey = Convert.FromBase64String(this.internalDataStore.ApiKey.GetSecret());
-            var signatureValidator = new JwtSignatureValidator(signingKey);
-            if (!signatureValidator.IsValid(jwt))
-            {
-                throw new InvalidJwtException("JWT failed signature validation.");
-            }
-
-            // Verify JWT issuer
-            if (!jwt.Body.Issuer.Equals(this.application.Href, StringComparison.Ordinal))
-            {
-                throw new InvalidCastException("JWT failed issuer validation.");
-            }
 
             // Build an IAccessToken instance from scratch
             var properties = new Dictionary<string, object>();
@@ -130,6 +124,7 @@ namespace Stormpath.SDK.Impl.Oauth
             properties.Add(AbstractResource.HrefPropertyName, accessTokenHref);
             properties.Add(DefaultAccessToken.AccountPropertyName, new LinkProperty(jwt.Body.Subject));
             properties.Add(DefaultAccessToken.ApplicationPropertyName, new LinkProperty(this.application.Href));
+            properties.Add(AbstractInstanceResource.CreatedAtPropertyName, DateTimeOffset.UtcNow);
             properties.Add(DefaultAccessToken.JwtPropertyName, request.Jwt);
             properties.Add(AbstractResource.TenantPropertyName, (this.application as DefaultApplication).Tenant);
 

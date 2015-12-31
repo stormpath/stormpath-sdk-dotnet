@@ -16,6 +16,7 @@
 
 Imports Shouldly
 Imports Stormpath.SDK.Error
+Imports Stormpath.SDK.Jwt
 Imports Stormpath.SDK.Oauth
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
@@ -213,5 +214,161 @@ Namespace Async
             Call (Await createdApplication.DeleteAsync()).ShouldBeTrue()
             Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
         End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Validating_jwt(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = Await client.GetCurrentTenantAsync()
+
+            ' Create a dummy application
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Validating JWT (VB)", createDirectory:=False)
+            createdApplication.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
+
+            ' Add the test accounts
+            Await createdApplication.AddAccountStoreAsync(Me.fixture.PrimaryDirectoryHref)
+
+            Dim passwordGrantRequest = OauthRequests.NewPasswordGrantRequest() _
+                .SetLogin("lskywalker@tattooine.rim") _
+                .SetPassword("whataPieceofjunk$1138") _
+                .SetAccountStore(Me.fixture.PrimaryDirectoryHref) _
+                .Build()
+            Dim authenticateResult = Await createdApplication.NewPasswordGrantAuthenticator() _
+                .AuthenticateAsync(passwordGrantRequest)
+            Dim accessTokenJwt = authenticateResult.AccessTokenString
+
+            Dim jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest() _
+                .SetJwt(accessTokenJwt) _
+                .Build()
+            Dim validAccessToken = Await createdApplication.NewJwtAuthenticator() _
+                .AuthenticateAsync(jwtAuthenticationRequest)
+
+            validAccessToken.ShouldNotBeNull()
+            validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href)
+            validAccessToken.CreatedAt.Day.ShouldBe(DateTimeOffset.Now.Day)
+            validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref)
+            validAccessToken.Jwt.ShouldBe(accessTokenJwt)
+
+            ' Clean up
+            Call (Await validAccessToken.DeleteAsync()).ShouldBeTrue()
+
+            Call (Await createdApplication.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Validating_jwt_throws_for_bad_jwt(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = Await client.GetCurrentTenantAsync()
+
+            ' Create a dummy application
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Validating JWT (VB)", createDirectory:=False)
+            createdApplication.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
+
+            ' Add the test accounts
+            Await createdApplication.AddAccountStoreAsync(Me.fixture.PrimaryDirectoryHref)
+
+            Dim passwordGrantRequest = OauthRequests.NewPasswordGrantRequest() _
+                .SetLogin("lskywalker@tattooine.rim") _
+                .SetPassword("whataPieceofjunk$1138") _
+                .SetAccountStore(Me.fixture.PrimaryDirectoryHref) _
+                .Build()
+            Dim authenticateResult = Await createdApplication.NewPasswordGrantAuthenticator() _
+                .AuthenticateAsync(passwordGrantRequest)
+
+            Dim badJwt = authenticateResult.AccessTokenString.Substring(0, authenticateResult.AccessTokenString.Length - 3) + "foo"
+
+            Dim jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest() _
+                .SetJwt(badJwt) _
+                .Build()
+
+            Await Should.ThrowAsync(Of ResourceException)(Async Function() Await createdApplication.NewJwtAuthenticator().AuthenticateAsync(jwtAuthenticationRequest))
+
+            ' Clean up
+            Call (Await createdApplication.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Validating_jwt_locally(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = Await client.GetCurrentTenantAsync()
+
+            ' Create a dummy application
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Validating JWT Locally (VB)", createDirectory:=False)
+            createdApplication.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
+
+            ' Add the test accounts
+            Await createdApplication.AddAccountStoreAsync(Me.fixture.PrimaryDirectoryHref)
+
+            Dim passwordGrantRequest = OauthRequests.NewPasswordGrantRequest() _
+                .SetLogin("lskywalker@tattooine.rim") _
+                .SetPassword("whataPieceofjunk$1138") _
+                .SetAccountStore(Me.fixture.PrimaryDirectoryHref) _
+                .Build()
+            Dim authenticateResult = Await createdApplication.NewPasswordGrantAuthenticator() _
+                .AuthenticateAsync(passwordGrantRequest)
+            Dim accessTokenJwt = authenticateResult.AccessTokenString
+
+            Dim jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest() _
+                .SetJwt(accessTokenJwt) _
+                .Build()
+            Dim validAccessToken = Await createdApplication.NewJwtAuthenticator() _
+                .WithLocalValidation() _
+                .AuthenticateAsync(jwtAuthenticationRequest)
+
+            validAccessToken.ShouldNotBeNull()
+            validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href)
+            validAccessToken.CreatedAt.Day.ShouldBe(DateTimeOffset.Now.Day)
+            validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref)
+            validAccessToken.Jwt.ShouldBe(accessTokenJwt)
+
+            ' Clean up
+            Call (Await validAccessToken.DeleteAsync()).ShouldBeTrue()
+
+            Call (Await createdApplication.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Validating_jwt_locally_throws_for_bad_jwt(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = Await client.GetCurrentTenantAsync()
+
+            ' Create a dummy application
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Validating JWT Locally (VB)", createDirectory:=False)
+            createdApplication.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
+
+            ' Add the test accounts
+            Await createdApplication.AddAccountStoreAsync(Me.fixture.PrimaryDirectoryHref)
+
+            Dim passwordGrantRequest = OauthRequests.NewPasswordGrantRequest() _
+                .SetLogin("lskywalker@tattooine.rim") _
+                .SetPassword("whataPieceofjunk$1138") _
+                .SetAccountStore(Me.fixture.PrimaryDirectoryHref) _
+                .Build()
+            Dim authenticateResult = Await createdApplication.NewPasswordGrantAuthenticator() _
+                .AuthenticateAsync(passwordGrantRequest)
+
+            Dim badJwt = authenticateResult.AccessTokenString.Substring(0, authenticateResult.AccessTokenString.Length - 3) + "foo"
+
+            Dim jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest() _
+                .SetJwt(badJwt) _
+                .Build()
+
+            Await Should.ThrowAsync(Of JwtSignatureException)(Async Function() Await createdApplication.NewJwtAuthenticator().WithLocalValidation().AuthenticateAsync(jwtAuthenticationRequest))
+
+            ' Clean up
+            Call (Await createdApplication.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
+        End Function
+
     End Class
 End Namespace

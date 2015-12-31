@@ -23,8 +23,8 @@ namespace Stormpath.SDK.Impl.Resource
 {
     internal abstract class AbstractInstanceResource : AbstractResource, IAuditable
     {
-        protected static readonly string CreatedAtPropertyName = "createdAt";
-        protected static readonly string ModifiedAtPropertyName = "modifiedAt";
+        public static readonly string CreatedAtPropertyName = "createdAt";
+        public static readonly string ModifiedAtPropertyName = "modifiedAt";
 
         protected AbstractInstanceResource(ResourceData data)
             : base(data)

@@ -25,6 +25,33 @@ namespace Stormpath.SDK.Oauth
     /// (no network request), call the <see cref="WithLocalValidation()"/> method before performing the authentication.
     /// </remarks>
     /// <example>
+    /// Remote validation:
+    /// <code>
+    /// // Create the request:
+    /// var jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest()
+    ///     .SetJwt(your_jwt_string)
+    ///     .Build();
+    ///
+    /// // Perform validation:
+    /// var accessToken = await createdApplication.NewJwtAuthenticator()
+    ///     .AuthenticateAsync(jwtAuthenticationRequest);
+    /// </code>
+    /// </example>
+    /// <code>
+    /// // Create the request:
+    /// var jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest()
+    ///     .SetJwt(your_jwt_string)
+    ///     .Build();
+    ///
+    /// // Perform validation:
+    /// var accessToken = await createdApplication.NewJwtAuthenticator()
+    ///     .WithLocalValidation()
+    ///     .AuthenticateAsync(jwtAuthenticationRequest);
+    /// </code>
+    /// <example>
+    /// Local validation:
+    /// <code>
+    /// </code>
     /// </example>
     public interface IJwtAuthenticator : IOauthAuthenticator<IJwtAuthenticationRequest, IAccessToken>
     {

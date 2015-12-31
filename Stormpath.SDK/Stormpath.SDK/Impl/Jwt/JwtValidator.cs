@@ -45,8 +45,8 @@ namespace Stormpath.SDK.Impl.Jwt
                 return false;
             }
 
+            // During parsing, the JWT is validated for expiration/lifetime, signature, and tampering
             throw new NotImplementedException();
-            //todo
         }
     }
 }

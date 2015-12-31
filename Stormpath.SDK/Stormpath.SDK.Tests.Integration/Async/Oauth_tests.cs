@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Error;
+using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
@@ -272,11 +273,54 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .AuthenticateAsync(jwtAuthenticationRequest);
 
             validAccessToken.ShouldNotBeNull();
+            validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href);
+            validAccessToken.CreatedAt.Day.ShouldBe(DateTimeOffset.Now.Day);
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
+            validAccessToken.Jwt.ShouldBe(accessTokenJwt);
 
             // Clean up
             (await validAccessToken.DeleteAsync()).ShouldBeTrue();
 
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Validating_jwt_throws_for_bad_jwt(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            // Create a dummy application
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Validating JWT",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            // Add the test accounts
+            await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin("lskywalker@tattooine.rim")
+                .SetPassword("whataPieceofjunk$1138")
+                .SetAccountStore(this.fixture.PrimaryDirectoryHref)
+                .Build();
+            var authenticateResult = await createdApplication.NewPasswordGrantAuthenticator()
+                .AuthenticateAsync(passwordGrantRequest);
+
+            var badJwt = authenticateResult.AccessTokenString
+                .Substring(0, authenticateResult.AccessTokenString.Length - 3) + "foo";
+
+            var jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest()
+                .SetJwt(badJwt)
+                .Build();
+
+            await Should.ThrowAsync<ResourceException>(async () =>
+                await createdApplication.NewJwtAuthenticator().AuthenticateAsync(jwtAuthenticationRequest));
+
+            // Clean up
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
@@ -315,11 +359,54 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .AuthenticateAsync(jwtAuthenticationRequest);
 
             validAccessToken.ShouldNotBeNull();
+            validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href);
+            validAccessToken.CreatedAt.Day.ShouldBe(DateTimeOffset.Now.Day);
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
+            validAccessToken.Jwt.ShouldBe(accessTokenJwt);
 
             // Clean up
             (await validAccessToken.DeleteAsync()).ShouldBeTrue();
 
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Validating_jwt_locally_throws_for_bad_jwt(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            // Create a dummy application
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Validating JWT Locally",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            // Add the test accounts
+            await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin("lskywalker@tattooine.rim")
+                .SetPassword("whataPieceofjunk$1138")
+                .SetAccountStore(this.fixture.PrimaryDirectoryHref)
+                .Build();
+            var authenticateResult = await createdApplication.NewPasswordGrantAuthenticator()
+                .AuthenticateAsync(passwordGrantRequest);
+
+            var badJwt = authenticateResult.AccessTokenString
+                .Substring(0, authenticateResult.AccessTokenString.Length - 3) + "foo";
+
+            var jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest()
+                .SetJwt(badJwt)
+                .Build();
+
+            await Should.ThrowAsync<JwtSignatureException>(async () =>
+                await createdApplication.NewJwtAuthenticator().WithLocalValidation().AuthenticateAsync(jwtAuthenticationRequest));
+
+            // Clean up
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
