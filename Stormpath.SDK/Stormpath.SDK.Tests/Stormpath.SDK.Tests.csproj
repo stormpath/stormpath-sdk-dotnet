@@ -85,7 +85,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fakes\FakeJson.cs" />
     <Compile Include="Fakes\FakeUserAgentBuilder.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
     <Compile Include="Helpers\SerializableTimeSpan.cs" />
