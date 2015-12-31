@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Impl.Account
         }
 
         string IEmailVerificationRequest.Login
-            => this.GetProperty<string>(LoginPropertyName);
+            => this.GetStringProperty(LoginPropertyName);
 
         public IEmailVerificationRequest SetLogin(string usernameOrEmail)
         {

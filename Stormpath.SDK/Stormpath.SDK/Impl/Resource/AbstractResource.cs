@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -51,7 +52,7 @@ namespace Stormpath.SDK.Impl.Resource
         {
             get
             {
-                var href = this.GetProperty<string>(HrefPropertyName);
+                var href = this.GetStringProperty(HrefPropertyName);
 
                 bool isEmptyOrDefault =
                     href == null ||
@@ -73,10 +74,10 @@ namespace Stormpath.SDK.Impl.Resource
             => this.GetResourceData()?.InternalSyncDataStore;
 
         public Task<ITenant> GetTenantAsync(CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(this.GetProperty<IEmbeddedProperty>(TenantPropertyName).Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(this.GetLinkProperty(TenantPropertyName).Href, cancellationToken);
 
         public ITenant GetTenant()
-            => this.GetInternalSyncDataStore().GetResource<ITenant>(this.GetProperty<IEmbeddedProperty>(TenantPropertyName).Href);
+            => this.GetInternalSyncDataStore().GetResource<ITenant>(this.GetLinkProperty(TenantPropertyName).Href);
 
         internal bool IsDirty => this.GetResourceData()?.IsDirty ?? true;
 
@@ -89,11 +90,27 @@ namespace Stormpath.SDK.Impl.Resource
         public object GetProperty(string name)
             => this.GetResourceData()?.GetProperty(name);
 
+        public int GetIntProperty(string name)
+            => Convert.ToInt32(this.GetProperty(name) ?? default(int));
+
+        public long GetLongProperty(string name)
+            => Convert.ToInt64(this.GetProperty(name) ?? default(long));
+
+        public string GetStringProperty(string name)
+            => this.GetProperty(name)?.ToString();
+
+        public bool GetBoolProperty(string name)
+            => Convert.ToBoolean(this.GetProperty(name) ?? default(bool));
+
+        public DateTimeOffset GetDateTimeProperty(string name)
+            => (DateTimeOffset)this.GetProperty(name);
+
         public T GetProperty<T>(string name)
+            where T : class
             => (T)(this.GetProperty(name) ?? default(T));
 
         public IEmbeddedProperty GetLinkProperty(string name)
-            => this.GetProperty<IEmbeddedProperty>(name) ?? new LinkProperty(null);
+            => (this.GetProperty(name) as IEmbeddedProperty) ?? new LinkProperty(null);
 
         public bool ContainsProperty(string name)
             => this.GetResourceData()?.ContainsProperty(name) ?? false;

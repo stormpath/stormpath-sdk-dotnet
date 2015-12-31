@@ -43,6 +43,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 href,
                 queryParams: queryParams,
                 create: false,
+                headers: null,
                 cancellationToken: cancellationToken);
         }
 
@@ -64,8 +65,9 @@ namespace Stormpath.SDK.Impl.DataStore
             return this.SaveCore<T, T>(
                 resource,
                 href,
+                queryParams: queryParams,
                 create: false,
-                queryParams: queryParams);
+                headers: null);
         }
     }
 }

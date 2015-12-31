@@ -52,9 +52,9 @@ namespace Stormpath.SDK.Impl.Tenant
 
         internal IEmbeddedProperty IdSites => this.GetLinkProperty(IdSitesPropertyName);
 
-        string ITenant.Key => this.GetProperty<string>(KeyPropertyName);
+        string ITenant.Key => this.GetStringProperty(KeyPropertyName);
 
-        string ITenant.Name => this.GetProperty<string>(NamePropertyName);
+        string ITenant.Name => this.GetStringProperty(NamePropertyName);
 
         internal IEmbeddedProperty Organizations => this.GetLinkProperty(OrganizationsPropertyName);
     }

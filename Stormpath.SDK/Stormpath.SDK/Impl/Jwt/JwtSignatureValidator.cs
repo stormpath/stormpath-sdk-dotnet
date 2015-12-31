@@ -15,39 +15,45 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Api;
+using Stormpath.SDK.Jwt;
 
 namespace Stormpath.SDK.Impl.Jwt
 {
+    /// <summary>
+    /// Validates a JWT signature.
+    /// </summary>
     internal sealed class JwtSignatureValidator
     {
-        private readonly IJwtSigner jwtSigner;
+        private readonly byte[] signingKey;
 
-        public JwtSignatureValidator(string signingKey)
+        public JwtSignatureValidator(byte[] signingKey)
         {
-            if (signingKey == null)
-            {
-                throw new ArgumentNullException(nameof(signingKey));
-            }
-
-            this.jwtSigner = new DefaultJwtSigner(signingKey);
+            this.signingKey = signingKey;
         }
 
-        public JwtSignatureValidator(IClientApiKey apiKey)
-            : this(apiKey?.GetSecret())
-        {
-        }
+        public bool IsValid(IJwt jwt)
+            => this.IsValid(jwt.Base64Header, jwt.Base64Payload, jwt.Base64Digest);
 
-        public bool IsValid(JsonWebToken jwt)
+        public bool IsValid(string base64UrlEncodedHeader, string base64UrlEncodedPayload, string base64UrlEncodedDigest)
         {
-            if (jwt == null)
+            if (string.IsNullOrEmpty(base64UrlEncodedHeader))
             {
-                throw new ArgumentNullException(nameof(jwt));
+                throw new ArgumentNullException(nameof(base64UrlEncodedHeader));
             }
 
-            var calculatedSignature = this.jwtSigner.CalculateSignature(jwt.Base64Header, jwt.Base64Payload);
+            if (string.IsNullOrEmpty(base64UrlEncodedPayload))
+            {
+                throw new ArgumentNullException(nameof(base64UrlEncodedPayload));
+            }
 
-            return jwt.Base64Signature.Equals(calculatedSignature, StringComparison.InvariantCultureIgnoreCase);
+            if (string.IsNullOrEmpty(base64UrlEncodedDigest))
+            {
+                throw new ArgumentNullException(nameof(base64UrlEncodedDigest));
+            }
+
+            var signer = new JwtSigner(this.signingKey);
+            var calculatedSignature = signer.CalculateSignature(base64UrlEncodedHeader, base64UrlEncodedPayload);
+            return base64UrlEncodedDigest.Equals(calculatedSignature, StringComparison.Ordinal);
         }
     }
 }

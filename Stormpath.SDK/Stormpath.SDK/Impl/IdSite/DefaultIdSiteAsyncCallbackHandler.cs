@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Api;
@@ -63,7 +64,7 @@ namespace Stormpath.SDK.Impl.IdSite
             this.asyncNonceStore = this.nonceStore as IAsynchronousNonceStore;
         }
 
-        private static string GetJwtResponse(IHttpRequest request)
+        internal static string GetJwtResponse(IHttpRequest request)
         {
             if (request.Method != HttpMethod.Get)
             {
@@ -74,7 +75,7 @@ namespace Stormpath.SDK.Impl.IdSite
 
             if (string.IsNullOrEmpty(jwtResponse))
             {
-                throw InvalidJwtException.JwtRequired;
+                throw new InvalidJwtException("JWT parameter is required.");
             }
 
             return jwtResponse;
@@ -109,40 +110,44 @@ namespace Stormpath.SDK.Impl.IdSite
 
         async Task<IAccountResult> IIdSiteAsyncCallbackHandler.GetAccountResultAsync(CancellationToken cancellationToken)
         {
-            var dataStoreApiKey = this.internalDataStore.ApiKey;
+            var signingKeyBytes = Encoding.UTF8.GetBytes(
+                this.internalDataStore.ApiKey.GetSecret());
 
-            var jwt = JsonWebToken.Decode(this.jwtResponse, this.internalDataStore.Serializer);
+            IJwtParser parser = new DefaultJwtParser(this.internalDataStore.Serializer);
+            var jwt = parser
+                .SetSigningKey(signingKeyBytes)
+                .Parse(this.jwtResponse);
 
-            ThrowIfRequiredParametersMissing(jwt.Payload);
+            ThrowIfRequiredParametersMissing(jwt.Body);
 
             string apiKeyFromJwt = null;
-            if (IsError(jwt.Payload))
+            if (IsError(jwt.Body))
             {
                 jwt.Header.TryGetValueAsString(JwtHeaderParameters.KeyId, out apiKeyFromJwt);
             }
             else
             {
-                jwt.Payload.TryGetValueAsString(DefaultJwtClaims.Audience, out apiKeyFromJwt);
+                apiKeyFromJwt = (string)jwt.Body.GetClaim(DefaultJwtClaims.Audience);
             }
 
-            ThrowIfJwtSignatureInvalid(apiKeyFromJwt, dataStoreApiKey, jwt);
-            ThrowIfJwtIsExpired(jwt.Payload);
+            ThrowIfJwtSignatureInvalid(apiKeyFromJwt, this.internalDataStore.ApiKey, jwt);
+            ThrowIfJwtIsExpired(jwt.Body);
 
-            IfErrorThrowIdSiteException(jwt.Payload);
+            IfErrorThrowIdSiteException(jwt.Body);
 
             if (!this.nonceStore.IsAsynchronousSupported || this.asyncNonceStore == null)
             {
                 throw new ApplicationException("The current nonce store does not support asynchronous operations.");
             }
 
-            var responseNonce = (string)jwt.Payload[IdSiteClaims.ResponseId];
+            var responseNonce = (string)jwt.Body.GetClaim(IdSiteClaims.ResponseId);
             await this.ThrowIfNonceIsAlreadyUsedAsync(responseNonce, cancellationToken).ConfigureAwait(false);
             await this.asyncNonceStore.PutNonceAsync(responseNonce, cancellationToken).ConfigureAwait(false);
 
-            ThrowIfSubjectIsMissing(jwt.Payload);
+            ThrowIfSubjectIsMissing(jwt.Body);
 
-            var accountResult = CreateAccountResult(jwt.Payload, this.internalDataStore);
-            var resultStatus = GetResultStatus(jwt.Payload);
+            var accountResult = CreateAccountResult(jwt.Body, this.internalDataStore);
+            var resultStatus = GetResultStatus(jwt.Body);
 
             if (this.resultListener != null)
             {
@@ -170,28 +175,20 @@ namespace Stormpath.SDK.Impl.IdSite
             throw new ArgumentException($"Encountered unknown ID Site result status: {status}");
         }
 
-        internal static bool IsError(Map payload)
+        internal static bool IsError(IJwtClaims claims)
         {
-            if (payload == null)
+            if (claims == null)
             {
-                throw new ArgumentNullException(nameof(payload));
+                throw new ArgumentNullException(nameof(claims));
             }
 
-            object error = null;
-
-            return payload.TryGetValue(IdSiteClaims.Error, out error)
-                && error != null;
+            return claims.GetClaim(IdSiteClaims.Error) != null;
         }
 
-        internal static string GetAccountHref(Map payload)
-        {
-            string accountHref = null;
-            payload.TryGetValueAsString(DefaultJwtClaims.Subject, out accountHref);
+        internal static string GetAccountHref(IJwtClaims claims)
+            => claims.GetClaim(DefaultJwtClaims.Subject)?.ToString();
 
-            return accountHref;
-        }
-
-        internal static void ThrowIfRequiredParametersMissing(Map payload)
+        internal static void ThrowIfRequiredParametersMissing(IJwtClaims claims)
         {
             var requiredKeys = new string[]
             {
@@ -204,46 +201,44 @@ namespace Stormpath.SDK.Impl.IdSite
                 IdSiteClaims.IsNewSubject,
             };
 
-            bool isError = IsError(payload);
-            bool valid = requiredKeys?.All(x => payload.ContainsKey(x)) ?? false;
+            bool isError = IsError(claims);
+
+            bool valid = requiredKeys?.All(x => claims.ContainsClaim(x)) ?? false;
             if (!isError && !valid)
             {
-                throw InvalidJwtException.ResponseMissingParameter;
+                throw new MissingClaimException("Required response parameter is missing.");
             }
         }
 
-        internal static void ThrowIfJwtSignatureInvalid(string jwtApiKey, IClientApiKey clientApiKey, JsonWebToken jwt)
+        internal static void ThrowIfJwtSignatureInvalid(string jwtApiKey, IClientApiKey clientApiKey, IJwt jwt)
         {
             if (!clientApiKey.GetId().Equals(jwtApiKey, StringComparison.InvariantCultureIgnoreCase))
             {
-                throw InvalidJwtException.ResponseInvalidApiKeyId;
+                throw new JwtSignatureException("The client used to sign the response is different than the one used in this DataStore.");
             }
 
-            if (!new JwtSignatureValidator(clientApiKey).IsValid(jwt))
+            var signingKey = Encoding.UTF8.GetBytes(clientApiKey.GetSecret());
+            if (!new JwtSignatureValidator(signingKey).IsValid(jwt))
             {
-                throw InvalidJwtException.SignatureError;
+                throw new JwtSignatureException("The JWT signature is invalid.");
             }
         }
 
-        internal static void ThrowIfJwtIsExpired(Map payload)
+        internal static void ThrowIfJwtIsExpired(IJwtClaims claims)
         {
-            var expiration = Convert.ToInt64(payload[DefaultJwtClaims.Expiration]);
-            var now = UnixDate.ToLong(DateTimeOffset.Now);
+            var validator = new JwtLifetimeValidator(DateTimeOffset.Now);
 
-            if (now > expiration)
-            {
-                throw InvalidJwtException.Expired;
-            }
+            validator.Validate(claims);
         }
 
-        internal static void IfErrorThrowIdSiteException(Map payload)
+        internal static void IfErrorThrowIdSiteException(IJwtClaims claims)
         {
-            if (!IsError(payload))
+            if (!IsError(claims))
             {
                 return;
             }
 
-            var errorData = payload[IdSiteClaims.Error] as Map;
+            var errorData = claims.GetClaim(IdSiteClaims.Error) as Map;
             if (errorData == null)
             {
                 throw new ApplicationException("Error parsing ID Site error response.");
@@ -280,31 +275,30 @@ namespace Stormpath.SDK.Impl.IdSite
             bool alreadyUsed = await this.asyncNonceStore.ContainsNonceAsync(nonce, cancellationToken).ConfigureAwait(false);
             if (alreadyUsed)
             {
-                throw InvalidJwtException.AlreadyUsed;
+                throw new ExpiredJwtException("This JWT has already been used.");
             }
         }
 
-        internal static void ThrowIfSubjectIsMissing(Map payload)
+        internal static void ThrowIfSubjectIsMissing(IJwtClaims claims)
         {
-            var sub = GetAccountHref(payload);
+            var sub = GetAccountHref(claims);
             bool subMissing = string.IsNullOrEmpty(sub);
-            var resultStatus = GetResultStatus(payload);
+            var resultStatus = GetResultStatus(claims);
 
             // The 'sub' claim (accountHref) can be null if calling /sso/logout when the subject is already logged out,
             // but this is only legal during the logout scenario, so assert:
             if (subMissing && resultStatus != IdSiteResultStatus.Logout)
             {
-                throw InvalidJwtException.ResponseMissingParameter;
+                throw new MissingClaimException("Required response parameter is missing.");
             }
         }
 
-        internal static IAccountResult CreateAccountResult(Map payload, IInternalDataStore dataStore)
+        internal static IAccountResult CreateAccountResult(IJwtClaims claims, IInternalDataStore dataStore)
         {
-            object state = null;
-            payload.TryGetValue(IdSiteClaims.State, out state);
+            var state = claims.GetClaim(IdSiteClaims.State);
 
-            bool isNewAccount = (bool)payload[IdSiteClaims.IsNewSubject];
-            var resultStatus = GetResultStatus(payload);
+            bool isNewAccount = (bool)claims.GetClaim(IdSiteClaims.IsNewSubject);
+            var resultStatus = GetResultStatus(claims);
 
             var properties = new Dictionary<string, object>()
             {
@@ -313,7 +307,7 @@ namespace Stormpath.SDK.Impl.IdSite
                 [DefaultAccountResult.StatusPropertyName] = resultStatus,
             };
 
-            var accountHref = GetAccountHref(payload);
+            var accountHref = GetAccountHref(claims);
             if (!string.IsNullOrEmpty(accountHref))
             {
                 properties[DefaultAccountResult.AccountPropertyName] = new LinkProperty(accountHref);
@@ -322,7 +316,7 @@ namespace Stormpath.SDK.Impl.IdSite
             return dataStore.InstantiateWithData<IAccountResult>(properties);
         }
 
-        internal static IdSiteResultStatus GetResultStatus(Map payload)
-            => IdSiteResultStatus.Parse((string)payload[IdSiteClaims.Status]);
+        internal static IdSiteResultStatus GetResultStatus(IJwtClaims claims)
+            => IdSiteResultStatus.Parse((string)claims.GetClaim(IdSiteClaims.Status));
     }
 }

@@ -49,13 +49,13 @@ namespace Stormpath.SDK.Impl.Organization
 
         internal IEmbeddedProperty DefaultGroupStoreMapping => this.GetLinkProperty(DefaultGroupStoreMappingPropertyName);
 
-        string IOrganization.Description => this.GetProperty<string>(DescriptionPropertyName);
+        string IOrganization.Description => this.GetStringProperty(DescriptionPropertyName);
 
         internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        string IOrganization.Name => this.GetProperty<string>(NamePropertyName);
+        string IOrganization.Name => this.GetStringProperty(NamePropertyName);
 
-        string IOrganization.NameKey => this.GetProperty<string>(NameKeyPropertyName);
+        string IOrganization.NameKey => this.GetStringProperty(NameKeyPropertyName);
 
         OrganizationStatus IOrganization.Status => this.GetProperty<OrganizationStatus>(StatusPropertyName);
 

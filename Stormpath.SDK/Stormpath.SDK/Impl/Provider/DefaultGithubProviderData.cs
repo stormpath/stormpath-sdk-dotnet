@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Impl.Provider
             => ProviderType.Github;
 
         string IGithubProviderData.AccessToken
-            => this.GetProperty<string>(AccessTokenPropertyName);
+            => this.GetStringProperty(AccessTokenPropertyName);
 
         internal IGithubProviderData SetAccessToken(string accessToken)
         {

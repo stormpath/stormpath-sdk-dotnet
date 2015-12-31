@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Impl.Auth
             var attempt = this.BuildRequest(parentHref, request);
             var href = $"{parentHref}/loginAttempts";
 
-            return this.dataStoreAsync.CreateAsync<IBasicLoginAttempt, IAuthenticationResult>(href, attempt, options, cancellationToken);
+            return this.dataStoreAsync.CreateAsync<IBasicLoginAttempt, IAuthenticationResult>(href, attempt, options, null, cancellationToken);
         }
 
         public IAuthenticationResult Authenticate(string parentHref, IAuthenticationRequest request, IRetrievalOptions<IAuthenticationResult> options)
@@ -100,7 +100,7 @@ namespace Stormpath.SDK.Impl.Auth
             var attempt = this.BuildRequest(parentHref, request);
             var href = $"{parentHref}/loginAttempts";
 
-            return this.dataStoreSync.Create<IBasicLoginAttempt, IAuthenticationResult>(href, attempt, options);
+            return this.dataStoreSync.Create<IBasicLoginAttempt, IAuthenticationResult>(href, attempt, options, null);
         }
     }
 }

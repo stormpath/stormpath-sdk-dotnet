@@ -238,5 +238,18 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .Expand(x => x.GetGroup())
                 .FirstOrDefaultAsync();
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Expanding_oAuthPolicy(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var app = await tenant
+                .GetApplications()
+                .Expand(x => x.GetOauthPolicy())
+                .FirstOrDefaultAsync();
+        }
     }
 }

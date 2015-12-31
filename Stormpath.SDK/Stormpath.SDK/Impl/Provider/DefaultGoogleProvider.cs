@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Impl.Provider
             => ProviderType.Google;
 
         string IGoogleProvider.ClientId
-            => this.GetProperty<string>(ClientIdPropertyName);
+            => this.GetStringProperty(ClientIdPropertyName);
 
         internal IGoogleProvider SetClientId(string clientId)
         {
@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         string IGoogleProvider.ClientSecret
-            => this.GetProperty<string>(ClientSecretPropertyName);
+            => this.GetStringProperty(ClientSecretPropertyName);
 
         internal IGoogleProvider SetClientSecret(string clientSecret)
         {
@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         string IGoogleProvider.RedirectUri
-            => this.GetProperty<string>(RedirectUriPropertyName);
+            => this.GetStringProperty(RedirectUriPropertyName);
 
         internal IGoogleProvider SetRedirectUri(string redirectUri)
         {

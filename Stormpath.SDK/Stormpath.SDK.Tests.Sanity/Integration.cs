@@ -28,19 +28,21 @@ namespace Stormpath.SDK.Tests.Sanity
         [Fact]
         public void Equal_numbers_of_sync_and_async_tests()
         {
-            var asyncTests = this.GetType().Assembly
+            var asyncTests = typeof(Tests.Integration.IntegrationTestCollection).Assembly
                 .GetTypes()
                 .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Async")
                 .SelectMany(x => x.GetMethods())
                 .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
                 .Select(x => Helpers.GetQualifiedMethodName(x));
+            asyncTests.ShouldNotBeEmpty();
 
-            var syncTests = this.GetType().Assembly
+            var syncTests = typeof(Tests.Integration.IntegrationTestCollection).Assembly
                 .GetTypes()
                 .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Sync")
                 .SelectMany(x => x.GetMethods())
                 .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
                 .Select(x => Helpers.GetQualifiedMethodName(x));
+            syncTests.ShouldNotBeEmpty();
 
             var asyncButNotSync = asyncTests
                 .Except(syncTests)

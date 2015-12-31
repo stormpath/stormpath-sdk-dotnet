@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Auth
         {
         }
 
-        string ILoginAttempt.Type => this.GetProperty<string>(TypePropertyName);
+        string ILoginAttempt.Type => this.GetStringProperty(TypePropertyName);
 
         IEmbeddedProperty ILoginAttempt.AccountStore => this.GetLinkProperty(AccountStorePropertyName);
 

@@ -34,6 +34,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.NameTranslators
             ["GetGroup"] = "group",
             ["GetApplication"] = "application",
             ["GetOrganization"] = "organization",
+            ["GetOauthPolicy"] = "oAuthPolicy",
 
             ["GetGroups"] = "groups",
             ["GetGroupMemberships"] = "groupMemberships",
@@ -42,7 +43,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.NameTranslators
             ["GetAccountStoreMappings"] = "accountStoreMappings",
             ["GetApplications"] = "applications",
             ["GetDirectories"] = "directories",
-            ["GetOrganizations"] = "organizations"
+            ["GetOrganizations"] = "organizations",
         };
 
         public MethodNameTranslator()

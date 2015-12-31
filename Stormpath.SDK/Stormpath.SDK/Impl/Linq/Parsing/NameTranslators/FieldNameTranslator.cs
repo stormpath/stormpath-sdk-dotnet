@@ -30,6 +30,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.NameTranslators
             ["Name"] = "name",
             ["Description"] = "description",
             ["Status"] = "status",
+            ["ApplicationHref"] = "application.href",
         };
 
         public FieldNameTranslator()

@@ -40,11 +40,13 @@ namespace Stormpath.SDK.Account
         string Username { get; }
         System.Threading.Tasks.Task<Stormpath.SDK.Group.IGroupMembership> AddGroupAsync(Stormpath.SDK.Group.IGroup group, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<Stormpath.SDK.Group.IGroupMembership> AddGroupAsync(string hrefOrName, System.Threading.CancellationToken cancellationToken = null);
+        Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Oauth.IAccessToken> GetAccessTokens();
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Application.IApplication> GetApplications();
         System.Threading.Tasks.Task<Stormpath.SDK.Directory.IDirectory> GetDirectoryAsync(System.Threading.CancellationToken cancellationToken = null);
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Group.IGroupMembership> GetGroupMemberships();
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Group.IGroup> GetGroups();
         System.Threading.Tasks.Task<Stormpath.SDK.Provider.IProviderData> GetProviderDataAsync(System.Threading.CancellationToken cancellationToken = null);
+        Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Oauth.IRefreshToken> GetRefreshTokens();
         System.Threading.Tasks.Task<bool> IsMemberOfGroupAsync(string hrefOrName, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<bool> RemoveGroupAsync(Stormpath.SDK.Group.IGroup group, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<bool> RemoveGroupAsync(string hrefOrName, System.Threading.CancellationToken cancellationToken = null);
@@ -178,8 +180,13 @@ namespace Stormpath.SDK.Application
         System.Threading.Tasks.Task<Stormpath.SDK.Provider.IProviderAccountResult> GetAccountAsync(Stormpath.SDK.Provider.IProviderAccountRequest request, System.Threading.CancellationToken cancellationToken = null);
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Account.IAccount> GetAccounts();
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Group.IGroup> GetGroups();
+        System.Threading.Tasks.Task<Stormpath.SDK.Oauth.IOauthPolicy> GetOauthPolicyAsync(System.Threading.CancellationToken cancellationToken = null);
         Stormpath.SDK.IdSite.IIdSiteAsyncCallbackHandler NewIdSiteAsyncCallbackHandler(Stormpath.SDK.Http.IHttpRequest request);
+        Stormpath.SDK.Oauth.IIdSiteTokenAuthenticator NewIdSiteTokenAuthenticator();
         Stormpath.SDK.IdSite.IIdSiteUrlBuilder NewIdSiteUrlBuilder();
+        Stormpath.SDK.Oauth.IJwtAuthenticator NewJwtAuthenticator();
+        Stormpath.SDK.Oauth.IPasswordGrantAuthenticator NewPasswordGrantAuthenticator();
+        Stormpath.SDK.Oauth.IRefreshGrantAuthenticator NewRefreshGrantAuthenticator();
         System.Threading.Tasks.Task<Stormpath.SDK.Account.IAccount> ResetPasswordAsync(string token, string newPassword, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<Stormpath.SDK.Account.IPasswordResetToken> SendPasswordResetEmailAsync(string email, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<Stormpath.SDK.Account.IPasswordResetToken> SendPasswordResetEmailAsync(string email, Stormpath.SDK.AccountStore.IAccountStore accountStore, System.Threading.CancellationToken cancellationToken = null);
@@ -563,6 +570,14 @@ namespace Stormpath.SDK.Http
     }
     public sealed class HttpHeaders : System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, System.Collections.Generic.IEnumerable<string>>>, System.Collections.IEnumerable
     {
+        public static readonly string HeaderAcceptName;
+        public static readonly string HeaderAuthorizationName;
+        public static readonly string HeaderContentLengthName;
+        public static readonly string HeaderContentTypeName;
+        public static readonly string HeaderHostName;
+        public static readonly string HeaderUserAgentName;
+        public static readonly string LocationName;
+        public static readonly string MediaTypeApplicationFormUrlEncoded;
         public HttpHeaders() { }
         public string Accept { get; set; }
         public Stormpath.SDK.Http.AuthorizationHeaderValue Authorization { get; set; }
@@ -572,7 +587,7 @@ namespace Stormpath.SDK.Http
         public System.Uri Location { get; set; }
         public string UserAgent { get; set; }
         public void Add(string key, object value) { }
-        [System.Runtime.CompilerServices.IteratorStateMachineAttribute(typeof(Stormpath.SDK.Http.HttpHeaders.<GetEnumerator>d__35))]
+        [System.Runtime.CompilerServices.IteratorStateMachineAttribute(typeof(Stormpath.SDK.Http.HttpHeaders.<GetEnumerator>d__36))]
         public System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<string, System.Collections.Generic.IEnumerable<string>>> GetEnumerator() { }
         public T GetFirst<T>(string key) { }
     }
@@ -737,6 +752,39 @@ namespace Stormpath.SDK.IdSite
 namespace Stormpath.SDK.Jwt
 {
     
+    public class ExpiredJwtException : Stormpath.SDK.Jwt.InvalidJwtException
+    {
+        public ExpiredJwtException(string message) { }
+    }
+    public interface IClaimsMutator<T>
+        where T : Stormpath.SDK.Jwt.IClaimsMutator<>
+    {
+        T SetAudience(string aud);
+        T SetClaim(string claimName, object value);
+        T SetExpiration(System.Nullable<System.DateTimeOffset> exp);
+        T SetId(string jti);
+        T SetIssuedAt(System.Nullable<System.DateTimeOffset> iat);
+        T SetIssuer(string iss);
+        T SetNotBeforeDate(System.Nullable<System.DateTimeOffset> nbf);
+        T SetSubject(string sub);
+    }
+    public interface IJwt
+    {
+        string Base64Digest { get; }
+        string Base64Header { get; }
+        string Base64Payload { get; }
+        Stormpath.SDK.Jwt.IJwtClaims Body { get; }
+        System.Collections.Generic.IDictionary<string, object> Header { get; }
+    }
+    public interface IJwtBuilder : Stormpath.SDK.Jwt.IClaimsMutator<Stormpath.SDK.Jwt.IJwtBuilder>
+    {
+        Stormpath.SDK.Jwt.IJwt Build();
+        Stormpath.SDK.Jwt.IJwtBuilder SetClaims(Stormpath.SDK.Jwt.IJwtClaims claims);
+        Stormpath.SDK.Jwt.IJwtBuilder SetClaims(System.Collections.Generic.IDictionary<string, object> claims);
+        Stormpath.SDK.Jwt.IJwtBuilder SetHeader(System.Collections.Generic.IDictionary<string, object> header);
+        Stormpath.SDK.Jwt.IJwtBuilder SignWith(byte[] signingKey);
+        Stormpath.SDK.Jwt.IJwtBuilder SignWith(string signingKeyString, System.Text.Encoding encoding);
+    }
     public interface IJwtClaims
     {
         string Audience { get; }
@@ -746,34 +794,60 @@ namespace Stormpath.SDK.Jwt
         string Issuer { get; }
         System.Nullable<System.DateTimeOffset> NotBefore { get; }
         string Subject { get; }
+        bool ContainsClaim(string claimName);
+        object GetClaim(string claimName);
         System.Collections.Generic.IDictionary<string, object> ToDictionary();
     }
-    public interface IJwtClaimsBuilder
+    public interface IJwtClaimsBuilder : Stormpath.SDK.Jwt.IClaimsMutator<Stormpath.SDK.Jwt.IJwtClaimsBuilder>
     {
         Stormpath.SDK.Jwt.IJwtClaims Build();
-        Stormpath.SDK.Jwt.IJwtClaimsBuilder SetAudience(string aud);
-        Stormpath.SDK.Jwt.IJwtClaimsBuilder SetClaim(string claimName, object value);
-        Stormpath.SDK.Jwt.IJwtClaimsBuilder SetExpiration(System.Nullable<System.DateTimeOffset> exp);
-        Stormpath.SDK.Jwt.IJwtClaimsBuilder SetId(string jti);
-        Stormpath.SDK.Jwt.IJwtClaimsBuilder SetIssuedAt(System.Nullable<System.DateTimeOffset> iat);
-        Stormpath.SDK.Jwt.IJwtClaimsBuilder SetIssuer(string iss);
-        Stormpath.SDK.Jwt.IJwtClaimsBuilder SetNotBeforeDate(System.Nullable<System.DateTimeOffset> nbf);
-        Stormpath.SDK.Jwt.IJwtClaimsBuilder SetSubject(string sub);
     }
-    public sealed class InvalidJwtException : System.ApplicationException
+    public interface IJwtParser
     {
-        public static Stormpath.SDK.Jwt.InvalidJwtException AlreadyUsed;
-        public static Stormpath.SDK.Jwt.InvalidJwtException Expired;
-        public static Stormpath.SDK.Jwt.InvalidJwtException InvalidValue;
-        public static Stormpath.SDK.Jwt.InvalidJwtException JwtRequired;
-        public static Stormpath.SDK.Jwt.InvalidJwtException ResponseInvalidApiKeyId;
-        public static Stormpath.SDK.Jwt.InvalidJwtException ResponseMissingParameter;
-        public static Stormpath.SDK.Jwt.InvalidJwtException SignatureError;
+        Stormpath.SDK.Jwt.IJwt Parse(string jwt);
+        Stormpath.SDK.Jwt.IJwtParser RequireAudience(string audience);
+        Stormpath.SDK.Jwt.IJwtParser RequireClaim(string claimName, object value);
+        Stormpath.SDK.Jwt.IJwtParser RequireExpiration(System.DateTimeOffset expiration);
+        Stormpath.SDK.Jwt.IJwtParser RequireId(string jti);
+        Stormpath.SDK.Jwt.IJwtParser RequireIssuedAt(System.DateTimeOffset issuedAt);
+        Stormpath.SDK.Jwt.IJwtParser RequireIssuer(string issuer);
+        Stormpath.SDK.Jwt.IJwtParser RequireNotBefore(System.DateTimeOffset notBefore);
+        Stormpath.SDK.Jwt.IJwtParser RequireSubject(string subject);
+        Stormpath.SDK.Jwt.IJwtParser SetSigningKey(string signingKeyString, System.Text.Encoding encoding);
+        Stormpath.SDK.Jwt.IJwtParser SetSigningKey(byte[] signingKey);
+    }
+    public class InvalidJwtException : System.ApplicationException
+    {
         public InvalidJwtException(string message) { }
+        public InvalidJwtException(string message, System.Exception innerException) { }
     }
     public class static Jwts
     {
+        public static Stormpath.SDK.Jwt.IJwtBuilder Builder() { }
+        [System.ObsoleteAttribute("This method will be removed in v1.0. Use Builder() instead.")]
         public static Stormpath.SDK.Jwt.IJwtClaimsBuilder NewClaimsBuilder() { }
+        public static Stormpath.SDK.Jwt.IJwtParser Parser() { }
+    }
+    public class JwtSignatureException : Stormpath.SDK.Jwt.InvalidJwtException
+    {
+        public JwtSignatureException(string message) { }
+    }
+    public class MalformedJwtException : Stormpath.SDK.Jwt.InvalidJwtException
+    {
+        public MalformedJwtException(string message) { }
+        public MalformedJwtException(string message, System.Exception innerException) { }
+    }
+    public class MismatchedClaimException : Stormpath.SDK.Jwt.InvalidJwtException
+    {
+        public MismatchedClaimException(string message) { }
+    }
+    public class MissingClaimException : Stormpath.SDK.Jwt.InvalidJwtException
+    {
+        public MissingClaimException(string message) { }
+    }
+    public class PrematureJwtException : Stormpath.SDK.Jwt.InvalidJwtException
+    {
+        public PrematureJwtException(string message) { }
     }
 }
 namespace Stormpath.SDK.Linq.Expandables
@@ -781,7 +855,11 @@ namespace Stormpath.SDK.Linq.Expandables
     
     public interface IAccountExpandables : Stormpath.SDK.Linq.Expandables.IExpandableApplications, Stormpath.SDK.Linq.Expandables.IExpandableCustomData, Stormpath.SDK.Linq.Expandables.IExpandableDirectory, Stormpath.SDK.Linq.Expandables.IExpandableGroupMemberships, Stormpath.SDK.Linq.Expandables.IExpandableGroups, Stormpath.SDK.Linq.Expandables.IExpandableTenant
     {
+        Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Oauth.IAccessToken> GetAccessTokens();
+        Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Oauth.IAccessToken> GetAccessTokens(System.Nullable<int> offset, System.Nullable<int> limit);
         Stormpath.SDK.Provider.IProviderData GetProviderData();
+        Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Oauth.IAccessToken> GetRefreshTokens();
+        Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Oauth.IAccessToken> GetRefreshTokens(System.Nullable<int> offset, System.Nullable<int> limit);
     }
     public interface IAccountStoreMappingExpandables
     {
@@ -792,6 +870,7 @@ namespace Stormpath.SDK.Linq.Expandables
     {
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Application.IApplicationAccountStoreMapping> GetAccountStoreMappings();
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Application.IApplicationAccountStoreMapping> GetAccountStoreMappings(System.Nullable<int> offset, System.Nullable<int> limit);
+        Stormpath.SDK.Oauth.IOauthPolicy GetOauthPolicy();
     }
     public interface IAuthenticationResultExpandables
     {
@@ -927,6 +1006,113 @@ namespace Stormpath.SDK.Logging
         Warn = 2,
         Error = 3,
         Fatal = 4,
+    }
+}
+namespace Stormpath.SDK.Oauth
+{
+    
+    public interface IAccessToken : Stormpath.SDK.Resource.IDeletable, Stormpath.SDK.Resource.IResource, Stormpath.SDK.Tenant.IHasTenant
+    {
+        string ApplicationHref { get; }
+        System.DateTimeOffset CreatedAt { get; }
+        string Jwt { get; }
+        System.Threading.Tasks.Task<Stormpath.SDK.Account.IAccount> GetAccountAsync(System.Threading.CancellationToken cancellationToken = null);
+        System.Threading.Tasks.Task<Stormpath.SDK.Application.IApplication> GetApplicationAsync(System.Threading.CancellationToken cancellationToken = null);
+    }
+    public interface IIdSiteTokenAuthenticationRequest : Stormpath.SDK.Oauth.IOauthGrantRequest
+    {
+        string Jwt { get; }
+    }
+    public interface IIdSiteTokenAuthenticationRequestBuilder : Stormpath.SDK.Oauth.IOauthAuthenticationRequestBuilder<Stormpath.SDK.Oauth.IIdSiteTokenAuthenticationRequest>
+    {
+        Stormpath.SDK.Oauth.IIdSiteTokenAuthenticationRequestBuilder SetJwt(string jwt);
+    }
+    public interface IIdSiteTokenAuthenticator : Stormpath.SDK.Oauth.IOauthAuthenticator<Stormpath.SDK.Oauth.IIdSiteTokenAuthenticationRequest, Stormpath.SDK.Oauth.IOauthGrantAuthenticationResult> { }
+    public interface IJwtAuthenticationRequest
+    {
+        string Jwt { get; }
+    }
+    public interface IJwtAuthenticationRequestBuilder : Stormpath.SDK.Oauth.IOauthAuthenticationRequestBuilder<Stormpath.SDK.Oauth.IJwtAuthenticationRequest>
+    {
+        Stormpath.SDK.Oauth.IJwtAuthenticationRequestBuilder SetJwt(string jwt);
+    }
+    public interface IJwtAuthenticator : Stormpath.SDK.Oauth.IOauthAuthenticator<Stormpath.SDK.Oauth.IJwtAuthenticationRequest, Stormpath.SDK.Oauth.IAccessToken>
+    {
+        Stormpath.SDK.Oauth.IJwtAuthenticator WithLocalValidation();
+    }
+    public interface IOauthAuthenticationRequestBuilder<TRequest>
+    
+    {
+        TRequest Build();
+    }
+    public interface IOauthAuthenticator<TRequest, TResult>
+    
+    
+    {
+        System.Threading.Tasks.Task<TResult> AuthenticateAsync(TRequest authenticationRequest, System.Threading.CancellationToken cancellationToken = null);
+    }
+    public interface IOauthGrantAuthenticationResult
+    {
+        string AccessTokenHref { get; }
+        string AccessTokenString { get; }
+        long ExpiresIn { get; }
+        string RefreshTokenString { get; }
+        string TokenType { get; }
+        System.Threading.Tasks.Task<Stormpath.SDK.Oauth.IAccessToken> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = null);
+    }
+    public interface IOauthGrantRequest
+    {
+        string GrantType { get; }
+    }
+    public interface IOauthPolicy : Stormpath.SDK.Resource.IAuditable, Stormpath.SDK.Resource.IResource, Stormpath.SDK.Resource.ISaveable<Stormpath.SDK.Oauth.IOauthPolicy>, Stormpath.SDK.Tenant.IHasTenant
+    {
+        System.TimeSpan AccessTokenTimeToLive { get; }
+        System.TimeSpan RefreshTokenTimeToLive { get; }
+        string TokenEndpointHref { get; }
+        System.Threading.Tasks.Task<Stormpath.SDK.Application.IApplication> GetApplicationAsync(System.Threading.CancellationToken cancellationToken = null);
+        Stormpath.SDK.Oauth.IOauthPolicy SetAccessTokenTimeToLive(System.TimeSpan accessTokenTtl);
+        Stormpath.SDK.Oauth.IOauthPolicy SetAccessTokenTimeToLive(string accessTokenTtl);
+        Stormpath.SDK.Oauth.IOauthPolicy SetRefreshTokenTimeToLive(System.TimeSpan refreshTokenTtl);
+        Stormpath.SDK.Oauth.IOauthPolicy SetRefreshTokenTimeToLive(string refreshTokenTtl);
+    }
+    public interface IPasswordGrantAuthenticator : Stormpath.SDK.Oauth.IOauthAuthenticator<Stormpath.SDK.Oauth.IPasswordGrantRequest, Stormpath.SDK.Oauth.IOauthGrantAuthenticationResult> { }
+    public interface IPasswordGrantRequest : Stormpath.SDK.Oauth.IOauthGrantRequest
+    {
+        string AccountStoreHref { get; }
+        string Login { get; }
+        string Password { get; }
+    }
+    public interface IPasswordGrantRequestBuilder : Stormpath.SDK.Oauth.IOauthAuthenticationRequestBuilder<Stormpath.SDK.Oauth.IPasswordGrantRequest>
+    {
+        Stormpath.SDK.Oauth.IPasswordGrantRequestBuilder SetAccountStore(Stormpath.SDK.AccountStore.IAccountStore accountStore);
+        Stormpath.SDK.Oauth.IPasswordGrantRequestBuilder SetAccountStore(string accountStoreHref);
+        Stormpath.SDK.Oauth.IPasswordGrantRequestBuilder SetLogin(string login);
+        Stormpath.SDK.Oauth.IPasswordGrantRequestBuilder SetPassword(string password);
+    }
+    public interface IRefreshGrantAuthenticator : Stormpath.SDK.Oauth.IOauthAuthenticator<Stormpath.SDK.Oauth.IRefreshGrantRequest, Stormpath.SDK.Oauth.IOauthGrantAuthenticationResult> { }
+    public interface IRefreshGrantRequest : Stormpath.SDK.Oauth.IOauthGrantRequest
+    {
+        string RefreshToken { get; }
+    }
+    public interface IRefreshGrantRequestBuilder : Stormpath.SDK.Oauth.IOauthAuthenticationRequestBuilder<Stormpath.SDK.Oauth.IRefreshGrantRequest>
+    {
+        Stormpath.SDK.Oauth.IRefreshGrantRequestBuilder SetRefreshToken(string refreshTokenString);
+        Stormpath.SDK.Oauth.IRefreshGrantRequestBuilder SetRefreshToken(Stormpath.SDK.Oauth.IRefreshToken refreshToken);
+    }
+    public interface IRefreshToken : Stormpath.SDK.Resource.IDeletable, Stormpath.SDK.Resource.IResource, Stormpath.SDK.Tenant.IHasTenant
+    {
+        string ApplicationHref { get; }
+        System.DateTimeOffset CreatedAt { get; }
+        string Jwt { get; }
+        System.Threading.Tasks.Task<Stormpath.SDK.Account.IAccount> GetAccountAsync(System.Threading.CancellationToken cancellationToken = null);
+        System.Threading.Tasks.Task<Stormpath.SDK.Application.IApplication> GetApplicationAsync(System.Threading.CancellationToken cancellationToken = null);
+    }
+    public class static OauthRequests
+    {
+        public static Stormpath.SDK.Oauth.IIdSiteTokenAuthenticationRequestBuilder NewIdSiteTokenAuthenticationRequest() { }
+        public static Stormpath.SDK.Oauth.IJwtAuthenticationRequestBuilder NewJwtAuthenticationRequest() { }
+        public static Stormpath.SDK.Oauth.IPasswordGrantRequestBuilder NewPasswordGrantRequest() { }
+        public static Stormpath.SDK.Oauth.IRefreshGrantRequestBuilder NewRefreshGrantRequest() { }
     }
 }
 namespace Stormpath.SDK.Organization
@@ -1157,6 +1343,11 @@ namespace Stormpath.SDK.Shared
 namespace Stormpath.SDK.Sync
 {
     
+    public class static SyncAccessTokenExtensions
+    {
+        public static Stormpath.SDK.Account.IAccount GetAccount(this Stormpath.SDK.Oauth.IAccessToken accessToken) { }
+        public static Stormpath.SDK.Application.IApplication GetApplication(this Stormpath.SDK.Oauth.IAccessToken accessToken) { }
+    }
     public class static SyncAccountCreationActionsExtensions
     {
         public static Stormpath.SDK.Account.IAccount CreateAccount(this Stormpath.SDK.Account.IAccountCreationActions source, Stormpath.SDK.Account.IAccount account, System.Action<Stormpath.SDK.Account.AccountCreationOptionsBuilder> creationOptionsAction) { }
@@ -1217,6 +1408,7 @@ namespace Stormpath.SDK.Sync
         public static Stormpath.SDK.Auth.IAuthenticationResult AuthenticateAccount(this Stormpath.SDK.Application.IApplication application, System.Action<Stormpath.SDK.Auth.UsernamePasswordRequestBuilder> requestBuilder, System.Action<Stormpath.SDK.Resource.IRetrievalOptions<Stormpath.SDK.Auth.IAuthenticationResult>> responseOptions) { }
         public static Stormpath.SDK.Auth.IAuthenticationResult AuthenticateAccount(this Stormpath.SDK.Application.IApplication application, string username, string password) { }
         public static Stormpath.SDK.Provider.IProviderAccountResult GetAccount(this Stormpath.SDK.Application.IApplication application, Stormpath.SDK.Provider.IProviderAccountRequest request) { }
+        public static Stormpath.SDK.Oauth.IOauthPolicy GetOauthPolicy(this Stormpath.SDK.Application.IApplication application) { }
         public static Stormpath.SDK.IdSite.IIdSiteSyncCallbackHandler NewIdSiteSyncCallbackHandler(this Stormpath.SDK.Application.IApplication application, Stormpath.SDK.Http.IHttpRequest request) { }
         public static Stormpath.SDK.Account.IAccount ResetPassword(this Stormpath.SDK.Application.IApplication application, string token, string newPassword) { }
         public static Stormpath.SDK.Account.IPasswordResetToken SendPasswordResetEmail(this Stormpath.SDK.Application.IApplication application, string email) { }
@@ -1294,6 +1486,22 @@ namespace Stormpath.SDK.Sync
     {
         public static Stormpath.SDK.Tenant.ITenant GetTenant(this Stormpath.SDK.Tenant.IHasTenant resource) { }
     }
+    public class static SyncIdSiteTokenAuthenticatorExtensions
+    {
+        public static Stormpath.SDK.Oauth.IOauthGrantAuthenticationResult Authenticate(this Stormpath.SDK.Oauth.IIdSiteTokenAuthenticator authenticator, Stormpath.SDK.Oauth.IIdSiteTokenAuthenticationRequest authenticationRequest) { }
+    }
+    public class static SyncJwtAuthenticatorExtensions
+    {
+        public static Stormpath.SDK.Oauth.IAccessToken Authenticate(this Stormpath.SDK.Oauth.IJwtAuthenticator authenticator, Stormpath.SDK.Oauth.IJwtAuthenticationRequest authenticationRequest) { }
+    }
+    public class static SyncOauthGrantAuthenticationResult
+    {
+        public static Stormpath.SDK.Oauth.IAccessToken GetAccessToken(this Stormpath.SDK.Oauth.IOauthGrantAuthenticationResult authenticationResult) { }
+    }
+    public class static SyncOauthPolicyExtensions
+    {
+        public static Stormpath.SDK.Application.IApplication GetApplication(this Stormpath.SDK.Oauth.IOauthPolicy policy) { }
+    }
     public class static SyncOrganizationAccountStoreContainerExtensions
     {
         public static Stormpath.SDK.Organization.IOrganizationAccountStoreMapping AddAccountStore<T>(this Stormpath.SDK.AccountStore.IAccountStoreContainer<Stormpath.SDK.Organization.IOrganizationAccountStoreMapping> container, System.Func<System.Linq.IQueryable<T>, System.Linq.IQueryable<T>> query)
@@ -1303,6 +1511,10 @@ namespace Stormpath.SDK.Sync
     {
         public static Stormpath.SDK.Organization.IOrganization GetOrganization(this Stormpath.SDK.Organization.IOrganizationAccountStoreMapping accountStoreMapping) { }
     }
+    public class static SyncPasswordGrantAuthenticatorExtensions
+    {
+        public static Stormpath.SDK.Oauth.IOauthGrantAuthenticationResult Authenticate(this Stormpath.SDK.Oauth.IPasswordGrantAuthenticator authenticator, Stormpath.SDK.Oauth.IPasswordGrantRequest authenticationRequest) { }
+    }
     public class static SyncPasswordResetTokenExtensions
     {
         public static Stormpath.SDK.Account.IAccount GetAccount(this Stormpath.SDK.Account.IPasswordResetToken token) { }
@@ -1310,6 +1522,15 @@ namespace Stormpath.SDK.Sync
     public class static SyncQueryableExtensions
     {
         public static System.Linq.IQueryable<TSource> Synchronously<TSource>(this Stormpath.SDK.Linq.IAsyncQueryable<TSource> source) { }
+    }
+    public class static SyncRefreshGrantAuthenticatorExtensions
+    {
+        public static Stormpath.SDK.Oauth.IOauthGrantAuthenticationResult Authenticate(this Stormpath.SDK.Oauth.IRefreshGrantAuthenticator authenticator, Stormpath.SDK.Oauth.IRefreshGrantRequest authenticationRequest) { }
+    }
+    public class static SyncRefreshTokenExtensions
+    {
+        public static Stormpath.SDK.Account.IAccount GetAccount(this Stormpath.SDK.Oauth.IRefreshToken refreshToken) { }
+        public static Stormpath.SDK.Application.IApplication GetApplication(this Stormpath.SDK.Oauth.IRefreshToken refreshToken) { }
     }
     public class static SyncResourceExtensions
     {

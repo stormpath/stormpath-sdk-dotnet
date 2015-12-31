@@ -18,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Provider;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Impl.Application
@@ -26,5 +27,8 @@ namespace Stormpath.SDK.Impl.Application
     {
         Task<IProviderAccountResult> IApplication.GetAccountAsync(IProviderAccountRequest request, CancellationToken cancellationToken)
             => new ProviderAccountResolver(this.GetInternalAsyncDataStore()).ResolveProviderAccountAsync(this.AsInterface.Href, request, cancellationToken);
+
+        Task<IOauthPolicy> IApplication.GetOauthPolicyAsync(CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IOauthPolicy>(this.OAuthPolicy.Href, cancellationToken);
     }
 }

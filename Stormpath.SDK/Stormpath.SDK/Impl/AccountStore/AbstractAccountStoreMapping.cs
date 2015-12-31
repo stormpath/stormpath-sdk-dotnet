@@ -49,11 +49,11 @@ namespace Stormpath.SDK.Impl.AccountStore
 
         internal IEmbeddedProperty AccountStore => this.GetLinkProperty(AccountStorePropertyName);
 
-        bool IAccountStoreMapping<T>.IsDefaultAccountStore => this.GetProperty<bool>(IsDefaultAccountStorePropertyName);
+        bool IAccountStoreMapping<T>.IsDefaultAccountStore => this.GetBoolProperty(IsDefaultAccountStorePropertyName);
 
-        bool IAccountStoreMapping<T>.IsDefaultGroupStore => this.GetProperty<bool>(IsDefaultGroupStorePropertyName);
+        bool IAccountStoreMapping<T>.IsDefaultGroupStore => this.GetBoolProperty(IsDefaultGroupStorePropertyName);
 
-        int IAccountStoreMapping<T>.ListIndex => this.GetProperty<int>(ListIndexPropertyName);
+        int IAccountStoreMapping<T>.ListIndex => this.GetIntProperty(ListIndexPropertyName);
 
         T IAccountStoreMapping<T>.SetAccountStore(IAccountStore accountStore)
         {

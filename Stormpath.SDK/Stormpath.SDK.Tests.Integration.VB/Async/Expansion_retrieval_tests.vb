@@ -189,5 +189,13 @@ Namespace Async
 
             Await client.GetResourceAsync(Of IGroupMembership)(membership.Href, Function(o) o.Expand(Function(x) x.GetGroup()))
         End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Expanding_oAuthPolicy(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+
+            Dim app = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref, Function(o) o.Expand(Function(x) x.GetOauthPolicy()))
+        End Function
     End Class
 End Namespace

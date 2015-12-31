@@ -25,14 +25,13 @@ using ApiApprover;
 using ApprovalTests.Reporters;
 using Shouldly;
 using Stormpath.SDK.Sync;
-using Stormpath.SDK.Tests.Common;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Sanity
 {
     public class Api
     {
-        [DebugOnlyFact]
+        [Fact(Skip = "Run this test manually.")]
         [UseReporter(typeof(DiffReporter))]
         public void No_public_api_changes()
         {
@@ -163,13 +162,22 @@ namespace Stormpath.SDK.Tests.Sanity
                 "IIdSiteAsyncResultListener.OnRegistered(IAccountResult)",
                 "IIdSiteAsyncResultListener.OnAuthenticated(IAccountResult)",
                 "IIdSiteAsyncResultListener.OnLogout(IAccountResult)",
+
+                // This generic method is provided by specific sync extension methods (false positive)
+                "IOauthAuthenticator`2.Authenticate(TRequest)",
             };
             var whitelistedSyncMethods = new List<string>()
             {
                 "IQueryable`1.Filter(String)",
                 "IQueryable`1.Expand(Expression`1)",
                 "IAsyncQueryable`1.Synchronously()",
-                "IApplication.NewIdSiteSyncCallbackHandler(IHttpRequest)"
+                "IApplication.NewIdSiteSyncCallbackHandler(IHttpRequest)",
+
+                // These methods correspond to IOauthAuthenticator`2.Authenticate(TRequest) (false positive)
+                "IPasswordGrantAuthenticator.Authenticate(IPasswordGrantRequest)",
+                "IJwtAuthenticator.Authenticate(IJwtAuthenticationRequest)",
+                "IIdSiteTokenAuthenticator.Authenticate(IIdSiteTokenAuthenticationRequest)",
+                "IRefreshGrantAuthenticator.Authenticate(IRefreshGrantRequest)",
             };
 
             // Get normal async API from interfaces

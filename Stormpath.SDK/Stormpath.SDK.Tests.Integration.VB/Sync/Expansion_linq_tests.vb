@@ -170,5 +170,18 @@ Namespace Sync
 
             Dim membership = group.GetAccountMemberships().Synchronously().Expand(Function(x) x.GetGroup()).FirstOrDefault()
         End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Expanding_oAuthPolicy(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            Dim app = tenant _
+                .GetApplications() _
+                .Synchronously() _
+                .Expand(Function(x) x.GetOauthPolicy()) _
+                .FirstOrDefault()
+        End Sub
     End Class
 End Namespace

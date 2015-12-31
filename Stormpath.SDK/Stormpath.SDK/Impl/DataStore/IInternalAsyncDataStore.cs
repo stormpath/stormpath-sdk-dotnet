@@ -17,6 +17,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 using Map = System.Collections.Generic.IDictionary<string, object>;
@@ -96,6 +97,20 @@ namespace Stormpath.SDK.Impl.DataStore
             where TReturned : class;
 
         /// <summary>
+        /// Creates a new resource on the server with the specified request headers.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <typeparam name="TReturned">The resource type to return.</typeparam>
+        /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
+        /// <param name="resource">The resource to persist.</param>
+        /// <param name="headers">The HTTP headers to use for the request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The persisted resource.</returns>
+        Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, HttpHeaders headers, CancellationToken cancellationToken)
+            where T : class
+            where TReturned : class;
+
+        /// <summary>
         /// Creates a new resource on the server with the specified options.
         /// </summary>
         /// <typeparam name="T">The resource type.</typeparam>
@@ -103,9 +118,10 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
         /// <param name="resource">The resource to persist.</param>
         /// <param name="options">The creation options to use for the request.</param>
+        /// <param name="headers">The HTTP headers to use for the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The persisted resource.</returns>
-        Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, CancellationToken cancellationToken)
+        Task<TReturned> CreateAsync<T, TReturned>(string parentHref, T resource, ICreationOptions options, HttpHeaders headers, CancellationToken cancellationToken)
             where T : class
             where TReturned : class;
 

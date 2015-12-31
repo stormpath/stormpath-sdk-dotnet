@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 
 namespace Stormpath.SDK.Linq.Expandables
@@ -34,5 +35,33 @@ namespace Stormpath.SDK.Linq.Expandables
         /// </summary>
         /// <returns>Not applicable.</returns>
         IProviderData GetProviderData();
+
+        /// <summary>
+        /// Expands the <c>accessTokens</c> collection with the default pagination options.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
+        IAsyncQueryable<IAccessToken> GetAccessTokens();
+
+        /// <summary>
+        /// Expands the <c>accessTokens</c> collection with the specified pagination options.
+        /// </summary>
+        /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
+        /// <returns>Not applicable.</returns>
+        IAsyncQueryable<IAccessToken> GetAccessTokens(int? offset, int? limit);
+
+        /// <summary>
+        /// Expands the <c>refreshTokens</c> collection with the default pagination options.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
+        IAsyncQueryable<IAccessToken> GetRefreshTokens();
+
+        /// <summary>
+        /// Expands the <c>refreshTokens</c> collection with the specified pagination options.
+        /// </summary>
+        /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
+        /// <returns>Not applicable.</returns>
+        IAsyncQueryable<IAccessToken> GetRefreshTokens(int? offset, int? limit);
     }
 }

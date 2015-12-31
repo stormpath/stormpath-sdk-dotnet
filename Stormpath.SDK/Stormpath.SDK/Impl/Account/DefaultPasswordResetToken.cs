@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-        string IPasswordResetToken.Email => this.GetProperty<string>(EmailPropertyName);
+        string IPasswordResetToken.Email => this.GetStringProperty(EmailPropertyName);
 
         internal IEmbeddedProperty Account => this.GetLinkProperty(AccountPropertyName);
 

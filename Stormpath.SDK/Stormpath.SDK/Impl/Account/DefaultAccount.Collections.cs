@@ -19,6 +19,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Oauth;
 
 namespace Stormpath.SDK.Impl.Account
 {
@@ -32,5 +33,11 @@ namespace Stormpath.SDK.Impl.Account
 
         IAsyncQueryable<IGroupMembership> IAccount.GetGroupMemberships()
             => new CollectionResourceQueryable<IGroupMembership>(this.GroupMemberships.Href, this.GetInternalAsyncDataStore());
+
+        IAsyncQueryable<IAccessToken> IAccount.GetAccessTokens()
+            => new CollectionResourceQueryable<IAccessToken>(this.AccessTokens.Href, this.GetInternalAsyncDataStore());
+
+        IAsyncQueryable<IRefreshToken> IAccount.GetRefreshTokens()
+            => new CollectionResourceQueryable<IRefreshToken>(this.RefreshTokens.Href, this.GetInternalAsyncDataStore());
     }
 }

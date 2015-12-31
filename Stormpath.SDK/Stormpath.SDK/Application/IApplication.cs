@@ -24,6 +24,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -89,6 +90,54 @@ namespace Stormpath.SDK.Application
         /// </param>
         /// <returns>This instance for method chaining.</returns>
         IApplication SetStatus(ApplicationStatus status);
+
+        /// <summary>
+        /// Creates a new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your
+        /// application users to a hosted login/registration/forgot-password site - what Stormpath calls an 'Identity Site'
+        /// (or 'ID Site' for short) - for performing common user identity functionality.
+        /// When the user is done (logging in, registering, etc), they will be redirected back to a <c>callbackUri</c> of your choice.
+        /// </summary>
+        /// <returns>A new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your application users to a hosted login/registration/forgot-password 'ID Site'.</returns>
+        IIdSiteUrlBuilder NewIdSiteUrlBuilder();
+
+        /// <summary>
+        /// Creates a new <see cref="IIdSiteAsyncCallbackHandler"/> used to handle HTTP replies from your ID Site to your application's <c>callbackUri</c>,
+        /// as described in the <see cref="NewIdSiteUrlBuilder"/> method.
+        /// </summary>
+        /// <param name="request">
+        /// An instance of <see cref="IHttpRequest"/>.
+        /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
+        /// </param>
+        /// <returns>An <see cref="IIdSiteAsyncCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
+        IIdSiteAsyncCallbackHandler NewIdSiteAsyncCallbackHandler(IHttpRequest request);
+
+        /// <summary>
+        /// Creates a new <see cref="IIdSiteTokenAuthenticator">ID Site Token Authenticator</see> that can
+        /// exchange an ID Site result for an OAuth 2.0 access token.
+        /// </summary>
+        /// <returns>A new <see cref="IIdSiteTokenAuthenticator"/> instance.</returns>
+        IIdSiteTokenAuthenticator NewIdSiteTokenAuthenticator();
+
+        /// <summary>
+        /// Creates a new <see cref="IPasswordGrantAuthenticator">Password Grant Authenticator</see> that allows you to
+        /// authenticate an account and exchange its credentials for a valid OAuth 2.0 token.
+        /// </summary>
+        /// <returns>A new <see cref="IPasswordGrantAuthenticator"/></returns> instance.
+        IPasswordGrantAuthenticator NewPasswordGrantAuthenticator();
+
+        /// <summary>
+        /// Creates a new <see cref="IRefreshGrantAuthenticator">Refresh Grant Authenticator</see> that allows you to
+        /// refresh an OAuth 2.0 token created in Stormpath.
+        /// </summary>
+        /// <returns>A new <see cref="IRefreshGrantAuthenticator"/></returns> instance.
+        IRefreshGrantAuthenticator NewRefreshGrantAuthenticator();
+
+        /// <summary>
+        /// Creates a new <see cref="IJwtAuthenticator">JWT Authenticator</see> that allows you to validate
+        /// a JSON Web Token locally or against Stormpath.
+        /// </summary>
+        /// <returns>A new <see cref="IJwtAuthenticator"/></returns> instance.
+        IJwtAuthenticator NewJwtAuthenticator();
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password).
@@ -257,26 +306,6 @@ namespace Stormpath.SDK.Application
         Task SendVerificationEmailAsync(string usernameOrEmail, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your
-        /// application users to a hosted login/registration/forgot-password site - what Stormpath calls an 'Identity Site'
-        /// (or 'ID Site' for short) - for performing common user identity functionality.
-        /// When the user is done (logging in, registering, etc), they will be redirected back to a <c>callbackUri</c> of your choice.
-        /// </summary>
-        /// <returns>A new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your application users to a hosted login/registration/forgot-password 'ID Site'.</returns>
-        IIdSiteUrlBuilder NewIdSiteUrlBuilder();
-
-        /// <summary>
-        /// Creates a new <see cref="IIdSiteAsyncCallbackHandler"/> used to handle HTTP replies from your ID Site to your application's <c>callbackUri</c>,
-        /// as described in the <see cref="NewIdSiteUrlBuilder"/> method.
-        /// </summary>
-        /// <param name="request">
-        /// An instance of <see cref="IHttpRequest"/>.
-        /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
-        /// </param>
-        /// <returns>An <see cref="IIdSiteAsyncCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
-        IIdSiteAsyncCallbackHandler NewIdSiteAsyncCallbackHandler(IHttpRequest request);
-
-        /// <summary>
         /// Verifies the password reset token (received in the user's email) and immediately
         /// changes the password in the same request, if the token is valid.
         /// <para>Once the token has been successfully used, it is immediately invalidated and can't be used again.
@@ -360,6 +389,13 @@ namespace Stormpath.SDK.Application
         /// <returns>The result of the access request.</returns>
         /// <exception cref="Error.ResourceException">The access attempt failed.</exception>
         Task<IProviderAccountResult> GetAccountAsync(IProviderAccountRequest request, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves the <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
+        Task<IOauthPolicy> GetOauthPolicyAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a queryable list of all Accounts in this Application.

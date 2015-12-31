@@ -21,6 +21,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Application;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 
@@ -306,5 +307,13 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="Error.ResourceException">The access attempt failed.</exception>
         public static IProviderAccountResult GetAccount(this IApplication application, IProviderAccountRequest request)
             => (application as IApplicationSync).GetAccount(request);
+
+        /// <summary>
+        /// Synchronously retrieves the <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
+        public static IOauthPolicy GetOauthPolicy(this IApplication application)
+            => (application as IApplicationSync).GetOauthPolicy();
     }
 }
