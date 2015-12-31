@@ -372,6 +372,42 @@ Namespace Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Validating_token_after_revocation(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = Await client.GetCurrentTenantAsync()
+
+            ' Create a dummy application
+            Dim createdApplication = Await tenant.CreateApplicationAsync($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Validating Token After Revocation (VB)", createDirectory:=False)
+            createdApplication.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
+
+            ' Add the test accounts
+            Await createdApplication.AddAccountStoreAsync(Me.fixture.PrimaryDirectoryHref)
+
+            Dim passwordGrantRequest = OauthRequests.NewPasswordGrantRequest() _
+                .SetLogin("lskywalker@tattooine.rim") _
+                .SetPassword("whataPieceofjunk$1138") _
+                .SetAccountStore(Me.fixture.PrimaryDirectoryHref) _
+                .Build()
+            Dim authenticateResult = Await createdApplication.NewPasswordGrantAuthenticator() _
+                .AuthenticateAsync(passwordGrantRequest)
+
+            Dim accessToken = Await authenticateResult.GetAccessTokenAsync()
+            Call (Await accessToken.DeleteAsync()).ShouldBeTrue() ' Revoke access token
+
+            Dim jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest() _
+                .SetJwt(accessToken.Jwt) _
+                .Build()
+
+            Await Should.ThrowAsync(Of ResourceException)(Async Function() Await createdApplication.NewJwtAuthenticator().AuthenticateAsync(jwtAuthenticationRequest))
+
+            ' Clean up
+            Call (Await createdApplication.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Refreshing_access_token_with_jwt(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()

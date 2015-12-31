@@ -413,6 +413,45 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Validating_token_after_revocation(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            // Create a dummy application
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Validating Token After Revocation",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            // Add the test accounts
+            await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin("lskywalker@tattooine.rim")
+                .SetPassword("whataPieceofjunk$1138")
+                .SetAccountStore(this.fixture.PrimaryDirectoryHref)
+                .Build();
+            var authenticateResult = await createdApplication.NewPasswordGrantAuthenticator()
+                .AuthenticateAsync(passwordGrantRequest);
+
+            var accessToken = await authenticateResult.GetAccessTokenAsync();
+            (await accessToken.DeleteAsync()).ShouldBeTrue(); // Revoke access token
+
+            var jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest()
+                .SetJwt(accessToken.Jwt)
+                .Build();
+
+            await Should.ThrowAsync<ResourceException>(async () => await createdApplication.NewJwtAuthenticator().AuthenticateAsync(jwtAuthenticationRequest));
+
+            // Clean up
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Refreshing_access_token_with_jwt(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -501,7 +540,5 @@ namespace Stormpath.SDK.Tests.Integration.Async
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
-
-        //TODO: ID Site Token Authentication exchange
     }
 }

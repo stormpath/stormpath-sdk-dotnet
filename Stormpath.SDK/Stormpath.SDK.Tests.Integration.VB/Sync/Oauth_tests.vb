@@ -379,6 +379,42 @@ Namespace Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Validating_token_after_revocation(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            ' Create a dummy application
+            Dim createdApplication = tenant.CreateApplication($".NET IT {fixture.TestRunIdentifier}-{clientBuilder.Name} Validating Token After Revocation - Sync (VB)", createDirectory:=False)
+            createdApplication.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedApplicationHrefs.Add(createdApplication.Href)
+
+            ' Add the test accounts
+            createdApplication.AddAccountStore(Me.fixture.PrimaryDirectoryHref)
+
+            Dim passwordGrantRequest = OauthRequests.NewPasswordGrantRequest() _
+                .SetLogin("lskywalker@tattooine.rim") _
+                .SetPassword("whataPieceofjunk$1138") _
+                .SetAccountStore(Me.fixture.PrimaryDirectoryHref) _
+                .Build()
+            Dim authenticateResult = createdApplication.NewPasswordGrantAuthenticator() _
+                .Authenticate(passwordGrantRequest)
+
+            Dim accessToken = authenticateResult.GetAccessToken()
+            Call (accessToken.Delete()).ShouldBeTrue() ' Revoke access token
+
+            Dim jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest() _
+                .SetJwt(accessToken.Jwt) _
+                .Build()
+
+            Should.Throw(Of ResourceException)(Function() createdApplication.NewJwtAuthenticator().Authenticate(jwtAuthenticationRequest))
+
+            ' Clean up
+            Call (createdApplication.Delete()).ShouldBeTrue()
+            Me.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Refreshing_access_token_with_jwt(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()

@@ -416,6 +416,45 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Validating_token_after_revocation(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            // Create a dummy application
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Validating Token After Revocation - Sync",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            // Add the test accounts
+            createdApplication.AddAccountStore(this.fixture.PrimaryDirectoryHref);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin("lskywalker@tattooine.rim")
+                .SetPassword("whataPieceofjunk$1138")
+                .SetAccountStore(this.fixture.PrimaryDirectoryHref)
+                .Build();
+            var authenticateResult = createdApplication.NewPasswordGrantAuthenticator()
+                .Authenticate(passwordGrantRequest);
+
+            var accessToken = authenticateResult.GetAccessToken();
+            accessToken.Delete().ShouldBeTrue(); // Revoke access token
+
+            var jwtAuthenticationRequest = OauthRequests.NewJwtAuthenticationRequest()
+                .SetJwt(accessToken.Jwt)
+                .Build();
+
+            Should.Throw<ResourceException>(() => createdApplication.NewJwtAuthenticator().Authenticate(jwtAuthenticationRequest));
+
+            // Clean up
+            createdApplication.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Refreshing_access_token_with_jwt(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
