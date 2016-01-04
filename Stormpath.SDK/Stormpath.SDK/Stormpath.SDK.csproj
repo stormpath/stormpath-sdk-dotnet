@@ -104,6 +104,7 @@
     <Compile Include="Impl\DataStore\DefaultDataStore.Get.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Save.cs" />
     <Compile Include="Impl\DataStore\Filters\AccountStoreMappingCacheInvalidationFilter.cs" />
+    <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.Sync.cs" />
     <Compile Include="Impl\DataStore\TypeNameResolver.cs" />
     <Compile Include="Impl\Http\DefaultHttpRequestBuilder.cs" />
     <Compile Include="Impl\Http\FormUrlEncoder.cs" />
@@ -227,7 +228,7 @@
     <Compile Include="Impl\DataStore\DefaultResourceDataRequest.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataResult.cs" />
     <Compile Include="Impl\DataStore\Filters\ReadCacheFilter.cs" />
-    <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.cs" />
+    <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.Async.cs" />
     <Compile Include="Impl\DataStore\IDataStoreSync.cs" />
     <Compile Include="Impl\IdentityMap\IdentityMapOptions.cs" />
     <Compile Include="Impl\Directory\DefaultDirectory.Collections.cs" />

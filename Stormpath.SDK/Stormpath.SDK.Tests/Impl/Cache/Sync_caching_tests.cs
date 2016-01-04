@@ -19,6 +19,7 @@ using System.Linq;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.CustomData;
@@ -82,7 +83,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         }
 
         [Fact]
-        public void Does_not_hit_cache_if_no_asynchronous_path_exists()
+        public void Does_not_hit_cache_if_no_hronous_path_exists()
         {
             var fakeCacheProvider = Substitute.For<ISynchronousCacheProvider>();
             fakeCacheProvider.IsAsynchronousSupported.Returns(true);
@@ -475,6 +476,29 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var result2 = authenticator.Authenticate("/loginAttempts", request, null);
 
             // Not cached
+            this.dataStore.RequestExecutor.Received(2).Execute(
+                Arg.Any<IHttpRequest>());
+        }
+
+        /// <summary>
+        /// Regression test for stormpath/stormpath-sdk-dotnet#96.
+        /// Unknown/new items in a JSON response should not cause the caching layer to explode.
+        /// </summary>
+        [Fact]
+        public void Resource_with_unknown_property_is_cached()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+
+            var fakeData = FakeJson.Application.Replace("authorizedCallbackUris", "foobarProperty");
+            this.BuildDataStore(FakeJson.Application, cacheProvider);
+
+            var app1 = this.dataStore.GetResource<IApplication>("/applications/foobarApplication");
+            var app2 = this.dataStore.GetResource<IApplication>("/applications/foobarApplication");
+
+            app1.ShouldNotBeNull();
+            app1.Name.ShouldBe("Lightsabers Galore");
+
+            // Fail silently by falling back to no caching
             this.dataStore.RequestExecutor.Received(2).Execute(
                 Arg.Any<IHttpRequest>());
         }

@@ -74,6 +74,31 @@ namespace Stormpath.SDK.Extensions.Serialization.JsonNet.Tests
         }
 
         [Fact]
+        public void Scalar_arrays_are_deserialized_to_list()
+        {
+            var json = @"
+{
+    ""urls"":
+    [
+        ""http://foo.bar"",
+        ""http://baz.bar""
+    ]
+}";
+            var result = this.serializer.Deserialize(json);
+
+            result.Count.ShouldBe(1);
+
+            var nestedList = result.Single().Value as IEnumerable<object>;
+            nestedList.Count().ShouldBe(2);
+
+            var firstItem = nestedList.ElementAt(0);
+            firstItem.ShouldBe("http://foo.bar");
+
+            var secondItem = nestedList.ElementAt(1);
+            secondItem.ShouldBe("http://baz.bar");
+        }
+
+        [Fact]
         public void Objects_are_deserialized_to_IDictionary()
         {
             var json = @"{ link: { href: ""http://foobar/myprop"" } }";

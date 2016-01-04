@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
                 throw new ApplicationException($"Could not parse expanded property data from attribute '{token.Key}'.");
             }
 
-            var embeddedType = this.typeLookup.GetInterface(token.Key);
+            var embeddedType = this.typeLookup.GetInterfaceByPropertyName(token.Key);
             var convertedData = this.converter(asEmbeddedResource, embeddedType);
 
             return new FieldConverterResult(true, new ExpandedProperty(convertedData));

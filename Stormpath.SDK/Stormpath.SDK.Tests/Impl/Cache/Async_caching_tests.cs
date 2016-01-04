@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.CustomData;
@@ -493,6 +494,31 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var result2 = await authenticator.AuthenticateAsync("/loginAttempts", request, null, CancellationToken.None);
 
             // Not cached
+            await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+        }
+
+        /// <summary>
+        /// Regression test for stormpath/stormpath-sdk-dotnet#96.
+        /// Unknown/new items in a JSON response should not cause the caching layer to explode.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous test.</returns>
+        [Fact]
+        public async Task Resource_with_unknown_property_is_cached()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+
+            var fakeResponse = FakeJson.Application.Replace("authorizedCallbackUris", "foobarProperty");
+            this.BuildDataStore(fakeResponse, cacheProvider);
+
+            var app1 = await this.dataStore.GetResourceAsync<IApplication>("/applications/foobarApplication");
+            var app2 = await this.dataStore.GetResourceAsync<IApplication>("/applications/foobarApplication");
+
+            app1.ShouldNotBeNull();
+            app1.Name.ShouldBe("Lightsabers Galore");
+
+            // Fail silently by falling back to no caching
             await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
                 Arg.Any<IHttpRequest>(),
                 Arg.Any<CancellationToken>());

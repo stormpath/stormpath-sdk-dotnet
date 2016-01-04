@@ -560,6 +560,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""authTokens"": {
                 ""href"": ""https://api.stormpath.com/v1/applications/foobarApplication/authTokens""
             },
+            ""authorizedCallbackUris"": [""https://foo.bar/1"", ""https://foo.bar/2""],
             ""createdAt"": ""2015-07-21T23:50:49.563Z"",
             ""customData"": {
                 ""href"": ""https://api.stormpath.com/v1/applications/foobarApplication/customData""

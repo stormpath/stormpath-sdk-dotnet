@@ -248,7 +248,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// </summary>
         /// <param name="nestedItemKey">A resource attribute name (e.g. "directory").</param>
         /// <returns>The associated interface type (e.g., <see cref="IDirectory"/>, or <see langword="null"/> if no type could be found.</returns>
-        public Type GetInterface(string nestedItemKey)
+        public Type GetInterfaceByPropertyName(string nestedItemKey)
         {
             Type foundType = null;
             InterfaceLookupByAttributeName.TryGetValue(nestedItemKey, out foundType);
@@ -283,7 +283,7 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         /// <summary>
-        /// Looks up the inner interface from a collection type.
+        /// Looks up the inner interface from a parent type.
         /// </summary>
         /// <param name="collectionType">A <see cref="CollectionResponsePage{T}"/> containing some inner <see cref="IResource"/> interface (e.g. <see cref="CollectionResponsePage{IAccount}"/>).</param>
         /// <returns>The inner interface (e.g. <see cref="IAccount"/>).</returns>
