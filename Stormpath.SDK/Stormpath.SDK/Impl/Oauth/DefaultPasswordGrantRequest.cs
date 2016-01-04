@@ -30,8 +30,6 @@ namespace Stormpath.SDK.Impl.Oauth
             this.password = password;
         }
 
-        string IOauthGrantRequest.GrantType => "password";
-
         string IPasswordGrantRequest.Login => this.login;
 
         string IPasswordGrantRequest.Password => this.password;

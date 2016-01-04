@@ -27,8 +27,6 @@ namespace Stormpath.SDK.Impl.Oauth
             this.jwt = jwt;
         }
 
-        string IOauthGrantRequest.GrantType => "id_site_token";
-
         string IIdSiteTokenAuthenticationRequest.Jwt => this.jwt;
     }
 }

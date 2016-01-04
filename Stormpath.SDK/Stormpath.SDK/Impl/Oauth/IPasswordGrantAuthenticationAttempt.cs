@@ -1,4 +1,4 @@
-﻿// <copyright file="IGrantAuthenticationAttempt.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IPasswordGrantAuthenticationAttempt.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,21 +20,15 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Impl.Oauth
 {
     /// <summary>
-    /// Represents the information required to build a Grant Authentication request.
+    /// Represents the information required to build a Password Grant Authentication request.
     /// </summary>
-    internal interface IGrantAuthenticationAttempt : IResource
+    internal interface IPasswordGrantAuthenticationAttempt : IResource
     {
         /// <summary>
         /// Gets the <see cref="IAccountStore">Account Store</see> <c>href</c> that will used for the token exchange request.
         /// </summary>
         /// <value>The <see cref="IAccountStore">Account Store</see> <c>href</c> that will used for the token exchange request.</value>
         string AccountStoreHref { get; }
-
-        /// <summary>
-        /// Gets the grant type that will used for the token exchange request.
-        /// </summary>
-        /// <value>The grant type that will used for the token exchange request.</value>
-        string GrantType { get; }
 
         /// <summary>
         /// Gets the username to be used in the token exchange request.
@@ -59,13 +53,6 @@ namespace Stormpath.SDK.Impl.Oauth
         /// </summary>
         /// <param name="accountStoreHref">The Account Store <c>href</c>.</param>
         void SetAccountStore(string accountStoreHref);
-
-        /// <summary>
-        /// Sets the Authentication Grant Type that will be used for the token exchange request.
-        /// </summary>
-        /// <remarks>Currently only the <c>password</c> grant type is supported for this operation.</remarks>
-        /// <param name="grantType">The grant type.</param>
-        void SetGrantType(string grantType);
 
         /// <summary>
         /// Sets the username to be used in the token exchange request.

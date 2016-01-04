@@ -64,7 +64,6 @@ namespace Stormpath.SDK.Impl.Oauth
         private IRefreshGrantAuthenticationAttempt BuildGrantAttempt(IRefreshGrantRequest authenticationRequest)
         {
             var refreshGrantRequest = this.internalDataStore.Instantiate<IRefreshGrantAuthenticationAttempt>();
-            refreshGrantRequest.SetGrantType(authenticationRequest.GrantType);
             refreshGrantRequest.SetRefreshToken(authenticationRequest.RefreshToken);
 
             return refreshGrantRequest;

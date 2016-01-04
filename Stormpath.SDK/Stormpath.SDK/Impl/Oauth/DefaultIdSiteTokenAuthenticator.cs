@@ -66,7 +66,6 @@ namespace Stormpath.SDK.Impl.Oauth
         private IIdSiteTokenAuthenticationAttempt BuildExchangeAttempt(IIdSiteTokenAuthenticationRequest authenticationRequest)
         {
             var exchangeAttempt = this.internalDataStore.Instantiate<IIdSiteTokenAuthenticationAttempt>();
-            exchangeAttempt.SetGrantType(authenticationRequest.GrantType);
             exchangeAttempt.SetToken(authenticationRequest.Jwt);
 
             return exchangeAttempt;

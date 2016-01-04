@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultGrantAuthenticationAttempt.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultPasswordGrantAuthenticationAttempt.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,43 +19,38 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
-    internal sealed class DefaultGrantAuthenticationAttempt : AbstractResource, IGrantAuthenticationAttempt
+    internal sealed class DefaultPasswordGrantAuthenticationAttempt : AbstractResource, IPasswordGrantAuthenticationAttempt
     {
         private static readonly string LoginPropertyName = "username";
         private static readonly string PasswordPropertyName = "password";
         private static readonly string AccountStoreHrefPropertyName = "accountStore";
         private static readonly string GrantTypePropertyName = "grant_type";
 
-        public DefaultGrantAuthenticationAttempt(ResourceData data)
+        public DefaultPasswordGrantAuthenticationAttempt(ResourceData data)
             : base(data)
         {
+            this.SetProperty(GrantTypePropertyName, "password");
         }
 
-        string IGrantAuthenticationAttempt.AccountStoreHref
+        string IPasswordGrantAuthenticationAttempt.AccountStoreHref
             => this.GetStringProperty(AccountStoreHrefPropertyName);
 
-        string IGrantAuthenticationAttempt.GrantType
-            => this.GetStringProperty(GrantTypePropertyName);
-
-        string IGrantAuthenticationAttempt.Login
+        string IPasswordGrantAuthenticationAttempt.Login
             => this.GetStringProperty(LoginPropertyName);
 
-        string IGrantAuthenticationAttempt.Password
+        string IPasswordGrantAuthenticationAttempt.Password
             => this.GetStringProperty(PasswordPropertyName);
 
-        void IGrantAuthenticationAttempt.SetLogin(string login)
+        void IPasswordGrantAuthenticationAttempt.SetLogin(string login)
             => this.SetProperty(LoginPropertyName, login);
 
-        void IGrantAuthenticationAttempt.SetPassword(string password)
+        void IPasswordGrantAuthenticationAttempt.SetPassword(string password)
             => this.SetProperty(PasswordPropertyName, password);
 
-        void IGrantAuthenticationAttempt.SetAccountStore(IAccountStore accountStore)
+        void IPasswordGrantAuthenticationAttempt.SetAccountStore(IAccountStore accountStore)
             => this.SetProperty(AccountStoreHrefPropertyName, accountStore.Href);
 
-        void IGrantAuthenticationAttempt.SetAccountStore(string accountStoreHref)
+        void IPasswordGrantAuthenticationAttempt.SetAccountStore(string accountStoreHref)
             => this.SetProperty(AccountStoreHrefPropertyName, accountStoreHref);
-
-        void IGrantAuthenticationAttempt.SetGrantType(string grantType)
-            => this.SetProperty(GrantTypePropertyName, grantType);
     }
 }

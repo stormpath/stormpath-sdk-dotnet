@@ -335,7 +335,7 @@
     <Compile Include="Impl\Oauth\DefaultAccessToken.cs" />
     <Compile Include="Impl\Oauth\DefaultIdSiteTokenAuthenticationAttempt.cs" />
     <Compile Include="Impl\Oauth\DefaultRefreshGrantAuthenticationAttempt.cs" />
-    <Compile Include="Impl\Oauth\DefaultGrantAuthenticationAttempt.cs" />
+    <Compile Include="Impl\Oauth\DefaultPasswordGrantAuthenticationAttempt.cs" />
     <Compile Include="Impl\Oauth\DefaultGrantAuthenticationToken.cs" />
     <Compile Include="Impl\Oauth\DefaultIdSiteTokenAuthenticationRequest.cs" />
     <Compile Include="Impl\Oauth\DefaultJwtAuthenticationRequest.cs" />
@@ -360,7 +360,7 @@
     <Compile Include="Impl\Oauth\IRefreshGrantAuthenticatorSync.cs" />
     <Compile Include="Impl\Oauth\IRefreshTokenSync.cs" />
     <Compile Include="Impl\Oauth\IAccessTokenSync.cs" />
-    <Compile Include="Impl\Oauth\IGrantAuthenticationAttempt.cs" />
+    <Compile Include="Impl\Oauth\IPasswordGrantAuthenticationAttempt.cs" />
     <Compile Include="Impl\Oauth\IGrantAuthenticationToken.cs" />
     <Compile Include="Impl\Oauth\IOauthAuthenticatorSync.cs" />
     <Compile Include="Impl\Oauth\IOauthGrantAuthenticationResultSync.cs" />

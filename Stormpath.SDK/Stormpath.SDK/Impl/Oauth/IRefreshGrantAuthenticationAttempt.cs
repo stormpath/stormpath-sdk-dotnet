@@ -24,25 +24,10 @@ namespace Stormpath.SDK.Impl.Oauth
     internal interface IRefreshGrantAuthenticationAttempt : IResource
     {
         /// <summary>
-        /// Gets the grant type that will used for the token exchange request.
-        /// </summary>
-        /// <value>The grant type that will used for the token exchange request.</value>
-        string GrantType { get; }
-
-        /// <summary>
         /// Gets the Refresh Token that will be used for the token exchange request.
         /// </summary>
         /// <value>The Refresh Token that will be used for the token exchange request.</value>
         string RefreshToken { get; }
-
-        /// <summary>
-        /// Sets the Authentication Grant Type that will be used for the token exchange request.
-        /// </summary>
-        /// <remarks>Currently only the <c>refresh</c> grant type is supported for this operation.
-        ///todo
-        /// </remarks>
-        /// <param name="grantType">The grant type.</param>
-        void SetGrantType(string grantType);
 
         /// <summary>
         /// Sets the Refresh Token that will be used for the token exchange request.

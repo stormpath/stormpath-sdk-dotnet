@@ -21,10 +21,5 @@ namespace Stormpath.SDK.Oauth
     /// </summary>
     public interface IOauthGrantRequest
     {
-        /// <summary>
-        /// Gets the OAuth 2.0 method used for the request.
-        /// </summary>
-        /// <value>The OAuth 2.0 method used for the request.</value>
-        string GrantType { get; }
     }
 }

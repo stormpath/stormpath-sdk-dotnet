@@ -26,16 +26,11 @@ namespace Stormpath.SDK.Impl.Oauth
         public DefaultIdSiteTokenAuthenticationAttempt(ResourceData data)
             : base(data)
         {
+            this.SetProperty<string>(GrantTypePropertyName, "id_site_token");
         }
-
-        string IIdSiteTokenAuthenticationAttempt.GrantType
-            => this.GetStringProperty(GrantTypePropertyName);
 
         string IIdSiteTokenAuthenticationAttempt.Token
             => this.GetStringProperty(TokenPropertyName);
-
-        void IIdSiteTokenAuthenticationAttempt.SetGrantType(string grantType)
-            => this.SetProperty(GrantTypePropertyName, grantType);
 
         void IIdSiteTokenAuthenticationAttempt.SetToken(string token)
             => this.SetProperty(TokenPropertyName, token);

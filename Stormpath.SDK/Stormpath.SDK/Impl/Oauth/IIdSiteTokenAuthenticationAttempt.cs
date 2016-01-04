@@ -24,24 +24,10 @@ namespace Stormpath.SDK.Impl.Oauth
     internal interface IIdSiteTokenAuthenticationAttempt : IResource
     {
         /// <summary>
-        /// Gets the grant type that will used for the token exchange request.
-        /// </summary>
-        /// <value>The grant type that will used for the token exchange request.</value>
-        string GrantType { get; }
-
-        /// <summary>
         /// Gets the token that will be used for the exchange request.
         /// </summary>
         /// <value>The token that will be used for the exchange request.</value>
         string Token { get; }
-
-        /// <summary>
-        /// Sets the Authentication Grant Type that will be used for the token exchange request.
-        /// </summary>
-        /// <remarks>Currently only the <c>id_site_token</c> grant type is supported for this operation.
-        /// </remarks>
-        /// <param name="grantType">The grant type.</param>
-        void SetGrantType(string grantType);
 
         /// <summary>
         /// Sets the token that will be used for the exchange request.

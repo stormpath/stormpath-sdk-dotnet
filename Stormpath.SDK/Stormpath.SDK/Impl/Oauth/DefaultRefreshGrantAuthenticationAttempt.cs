@@ -26,16 +26,11 @@ namespace Stormpath.SDK.Impl.Oauth
         public DefaultRefreshGrantAuthenticationAttempt(ResourceData data)
             : base(data)
         {
+            this.SetProperty(GrantTypePropertyName, "refresh_token");
         }
-
-        string IRefreshGrantAuthenticationAttempt.GrantType
-            => this.GetStringProperty(GrantTypePropertyName);
 
         string IRefreshGrantAuthenticationAttempt.RefreshToken
             => this.GetStringProperty(RefreshTokenPropertyName);
-
-        void IRefreshGrantAuthenticationAttempt.SetGrantType(string grantType)
-            => this.SetProperty(GrantTypePropertyName, grantType);
 
         void IRefreshGrantAuthenticationAttempt.SetRefreshToken(string refreshToken)
             => this.SetProperty(RefreshTokenPropertyName, refreshToken);

@@ -31,8 +31,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var dataStore = TestDataStore.Create();
 
-            var createGrantAttempt = dataStore.Instantiate<IGrantAuthenticationAttempt>();
-            createGrantAttempt.SetGrantType("password");
+            var createGrantAttempt = dataStore.Instantiate<IPasswordGrantAuthenticationAttempt>();
             createGrantAttempt.SetLogin("tom@stormpath.com");
             createGrantAttempt.SetPassword("Secret1");
             createGrantAttempt.SetAccountStore("https://api.stormpath.com/v1/directories/1bcd23ec1d0a8wa6");

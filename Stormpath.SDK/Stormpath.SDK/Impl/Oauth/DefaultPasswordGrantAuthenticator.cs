@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Impl.Oauth
             var createGrantAttempt = this.BuildGrantAttempt(authenticationRequest);
             var headers = this.GetHeaderWithMediaType();
 
-            return await this.InternalAsyncDataStore.CreateAsync<IGrantAuthenticationAttempt, IGrantAuthenticationToken>(
+            return await this.InternalAsyncDataStore.CreateAsync<IPasswordGrantAuthenticationAttempt, IGrantAuthenticationToken>(
                 $"{this.application.Href}{OauthTokenPath}",
                 createGrantAttempt,
                 headers,
@@ -55,25 +55,24 @@ namespace Stormpath.SDK.Impl.Oauth
             var createGrantAttempt = this.BuildGrantAttempt(authenticationRequest);
             var headers = this.GetHeaderWithMediaType();
 
-            return this.InternalSyncDataStore.Create<IGrantAuthenticationAttempt, IGrantAuthenticationToken>(
+            return this.InternalSyncDataStore.Create<IPasswordGrantAuthenticationAttempt, IGrantAuthenticationToken>(
                 $"{this.application.Href}{OauthTokenPath}",
                 createGrantAttempt,
                 headers);
         }
 
-        private IGrantAuthenticationAttempt BuildGrantAttempt(IPasswordGrantRequest authenticationRequest)
+        private IPasswordGrantAuthenticationAttempt BuildGrantAttempt(IPasswordGrantRequest authenticationRequest)
         {
-            var createGrantAttempt = this.internalDataStore.Instantiate<IGrantAuthenticationAttempt>();
-            createGrantAttempt.SetLogin(authenticationRequest.Login);
-            createGrantAttempt.SetPassword(authenticationRequest.Password);
-            createGrantAttempt.SetGrantType(authenticationRequest.GrantType);
+            var passwordGrantAttempt = this.internalDataStore.Instantiate<IPasswordGrantAuthenticationAttempt>();
+            passwordGrantAttempt.SetLogin(authenticationRequest.Login);
+            passwordGrantAttempt.SetPassword(authenticationRequest.Password);
 
             if (!string.IsNullOrEmpty(authenticationRequest.AccountStoreHref))
             {
-                createGrantAttempt.SetAccountStore(authenticationRequest.AccountStoreHref);
+                passwordGrantAttempt.SetAccountStore(authenticationRequest.AccountStoreHref);
             }
 
-            return createGrantAttempt;
+            return passwordGrantAttempt;
         }
     }
 }
