@@ -27,7 +27,6 @@ using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Jwt;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 

@@ -20,6 +20,20 @@ namespace Stormpath.SDK.Oauth
     /// Represents a Refresh Grant-specific OAuth 2.0 Authenticator used to refresh an OAuth 2.0 token created in Stormpath.
     /// </summary>
     /// <example>
+    /// // Create a new Refresh Grant request
+    /// var refreshGrantRequest = OauthRequests.NewRefreshGrantRequest()
+    ///     // Use refresh token string
+    ///     .SetRefreshToken(refreshTokenJwtString)
+    ///     // ... or an IRefreshToken instance
+    ///     .SetRefreshToken(refreshToken)
+    ///     .Build();
+    ///
+    /// // Execute it against the application
+    /// var refreshGrantResult = await createdApplication.NewRefreshGrantAuthenticator()
+    ///     .AuthenticateAsync(refreshGrantRequest);
+    ///
+    /// // New access token stored at
+    /// // refreshGrantResult.AccessTokenString
     /// </example>
     public interface IRefreshGrantAuthenticator : IOauthAuthenticator<IRefreshGrantRequest, IOauthGrantAuthenticationResult>
     {

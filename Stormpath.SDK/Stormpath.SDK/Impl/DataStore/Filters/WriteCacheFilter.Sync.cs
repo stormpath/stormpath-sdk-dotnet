@@ -16,12 +16,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.CustomData;
-using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;

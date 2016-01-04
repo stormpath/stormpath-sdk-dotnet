@@ -14,11 +14,9 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Oauth;
 

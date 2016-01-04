@@ -21,6 +21,15 @@ namespace Stormpath.SDK.Oauth
     /// validate and exchange an ID Site response for an access token.
     /// </summary>
     /// <example>
+    /// // Create a new ID Site Token Authentication request
+    /// var idSiteTokenRequest = OauthRequests.NewIdSiteTokenAuthenticationRequest()
+    ///     .SetJwt(id_site_jwt_response)
+    ///     .Build();
+    ///
+    /// // Execute it against the application
+    /// var idSiteTokenResult = await myApplication
+    ///     .NewIdSiteTokenAuthenticator()
+    ///     .AuthenticateAsync(idSiteTokenRequest);
     /// </example>
     public interface IIdSiteTokenAuthenticator : IOauthAuthenticator<IIdSiteTokenAuthenticationRequest, IOauthGrantAuthenticationResult>
     {

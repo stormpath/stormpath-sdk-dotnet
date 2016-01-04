@@ -22,7 +22,6 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Jwt;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Oauth;
