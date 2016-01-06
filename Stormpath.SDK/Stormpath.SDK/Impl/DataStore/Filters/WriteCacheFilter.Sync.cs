@@ -302,6 +302,5 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             var cache = this.GetSyncCache(typeof(IAccount));
             cache.Remove(this.GetCacheKey(accountHref));
         }
-
     }
 }
