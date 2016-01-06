@@ -105,6 +105,10 @@ namespace Stormpath.SDK.Client
         /// <exception cref="System.ArgumentNullException"><paramref name="httpClient"/> is null.</exception>
         IClientBuilder SetHttpClient(IHttpClient httpClient);
 
+        IClientBuilder SetHttpClient(IHttpClientBuilder httpClientBuilder);
+
+        IClientBuilder SetSerializer(ISerializerBuilder serializerBuilder);
+
         /// <summary>
         /// Constructs a new <see cref="IClient"/> instance based on the builder's current configuration state.
         /// </summary>

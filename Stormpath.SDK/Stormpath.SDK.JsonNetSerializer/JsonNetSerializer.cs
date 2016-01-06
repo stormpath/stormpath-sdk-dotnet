@@ -24,7 +24,7 @@ using Stormpath.SDK.Serialization;
 namespace Stormpath.SDK.Extensions.Serialization
 {
     /// <summary>
-    /// JSON.NET-based deserializer for Stormpath.SDK.
+    /// JSON.NET-based serializer for Stormpath.SDK.
     /// </summary>
     public sealed class JsonNetSerializer : IJsonSerializer
     {
@@ -33,6 +33,7 @@ namespace Stormpath.SDK.Extensions.Serialization
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonNetSerializer"/> class.
         /// </summary>
+        [Obsolete("Don't create serializers directly. Use Serializers.Create().Default() or Create().JsonNetSerializer() instead.")]
         public JsonNetSerializer()
         {
             this.serializerSettings = new JsonSerializerSettings();

@@ -32,15 +32,15 @@ namespace Stormpath.SDK.Impl.Jwt
 
         private byte[] keyBytes;
 
+        internal DefaultJwtParser()
+            : this(Serializers.Create().Default().Build()) //todo awful
+        {
+        }
+
         public DefaultJwtParser(IJsonSerializer serializer)
         {
             this.expectedClaims = new DefaultJwtClaimsBuilder();
             this.serializer = serializer;
-        }
-
-        internal DefaultJwtParser()
-            : this(((IJsonSerializerBuilder)new DefaultJsonSerializerBuilder()).Build())
-        {
         }
 
         IJwtParser IJwtParser.RequireClaim(string claimName, object value)

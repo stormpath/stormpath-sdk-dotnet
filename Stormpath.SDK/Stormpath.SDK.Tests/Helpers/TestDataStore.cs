@@ -17,11 +17,11 @@
 using System;
 using NSubstitute;
 using Stormpath.SDK.Cache;
-using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Logging;
 using Stormpath.SDK.Logging;
+using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Tests.Fakes;
 
 namespace Stormpath.SDK.Tests.Helpers
@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Tests.Helpers
             return new DefaultDataStore(
                 requestExecutor ?? Substitute.For<IRequestExecutor>(),
                 baseUrl: BaseUrl,
-                serializer: new JsonNetSerializer(),
+                serializer: Serializers.Create().JsonNetSerializer().Build(),
                 logger: logger ?? new NullLogger(),
                 userAgentBuilder: new FakeUserAgentBuilder(),
                 cacheProvider: cacheProvider ?? Caches.NewDisabledCacheProvider(),

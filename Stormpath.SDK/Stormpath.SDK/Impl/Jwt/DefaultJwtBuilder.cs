@@ -34,15 +34,15 @@ namespace Stormpath.SDK.Impl.Jwt
         private Map header;
         private byte[] signingKey;
 
+        internal DefaultJwtBuilder()
+            : this(Serializers.Create().Default().Build()) //todo fix this, because it's awful
+        {
+        }
+
         public DefaultJwtBuilder(IJsonSerializer serializer)
         {
             this.claimsBuilder = new DefaultJwtClaimsBuilder();
             this.serializer = serializer;
-        }
-
-        internal DefaultJwtBuilder()
-            : this(((IJsonSerializerBuilder)new DefaultJsonSerializerBuilder()).Build())
-        {
         }
 
         private string Base64UrlEncode(Map map, Encoding encoding)

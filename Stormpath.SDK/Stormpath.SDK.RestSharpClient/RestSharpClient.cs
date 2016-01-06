@@ -58,6 +58,7 @@ namespace Stormpath.SDK.Extensions.Http
         /// <param name="connectionTimeout">The connection timeout (in milliseconds).</param>
         /// <param name="proxy">The proxy, or <see langword="null"/> to connect directly.</param>
         /// <param name="logger">The logger.</param>
+        [Obsolete("Don't create clients directly. Use HttpClients.Create().Default() or Create().RestSharpClient() instead.")]
         public RestSharpClient(string baseUrl, int connectionTimeout, IWebProxy proxy, ILogger logger)
         {
             this.adapter = new RestSharpAdapter();

@@ -62,6 +62,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RestSharpHttpClientFactoryExtensions.cs" />
     <Compile Include="RestSharpAdapter.cs" />
     <Compile Include="RestSharpClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

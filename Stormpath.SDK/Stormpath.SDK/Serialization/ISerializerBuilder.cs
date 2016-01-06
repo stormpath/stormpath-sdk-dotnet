@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultHttpClientLoader_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ISerializerBuilder.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,17 @@
 // limitations under the License.
 // </copyright>
 
-using Shouldly;
-using Stormpath.SDK.Impl.Http;
-using Xunit;
-
-namespace Stormpath.SDK.Tests.Impl
+namespace Stormpath.SDK.Serialization
 {
-    public class DefaultHttpClientLoader_tests
+    /// <summary>
+    /// Builder pattern for <see cref="IJsonSerializer"/> instances.
+    /// </summary>
+    public interface ISerializerBuilder
     {
-        [Fact]
-        public void Default_library_is_loaded()
-        {
-            // This test project has a reference to Stormpath.SDK.RestSharpClient, so the file lookup will succeed
-            var foundType = DefaultHttpClientLoader.Load();
-
-            foundType.ShouldNotBeNull();
-        }
+        /// <summary>
+        /// Builds a new <see cref="IJsonSerializer"/> from the current builder state.
+        /// </summary>
+        /// <returns>A new <see cref="IJsonSerializer"/> instance.</returns>
+        IJsonSerializer Build();
     }
 }

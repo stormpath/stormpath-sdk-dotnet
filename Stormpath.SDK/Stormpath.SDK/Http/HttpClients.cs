@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultHttpClientLoader_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="HttpClients.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,13 @@
 // limitations under the License.
 // </copyright>
 
-using Shouldly;
 using Stormpath.SDK.Impl.Http;
-using Xunit;
 
-namespace Stormpath.SDK.Tests.Impl
+namespace Stormpath.SDK.Http
 {
-    public class DefaultHttpClientLoader_tests
+    public static class HttpClients
     {
-        [Fact]
-        public void Default_library_is_loaded()
-        {
-            // This test project has a reference to Stormpath.SDK.RestSharpClient, so the file lookup will succeed
-            var foundType = DefaultHttpClientLoader.Load();
-
-            foundType.ShouldNotBeNull();
-        }
+        public static IHttpClientFactory Create()
+            => new DefaultHttpClientFactory();
     }
 }
