@@ -19,6 +19,7 @@ Imports Stormpath.SDK.Error
 Imports Stormpath.SDK.Jwt
 Imports Stormpath.SDK.Oauth
 Imports Stormpath.SDK.Sync
+Imports Stormpath.SDK.Tests.Common
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
@@ -253,7 +254,7 @@ Namespace Sync
 
             validAccessToken.ShouldNotBeNull()
             validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href)
-            validAccessToken.CreatedAt.Day.ShouldBe(DateTimeOffset.Now.Day)
+            validAccessToken.CreatedAt.ShouldBe(DateTimeOffset.Now, Delay.ReasonableTestRunWindow)
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref)
             validAccessToken.Jwt.ShouldBe(accessTokenJwt)
 
@@ -331,7 +332,7 @@ Namespace Sync
 
             validAccessToken.ShouldNotBeNull()
             validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href)
-            validAccessToken.CreatedAt.Day.ShouldBe(DateTimeOffset.Now.Day)
+            validAccessToken.CreatedAt.ShouldBe(DateTimeOffset.Now, Delay.ReasonableTestRunWindow)
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref)
             validAccessToken.Jwt.ShouldBe(accessTokenJwt)
 

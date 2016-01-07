@@ -21,6 +21,7 @@ using Stormpath.SDK.Error;
 using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 
@@ -277,7 +278,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             validAccessToken.ShouldNotBeNull();
             validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href);
-            validAccessToken.CreatedAt.Day.ShouldBe(DateTimeOffset.Now.Day);
+            validAccessToken.CreatedAt.ShouldBe(DateTimeOffset.Now, Delay.ReasonableTestRunWindow);
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
             validAccessToken.Jwt.ShouldBe(accessTokenJwt);
 
@@ -363,7 +364,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             validAccessToken.ShouldNotBeNull();
             validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href);
-            validAccessToken.CreatedAt.Day.ShouldBe(DateTimeOffset.Now.Day);
+            validAccessToken.CreatedAt.ShouldBe(DateTimeOffset.Now, Delay.ReasonableTestRunWindow);
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
             validAccessToken.Jwt.ShouldBe(accessTokenJwt);
 

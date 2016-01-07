@@ -14,10 +14,14 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Tests.Common
 {
     public static class Delay
     {
         public static readonly int UpdatePropogation = 250;
+
+        public static TimeSpan ReasonableTestRunWindow = TimeSpan.FromMinutes(10);
     }
 }
