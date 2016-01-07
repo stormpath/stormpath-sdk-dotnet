@@ -2,7 +2,6 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Stormpath.SDK.RestSharpClient")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Stormpath.SDK.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Stormpath.SDK.Tests.Common")]
-[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 [assembly: System.Runtime.InteropServices.GuidAttribute("79a65c37-9db1-413a-ac23-708404530295")]
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName=".NET Framework 4.5")]
 
@@ -398,6 +397,8 @@ namespace Stormpath.SDK.Client
     {
         Stormpath.SDK.Cache.ICacheProvider GetCacheProvider();
         System.Threading.Tasks.Task<Stormpath.SDK.Tenant.ITenant> GetCurrentTenantAsync(System.Threading.CancellationToken cancellationToken = null);
+        Stormpath.SDK.Jwt.IJwtBuilder NewJwtBuilder();
+        Stormpath.SDK.Jwt.IJwtParser NewJwtParser();
     }
     public interface IClientBuilder : Stormpath.SDK.Logging.ILoggerConsumer<Stormpath.SDK.Client.IClientBuilder>, Stormpath.SDK.Serialization.ISerializerConsumer<Stormpath.SDK.Client.IClientBuilder>
     {
@@ -408,7 +409,9 @@ namespace Stormpath.SDK.Client
         Stormpath.SDK.Client.IClientBuilder SetCacheProvider(Stormpath.SDK.Cache.ICacheProvider cacheProvider);
         Stormpath.SDK.Client.IClientBuilder SetConnectionTimeout(int timeout);
         Stormpath.SDK.Client.IClientBuilder SetHttpClient(Stormpath.SDK.Http.IHttpClient httpClient);
+        Stormpath.SDK.Client.IClientBuilder SetHttpClient(Stormpath.SDK.Http.IHttpClientBuilder httpClientBuilder);
         Stormpath.SDK.Client.IClientBuilder SetProxy(System.Net.IWebProxy proxy);
+        Stormpath.SDK.Client.IClientBuilder SetSerializer(Stormpath.SDK.Serialization.ISerializerBuilder serializerBuilder);
     }
 }
 namespace Stormpath.SDK.CustomData
@@ -551,6 +554,11 @@ namespace Stormpath.SDK.Group
 namespace Stormpath.SDK.Http
 {
     
+    public sealed class AbstractHttpClientBuilder<T> : Stormpath.SDK.Http.IHttpClientBuilder, Stormpath.SDK.Logging.ILoggerConsumer<Stormpath.SDK.Http.IHttpClientBuilder>
+        where T : Stormpath.SDK.Http.IHttpClient
+    {
+        public AbstractHttpClientBuilder() { }
+    }
     public sealed class AuthorizationHeaderValue : Stormpath.SDK.Shared.ImmutableValueObject<Stormpath.SDK.Http.AuthorizationHeaderValue>
     {
         public AuthorizationHeaderValue(string scheme, string parameter) { }
@@ -567,6 +575,10 @@ namespace Stormpath.SDK.Http
         public System.Uri ResourcePath { get; }
         public override string ToString() { }
         public System.Uri ToUri() { }
+    }
+    public class static HttpClients
+    {
+        public static Stormpath.SDK.Http.IHttpClientFactory Create() { }
     }
     public sealed class HttpHeaders : System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, System.Collections.Generic.IEnumerable<string>>>, System.Collections.IEnumerable
     {
@@ -620,6 +632,17 @@ namespace Stormpath.SDK.Http
         bool IsAsynchronousSupported { get; }
         bool IsSynchronousSupported { get; }
         System.Net.IWebProxy Proxy { get; }
+    }
+    public interface IHttpClientBuilder : Stormpath.SDK.Logging.ILoggerConsumer<Stormpath.SDK.Http.IHttpClientBuilder>
+    {
+        Stormpath.SDK.Http.IHttpClient Build();
+        Stormpath.SDK.Http.IHttpClientBuilder SetBaseUrl(string baseUrl);
+        Stormpath.SDK.Http.IHttpClientBuilder SetConnectionTimeout(int connectionTimeout);
+        Stormpath.SDK.Http.IHttpClientBuilder SetProxy(System.Net.IWebProxy proxy);
+    }
+    public interface IHttpClientFactory
+    {
+        Stormpath.SDK.Http.IHttpClientBuilder AutoDetect();
     }
     public interface IHttpMessage
     {
@@ -821,12 +844,11 @@ namespace Stormpath.SDK.Jwt
         public InvalidJwtException(string message) { }
         public InvalidJwtException(string message, System.Exception innerException) { }
     }
+    [System.ObsoleteAttribute("Use the JWT methods available on IClient.")]
     public class static Jwts
     {
-        public static Stormpath.SDK.Jwt.IJwtBuilder Builder() { }
-        [System.ObsoleteAttribute("This method will be removed in v1.0. Use Builder() instead.")]
+        [System.ObsoleteAttribute("Use IClient.NewJwtBuilder() instead.")]
         public static Stormpath.SDK.Jwt.IJwtClaimsBuilder NewClaimsBuilder() { }
-        public static Stormpath.SDK.Jwt.IJwtParser Parser() { }
     }
     public class JwtSignatureException : Stormpath.SDK.Jwt.InvalidJwtException
     {
@@ -1060,10 +1082,7 @@ namespace Stormpath.SDK.Oauth
         string TokenType { get; }
         System.Threading.Tasks.Task<Stormpath.SDK.Oauth.IAccessToken> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = null);
     }
-    public interface IOauthGrantRequest
-    {
-        string GrantType { get; }
-    }
+    public interface IOauthGrantRequest { }
     public interface IOauthPolicy : Stormpath.SDK.Resource.IAuditable, Stormpath.SDK.Resource.IResource, Stormpath.SDK.Resource.ISaveable<Stormpath.SDK.Oauth.IOauthPolicy>, Stormpath.SDK.Tenant.IHasTenant
     {
         System.TimeSpan AccessTokenTimeToLive { get; }
@@ -1290,6 +1309,7 @@ namespace Stormpath.SDK.Resource
     }
     public interface IResource
     {
+        Stormpath.SDK.Client.IClient Client { get; }
         string Href { get; }
     }
     public interface IRetrievalOptions<T> : Stormpath.SDK.Resource.ICreationOptions { }
@@ -1307,15 +1327,32 @@ namespace Stormpath.SDK.Resource
 namespace Stormpath.SDK.Serialization
 {
     
+    public sealed class AbstractSerializerBuilder<T> : Stormpath.SDK.Serialization.ISerializerBuilder
+        where T : Stormpath.SDK.Serialization.IJsonSerializer
+    {
+        public AbstractSerializerBuilder() { }
+    }
     public interface IJsonSerializer
     {
         System.Collections.Generic.IDictionary<string, object> Deserialize(string json);
         string Serialize(System.Collections.Generic.IDictionary<string, object> map);
     }
+    public interface ISerializerBuilder
+    {
+        Stormpath.SDK.Serialization.IJsonSerializer Build();
+    }
     public interface ISerializerConsumer<out T>
     
     {
         T SetSerializer(Stormpath.SDK.Serialization.IJsonSerializer serializer);
+    }
+    public interface ISerializerFactory
+    {
+        Stormpath.SDK.Serialization.ISerializerBuilder AutoDetect();
+    }
+    public class static Serializers
+    {
+        public static Stormpath.SDK.Serialization.ISerializerFactory Create() { }
     }
 }
 namespace Stormpath.SDK.Shared
