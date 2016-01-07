@@ -16,7 +16,6 @@
 
 using System;
 using System.Text;
-using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
@@ -31,11 +30,6 @@ namespace Stormpath.SDK.Impl.Jwt
         private readonly IJsonSerializer serializer;
 
         private byte[] keyBytes;
-
-        internal DefaultJwtParser()
-            : this(Serializers.Create().Default().Build()) //todo awful
-        {
-        }
 
         public DefaultJwtParser(IJsonSerializer serializer)
         {

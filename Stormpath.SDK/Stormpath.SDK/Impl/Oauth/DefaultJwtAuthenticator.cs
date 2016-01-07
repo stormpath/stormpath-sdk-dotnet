@@ -101,7 +101,7 @@ namespace Stormpath.SDK.Impl.Oauth
 
         private IAccessToken ValidateLocallySync(IJwtAuthenticationRequest request)
         {
-            var parser = Jwts.Parser()
+            var parser = this.application.Client.NewJwtParser()
 
                 // Require secret key signature
                 .SetSigningKey(this.internalDataStore.ApiKey.GetSecret(), Encoding.UTF8)
