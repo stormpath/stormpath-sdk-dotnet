@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultJsonSerializerLoader_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultSerializerLoader_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,25 +16,19 @@
 
 using Shouldly;
 using Stormpath.SDK.Impl.Serialization;
-using Stormpath.SDK.Impl.Utility;
-using Stormpath.SDK.Serialization;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
-    public class DefaultJsonSerializerLoader_tests
+    public class DefaultSerializerLoader_tests
     {
         [Fact]
         public void Default_library_is_loaded()
         {
-            ITypeLoader<IJsonSerializer> loader = new DefaultJsonSerializerLoader();
-
             // This test project has a reference to Stormpath.SDK.JsonNetSerializer, so the file lookup will succeed
-            IJsonSerializer instance = null;
-            bool loadResult = loader.TryLoad(out instance);
+            var foundType = DefaultSerializerLoader.Load();
 
-            loadResult.ShouldBeTrue();
-            instance.ShouldNotBe(null);
+            foundType.ShouldNotBeNull();
         }
     }
 }

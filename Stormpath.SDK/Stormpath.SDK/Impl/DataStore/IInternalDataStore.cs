@@ -15,6 +15,7 @@
 // </copyright>
 
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Client;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.Http;
@@ -46,6 +47,12 @@ namespace Stormpath.SDK.Impl.DataStore
         /// </summary>
         /// <value>The <see cref="IJsonSerializer"/> used by this data store.</value>
         IJsonSerializer Serializer { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IClient"/> that owns this data store.
+        /// </summary>
+        /// <value>The <see cref="IClient"/> that owns this data store.</value>
+        IClient Client { get; }
 
         /// <summary>
         /// Gets the base URL of the remote server.

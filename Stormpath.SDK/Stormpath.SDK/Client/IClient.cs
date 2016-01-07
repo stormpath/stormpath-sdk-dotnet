@@ -18,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.DataStore;
+using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Client
@@ -42,5 +43,17 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <returns>The cache provider associated with this client.</returns>
         ICacheProvider GetCacheProvider();
+
+        /// <summary>
+        /// Creates a new <see cref="IJwtBuilder">JWT Builder</see>, which can create <see cref="IJwt">JSON Web Tokens</see>.
+        /// </summary>
+        /// <returns>A new <see cref="IJwtBuilder"/> instance.</returns>
+        IJwtBuilder NewJwtBuilder();
+
+        /// <summary>
+        /// Creates a new <see cref="IJwtParser">JWT Parser</see>, which can parse JSON Web Token strings.
+        /// </summary>
+        /// <returns>A new <see cref="IJwtParser"/> instance.</returns>
+        IJwtParser NewJwtParser();
     }
 }

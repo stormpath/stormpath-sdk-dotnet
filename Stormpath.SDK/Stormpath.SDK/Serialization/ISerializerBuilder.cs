@@ -1,4 +1,4 @@
-﻿// <copyright file="IJsonSerializerBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ISerializerBuilder.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Serialization;
-
-namespace Stormpath.SDK.Impl.Client
+namespace Stormpath.SDK.Serialization
 {
     /// <summary>
-    /// Builder pattern for <see cref="IJsonSerializerBuilder"/> instances.
+    /// Builder pattern for <see cref="IJsonSerializer"/> instances.
     /// </summary>
-    internal interface IJsonSerializerBuilder : ISerializerConsumer<IJsonSerializerBuilder>
+    public interface ISerializerBuilder
     {
         /// <summary>
         /// Builds a new <see cref="IJsonSerializer"/> from the current builder state.

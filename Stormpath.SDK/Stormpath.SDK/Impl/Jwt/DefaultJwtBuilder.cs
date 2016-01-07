@@ -40,11 +40,6 @@ namespace Stormpath.SDK.Impl.Jwt
             this.serializer = serializer;
         }
 
-        internal DefaultJwtBuilder()
-            : this(((IJsonSerializerBuilder)new DefaultJsonSerializerBuilder()).Build())
-        {
-        }
-
         private string Base64UrlEncode(Map map, Encoding encoding)
         {
             var json = this.serializer.Serialize(map);

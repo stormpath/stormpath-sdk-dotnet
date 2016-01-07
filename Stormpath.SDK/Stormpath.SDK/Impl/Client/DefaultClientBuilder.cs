@@ -34,9 +34,12 @@ namespace Stormpath.SDK.Impl.Client
         private static readonly TimeSpan DefaultIdentityMapSlidingExpiration = TimeSpan.FromMinutes(10);
 
         private readonly IClientApiKeyBuilder clientApiKeyBuilder;
-        private readonly IJsonSerializerBuilder serializerBuilder;
-        private readonly IHttpClientBuilder httpClientBuilder;
         private readonly IUserAgentBuilder userAgentBuilder;
+
+        private ISerializerBuilder serializerBuilder;
+        private IHttpClientBuilder httpClientBuilder;
+        private IJsonSerializer overrideSerializer;
+        private IHttpClient overrideHttpClient;
 
         private string baseUrl = DefaultBaseUrl;
         private int connectionTimeout = DefaultConnectionTimeout;
@@ -50,8 +53,8 @@ namespace Stormpath.SDK.Impl.Client
         {
             this.userAgentBuilder = userAgentBuilder;
 
-            this.serializerBuilder = new DefaultJsonSerializerBuilder();
-            this.httpClientBuilder = new DefaultHttpClientBuilder();
+            this.serializerBuilder = Serializers.Create().Default();
+            this.httpClientBuilder = HttpClients.Create().Default();
             this.clientApiKeyBuilder = ClientApiKeys.Builder();
         }
 
@@ -121,7 +124,19 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentNullException(nameof(serializer));
             }
 
-            this.serializerBuilder.SetSerializer(serializer);
+            this.overrideSerializer = serializer;
+
+            return this;
+        }
+
+        IClientBuilder IClientBuilder.SetSerializer(ISerializerBuilder serializerBuilder)
+        {
+            if (serializerBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(serializerBuilder));
+            }
+
+            this.serializerBuilder = serializerBuilder;
 
             return this;
         }
@@ -133,7 +148,19 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentNullException(nameof(httpClient));
             }
 
-            this.httpClientBuilder.SetHttpClient(httpClient);
+            this.overrideHttpClient = httpClient;
+
+            return this;
+        }
+
+        IClientBuilder IClientBuilder.SetHttpClient(IHttpClientBuilder httpClientBuilder)
+        {
+            if (httpClientBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(httpClientBuilder));
+            }
+
+            this.httpClientBuilder = httpClientBuilder;
 
             return this;
         }
@@ -150,11 +177,6 @@ namespace Stormpath.SDK.Impl.Client
             if (cacheProvider == null)
             {
                 throw new ArgumentNullException(nameof(cacheProvider));
-            }
-
-            if (this.cacheProvider != null)
-            {
-                throw new ApplicationException("Cache provider already set.");
             }
 
             this.cacheProvider = cacheProvider;
@@ -176,12 +198,16 @@ namespace Stormpath.SDK.Impl.Client
                 }
             }
 
-            if (this.logger == null)
-            {
-                this.logger = new NullLogger();
-            }
+            var logger = this.logger ?? new NullLogger();
 
-            var serializer = this.serializerBuilder.Build();
+            var serializer = this.overrideSerializer ?? this.serializerBuilder.Build();
+
+            this.httpClientBuilder
+                .SetBaseUrl(this.baseUrl)
+                .SetConnectionTimeout(this.connectionTimeout)
+                .SetProxy(this.proxy)
+                .SetLogger(this.logger);
+            var httpClient = this.overrideHttpClient ?? this.httpClientBuilder.Build();
 
             if (this.cacheProvider == null)
             {
@@ -208,23 +234,17 @@ namespace Stormpath.SDK.Impl.Client
                 }
             }
 
-            this.httpClientBuilder
-                .SetBaseUrl(this.baseUrl)
-                .SetConnectionTimeout(this.connectionTimeout)
-                .SetProxy(this.proxy)
-                .SetLogger(this.logger);
-
             return new DefaultClient(
                 this.apiKey,
                 this.baseUrl,
                 this.authenticationScheme,
                 this.connectionTimeout,
                 this.proxy,
-                this.httpClientBuilder.Build(),
-                this.serializerBuilder.Build(),
+                httpClient,
+                serializer,
                 this.cacheProvider,
                 this.userAgentBuilder,
-                this.logger,
+                logger,
                 DefaultIdentityMapSlidingExpiration);
         }
     }

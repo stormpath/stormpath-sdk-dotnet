@@ -1,4 +1,4 @@
-﻿// <copyright file="TypeLoader{T}.cs" company="Stormpath, Inc.">
+﻿// <copyright file="TypeLoader.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +20,7 @@ using System.Reflection;
 
 namespace Stormpath.SDK.Impl.Utility
 {
-    internal abstract class TypeLoader<T> : ITypeLoader<T>
-        where T : class
+    internal sealed class TypeLoader
     {
         private readonly string fileName;
         private readonly string fullyQualifiedTypeName;
@@ -32,7 +31,15 @@ namespace Stormpath.SDK.Impl.Utility
             this.fullyQualifiedTypeName = fullyQualifiedTypeName;
         }
 
-        public bool TryLoad(out T instance, object[] constructorArguments = null)
+        public Type Load()
+        {
+            var path = this.GetPath();
+
+            var assembly = Assembly.LoadFile(path);
+            return assembly.GetType(this.fullyQualifiedTypeName);
+        }
+
+        private string GetPath()
         {
             // Try to load via AppDomain.CurrentDomain
             var appDomainPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", this.fileName);
@@ -44,19 +51,12 @@ namespace Stormpath.SDK.Impl.Utility
 
             if (!foundViaAppDomain && !foundViaNaivePath)
             {
-                instance = null;
-                return false;
+                return null;
             }
 
-            var absolutePath = foundViaAppDomain
+            return foundViaAppDomain
                 ? appDomainPath
                 : naivePath;
-
-            Assembly assembly = Assembly.LoadFile(absolutePath);
-            var type = assembly.GetType(this.fullyQualifiedTypeName);
-            instance = Activator.CreateInstance(type, constructorArguments) as T;
-
-            return instance != null;
         }
     }
 }

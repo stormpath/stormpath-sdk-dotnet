@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultHttpClientLoader.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultSerializerLoader.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,12 +17,12 @@
 using System;
 using Stormpath.SDK.Impl.Utility;
 
-namespace Stormpath.SDK.Impl.Http
+namespace Stormpath.SDK.Impl.Serialization
 {
-    internal static class DefaultHttpClientLoader
+    internal static class DefaultSerializerLoader
     {
-        private static readonly string FileName = "Stormpath.SDK.RestSharpClient.dll";
-        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Http.RestSharpClient";
+        private static readonly string FileName = "Stormpath.SDK.JsonNetSerializer.dll";
+        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Serialization.JsonNetSerializer";
 
         // Caching result so expensive reflection only happens once
         private static readonly Lazy<Type> LoadTypeAction = new Lazy<Type>(() =>

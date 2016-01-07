@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultJsonSerializerLoader.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultSerializerFactory.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,19 +14,26 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Impl.Utility;
+using System;
 using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Impl.Serialization
 {
-    internal sealed class DefaultJsonSerializerLoader : TypeLoader<IJsonSerializer>
+    internal sealed class DefaultSerializerFactory : ISerializerFactory
     {
-        private static readonly string FileName = "Stormpath.SDK.JsonNetSerializer.dll";
-        private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Serialization.JsonNetSerializer";
-
-        public DefaultJsonSerializerLoader()
-            : base(FileName, FullyQualifiedType)
+        ISerializerBuilder ISerializerFactory.Default()
         {
+            Type defaultSerializerType = null;
+            try
+            {
+                defaultSerializerType = DefaultSerializerLoader.Load();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error while loading the default serializer. See the inner exception for details.", ex);
+            }
+
+            return new AbstractSerializerBuilder<IJsonSerializer>(defaultSerializerType);
         }
     }
 }

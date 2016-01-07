@@ -1,4 +1,4 @@
-﻿// <copyright file="IResource.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Serializers.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,25 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Client;
+using Stormpath.SDK.Impl.Serialization;
 
-namespace Stormpath.SDK.Resource
+namespace Stormpath.SDK.Serialization
 {
     /// <summary>
-    /// Represents a resource stored in Stormpath.
+    /// Static entry point for creating <see cref="IJsonSerializer">serializer</see> instances.
     /// </summary>
-    public interface IResource
+    public static class Serializers
     {
         /// <summary>
-        /// Gets the URL of the resource.
+        /// Gets a new <see cref="ISerializerFactory">factory</see> instance.
         /// </summary>
-        /// <value>A resource URL.</value>
-        string Href { get; }
-
-        /// <summary>
-        /// Gets the <see cref="IClient">Client</see> that instantiated this object.
-        /// </summary>
-        /// <value>The <see cref="IClient">Client</see> that instantiated this object.</value>
-        IClient Client { get; }
+        /// <returns>A new <see cref="ISerializerFactory">factory</see> instance.</returns>
+        public static ISerializerFactory Create()
+            => new DefaultSerializerFactory();
     }
 }

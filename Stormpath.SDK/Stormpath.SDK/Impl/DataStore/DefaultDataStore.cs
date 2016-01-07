@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
+using Stormpath.SDK.Client;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.Client;
@@ -36,6 +37,7 @@ namespace Stormpath.SDK.Impl.DataStore
     internal sealed partial class DefaultDataStore : IInternalDataStore, IInternalAsyncDataStore, IInternalSyncDataStore, IDisposable
     {
         private readonly string baseUrl;
+        private readonly IClient client;
         private readonly IRequestExecutor requestExecutor;
         private readonly ICacheResolver cacheResolver;
         private readonly ICacheProvider cacheProvider;
@@ -65,8 +67,15 @@ namespace Stormpath.SDK.Impl.DataStore
 
         IClientApiKey IInternalDataStore.ApiKey => this.requestExecutor.ApiKey;
 
-        internal DefaultDataStore(IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, IUserAgentBuilder userAgentBuilder, ICacheProvider cacheProvider, TimeSpan identityMapExpiration)
+        IClient IInternalDataStore.Client => this.client;
+
+        internal DefaultDataStore(IClient client, IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, IUserAgentBuilder userAgentBuilder, ICacheProvider cacheProvider, TimeSpan identityMapExpiration)
         {
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+
             if (requestExecutor == null)
             {
                 throw new ArgumentNullException(nameof(requestExecutor));
@@ -94,6 +103,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.cacheResolver = new DefaultCacheResolver(cacheProvider, this.logger);
             this.userAgentBuilder = userAgentBuilder;
 
+            this.client = client;
             this.serializer = new JsonSerializationProvider(serializer);
             this.identityMap = new MemoryCacheIdentityMap<ResourceData>(identityMapExpiration, this.logger);
             this.resourceFactory = new DefaultResourceFactory(this, this.identityMap);

@@ -85,6 +85,9 @@
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
     <Compile Include="Cache\AbstractCacheProvider.cs" />
+    <Compile Include="Http\AbstractHttpClientBuilder.cs" />
+    <Compile Include="Http\HttpClients.cs" />
+    <Compile Include="Http\IHttpClientFactory.cs" />
     <Compile Include="Http\IHttpRequestBuilder.cs" />
     <Compile Include="IdSite\IIdSiteSyncResultListener.cs" />
     <Compile Include="IdSite\IIdSiteSyncCallbackHandler.cs" />
@@ -97,6 +100,7 @@
     <Compile Include="Impl\Application\DefaultApplication.Oauth.cs" />
     <Compile Include="Impl\Application\DefaultApplicationAccountStoreMapping.cs" />
     <Compile Include="Impl\Application\IApplicationAccountStoreMappingSync.cs" />
+    <Compile Include="Impl\Client\DefaultClient.Jwt.cs" />
     <Compile Include="Impl\Client\IUserAgentBuilder.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Core.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Create.cs" />
@@ -106,6 +110,8 @@
     <Compile Include="Impl\DataStore\Filters\AccountStoreMappingCacheInvalidationFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.Sync.cs" />
     <Compile Include="Impl\DataStore\TypeNameResolver.cs" />
+    <Compile Include="Impl\Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Impl\Http\DefaultHttpClientFactory.cs" />
     <Compile Include="Impl\Http\DefaultHttpRequestBuilder.cs" />
     <Compile Include="Impl\Http\FormUrlEncoder.cs" />
     <Compile Include="Impl\IdentityMap\IdentityMapOptionsResolver.cs" />
@@ -215,14 +221,11 @@
     <Compile Include="Impl\Client\DefaultClient.DataStore.cs" />
     <Compile Include="Impl\Client\DefaultClient.TenantActions.cs" />
     <Compile Include="Impl\Client\DefaultClient.TenantActionsSync.cs" />
-    <Compile Include="Impl\Client\DefaultJsonSerializerBuilder.cs" />
-    <Compile Include="Impl\Client\DefaultHttpClientBuilder.cs" />
     <Compile Include="Impl\CustomData\ICustomDataSync.cs" />
     <Compile Include="Impl\DataStore\Filters\AbstractCacheFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\ProviderAccountResultFilter.cs" />
     <Compile Include="Impl\Client\IClientSync.cs" />
-    <Compile Include="Impl\Client\IJsonSerializerBuilder.cs" />
-    <Compile Include="Impl\Client\IHttpClientBuilder.cs" />
+    <Compile Include="Http\IHttpClientBuilder.cs" />
     <Compile Include="Impl\CustomData\DefaultCustomData.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceConverter.cs" />
     <Compile Include="Impl\DataStore\DefaultResourceDataRequest.cs" />
@@ -415,6 +418,7 @@
     <Compile Include="Impl\Resource\DefaultRetrievalOptions{T}.cs" />
     <Compile Include="Impl\Resource\ExpandedProperty.cs" />
     <Compile Include="Impl\Resource\IEmbeddedProperty.cs" />
+    <Compile Include="Impl\Serialization\DefaultSerializerFactory.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.Collections.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.TenantActions.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.TenantActionsSync.cs" />
@@ -444,7 +448,7 @@
     <Compile Include="Impl\DataStore\Filters\ISynchronousFilter.cs" />
     <Compile Include="Impl\DataStore\IInternalDataStore.cs" />
     <Compile Include="Impl\Serialization\JsonSerializationProvider.cs" />
-    <Compile Include="Impl\Serialization\DefaultJsonSerializerLoader.cs" />
+    <Compile Include="Impl\Serialization\DefaultSerializerLoader.cs" />
     <Compile Include="Impl\Tenant\ITenantActionsSync.cs" />
     <Compile Include="Impl\Tenant\ITenantSync.cs" />
     <Compile Include="Impl\Utility\AnonymousType.cs" />
@@ -453,9 +457,8 @@
     <Compile Include="Impl\Utility\DurationVisitor.cs" />
     <Compile Include="Impl\Utility\HmacGenerator.cs" />
     <Compile Include="Impl\Utility\Iso8601Duration.cs" />
-    <Compile Include="Impl\Utility\ITypeLoader{T}.cs" />
     <Compile Include="Impl\Introspection\SourceLanguage.cs" />
-    <Compile Include="Impl\Utility\TypeLoader{T}.cs" />
+    <Compile Include="Impl\Utility\TypeLoader.cs" />
     <Compile Include="Impl\Utility\UnixDate.cs" />
     <Compile Include="Jwt\IClaimsMutator.cs" />
     <Compile Include="Jwt\IJwtBuilder.cs" />
@@ -554,6 +557,10 @@
     <Compile Include="Resource\IRetrievalOptions{T}.cs" />
     <Compile Include="Resource\ISaveableWithOptions{T}.cs" />
     <Compile Include="Resource\ISaveable{T}.cs" />
+    <Compile Include="Serialization\AbstractSerializerBuilder.cs" />
+    <Compile Include="Serialization\ISerializerBuilder.cs" />
+    <Compile Include="Serialization\ISerializerFactory.cs" />
+    <Compile Include="Serialization\Serializers.cs" />
     <Compile Include="Sync\SyncJwtAuthenticatorExtensions.cs" />
     <Compile Include="Sync\SyncIdSiteTokenAuthenticatorExtensions.cs" />
     <Compile Include="Sync\SyncRefreshGrantAuthenticatorExtensions.cs" />

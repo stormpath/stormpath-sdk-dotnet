@@ -1,4 +1,4 @@
-﻿// <copyright file="ISerializerConsumer{T}.cs" company="Stormpath, Inc.">
+﻿// <copyright file="JsonNetSerializerFactoryExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,18 +17,16 @@
 namespace Stormpath.SDK.Serialization
 {
     /// <summary>
-    /// Represents a class that depends on <see cref="IJsonSerializer"/>.
+    /// Provides access to JsonNetSerializer by plugging into <see cref="ISerializerFactory"/>.
     /// </summary>
-    /// <typeparam name="T">The return type.</typeparam>
-    public interface ISerializerConsumer<out T>
+    public static class JsonNetSerializerFactoryExtensions
     {
         /// <summary>
-        /// Use the specified JSON serializer.
+        /// Creates a new JSON.NET-based serializer instance.
         /// </summary>
-        /// <param name="serializer">The serializer to use.</param>
-        /// <returns>The source object for method chaining.</returns>
-        /// <seealso cref="Serializers.Create()"/>
-        /// <seealso cref="ISerializerFactory.Default()"/>
-        T SetSerializer(IJsonSerializer serializer);
+        /// <param name="factory">The factory.</param>
+        /// <returns>A <see cref="ISerializerBuilder">builder</see> capable of constructing an instance of the JSON.NET-based serializer.</returns>
+        public static ISerializerBuilder JsonNetSerializer(this ISerializerFactory factory)
+            => new AbstractSerializerBuilder<Extensions.Serialization.JsonNetSerializer>();
     }
 }

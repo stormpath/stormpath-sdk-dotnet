@@ -22,6 +22,8 @@ using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Extensions.Http;
 using Stormpath.SDK.Extensions.Serialization;
+using Stormpath.SDK.Http;
+using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Tests.Common.Integration
 {
@@ -40,8 +42,10 @@ namespace Stormpath.SDK.Tests.Common.Integration
         {
             return Clients.Builder()
                 .SetApiKey(GetApiKey())
-                .SetHttpClient(new RestSharpClient(ApiBaseUrl.Value, 20000, null, null))
-                .SetSerializer(new JsonNetSerializer())
+                .SetHttpClient(HttpClients.Create().RestSharpClient()
+                    .SetBaseUrl(ApiBaseUrl.Value)
+                    .Build())
+                .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .SetAuthenticationScheme(AuthenticationScheme.Basic)
                 .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
@@ -53,8 +57,10 @@ namespace Stormpath.SDK.Tests.Common.Integration
         {
             return Clients.Builder()
                 .SetApiKey(GetApiKey())
-                .SetHttpClient(new RestSharpClient(ApiBaseUrl.Value, 20000, null, null))
-                .SetSerializer(new JsonNetSerializer())
+                .SetHttpClient(HttpClients.Create().RestSharpClient()
+                    .SetBaseUrl(ApiBaseUrl.Value)
+                    .Build())
+                .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
@@ -66,8 +72,10 @@ namespace Stormpath.SDK.Tests.Common.Integration
         {
             return Clients.Builder()
                 .SetApiKey(GetApiKey())
-                .SetHttpClient(new RestSharpClient(ApiBaseUrl.Value, 20000, null, null))
-                .SetSerializer(new JsonNetSerializer())
+                .SetHttpClient(HttpClients.Create().RestSharpClient()
+                    .SetBaseUrl(ApiBaseUrl.Value)
+                    .Build())
+                .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)

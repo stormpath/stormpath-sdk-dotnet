@@ -15,23 +15,15 @@
 // </copyright>
 
 using System.Net;
-using Stormpath.SDK.Http;
 using Stormpath.SDK.Logging;
 
-namespace Stormpath.SDK.Impl.Client
+namespace Stormpath.SDK.Http
 {
     /// <summary>
-    /// Builder pattern for <see cref="IHttpClient"/> instances.
+    /// Builder for <see cref="IHttpClient"/> instances.
     /// </summary>
-    internal interface IHttpClientBuilder : ILoggerConsumer<IHttpClientBuilder>
+    public interface IHttpClientBuilder : ILoggerConsumer<IHttpClientBuilder>
     {
-        /// <summary>
-        /// Sets the HTTP client object to use.
-        /// </summary>
-        /// <param name="client">The HTTP client.</param>
-        /// <returns>This instance for method chaining.</returns>
-        IHttpClientBuilder SetHttpClient(IHttpClient client);
-
         /// <summary>
         /// Sets the remote base URL.
         /// </summary>

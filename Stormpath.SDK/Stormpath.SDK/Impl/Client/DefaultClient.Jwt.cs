@@ -1,4 +1,4 @@
-﻿// <copyright file="IResource.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultClient.Jwt.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,24 +15,17 @@
 // </copyright>
 
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Impl.Jwt;
+using Stormpath.SDK.Jwt;
 
-namespace Stormpath.SDK.Resource
+namespace Stormpath.SDK.Impl.Client
 {
-    /// <summary>
-    /// Represents a resource stored in Stormpath.
-    /// </summary>
-    public interface IResource
+    internal sealed partial class DefaultClient
     {
-        /// <summary>
-        /// Gets the URL of the resource.
-        /// </summary>
-        /// <value>A resource URL.</value>
-        string Href { get; }
+        IJwtBuilder IClient.NewJwtBuilder()
+            => new DefaultJwtBuilder(this.Serializer);
 
-        /// <summary>
-        /// Gets the <see cref="IClient">Client</see> that instantiated this object.
-        /// </summary>
-        /// <value>The <see cref="IClient">Client</see> that instantiated this object.</value>
-        IClient Client { get; }
+        IJwtParser IClient.NewJwtParser()
+            => new DefaultJwtParser(this.Serializer);
     }
 }

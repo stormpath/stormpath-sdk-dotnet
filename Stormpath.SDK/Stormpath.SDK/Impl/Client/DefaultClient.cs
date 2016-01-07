@@ -25,6 +25,7 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Sync;
@@ -92,7 +93,7 @@ namespace Stormpath.SDK.Impl.Client
 
             var requestExecutor = new DefaultRequestExecutor(httpClient, apiKey, authenticationScheme, this.logger);
 
-            this.dataStore = new DefaultDataStore(requestExecutor, baseUrl, this.serializer, this.logger, userAgentBuilder, cacheProvider, identityMapExpiration);
+            this.dataStore = new DefaultDataStore(this as IClient, requestExecutor, baseUrl, this.serializer, this.logger, userAgentBuilder, cacheProvider, identityMapExpiration);
             this.dataStoreAsync = this.dataStore as IInternalAsyncDataStore;
             this.dataStoreSync = this.dataStore as IInternalSyncDataStore;
         }

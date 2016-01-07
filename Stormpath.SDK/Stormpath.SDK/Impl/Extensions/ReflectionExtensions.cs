@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultHttpClientLoader_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ReflectionExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,22 @@
 // limitations under the License.
 // </copyright>
 
-using Shouldly;
-using Stormpath.SDK.Impl.Http;
-using Xunit;
+using System;
+using System.Reflection;
 
-namespace Stormpath.SDK.Tests.Impl
+namespace Stormpath.SDK.Impl.Extensions
 {
-    public class DefaultHttpClientLoader_tests
+    internal static class ReflectionExtensions
     {
-        [Fact]
-        public void Default_library_is_loaded()
+        public static ConstructorInfo FindConstructor(this Type type, Type[] parameterTypes, bool findPrivate = false)
         {
-            // This test project has a reference to Stormpath.SDK.RestSharpClient, so the file lookup will succeed
-            var foundType = DefaultHttpClientLoader.Load();
+            var bindingFlags = BindingFlags.Instance | BindingFlags.Public;
+            if (findPrivate)
+            {
+                bindingFlags |= BindingFlags.NonPublic;
+            }
 
-            foundType.ShouldNotBeNull();
+            return type?.GetConstructor(bindingFlags, null, parameterTypes, null);
         }
     }
 }

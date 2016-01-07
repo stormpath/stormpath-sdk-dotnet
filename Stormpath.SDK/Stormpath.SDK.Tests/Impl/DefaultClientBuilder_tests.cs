@@ -21,8 +21,10 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Extensions.Http;
 using Stormpath.SDK.Extensions.Serialization;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.Client;
+using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Xunit;
@@ -40,8 +42,8 @@ namespace Stormpath.SDK.Tests.Impl
             // Providing these means the tests won't try to do a dynamic assembly lookup
             // which tends to screw up parallel-running tests
             this.builder
-                .SetHttpClient(new RestSharpClient("https://api.stormpath.com/v1", 20000, null, null))
-                .SetSerializer(new JsonNetSerializer());
+                .SetHttpClient(HttpClients.Create().RestSharpClient())
+                .SetSerializer(Serializers.Create().JsonNetSerializer());
         }
 
         [Fact]

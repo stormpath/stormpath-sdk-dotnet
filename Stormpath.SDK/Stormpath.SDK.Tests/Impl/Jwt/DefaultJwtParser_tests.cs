@@ -17,10 +17,10 @@
 using System;
 using System.Text;
 using Shouldly;
-using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Impl.Jwt;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
+using Stormpath.SDK.Serialization;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Jwt
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
 
         private static IJwtBuilder GetBuilder(byte[] key)
         {
-            IJwtBuilder builder = new DefaultJwtBuilder(new JsonNetSerializer());
+            IJwtBuilder builder = new DefaultJwtBuilder(Serializers.Create().JsonNetSerializer().Build());
             builder.SignWith(key);
 
             return builder;
@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
 
         private static IJwtParser GetParser(byte[] key)
         {
-            IJwtParser parser = new DefaultJwtParser(new JsonNetSerializer());
+            IJwtParser parser = new DefaultJwtParser(Serializers.Create().JsonNetSerializer().Build());
             parser.SetSigningKey(key);
 
             return parser;

@@ -16,7 +16,6 @@
 
 using System;
 using System.Text;
-using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
@@ -36,11 +35,6 @@ namespace Stormpath.SDK.Impl.Jwt
         {
             this.expectedClaims = new DefaultJwtClaimsBuilder();
             this.serializer = serializer;
-        }
-
-        internal DefaultJwtParser()
-            : this(((IJsonSerializerBuilder)new DefaultJsonSerializerBuilder()).Build())
-        {
         }
 
         IJwtParser IJwtParser.RequireClaim(string claimName, object value)
