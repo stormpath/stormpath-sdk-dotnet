@@ -21,7 +21,7 @@ namespace Stormpath.SDK.Impl.Serialization
 {
     internal sealed class DefaultSerializerFactory : ISerializerFactory
     {
-        ISerializerBuilder ISerializerFactory.Default()
+        ISerializerBuilder ISerializerFactory.AutoDetect()
         {
             Type defaultSerializerType = null;
             try

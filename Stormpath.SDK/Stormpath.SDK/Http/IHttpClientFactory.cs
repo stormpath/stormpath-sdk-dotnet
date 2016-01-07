@@ -25,11 +25,11 @@ namespace Stormpath.SDK.Http
         /// Use the default HTTP client.
         /// </summary>
         /// <remarks>
-        /// Dynamically loads the default HTTP client (currently RestSharpClient).
-        /// This method is called by <see cref="Client.IClientBuilder"/> unless a different <see cref="IHttpClientBuilder">client builder</see> is specified.
+        /// Dynamically loads the default HTTP client (currently <c>RestSharpClient</c>) by searching the application path.
+        /// This method is implicitly called by <see cref="Client.IClientBuilder"/> unless a different <see cref="IHttpClientBuilder">client builder</see> is specified.
         /// </remarks>
         /// <seealso cref="Client.IClientBuilder.SetHttpClient(IHttpClientBuilder)"/>
         /// <returns>A <see cref="IHttpClientBuilder">builder</see> capable of constructing the default HTTP client.</returns>
-        IHttpClientBuilder Default();
+        IHttpClientBuilder AutoDetect();
     }
 }

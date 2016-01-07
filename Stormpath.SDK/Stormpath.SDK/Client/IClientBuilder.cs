@@ -38,11 +38,11 @@ namespace Stormpath.SDK.Client
     /// </para>
     /// <para>
     /// Unless <see cref="SetHttpClient(IHttpClient)"/> or <see cref="SetHttpClient(IHttpClientBuilder)"/> is called,
-    /// the <see cref="IHttpClientFactory.Default()">default</see> HTTP client will be used.
+    /// the <see cref="IHttpClientFactory.AutoDetect()">default</see> HTTP client will be used.
     /// </para>
     /// <para>
     /// Unless <see cref="ISerializerConsumer{T}.SetSerializer(IJsonSerializer)"/> or <see cref="SetSerializer(ISerializerBuilder)"/> is called,
-    /// the <see cref="ISerializerFactory.Default()">default</see> serializer will be used.
+    /// the <see cref="ISerializerFactory.AutoDetect()">default</see> serializer will be used.
     /// </para>
     /// <para>
     /// Unless <see cref="SetCacheProvider(ICacheProvider)"/> is called, an in-memory cache will be used to improve performance,
@@ -122,12 +122,12 @@ namespace Stormpath.SDK.Client
         /// <summary>
         /// Sets the HTTP client to use when making requests.
         /// </summary>
-        /// <remarks><see cref="SetHttpClient(IHttpClientBuilder)"/> is preferred, unless have manually instantiated</remarks>
+        /// <remarks><see cref="SetHttpClient(IHttpClientBuilder)"/> is preferred, unless you have manually instantiated a class supporting <see cref="IHttpClient"/>.</remarks>
         /// <param name="httpClient">The HTTP client to use.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="System.ArgumentNullException"><paramref name="httpClient"/> is null.</exception>
         /// <seealso cref="HttpClients.Create()"/>
-        /// <seealso cref="IHttpClientFactory.Default()"/>
+        /// <seealso cref="IHttpClientFactory.AutoDetect()"/>
         IClientBuilder SetHttpClient(IHttpClient httpClient);
 
         /// <summary>

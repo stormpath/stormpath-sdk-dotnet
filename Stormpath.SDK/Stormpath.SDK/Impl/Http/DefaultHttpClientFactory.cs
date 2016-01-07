@@ -21,7 +21,7 @@ namespace Stormpath.SDK.Impl.Http
 {
     internal sealed class DefaultHttpClientFactory : IHttpClientFactory
     {
-        IHttpClientBuilder IHttpClientFactory.Default()
+        IHttpClientBuilder IHttpClientFactory.AutoDetect()
         {
             Type defaultClientType = null;
             try

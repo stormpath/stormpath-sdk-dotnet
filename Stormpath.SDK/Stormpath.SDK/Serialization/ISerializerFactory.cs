@@ -25,11 +25,11 @@ namespace Stormpath.SDK.Serialization
         /// Use the default serializer.
         /// </summary>
         /// <remarks>
-        /// Dynamically loads the default serializer (currently JsonNetSerializer).
-        /// This method is called by <see cref="Client.IClientBuilder"/> unless a different <see cref="ISerializerBuilder">serializer builder</see> is specified.
+        /// Dynamically loads the default serializer (currently <c>JsonNetSerializer</c>) by searching the application path.
+        /// This method is implicitly called by <see cref="Client.IClientBuilder"/> unless a different <see cref="ISerializerBuilder">serializer builder</see> is specified.
         /// </remarks>
         /// <seealso cref="Client.IClientBuilder.SetSerializer(ISerializerBuilder)"/>
         /// <returns>A <see cref="ISerializerBuilder">builder</see> capable of constructing the default serializer.</returns>
-        ISerializerBuilder Default();
+        ISerializerBuilder AutoDetect();
     }
 }

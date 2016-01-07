@@ -53,8 +53,8 @@ namespace Stormpath.SDK.Impl.Client
         {
             this.userAgentBuilder = userAgentBuilder;
 
-            this.serializerBuilder = Serializers.Create().Default();
-            this.httpClientBuilder = HttpClients.Create().Default();
+            this.serializerBuilder = Serializers.Create().AutoDetect();
+            this.httpClientBuilder = HttpClients.Create().AutoDetect();
             this.clientApiKeyBuilder = ClientApiKeys.Builder();
         }
 
