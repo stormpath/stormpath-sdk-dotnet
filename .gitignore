@@ -36,4 +36,4 @@ Stormpath.SDK/.nuget/
 docs/api
 
 # Diff backup files from ApiApprover
-.cs.bak
+*.cs.bak
