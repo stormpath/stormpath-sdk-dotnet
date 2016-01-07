@@ -15,23 +15,27 @@
 // </copyright>
 
 using System.Collections.Generic;
+using Stormpath.SDK.Client;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Resource
 {
     internal sealed class CollectionResponsePage<T> : IResource
     {
+        private readonly IClient client;
+
         public CollectionResponsePage()
         {
         }
 
-        public CollectionResponsePage(string href, long offset, long limit, long size, List<T> items)
+        public CollectionResponsePage(string href, long offset, long limit, long size, List<T> items, IClient client)
         {
             this.Href = href;
             this.Offset = offset;
             this.Limit = limit;
             this.Size = size;
             this.Items = items;
+            this.client = client;
         }
 
         public string Href { get; set; }
@@ -43,5 +47,7 @@ namespace Stormpath.SDK.Impl.Resource
         public long Size { get; set; }
 
         public List<T> Items { get; set; }
+
+        IClient IResource.Client => this.client;
     }
 }

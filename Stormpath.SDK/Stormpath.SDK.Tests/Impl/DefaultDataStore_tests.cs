@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Client;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Account;
@@ -254,6 +255,17 @@ namespace Stormpath.SDK.Tests.Impl
             stopwatch.Stop();
             stopwatch.ElapsedMilliseconds.ShouldBeLessThan(1000);
             deleted.ShouldBeTrue();
+        }
+
+        [Fact]
+        public void Instantiated_resources_contain_reference_to_client()
+        {
+            var fakeClient = Substitute.For<IClient>();
+            var dataStore = TestDataStore.Create(client: fakeClient);
+
+            var account = dataStore.Instantiate<IAccount>();
+
+            account.Client.ShouldBe(fakeClient);
         }
     }
 }

@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.SDK.Client;
+
 namespace Stormpath.SDK.Resource
 {
     /// <summary>
@@ -26,5 +28,11 @@ namespace Stormpath.SDK.Resource
         /// </summary>
         /// <value>A resource URL.</value>
         string Href { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IClient">Client</see> that instantiated this object.
+        /// </summary>
+        /// <value>The <see cref="IClient">Client</see> that instantiated this object.</value>
+        IClient Client { get; }
     }
 }

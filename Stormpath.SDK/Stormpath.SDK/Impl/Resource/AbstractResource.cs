@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -63,6 +64,9 @@ namespace Stormpath.SDK.Impl.Resource
                     : href;
             }
         }
+
+        IClient IResource.Client
+            => this.GetInternalDataStore()?.Client;
 
         protected IInternalDataStore GetInternalDataStore()
             => this.GetResourceData()?.InternalDataStore;

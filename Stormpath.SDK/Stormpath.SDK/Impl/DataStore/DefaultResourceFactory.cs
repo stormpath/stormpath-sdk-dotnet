@@ -180,18 +180,18 @@ namespace Stormpath.SDK.Impl.DataStore
 
             try
             {
-                Type listOfInnerType = typeof(List<>).MakeGenericType(innerType);
-                var materializedItems = listOfInnerType.GetConstructor(Type.EmptyTypes).Invoke(Type.EmptyTypes);
-                var addMethod = listOfInnerType.GetMethod("Add", new Type[] { innerType });
+                Type typeOfListType = typeof(List<>).MakeGenericType(innerType);
+                var listOfMaterializedItems = typeOfListType.GetConstructor(Type.EmptyTypes).Invoke(Type.EmptyTypes);
+                var addMethod = typeOfListType.GetMethod("Add", new Type[] { innerType });
 
                 foreach (var itemMap in items)
                 {
                     var materialized = this.InstantiateSingle(innerType, itemMap, original: null);
-                    addMethod.Invoke(materializedItems, new object[] { materialized });
+                    addMethod.Invoke(listOfMaterializedItems, new object[] { materialized });
                 }
 
                 object targetObject;
-                targetObject = Activator.CreateInstance(collectionType, new object[] { href, offset, limit, size, materializedItems });
+                targetObject = Activator.CreateInstance(collectionType, new object[] { href, offset, limit, size, listOfMaterializedItems, this.dataStore.Client });
 
                 return targetObject;
             }
