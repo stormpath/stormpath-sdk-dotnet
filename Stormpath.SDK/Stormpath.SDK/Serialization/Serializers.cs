@@ -18,8 +18,15 @@ using Stormpath.SDK.Impl.Serialization;
 
 namespace Stormpath.SDK.Serialization
 {
+    /// <summary>
+    /// Static entry point for creating <see cref="IJsonSerializer">serializer</see> instances.
+    /// </summary>
     public static class Serializers
     {
+        /// <summary>
+        /// Gets a new <see cref="ISerializerFactory">factory</see> instance.
+        /// </summary>
+        /// <returns>A new <see cref="ISerializerFactory">factory</see> instance.</returns>
         public static ISerializerFactory Create()
             => new DefaultSerializerFactory();
     }

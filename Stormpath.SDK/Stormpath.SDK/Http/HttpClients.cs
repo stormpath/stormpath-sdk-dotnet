@@ -18,8 +18,15 @@ using Stormpath.SDK.Impl.Http;
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// Static entry point for creating <see cref="IHttpClient">HTTP client</see> instances.
+    /// </summary>
     public static class HttpClients
     {
+        /// <summary>
+        /// Gets a new <see cref="IHttpClientFactory">factory</see> instance.
+        /// </summary>
+        /// <returns>A new <see cref="IHttpClientFactory">factory</see> instance.</returns>
         public static IHttpClientFactory Create()
             => new DefaultHttpClientFactory();
     }

@@ -22,7 +22,14 @@ using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Http
 {
-    //remarks must have a public(?) constructor to target
+    /// <summary>
+    /// Builder class capable of constructing <see cref="IHttpClient"/> instances using the specified properties.
+    /// </summary>
+    /// <remarks>
+    /// The constructed type <b>must</b> have a public or private constructor that accepts these parameters in this order:
+    /// baseUrl (<see cref="string">string</see>), connectionTimeout (<see cref="int">int</see>), proxy (<see cref="IWebProxy">IWebProxy</see> or <see langword="null"/>), logger (<see cref="ILogger">ILogger</see> or <see langword="null"/>)
+    /// </remarks>
+    /// <typeparam name="T">The concrete type being constructed.</typeparam>
     public sealed class AbstractHttpClientBuilder<T> : IHttpClientBuilder
         where T : IHttpClient
     {

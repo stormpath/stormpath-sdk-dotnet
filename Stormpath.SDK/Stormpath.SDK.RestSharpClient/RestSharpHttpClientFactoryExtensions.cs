@@ -1,4 +1,4 @@
-﻿// <copyright file="HttpClientFactoryExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="RestSharpHttpClientFactoryExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2015 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +16,16 @@
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// Provides access to JsonNetSerializer by plugging into <see cref="IHttpClientFactory"/>.
+    /// </summary>
     public static class RestSharpHttpClientFactoryExtensions
     {
+        /// <summary>
+        /// Creates a new RestSharp-based HTTP client instance.
+        /// </summary>
+        /// <param name="factory">The factory.</param>
+        /// <returns>A <see cref="IHttpClientBuilder">builder</see> capable of constructing an instance of the RestSharp-based HTTP client.</returns>
         public static IHttpClientBuilder RestSharpClient(this IHttpClientFactory factory)
             => new AbstractHttpClientBuilder<Extensions.Http.RestSharpClient>();
     }

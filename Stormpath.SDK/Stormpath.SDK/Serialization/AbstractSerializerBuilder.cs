@@ -20,7 +20,13 @@ using Stormpath.SDK.Impl.Extensions;
 
 namespace Stormpath.SDK.Serialization
 {
-    //remarks must have a public(?) constructor to target
+    /// <summary>
+    /// Builder class capable of constructing <see cref="IJsonSerializer"/> instances using the specified properties.
+    /// </summary>
+    /// <remarks>
+    /// The constructed type <b>must</b> have a public or private parameterless constructor.
+    /// </remarks>
+    /// <typeparam name="T">The concrete type being constructed.</typeparam>
     public sealed class AbstractSerializerBuilder<T> : ISerializerBuilder
         where T : IJsonSerializer
     {

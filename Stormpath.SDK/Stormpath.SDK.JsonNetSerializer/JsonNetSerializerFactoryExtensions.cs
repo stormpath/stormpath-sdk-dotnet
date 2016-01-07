@@ -16,8 +16,16 @@
 
 namespace Stormpath.SDK.Serialization
 {
+    /// <summary>
+    /// Provides access to JsonNetSerializer by plugging into <see cref="ISerializerFactory"/>.
+    /// </summary>
     public static class JsonNetSerializerFactoryExtensions
     {
+        /// <summary>
+        /// Creates a new JSON.NET-based serializer instance.
+        /// </summary>
+        /// <param name="factory">The factory.</param>
+        /// <returns>A <see cref="ISerializerBuilder">builder</see> capable of constructing an instance of the JSON.NET-based serializer.</returns>
         public static ISerializerBuilder JsonNetSerializer(this ISerializerFactory factory)
             => new AbstractSerializerBuilder<Extensions.Serialization.JsonNetSerializer>();
     }

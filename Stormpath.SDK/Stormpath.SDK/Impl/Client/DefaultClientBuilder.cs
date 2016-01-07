@@ -179,11 +179,6 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentNullException(nameof(cacheProvider));
             }
 
-            if (this.cacheProvider != null)
-            {
-                throw new ApplicationException("Cache provider already set.");
-            }
-
             this.cacheProvider = cacheProvider;
 
             return this;
