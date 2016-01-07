@@ -24,11 +24,7 @@ namespace Stormpath.SDK.Impl.Resource
     {
         private readonly IClient client;
 
-        public CollectionResponsePage()
-        {
-        }
-
-        public CollectionResponsePage(string href, long offset, long limit, long size, List<T> items, IClient client)
+        public CollectionResponsePage(IClient client, string href, long offset, long limit, long size, List<T> items)
         {
             this.Href = href;
             this.Offset = offset;
@@ -38,15 +34,15 @@ namespace Stormpath.SDK.Impl.Resource
             this.client = client;
         }
 
-        public string Href { get; set; }
+        public string Href { get; }
 
-        public long Offset { get; set; }
+        public long Offset { get; }
 
-        public long Limit { get; set; }
+        public long Limit { get; }
 
-        public long Size { get; set; }
+        public long Size { get; }
 
-        public List<T> Items { get; set; }
+        public List<T> Items { get; }
 
         IClient IResource.Client => this.client;
     }

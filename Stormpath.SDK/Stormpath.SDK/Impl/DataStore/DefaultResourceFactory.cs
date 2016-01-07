@@ -191,7 +191,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 }
 
                 object targetObject;
-                targetObject = Activator.CreateInstance(collectionType, new object[] { href, offset, limit, size, listOfMaterializedItems, this.dataStore.Client });
+                targetObject = Activator.CreateInstance(collectionType, new object[] { this.dataStore.Client, href, offset, limit, size, listOfMaterializedItems });
 
                 return targetObject;
             }
