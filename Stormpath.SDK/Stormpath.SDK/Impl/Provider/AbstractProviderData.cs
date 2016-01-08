@@ -32,6 +32,6 @@ namespace Stormpath.SDK.Impl.Provider
         protected abstract string ConcreteProviderId { get; }
 
         string IProviderData.ProviderId
-            => this.GetProperty<string>(ProviderIdPropertyName);
+            => this.GetStringProperty(ProviderIdPropertyName);
     }
 }

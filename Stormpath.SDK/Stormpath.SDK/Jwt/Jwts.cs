@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Impl.Jwt;
 
 namespace Stormpath.SDK.Jwt
@@ -21,12 +22,14 @@ namespace Stormpath.SDK.Jwt
     /// <summary>
     /// Utility class for creating <see cref="IJwtClaimsBuilder"/>s for constructing <see cref="IJwtClaims"/> instances.
     /// </summary>
+    [Obsolete("Use the JWT methods available on IClient.")]
     public static class Jwts
     {
         /// <summary>
         /// Creates a new <see cref="IJwtClaimsBuilder"/>, used to construct <see cref="IJwtClaims"/> instances.
         /// </summary>
         /// <returns>A new <see cref="IJwtClaimsBuilder"/>.</returns>
+        [Obsolete("Use IClient.NewJwtBuilder() instead.")]
         public static IJwtClaimsBuilder NewClaimsBuilder()
             => new DefaultJwtClaimsBuilder();
     }

@@ -31,7 +31,7 @@ using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
-using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Tests.Impl
 
         public DefaultResourceFactory_tests()
         {
-            var dataStore = new StubDataStore(null, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create();
             var identityMap = new MemoryCacheIdentityMap<ResourceData>(TimeSpan.FromSeconds(10), Substitute.For<ILogger>()); // arbitrary expiration time
             this.factory = new DefaultResourceFactory(dataStore, identityMap);
         }

@@ -170,7 +170,7 @@ namespace Stormpath.SDK.Impl.Http.Authentication
         private static string GetSortedHeaderNames(HttpHeaders headers)
         {
             var sortedKeys = headers
-                .OrderBy(x => x.Key, StringComparer.InvariantCultureIgnoreCase)
+                .OrderBy(x => x.Key, StringComparer.OrdinalIgnoreCase)
                 .Select(x => x.Key.ToLower());
 
             return string.Join(";", sortedKeys);
@@ -191,7 +191,7 @@ namespace Stormpath.SDK.Impl.Http.Authentication
             var buffer = new StringBuilder();
 
             var sortedHeaders = request.Headers
-                .OrderBy(x => x.Key, StringComparer.InvariantCultureIgnoreCase);
+                .OrderBy(x => x.Key, StringComparer.OrdinalIgnoreCase);
 
             foreach (var header in sortedHeaders)
             {

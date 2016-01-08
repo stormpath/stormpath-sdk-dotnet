@@ -39,17 +39,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mono|AnyCPU'">
     <OutputPath>bin\Mono\</OutputPath>
-    <DefineConstants>CODE_ANALYSIS;TRACE</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>
     </CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Shouldly, Version=2.6.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
       <HintPath>..\packages\Shouldly.2.6.0\lib\net40\Shouldly.dll</HintPath>
       <Private>True</Private>
@@ -85,6 +84,9 @@
     <Compile Include="Async\Group_tests.cs" />
     <Compile Include="Async\Directory_tests.cs" />
     <Compile Include="Async\Error_tests.cs" />
+    <Compile Include="Async\OauthPolicy_tests.cs" />
+    <Compile Include="Async\Oauth_tests.cs" />
+    <Compile Include="Async\Organization_tests.cs" />
     <Compile Include="Sync\Expansion_linq_tests.cs" />
     <Compile Include="Sync\Expansion_retrieval_tests.cs" />
     <Compile Include="Meta_tests.cs" />
@@ -96,9 +98,11 @@
     <Compile Include="Sync\Directory_tests.cs" />
     <Compile Include="Sync\Account_tests.cs" />
     <Compile Include="Sync\Error_tests.cs" />
+    <Compile Include="Sync\OauthPolicy_tests.cs" />
+    <Compile Include="Sync\Oauth_tests.cs" />
+    <Compile Include="Sync\Organization_tests.cs" />
     <Compile Include="Sync\Tenant_tests.cs" />
     <Compile Include="Async\Tenant_tests.cs" />
-    <Compile Include="Sanity_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IntegrationTestCollection.cs" />
   </ItemGroup>
@@ -131,9 +135,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc1\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc1\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc1\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

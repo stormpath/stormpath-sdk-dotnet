@@ -23,7 +23,7 @@ Imports Stormpath.SDK.Error
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.Async
+Namespace Async
     Public Class Error_tests
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>

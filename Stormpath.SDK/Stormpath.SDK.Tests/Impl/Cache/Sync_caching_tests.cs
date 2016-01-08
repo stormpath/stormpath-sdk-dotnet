@@ -19,47 +19,35 @@ using System.Linq;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.CustomData;
-using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Http;
-using Stormpath.SDK.Impl;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Linq;
-using Stormpath.SDK.Impl.Logging;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Cache
 {
     public class Sync_caching_tests : IDisposable
     {
-        private static readonly string BaseUrl = "https://api.stormpath.com/v1";
         private IInternalDataStore dataStore;
 
         private void BuildDataStore(string resourceResponse, ICacheProvider cacheProviderUnderTest)
         {
             var fakeRequestExecutor = new StubRequestExecutor(resourceResponse);
 
-            this.BuildDataStore(fakeRequestExecutor.Object, cacheProviderUnderTest);
-        }
-
-        private void BuildDataStore(IRequestExecutor requestExecutor, ICacheProvider cacheProviderUnderTest)
-        {
-            this.dataStore = new DefaultDataStore(
-                requestExecutor,
-                baseUrl: BaseUrl,
-                serializer: new JsonNetSerializer(),
-                logger: new NullLogger(),
-                cacheProvider: cacheProviderUnderTest,
-                identityMapExpiration: TimeSpan.FromMinutes(10));
+            this.dataStore = TestDataStore.Create(fakeRequestExecutor.Object, cacheProviderUnderTest);
         }
 
         [Fact]
@@ -95,7 +83,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         }
 
         [Fact]
-        public void Does_not_hit_cache_if_no_asynchronous_path_exists()
+        public void Does_not_hit_cache_if_no_hronous_path_exists()
         {
             var fakeCacheProvider = Substitute.For<ISynchronousCacheProvider>();
             fakeCacheProvider.IsAsynchronousSupported.Returns(true);
@@ -218,7 +206,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             // GET returns original
             requestExecutor
@@ -250,7 +238,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             // GET returns expanded request
             requestExecutor
@@ -282,7 +270,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
 
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             // GET returns expanded request
             requestExecutor
@@ -351,7 +339,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             var emailVerificationTokenResponse = @"
 {
@@ -405,7 +393,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             var emailVerificationTokenResponse = @"
 {
@@ -432,7 +420,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             var passwordResetTokenResponse = @"
 {
@@ -467,7 +455,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         {
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
-            this.BuildDataStore(requestExecutor, cacheProvider);
+            this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
             var authResponse = @"
 {
@@ -488,6 +476,29 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var result2 = authenticator.Authenticate("/loginAttempts", request, null);
 
             // Not cached
+            this.dataStore.RequestExecutor.Received(2).Execute(
+                Arg.Any<IHttpRequest>());
+        }
+
+        /// <summary>
+        /// Regression test for stormpath/stormpath-sdk-dotnet#96.
+        /// Unknown/new items in a JSON response should not cause the caching layer to explode.
+        /// </summary>
+        [Fact]
+        public void Resource_with_unknown_property_is_cached()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+
+            var fakeData = FakeJson.Application.Replace("authorizedCallbackUris", "foobarProperty");
+            this.BuildDataStore(FakeJson.Application, cacheProvider);
+
+            var app1 = this.dataStore.GetResource<IApplication>("/applications/foobarApplication");
+            var app2 = this.dataStore.GetResource<IApplication>("/applications/foobarApplication");
+
+            app1.ShouldNotBeNull();
+            app1.Name.ShouldBe("Lightsabers Galore");
+
+            // Fail silently by falling back to no caching
             this.dataStore.RequestExecutor.Received(2).Execute(
                 Arg.Any<IHttpRequest>());
         }

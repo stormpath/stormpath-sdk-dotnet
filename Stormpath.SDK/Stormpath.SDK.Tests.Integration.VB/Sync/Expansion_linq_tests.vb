@@ -22,7 +22,7 @@ Imports Stormpath.SDK.Sync
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Sync
+Namespace Sync
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Expansion_linq_tests
         Private ReadOnly fixture As TestFixture
@@ -105,6 +105,20 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Expanding_organization_account_store_mappings(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            Dim account = tenant _
+                .GetOrganizations() _
+                .Synchronously() _
+                .Where(Function(x) x.Description = "The Battle of Endor") _
+                .Expand(Function(x) x.GetAccountStoreMappings(Nothing, 10)) _
+                .FirstOrDefault()
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Expanding_default_account_store(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim tenant = client.GetCurrentTenant()
@@ -155,6 +169,19 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim group = client.GetResource(Of IGroup)(Me.fixture.PrimaryGroupHref)
 
             Dim membership = group.GetAccountMemberships().Synchronously().Expand(Function(x) x.GetGroup()).FirstOrDefault()
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Expanding_oAuthPolicy(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            Dim app = tenant _
+                .GetApplications() _
+                .Synchronously() _
+                .Expand(Function(x) x.GetOauthPolicy()) _
+                .FirstOrDefault()
         End Sub
     End Class
 End Namespace

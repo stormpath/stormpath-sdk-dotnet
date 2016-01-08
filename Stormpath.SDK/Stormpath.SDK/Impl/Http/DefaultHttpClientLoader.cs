@@ -14,19 +14,25 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Http;
+using System;
 using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Http
 {
-    internal sealed class DefaultHttpClientLoader : TypeLoader<IHttpClient>
+    internal static class DefaultHttpClientLoader
     {
         private static readonly string FileName = "Stormpath.SDK.RestSharpClient.dll";
         private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Http.RestSharpClient";
 
-        public DefaultHttpClientLoader()
-            : base(FileName, FullyQualifiedType)
+        // Caching result so expensive reflection only happens once
+        private static readonly Lazy<Type> LoadTypeAction = new Lazy<Type>(() =>
         {
-        }
+            var loader = new TypeLoader(FileName, FullyQualifiedType);
+
+            return loader.Load();
+        });
+
+        public static Type Load()
+            => LoadTypeAction.Value;
     }
 }

@@ -26,12 +26,15 @@ namespace Stormpath.SDK.Impl.DataStore
     {
         private readonly IInternalDataStore dataStore;
         private readonly IIdentityMap<ResourceData> identityMap;
+        private readonly ResourceTypeLookup typeLookup;
+
         private bool isDisposed = false; // To detect redundant calls
 
         public DefaultResourceFactory(IInternalDataStore dataStore, IIdentityMap<ResourceData> identityMap)
         {
             this.dataStore = dataStore;
             this.identityMap = identityMap;
+            this.typeLookup = new ResourceTypeLookup();
         }
 
         private IResourceFactory AsInterface => this;
@@ -47,7 +50,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         object IResourceFactory.Create(Type type, Map properties, ILinkable original)
         {
-            if (ResourceTypeLookup.IsCollectionResponse(type))
+            if (this.typeLookup.IsCollectionResponse(type))
             {
                 return this.InstantiateCollection(type, properties);
             }
@@ -57,10 +60,12 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private object InstantiateSingle(Type type, Map properties, ILinkable original)
         {
-            var targetType = new ResourceTypeLookup().GetConcrete(type);
+            var typeName = new TypeNameResolver().GetTypeName(type);
+
+            var targetType = this.typeLookup.GetConcrete(type);
             if (targetType == null)
             {
-                throw new ApplicationException($"Unknown resource type {type.Name}");
+                throw new ApplicationException($"Unknown resource type {typeName}");
             }
 
             var identityMapOptions = new IdentityMapOptionsResolver().GetOptions(type);
@@ -68,7 +73,7 @@ namespace Stormpath.SDK.Impl.DataStore
             AbstractResource targetObject;
             try
             {
-                string id = RandomResourceId(type.Name);
+                string id = RandomResourceId(typeName);
 
                 if (properties == null)
                 {
@@ -81,7 +86,7 @@ namespace Stormpath.SDK.Impl.DataStore
                     href != null;
                 if (propertiesContainsHref)
                 {
-                    id = $"{type.Name}/{href.ToString()}";
+                    id = $"{typeName}/{href.ToString()}";
                 }
 
                 if (!propertiesContainsHref)
@@ -121,8 +126,8 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private object InstantiateCollection(Type collectionType, Map properties)
         {
-            Type innerType = new ResourceTypeLookup().GetInnerCollectionInterface(collectionType);
-            var targetType = new ResourceTypeLookup().GetConcrete(innerType);
+            Type innerType = this.typeLookup.GetInnerCollectionInterface(collectionType);
+            var targetType = this.typeLookup.GetConcrete(innerType);
             if (innerType == null || targetType == null)
             {
                 throw new ApplicationException($"Error creating collection resource: unknown inner type '{innerType?.Name}'.");
@@ -175,18 +180,18 @@ namespace Stormpath.SDK.Impl.DataStore
 
             try
             {
-                Type listOfInnerType = typeof(List<>).MakeGenericType(innerType);
-                var materializedItems = listOfInnerType.GetConstructor(Type.EmptyTypes).Invoke(Type.EmptyTypes);
-                var addMethod = listOfInnerType.GetMethod("Add", new Type[] { innerType });
+                Type typeOfListType = typeof(List<>).MakeGenericType(innerType);
+                var listOfMaterializedItems = typeOfListType.GetConstructor(Type.EmptyTypes).Invoke(Type.EmptyTypes);
+                var addMethod = typeOfListType.GetMethod("Add", new Type[] { innerType });
 
                 foreach (var itemMap in items)
                 {
                     var materialized = this.InstantiateSingle(innerType, itemMap, original: null);
-                    addMethod.Invoke(materializedItems, new object[] { materialized });
+                    addMethod.Invoke(listOfMaterializedItems, new object[] { materialized });
                 }
 
                 object targetObject;
-                targetObject = Activator.CreateInstance(collectionType, new object[] { href, offset, limit, size, materializedItems });
+                targetObject = Activator.CreateInstance(collectionType, new object[] { this.dataStore.Client, href, offset, limit, size, listOfMaterializedItems });
 
                 return targetObject;
             }

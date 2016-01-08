@@ -14,30 +14,39 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Application;
+using Stormpath.SDK.Oauth;
 
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents resources that can be expanded from an <see cref="Application.IApplication"/>.
+    /// Represents resources that can be expanded from an <see cref="IApplication"/>.
     /// </summary>
     public interface IApplicationExpandables :
-        IExpandableAccountStoreMappings,
         IExpandableAccounts,
         IExpandableCustomData,
         IExpandableGroups,
-        IExpandableTenant
+        IExpandableTenant,
+        IExpandableDefaultStores
     {
         /// <summary>
-        /// Expands the <c>defaultAccountStore</c> resource.
+        /// Expands the <c>accountStoreMappings</c> collection with the default pagination options.
         /// </summary>
         /// <returns>Not applicable.</returns>
-        IAccountStore GetDefaultAccountStore();
+        IAsyncQueryable<IApplicationAccountStoreMapping> GetAccountStoreMappings();
 
         /// <summary>
-        /// Expands the <c>defaultGroupStore</c> resource.
+        /// Expands the <c>accountStoreMappings</c> collection with the specified pagination options.
+        /// </summary>
+        /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
+        /// <returns>Not applicable.</returns>
+        IAsyncQueryable<IApplicationAccountStoreMapping> GetAccountStoreMappings(int? offset, int? limit);
+
+        /// <summary>
+        /// Expands the <c>oAuthPolicy</c> resource.
         /// </summary>
         /// <returns>Not applicable.</returns>
-        IAccountStore GetDefaultGroupStore();
+        IOauthPolicy GetOauthPolicy();
     }
 }

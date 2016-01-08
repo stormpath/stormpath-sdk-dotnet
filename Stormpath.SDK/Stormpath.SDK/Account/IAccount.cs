@@ -16,9 +16,11 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -28,7 +30,13 @@ namespace Stormpath.SDK.Account
     /// <summary>
     /// An Account is a unique identity within a <see cref="IDirectory"/>. Accounts within a <see cref="IDirectory"/> or <see cref="IGroup"/> mapped to an <see cref="Application.IApplication"/> may log in to that Application.
     /// </summary>
-    public interface IAccount : IResource, ISaveableWithOptions<IAccount>, IDeletable, IAuditable, IExtendable
+    public interface IAccount :
+        IResource,
+        IHasTenant,
+        ISaveableWithOptions<IAccount>,
+        IDeletable,
+        IAuditable,
+        IExtendable
     {
         /// <summary>
         /// Gets the account's username. Unless otherwise specified, this is the same as <see cref="Email"/>.
@@ -145,13 +153,6 @@ namespace Stormpath.SDK.Account
         Task<IDirectory> GetDirectoryAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>This account's tenant.</returns>
-        Task<ITenant> GetTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
         /// Assigns this account to the specified <see cref="IGroup"/>.
         /// </summary>
         /// <param name="group">The Group this account will be added to.</param>
@@ -210,9 +211,20 @@ namespace Stormpath.SDK.Account
         Task<IProviderData> GetProviderDataAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets a queryable list of the account's assigned groups.
+        /// Gets a queryable list of the <see cref="IApplication">Applications</see> the Account may log in to.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search groups.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to asynchronously list or search Applications.</returns>
+        /// <example>
+        /// <code>
+        /// var allApplications = await account.GetApplications().ToListAsync();
+        /// </code>
+        /// </example>
+        IAsyncQueryable<IApplication> GetApplications();
+
+        /// <summary>
+        /// Gets a queryable list of the account's assigned <see cref="IGroup">Groups</see>.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search Groups.</returns>
         /// <example>
         /// <code>
         /// var allGroups = await account.GetGroups().ToListAsync();
@@ -221,11 +233,33 @@ namespace Stormpath.SDK.Account
         IAsyncQueryable<IGroup> GetGroups();
 
         /// <summary>
-        /// Returns all <see cref="IGroupMembership"/>s that reflect this account.
+        /// Returns all <see cref="IGroupMembership">Group Memberships</see> that reflect this account.
         /// This method is an alternative to <see cref="GetGroups"/> that returns the actual
-        /// association entity representing the account and a group.
+        /// association entity representing the Account and a <see cref="IGroup">Group</see>.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to asynchronously list or search group memberships.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to asynchronously list or search Group Memberships.</returns>
         IAsyncQueryable<IGroupMembership> GetGroupMemberships();
+
+        /// <summary>
+        /// Gets a queryable list of the active <see cref="IAccessToken">Access Tokens</see> that belong to the account.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IAccessToken}"/> that may be used to asynchronously list or search Access Tokens.</returns>
+        /// <example>
+        /// <code>
+        /// var activeAccessTokens = await account.GetAccessTokens().ToListAsync();
+        /// </code>
+        /// </example>
+        IAsyncQueryable<IAccessToken> GetAccessTokens();
+
+        /// <summary>
+        /// Gets a queryable list of the active <see cref="IRefreshToken">Refresh Tokens</see> that belong to the account.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IRefreshToken}"/> that may be used to asynchronously list or search Refresh Tokens.</returns>
+        /// <example>
+        /// <code>
+        /// var refreshTokens = await account.GetRefreshTokens().ToListAsync();
+        /// </code>
+        /// </example>
+        IAsyncQueryable<IRefreshToken> GetRefreshTokens();
     }
 }

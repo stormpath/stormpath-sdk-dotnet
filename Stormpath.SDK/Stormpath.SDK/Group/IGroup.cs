@@ -18,16 +18,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Group
 {
     /// <summary>
     /// A Group is a uniquely-named collection of <see cref="IAccount"/>s within a <see cref="IDirectory"/>.
     /// </summary>
-    public interface IGroup : IResource, ISaveableWithOptions<IGroup>, IDeletable, IAuditable, IExtendable, IAccountStore
+    public interface IGroup :
+        IResource,
+        IHasTenant,
+        ISaveableWithOptions<IGroup>,
+        IDeletable,
+        IAuditable,
+        IExtendable,
+        IAccountStore
     {
         /// <summary>
         /// Gets the group's name, guaranteed to be unique for all groups within a <see cref="IDirectory"/>.
@@ -131,5 +140,16 @@ namespace Stormpath.SDK.Group
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to asynchronously list or search memberships.</returns>
         IAsyncQueryable<IGroupMembership> GetAccountMemberships();
+
+        /// <summary>
+        /// Gets a queryable list of the <see cref="IApplication">Applications</see> the Group is mapped to as an <see cref="IAccountStore">Account Store</see>.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to asynchronously list or search Applications.</returns>
+        /// <example>
+        /// <code>
+        /// var groupApplications = await group.GetApplications().ToListAsync();
+        /// </code>
+        /// </example>
+        IAsyncQueryable<IApplication> GetApplications();
     }
 }

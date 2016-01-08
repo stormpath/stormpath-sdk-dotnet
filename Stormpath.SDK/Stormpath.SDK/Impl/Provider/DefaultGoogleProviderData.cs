@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         string IGoogleProviderData.AccessToken
-            => this.GetProperty<string>(AccessTokenPropertyName);
+            => this.GetStringProperty(AccessTokenPropertyName);
 
         internal IGoogleProviderData SetAccessToken(string accessToken)
         {
@@ -40,10 +40,10 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         string IGoogleProviderData.RefreshToken
-            => this.GetProperty<string>(RefreshTokenPropertyName);
+            => this.GetStringProperty(RefreshTokenPropertyName);
 
         internal string Code
-            => this.GetProperty<string>(CodePropertyName);
+            => this.GetStringProperty(CodePropertyName);
 
         internal IGoogleProviderData SetCode(string code)
         {

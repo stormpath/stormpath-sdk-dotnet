@@ -23,12 +23,11 @@ Imports Stormpath.SDK.Application
 Imports Stormpath.SDK.Auth
 Imports Stormpath.SDK.Error
 Imports Stormpath.SDK.Sync
-Imports Stormpath.SDK.Tests.Common
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Sync
+Namespace Sync
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Account_tests
         Private ReadOnly fixture As TestFixture
@@ -110,6 +109,17 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
 
             chewie.SetUsername($"rwaaargh-{fixture.TestRunIdentifier}")
             chewie.Save(Function(response) response.Expand(Function(x) x.GetCustomData()))
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Getting_account_applications(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+
+            Dim luke = client.GetAccount(Me.fixture.PrimaryAccountHref)
+
+            Dim apps = luke.GetApplications().Synchronously().ToList()
+            apps.Where(Function(x) x.Href = Me.fixture.PrimaryApplicationHref).Any().ShouldBeTrue()
         End Sub
 
         <Theory>
@@ -459,7 +469,26 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             Dim result = application.AuthenticateAccount(Sub(request)
                                                              request.SetUsernameOrEmail($"sonofthesuns-{fixture.TestRunIdentifier}")
                                                              request.SetPassword("whataPieceofjunk$1138")
-                                                             request.SetAccountStore(Me.fixture.PrimaryDirectoryHref)
+                                                             request.SetAccountStore(Me.fixture.PrimaryOrganizationHref)
+                                                         End Sub)
+            result.ShouldBeAssignableTo(Of IAuthenticationResult)()
+            result.Success.ShouldBeTrue()
+
+            Dim account = result.GetAccount()
+            account.FullName.ShouldBe("Luke Skywalker")
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Authenticating_account_in_specified_organization_by_nameKey(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim application = client.GetResource(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+            Dim accountStore = application.GetDefaultAccountStore()
+
+            Dim result = application.AuthenticateAccount(Sub(request)
+                                                             request.SetUsernameOrEmail($"sonofthesuns-{fixture.TestRunIdentifier}")
+                                                             request.SetPassword("whataPieceofjunk$1138")
+                                                             request.SetAccountStore(Me.fixture.PrimaryOrganizationNameKey)
                                                          End Sub)
             result.ShouldBeAssignableTo(Of IAuthenticationResult)()
             result.Success.ShouldBeTrue()

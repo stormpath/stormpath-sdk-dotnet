@@ -19,6 +19,7 @@ using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Tenant;
 
 namespace Stormpath.SDK.Impl.Group
 {
@@ -26,7 +27,12 @@ namespace Stormpath.SDK.Impl.Group
     /// Represents the synchronous actions that correspond to the default asynchronous actions
     /// available on <see cref="IGroup"/>.
     /// </summary>
-    internal interface IGroupSync : ISaveableWithOptionsSync<IGroup>, IDeletableSync, IExtendableSync, IAccountStoreSync
+    internal interface IGroupSync :
+        IHasTenantSync,
+        ISaveableWithOptionsSync<IGroup>,
+        IDeletableSync,
+        IExtendableSync,
+        IAccountStoreSync
     {
         /// <summary>
         /// Synchronous counterpart to <see cref="IGroup.AddAccountAsync(IAccount, System.Threading.CancellationToken)"/>.

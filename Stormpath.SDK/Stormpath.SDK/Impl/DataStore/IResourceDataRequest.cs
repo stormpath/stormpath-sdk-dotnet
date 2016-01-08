@@ -15,7 +15,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using Stormpath.SDK.Http;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
@@ -39,6 +38,12 @@ namespace Stormpath.SDK.Impl.DataStore
         CanonicalUri Uri { get; }
 
         /// <summary>
+        /// Gets the request's HTTP headers.
+        /// </summary>
+        /// <value>The HTTP headers.</value>
+        HttpHeaders Headers { get; }
+
+        /// <summary>
         /// Gets the resource type as a .NET <see cref="System.Type"/>.
         /// </summary>
         /// <value>The resource type.</value>
@@ -49,5 +54,11 @@ namespace Stormpath.SDK.Impl.DataStore
         /// </summary>
         /// <value>Additional resource properties.</value>
         Map Properties { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether to skip the cache for this request.
+        /// </summary>
+        /// <value><see langword="true"/> if the cache should be skipped on this request; <see langword="false"/> otherwise. Default: <see langword="false"/>.</value>
+        bool SkipCache { get; }
     }
 }

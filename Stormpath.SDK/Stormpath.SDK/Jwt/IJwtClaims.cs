@@ -21,7 +21,7 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 namespace Stormpath.SDK.Jwt
 {
     /// <summary>
-    /// Represents the fields of a JSON Web Token.
+    /// Represents the claims of a JSON Web Token.
     /// </summary>
     public interface IJwtClaims
     {
@@ -56,16 +56,30 @@ namespace Stormpath.SDK.Jwt
         DateTimeOffset? NotBefore { get; }
 
         /// <summary>
-        /// Gets the JWT ID (jti) field.
+        /// Gets the issued-at (IAT) claim.
         /// </summary>
         /// <value>The value of the issued-at field.</value>
         DateTimeOffset? IssuedAt { get; }
 
         /// <summary>
-        /// Gets the issued-at (IAT) claim.
+        /// Gets the JWT ID (jti) field.
         /// </summary>
         /// <value>The value of the issued-at field.</value>
         string Id { get; }
+
+        /// <summary>
+        /// Determines whether the claims collection contains the specified <paramref name="claimName"/>.
+        /// </summary>
+        /// <param name="claimName">The claim name.</param>
+        /// <returns><see langword="true"/> if the claim exists; <see langword="false"/> otherwise.</returns>
+        bool ContainsClaim(string claimName);
+
+        /// <summary>
+        /// Gets a claim from the collection.
+        /// </summary>
+        /// <param name="claimName">The claim name.</param>
+        /// <returns>The claim value, or <see langword="null"/> if the claim does not exist.</returns>
+        object GetClaim(string claimName);
 
         /// <summary>
         /// Builds a <see cref="IDictionary{TKey, TValue}"/> from the current JWT fields.

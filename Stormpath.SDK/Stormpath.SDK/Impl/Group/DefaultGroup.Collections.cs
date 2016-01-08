@@ -16,6 +16,7 @@
 
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
@@ -24,6 +25,9 @@ namespace Stormpath.SDK.Impl.Group
 {
     internal sealed partial class DefaultGroup
     {
+        IAsyncQueryable<IApplication> IGroup.GetApplications()
+            => new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetInternalAsyncDataStore());
+
         IAsyncQueryable<IGroupMembership> IGroup.GetAccountMemberships()
             => new CollectionResourceQueryable<IGroupMembership>(this.AccountMemberships.Href, this.GetInternalAsyncDataStore());
 

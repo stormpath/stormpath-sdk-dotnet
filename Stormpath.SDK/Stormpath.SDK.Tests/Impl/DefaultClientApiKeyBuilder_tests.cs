@@ -19,6 +19,7 @@ using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Impl.Api;
+using Stormpath.SDK.Impl.Introspection;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Logging;
 using Xunit;
@@ -80,7 +81,9 @@ namespace Stormpath.SDK.Tests.Impl
                 this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%").Returns("~fake");
                 this.env.GetEnvironmentVariable("HOME").Returns("~fake");
 
-                this.defaultLocation = PlatformHelper.IsPlatformUnix()
+                var platform = Platform.Analyze();
+
+                this.defaultLocation = platform.IsPlatformUnix
                     ? @"~fake/.stormpath/apiKey.properties"
                     : @"~fake\.stormpath\apiKey.properties";
 
@@ -538,7 +541,8 @@ namespace Stormpath.SDK.Tests.Impl
             [Fact]
             public void File_location_interprets_tilde_as_home_directory_on_windows()
             {
-                if (PlatformHelper.IsRunningOnMono())
+                var platform = Platform.Analyze();
+                if (platform.IsRunningOnMono)
                 {
                     return;
                 }

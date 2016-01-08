@@ -42,18 +42,18 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mono|AnyCPU'">
     <OutputPath>bin\Mono\</OutputPath>
-    <DefineConstants>CODE_ANALYSIS;TRACE</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>
     </CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NSubstitute, Version=1.9.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
@@ -85,11 +85,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fakes\FakeDataStore{TType}.cs" />
-    <Compile Include="Fakes\FakeJson.cs" />
-    <Compile Include="Fakes\StubDataStore.cs" />
+    <Compile Include="Fakes\FakeUserAgentBuilder.cs" />
     <Compile Include="Fakes\StubRequestExecutor.cs" />
-    <Compile Include="Helpers\CollectionTestHarness{T}.cs" />
+    <Compile Include="Helpers\SerializableTimeSpan.cs" />
+    <Compile Include="Helpers\TestDataStore.cs" />
     <Compile Include="Impl\Cache\Sync_caching_tests.cs" />
     <Compile Include="Impl\Cache\Async_caching_tests.cs" />
     <Compile Include="Impl\Cache\InMemoryCacheProviderBuilder_tests.cs" />
@@ -99,10 +98,10 @@
     <Compile Include="Impl\Entity_identity_map_tests.cs" />
     <Compile Include="Impl\DefaultCustomData_persistence_tests.cs" />
     <Compile Include="Impl\DefaultCustomData_tests.cs" />
-    <Compile Include="Impl\DefaultJsonSerializerBuilder_tests.cs" />
+    <Compile Include="Impl\AbstractJsonSerializerBuilder_tests.cs" />
     <Compile Include="Impl\DefaultHttpClientLoader_tests.cs" />
-    <Compile Include="Impl\DefaultJsonSerializerLoader_tests.cs" />
-    <Compile Include="Impl\DefaultHttpClientBuilder_tests.cs" />
+    <Compile Include="Impl\DefaultSerializerLoader_tests.cs" />
+    <Compile Include="Impl\AbstractHttpClientBuilder_tests.cs" />
     <Compile Include="Impl\DefaultRequestExecutor_tests.cs" />
     <Compile Include="Impl\Expansion_save_options_tests.cs" />
     <Compile Include="Impl\Expansion_retrieval_options_tests.cs" />
@@ -111,7 +110,6 @@
     <Compile Include="Impl\Extensions\String_Nullable_tests.cs" />
     <Compile Include="Impl\Extensions\Uri_WithoutQueryAndFragment_tests.cs" />
     <Compile Include="Impl\FieldConverter_tests.cs" />
-    <Compile Include="Helpers\LinqAssertExtensions.cs" />
     <Compile Include="Impl\Authentication\SAuthc1RequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\BasicRequestAuthenticator_tests.cs" />
     <Compile Include="Impl\Authentication\DefaultRequestAuthenticatorFactory_tests.cs" />
@@ -119,12 +117,17 @@
     <Compile Include="Impl\Cache\DefaultCacheResolver_tests.cs" />
     <Compile Include="Impl\CanonicalUri_tests.cs" />
     <Compile Include="Impl\ClientApiKey_tests.cs" />
+    <Compile Include="Impl\FormUrlEncoder_tests.cs" />
+    <Compile Include="Impl\IdSite\CallbackHandlerTests.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler_exception_tests.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler_exception_tests.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler_tests.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler_tests.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteUrlBuilder_tests.cs" />
+    <Compile Include="Impl\IdSite\ExceptionTests.cs" />
     <Compile Include="Impl\IdSite\InlineIdSiteSyncResultListener_tests.cs" />
     <Compile Include="Impl\IdSite\InlineIdSiteAsyncResultListener_tests.cs" />
+    <Compile Include="Impl\Jwt\DefaultJwtParser_tests.cs" />
     <Compile Include="Impl\Jwt\Jwt_tests.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryable_iteration_tests.cs" />
     <Compile Include="Impl\CreationOptions_tests.cs" />
@@ -181,11 +184,12 @@
     <Compile Include="Impl\Linq\Within_extension_tests.cs" />
     <Compile Include="Impl\QueryString_tests.cs" />
     <Compile Include="Impl\UserAgentBuilder_tests.cs" />
+    <Compile Include="Impl\Utility\Iso8601Duration_tests.cs" />
     <Compile Include="Impl\Utility\Iso8601_tests.cs" />
     <Compile Include="Impl\Utility\Properties_tests.cs" />
     <Compile Include="Impl\Utility\RequestHelper_tests.cs" />
     <Compile Include="Impl\Utility\UnixDate_tests.cs" />
-    <Compile Include="Impl\Utility\WindowsVersion_tests.cs" />
+    <Compile Include="Impl\Introspection\WindowsVersion_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LoggerExtensions_tests.cs" />
     <Compile Include="User_agent_tests.cs" />
@@ -219,9 +223,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc1\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc1\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc1\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

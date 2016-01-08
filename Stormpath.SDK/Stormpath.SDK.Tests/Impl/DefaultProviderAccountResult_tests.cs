@@ -22,7 +22,9 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -33,7 +35,7 @@ namespace Stormpath.SDK.Tests.Impl
         public async Task When_getting_new_provider_based_account()
         {
             // 201 Created indicates the account is new
-            IInternalAsyncDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object) as IInternalAsyncDataStore;
             dataStore.RequestExecutor
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(201, "Created", null, FakeJson.Account, "application/json", transportError: false)));
@@ -52,7 +54,7 @@ namespace Stormpath.SDK.Tests.Impl
         public async Task When_getting_existing_provider_based_account()
         {
             // 200 OK indicates the account is not new
-            IInternalAsyncDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object) as IInternalAsyncDataStore;
             dataStore.RequestExecutor
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(200, "OK", null, FakeJson.Account, "application/json", transportError: false)));

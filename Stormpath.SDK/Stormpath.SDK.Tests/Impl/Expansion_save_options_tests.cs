@@ -14,26 +14,21 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Cache;
-using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Http;
-using Stormpath.SDK.Impl;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Logging;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
     public class Expansion_save_options_tests
     {
-        private static readonly string BaseUrl = "https://api.stormpath.com/v1";
-
         private static async Task GeneratedArgumentsWere(IInternalDataStore dataStore, string expectedQueryString)
         {
             await dataStore.RequestExecutor.Received(1).ExecuteAsync(
@@ -43,13 +38,7 @@ namespace Stormpath.SDK.Tests.Impl
 
         private IInternalDataStore BuildDataStore(string resourceResponse)
         {
-            return new DefaultDataStore(
-                new StubRequestExecutor(resourceResponse).Object,
-                baseUrl: BaseUrl,
-                serializer: new JsonNetSerializer(),
-                logger: new NullLogger(),
-                cacheProvider: Caches.NewDisabledCacheProvider(),
-                identityMapExpiration: TimeSpan.FromMinutes(10));
+            return TestDataStore.Create(new StubRequestExecutor(resourceResponse).Object);
         }
 
         [Fact]

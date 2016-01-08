@@ -18,6 +18,8 @@ using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Group;
+using Stormpath.SDK.Organization;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
@@ -93,10 +95,91 @@ namespace Stormpath.SDK.Impl.Tenant
         IDirectory CreateDirectory(string name, string description, DirectoryStatus status);
 
         /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateOrganizationAsync(IOrganization, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="organization">The Organization to create.</param>
+        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">There was a problem creating the Organization.</exception>
+        IOrganization CreateOrganization(IOrganization organization);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateOrganizationAsync(IOrganization, Action{OrganizationCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="organization">The Organization to create.</param>
+        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
+        /// which will be used when sending the request.</param>
+        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">There was a problem creating the Organization.</exception>
+        IOrganization CreateOrganization(IOrganization organization, Action<OrganizationCreationOptionsBuilder> creationOptionsAction);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateOrganizationAsync(IOrganization, IOrganizationCreationOptions, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="organization">The Organization to create.</param>
+        /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
+        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">There was a problem creating the Organization.</exception>
+        IOrganization CreateOrganization(IOrganization organization, IOrganizationCreationOptions creationOptions);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateOrganizationAsync(string, string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="name">The Organization's name.</param>
+        /// <param name="description">The Organization's description text.</param>
+        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">There was a problem creating the Organization.</exception>
+        IOrganization CreateOrganization(string name, string description);
+
+        /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.VerifyAccountEmailAsync(string, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="token">The <c>sptoken</c> query parameter value.</param>
         /// <returns>The verified account.</returns>
         IAccount VerifyAccountEmail(string token);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetAccountAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStoreSync.GetResource{IAccount}(string)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IAccount">Account</see> to retrieve.</param>
+        /// <returns>The <see cref="IAccount">Account</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
+        IAccount GetAccount(string href);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetApplicationAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStoreSync.GetResource{IApplication}(string)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IApplication">Application</see> to retrieve.</param>
+        /// <returns>The <see cref="IApplication">Application</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
+        IApplication GetApplication(string href);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetDirectoryAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStoreSync.GetResource{IDirectory}(string)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IDirectory">Directory</see> to retrieve.</param>
+        /// <returns>The <see cref="IDirectory">Directory</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
+        IDirectory GetDirectory(string href);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetGroupAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStoreSync.GetResource{IGroup}(string)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IGroup">Group</see> to retrieve.</param>
+        /// <returns>The <see cref="IGroup">Group</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
+        IGroup GetGroup(string href);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetOrganizationAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStoreSync.GetResource{IOrganization}(string)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IOrganization">Organization</see> to retrieve.</param>
+        /// <returns>The <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
+        IOrganization GetOrganization(string href);
     }
 }

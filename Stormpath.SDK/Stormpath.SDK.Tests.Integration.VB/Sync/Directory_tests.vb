@@ -24,7 +24,7 @@ Imports Stormpath.SDK.Sync
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Sync
+Namespace Sync
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Directory_tests
         Private ReadOnly fixture As TestFixture
@@ -52,6 +52,16 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             ' Verify data from IntegrationTestData
             Dim tenantHref = directory.GetTenant().Href
             tenantHref.ShouldBe(Me.fixture.TenantHref)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Getting_directory_applications(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim directory = client.GetDirectory(Me.fixture.PrimaryDirectoryHref)
+
+            Dim apps = directory.GetApplications().Synchronously().ToList()
+            apps.Where(Function(x) x.Href = Me.fixture.PrimaryApplicationHref).Any().ShouldBeTrue()
         End Sub
 
         <Theory>

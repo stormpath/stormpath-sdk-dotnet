@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
+                var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"), false);
                 var result = filterChain.Filter(request, Substitute.For<ILogger>());
 
                 result.Action.ShouldBe(ResourceAction.Create);
@@ -88,7 +88,7 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
+                var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(IAccount), new CanonicalUri("http://api.foo.bar"), false);
                 var result = filterChain.Filter(request, Substitute.For<ILogger>());
 
                 result.Action.ShouldBe(ResourceAction.Delete);
@@ -112,7 +112,7 @@ namespace Stormpath.SDK.Tests.Impl
                             body: new Dictionary<string, object>() { { "Foo", "bar" } });
                     }));
 
-                var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
+                var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"), false);
                 var result = finalChain.Filter(request, Substitute.For<ILogger>());
 
                 result.Action.ShouldBe(ResourceAction.Create);
@@ -165,7 +165,7 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
+                var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"), false);
                 var result = await filterChain.FilterAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Create);
@@ -179,7 +179,7 @@ namespace Stormpath.SDK.Tests.Impl
                     .Add(new CreateInterceptorFilter())
                     .Add(new DeleteInterceptorFilter());
 
-                var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
+                var request = new DefaultResourceDataRequest(ResourceAction.Delete, typeof(IAccount), new CanonicalUri("http://api.foo.bar"), false);
                 var result = await filterChain.FilterAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Delete);
@@ -203,7 +203,7 @@ namespace Stormpath.SDK.Tests.Impl
                             body: new Dictionary<string, object>() { { "Foo", "bar" } }));
                     }));
 
-                var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"));
+                var request = new DefaultResourceDataRequest(ResourceAction.Create, typeof(IAccount), new CanonicalUri("http://api.foo.bar"), false);
                 var result = await finalChain.FilterAsync(request, Substitute.For<ILogger>(), CancellationToken.None);
 
                 result.Action.ShouldBe(ResourceAction.Create);

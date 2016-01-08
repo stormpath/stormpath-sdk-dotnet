@@ -99,8 +99,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var defaultAccountStore = app.GetDefaultAccountStore();
-            var asDirectory = defaultAccountStore as IDirectory;
-            asDirectory.ShouldNotBeNull();
+            defaultAccountStore.ShouldNotBeNull();
         }
 
         [Theory]
@@ -111,8 +110,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var app = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var defaultGroupStore = app.GetDefaultGroupStore();
-            var asDirectory = defaultGroupStore as IDirectory;
-            asDirectory.ShouldNotBeNull();
+            defaultGroupStore.ShouldNotBeNull();
         }
 
         [Theory]
@@ -275,6 +273,23 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Reset_password_for_account_in_organization_by_nameKey(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+            var accountStore = application.GetDefaultAccountStore();
+
+            var token = application.SendPasswordResetEmail("vader@galacticempire.co", this.fixture.PrimaryOrganizationNameKey);
+
+            var validTokenResponse = application.VerifyPasswordResetToken(token.GetValue());
+            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+
+            var resetPasswordResponse = application.ResetPassword(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
+            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Creating_account_store_mapping(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -336,7 +351,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_directory_as_account_store_to_application(TestClientProvider clientBuilder)
+        public void Adding_directory_as_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -364,7 +379,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_group_as_account_store_to_application(TestClientProvider clientBuilder)
+        public void Adding_group_as_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -392,6 +407,42 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Saving_new_mapping_as_default(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier} Creating New AccountStore as Default Test Application - Sync",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
+            var mapping = client.Instantiate<IAccountStoreMapping>()
+                .SetAccountStore(directory)
+                .SetApplication(createdApplication)
+                .SetDefaultAccountStore(true)
+                .SetDefaultGroupStore(true);
+
+            createdApplication.CreateAccountStoreMapping(mapping);
+
+            // Default links should be updated without having to re-retrieve the Application resource
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+            createdApplication.GetDefaultGroupStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+
+            // Retrieving it again should have the same result
+            var updated = client.GetResource<IApplication>(createdApplication.Href);
+            updated.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+            updated.GetDefaultGroupStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+
+            // Clean up
+            createdApplication.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Setting_mapped_directory_to_default_account_store(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -408,6 +459,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             createdApplication.SetDefaultAccountStore(directory);
 
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
             mapping.IsDefaultAccountStore.ShouldBeTrue();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
 
@@ -434,6 +486,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             createdApplication.SetDefaultAccountStore(group);
 
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryGroupHref);
             mapping.IsDefaultAccountStore.ShouldBeTrue();
             mapping.IsDefaultGroupStore.ShouldBeFalse();
 
@@ -457,6 +510,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
             createdApplication.SetDefaultAccountStore(directory);
+
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
 
             var mapping = createdApplication.GetAccountStoreMappings().Synchronously().Single();
             mapping.IsDefaultAccountStore.ShouldBeTrue();
@@ -482,6 +537,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var group = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
             createdApplication.SetDefaultAccountStore(group);
+
+            createdApplication.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryGroupHref);
 
             var mapping = createdApplication.GetAccountStoreMappings().Synchronously().Single();
             mapping.IsDefaultAccountStore.ShouldBeTrue();
@@ -510,6 +567,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             createdApplication.SetDefaultGroupStore(directory);
 
+            createdApplication.GetDefaultGroupStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
             mapping.IsDefaultAccountStore.ShouldBeFalse();
             mapping.IsDefaultGroupStore.ShouldBeTrue();
 
@@ -533,6 +591,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var directory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
             createdApplication.SetDefaultGroupStore(directory);
+
+            createdApplication.GetDefaultGroupStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
 
             var mapping = createdApplication.GetAccountStoreMappings().Synchronously().Single();
             mapping.IsDefaultAccountStore.ShouldBeFalse();
@@ -559,6 +619,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var group = client.GetResource<IGroup>(this.fixture.PrimaryGroupHref);
 
             // If this errors, the server-side API behavior has changed.
+            // TODO ResourceException after Shouldly Mono update
             Should.Throw<Exception>(() =>
             {
                 createdApplication.SetDefaultGroupStore(group);
@@ -571,7 +632,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_directory_as_account_store_by_href_to_application(TestClientProvider clientBuilder)
+        public void Adding_directory_as_account_store_by_href(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -598,7 +659,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_group_as_account_store_by_href_to_application(TestClientProvider clientBuilder)
+        public void Adding_group_as_account_store_by_href(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -625,7 +686,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_directory_as_account_store_by_name_to_application(TestClientProvider clientBuilder)
+        public void Adding_directory_as_account_store_by_name(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -662,7 +723,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_group_as_account_store_by_name_to_application(TestClientProvider clientBuilder)
+        public void Adding_group_as_account_store_by_name(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -704,7 +765,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_directory_as_account_store_to_application_by_query(TestClientProvider clientBuilder)
+        public void Adding_directory_as_account_store_by_query(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -733,7 +794,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_group_as_account_store_to_application_by_query(TestClientProvider clientBuilder)
+        public void Adding_group_as_account_store_by_query(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -762,7 +823,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_directory_as_account_store_to_application_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
+        public void Adding_directory_as_account_store_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
@@ -773,47 +834,72 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
+            var dir1 = client.CreateDirectory($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results1", string.Empty, DirectoryStatus.Enabled);
+            var dir2 = client.CreateDirectory($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results2", string.Empty, DirectoryStatus.Enabled);
+
+            this.fixture.CreatedDirectoryHrefs.Add(dir1.Href);
+            this.fixture.CreatedDirectoryHrefs.Add(dir2.Href);
+
+            // TODO ArgumentException after Shouldly Mono update
             Should.Throw<Exception>(() =>
             {
+                // Throws because multiple matching results exist
                 var mapping = createdApplication
-                    .AddAccountStore<IDirectory>(allDirs => allDirs);
+                    .AddAccountStore<IDirectory>(dirs => dirs.Where(d => d.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results")));
             });
 
             // Clean up
+            dir1.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(dir1.Href);
+
+            dir2.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(dir2.Href);
+
             createdApplication.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Adding_group_as_account_store_to_application_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
+        public void Adding_group_as_account_store_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = client.GetCurrentTenant();
 
             var createdApplication = tenant.CreateApplication(
                 $".NET IT {this.fixture.TestRunIdentifier} Adding AccountStore Group By Query Throws Test Application (Sync)",
-                createDirectory: false);
+                createDirectory: true);
+
             createdApplication.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
 
-            var dummyGroup = client
-                .Instantiate<IGroup>()
-                .SetName($".NET IT {this.fixture.TestRunIdentifier} Dummy Test Group for Adding Multiple Groups as AccountStore (Sync)");
-            var primaryDirectory = client.GetResource<IDirectory>(this.fixture.PrimaryDirectoryHref);
-            primaryDirectory.CreateGroup(dummyGroup);
-            dummyGroup.Href.ShouldNotBeNullOrEmpty();
-            this.fixture.CreatedGroupHrefs.Add(dummyGroup.Href);
+            var defaultGroupStore = createdApplication.GetDefaultGroupStore() as IDirectory;
+            defaultGroupStore.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(defaultGroupStore.Href);
 
+            var group1 = createdApplication.CreateGroup($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results1", string.Empty);
+            var group2 = createdApplication.CreateGroup($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results2", string.Empty);
+
+            this.fixture.CreatedGroupHrefs.Add(group1.Href);
+            this.fixture.CreatedGroupHrefs.Add(group2.Href);
+
+            // TODO ArgumentException after Shouldly Mono update
             Should.Throw<Exception>(() =>
             {
+                // Throws because multiple matching results exist
                 var mapping = createdApplication
-                    .AddAccountStore<IGroup>(allGroups => allGroups);
+                    .AddAccountStore<IGroup>(groups => groups.Where(x => x.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results")));
             });
 
             // Clean up
-            dummyGroup.Delete().ShouldBeTrue();
-            this.fixture.CreatedGroupHrefs.Remove(dummyGroup.Href);
+            group1.Delete().ShouldBeTrue();
+            this.fixture.CreatedGroupHrefs.Remove(group1.Href);
+
+            group2.Delete().ShouldBeTrue();
+            this.fixture.CreatedGroupHrefs.Remove(group2.Href);
+
+            defaultGroupStore.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(defaultGroupStore.Href);
 
             createdApplication.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);

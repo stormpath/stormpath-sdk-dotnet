@@ -18,6 +18,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 
@@ -29,8 +30,8 @@ namespace Stormpath.SDK.Impl.Application
         private static readonly string AccountsPropertyName = "accounts";
         private static readonly string ApiKeysPropertyName = "apiKeys";
         private static readonly string AuthTokensPropertyName = "authTokens";
-        private static readonly string DefaultAccountStoreMappingPropertyName = "defaultAccountStoreMapping";
-        private static readonly string DefaultGroupStoreMappingPropertyName = "defaultGroupStoreMapping";
+        private static readonly string DefaultAccountStoreMappingPropertyName = AccountStoreContainerShared.DefaultAccountStoreMappingPropertyName;
+        private static readonly string DefaultGroupStoreMappingPropertyName = AccountStoreContainerShared.DefaultGroupStoreMappingPropertyName;
         private static readonly string DescriptionPropertyName = "description";
         private static readonly string GroupsPropertyName = "groups";
         private static readonly string LoginAttemptsPropertyName = "loginAttempts";
@@ -38,7 +39,6 @@ namespace Stormpath.SDK.Impl.Application
         private static readonly string OAuthPolicyPropertyName = "oAuthPolicy";
         private static readonly string PasswordResetTokensPropertyName = "passwordResetTokens";
         private static readonly string StatusPropertyName = "status";
-        private static readonly string TenantPropertyName = "tenant";
         private static readonly string VerificationEmailsPropertyName = "verificationEmails";
 
         public DefaultApplication(ResourceData data)
@@ -62,11 +62,11 @@ namespace Stormpath.SDK.Impl.Application
 
         internal IEmbeddedProperty DefaultGroupStoreMapping => this.GetLinkProperty(DefaultGroupStoreMappingPropertyName);
 
-        string IApplication.Description => this.GetProperty<string>(DescriptionPropertyName);
+        string IApplication.Description => this.GetStringProperty(DescriptionPropertyName);
 
         internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        string IApplication.Name => this.GetProperty<string>(NamePropertyName);
+        string IApplication.Name => this.GetStringProperty(NamePropertyName);
 
         internal IEmbeddedProperty LoginAttempts => this.GetLinkProperty(LoginAttemptsPropertyName);
 
@@ -82,11 +82,6 @@ namespace Stormpath.SDK.Impl.Application
 
         IApplication IApplication.SetDescription(string description)
         {
-            if (string.IsNullOrEmpty(description))
-            {
-                throw new ArgumentNullException(nameof(description));
-            }
-
             this.SetProperty(DescriptionPropertyName, description);
             return this;
         }

@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .OrderBy(x => x.GivenName)
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("orderBy=givenName");
+            this.ShouldBeCalledWithArguments("orderBy=givenName");
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .OrderByDescending(x => x.Email)
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("orderBy=email+desc");
+            this.ShouldBeCalledWithArguments("orderBy=email+desc");
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .OrderBy(x => x.GivenName)
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("limit=10&orderBy=givenName");
+            this.ShouldBeCalledWithArguments("limit=10", "orderBy=givenName");
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Take(10)
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("limit=10&orderBy=givenName+desc");
+            this.ShouldBeCalledWithArguments("limit=10", "orderBy=givenName+desc");
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .ThenByDescending(x => x.Username)
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("orderBy=givenName,username+desc");
+            this.ShouldBeCalledWithArguments("orderBy=givenName,username+desc");
         }
     }
 }

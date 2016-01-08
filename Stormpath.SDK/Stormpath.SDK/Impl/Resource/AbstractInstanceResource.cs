@@ -23,17 +23,17 @@ namespace Stormpath.SDK.Impl.Resource
 {
     internal abstract class AbstractInstanceResource : AbstractResource, IAuditable
     {
-        protected static readonly string CreatedAtPropertyName = "createdAt";
-        protected static readonly string ModifiedAtPropertyName = "modifiedAt";
+        public static readonly string CreatedAtPropertyName = "createdAt";
+        public static readonly string ModifiedAtPropertyName = "modifiedAt";
 
         protected AbstractInstanceResource(ResourceData data)
             : base(data)
         {
         }
 
-        DateTimeOffset IAuditable.CreatedAt => this.GetProperty<DateTimeOffset>(CreatedAtPropertyName);
+        public DateTimeOffset CreatedAt => this.GetDateTimeProperty(CreatedAtPropertyName);
 
-        DateTimeOffset IAuditable.ModifiedAt => this.GetProperty<DateTimeOffset>(ModifiedAtPropertyName);
+        public DateTimeOffset ModifiedAt => this.GetDateTimeProperty(ModifiedAtPropertyName);
 
         protected virtual Task<T> SaveAsync<T>(CancellationToken cancellationToken)
             where T : class, IResource, ISaveable<T>

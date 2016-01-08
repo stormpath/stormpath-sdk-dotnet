@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Stormpath.SDK.Cache.Redis</id>
-        <version>0.1.0</version>
+        <version>0.4.0</version>
         <authors>Nate Barbettini</authors>
         <owners>Stormpath,Inc.</owners>
         <licenseUrl>https://github.com/stormpath/stormpath-sdk-csharp/blob/master/LICENSE</licenseUrl>
@@ -15,7 +15,7 @@
         <tags>Stormpath API Authentication Authorization REST Caching Redis</tags>
         <dependencies>
             <dependency id="StackExchange.Redis" version="1.0.481" />
-            <dependency id="Stormpath.SDK.Core" version="0.3.0" />
+            <dependency id="Stormpath.SDK.Core" version="0.4.0" />
         </dependencies>
     </metadata>
     <files>

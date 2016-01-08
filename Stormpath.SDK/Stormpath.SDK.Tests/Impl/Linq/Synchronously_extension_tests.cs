@@ -14,12 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Sync;
-using Stormpath.SDK.Tests.Common.Fakes;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Linq
@@ -27,23 +25,68 @@ namespace Stormpath.SDK.Tests.Impl.Linq
     public class Synchronously_extension_tests : Linq_test<IAccount>
     {
         [Fact]
-        public void Throws_if_not_called_first()
+        public void When_called_first()
         {
-            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.DarthVader, 52));
+            this.Queryable
+                .Synchronously()
+                .Expand(x => x.GetCustomData())
+                .Filter("foo")
+                .Skip(10)
+                .Take(5)
+                .Where(x => x.Email == "vader@galacticempire.co")
+                .ToList();
 
-            Should.Throw<NotSupportedException>(() =>
-            {
-                var synchronousQueryable = this.Queryable
-                    .Skip(10)
-                    .Synchronously();
-            });
+            this.ShouldBeCalledWithArguments(
+                "expand=customData",
+                "q=foo",
+                "offset=10",
+                "limit=5",
+                "email=vader%40galacticempire.co");
+        }
+
+        [Fact]
+        public void When_called_mid_query()
+        {
+            this.Queryable
+                .Expand(x => x.GetCustomData())
+                .Filter("foo")
+                .Synchronously()
+                .Skip(10)
+                .Take(5)
+                .Where(x => x.Email == "vader@galacticempire.co")
+                .ToList();
+
+            this.ShouldBeCalledWithArguments(
+                "expand=customData",
+                "q=foo",
+                "offset=10",
+                "limit=5",
+                "email=vader%40galacticempire.co");
+        }
+
+        [Fact]
+        public void When_called_last()
+        {
+            this.Queryable
+                .Expand(x => x.GetCustomData())
+                .Filter("foo")
+                .Skip(10)
+                .Take(5)
+                .Where(x => x.Email == "vader@galacticempire.co")
+                .Synchronously()
+                .ToList();
+
+            this.ShouldBeCalledWithArguments(
+                "expand=customData",
+                "q=foo",
+                "offset=10",
+                "limit=5",
+                "email=vader%40galacticempire.co");
         }
 
         [Fact]
         public void Returns_a_vanilla_queryable()
         {
-            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.DarthVader, 52));
-
             var synchronousQueryable = this.Queryable
                 .Synchronously()
                 .Skip(10);

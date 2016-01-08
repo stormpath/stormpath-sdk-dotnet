@@ -48,7 +48,7 @@ namespace Stormpath.SDK.IdSite
         /// Custom Nonce Store: If you have not enabled caching in the SDK, or you don't want to use your SDK cache as a nonce store,
         /// you can specify a custom instance via this method, and all ID Site reply identifiers will be stored there to
         /// prevent reuse, but note: your custom <see cref="INonceStore"/> implementation <em>MUST</em> support the notion of a
-        /// TTL (Time-to-Live) and automatically evict entries older than the max age lifespan(again, 1 minute).
+        /// TTL (Time-to-Live) and automatically evict entries older than the max age lifespan (again, 1 minute).
         /// </para>
         /// <para>
         /// If your <see cref="INonceStore"/> implementation does not support TTL auto-eviction, your store will fill up

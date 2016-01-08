@@ -16,10 +16,8 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Group
 {
@@ -27,8 +25,5 @@ namespace Stormpath.SDK.Impl.Group
     {
         Task<IDirectory> IGroup.GetDirectoryAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
-
-        Task<ITenant> IAccountStore.GetTenantAsync(CancellationToken cancellationToken)
-            => this.GetTenantAsync(this.Tenant.Href, cancellationToken);
     }
 }

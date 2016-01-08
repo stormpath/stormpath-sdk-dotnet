@@ -27,6 +27,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
 
         private readonly string name;
         private readonly Type[] appliesToTargetTypes;
+        private readonly ResourceTypeLookup typeLookup;
 
         public AbstractFieldConverter(string converterName, Type appliesToTargetType = AnyType)
             : this(converterName, appliesToTargetTypes: appliesToTargetType)
@@ -37,6 +38,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
         {
             this.appliesToTargetTypes = appliesToTargetTypes;
             this.name = converterName;
+            this.typeLookup = new ResourceTypeLookup();
         }
 
         public FieldConverterResult TryConvertField(KeyValuePair<string, object> token, Type targetType)
@@ -49,7 +51,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             else
             {
                 bool isSupportedTargetType = this.appliesToTargetTypes.Contains(targetType);
-                bool isSupportedGenericTargetType = (targetType?.IsGenericType ?? false) && this.appliesToTargetTypes.Contains(new ResourceTypeLookup().GetInnerCollectionInterface(targetType));
+                bool isSupportedGenericTargetType = (targetType?.IsGenericType ?? false) && this.appliesToTargetTypes.Contains(this.typeLookup.GetInnerCollectionInterface(targetType));
                 isSupported = isSupportedTargetType || isSupportedGenericTargetType;
             }
 

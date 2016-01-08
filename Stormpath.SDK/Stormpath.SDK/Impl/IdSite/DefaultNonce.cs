@@ -17,8 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stormpath.SDK.Client;
 using Stormpath.SDK.IdSite;
-using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
@@ -66,6 +66,14 @@ namespace Stormpath.SDK.Impl.IdSite
             => new Dictionary<string, object>(this.properties);
 
         string IResource.Href => this.GetValue();
+
+        IClient IResource.Client
+        {
+            get
+            {
+                throw new NotSupportedException();
+            }
+        }
 
         string INonce.Value => this.GetValue();
 

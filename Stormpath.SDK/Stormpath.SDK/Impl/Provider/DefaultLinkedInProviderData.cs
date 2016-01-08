@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Impl.Provider
             => ProviderType.LinkedIn;
 
         string ILinkedInProviderData.AccessToken
-            => this.GetProperty<string>(AccessTokenPropertyName);
+            => this.GetStringProperty(AccessTokenPropertyName);
 
         internal ILinkedInProviderData SetAccessToken(string accessToken)
         {

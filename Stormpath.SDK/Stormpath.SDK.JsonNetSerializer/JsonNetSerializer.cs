@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Stormpath.SDK.Serialization;
@@ -23,7 +24,7 @@ using Stormpath.SDK.Serialization;
 namespace Stormpath.SDK.Extensions.Serialization
 {
     /// <summary>
-    /// JSON.NET-based deserializer for Stormpath.SDK.
+    /// JSON.NET-based serializer for Stormpath.SDK.
     /// </summary>
     public sealed class JsonNetSerializer : IJsonSerializer
     {
@@ -32,6 +33,7 @@ namespace Stormpath.SDK.Extensions.Serialization
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonNetSerializer"/> class.
         /// </summary>
+        [Obsolete("Don't create serializers directly. Use Serializers.Create().Default() or Create().JsonNetSerializer() instead.")]
         public JsonNetSerializer()
         {
             this.serializerSettings = new JsonSerializerSettings();
@@ -69,65 +71,68 @@ namespace Stormpath.SDK.Extensions.Serialization
             foreach (var prop in map.Properties())
             {
                 var name = prop.Name;
-                object value = null;
-
-                switch (prop.Value.Type)
-                {
-                    case JTokenType.Array:
-                        var nested = new List<IDictionary<string, object>>();
-                        foreach (var child in prop.Value.Children())
-                        {
-                            nested.Add(this.Sanitize((JObject)child));
-                        }
-
-                        value = nested;
-                        break;
-
-                    case JTokenType.Object:
-                        value = this.Sanitize((JObject)prop.Value);
-                        break;
-
-                    case JTokenType.Date:
-                        value = prop.Value.ToObject<DateTimeOffset>();
-                        break;
-
-                    case JTokenType.Integer:
-                        var raw = prop.Value.ToString();
-                        int intResult;
-                        long longResult;
-
-                        if (int.TryParse(raw, out intResult))
-                        {
-                            value = intResult;
-                        }
-                        else if (long.TryParse(raw, out longResult))
-                        {
-                            value = longResult;
-                        }
-                        else
-                        {
-                            throw new ArgumentException("Unknown integer type encountered during parsing.");
-                        }
-
-                        break;
-
-                    case JTokenType.Boolean:
-                        value = bool.Parse(prop.Value.ToString());
-                        break;
-
-                    case JTokenType.Null:
-                        value = null;
-                        break;
-
-                    default:
-                        value = prop.Value.ToString();
-                        break;
-                }
+                var value = this.SanitizeToken(prop.Value);
 
                 result.Add(name, value);
             }
 
             return result;
+        }
+
+        private object SanitizeToken(JToken token)
+        {
+            switch (token.Type)
+            {
+                case JTokenType.Array:
+                    if (token.Children().All(t => t.Type == JTokenType.Object))
+                    {
+                        // Collections of sub-objects get recursively sanitized
+                        var nestedObjects = token.Children()
+                            .Select(c => this.Sanitize((JObject)c))
+                            .ToList();
+                        return nestedObjects;
+                    }
+                    else
+                    {
+                        var nestedScalars = token.Children()
+                            .Select(c => this.SanitizeToken(c))
+                            .ToList();
+                        return nestedScalars;
+                    }
+
+                case JTokenType.Object:
+                    return this.Sanitize((JObject)token);
+
+                case JTokenType.Date:
+                    return token.ToObject<DateTimeOffset>();
+
+                case JTokenType.Integer:
+                    var raw = token.ToString();
+                    int intResult;
+                    long longResult;
+
+                    if (int.TryParse(raw, out intResult))
+                    {
+                        return intResult;
+                    }
+                    else if (long.TryParse(raw, out longResult))
+                    {
+                        return longResult;
+                    }
+                    else
+                    {
+                        return raw;
+                    }
+
+                case JTokenType.Boolean:
+                    return bool.Parse(token.ToString());
+
+                case JTokenType.Null:
+                    return null;
+
+                default:
+                    return token.ToString();
+            }
         }
     }
 }

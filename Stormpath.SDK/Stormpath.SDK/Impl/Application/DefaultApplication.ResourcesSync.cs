@@ -15,8 +15,8 @@
 // </copyright>
 
 using Stormpath.SDK.Impl.Provider;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Impl.Application
         IProviderAccountResult IApplicationSync.GetAccount(IProviderAccountRequest request)
             => new ProviderAccountResolver(this.GetInternalSyncDataStore()).ResolveProviderAccount(this.AsInterface.Href, request);
 
-        ITenant IApplicationSync.GetTenant()
-            => this.GetTenant(this.Tenant.Href);
+        IOauthPolicy IApplicationSync.GetOauthPolicy()
+            => this.GetInternalSyncDataStore().GetResource<IOauthPolicy>(this.OAuthPolicy.Href);
     }
 }

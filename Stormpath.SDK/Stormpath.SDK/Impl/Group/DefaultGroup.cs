@@ -29,9 +29,9 @@ namespace Stormpath.SDK.Impl.Group
         private static readonly string DescriptionPropertyName = "description";
         private static readonly string StatusPropertyName = "status";
         private static readonly string DirectoryPropertyName = "directory";
-        private static readonly string TenantPropertyName = "tenant";
         private static readonly string AccountsPropertyName = "accounts";
         private static readonly string AccountMembershipsPropertyName = "accountMemberships";
+        private static readonly string ApplicationsPropertyName = "applications";
 
         public DefaultGroup(ResourceData data)
             : base(data)
@@ -40,9 +40,9 @@ namespace Stormpath.SDK.Impl.Group
 
         private new IGroup AsInterface => this;
 
-        string IGroup.Name => this.GetProperty<string>(NamePropertyName);
+        string IGroup.Name => this.GetStringProperty(NamePropertyName);
 
-        string IGroup.Description => this.GetProperty<string>(DescriptionPropertyName);
+        string IGroup.Description => this.GetStringProperty(DescriptionPropertyName);
 
         GroupStatus IGroup.Status => this.GetProperty<GroupStatus>(StatusPropertyName);
 
@@ -53,6 +53,8 @@ namespace Stormpath.SDK.Impl.Group
         internal IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
         internal IEmbeddedProperty AccountMemberships => this.GetLinkProperty(AccountMembershipsPropertyName);
+
+        internal IEmbeddedProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
         IGroup IGroup.SetDescription(string description)
         {

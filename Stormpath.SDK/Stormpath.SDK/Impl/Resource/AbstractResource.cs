@@ -14,9 +14,11 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -26,6 +28,7 @@ namespace Stormpath.SDK.Impl.Resource
     internal abstract class AbstractResource : IResource, ILinkable
     {
         public static readonly string HrefPropertyName = "href";
+        public static readonly string TenantPropertyName = "tenant";
 
         private ResourceData resourceData;
 
@@ -50,7 +53,7 @@ namespace Stormpath.SDK.Impl.Resource
         {
             get
             {
-                var href = this.GetProperty<string>(HrefPropertyName);
+                var href = this.GetStringProperty(HrefPropertyName);
 
                 bool isEmptyOrDefault =
                     href == null ||
@@ -62,6 +65,9 @@ namespace Stormpath.SDK.Impl.Resource
             }
         }
 
+        IClient IResource.Client
+            => this.GetInternalDataStore()?.Client;
+
         protected IInternalDataStore GetInternalDataStore()
             => this.GetResourceData()?.InternalDataStore;
 
@@ -71,11 +77,11 @@ namespace Stormpath.SDK.Impl.Resource
         protected IInternalSyncDataStore GetInternalSyncDataStore()
             => this.GetResourceData()?.InternalSyncDataStore;
 
-        protected Task<ITenant> GetTenantAsync(string tenantHref, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(tenantHref, cancellationToken);
+        public Task<ITenant> GetTenantAsync(CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<ITenant>(this.GetLinkProperty(TenantPropertyName).Href, cancellationToken);
 
-        protected ITenant GetTenant(string tenantHref)
-            => this.GetInternalSyncDataStore().GetResource<ITenant>(tenantHref);
+        public ITenant GetTenant()
+            => this.GetInternalSyncDataStore().GetResource<ITenant>(this.GetLinkProperty(TenantPropertyName).Href);
 
         internal bool IsDirty => this.GetResourceData()?.IsDirty ?? true;
 
@@ -88,11 +94,27 @@ namespace Stormpath.SDK.Impl.Resource
         public object GetProperty(string name)
             => this.GetResourceData()?.GetProperty(name);
 
+        public int GetIntProperty(string name)
+            => Convert.ToInt32(this.GetProperty(name) ?? default(int));
+
+        public long GetLongProperty(string name)
+            => Convert.ToInt64(this.GetProperty(name) ?? default(long));
+
+        public string GetStringProperty(string name)
+            => this.GetProperty(name)?.ToString();
+
+        public bool GetBoolProperty(string name)
+            => Convert.ToBoolean(this.GetProperty(name) ?? default(bool));
+
+        public DateTimeOffset GetDateTimeProperty(string name)
+            => (DateTimeOffset)this.GetProperty(name);
+
         public T GetProperty<T>(string name)
+            where T : class
             => (T)(this.GetProperty(name) ?? default(T));
 
         public IEmbeddedProperty GetLinkProperty(string name)
-            => this.GetProperty<IEmbeddedProperty>(name) ?? new LinkProperty(null);
+            => (this.GetProperty(name) as IEmbeddedProperty) ?? new LinkProperty(null);
 
         public bool ContainsProperty(string name)
             => this.GetResourceData()?.ContainsProperty(name) ?? false;

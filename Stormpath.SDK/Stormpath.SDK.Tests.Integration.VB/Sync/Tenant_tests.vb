@@ -22,9 +22,15 @@ Imports Stormpath.SDK.Sync
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Sync
+Namespace Sync
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Tenant_tests
+        Private ReadOnly fixture As TestFixture
+
+        Public Sub New(fixture As TestFixture)
+            Me.fixture = fixture
+        End Sub
+
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Getting_current_tenant(clientBuilder As TestClientProvider)
@@ -34,6 +40,59 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Sync
             tenant.ShouldNotBe(Nothing)
             tenant.Href.ShouldNotBe(Nothing)
             tenant.Name.ShouldNotBe(Nothing)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Getting_account(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            Dim account = tenant.GetAccount(Me.fixture.PrimaryAccountHref)
+            account.Href.ShouldBe(Me.fixture.PrimaryAccountHref)
+            account.FullName.ShouldBe("Luke Skywalker")
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Getting_application(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            Dim app = tenant.GetApplication(Me.fixture.PrimaryApplicationHref)
+            app.Href.ShouldBe(Me.fixture.PrimaryApplicationHref)
+            app.Description.ShouldBe("The Battle of Endor")
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Getting_directory(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            Dim directory = tenant.GetDirectory(Me.fixture.PrimaryDirectoryHref)
+            directory.Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Getting_group(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            Dim group = tenant.GetGroup(Me.fixture.PrimaryGroupHref)
+            group.Href.ShouldBe(Me.fixture.PrimaryGroupHref)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Getting_organization(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim tenant = client.GetCurrentTenant()
+
+            Dim org = tenant.GetOrganization(Me.fixture.PrimaryOrganizationHref)
+            org.NameKey.ShouldBe(Me.fixture.PrimaryOrganizationNameKey)
+            org.Href.ShouldBe(Me.fixture.PrimaryOrganizationHref)
         End Sub
     End Class
 End Namespace

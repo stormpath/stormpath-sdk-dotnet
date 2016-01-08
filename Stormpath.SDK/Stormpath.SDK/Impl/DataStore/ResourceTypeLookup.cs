@@ -31,9 +31,13 @@ using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.Directory;
 using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.IdSite;
+using Stormpath.SDK.Impl.Oauth;
+using Stormpath.SDK.Impl.Organization;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Oauth;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -44,13 +48,13 @@ namespace Stormpath.SDK.Impl.DataStore
     {
         private static readonly IReadOnlyDictionary<Type, Type> ConcreteLookup = new Dictionary<Type, Type>()
         {
+            [typeof(IOrganization)] = typeof(DefaultOrganization),
             [typeof(IAccount)] = typeof(DefaultAccount),
             [typeof(IApplication)] = typeof(DefaultApplication),
             [typeof(ITenant)] = typeof(DefaultTenant),
             [typeof(IDirectory)] = typeof(DefaultDirectory),
             [typeof(IGroup)] = typeof(DefaultGroup),
             [typeof(IGroupMembership)] = typeof(DefaultGroupMembership),
-            [typeof(IAccountStoreMapping)] = typeof(DefaultAccountStoreMapping),
             [typeof(IAccountStore)] = typeof(DefaultAccountStore),
             [typeof(IBasicLoginAttempt)] = typeof(DefaultBasicLoginAttempt),
             [typeof(SDK.Auth.IAuthenticationResult)] = typeof(DefaultAuthenticationResult),
@@ -72,17 +76,31 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(ILinkedInProviderData)] = typeof(DefaultLinkedInProviderData),
             [typeof(IAccountResult)] = typeof(DefaultAccountResult),
             [typeof(INonce)] = typeof(DefaultNonce),
+            [typeof(IOauthPolicy)] = typeof(DefaultOauthPolicy),
+            [typeof(IAccessToken)] = typeof(DefaultAccessToken),
+            [typeof(IRefreshToken)] = typeof(DefaultRefreshToken),
+            [typeof(IPasswordGrantAuthenticationAttempt)] = typeof(DefaultPasswordGrantAuthenticationAttempt),
+            [typeof(IGrantAuthenticationToken)] = typeof(DefaultGrantAuthenticationToken),
+            [typeof(IRefreshGrantAuthenticationAttempt)] = typeof(DefaultRefreshGrantAuthenticationAttempt),
+            [typeof(IIdSiteTokenAuthenticationAttempt)] = typeof(DefaultIdSiteTokenAuthenticationAttempt),
+
+            // TODO these will be greatly simplified on a breaking version change
+            [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
+            [typeof(IAccountStoreMapping<IApplicationAccountStoreMapping>)] = typeof(DefaultApplicationAccountStoreMapping),
+            [typeof(IApplicationAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
+            [typeof(IOrganizationAccountStoreMapping)] = typeof(DefaultOrganizationAccountStoreMapping),
+            [typeof(IAccountStoreMapping<IOrganizationAccountStoreMapping>)] = typeof(DefaultOrganizationAccountStoreMapping),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> InterfaceLookup = new Dictionary<Type, Type>()
         {
+            [typeof(DefaultOrganization)] = typeof(IOrganization),
             [typeof(DefaultAccount)] = typeof(IAccount),
             [typeof(DefaultApplication)] = typeof(IApplication),
             [typeof(DefaultTenant)] = typeof(ITenant),
             [typeof(DefaultDirectory)] = typeof(IDirectory),
             [typeof(DefaultGroup)] = typeof(IGroup),
             [typeof(DefaultGroupMembership)] = typeof(IGroupMembership),
-            [typeof(DefaultAccountStoreMapping)] = typeof(IAccountStoreMapping),
             [typeof(DefaultAccountStore)] = typeof(IAccountStore),
             [typeof(DefaultBasicLoginAttempt)] = typeof(IBasicLoginAttempt),
             [typeof(DefaultAuthenticationResult)] = typeof(SDK.Auth.IAuthenticationResult),
@@ -102,11 +120,23 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultGoogleProviderData)] = typeof(IGoogleProviderData),
             [typeof(DefaultLinkedInProvider)] = typeof(ILinkedInProvider),
             [typeof(DefaultLinkedInProviderData)] = typeof(ILinkedInProviderData),
-            [typeof(DefaultAccountResult)] = typeof(IAccountResult)
+            [typeof(DefaultAccountResult)] = typeof(IAccountResult),
+            [typeof(DefaultOauthPolicy)] = typeof(IOauthPolicy),
+            [typeof(DefaultAccessToken)] = typeof(IAccessToken),
+            [typeof(DefaultRefreshToken)] = typeof(IRefreshToken),
+            [typeof(DefaultPasswordGrantAuthenticationAttempt)] = typeof(IPasswordGrantAuthenticationAttempt),
+            [typeof(DefaultGrantAuthenticationToken)] = typeof(IGrantAuthenticationToken),
+            [typeof(DefaultRefreshGrantAuthenticationAttempt)] = typeof(IRefreshGrantAuthenticationAttempt),
+            [typeof(DefaultIdSiteTokenAuthenticationAttempt)] = typeof(IIdSiteTokenAuthenticationAttempt),
+
+            // TODO these will be greatly simplified on a breaking version change
+            [typeof(DefaultApplicationAccountStoreMapping)] = typeof(IApplicationAccountStoreMapping),
+            [typeof(DefaultOrganizationAccountStoreMapping)] = typeof(IOrganizationAccountStoreMapping),
         };
 
         private static readonly IReadOnlyDictionary<string, Type> InterfaceLookupByAttributeName = new Dictionary<string, Type>()
         {
+            ["organization"] = typeof(IOrganization),
             ["application"] = typeof(IApplication),
             ["account"] = typeof(IAccount),
             ["directory"] = typeof(IDirectory),
@@ -118,7 +148,9 @@ namespace Stormpath.SDK.Impl.DataStore
             ["defaultAccountStoreMapping"] = typeof(IAccountStoreMapping),
             ["defaultGroupStoreMapping"] = typeof(IAccountStoreMapping),
             ["accountStore"] = typeof(IAccountStore),
+            ["oAuthPolicy"] = typeof(IOauthPolicy),
 
+            ["organizations"] = typeof(CollectionResponsePage<IOrganization>),
             ["applications"] = typeof(CollectionResponsePage<IApplication>),
             ["directories"] = typeof(CollectionResponsePage<IDirectory>),
             ["accounts"] = typeof(CollectionResponsePage<IAccount>),
@@ -130,12 +162,19 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()
         {
+            [typeof(CollectionResponsePage<IOrganization>)] = typeof(IOrganization),
             [typeof(CollectionResponsePage<IAccount>)] = typeof(IAccount),
             [typeof(CollectionResponsePage<IApplication>)] = typeof(IApplication),
             [typeof(CollectionResponsePage<IDirectory>)] = typeof(IDirectory),
             [typeof(CollectionResponsePage<IGroup>)] = typeof(IGroup),
             [typeof(CollectionResponsePage<IGroupMembership>)] = typeof(IGroupMembership),
-            [typeof(CollectionResponsePage<IAccountStoreMapping>)] = typeof(IAccountStoreMapping),
+            [typeof(CollectionResponsePage<IAccessToken>)] = typeof(IAccessToken),
+            [typeof(CollectionResponsePage<IRefreshToken>)] = typeof(IRefreshToken),
+
+            // TODO these will be greatly simplified on a breaking version change
+            [typeof(CollectionResponsePage<IApplicationAccountStoreMapping>)] = typeof(IApplicationAccountStoreMapping),
+            [typeof(CollectionResponsePage<IAccountStoreMapping>)] = typeof(IApplicationAccountStoreMapping),
+            [typeof(CollectionResponsePage<IOrganizationAccountStoreMapping>)] = typeof(IOrganizationAccountStoreMapping),
         };
 
         private static Type GetConcreteTypeForInterface(Type iface)
@@ -175,7 +214,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// </summary>
         /// <param name="type">The type to check</param>
         /// <returns><see langword="true"/> if this type represents a paged collection response; <see langword="false"/> otherwise.</returns>
-        public static bool IsCollectionResponse(Type type)
+        public bool IsCollectionResponse(Type type)
             => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
 
         /// <summary>
@@ -209,7 +248,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// </summary>
         /// <param name="nestedItemKey">A resource attribute name (e.g. "directory").</param>
         /// <returns>The associated interface type (e.g., <see cref="IDirectory"/>, or <see langword="null"/> if no type could be found.</returns>
-        public Type GetInterface(string nestedItemKey)
+        public Type GetInterfaceByPropertyName(string nestedItemKey)
         {
             Type foundType = null;
             InterfaceLookupByAttributeName.TryGetValue(nestedItemKey, out foundType);
@@ -244,7 +283,7 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         /// <summary>
-        /// Looks up the inner interface from a collection type.
+        /// Looks up the inner interface from a parent type.
         /// </summary>
         /// <param name="collectionType">A <see cref="CollectionResponsePage{T}"/> containing some inner <see cref="IResource"/> interface (e.g. <see cref="CollectionResponsePage{IAccount}"/>).</param>
         /// <returns>The inner interface (e.g. <see cref="IAccount"/>).</returns>

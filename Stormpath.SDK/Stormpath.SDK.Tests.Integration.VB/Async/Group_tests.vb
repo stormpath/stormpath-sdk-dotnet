@@ -24,7 +24,7 @@ Imports Stormpath.SDK.Group
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Xunit
 
-Namespace Stormpath.SDK.Tests.Integration.VB.Async
+Namespace Async
     <Collection(NameOf(IntegrationTestCollection))>
     Public Class Group_tests
         Private ReadOnly fixture As TestFixture
@@ -62,6 +62,16 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             Dim groups = Await app.GetGroups().ToListAsync()
 
             groups.Count.ShouldBeGreaterThan(0)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Getting_group_applications(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim group = Await client.GetGroupAsync(Me.fixture.PrimaryGroupHref)
+
+            Dim apps = Await group.GetApplications().ToListAsync()
+            apps.Where(Function(x) x.Href = Me.fixture.PrimaryApplicationHref).Any().ShouldBeTrue()
         End Function
 
         <Theory>
@@ -278,6 +288,25 @@ Namespace Stormpath.SDK.Tests.Integration.VB.Async
             created.Status.ShouldBe(GroupStatus.Disabled)
 
             Assert.True(Await created.DeleteAsync())
+            Me.fixture.CreatedGroupHrefs.Remove(created.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Creating_group_in_application_with_convenience_method(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim app = Await client.GetResourceAsync(Of IApplication)(Me.fixture.PrimaryApplicationHref)
+
+            Dim name = $".NET ITs New Convenient Test Group {fixture.TestRunIdentifier}"
+            Dim created = Await app.CreateGroupAsync(name, "I can has lazy")
+            created.Href.ShouldNotBeNullOrEmpty()
+            Me.fixture.CreatedGroupHrefs.Add(created.Href)
+
+            created.Name.ShouldBe(name)
+            created.Description.ShouldBe("I can has lazy")
+            created.Status.ShouldBe(GroupStatus.Enabled)
+
+            Call (Await created.DeleteAsync()).ShouldBeTrue()
             Me.fixture.CreatedGroupHrefs.Remove(created.Href)
         End Function
 

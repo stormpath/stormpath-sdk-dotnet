@@ -36,7 +36,6 @@ namespace Stormpath.SDK.Impl.Directory
         private static readonly string PasswordPolicyPropertyName = "passwordPolicy";
         private static readonly string ProviderPropertyName = "provider";
         private static readonly string StatusPropertyName = "status";
-        private static readonly string TenantPropertyName = "tenant";
 
         public DefaultDirectory(ResourceData data)
             : base(data)
@@ -51,11 +50,11 @@ namespace Stormpath.SDK.Impl.Directory
 
         internal IEmbeddedProperty Applications => this.GetLinkProperty(ApplicationsPropertyName);
 
-        string IDirectory.Description => this.GetProperty<string>(DescriptionPropertyName);
+        string IDirectory.Description => this.GetStringProperty(DescriptionPropertyName);
 
         internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
-        string IDirectory.Name => this.GetProperty<string>(NamePropertyName);
+        string IDirectory.Name => this.GetStringProperty(NamePropertyName);
 
         internal IEmbeddedProperty PasswordPolicy => this.GetLinkProperty(PasswordPolicyPropertyName);
 

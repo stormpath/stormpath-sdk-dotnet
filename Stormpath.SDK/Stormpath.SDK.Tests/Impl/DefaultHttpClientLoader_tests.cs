@@ -14,12 +14,8 @@
 // limitations under the License.
 // </copyright>
 
-using NSubstitute;
 using Shouldly;
-using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Http;
-using Stormpath.SDK.Impl.Utility;
-using Stormpath.SDK.Logging;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -29,15 +25,10 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Default_library_is_loaded()
         {
-            ITypeLoader<IHttpClient> loader = new DefaultHttpClientLoader();
-
             // This test project has a reference to Stormpath.SDK.RestSharpClient, so the file lookup will succeed
-            IHttpClient instance = null;
-            var constructorArgs = new object[] { "http://api.foo.bar", 100, null, Substitute.For<ILogger>() };
-            bool loadResult = loader.TryLoad(out instance, constructorArgs);
+            var foundType = DefaultHttpClientLoader.Load();
 
-            loadResult.ShouldBeTrue();
-            instance.ShouldNotBe(null);
+            foundType.ShouldNotBeNull();
         }
     }
 }

@@ -22,7 +22,6 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Error;
-using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
@@ -126,6 +125,18 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             chewie.SetUsername($"rwaaargh-{this.fixture.TestRunIdentifier}");
             await chewie.SaveAsync(response => response.Expand(x => x.GetCustomData()));
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_account_applications(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var luke = await client.GetAccountAsync(this.fixture.PrimaryAccountHref);
+
+            var apps = await luke.GetApplications().ToListAsync();
+            apps.Where(x => x.Href == this.fixture.PrimaryApplicationHref).Any().ShouldBeTrue();
         }
 
         [Theory]
@@ -549,8 +560,30 @@ namespace Stormpath.SDK.Tests.Integration.Async
             {
                 request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}");
                 request.SetPassword("whataPieceofjunk$1138");
-                request.SetAccountStore(this.fixture.PrimaryDirectoryHref);
+                request.SetAccountStore(this.fixture.PrimaryOrganizationHref);
             });
+            result.ShouldBeAssignableTo<IAuthenticationResult>();
+            result.Success.ShouldBeTrue();
+
+            var account = await result.GetAccountAsync();
+            account.FullName.ShouldBe("Luke Skywalker");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Authenticating_account_in_specified_organization_by_nameKey(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+            var accountStore = await application.GetDefaultAccountStoreAsync();
+
+            var result = await application.AuthenticateAccountAsync(
+                request =>
+                {
+                    request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}");
+                    request.SetPassword("whataPieceofjunk$1138");
+                    request.SetAccountStore(this.fixture.PrimaryOrganizationNameKey);
+                });
             result.ShouldBeAssignableTo<IAuthenticationResult>();
             result.Success.ShouldBeTrue();
 

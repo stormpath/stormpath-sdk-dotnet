@@ -560,6 +560,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""authTokens"": {
                 ""href"": ""https://api.stormpath.com/v1/applications/foobarApplication/authTokens""
             },
+            ""authorizedCallbackUris"": [""https://foo.bar/1"", ""https://foo.bar/2""],
             ""createdAt"": ""2015-07-21T23:50:49.563Z"",
             ""customData"": {
                 ""href"": ""https://api.stormpath.com/v1/applications/foobarApplication/customData""
@@ -948,6 +949,38 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount/customData"",
             ""membershipType"": ""lifetime"",
             ""modifiedAt"": ""2015-08-12T21:31:49.854Z""
+        }";
+
+        #endregion
+
+        #region Organization 'Star Wars'
+
+        public static readonly string Organizatino = @"
+        {
+            ""accountStoreMappings"": {
+                ""href"": ""https://api.stormpath.com/v1/organizations/org1/accountStoreMappings""
+            },
+            ""accounts"": {
+                ""href"": ""https://api.stormpath.com/v1/organizations/org1/accounts""
+            },
+            ""createdAt"": ""2015-12-11T22:23:01.014Z"",
+            ""customData"": {
+                ""href"": ""https://api.stormpath.com/v1/organizations/org1/customData""
+            },
+            ""defaultAccountStoreMapping"": null,
+            ""defaultGroupStoreMapping"": null,
+            ""description"": ""A long time ago, in a galaxy far away..."",
+            ""groups"": {
+                ""href"": ""https://api.stormpath.com/v1/organizations/org1/groups""
+            },
+            ""href"": ""https://api.stormpath.com/v1/organizations/org1"",
+            ""modifiedAt"": ""2015-12-11T22:23:01.014Z"",
+            ""name"": ""Star Wars"",
+            ""nameKey"": ""star-wars"",
+            ""status"": ""ENABLED"",
+            ""tenant"": {
+                ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
+            }
         }";
 
         #endregion

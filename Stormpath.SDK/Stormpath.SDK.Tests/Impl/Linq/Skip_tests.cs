@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Skip(10)
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("offset=10");
+            this.ShouldBeCalledWithArguments("offset=10");
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Skip(offset)
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("offset=20");
+            this.ShouldBeCalledWithArguments("offset=20");
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Skip(offsetFunc())
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArgument("offset=25");
+            this.ShouldBeCalledWithArguments("offset=25");
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .MoveNextAsync();
 
             // Expected behavior: the last call will be kept
-            this.ShouldBeCalledWithArgument("offset=5");
+            this.ShouldBeCalledWithArguments("offset=5");
         }
 
         [Fact]

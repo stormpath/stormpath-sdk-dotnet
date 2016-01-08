@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Resource;
@@ -22,18 +23,31 @@ namespace Stormpath.SDK.Impl.AccountStore
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="IAccountStoreMapping"/>.
+    /// available on <see cref="IAccountStoreMapping{T}"/>.
     /// </summary>
-    internal interface IAccountStoreMappingSync : ISaveableSync<IAccountStoreMapping>, IDeletableSync
+    [Obsolete("This interface will be removed in 1.0. Use IApplicationAccountStoreMappingSync instead.")]
+    internal interface IAccountStoreMappingSync : IAccountStoreMappingSync<IApplicationAccountStoreMapping>
+    {
+    }
+
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IAccountStoreMapping{T}"/>.
+    /// </summary>
+    /// <typeparam name="T">The Account Store type.</typeparam>
+    internal interface IAccountStoreMappingSync<T> :
+        ISaveableSync<T>,
+        IDeletableSync
+        where T : IAccountStoreMapping<T>
     {
         /// <summary>
-        /// Synchronous counterpart to <see cref="IAccountStoreMapping.GetAccountStoreAsync(System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <see cref="IAccountStoreMapping{T}.GetAccountStoreAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <returns>The Account Store.</returns>
         IAccountStore GetAccountStore();
 
         /// <summary>
-        /// Synchronous counterpart to <see cref="IAccountStoreMapping.GetApplicationAsync(System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <see cref="IAccountStoreMapping{T}.GetApplicationAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <returns>The Application.</returns>
         IApplication GetApplication();

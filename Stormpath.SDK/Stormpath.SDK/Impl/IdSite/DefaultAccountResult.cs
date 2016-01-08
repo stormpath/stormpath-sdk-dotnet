@@ -37,9 +37,9 @@ namespace Stormpath.SDK.Impl.IdSite
 
         internal IEmbeddedProperty Account => this.GetLinkProperty(AccountPropertyName);
 
-        bool IAccountResult.IsNewAccount => this.GetProperty<bool>(NewAccountPropertyName);
+        bool IAccountResult.IsNewAccount => this.GetBoolProperty(NewAccountPropertyName);
 
-        string IAccountResult.State => this.GetProperty<string>(StatePropertyName);
+        string IAccountResult.State => this.GetStringProperty(StatePropertyName);
 
         IdSiteResultStatus IAccountResult.Status => this.GetProperty<IdSiteResultStatus>(StatusPropertyName);
 

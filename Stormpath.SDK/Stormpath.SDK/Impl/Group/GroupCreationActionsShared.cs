@@ -28,34 +28,54 @@ namespace Stormpath.SDK.Impl.Group
     /// </summary>
     internal static class GroupCreationActionsShared
     {
-        public static Task<IGroup> CreateGroupAsync(IInternalAsyncDataStore dataStore, string groupsHref, IGroup group, CancellationToken cancellationToken)
-            => dataStore.CreateAsync(groupsHref, group, cancellationToken);
+        public static Task<IGroup> CreateGroupAsync(IInternalAsyncDataStore internalDataStore, string groupsHref, IGroup group, CancellationToken cancellationToken)
+            => internalDataStore.CreateAsync(groupsHref, group, cancellationToken);
 
-        public static IGroup CreateGroup(IInternalSyncDataStore dataStore, string groupsHref, IGroup group)
-            => dataStore.Create(groupsHref, group);
+        public static IGroup CreateGroup(IInternalSyncDataStore internalDataStore, string groupsHref, IGroup group)
+            => internalDataStore.Create(groupsHref, group);
 
-        public static Task<IGroup> CreateGroupAsync(IInternalAsyncDataStore dataStore, string groupsHref, IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
+        public static Task<IGroup> CreateGroupAsync(IInternalAsyncDataStore internalDataStore, string groupsHref, IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
         {
             var builder = new GroupCreationOptionsBuilder();
             creationOptionsAction(builder);
             var options = builder.Build();
 
-            return dataStore.CreateAsync(groupsHref, group, options, cancellationToken);
+            return internalDataStore.CreateAsync(groupsHref, group, options, cancellationToken);
         }
 
-        public static IGroup CreateGroup(IInternalSyncDataStore dataStore, string groupsHref, IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction)
+        public static IGroup CreateGroup(IInternalSyncDataStore internalDataStore, string groupsHref, IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction)
         {
             var builder = new GroupCreationOptionsBuilder();
             creationOptionsAction(builder);
             var options = builder.Build();
 
-            return dataStore.Create(groupsHref, group, options);
+            return internalDataStore.Create(groupsHref, group, options);
         }
 
-        public static Task<IGroup> CreateGroupAsync(IInternalAsyncDataStore dataStore, string groupsHref, IGroup group, IGroupCreationOptions creationOptions, CancellationToken cancellationToken)
-            => dataStore.CreateAsync(groupsHref, group, creationOptions, cancellationToken);
+        public static Task<IGroup> CreateGroupAsync(IInternalAsyncDataStore internalDataStore, string groupsHref, IGroup group, IGroupCreationOptions creationOptions, CancellationToken cancellationToken)
+            => internalDataStore.CreateAsync(groupsHref, group, creationOptions, cancellationToken);
 
-        public static IGroup CreateGroup(IInternalSyncDataStore dataStore, string groupsHref, IGroup group, IGroupCreationOptions creationOptions)
-            => dataStore.Create(groupsHref, group, creationOptions);
+        public static Task<IGroup> CreateGroupAsync(IInternalAsyncDataStore internalDataStore, string groupsHref, string name, string description, CancellationToken cancellationToken)
+        {
+            var group = internalDataStore.Instantiate<IGroup>()
+                .SetName(name)
+                .SetDescription(description)
+                .SetStatus(GroupStatus.Enabled);
+
+            return internalDataStore.CreateAsync(groupsHref, group, cancellationToken);
+        }
+
+        public static IGroup CreateGroup(IInternalSyncDataStore internalDataStore, string groupsHref, IGroup group, IGroupCreationOptions creationOptions)
+            => internalDataStore.Create(groupsHref, group, creationOptions);
+
+        public static IGroup CreateGroup(IInternalSyncDataStore internalDataStore, string groupsHref, string name, string description)
+        {
+            var group = internalDataStore.Instantiate<IGroup>()
+                .SetName(name)
+                .SetDescription(description)
+                .SetStatus(GroupStatus.Enabled);
+
+            return internalDataStore.Create(groupsHref, group);
+        }
     }
 }

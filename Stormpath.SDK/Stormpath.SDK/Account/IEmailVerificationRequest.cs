@@ -14,6 +14,9 @@
 // limitations under the License.
 // </copyright>
 
+using System.Threading;
+using System.Threading.Tasks;
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Account
@@ -29,6 +32,11 @@ namespace Stormpath.SDK.Account
         /// <value>The username or email.</value>
         string Login { get; }
 
-        // TODO AccountStore
+        /// <summary>
+        /// Gets the <see cref="IAccountStore">Account Store</see> used for this request.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IAccountStore">Account Store</see>, or <see langword="null"/> if no Account Store was set.</returns>
+        Task<IAccountStore> GetAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

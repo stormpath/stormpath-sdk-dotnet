@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Application;
@@ -66,6 +67,17 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var groups = await app.GetGroups().ToListAsync();
 
             groups.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_group_applications(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var group = await client.GetGroupAsync(this.fixture.PrimaryGroupHref);
+
+            var apps = await group.GetApplications().ToListAsync();
+            apps.Where(x => x.Href == this.fixture.PrimaryApplicationHref).Any().ShouldBeTrue();
         }
 
         [Theory]
@@ -277,6 +289,26 @@ namespace Stormpath.SDK.Tests.Integration.Async
             created.Name.ShouldBe($".NET ITs New Test Group {this.fixture.TestRunIdentifier}");
             created.Description.ShouldBe("A nu start");
             created.Status.ShouldBe(GroupStatus.Disabled);
+
+            (await created.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedGroupHrefs.Remove(created.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Creating_group_in_application_with_convenience_method(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var name = $".NET ITs New Convenient Test Group {this.fixture.TestRunIdentifier}";
+            var created = await app.CreateGroupAsync(name, "I can has lazy");
+            created.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedGroupHrefs.Add(created.Href);
+
+            created.Name.ShouldBe(name);
+            created.Description.ShouldBe("I can has lazy");
+            created.Status.ShouldBe(GroupStatus.Enabled);
 
             (await created.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedGroupHrefs.Remove(created.Href);

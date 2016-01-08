@@ -19,7 +19,6 @@ using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Provider;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {
@@ -35,14 +34,6 @@ namespace Stormpath.SDK.Sync
         /// <returns>This account's directory.</returns>
         public static IDirectory GetDirectory(this IAccount account)
             => (account as IAccountSync).GetDirectory();
-
-        /// <summary>
-        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Account resource.
-        /// </summary>
-        /// <param name="account">The account.</param>
-        /// <returns>This account's tenant.</returns>
-        public static ITenant GetTenant(this IAccount account)
-            => (account as IAccountSync).GetTenant();
 
         /// <summary>
         /// Synchronously assigns this account to the specified <see cref="Group.IGroup"/>.

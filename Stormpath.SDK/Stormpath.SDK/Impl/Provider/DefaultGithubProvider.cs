@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Impl.Provider
             => ProviderType.Github;
 
         string IGithubProvider.ClientId
-            => this.GetProperty<string>(ClientIdPropertyName);
+            => this.GetStringProperty(ClientIdPropertyName);
 
         internal IGithubProvider SetClientId(string clientId)
         {
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Impl.Provider
         }
 
         string IGithubProvider.ClientSecret
-            => this.GetProperty<string>(ClientSecretPropertyName);
+            => this.GetStringProperty(ClientSecretPropertyName);
 
         internal IGithubProvider SetClientSecret(string clientSecret)
         {

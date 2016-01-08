@@ -15,7 +15,7 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 using Map = System.Collections.Generic.IDictionary<string, object>;
@@ -44,6 +44,16 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <returns>The resource.</returns>
         T GetResource<T>(string href, Func<Map, Type> typeLookup)
             where T : class, IResource;
+
+        /// <summary>
+        /// Directly retrieves the resource at the specified <paramref name="href"/> URL and returns the resource
+        /// as an instance of the specified class <typeparamref name="T"/>. The cache is not consulted for reads;
+        /// but any returned value <b>is</b> cached.
+        /// </summary>
+        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <param name="href">The resource URL of the resource to retrieve.</param>
+        /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
+        T GetResourceSkipCache<T>(string href);
 
         /// <summary>
         /// Creates a new resource on the server.
@@ -85,9 +95,23 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <typeparam name="TReturned">The resource type to return.</typeparam>
         /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
         /// <param name="resource">The resource to persist.</param>
-        /// <param name="options">The creation options to use for the request.</param>
+        /// <param name="headers">The HTTP headers to use for the request.</param>
         /// <returns>The persisted resource.</returns>
-        TReturned Create<T, TReturned>(string parentHref, T resource, ICreationOptions options)
+        TReturned Create<T, TReturned>(string parentHref, T resource, HttpHeaders headers)
+            where T : class
+            where TReturned : class;
+
+        /// <summary>
+        /// Creates a new resource on the server with the specified options.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <typeparam name="TReturned">The resource type to return.</typeparam>
+        /// <param name="parentHref">The parent resource URL to send the creation request to.</param>
+        /// <param name="resource">The resource to persist.</param>
+        /// <param name="options">The creation options to use for the request.</param>
+        /// <param name="headers">The HTTP headers to use for the request.</param>
+        /// <returns>The persisted resource.</returns>
+        TReturned Create<T, TReturned>(string parentHref, T resource, ICreationOptions options, HttpHeaders headers)
             where T : class
             where TReturned : class;
 

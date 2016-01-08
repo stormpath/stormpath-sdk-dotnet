@@ -18,7 +18,7 @@ using System;
 using System.Threading;
 using Shouldly;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Application;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Fakes;
@@ -42,18 +42,18 @@ namespace Stormpath.SDK.Cache.Redis.Tests
                 .Build();
 
             this.CreateClient(cacheProvider);
-            this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
+            this.fakeHttpClient.SetupGet("/accounts/foobarAccount", 200, FakeJson.Account);
 
             // Prime the cache
-            var application = this.client.GetResource<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
+            var account = this.client.GetResource<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
 
             // All cache hits
-            this.client.GetResource<IApplication>(application.Href);
-            this.client.GetResource<IApplication>(application.Href);
-            this.client.GetResource<IApplication>(application.Href);
+            this.client.GetResource<IAccount>(account.Href);
+            this.client.GetResource<IAccount>(account.Href);
+            this.client.GetResource<IAccount>(account.Href);
 
             var db = this.fixture.Connection.GetDatabase();
-            var key = TestHelper.CreateKey(application);
+            var key = TestHelper.CreateKey(account);
             var cached = db.StringGetWithExpiry(key);
 
             cached.Expiry.ShouldBeNull(); // No TTI
@@ -70,17 +70,17 @@ namespace Stormpath.SDK.Cache.Redis.Tests
                 .Build();
 
             this.CreateClient(cacheProvider);
-            this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
+            this.fakeHttpClient.SetupGet("/accounts/foobarAccount", 200, FakeJson.Account);
 
-            var application = this.client.GetResource<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
-            this.client.GetResource<IApplication>(application.Href);
-            this.client.GetResource<IApplication>(application.Href);
+            var account = this.client.GetResource<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
+            this.client.GetResource<IAccount>(account.Href);
+            this.client.GetResource<IAccount>(account.Href);
             this.fakeHttpClient.Calls.Count.ShouldBe(1);
 
             Thread.Sleep(1500);
 
-            this.client.GetResource<IApplication>(application.Href);
-            this.client.GetResource<IApplication>(application.Href);
+            this.client.GetResource<IAccount>(account.Href);
+            this.client.GetResource<IAccount>(account.Href);
             this.fakeHttpClient.Calls.Count.ShouldBe(2);
         }
 
@@ -93,17 +93,17 @@ namespace Stormpath.SDK.Cache.Redis.Tests
                 .Build();
 
             this.CreateClient(cacheProvider);
-            this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
+            this.fakeHttpClient.SetupGet("/accounts/foobarAccount", 200, FakeJson.Account);
 
-            var application = this.client.GetResource<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
-            this.client.GetResource<IApplication>(application.Href);
-            this.client.GetResource<IApplication>(application.Href);
+            var account = this.client.GetResource<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
+            this.client.GetResource<IAccount>(account.Href);
+            this.client.GetResource<IAccount>(account.Href);
             this.fakeHttpClient.Calls.Count.ShouldBe(1);
 
             Thread.Sleep(1500);
 
-            this.client.GetResource<IApplication>(application.Href);
-            this.client.GetResource<IApplication>(application.Href);
+            this.client.GetResource<IAccount>(account.Href);
+            this.client.GetResource<IAccount>(account.Href);
             this.fakeHttpClient.Calls.Count.ShouldBe(2);
         }
 
@@ -119,10 +119,10 @@ namespace Stormpath.SDK.Cache.Redis.Tests
                 .Build();
 
             this.CreateClient(cacheProvider);
-            this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
+            this.fakeHttpClient.SetupGet("/groups/group1", 200, FakeJson.Group);
             this.fakeHttpClient.SetupGet("/accounts/foobarAccount", 200, FakeJson.Account);
 
-            var application = this.client.GetResource<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
+            var group = this.client.GetResource<IGroup>("https://api.stormpath.com/v1/groups/group1");
             var account = this.client.GetResource<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
             this.fakeHttpClient.Calls.Count.ShouldBe(2);
 
@@ -131,7 +131,7 @@ namespace Stormpath.SDK.Cache.Redis.Tests
             this.client.GetResourceAsync<IAccount>(account.Href);
             this.fakeHttpClient.Calls.Count.ShouldBe(3);
 
-            this.client.GetResource<IApplication>(application.Href);
+            this.client.GetResource<IGroup>(group.Href);
             this.fakeHttpClient.Calls.Count.ShouldBe(3);
         }
 
@@ -147,10 +147,10 @@ namespace Stormpath.SDK.Cache.Redis.Tests
                 .Build();
 
             this.CreateClient(cacheProvider);
-            this.fakeHttpClient.SetupGet("/applications/foobarApplication", 200, FakeJson.Application);
+            this.fakeHttpClient.SetupGet("/groups/group1", 200, FakeJson.Group);
             this.fakeHttpClient.SetupGet("/accounts/foobarAccount", 200, FakeJson.Account);
 
-            var application = this.client.GetResource<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
+            var group = this.client.GetResource<IGroup>("https://api.stormpath.com/v1/groups/group1");
             var account = this.client.GetResource<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
             this.fakeHttpClient.Calls.Count.ShouldBe(2);
 
@@ -159,7 +159,7 @@ namespace Stormpath.SDK.Cache.Redis.Tests
             this.client.GetResource<IAccount>(account.Href);
             this.fakeHttpClient.Calls.Count.ShouldBe(3);
 
-            this.client.GetResource<IApplication>(application.Href);
+            this.client.GetResource<IGroup>(group.Href);
             this.fakeHttpClient.Calls.Count.ShouldBe(3);
         }
     }

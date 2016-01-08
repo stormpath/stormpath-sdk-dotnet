@@ -16,6 +16,7 @@
 
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Linq;
@@ -25,6 +26,9 @@ namespace Stormpath.SDK.Impl.Directory
 {
     internal sealed partial class DefaultDirectory
     {
+        IAsyncQueryable<IApplication> IDirectory.GetApplications()
+            => new CollectionResourceQueryable<IApplication>(this.Applications.Href, this.GetInternalAsyncDataStore());
+
         IAsyncQueryable<IAccount> IAccountStore.GetAccounts()
             => new CollectionResourceQueryable<IAccount>(this.Accounts.Href, this.GetInternalAsyncDataStore());
 

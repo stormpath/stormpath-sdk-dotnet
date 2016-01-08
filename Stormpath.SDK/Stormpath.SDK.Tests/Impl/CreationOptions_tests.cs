@@ -26,15 +26,15 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
     public class CreationOptions_tests
     {
-        private static readonly string BaseHref = "http://api.foobar.com";
-
         private static void VerifyRequestContents(IRequestExecutor executor, string queryString)
         {
             executor.Received()
@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             public Application_options()
             {
-                this.dataStore = new StubDataStore(FakeJson.Application, BaseHref);
+                this.dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Application).Object) as IInternalAsyncDataStore;
             }
 
             private async Task VerifyThat(ICreationOptions options, string resultsInQueryString)
@@ -129,7 +129,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             public Account_options()
             {
-                this.dataStore = new StubDataStore(FakeJson.Account, BaseHref);
+                this.dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object) as IInternalAsyncDataStore;
             }
 
             private async Task VerifyThat(ICreationOptions options, string resultsInQueryString)
@@ -205,7 +205,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             public Directory_options()
             {
-                this.dataStore = new StubDataStore(FakeJson.Directory, BaseHref);
+                this.dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Directory).Object) as IInternalAsyncDataStore;
             }
 
             private async Task VerifyThat(ICreationOptions options, string resultsInQueryString)
@@ -248,7 +248,7 @@ namespace Stormpath.SDK.Tests.Impl
 
             public Group_options()
             {
-                this.dataStore = new StubDataStore(FakeJson.Group, BaseHref);
+                this.dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Group).Object) as IInternalAsyncDataStore;
             }
 
             private async Task VerifyThat(ICreationOptions options, string resultsInQueryString)

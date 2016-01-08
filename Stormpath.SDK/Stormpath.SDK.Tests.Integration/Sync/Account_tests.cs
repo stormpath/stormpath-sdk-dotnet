@@ -16,14 +16,12 @@
 
 using System;
 using System.Linq;
-using System.Threading;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Sync;
-using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
@@ -130,6 +128,18 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             chewie.SetUsername($"rwaaargh-{this.fixture.TestRunIdentifier}");
             chewie.Save(response => response.Expand(x => x.GetCustomData()));
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_account_applications(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var luke = client.GetAccount(this.fixture.PrimaryAccountHref);
+
+            var apps = luke.GetApplications().Synchronously().ToList();
+            apps.Where(x => x.Href == this.fixture.PrimaryApplicationHref).Any().ShouldBeTrue();
         }
 
         [Theory]
@@ -570,7 +580,29 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 {
                     request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}");
                     request.SetPassword("whataPieceofjunk$1138");
-                    request.SetAccountStore(this.fixture.PrimaryDirectoryHref);
+                    request.SetAccountStore(this.fixture.PrimaryOrganizationHref);
+                });
+            result.ShouldBeAssignableTo<IAuthenticationResult>();
+            result.Success.ShouldBeTrue();
+
+            var account = result.GetAccount();
+            account.FullName.ShouldBe("Luke Skywalker");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Authenticating_account_in_specified_organization_by_nameKey(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+            var accountStore = application.GetDefaultAccountStore();
+
+            var result = application.AuthenticateAccount(
+                request =>
+                {
+                    request.SetUsernameOrEmail($"sonofthesuns-{this.fixture.TestRunIdentifier}");
+                    request.SetPassword("whataPieceofjunk$1138");
+                    request.SetAccountStore(this.fixture.PrimaryOrganizationNameKey);
                 });
             result.ShouldBeAssignableTo<IAuthenticationResult>();
             result.Success.ShouldBeTrue();

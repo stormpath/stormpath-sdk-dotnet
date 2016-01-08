@@ -15,9 +15,12 @@
 // </copyright>
 
 using System.Collections.Generic;
+using System.Text;
 using Shouldly;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Impl.Jwt;
+using Stormpath.SDK.Jwt;
+using Stormpath.SDK.Serialization;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl.Jwt
@@ -45,27 +48,43 @@ namespace Stormpath.SDK.Tests.Impl.Jwt
         [MemberData(nameof(TestCases))]
         public void When_encoding(IDictionary<string, object> payload, string signingKey, string expected)
         {
-            var encoded = JsonWebToken.Encode(payload, signingKey, new JsonNetSerializer());
+            IJwtBuilder builder = new DefaultJwtBuilder(Serializers.Create().JsonNetSerializer().Build());
 
-            encoded.ToString().ShouldBe(expected);
+            var jwt = builder
+                .SetClaims(payload)
+                .SignWith(signingKey, Encoding.UTF8)
+                .Build();
+
+            jwt.ToString().ShouldBe(expected);
         }
 
         [Theory]
         [MemberData(nameof(TestCases))]
         public void When_decoding(IDictionary<string, object> expectedPayload, string signingKey, string jwt)
         {
-            var decoded = JsonWebToken.Decode(jwt, new JsonNetSerializer());
+            IJwtParser parser = new DefaultJwtParser(Serializers.Create().JsonNetSerializer().Build());
 
-            decoded.Payload.ShouldBe(expectedPayload);
+            var signingKeyBytes = Encoding.UTF8.GetBytes(signingKey);
+            var decoded = parser
+                .SetSigningKey(signingKeyBytes)
+                .Parse(jwt);
+
+            decoded.Body.ToDictionary().ShouldBe(expectedPayload);
         }
 
         [Theory]
         [MemberData(nameof(TestCases))]
         public void When_verifying(IDictionary<string, object> ignored, string signingKey, string jwt)
         {
-            var decoded = JsonWebToken.Decode(jwt, new JsonNetSerializer());
+            IJwtParser parser = new DefaultJwtParser(Serializers.Create().JsonNetSerializer().Build());
 
-            var validator = new JwtSignatureValidator(signingKey);
+            var signingKeyBytes = Encoding.UTF8.GetBytes(signingKey);
+            var decoded = parser
+                .SetSigningKey(signingKeyBytes)
+                .Parse(jwt);
+
+            var validator = new JwtSignatureValidator(signingKeyBytes);
+
             validator.IsValid(decoded).ShouldBeTrue();
         }
     }

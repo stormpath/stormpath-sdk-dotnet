@@ -20,7 +20,6 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Provider;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
 {
@@ -28,9 +27,6 @@ namespace Stormpath.SDK.Impl.Account
     {
         Task<IDirectory> IAccount.GetDirectoryAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IDirectory>(this.Directory.Href, cancellationToken);
-
-        Task<ITenant> IAccount.GetTenantAsync(CancellationToken cancellationToken)
-            => this.GetTenantAsync(this.Tenant.Href, cancellationToken);
 
         Task<IProviderData> IAccount.GetProviderDataAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IProviderData>(this.ProviderData.Href, ProviderTypeConverter.DataTypeLookup, cancellationToken);

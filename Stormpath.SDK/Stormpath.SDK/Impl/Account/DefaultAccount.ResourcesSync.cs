@@ -17,7 +17,6 @@
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Provider;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
 {
@@ -25,9 +24,6 @@ namespace Stormpath.SDK.Impl.Account
     {
         IDirectory IAccountSync.GetDirectory()
             => this.GetInternalSyncDataStore().GetResource<IDirectory>(this.Directory.Href);
-
-        ITenant IAccountSync.GetTenant()
-            => this.GetTenant(this.Tenant.Href);
 
         IProviderData IAccountSync.GetProviderData()
             => this.GetInternalSyncDataStore().GetResource<IProviderData>(this.ProviderData.Href, ProviderTypeConverter.DataTypeLookup);

@@ -15,8 +15,6 @@
 // </copyright>
 
 using Stormpath.SDK.AccountStore;
-using Stormpath.SDK.Impl.AccountStore;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
 {
@@ -25,12 +23,5 @@ namespace Stormpath.SDK.Sync
     /// </summary>
     public static class SyncAccountStoreExtensions
     {
-        /// <summary>
-        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this Account Store resource.
-        /// </summary>
-        /// <param name="accountStore">The account store (a <see cref="Directory.IDirectory"/> or <see cref="Group.IGroup"/>).</param>
-        /// <returns>This account's tenant.</returns>
-        public static ITenant GetTenant(this IAccountStore accountStore)
-            => (accountStore as IAccountStoreSync).GetTenant();
     }
 }

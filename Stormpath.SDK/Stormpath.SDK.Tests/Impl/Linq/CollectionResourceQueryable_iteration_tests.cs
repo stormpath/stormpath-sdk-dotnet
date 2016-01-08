@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Tests.Impl.Linq
                 .Skip(10);
 
             await (query as IAsyncQueryable<IAccount>).MoveNextAsync();
-            this.ShouldBeCalledWithArgument("limit=5&offset=10");
+            this.ShouldBeCalledWithArguments("limit=5", "offset=10");
         }
 
         [Fact]

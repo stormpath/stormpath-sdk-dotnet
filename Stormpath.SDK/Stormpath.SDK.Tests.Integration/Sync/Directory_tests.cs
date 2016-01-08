@@ -59,6 +59,17 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_directory_applications(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var directory = client.GetDirectory(this.fixture.PrimaryDirectoryHref);
+
+            var apps = directory.GetApplications().Synchronously().ToList();
+            apps.Where(x => x.Href == this.fixture.PrimaryApplicationHref).Any().ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Creating_disabled_directory(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Client;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Account;
@@ -32,7 +33,9 @@ using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Logging;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
@@ -42,7 +45,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task Single_item_data_is_deserialized_properly()
         {
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object);
 
             var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
 
@@ -74,7 +77,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task Collection_resource_data_is_deserialized_properly()
         {
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.AccountList, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.AccountList).Object);
 
             IAsyncQueryable<IAccount> accounts = new CollectionResourceQueryable<IAccount>("/accounts", dataStore);
             await accounts.MoveNextAsync();
@@ -113,7 +116,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task Default_headers_are_applied_to_all_requests()
         {
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object);
 
             var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
 
@@ -134,7 +137,7 @@ namespace Stormpath.SDK.Tests.Impl
                 fakeLog.Add(call.Arg<LogEntry>());
             });
 
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar", stubLogger);
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object, logger: stubLogger);
 
             var account = await dataStore.GetResourceAsync<IAccount>("account", CancellationToken.None);
             await account.DeleteAsync();
@@ -148,7 +151,7 @@ namespace Stormpath.SDK.Tests.Impl
             string savedHref = null;
             string savedJson = null;
 
-            IInternalDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object);
             dataStore.RequestExecutor
                 .When(x => x.ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>()))
                 .Do(call =>
@@ -177,7 +180,7 @@ namespace Stormpath.SDK.Tests.Impl
         public async Task When_saving_returns_empty_response_without_status_202_throws_error()
         {
             // Expected behavior: Saving should always return the updated data unless we get back HTTP 202 (Accepted for Processing).
-            IInternalAsyncDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object) as IInternalAsyncDataStore;
             dataStore.RequestExecutor
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(200, "OK", null, null, null, transportError: false)));
@@ -204,7 +207,7 @@ namespace Stormpath.SDK.Tests.Impl
         public async Task When_saving_returns_empty_response_with_status_202()
         {
             // Expected behavior: Saving should always return the updated data unless we get back HTTP 202 (Accepted for Processing).
-            IInternalAsyncDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object) as IInternalAsyncDataStore;
             dataStore.RequestExecutor
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(202, "Accepted", null, null, null, transportError: false)));
@@ -223,7 +226,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public async Task Cancellation_token_is_passed_down_to_low_level_operations()
         {
-            IInternalAsyncDataStore dataStore = new StubDataStore(FakeJson.Account, "http://api.foo.bar");
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object) as IInternalAsyncDataStore;
             dataStore.RequestExecutor
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
                 .Returns(async callInfo =>
@@ -252,6 +255,17 @@ namespace Stormpath.SDK.Tests.Impl
             stopwatch.Stop();
             stopwatch.ElapsedMilliseconds.ShouldBeLessThan(1000);
             deleted.ShouldBeTrue();
+        }
+
+        [Fact]
+        public void Instantiated_resources_contain_reference_to_client()
+        {
+            var fakeClient = Substitute.For<IClient>();
+            var dataStore = TestDataStore.Create(client: fakeClient);
+
+            var account = dataStore.Instantiate<IAccount>();
+
+            account.Client.ShouldBe(fakeClient);
         }
     }
 }

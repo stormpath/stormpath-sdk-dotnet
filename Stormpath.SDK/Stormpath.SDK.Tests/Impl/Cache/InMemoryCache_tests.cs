@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Impl.Cache;
-using Xunit;
+using Stormpath.SDK.Tests.Common;
 
 namespace Stormpath.SDK.Tests.Impl.Cache
 {
@@ -64,7 +64,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 
         public class SynchronousCache
         {
-            [Fact]
+            [DebugOnlyFact]
             public void Empty_cache_is_empty()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -79,7 +79,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 cache.GetHitRatio().ShouldBe(0);
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public void Cache_access_hit()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -95,7 +95,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 cache.GetHitRatio().ShouldBe(1.0);
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public void Cache_access_miss()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -110,7 +110,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 cache.GetHitRatio().ShouldBe(0.0);
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public void Removing_item()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -123,7 +123,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 cache.AccessCount.ShouldBe(2);
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public void Multiple_cache_reads_and_writes_from_single_thread()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -145,7 +145,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 cache.GetHitRatio().ShouldBe(0.67, tolerance: 0.01);
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public void Accessing_cache_from_multiple_threads()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -167,7 +167,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 cache.GetHitRatio().ShouldBe(0.67, tolerance: 0.01);
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public void Cache_access_after_TTL_expiration()
             {
                 var cache = new InMemoryCache(
@@ -185,7 +185,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 iface.Get("foo").ShouldBeNull();
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public void Cache_access_after_TTI_expiration()
             {
                 var cache = new InMemoryCache(
@@ -206,7 +206,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 iface.Get("foo").ShouldBeNull();
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public void Cache_access_after_TTL_but_not_TTI_expiration()
             {
                 var cache = new InMemoryCache(
@@ -230,7 +230,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 iface.Get("foo").ShouldBeNull();
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public void Disposing_clears_cache()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -254,7 +254,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 
         public class AsynchronousCache
         {
-            [Fact]
+            [DebugOnlyFact]
             public void Empty_cache_is_empty()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -269,7 +269,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 cache.GetHitRatio().ShouldBe(0);
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public async Task Cache_access_hit()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -285,7 +285,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 cache.GetHitRatio().ShouldBe(1.0);
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public async Task Cache_access_miss()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -300,7 +300,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 cache.GetHitRatio().ShouldBe(0.0);
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public async Task Removing_item()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -313,7 +313,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 cache.AccessCount.ShouldBe(2);
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public async Task Multiple_cache_reads_and_writes_from_single_thread()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -335,7 +335,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 cache.GetHitRatio().ShouldBe(0.67, tolerance: 0.01);
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public async Task Accessing_cache_from_multiple_threads()
             {
                 var cache = new InMemoryCache("fooCache");
@@ -359,7 +359,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 cache.GetHitRatio().ShouldBe(0.67, tolerance: 0.01);
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public async Task Cache_access_after_TTL_expiration()
             {
                 var cache = new InMemoryCache(
@@ -377,7 +377,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 (await iface.GetAsync("foo")).ShouldBeNull();
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public async Task Cache_access_after_TTI_expiration()
             {
                 var cache = new InMemoryCache(
@@ -398,7 +398,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 (await iface.GetAsync("foo")).ShouldBeNull();
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public async Task Cache_access_after_TTL_but_not_TTI_expiration()
             {
                 var cache = new InMemoryCache(
@@ -422,7 +422,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 (await iface.GetAsync("foo")).ShouldBeNull();
             }
 
-            [Fact]
+            [DebugOnlyFact]
             public async Task Disposing_clears_cache()
             {
                 var cache = new InMemoryCache("fooCache");

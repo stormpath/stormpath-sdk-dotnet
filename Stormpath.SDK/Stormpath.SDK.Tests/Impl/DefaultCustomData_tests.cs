@@ -17,60 +17,65 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
 using Shouldly;
 using Stormpath.SDK.CustomData;
-using Stormpath.SDK.Impl.CustomData;
-using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Tests.Fakes;
+using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Impl
 {
     public class DefaultCustomData_tests
     {
-        private static List<object> validValueTypes = new List<object>()
-        {
-            short.MinValue,
-            int.MaxValue,
-            long.MinValue,
-            float.MaxValue,
-            double.MinValue,
-            decimal.MaxValue,
-            byte.MinValue,
-            true,
-            "foobar",
-            'x'
-        };
+        private readonly IInternalDataStore dataStore;
 
-        private static List<object> invalidValueTypes = new List<object>()
+        public DefaultCustomData_tests()
+        {
+            this.dataStore = TestDataStore.Create();
+        }
+
+        private static IEnumerable<object[]> ValidValueTypes()
+        {
+            yield return new object[] { short.MinValue };
+            yield return new object[] { int.MaxValue };
+            yield return new object[] { long.MinValue };
+            yield return new object[] { float.MaxValue };
+            yield return new object[] { double.MinValue };
+            yield return new object[] { decimal.MaxValue };
+            yield return new object[] { byte.MinValue };
+            yield return new object[] { true };
+            yield return new object[] { "foobar" };
+            yield return new object[] { 'x' };
+        }
+
+        private static IEnumerable<object[]> InvalidValueTypes()
+        {
+            yield return new object[] { new object() };
+            yield return new object[] { DateTime.Now };
+            yield return new object[] { DateTimeOffset.Now };
+            yield return new object[] { TimeSpan.FromSeconds(1) };
+            yield return new object[] { Guid.NewGuid() };
+            yield return new object[] { new System.Text.StringBuilder("foobar!") };
+            yield return new object[] { new Lazy<bool>(() => false) };
+            yield return new object[] { new string[] { "foo", "bar" } };
+            yield return new object[]
             {
-                new object(),
-                DateTime.Now,
-                DateTimeOffset.Now,
-                TimeSpan.FromSeconds(1),
-                Guid.NewGuid(),
-                new System.Text.StringBuilder("foobar!"),
-                new Lazy<bool>(() => false),
-                new string[] { "foo", "bar" },
                 new Dictionary<int, bool>()
-                {
-                    [123] = true
-                }
+                    {
+                        [123] = true
+                    }
             };
+        }
 
-        private static ICustomData GetInstance(IDictionary<string, object> properties = null)
+        private ICustomData GetInstance(IDictionary<string, object> properties = null)
         {
-            var fakeResourceData = new ResourceData(new FakeDataStore<ICustomData>());
-            fakeResourceData.Update(properties);
-
-            return new DefaultCustomData(fakeResourceData);
+            return this.dataStore.InstantiateWithData<ICustomData>(properties);
         }
 
         [Fact]
         public void Get_returns_null_for_unknown_key()
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
             customData.Get("foo").ShouldBeNull();
         }
@@ -78,7 +83,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Get_after_removing_returns_null()
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
             customData.Put("foo", "bar");
             customData.Remove("foo");
@@ -89,7 +94,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Put_single_item()
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
             customData.Put("foo", "bar");
 
@@ -99,7 +104,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Put_single_item_with_indexer()
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
             customData["foo"] = 123;
 
@@ -109,7 +114,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Put_KeyValuePair_item()
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
             var newItem = new KeyValuePair<string, object>("foo", 987);
 
             customData.Put(newItem);
@@ -120,7 +125,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Put_multiple_items()
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
             var newItems = new Dictionary<string, object>()
             {
                 { "foo", "bar" }, { "baz", 123 }
@@ -135,7 +140,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Put_anonymous_items()
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
             customData.Put(new { foo = "bar", baz = 123 });
 
@@ -146,7 +151,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void Put_dynamic_items()
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
             dynamic data = new ExpandoObject();
             data.foo = "bar";
@@ -158,90 +163,99 @@ namespace Stormpath.SDK.Tests.Impl
             customData["baz"].ShouldBe(123);
         }
 
-        [Fact]
-        public void Put_throws_for_reserved_key_names()
+        [Theory]
+        [InlineData("href")]
+        [InlineData("createdAt")]
+        [InlineData("modifiedAt")]
+        public void Put_throws_for_reserved_key_name(string key)
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
-            var reservedNames = new List<string>()
-            {
-                "href", "createdAt", "modifiedAt",
-                "meta", "spMeta", "spmeta", "ionmeta", "ionMeta"
-            };
-
-            reservedNames.ForEach(x =>
-            {
-                Should.Throw<ArgumentOutOfRangeException>(() => customData.Put(x, "quz"));
-            });
+            Should.Throw<ArgumentOutOfRangeException>(() => customData.Put(key, "quz"));
         }
 
-        [Fact]
-        public void Put_throws_for_invalid_key_names()
+        [Theory]
+        [InlineData("foo&bar")]
+        [InlineData("-test")]
+        public void Put_throws_for_invalid_key_name(string key)
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
-            var invalidNames = new List<string>()
-            {
-                "foo&bar", "-test",
-            };
-
-            invalidNames.ForEach(x =>
-            {
-                Should.Throw<ArgumentOutOfRangeException>(() => customData.Put(x, "quz"));
-            });
+            Should.Throw<ArgumentOutOfRangeException>(() => customData.Put(key, "quz"));
         }
 
-        [Fact]
-        public void Put_only_accepts_primitives()
+        [Theory]
+        [MemberData(nameof(ValidValueTypes))]
+        public void Put_accepts_valid_primitives(object value)
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
+            var dummyKey = value.GetType().Name;
 
-            validValueTypes.ForEach(v => customData.Put(v.GetType().Name, v));
+            customData.Put(dummyKey, value);
 
-            invalidValueTypes.ForEach(x =>
-            {
-                Should.Throw<ArgumentOutOfRangeException>(
-                    () => customData.Put("bad", x), $"This should not be allowed in customData: {x}");
-            });
-
-            customData.Count.ShouldBe(validValueTypes.Count);
+            customData[dummyKey].ShouldBe(value);
         }
 
-        [Fact]
-        public void Put_only_accepts_primitives_in_key_value_pairs()
+        [Theory]
+        [MemberData(nameof(InvalidValueTypes))]
+        public void Put_throws_for_invalid_primitives(object value)
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
-            validValueTypes.ForEach(v => customData.Put(new KeyValuePair<string, object>(v.GetType().Name, v)));
-
-            invalidValueTypes.ForEach(x =>
-            {
-                Should.Throw<ArgumentOutOfRangeException>(
-                    () => customData.Put(new KeyValuePair<string, object>("bad", x)), $"This should not be allowed in customData: {x}");
-            });
-
-            customData.Count.ShouldBe(validValueTypes.Count);
+            Should.Throw<ArgumentOutOfRangeException>(
+                () => customData.Put("bad", value), $"This should not be allowed in customData: {value}");
         }
 
-        [Fact]
-        public void Put_only_accepts_primitives_in_dictionary()
+        [Theory]
+        [MemberData(nameof(ValidValueTypes))]
+        public void Put_accepts_primitives_in_keyValue_pairs(object value)
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
+            var dummyKey = value.GetType().Name;
 
-            var itemsToPut = validValueTypes.ToDictionary(key => key.GetType().Name, value => value);
-            customData.Put(itemsToPut);
+            customData.Put(new KeyValuePair<string, object>(dummyKey, value));
 
-            var invalidItems = invalidValueTypes.ToDictionary(key => key.GetType().Name, value => value);
+            customData[dummyKey].ShouldBe(value);
+        }
+
+        [Theory]
+        [MemberData(nameof(InvalidValueTypes))]
+        public void Put_throws_for_invalid_primitives_in_keyValue_pairs(object value)
+        {
+            var customData = this.GetInstance();
+
+            Should.Throw<ArgumentOutOfRangeException>(
+                () => customData.Put(new KeyValuePair<string, object>("bad", value)), $"This should not be allowed in customData: {value}");
+        }
+
+        [Theory]
+        [MemberData(nameof(ValidValueTypes))]
+        public void Put_accepts_primitives_in_dictionary(object value)
+        {
+            var customData = this.GetInstance();
+            var dummyKey = value.GetType().Name;
+
+            customData.Put(new Dictionary<string, object>() { [dummyKey] = value });
+
+            customData[dummyKey].ShouldBe(value);
+        }
+
+        [Theory]
+        [MemberData(nameof(InvalidValueTypes))]
+        public void Put_throws_for_invalid_primitives_in_dictionary(object value)
+        {
+            var customData = this.GetInstance();
+
             Should.Throw<ArgumentOutOfRangeException>(() =>
             {
-                customData.Put(invalidItems);
+                customData.Put(new Dictionary<string, object>() { [value.GetType().Name] = value });
             });
 
-            customData.Count.ShouldBe(validValueTypes.Count);
+            customData.IsEmptyOrDefault().ShouldBeTrue();
         }
 
         [Fact]
-        public void Put_only_accepts_primitives_in_anonymous_type()
+        public void Put_accepts_primitives_in_anonymous_type()
         {
             var validValueTypesAnon = new
             {
@@ -256,7 +270,16 @@ namespace Stormpath.SDK.Tests.Impl
                 aString = "foobar",
                 aChar = 'x'
             };
+            var customData = this.GetInstance();
 
+            customData.Put(validValueTypesAnon);
+
+            customData.Count.ShouldBe(11); // 10 properties in the anonymous type, plus href field
+        }
+
+        [Fact]
+        public void Put_throws_for_invalid_primitives_in_anonymous_type()
+        {
             var invalidValueTypesAnon = new
             {
                 aObject = new object(),
@@ -272,49 +295,41 @@ namespace Stormpath.SDK.Tests.Impl
                     [123] = true
                 }
             };
-
-            var customData = GetInstance();
-
-            customData.Put(validValueTypesAnon);
+            var customData = this.GetInstance();
 
             Should.Throw<ArgumentOutOfRangeException>(() =>
             {
                 customData.Put(invalidValueTypesAnon);
             });
 
-            customData.Count.ShouldBe(validValueTypes.Count);
+            customData.IsEmptyOrDefault().ShouldBeTrue();
         }
 
         [Fact]
         public void ContainsKey_after_put_is_true()
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
             customData.Put("bar", "baz");
 
             customData.ContainsKey("bar").ShouldBeTrue();
         }
 
-        [Fact]
-        public void Remove_throws_for_reserved_key_names()
+        [Theory]
+        [InlineData("href")]
+        [InlineData("createdAt")]
+        [InlineData("modifiedAt")]
+        public void Remove_throws_for_reserved_key_names(string key)
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
-            var reservedNames = new List<string>()
-            {
-                "href", "createdAt", "modifiedAt",
-            };
-
-            reservedNames.ForEach(x =>
-            {
-                Should.Throw<ArgumentOutOfRangeException>(() => customData.Remove(x));
-            });
+            Should.Throw<ArgumentOutOfRangeException>(() => customData.Remove(key));
         }
 
         [Fact]
         public void TryGetValue_returns_true_for_existent_key()
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
             customData.Put("foo", 123);
 
@@ -325,7 +340,7 @@ namespace Stormpath.SDK.Tests.Impl
         [Fact]
         public void TryGetValue_returns_false_for_nonexistent_key()
         {
-            var customData = GetInstance();
+            var customData = this.GetInstance();
 
             object value;
             customData.TryGetValue("nope", out value).ShouldBeFalse();
@@ -340,7 +355,7 @@ namespace Stormpath.SDK.Tests.Impl
                 { "createdAt", DateTimeOffset.UtcNow },
                 { "modifiedAt", DateTimeOffset.UtcNow }
             };
-            var customData = GetInstance(instanceData);
+            var customData = this.GetInstance(instanceData);
 
             customData.IsEmptyOrDefault().ShouldBeTrue();
         }
@@ -352,7 +367,7 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 { "myStuff", "foobarbaz" },
             };
-            var customData = GetInstance(instanceData);
+            var customData = this.GetInstance(instanceData);
 
             customData.IsEmptyOrDefault().ShouldBeFalse();
         }
@@ -364,11 +379,12 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 { "foo", "bar" },
             };
-            var customData = GetInstance(instanceData);
+
+            var customData = this.GetInstance(instanceData);
+            customData.Count.ShouldBe(2);
 
             customData.Remove("foo");
-
-            customData.Count.ShouldBe(0);
+            customData.Count.ShouldBe(1);
         }
 
         [Fact]
@@ -378,11 +394,11 @@ namespace Stormpath.SDK.Tests.Impl
             {
                 { "foo", "bar" },
             };
-            var customData = GetInstance(instanceData);
+            var customData = this.GetInstance(instanceData);
+            customData.Count.ShouldBe(2);
 
             customData.Put("baz", 123);
-
-            customData.Count.ShouldBe(2);
+            customData.Count.ShouldBe(3);
         }
 
         [Fact]
@@ -394,7 +410,7 @@ namespace Stormpath.SDK.Tests.Impl
                 { "createdAt", DateTimeOffset.UtcNow },
                 { "modifiedAt", DateTimeOffset.UtcNow }
             };
-            var customData = GetInstance(instanceData);
+            var customData = this.GetInstance(instanceData);
 
             var breadcrumbs = new List<string>();
             foreach (var item in customData)

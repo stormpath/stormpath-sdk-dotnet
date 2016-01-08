@@ -35,11 +35,6 @@ namespace Stormpath.SDK.Impl.CustomData
             HrefPropertyName, CreatedAtPropertyName, ModifiedAtPropertyName
         };
 
-        private static readonly List<string> FutureReservedKeys = new List<string>()
-        {
-            "meta", "spMeta", "spmeta", "ionmeta", "ionMeta"
-        };
-
         // Matches any character in a-z, A-Z, 0-9, _, -  (but cannot start with -)
         private static readonly Regex ValidKeyCharactersRegex = new Regex("^[a-zA-Z0-9_]+[a-zA-Z0-9_-]*$", RegexOptions.Compiled);
 
@@ -63,8 +58,7 @@ namespace Stormpath.SDK.Impl.CustomData
                 return false;
             }
 
-            bool isReservedKeyword = ReservedKeys.Contains(possibleKey) || FutureReservedKeys.Contains(possibleKey);
-            if (isReservedKeyword)
+            if (ReservedKeys.Contains(possibleKey))
             {
                 return false;
             }

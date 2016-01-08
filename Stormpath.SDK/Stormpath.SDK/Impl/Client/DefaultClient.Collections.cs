@@ -19,6 +19,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
@@ -51,6 +52,13 @@ namespace Stormpath.SDK.Impl.Client
             this.EnsureTenant();
 
             return this.tenant.GetGroups();
+        }
+
+        IAsyncQueryable<IOrganization> ITenantActions.GetOrganizations()
+        {
+            this.EnsureTenant();
+
+            return this.tenant.GetOrganizations();
         }
     }
 }

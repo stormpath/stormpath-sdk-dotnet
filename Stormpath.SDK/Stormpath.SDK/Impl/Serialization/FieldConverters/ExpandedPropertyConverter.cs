@@ -25,11 +25,13 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
     internal sealed class ExpandedPropertyConverter : AbstractFieldConverter
     {
         private readonly Func<Map, Type, Map> converter;
+        private readonly ResourceTypeLookup typeLookup;
 
         public ExpandedPropertyConverter(Func<Map, Type, Map> converter)
             : base(nameof(ExpandedPropertyConverter), appliesToTargetType: AnyType)
         {
             this.converter = converter;
+            this.typeLookup = new ResourceTypeLookup();
         }
 
         protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
@@ -50,7 +52,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
                 throw new ApplicationException($"Could not parse expanded property data from attribute '{token.Key}'.");
             }
 
-            var embeddedType = new ResourceTypeLookup().GetInterface(token.Key);
+            var embeddedType = this.typeLookup.GetInterfaceByPropertyName(token.Key);
             var convertedData = this.converter(asEmbeddedResource, embeddedType);
 
             return new FieldConverterResult(true, new ExpandedProperty(convertedData));
