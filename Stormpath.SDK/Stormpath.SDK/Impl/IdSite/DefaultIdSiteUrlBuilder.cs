@@ -19,6 +19,7 @@ using System.Text;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Jwt;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
 
 namespace Stormpath.SDK.Impl.IdSite
@@ -31,6 +32,9 @@ namespace Stormpath.SDK.Impl.IdSite
         private readonly string ssoEndpoint;
         private readonly string applicationHref;
 
+        private readonly IIdSiteJtiProvider jtiProvider;
+        private readonly IClock clock;
+
         private string callbackUri;
         private string state;
         private string path;
@@ -39,7 +43,7 @@ namespace Stormpath.SDK.Impl.IdSite
         private bool? useSubdomain;
         private bool? showOrganizationField;
 
-        public DefaultIdSiteUrlBuilder(IInternalDataStore internalDataStore, string applicationHref)
+        public DefaultIdSiteUrlBuilder(IInternalDataStore internalDataStore, string applicationHref, IIdSiteJtiProvider jtiProvider, IClock clock)
         {
             if (internalDataStore == null)
             {
@@ -51,7 +55,19 @@ namespace Stormpath.SDK.Impl.IdSite
                 throw new ArgumentNullException(nameof(applicationHref));
             }
 
+            if (jtiProvider == null)
+            {
+                throw new ArgumentNullException(nameof(jtiProvider));
+            }
+
+            if (clock == null)
+            {
+                throw new ArgumentNullException(nameof(clock));
+            }
+
             this.internalDataStore = internalDataStore;
+            this.jtiProvider = jtiProvider;
+            this.clock = clock;
             this.applicationHref = applicationHref;
             this.ssoEndpoint = GetBaseUrl(applicationHref) + "/sso";
         }
@@ -144,17 +160,17 @@ namespace Stormpath.SDK.Impl.IdSite
                 throw new ApplicationException($"{nameof(this.callbackUri)} cannot be null or empty.");
             }
 
-            var jti = Guid.NewGuid().ToString();
-            var now = DateTimeOffset.UtcNow;
+            var jti = this.jtiProvider.NewJti();
             var apiKey = this.internalDataStore.ApiKey;
 
             IJwtBuilder jwtBuilder = new DefaultJwtBuilder(this.internalDataStore.Serializer);
             jwtBuilder
                 .SetId(jti)
-                .SetIssuedAt(DateTimeOffset.Now)
+                .SetIssuedAt(this.clock.Now)
                 .SetIssuer(apiKey.GetId())
                 .SetSubject(this.applicationHref)
-                .SetClaim(IdSiteClaims.RedirectUri, this.callbackUri);
+                .SetClaim(IdSiteClaims.RedirectUri, this.callbackUri)
+                .SignWith(apiKey.GetSecret(), Encoding.UTF8);
 
             if (!string.IsNullOrEmpty(this.path))
             {
@@ -171,12 +187,12 @@ namespace Stormpath.SDK.Impl.IdSite
                 jwtBuilder.SetClaim(IdSiteClaims.OrganizationNameKey, this.organizationNameKey);
             }
 
-            if (this.useSubdomain.HasValue)
+            if (this.useSubdomain != null)
             {
                 jwtBuilder.SetClaim(IdSiteClaims.UseSubdomain, this.useSubdomain.Value);
             }
 
-            if (this.showOrganizationField.HasValue)
+            if (this.showOrganizationField != null)
             {
                 jwtBuilder.SetClaim(IdSiteClaims.ShowOrganizationField, this.showOrganizationField.Value);
             }

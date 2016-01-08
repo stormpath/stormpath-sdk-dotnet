@@ -16,13 +16,14 @@
 
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.IdSite;
+using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Application
 {
     internal sealed partial class DefaultApplication
     {
         SDK.IdSite.IIdSiteUrlBuilder IApplication.NewIdSiteUrlBuilder()
-            => new DefaultIdSiteUrlBuilder(this.GetInternalDataStore(), this.AsInterface.Href);
+            => new DefaultIdSiteUrlBuilder(this.GetInternalDataStore(), this.AsInterface.Href, new DefaultIdSiteJtiProvider(), new DefaultClock());
 
         SDK.IdSite.IIdSiteAsyncCallbackHandler IApplication.NewIdSiteAsyncCallbackHandler(SDK.Http.IHttpRequest request)
             => new DefaultIdSiteAsyncCallbackHandler(this.GetInternalDataStore(), request);

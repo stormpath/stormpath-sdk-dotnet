@@ -122,6 +122,7 @@
     <Compile Include="Impl\Group\DefaultGroup.ResourcesSync.cs" />
     <Compile Include="Impl\IdentityMap\MemoryCacheIdentityMap{TItem}.cs" />
     <Compile Include="Impl\IdSite\DefaultAccountResult.cs" />
+    <Compile Include="Impl\IdSite\DefaultIdSiteJtiProvider.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler.cs" />
     <Compile Include="Impl\IdSite\IAccountResultSync.cs" />
     <Compile Include="IdSite\IdSiteResultStatus.cs" />
@@ -264,6 +265,7 @@
     <Compile Include="IdSite\IdSiteRuntimeException.cs" />
     <Compile Include="IdSite\IdSiteSessionTimeoutException.cs" />
     <Compile Include="IdSite\InvalidIdSiteTokenException.cs" />
+    <Compile Include="Impl\IdSite\IIdSiteJtiProvider.cs" />
     <Compile Include="Impl\IdSite\InlineIdSiteSyncResultListener.cs" />
     <Compile Include="Impl\IdSite\InlineIdSiteAsyncResultListener.cs" />
     <Compile Include="Impl\Introspection\Integration.cs" />
@@ -453,9 +455,11 @@
     <Compile Include="Impl\Tenant\ITenantSync.cs" />
     <Compile Include="Impl\Utility\AnonymousType.cs" />
     <Compile Include="Impl\Utility\Base64.cs" />
+    <Compile Include="Impl\Utility\DefaultClock.cs" />
     <Compile Include="Impl\Utility\DurationVisitor.Api.cs" />
     <Compile Include="Impl\Utility\DurationVisitor.cs" />
     <Compile Include="Impl\Utility\HmacGenerator.cs" />
+    <Compile Include="Impl\Utility\IClock.cs" />
     <Compile Include="Impl\Utility\Iso8601Duration.cs" />
     <Compile Include="Impl\Introspection\SourceLanguage.cs" />
     <Compile Include="Impl\Utility\TypeLoader.cs" />
