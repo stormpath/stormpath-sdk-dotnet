@@ -118,11 +118,13 @@
     <Compile Include="Impl\CanonicalUri_tests.cs" />
     <Compile Include="Impl\ClientApiKey_tests.cs" />
     <Compile Include="Impl\FormUrlEncoder_tests.cs" />
+    <Compile Include="Impl\IdSite\CallbackHandlerTests.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler_exception_tests.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler_exception_tests.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteSyncCallbackHandler_tests.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteAsyncCallbackHandler_tests.cs" />
     <Compile Include="Impl\IdSite\DefaultIdSiteUrlBuilder_tests.cs" />
+    <Compile Include="Impl\IdSite\ExceptionTests.cs" />
     <Compile Include="Impl\IdSite\InlineIdSiteSyncResultListener_tests.cs" />
     <Compile Include="Impl\IdSite\InlineIdSiteAsyncResultListener_tests.cs" />
     <Compile Include="Impl\Jwt\DefaultJwtParser_tests.cs" />
