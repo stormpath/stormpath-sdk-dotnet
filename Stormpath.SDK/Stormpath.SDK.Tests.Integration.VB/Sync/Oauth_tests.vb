@@ -176,6 +176,9 @@ Namespace Sync
             Call (accessTokenForApplication.GetApplication()).Href.ShouldBe(createdApplication.Href)
             Call (accessTokenForApplication.GetTenant()).Href.ShouldBe(Me.fixture.TenantHref)
 
+            Dim retrievedDirectly = client.GetAccessToken(accessTokenForApplication.Href)
+            retrievedDirectly.Href.ShouldBe(accessTokenForApplication.Href)
+
             ' Clean up
             Call (accessTokenForApplication.Delete()).ShouldBeTrue()
 
@@ -215,6 +218,9 @@ Namespace Sync
             Call (refreshTokenForApplication.GetAccount()).Href.ShouldBe(Me.fixture.PrimaryAccountHref)
             Call (refreshTokenForApplication.GetApplication()).Href.ShouldBe(createdApplication.Href)
             Call (refreshTokenForApplication.GetTenant()).Href.ShouldBe(Me.fixture.TenantHref)
+
+            Dim retrievedDirectly = client.GetRefreshToken(refreshTokenForApplication.Href)
+            retrievedDirectly.Href.ShouldBe(refreshTokenForApplication.Href)
 
             ' Clean up
             Call (refreshTokenForApplication.Delete()).ShouldBeTrue()
