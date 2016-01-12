@@ -27,28 +27,40 @@ namespace Stormpath.SDK.Client
     /// Represents a builder that can construct <see cref="IClient">Client</see> instances.
     /// </summary>
     /// <remarks>
-    /// This builder uses a number of optional methods that fall back to sensible defaults.
-    /// <para>
-    /// If <see cref="SetApiKey(IClientApiKey)"/> is not called, the default locations will be searched
-    /// to discover an API Key. See the documentation on <see cref="IClientApiKeyBuilder"/> for details.
-    /// </para>
-    /// <para>
-    /// If <see cref="SetAuthenticationScheme(AuthenticationScheme)"/> is not called, the default scheme
-    /// (<see cref="AuthenticationScheme.SAuthc1">SAuthc1</see>) will be used.
-    /// </para>
-    /// <para>
-    /// Unless <see cref="SetHttpClient(IHttpClient)"/> or <see cref="SetHttpClient(IHttpClientBuilder)"/> is called,
-    /// the <see cref="IHttpClientFactory.AutoDetect()">default</see> HTTP client will be used.
-    /// </para>
-    /// <para>
-    /// Unless <see cref="ISerializerConsumer{T}.SetSerializer(IJsonSerializer)"/> or <see cref="SetSerializer(ISerializerBuilder)"/> is called,
-    /// the <see cref="ISerializerFactory.AutoDetect()">default</see> serializer will be used.
-    /// </para>
-    /// <para>
-    /// Unless <see cref="SetCacheProvider(ICacheProvider)"/> is called, an in-memory cache will be used to improve performance,
-    /// with a default TTL (Time to Live) and TTI (Time to Idle) of 1 hour. Caching can be disabled
-    /// by passing <see cref="Caches.NewDisabledCacheProvider"/> to <see cref="SetCacheProvider(ICacheProvider)"/>.
-    /// </para>
+    /// This builder uses a number of optional methods that fall back to sensible defaults:
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///             If <see cref="SetApiKey(IClientApiKey)"/> is not called, the default locations will be searched
+    ///             to discover an API Key. See the documentation on <see cref="IClientApiKeyBuilder"/> for details.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///             If <see cref="SetAuthenticationScheme(AuthenticationScheme)"/> is not called, the default scheme
+    ///             (<see cref="AuthenticationScheme.SAuthc1">SAuthc1</see>) will be used.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///             If <see cref="SetHttpClient(IHttpClient)"/> or <see cref="SetHttpClient(IHttpClientBuilder)"/> is not called,
+    ///             the <see cref="IHttpClientFactory.AutoDetect()">default</see> HTTP client will be used.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///             If <see cref="ISerializerConsumer{T}.SetSerializer(IJsonSerializer)"/> or <see cref="SetSerializer(ISerializerBuilder)"/> is not called,
+    ///             the <see cref="ISerializerFactory.AutoDetect()">default</see> serializer will be used.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///             If <see cref="SetCacheProvider(ICacheProvider)"/> is not called, an in-memory cache will be used to improve performance,
+    ///             with a default TTL (Time to Live) and TTI (Time to Idle) of 1 hour. Caching can be disabled
+    ///             by passing <see cref="Caches.NewDisabledCacheProvider"/> to <see cref="SetCacheProvider(ICacheProvider)"/>.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// <para>
     /// Note: The default in-memory cache might not be sufficient for an application that runs on multiple servers,
     /// due to cache-coherency issues. If your application runs in multiple instances, consider plugging in a
