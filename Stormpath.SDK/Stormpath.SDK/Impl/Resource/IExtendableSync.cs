@@ -1,5 +1,5 @@
 ﻿// <copyright file="IExtendableSync.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Impl.Resource
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Resource.IExtendable.GetCustomDataAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <returns>The <see cref="ICustomData"/> associated with this resource.</returns>
+        /// <returns>The <see cref="ICustomData">Custom Data</see> associated with this resource.</returns>
         ICustomData GetCustomData();
     }
 }

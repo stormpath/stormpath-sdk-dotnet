@@ -1,5 +1,5 @@
 ﻿// <copyright file="IGroupMembership.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,26 +22,26 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Group
 {
     /// <summary>
-    /// A <see cref="IGroupMembership"/> represents the association of an <see cref="IAccount"/> and a <see cref="IGroup"/>.
-    /// <para>
-    /// Calling <see cref="IDeletable.DeleteAsync(CancellationToken)"/> on this resource will only
-    /// delete the association - it will not delete the <see cref="IAccount"/> or <see cref="IGroup"/>.
-    /// </para>
+    /// A <see cref="IGroupMembership">Group Membership</see> represents the association of an <see cref="IAccount">Account</see> and a <see cref="IGroup">Group</see>.
     /// </summary>
+    /// <remarks>
+    /// Calling <see cref="IDeletable.DeleteAsync(CancellationToken)"/> on this resource will only
+    /// delete the association - it will not delete the <see cref="IAccount">Account</see> or <see cref="IGroup">Group</see>.
+    /// </remarks>
     public interface IGroupMembership : IResource, IDeletable
     {
         /// <summary>
-        /// Gets this membership's <see cref="IAccount"/> resource.
+        /// Gets this membership's <see cref="IAccount">Account</see> resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>This membership's <see cref="IAccount"/> resource.</returns>
+        /// <returns>This membership's <see cref="IAccount">Account</see> resource.</returns>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets this membership's <see cref="IGroup"/> resource.
+        /// Gets this membership's <see cref="IGroup">Group</see> resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>This membership's <see cref="IGroup"/> resource.</returns>
+        /// <returns>This membership's <see cref="IGroup">Group</see> resource.</returns>
         Task<IGroup> GetGroupAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

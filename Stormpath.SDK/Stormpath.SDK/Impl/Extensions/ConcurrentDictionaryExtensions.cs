@@ -1,5 +1,5 @@
 ﻿// <copyright file="ConcurrentDictionaryExtensions.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,8 +25,10 @@ namespace Stormpath.SDK.Impl.Extensions
         /// <summary>
         /// Atomic conditional removal from a <see cref="ConcurrentDictionary{TKey, TValue}"/>.
         /// Only removes <paramref name="key"/> if its value matches <paramref name="value"/>.
-        /// <para>Based on http://blogs.msdn.com/b/pfxteam/archive/2011/04/02/10149222.aspx</para>
         /// </summary>
+        /// <remarks>
+        /// Based on code by <see href="http://blogs.msdn.com/b/pfxteam/archive/2011/04/02/10149222.aspx">Stephen Toub</see>.
+        /// </remarks>
         /// <typeparam name="TKey">The key type.</typeparam>
         /// <typeparam name="TValue">The value type.</typeparam>
         /// <param name="dictionary">The source dictionary.</param>

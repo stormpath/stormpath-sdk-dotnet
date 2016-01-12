@@ -1,5 +1,5 @@
 ﻿// <copyright file="SyncPasswordResetTokenExtensions.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,15 +20,15 @@ using Stormpath.SDK.Impl.Account;
 namespace Stormpath.SDK.Sync
 {
     /// <summary>
-    /// Provides synchronous access to the methods available on <see cref="IPasswordResetToken"/>.
+    /// Provides synchronous access to the methods available on <see cref="IPasswordResetToken">Password Reset Token</see>.
     /// </summary>
     public static class SyncPasswordResetTokenExtensions
     {
         /// <summary>
-        /// Synchronously gets the <see cref="IAccount"/> associated with this password reset token.
+        /// Synchronously gets the <see cref="IAccount">Account</see> associated with this password reset token.
         /// </summary>
         /// <param name="token">The token.</param>
-        /// <returns>The <see cref="IAccount"/> in the reset password workflow.</returns>
+        /// <returns>The <see cref="IAccount">Account</see> in the reset password workflow.</returns>
         public static IAccount GetAccount(this IPasswordResetToken token)
             => (token as IPasswordResetTokenSync).GetAccount();
     }

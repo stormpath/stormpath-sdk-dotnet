@@ -1,5 +1,5 @@
 ﻿// <copyright file="DefaultIdSiteUrlBuilder.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -74,8 +74,10 @@ namespace Stormpath.SDK.Impl.IdSite
 
         /// <summary>
         /// Trim off anything after the first single slash in a URL.
-        /// <para>Example: http://foo.com/test becomes http://foo.com</para>
         /// </summary>
+        /// <remarks>
+        /// For example, http://foo.com/test becomes http://foo.com
+        /// </remarks>
         /// <param name="href">The URL to trim.</param>
         /// <returns><paramref name="href"/> up to the first single slash.</returns>
         private static string GetBaseUrl(string href)

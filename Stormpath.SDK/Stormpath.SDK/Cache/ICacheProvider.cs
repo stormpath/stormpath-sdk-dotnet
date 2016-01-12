@@ -1,5 +1,5 @@
 ﻿// <copyright file="ICacheProvider.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Cache
     public interface ICacheProvider : IDisposable
     {
         /// <summary>
-        /// Gets a value indicating whether this <see cref="ICacheProvider"/> instance supports synchronous operations.
+        /// Gets a value indicating whether this <see cref="ICacheProvider">Cache Provider</see> instance supports synchronous operations.
         /// </summary>
         /// <value>
         /// For any objects implementing <see cref="ISynchronousCacheProvider"/>, this should return <see langword="true"/>.
@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Cache
         bool IsSynchronousSupported { get; }
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="ICacheProvider"/> instance supports asynchronous operations.
+        /// Gets a value indicating whether this <see cref="ICacheProvider">Cache Provider</see> instance supports asynchronous operations.
         /// </summary>
         /// <value>
         /// For any objects implementing <see cref="IAsynchronousCacheProvider"/>, this should return <see langword="true"/>.

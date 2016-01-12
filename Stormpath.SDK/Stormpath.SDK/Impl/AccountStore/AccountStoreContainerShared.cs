@@ -1,5 +1,5 @@
 ﻿// <copyright file="AccountStoreContainerShared.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="storeMappingHref">The AccountStoreMapping <c>href</c>.</param>
         /// <param name="internalDataStore">The <see cref="IInternalAsyncDataStore"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The <see cref="IAccountStore"/>, or <see langword="null"/>.</returns>
+        /// <returns>The <see cref="IAccountStore">Account Store</see>, or <see langword="null"/>.</returns>
         public static async Task<IAccountStore> GetDefaultStoreAsync(
             string storeMappingHref,
             IInternalAsyncDataStore internalDataStore,
@@ -71,7 +71,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// </summary>
         /// <param name="accountStoreMappingHref">The AccountStoreMapping <c>href</c>.</param>
         /// <param name="internalDataStore">The <see cref="IInternalAsyncDataStore"/>.</param>
-        /// <returns>The <see cref="IAccountStore"/>, or <see langword="null"/>.</returns>
+        /// <returns>The <see cref="IAccountStore">Account Store</see>, or <see langword="null"/>.</returns>
         public static IAccountStore GetDefaultStore(string accountStoreMappingHref, IInternalSyncDataStore internalDataStore)
         {
             if (string.IsNullOrEmpty(accountStoreMappingHref))
@@ -552,12 +552,12 @@ namespace Stormpath.SDK.Impl.AccountStore
         }
 
         /// <summary>
-        /// Gets a single <see cref="IDirectory"/> from a query.
+        /// Gets a single <see cref="IDirectory">Directory</see> from a query.
         /// </summary>
-        /// <param name="parent">The parent resource that contains a link to a <see cref="ITenant"/>.</param>
+        /// <param name="parent">The parent resource that contains a link to a <see cref="ITenant">Tenant</see>.</param>
         /// <param name="queryAction">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The located <see cref="IDirectory"/>.</returns>
+        /// <returns>The located <see cref="IDirectory">Directory</see>.</returns>
         private static async Task<IDirectory> GetSingleTenantDirectoryAsync(
             IHasTenant parent,
             Func<IAsyncQueryable<IDirectory>, IAsyncQueryable<IDirectory>> queryAction,
@@ -588,11 +588,11 @@ namespace Stormpath.SDK.Impl.AccountStore
         }
 
         /// <summary>
-        /// Synchronously gets a single <see cref="IDirectory"/> from a query.
+        /// Synchronously gets a single <see cref="IDirectory">Directory</see> from a query.
         /// </summary>
-        /// <param name="parent">The parent resource that contains a link to a <see cref="ITenant"/>.</param>
+        /// <param name="parent">The parent resource that contains a link to a <see cref="ITenant">Tenant</see>.</param>
         /// <param name="queryAction">The query.</param>
-        /// <returns>The located <see cref="IDirectory"/>.</returns>
+        /// <returns>The located <see cref="IDirectory">Directory</see>.</returns>
         private static IDirectory GetSingleTenantDirectory(
             IHasTenant parent,
             Func<IQueryable<IDirectory>, IQueryable<IDirectory>> queryAction)
@@ -621,12 +621,12 @@ namespace Stormpath.SDK.Impl.AccountStore
         }
 
         /// <summary>
-        /// Gets a single <see cref="IGroup"/> from a query.
+        /// Gets a single <see cref="IGroup">Group</see> from a query.
         /// </summary>
-        /// <param name="parent">The parent resource that contains a link to a <see cref="ITenant"/>.</param>
+        /// <param name="parent">The parent resource that contains a link to a <see cref="ITenant">Tenant</see>.</param>
         /// <param name="queryAction">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The located <see cref="IGroup"/>.</returns>
+        /// <returns>The located <see cref="IGroup">Group</see>.</returns>
         private static async Task<IGroup> GetSingleTenantGroupAsync(
             IHasTenant parent,
             Func<IAsyncQueryable<IGroup>, IAsyncQueryable<IGroup>> queryAction,
@@ -657,11 +657,11 @@ namespace Stormpath.SDK.Impl.AccountStore
         }
 
         /// <summary>
-        /// Synchronously gets a single <see cref="IGroup"/> from a query.
+        /// Synchronously gets a single <see cref="IGroup">Group</see> from a query.
         /// </summary>
-        /// <param name="parent">The parent resource that contains a link to a <see cref="ITenant"/>.</param>
+        /// <param name="parent">The parent resource that contains a link to a <see cref="ITenant">Tenant</see>.</param>
         /// <param name="queryAction">The query.</param>
-        /// <returns>The located <see cref="IGroup"/>.</returns>
+        /// <returns>The located <see cref="IGroup">Group</see>.</returns>
         private static IGroup GetSingleTenantGroup(
             IHasTenant parent,
             Func<IQueryable<IGroup>, IQueryable<IGroup>> queryAction)

@@ -1,5 +1,5 @@
 ﻿// <copyright file="IClientBuilder.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,31 +24,43 @@ using Stormpath.SDK.Serialization;
 namespace Stormpath.SDK.Client
 {
     /// <summary>
-    /// Represents a builder that can construct <see cref="IClient"/> instances.
+    /// Represents a builder that can construct <see cref="IClient">Client</see> instances.
     /// </summary>
     /// <remarks>
-    /// This builder uses a number of optional methods that fall back to sensible defaults.
-    /// <para>
-    /// If <see cref="SetApiKey(IClientApiKey)"/> is not called, the default locations will be searched
-    /// to discover an API Key. See the documentation on <see cref="IClientApiKeyBuilder"/> for details.
-    /// </para>
-    /// <para>
-    /// If <see cref="SetAuthenticationScheme(AuthenticationScheme)"/> is not called, the default scheme
-    /// (<see cref="AuthenticationScheme.SAuthc1">SAuthc1</see>) will be used.
-    /// </para>
-    /// <para>
-    /// Unless <see cref="SetHttpClient(IHttpClient)"/> or <see cref="SetHttpClient(IHttpClientBuilder)"/> is called,
-    /// the <see cref="IHttpClientFactory.AutoDetect()">default</see> HTTP client will be used.
-    /// </para>
-    /// <para>
-    /// Unless <see cref="ISerializerConsumer{T}.SetSerializer(IJsonSerializer)"/> or <see cref="SetSerializer(ISerializerBuilder)"/> is called,
-    /// the <see cref="ISerializerFactory.AutoDetect()">default</see> serializer will be used.
-    /// </para>
-    /// <para>
-    /// Unless <see cref="SetCacheProvider(ICacheProvider)"/> is called, an in-memory cache will be used to improve performance,
-    /// with a default TTL (Time to Live) and TTI (Time to Idle) of 1 hour. Caching can be disabled
-    /// by passing <see cref="Caches.NewDisabledCacheProvider"/> to <see cref="SetCacheProvider(ICacheProvider)"/>.
-    /// </para>
+    /// This builder uses a number of optional methods that fall back to sensible defaults:
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///             If <see cref="SetApiKey(IClientApiKey)"/> is not called, the default locations will be searched
+    ///             to discover an API Key. See the documentation on <see cref="IClientApiKeyBuilder"/> for details.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///             If <see cref="SetAuthenticationScheme(AuthenticationScheme)"/> is not called, the default scheme
+    ///             (<see cref="AuthenticationScheme.SAuthc1">SAuthc1</see>) will be used.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///             If <see cref="SetHttpClient(IHttpClient)"/> or <see cref="SetHttpClient(IHttpClientBuilder)"/> is not called,
+    ///             the <see cref="IHttpClientFactory.AutoDetect()">default</see> HTTP client will be used.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///             If <see cref="ISerializerConsumer{T}.SetSerializer(IJsonSerializer)"/> or <see cref="SetSerializer(ISerializerBuilder)"/> is not called,
+    ///             the <see cref="ISerializerFactory.AutoDetect()">default</see> serializer will be used.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///             If <see cref="SetCacheProvider(ICacheProvider)"/> is not called, an in-memory cache will be used to improve performance,
+    ///             with a default TTL (Time to Live) and TTI (Time to Idle) of 1 hour. Caching can be disabled
+    ///             by passing <see cref="Caches.NewDisabledCacheProvider"/> to <see cref="SetCacheProvider(ICacheProvider)"/>.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// <para>
     /// Note: The default in-memory cache might not be sufficient for an application that runs on multiple servers,
     /// due to cache-coherency issues. If your application runs in multiple instances, consider plugging in a
@@ -66,7 +78,7 @@ namespace Stormpath.SDK.Client
     public interface IClientBuilder : ILoggerConsumer<IClientBuilder>, ISerializerConsumer<IClientBuilder>
     {
         /// <summary>
-        /// Sets the <see cref="IClientApiKey"/> to use when making requests.
+        /// Sets the <see cref="IClientApiKey">Client API Key</see> to use when making requests.
         /// If this method is not called, the default API Key locations will be checked.
         /// </summary>
         /// <param name="apiKey">The API Key to use.</param>
@@ -151,9 +163,9 @@ namespace Stormpath.SDK.Client
         IClientBuilder SetSerializer(ISerializerBuilder serializerBuilder);
 
         /// <summary>
-        /// Constructs a new <see cref="IClient"/> instance based on the builder's current configuration state.
+        /// Constructs a new <see cref="IClient">Client</see> instance based on the builder's current configuration state.
         /// </summary>
-        /// <returns>A new <see cref="IClient"/> instance.</returns>
+        /// <returns>A new <see cref="IClient">Client</see> instance.</returns>
         /// <exception cref="System.ApplicationException">No valid API Key ID and Secret could be found.</exception>
         IClient Build();
     }

@@ -1,5 +1,5 @@
 ﻿// <copyright file="ISaveableWithOptions{T}.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Resource
     /// <summary>
     /// Represents a resource that can be saved with additional options.
     /// </summary>
-    /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
+    /// <typeparam name="T">The <see cref="IResource">Resource</see> type.</typeparam>
     public interface ISaveableWithOptions<T> : ISaveable<T>
         where T : IResource
     {

@@ -1,5 +1,5 @@
 ﻿// <copyright file="IResourceFactory.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 namespace Stormpath.SDK.Impl.DataStore
 {
     /// <summary>
-    /// Creates local resource instances from <see cref="Map"/>s of properties.
+    /// Creates local resource instances from <see cref="Map">Maps</see> of properties.
     /// </summary>
     internal interface IResourceFactory : IDisposable
     {

@@ -1,5 +1,5 @@
 ﻿// <copyright file="ClientApiKeys.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@ using Stormpath.SDK.Logging;
 namespace Stormpath.SDK.Api
 {
     /// <summary>
-    /// Static entry point for working with <see cref="IClientApiKey"/> objects.
+    /// Static entry point for working with <see cref="IClientApiKey">Client API Key</see> objects.
     /// </summary>
     public sealed class ClientApiKeys
     {
         /// <summary>
-        /// Gets a new <see cref="IClientApiKeyBuilder"/> instance, used to fluently construct <see cref="IClientApiKey"/> instances to authenticate calls to Stormpath.
+        /// Gets a new <see cref="IClientApiKeyBuilder"/> instance, used to fluently construct <see cref="IClientApiKey">Client API Key</see> instances to authenticate calls to Stormpath.
         /// </summary>
         /// <param name="logger">A logger instance for capturing trace output; pass <see langword="null"/> to disable logging.</param>
         /// <returns>A new <see cref="IClientApiKeyBuilder"/> instance.</returns>

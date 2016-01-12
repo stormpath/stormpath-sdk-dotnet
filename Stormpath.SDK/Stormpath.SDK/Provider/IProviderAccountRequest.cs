@@ -1,5 +1,5 @@
 ﻿// <copyright file="IProviderAccountRequest.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,13 +17,13 @@
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
-    /// Represents an attempt to get or create a Provider-based <see cref="Account.IAccount"/> record in Stormpath.
-    /// <para>
-    /// NOTE: A Provider-specific <see cref="Directory.IDirectory"/>
+    /// Represents an attempt to get or create a Provider-based <see cref="Account.IAccount">Account</see> record in Stormpath.
+    /// </summary>
+    /// <remarks>
+    /// NOTE: A Provider-specific <see cref="Directory.IDirectory">Directory</see>
     /// must previously exist in Stormpath and it must also
     /// be an Enabled Account Store within the Application.
-    /// </para>
-    /// </summary>
+    /// </remarks>
     public interface IProviderAccountRequest
     {
         /// <summary>

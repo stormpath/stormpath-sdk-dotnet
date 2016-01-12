@@ -1,5 +1,5 @@
 ﻿// <copyright file="AuthenticationScheme.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -48,10 +48,10 @@ namespace Stormpath.SDK.Client
         }
 
         /// <summary>
-        /// Parses a string to an <see cref="AuthenticationScheme"/>.
+        /// Parses a string to an <see cref="AuthenticationScheme">Authentication Scheme</see>.
         /// </summary>
         /// <param name="scheme">A string containing "basic" or "sauthc1" (matching is case-insensitive).</param>
-        /// <returns>The <see cref="AuthenticationScheme"/> with the specified name.</returns>
+        /// <returns>The <see cref="AuthenticationScheme">Authentication Scheme</see> with the specified name.</returns>
         /// <exception cref="ApplicationException">No match is found.</exception>
         public static AuthenticationScheme Parse(string scheme)
         {

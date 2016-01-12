@@ -1,5 +1,5 @@
 ﻿// <copyright file="IGroupSync.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Impl.Group
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="IGroup"/>.
+    /// available on <see cref="IGroup">Group</see>.
     /// </summary>
     internal interface IGroupSync :
         IHasTenantSync,
@@ -39,16 +39,16 @@ namespace Stormpath.SDK.Impl.Group
         /// </summary>
         /// <param name="account">The account to assign to this group.</param>
         /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created reflecting the group-to-account association.
+        /// The new <see cref="IGroupMembership">Group Membership</see> resource created reflecting the group-to-account association.
         /// </returns>
         IGroupMembership AddAccount(IAccount account);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IGroup.AddAccountAsync(IAccount, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="hrefOrEmailOrUsername">The <c>href</c>, email, or username of the <see cref="IAccount"/> to associate.</param>
+        /// <param name="hrefOrEmailOrUsername">The <c>href</c>, email, or username of the <see cref="IAccount">Account</see> to associate.</param>
         /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created reflecting the group-to-account association.
+        /// The new <see cref="IGroupMembership">Group Membership</see> resource created reflecting the group-to-account association.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">The specified account could not be found.</exception>
         IGroupMembership AddAccount(string hrefOrEmailOrUsername);
@@ -56,7 +56,7 @@ namespace Stormpath.SDK.Impl.Group
         /// <summary>
         /// Synchronous counterpart to <see cref="IGroup.RemoveAccountAsync(IAccount, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="account">The <see cref="IAccount"/> object to disassociate.</param>
+        /// <param name="account">The <see cref="IAccount">Account</see> object to disassociate.</param>
         /// <returns>Whether the operation succeeded.</returns>
         /// <exception cref="System.InvalidOperationException">The specified account does not belong to this group.</exception>
         bool RemoveAccount(IAccount account);
@@ -64,7 +64,7 @@ namespace Stormpath.SDK.Impl.Group
         /// <summary>
         /// Synchronous counterpart to <see cref="IGroup.RemoveAccountAsync(string, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="hrefOrEmailOrUsername">The <see cref="IAccount"/> object to disassociate.</param>
+        /// <param name="hrefOrEmailOrUsername">The <see cref="IAccount">Account</see> object to disassociate.</param>
         /// <returns>Whether the operation succeeded.</returns>
         /// <exception cref="System.InvalidOperationException">The specified account does not belong to this group.</exception>
         bool RemoveAccount(string hrefOrEmailOrUsername);

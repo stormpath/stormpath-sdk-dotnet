@@ -1,5 +1,5 @@
 ﻿// <copyright file="ICreateProviderRequestBuilder{T}.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
-    /// A Builder to construct <see cref="ICreateProviderRequest"/>s.
+    /// A Builder to construct <see cref="ICreateProviderRequest"/> instances.
     /// </summary>
     /// <typeparam name="T">The specific builder interface
     /// (e.g. <see cref="IFacebookCreateProviderRequestBuilder"/> or <see cref="IGoogleCreateProviderRequestBuilder"/>).</typeparam>

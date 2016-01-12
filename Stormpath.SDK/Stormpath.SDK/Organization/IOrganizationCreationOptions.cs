@@ -1,5 +1,5 @@
 ﻿// <copyright file="IOrganizationCreationOptions.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Organization
 {
     /// <summary>
-    /// Represents options for an <see cref="IOrganization"/> creation request.
+    /// Represents options for an <see cref="IOrganization">Organization</see> creation request.
     /// </summary>
     public interface IOrganizationCreationOptions : ICreationOptions
     {

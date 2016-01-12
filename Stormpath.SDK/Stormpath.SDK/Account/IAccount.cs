@@ -1,5 +1,5 @@
 ﻿// <copyright file="IAccount.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ using Stormpath.SDK.Tenant;
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// An Account is a unique identity within a <see cref="IDirectory"/>. Accounts within a <see cref="IDirectory"/> or <see cref="IGroup"/> mapped to an <see cref="Application.IApplication"/> may log in to that Application.
+    /// An Account is a unique identity within a <see cref="IDirectory">Directory</see>. Accounts within a <see cref="IDirectory">Directory</see> or <see cref="IGroup">Group</see> mapped to an <see cref="Application.IApplication">Application</see> may log in to that Application.
     /// </summary>
     public interface IAccount :
         IResource,
@@ -41,13 +41,13 @@ namespace Stormpath.SDK.Account
         /// <summary>
         /// Gets the account's username. Unless otherwise specified, this is the same as <see cref="Email"/>.
         /// </summary>
-        /// <value>This account's username, guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.</value>
+        /// <value>The account's username, guaranteed to be unique for all accounts within a <see cref="IDirectory">Directory</see>.</value>
         string Username { get; }
 
         /// <summary>
         /// Gets the account's email address.
         /// </summary>
-        /// <value>This account's email address, guaranteed to be unique for all accounts within a <see cref="IDirectory"/>.</value>
+        /// <value>The account's email address, guaranteed to be unique for all accounts within a <see cref="IDirectory">Directory</see>.</value>
         string Email { get; }
 
         /// <summary>
@@ -61,19 +61,19 @@ namespace Stormpath.SDK.Account
         /// <summary>
         /// Gets the account's given name (aka 'first name' in Western cultures).
         /// </summary>
-        /// <value>This account's given name (aka 'first name' in Western cultures).</value>
+        /// <value>The account's given name (aka 'first name' in Western cultures).</value>
         string GivenName { get; }
 
         /// <summary>
         /// Gets the account's middle name(s).
         /// </summary>
-        /// <value>This account's middle name(s).</value>
+        /// <value>The account's middle name(s).</value>
         string MiddleName { get; }
 
         /// <summary>
         /// Gets the account's surname (aka 'last name' in Western cultures).
         /// </summary>
-        /// <value>This account's surname (aka 'last name' in Western cultures).</value>
+        /// <value>The account's surname (aka 'last name' in Western cultures).</value>
         string Surname { get; }
 
         /// <summary>
@@ -86,11 +86,11 @@ namespace Stormpath.SDK.Account
         /// <summary>
         /// Gets the account's status.
         /// </summary>
-        /// <value>This account's status. Accounts that are not <see cref="AccountStatus.Enabled"/> may not login to applications.</value>
+        /// <value>The account's status. Accounts that are not <see cref="AccountStatus.Enabled">Enabled</see> may not login to applications.</value>
         AccountStatus Status { get; }
 
         /// <summary>
-        /// Sets the account's email address, which must be unique among all other accounts within a <see cref="IDirectory"/>.
+        /// Sets the account's email address, which must be unique among all other accounts within a <see cref="IDirectory">Directory</see>.
         /// </summary>
         /// <param name="email">The account's email address.</param>
         /// <returns>This instance for method chaining.</returns>
@@ -123,7 +123,7 @@ namespace Stormpath.SDK.Account
         IAccount SetPassword(string password);
 
         /// <summary>
-        /// Sets the account's status. Accounts that are not <see cref="AccountStatus.Enabled"/> may not login to applications.
+        /// Sets the account's status. Accounts that are not <see cref="AccountStatus.Enabled">Enabled</see> may not login to applications.
         /// </summary>
         /// <param name="status">The account's status.</param>
         /// <returns>This instance for method chaining.</returns>
@@ -146,37 +146,37 @@ namespace Stormpath.SDK.Account
         IAccount SetUsername(string username);
 
         /// <summary>
-        /// Gets the account's parent <see cref="IDirectory"/> (where the account is stored).
+        /// Gets the account's parent <see cref="IDirectory">Directory</see> (where the account is stored).
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>This account's directory.</returns>
+        /// <returns>The account's directory.</returns>
         Task<IDirectory> GetDirectoryAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Assigns this account to the specified <see cref="IGroup"/>.
+        /// Assigns this account to the specified <see cref="IGroup">Group</see>.
         /// </summary>
         /// <param name="group">The Group this account will be added to.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created reflecting
+        /// The new <see cref="IGroupMembership">Group Membership</see> resource created reflecting
         /// the account-to-group association.
         /// </returns>
         Task<IGroupMembership> AddGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Assigns this account to the specified <see cref="IGroup"/> represented
+        /// Assigns this account to the specified <see cref="IGroup">Group</see> represented
         /// by its (case-insensitive) name or <c>href</c>.
         /// </summary>
         /// <param name="hrefOrName">The <c>href</c> or name of the group to add.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created reflecting
+        /// The new <see cref="IGroupMembership">Group Membership</see> resource created reflecting
         /// the account-to-group association.
         /// </returns>
         Task<IGroupMembership> AddGroupAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Removes this <see cref="IAccount"/> from the specified <see cref="IGroup"/>.
+        /// Removes this <see cref="IAccount">Account</see> from the specified <see cref="IGroup">Group</see>.
         /// </summary>
         /// <param name="group">The group object from which the account must be removed.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -185,7 +185,7 @@ namespace Stormpath.SDK.Account
         Task<bool> RemoveGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Removes this <see cref="IAccount"/> from the specified <see cref="IGroup"/>
+        /// Removes this <see cref="IAccount">Account</see> from the specified <see cref="IGroup">Group</see>
         /// represented by its (case-insensitive) name or <c>href</c>.
         /// </summary>
         /// <param name="hrefOrName">The <c>href</c> or name of the group object from which the account must be removed.</param>

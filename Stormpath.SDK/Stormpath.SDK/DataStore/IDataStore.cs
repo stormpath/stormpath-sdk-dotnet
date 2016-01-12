@@ -1,5 +1,5 @@
 ﻿// <copyright file="IDataStore.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,18 +23,20 @@ namespace Stormpath.SDK.DataStore
 {
     /// <summary>
     /// A <see cref="IDataStore"/> is the liaison between client SDK components and the raw Stormpath REST API.
-    /// It is responsible for converting SDK objects (<see cref="Account.IAccount"/>, <see cref="Application.IApplication"/>, <see cref="Directory.IDirectory"/>, etc.)
+    /// It is responsible for converting SDK objects (<see cref="Account.IAccount">Account</see>, <see cref="Application.IApplication">Application</see>, <see cref="Directory.IDirectory">Directory</see>, etc.)
     /// into REST HTTP requests, executing those requests, and converting REST HTTP responses back into SDK objects.
     /// </summary>
     public interface IDataStore : IDisposable
     {
         /// <summary>
-        /// Instantiates and returns a new instance of the specified <see cref="IResource"/> type.
+        /// Instantiates and returns a new instance of the specified <see cref="IResource">Resource</see> type.
         /// The instance is merely instantiated and is not saved/synchronized with the server in any way.
-        /// <para>This method effectively replaces the <c>new</c> keyword that would have been used otherwise if the
-        /// concrete implementation was known (Resource implementation classes are intentionally not exposed to SDK end-users).</para>
         /// </summary>
-        /// <typeparam name="T">The <see cref="IResource"/> type to instantiate.</typeparam>
+        /// <remarks>
+        /// This method effectively replaces the <c>new</c> keyword that would have been used otherwise if the
+        /// concrete implementation was known (Resource implementation classes are intentionally not exposed to SDK end-users).
+        /// </remarks>
+        /// <typeparam name="T">The <see cref="IResource">Resource</see> type to instantiate.</typeparam>
         /// <returns>A new instance of the specified resource type</returns>
         T Instantiate<T>()
             where T : IResource;
@@ -43,7 +45,7 @@ namespace Stormpath.SDK.DataStore
         /// Retrieves the resource at the specified <paramref name="href"/> URL and returns the resource
         /// as an instance of the specified class <typeparamref name="T"/>.
         /// </summary>
-        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <typeparam name="T">The type of the returned <see cref="IResource">Resource</see> value.</typeparam>
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
@@ -53,7 +55,7 @@ namespace Stormpath.SDK.DataStore
         /// Retrieves the resource at the specified <paramref name="href"/> URL with the specified <paramref name="responseOptions"/>,
         /// and returns the resource as an instance of the specified class <typeparamref name="T"/>.
         /// </summary>
-        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <typeparam name="T">The type of the returned <see cref="IResource">Resource</see> value.</typeparam>
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <param name="responseOptions">The options to apply to this request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>

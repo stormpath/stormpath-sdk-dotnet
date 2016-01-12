@@ -1,5 +1,5 @@
 ﻿// <copyright file="IAccountSync.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Impl.Account
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="IAccount"/>.
+    /// available on <see cref="IAccount">Account</see>.
     /// </summary>
     internal interface IAccountSync :
         IHasTenantSync,
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Impl.Account
         /// </summary>
         /// <param name="group">The Group this account will be added to.</param>
         /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created reflecting the account-to-group association.
+        /// The new <see cref="IGroupMembership">Group Membership</see> resource created reflecting the account-to-group association.
         /// </returns>
         IGroupMembership AddGroup(IGroup group);
 
@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Impl.Account
         /// </summary>
         /// <param name="hrefOrName">The <c>href</c> or name of the group to add.</param>
         /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created reflecting the account-to-group association.
+        /// The new <see cref="IGroupMembership">Group Membership</see> resource created reflecting the account-to-group association.
         /// </returns>
         IGroupMembership AddGroup(string hrefOrName);
 

@@ -1,5 +1,5 @@
 ﻿// <copyright file="SyncAccountResultExtensions.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Sync
         /// that has logged in.
         /// </summary>
         /// <param name="source">The account result.</param>
-        /// <returns>The user's <see cref="IAccount"/> resource.</returns>
+        /// <returns>The user's <see cref="IAccount">Account</see> resource.</returns>
         /// <exception cref="System.ApplicationException">The account is not present.</exception>
         public static IAccount GetAccount(this IAccountResult source)
             => (source as IAccountResultSync).GetAccount();

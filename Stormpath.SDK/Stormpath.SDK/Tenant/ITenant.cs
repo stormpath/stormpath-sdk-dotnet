@@ -1,5 +1,5 @@
 ﻿// <copyright file="ITenant.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,14 +19,14 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Tenant
 {
     /// <summary>
-    /// A tenant represents a customer's private data 'space' within Stormpath that contains all of the customer's Stormpath-stored resources, like <see cref="Application.IApplication"/>s, <see cref="Directory.IDirectory"/>s, and <see cref="Account.IAccount"/>s.
+    /// A tenant represents a customer's private data 'space' within Stormpath that contains all of the customer's Stormpath-stored resources, like <see cref="Application.IApplication">Applications</see>, <see cref="Directory.IDirectory">Directories</see>, and <see cref="Account.IAccount">Accounts</see>.
     /// </summary>
     public interface ITenant : IResource, IAuditable, IExtendable, ITenantActions
     {
         /// <summary>
         /// Gets the tenant's globally-unique human-readable key in Stormpath.
-        /// <para><b>This can change in the future. Do not rely on it as a permanent identifier.</b> If you need a permanent ID, use the href as the permanent ID (this is true for all resources, not just Tenant resources).</para>
         /// </summary>
+        /// <remarks><b>This can change in the future. Do not rely on it as a permanent identifier.</b> If you need a permanent ID, use the href as the permanent ID (this is true for all resources, not just Tenant resources).</remarks>
         /// <value>This tenant's globally-unique key. <b>This can change. Do not rely on it as a permanent identifier.</b></value>
         string Key { get; }
 

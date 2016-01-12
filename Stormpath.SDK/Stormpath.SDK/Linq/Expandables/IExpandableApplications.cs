@@ -1,5 +1,5 @@
 ﻿// <copyright file="IExpandableApplications.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ using Stormpath.SDK.Application;
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents an expandable <see cref="IApplication"/> collection.
+    /// Represents an expandable <see cref="IApplication">Application</see> collection.
     /// </summary>
     public interface IExpandableApplications
     {

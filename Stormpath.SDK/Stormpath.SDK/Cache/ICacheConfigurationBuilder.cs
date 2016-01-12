@@ -1,5 +1,5 @@
 ﻿// <copyright file="ICacheConfigurationBuilder.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +24,9 @@ namespace Stormpath.SDK.Cache
     public interface ICacheConfigurationBuilder
     {
         /// <summary>
-        /// Sets the associated <see cref="ICache"/> region's entry Time to Live (TTL).
+        /// Sets the associated <see cref="ICache">Cache</see> region's entry Time to Live (TTL).
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// Time to Live is the amount of time a cache entry may exist after first being created before it will expire and no
         /// longer be available. If a cache entry ever becomes older than this amount of time (regardless of how often
@@ -35,13 +37,15 @@ namespace Stormpath.SDK.Cache
         /// Note however that entries can still be expunged due to other conditions (e.g. memory constraints, Time to
         /// Idle setting, etc).
         /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="ttl">The entry Time to Live for this cache region.</param>
         /// <returns>This instance for method chaining.</returns>
         ICacheConfigurationBuilder WithTimeToLive(TimeSpan ttl);
 
         /// <summary>
-        /// Sets the associated <see cref="ICache"/> region's entry Time to Idle (TTI).
+        /// Sets the associated <see cref="ICache">Cache</see> region's entry Time to Idle (TTI).
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// Time to Idle is the amount of time a cache entry may be idle (unused/not accessed) before it will expire and
         /// no longer be available. If a cache entry is not accessed at all after this amount of time, it will be removed
@@ -52,7 +56,7 @@ namespace Stormpath.SDK.Cache
         /// Note however that entries can still be expunged due to other conditions (e.g.memory constraints, Time to
         /// Live setting, etc).
         /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="tti">The entry Time to Idle for this cache region.</param>
         /// <returns>This instance for method chaining.</returns>
         ICacheConfigurationBuilder WithTimeToIdle(TimeSpan tti);

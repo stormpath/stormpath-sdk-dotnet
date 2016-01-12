@@ -1,5 +1,5 @@
 ﻿// <copyright file="IJwtAuthenticator.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -94,6 +94,10 @@ namespace Stormpath.SDK.Oauth
         ///         <description>Account is still in account store for the issuing application</description>
         ///     </item>
         /// </list>
+        /// </para>
+        /// <para>
+        /// If validation fails, <see cref="IOauthAuthenticator{TRequest, TResult}.AuthenticateAsync(TRequest, System.Threading.CancellationToken)">AuthenticateAsync()</see>
+        /// will throw the appropriate exception derived from <see cref="Jwt.InvalidJwtException"/>.
         /// </para>
         /// </remarks>
         /// <returns>This instance for method chaining.</returns>
