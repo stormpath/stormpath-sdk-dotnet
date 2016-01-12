@@ -1,0 +1,17 @@
+version: 1.0.{build}
+skip_non_tags: true
+before_build:
+- ps: nuget restore .\Stormpath.SDK\Stormpath.SDK.sln
+build:
+  verbosity: minimal
+after_build:
+- ps: .\build-docs.ps1
+test: off
+notifications:
+- provider: Email
+  to:
+  - nate@stormpath.com
+  subject: Master documentation built
+  on_build_success: true
+  on_build_failure: false
+  on_build_status_changed: false
