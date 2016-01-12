@@ -77,7 +77,7 @@ namespace Stormpath.SDK.Sync
         /// Synchronously gets the group's parent <see cref="Directory.IDirectory">Directory</see> (where the group is stored).
         /// </summary>
         /// <param name="group">The group.</param>
-        /// <returns>This group's parent <see cref="Directory.IDirectory">Directory</see>.</returns>
+        /// <returns>The group's parent <see cref="Directory.IDirectory">Directory</see>.</returns>
         public static IDirectory GetDirectory(this IGroup group)
             => (group as IGroupSync).GetDirectory();
     }

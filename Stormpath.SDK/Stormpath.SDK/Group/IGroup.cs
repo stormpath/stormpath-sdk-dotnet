@@ -41,20 +41,20 @@ namespace Stormpath.SDK.Group
         /// <summary>
         /// Gets the group's name, guaranteed to be unique for all groups within a <see cref="IDirectory">Directory</see>.
         /// </summary>
-        /// <value>This group's name, guaranteed to be unique for all groups within a <see cref="IDirectory">Directory</see>.</value>
+        /// <value>The group's name, guaranteed to be unique for all groups within a <see cref="IDirectory">Directory</see>.</value>
         string Name { get; }
 
         /// <summary>
         /// Gets the group's description.
         /// </summary>
-        /// <value>This group's description. This is an optional property and may be null or empty.</value>
+        /// <value>The group's description. This is an optional property and may be null or empty.</value>
         string Description { get; }
 
         /// <summary>
         /// Gets the group's status.
         /// </summary>
         /// <value>
-        /// This directory's status.
+        /// The directory's status.
         /// An <see cref="DirectoryStatus.Enabled">Enabled</see> directory may be used by applications to login accounts found within the directory.
         /// A <see cref="DirectoryStatus.Disabled">Disabled</see> directory prevents its accounts from being used to login to applications.
         /// </value>
@@ -132,7 +132,7 @@ namespace Stormpath.SDK.Group
         /// Gets the group's parent <see cref="IDirectory">Directory</see> (where the group is stored).
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>This group's parent <see cref="IDirectory">Directory</see>.</returns>
+        /// <returns>The group's parent <see cref="IDirectory">Directory</see>.</returns>
         Task<IDirectory> GetDirectoryAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

@@ -41,13 +41,13 @@ namespace Stormpath.SDK.Account
         /// <summary>
         /// Gets the account's username. Unless otherwise specified, this is the same as <see cref="Email"/>.
         /// </summary>
-        /// <value>This account's username, guaranteed to be unique for all accounts within a <see cref="IDirectory">Directory</see>.</value>
+        /// <value>The account's username, guaranteed to be unique for all accounts within a <see cref="IDirectory">Directory</see>.</value>
         string Username { get; }
 
         /// <summary>
         /// Gets the account's email address.
         /// </summary>
-        /// <value>This account's email address, guaranteed to be unique for all accounts within a <see cref="IDirectory">Directory</see>.</value>
+        /// <value>The account's email address, guaranteed to be unique for all accounts within a <see cref="IDirectory">Directory</see>.</value>
         string Email { get; }
 
         /// <summary>
@@ -61,19 +61,19 @@ namespace Stormpath.SDK.Account
         /// <summary>
         /// Gets the account's given name (aka 'first name' in Western cultures).
         /// </summary>
-        /// <value>This account's given name (aka 'first name' in Western cultures).</value>
+        /// <value>The account's given name (aka 'first name' in Western cultures).</value>
         string GivenName { get; }
 
         /// <summary>
         /// Gets the account's middle name(s).
         /// </summary>
-        /// <value>This account's middle name(s).</value>
+        /// <value>The account's middle name(s).</value>
         string MiddleName { get; }
 
         /// <summary>
         /// Gets the account's surname (aka 'last name' in Western cultures).
         /// </summary>
-        /// <value>This account's surname (aka 'last name' in Western cultures).</value>
+        /// <value>The account's surname (aka 'last name' in Western cultures).</value>
         string Surname { get; }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Stormpath.SDK.Account
         /// <summary>
         /// Gets the account's status.
         /// </summary>
-        /// <value>This account's status. Accounts that are not <see cref="AccountStatus.Enabled">Enabled</see> may not login to applications.</value>
+        /// <value>The account's status. Accounts that are not <see cref="AccountStatus.Enabled">Enabled</see> may not login to applications.</value>
         AccountStatus Status { get; }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace Stormpath.SDK.Account
         /// Gets the account's parent <see cref="IDirectory">Directory</see> (where the account is stored).
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>This account's directory.</returns>
+        /// <returns>The account's directory.</returns>
         Task<IDirectory> GetDirectoryAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

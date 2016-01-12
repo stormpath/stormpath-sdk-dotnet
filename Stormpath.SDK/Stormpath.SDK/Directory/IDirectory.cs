@@ -50,20 +50,20 @@ namespace Stormpath.SDK.Directory
         /// <summary>
         /// Gets the directory's name.
         /// </summary>
-        /// <value>This directory's name. The name is guaranteed to be non-null and unique among all other directories in the owning <see cref="Tenant.ITenant">Tenant</see>.</value>
+        /// <value>The directory's name. The name is guaranteed to be non-null and unique among all other directories in the owning <see cref="Tenant.ITenant">Tenant</see>.</value>
         string Name { get; }
 
         /// <summary>
         /// Gets the directory's description.
         /// </summary>
-        /// <value>This directory's description. This is an optional property and may be null or empty.</value>
+        /// <value>The directory's description. This is an optional property and may be null or empty.</value>
         string Description { get; }
 
         /// <summary>
         /// Gets the directory's status.
         /// </summary>
         /// <value>
-        /// This directory's status.
+        /// The directory's status.
         /// An <see cref="DirectoryStatus.Enabled">Enabled</see> directory may be used by applications to login accounts found within the directory.
         /// A <see cref="DirectoryStatus.Disabled">Disabled</see> directory prevents its accounts from being used to login to applications.
         /// </value>

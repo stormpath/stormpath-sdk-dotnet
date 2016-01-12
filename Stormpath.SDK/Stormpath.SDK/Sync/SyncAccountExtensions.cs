@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Sync
         /// Synchronously gets The account.'s parent <see cref="Directory.IDirectory">Directory</see> (where The account. is stored).
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <returns>This account's directory.</returns>
+        /// <returns>The account's directory.</returns>
         public static IDirectory GetDirectory(this IAccount account)
             => (account as IAccountSync).GetDirectory();
 
