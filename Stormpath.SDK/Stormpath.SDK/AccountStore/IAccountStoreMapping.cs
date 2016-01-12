@@ -24,9 +24,11 @@ namespace Stormpath.SDK.AccountStore
 {
     /// <summary>
     /// Represents the assignment of an <see cref="IAccountStore">Account Store</see> AccountStore (either a <see cref="Group.IGroup">Group</see> or <see cref="Directory.IDirectory">Directory</see>) to an <see cref="IApplication">Application</see>.
-    /// <para>When an <see cref="IAccountStoreMapping{T}">Account Store Mapping</see> is created, the accounts in the account store are granted access to become users of the linked <see cref="IApplication">Application</see>.
-    /// The order in which Account Stores are assigned to an application determines how login attempts work in Stormpath.</para>
     /// </summary>
+    /// <remarks>
+    /// When an <see cref="IAccountStoreMapping{T}">Account Store Mapping</see> is created, the accounts in the account store are granted access to become users of the linked <see cref="IApplication">Application</see>.
+    /// The order in which Account Stores are assigned to an application determines how login attempts work in Stormpath.
+    /// </remarks>
     [Obsolete("This interface will be removed in 1.0. Use IApplicationAccountStoreMapping instead.")]
     public interface IAccountStoreMapping : IApplicationAccountStoreMapping
     {
@@ -34,9 +36,11 @@ namespace Stormpath.SDK.AccountStore
 
     /// <summary>
     /// Represents the assignment of an <see cref="IAccountStore">Account Store</see> AccountStore (either a <see cref="Group.IGroup">Group</see> or <see cref="Directory.IDirectory">Directory</see>) to an <see cref="IApplication">Application</see>.
-    /// <para>When an <see cref="IAccountStoreMapping{T}">Account Store Mapping</see> is created, the accounts in the account store are granted access to become users of the linked <see cref="IApplication">Application</see>.
-    /// The order in which Account Stores are assigned to an application determines how login attempts work in Stormpath.</para>
     /// </summary>
+    /// <remarks>
+    /// When an <see cref="IAccountStoreMapping{T}">Account Store Mapping</see> is created, the accounts in the account store are granted access to become users of the linked <see cref="IApplication">Application</see>.
+    /// The order in which Account Stores are assigned to an application determines how login attempts work in Stormpath.
+    /// </remarks>
     /// <typeparam name="T">The Account Store type.</typeparam>
     public interface IAccountStoreMapping<T> :
         IResource,
@@ -62,11 +66,11 @@ namespace Stormpath.SDK.AccountStore
         /// <summary>
         /// Updates the zero-based order in which the associated <see cref="IAccountStore">Account Store</see> will be consulted
         /// by the linked <see cref="IApplication">Application</see> during an account authentication attempt.
-        /// <para>
+        /// </summary>
+        /// <remarks>
         /// If you use this setter, you will invalidate the cache for all of the associated Application's
         /// other AccountStoreMappings.
-        /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="listIndex">
         /// If <c>0</c> is passed, the account store mapping will be the first item in the list.
         /// If <c>1</c> or greater is passed, the mapping will be inserted at that index. Because list indices
@@ -79,11 +83,11 @@ namespace Stormpath.SDK.AccountStore
         /// <summary>
         /// Sets whether or not the associated <see cref="IAccountStore">Account Store</see> is designated as the
         /// default Account Store for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
-        /// <para>
+        /// </summary>
+        /// <remarks>
         /// A <see langword="true"/> value indicates that any accounts created directly by the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see> will be dispatched
         /// to and saved in the associated <see cref="IAccountStore">Account Store</see>, since Applications and Organizations cannot store Accounts directly.
-        /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="defaultAccountStore">Whether or not the associated <see cref="IAccountStore">Account Store</see> is designated as the default Account Store for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.</param>
         /// <returns>This instance for method chaining.</returns>
         T SetDefaultAccountStore(bool defaultAccountStore);
@@ -91,11 +95,11 @@ namespace Stormpath.SDK.AccountStore
         /// <summary>
         /// Sets whether or not the associated <see cref="IAccountStore">Account Store</see> is designated as the default Group Store
         /// for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
-        /// <para>
+        /// </summary>
+        /// <remarks>
         /// A <see langword="true"/> value indicates that any groups created directly by the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see> will be dispatched
         /// to and saved in the associated <see cref="IAccountStore">Account Store</see>, since Applications and Organizations cannot store Accounts directly.
-        /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="defaultGroupStore">Whether or not the associated <see cref="IAccountStore">Account Store</see> is designated as the default Group Store for the <see cref="IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.</param>
         /// <returns>This instance for method chaining.</returns>
         T SetDefaultGroupStore(bool defaultGroupStore);

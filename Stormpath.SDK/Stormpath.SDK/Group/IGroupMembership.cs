@@ -23,11 +23,11 @@ namespace Stormpath.SDK.Group
 {
     /// <summary>
     /// A <see cref="IGroupMembership">Group Membership</see> represents the association of an <see cref="IAccount">Account</see> and a <see cref="IGroup">Group</see>.
-    /// <para>
+    /// </summary>
+    /// <remarks>
     /// Calling <see cref="IDeletable.DeleteAsync(CancellationToken)"/> on this resource will only
     /// delete the association - it will not delete the <see cref="IAccount">Account</see> or <see cref="IGroup">Group</see>.
-    /// </para>
-    /// </summary>
+    /// </remarks>
     public interface IGroupMembership : IResource, IDeletable
     {
         /// <summary>

@@ -30,13 +30,13 @@ namespace Stormpath.SDK.IdSite
         /// Sets a <see cref="INonceStore"/> that will retain ID Site message identifiers as
         /// cryptographic nonces, eliminating the possibility of a replay attack. This ensures
         /// any ID Site message cannot be intercepted and used again later.
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// Because this ensures strong security, a <see cref="INonceStore"/> is enabled by default if
         /// you have caching enabled for the SDK: a cache region will be used to store nonces over time, and those nonces
         /// will be used to assert that ID Site replies are not used more than once.
         /// </para>
-        /// </summary>
-        /// <remarks>
         /// <para>
         /// Default Nonce Store: A <see cref="Cache.ICache">Cache</see>-based <see cref="INonceStore"/> is enabled by default
         /// if you have caching enabled in the SDK. Because nonces are stored in a cache region, it is very important to
@@ -63,10 +63,10 @@ namespace Stormpath.SDK.IdSite
         /// <summary>
         /// Sets the <see cref="IIdSiteAsyncResultListener"/> that will be notified about the actual operation
         /// of the ID Site invocation: registration, authentication, or logout.
-        /// <para>
-        /// The listener must be set before the method <see cref="GetAccountResultAsync(CancellationToken)"/> is invoked.
-        /// </para>
         /// </summary>
+        /// <remarks>
+        /// The listener must be set before the method <see cref="GetAccountResultAsync(CancellationToken)"/> is invoked.
+        /// </remarks>
         /// <param name="resultListener">The result listener to notify.</param>
         /// <returns>This instance for method chaining.</returns>
         IIdSiteAsyncCallbackHandler SetResultListener(IIdSiteAsyncResultListener resultListener);
@@ -75,10 +75,10 @@ namespace Stormpath.SDK.IdSite
         /// Sets the <see cref="IIdSiteAsyncResultListener"/> that will be notified about the actual operation
         /// of the ID Site invocation: registration, authentication, or logout. This overload
         /// constructs an inline <see cref="IIdSiteAsyncResultListener"/> based on the delegate parameters.
-        /// <para>
-        /// The listener must be set before the method <see cref="GetAccountResultAsync(CancellationToken)"/> is invoked.
-        /// </para>
         /// </summary>
+        /// <remarks>
+        /// The listener must be set before the method <see cref="GetAccountResultAsync(CancellationToken)"/> is invoked.
+        /// </remarks>
         /// <param name="onRegistered">The action to run for new account registration.</param>
         /// <param name="onAuthenticated">The action to run for successful authentication.</param>
         /// <param name="onLogout">The action to run for account logout.</param>

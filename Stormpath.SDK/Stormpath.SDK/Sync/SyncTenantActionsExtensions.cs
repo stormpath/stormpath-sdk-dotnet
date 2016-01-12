@@ -166,6 +166,8 @@ namespace Stormpath.SDK.Sync
         /// <summary>
         /// Synchronously verifies an account's email address based on a <c>sptoken</c> parameter embedded in a URL
         /// found in an account's verification email.
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// For example:
         /// <code>
@@ -178,7 +180,7 @@ namespace Stormpath.SDK.Sync
         /// tenant.VerifyAccountEmailAsync("ExAmPleEmAilVeRiFiCaTiOnTokEnHeRE");
         /// </code>
         /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="token">The <c>sptoken</c> query parameter value.</param>
         /// <returns>The verified account.</returns>

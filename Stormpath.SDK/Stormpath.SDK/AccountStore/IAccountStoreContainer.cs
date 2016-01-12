@@ -61,11 +61,11 @@ namespace Stormpath.SDK.AccountStore
         /// <summary>
         /// Sets the <see cref="IAccountStore">Account Store</see> (either a <see cref="Group.IGroup">Group</see> or a <see cref="Directory.IDirectory">Directory</see>)
         /// used to persist new <see cref="Account.IAccount">Accounts</see>.
-        /// <para>
+        /// </summary>
+        /// <remarks>
         /// Because this resource is not an <see cref="IAccountStore">Account Store</see> itself, it delegates to a Group or Directory
         /// when creating accounts; this method sets the <see cref="IAccountStore">Account Store</see> to which new account persistence is delegated.
-        /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="accountStore">The <see cref="IAccountStore">Account Store</see> used to persist new accounts.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
@@ -74,12 +74,12 @@ namespace Stormpath.SDK.AccountStore
         /// <summary>
         /// Gets the <see cref="IAccountStore">Account Store</see> used to persist new <see cref="Group.IGroup">Groups</see>, or <see langword="null"/>
         /// if no default Account Store has been designated.
-        /// <para>
+        /// </summary>
+        /// <remarks>
         /// Stormpath's current REST API requires this to be a <see cref="Directory.IDirectory">Directory</see>.
         /// However, this could be a <see cref="Group.IGroup">Group</see> in the future, so do not assume it is always a
         /// Directory if you want your code to be function correctly if/when this support is added.
-        /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The default <see cref="IAccountStore">Account Store</see> for new <see cref="Group.IGroup">Groups</see>,
         /// or <see langword="null"/> if no default <see cref="IAccountStore">Account Store</see> has been designated.</returns>
@@ -100,6 +100,8 @@ namespace Stormpath.SDK.AccountStore
         /// <summary>
         /// Sets the <see cref="IAccountStore">Account Store</see> (a <see cref="Directory.IDirectory">Directory</see>)
         /// used to persist new <see cref="Group.IGroup">Groups</see>.
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// Stormpath's current REST API requires this to be a <see cref="Directory.IDirectory">Directory</see>. However, this could be a <see cref="Group.IGroup">Group</see> in the future,
         /// so do not assume it is always a Directory if you want your code to function properly if/when this support is added.
@@ -108,7 +110,7 @@ namespace Stormpath.SDK.AccountStore
         /// Because this resource is not an <see cref="IAccountStore">Account Store</see> itself, it delegates to a Directory
         /// when creating groups; this method sets the <see cref="IAccountStore">Account Store</see> to which new group persistence is delegated.
         /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="accountStore">The <see cref="IAccountStore">Account Store</see> used to persist new groups.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
@@ -140,10 +142,10 @@ namespace Stormpath.SDK.AccountStore
         /// <summary>
         /// Adds a new <see cref="IAccountStore">Account Store</see> to the Application or Organization and appends the resulting <see cref="IAccountStoreMapping{T}">Account Store Mapping</see>
         /// to the end of the AccountStoreMapping list.
-        /// <para>
-        /// If you need to control the order of the added AccountStore, use the <see cref="CreateAccountStoreMappingAsync(TMapping, CancellationToken)"/> method.
-        /// </para>
         /// </summary>
+        /// <remarks>
+        /// If you need to control the order of the added AccountStore, use the <see cref="CreateAccountStoreMappingAsync(TMapping, CancellationToken)"/> method.
+        /// </remarks>
         /// <param name="accountStore">The new <see cref="IAccountStore">Account Store</see> resource to add to the AccountStoreMapping list.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping{T}">Account Store Mapping</see>.</returns>
@@ -159,6 +161,8 @@ namespace Stormpath.SDK.AccountStore
         /// <summary>
         /// Adds a new <see cref="IAccountStore">Account Store</see> to this Application. The given string can either be an <c>href</c> or a name of a
         /// <see cref="Directory.IDirectory">Directory</see> or <see cref="Group.IGroup">Group</see> belonging to the current <see cref="Tenant.ITenant">Tenant</see>.
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// If the provided value is an <c>href</c>, this method will get the proper Resource and add it as a new AccountStore in this
         /// Application or Organization without much effort. However, if the provided value is not an <c>href</c>, it will be considered as a name. In this case,
@@ -172,7 +176,7 @@ namespace Stormpath.SDK.AccountStore
         /// to loop through every existing directory in order to find the required Group. In contrast, providing the Group's <c>href</c> is much more
         /// efficient as no actual search operation needs to be carried out.
         /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="hrefOrName">Either the <c>href</c> or name of the desired <see cref="Directory.IDirectory">Directory</see> or <see cref="Group.IGroup">Group</see>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping{T}">Account Store Mapping</see>.</returns>

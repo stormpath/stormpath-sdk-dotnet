@@ -260,8 +260,8 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Attempts to authenticate an account with the specified username and password.
-        /// <para>If you need to obtain the authenticated account details, use <see cref="AuthenticateAccountAsync(string, string, CancellationToken)"/> instead.</para>
         /// </summary>
+        /// <remarks>If you need to obtain the authenticated account details, use <see cref="AuthenticateAccountAsync(string, string, CancellationToken)"/> instead.</remarks>
         /// <param name="username">The account's username.</param>
         /// <param name="password">The account's raw (plaintext) password</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -276,6 +276,8 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Triggers the delivery of a new verification email for the specified account.
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// This method is useful in scenarios where the Account Registration and Verification workflow
         /// is enabled. If the welcome email has not been received by a newly registered account,
@@ -285,7 +287,7 @@ namespace Stormpath.SDK.Application
         /// <para>
         /// The <see cref="IEmailVerificationRequest"/> must contain the username or email identifying the account.
         /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="requestBuilderAction">Sets the options required for the verification email request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
@@ -293,13 +295,15 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Triggers the delivery of a new verification email for the specified account.
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// This method is useful in scenarios where the Account Registration and Verification workflow
         /// is enabled. If the welcome email has not been received by a newly registered account,
         /// then the user will not be able to login until the account is verified.
         /// </para>
         /// <para>This method re-sends the verification email and allows the user to verify the account.</para>
-        /// </summary>
+        /// </remarks>
         /// <param name="usernameOrEmail">The username or email identifying the account to send the verification email to.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
@@ -308,10 +312,12 @@ namespace Stormpath.SDK.Application
         /// <summary>
         /// Verifies the password reset token (received in the user's email) and immediately
         /// changes the password in the same request, if the token is valid.
-        /// <para>Once the token has been successfully used, it is immediately invalidated and can't be used again.
-        /// If you need to change the password again, you will previously need to execute
-        /// <see cref="SendPasswordResetEmailAsync(string, CancellationToken)"/> again in order to obtain a new password reset token.</para>
         /// </summary>
+        /// <remarks>
+        /// Once the token has been successfully used, it is immediately invalidated and can't be used again.
+        /// If you need to change the password again, you will need to execute
+        /// <see cref="SendPasswordResetEmailAsync(string, CancellationToken)"/> again in order to obtain a new password reset token.
+        /// </remarks>
         /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
         /// <param name="newPassword">The new password that will be set to the <see cref="IAccount">Account</see> if the token is successfully validated.</param>
         /// <param name="cancellationToken">The cancellation token.</param>

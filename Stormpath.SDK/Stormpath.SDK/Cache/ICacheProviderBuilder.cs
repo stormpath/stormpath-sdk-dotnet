@@ -28,6 +28,8 @@ namespace Stormpath.SDK.Cache
         /// <see cref="ICacheProvider">Cache Provider</see>. You may override this default for individual cache regions
         /// by using the <see cref="WithCache(ICacheConfigurationBuilder)"/> method for each region
         /// you wish to configure.
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// Time to Live is the amount of time a cache entry may exist after first being created before it will expire and no
         /// longer be available. If a cache entry ever becomes older than this amount of time (regardless of how often
@@ -38,7 +40,7 @@ namespace Stormpath.SDK.Cache
         /// Note however that entries can still be expunged due to other conditions (e.g. memory constraints, Time to
         /// Idle setting, etc).
         /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="ttl">Default Time to Live value</param>
         /// <example>
         /// Create an in-memory cache with a default TTL of 30 minutes:
@@ -55,6 +57,8 @@ namespace Stormpath.SDK.Cache
         /// Sets the default Time to Idle (TTI) for all cache regions managed by the
         /// <see cref="ICacheProvider">Cache Provider</see>. You may override this default for individual cache regions by using the
         /// <see cref="WithCache(ICacheConfigurationBuilder)"/> method for each region you wish to configure.
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// Time to Idle is the amount of time a cache entry may be idle (unused/not accessed) before it will expire and
         /// no longer be available. If a cache entry is not accessed at all after this amount of time, it will be removed
@@ -65,7 +69,7 @@ namespace Stormpath.SDK.Cache
         /// Note however that entries can still be expunged due to other conditions (e.g. memory constraints, Time to
         /// Live setting, etc).
         /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="tti">Default Time To Idle value.</param>
         /// <example>
         /// Create an in-memory cache with a default TTI of 30 minutes:

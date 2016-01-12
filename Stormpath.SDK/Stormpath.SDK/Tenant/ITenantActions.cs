@@ -156,6 +156,8 @@ namespace Stormpath.SDK.Tenant
         /// <summary>
         /// Verifies an account's email address based on a <c>sptoken</c> parameter embedded in a URL
         /// found in an account's verification email.
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// For example:
         /// <code>
@@ -168,7 +170,7 @@ namespace Stormpath.SDK.Tenant
         /// tenant.VerifyAccountEmailAsync("ExAmPleEmAilVeRiFiCaTiOnTokEnHeRE");
         /// </code>
         /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="token">The <c>sptoken</c> query parameter value.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The verified account.</returns>

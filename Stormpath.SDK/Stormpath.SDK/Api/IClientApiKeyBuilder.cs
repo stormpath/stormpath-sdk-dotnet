@@ -37,10 +37,12 @@ namespace Stormpath.SDK.Api
     {
         /// <summary>
         /// Allows specifying the client's API Key ID value directly instead of reading it from a file or stream.
-        /// <para><b>Usage Warning:</b> It is almost always advisable to NOT use this method and instead use
-        /// methods that accept a file or stream: these other methods would ideally acquire the API Key
-        /// from a secure and private apiKey.properties file that is readable only by the process that uses the Stormpath SDK.</para>
         /// </summary>
+        /// <remarks>
+        /// <b>Usage Warning:</b> It is almost always advisable to NOT use this method and instead use
+        /// methods that accept a file or stream: these other methods would ideally acquire the API Key
+        /// from a secure and private apiKey.properties file that is readable only by the process that uses the Stormpath SDK.
+        /// </remarks>
         /// <param name="id">The API Key ID to use when communicating with Stormpath.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <example>
@@ -56,8 +58,8 @@ namespace Stormpath.SDK.Api
 
         /// <summary>
         /// Allows specifying the client's API Key Secret value directly instead of reading it from a file or stream.
-        /// <para>See the security precautions outlined at <see cref="SetId(string)"/>.</para>
         /// </summary>
+        /// <remarks>See the security precautions outlined at <see cref="SetId(string)"/>.</remarks>
         /// <param name="secret">The API Key Secret to use when communicating with Stormpath.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <example>
@@ -92,10 +94,12 @@ namespace Stormpath.SDK.Api
 
         /// <summary>
         /// Sets the location of the .properties file to load containing the API Key ID and Secret used by the Client to communicate with the Stormpath REST API.
+        /// </summary>
+        /// <remarks>
         /// <para>When the file is loaded, the following name/value pairs are expected to be present by default: apiKey.id, apiKey.secret</para>
         /// <para>If you want to control the property names used in the file, you may configure them via <see cref="SetIdPropertyName(string)"/> and <see cref="SetSecretPropertyName(string)"/>.</para>
         /// <para>Note: the tilde (~) character is expanded to %HOMEDRIVE%%HOMEPATH% on Windows, to match the behavior on *nix platforms.</para>
-        /// </summary>
+        /// </remarks>
         /// <param name="path">The relative or absolute path to the .properties file.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <example>

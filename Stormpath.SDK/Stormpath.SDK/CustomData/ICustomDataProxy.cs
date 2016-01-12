@@ -25,8 +25,8 @@ namespace Stormpath.SDK.CustomData
     {
         /// <summary>
         /// Removes all custom data items when the resource is saved.
-        /// <para>Note: Does not take effect until the parent resource is saved using <see cref="Resource.ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/>!</para>
         /// </summary>
+        /// <remarks>Does not take effect until the parent resource is saved using <see cref="Resource.ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/>.</remarks>
         void Clear();
 
         /// <summary>
@@ -38,29 +38,29 @@ namespace Stormpath.SDK.CustomData
 
         /// <summary>
         /// Adds one or more new custom data items when the resource is saved.
-        /// <para>Note: Does not take effect until the parent resource is saved using <see cref="Resource.ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/>!</para>
         /// </summary>
+        /// <remarks>Does not take effect until the parent resource is saved using <see cref="Resource.ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/>.</remarks>
         /// <param name="values">The items to add.</param>
         void Put(IEnumerable<KeyValuePair<string, object>> values);
 
         /// <summary>
         /// Adds a new custom data item when the resource is saved.
-        /// <para>Note: Does not take effect until the parent resource is saved using <see cref="Resource.ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/>!</para>
         /// </summary>
+        /// <remarks>Does not take effect until the parent resource is saved using <see cref="Resource.ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/>.</remarks>
         /// <param name="item">The custom data item to add.</param>
         void Put(KeyValuePair<string, object> item);
 
         /// <summary>
         /// Adds one or more new custom data items when the resource is saved.
-        /// <para>Note: Does not take effect until the parent resource is saved using <see cref="Resource.ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/>!</para>
         /// </summary>
+        /// <remarks>Does not take effect until the parent resource is saved using <see cref="Resource.ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/>.</remarks>
         /// <param name="customData">An anonymous type containing the items to add.</param>
         void Put(object customData);
 
         /// <summary>
         /// Removes a custom data item when the resource is saved.
-        /// <para>Note: Does not take effect until the parent resource is saved using <see cref="Resource.ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/>!</para>
         /// </summary>
+        /// <remarks>Does not take effect until the parent resource is saved using <see cref="Resource.ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/>.</remarks>
         /// <param name="key">The name (key) of the custom data item to remove.</param>
         void Remove(string key);
     }

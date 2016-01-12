@@ -22,11 +22,11 @@ namespace Stormpath.SDK.Provider
     /// <summary>
     /// Represents the result of the attempt to access the Provider's account. Stormpath maps common fields of the
     /// Provider user to the <see cref="IAccount">Account</see> Resource.
-    /// <para>
+    /// </summary>
+    /// <remarks>
     /// If the user retrieved from the Provider did not previously exist in Stormpath as an Account, common Provider user fields
     /// will be used to create a new <see cref="IAccount">Account</see> in Stormpath.
-    /// </para>
-    /// </summary>
+    /// </remarks>
     /// <seealso cref="Application.IApplication.GetAccountAsync(IProviderAccountRequest, System.Threading.CancellationToken)"/>
     public interface IProviderAccountResult : IResource
     {

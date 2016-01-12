@@ -27,16 +27,16 @@ namespace Stormpath.SDK.IdSite
     {
         /// <summary>
         /// The built ID Site URL (when invoked) will logout the current user.
-        /// <para>There is no way to undo this operation on the builder. To undo, you must create a new <see cref="IIdSiteUrlBuilder"/>.</para>
         /// </summary>
+        /// <remarks>There is no way to undo this operation on the builder. To undo, you must create a new <see cref="IIdSiteUrlBuilder"/>.</remarks>
         /// <returns>This instance for method chaining.</returns>
         IIdSiteUrlBuilder ForLogout();
 
         /// <summary>
         /// Sets the location where the user will be sent when returning from the ID Site. This property is mandatory and must be set.
         /// Use <see cref="Application.IApplication.NewIdSiteAsyncCallbackHandler(Http.IHttpRequest)"/> to process requests to your <paramref name="callbackUri"/>.
-        /// <para>For security reasons, this location must be registered in your ID Site configuration in the Stormpath Admin Console.</para>
         /// </summary>
+        /// <remarks>For security reasons, this location must be registered in your ID Site configuration in the Stormpath Admin Console.</remarks>
         /// <param name="callbackUri">The final destination the browser will be redirected to.</param>
         /// <returns>This instance for method chaining.</returns>
         IIdSiteUrlBuilder SetCallbackUri(string callbackUri);
@@ -44,8 +44,8 @@ namespace Stormpath.SDK.IdSite
         /// <summary>
         /// Sets the location where the user will be sent when returning from the ID Site. This property is mandatory and must be set.
         /// Use <see cref="Application.IApplication.NewIdSiteAsyncCallbackHandler(Http.IHttpRequest)"/> to process requests to your <paramref name="callbackUri"/>.
-        /// <para>For security reasons, this location must be registered in your ID Site configuration in the Stormpath Admin Console.</para>
         /// </summary>
+        /// <remarks>For security reasons, this location must be registered in your ID Site configuration in the Stormpath Admin Console.</remarks>
         /// <param name="callbackUri">The final destination the browser will be redirected to.</param>
         /// <returns>This instance for method chaining.</returns>
         IIdSiteUrlBuilder SetCallbackUri(Uri callbackUri);

@@ -31,9 +31,11 @@ namespace Stormpath.SDK.DataStore
         /// <summary>
         /// Instantiates and returns a new instance of the specified <see cref="IResource">Resource</see> type.
         /// The instance is merely instantiated and is not saved/synchronized with the server in any way.
-        /// <para>This method effectively replaces the <c>new</c> keyword that would have been used otherwise if the
-        /// concrete implementation was known (Resource implementation classes are intentionally not exposed to SDK end-users).</para>
         /// </summary>
+        /// <remarks>
+        /// This method effectively replaces the <c>new</c> keyword that would have been used otherwise if the
+        /// concrete implementation was known (Resource implementation classes are intentionally not exposed to SDK end-users).
+        /// </remarks>
         /// <typeparam name="T">The <see cref="IResource">Resource</see> type to instantiate.</typeparam>
         /// <returns>A new instance of the specified resource type</returns>
         T Instantiate<T>()

@@ -30,10 +30,12 @@ namespace Stormpath.SDK.Directory
     /// <summary>
     /// A directory is a top-level container of <see cref="IAccount">Accounts</see> and <see cref="IGroup">Groups</see>.
     /// Accounts and groups are guaranteed to be unique within a directory, but not across multiple directories.
-    /// <para>You can think of a <see cref="IDirectory">Directory</see> as an account 'store'.
-    /// You can map one or more directories (or groups within a directory) to an <see cref="Application.IApplication">Application</see>.
-    /// This forms the application's effective 'user base' of all <see cref="IAccount">Account</see> that may use the application.</para>
     /// </summary>
+    /// <remarks>
+    /// You can think of a <see cref="IDirectory">Directory</see> as an account 'store'.
+    /// You can map one or more directories (or groups within a directory) to an <see cref="Application.IApplication">Application</see>.
+    /// This forms the application's effective 'user base' of all <see cref="IAccount">Account</see> that may use the application.
+    /// </remarks>
     public interface IDirectory :
         IResource,
         IHasTenant,

@@ -27,8 +27,8 @@ namespace Stormpath.SDK.Organization
     /// An Organization is a top-level container for <see cref="Directory.IDirectory">Directory</see> and <see cref="IGroup">Group</see> resources,
     /// and is an <see cref="IAccountStore">Account Store</see> that can be mapped to an <see cref="Application.IApplication">Application</see>
     /// just like a Directory or Group.
-    /// <para>Organizations are primarily intended to represent tenants in multi-tenant applications.</para>
     /// </summary>
+    /// <remarks>Organizations are primarily intended to represent tenants in multi-tenant applications.</remarks>
     public interface IOrganization :
         IResource,
         IHasTenant,

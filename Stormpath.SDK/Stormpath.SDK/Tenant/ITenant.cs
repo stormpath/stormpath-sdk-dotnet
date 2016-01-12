@@ -25,8 +25,8 @@ namespace Stormpath.SDK.Tenant
     {
         /// <summary>
         /// Gets the tenant's globally-unique human-readable key in Stormpath.
-        /// <para><b>This can change in the future. Do not rely on it as a permanent identifier.</b> If you need a permanent ID, use the href as the permanent ID (this is true for all resources, not just Tenant resources).</para>
         /// </summary>
+        /// <remarks><b>This can change in the future. Do not rely on it as a permanent identifier.</b> If you need a permanent ID, use the href as the permanent ID (this is true for all resources, not just Tenant resources).</remarks>
         /// <value>This tenant's globally-unique key. <b>This can change. Do not rely on it as a permanent identifier.</b></value>
         string Key { get; }
 

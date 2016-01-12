@@ -28,45 +28,45 @@ namespace Stormpath.SDK.Jwt
         /// <summary>
         /// Sets the Issuer (<c>iss</c>) claim. A <see langword="null"/> value will remove the claim.
         /// </summary>
-        /// <param name="iss">The JWT <c>iss</c> claim value or <see langword="null"/> to remove the claim.</param>
+        /// <param name="iss">The JWT <c>iss</c> claim value, or <see langword="null"/> to remove the claim.</param>
         /// <returns>This instance for method chaining.</returns>
         T SetIssuer(string iss);
 
         /// <summary>
         /// Sets the Subject (<c>sub</c>) claim. A <see langword="null"/> value will remove the claim.
         /// </summary>
-        /// <param name="sub">The JWT <c>sub</c> claim value or <see langword="null"/> to remove the claim.</param>
+        /// <param name="sub">The JWT <c>sub</c> claim value, or <see langword="null"/> to remove the claim.</param>
         /// <returns>This instance for method chaining.</returns>
         T SetSubject(string sub);
 
         /// <summary>
         /// Sets the Audience (<c>aud</c>) claim. A <see langword="null"/> value will remove the claim.
         /// </summary>
-        /// <param name="aud">The JWT <c>aud</c> claim value or <see langword="null"/> to remove the claim.</param>
+        /// <param name="aud">The JWT <c>aud</c> claim value, or <see langword="null"/> to remove the claim.</param>
         /// <returns>This instance for method chaining.</returns>
         T SetAudience(string aud);
 
         /// <summary>
         /// Sets the Expiration Time (<c>exp</c>) claim. A <see langword="null"/> value will remove the claim.
-        /// <para>A JWT obtained after this timestamp should not be used.</para>
         /// </summary>
-        /// <param name="exp">The JWT <c>exp</c> claim value or <see langword="null"/> to remove the claim.</param>
+        /// <remarks>A JWT obtained after this timestamp should not be used.</remarks>
+        /// <param name="exp">The JWT <c>exp</c> claim value, or <see langword="null"/> to remove the claim.</param>
         /// <returns>This instance for method chaining.</returns>
         T SetExpiration(DateTimeOffset? exp);
 
         /// <summary>
         /// Sets the Not Before (<c>nbf</c>) claim. A <see langword="null"/> value will remove the claim.
-        /// <para>A JWT obtained before this timestamp should not be used.</para>
         /// </summary>
-        /// <param name="nbf">The JWT <c>nbf</c> claim value or <see langword="null"/> to remove the claim.</param>
+        /// <remarks>A JWT obtained before this timestamp should not be used.</remarks>
+        /// <param name="nbf">The JWT <c>nbf</c> claim value, or <see langword="null"/> to remove the claim.</param>
         /// <returns>This instance for method chaining.</returns>
         T SetNotBeforeDate(DateTimeOffset? nbf);
 
         /// <summary>
         /// Sets the Issued At (<c>iat</c>) claim. A <see langword="null"/> value will remove the claim.
-        /// <para>The value is the timestamp when the JWT was created.</para>
         /// </summary>
-        /// <param name="iat">The JWT <c>iat</c> claim value or <see langword="null"/> to remove the claim.</param>
+        /// <remarks>The value is the timestamp when the JWT was created.</remarks>
+        /// <param name="iat">The JWT <c>iat</c> claim value (the timestamp when the JWT was created), or <see langword="null"/> to remove the claim.</param>
         /// <returns>This instance for method chaining.</returns>
         T SetIssuedAt(DateTimeOffset? iat);
 

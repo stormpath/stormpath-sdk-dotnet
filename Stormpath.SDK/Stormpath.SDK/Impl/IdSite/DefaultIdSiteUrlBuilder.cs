@@ -74,8 +74,10 @@ namespace Stormpath.SDK.Impl.IdSite
 
         /// <summary>
         /// Trim off anything after the first single slash in a URL.
-        /// <para>Example: http://foo.com/test becomes http://foo.com</para>
         /// </summary>
+        /// <remarks>
+        /// For example, http://foo.com/test becomes http://foo.com
+        /// </remarks>
         /// <param name="href">The URL to trim.</param>
         /// <returns><paramref name="href"/> up to the first single slash.</returns>
         private static string GetBaseUrl(string href)
