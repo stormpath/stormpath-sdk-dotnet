@@ -21,6 +21,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
 
@@ -152,6 +153,20 @@ namespace Stormpath.SDK.Impl.Client
             await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.GetOrganizationAsync(href).ConfigureAwait(false);
+        }
+
+        async Task<IAccessToken> ITenantActions.GetAccessTokenAsync(string href, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.GetAccessTokenAsync(href).ConfigureAwait(false);
+        }
+
+        async Task<IRefreshToken> ITenantActions.GetRefreshTokenAsync(string href, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.GetRefreshTokenAsync(href).ConfigureAwait(false);
         }
     }
 }

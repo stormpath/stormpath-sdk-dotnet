@@ -20,6 +20,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Sync;
 
@@ -151,6 +152,20 @@ namespace Stormpath.SDK.Impl.Client
             this.EnsureTenant();
 
             return this.tenant.GetOrganization(href);
+        }
+
+        IAccessToken ITenantActionsSync.GetAccessToken(string href)
+        {
+            this.EnsureTenant();
+
+            return this.tenant.GetAccessToken(href);
+        }
+
+        IRefreshToken ITenantActionsSync.GetRefreshToken(string href)
+        {
+            this.EnsureTenant();
+
+            return this.tenant.GetRefreshToken(href);
         }
     }
 }

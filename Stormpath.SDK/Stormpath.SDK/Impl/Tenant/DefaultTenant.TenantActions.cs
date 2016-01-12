@@ -22,6 +22,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
@@ -148,5 +149,11 @@ namespace Stormpath.SDK.Impl.Tenant
 
         Task<IOrganization> ITenantActions.GetOrganizationAsync(string href, CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IOrganization>(href);
+
+        Task<IAccessToken> ITenantActions.GetAccessTokenAsync(string href, CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccessToken>(href);
+
+        Task<IRefreshToken> ITenantActions.GetRefreshTokenAsync(string href, CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IRefreshToken>(href);
     }
 }

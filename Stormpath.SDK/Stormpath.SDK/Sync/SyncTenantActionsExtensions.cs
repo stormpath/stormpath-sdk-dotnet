@@ -20,6 +20,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
 
@@ -240,5 +241,27 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
         public static IOrganization GetOrganization(this ITenantActions tenantActions, string href)
             => (tenantActions as ITenantActionsSync).GetOrganization(href);
+
+        /// <summary>
+        /// Synchronously retrieves the <see cref="IAccessToken">Access Token</see> at the specified Stormpath URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IAccessToken}(DataStore.IDataStore, string)"/>.</remarks>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="href">The resource URL of the <see cref="IAccessToken">Access Token</see> to retrieve.</param>
+        /// <returns>The <see cref="IAccessToken">Access Token</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        public static IAccessToken GetAccessToken(this ITenantActions tenantActions, string href)
+            => (tenantActions as ITenantActionsSync).GetAccessToken(href);
+
+        /// <summary>
+        /// Synchronously retrieves the <see cref="IRefreshToken">Refresh Token</see> at the specified Stormpath URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IRefreshToken}(DataStore.IDataStore, string)"/>.</remarks>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="href">The resource URL of the <see cref="IRefreshToken">Refresh Token</see> to retrieve.</param>
+        /// <returns>The <see cref="IRefreshToken">Refresh Token</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        public static IRefreshToken GetRefreshToken(this ITenantActions tenantActions, string href)
+            => (tenantActions as ITenantActionsSync).GetRefreshToken(href);
     }
 }

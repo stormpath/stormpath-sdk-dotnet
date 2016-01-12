@@ -22,6 +22,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 
 namespace Stormpath.SDK.Tenant
@@ -224,6 +225,26 @@ namespace Stormpath.SDK.Tenant
         /// <returns>The <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
         Task<IOrganization> GetOrganizationAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves the <see cref="IAccessToken">Access Token</see> at the specified Stormpath URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStore.GetResourceAsync{IAccessToken}(string, CancellationToken)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IAccessToken">Access Token</see> to retrieve.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IAccessToken">Access Token</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        Task<IAccessToken> GetAccessTokenAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves the <see cref="IRefreshToken">Refresh Token</see> at the specified Stormpath URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStore.GetResourceAsync{IRefreshToken}(string, CancellationToken)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IRefreshToken">Refresh Token</see> to retrieve.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IRefreshToken">Refresh Token</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        Task<IRefreshToken> GetRefreshTokenAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a queryable list of all <see cref="IAccount">Accounts</see> in this tenant.
