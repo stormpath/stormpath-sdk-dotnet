@@ -22,6 +22,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 
 namespace Stormpath.SDK.Tenant
@@ -147,11 +148,11 @@ namespace Stormpath.SDK.Tenant
         /// Creates a new <see cref="IOrganization">Organization</see> resource in the Tenant.
         /// </summary>
         /// <param name="name">The Organization's name.</param>
-        /// <param name="description">The Organization's description text.</param>
+        /// <param name="nameKey">The Organization's <c>nameKey</c>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the Organization.</exception>
-        Task<IOrganization> CreateOrganizationAsync(string name, string description, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IOrganization> CreateOrganizationAsync(string name, string nameKey, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Verifies an account's email address based on a <c>sptoken</c> parameter embedded in a URL
@@ -178,7 +179,7 @@ namespace Stormpath.SDK.Tenant
         Task<IAccount> VerifyAccountEmailAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Retrieves the <see cref="IAccount">Account</see> at the specified URL.
+        /// Retrieves the <see cref="IAccount">Account</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStore.GetResourceAsync{IAccount}(string, CancellationToken)"/>.</remarks>
         /// <param name="href">The resource URL of the <see cref="IAccount">Account</see> to retrieve.</param>
@@ -188,7 +189,7 @@ namespace Stormpath.SDK.Tenant
         Task<IAccount> GetAccountAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Retrieves the <see cref="IApplication">Application</see> at the specified URL.
+        /// Retrieves the <see cref="IApplication">Application</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStore.GetResourceAsync{IApplication}(string, CancellationToken)"/>.</remarks>
         /// <param name="href">The resource URL of the <see cref="IApplication">Application</see> to retrieve.</param>
@@ -198,7 +199,7 @@ namespace Stormpath.SDK.Tenant
         Task<IApplication> GetApplicationAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Retrieves the <see cref="IDirectory">Directory</see> at the specified URL.
+        /// Retrieves the <see cref="IDirectory">Directory</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStore.GetResourceAsync{IDirectory}(string, CancellationToken)"/>.</remarks>
         /// <param name="href">The resource URL of the <see cref="IDirectory">Directory</see> to retrieve.</param>
@@ -218,7 +219,7 @@ namespace Stormpath.SDK.Tenant
         Task<IGroup> GetGroupAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Retrieves the <see cref="IOrganization">Organization</see> at the specified URL.
+        /// Retrieves the <see cref="IOrganization">Organization</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStore.GetResourceAsync{IOrganization}(string, CancellationToken)"/>.</remarks>
         /// <param name="href">The resource URL of the <see cref="IOrganization">Organization</see> to retrieve.</param>
@@ -226,6 +227,26 @@ namespace Stormpath.SDK.Tenant
         /// <returns>The <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
         Task<IOrganization> GetOrganizationAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves the <see cref="IAccessToken">Access Token</see> at the specified Stormpath URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStore.GetResourceAsync{IAccessToken}(string, CancellationToken)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IAccessToken">Access Token</see> to retrieve.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IAccessToken">Access Token</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        Task<IAccessToken> GetAccessTokenAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves the <see cref="IRefreshToken">Refresh Token</see> at the specified Stormpath URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStore.GetResourceAsync{IRefreshToken}(string, CancellationToken)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IRefreshToken">Refresh Token</see> to retrieve.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IRefreshToken">Refresh Token</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        Task<IRefreshToken> GetRefreshTokenAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a queryable list of all <see cref="IAccount">Accounts</see> in this tenant.

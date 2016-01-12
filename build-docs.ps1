@@ -1,5 +1,5 @@
 Write-Host "Compiling documentation..."
-msbuild docs\StormpathSDKApiDocs.shfbproj /verbosity:quiet /nologo
+msbuild docs\StormpathSDKApiDocs.shfbproj /verbosity:minimal /nologo
 
 Write-Host "Cleaning up files..."
 Remove-Item docs\api\SearchHelp.aspx

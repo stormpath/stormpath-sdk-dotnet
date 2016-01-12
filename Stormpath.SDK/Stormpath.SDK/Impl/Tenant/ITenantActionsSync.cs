@@ -19,6 +19,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 
 namespace Stormpath.SDK.Impl.Tenant
@@ -125,10 +126,10 @@ namespace Stormpath.SDK.Impl.Tenant
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateOrganizationAsync(string, string, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="name">The Organization's name.</param>
-        /// <param name="description">The Organization's description text.</param>
+        /// <param name="nameKey">The Organization's <c>nameKey</c>.</param>
         /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="SDK.Error.ResourceException">There was a problem creating the Organization.</exception>
-        IOrganization CreateOrganization(string name, string description);
+        IOrganization CreateOrganization(string name, string nameKey);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.VerifyAccountEmailAsync(string, System.Threading.CancellationToken)"/>.
@@ -181,5 +182,23 @@ namespace Stormpath.SDK.Impl.Tenant
         /// <returns>The <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
         IOrganization GetOrganization(string href);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetAccessTokenAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStoreSync.GetResource{IAccessToken}(string)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IAccessToken">Access Token</see> to retrieve.</param>
+        /// <returns>The <see cref="IAccessToken">Access Token</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
+        IAccessToken GetAccessToken(string href);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetRefreshTokenAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStoreSync.GetResource{IRefreshToken}(string)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IRefreshToken">Refresh Token</see> to retrieve.</param>
+        /// <returns>The <see cref="IRefreshToken">Refresh Token</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
+        IRefreshToken GetRefreshToken(string href);
     }
 }

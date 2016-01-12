@@ -243,6 +243,28 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Creating_with_convenience_method(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var name = $"Created Organization 4 (.NET ITs {this.fixture.TestRunIdentifier}-{clientBuilder.Name})";
+            var nameKey = $"dotnet-test4-{this.fixture.TestRunIdentifier}-{clientBuilder.Name}";
+
+            var newOrg = await client.CreateOrganizationAsync(name, nameKey);
+            newOrg.ShouldNotBeNull();
+            this.fixture.CreatedOrganizationHrefs.Add(newOrg.Href);
+
+            newOrg.Name.ShouldBe(name);
+            newOrg.NameKey.ShouldBe(nameKey);
+            newOrg.Status.ShouldBe(OrganizationStatus.Enabled);
+
+            // Clean up
+            (await newOrg.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedOrganizationHrefs.Remove(newOrg.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Creating_account_store_mapping(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

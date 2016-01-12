@@ -244,6 +244,28 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Creating_with_convenience_method(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var name = $"Created Organization 4 (.NET ITs {this.fixture.TestRunIdentifier}-{clientBuilder.Name}) - Sync";
+            var nameKey = $"dotnet-test4-{this.fixture.TestRunIdentifier}-{clientBuilder.Name}";
+
+            var newOrg = client.CreateOrganization(name, nameKey);
+            newOrg.ShouldNotBeNull();
+            this.fixture.CreatedOrganizationHrefs.Add(newOrg.Href);
+
+            newOrg.Name.ShouldBe(name);
+            newOrg.NameKey.ShouldBe(nameKey);
+            newOrg.Status.ShouldBe(OrganizationStatus.Enabled);
+
+            // Clean up
+            newOrg.Delete().ShouldBeTrue();
+            this.fixture.CreatedOrganizationHrefs.Remove(newOrg.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Creating_account_store_mapping(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

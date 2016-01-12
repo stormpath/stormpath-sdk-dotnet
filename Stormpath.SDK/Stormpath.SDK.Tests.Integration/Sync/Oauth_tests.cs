@@ -192,6 +192,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             accessTokenForApplication.GetApplication().Href.ShouldBe(createdApplication.Href);
             accessTokenForApplication.GetTenant().Href.ShouldBe(this.fixture.TenantHref);
 
+            var retrievedDirectly = client.GetAccessToken(accessTokenForApplication.Href);
+            retrievedDirectly.Href.ShouldBe(accessTokenForApplication.Href);
+
             // Clean up
             accessTokenForApplication.Delete().ShouldBeTrue();
 
@@ -236,6 +239,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             refreshTokenForApplication.GetAccount().Href.ShouldBe(this.fixture.PrimaryAccountHref);
             refreshTokenForApplication.GetApplication().Href.ShouldBe(createdApplication.Href);
             refreshTokenForApplication.GetTenant().Href.ShouldBe(this.fixture.TenantHref);
+
+            var retrievedDirectly = client.GetRefreshToken(refreshTokenForApplication.Href);
+            retrievedDirectly.Href.ShouldBe(refreshTokenForApplication.Href);
 
             // Clean up
             refreshTokenForApplication.Delete().ShouldBeTrue();

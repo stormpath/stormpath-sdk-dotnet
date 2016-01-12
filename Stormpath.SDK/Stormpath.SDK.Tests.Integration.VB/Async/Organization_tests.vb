@@ -231,6 +231,27 @@ Namespace Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Creating_with_convenience_method(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+
+            Dim name = $"Created Organization 4 (.NET ITs {fixture.TestRunIdentifier}-{clientBuilder.Name} - VB)"
+            Dim nameKey = $"dotnet-test4-{fixture.TestRunIdentifier}-{clientBuilder.Name}"
+
+            Dim newOrg = Await client.CreateOrganizationAsync(name, nameKey)
+            newOrg.ShouldNotBeNull()
+            Me.fixture.CreatedOrganizationHrefs.Add(newOrg.Href)
+
+            newOrg.Name.ShouldBe(name)
+            newOrg.NameKey.ShouldBe(nameKey)
+            newOrg.Status.ShouldBe(OrganizationStatus.Enabled)
+
+            ' Clean up
+            Call (Await newOrg.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedOrganizationHrefs.Remove(newOrg.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Creating_account_store_mapping(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
             Dim tenant = Await client.GetCurrentTenantAsync()
