@@ -124,7 +124,7 @@ namespace Stormpath.SDK.Impl.Application
         /// Synchronous counterpart to <see cref="IApplication.SendPasswordResetEmailAsync(string, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
-        /// <returns>The created <see cref="IPasswordResetToken"/>.</returns>
+        /// <returns>The created <see cref="IPasswordResetToken">Password Reset Token</see>.</returns>
         IPasswordResetToken SendPasswordResetEmail(string email);
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Stormpath.SDK.Impl.Application
         /// </summary>
         /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="accountStore">The AccountStore expected to contain an account with the specified email address.</param>
-        /// <returns>The created <see cref="IPasswordResetToken"/>.</returns>
+        /// <returns>The created <see cref="IPasswordResetToken">Password Reset Token</see>.</returns>
         IPasswordResetToken SendPasswordResetEmail(string email, IAccountStore accountStore);
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace Stormpath.SDK.Impl.Application
         /// </summary>
         /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="hrefOrNameKey">The href of the AccountStore, or the name key of the Organization, expected to contain an account with the specified email address.</param>
-        /// <returns>The created <see cref="IPasswordResetToken"/>.</returns>
+        /// <returns>The created <see cref="IPasswordResetToken">Password Reset Token</see>.</returns>
         IPasswordResetToken SendPasswordResetEmail(string email, string hrefOrNameKey);
 
         /// <summary>

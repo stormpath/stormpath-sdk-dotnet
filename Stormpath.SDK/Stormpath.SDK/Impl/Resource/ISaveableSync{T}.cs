@@ -21,7 +21,7 @@ namespace Stormpath.SDK.Impl.Resource
     /// <summary>
     /// Represents a resource that can be created or modified.
     /// </summary>
-    /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
+    /// <typeparam name="T">The <see cref="IResource">Resource</see> type.</typeparam>
     internal interface ISaveableSync<T>
         where T : IResource
     {

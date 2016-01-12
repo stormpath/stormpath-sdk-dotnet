@@ -20,7 +20,7 @@ namespace Stormpath.SDK.Impl.Account
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="IPasswordResetToken"/>.
+    /// available on <see cref="IPasswordResetToken">Password Reset Token</see>.
     /// </summary>
     internal interface IPasswordResetTokenSync
     {

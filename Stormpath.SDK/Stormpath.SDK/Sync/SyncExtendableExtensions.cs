@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Sync
         /// Synchronously gets the custom data associated with this resource.
         /// </summary>
         /// <param name="resource">The resource.</param>
-        /// <returns>The <see cref="ICustomData"/> associated with this resource.</returns>
+        /// <returns>The <see cref="ICustomData">Custom Data</see> associated with this resource.</returns>
         /// <exception cref="Error.ResourceException">The custom data could not be loaded.</exception>
         public static ICustomData GetCustomData(this IExtendable resource)
             => (resource as IExtendableSync).GetCustomData();

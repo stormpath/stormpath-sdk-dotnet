@@ -19,26 +19,26 @@ using System;
 namespace Stormpath.SDK.Cache
 {
     /// <summary>
-    /// Represents configuration settings for a particular <see cref="ICache"/> region.
+    /// Represents configuration settings for a particular <see cref="ICache">Cache</see> region.
     /// </summary>
     public interface ICacheConfiguration
     {
         /// <summary>
-        /// Gets the name of the <see cref="ICache"/> for which this configuration applies.
+        /// Gets the name of the <see cref="ICache">Cache</see> for which this configuration applies.
         /// </summary>
-        /// <value>The name of the <see cref="ICache"/> for which this configuration applies.</value>
+        /// <value>The name of the <see cref="ICache">Cache</see> for which this configuration applies.</value>
         string Name { get; }
 
         /// <summary>
-        /// Gets the Time to Live (TTL) setting to apply for all entries in the associated <see cref="ICache"/>.
+        /// Gets the Time to Live (TTL) setting to apply for all entries in the associated <see cref="ICache">Cache</see>.
         /// </summary>
-        /// <value>The Time to Live (TTL) setting to apply for all entries in the associated <see cref="ICache"/>.</value>
+        /// <value>The Time to Live (TTL) setting to apply for all entries in the associated <see cref="ICache">Cache</see>.</value>
         TimeSpan? TimeToLive { get; }
 
         /// <summary>
-        /// Gets the Time to Live (TTI) setting to apply for all entries in the associated <see cref="ICache"/>.
+        /// Gets the Time to Live (TTI) setting to apply for all entries in the associated <see cref="ICache">Cache</see>.
         /// </summary>
-        /// <value>The Time to Live (TTI) setting to apply for all entries in the associated <see cref="ICache"/>.</value>
+        /// <value>The Time to Live (TTI) setting to apply for all entries in the associated <see cref="ICache">Cache</see>.</value>
         TimeSpan? TimeToIdle { get; }
     }
 }

@@ -21,7 +21,7 @@ namespace Stormpath.SDK.Impl.CustomData
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="ICustomData"/>.
+    /// available on <see cref="ICustomData">Custom Data</see>.
     /// </summary>
     internal interface ICustomDataSync : ISaveableSync<ICustomData>, IDeletableSync
     {

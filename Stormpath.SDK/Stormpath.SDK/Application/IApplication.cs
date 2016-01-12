@@ -62,8 +62,8 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <value>
         /// The Application's status.
-        /// Application users may login to an <see cref="ApplicationStatus.Enabled"/> application.
-        /// They may not login to a <see cref="ApplicationStatus.Disabled"/> application.
+        /// Application users may login to an <see cref="ApplicationStatus.Enabled">Enabled</see> application.
+        /// They may not login to a <see cref="ApplicationStatus.Disabled">Disabled</see> application.
         /// </value>
         ApplicationStatus Status { get; }
 
@@ -85,8 +85,8 @@ namespace Stormpath.SDK.Application
         /// Sets the Application's status.
         /// </summary>
         /// <param name="status">The Application's status.
-        /// Application users may login to an <see cref="ApplicationStatus.Enabled"/> application.
-        /// They may not login to a <see cref="ApplicationStatus.Disabled"/> application.
+        /// Application users may login to an <see cref="ApplicationStatus.Enabled">Enabled</see> application.
+        /// They may not login to a <see cref="ApplicationStatus.Disabled">Disabled</see> application.
         /// </param>
         /// <returns>This instance for method chaining.</returns>
         IApplication SetStatus(ApplicationStatus status);
@@ -325,7 +325,7 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The created <see cref="IPasswordResetToken"/>.
+        /// <returns>The created <see cref="IPasswordResetToken">Password Reset Token</see>.
         /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">There is no account that matches the specified email address.</exception>
         Task<IPasswordResetToken> SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken = default(CancellationToken));
@@ -341,7 +341,7 @@ namespace Stormpath.SDK.Application
         /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="accountStore">The AccountStore expected to contain an account with the specified email address.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The created <see cref="IPasswordResetToken"/>.
+        /// <returns>The created <see cref="IPasswordResetToken">Password Reset Token</see>.
         /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">
         /// The specified <see cref="IAccountStore">Account Store</see> is not mapped to this application, or there is no account that matches the specified email address in the specified <paramref name="accountStore"/>.
@@ -360,7 +360,7 @@ namespace Stormpath.SDK.Application
         /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="hrefOrNameKey">The href of the AccountStore, or the name key of the Organization, expected to contain an account with the specified email address.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The created <see cref="IPasswordResetToken"/>.
+        /// <returns>The created <see cref="IPasswordResetToken">Password Reset Token</see>.
         /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">
         /// The specified AccountStore or Organization is not mapped to this application, or there is no account that matches the specified email address in the AccountStore or Organization.
@@ -378,7 +378,7 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Retrieves a Provider-based <see cref="IAccount">Account</see>. The account must exist in one of the Provider-based <see cref="Directory.IDirectory">Directory</see>
-        /// assigned to the Application as an account store, and the Directory must also be <see cref="Directory.DirectoryStatus.Enabled"/>.
+        /// assigned to the Application as an account store, and the Directory must also be <see cref="Directory.DirectoryStatus.Enabled">Enabled</see>.
         /// If not in an assigned account store, the retrieval attempt will fail.
         /// </summary>
         /// <param name="request">

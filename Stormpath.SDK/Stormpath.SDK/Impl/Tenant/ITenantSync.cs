@@ -20,7 +20,7 @@ namespace Stormpath.SDK.Impl.Tenant
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="SDK.Tenant.ITenant"/>.
+    /// available on <see cref="SDK.Tenant.ITenant">Tenant</see>.
     /// </summary>
     internal interface ITenantSync : IExtendableSync, ITenantActionsSync
     {

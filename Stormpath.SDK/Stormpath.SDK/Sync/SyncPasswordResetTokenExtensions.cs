@@ -20,7 +20,7 @@ using Stormpath.SDK.Impl.Account;
 namespace Stormpath.SDK.Sync
 {
     /// <summary>
-    /// Provides synchronous access to the methods available on <see cref="IPasswordResetToken"/>.
+    /// Provides synchronous access to the methods available on <see cref="IPasswordResetToken">Password Reset Token</see>.
     /// </summary>
     public static class SyncPasswordResetTokenExtensions
     {

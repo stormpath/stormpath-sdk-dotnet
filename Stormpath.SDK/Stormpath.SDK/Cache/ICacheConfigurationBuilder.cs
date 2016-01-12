@@ -24,7 +24,7 @@ namespace Stormpath.SDK.Cache
     public interface ICacheConfigurationBuilder
     {
         /// <summary>
-        /// Sets the associated <see cref="ICache"/> region's entry Time to Live (TTL).
+        /// Sets the associated <see cref="ICache">Cache</see> region's entry Time to Live (TTL).
         /// <para>
         /// Time to Live is the amount of time a cache entry may exist after first being created before it will expire and no
         /// longer be available. If a cache entry ever becomes older than this amount of time (regardless of how often
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Cache
         ICacheConfigurationBuilder WithTimeToLive(TimeSpan ttl);
 
         /// <summary>
-        /// Sets the associated <see cref="ICache"/> region's entry Time to Idle (TTI).
+        /// Sets the associated <see cref="ICache">Cache</see> region's entry Time to Idle (TTI).
         /// <para>
         /// Time to Idle is the amount of time a cache entry may be idle (unused/not accessed) before it will expire and
         /// no longer be available. If a cache entry is not accessed at all after this amount of time, it will be removed

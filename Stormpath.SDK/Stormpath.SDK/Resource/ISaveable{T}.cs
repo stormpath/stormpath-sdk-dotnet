@@ -22,7 +22,7 @@ namespace Stormpath.SDK.Resource
     /// <summary>
     /// Represents a resource that can be created or modified.
     /// </summary>
-    /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
+    /// <typeparam name="T">The <see cref="IResource">Resource</see> type.</typeparam>
     public interface ISaveable<T>
         where T : IResource
     {

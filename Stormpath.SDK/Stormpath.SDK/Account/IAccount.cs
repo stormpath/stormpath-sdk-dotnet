@@ -86,7 +86,7 @@ namespace Stormpath.SDK.Account
         /// <summary>
         /// Gets the account's status.
         /// </summary>
-        /// <value>This account's status. Accounts that are not <see cref="AccountStatus.Enabled"/> may not login to applications.</value>
+        /// <value>This account's status. Accounts that are not <see cref="AccountStatus.Enabled">Enabled</see> may not login to applications.</value>
         AccountStatus Status { get; }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Stormpath.SDK.Account
         IAccount SetPassword(string password);
 
         /// <summary>
-        /// Sets the account's status. Accounts that are not <see cref="AccountStatus.Enabled"/> may not login to applications.
+        /// Sets the account's status. Accounts that are not <see cref="AccountStatus.Enabled">Enabled</see> may not login to applications.
         /// </summary>
         /// <param name="status">The account's status.</param>
         /// <returns>This instance for method chaining.</returns>

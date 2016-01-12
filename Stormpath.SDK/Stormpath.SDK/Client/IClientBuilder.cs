@@ -24,7 +24,7 @@ using Stormpath.SDK.Serialization;
 namespace Stormpath.SDK.Client
 {
     /// <summary>
-    /// Represents a builder that can construct <see cref="IClient"/> instances.
+    /// Represents a builder that can construct <see cref="IClient">Client</see> instances.
     /// </summary>
     /// <remarks>
     /// This builder uses a number of optional methods that fall back to sensible defaults.
@@ -66,7 +66,7 @@ namespace Stormpath.SDK.Client
     public interface IClientBuilder : ILoggerConsumer<IClientBuilder>, ISerializerConsumer<IClientBuilder>
     {
         /// <summary>
-        /// Sets the <see cref="IClientApiKey"/> to use when making requests.
+        /// Sets the <see cref="IClientApiKey">Client API Key</see> to use when making requests.
         /// If this method is not called, the default API Key locations will be checked.
         /// </summary>
         /// <param name="apiKey">The API Key to use.</param>
@@ -151,9 +151,9 @@ namespace Stormpath.SDK.Client
         IClientBuilder SetSerializer(ISerializerBuilder serializerBuilder);
 
         /// <summary>
-        /// Constructs a new <see cref="IClient"/> instance based on the builder's current configuration state.
+        /// Constructs a new <see cref="IClient">Client</see> instance based on the builder's current configuration state.
         /// </summary>
-        /// <returns>A new <see cref="IClient"/> instance.</returns>
+        /// <returns>A new <see cref="IClient">Client</see> instance.</returns>
         /// <exception cref="System.ApplicationException">No valid API Key ID and Secret could be found.</exception>
         IClient Build();
     }

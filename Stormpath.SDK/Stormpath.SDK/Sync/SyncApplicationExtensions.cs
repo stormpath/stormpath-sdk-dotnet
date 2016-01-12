@@ -238,7 +238,7 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="application">The application.</param>
         /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
-        /// <returns>The created <see cref="IPasswordResetToken"/>.
+        /// <returns>The created <see cref="IPasswordResetToken">Password Reset Token</see>.
         /// You can obtain the associated account via <see cref="SyncPasswordResetTokenExtensions.GetAccount(IPasswordResetToken)"/>.</returns>
         /// <exception cref="SDK.Error.ResourceException">There is no account that matches the specified email address.</exception>
         public static IPasswordResetToken SendPasswordResetEmail(this IApplication application, string email)
@@ -255,7 +255,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="application">The application.</param>
         /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="accountStore">The AccountStore expected to contain an account with the specified email address.</param>
-        /// <returns>A public static  whose result is the created <see cref="IPasswordResetToken"/>.
+        /// <returns>A public static  whose result is the created <see cref="IPasswordResetToken">Password Reset Token</see>.
         /// You can obtain the associated account via <see cref="SyncPasswordResetTokenExtensions.GetAccount(IPasswordResetToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">
         /// The specified <see cref="IAccountStore">Account Store</see> is not mapped to this application, or there is no account that matches the specified email address in the specified <paramref name="accountStore"/>.
@@ -275,7 +275,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="application">The application.</param>
         /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="hrefOrNameKey">The href of the AccountStore, or the name key of the Organization, expected to contain an account with the specified email address.</param>
-        /// <returns>A public static  whose result is the created <see cref="IPasswordResetToken"/>.
+        /// <returns>A public static  whose result is the created <see cref="IPasswordResetToken">Password Reset Token</see>.
         /// You can obtain the associated account via <see cref="SyncPasswordResetTokenExtensions.GetAccount(IPasswordResetToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">
         /// The specified AccountStore or Organization is not mapped to this application, or there is no account that matches the specified email address in the AccountStore or Organization.
@@ -295,7 +295,7 @@ namespace Stormpath.SDK.Sync
 
         /// <summary>
         /// Synchronously retrieves a Provider-based <see cref="IAccount">Account</see>. The account must exist in one of the Provider-based <see cref="Directory.IDirectory">Directory</see>
-        /// assigned to the Application as an account store, and the Directory must also be <see cref="Directory.DirectoryStatus.Enabled"/>.
+        /// assigned to the Application as an account store, and the Directory must also be <see cref="Directory.DirectoryStatus.Enabled">Enabled</see>.
         /// If not in an assigned account store, the retrieval attempt will fail.
         /// </summary>
         /// <param name="application">The application.</param>

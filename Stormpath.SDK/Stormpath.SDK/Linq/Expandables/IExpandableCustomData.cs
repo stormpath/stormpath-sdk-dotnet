@@ -19,7 +19,7 @@ using Stormpath.SDK.CustomData;
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents an expandable <see cref="ICustomData"/> resource.
+    /// Represents an expandable <see cref="ICustomData">Custom Data</see> resource.
     /// </summary>
     public interface IExpandableCustomData
     {

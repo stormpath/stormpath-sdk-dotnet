@@ -44,14 +44,14 @@ namespace Stormpath.SDK.Organization
         /// <summary>
         /// Gets the Organization's name.
         /// </summary>
-        /// <value>The Organization's name. An Organization's name must be unique across all Organizations within a Stormpath <see cref="Tenant.ITenant"/>.</value>
+        /// <value>The Organization's name. An Organization's name must be unique across all Organizations within a Stormpath <see cref="Tenant.ITenant">Tenant</see>.</value>
         string Name { get; }
 
         /// <summary>
         /// Gets the Organization's name key.
         /// </summary>
         /// <value>
-        /// The Organization's name key. An Organization's name key must be unique across all Organizations within a Stormpath <see cref="Tenant.ITenant"/>,
+        /// The Organization's name key. An Organization's name key must be unique across all Organizations within a Stormpath <see cref="Tenant.ITenant">Tenant</see>,
         /// and must follow DNS hostname rules: it may only consist of a-z, A-Z, 0-9 and - (hyphen). It must not start or end with a hyphen.
         /// The uniqueness constraint is case-insensitive.
         /// </value>
@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Organization
         /// <summary>
         /// Sets the Organization's name.
         /// </summary>
-        /// <param name="name">The Organization's name. Organization names must be unique within a Stormpath <see cref="Tenant.ITenant"/>.</param>
+        /// <param name="name">The Organization's name. Organization names must be unique within a Stormpath <see cref="Tenant.ITenant">Tenant</see>.</param>
         /// <returns>This instance for method chaining.</returns>
         IOrganization SetName(string name);
 
@@ -80,7 +80,7 @@ namespace Stormpath.SDK.Organization
         /// Sets the Organization's name key.
         /// </summary>
         /// <param name="nameKey">
-        /// The Organization's name key. Organization name keys must be unique within a Stormpath <see cref="Tenant.ITenant"/>,
+        /// The Organization's name key. Organization name keys must be unique within a Stormpath <see cref="Tenant.ITenant">Tenant</see>,
         /// and must follow DNS hostname rules: it may only consist of a-z, A-Z, 0-9 and - (hyphen). It must not start or end with a hyphen.
         /// The uniqueness constraint is case-insensitive.
         /// </param>
@@ -91,8 +91,8 @@ namespace Stormpath.SDK.Organization
         /// Sets the Organization's status.
         /// </summary>
         /// <param name="status">The Organization's status.
-        /// <see cref="OrganizationStatus.Enabled"/> Organizations can be used as <see cref="IAccountStore">Account Stores</see>s for <see cref="Application.IApplication">Applications</see>.
-        /// <see cref="OrganizationStatus.Disabled"/> Organizations cannot be used as <see cref="IAccountStore">Account Stores</see>.
+        /// <see cref="OrganizationStatus.Enabled">Enabled</see> Organizations can be used as <see cref="IAccountStore">Account Stores</see>s for <see cref="Application.IApplication">Applications</see>.
+        /// <see cref="OrganizationStatus.Disabled">Disabled</see> Organizations cannot be used as <see cref="IAccountStore">Account Stores</see>.
         /// </param>
         /// <returns>This instance for method chaining.</returns>
         IOrganization SetStatus(OrganizationStatus status);

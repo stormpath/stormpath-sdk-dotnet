@@ -158,7 +158,7 @@ namespace Stormpath.SDK.AccountStore
 
         /// <summary>
         /// Adds a new <see cref="IAccountStore">Account Store</see> to this Application. The given string can either be an <c>href</c> or a name of a
-        /// <see cref="Directory.IDirectory">Directory</see> or <see cref="Group.IGroup">Group</see> belonging to the current <see cref="Tenant.ITenant"/>.
+        /// <see cref="Directory.IDirectory">Directory</see> or <see cref="Group.IGroup">Group</see> belonging to the current <see cref="Tenant.ITenant">Tenant</see>.
         /// <para>
         /// If the provided value is an <c>href</c>, this method will get the proper Resource and add it as a new AccountStore in this
         /// Application or Organization without much effort. However, if the provided value is not an <c>href</c>, it will be considered as a name. In this case,

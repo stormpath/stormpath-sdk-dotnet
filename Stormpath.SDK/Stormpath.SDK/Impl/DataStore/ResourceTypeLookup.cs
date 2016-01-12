@@ -285,7 +285,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <summary>
         /// Looks up the inner interface from a parent type.
         /// </summary>
-        /// <param name="collectionType">A <see cref="CollectionResponsePage{T}"/> containing some inner <see cref="IResource"/> interface (e.g. <see cref="CollectionResponsePage{IAccount}"/>).</param>
+        /// <param name="collectionType">A <see cref="CollectionResponsePage{T}"/> containing some inner <see cref="IResource">Resource</see> interface (e.g. <see cref="CollectionResponsePage{IAccount}"/>).</param>
         /// <returns>The inner interface (e.g. <see cref="IAccount">Account</see>).</returns>
         public Type GetInnerCollectionInterface(Type collectionType)
         {

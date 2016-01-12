@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Sync
         /// Synchronously retrieves the resource at the specified <paramref name="href"/> URL synchronously and returns the resource
         /// as an instance of the specified class <typeparamref name="T"/>.
         /// </summary>
-        /// <typeparam name="T">The type of the returned <see cref="Resource.IResource"/> value.</typeparam>
+        /// <typeparam name="T">The type of the returned <see cref="Resource.IResource">Resource</see> value.</typeparam>
         /// <param name="dataStore">The object implementing the <see cref="IDataStore"/> interface.</param>
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Sync
         /// Synchronously retrieves the resource at the specified <paramref name="href"/> URL with the specified <paramref name="responseOptions"/>,
         /// and returns the resource as an instance of the specified class <typeparamref name="T"/>.
         /// </summary>
-        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <typeparam name="T">The type of the returned <see cref="IResource">Resource</see> value.</typeparam>
         /// <param name="dataStore">The object implementing the <see cref="IDataStore"/> interface.</param>
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <param name="responseOptions">The options to apply to this request.</param>

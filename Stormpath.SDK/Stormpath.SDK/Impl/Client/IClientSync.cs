@@ -22,7 +22,7 @@ namespace Stormpath.SDK.Impl.Client
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="SDK.Client.IClient"/>.
+    /// available on <see cref="SDK.Client.IClient">Client</see>.
     /// </summary>
     internal interface IClientSync : ITenantActionsSync, IDataStoreSync
     {

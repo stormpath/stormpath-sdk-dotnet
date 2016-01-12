@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// as an instance of the specified class <typeparamref name="T"/>. The cache is not consulted for reads;
         /// but any returned value <b>is</b> cached.
         /// </summary>
-        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <typeparam name="T">The type of the returned <see cref="IResource">Resource</see> value.</typeparam>
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
         T GetResourceSkipCache<T>(string href);

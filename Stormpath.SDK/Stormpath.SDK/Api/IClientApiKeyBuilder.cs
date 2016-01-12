@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Api
 {
     /// <summary>
-    /// A Builder design pattern used to construct <see cref="IClientApiKey"/> instances.
+    /// A Builder design pattern used to construct <see cref="IClientApiKey">Client API Key</see> instances.
     /// </summary>
     /// <example>
     /// Read an API Key at the specified path:
@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Api
         IClientApiKeyBuilder SetSecret(string secret);
 
         /// <summary>
-        /// Creates a <see cref="IClientApiKey"/> instance from the specified input stream instead of reading from a file.
+        /// Creates a <see cref="IClientApiKey">Client API Key</see> instance from the specified input stream instead of reading from a file.
         /// See <see cref="SetFileLocation(string)"/> for the expected input format.
         /// </summary>
         /// <param name="stream">The input stream to consume.</param>
@@ -148,9 +148,9 @@ namespace Stormpath.SDK.Api
         IClientApiKeyBuilder SetSecretPropertyName(string secretPropertyName);
 
         /// <summary>
-        /// Constructs a new <see cref="IClientApiKey"/> instance based on the builder's current configuration state.
+        /// Constructs a new <see cref="IClientApiKey">Client API Key</see> instance based on the builder's current configuration state.
         /// </summary>
-        /// <returns>A new <see cref="IClientApiKey"/> instance.</returns>
+        /// <returns>A new <see cref="IClientApiKey">Client API Key</see> instance.</returns>
         /// <exception cref="System.ApplicationException">No valid API Key ID and Secret can be found.</exception>
         IClientApiKey Build();
     }

@@ -23,7 +23,7 @@ using Stormpath.SDK.Impl.DataStore;
 namespace Stormpath.SDK.Impl.Group
 {
     /// <summary>
-    /// Both <see cref="SDK.Application.IApplication"/> and <see cref="SDK.Directory.IDirectory"/> implement
+    /// Both <see cref="SDK.Application.IApplication">Application</see> and <see cref="SDK.Directory.IDirectory">Directory</see> implement
     /// <see cref="IGroupCreationActions"/>, so this shared class wraps the methods up in a DRY way.
     /// </summary>
     internal static class GroupCreationActionsShared

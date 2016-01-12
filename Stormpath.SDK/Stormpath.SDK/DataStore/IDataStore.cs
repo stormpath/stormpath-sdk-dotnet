@@ -29,12 +29,12 @@ namespace Stormpath.SDK.DataStore
     public interface IDataStore : IDisposable
     {
         /// <summary>
-        /// Instantiates and returns a new instance of the specified <see cref="IResource"/> type.
+        /// Instantiates and returns a new instance of the specified <see cref="IResource">Resource</see> type.
         /// The instance is merely instantiated and is not saved/synchronized with the server in any way.
         /// <para>This method effectively replaces the <c>new</c> keyword that would have been used otherwise if the
         /// concrete implementation was known (Resource implementation classes are intentionally not exposed to SDK end-users).</para>
         /// </summary>
-        /// <typeparam name="T">The <see cref="IResource"/> type to instantiate.</typeparam>
+        /// <typeparam name="T">The <see cref="IResource">Resource</see> type to instantiate.</typeparam>
         /// <returns>A new instance of the specified resource type</returns>
         T Instantiate<T>()
             where T : IResource;
@@ -43,7 +43,7 @@ namespace Stormpath.SDK.DataStore
         /// Retrieves the resource at the specified <paramref name="href"/> URL and returns the resource
         /// as an instance of the specified class <typeparamref name="T"/>.
         /// </summary>
-        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <typeparam name="T">The type of the returned <see cref="IResource">Resource</see> value.</typeparam>
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>
@@ -53,7 +53,7 @@ namespace Stormpath.SDK.DataStore
         /// Retrieves the resource at the specified <paramref name="href"/> URL with the specified <paramref name="responseOptions"/>,
         /// and returns the resource as an instance of the specified class <typeparamref name="T"/>.
         /// </summary>
-        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <typeparam name="T">The type of the returned <see cref="IResource">Resource</see> value.</typeparam>
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <param name="responseOptions">The options to apply to this request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>

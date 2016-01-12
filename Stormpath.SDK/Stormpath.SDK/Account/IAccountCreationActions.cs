@@ -86,7 +86,7 @@ namespace Stormpath.SDK.Account
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
         /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory">Directory</see>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
-        /// <param name="customData">An anonymous type containing name/value pairs to be stored in this account's <see cref="CustomData.ICustomData"/>.</param>
+        /// <param name="customData">An anonymous type containing name/value pairs to be stored in this account's <see cref="CustomData.ICustomData">Custom Data</see>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The persisted account.</returns>
         /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see> does not have a dedicated

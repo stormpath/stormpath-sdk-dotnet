@@ -46,7 +46,7 @@ namespace Stormpath.SDK.CustomData
         void Clear();
 
         /// <summary>
-        /// Determines whether the <see cref="ICustomData"/> contains an
+        /// Determines whether the <see cref="ICustomData">Custom Data</see> contains an
         /// item with the specified name (key).
         /// </summary>
         /// <param name="key">The key to locate.</param>

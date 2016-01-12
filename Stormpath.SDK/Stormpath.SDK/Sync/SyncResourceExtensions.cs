@@ -21,7 +21,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Sync
 {
     /// <summary>
-    /// Provides synchronous access to the methods available on <see cref="IResource"/>.
+    /// Provides synchronous access to the methods available on <see cref="IResource">Resource</see>.
     /// </summary>
     public static class SyncResourceExtensions
     {
@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Sync
         /// Synchronously creates or updates the resource.
         /// </summary>
         /// <param name="resource">The resource.</param>
-        /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
+        /// <typeparam name="T">The <see cref="IResource">Resource</see> type.</typeparam>
         /// <returns>The persisted resource data.</returns>
         /// <exception cref="Error.ResourceException">The save operation failed.</exception>
         public static T Save<T>(this ISaveable<T> resource)
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="resource">The resource.</param>
         /// <param name="responseOptions">The options to apply to this request.</param>
-        /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
+        /// <typeparam name="T">The <see cref="IResource">Resource</see> type.</typeparam>
         /// <returns>The persisted resource data.</returns>
         /// <exception cref="Error.ResourceException">The save operation failed.</exception>
         public static T Save<T>(this ISaveableWithOptions<T> resource, Action<IRetrievalOptions<T>> responseOptions)

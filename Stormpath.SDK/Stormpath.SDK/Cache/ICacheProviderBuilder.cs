@@ -19,13 +19,13 @@ using System;
 namespace Stormpath.SDK.Cache
 {
     /// <summary>
-    /// A Builder design pattern used to construct <see cref="ICacheProvider"/> instances.
+    /// A Builder design pattern used to construct <see cref="ICacheProvider">Cache Provider</see> instances.
     /// </summary>
     public interface ICacheProviderBuilder
     {
         /// <summary>
         /// Sets the default Time to Live (TTL) for all cache regions managed by the
-        /// <see cref="ICacheProvider"/>. You may override this default for individual cache regions
+        /// <see cref="ICacheProvider">Cache Provider</see>. You may override this default for individual cache regions
         /// by using the <see cref="WithCache(ICacheConfigurationBuilder)"/> method for each region
         /// you wish to configure.
         /// <para>
@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Cache
 
         /// <summary>
         /// Sets the default Time to Idle (TTI) for all cache regions managed by the
-        /// <see cref="ICacheProvider"/>. You may override this default for individual cache regions by using the
+        /// <see cref="ICacheProvider">Cache Provider</see>. You may override this default for individual cache regions by using the
         /// <see cref="WithCache(ICacheConfigurationBuilder)"/> method for each region you wish to configure.
         /// <para>
         /// Time to Idle is the amount of time a cache entry may be idle (unused/not accessed) before it will expire and
@@ -79,7 +79,7 @@ namespace Stormpath.SDK.Cache
         ICacheProviderBuilder WithDefaultTimeToIdle(TimeSpan tti);
 
         /// <summary>
-        /// Adds configuration settings for a specific cache region managed by the <see cref="ICacheProvider"/>.
+        /// Adds configuration settings for a specific cache region managed by the <see cref="ICacheProvider">Cache Provider</see>.
         /// </summary>
         /// <param name="builder">
         /// The <see cref="ICacheConfigurationBuilder"/> instance that will
@@ -101,9 +101,9 @@ namespace Stormpath.SDK.Cache
         ICacheProviderBuilder WithCache(ICacheConfigurationBuilder builder);
 
         /// <summary>
-        /// Constructs a new <see cref="ICacheProvider"/> instance based on the builder's current configuration state.
+        /// Constructs a new <see cref="ICacheProvider">Cache Provider</see> instance based on the builder's current configuration state.
         /// </summary>
-        /// <returns>A new <see cref="ICacheProvider"/> instance.</returns>
+        /// <returns>A new <see cref="ICacheProvider">Cache Provider</see> instance.</returns>
         ICacheProvider Build();
     }
 }

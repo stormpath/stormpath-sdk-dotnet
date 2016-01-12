@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.DataStore.IDataStore.GetResourceAsync{T}(string, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <typeparam name="T">The type of the returned <see cref="IResource">Resource</see> value.</typeparam>
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <returns>The Resource.</returns>
         T GetResource<T>(string href);
@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.DataStore.IDataStore.GetResourceAsync{T}(string, Action{IRetrievalOptions{T}}, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <typeparam name="T">The type of the returned <see cref="IResource">Resource</see> value.</typeparam>
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <param name="responseOptions">The options to apply to this request.</param>
         /// <returns>The Resource.</returns>

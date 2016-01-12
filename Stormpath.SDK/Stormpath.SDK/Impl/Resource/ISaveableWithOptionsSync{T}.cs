@@ -22,7 +22,7 @@ namespace Stormpath.SDK.Impl.Resource
     /// <summary>
     /// Represents a resource that can be saved with additional options.
     /// </summary>
-    /// <typeparam name="T">The <see cref="IResource"/> type.</typeparam>
+    /// <typeparam name="T">The <see cref="IResource">Resource</see> type.</typeparam>
     internal interface ISaveableWithOptionsSync<T> : ISaveableSync<T>
         where T : IResource
     {

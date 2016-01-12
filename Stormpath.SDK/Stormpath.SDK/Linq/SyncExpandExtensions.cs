@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Sync
     public static class SyncExpandExtensions
     {
         /// <summary>
-        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
         /// </summary>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Sync
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
-        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
         /// </summary>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Sync
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
-        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
         /// </summary>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Sync
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
-        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
         /// </summary>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Sync
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
-        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
         /// </summary>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -81,7 +81,7 @@ namespace Stormpath.SDK.Sync
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
-        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
         /// </summary>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Sync
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
-        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
         /// </summary>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -99,7 +99,7 @@ namespace Stormpath.SDK.Sync
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
-        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
         /// </summary>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -108,7 +108,7 @@ namespace Stormpath.SDK.Sync
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
-        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
         /// </summary>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -117,7 +117,7 @@ namespace Stormpath.SDK.Sync
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
-        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
         /// </summary>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
@@ -126,7 +126,7 @@ namespace Stormpath.SDK.Sync
             => ExpandCommon.CreateQuery(source, selector);
 
         /// <summary>
-        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient"/> object.
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
         /// </summary>
         /// <param name="source">The source query.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>

@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Tenant
 {
     /// <summary>
     /// Represents common tenant actions that can be executed on a <see cref="ITenant">Tenant</see> instance
-    /// <i>or</i> a <see cref="Client.IClient"/> instance acting on behalf of its current tenant.
+    /// <i>or</i> a <see cref="Client.IClient">Client</see> instance acting on behalf of its current tenant.
     /// </summary>
     public interface ITenantActions
     {

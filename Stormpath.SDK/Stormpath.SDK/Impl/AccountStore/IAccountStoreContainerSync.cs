@@ -69,14 +69,14 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccountStoreContainer{T}.AddAccountStoreAsync(string, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="hrefOrName">Either the <c>href</c> or name of the desired <see cref="SDK.Directory.IDirectory"/> or <see cref="SDK.Group.IGroup"/>.</param>
+        /// <param name="hrefOrName">Either the <c>href</c> or name of the desired <see cref="SDK.Directory.IDirectory">Directory</see> or <see cref="SDK.Group.IGroup">Group</see>.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
         T AddAccountStore(string hrefOrName);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccountStoreContainer{T}.AddAccountStoreAsync{T}(Func{SDK.Linq.IAsyncQueryable{T}, SDK.Linq.IAsyncQueryable{T}}, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <typeparam name="TSource">The type of resource (either a <see cref="SDK.Directory.IDirectory"/> or a <see cref="SDK.Group.IGroup"/>) to query for.</typeparam>
+        /// <typeparam name="TSource">The type of resource (either a <see cref="SDK.Directory.IDirectory">Directory</see> or a <see cref="SDK.Group.IGroup">Group</see>) to query for.</typeparam>
         /// <param name="query">Query to search for a resource of type <typeparamref name="TSource"/> in the current Tenant.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>, or <see langword="null"/> if there is no resource matching the query.</returns>
         T AddAccountStore<TSource>(Func<IQueryable<TSource>, IQueryable<TSource>> query)

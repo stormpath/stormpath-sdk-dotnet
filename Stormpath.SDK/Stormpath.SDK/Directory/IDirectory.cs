@@ -48,7 +48,7 @@ namespace Stormpath.SDK.Directory
         /// <summary>
         /// Gets the directory's name.
         /// </summary>
-        /// <value>This directory's name. The name is guaranteed to be non-null and unique among all other directories in the owning <see cref="Tenant.ITenant"/>.</value>
+        /// <value>This directory's name. The name is guaranteed to be non-null and unique among all other directories in the owning <see cref="Tenant.ITenant">Tenant</see>.</value>
         string Name { get; }
 
         /// <summary>
@@ -62,8 +62,8 @@ namespace Stormpath.SDK.Directory
         /// </summary>
         /// <value>
         /// This directory's status.
-        /// An <see cref="DirectoryStatus.Enabled"/> directory may be used by applications to login accounts found within the directory.
-        /// A <see cref="DirectoryStatus.Disabled"/> directory prevents its accounts from being used to login to applications.
+        /// An <see cref="DirectoryStatus.Enabled">Enabled</see> directory may be used by applications to login accounts found within the directory.
+        /// A <see cref="DirectoryStatus.Disabled">Disabled</see> directory prevents its accounts from being used to login to applications.
         /// </value>
         DirectoryStatus Status { get; }
 
@@ -77,7 +77,7 @@ namespace Stormpath.SDK.Directory
         /// <summary>
         /// Sets the directory's name.
         /// </summary>
-        /// <param name="name">The directory's name. Directory names are required and must be unique within a <see cref="Tenant.ITenant"/>.</param>
+        /// <param name="name">The directory's name. Directory names are required and must be unique within a <see cref="Tenant.ITenant">Tenant</see>.</param>
         /// <returns>This instance for method chaining.</returns>
         IDirectory SetName(string name);
 
@@ -85,8 +85,8 @@ namespace Stormpath.SDK.Directory
         /// Sets the directory's status.
         /// </summary>
         /// <param name="status">The directory's status.
-        /// An <see cref="DirectoryStatus.Enabled"/> directory may be used by applications to login accounts found within the directory.
-        /// A <see cref="DirectoryStatus.Disabled"/> directory prevents its accounts from being used to login to applications.
+        /// An <see cref="DirectoryStatus.Enabled">Enabled</see> directory may be used by applications to login accounts found within the directory.
+        /// A <see cref="DirectoryStatus.Disabled">Disabled</see> directory prevents its accounts from being used to login to applications.
         /// </param>
         /// <returns>This instance for method chaining.</returns>
         IDirectory SetStatus(DirectoryStatus status);

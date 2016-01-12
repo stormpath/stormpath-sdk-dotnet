@@ -25,21 +25,21 @@ namespace Stormpath.SDK.Client
 {
     /// <summary>
     /// The main entry point into the Stormpath C# SDK. To communicate with the Stormpath REST API from your project,
-    /// you must first build a <see cref="IClient"/> instance. After obtaining an instance, the REST API may be
-    /// used by making simple calls on objects returned from the <see cref="IClient"/> (or any child objects).
+    /// you must first build a <see cref="IClient">Client</see> instance. After obtaining an instance, the REST API may be
+    /// used by making simple calls on objects returned from the <see cref="IClient">Client</see> (or any child objects).
     /// </summary>
     /// <threadsafety instance="true"/>
     public interface IClient : ITenantActions, IDataStore
     {
         /// <summary>
-        /// Gets the sole <see cref="ITenant">Tenant</see> associated to this <see cref="IClient"/>.
+        /// Gets the sole <see cref="ITenant">Tenant</see> associated to this <see cref="IClient">Client</see>.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The <see cref="ITenant">Tenant</see> associated to this client.</returns>
         Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets the <see cref="ICacheProvider"/> associated with this client.
+        /// Gets the <see cref="ICacheProvider">Cache Provider</see> associated with this client.
         /// </summary>
         /// <returns>The cache provider associated with this client.</returns>
         ICacheProvider GetCacheProvider();

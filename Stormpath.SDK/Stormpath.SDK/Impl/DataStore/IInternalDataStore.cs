@@ -49,9 +49,9 @@ namespace Stormpath.SDK.Impl.DataStore
         IJsonSerializer Serializer { get; }
 
         /// <summary>
-        /// Gets the <see cref="IClient"/> that owns this data store.
+        /// Gets the <see cref="IClient">Client</see> that owns this data store.
         /// </summary>
-        /// <value>The <see cref="IClient"/> that owns this data store.</value>
+        /// <value>The <see cref="IClient">Client</see> that owns this data store.</value>
         IClient Client { get; }
 
         /// <summary>
@@ -61,28 +61,28 @@ namespace Stormpath.SDK.Impl.DataStore
         string BaseUrl { get; }
 
         /// <summary>
-        /// Gets the <see cref="IClientApiKey"/> used by this data store.
+        /// Gets the <see cref="IClientApiKey">Client API Key</see> used by this data store.
         /// </summary>
-        /// <value>The <see cref="IClientApiKey"/> used by this data store.</value>
+        /// <value>The <see cref="IClientApiKey">Client API Key</see> used by this data store.</value>
         IClientApiKey ApiKey { get; }
 
         /// <summary>
-        /// Instantiates and returns a new instance of the specified <see cref="IResource"/> type,
+        /// Instantiates and returns a new instance of the specified <see cref="IResource">Resource</see> type,
         /// with the given <paramref name="href"/>
         /// The instance is merely instantiated and is not saved/synchronized with the server in any way.
         /// </summary>
-        /// <typeparam name="T">The <see cref="IResource"/> type to instantiate.</typeparam>
+        /// <typeparam name="T">The <see cref="IResource">Resource</see> type to instantiate.</typeparam>
         /// <param name="href">The <c>href</c> of the resource.</param>
         /// <returns>A new instance of the specified resource type</returns>
         T InstantiateWithHref<T>(string href)
             where T : IResource;
 
         /// <summary>
-        /// Instantiates and returns a new instance of the specified <see cref="IResource"/> type,
+        /// Instantiates and returns a new instance of the specified <see cref="IResource">Resource</see> type,
         /// with the given <paramref name="properties"/>.
         /// The instance is merely instantiated and is not saved/synchronized with the server in any way.
         /// </summary>
-        /// <typeparam name="T">The <see cref="IResource"/> type to instantiate.</typeparam>
+        /// <typeparam name="T">The <see cref="IResource">Resource</see> type to instantiate.</typeparam>
         /// <param name="properties">The properties to initialize the object with.</param>
         /// <returns>A new instance of the specified resource type</returns>
         T InstantiateWithData<T>(Map properties);
