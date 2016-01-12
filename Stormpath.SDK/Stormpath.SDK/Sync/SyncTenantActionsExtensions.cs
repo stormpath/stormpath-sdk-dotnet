@@ -157,11 +157,11 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="name">The Organization's name.</param>
-        /// <param name="description">The Organization's description text.</param>
+        /// <param name="nameKey">The Organization's <c>nameKey</c>.</param>
         /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the Organization.</exception>
-        public static IOrganization CreateOrganization(this ITenantActions tenantActions, string name, string description)
-            => (tenantActions as ITenantActionsSync).CreateOrganization(name, description);
+        public static IOrganization CreateOrganization(this ITenantActions tenantActions, string name, string nameKey)
+            => (tenantActions as ITenantActionsSync).CreateOrganization(name, nameKey);
 
         /// <summary>
         /// Synchronously verifies an account's email address based on a <c>sptoken</c> parameter embedded in a URL

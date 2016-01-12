@@ -1590,7 +1590,7 @@ namespace Stormpath.SDK.Sync
         public static Stormpath.SDK.Organization.IOrganization CreateOrganization(this Stormpath.SDK.Tenant.ITenantActions tenantActions, Stormpath.SDK.Organization.IOrganization organization) { }
         public static Stormpath.SDK.Organization.IOrganization CreateOrganization(this Stormpath.SDK.Tenant.ITenantActions tenantActions, Stormpath.SDK.Organization.IOrganization organization, System.Action<Stormpath.SDK.Organization.OrganizationCreationOptionsBuilder> creationOptionsAction) { }
         public static Stormpath.SDK.Organization.IOrganization CreateOrganization(this Stormpath.SDK.Tenant.ITenantActions tenantActions, Stormpath.SDK.Organization.IOrganization organization, Stormpath.SDK.Organization.IOrganizationCreationOptions creationOptions) { }
-        public static Stormpath.SDK.Organization.IOrganization CreateOrganization(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string name, string description) { }
+        public static Stormpath.SDK.Organization.IOrganization CreateOrganization(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string name, string nameKey) { }
         public static Stormpath.SDK.Account.IAccount GetAccount(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string href) { }
         public static Stormpath.SDK.Application.IApplication GetApplication(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string href) { }
         public static Stormpath.SDK.Directory.IDirectory GetDirectory(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string href) { }
@@ -1624,7 +1624,7 @@ namespace Stormpath.SDK.Tenant
         System.Threading.Tasks.Task<Stormpath.SDK.Organization.IOrganization> CreateOrganizationAsync(Stormpath.SDK.Organization.IOrganization organization, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<Stormpath.SDK.Organization.IOrganization> CreateOrganizationAsync(Stormpath.SDK.Organization.IOrganization organization, System.Action<Stormpath.SDK.Organization.OrganizationCreationOptionsBuilder> creationOptionsAction, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<Stormpath.SDK.Organization.IOrganization> CreateOrganizationAsync(Stormpath.SDK.Organization.IOrganization organization, Stormpath.SDK.Organization.IOrganizationCreationOptions creationOptions, System.Threading.CancellationToken cancellationToken = null);
-        System.Threading.Tasks.Task<Stormpath.SDK.Organization.IOrganization> CreateOrganizationAsync(string name, string description, System.Threading.CancellationToken cancellationToken = null);
+        System.Threading.Tasks.Task<Stormpath.SDK.Organization.IOrganization> CreateOrganizationAsync(string name, string nameKey, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<Stormpath.SDK.Account.IAccount> GetAccountAsync(string href, System.Threading.CancellationToken cancellationToken = null);
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Account.IAccount> GetAccounts();
         System.Threading.Tasks.Task<Stormpath.SDK.Application.IApplication> GetApplicationAsync(string href, System.Threading.CancellationToken cancellationToken = null);

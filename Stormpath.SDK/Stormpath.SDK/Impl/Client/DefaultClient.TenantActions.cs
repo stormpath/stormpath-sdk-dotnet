@@ -105,11 +105,11 @@ namespace Stormpath.SDK.Impl.Client
             return await this.tenant.CreateOrganizationAsync(organization, creationOptions, cancellationToken).ConfigureAwait(false);
         }
 
-        async Task<IOrganization> ITenantActions.CreateOrganizationAsync(string name, string description, CancellationToken cancellationToken)
+        async Task<IOrganization> ITenantActions.CreateOrganizationAsync(string name, string nameKey, CancellationToken cancellationToken)
         {
             await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
-            return await this.tenant.CreateOrganizationAsync(name, description, cancellationToken).ConfigureAwait(false);
+            return await this.tenant.CreateOrganizationAsync(name, nameKey, cancellationToken).ConfigureAwait(false);
         }
 
         async Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
