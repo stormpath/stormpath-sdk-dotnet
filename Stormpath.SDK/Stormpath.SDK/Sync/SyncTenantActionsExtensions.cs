@@ -188,7 +188,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).VerifyAccountEmail(token);
 
         /// <summary>
-        /// Retrieves the <see cref="IAccount">Account</see> at the specified URL.
+        /// Synchronously retrieves the <see cref="IAccount">Account</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IAccount}(DataStore.IDataStore, string)"/>.</remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
@@ -199,7 +199,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).GetAccount(href);
 
         /// <summary>
-        /// Retrieves the <see cref="IApplication">Application</see> at the specified URL.
+        /// Synchronously retrieves the <see cref="IApplication">Application</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IApplication}(DataStore.IDataStore, string)"/>.</remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
@@ -210,7 +210,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).GetApplication(href);
 
         /// <summary>
-        /// Retrieves the <see cref="IDirectory">Directory</see> at the specified URL.
+        /// Synchronously retrieves the <see cref="IDirectory">Directory</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IDirectory}(DataStore.IDataStore, string)"/>.</remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
@@ -221,7 +221,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).GetDirectory(href);
 
         /// <summary>
-        /// Retrieves the <see cref="IGroup">Group</see> at the specified URL.
+        /// Synchronously retrieves the <see cref="IGroup">Group</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IGroup}(DataStore.IDataStore, string)"/>.</remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
@@ -232,7 +232,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).GetGroup(href);
 
         /// <summary>
-        /// Retrieves the <see cref="IOrganization">Organization</see> at the specified URL.
+        /// Synchronously retrieves the <see cref="IOrganization">Organization</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IOrganization}(DataStore.IDataStore, string)"/>.</remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
