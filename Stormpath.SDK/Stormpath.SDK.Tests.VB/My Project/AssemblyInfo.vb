@@ -1,5 +1,5 @@
 ﻿' <copyright file="AssemblyInfo.vb" company="Stormpath, Inc.">
-' Copyright (c) 2015 Stormpath, Inc.
+' Copyright (c) 2016 Stormpath, Inc.
 '
 ' Licensed under the Apache License, Version 2.0 (the "License");
 ' you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Unit tests for the Stormpath .NET SDK")>
 <Assembly: AssemblyCompany("Stormpath, Inc.")>
 <Assembly: AssemblyProduct("Stormpath .NET SDK")>
-<Assembly: AssemblyCopyright("Copyright © 2015 Stormpath, Inc.")>
+<Assembly: AssemblyCopyright("Copyright © 2016 Stormpath, Inc.")>
 <Assembly: AssemblyTrademark("")>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
