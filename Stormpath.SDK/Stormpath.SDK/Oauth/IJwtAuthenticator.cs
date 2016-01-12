@@ -95,6 +95,10 @@ namespace Stormpath.SDK.Oauth
         ///     </item>
         /// </list>
         /// </para>
+        /// <para>
+        /// If validation fails, <see cref="IOauthAuthenticator{TRequest, TResult}.AuthenticateAsync(TRequest, System.Threading.CancellationToken)">AuthenticateAsync()</see>
+        /// will throw the appropriate exception derived from <see cref="Jwt.InvalidJwtException"/>.
+        /// </para>
         /// </remarks>
         /// <returns>This instance for method chaining.</returns>
         IJwtAuthenticator WithLocalValidation();
