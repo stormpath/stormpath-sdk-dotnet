@@ -105,11 +105,11 @@ namespace Stormpath.SDK.Impl.Client
             return this.tenant.CreateOrganization(organization, creationOptions);
         }
 
-        IOrganization ITenantActionsSync.CreateOrganization(string name, string description)
+        IOrganization ITenantActionsSync.CreateOrganization(string name, string nameKey)
         {
             this.EnsureTenant();
 
-            return this.tenant.CreateOrganization(name, description);
+            return this.tenant.CreateOrganization(name, nameKey);
         }
 
         IAccount ITenantActionsSync.VerifyAccountEmail(string token)

@@ -118,11 +118,11 @@ namespace Stormpath.SDK.Impl.Tenant
             return this.GetInternalAsyncDataStore().CreateAsync(OrganizationsPropertyName, organization, creationOptions, cancellationToken);
         }
 
-        Task<IOrganization> ITenantActions.CreateOrganizationAsync(string name, string description, CancellationToken cancellationToken)
+        Task<IOrganization> ITenantActions.CreateOrganizationAsync(string name, string nameKey, CancellationToken cancellationToken)
         {
             var organzation = this.GetInternalAsyncDataStore().Instantiate<IOrganization>();
             organzation.SetName(name);
-            organzation.SetDescription(description);
+            organzation.SetNameKey(nameKey);
 
             return this.AsInterface.CreateOrganizationAsync(organzation, cancellationToken);
         }

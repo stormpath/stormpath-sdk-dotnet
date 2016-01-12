@@ -116,11 +116,11 @@ namespace Stormpath.SDK.Impl.Tenant
             return this.GetInternalSyncDataStore().Create(OrganizationsPropertyName, organization, creationOptions);
         }
 
-        IOrganization ITenantActionsSync.CreateOrganization(string name, string description)
+        IOrganization ITenantActionsSync.CreateOrganization(string name, string nameKey)
         {
             var organization = this.GetInternalAsyncDataStore().Instantiate<IOrganization>();
             organization.SetName(name);
-            organization.SetDescription(description);
+            organization.SetNameKey(nameKey);
 
             return this.AsTenantActionSyncInterface.CreateOrganization(organization);
         }

@@ -126,10 +126,10 @@ namespace Stormpath.SDK.Impl.Tenant
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateOrganizationAsync(string, string, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="name">The Organization's name.</param>
-        /// <param name="description">The Organization's description text.</param>
+        /// <param name="nameKey">The Organization's <c>nameKey</c>.</param>
         /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="SDK.Error.ResourceException">There was a problem creating the Organization.</exception>
-        IOrganization CreateOrganization(string name, string description);
+        IOrganization CreateOrganization(string name, string nameKey);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.VerifyAccountEmailAsync(string, System.Threading.CancellationToken)"/>.

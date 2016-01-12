@@ -148,11 +148,11 @@ namespace Stormpath.SDK.Tenant
         /// Creates a new <see cref="IOrganization">Organization</see> resource in the Tenant.
         /// </summary>
         /// <param name="name">The Organization's name.</param>
-        /// <param name="description">The Organization's description text.</param>
+        /// <param name="nameKey">The Organization's <c>nameKey</c>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the Organization.</exception>
-        Task<IOrganization> CreateOrganizationAsync(string name, string description, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IOrganization> CreateOrganizationAsync(string name, string nameKey, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Verifies an account's email address based on a <c>sptoken</c> parameter embedded in a URL
