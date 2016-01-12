@@ -27,7 +27,7 @@ using Stormpath.SDK.Tenant;
 namespace Stormpath.SDK.Group
 {
     /// <summary>
-    /// A Group is a uniquely-named collection of <see cref="IAccount"/>s within a <see cref="IDirectory"/>.
+    /// A Group is a uniquely-named collection of <see cref="IAccount">Accounts</see> within a <see cref="IDirectory">Directory</see>.
     /// </summary>
     public interface IGroup :
         IResource,
@@ -39,9 +39,9 @@ namespace Stormpath.SDK.Group
         IAccountStore
     {
         /// <summary>
-        /// Gets the group's name, guaranteed to be unique for all groups within a <see cref="IDirectory"/>.
+        /// Gets the group's name, guaranteed to be unique for all groups within a <see cref="IDirectory">Directory</see>.
         /// </summary>
-        /// <value>This group's name, guaranteed to be unique for all groups within a <see cref="IDirectory"/>.</value>
+        /// <value>This group's name, guaranteed to be unique for all groups within a <see cref="IDirectory">Directory</see>.</value>
         string Name { get; }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Stormpath.SDK.Group
         /// <summary>
         /// Sets the group's name.
         /// </summary>
-        /// <param name="name">The group's name. Group names are required and must be unique within a <see cref="IDirectory"/>.</param>
+        /// <param name="name">The group's name. Group names are required and must be unique within a <see cref="IDirectory">Directory</see>.</param>
         /// <returns>This instance for method chaining.</returns>
         IGroup SetName(string name);
 
@@ -78,7 +78,7 @@ namespace Stormpath.SDK.Group
         /// Sets the group's status.
         /// </summary>
         /// <param name="status">The group's status.
-        /// If a group is mapped to an <see cref="Application.IApplication"/> as an Account Store (for login purposes),
+        /// If a group is mapped to an <see cref="Application.IApplication">Application</see> as an Account Store (for login purposes),
         /// and the Group is disabled, the accounts within that Group cannot login to the application. Accounts in enabled
         /// Groups mapped to an Application may login to that application.
         /// </param>
@@ -86,53 +86,53 @@ namespace Stormpath.SDK.Group
         IGroup SetStatus(GroupStatus status);
 
         /// <summary>
-        /// Assigns the specified <see cref="IAccount"/> to this <see cref="IGroup"/>.
+        /// Assigns the specified <see cref="IAccount">Account</see> to this <see cref="IGroup">Group</see>.
         /// </summary>
         /// <param name="account">The account to assign to this group.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created
+        /// The new <see cref="IGroupMembership">Group Membership</see> resource created
         /// reflecting the group-to-account association.
         /// </returns>
         Task<IGroupMembership> AddAccountAsync(IAccount account, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Assigns this <see cref="IGroup"/> to the specified <see cref="IAccount"/>
+        /// Assigns this <see cref="IGroup">Group</see> to the specified <see cref="IAccount">Account</see>
         /// represented by its (case-insensitive) <c>username</c>, <c>email</c>, or <c>href</c>.
         /// </summary>
-        /// <param name="hrefOrEmailOrUsername">The <c>href</c>, email, or username of the <see cref="IAccount"/> to associate.</param>
+        /// <param name="hrefOrEmailOrUsername">The <c>href</c>, email, or username of the <see cref="IAccount">Account</see> to associate.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created
+        /// The new <see cref="IGroupMembership">Group Membership</see> resource created
         /// reflecting the group-to-account association.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">The specified account could not be found.</exception>
         Task<IGroupMembership> AddAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Removes this group's association with the specified <see cref="IAccount"/>.
+        /// Removes this group's association with the specified <see cref="IAccount">Account</see>.
         /// </summary>
-        /// <param name="account">The <see cref="IAccount"/> object to disassociate.</param>
+        /// <param name="account">The <see cref="IAccount">Account</see> object to disassociate.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>Whether the operation succeeded.</returns>
         /// <exception cref="System.InvalidOperationException">The specified account does not belong to this group.</exception>
         Task<bool> RemoveAccountAsync(IAccount account, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Removes this Group's association with the specified <see cref="IAccount"/>
+        /// Removes this Group's association with the specified <see cref="IAccount">Account</see>
         /// represented by its (case-insensitive) <c>username</c>, <c>email</c>, or <c>href</c>.
         /// </summary>
-        /// <param name="hrefOrEmailOrUsername">The <see cref="IAccount"/> object to disassociate.</param>
+        /// <param name="hrefOrEmailOrUsername">The <see cref="IAccount">Account</see> object to disassociate.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>Whether the operation succeeded.</returns>
         /// <exception cref="System.InvalidOperationException">The specified account does not belong to this group.</exception>
         Task<bool> RemoveAccountAsync(string hrefOrEmailOrUsername, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets the group's parent <see cref="IDirectory"/> (where the group is stored).
+        /// Gets the group's parent <see cref="IDirectory">Directory</see> (where the group is stored).
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>This group's parent <see cref="IDirectory"/>.</returns>
+        /// <returns>This group's parent <see cref="IDirectory">Directory</see>.</returns>
         Task<IDirectory> GetDirectoryAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

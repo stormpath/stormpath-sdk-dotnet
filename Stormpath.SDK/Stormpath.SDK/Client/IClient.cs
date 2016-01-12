@@ -32,10 +32,10 @@ namespace Stormpath.SDK.Client
     public interface IClient : ITenantActions, IDataStore
     {
         /// <summary>
-        /// Gets the sole <see cref="ITenant"/> associated to this <see cref="IClient"/>.
+        /// Gets the sole <see cref="ITenant">Tenant</see> associated to this <see cref="IClient"/>.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The <see cref="ITenant"/> associated to this client.</returns>
+        /// <returns>The <see cref="ITenant">Tenant</see> associated to this client.</returns>
         Task<ITenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

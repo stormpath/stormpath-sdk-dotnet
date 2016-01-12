@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Organization
 {
     /// <summary>
-    /// Represents options for an <see cref="IOrganization"/> creation request.
+    /// Represents options for an <see cref="IOrganization">Organization</see> creation request.
     /// </summary>
     public interface IOrganizationCreationOptions : ICreationOptions
     {

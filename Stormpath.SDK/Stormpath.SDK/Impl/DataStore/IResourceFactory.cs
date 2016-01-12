@@ -21,7 +21,7 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 namespace Stormpath.SDK.Impl.DataStore
 {
     /// <summary>
-    /// Creates local resource instances from <see cref="Map"/>s of properties.
+    /// Creates local resource instances from <see cref="Map">Maps</see> of properties.
     /// </summary>
     internal interface IResourceFactory : IDisposable
     {

@@ -20,7 +20,7 @@ using Stormpath.SDK.Provider;
 namespace Stormpath.SDK.Impl.Provider
 {
     /// <summary>
-    /// Base class for Provider-specific <see cref="IProvider"/> resources.
+    /// Base class for Provider-specific <see cref="IProvider">Provider</see> resources.
     /// </summary>
     internal abstract class AbstractProvider : AbstractInstanceResource, IProvider
     {

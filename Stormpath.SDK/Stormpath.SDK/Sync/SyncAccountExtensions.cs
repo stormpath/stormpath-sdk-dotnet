@@ -23,12 +23,12 @@ using Stormpath.SDK.Provider;
 namespace Stormpath.SDK.Sync
 {
     /// <summary>
-    /// Provides synchronous access to the methods available on <see cref="IAccount"/>.
+    /// Provides synchronous access to the methods available on <see cref="IAccount">Account</see>.
     /// </summary>
     public static class SyncAccountExtensions
     {
         /// <summary>
-        /// Synchronously gets The account.'s parent <see cref="Directory.IDirectory"/> (where The account. is stored).
+        /// Synchronously gets The account.'s parent <see cref="Directory.IDirectory">Directory</see> (where The account. is stored).
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>This account's directory.</returns>
@@ -36,30 +36,30 @@ namespace Stormpath.SDK.Sync
             => (account as IAccountSync).GetDirectory();
 
         /// <summary>
-        /// Synchronously assigns this account to the specified <see cref="Group.IGroup"/>.
+        /// Synchronously assigns this account to the specified <see cref="Group.IGroup">Group</see>.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="group">The Group this account will be added to.</param>
         /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created reflecting The account.-to-group association.
+        /// The new <see cref="IGroupMembership">Group Membership</see> resource created reflecting The account.-to-group association.
         /// </returns>
         public static IGroupMembership AddGroup(this IAccount account, IGroup group)
             => (account as IAccountSync).AddGroup(group);
 
         /// <summary>
-        /// Synchronously assigns this account to the specified <see cref="Group.IGroup"/> represented
+        /// Synchronously assigns this account to the specified <see cref="Group.IGroup">Group</see> represented
         /// by its (case-insensitive) name or <c>href</c>.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="hrefOrName">The <c>href</c> or name of the group to add.</param>
         /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created reflecting The account.-to-group association.
+        /// The new <see cref="IGroupMembership">Group Membership</see> resource created reflecting The account.-to-group association.
         /// </returns>
         public static IGroupMembership AddGroup(this IAccount account, string hrefOrName)
             => (account as IAccountSync).AddGroup(hrefOrName);
 
         /// <summary>
-        /// Synchronously removes this <see cref="IAccount"/> from the specified <see cref="Group.IGroup"/>.
+        /// Synchronously removes this <see cref="IAccount">Account</see> from the specified <see cref="Group.IGroup">Group</see>.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="group">The group object from which The account. must be removed.</param>
@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Sync
             => (account as IAccountSync).RemoveGroup(group);
 
         /// <summary>
-        /// Synchronously removes this <see cref="IAccount"/> from the specified <see cref="Group.IGroup"/>
+        /// Synchronously removes this <see cref="IAccount">Account</see> from the specified <see cref="Group.IGroup">Group</see>
         /// represented by its (case-insensitive) name or <c>href</c>.
         /// </summary>
         /// <param name="account">The account.</param>

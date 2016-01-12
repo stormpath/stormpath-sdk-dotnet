@@ -22,7 +22,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// Represents options for an <see cref="IAccount"/> verification email resend request.
+    /// Represents options for an <see cref="IAccount">Account</see> verification email resend request.
     /// </summary>
     public interface IEmailVerificationRequest : IResource
     {

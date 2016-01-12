@@ -25,10 +25,10 @@ namespace Stormpath.SDK.Sync
     public static class SyncPasswordResetTokenExtensions
     {
         /// <summary>
-        /// Synchronously gets the <see cref="IAccount"/> associated with this password reset token.
+        /// Synchronously gets the <see cref="IAccount">Account</see> associated with this password reset token.
         /// </summary>
         /// <param name="token">The token.</param>
-        /// <returns>The <see cref="IAccount"/> in the reset password workflow.</returns>
+        /// <returns>The <see cref="IAccount">Account</see> in the reset password workflow.</returns>
         public static IAccount GetAccount(this IPasswordResetToken token)
             => (token as IPasswordResetTokenSync).GetAccount();
     }

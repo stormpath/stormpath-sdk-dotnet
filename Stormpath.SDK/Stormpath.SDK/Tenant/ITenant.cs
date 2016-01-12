@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Tenant
 {
     /// <summary>
-    /// A tenant represents a customer's private data 'space' within Stormpath that contains all of the customer's Stormpath-stored resources, like <see cref="Application.IApplication"/>s, <see cref="Directory.IDirectory"/>s, and <see cref="Account.IAccount"/>s.
+    /// A tenant represents a customer's private data 'space' within Stormpath that contains all of the customer's Stormpath-stored resources, like <see cref="Application.IApplication">Applications</see>, <see cref="Directory.IDirectory">Directories</see>, and <see cref="Account.IAccount">Accounts</see>.
     /// </summary>
     public interface ITenant : IResource, IAuditable, IExtendable, ITenantActions
     {

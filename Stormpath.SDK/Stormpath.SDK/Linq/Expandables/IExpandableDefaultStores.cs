@@ -19,7 +19,7 @@ using Stormpath.SDK.AccountStore;
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents expandable <see cref="IAccountStore"/> resources.
+    /// Represents expandable <see cref="IAccountStore">Account Store</see> resources.
     /// </summary>
     public interface IExpandableDefaultStores
     {

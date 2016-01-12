@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Tenant
     public interface IHasTenant
     {
         /// <summary>
-        /// Gets the Stormpath <see cref="ITenant"/> that owns this resource.
+        /// Gets the Stormpath <see cref="ITenant">Tenant</see> that owns this resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The tenant.</returns>

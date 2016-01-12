@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Sync
     public static class SyncHasTenantExtensions
     {
         /// <summary>
-        /// Synchronously gets the Stormpath <see cref="ITenant"/> that owns this resource.
+        /// Synchronously gets the Stormpath <see cref="ITenant">Tenant</see> that owns this resource.
         /// </summary>
         /// <param name="resource">The resource.</param>
         /// <returns>The tenant.</returns>

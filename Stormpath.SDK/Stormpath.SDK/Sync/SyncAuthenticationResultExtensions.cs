@@ -26,10 +26,10 @@ namespace Stormpath.SDK.Sync
     public static class SyncAuthenticationResultExtensions
     {
         /// <summary>
-        /// Synchronously gets the successfully authenticated <see cref="IAccount"/>.
+        /// Synchronously gets the successfully authenticated <see cref="IAccount">Account</see>.
         /// </summary>
         /// <param name="authResult">The authentication result.</param>
-        /// <returns>The <see cref="IAccount"/> that was successfully authenticated.</returns>
+        /// <returns>The <see cref="IAccount">Account</see> that was successfully authenticated.</returns>
         public static IAccount GetAccount(this IAuthenticationResult authResult)
             => (authResult as IAuthenticationResultSync).GetAccount();
     }

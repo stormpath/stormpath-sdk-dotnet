@@ -20,7 +20,7 @@ using Stormpath.SDK.Group;
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents resources that can be expanded from a <see cref="Group.IGroup"/>.
+    /// Represents resources that can be expanded from a <see cref="Group.IGroup">Group</see>.
     /// </summary>
     public interface IGroupExpandables :
         IExpandableAccounts,

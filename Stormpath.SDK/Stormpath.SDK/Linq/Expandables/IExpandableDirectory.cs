@@ -19,7 +19,7 @@ using Stormpath.SDK.Directory;
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents an expandable <see cref="IDirectory"/> resource.
+    /// Represents an expandable <see cref="IDirectory">Directory</see> resource.
     /// </summary>
     public interface IExpandableDirectory
     {

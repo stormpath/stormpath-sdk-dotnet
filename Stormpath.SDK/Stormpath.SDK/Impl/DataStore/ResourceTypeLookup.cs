@@ -194,7 +194,7 @@ namespace Stormpath.SDK.Impl.DataStore
         }
 
         /// <summary>
-        /// Checks whether this type is a known resource interface (e.g. <see cref="IAccount"/>).
+        /// Checks whether this type is a known resource interface (e.g. <see cref="IAccount">Account</see>).
         /// </summary>
         /// <param name="possiblyInterface">The type to check</param>
         /// <returns><see langword="true"/> if this type is a known resource interface; <see langword="false"/> otherwise.</returns>
@@ -221,7 +221,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// Looks up an interface from a concrete type.
         /// </summary>
         /// <typeparam name="T">A concrete instance class type (e.g., <see cref="DefaultAccount"/>).</typeparam>
-        /// <returns>The associated interface type (e.g., <see cref="IAccount"/>).</returns>
+        /// <returns>The associated interface type (e.g., <see cref="IAccount">Account</see>).</returns>
         public Type GetInterface<T>()
             where T : IResource
         {
@@ -232,7 +232,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// Looks up an interface from a concrete type.
         /// </summary>
         /// <param name="possiblyConcrete">A concrete instance class type (e.g., <see cref="DefaultAccount"/>).</param>
-        /// <returns>The associated interface type (e.g., <see cref="IAccount"/>).</returns>
+        /// <returns>The associated interface type (e.g., <see cref="IAccount">Account</see>).</returns>
         public Type GetInterface(Type possiblyConcrete)
         {
             if (IsInterface(possiblyConcrete))
@@ -247,7 +247,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// Gets a resource interface type given a resource attribute name.
         /// </summary>
         /// <param name="nestedItemKey">A resource attribute name (e.g. "directory").</param>
-        /// <returns>The associated interface type (e.g., <see cref="IDirectory"/>, or <see langword="null"/> if no type could be found.</returns>
+        /// <returns>The associated interface type (e.g., <see cref="IDirectory">Directory</see>, or <see langword="null"/> if no type could be found.</returns>
         public Type GetInterfaceByPropertyName(string nestedItemKey)
         {
             Type foundType = null;
@@ -259,7 +259,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <summary>
         /// Looks up concrete type from an interface.
         /// </summary>
-        /// <typeparam name="T">A resource interface (e.g., <see cref="IAccount"/>).</typeparam>.
+        /// <typeparam name="T">A resource interface (e.g., <see cref="IAccount">Account</see>).</typeparam>.
         /// <returns>The associated concrete instance class type (e.g., <see cref="DefaultAccount"/>).</returns>
         public Type GetConcrete<T>()
             where T : IResource
@@ -270,7 +270,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <summary>
         /// Looks up concrete type from an interface.
         /// </summary>
-        /// <param name="possiblyInterface">A resource interface (e.g., <see cref="IAccount"/>).</param>
+        /// <param name="possiblyInterface">A resource interface (e.g., <see cref="IAccount">Account</see>).</param>
         /// <returns>The associated concrete instance class type (e.g., <see cref="DefaultAccount"/>).</returns>
         public Type GetConcrete(Type possiblyInterface)
         {
@@ -286,7 +286,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// Looks up the inner interface from a parent type.
         /// </summary>
         /// <param name="collectionType">A <see cref="CollectionResponsePage{T}"/> containing some inner <see cref="IResource"/> interface (e.g. <see cref="CollectionResponsePage{IAccount}"/>).</param>
-        /// <returns>The inner interface (e.g. <see cref="IAccount"/>).</returns>
+        /// <returns>The inner interface (e.g. <see cref="IAccount">Account</see>).</returns>
         public Type GetInnerCollectionInterface(Type collectionType)
         {
             Type iface = null;

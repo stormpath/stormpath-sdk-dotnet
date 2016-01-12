@@ -20,7 +20,7 @@ using Stormpath.SDK.Impl.Jwt;
 namespace Stormpath.SDK.Jwt
 {
     /// <summary>
-    /// Utility class for creating <see cref="IJwtClaimsBuilder"/>s for constructing <see cref="IJwtClaims"/> instances.
+    /// Utility class for creating <see cref="IJwtClaimsBuilder"/> instances, used for constructing <see cref="IJwtClaims"/> instances.
     /// </summary>
     [Obsolete("Use the JWT methods available on IClient.")]
     public static class Jwts

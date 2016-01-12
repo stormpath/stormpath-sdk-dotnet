@@ -20,7 +20,7 @@ using Stormpath.SDK.Shared;
 namespace Stormpath.SDK.Group
 {
     /// <summary>
-    /// Represents the status of a <see cref="IGroup"/>.
+    /// Represents the status of a <see cref="IGroup">Group</see>.
     /// </summary>
     public sealed class GroupStatus : StringEnumeration
     {
@@ -40,10 +40,10 @@ namespace Stormpath.SDK.Group
         }
 
         /// <summary>
-        /// Parses a string to a <see cref="GroupStatus"/>.
+        /// Parses a string to a <see cref="GroupStatus">Group Status</see>.
         /// </summary>
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
-        /// <returns>The <see cref="GroupStatus"/> with the specified name.</returns>
+        /// <returns>The <see cref="GroupStatus">Group Status</see> with the specified name.</returns>
         /// <exception cref="ApplicationException">No match is found.</exception>
         public static GroupStatus Parse(string status)
         {

@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Group
 {
     /// <summary>
-    /// Represents options for an <see cref="IGroup"/> creation request.
+    /// Represents options for an <see cref="IGroup">Group</see> creation request.
     /// </summary>
     public interface IGroupCreationOptions : ICreationOptions
     {

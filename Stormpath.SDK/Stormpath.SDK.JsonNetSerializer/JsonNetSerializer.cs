@@ -59,7 +59,7 @@ namespace Stormpath.SDK.Extensions.Serialization
         }
 
         /// <summary>
-        /// Converts a nested tree of <see cref="JObject"/>s into nested <see cref="IDictionary{TKey, TValue}"/>s.
+        /// Converts a nested tree of <see cref="JObject"/> instances into nested <see cref="IDictionary{TKey, TValue}">dictionaries</see>.
         /// </summary>
         /// <remarks>JSON.NET deserializes everything into nested JObjects. We want IDictionaries all the way down.</remarks>
         /// <param name="map">Deserialized <see cref="JObject"/> from JSON.NET</param>

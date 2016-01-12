@@ -19,7 +19,7 @@ using Stormpath.SDK.AccountStore;
 namespace Stormpath.SDK.Sync
 {
     /// <summary>
-    /// Provides synchronous access to the methods available on <see cref="IAccountStore"/>.
+    /// Provides synchronous access to the methods available on <see cref="IAccountStore">Account Store</see>.
     /// </summary>
     public static class SyncAccountStoreExtensions
     {

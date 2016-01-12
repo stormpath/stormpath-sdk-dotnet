@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
-    /// Google-specific <see cref="IProvider"/> Resource.
+    /// Google-specific <see cref="IProvider">Provider</see> Resource.
     /// </summary>
     public interface IGoogleProvider : IProvider
     {

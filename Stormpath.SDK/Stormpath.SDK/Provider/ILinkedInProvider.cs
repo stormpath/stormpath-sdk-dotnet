@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
-    /// LinkedIn-specific <see cref="IProvider"/> Resource.
+    /// LinkedIn-specific <see cref="IProvider">Provider</see> Resource.
     /// </summary>
     public interface ILinkedInProvider : IProvider
     {

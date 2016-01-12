@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// Represents options for an <see cref="IAccount"/> creation request.
+    /// Represents options for an <see cref="IAccount">Account</see> creation request.
     /// </summary>
     public interface IAccountCreationOptions : ICreationOptions
     {

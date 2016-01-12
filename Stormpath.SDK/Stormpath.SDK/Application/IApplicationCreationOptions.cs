@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Application
 {
     /// <summary>
-    /// Represents options for an <see cref="IApplication"/> creation request.
+    /// Represents options for an <see cref="IApplication">Application</see> creation request.
     /// </summary>
     public interface IApplicationCreationOptions : ICreationOptions
     {

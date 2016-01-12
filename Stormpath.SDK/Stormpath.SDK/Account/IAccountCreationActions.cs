@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Account
     public interface IAccountCreationActions
     {
         /// <summary>
-        /// Creates a new <see cref="IAccount"/> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
+        /// Creates a new <see cref="IAccount">Account</see> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>
         /// <param name="account">The account to create/persist.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IAccountCreationOptions"/>,
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Account
         Task<IAccount> CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new <see cref="IAccount"/> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
+        /// Creates a new <see cref="IAccount">Account</see> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>
         /// <param name="account">The account to create/persist.</param>
         /// <param name="creationOptions">An <see cref="IAccountCreationOptions"/> instance to use when sending the request.</param>
@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Account
         Task<IAccount> CreateAccountAsync(IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new <see cref="IAccount"/> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
+        /// Creates a new <see cref="IAccount">Account</see> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>
         /// <param name="account">The account to create/persist.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -65,12 +65,12 @@ namespace Stormpath.SDK.Account
         Task<IAccount> CreateAccountAsync(IAccount account, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new enabled <see cref="IAccount"/> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>,
+        /// Creates a new enabled <see cref="IAccount">Account</see> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>,
         /// with the default creation options.
         /// </summary>
         /// <param name="givenName">The given name (aka 'first name' in Western cultures).</param>
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
-        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory"/>.</param>
+        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory">Directory</see>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The persisted account.</returns>
@@ -79,12 +79,12 @@ namespace Stormpath.SDK.Account
         Task<IAccount> CreateAccountAsync(string givenName, string surname, string email, string password, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Creates a new enabled <see cref="IAccount"/> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>,
+        /// Creates a new enabled <see cref="IAccount">Account</see> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>,
         /// with the default creation options and the specified <see cref="CustomData.ICustomData">Custom Data</see>.
         /// </summary>
         /// <param name="givenName">The given name (aka 'first name' in Western cultures).</param>
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
-        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory"/>.</param>
+        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory">Directory</see>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
         /// <param name="customData">An anonymous type containing name/value pairs to be stored in this account's <see cref="CustomData.ICustomData"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>

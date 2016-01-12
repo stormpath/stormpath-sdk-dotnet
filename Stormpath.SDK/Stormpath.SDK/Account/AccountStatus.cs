@@ -20,7 +20,7 @@ using Stormpath.SDK.Shared;
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// Represents the various states an <see cref="IAccount"/> may be in.
+    /// Represents the various states an <see cref="IAccount">Account</see> may be in.
     /// </summary>
     public sealed class AccountStatus : StringEnumeration
     {
@@ -45,10 +45,10 @@ namespace Stormpath.SDK.Account
         }
 
         /// <summary>
-        /// Parses a string to an <see cref="AccountStatus"/>.
+        /// Parses a string to an <see cref="AccountStatus">Account Status</see>.
         /// </summary>
         /// <param name="status">A string containing "enabled", "disabled", or "unverified" (matching is case-insensitive).</param>
-        /// <returns>The <see cref="AccountStatus"/> with the specified name.</returns>
+        /// <returns>The <see cref="AccountStatus">Account Status</see> with the specified name.</returns>
         /// <exception cref="ApplicationException">No match is found.</exception>
         public static AccountStatus Parse(string status)
         {

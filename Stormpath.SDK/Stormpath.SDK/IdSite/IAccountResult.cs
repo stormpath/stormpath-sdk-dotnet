@@ -39,7 +39,7 @@ namespace Stormpath.SDK.IdSite
         /// Gets a value indicating whether the account returned by <see cref="GetAccountAsync(CancellationToken)"/> was
         /// newly created (registered) on the ID Site, or was an existing account that logged in successfully.
         /// </summary>
-        /// <value><see langword="true"/> if the returned <see cref="IAccount"/> was registered on the ID Site;
+        /// <value><see langword="true"/> if the returned <see cref="IAccount">Account</see> was registered on the ID Site;
         /// <see langword="false"/> if the account was an existing account that logged in successfully.</value>
         bool IsNewAccount { get; }
 
@@ -56,7 +56,7 @@ namespace Stormpath.SDK.IdSite
         /// that has logged in.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The user's <see cref="IAccount"/> resource.</returns>
+        /// <returns>The user's <see cref="IAccount">Account</see> resource.</returns>
         /// <exception cref="System.ApplicationException">The account is not present.</exception>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }

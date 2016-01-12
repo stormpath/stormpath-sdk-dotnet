@@ -19,7 +19,7 @@ using Stormpath.SDK.Group;
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents an expandable <see cref="IGroupMembership"/> collection.
+    /// Represents an expandable <see cref="IGroupMembership">Group Membership</see> collection.
     /// </summary>
     public interface IExpandableGroupMemberships
     {

@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Impl.Auth
         string Type { get; }
 
         /// <summary>
-        /// Gets the <see cref="IAccountStore"/> this login will be performed against.
+        /// Gets the <see cref="IAccountStore">Account Store</see> this login will be performed against.
         /// </summary>
         /// <value>The Account Store this login will be performed against.
         /// If <see langword="null"/>, the login request will use the default Stormpath login flow.</value>

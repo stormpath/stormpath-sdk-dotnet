@@ -19,7 +19,7 @@ using Stormpath.SDK.Tenant;
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents an expandable <see cref="ITenant"/> resource.
+    /// Represents an expandable <see cref="ITenant">Tenant</see> resource.
     /// </summary>
     public interface IExpandableTenant
     {

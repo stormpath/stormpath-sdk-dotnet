@@ -20,7 +20,7 @@ using Stormpath.SDK.Oauth;
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents resources that can be expanded from an <see cref="IApplication"/>.
+    /// Represents resources that can be expanded from an <see cref="IApplication">Application</see>.
     /// </summary>
     public interface IApplicationExpandables :
         IExpandableAccounts,

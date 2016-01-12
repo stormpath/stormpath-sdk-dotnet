@@ -21,26 +21,26 @@ namespace Stormpath.SDK.Provider
 {
     /// <summary>
     /// Represents the result of the attempt to access the Provider's account. Stormpath maps common fields of the
-    /// Provider user to the <see cref="IAccount"/> Resource.
+    /// Provider user to the <see cref="IAccount">Account</see> Resource.
     /// <para>
     /// If the user retrieved from the Provider did not previously exist in Stormpath as an Account, common Provider user fields
-    /// will be used to create a new <see cref="IAccount"/> in Stormpath.
+    /// will be used to create a new <see cref="IAccount">Account</see> in Stormpath.
     /// </para>
     /// </summary>
     /// <seealso cref="Application.IApplication.GetAccountAsync(IProviderAccountRequest, System.Threading.CancellationToken)"/>
     public interface IProviderAccountResult : IResource
     {
         /// <summary>
-        /// Gets the <see cref="IAccount"/> Resource containing common fields of the Provider user in Stormpath.
+        /// Gets the <see cref="IAccount">Account</see> Resource containing common fields of the Provider user in Stormpath.
         /// </summary>
-        /// <value>The <see cref="IAccount"/> Resource containing common fields of the Provider user in Stormpath.</value>
+        /// <value>The <see cref="IAccount">Account</see> Resource containing common fields of the Provider user in Stormpath.</value>
         IAccount Account { get; }
 
         /// <summary>
         /// Gets a value indicating whether this request generated a new account in Stormpath.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> if a new <see cref="IAccount"/> was generated in Stormpath as a result of the request;
+        /// <see langword="true"/> if a new <see cref="IAccount">Account</see> was generated in Stormpath as a result of the request;
         /// <see langword="false"/> otherwise.
         /// </value>
         bool IsNewAccount { get; }

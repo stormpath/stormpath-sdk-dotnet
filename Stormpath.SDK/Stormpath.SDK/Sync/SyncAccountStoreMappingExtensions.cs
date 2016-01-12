@@ -26,21 +26,21 @@ namespace Stormpath.SDK.Sync
     public static class SyncAccountStoreMappingExtensions
     {
         /// <summary>
-        /// Synchronously gets this mapping's <see cref="IAccountStore"/> (either a <see cref="Group.IGroup"/> or <see cref="Directory.IDirectory"/>), to be assigned to the application.
+        /// Synchronously gets this mapping's <see cref="IAccountStore">Account Store</see> (either a <see cref="Group.IGroup">Group</see> or <see cref="Directory.IDirectory">Directory</see>), to be assigned to the application.
         /// </summary>
         /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="accountStoreMapping">The account store mapping.</param>
-        /// <returns>The mapping's <see cref="IAccountStore"/>.</returns>
+        /// <returns>The mapping's <see cref="IAccountStore">Account Store</see>.</returns>
         public static IAccountStore GetAccountStore<TMapping>(this IAccountStoreMapping<TMapping> accountStoreMapping)
             where TMapping : class, IAccountStoreMapping<TMapping>
             => (accountStoreMapping as IAccountStoreMappingSync<TMapping>).GetAccountStore();
 
         /// <summary>
-        /// Synchronously gets the <see cref="IApplication"/> represented by this mapping.
+        /// Synchronously gets the <see cref="IApplication">Application</see> represented by this mapping.
         /// </summary>
         /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="accountStoreMapping">The account store mapping.</param>
-        /// <returns>The mapping's <see cref="IApplication"/>.</returns>
+        /// <returns>The mapping's <see cref="IApplication">Application</see>.</returns>
         public static IApplication GetApplication<TMapping>(this IAccountStoreMapping<TMapping> accountStoreMapping)
             where TMapping : class, IAccountStoreMapping<TMapping>
             => (accountStoreMapping as IAccountStoreMappingSync<TMapping>).GetApplication();

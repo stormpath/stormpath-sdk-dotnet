@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccountStoreContainer{T}.SetDefaultAccountStoreAsync(IAccountStore, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="accountStore">The <see cref="IAccountStore"/> used to persist new accounts.</param>
+        /// <param name="accountStore">The <see cref="IAccountStore">Account Store</see> used to persist new accounts.</param>
         void SetDefaultAccountStore(IAccountStore accountStore);
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccountStoreContainer{T}.SetDefaultGroupStoreAsync(IAccountStore, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="accountStore">The <see cref="IAccountStore"/> used to persist new groups.</param>
+        /// <param name="accountStore">The <see cref="IAccountStore">Account Store</see> used to persist new groups.</param>
         void SetDefaultGroupStore(IAccountStore accountStore);
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// Synchronous counterpart to <see cref="IAccountStoreContainer{T}.AddAccountStoreAsync(IAccountStore, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="accountStore">The new <see cref="IAccountStore"/> resource to add to the AccountStoreMapping list.</param>
+        /// <param name="accountStore">The new <see cref="IAccountStore">Account Store</see> resource to add to the AccountStoreMapping list.</param>
         /// <returns>The newly-created <see cref="IAccountStoreMapping"/>.</returns>
         T AddAccountStore(IAccountStore accountStore);
 

@@ -22,7 +22,7 @@ using Stormpath.SDK.Tenant;
 namespace Stormpath.SDK.AccountStore
 {
     /// <summary>
-    /// An abstract representation of a <see cref="Directory.IDirectory"/> or <see cref="Group.IGroup"/>.
+    /// An abstract representation of a <see cref="Directory.IDirectory">Directory</see> or <see cref="Group.IGroup">Group</see>.
     /// </summary>
     public interface IAccountStore : IResource, IHasTenant
     {

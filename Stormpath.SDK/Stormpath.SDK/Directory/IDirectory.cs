@@ -28,11 +28,11 @@ using Stormpath.SDK.Tenant;
 namespace Stormpath.SDK.Directory
 {
     /// <summary>
-    /// A directory is a top-level container of <see cref="IAccount"/>s and <see cref="IGroup"/>s.
+    /// A directory is a top-level container of <see cref="IAccount">Accounts</see> and <see cref="IGroup">Groups</see>.
     /// Accounts and groups are guaranteed to be unique within a directory, but not across multiple directories.
-    /// <para>You can think of a <see cref="IDirectory"/> as an account 'store'.
-    /// You can map one or more directories (or groups within a directory) to an <see cref="Application.IApplication"/>.
-    /// This forms the application's effective 'user base' of all <see cref="IAccount"/> that may use the application.</para>
+    /// <para>You can think of a <see cref="IDirectory">Directory</see> as an account 'store'.
+    /// You can map one or more directories (or groups within a directory) to an <see cref="Application.IApplication">Application</see>.
+    /// This forms the application's effective 'user base' of all <see cref="IAccount">Account</see> that may use the application.</para>
     /// </summary>
     public interface IDirectory :
         IResource,
@@ -92,7 +92,7 @@ namespace Stormpath.SDK.Directory
         IDirectory SetStatus(DirectoryStatus status);
 
         /// <summary>
-        /// Gets the <see cref="IProvider"/> of this Directory.
+        /// Gets the <see cref="IProvider">Provider</see> of this Directory.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The Provider of this Directory.</returns>

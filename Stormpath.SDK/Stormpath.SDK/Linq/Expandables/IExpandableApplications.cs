@@ -19,7 +19,7 @@ using Stormpath.SDK.Application;
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents an expandable <see cref="IApplication"/> collection.
+    /// Represents an expandable <see cref="IApplication">Application</see> collection.
     /// </summary>
     public interface IExpandableApplications
     {

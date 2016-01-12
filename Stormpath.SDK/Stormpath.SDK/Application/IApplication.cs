@@ -48,7 +48,7 @@ namespace Stormpath.SDK.Application
         /// <summary>
         /// Gets the Application's name.
         /// </summary>
-        /// <value>The application's name. An application's name must be unique across all other applications within a Stormpath <see cref="ITenant"/>.</value>
+        /// <value>The application's name. An application's name must be unique across all other applications within a Stormpath <see cref="ITenant">Tenant</see>.</value>
         string Name { get; }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Stormpath.SDK.Application
         /// <summary>
         /// Sets the Application's name.
         /// </summary>
-        /// <param name="name">The Application's name. Application names must be unique within a Stormpath <see cref="ITenant"/>.</param>
+        /// <param name="name">The Application's name. Application names must be unique within a Stormpath <see cref="ITenant">Tenant</see>.</param>
         /// <returns>This instance for method chaining.</returns>
         IApplication SetName(string name);
 
@@ -313,7 +313,7 @@ namespace Stormpath.SDK.Application
         /// <see cref="SendPasswordResetEmailAsync(string, CancellationToken)"/> again in order to obtain a new password reset token.</para>
         /// </summary>
         /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
-        /// <param name="newPassword">The new password that will be set to the <see cref="IAccount"/> if the token is successfully validated.</param>
+        /// <param name="newPassword">The new password that will be set to the <see cref="IAccount">Account</see> if the token is successfully validated.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The account matching the specified token.</returns>
         /// <exception cref="Error.ResourceException">The token is not valid.</exception>
@@ -323,7 +323,7 @@ namespace Stormpath.SDK.Application
         /// Sends a password reset email for the specified account email address.
         /// The email will contain a password reset link that the user can click or copy into their browser address bar.
         /// </summary>
-        /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
+        /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The created <see cref="IPasswordResetToken"/>.
         /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
@@ -331,20 +331,20 @@ namespace Stormpath.SDK.Application
         Task<IPasswordResetToken> SendPasswordResetEmailAsync(string email, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Sends a password reset email to an account in the specified <see cref="IAccountStore"/> matching
+        /// Sends a password reset email to an account in the specified <see cref="IAccountStore">Account Store</see> matching
         /// the specified <paramref name="email"/>. If the email does not match an account in the specified
-        /// <see cref="IAccountStore"/>, a <see cref="Error.ResourceException"/> will be thrown.
+        /// <see cref="IAccountStore">Account Store</see>, a <see cref="Error.ResourceException"/> will be thrown.
         /// If you are unsure of which of the application's mapped account stores might contain the account, use the more general
         /// <see cref="SendPasswordResetEmailAsync(string, CancellationToken)"/> method instead.
         /// The email will contain a password reset link that the user can click or copy into their browser address bar.
         /// </summary>
-        /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
+        /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="accountStore">The AccountStore expected to contain an account with the specified email address.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The created <see cref="IPasswordResetToken"/>.
         /// You can obtain the associated account via <see cref="IPasswordResetToken.GetAccountAsync(CancellationToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">
-        /// The specified <see cref="IAccountStore"/> is not mapped to this application, or there is no account that matches the specified email address in the specified <paramref name="accountStore"/>.
+        /// The specified <see cref="IAccountStore">Account Store</see> is not mapped to this application, or there is no account that matches the specified email address in the specified <paramref name="accountStore"/>.
         /// </exception>
         Task<IPasswordResetToken> SendPasswordResetEmailAsync(string email, IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -357,7 +357,7 @@ namespace Stormpath.SDK.Application
         /// <see cref="SendPasswordResetEmailAsync(string, CancellationToken)"/> method instead.
         /// The email will contain a password reset link that the user can click or copy into their browser address bar.
         /// </summary>
-        /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
+        /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="hrefOrNameKey">The href of the AccountStore, or the name key of the Organization, expected to contain an account with the specified email address.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The created <see cref="IPasswordResetToken"/>.
@@ -372,12 +372,12 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The <see cref="IAccount"/> matching the specified token.</returns>
+        /// <returns>The <see cref="IAccount">Account</see> matching the specified token.</returns>
         /// <exception cref="Error.ResourceException">The token is not valid.</exception>
         Task<IAccount> VerifyPasswordResetTokenAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Retrieves a Provider-based <see cref="IAccount"/>. The account must exist in one of the Provider-based <see cref="Directory.IDirectory"/>
+        /// Retrieves a Provider-based <see cref="IAccount">Account</see>. The account must exist in one of the Provider-based <see cref="Directory.IDirectory">Directory</see>
         /// assigned to the Application as an account store, and the Directory must also be <see cref="Directory.DirectoryStatus.Enabled"/>.
         /// If not in an assigned account store, the retrieval attempt will fail.
         /// </summary>
@@ -400,7 +400,7 @@ namespace Stormpath.SDK.Application
         /// <summary>
         /// Gets a queryable list of all Accounts in this Application.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search <see cref="Account.IAccount"/>s.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search <see cref="Account.IAccount">Accounts</see>.</returns>
         /// <example>
         /// var allAccounts = await myApp.GetAccounts().ToListAsync();
         /// </example>
@@ -408,10 +408,10 @@ namespace Stormpath.SDK.Application
 
         /// <summary>
         /// Gets a queryable list of all Groups accessible to this application.
-        /// It will not only return any group associated directly as an <see cref="IAccountStore"/>
+        /// It will not only return any group associated directly as an <see cref="IAccountStore">Account Store</see>
         /// but also every group that exists inside every directory associated as an Account Store.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search <see cref="IGroup"/>s.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search <see cref="IGroup">Groups</see>.</returns>
         /// <example>
         /// var allGroups = await myApp.GetGroups().ToListAsync();
         /// </example>

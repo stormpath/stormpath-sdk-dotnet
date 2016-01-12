@@ -26,15 +26,15 @@ namespace Stormpath.SDK.Provider
         where P : ICreateProviderRequestBuilder<P>
     {
         /// <summary>
-        /// Returns a builder to generate an attempt to create or retrieve a Provider <see cref="Account.IAccount"/> from Stormpath.
+        /// Returns a builder to generate an attempt to create or retrieve a Provider <see cref="Account.IAccount">Account</see> from Stormpath.
         /// </summary>
-        /// <returns>A builder to generate an attempt to create or retrieve a Provider <see cref="Account.IAccount"/> from Stormpath.</returns>
+        /// <returns>A builder to generate an attempt to create or retrieve a Provider <see cref="Account.IAccount">Account</see> from Stormpath.</returns>
         A Account();
 
         /// <summary>
-        /// Returns a builder to generate an attempt to create a Provider-based <see cref="Directory.IDirectory"/> in Stormpath.
+        /// Returns a builder to generate an attempt to create a Provider-based <see cref="Directory.IDirectory">Directory</see> in Stormpath.
         /// </summary>
-        /// <returns>A builder to generate an attempt to create a Provider-based <see cref="Directory.IDirectory"/> in Stormpath.</returns>
+        /// <returns>A builder to generate an attempt to create a Provider-based <see cref="Directory.IDirectory">Directory</see> in Stormpath.</returns>
         P Builder();
     }
 }

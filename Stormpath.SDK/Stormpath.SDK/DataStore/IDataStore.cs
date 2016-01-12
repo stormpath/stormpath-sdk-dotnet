@@ -23,7 +23,7 @@ namespace Stormpath.SDK.DataStore
 {
     /// <summary>
     /// A <see cref="IDataStore"/> is the liaison between client SDK components and the raw Stormpath REST API.
-    /// It is responsible for converting SDK objects (<see cref="Account.IAccount"/>, <see cref="Application.IApplication"/>, <see cref="Directory.IDirectory"/>, etc.)
+    /// It is responsible for converting SDK objects (<see cref="Account.IAccount">Account</see>, <see cref="Application.IApplication">Application</see>, <see cref="Directory.IDirectory">Directory</see>, etc.)
     /// into REST HTTP requests, executing those requests, and converting REST HTTP responses back into SDK objects.
     /// </summary>
     public interface IDataStore : IDisposable

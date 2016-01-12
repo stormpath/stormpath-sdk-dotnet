@@ -20,7 +20,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Directory
 {
     /// <summary>
-    /// Represents options for an <see cref="IDirectory"/> creation request.
+    /// Represents options for an <see cref="IDirectory">Directory</see> creation request.
     /// </summary>
     public interface IDirectoryCreationOptions : ICreationOptions
     {

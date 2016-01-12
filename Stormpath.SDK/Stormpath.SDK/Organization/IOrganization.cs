@@ -24,8 +24,8 @@ using Stormpath.SDK.Tenant;
 namespace Stormpath.SDK.Organization
 {
     /// <summary>
-    /// An Organization is a top-level container for <see cref="Directory.IDirectory"/> and <see cref="IGroup"/> resources,
-    /// and is an <see cref="IAccountStore"/> that can be mapped to an <see cref="Application.IApplication"/>
+    /// An Organization is a top-level container for <see cref="Directory.IDirectory">Directory</see> and <see cref="IGroup">Group</see> resources,
+    /// and is an <see cref="IAccountStore">Account Store</see> that can be mapped to an <see cref="Application.IApplication">Application</see>
     /// just like a Directory or Group.
     /// <para>Organizations are primarily intended to represent tenants in multi-tenant applications.</para>
     /// </summary>
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Organization
         /// <summary>
         /// Gets the Organization's status.
         /// </summary>
-        /// <value>The Organization's status. Enabled Organizations can be used as <see cref="IAccountStore"/>s for <see cref="Application.IApplication"/>s; Disabled Organizations cannot.</value>
+        /// <value>The Organization's status. Enabled Organizations can be used as <see cref="IAccountStore">Account Stores</see> for <see cref="Application.IApplication">Applications</see>; Disabled Organizations cannot.</value>
         OrganizationStatus Status { get; }
 
         /// <summary>
@@ -91,8 +91,8 @@ namespace Stormpath.SDK.Organization
         /// Sets the Organization's status.
         /// </summary>
         /// <param name="status">The Organization's status.
-        /// <see cref="OrganizationStatus.Enabled"/> Organizations can be used as <see cref="IAccountStore"/>s for <see cref="Application.IApplication"/>s.
-        /// <see cref="OrganizationStatus.Disabled"/> Organizations cannot be used as <see cref="IAccountStore"/>s.
+        /// <see cref="OrganizationStatus.Enabled"/> Organizations can be used as <see cref="IAccountStore">Account Stores</see>s for <see cref="Application.IApplication">Applications</see>.
+        /// <see cref="OrganizationStatus.Disabled"/> Organizations cannot be used as <see cref="IAccountStore">Account Stores</see>.
         /// </param>
         /// <returns>This instance for method chaining.</returns>
         IOrganization SetStatus(OrganizationStatus status);
@@ -106,10 +106,10 @@ namespace Stormpath.SDK.Organization
 
         /// <summary>
         /// Gets a queryable list of all Groups accessible to this Organization.
-        /// It will not only return any group associated directly as an <see cref="IAccountStore"/>
+        /// It will not only return any group associated directly as an <see cref="IAccountStore">Account Store</see>
         /// but also every Group that exists inside every Directory associated as an Account Store.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search <see cref="IGroup"/>s.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search <see cref="IGroup">Groups</see>.</returns>
         /// <example>
         /// var allOrganizationGroups = await myOrg.GetGroups().ToListAsync();
         /// </example>

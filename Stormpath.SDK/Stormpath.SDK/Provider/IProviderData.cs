@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
-    /// Resource containing Provider-specific data for the <see cref="Account.IAccount"/>. For example, for Google, it
+    /// Resource containing Provider-specific data for the <see cref="Account.IAccount">Account</see>. For example, for Google, it
     /// contains <c>refreshToken</c> and <c>accessToken</c>.
     /// </summary>
     public interface IProviderData : IResource, IAuditable

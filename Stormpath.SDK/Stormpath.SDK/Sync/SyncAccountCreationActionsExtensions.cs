@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Sync
     public static class SyncAccountCreationActionsExtensions
     {
         /// <summary>
-        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application.
+        /// Synchronously creates a new <see cref="IAccount">Account</see> that may login to this application.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="account">The account to create/persist.</param>
@@ -39,63 +39,63 @@ namespace Stormpath.SDK.Sync
         /// </code>
         /// </example>
         /// <returns>The persisted account.</returns>
-        /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
+        /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication">Application</see> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
         public static IAccount CreateAccount(this IAccountCreationActions source, IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction)
             => (source as IAccountCreationActionsSync).CreateAccount(account, creationOptionsAction);
 
         /// <summary>
-        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application.
+        /// Synchronously creates a new <see cref="IAccount">Account</see> that may login to this application.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="account">The account to create/persist.</param>
         /// <param name="creationOptions">An <see cref="IAccountCreationOptions"/> instance to use when sending the request.</param>
         /// <returns>The persisted account.</returns>
-        /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
+        /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication">Application</see> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
         public static IAccount CreateAccount(this IAccountCreationActions source, IAccount account, IAccountCreationOptions creationOptions)
             => (source as IAccountCreationActionsSync).CreateAccount(account, creationOptions);
 
         /// <summary>
-        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application.
+        /// Synchronously creates a new <see cref="IAccount">Account</see> that may login to this application.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="account">The account to create/persist.</param>
         /// <returns>The persisted account.</returns>
-        /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
+        /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication">Application</see> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
         public static IAccount CreateAccount(this IAccountCreationActions source, IAccount account)
             => (source as IAccountCreationActionsSync).CreateAccount(account);
 
         /// <summary>
-        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application, with the default creation options.
+        /// Synchronously creates a new <see cref="IAccount">Account</see> that may login to this application, with the default creation options.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="givenName">The given name (aka 'first name' in Western cultures).</param>
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
-        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory"/>.</param>
+        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory">Directory</see>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
         /// <returns>The persisted account.</returns>
-        /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
+        /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication">Application</see> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
         public static IAccount CreateAccount(this IAccountCreationActions source, string givenName, string surname, string email, string password)
             => (source as IAccountCreationActionsSync).CreateAccount(givenName, surname, email, password);
 
         /// <summary>
-        /// Synchronously creates a new <see cref="IAccount"/> that may login to this application, with the default creation options.
+        /// Synchronously creates a new <see cref="IAccount">Account</see> that may login to this application, with the default creation options.
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="givenName">The given name (aka 'first name' in Western cultures).</param>
         /// <param name="surname">The surname (aka 'last name' in Western cultures).</param>
-        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory"/>.</param>
+        /// <param name="email">The account's email address, which must be unique among all other accounts within a <see cref="Directory.IDirectory">Directory</see>.</param>
         /// <param name="password">The account's raw (plaintext) password.</param>
         /// <param name="customData">An anonymous type containing name/value pairs to be stored in this account's <see cref="SDK.CustomData.ICustomData"/>.</param>
         /// <returns>The persisted account.</returns>
-        /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication"/> does not have a dedicated
+        /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication">Application</see> does not have a dedicated
         ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/>
         ///  does not allow new accounts to be created.</exception>
         public static IAccount CreateAccount(this IAccountCreationActions source, string givenName, string surname, string email, string password, object customData = null)

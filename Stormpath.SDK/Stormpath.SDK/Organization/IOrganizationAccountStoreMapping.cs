@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Organization
         IOrganizationAccountStoreMapping SetOrganization(IOrganization organization);
 
         /// <summary>
-        /// Gets the <see cref="IOrganization"/> represented by this mapping.
+        /// Gets the <see cref="IOrganization">Organization</see> represented by this mapping.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The mapping's <see cref="IOrganization">Organization</see>.</returns>

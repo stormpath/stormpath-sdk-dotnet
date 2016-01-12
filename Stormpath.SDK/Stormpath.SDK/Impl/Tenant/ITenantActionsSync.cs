@@ -32,25 +32,25 @@ namespace Stormpath.SDK.Impl.Tenant
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateApplicationAsync(IApplication, Action{ApplicationCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="application">The <see cref="IApplication"/> to create.</param>
+        /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IApplicationCreationOptions"/>,
         /// which will be used when sending the request.</param>
-        /// <returns>The created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
         IApplication CreateApplication(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateApplicationAsync(IApplication, IApplicationCreationOptions, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="application">The <see cref="IApplication"/> to create.</param>
+        /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
         /// <param name="creationOptions">An <see cref="IApplicationCreationOptions"/> instance to use when sending the request.</param>
-        /// <returns>The created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
         IApplication CreateApplication(IApplication application, IApplicationCreationOptions creationOptions);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateApplicationAsync(IApplication, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="application">The <see cref="IApplication"/> to create.</param>
-        /// <returns>The created <see cref="IApplication"/>.</returns>
+        /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
+        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
         IApplication CreateApplication(IApplication application);
 
         /// <summary>
@@ -58,31 +58,31 @@ namespace Stormpath.SDK.Impl.Tenant
         /// </summary>
         /// <param name="name">The name of the application.</param>
         /// <param name="createDirectory">Whether a default directory should be created automatically.</param>
-        /// <returns>The created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
         IApplication CreateApplication(string name, bool createDirectory);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateDirectoryAsync(IDirectory, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="directory">The Directory resource to create.</param>
-        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="IDirectory">Directory</see>.</returns>
         IDirectory CreateDirectory(IDirectory directory);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateDirectoryAsync(IDirectory, Action{DirectoryCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="directory">The <see cref="IDirectory">Directory</see> to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
         /// which will be used when sending the request.</param>
-        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="IDirectory">Directory</see>.</returns>
         IDirectory CreateDirectory(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateDirectoryAsync(IDirectory, IDirectoryCreationOptions, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="directory">The <see cref="IDirectory">Directory</see> to create.</param>
         /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
-        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="IDirectory">Directory</see>.</returns>
         IDirectory CreateDirectory(IDirectory directory, IDirectoryCreationOptions creationOptions);
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Stormpath.SDK.Impl.Tenant
         /// <param name="name">The directory name.</param>
         /// <param name="description">The directory description.</param>
         /// <param name="status">The initial directory status.</param>
-        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="IDirectory">Directory</see>.</returns>
         IDirectory CreateDirectory(string name, string description, DirectoryStatus status);
 
         /// <summary>

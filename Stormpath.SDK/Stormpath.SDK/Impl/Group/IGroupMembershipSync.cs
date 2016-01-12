@@ -22,7 +22,7 @@ namespace Stormpath.SDK.Impl.Group
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="IGroupMembership"/>.
+    /// available on <see cref="IGroupMembership">Group Membership</see>.
     /// </summary>
     internal interface IGroupMembershipSync : IDeletableSync
     {

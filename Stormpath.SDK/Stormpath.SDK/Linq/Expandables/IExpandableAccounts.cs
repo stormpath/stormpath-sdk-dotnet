@@ -19,7 +19,7 @@ using Stormpath.SDK.Account;
 namespace Stormpath.SDK.Linq.Expandables
 {
     /// <summary>
-    /// Represents an expandable <see cref="IAccount"/> collection.
+    /// Represents an expandable <see cref="IAccount">Account</see> collection.
     /// </summary>
     public interface IExpandableAccounts
     {

@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
-    /// A Builder to construct <see cref="ICreateProviderRequest"/>s.
+    /// A Builder to construct <see cref="ICreateProviderRequest"/> instances.
     /// </summary>
     /// <typeparam name="T">The specific builder interface
     /// (e.g. <see cref="IFacebookCreateProviderRequestBuilder"/> or <see cref="IGoogleCreateProviderRequestBuilder"/>).</typeparam>

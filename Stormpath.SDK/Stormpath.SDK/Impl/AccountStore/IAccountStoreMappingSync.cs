@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Impl.AccountStore
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="IAccountStoreMapping{T}"/>.
+    /// available on <see cref="IAccountStoreMapping{T}">Account Store Mapping</see>.
     /// </summary>
     [Obsolete("This interface will be removed in 1.0. Use IApplicationAccountStoreMappingSync instead.")]
     internal interface IAccountStoreMappingSync : IAccountStoreMappingSync<IApplicationAccountStoreMapping>
@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Impl.AccountStore
 
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="IAccountStoreMapping{T}"/>.
+    /// available on <see cref="IAccountStoreMapping{T}">Account Store Mapping</see>.
     /// </summary>
     /// <typeparam name="T">The Account Store type.</typeparam>
     internal interface IAccountStoreMappingSync<T> :

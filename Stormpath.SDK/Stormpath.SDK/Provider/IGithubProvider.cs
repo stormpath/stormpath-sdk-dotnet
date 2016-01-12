@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
-    /// Github-specific <see cref="IProvider"/> Resource.
+    /// Github-specific <see cref="IProvider">Provider</see> Resource.
     /// </summary>
     public interface IGithubProvider : IProvider
     {

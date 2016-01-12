@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Group
         /// Synchronous counterpart to <see cref="IGroupCreationActions.CreateGroupAsync(IGroup, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="group">The group to create.</param>
-        /// <returns>The new <see cref="IGroup"/>.</returns>
+        /// <returns>The new <see cref="IGroup">Group</see>.</returns>
         IGroup CreateGroup(IGroup group);
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Group
         /// <param name="creationOptionsAction">
         /// An inline builder for an instance of <see cref="IGroupCreationOptions"/>, which will be used when sending the request.
         /// </param>
-        /// <returns>The new <see cref="IGroup"/>.</returns>
+        /// <returns>The new <see cref="IGroup">Group</see>.</returns>
         IGroup CreateGroup(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction);
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Group
         /// </summary>
         /// <param name="group">The group to create.</param>
         /// <param name="creationOptions">An <see cref="IGroupCreationOptions"/> instance to use when sending the request.</param>
-        /// <returns>The new <see cref="IGroup"/>.</returns>
+        /// <returns>The new <see cref="IGroup">Group</see>.</returns>
         IGroup CreateGroup(IGroup group, IGroupCreationOptions creationOptions);
 
         /// <summary>

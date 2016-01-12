@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Impl.Organization
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="IOrganization"/>.
+    /// available on <see cref="IOrganization">Organization</see>.
     /// </summary>
     internal interface IOrganizationSync :
         IHasTenantSync,

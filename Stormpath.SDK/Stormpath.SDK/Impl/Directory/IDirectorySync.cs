@@ -25,7 +25,7 @@ namespace Stormpath.SDK.Impl.Directory
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="IDirectory"/>.
+    /// available on <see cref="IDirectory">Directory</see>.
     /// </summary>
     internal interface IDirectorySync : ISaveableWithOptionsSync<IDirectory>, IDeletableSync, IExtendableSync, IAccountCreationActionsSync, IGroupCreationActionsSync, IAccountStoreSync
     {

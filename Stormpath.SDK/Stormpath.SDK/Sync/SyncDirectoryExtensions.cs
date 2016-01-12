@@ -21,12 +21,12 @@ using Stormpath.SDK.Provider;
 namespace Stormpath.SDK.Sync
 {
     /// <summary>
-    /// Provides synchronous access to the methods available on <see cref="IDirectory"/>.
+    /// Provides synchronous access to the methods available on <see cref="IDirectory">Directory</see>.
     /// </summary>
     public static class SyncDirectoryExtensions
     {
         /// <summary>
-        /// Synchronously gets the <see cref="IProvider"/> of this Directory.
+        /// Synchronously gets the <see cref="IProvider">Provider</see> of this Directory.
         /// </summary>
         /// <param name="directory">The directory.</param>
         /// <returns>The Provider of this Directory.</returns>
