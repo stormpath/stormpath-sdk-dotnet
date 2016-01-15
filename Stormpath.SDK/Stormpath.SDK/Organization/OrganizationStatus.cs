@@ -1,5 +1,5 @@
 ﻿// <copyright file="OrganizationStatus.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,17 +20,17 @@ using Stormpath.SDK.Shared;
 namespace Stormpath.SDK.Organization
 {
     /// <summary>
-    /// Represents the states an <see cref="IOrganization"/> may be in.
+    /// Represents the states an <see cref="IOrganization">Organization</see> may be in.
     /// </summary>
     public sealed class OrganizationStatus : StringEnumeration
     {
         /// <summary>
-        /// Enabled Organizations can be used as <see cref="AccountStore.IAccountStore"/>s for <see cref="Application.IApplication"/>s.
+        /// Enabled Organizations can be used as <see cref="AccountStore.IAccountStore">Account Stores</see> for <see cref="Application.IApplication">Applications</see>.
         /// </summary>
         public static OrganizationStatus Enabled = new OrganizationStatus("ENABLED");
 
         /// <summary>
-        /// Enabled Organizations cannot be used as <see cref="AccountStore.IAccountStore"/>s for <see cref="Application.IApplication"/>s.
+        /// Enabled Organizations cannot be used as <see cref="AccountStore.IAccountStore">Account Stores</see> for <see cref="Application.IApplication">Applications</see>.
         /// </summary>
         public static OrganizationStatus Disabled = new OrganizationStatus("DISABLED");
 
@@ -40,10 +40,10 @@ namespace Stormpath.SDK.Organization
         }
 
         /// <summary>
-        /// Parses a string to an <see cref="OrganizationStatus"/>.
+        /// Parses a string to an <see cref="OrganizationStatus">Organization Status</see>.
         /// </summary>
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
-        /// <returns>The <see cref="OrganizationStatus"/> with the specified name.</returns>
+        /// <returns>The <see cref="OrganizationStatus">Organization Status</see> with the specified name.</returns>
         public static OrganizationStatus Parse(string status)
         {
             switch (status.ToUpper())

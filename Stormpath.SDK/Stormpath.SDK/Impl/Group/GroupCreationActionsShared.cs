@@ -1,5 +1,5 @@
 ﻿// <copyright file="GroupCreationActionsShared.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ using Stormpath.SDK.Impl.DataStore;
 namespace Stormpath.SDK.Impl.Group
 {
     /// <summary>
-    /// Both <see cref="SDK.Application.IApplication"/> and <see cref="SDK.Directory.IDirectory"/> implement
+    /// Both <see cref="SDK.Application.IApplication">Application</see> and <see cref="SDK.Directory.IDirectory">Directory</see> implement
     /// <see cref="IGroupCreationActions"/>, so this shared class wraps the methods up in a DRY way.
     /// </summary>
     internal static class GroupCreationActionsShared

@@ -1,5 +1,5 @@
 ﻿// <copyright file="IAuthenticationResult.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ using Stormpath.SDK.Account;
 namespace Stormpath.SDK.Auth
 {
     /// <summary>
-    /// Represents the return value of an <see cref="Application.IApplication"/> authentication attempt.
+    /// Represents the return value of an <see cref="Application.IApplication">Application</see> authentication attempt.
     /// The successfully authenticated account may be obtained via <see cref="GetAccountAsync(CancellationToken)"/>.
     /// </summary>
     public interface IAuthenticationResult
@@ -34,10 +34,10 @@ namespace Stormpath.SDK.Auth
         bool Success { get; }
 
         /// <summary>
-        /// Gets the successfully authenticated <see cref="IAccount"/>.
+        /// Gets the successfully authenticated <see cref="IAccount">Account</see>.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The <see cref="IAccount"/> that was successfully authenticated.</returns>
+        /// <returns>The <see cref="IAccount">Account</see> that was successfully authenticated.</returns>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

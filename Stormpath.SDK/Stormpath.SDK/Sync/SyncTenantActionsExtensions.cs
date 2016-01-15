@@ -1,5 +1,5 @@
 ﻿// <copyright file="SyncTenantActionsExtensions.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
 
@@ -31,45 +32,45 @@ namespace Stormpath.SDK.Sync
     public static class SyncTenantActionsExtensions
     {
         /// <summary>
-        /// Synchronously creates a new <see cref="IApplication"/> resource in the current tenant.
+        /// Synchronously creates a new <see cref="IApplication">Application</see> resource in the current tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
-        /// <param name="application">The <see cref="IApplication"/> to create.</param>
+        /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="ApplicationCreationOptionsBuilder"/>,
         /// which will be used when sending the request.</param>
-        /// <returns>The created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
         public static IApplication CreateApplication(this ITenantActions tenantActions, IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction)
             => (tenantActions as ITenantActionsSync).CreateApplication(application, creationOptionsAction);
 
         /// <summary>
-        /// Synchronously creates a new <see cref="IApplication"/> resource in the current tenant.
+        /// Synchronously creates a new <see cref="IApplication">Application</see> resource in the current tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
-        /// <param name="application">The <see cref="IApplication"/> to create.</param>
+        /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
         /// <param name="creationOptions">An <see cref="IApplicationCreationOptions"/> instance to use when sending the request.</param>
-        /// <returns>The created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
         public static IApplication CreateApplication(this ITenantActions tenantActions, IApplication application, IApplicationCreationOptions creationOptions)
             => (tenantActions as ITenantActionsSync).CreateApplication(application, creationOptions);
 
         /// <summary>
-        /// Synchronously creates a new <see cref="IApplication"/> resource in the current tenant, with the default creation options.
+        /// Synchronously creates a new <see cref="IApplication">Application</see> resource in the current tenant, with the default creation options.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
-        /// <param name="application">The <see cref="IApplication"/> to create.</param>
-        /// <returns>The created <see cref="IApplication"/>.</returns>
+        /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
+        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
         public static IApplication CreateApplication(this ITenantActions tenantActions, IApplication application)
             => (tenantActions as ITenantActionsSync).CreateApplication(application);
 
         /// <summary>
-        /// Synchronously creates a new <see cref="IApplication"/> resource in the current tenant.
+        /// Synchronously creates a new <see cref="IApplication">Application</see> resource in the current tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="name">The name of the application.</param>
         /// <param name="createDirectory">Whether a default directory should be created automatically.</param>
-        /// <returns>The created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
         public static IApplication CreateApplication(this ITenantActions tenantActions, string name, bool createDirectory)
             => (tenantActions as ITenantActionsSync).CreateApplication(name, createDirectory);
@@ -79,7 +80,7 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="directory">The Directory resource to create.</param>
-        /// <returns>The created <see cref="Directory.IDirectory"/>.</returns>
+        /// <returns>The created <see cref="Directory.IDirectory">Directory</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         public static IDirectory CreateDirectory(this ITenantActions tenantActions, IDirectory directory)
             => (tenantActions as ITenantActionsSync).CreateDirectory(directory);
@@ -88,10 +89,10 @@ namespace Stormpath.SDK.Sync
         /// Synchronously creates a new Provider-based Directory resource in the Tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
-        /// <param name="directory">The <see cref="Directory.IDirectory"/> to create.</param>
+        /// <param name="directory">The <see cref="Directory.IDirectory">Directory</see> to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
         /// which will be used when sending the request.</param>
-        /// <returns>The created <see cref="Directory.IDirectory"/>.</returns>
+        /// <returns>The created <see cref="Directory.IDirectory">Directory</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         public static IDirectory CreateDirectory(this ITenantActions tenantActions, IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction)
             => (tenantActions as ITenantActionsSync).CreateDirectory(directory, creationOptionsAction);
@@ -100,9 +101,9 @@ namespace Stormpath.SDK.Sync
         /// Synchronously creates a new Cloud- or Provider-based Directory resource in the Tenant.
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
-        /// <param name="directory">The <see cref="Directory.IDirectory"/> to create.</param>
+        /// <param name="directory">The <see cref="Directory.IDirectory">Directory</see> to create.</param>
         /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
-        /// <returns>The created <see cref="Directory.IDirectory"/>.</returns>
+        /// <returns>The created <see cref="Directory.IDirectory">Directory</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         public static IDirectory CreateDirectory(this ITenantActions tenantActions, IDirectory directory, IDirectoryCreationOptions creationOptions)
             => (tenantActions as ITenantActionsSync).CreateDirectory(directory, creationOptions);
@@ -114,7 +115,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="name">The directory name.</param>
         /// <param name="description">The directory description.</param>
         /// <param name="status">The initial directory status.</param>
-        /// <returns>The created <see cref="Directory.IDirectory"/>.</returns>
+        /// <returns>The created <see cref="Directory.IDirectory">Directory</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         public static IDirectory CreateDirectory(this ITenantActions tenantActions, string name, string description, DirectoryStatus status)
             => (tenantActions as ITenantActionsSync).CreateDirectory(name, description, status);
@@ -157,15 +158,17 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="name">The Organization's name.</param>
-        /// <param name="description">The Organization's description text.</param>
+        /// <param name="nameKey">The Organization's <c>nameKey</c>.</param>
         /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the Organization.</exception>
-        public static IOrganization CreateOrganization(this ITenantActions tenantActions, string name, string description)
-            => (tenantActions as ITenantActionsSync).CreateOrganization(name, description);
+        public static IOrganization CreateOrganization(this ITenantActions tenantActions, string name, string nameKey)
+            => (tenantActions as ITenantActionsSync).CreateOrganization(name, nameKey);
 
         /// <summary>
         /// Synchronously verifies an account's email address based on a <c>sptoken</c> parameter embedded in a URL
         /// found in an account's verification email.
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// For example:
         /// <code>
@@ -178,7 +181,7 @@ namespace Stormpath.SDK.Sync
         /// tenant.VerifyAccountEmailAsync("ExAmPleEmAilVeRiFiCaTiOnTokEnHeRE");
         /// </code>
         /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="token">The <c>sptoken</c> query parameter value.</param>
         /// <returns>The verified account.</returns>
@@ -187,7 +190,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).VerifyAccountEmail(token);
 
         /// <summary>
-        /// Retrieves the <see cref="IAccount">Account</see> at the specified URL.
+        /// Synchronously retrieves the <see cref="IAccount">Account</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IAccount}(DataStore.IDataStore, string)"/>.</remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
@@ -198,7 +201,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).GetAccount(href);
 
         /// <summary>
-        /// Retrieves the <see cref="IApplication">Application</see> at the specified URL.
+        /// Synchronously retrieves the <see cref="IApplication">Application</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IApplication}(DataStore.IDataStore, string)"/>.</remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
@@ -209,7 +212,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).GetApplication(href);
 
         /// <summary>
-        /// Retrieves the <see cref="IDirectory">Directory</see> at the specified URL.
+        /// Synchronously retrieves the <see cref="IDirectory">Directory</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IDirectory}(DataStore.IDataStore, string)"/>.</remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
@@ -220,7 +223,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).GetDirectory(href);
 
         /// <summary>
-        /// Retrieves the <see cref="IGroup">Group</see> at the specified URL.
+        /// Synchronously retrieves the <see cref="IGroup">Group</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IGroup}(DataStore.IDataStore, string)"/>.</remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
@@ -231,7 +234,7 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).GetGroup(href);
 
         /// <summary>
-        /// Retrieves the <see cref="IOrganization">Organization</see> at the specified URL.
+        /// Synchronously retrieves the <see cref="IOrganization">Organization</see> at the specified Stormpath URL.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IOrganization}(DataStore.IDataStore, string)"/>.</remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
@@ -240,5 +243,27 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
         public static IOrganization GetOrganization(this ITenantActions tenantActions, string href)
             => (tenantActions as ITenantActionsSync).GetOrganization(href);
+
+        /// <summary>
+        /// Synchronously retrieves the <see cref="IAccessToken">Access Token</see> at the specified Stormpath URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IAccessToken}(DataStore.IDataStore, string)"/>.</remarks>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="href">The resource URL of the <see cref="IAccessToken">Access Token</see> to retrieve.</param>
+        /// <returns>The <see cref="IAccessToken">Access Token</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        public static IAccessToken GetAccessToken(this ITenantActions tenantActions, string href)
+            => (tenantActions as ITenantActionsSync).GetAccessToken(href);
+
+        /// <summary>
+        /// Synchronously retrieves the <see cref="IRefreshToken">Refresh Token</see> at the specified Stormpath URL.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IRefreshToken}(DataStore.IDataStore, string)"/>.</remarks>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="href">The resource URL of the <see cref="IRefreshToken">Refresh Token</see> to retrieve.</param>
+        /// <returns>The <see cref="IRefreshToken">Refresh Token</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        public static IRefreshToken GetRefreshToken(this ITenantActions tenantActions, string href)
+            => (tenantActions as ITenantActionsSync).GetRefreshToken(href);
     }
 }

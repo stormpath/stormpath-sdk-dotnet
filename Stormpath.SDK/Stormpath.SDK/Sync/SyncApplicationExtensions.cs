@@ -1,5 +1,5 @@
 ﻿// <copyright file="SyncApplicationExtensions.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Sync
 {
     /// <summary>
-    /// Provides synchronous access to the methods available on <see cref="IApplication"/>.
+    /// Provides synchronous access to the methods available on <see cref="IApplication">Application</see>.
     /// </summary>
     public static class SyncApplicationExtensions
     {
@@ -158,8 +158,8 @@ namespace Stormpath.SDK.Sync
 
         /// <summary>
         /// Attempts to synchronously authenticate an account with the specified username and password.
-        /// <para>If you need to obtain the authenticated account details, use <see cref="AuthenticateAccount(IApplication, string, string)"/> instead.</para>
         /// </summary>
+        /// <remarks>If you need to obtain the authenticated account details, use <see cref="AuthenticateAccount(IApplication, string, string)"/> instead.</remarks>
         /// <param name="application">The application.</param>
         /// <param name="username">The account's username.</param>
         /// <param name="password">The account's raw (plaintext) password</param>
@@ -175,6 +175,8 @@ namespace Stormpath.SDK.Sync
 
         /// <summary>
         /// Synchronously triggers the delivery of a new verification email for the specified account.
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// This method is useful in scenarios where the Account Registration and Verification workflow
         /// is enabled. If the welcome email has not been received by a newly registered account,
@@ -184,7 +186,7 @@ namespace Stormpath.SDK.Sync
         /// <para>
         /// The <see cref="IEmailVerificationRequest"/> must contain the username or email identifying the account.
         /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="application">The application</param>
         /// <param name="requestBuilderAction">Sets the options required for the verification email request.</param>
         public static void SendVerificationEmail(this IApplication application, Action<EmailVerificationRequestBuilder> requestBuilderAction)
@@ -192,13 +194,15 @@ namespace Stormpath.SDK.Sync
 
         /// <summary>
         /// Synchronously triggers the delivery of a new verification email for the specified account.
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// This method is useful in scenarios where the Account Registration and Verification workflow
         /// is enabled. If the welcome email has not been received by a newly registered account,
         /// then the user will not be able to login until the account is verified.
         /// </para>
         /// <para>This method re-sends the verification email and allows the user to verify the account.</para>
-        /// </summary>
+        /// </remarks>
         /// <param name="application">The application</param>
         /// <param name="usernameOrEmail">The username or email identifying the account to send the verification email to.</param>
         public static void SendVerificationEmail(this IApplication application, string usernameOrEmail)
@@ -220,13 +224,13 @@ namespace Stormpath.SDK.Sync
         /// <summary>
         /// Synchronously verifies the password reset token (received in the user's email) and immediately
         /// changes the password in the same request, if the token is valid.
-        /// <para>Once the token has been successfully used, it is immediately invalidated and can't be used again.
-        /// If you need to change the password again, you will previously need to execute
-        /// <see cref="SendPasswordResetEmail(IApplication, string)"/> again in order to obtain a new password reset token.</para>
         /// </summary>
+        /// <remarks>Once the token has been successfully used, it is immediately invalidated and can't be used again.
+        /// If you need to change the password again, you will need to execute
+        /// <see cref="SendPasswordResetEmail(IApplication, string)"/> again in order to obtain a new password reset token.</remarks>
         /// <param name="application">The application.</param>
         /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
-        /// <param name="newPassword">The new password that will be set to the <see cref="IAccount"/> if the token is successfully validated.</param>
+        /// <param name="newPassword">The new password that will be set to the <see cref="IAccount">Account</see> if the token is successfully validated.</param>
         /// <returns>The account matching the specified token.</returns>
         /// <exception cref="SDK.Error.ResourceException">The token is not valid.</exception>
         public static IAccount ResetPassword(this IApplication application, string token, string newPassword)
@@ -237,28 +241,28 @@ namespace Stormpath.SDK.Sync
         /// The email will contain a password reset link that the user can click or copy into their browser address bar.
         /// </summary>
         /// <param name="application">The application.</param>
-        /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
-        /// <returns>The created <see cref="IPasswordResetToken"/>.
+        /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
+        /// <returns>The created <see cref="IPasswordResetToken">Password Reset Token</see>.
         /// You can obtain the associated account via <see cref="SyncPasswordResetTokenExtensions.GetAccount(IPasswordResetToken)"/>.</returns>
         /// <exception cref="SDK.Error.ResourceException">There is no account that matches the specified email address.</exception>
         public static IPasswordResetToken SendPasswordResetEmail(this IApplication application, string email)
             => (application as IApplicationSync).SendPasswordResetEmail(email);
 
         /// <summary>
-        /// Synchronously sends a password reset email to an account in the specified <see cref="IAccountStore"/> matching
+        /// Synchronously sends a password reset email to an account in the specified <see cref="IAccountStore">Account Store</see> matching
         /// the specified <paramref name="email"/>. If the email does not match an account in the specified
-        /// <see cref="IAccountStore"/>, a <see cref="Error.ResourceException"/> will be thrown.
+        /// <see cref="IAccountStore">Account Store</see>, a <see cref="Error.ResourceException"/> will be thrown.
         /// If you are unsure of which of the application's mapped account stores might contain the account, use the more general
         /// <see cref="SendPasswordResetEmail(IApplication, string)"/> method instead.
         /// The email will contain a password reset link that the user can click or copy into their browser address bar.
         /// </summary>
         /// <param name="application">The application.</param>
-        /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
+        /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="accountStore">The AccountStore expected to contain an account with the specified email address.</param>
-        /// <returns>A public static  whose result is the created <see cref="IPasswordResetToken"/>.
+        /// <returns>A public static  whose result is the created <see cref="IPasswordResetToken">Password Reset Token</see>.
         /// You can obtain the associated account via <see cref="SyncPasswordResetTokenExtensions.GetAccount(IPasswordResetToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">
-        /// The specified <see cref="IAccountStore"/> is not mapped to this application, or there is no account that matches the specified email address in the specified <paramref name="accountStore"/>.
+        /// The specified <see cref="IAccountStore">Account Store</see> is not mapped to this application, or there is no account that matches the specified email address in the specified <paramref name="accountStore"/>.
         /// </exception>
         public static IPasswordResetToken SendPasswordResetEmail(this IApplication application, string email, IAccountStore accountStore)
             => (application as IApplicationSync).SendPasswordResetEmail(email, accountStore);
@@ -273,9 +277,9 @@ namespace Stormpath.SDK.Sync
         /// The email will contain a password reset link that the user can click or copy into their browser address bar.
         /// </summary>
         /// <param name="application">The application.</param>
-        /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
+        /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="hrefOrNameKey">The href of the AccountStore, or the name key of the Organization, expected to contain an account with the specified email address.</param>
-        /// <returns>A public static  whose result is the created <see cref="IPasswordResetToken"/>.
+        /// <returns>A public static  whose result is the created <see cref="IPasswordResetToken">Password Reset Token</see>.
         /// You can obtain the associated account via <see cref="SyncPasswordResetTokenExtensions.GetAccount(IPasswordResetToken)"/>.</returns>
         /// <exception cref="Error.ResourceException">
         /// The specified AccountStore or Organization is not mapped to this application, or there is no account that matches the specified email address in the AccountStore or Organization.
@@ -288,14 +292,14 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="application">The application.</param>
         /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
-        /// <returns>The <see cref="IAccount"/> matching the specified token.</returns>
+        /// <returns>The <see cref="IAccount">Account</see> matching the specified token.</returns>
         /// <exception cref="SDK.Error.ResourceException">The token is not valid.</exception>
         public static IAccount VerifyPasswordResetToken(this IApplication application, string token)
             => (application as IApplicationSync).VerifyPasswordResetToken(token);
 
         /// <summary>
-        /// Synchronously retrieves a Provider-based <see cref="IAccount"/>. The account must exist in one of the Provider-based <see cref="Directory.IDirectory"/>
-        /// assigned to the Application as an account store, and the Directory must also be <see cref="Directory.DirectoryStatus.Enabled"/>.
+        /// Synchronously retrieves a Provider-based <see cref="IAccount">Account</see>. The account must exist in one of the Provider-based <see cref="Directory.IDirectory">Directory</see>
+        /// assigned to the Application as an account store, and the Directory must also be <see cref="Directory.DirectoryStatus.Enabled">Enabled</see>.
         /// If not in an assigned account store, the retrieval attempt will fail.
         /// </summary>
         /// <param name="application">The application.</param>

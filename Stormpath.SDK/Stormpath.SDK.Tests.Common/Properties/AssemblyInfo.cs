@@ -1,5 +1,5 @@
 ﻿// <copyright file="AssemblyInfo.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,12 +25,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Stormpath, Inc.")]
 [assembly: AssemblyProduct("Stormpath .NET SDK")]
-[assembly: AssemblyCopyright("Copyright © 2015 Stormpath, Inc.")]
+[assembly: AssemblyCopyright("Copyright © 2016 Stormpath, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("9ed26d42-2203-46c0-b897-8e3218954170")]
 
-[assembly: AssemblyVersion("0.4.0.0")]
-[assembly: AssemblyFileVersion("0.4.0.0")]
+[assembly: AssemblyVersion("0.4.1.0")]
+[assembly: AssemblyFileVersion("0.4.1.0")]

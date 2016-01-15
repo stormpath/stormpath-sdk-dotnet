@@ -1,5 +1,5 @@
 ﻿// <copyright file="SyncClientExtensions.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,15 +21,15 @@ using Stormpath.SDK.Tenant;
 namespace Stormpath.SDK.Sync
 {
     /// <summary>
-    /// Provides synchronous access to the methods available on <see cref="IClient"/>.
+    /// Provides synchronous access to the methods available on <see cref="IClient">Client</see>.
     /// </summary>
     public static class SyncClientExtensions
     {
         /// <summary>
-        /// Synchronously gets the sole <see cref="ITenant"/> associated to this <see cref="IClient"/>.
+        /// Synchronously gets the sole <see cref="ITenant">Tenant</see> associated to this <see cref="IClient">Client</see>.
         /// </summary>
         /// <param name="client">The client.</param>
-        /// <returns>The <see cref="ITenant"/> associated to this client.</returns>
+        /// <returns>The <see cref="ITenant">Tenant</see> associated to this client.</returns>
         public static ITenant GetCurrentTenant(this IClient client)
             => (client as IClientSync).GetCurrentTenant();
     }

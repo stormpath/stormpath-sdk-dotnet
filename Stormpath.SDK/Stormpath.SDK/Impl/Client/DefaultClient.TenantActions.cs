@@ -1,5 +1,5 @@
 ﻿// <copyright file="DefaultClient.TenantActions.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
 
@@ -105,11 +106,11 @@ namespace Stormpath.SDK.Impl.Client
             return await this.tenant.CreateOrganizationAsync(organization, creationOptions, cancellationToken).ConfigureAwait(false);
         }
 
-        async Task<IOrganization> ITenantActions.CreateOrganizationAsync(string name, string description, CancellationToken cancellationToken)
+        async Task<IOrganization> ITenantActions.CreateOrganizationAsync(string name, string nameKey, CancellationToken cancellationToken)
         {
             await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
-            return await this.tenant.CreateOrganizationAsync(name, description, cancellationToken).ConfigureAwait(false);
+            return await this.tenant.CreateOrganizationAsync(name, nameKey, cancellationToken).ConfigureAwait(false);
         }
 
         async Task<IAccount> ITenantActions.VerifyAccountEmailAsync(string token, CancellationToken cancellationToken)
@@ -152,6 +153,20 @@ namespace Stormpath.SDK.Impl.Client
             await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.GetOrganizationAsync(href).ConfigureAwait(false);
+        }
+
+        async Task<IAccessToken> ITenantActions.GetAccessTokenAsync(string href, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.GetAccessTokenAsync(href).ConfigureAwait(false);
+        }
+
+        async Task<IRefreshToken> ITenantActions.GetRefreshTokenAsync(string href, CancellationToken cancellationToken)
+        {
+            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+
+            return await this.tenant.GetRefreshTokenAsync(href).ConfigureAwait(false);
         }
     }
 }

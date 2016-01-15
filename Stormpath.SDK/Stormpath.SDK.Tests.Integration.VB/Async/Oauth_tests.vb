@@ -1,5 +1,5 @@
 ﻿' <copyright file="Oauth_tests.vb" company="Stormpath, Inc.">
-' Copyright (c) 2015 Stormpath, Inc.
+' Copyright (c) 2016 Stormpath, Inc.
 '
 ' Licensed under the Apache License, Version 2.0 (the "License");
 ' you may not use this file except in compliance with the License.
@@ -172,6 +172,9 @@ Namespace Async
             Call (Await accessTokenForApplication.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href)
             Call (Await accessTokenForApplication.GetTenantAsync()).Href.ShouldBe(Me.fixture.TenantHref)
 
+            Dim retrievedDirectly = Await client.GetAccessTokenAsync(accessTokenForApplication.Href)
+            retrievedDirectly.Href.ShouldBe(accessTokenForApplication.Href)
+
             ' Clean up
             Call (Await accessTokenForApplication.DeleteAsync()).ShouldBeTrue()
 
@@ -208,6 +211,9 @@ Namespace Async
             Call (Await refreshTokenForApplication.GetAccountAsync()).Href.ShouldBe(Me.fixture.PrimaryAccountHref)
             Call (Await refreshTokenForApplication.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href)
             Call (Await refreshTokenForApplication.GetTenantAsync()).Href.ShouldBe(Me.fixture.TenantHref)
+
+            Dim retrievedDirectly = Await client.GetRefreshTokenAsync(refreshTokenForApplication.Href)
+            retrievedDirectly.Href.ShouldBe(refreshTokenForApplication.Href)
 
             ' Clean up
             Call (Await refreshTokenForApplication.DeleteAsync()).ShouldBeTrue()

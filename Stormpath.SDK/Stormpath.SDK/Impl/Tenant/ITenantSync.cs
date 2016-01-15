@@ -1,5 +1,5 @@
 ﻿// <copyright file="ITenantSync.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ namespace Stormpath.SDK.Impl.Tenant
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="SDK.Tenant.ITenant"/>.
+    /// available on <see cref="SDK.Tenant.ITenant">Tenant</see>.
     /// </summary>
     internal interface ITenantSync : IExtendableSync, ITenantActionsSync
     {

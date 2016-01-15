@@ -1,5 +1,5 @@
 ﻿// <copyright file="IOrganization.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,11 +24,11 @@ using Stormpath.SDK.Tenant;
 namespace Stormpath.SDK.Organization
 {
     /// <summary>
-    /// An Organization is a top-level container for <see cref="Directory.IDirectory"/> and <see cref="IGroup"/> resources,
-    /// and is an <see cref="IAccountStore"/> that can be mapped to an <see cref="Application.IApplication"/>
+    /// An Organization is a top-level container for <see cref="Directory.IDirectory">Directory</see> and <see cref="IGroup">Group</see> resources,
+    /// and is an <see cref="IAccountStore">Account Store</see> that can be mapped to an <see cref="Application.IApplication">Application</see>
     /// just like a Directory or Group.
-    /// <para>Organizations are primarily intended to represent tenants in multi-tenant applications.</para>
     /// </summary>
+    /// <remarks>Organizations are primarily intended to represent tenants in multi-tenant applications.</remarks>
     public interface IOrganization :
         IResource,
         IHasTenant,
@@ -44,14 +44,14 @@ namespace Stormpath.SDK.Organization
         /// <summary>
         /// Gets the Organization's name.
         /// </summary>
-        /// <value>The Organization's name. An Organization's name must be unique across all Organizations within a Stormpath <see cref="Tenant.ITenant"/>.</value>
+        /// <value>The Organization's name. An Organization's name must be unique across all Organizations within a Stormpath <see cref="Tenant.ITenant">Tenant</see>.</value>
         string Name { get; }
 
         /// <summary>
         /// Gets the Organization's name key.
         /// </summary>
         /// <value>
-        /// The Organization's name key. An Organization's name key must be unique across all Organizations within a Stormpath <see cref="Tenant.ITenant"/>,
+        /// The Organization's name key. An Organization's name key must be unique across all Organizations within a Stormpath <see cref="Tenant.ITenant">Tenant</see>,
         /// and must follow DNS hostname rules: it may only consist of a-z, A-Z, 0-9 and - (hyphen). It must not start or end with a hyphen.
         /// The uniqueness constraint is case-insensitive.
         /// </value>
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Organization
         /// <summary>
         /// Gets the Organization's status.
         /// </summary>
-        /// <value>The Organization's status. Enabled Organizations can be used as <see cref="IAccountStore"/>s for <see cref="Application.IApplication"/>s; Disabled Organizations cannot.</value>
+        /// <value>The Organization's status. Enabled Organizations can be used as <see cref="IAccountStore">Account Stores</see> for <see cref="Application.IApplication">Applications</see>; Disabled Organizations cannot.</value>
         OrganizationStatus Status { get; }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Organization
         /// <summary>
         /// Sets the Organization's name.
         /// </summary>
-        /// <param name="name">The Organization's name. Organization names must be unique within a Stormpath <see cref="Tenant.ITenant"/>.</param>
+        /// <param name="name">The Organization's name. Organization names must be unique within a Stormpath <see cref="Tenant.ITenant">Tenant</see>.</param>
         /// <returns>This instance for method chaining.</returns>
         IOrganization SetName(string name);
 
@@ -80,7 +80,7 @@ namespace Stormpath.SDK.Organization
         /// Sets the Organization's name key.
         /// </summary>
         /// <param name="nameKey">
-        /// The Organization's name key. Organization name keys must be unique within a Stormpath <see cref="Tenant.ITenant"/>,
+        /// The Organization's name key. Organization name keys must be unique within a Stormpath <see cref="Tenant.ITenant">Tenant</see>,
         /// and must follow DNS hostname rules: it may only consist of a-z, A-Z, 0-9 and - (hyphen). It must not start or end with a hyphen.
         /// The uniqueness constraint is case-insensitive.
         /// </param>
@@ -91,8 +91,8 @@ namespace Stormpath.SDK.Organization
         /// Sets the Organization's status.
         /// </summary>
         /// <param name="status">The Organization's status.
-        /// <see cref="OrganizationStatus.Enabled"/> Organizations can be used as <see cref="IAccountStore"/>s for <see cref="Application.IApplication"/>s.
-        /// <see cref="OrganizationStatus.Disabled"/> Organizations cannot be used as <see cref="IAccountStore"/>s.
+        /// <see cref="OrganizationStatus.Enabled">Enabled</see> Organizations can be used as <see cref="IAccountStore">Account Stores</see>s for <see cref="Application.IApplication">Applications</see>.
+        /// <see cref="OrganizationStatus.Disabled">Disabled</see> Organizations cannot be used as <see cref="IAccountStore">Account Stores</see>.
         /// </param>
         /// <returns>This instance for method chaining.</returns>
         IOrganization SetStatus(OrganizationStatus status);
@@ -106,10 +106,10 @@ namespace Stormpath.SDK.Organization
 
         /// <summary>
         /// Gets a queryable list of all Groups accessible to this Organization.
-        /// It will not only return any group associated directly as an <see cref="IAccountStore"/>
+        /// It will not only return any group associated directly as an <see cref="IAccountStore">Account Store</see>
         /// but also every Group that exists inside every Directory associated as an Account Store.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search <see cref="IGroup"/>s.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search <see cref="IGroup">Groups</see>.</returns>
         /// <example>
         /// var allOrganizationGroups = await myOrg.GetGroups().ToListAsync();
         /// </example>

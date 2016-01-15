@@ -1,5 +1,5 @@
 ﻿// <copyright file="IHasTenant.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Tenant
     public interface IHasTenant
     {
         /// <summary>
-        /// Gets the Stormpath <see cref="ITenant"/> that owns this resource.
+        /// Gets the Stormpath <see cref="ITenant">Tenant</see> that owns this resource.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The tenant.</returns>

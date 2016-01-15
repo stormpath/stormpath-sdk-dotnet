@@ -1,5 +1,5 @@
 ﻿// <copyright file="IInternalAsyncDataStore.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// as an instance of the specified class <typeparamref name="T"/>. The cache is not consulted for reads;
         /// but any returned value <b>is</b> cached.
         /// </summary>
-        /// <typeparam name="T">The type of the returned <see cref="IResource"/> value.</typeparam>
+        /// <typeparam name="T">The type of the returned <see cref="IResource">Resource</see> value.</typeparam>
         /// <param name="href">The resource URL of the resource to retrieve.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>An instance of the specified class based on data returned from the specified <paramref name="href"/> URL.</returns>

@@ -1,5 +1,5 @@
 ﻿// <copyright file="ApplicationStatus.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ using Stormpath.SDK.Shared;
 namespace Stormpath.SDK.Application
 {
     /// <summary>
-    /// Represents the states an <see cref="IApplication"/> may be in.
+    /// Represents the states an <see cref="IApplication">Application</see> may be in.
     /// </summary>
     public sealed class ApplicationStatus : StringEnumeration
     {
@@ -40,10 +40,10 @@ namespace Stormpath.SDK.Application
         }
 
         /// <summary>
-        /// Parses a string to an <see cref="ApplicationStatus"/>.
+        /// Parses a string to an <see cref="ApplicationStatus">Application Status</see>.
         /// </summary>
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
-        /// <returns>The <see cref="ApplicationStatus"/> with the specified name.</returns>
+        /// <returns>The <see cref="ApplicationStatus">Application Status</see> with the specified name.</returns>
         public static ApplicationStatus Parse(string status)
         {
             switch (status.ToUpper())

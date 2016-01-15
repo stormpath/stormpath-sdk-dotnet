@@ -1,6 +1,6 @@
 ﻿
 ' <copyright file="Organization_tests.cs" company="Stormpath, Inc.">
-' Copyright (c) 2015 Stormpath, Inc.
+' Copyright (c) 2016 Stormpath, Inc.
 '
 ' Licensed under the Apache License, Version 2.0 (the "License");
 ' you may not use this file except in compliance with the License.
@@ -223,6 +223,27 @@ Namespace Async
             newOrg.Name.ShouldBe(name)
             newOrg.NameKey.ShouldBe(nameKey)
             newOrg.Status.ShouldBe(OrganizationStatus.Disabled)
+
+            ' Clean up
+            Call (Await newOrg.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedOrganizationHrefs.Remove(newOrg.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Creating_with_convenience_method(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+
+            Dim name = $"Created Organization 4 (.NET ITs {fixture.TestRunIdentifier}-{clientBuilder.Name} - VB)"
+            Dim nameKey = $"dotnet-test4-{fixture.TestRunIdentifier}-{clientBuilder.Name}"
+
+            Dim newOrg = Await client.CreateOrganizationAsync(name, nameKey)
+            newOrg.ShouldNotBeNull()
+            Me.fixture.CreatedOrganizationHrefs.Add(newOrg.Href)
+
+            newOrg.Name.ShouldBe(name)
+            newOrg.NameKey.ShouldBe(nameKey)
+            newOrg.Status.ShouldBe(OrganizationStatus.Enabled)
 
             ' Clean up
             Call (Await newOrg.DeleteAsync()).ShouldBeTrue()

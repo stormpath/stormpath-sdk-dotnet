@@ -1,5 +1,5 @@
 ﻿// <copyright file="SyncGroupExtensions.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,30 +22,30 @@ using Stormpath.SDK.Impl.Group;
 namespace Stormpath.SDK.Sync
 {
     /// <summary>
-    /// Provides synchronous access to the methods available on <see cref="IGroup"/>.
+    /// Provides synchronous access to the methods available on <see cref="IGroup">Group</see>.
     /// </summary>
     public static class SyncGroupExtensions
     {
         /// <summary>
-        /// Synchronously assigns the specified <see cref="IAccount"/> to this <see cref="Group.IGroup"/>.
+        /// Synchronously assigns the specified <see cref="IAccount">Account</see> to this <see cref="Group.IGroup">Group</see>.
         /// </summary>
         /// <param name="group">The group.</param>
         /// <param name="account">The account to assign to this group.</param>
         /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created
+        /// The new <see cref="IGroupMembership">Group Membership</see> resource created
         /// reflecting the group-to-account association.
         /// </returns>
         public static IGroupMembership AddAccount(this IGroup group, IAccount account)
              => (group as IGroupSync).AddAccount(account);
 
         /// <summary>
-        /// Synchronously assigns this <see cref="Group.IGroup"/> to the specified <see cref="IAccount"/>
+        /// Synchronously assigns this <see cref="Group.IGroup">Group</see> to the specified <see cref="IAccount">Account</see>
         /// represented by its (case-insensitive) <c>username</c>, <c>email</c>, or <c>href</c>
         /// </summary>
         /// <param name="group">The group.</param>
-        /// <param name="hrefOrEmailOrUsername">The <c>href</c>, email, or username of the <see cref="IAccount"/> to associate.</param>
+        /// <param name="hrefOrEmailOrUsername">The <c>href</c>, email, or username of the <see cref="IAccount">Account</see> to associate.</param>
         /// <returns>
-        /// The new <see cref="IGroupMembership"/> resource created
+        /// The new <see cref="IGroupMembership">Group Membership</see> resource created
         /// reflecting the group-to-account association.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">The specified account could not be found.</exception>
@@ -53,31 +53,31 @@ namespace Stormpath.SDK.Sync
             => (group as IGroupSync).AddAccount(hrefOrEmailOrUsername);
 
         /// <summary>
-        /// Synchronously removes this group's association with the specified <see cref="IAccount"/>.
+        /// Synchronously removes this group's association with the specified <see cref="IAccount">Account</see>.
         /// </summary>
         /// <param name="group">The group.</param>
-        /// <param name="account">The <see cref="IAccount"/> object to disassociate.</param>
+        /// <param name="account">The <see cref="IAccount">Account</see> object to disassociate.</param>
         /// <returns>Whether the operation succeeded.</returns>
         /// <exception cref="System.InvalidOperationException">The specified account does not belong to this group.</exception>
         public static bool RemoveAccount(this IGroup group, IAccount account)
             => (group as IGroupSync).RemoveAccount(account);
 
         /// <summary>
-        /// Synchronously removes this Group's association with the specified <see cref="IAccount"/>
+        /// Synchronously removes this Group's association with the specified <see cref="IAccount">Account</see>
         /// represented by its (case-insensitive) <c>username</c>, <c>email</c>, or <c>href</c>
         /// </summary>
         /// <param name="group">The group.</param>
-        /// <param name="hrefOrEmailOrUsername">The <see cref="IAccount"/> object to disassociate.</param>
+        /// <param name="hrefOrEmailOrUsername">The <see cref="IAccount">Account</see> object to disassociate.</param>
         /// <returns>Whether the operation succeeded.</returns>
         /// <exception cref="System.InvalidOperationException">The specified account does not belong to this group.</exception>
         public static bool RemoveAccount(this IGroup group, string hrefOrEmailOrUsername)
             => (group as IGroupSync).RemoveAccount(hrefOrEmailOrUsername);
 
         /// <summary>
-        /// Synchronously gets the group's parent <see cref="Directory.IDirectory"/> (where the group is stored).
+        /// Synchronously gets the group's parent <see cref="Directory.IDirectory">Directory</see> (where the group is stored).
         /// </summary>
         /// <param name="group">The group.</param>
-        /// <returns>This group's parent <see cref="Directory.IDirectory"/>.</returns>
+        /// <returns>The group's parent <see cref="Directory.IDirectory">Directory</see>.</returns>
         public static IDirectory GetDirectory(this IGroup group)
             => (group as IGroupSync).GetDirectory();
     }

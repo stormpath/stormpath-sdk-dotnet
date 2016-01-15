@@ -1,5 +1,5 @@
 ﻿// <copyright file="IDirectory.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,12 +28,14 @@ using Stormpath.SDK.Tenant;
 namespace Stormpath.SDK.Directory
 {
     /// <summary>
-    /// A directory is a top-level container of <see cref="IAccount"/>s and <see cref="IGroup"/>s.
+    /// A directory is a top-level container of <see cref="IAccount">Accounts</see> and <see cref="IGroup">Groups</see>.
     /// Accounts and groups are guaranteed to be unique within a directory, but not across multiple directories.
-    /// <para>You can think of a <see cref="IDirectory"/> as an account 'store'.
-    /// You can map one or more directories (or groups within a directory) to an <see cref="Application.IApplication"/>.
-    /// This forms the application's effective 'user base' of all <see cref="IAccount"/> that may use the application.</para>
     /// </summary>
+    /// <remarks>
+    /// You can think of a <see cref="IDirectory">Directory</see> as an account 'store'.
+    /// You can map one or more directories (or groups within a directory) to an <see cref="Application.IApplication">Application</see>.
+    /// This forms the application's effective 'user base' of all <see cref="IAccount">Account</see> that may use the application.
+    /// </remarks>
     public interface IDirectory :
         IResource,
         IHasTenant,
@@ -48,22 +50,22 @@ namespace Stormpath.SDK.Directory
         /// <summary>
         /// Gets the directory's name.
         /// </summary>
-        /// <value>This directory's name. The name is guaranteed to be non-null and unique among all other directories in the owning <see cref="Tenant.ITenant"/>.</value>
+        /// <value>The directory's name. The name is guaranteed to be non-null and unique among all other directories in the owning <see cref="Tenant.ITenant">Tenant</see>.</value>
         string Name { get; }
 
         /// <summary>
         /// Gets the directory's description.
         /// </summary>
-        /// <value>This directory's description. This is an optional property and may be null or empty.</value>
+        /// <value>The directory's description. This is an optional property and may be null or empty.</value>
         string Description { get; }
 
         /// <summary>
         /// Gets the directory's status.
         /// </summary>
         /// <value>
-        /// This directory's status.
-        /// An <see cref="DirectoryStatus.Enabled"/> directory may be used by applications to login accounts found within the directory.
-        /// A <see cref="DirectoryStatus.Disabled"/> directory prevents its accounts from being used to login to applications.
+        /// The directory's status.
+        /// An <see cref="DirectoryStatus.Enabled">Enabled</see> directory may be used by applications to login accounts found within the directory.
+        /// A <see cref="DirectoryStatus.Disabled">Disabled</see> directory prevents its accounts from being used to login to applications.
         /// </value>
         DirectoryStatus Status { get; }
 
@@ -77,7 +79,7 @@ namespace Stormpath.SDK.Directory
         /// <summary>
         /// Sets the directory's name.
         /// </summary>
-        /// <param name="name">The directory's name. Directory names are required and must be unique within a <see cref="Tenant.ITenant"/>.</param>
+        /// <param name="name">The directory's name. Directory names are required and must be unique within a <see cref="Tenant.ITenant">Tenant</see>.</param>
         /// <returns>This instance for method chaining.</returns>
         IDirectory SetName(string name);
 
@@ -85,14 +87,14 @@ namespace Stormpath.SDK.Directory
         /// Sets the directory's status.
         /// </summary>
         /// <param name="status">The directory's status.
-        /// An <see cref="DirectoryStatus.Enabled"/> directory may be used by applications to login accounts found within the directory.
-        /// A <see cref="DirectoryStatus.Disabled"/> directory prevents its accounts from being used to login to applications.
+        /// An <see cref="DirectoryStatus.Enabled">Enabled</see> directory may be used by applications to login accounts found within the directory.
+        /// A <see cref="DirectoryStatus.Disabled">Disabled</see> directory prevents its accounts from being used to login to applications.
         /// </param>
         /// <returns>This instance for method chaining.</returns>
         IDirectory SetStatus(DirectoryStatus status);
 
         /// <summary>
-        /// Gets the <see cref="IProvider"/> of this Directory.
+        /// Gets the <see cref="IProvider">Provider</see> of this Directory.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The Provider of this Directory.</returns>

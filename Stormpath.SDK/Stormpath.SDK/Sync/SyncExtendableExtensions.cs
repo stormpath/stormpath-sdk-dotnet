@@ -1,5 +1,5 @@
 ﻿// <copyright file="SyncExtendableExtensions.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Sync
         /// Synchronously gets the custom data associated with this resource.
         /// </summary>
         /// <param name="resource">The resource.</param>
-        /// <returns>The <see cref="ICustomData"/> associated with this resource.</returns>
+        /// <returns>The <see cref="ICustomData">Custom Data</see> associated with this resource.</returns>
         /// <exception cref="Error.ResourceException">The custom data could not be loaded.</exception>
         public static ICustomData GetCustomData(this IExtendable resource)
             => (resource as IExtendableSync).GetCustomData();

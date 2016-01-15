@@ -1,5 +1,5 @@
 ﻿// <copyright file="JsonNetSerializer.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ namespace Stormpath.SDK.Extensions.Serialization
         }
 
         /// <summary>
-        /// Converts a nested tree of <see cref="JObject"/>s into nested <see cref="IDictionary{TKey, TValue}"/>s.
+        /// Converts a nested tree of <see cref="JObject"/> instances into nested <see cref="IDictionary{TKey, TValue}">dictionaries</see>.
         /// </summary>
         /// <remarks>JSON.NET deserializes everything into nested JObjects. We want IDictionaries all the way down.</remarks>
         /// <param name="map">Deserialized <see cref="JObject"/> from JSON.NET</param>

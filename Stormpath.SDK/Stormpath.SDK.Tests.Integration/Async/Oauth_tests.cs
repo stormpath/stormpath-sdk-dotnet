@@ -1,5 +1,5 @@
 ﻿// <copyright file="Oauth_tests.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -190,6 +190,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
             (await accessTokenForApplication.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
             (await accessTokenForApplication.GetTenantAsync()).Href.ShouldBe(this.fixture.TenantHref);
 
+            var retrievedDirectly = await client.GetAccessTokenAsync(accessTokenForApplication.Href);
+            retrievedDirectly.Href.ShouldBe(accessTokenForApplication.Href);
+
             // Clean up
             (await accessTokenForApplication.DeleteAsync()).ShouldBeTrue();
 
@@ -233,6 +236,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
             (await refreshTokenForApplication.GetAccountAsync()).Href.ShouldBe(this.fixture.PrimaryAccountHref);
             (await refreshTokenForApplication.GetApplicationAsync()).Href.ShouldBe(createdApplication.Href);
             (await refreshTokenForApplication.GetTenantAsync()).Href.ShouldBe(this.fixture.TenantHref);
+
+            var retrievedDirectly = await client.GetRefreshTokenAsync(refreshTokenForApplication.Href);
+            retrievedDirectly.Href.ShouldBe(refreshTokenForApplication.Href);
 
             // Clean up
             (await refreshTokenForApplication.DeleteAsync()).ShouldBeTrue();

@@ -1,5 +1,5 @@
 ﻿// <copyright file="IApplicationSync.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Impl.Application
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="IApplication"/>.
+    /// available on <see cref="IApplication">Application</see>.
     /// </summary>
     internal interface IApplicationSync :
         IHasTenantSync,
@@ -116,38 +116,38 @@ namespace Stormpath.SDK.Impl.Application
         /// Synchronous counterpart to <see cref="IApplication.ResetPasswordAsync(string, string, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
-        /// <param name="newPassword">The new password that will be set to the <see cref="IAccount"/> if the token is successfully validated.</param>
+        /// <param name="newPassword">The new password that will be set to the <see cref="IAccount">Account</see> if the token is successfully validated.</param>
         /// <returns>The Account.</returns>
         IAccount ResetPassword(string token, string newPassword);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IApplication.SendPasswordResetEmailAsync(string, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
-        /// <returns>The created <see cref="IPasswordResetToken"/>.</returns>
+        /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
+        /// <returns>The created <see cref="IPasswordResetToken">Password Reset Token</see>.</returns>
         IPasswordResetToken SendPasswordResetEmail(string email);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IApplication.SendPasswordResetEmailAsync(string, IAccountStore, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
+        /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="accountStore">The AccountStore expected to contain an account with the specified email address.</param>
-        /// <returns>The created <see cref="IPasswordResetToken"/>.</returns>
+        /// <returns>The created <see cref="IPasswordResetToken">Password Reset Token</see>.</returns>
         IPasswordResetToken SendPasswordResetEmail(string email, IAccountStore accountStore);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IApplication.SendPasswordResetEmailAsync(string, string, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="email">An email address of an <see cref="IAccount"/> that may login to the application.</param>
+        /// <param name="email">An email address of an <see cref="IAccount">Account</see> that may login to the application.</param>
         /// <param name="hrefOrNameKey">The href of the AccountStore, or the name key of the Organization, expected to contain an account with the specified email address.</param>
-        /// <returns>The created <see cref="IPasswordResetToken"/>.</returns>
+        /// <returns>The created <see cref="IPasswordResetToken">Password Reset Token</see>.</returns>
         IPasswordResetToken SendPasswordResetEmail(string email, string hrefOrNameKey);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IApplication.VerifyPasswordResetTokenAsync(string, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="token">The verification token, usually obtained as a request parameter by your application.</param>
-        /// <returns>The <see cref="IAccount"/> matching the specified token.</returns>
+        /// <returns>The <see cref="IAccount">Account</see> matching the specified token.</returns>
         IAccount VerifyPasswordResetToken(string token);
 
         /// <summary>

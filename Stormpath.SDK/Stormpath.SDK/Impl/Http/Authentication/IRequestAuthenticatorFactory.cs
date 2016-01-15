@@ -1,5 +1,5 @@
 ﻿// <copyright file="IRequestAuthenticatorFactory.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@ namespace Stormpath.SDK.Impl.Http.Authentication
 {
     /// <summary>
     /// Represents a factory that can create the appropriate <see cref="IRequestAuthenticator"/>
-    /// given an <see cref="AuthenticationScheme"/>.
+    /// given an <see cref="AuthenticationScheme">Authentication Scheme</see>.
     /// </summary>
     internal interface IRequestAuthenticatorFactory
     {
         /// <summary>
-        /// Creates the appropriate <see cref="IRequestAuthenticator" /> for this <see cref="AuthenticationScheme"/>.
+        /// Creates the appropriate <see cref="IRequestAuthenticator" /> for this <see cref="AuthenticationScheme">Authentication Scheme</see>.
         /// </summary>
         /// <param name="scheme">The authentication scheme.</param>
         /// <returns>A new <see cref="IRequestAuthenticator"/> instance.</returns>

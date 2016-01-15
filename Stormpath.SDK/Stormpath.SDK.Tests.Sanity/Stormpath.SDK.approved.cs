@@ -1590,12 +1590,14 @@ namespace Stormpath.SDK.Sync
         public static Stormpath.SDK.Organization.IOrganization CreateOrganization(this Stormpath.SDK.Tenant.ITenantActions tenantActions, Stormpath.SDK.Organization.IOrganization organization) { }
         public static Stormpath.SDK.Organization.IOrganization CreateOrganization(this Stormpath.SDK.Tenant.ITenantActions tenantActions, Stormpath.SDK.Organization.IOrganization organization, System.Action<Stormpath.SDK.Organization.OrganizationCreationOptionsBuilder> creationOptionsAction) { }
         public static Stormpath.SDK.Organization.IOrganization CreateOrganization(this Stormpath.SDK.Tenant.ITenantActions tenantActions, Stormpath.SDK.Organization.IOrganization organization, Stormpath.SDK.Organization.IOrganizationCreationOptions creationOptions) { }
-        public static Stormpath.SDK.Organization.IOrganization CreateOrganization(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string name, string description) { }
+        public static Stormpath.SDK.Organization.IOrganization CreateOrganization(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string name, string nameKey) { }
+        public static Stormpath.SDK.Oauth.IAccessToken GetAccessToken(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string href) { }
         public static Stormpath.SDK.Account.IAccount GetAccount(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string href) { }
         public static Stormpath.SDK.Application.IApplication GetApplication(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string href) { }
         public static Stormpath.SDK.Directory.IDirectory GetDirectory(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string href) { }
         public static Stormpath.SDK.Group.IGroup GetGroup(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string href) { }
         public static Stormpath.SDK.Organization.IOrganization GetOrganization(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string href) { }
+        public static Stormpath.SDK.Oauth.IRefreshToken GetRefreshToken(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string href) { }
         public static Stormpath.SDK.Account.IAccount VerifyAccountEmail(this Stormpath.SDK.Tenant.ITenantActions tenantActions, string token) { }
     }
 }
@@ -1624,7 +1626,8 @@ namespace Stormpath.SDK.Tenant
         System.Threading.Tasks.Task<Stormpath.SDK.Organization.IOrganization> CreateOrganizationAsync(Stormpath.SDK.Organization.IOrganization organization, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<Stormpath.SDK.Organization.IOrganization> CreateOrganizationAsync(Stormpath.SDK.Organization.IOrganization organization, System.Action<Stormpath.SDK.Organization.OrganizationCreationOptionsBuilder> creationOptionsAction, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<Stormpath.SDK.Organization.IOrganization> CreateOrganizationAsync(Stormpath.SDK.Organization.IOrganization organization, Stormpath.SDK.Organization.IOrganizationCreationOptions creationOptions, System.Threading.CancellationToken cancellationToken = null);
-        System.Threading.Tasks.Task<Stormpath.SDK.Organization.IOrganization> CreateOrganizationAsync(string name, string description, System.Threading.CancellationToken cancellationToken = null);
+        System.Threading.Tasks.Task<Stormpath.SDK.Organization.IOrganization> CreateOrganizationAsync(string name, string nameKey, System.Threading.CancellationToken cancellationToken = null);        
+        System.Threading.Tasks.Task<Stormpath.SDK.Oauth.IAccessToken> GetAccessTokenAsync(string href, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<Stormpath.SDK.Account.IAccount> GetAccountAsync(string href, System.Threading.CancellationToken cancellationToken = null);
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Account.IAccount> GetAccounts();
         System.Threading.Tasks.Task<Stormpath.SDK.Application.IApplication> GetApplicationAsync(string href, System.Threading.CancellationToken cancellationToken = null);
@@ -1635,6 +1638,7 @@ namespace Stormpath.SDK.Tenant
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Group.IGroup> GetGroups();
         System.Threading.Tasks.Task<Stormpath.SDK.Organization.IOrganization> GetOrganizationAsync(string href, System.Threading.CancellationToken cancellationToken = null);
         Stormpath.SDK.Linq.IAsyncQueryable<Stormpath.SDK.Organization.IOrganization> GetOrganizations();
+        System.Threading.Tasks.Task<Stormpath.SDK.Oauth.IRefreshToken> GetRefreshTokenAsync(string href, System.Threading.CancellationToken cancellationToken = null);
         System.Threading.Tasks.Task<Stormpath.SDK.Account.IAccount> VerifyAccountEmailAsync(string token, System.Threading.CancellationToken cancellationToken = null);
     }
 }

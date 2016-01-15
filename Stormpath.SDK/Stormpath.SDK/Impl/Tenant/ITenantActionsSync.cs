@@ -1,5 +1,5 @@
 ﻿// <copyright file="ITenantActionsSync.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 
 namespace Stormpath.SDK.Impl.Tenant
@@ -32,25 +33,25 @@ namespace Stormpath.SDK.Impl.Tenant
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateApplicationAsync(IApplication, Action{ApplicationCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="application">The <see cref="IApplication"/> to create.</param>
+        /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IApplicationCreationOptions"/>,
         /// which will be used when sending the request.</param>
-        /// <returns>The created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
         IApplication CreateApplication(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateApplicationAsync(IApplication, IApplicationCreationOptions, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="application">The <see cref="IApplication"/> to create.</param>
+        /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
         /// <param name="creationOptions">An <see cref="IApplicationCreationOptions"/> instance to use when sending the request.</param>
-        /// <returns>The created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
         IApplication CreateApplication(IApplication application, IApplicationCreationOptions creationOptions);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateApplicationAsync(IApplication, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="application">The <see cref="IApplication"/> to create.</param>
-        /// <returns>The created <see cref="IApplication"/>.</returns>
+        /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
+        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
         IApplication CreateApplication(IApplication application);
 
         /// <summary>
@@ -58,31 +59,31 @@ namespace Stormpath.SDK.Impl.Tenant
         /// </summary>
         /// <param name="name">The name of the application.</param>
         /// <param name="createDirectory">Whether a default directory should be created automatically.</param>
-        /// <returns>The created <see cref="IApplication"/>.</returns>
+        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
         IApplication CreateApplication(string name, bool createDirectory);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateDirectoryAsync(IDirectory, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="directory">The Directory resource to create.</param>
-        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="IDirectory">Directory</see>.</returns>
         IDirectory CreateDirectory(IDirectory directory);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateDirectoryAsync(IDirectory, Action{DirectoryCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="directory">The <see cref="IDirectory">Directory</see> to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
         /// which will be used when sending the request.</param>
-        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="IDirectory">Directory</see>.</returns>
         IDirectory CreateDirectory(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateDirectoryAsync(IDirectory, IDirectoryCreationOptions, System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <param name="directory">The <see cref="IDirectory"/> to create.</param>
+        /// <param name="directory">The <see cref="IDirectory">Directory</see> to create.</param>
         /// <param name="creationOptions">A <see cref="IDirectoryCreationOptions"/> instance to use when sending the request.</param>
-        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="IDirectory">Directory</see>.</returns>
         IDirectory CreateDirectory(IDirectory directory, IDirectoryCreationOptions creationOptions);
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace Stormpath.SDK.Impl.Tenant
         /// <param name="name">The directory name.</param>
         /// <param name="description">The directory description.</param>
         /// <param name="status">The initial directory status.</param>
-        /// <returns>The created <see cref="IDirectory"/>.</returns>
+        /// <returns>The created <see cref="IDirectory">Directory</see>.</returns>
         IDirectory CreateDirectory(string name, string description, DirectoryStatus status);
 
         /// <summary>
@@ -125,10 +126,10 @@ namespace Stormpath.SDK.Impl.Tenant
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateOrganizationAsync(string, string, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="name">The Organization's name.</param>
-        /// <param name="description">The Organization's description text.</param>
+        /// <param name="nameKey">The Organization's <c>nameKey</c>.</param>
         /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="SDK.Error.ResourceException">There was a problem creating the Organization.</exception>
-        IOrganization CreateOrganization(string name, string description);
+        IOrganization CreateOrganization(string name, string nameKey);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.VerifyAccountEmailAsync(string, System.Threading.CancellationToken)"/>.
@@ -181,5 +182,23 @@ namespace Stormpath.SDK.Impl.Tenant
         /// <returns>The <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
         IOrganization GetOrganization(string href);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetAccessTokenAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStoreSync.GetResource{IAccessToken}(string)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IAccessToken">Access Token</see> to retrieve.</param>
+        /// <returns>The <see cref="IAccessToken">Access Token</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
+        IAccessToken GetAccessToken(string href);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetRefreshTokenAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStoreSync.GetResource{IRefreshToken}(string)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IRefreshToken">Refresh Token</see> to retrieve.</param>
+        /// <returns>The <see cref="IRefreshToken">Refresh Token</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
+        IRefreshToken GetRefreshToken(string href);
     }
 }

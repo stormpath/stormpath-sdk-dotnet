@@ -1,5 +1,5 @@
 ﻿// <copyright file="Clients.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@ using Stormpath.SDK.Impl.Client;
 namespace Stormpath.SDK.Client
 {
     /// <summary>
-    /// Static entry point for working with <see cref="IClient"/> objects.
+    /// Static entry point for working with <see cref="IClient">Client</see> objects.
     /// </summary>
     public sealed class Clients
     {
         /// <summary>
-        /// Gets a new <see cref="IClientBuilder"/> instance, used to fluently construct <see cref="IClient"/> instances.
+        /// Gets a new <see cref="IClientBuilder"/> instance, used to fluently construct <see cref="IClient">Client</see> instances.
         /// </summary>
         /// <returns>A new <see cref="IClientBuilder"/> instance.</returns>
         /// <example>

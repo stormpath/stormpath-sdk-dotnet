@@ -1,5 +1,5 @@
 ﻿// <copyright file="ICreateProviderRequest.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ namespace Stormpath.SDK.Provider
 {
     /// <summary>
     /// Placeholder for all the information pertaining to a Provider when attempting to create a
-    /// new Provider-based <see cref="Directory.IDirectory"/> in Stormpath.
+    /// new Provider-based <see cref="Directory.IDirectory">Directory</see> in Stormpath.
     /// </summary>
     /// <seealso cref="ICreateProviderRequestBuilder{T}"/>
     public interface ICreateProviderRequest

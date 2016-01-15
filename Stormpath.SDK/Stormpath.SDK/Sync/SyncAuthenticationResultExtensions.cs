@@ -1,5 +1,5 @@
 ﻿// <copyright file="SyncAuthenticationResultExtensions.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,10 +26,10 @@ namespace Stormpath.SDK.Sync
     public static class SyncAuthenticationResultExtensions
     {
         /// <summary>
-        /// Synchronously gets the successfully authenticated <see cref="IAccount"/>.
+        /// Synchronously gets the successfully authenticated <see cref="IAccount">Account</see>.
         /// </summary>
         /// <param name="authResult">The authentication result.</param>
-        /// <returns>The <see cref="IAccount"/> that was successfully authenticated.</returns>
+        /// <returns>The <see cref="IAccount">Account</see> that was successfully authenticated.</returns>
         public static IAccount GetAccount(this IAuthenticationResult authResult)
             => (authResult as IAuthenticationResultSync).GetAccount();
     }

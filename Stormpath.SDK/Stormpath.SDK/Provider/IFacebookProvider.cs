@@ -1,5 +1,5 @@
 ﻿// <copyright file="IFacebookProvider.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
-    /// Facebook-specific <see cref="IProvider"/> Resource.
+    /// Facebook-specific <see cref="IProvider">Provider</see> Resource.
     /// </summary>
     public interface IFacebookProvider : IProvider
     {

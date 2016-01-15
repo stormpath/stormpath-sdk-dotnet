@@ -1,5 +1,5 @@
 ﻿// <copyright file="DefaultTenant.TenantActionsSync.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Directory;
+using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
@@ -115,11 +116,11 @@ namespace Stormpath.SDK.Impl.Tenant
             return this.GetInternalSyncDataStore().Create(OrganizationsPropertyName, organization, creationOptions);
         }
 
-        IOrganization ITenantActionsSync.CreateOrganization(string name, string description)
+        IOrganization ITenantActionsSync.CreateOrganization(string name, string nameKey)
         {
             var organization = this.GetInternalAsyncDataStore().Instantiate<IOrganization>();
             organization.SetName(name);
-            organization.SetDescription(description);
+            organization.SetNameKey(nameKey);
 
             return this.AsTenantActionSyncInterface.CreateOrganization(organization);
         }
@@ -146,5 +147,11 @@ namespace Stormpath.SDK.Impl.Tenant
 
         IOrganization ITenantActionsSync.GetOrganization(string href)
             => this.GetInternalSyncDataStore().GetResource<IOrganization>(href);
+
+        IAccessToken ITenantActionsSync.GetAccessToken(string href)
+            => this.GetInternalSyncDataStore().GetResource<IAccessToken>(href);
+
+        IRefreshToken ITenantActionsSync.GetRefreshToken(string href)
+            => this.GetInternalSyncDataStore().GetResource<IRefreshToken>(href);
     }
 }

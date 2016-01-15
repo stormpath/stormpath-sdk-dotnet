@@ -1,5 +1,5 @@
 ﻿// <copyright file="IProviderAccountRequestBuilder{T}.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
-    /// A builder to construct <see cref="IProviderAccountRequest"/>s.
+    /// A builder to construct <see cref="IProviderAccountRequest"/> instances.
     /// </summary>
     /// <typeparam name="T">The specific builder interface
     /// (e.g. <see cref="IFacebookAccountRequestBuilder"/> or <see cref="IGoogleAccountRequestBuilder"/>).</typeparam>

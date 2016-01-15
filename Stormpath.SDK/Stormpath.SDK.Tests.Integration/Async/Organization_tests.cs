@@ -1,5 +1,5 @@
 ﻿// <copyright file="Organization_tests.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -235,6 +235,28 @@ namespace Stormpath.SDK.Tests.Integration.Async
             newOrg.Name.ShouldBe(name);
             newOrg.NameKey.ShouldBe(nameKey);
             newOrg.Status.ShouldBe(OrganizationStatus.Disabled);
+
+            // Clean up
+            (await newOrg.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedOrganizationHrefs.Remove(newOrg.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Creating_with_convenience_method(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var name = $"Created Organization 4 (.NET ITs {this.fixture.TestRunIdentifier}-{clientBuilder.Name})";
+            var nameKey = $"dotnet-test4-{this.fixture.TestRunIdentifier}-{clientBuilder.Name}";
+
+            var newOrg = await client.CreateOrganizationAsync(name, nameKey);
+            newOrg.ShouldNotBeNull();
+            this.fixture.CreatedOrganizationHrefs.Add(newOrg.Href);
+
+            newOrg.Name.ShouldBe(name);
+            newOrg.NameKey.ShouldBe(nameKey);
+            newOrg.Status.ShouldBe(OrganizationStatus.Enabled);
 
             // Clean up
             (await newOrg.DeleteAsync()).ShouldBeTrue();

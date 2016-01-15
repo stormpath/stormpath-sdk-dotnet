@@ -1,5 +1,5 @@
 ﻿// <copyright file="IPasswordResetToken.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Account
     public interface IPasswordResetToken : IResource
     {
         /// <summary>
-        /// Gets the email address associated with the <see cref="IAccount"/> in the reset password workflow.
+        /// Gets the email address associated with the <see cref="IAccount">Account</see> in the reset password workflow.
         /// </summary>
         /// <value>The account's email address.</value>
         string Email { get; }
@@ -38,10 +38,10 @@ namespace Stormpath.SDK.Account
         string GetValue();
 
         /// <summary>
-        /// Gets the <see cref="IAccount"/> associated with this password reset token.
+        /// Gets the <see cref="IAccount">Account</see> associated with this password reset token.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The <see cref="IAccount"/> in the reset password workflow.</returns>
+        /// <returns>The <see cref="IAccount">Account</see> in the reset password workflow.</returns>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

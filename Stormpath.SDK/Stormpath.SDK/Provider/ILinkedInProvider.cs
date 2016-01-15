@@ -1,5 +1,5 @@
 ﻿// <copyright file="ILinkedInProvider.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Provider
 {
     /// <summary>
-    /// LinkedIn-specific <see cref="IProvider"/> Resource.
+    /// LinkedIn-specific <see cref="IProvider">Provider</see> Resource.
     /// </summary>
     public interface ILinkedInProvider : IProvider
     {

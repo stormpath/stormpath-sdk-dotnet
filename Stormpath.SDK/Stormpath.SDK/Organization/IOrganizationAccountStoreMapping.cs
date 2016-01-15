@@ -1,5 +1,5 @@
 ﻿// <copyright file="IOrganizationAccountStoreMapping.cs" company="Stormpath, Inc.">
-// Copyright (c) 2015 Stormpath, Inc.
+// Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Organization
         IOrganizationAccountStoreMapping SetOrganization(IOrganization organization);
 
         /// <summary>
-        /// Gets the <see cref="IOrganization"/> represented by this mapping.
+        /// Gets the <see cref="IOrganization">Organization</see> represented by this mapping.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The mapping's <see cref="IOrganization">Organization</see>.</returns>
