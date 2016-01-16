@@ -22,11 +22,10 @@ if ($built -ne $true)
 }
 
 $deploy_docs = $env:deploy_docs
-$latestTag = ""
+$latestTag = git tag | tail -n 1
 if (!$deploy_docs) {
 	Write-Host "deploy_docs not set; checking for tagged release"
 	
-	$latestTag = git tag | tail -n 1
 	if ((git log --decorate --oneline | head -n 1).contains("HEAD, tag: " + $latestTag)) {
 		Write-Host "Tagged release $($latestTag) found"
 		$deploy_docs = 1
@@ -36,7 +35,7 @@ if (!$deploy_docs) {
 if ($built -and $deploy_docs) {
 	Write-Host "Deploying documentation!"
 	
-	git clone git@github.com:stormpath/stormpath.github.io.git --branch source
+	git clone -q git@github.com:stormpath/stormpath.github.io.git --branch source 2> $null
 	cd stormpath.github.io
 	git config user.email "evangelists@stormpath.com"
 	git config user.name "sdk-dotnet Auto Doc Build"
