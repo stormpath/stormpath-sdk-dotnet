@@ -116,6 +116,9 @@ namespace Stormpath.SDK.Impl.Resource
         public IEmbeddedProperty GetLinkProperty(string name)
             => (this.GetProperty(name) as IEmbeddedProperty) ?? new LinkProperty(null);
 
+        public IReadOnlyList<T> GetListProperty<T>(string name)
+            => (this.GetProperty(name) as IReadOnlyList<T>) ?? new List<T>();
+
         public bool ContainsProperty(string name)
             => this.GetResourceData()?.ContainsProperty(name) ?? false;
 

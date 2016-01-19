@@ -15,12 +15,15 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Saml;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -30,6 +33,7 @@ namespace Stormpath.SDK.Impl.Application
         private static readonly string AccountsPropertyName = "accounts";
         private static readonly string ApiKeysPropertyName = "apiKeys";
         private static readonly string AuthTokensPropertyName = "authTokens";
+        private static readonly string AuthorizedCallbackUrisPropertyName = "authorizedCallbackUris";
         private static readonly string DefaultAccountStoreMappingPropertyName = AccountStoreContainerShared.DefaultAccountStoreMappingPropertyName;
         private static readonly string DefaultGroupStoreMappingPropertyName = AccountStoreContainerShared.DefaultGroupStoreMappingPropertyName;
         private static readonly string DescriptionPropertyName = "description";
@@ -57,6 +61,8 @@ namespace Stormpath.SDK.Impl.Application
         internal IEmbeddedProperty ApiKeys => this.GetLinkProperty(ApiKeysPropertyName);
 
         internal IEmbeddedProperty AuthTokens => this.GetLinkProperty(AuthTokensPropertyName);
+
+        IReadOnlyList<string> IApplication.AuthorizedCallbackUris => this.GetListProperty<string>(AuthorizedCallbackUrisPropertyName);
 
         internal IEmbeddedProperty DefaultAccountStoreMapping => this.GetLinkProperty(DefaultAccountStoreMappingPropertyName);
 

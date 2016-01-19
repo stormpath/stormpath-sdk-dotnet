@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -27,6 +28,7 @@ using Stormpath.SDK.Linq;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Saml;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Application
@@ -56,6 +58,8 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <value>The application's description text.</value>
         string Description { get; }
+
+        IReadOnlyList<string> AuthorizedCallbackUris { get; }
 
         /// <summary>
         /// Gets the Application's status.
@@ -138,6 +142,10 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <returns>A new <see cref="IJwtAuthenticator"/></returns> instance.
         IJwtAuthenticator NewJwtAuthenticator();
+
+        ISamlIdpUrlBuilder NewSamlIdpUrlBuilder();
+
+        //ISamlAsyncCallbackHandler NewSamlAsyncCallbackHandler();
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password).
@@ -402,6 +410,8 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
         Task<IOauthPolicy> GetOauthPolicyAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<ISamlPolicy> GetSamlPolicyAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a queryable list of all Accounts in this Application.
