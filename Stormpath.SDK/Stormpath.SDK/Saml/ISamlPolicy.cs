@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Resource;
 
@@ -21,6 +22,6 @@ namespace Stormpath.SDK.Saml
 {
     public interface ISamlPolicy : IResource, IAuditable
     {
-        Task<ISamlServiceProvider> GetSamlServiceProviderAsync();
+        Task<ISamlServiceProvider> GetSamlServiceProviderAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

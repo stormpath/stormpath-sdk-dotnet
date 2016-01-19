@@ -22,8 +22,6 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Saml;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -41,6 +39,7 @@ namespace Stormpath.SDK.Impl.Application
         private static readonly string LoginAttemptsPropertyName = "loginAttempts";
         private static readonly string NamePropertyName = "name";
         private static readonly string OAuthPolicyPropertyName = "oAuthPolicy";
+        private static readonly string SamlPolicyPropertyName = "samlPolicy";
         private static readonly string PasswordResetTokensPropertyName = "passwordResetTokens";
         private static readonly string StatusPropertyName = "status";
         private static readonly string VerificationEmailsPropertyName = "verificationEmails";
@@ -77,6 +76,8 @@ namespace Stormpath.SDK.Impl.Application
         internal IEmbeddedProperty LoginAttempts => this.GetLinkProperty(LoginAttemptsPropertyName);
 
         internal IEmbeddedProperty OAuthPolicy => this.GetLinkProperty(OAuthPolicyPropertyName);
+
+        internal IEmbeddedProperty SamlPolicy => this.GetLinkProperty(SamlPolicyPropertyName);
 
         internal IEmbeddedProperty PasswordResetToken => this.GetLinkProperty(PasswordResetTokensPropertyName);
 

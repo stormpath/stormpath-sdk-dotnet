@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultApplication.Saml.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultSsoInitiationEndpoint.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +14,16 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Saml;
 
-namespace Stormpath.SDK.Impl.Application
+namespace Stormpath.SDK.Impl.Saml
 {
-    internal sealed partial class DefaultApplication
+    internal sealed class DefaultSsoInitiationEndpoint : AbstractResource, ISsoInitiationEndpoint
     {
-        ISamlIdpUrlBuilder IApplication.NewSamlIdpUrlBuilder()
+        public DefaultSsoInitiationEndpoint(ResourceData data)
+            : base(data)
         {
-            throw new NotImplementedException();
         }
-
-        Task<ISamlPolicy> IApplication.GetSamlPolicyAsync(CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<ISamlPolicy>(this.SamlPolicy.Href, cancellationToken);
     }
 }
