@@ -166,6 +166,7 @@
     <Compile Include="Impl\PasswordResetToken_tests.cs" />
     <Compile Include="Impl\ResourceTypes_tests.cs" />
     <Compile Include="Impl\Extensions\String_SplitToKeyValuePair_tests.cs" />
+    <Compile Include="Impl\Saml\DefaultSamlIdpUrlBuilder_tests.cs" />
     <Compile Include="Impl\UriQualifier_tests.cs" />
     <Compile Include="Impl\Utility\AnonymousType_tests.cs" />
     <Compile Include="Impl\Utility\Base64_tests.cs" />

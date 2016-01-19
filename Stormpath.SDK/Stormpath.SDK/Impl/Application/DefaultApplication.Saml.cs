@@ -14,23 +14,38 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Http;
+using Stormpath.SDK.Impl.IdSite;
+using Stormpath.SDK.Impl.Saml;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Impl.Application
 {
     internal sealed partial class DefaultApplication
     {
-        ISamlIdpUrlBuilder IApplication.NewSamlIdpUrlBuilder()
+        async Task<ISamlIdpUrlBuilder> IApplication.NewSamlIdpUrlBuilderAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var samlPolicy = await this.AsInterface.GetSamlPolicyAsync(cancellationToken).ConfigureAwait(false);
+            var samlServiceProvider = await samlPolicy.GetSamlServiceProviderAsync(cancellationToken).ConfigureAwait(false);
+            var ssoInitiationEndpoint = await samlServiceProvider.GetSsoInitiationEndpointAsync(cancellationToken).ConfigureAwait(false);
+
+            return new DefaultSamlIdpUrlBuilder(
+                this.GetInternalDataStore(),
+                this.AsInterface.Href,
+                ssoInitiationEndpoint.Href,
+                new DefaultIdSiteJtiProvider(),
+                new DefaultClock());
         }
 
         Task<ISamlPolicy> IApplication.GetSamlPolicyAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<ISamlPolicy>(this.SamlPolicy.Href, cancellationToken);
+
+        ISamlAsyncCallbackHandler IApplication.NewSamlAsyncCallbackHandler(IHttpRequest request)
+            => new DefaultSamlAsyncCallbackHandler(this.GetInternalDataStore(), request);
 
         ISamlPolicy IApplicationSync.GetSamlPolicy()
             => this.GetInternalSyncDataStore().GetResource<ISamlPolicy>(this.SamlPolicy.Href);

@@ -143,9 +143,9 @@ namespace Stormpath.SDK.Application
         /// <returns>A new <see cref="IJwtAuthenticator"/></returns> instance.
         IJwtAuthenticator NewJwtAuthenticator();
 
-        ISamlIdpUrlBuilder NewSamlIdpUrlBuilder();
+        Task<ISamlIdpUrlBuilder> NewSamlIdpUrlBuilderAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        //ISamlAsyncCallbackHandler NewSamlAsyncCallbackHandler();
+        ISamlAsyncCallbackHandler NewSamlAsyncCallbackHandler(IHttpRequest request);
 
         /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password).
