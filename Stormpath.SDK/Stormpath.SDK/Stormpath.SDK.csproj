@@ -421,6 +421,11 @@
     <Compile Include="Impl\Resource\DefaultRetrievalOptions{T}.cs" />
     <Compile Include="Impl\Resource\ExpandedProperty.cs" />
     <Compile Include="Impl\Resource\IEmbeddedProperty.cs" />
+    <Compile Include="Impl\Saml\DefaultSamlPolicy.cs" />
+    <Compile Include="Impl\Saml\DefaultSamlServiceProvider.cs" />
+    <Compile Include="Impl\Saml\DefaultSsoInitiationEndpoint.cs" />
+    <Compile Include="Impl\Saml\ISamlPolicySync.cs" />
+    <Compile Include="Impl\Saml\ISamlServiceProviderSync.cs" />
     <Compile Include="Impl\Serialization\DefaultSerializerFactory.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.Collections.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.TenantActions.cs" />
@@ -581,6 +586,8 @@
     <Compile Include="Sync\SyncHasTenantExtensions.cs" />
     <Compile Include="Sync\SyncEmailVerificationRequestExtensions.cs" />
     <Compile Include="Sync\SyncPasswordGrantAuthenticatorExtensions.cs" />
+    <Compile Include="Sync\SyncSamlPolicyExtensions.cs" />
+    <Compile Include="Sync\SyncSamlServiceProviderExtensions.cs" />
     <Compile Include="Tenant\IHasTenant.cs" />
     <Compile Include="Serialization\ISerializerConsumer{T}.cs" />
     <Compile Include="Shared\ImmutableValueObject{T}.cs" />

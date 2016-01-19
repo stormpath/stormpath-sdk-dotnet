@@ -28,6 +28,7 @@ using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -165,5 +166,7 @@ namespace Stormpath.SDK.Impl.Application
         /// </summary>
         /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
         IOauthPolicy GetOauthPolicy();
+
+        ISamlPolicy GetSamlPolicy();
     }
 }

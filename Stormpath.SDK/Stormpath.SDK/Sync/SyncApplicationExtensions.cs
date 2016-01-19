@@ -24,6 +24,7 @@ using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Sync
 {
@@ -319,5 +320,8 @@ namespace Stormpath.SDK.Sync
         /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
         public static IOauthPolicy GetOauthPolicy(this IApplication application)
             => (application as IApplicationSync).GetOauthPolicy();
+
+        public static ISamlPolicy GetSamlPolicy(this IApplication application)
+            => (application as IApplicationSync).GetSamlPolicy();
     }
 }

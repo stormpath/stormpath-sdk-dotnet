@@ -21,7 +21,7 @@ using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Impl.Saml
 {
-    internal sealed class DefaultSamlServiceProvider : AbstractInstanceResource, ISamlServiceProvider
+    internal sealed class DefaultSamlServiceProvider : AbstractInstanceResource, ISamlServiceProvider, ISamlServiceProviderSync
     {
         private static readonly string SsoInitiationEndpointPropertyName = "ssoInitiationEndpoint";
 
@@ -33,6 +33,9 @@ namespace Stormpath.SDK.Impl.Saml
         internal IEmbeddedProperty SsoInitiationEndpoint => this.GetLinkProperty(SsoInitiationEndpointPropertyName);
 
         Task<ISsoInitiationEndpoint> ISamlServiceProvider.GetSsoInitiationEndpointAsync(CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<ISsoInitiationEndpoint>(this.SsoInitiationEndpoint.Href, cancellationToken);
+            => Task.FromResult(this.GetInternalDataStore().InstantiateWithHref<ISsoInitiationEndpoint>(this.SsoInitiationEndpoint.Href));
+
+        ISsoInitiationEndpoint ISamlServiceProviderSync.GetSsoInitiationEndpoint()
+            => this.GetInternalDataStore().InstantiateWithHref<ISsoInitiationEndpoint>(this.SsoInitiationEndpoint.Href);
     }
 }

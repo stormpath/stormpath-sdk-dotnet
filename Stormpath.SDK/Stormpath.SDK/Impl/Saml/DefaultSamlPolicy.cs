@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Resource;
@@ -21,7 +22,7 @@ using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Impl.Saml
 {
-    internal sealed class DefaultSamlPolicy : AbstractInstanceResource, ISamlPolicy
+    internal sealed class DefaultSamlPolicy : AbstractInstanceResource, ISamlPolicy, ISamlPolicySync
     {
         private static readonly string ServiceProviderPropertyName = "serviceProvider";
 
@@ -34,5 +35,8 @@ namespace Stormpath.SDK.Impl.Saml
 
         Task<ISamlServiceProvider> ISamlPolicy.GetSamlServiceProviderAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<ISamlServiceProvider>(this.ServiceProvider.Href, cancellationToken);
+
+        ISamlServiceProvider ISamlPolicySync.GetSamlServiceProvider()
+            => this.GetInternalSyncDataStore().GetResource<ISamlServiceProvider>(this.ServiceProvider.Href);
     }
 }

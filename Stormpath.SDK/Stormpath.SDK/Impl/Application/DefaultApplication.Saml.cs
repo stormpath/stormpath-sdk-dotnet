@@ -31,5 +31,8 @@ namespace Stormpath.SDK.Impl.Application
 
         Task<ISamlPolicy> IApplication.GetSamlPolicyAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<ISamlPolicy>(this.SamlPolicy.Href, cancellationToken);
+
+        ISamlPolicy IApplicationSync.GetSamlPolicy()
+            => this.GetInternalSyncDataStore().GetResource<ISamlPolicy>(this.SamlPolicy.Href);
     }
 }
