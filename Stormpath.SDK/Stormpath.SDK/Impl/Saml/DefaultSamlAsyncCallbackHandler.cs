@@ -102,13 +102,13 @@ namespace Stormpath.SDK.Impl.Saml
         }
 
         ISamlAsyncCallbackHandler ISamlAsyncCallbackHandler.SetResultListener(
-            Func<IAccountResult, CancellationToken, Task> onAuthenticated,
-            Func<IAccountResult, CancellationToken, Task> onLogout)
+            Func<ISamlAccountResult, CancellationToken, Task> onAuthenticated,
+            Func<ISamlAccountResult, CancellationToken, Task> onLogout)
         {
             return this.AsInterface.SetResultListener(new InlineSamlAsyncResultListener(onAuthenticated, onLogout));
         }
 
-        async Task<IAccountResult> ISamlAsyncCallbackHandler.GetAccountResultAsync(CancellationToken cancellationToken)
+        async Task<ISamlAccountResult> ISamlAsyncCallbackHandler.GetAccountResultAsync(CancellationToken cancellationToken)
         {
             var signingKeyBytes = Encoding.UTF8.GetBytes(
                 this.internalDataStore.ApiKey.GetSecret());
@@ -157,7 +157,7 @@ namespace Stormpath.SDK.Impl.Saml
             return accountResult;
         }
 
-        private Task DispatchResponseStatusAsync(SamlResultStatus status, IAccountResult accountResult, CancellationToken cancellationToken)
+        private Task DispatchResponseStatusAsync(SamlResultStatus status, ISamlAccountResult accountResult, CancellationToken cancellationToken)
         {
             if (status == SamlResultStatus.Authenticated)
             {
@@ -274,7 +274,7 @@ namespace Stormpath.SDK.Impl.Saml
             }
         }
 
-        internal static IAccountResult CreateAccountResult(IJwtClaims claims, IInternalDataStore dataStore)
+        internal static ISamlAccountResult CreateAccountResult(IJwtClaims claims, IInternalDataStore dataStore)
         {
             var state = claims.GetClaim(IdSiteClaims.State);
 
@@ -294,7 +294,7 @@ namespace Stormpath.SDK.Impl.Saml
                 properties[DefaultAccountResult.AccountPropertyName] = new LinkProperty(accountHref);
             }
 
-            return dataStore.InstantiateWithData<IAccountResult>(properties);
+            return dataStore.InstantiateWithData<ISamlAccountResult>(properties);
         }
 
         internal static SamlResultStatus GetResultStatus(IJwtClaims claims)

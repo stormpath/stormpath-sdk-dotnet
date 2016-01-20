@@ -1,4 +1,4 @@
-﻿// <copyright file="ISamlAsyncResultListener.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SyncSamlAccountResultExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +14,15 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading;
-using System.Threading.Tasks;
+using Stormpath.SDK.Account;
+using Stormpath.SDK.Impl.Saml;
+using Stormpath.SDK.Saml;
 
-namespace Stormpath.SDK.Saml
+namespace Stormpath.SDK.Sync
 {
-    public interface ISamlAsyncResultListener
+    public static class SyncSamlAccountResultExtensions
     {
-        Task OnAuthenticatedAsync(ISamlAccountResult result, CancellationToken cancellationToken);
-
-        Task OnLogoutAsync(ISamlAccountResult result, CancellationToken cancellationToken);
+        public static IAccount GetAccount(this ISamlAccountResult samlAccountResult)
+            => (samlAccountResult as ISamlAccountResultSync).GetAccount();
     }
 }

@@ -421,11 +421,15 @@
     <Compile Include="Impl\Resource\DefaultRetrievalOptions{T}.cs" />
     <Compile Include="Impl\Resource\ExpandedProperty.cs" />
     <Compile Include="Impl\Resource\IEmbeddedProperty.cs" />
+    <Compile Include="Impl\Saml\DefaultSamlAccountResult.cs" />
+    <Compile Include="Impl\Saml\DefaultSamlSyncCallbackHandler.cs" />
     <Compile Include="Impl\Saml\DefaultSamlAsyncCallbackHandler.cs" />
     <Compile Include="Impl\Saml\DefaultSamlIdpUrlBuilder.cs" />
     <Compile Include="Impl\Saml\DefaultSamlPolicy.cs" />
     <Compile Include="Impl\Saml\DefaultSamlServiceProvider.cs" />
     <Compile Include="Impl\Saml\DefaultSsoInitiationEndpoint.cs" />
+    <Compile Include="Impl\Saml\InlineSamlSyncResultListener.cs" />
+    <Compile Include="Impl\Saml\ISamlAccountResultSync.cs" />
     <Compile Include="Impl\Saml\InlineSamlAsyncResultListener.cs" />
     <Compile Include="Impl\Saml\ISamlPolicySync.cs" />
     <Compile Include="Impl\Saml\ISamlServiceProviderSync.cs" />
@@ -570,6 +574,9 @@
     <Compile Include="Resource\IRetrievalOptions{T}.cs" />
     <Compile Include="Resource\ISaveableWithOptions{T}.cs" />
     <Compile Include="Resource\ISaveable{T}.cs" />
+    <Compile Include="Saml\IAccountResult.cs" />
+    <Compile Include="Saml\ISamlSyncResultListener.cs" />
+    <Compile Include="Saml\ISamlSyncCallbackHandler.cs" />
     <Compile Include="Saml\ISamlAsyncCallbackHandler.cs" />
     <Compile Include="Saml\ISamlAsyncResultListener.cs" />
     <Compile Include="Saml\ISamlIdpUrlBuilder.cs" />
@@ -594,6 +601,7 @@
     <Compile Include="Sync\SyncHasTenantExtensions.cs" />
     <Compile Include="Sync\SyncEmailVerificationRequestExtensions.cs" />
     <Compile Include="Sync\SyncPasswordGrantAuthenticatorExtensions.cs" />
+    <Compile Include="Sync\SyncSamlAccountResultExtensions.cs" />
     <Compile Include="Sync\SyncSamlPolicyExtensions.cs" />
     <Compile Include="Sync\SyncSamlServiceProviderExtensions.cs" />
     <Compile Include="Tenant\IHasTenant.cs" />

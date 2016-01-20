@@ -22,6 +22,7 @@ using Stormpath.SDK.Impl.IdSite;
 using Stormpath.SDK.Impl.Saml;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Saml;
+using Stormpath.SDK.Sync;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -41,13 +42,30 @@ namespace Stormpath.SDK.Impl.Application
                 new DefaultClock());
         }
 
+        ISamlIdpUrlBuilder IApplicationSync.NewSamlIdpUrlBuilder()
+        {
+            var samlPolicy = this.AsInterface.GetSamlPolicy();
+            var samlServiceProvider = samlPolicy.GetSamlServiceProvider();
+            var ssoInitiationEndpoint = samlServiceProvider.GetSsoInitiationEndpoint();
+
+            return new DefaultSamlIdpUrlBuilder(
+                this.GetInternalDataStore(),
+                this.AsInterface.Href,
+                ssoInitiationEndpoint.Href,
+                new DefaultIdSiteJtiProvider(),
+                new DefaultClock());
+        }
+
         Task<ISamlPolicy> IApplication.GetSamlPolicyAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<ISamlPolicy>(this.SamlPolicy.Href, cancellationToken);
+
+        ISamlPolicy IApplicationSync.GetSamlPolicy()
+            => this.GetInternalSyncDataStore().GetResource<ISamlPolicy>(this.SamlPolicy.Href);
 
         ISamlAsyncCallbackHandler IApplication.NewSamlAsyncCallbackHandler(IHttpRequest request)
             => new DefaultSamlAsyncCallbackHandler(this.GetInternalDataStore(), request);
 
-        ISamlPolicy IApplicationSync.GetSamlPolicy()
-            => this.GetInternalSyncDataStore().GetResource<ISamlPolicy>(this.SamlPolicy.Href);
+        ISamlSyncCallbackHandler IApplicationSync.NewSamlSyncCallbackHandler(IHttpRequest request)
+            => new DefaultSamlSyncCallbackHandler(this.GetInternalDataStore(), request);
     }
 }

@@ -168,5 +168,9 @@ namespace Stormpath.SDK.Impl.Application
         IOauthPolicy GetOauthPolicy();
 
         ISamlPolicy GetSamlPolicy();
+
+        ISamlIdpUrlBuilder NewSamlIdpUrlBuilder();
+
+        ISamlSyncCallbackHandler NewSamlSyncCallbackHandler(IHttpRequest request);
     }
 }

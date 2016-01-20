@@ -162,6 +162,7 @@ namespace Stormpath.SDK.Impl.Saml
             }
 
             var jwt = this.jwtBuilder
+                .SetHeaderParameter(JwtHeaderParameters.KeyId, apiKey.GetId())
                 .SignWith(apiKey.GetSecret(), Encoding.UTF8)
                 .Build()
                 .ToString();

@@ -31,6 +31,8 @@ namespace Stormpath.SDK.Jwt
         /// <returns>This instance for method chaining.</returns>
         IJwtBuilder SetHeader(Map header);
 
+        IJwtBuilder SetHeaderParameter(string name, object value);
+
         /// <summary>
         /// Sets the JWT claims.
         /// </summary>

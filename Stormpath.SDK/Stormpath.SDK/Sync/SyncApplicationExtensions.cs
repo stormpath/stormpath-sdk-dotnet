@@ -323,5 +323,11 @@ namespace Stormpath.SDK.Sync
 
         public static ISamlPolicy GetSamlPolicy(this IApplication application)
             => (application as IApplicationSync).GetSamlPolicy();
+
+        public static ISamlIdpUrlBuilder NewSamlIdpUrlBuilder(this IApplication application)
+            => (application as IApplicationSync).NewSamlIdpUrlBuilder();
+
+        public static ISamlSyncCallbackHandler NewSamlSyncCallbackHandler(this IApplication application, IHttpRequest request)
+            => (application as IApplicationSync).NewSamlSyncCallbackHandler(request);
     }
 }

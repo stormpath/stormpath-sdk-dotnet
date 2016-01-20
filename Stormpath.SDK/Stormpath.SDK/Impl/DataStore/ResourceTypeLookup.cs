@@ -88,6 +88,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(ISamlPolicy)] = typeof(DefaultSamlPolicy),
             [typeof(ISamlServiceProvider)] = typeof(DefaultSamlServiceProvider),
             [typeof(ISsoInitiationEndpoint)] = typeof(DefaultSsoInitiationEndpoint),
+            [typeof(ISamlAccountResult)] = typeof(DefaultSamlAccountResult),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),

@@ -17,32 +17,31 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Impl.Saml
 {
     internal sealed class InlineSamlAsyncResultListener : ISamlAsyncResultListener
     {
-        private readonly Func<IAccountResult, CancellationToken, Task> onAuthenticated;
-        private readonly Func<IAccountResult, CancellationToken, Task> onLogout;
+        private readonly Func<ISamlAccountResult, CancellationToken, Task> onAuthenticated;
+        private readonly Func<ISamlAccountResult, CancellationToken, Task> onLogout;
 
         public InlineSamlAsyncResultListener(
-            Func<IAccountResult, CancellationToken, Task> onAuthenticated,
-            Func<IAccountResult, CancellationToken, Task> onLogout)
+            Func<ISamlAccountResult, CancellationToken, Task> onAuthenticated,
+            Func<ISamlAccountResult, CancellationToken, Task> onLogout)
         {
             this.onAuthenticated = onAuthenticated;
             this.onLogout = onLogout;
         }
 
-        Task ISamlAsyncResultListener.OnAuthenticatedAsync(IAccountResult result, CancellationToken cancellationToken)
+        Task ISamlAsyncResultListener.OnAuthenticatedAsync(ISamlAccountResult result, CancellationToken cancellationToken)
         {
             return this.onAuthenticated != null
                 ? this.onAuthenticated(result, cancellationToken)
                 : Task.FromResult(true);
         }
 
-        Task ISamlAsyncResultListener.OnLogoutAsync(IAccountResult result, CancellationToken cancellationToken)
+        Task ISamlAsyncResultListener.OnLogoutAsync(ISamlAccountResult result, CancellationToken cancellationToken)
         {
             return this.onLogout != null
                 ? this.onLogout(result, cancellationToken)

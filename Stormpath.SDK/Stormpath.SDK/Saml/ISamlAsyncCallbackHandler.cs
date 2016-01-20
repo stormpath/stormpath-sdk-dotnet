@@ -15,9 +15,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.IdSite;
@@ -31,9 +28,9 @@ namespace Stormpath.SDK.Saml
         ISamlAsyncCallbackHandler SetResultListener(ISamlAsyncResultListener resultListener);
 
         ISamlAsyncCallbackHandler SetResultListener(
-            Func<IAccountResult, CancellationToken, Task> onAuthenticated = null,
-            Func<IAccountResult, CancellationToken, Task> onLogout = null);
+            Func<ISamlAccountResult, CancellationToken, Task> onAuthenticated = null,
+            Func<ISamlAccountResult, CancellationToken, Task> onLogout = null);
 
-        Task<IAccountResult> GetAccountResultAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<ISamlAccountResult> GetAccountResultAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

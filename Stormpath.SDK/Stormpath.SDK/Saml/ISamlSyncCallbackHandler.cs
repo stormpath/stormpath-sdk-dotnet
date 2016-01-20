@@ -1,4 +1,4 @@
-﻿// <copyright file="ISamlAsyncResultListener.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ISamlAsyncCallbackHandler.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +14,21 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading;
-using System.Threading.Tasks;
+using System;
+using Stormpath.SDK.IdSite;
 
 namespace Stormpath.SDK.Saml
 {
-    public interface ISamlAsyncResultListener
+    public interface ISamlSyncCallbackHandler
     {
-        Task OnAuthenticatedAsync(ISamlAccountResult result, CancellationToken cancellationToken);
+        ISamlSyncCallbackHandler SetNonceStore(INonceStore nonceStore);
 
-        Task OnLogoutAsync(ISamlAccountResult result, CancellationToken cancellationToken);
+        ISamlSyncCallbackHandler SetResultListener(ISamlSyncResultListener resultListener);
+
+        ISamlSyncCallbackHandler SetResultListener(
+            Action<ISamlAccountResult> onAuthenticated = null,
+            Action<ISamlAccountResult> onLogout = null);
+
+        ISamlAccountResult GetAccountResult();
     }
 }
