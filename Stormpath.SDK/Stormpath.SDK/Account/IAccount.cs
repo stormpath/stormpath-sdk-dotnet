@@ -16,6 +16,7 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
@@ -209,6 +210,10 @@ namespace Stormpath.SDK.Account
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The ProviderData Resource belonging to the account.</returns>
         Task<IProviderData> GetProviderDataAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<IApiKey> CreateApiKeyAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        IAsyncQueryable<IApiKey> GetApiKeys();
 
         /// <summary>
         /// Gets a queryable list of the <see cref="IApplication">Applications</see> the Account may log in to.
