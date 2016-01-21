@@ -14,14 +14,15 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading.Tasks;
+using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration.Async
+namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection(nameof(IntegrationTestCollection))]
     public class ApiKey_tests
@@ -35,84 +36,84 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Creating_and_deleting_api_key(TestClientProvider clientBuilder)
+        public void Creating_and_deleting_api_key(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester1", "api-key-tester-1@foo.foo", new RandomPassword(12));
+            var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
+            var account = app.CreateAccount("ApiKey", "Tester1", "api-key-tester-1@foo.foo", new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
-            (await account.GetApiKeys().CountAsync()).ShouldBe(0);
+            account.GetApiKeys().Synchronously().Count().ShouldBe(0);
 
-            var newKey1 = await account.CreateApiKeyAsync();
-            var newKey2 = await account.CreateApiKeyAsync(opt =>
+            var newKey1 = account.CreateApiKey();
+            var newKey2 = account.CreateApiKey(opt =>
             {
                 opt.Expand(e => e.GetAccount());
                 opt.Expand(e => e.GetTenant());
             });
 
-            var keysList = await account.GetApiKeys().ToListAsync();
+            var keysList = account.GetApiKeys().Synchronously().ToList();
             keysList.Count.ShouldBe(2);
             keysList.ShouldContain(x => x.Href == newKey1.Href);
             keysList.ShouldContain(x => x.Href == newKey2.Href);
 
-            (await newKey1.DeleteAsync()).ShouldBeTrue();
-            (await newKey2.DeleteAsync()).ShouldBeTrue();
+            newKey1.Delete().ShouldBeTrue();
+            newKey2.Delete().ShouldBeTrue();
 
             // Clean up
-            (await account.DeleteAsync()).ShouldBeTrue();
+            account.Delete().ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Updating_api_key(TestClientProvider clientBuilder)
+        public void Updating_api_key(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester2", "api-key-tester-2@foo.foo", new RandomPassword(12));
+            var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
+            var account = app.CreateAccount("ApiKey", "Tester2", "api-key-tester-2@foo.foo", new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
-            var newKey = await account.CreateApiKeyAsync();
+            var newKey = account.CreateApiKey();
             newKey.Status.ShouldBe(ApiKeyStatus.Enabled);
 
             newKey.SetStatus(ApiKeyStatus.Disabled);
-            await newKey.SaveAsync();
+            newKey.Save();
             newKey.Status.ShouldBe(ApiKeyStatus.Disabled);
 
-            var retrieved = await account.GetApiKeys().SingleAsync();
+            var retrieved = account.GetApiKeys().Synchronously().Single();
             retrieved.Status.ShouldBe(ApiKeyStatus.Disabled);
 
             // Clean up
-            (await newKey.DeleteAsync()).ShouldBeTrue();
+            newKey.Delete().ShouldBeTrue();
 
-            (await account.DeleteAsync()).ShouldBeTrue();
+            account.Delete().ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Looking_up_api_key_via_application(TestClientProvider clientBuilder)
+        public void Looking_up_api_key_via_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester3", "api-key-tester-3@foo.foo", new RandomPassword(12));
+            var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
+            var account = app.CreateAccount("ApiKey", "Tester3", "api-key-tester-3@foo.foo", new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
-            var newKey = await account.CreateApiKeyAsync();
+            var newKey = account.CreateApiKey();
 
-            var foundKey = await app.GetApiKeyAsync(newKey.Id, opt =>
+            var foundKey = app.GetApiKey(newKey.Id, opt =>
             {
                 opt.Expand(e => e.GetAccount());
                 opt.Expand(e => e.GetTenant());
             });
-            var foundAccount = await foundKey.GetAccountAsync();
+            var foundAccount = foundKey.GetAccount();
             foundAccount.Href.ShouldBe(account.Href);
 
             // Clean up
-            (await newKey.DeleteAsync()).ShouldBeTrue();
+            newKey.Delete().ShouldBeTrue();
 
-            (await account.DeleteAsync()).ShouldBeTrue();
+            account.Delete().ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
     }

@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Async\Account_tests.vb" />
+    <Compile Include="Async\ApiKey_tests.vb" />
     <Compile Include="Async\Application_tests.vb" />
     <Compile Include="Async\CustomData_embedded_tests.vb" />
     <Compile Include="Async\CustomData_tests.vb" />
@@ -131,6 +132,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Sync\Account_tests.vb" />
+    <Compile Include="Sync\ApiKey_tests.vb" />
     <Compile Include="Sync\Application_tests.vb" />
     <Compile Include="Sync\CustomData_embedded_tests.vb" />
     <Compile Include="Sync\CustomData_tests.vb" />
