@@ -15,7 +15,9 @@
 ' </copyright>
 
 Imports Shouldly
+Imports Stormpath.SDK.Account
 Imports Stormpath.SDK.Api
+Imports Stormpath.SDK.Auth
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData
 Imports Xunit
@@ -99,6 +101,135 @@ Namespace Async
                                                                End Sub)
             Dim foundAccount = Await foundKey.GetAccountAsync()
             foundAccount.Href.ShouldBe(account.Href)
+
+            ' Clean up
+            Call (Await newKey.DeleteAsync()).ShouldBeTrue()
+
+            Call (Await account.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedAccountHrefs.Remove(account.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Authenticating_api_key(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim app = Await client.GetApplicationAsync(Me.fixture.PrimaryApplicationHref)
+            Dim account = Await app.CreateAccountAsync("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
+            Me.fixture.CreatedAccountHrefs.Add(account.Href)
+
+            Dim newKey = Await account.CreateApiKeyAsync()
+
+            Dim apiKeyAuthRequest = New ApiKeyRequestBuilder() _
+                .SetId(newKey.Id) _
+                .SetSecret(newKey.Secret) _
+                .Build()
+
+            Dim result = Await app.AuthenticateAccountAsync(apiKeyAuthRequest)
+            Dim resultAccount = Await result.GetAccountAsync()
+
+            resultAccount.Href.ShouldBe(account.Href)
+
+            ' Clean up
+            Call (Await newKey.DeleteAsync()).ShouldBeTrue()
+
+            Call (Await account.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedAccountHrefs.Remove(account.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Throws_when_id_is_invalid(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim app = Await client.GetApplicationAsync(Me.fixture.PrimaryApplicationHref)
+            Dim account = Await app.CreateAccountAsync("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
+            Me.fixture.CreatedAccountHrefs.Add(account.Href)
+
+            Dim newKey = Await account.CreateApiKeyAsync()
+
+            Dim apiKeyAuthRequest = New ApiKeyRequestBuilder() _
+                .SetId("FOOBAR1") _
+                .SetSecret(newKey.Secret) _
+                .Build()
+
+            Await Should.ThrowAsync(Of IncorrectCredentialsException)(app.AuthenticateAccountAsync(apiKeyAuthRequest))
+
+            ' Clean up
+            Call (Await newKey.DeleteAsync()).ShouldBeTrue()
+
+            Call (Await account.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedAccountHrefs.Remove(account.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Throws_when_secret_is_invalid(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim app = Await client.GetApplicationAsync(Me.fixture.PrimaryApplicationHref)
+            Dim account = Await app.CreateAccountAsync("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
+            Me.fixture.CreatedAccountHrefs.Add(account.Href)
+
+            Dim newKey = Await account.CreateApiKeyAsync()
+
+            Dim apiKeyAuthRequest = New ApiKeyRequestBuilder() _
+                .SetId(newKey.Id) _
+                .SetSecret("notARealSecret123") _
+                .Build()
+
+            Await Should.ThrowAsync(Of IncorrectCredentialsException)(app.AuthenticateAccountAsync(apiKeyAuthRequest))
+
+            ' Clean up
+            Call (Await newKey.DeleteAsync()).ShouldBeTrue()
+
+            Call (Await account.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedAccountHrefs.Remove(account.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Throws_when_key_is_disabled(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim app = Await client.GetApplicationAsync(Me.fixture.PrimaryApplicationHref)
+            Dim account = Await app.CreateAccountAsync("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
+            Me.fixture.CreatedAccountHrefs.Add(account.Href)
+
+            Dim newKey = Await account.CreateApiKeyAsync()
+            newKey.SetStatus(ApiKeyStatus.Disabled)
+            Await newKey.SaveAsync()
+
+            Dim apiKeyAuthRequest = New ApiKeyRequestBuilder() _
+                .SetId(newKey.Id) _
+                .SetSecret(newKey.Secret) _
+                .Build()
+
+            Await Should.ThrowAsync(Of DisabledApiKeyException)(app.AuthenticateAccountAsync(apiKeyAuthRequest))
+
+            ' Clean up
+            Call (Await newKey.DeleteAsync()).ShouldBeTrue()
+
+            Call (Await account.DeleteAsync()).ShouldBeTrue()
+            Me.fixture.CreatedAccountHrefs.Remove(account.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Throws_when_account_is_disabled(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim app = Await client.GetApplicationAsync(Me.fixture.PrimaryApplicationHref)
+
+            Dim account = Await app.CreateAccountAsync("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
+            Me.fixture.CreatedAccountHrefs.Add(account.Href)
+
+            account.SetStatus(AccountStatus.Disabled)
+            Await account.SaveAsync()
+
+            Dim newKey = Await account.CreateApiKeyAsync()
+
+            Dim apiKeyAuthRequest = New ApiKeyRequestBuilder() _
+                .SetId(newKey.Id) _
+                .SetSecret(newKey.Secret) _
+                .Build()
+
+            Await Should.ThrowAsync(Of DisabledAccountException)(app.AuthenticateAccountAsync(apiKeyAuthRequest))
 
             ' Clean up
             Call (Await newKey.DeleteAsync()).ShouldBeTrue()

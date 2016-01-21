@@ -84,8 +84,13 @@
     <Compile Include="Application\IApplicationAccountStoreMapping.cs" />
     <Compile Include="Application\IApplicationCreationOptions.cs" />
     <Compile Include="Application\IApplication.cs" />
+    <Compile Include="Auth\ApiAuthenticationException.cs" />
+    <Compile Include="Auth\ApiKeyRequestBuilder.cs" />
+    <Compile Include="Auth\DisabledAccountException.cs" />
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
+    <Compile Include="Auth\DisabledApiKeyException.cs" />
+    <Compile Include="Auth\IncorrectCredentialsException.cs" />
     <Compile Include="Cache\AbstractCacheProvider.cs" />
     <Compile Include="Http\AbstractHttpClientBuilder.cs" />
     <Compile Include="Http\HttpClients.cs" />
@@ -106,6 +111,8 @@
     <Compile Include="Impl\Application\DefaultApplication.Oauth.cs" />
     <Compile Include="Impl\Application\DefaultApplicationAccountStoreMapping.cs" />
     <Compile Include="Impl\Application\IApplicationAccountStoreMappingSync.cs" />
+    <Compile Include="Impl\Auth\ApiKeyAuthenticationRequest.cs" />
+    <Compile Include="Impl\Auth\ApiKeyAuthenticator.cs" />
     <Compile Include="Impl\Client\DefaultClient.Jwt.cs" />
     <Compile Include="Impl\Client\IUserAgentBuilder.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Core.cs" />

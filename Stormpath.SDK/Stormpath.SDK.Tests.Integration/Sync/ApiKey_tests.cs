@@ -16,7 +16,9 @@
 
 using System.Linq;
 using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Auth;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
@@ -40,7 +42,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
             var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
-            var account = app.CreateAccount("ApiKey", "Tester1", "api-key-tester-1@foo.foo", new RandomPassword(12));
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             account.GetApiKeys().Synchronously().Count().ShouldBe(0);
@@ -71,7 +73,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
             var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
-            var account = app.CreateAccount("ApiKey", "Tester2", "api-key-tester-2@foo.foo", new RandomPassword(12));
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = account.CreateApiKey();
@@ -97,7 +99,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
             var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
-            var account = app.CreateAccount("ApiKey", "Tester3", "api-key-tester-3@foo.foo", new RandomPassword(12));
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = account.CreateApiKey();
@@ -109,6 +111,140 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             });
             var foundAccount = foundKey.GetAccount();
             foundAccount.Href.ShouldBe(account.Href);
+
+            // Clean up
+            newKey.Delete().ShouldBeTrue();
+
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Authenticating_api_key(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var newKey = account.CreateApiKey();
+
+            var apiKeyAuthRequest = new ApiKeyRequestBuilder()
+                .SetId(newKey.Id)
+                .SetSecret(newKey.Secret)
+                .Build();
+
+            var result = app.AuthenticateAccount(apiKeyAuthRequest);
+            var resultAccount = result.GetAccount();
+
+            resultAccount.Href.ShouldBe(account.Href);
+
+            // Clean up
+            newKey.Delete().ShouldBeTrue();
+
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Throws_when_id_is_invalid(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var newKey = account.CreateApiKey();
+
+            var apiKeyAuthRequest = new ApiKeyRequestBuilder()
+                .SetId("FOOBAR1")
+                .SetSecret(newKey.Secret)
+                .Build();
+
+            Should.Throw<IncorrectCredentialsException>(() => app.AuthenticateAccount(apiKeyAuthRequest));
+
+            // Clean up
+            newKey.Delete().ShouldBeTrue();
+
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Throws_when_secret_is_invalid(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var newKey = account.CreateApiKey();
+
+            var apiKeyAuthRequest = new ApiKeyRequestBuilder()
+                .SetId(newKey.Id)
+                .SetSecret("notARealSecret123")
+                .Build();
+
+            Should.Throw<IncorrectCredentialsException>(() => app.AuthenticateAccount(apiKeyAuthRequest));
+
+            // Clean up
+            newKey.Delete().ShouldBeTrue();
+
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Throws_when_key_is_disabled(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var newKey = account.CreateApiKey();
+            newKey.SetStatus(ApiKeyStatus.Disabled);
+            newKey.Save();
+
+            var apiKeyAuthRequest = new ApiKeyRequestBuilder()
+                .SetId(newKey.Id)
+                .SetSecret(newKey.Secret)
+                .Build();
+
+            Should.Throw<DisabledApiKeyException>(() => app.AuthenticateAccount(apiKeyAuthRequest));
+
+            // Clean up
+            newKey.Delete().ShouldBeTrue();
+
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Throws_when_account_is_disabled(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
+
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            account.SetStatus(AccountStatus.Disabled);
+            account.Save();
+
+            var newKey = account.CreateApiKey();
+
+            var apiKeyAuthRequest = new ApiKeyRequestBuilder()
+                .SetId(newKey.Id)
+                .SetSecret(newKey.Secret)
+                .Build();
+
+            Should.Throw<DisabledAccountException>(() => app.AuthenticateAccount(apiKeyAuthRequest));
 
             // Clean up
             newKey.Delete().ShouldBeTrue();

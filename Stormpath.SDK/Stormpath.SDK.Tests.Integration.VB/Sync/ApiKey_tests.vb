@@ -15,7 +15,9 @@
 ' </copyright>
 
 Imports Shouldly
+Imports Stormpath.SDK.Account
 Imports Stormpath.SDK.Api
+Imports Stormpath.SDK.Auth
 Imports Stormpath.SDK.Sync
 Imports Stormpath.SDK.Tests.Common.Integration
 Imports Stormpath.SDK.Tests.Common.RandomData
@@ -35,7 +37,7 @@ Namespace Sync
         Public Sub Creating_and_deleting_api_key(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim app = client.GetApplication(Me.fixture.PrimaryApplicationHref)
-            Dim account = app.CreateAccount("ApiKey", "Tester1", "api-key-tester-1@foo.foo", New RandomPassword(12))
+            Dim account = app.CreateAccount("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
             Me.fixture.CreatedAccountHrefs.Add(account.Href)
 
             Call (account.GetApiKeys().Synchronously().Count()).ShouldBe(0)
@@ -64,7 +66,7 @@ Namespace Sync
         Public Sub Updating_api_key(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim app = client.GetApplication(Me.fixture.PrimaryApplicationHref)
-            Dim account = app.CreateAccount("ApiKey", "Tester2", "api-key-tester-2@foo.foo", New RandomPassword(12))
+            Dim account = app.CreateAccount("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
             Me.fixture.CreatedAccountHrefs.Add(account.Href)
 
             Dim newKey = account.CreateApiKey()
@@ -89,7 +91,7 @@ Namespace Sync
         Public Sub Looking_up_api_key_via_application(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
             Dim app = client.GetApplication(Me.fixture.PrimaryApplicationHref)
-            Dim account = app.CreateAccount("ApiKey", "Tester3", "api-key-tester-3@foo.foo", New RandomPassword(12))
+            Dim account = app.CreateAccount("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
             Me.fixture.CreatedAccountHrefs.Add(account.Href)
 
             Dim newKey = account.CreateApiKey()
@@ -100,6 +102,132 @@ Namespace Sync
                                                     End Sub)
             Dim foundAccount = foundKey.GetAccount()
             foundAccount.Href.ShouldBe(account.Href)
+
+            ' Clean up
+            Call (newKey.Delete()).ShouldBeTrue()
+
+            Call (account.Delete()).ShouldBeTrue()
+            Me.fixture.CreatedAccountHrefs.Remove(account.Href)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Authenticating_api_key(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim app = client.GetApplication(Me.fixture.PrimaryApplicationHref)
+            Dim account = app.CreateAccount("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
+            Me.fixture.CreatedAccountHrefs.Add(account.Href)
+
+            Dim newKey = account.CreateApiKey()
+
+            Dim apiKeyAuthRequest = New ApiKeyRequestBuilder() _
+                .SetId(newKey.Id) _
+                .SetSecret(newKey.Secret) _
+                .Build()
+
+            Dim result = app.AuthenticateAccount(apiKeyAuthRequest)
+            Dim resultAccount = result.GetAccount()
+
+            resultAccount.Href.ShouldBe(account.Href)
+
+            ' Clean up
+            Call (newKey.Delete()).ShouldBeTrue()
+
+            Call (account.Delete()).ShouldBeTrue()
+            Me.fixture.CreatedAccountHrefs.Remove(account.Href)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Throws_when_id_is_invalid(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim app = client.GetApplication(Me.fixture.PrimaryApplicationHref)
+            Dim account = app.CreateAccount("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
+            Me.fixture.CreatedAccountHrefs.Add(account.Href)
+
+            Dim newKey = account.CreateApiKey()
+
+            Dim apiKeyAuthRequest = New ApiKeyRequestBuilder() _
+                .SetId("FOOBAR1") _
+                .SetSecret(newKey.Secret) _
+                .Build()
+
+            Should.Throw(Of IncorrectCredentialsException)(Function() app.AuthenticateAccount(apiKeyAuthRequest))
+
+            ' Clean up
+            Call (newKey.Delete()).ShouldBeTrue()
+
+            Call (account.Delete()).ShouldBeTrue()
+            Me.fixture.CreatedAccountHrefs.Remove(account.Href)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Throws_when_secret_is_invalid(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim app = client.GetApplication(Me.fixture.PrimaryApplicationHref)
+            Dim account = app.CreateAccount("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
+            Me.fixture.CreatedAccountHrefs.Add(account.Href)
+
+            Dim newKey = account.CreateApiKey()
+
+            Dim apiKeyAuthRequest = New ApiKeyRequestBuilder() _
+                .SetId(newKey.Id) _
+                .SetSecret("notARealSecret123") _
+                .Build()
+
+            Should.Throw(Of IncorrectCredentialsException)(Function() app.AuthenticateAccount(apiKeyAuthRequest))
+
+            ' Clean up
+            Call (newKey.Delete()).ShouldBeTrue()
+
+            Call (account.Delete()).ShouldBeTrue()
+            Me.fixture.CreatedAccountHrefs.Remove(account.Href)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Throws_when_key_is_disabled(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim app = client.GetApplication(Me.fixture.PrimaryApplicationHref)
+            Dim account = app.CreateAccount("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
+            Me.fixture.CreatedAccountHrefs.Add(account.Href)
+
+            Dim newKey = account.CreateApiKey()
+            newKey.SetStatus(ApiKeyStatus.Disabled)
+            newKey.Save()
+
+            Dim apiKeyAuthRequest = New ApiKeyRequestBuilder() _
+                .SetId(newKey.Id) _
+                .SetSecret(newKey.Secret) _
+                .Build()
+
+            Should.Throw(Of DisabledApiKeyException)(Function() app.AuthenticateAccount(apiKeyAuthRequest))
+
+            ' Clean up
+            Call (newKey.Delete()).ShouldBeTrue()
+
+            Call (account.Delete()).ShouldBeTrue()
+            Me.fixture.CreatedAccountHrefs.Remove(account.Href)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Throws_when_account_is_disabled(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim app = client.GetApplication(Me.fixture.PrimaryApplicationHref)
+
+            Dim account = app.CreateAccount("ApiKey", "Tester", New RandomEmail("foo.foo"), New RandomPassword(12))
+            Me.fixture.CreatedAccountHrefs.Add(account.Href)
+
+            account.SetStatus(AccountStatus.Disabled)
+            account.Save()
+
+            Dim newKey = account.CreateApiKey()
+
+            Dim apiKeyAuthRequest = New ApiKeyRequestBuilder().SetId(newKey.Id).SetSecret(newKey.Secret).Build()
+
+            Should.Throw(Of DisabledAccountException)(Function() app.AuthenticateAccount(apiKeyAuthRequest))
 
             ' Clean up
             Call (newKey.Delete()).ShouldBeTrue()

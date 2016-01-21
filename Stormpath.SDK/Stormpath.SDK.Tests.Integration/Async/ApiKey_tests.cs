@@ -16,7 +16,9 @@
 
 using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Auth;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
@@ -39,7 +41,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester1", "api-key-tester-1@foo.foo", new RandomPassword(12));
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             (await account.GetApiKeys().CountAsync()).ShouldBe(0);
@@ -70,7 +72,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester2", "api-key-tester-2@foo.foo", new RandomPassword(12));
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = await account.CreateApiKeyAsync();
@@ -96,7 +98,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester3", "api-key-tester-3@foo.foo", new RandomPassword(12));
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = await account.CreateApiKeyAsync();
@@ -108,6 +110,140 @@ namespace Stormpath.SDK.Tests.Integration.Async
             });
             var foundAccount = await foundKey.GetAccountAsync();
             foundAccount.Href.ShouldBe(account.Href);
+
+            // Clean up
+            (await newKey.DeleteAsync()).ShouldBeTrue();
+
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Authenticating_api_key(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var newKey = await account.CreateApiKeyAsync();
+
+            var apiKeyAuthRequest = new ApiKeyRequestBuilder()
+                .SetId(newKey.Id)
+                .SetSecret(newKey.Secret)
+                .Build();
+
+            var result = await app.AuthenticateAccountAsync(apiKeyAuthRequest);
+            var resultAccount = await result.GetAccountAsync();
+
+            resultAccount.Href.ShouldBe(account.Href);
+
+            // Clean up
+            (await newKey.DeleteAsync()).ShouldBeTrue();
+
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Throws_when_id_is_invalid(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var newKey = await account.CreateApiKeyAsync();
+
+            var apiKeyAuthRequest = new ApiKeyRequestBuilder()
+                .SetId("FOOBAR1")
+                .SetSecret(newKey.Secret)
+                .Build();
+
+            await Should.ThrowAsync<IncorrectCredentialsException>(app.AuthenticateAccountAsync(apiKeyAuthRequest));
+
+            // Clean up
+            (await newKey.DeleteAsync()).ShouldBeTrue();
+
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Throws_when_secret_is_invalid(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var newKey = await account.CreateApiKeyAsync();
+
+            var apiKeyAuthRequest = new ApiKeyRequestBuilder()
+                .SetId(newKey.Id)
+                .SetSecret("notARealSecret123")
+                .Build();
+
+            await Should.ThrowAsync<IncorrectCredentialsException>(app.AuthenticateAccountAsync(apiKeyAuthRequest));
+
+            // Clean up
+            (await newKey.DeleteAsync()).ShouldBeTrue();
+
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Throws_when_key_is_disabled(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var newKey = await account.CreateApiKeyAsync();
+            newKey.SetStatus(ApiKeyStatus.Disabled);
+            await newKey.SaveAsync();
+
+            var apiKeyAuthRequest = new ApiKeyRequestBuilder()
+                .SetId(newKey.Id)
+                .SetSecret(newKey.Secret)
+                .Build();
+
+            await Should.ThrowAsync<DisabledApiKeyException>(app.AuthenticateAccountAsync(apiKeyAuthRequest));
+
+            // Clean up
+            (await newKey.DeleteAsync()).ShouldBeTrue();
+
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Throws_when_account_is_disabled(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
+
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            account.SetStatus(AccountStatus.Disabled);
+            await account.SaveAsync();
+
+            var newKey = await account.CreateApiKeyAsync();
+
+            var apiKeyAuthRequest = new ApiKeyRequestBuilder()
+                .SetId(newKey.Id)
+                .SetSecret(newKey.Secret)
+                .Build();
+
+            await Should.ThrowAsync<DisabledAccountException>(app.AuthenticateAccountAsync(apiKeyAuthRequest));
 
             // Clean up
             (await newKey.DeleteAsync()).ShouldBeTrue();
