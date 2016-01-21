@@ -69,6 +69,8 @@
     <Compile Include="Account\IEmailVerificationToken.cs" />
     <Compile Include="Account\IPasswordResetToken.cs" />
     <Compile Include="Account\IEmailVerificationRequest.cs" />
+    <Compile Include="Api\ApiKeyStatus.cs" />
+    <Compile Include="Api\IApiKey.cs" />
     <Compile Include="Application\ApplicationCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountStatus.cs" />
@@ -96,7 +98,10 @@
     <Compile Include="Impl\AccountStore\IAccountStoreContainerSync.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
     <Compile Include="Cache\AbstractCacheProviderBuilder{T}.cs" />
+    <Compile Include="Impl\Account\DefaultAccount.ApiKeys.cs" />
     <Compile Include="Impl\Account\IEmailVerificationRequestSync.cs" />
+    <Compile Include="Impl\Api\DefaultApiKey.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.ApiKey.cs" />
     <Compile Include="Impl\Application\DefaultApplication.Oauth.cs" />
     <Compile Include="Impl\Application\DefaultApplicationAccountStoreMapping.cs" />
     <Compile Include="Impl\Application\IApplicationAccountStoreMappingSync.cs" />
@@ -480,6 +485,7 @@
     <Compile Include="Jwt\InvalidJwtException.cs" />
     <Compile Include="Jwt\Jwts.cs" />
     <Compile Include="Linq\Expandables\IAccountExpandables.cs" />
+    <Compile Include="Linq\Expandables\IApiKeyExpandables.cs" />
     <Compile Include="Linq\Expandables\IOrganizationAccountStoreMappingExpandables.cs" />
     <Compile Include="Linq\Expandables\IAccountStoreMappingExpandables.cs" />
     <Compile Include="Linq\Expandables\IApplicationExpandables.cs" />

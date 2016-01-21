@@ -18,6 +18,7 @@ using System;
 using System.Linq.Expressions;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Directory;
@@ -164,6 +165,18 @@ namespace Stormpath.SDK
         public static IRetrievalOptions<IAuthenticationResult> Expand(this IRetrievalOptions<IAuthenticationResult> options, Expression<Func<IAuthenticationResultExpandables, object>> selector)
         {
             (options as DefaultRetrievalOptions<IAuthenticationResult>).SetProxy(x => x.Expand(selector));
+            return options;
+        }
+
+        /// <summary>
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
+        /// </summary>
+        /// <param name="options">The options for this request.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
+        /// <returns>The current instance for method chaining.</returns>
+        public static IRetrievalOptions<IApiKey> Expand(this IRetrievalOptions<IApiKey> options, Expression<Func<IApiKeyExpandables, object>> selector)
+        {
+            (options as DefaultRetrievalOptions<IApiKey>).SetProxy(x => x.Expand(selector));
             return options;
         }
     }

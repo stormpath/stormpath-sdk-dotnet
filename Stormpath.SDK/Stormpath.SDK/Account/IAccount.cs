@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Api;
@@ -212,6 +213,8 @@ namespace Stormpath.SDK.Account
         Task<IProviderData> GetProviderDataAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         Task<IApiKey> CreateApiKeyAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<IApiKey> CreateApiKeyAsync(Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
         IAsyncQueryable<IApiKey> GetApiKeys();
 

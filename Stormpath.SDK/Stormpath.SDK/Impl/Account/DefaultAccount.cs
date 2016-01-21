@@ -18,8 +18,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Linq;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Account
 {

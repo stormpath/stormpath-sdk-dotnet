@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Async\Account_tests.cs" />
+    <Compile Include="Async\ApiKey_tests.cs" />
     <Compile Include="Async\Application_tests.cs" />
     <Compile Include="Async\Entity_tests.cs" />
     <Compile Include="Async\CustomData_embedded_tests.cs" />

@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Directory;
@@ -25,6 +26,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.AccountStore;
+using Stormpath.SDK.Impl.Api;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.Auth;
 using Stormpath.SDK.Impl.CustomData;
@@ -83,6 +85,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(IGrantAuthenticationToken)] = typeof(DefaultGrantAuthenticationToken),
             [typeof(IRefreshGrantAuthenticationAttempt)] = typeof(DefaultRefreshGrantAuthenticationAttempt),
             [typeof(IIdSiteTokenAuthenticationAttempt)] = typeof(DefaultIdSiteTokenAuthenticationAttempt),
+            [typeof(IApiKey)] = typeof(DefaultApiKey),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
@@ -128,6 +131,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultGrantAuthenticationToken)] = typeof(IGrantAuthenticationToken),
             [typeof(DefaultRefreshGrantAuthenticationAttempt)] = typeof(IRefreshGrantAuthenticationAttempt),
             [typeof(DefaultIdSiteTokenAuthenticationAttempt)] = typeof(IIdSiteTokenAuthenticationAttempt),
+            [typeof(DefaultApiKey)] = typeof(IApiKey),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(DefaultApplicationAccountStoreMapping)] = typeof(IApplicationAccountStoreMapping),
@@ -158,6 +162,7 @@ namespace Stormpath.SDK.Impl.DataStore
             ["groups"] = typeof(CollectionResponsePage<IGroup>),
             ["groupMemberships"] = typeof(CollectionResponsePage<IGroupMembership>),
             ["accountMemberships"] = typeof(CollectionResponsePage<IGroupMembership>),
+            ["apiKeys"] = typeof(CollectionResponsePage<IApiKey>),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()
@@ -170,6 +175,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(CollectionResponsePage<IGroupMembership>)] = typeof(IGroupMembership),
             [typeof(CollectionResponsePage<IAccessToken>)] = typeof(IAccessToken),
             [typeof(CollectionResponsePage<IRefreshToken>)] = typeof(IRefreshToken),
+            [typeof(CollectionResponsePage<IApiKey>)] = typeof(IApiKey),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(CollectionResponsePage<IApplicationAccountStoreMapping>)] = typeof(IApplicationAccountStoreMapping),

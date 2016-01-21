@@ -116,5 +116,23 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
                 return new FieldConverterResult(true, SDK.Organization.OrganizationStatus.Parse(token.Value.ToString()));
             }
         }
+
+        internal sealed class ApiKeyStatusConverter : AbstractFieldConverter
+        {
+            public ApiKeyStatusConverter()
+                : base(nameof(ApiKeyStatusConverter), appliesToTargetType: typeof(SDK.Api.IApiKey))
+            {
+            }
+
+            protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
+            {
+                if (!IsStatusField(token))
+                {
+                    return FieldConverterResult.Failed;
+                }
+
+                return new FieldConverterResult(true, SDK.Api.ApiKeyStatus.Parse(token.Value.ToString()));
+            }
+        }
     }
 }

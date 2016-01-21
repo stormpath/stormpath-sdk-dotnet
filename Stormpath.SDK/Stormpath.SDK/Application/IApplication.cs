@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Http;
@@ -402,6 +403,10 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
         Task<IOauthPolicy> GetOauthPolicyAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<IApiKey> GetApiKey(string apiKeyId, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<IApiKey> GetApiKey(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a queryable list of all Accounts in this Application.
