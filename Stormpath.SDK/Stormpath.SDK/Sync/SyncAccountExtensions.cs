@@ -14,11 +14,14 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Sync
 {
@@ -96,5 +99,11 @@ namespace Stormpath.SDK.Sync
         /// <returns>The ProviderData Resource belonging to the account.</returns>
         public static IProviderData GetProviderData(this IAccount account)
             => (account as IAccountSync).GetProviderData();
+
+        public static IApiKey CreateApiKey(this IAccount account)
+            => (account as IAccountSync).CreateApiKey();
+
+        public static IApiKey CreateApiKey(this IAccount account, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction)
+            => (account as IAccountSync).CreateApiKey(retrievalOptionsAction);
     }
 }

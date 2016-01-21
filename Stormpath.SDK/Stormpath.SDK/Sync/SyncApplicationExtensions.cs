@@ -17,6 +17,7 @@
 using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Http;
@@ -319,5 +320,11 @@ namespace Stormpath.SDK.Sync
         /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
         public static IOauthPolicy GetOauthPolicy(this IApplication application)
             => (application as IApplicationSync).GetOauthPolicy();
+
+        public static IApiKey GetApiKey(this IApplication application, string apiKeyId)
+            => (application as IApplicationSync).GetApiKey(apiKeyId);
+
+        public static IApiKey GetApiKey(this IApplication application, string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction)
+            => (application as IApplicationSync).GetApiKey(apiKeyId, retrievalOptionsAction);
     }
 }

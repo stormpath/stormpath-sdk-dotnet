@@ -53,6 +53,8 @@ namespace Stormpath.SDK.Impl.Account
 
         private new IAccount AsInterface => this;
 
+        private IAccountSync AsSyncInterface => this;
+
         internal IEmbeddedProperty AccessTokens => this.GetLinkProperty(AccessTokensPropertyName);
 
         internal IEmbeddedProperty ApiKeys => this.GetLinkProperty(ApiKeysPropertyName);

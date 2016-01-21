@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Resource;
@@ -50,6 +51,6 @@ namespace Stormpath.SDK.Api
 
         void SetStatus(ApiKeyStatus status);
 
-        Task<IAccount> GetAccountAsync();
+        Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

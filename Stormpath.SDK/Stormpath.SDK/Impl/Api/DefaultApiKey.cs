@@ -23,7 +23,7 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Api
 {
-    internal sealed class DefaultApiKey : AbstractInstanceResource, IApiKey
+    internal sealed class DefaultApiKey : AbstractInstanceResource, IApiKey, IApiKeySync
     {
         private static readonly string IdPropertyName = "id";
         private static readonly string SecretPropertyName = "secret";
@@ -49,13 +49,22 @@ namespace Stormpath.SDK.Impl.Api
         void IApiKey.SetStatus(ApiKeyStatus status)
             => this.SetProperty(StatusPropertyName, status);
 
-        Task<IAccount> IApiKey.GetAccountAsync()
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href);
-
         Task<IApiKey> ISaveable<IApiKey>.SaveAsync(CancellationToken cancellationToken)
             => this.SaveAsync<IApiKey>(cancellationToken);
 
+        IApiKey ISaveableSync<IApiKey>.Save()
+            => this.Save<IApiKey>();
+
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
+
+        bool IDeletableSync.Delete()
+            => this.GetInternalSyncDataStore().Delete(this);
+
+        Task<IAccount> IApiKey.GetAccountAsync(CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
+
+        IAccount IApiKeySync.GetAccount()
+            => this.GetInternalSyncDataStore().GetResource<IAccount>(this.Account.Href);
     }
 }

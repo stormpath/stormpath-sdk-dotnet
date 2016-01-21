@@ -105,7 +105,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var newKey = await account.CreateApiKeyAsync();
 
-            var foundKey = await app.GetApiKey(newKey.Id, opt =>
+            var foundKey = await app.GetApiKeyAsync(newKey.Id, opt =>
             {
                 opt.Expand(e => e.GetAccount());
                 opt.Expand(e => e.GetTenant());

@@ -21,6 +21,7 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 

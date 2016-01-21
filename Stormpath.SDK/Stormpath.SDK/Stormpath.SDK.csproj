@@ -101,6 +101,7 @@
     <Compile Include="Impl\Account\DefaultAccount.ApiKeys.cs" />
     <Compile Include="Impl\Account\IEmailVerificationRequestSync.cs" />
     <Compile Include="Impl\Api\DefaultApiKey.cs" />
+    <Compile Include="Impl\Api\IApiKeySync.cs" />
     <Compile Include="Impl\Application\DefaultApplication.ApiKey.cs" />
     <Compile Include="Impl\Application\DefaultApplication.Oauth.cs" />
     <Compile Include="Impl\Application\DefaultApplicationAccountStoreMapping.cs" />
@@ -571,6 +572,7 @@
     <Compile Include="Serialization\ISerializerBuilder.cs" />
     <Compile Include="Serialization\ISerializerFactory.cs" />
     <Compile Include="Serialization\Serializers.cs" />
+    <Compile Include="Sync\SyncApiKeyExtensions.cs" />
     <Compile Include="Sync\SyncJwtAuthenticatorExtensions.cs" />
     <Compile Include="Sync\SyncIdSiteTokenAuthenticatorExtensions.cs" />
     <Compile Include="Sync\SyncRefreshGrantAuthenticatorExtensions.cs" />

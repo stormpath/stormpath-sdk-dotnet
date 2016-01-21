@@ -404,9 +404,9 @@ namespace Stormpath.SDK.Application
         /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
         Task<IOauthPolicy> GetOauthPolicyAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<IApiKey> GetApiKey(string apiKeyId, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IApiKey> GetApiKeyAsync(string apiKeyId, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<IApiKey> GetApiKey(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IApiKey> GetApiKeyAsync(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a queryable list of all Accounts in this Application.

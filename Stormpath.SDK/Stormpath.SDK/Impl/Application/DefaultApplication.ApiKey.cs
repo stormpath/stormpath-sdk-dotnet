@@ -15,9 +15,7 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Api;
@@ -25,15 +23,35 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Sync;
 
 namespace Stormpath.SDK.Impl.Application
 {
     internal sealed partial class DefaultApplication
     {
-        Task<IApiKey> IApplication.GetApiKey(string apiKeyId, CancellationToken cancellationToken)
-            => this.AsInterface.GetApiKey(apiKeyId, opt => { }, cancellationToken);
+        Task<IApiKey> IApplication.GetApiKeyAsync(string apiKeyId, CancellationToken cancellationToken)
+            => this.AsInterface.GetApiKeyAsync(apiKeyId, opt => { }, cancellationToken);
 
-        Task<IApiKey> IApplication.GetApiKey(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction, CancellationToken cancellationToken)
+        Task<IApiKey> IApplication.GetApiKeyAsync(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction, CancellationToken cancellationToken)
+        {
+            var href = this.ConstructHref(apiKeyId, retrievalOptionsAction);
+
+            var apiKeyCollection = new CollectionResourceQueryable<IApiKey>(href, this.GetInternalDataStore());
+            return apiKeyCollection.SingleOrDefaultAsync();
+        }
+
+        IApiKey IApplicationSync.GetApiKey(string apiKeyId)
+            => this.AsSyncInterface.GetApiKey(apiKeyId, opt => { });
+
+        IApiKey IApplicationSync.GetApiKey(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction)
+        {
+            var href = this.ConstructHref(apiKeyId, retrievalOptionsAction);
+
+            var apiKeyCollection = new CollectionResourceQueryable<IApiKey>(href, this.GetInternalDataStore());
+            return apiKeyCollection.Synchronously().SingleOrDefault();
+        }
+
+        private string ConstructHref(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction)
         {
             if (string.IsNullOrEmpty(apiKeyId))
             {
@@ -50,8 +68,7 @@ namespace Stormpath.SDK.Impl.Application
                 href += $"&{additionalQueryString}";
             }
 
-            var apiKeyCollection = new CollectionResourceQueryable<IApiKey>(href, this.GetInternalDataStore());
-            return apiKeyCollection.SingleOrDefaultAsync();
+            return href;
         }
     }
 }

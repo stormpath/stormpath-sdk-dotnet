@@ -40,5 +40,19 @@ namespace Stormpath.SDK.Impl.Account
                 retrievalOptions,
                 cancellationToken);
         }
+
+        IApiKey IAccountSync.CreateApiKey()
+            => this.AsSyncInterface.CreateApiKey(_ => { });
+
+        IApiKey IAccountSync.CreateApiKey(Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction)
+        {
+            var retrievalOptions = new DefaultRetrievalOptions<IApiKey>();
+            retrievalOptionsAction(retrievalOptions);
+
+            return this.GetInternalSyncDataStore().Create(
+                this.ApiKeys.Href,
+                this.GetInternalDataStore().Instantiate<IApiKey>(),
+                retrievalOptions);
+        }
     }
 }
