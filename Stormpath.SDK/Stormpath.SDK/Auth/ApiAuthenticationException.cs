@@ -19,6 +19,9 @@ using Stormpath.SDK.Impl.Error;
 
 namespace Stormpath.SDK.Auth
 {
+    /// <summary>
+    /// Represents an error that occurs while attempting to authenticate an <see cref="Api.IApiKey">API Key</see>.
+    /// </summary>
     public abstract class ApiAuthenticationException : ResourceException
     {
         private static readonly int ExceptionStatus = 401;
@@ -28,7 +31,7 @@ namespace Stormpath.SDK.Auth
         private static readonly string ExceptionDefaultClientMessage = "Authentication Required";
 
         internal ApiAuthenticationException(string developerMessage)
-            : base(DefaultError.WithMessage(developerMessage))
+            : base(DefaultError.With(ExceptionStatus, ExceptionCode, ExceptionMoreInfo, developerMessage, ExceptionDefaultClientMessage))
         {
         }
     }

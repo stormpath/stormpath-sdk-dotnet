@@ -21,11 +21,19 @@ using Stormpath.SDK.Impl.Tenant;
 
 namespace Stormpath.SDK.Impl.Api
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="IApiKey"/>.
+    /// </summary>
     internal interface IApiKeySync :
         ISaveableSync<IApiKey>,
         IDeletableSync,
         IHasTenantSync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IApiKey.GetAccountAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The <see cref="IAccount">Account</see> to which the API Key belongs.</returns>
         IAccount GetAccount();
     }
 }

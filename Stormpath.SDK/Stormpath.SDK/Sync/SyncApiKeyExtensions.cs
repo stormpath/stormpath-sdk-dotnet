@@ -20,8 +20,16 @@ using Stormpath.SDK.Impl.Api;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="IApiKey"/>.
+    /// </summary>
     public static class SyncApiKeyExtensions
     {
+        /// <summary>
+        /// Synchronously gets the <see cref="IAccount">Account</see> to which the API Key belongs.
+        /// </summary>
+        /// <param name="apiKey">The API Key object.</param>
+        /// <returns>The <see cref="IAccount">Account</see> to which the API Key belongs.</returns>
         public static IAccount GetAccount(this IApiKey apiKey)
             => (apiKey as IApiKeySync).GetAccount();
     }

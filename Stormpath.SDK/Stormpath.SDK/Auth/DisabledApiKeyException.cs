@@ -16,8 +16,15 @@
 
 namespace Stormpath.SDK.Auth
 {
+    /// <summary>
+    /// Represents an error that occurs during API Authentication
+    /// when the API Key is found, but it is <see cref="Api.ApiKeyStatus.Disabled">Disabled</see>.
+    /// </summary>
     public sealed class DisabledApiKeyException : ApiAuthenticationException
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DisabledApiKeyException"/> class.
+        /// </summary>
         public DisabledApiKeyException()
             : base("The API Key has been disabled.")
         {

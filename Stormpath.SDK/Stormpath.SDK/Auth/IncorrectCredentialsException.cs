@@ -16,8 +16,14 @@
 
 namespace Stormpath.SDK.Auth
 {
+    /// <summary>
+    /// Represents an error that occurs during API Authentication when the API Key is not found.
+    /// </summary>
     public sealed class IncorrectCredentialsException : ApiAuthenticationException
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IncorrectCredentialsException"/> class.
+        /// </summary>
         public IncorrectCredentialsException()
             : base("The provided credentials are not correct.")
         {

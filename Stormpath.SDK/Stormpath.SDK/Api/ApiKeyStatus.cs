@@ -24,8 +24,14 @@ namespace Stormpath.SDK.Api
     /// </summary>
     public sealed class ApiKeyStatus : StringEnumeration
     {
+        /// <summary>
+        /// An enabled API Key may be used for API Authentication.
+        /// </summary>
         public static ApiKeyStatus Enabled = new ApiKeyStatus("ENABLED");
 
+        /// <summary>
+        /// A disabled API Key may not be used for API Authentication.
+        /// </summary>
         public static ApiKeyStatus Disabled = new ApiKeyStatus("DISABLED");
 
         private ApiKeyStatus(string value)

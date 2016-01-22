@@ -22,6 +22,17 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Api
 {
+    /// <summary>
+    /// An API Key is a secure random username/password pair attributed to an <see cref="IAccount">Account</see>
+    /// that can be used by the account to make secure requests to an API service.
+    /// </summary>
+    /// <remarks>
+    /// An <see cref="IAccount">Account</see> may have zero or more API Keys, and allowing multiple keys is often useful for key
+    /// rotation strategies. For example, a new key can be generated while an existing key is in use. Applications can
+    /// then reference the new key (e.g., on startup), and once running, the old key can then be deleted. This allows for
+    /// key rotation without an interruption in service, which would happen otherwise if an old key was invalidated the
+    /// instant a new key was generated.
+    /// </remarks>
     public interface IApiKey :
         IResource,
         ISaveable<IApiKey>,
@@ -47,10 +58,35 @@ namespace Stormpath.SDK.Api
         /// <value>The API Key plaintext secret.</value>
         string Secret { get; }
 
+        /// <summary>
+        /// Gets the API Key status.
+        /// </summary>
+        /// <remarks>
+        /// API Keys that are not <see cref="ApiKeyStatus.Enabled">Enabled</see> cannot be used to authenticate requests.
+        /// API Keys are enabled by default when they are created.
+        /// </remarks>
+        /// <value>The API Key status.</value>
         ApiKeyStatus Status { get; }
 
+        /// <summary>
+        /// Sets the API Key status.
+        /// </summary>
+        /// <remarks>
+        /// API Keys that are not <see cref="ApiKeyStatus.Enabled">Enabled</see> cannot be used to authenticate requests.
+        /// API Keys are enabled by default when they are created.
+        /// <para>
+        /// You <b>must</b> call <c>SaveAsync</c> after updating this property; changes do not take effect until
+        /// the resource is saved to the Stormpath API.
+        /// </para>
+        /// </remarks>
+        /// <param name="status">The status.</param>
         void SetStatus(ApiKeyStatus status);
 
+        /// <summary>
+        /// Gets the <see cref="IAccount">Account</see> to which the API Key belongs.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IAccount">Account</see> to which the API Key belongs.</returns>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

@@ -167,8 +167,21 @@ namespace Stormpath.SDK.Impl.Application
         /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
         IOauthPolicy GetOauthPolicy();
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IApplication.GetApiKeyAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="apiKeyId">The API Key ID.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
+        /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
         IApiKey GetApiKey(string apiKeyId);
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IApplication.GetApiKeyAsync(string, Action{IRetrievalOptions{IApiKey}}, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="apiKeyId">The API Key ID.</param>
+        /// <param name="retrievalOptionsAction">The options to apply to the request.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
+        /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
         IApiKey GetApiKey(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction);
     }
 }

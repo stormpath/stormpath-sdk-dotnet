@@ -18,8 +18,16 @@ using Stormpath.SDK.Account;
 
 namespace Stormpath.SDK.Auth
 {
+    /// <summary>
+    /// Represents an error that occurs during API Authentication
+    /// when the API Key is found, but the owning <see cref="IAccount">Account</see> is disabled.
+    /// </summary>
     public sealed class DisabledAccountException : ApiAuthenticationException
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DisabledAccountException"/> class.
+        /// </summary>
+        /// <param name="status">The account status.</param>
         public DisabledAccountException(AccountStatus status)
             : base($"The account is not enabled (status: {status}).")
         {

@@ -404,8 +404,25 @@ namespace Stormpath.SDK.Application
         /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
         Task<IOauthPolicy> GetOauthPolicyAsync(CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Gets an <see cref="IApiKey">API Key</see>, by its ID, that belongs to an <see cref="IAccount">Account</see>
+        /// that has access to this application by a mapped account store.
+        /// </summary>
+        /// <param name="apiKeyId">The API Key ID.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
+        /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
         Task<IApiKey> GetApiKeyAsync(string apiKeyId, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Gets an <see cref="IApiKey">API Key</see>, by its ID, that belongs to an <see cref="IAccount">Account</see>
+        /// that has access to this application by a mapped account store.
+        /// </summary>
+        /// <param name="apiKeyId">The API Key ID.</param>
+        /// <param name="retrievalOptionsAction">The options to apply to the request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
+        /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
         Task<IApiKey> GetApiKeyAsync(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

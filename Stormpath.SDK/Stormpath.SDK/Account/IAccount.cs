@@ -212,10 +212,44 @@ namespace Stormpath.SDK.Account
         /// <returns>The ProviderData Resource belonging to the account.</returns>
         Task<IProviderData> GetProviderDataAsync(CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Creates a new <see cref="IApiKey">API Key</see> assigned to this account on the Stormpath server and returns the created resource.
+        /// </summary>
+        /// <remarks>
+        /// The returned API Key's <see cref="IApiKey.Secret">secret</see> is considered
+        /// <em>extremely</em> sensitive. Stormpath strongly recommends that you make newly generated API Keys accessible
+        /// to your accounts via a file download that stays secure on their file system.
+        /// </remarks>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The newly-created <see cref="IApiKey">API Key</see>.</returns>
+        /// <seealso cref="Auth.ApiKeyRequestBuilder"/>
+        /// <see cref="IApplication.AuthenticateAccountAsync(Auth.IAuthenticationRequest, CancellationToken)"/>
         Task<IApiKey> CreateApiKeyAsync(CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Creates a new <see cref="IApiKey">API Key</see> assigned to this account on the Stormpath server and returns the created resource.
+        /// </summary>
+        /// <remarks>
+        /// The returned API Key's <see cref="IApiKey.Secret">secret</see> is considered
+        /// <em>extremely</em> sensitive. Stormpath strongly recommends that you make newly generated API Keys accessible
+        /// to your accounts via a file download that stays secure on their file system.
+        /// </remarks>
+        /// <param name="retrievalOptionsAction">The options to apply to the request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The newly-created <see cref="IApiKey">API Key</see>.</returns>
+        /// <seealso cref="Auth.ApiKeyRequestBuilder"/>
+        /// <see cref="IApplication.AuthenticateAccountAsync(Auth.IAuthenticationRequest, CancellationToken)"/>
         Task<IApiKey> CreateApiKeyAsync(Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Gets a queryable list of the <see cref="IApiKey">API Keys</see> that belong to this account.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IApiKey}"/> that may be used to synchronously list API Keys.</returns>
+        /// <example>
+        /// <code>
+        /// var allApiKeys = await account.GetApiKeys().ToListAsync();
+        /// </code>
+        /// </example>
         IAsyncQueryable<IApiKey> GetApiKeys();
 
         /// <summary>

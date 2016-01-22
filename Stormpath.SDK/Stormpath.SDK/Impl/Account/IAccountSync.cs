@@ -87,8 +87,17 @@ namespace Stormpath.SDK.Impl.Account
         /// <returns>The provider data.</returns>
         IProviderData GetProviderData();
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccount.CreateApiKeyAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The new API Key.</returns>
         IApiKey CreateApiKey();
 
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccount.CreateApiKeyAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="retrievalOptionsAction">The options to apply to the request.</param>
+        /// <returns>The new API Key.</returns>
         IApiKey CreateApiKey(Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction);
     }
 }
