@@ -33,8 +33,8 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("79a65c37-9db1-413a-ac23-708404530295")]
 
-[assembly: AssemblyVersion("0.4.1.0")]
-[assembly: AssemblyFileVersion("0.4.1.0")]
+[assembly: AssemblyVersion("0.4.2.0")]
+[assembly: AssemblyFileVersion("0.4.2.0")]
 [assembly: InternalsVisibleTo("Stormpath.SDK.Tests")]
 [assembly: InternalsVisibleTo("Stormpath.SDK.Tests.Common")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

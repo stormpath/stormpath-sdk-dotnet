@@ -96,11 +96,18 @@ namespace Stormpath.SDK.Oauth
         /// </list>
         /// </para>
         /// <para>
+        /// When validating access tokens issued by ID Site, local validation will fail
+        /// because the Issuer (iss) claim is does not match the Application (for ID Site tokens, the issuer is the
+        /// ID Site URL). In this case, you can manually specify the expected issuer with <paramref name="localValidationOptions"/>.
+        /// </para>
+        /// <para>
         /// If validation fails, <see cref="IOauthAuthenticator{TRequest, TResult}.AuthenticateAsync(TRequest, System.Threading.CancellationToken)">AuthenticateAsync()</see>
         /// will throw the appropriate exception derived from <see cref="Jwt.InvalidJwtException"/>.
         /// </para>
         /// </remarks>
+        /// <param name="localValidationOptions">Optional parameters to use when validating locally.</param>
         /// <returns>This instance for method chaining.</returns>
-        IJwtAuthenticator WithLocalValidation();
+        /// <seealso cref="JwtLocalValidationOptions"/>
+        IJwtAuthenticator WithLocalValidation(JwtLocalValidationOptions localValidationOptions = null);
     }
 }

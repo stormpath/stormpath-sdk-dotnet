@@ -17,6 +17,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Http;
 
@@ -27,10 +28,13 @@ namespace Stormpath.SDK.Tests.Fakes
         private readonly IRequestExecutor fakeRequestExecutor;
         private readonly string resourceJson;
 
-        public StubRequestExecutor(string resourceJson)
+        public StubRequestExecutor(string resourceJson, IClientApiKey clientApiKey = null)
         {
             this.resourceJson = resourceJson;
             this.fakeRequestExecutor = Substitute.For<IRequestExecutor>();
+
+            // API Key
+            this.fakeRequestExecutor.ApiKey.Returns(clientApiKey);
 
             // All GETs return 200 OK
             this.fakeRequestExecutor

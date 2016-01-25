@@ -40,6 +40,7 @@ namespace Stormpath.SDK.Impl.Oauth
         private readonly IInternalDataStore internalDataStore;
 
         private bool withLocalValidation = false;
+        private JwtLocalValidationOptions localValidationOptions;
 
         public DefaultJwtAuthenticator(IApplication application, IInternalDataStore internalDataStore)
         {
@@ -51,9 +52,10 @@ namespace Stormpath.SDK.Impl.Oauth
 
         private IInternalSyncDataStore InternalSyncDataStore => this.internalDataStore as IInternalSyncDataStore;
 
-        IJwtAuthenticator IJwtAuthenticator.WithLocalValidation()
+        IJwtAuthenticator IJwtAuthenticator.WithLocalValidation(JwtLocalValidationOptions localValidationOptions)
         {
             this.withLocalValidation = true;
+            this.localValidationOptions = localValidationOptions;
             return this;
         }
 
@@ -101,13 +103,24 @@ namespace Stormpath.SDK.Impl.Oauth
 
         private IAccessToken ValidateLocallySync(IJwtAuthenticationRequest request)
         {
+            var options = this.localValidationOptions ?? new JwtLocalValidationOptions();
+
+            // Allow the issuer claim to be manually specified. This is necessary
+            // because ID Site tokens have a different issuer and break local validation
+            // with the default rules.
+            var expectedIssuer = options.Issuer;
+            if (string.IsNullOrEmpty(expectedIssuer))
+            {
+                expectedIssuer = this.application.Href;
+            }
+
             var parser = this.application.Client.NewJwtParser()
 
                 // Require secret key signature
                 .SetSigningKey(this.internalDataStore.ApiKey.GetSecret(), Encoding.UTF8)
 
                 // Require this application to be the issuer
-                .RequireIssuer(this.application.Href);
+                .RequireIssuer(expectedIssuer);
 
             // During parsing, the JWT is validated for lifetime, signature, and tampering
             var jwt = parser.Parse(request.Jwt);

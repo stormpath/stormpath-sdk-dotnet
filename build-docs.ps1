@@ -1,12 +1,22 @@
+$exitCode = 0
+
 Write-Host "Compiling documentation..."
-msbuild docs\StormpathSDKApiDocs.shfbproj /verbosity:minimal /nologo
+& msbuild docs\StormpathSDKApiDocs.shfbproj /verbosity:minimal /nologo
+$exitCode = $LASTEXITCODE
 
 Write-Host "Cleaning up files..."
-Remove-Item docs\api\SearchHelp.aspx
-Remove-Item docs\api\SearchHelp.inc.php
-Remove-Item docs\api\SearchHelp.php
-Remove-Item docs\api\LastBuild.log
-Remove-Item docs\api\Web.Config
-(Get-Content docs\api\index.html).replace('html/Introduction.htm', '/dotnet/api/html/Introduction.htm') | Set-Content docs\api\index.html
+Try
+{
+	Remove-Item docs\api\SearchHelp.aspx -ErrorAction Stop
+	Remove-Item docs\api\SearchHelp.inc.php -ErrorAction Stop
+	Remove-Item docs\api\SearchHelp.php -ErrorAction Stop
+	Remove-Item docs\api\LastBuild.log -ErrorAction Stop
+	Remove-Item docs\api\Web.Config -ErrorAction Stop
+	(Get-Content docs\api\index.html -ErrorAction Stop).replace('html/Introduction.htm', '/dotnet/api/html/Introduction.htm') | Set-Content docs\api\index.html -ErrorAction Stop
+}
+Catch
+{
+	$exitCode = 1
+}
 
-Write-Host "Done! Docs available at docs\api"
+Return $exitCode
