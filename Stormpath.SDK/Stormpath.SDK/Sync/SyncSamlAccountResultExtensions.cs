@@ -20,8 +20,17 @@ using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="ISamlAccountResult"/>.
+    /// </summary>
     public static class SyncSamlAccountResultExtensions
     {
+        /// <summary>
+        /// Synchronously gets the user account returned by the SAML Identity Provider.
+        /// </summary>
+        /// <param name="samlAccountResult">The <see cref="ISamlAccountResult"/>.</param>
+        /// <returns>The user's <see cref="IAccount">Account</see> resource.</returns>
+        /// <exception cref="System.ApplicationException">The account is not present.</exception>
         public static IAccount GetAccount(this ISamlAccountResult samlAccountResult)
             => (samlAccountResult as ISamlAccountResultSync).GetAccount();
     }

@@ -16,10 +16,22 @@
 
 namespace Stormpath.SDK.Saml
 {
+    /// <summary>
+    /// Listener interface to get synchronous notifications about effective operations of the SAML Identity Provider invocation
+    /// (authentication or logout).
+    /// </summary>
     public interface ISamlSyncResultListener
     {
+        /// <summary>
+        /// This method will be invoked if a successful authentication operation takes place.
+        /// </summary>
+        /// <param name="result">The data specific to this event.</param>
         void OnAuthenticated(ISamlAccountResult result);
 
+        /// <summary>
+        /// This method will be invoked if a successful logout operation takes place.
+        /// </summary>
+        /// <param name="result">The data specific to this event.</param>
         void OnLogout(ISamlAccountResult result);
     }
 }

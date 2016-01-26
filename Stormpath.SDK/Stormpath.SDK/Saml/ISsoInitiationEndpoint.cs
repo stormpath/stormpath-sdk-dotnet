@@ -18,6 +18,9 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Saml
 {
+    /// <summary>
+    /// Represents an endpoint that can initiate SAML Single Sign-On.
+    /// </summary>
     public interface ISsoInitiationEndpoint : IResource
     {
     }

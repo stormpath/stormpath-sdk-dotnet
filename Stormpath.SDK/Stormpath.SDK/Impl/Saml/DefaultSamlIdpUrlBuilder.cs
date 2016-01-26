@@ -27,8 +27,6 @@ namespace Stormpath.SDK.Impl.Saml
 {
     internal sealed class DefaultSamlIdpUrlBuilder : ISamlIdpUrlBuilder
     {
-        private static string logoutSuffix = "/logout";
-
         private readonly IInternalDataStore internalDataStore;
         private readonly string applicationHref;
         private readonly string ssoEndpoint;

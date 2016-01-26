@@ -18,8 +18,16 @@ using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Impl.Saml
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="ISamlPolicy"/>.
+    /// </summary>
     internal interface ISamlPolicySync
     {
+        /// <summary>
+        /// Synchronous counterpart to <see cref="ISamlPolicy.GetSamlServiceProviderAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The <see cref="ISamlServiceProvider">SAML Service Provider</see>.</returns>
         ISamlServiceProvider GetSamlServiceProvider();
     }
 }

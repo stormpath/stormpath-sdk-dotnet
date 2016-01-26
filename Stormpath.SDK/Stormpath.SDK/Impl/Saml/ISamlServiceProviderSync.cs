@@ -18,8 +18,16 @@ using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Impl.Saml
 {
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on <see cref="ISamlServiceProviderSync"/>.
+    /// </summary>
     internal interface ISamlServiceProviderSync
     {
+        /// <summary>
+        /// Gets the endpoint resource used to initiate SAML-based Single Sign-On.
+        /// </summary>
+        /// <returns>The endpoint resource used to initiate SAML-based Single Sign-On.</returns>
         ISsoInitiationEndpoint GetSsoInitiationEndpoint();
     }
 }

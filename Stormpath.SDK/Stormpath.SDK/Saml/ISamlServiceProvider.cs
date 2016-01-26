@@ -20,8 +20,16 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Saml
 {
+    /// <summary>
+    /// Represents a SAML Service Provider associated with a <see cref="ISamlPolicy">SAML Policy.</see>
+    /// </summary>
     public interface ISamlServiceProvider : IResource, IAuditable
     {
+        /// <summary>
+        /// Gets the endpoint resource used to initiate SAML-based Single Sign-On.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The endpoint resource used to initiate SAML-based Single Sign-On.</returns>
         Task<ISsoInitiationEndpoint> GetSsoInitiationEndpointAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

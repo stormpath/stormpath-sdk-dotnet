@@ -21,6 +21,9 @@ using Stormpath.SDK.Impl.Error;
 
 namespace Stormpath.SDK.Saml
 {
+    /// <summary>
+    /// Represents a SAML-related exception.
+    /// </summary>
     [Serializable]
     public class SamlException : ApplicationException, IError, ISerializable
     {

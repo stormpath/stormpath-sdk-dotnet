@@ -19,8 +19,16 @@ using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="ISamlServiceProvider"/>.
+    /// </summary>
     public static class SyncSamlServiceProviderExtensions
     {
+        /// <summary>
+        /// Synchronously gets the endpoint resource used to initiate SAML-based Single Sign-On.
+        /// </summary>
+        /// <param name="samlServiceProvider">The <see cref="ISamlServiceProvider"/>.</param>
+        /// <returns>The endpoint resource used to initiate SAML-based Single Sign-On.</returns>
         public static ISsoInitiationEndpoint GetSsoInitiationEndpoint(this ISamlServiceProvider samlServiceProvider)
             => (samlServiceProvider as ISamlServiceProviderSync).GetSsoInitiationEndpoint();
     }

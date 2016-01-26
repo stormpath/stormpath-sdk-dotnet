@@ -59,6 +59,10 @@ namespace Stormpath.SDK.Application
         /// <value>The application's description text.</value>
         string Description { get; }
 
+        /// <summary>
+        /// Gets the authorized callback URIs for this <see cref="IApplication">Application</see>.
+        /// </summary>
+        /// <value>The authorized callback URIs for this <see cref="IApplication">Application</see>.</value>
         IReadOnlyList<string> AuthorizedCallbackUris { get; }
 
         /// <summary>
@@ -143,8 +147,23 @@ namespace Stormpath.SDK.Application
         /// <returns>A new <see cref="IJwtAuthenticator"/></returns> instance.
         IJwtAuthenticator NewJwtAuthenticator();
 
+        /// <summary>
+        /// Creates a new <see cref="ISamlIdpUrlBuilder"/> that allows you to build a URL you can use to redirect
+        /// your application users to an external SAML Identity Provider.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A new <see cref="ISamlIdpUrlBuilder"/> that can build a URL to redirect your users to a SAML Identity Provider.</returns>
         Task<ISamlIdpUrlBuilder> NewSamlIdpUrlBuilderAsync(CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Creates a new <see cref="ISamlAsyncCallbackHandler"/> used to handle HTTP replies from an external SAML Identity Provider to your
+        /// application's <c>callbackUri</c>.
+        /// </summary>
+        /// <param name="request">
+        /// An instance of <see cref="IHttpRequest"/>.
+        /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
+        /// </param>
+        /// <returns>A new <see cref="ISamlAsyncCallbackHandler"/> that allows your to customize how the <paramref name="request"/> will be handled.</returns>
         ISamlAsyncCallbackHandler NewSamlAsyncCallbackHandler(IHttpRequest request);
 
         /// <summary>
@@ -411,6 +430,11 @@ namespace Stormpath.SDK.Application
         /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
         Task<IOauthPolicy> GetOauthPolicyAsync(CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Retrieves the <see cref="ISamlPolicy">SAML Policy</see> associated with this <see cref="IApplication">Application</see>.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="ISamlPolicy">SAML Policy</see> associated with this <see cref="IApplication">Application</see>.</returns>
         Task<ISamlPolicy> GetSamlPolicyAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

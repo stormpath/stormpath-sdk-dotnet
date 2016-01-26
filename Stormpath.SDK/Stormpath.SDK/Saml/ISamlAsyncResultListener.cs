@@ -19,10 +19,26 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Saml
 {
+    /// <summary>
+    /// Listener interface to get asynchronous notifications about effective operations of the SAML Identity Provider invocation
+    /// (authentication or logout).
+    /// </summary>
     public interface ISamlAsyncResultListener
     {
+        /// <summary>
+        /// This method will be invoked if a successful authentication operation takes place.
+        /// </summary>
+        /// <param name="result">The data specific to this event.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task OnAuthenticatedAsync(ISamlAccountResult result, CancellationToken cancellationToken);
 
+        /// <summary>
+        /// This method will be invoked if a successful logout operation takes place.
+        /// </summary>
+        /// <param name="result">The data specific to this event.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task OnLogoutAsync(ISamlAccountResult result, CancellationToken cancellationToken);
     }
 }

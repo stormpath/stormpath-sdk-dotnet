@@ -19,8 +19,16 @@ using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on <see cref="ISamlPolicy"/>.
+    /// </summary>
     public static class SyncSamlPolicyExtensions
     {
+        /// <summary>
+        /// Synchronously gets the <see cref="ISamlServiceProvider">SAML Service Provider</see> resource associated with this <see cref="ISamlPolicy">SAML Policy</see>.
+        /// </summary>
+        /// <param name="samlPolicy">The SAML Policy.</param>
+        /// <returns>The <see cref="ISamlServiceProvider">SAML Service Provider</see>.</returns>
         public static ISamlServiceProvider GetSamlServiceProvider(this ISamlPolicy samlPolicy)
             => (samlPolicy as ISamlPolicySync).GetSamlServiceProvider();
     }

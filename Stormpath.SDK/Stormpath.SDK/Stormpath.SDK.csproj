@@ -574,7 +574,7 @@
     <Compile Include="Resource\IRetrievalOptions{T}.cs" />
     <Compile Include="Resource\ISaveableWithOptions{T}.cs" />
     <Compile Include="Resource\ISaveable{T}.cs" />
-    <Compile Include="Saml\IAccountResult.cs" />
+    <Compile Include="Saml\ISamlAccountResult.cs" />
     <Compile Include="Saml\ISamlSyncResultListener.cs" />
     <Compile Include="Saml\ISamlSyncCallbackHandler.cs" />
     <Compile Include="Saml\ISamlAsyncCallbackHandler.cs" />

@@ -20,8 +20,16 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Saml
 {
+    /// <summary>
+    /// Represents a SAML Policy associated with an <see cref="Application.IApplication">Application</see>.
+    /// </summary>
     public interface ISamlPolicy : IResource, IAuditable
     {
+        /// <summary>
+        /// Gets the <see cref="ISamlServiceProvider">SAML Service Provider</see> resource associated with this <see cref="ISamlPolicy">SAML Policy</see>.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="ISamlServiceProvider">SAML Service Provider</see>.</returns>
         Task<ISamlServiceProvider> GetSamlServiceProviderAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

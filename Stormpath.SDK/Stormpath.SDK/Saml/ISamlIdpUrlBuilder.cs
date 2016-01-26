@@ -20,10 +20,34 @@ namespace Stormpath.SDK.Saml
 {
     public interface ISamlIdpUrlBuilder
     {
+        /// <summary>
+        /// Sets the location where the user will be sent when returning from the SAML Identity Provider. This property is mandatory and must be set.
+        /// </summary>
+        /// <remarks>
+        /// The <paramref name="callbackUri"/> must be one of <see cref="Application.IApplication.AuthorizedCallbackUris"/>.
+        /// Use <see cref="Application.IApplication.NewSamlAsyncCallbackHandler(Http.IHttpRequest)"/> to process requests to your <paramref name="callbackUri"/>.
+        /// </remarks>
+        /// <param name="callbackUri">The final destination the browser will be redirected to.</param>
+        /// <returns>This instance for method chaining.</returns>
         ISamlIdpUrlBuilder SetCallbackUri(string callbackUri);
 
+        /// <summary>
+        /// Sets the location where the user will be sent when returning from the SAML Identity Provider. This property is mandatory and must be set.
+        /// </summary>
+        /// <remarks>
+        /// The <paramref name="callbackUri"/> must be one of <see cref="Application.IApplication.AuthorizedCallbackUris"/>.
+        /// Use <see cref="Application.IApplication.NewSamlAsyncCallbackHandler(Http.IHttpRequest)"/> to process requests to your <paramref name="callbackUri"/>.
+        /// </remarks>
+        /// <param name="callbackUri">The final destination the browser will be redirected to.</param>
+        /// <returns>This instance for method chaining.</returns>
         ISamlIdpUrlBuilder SetCallbackUri(Uri callbackUri);
 
+        /// <summary>
+        /// Sets application-specific state data that should be retained and made available to your <c>callbackUri</c>
+        /// when the user returns from the SAML Identity Provider.
+        /// </summary>
+        /// <param name="state">Application-specific state data that should be retained and made available to your <c>callbackUri</c> when the user returns from the SAML Identity Provider.</param>
+        /// <returns>This instance for method chaining.</returns>
         ISamlIdpUrlBuilder SetState(string state);
 
         ISamlIdpUrlBuilder SetPath(string path);
@@ -34,6 +58,10 @@ namespace Stormpath.SDK.Saml
 
         ISamlIdpUrlBuilder AddProperty(string name, object value);
 
+        /// <summary>
+        /// Builds the fully-qualified URL representing the redirect to the SAML Identity Provider.
+        /// </summary>
+        /// <returns>The fully-qualified URL representing the redirect to the SAML Identity Provider.</returns>
         string Build();
     }
 }
