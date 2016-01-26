@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.IdSite
 {
     /// <summary>
-    /// Listener interface to get asynchronous notifications about effective operations of the ID Site invocation
+    /// Listener interface to get synchronous notifications about effective operations of the ID Site invocation
     /// (registration, authentication, or logout).
     /// </summary>
     public interface IIdSiteSyncResultListener
@@ -29,13 +29,13 @@ namespace Stormpath.SDK.IdSite
         void OnRegistered(IAccountResult result);
 
         /// <summary>
-        /// This method will be invoked if a successful registration operation takes place on ID Site.
+        /// This method will be invoked if a successful authentication operation takes place on ID Site.
         /// </summary>
         /// <param name="result">The data specific to this event.</param>
         void OnAuthenticated(IAccountResult result);
 
         /// <summary>
-        /// This method will be invoked if a successful registration operation takes place on ID Site.
+        /// This method will be invoked if a successful logout operation takes place on ID Site.
         /// </summary>
         /// <param name="result">The data specific to this event.</param>
         void OnLogout(IAccountResult result);

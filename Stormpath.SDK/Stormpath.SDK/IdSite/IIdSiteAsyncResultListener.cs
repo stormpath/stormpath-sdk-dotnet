@@ -34,7 +34,7 @@ namespace Stormpath.SDK.IdSite
         Task OnRegisteredAsync(IAccountResult result, CancellationToken cancellationToken);
 
         /// <summary>
-        /// This method will be invoked if a successful registration operation takes place on ID Site.
+        /// This method will be invoked if a successful authentication operation takes place on ID Site.
         /// </summary>
         /// <param name="result">The data specific to this event.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.IdSite
         Task OnAuthenticatedAsync(IAccountResult result, CancellationToken cancellationToken);
 
         /// <summary>
-        /// This method will be invoked if a successful registration operation takes place on ID Site.
+        /// This method will be invoked if a successful logout operation takes place on ID Site.
         /// </summary>
         /// <param name="result">The data specific to this event.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
