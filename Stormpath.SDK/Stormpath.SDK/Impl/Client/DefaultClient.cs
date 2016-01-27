@@ -25,7 +25,6 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
-using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Sync;

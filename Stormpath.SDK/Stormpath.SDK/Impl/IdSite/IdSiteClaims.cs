@@ -28,7 +28,9 @@ namespace Stormpath.SDK.Impl.IdSite
         public static readonly string IsNewSubject = "isNewSub";
         public static readonly string Status = "status";
         public static readonly string Error = "err";
+        public static readonly string SpToken = "sp_token";
 
+        public static readonly string AccessToken = "accessToken";
         public static readonly string JwtRequest = "jwtRequest";
         public static readonly string JwtResponse = "jwtResponse";
     }

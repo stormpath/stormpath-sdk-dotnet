@@ -490,7 +490,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
 
             var fakeData = FakeJson.Application.Replace("authorizedCallbackUris", "foobarProperty");
-            this.BuildDataStore(FakeJson.Application, cacheProvider);
+            this.BuildDataStore(fakeData, cacheProvider);
 
             var app1 = this.dataStore.GetResource<IApplication>("/applications/foobarApplication");
             var app2 = this.dataStore.GetResource<IApplication>("/applications/foobarApplication");

@@ -24,6 +24,7 @@ using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Sync
 {
@@ -319,5 +320,35 @@ namespace Stormpath.SDK.Sync
         /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
         public static IOauthPolicy GetOauthPolicy(this IApplication application)
             => (application as IApplicationSync).GetOauthPolicy();
+
+        /// <summary>
+        /// Synchronously retrieves the <see cref="ISamlPolicy">SAML Policy</see> associated with this <see cref="IApplication">Application</see>.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <returns>The <see cref="ISamlPolicy">SAML Policy</see> associated with this <see cref="IApplication">Application</see>.</returns>
+        public static ISamlPolicy GetSamlPolicy(this IApplication application)
+            => (application as IApplicationSync).GetSamlPolicy();
+
+        /// <summary>
+        /// Synchronously creates a new <see cref="ISamlIdpUrlBuilder"/> that allows you to build a URL you can use to redirect
+        /// your application users to an external SAML Identity Provider.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <returns>A new <see cref="ISamlIdpUrlBuilder"/> that can build a URL to redirect your users to a SAML Identity Provider.</returns>
+        public static ISamlIdpUrlBuilder NewSamlIdpUrlBuilder(this IApplication application)
+            => (application as IApplicationSync).NewSamlIdpUrlBuilder();
+
+        /// <summary>
+        /// Creates a new <see cref="ISamlSyncCallbackHandler"/> used to handle HTTP replies from an external SAML Identity Provider to your
+        /// application's <c>callbackUri</c>.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <param name="request">
+        /// An instance of <see cref="IHttpRequest"/>.
+        /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
+        /// </param>
+        /// <returns>A new <see cref="ISamlSyncCallbackHandler"/> that allows your to customize how the <paramref name="request"/> will be handled.</returns>
+        public static ISamlSyncCallbackHandler NewSamlSyncCallbackHandler(this IApplication application, IHttpRequest request)
+            => (application as IApplicationSync).NewSamlSyncCallbackHandler(request);
     }
 }
