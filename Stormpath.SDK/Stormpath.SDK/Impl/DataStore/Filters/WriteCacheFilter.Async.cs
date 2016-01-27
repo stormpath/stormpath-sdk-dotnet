@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Impl.Account;
@@ -342,7 +343,11 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 result.Type != typeof(IAuthenticationResult) &&
 
                 // ProviderAccountResults look like IAccounts but should not be cached either
-                result.Type != typeof(IProviderAccountResult);
+                result.Type != typeof(IProviderAccountResult)
+
+                // Don't cache API Keys (for now)
+                && result.Type != typeof(IApiKey)
+                && result.Type != typeof(CollectionResponsePage<IApiKey>);
         }
 
         private static bool IsResource(Map data)
