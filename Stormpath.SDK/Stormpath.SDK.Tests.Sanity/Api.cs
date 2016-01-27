@@ -116,6 +116,8 @@ namespace Stormpath.SDK.Tests.Sanity
                 "IIdSiteAsyncResultListener.OnRegisteredAsync(IAccountResult, CancellationToken)",
                 "IIdSiteAsyncResultListener.OnAuthenticatedAsync(IAccountResult, CancellationToken)",
                 "IIdSiteAsyncResultListener.OnLogoutAsync(IAccountResult, CancellationToken)",
+                "ISamlAsyncResultListener.OnAuthenticatedAsync(ISamlAccountResult, CancellationToken)",
+                "ISamlAsyncResultListener.OnLogoutAsync(ISamlAccountResult, CancellationToken)",
             };
 
             var methodsInAssembly = Assembly
@@ -162,6 +164,9 @@ namespace Stormpath.SDK.Tests.Sanity
                 "IIdSiteAsyncResultListener.OnRegistered(IAccountResult)",
                 "IIdSiteAsyncResultListener.OnAuthenticated(IAccountResult)",
                 "IIdSiteAsyncResultListener.OnLogout(IAccountResult)",
+                "ISamlAsyncCallbackHandler.GetAccountResult()",
+                "ISamlAsyncResultListener.OnAuthenticated(ISamlAccountResult)",
+                "ISamlAsyncResultListener.OnLogout(ISamlAccountResult)",
 
                 // This generic method is provided by specific sync extension methods (false positive)
                 "IOauthAuthenticator`2.Authenticate(TRequest)",
@@ -172,6 +177,7 @@ namespace Stormpath.SDK.Tests.Sanity
                 "IQueryable`1.Expand(Expression`1)",
                 "IAsyncQueryable`1.Synchronously()",
                 "IApplication.NewIdSiteSyncCallbackHandler(IHttpRequest)",
+                "IApplication.NewSamlSyncCallbackHandler(IHttpRequest)",
 
                 // These methods correspond to IOauthAuthenticator`2.Authenticate(TRequest) (false positive)
                 "IPasswordGrantAuthenticator.Authenticate(IPasswordGrantRequest)",
