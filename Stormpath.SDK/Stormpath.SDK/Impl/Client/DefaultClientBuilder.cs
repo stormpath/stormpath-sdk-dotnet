@@ -239,8 +239,8 @@ namespace Stormpath.SDK.Impl.Client
             {
                 this.logger.Info("No CacheProvider configured. Defaulting to in-memory CacheProvider with default TTL and TTI of one hour.");
 
-                this.cacheProvider = Caches
-                    .NewInMemoryCacheProvider()
+                this.cacheProvider = CacheProviders.Create()
+                    .InMemoryCache()
                     .WithDefaultTimeToIdle(TimeSpan.FromHours(1))
                     .WithDefaultTimeToLive(TimeSpan.FromHours(1))
                     .Build();

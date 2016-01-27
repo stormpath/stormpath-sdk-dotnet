@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 .SetAuthenticationScheme(AuthenticationScheme.Basic)
                 .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
-                .SetCacheProvider(Caches.NewDisabledCacheProvider())
+                .SetCacheProvider(CacheProviders.Create().DisabledCache())
                 .Build();
         });
 
@@ -62,7 +62,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
-                .SetCacheProvider(Caches.NewDisabledCacheProvider())
+                .SetCacheProvider(CacheProviders.Create().DisabledCache())
                 .Build();
         });
 
@@ -77,7 +77,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
-                .SetCacheProvider(Caches.NewInMemoryCacheProvider()
+                .SetCacheProvider(CacheProviders.Create().InMemoryCache()
                     .WithDefaultTimeToIdle(TimeSpan.FromMinutes(10))
                     .WithDefaultTimeToLive(TimeSpan.FromMinutes(10))
                     .Build())

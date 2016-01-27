@@ -93,7 +93,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public void Combining_configuration_options()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider()
+            var cacheProvider = CacheProviders.Create().InMemoryCache()
                 .WithDefaultTimeToLive(TimeSpan.FromMinutes(30))
                 .WithDefaultTimeToIdle(TimeSpan.FromMinutes(30))
                 .WithCache(Caches

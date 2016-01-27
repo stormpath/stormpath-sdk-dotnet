@@ -128,7 +128,7 @@ namespace Stormpath.SDK.Client
         /// <param name="cacheProvider">The cache provider to use.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="System.ArgumentNullException"><paramref name="cacheProvider"/> is null.</exception>
-        /// <seealso cref="Caches.NewDisabledCacheProvider()"/>
+        /// <seealso cref="CacheProviders.Create().DisabledCache()"/>
         IClientBuilder SetCacheProvider(ICacheProvider cacheProvider);
 
         /// <summary>
