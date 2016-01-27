@@ -248,7 +248,7 @@ namespace Stormpath.SDK.Impl.Saml
                 throw new SamlException(new Error.DefaultError(errorData));
             }
 
-            throw new SamlRuntimeException(new Error.DefaultError(errorData));
+            throw new SamlException(new Error.DefaultError(errorData));
         }
 
         private async Task ThrowIfNonceIsAlreadyUsedAsync(string nonce, CancellationToken cancellationToken)

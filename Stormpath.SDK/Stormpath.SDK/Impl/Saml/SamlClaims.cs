@@ -1,4 +1,4 @@
-﻿// <copyright file="SamlException.cs" company="Stormpath, Inc.">
+﻿// <copyright file="SamlClaims.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Linq;
-using Stormpath.SDK.Error;
-using Stormpath.SDK.Impl.Error;
-
-namespace Stormpath.SDK.Saml
+namespace Stormpath.SDK.Impl.Saml
 {
-    /// <summary>
-    /// Represents a SAML-related error.
-    /// </summary>
-    public sealed class SamlException : ResourceException
+    internal static class SamlClaims
     {
-        internal SamlException(DefaultError error)
-            : base(error)
-        {
-        }
+        public static readonly string AccountStoreHref = "ash";
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultSamlAsyncCallbackHandler.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultSamlSyncCallbackHandler.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

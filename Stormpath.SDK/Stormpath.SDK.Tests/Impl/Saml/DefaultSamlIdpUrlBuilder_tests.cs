@@ -97,10 +97,20 @@ namespace Stormpath.SDK.Tests.Impl.Saml
                 .SetCallbackUri(FakeCallbackUri)
                 .Build();
 
-            url.ShouldStartWith(FakeSamlEndpoint);
-
             var jwt = this.ParseJwtFromUrl(url);
             jwt.Body.GetClaim("cb_uri").ShouldBe(FakeCallbackUri);
+        }
+
+        [Fact]
+        public void Generated_url_starts_with_endpoint()
+        {
+            var builder = this.GetBuilder();
+
+            var url = builder
+                .SetCallbackUri(FakeCallbackUri)
+                .Build();
+
+            url.ShouldStartWith(FakeSamlEndpoint);
         }
 
         [Fact]
@@ -114,16 +124,13 @@ namespace Stormpath.SDK.Tests.Impl.Saml
                 .SetState("someState")
                 .Build();
 
-            url.ShouldStartWith(FakeSamlEndpoint);
-
             var jwt = this.ParseJwtFromUrl(url);
-            jwt.Body.GetClaim("cb_uri").ShouldBe(FakeCallbackUri);
             jwt.Body.GetClaim("path").ShouldBe("/sso-site");
             jwt.Body.GetClaim("state").ShouldBe("someState");
         }
 
         [Fact]
-        public void Generates_url_with_organization()
+        public void Generates_url_with_organization_nameKey()
         {
             var builder = this.GetBuilder();
 
@@ -132,11 +139,24 @@ namespace Stormpath.SDK.Tests.Impl.Saml
                 .SetOrganizationNameKey("first-order")
                 .Build();
 
+            var jwt = this.ParseJwtFromUrl(url);
+            jwt.Body.GetClaim("onk").ShouldBe("first-order");
+        }
+
+        [Fact]
+        public void Generates_url_with_accountStore_href()
+        {
+            var builder = this.GetBuilder();
+
+            var url = builder
+                .SetCallbackUri(FakeCallbackUri)
+                .SetAccountStore("http://foo.bar/foo")
+                .Build();
+
             url.ShouldStartWith(FakeSamlEndpoint);
 
             var jwt = this.ParseJwtFromUrl(url);
-            jwt.Body.GetClaim("cb_uri").ShouldBe(FakeCallbackUri);
-            jwt.Body.GetClaim("onk").ShouldBe("first-order");
+            jwt.Body.GetClaim("ash").ShouldBe("http://foo.bar/foo");
         }
 
         [Fact]
@@ -149,10 +169,7 @@ namespace Stormpath.SDK.Tests.Impl.Saml
                 .SetSpToken("anSpToken")
                 .Build();
 
-            url.ShouldStartWith(FakeSamlEndpoint);
-
             var jwt = this.ParseJwtFromUrl(url);
-            jwt.Body.GetClaim("cb_uri").ShouldBe(FakeCallbackUri);
             jwt.Body.GetClaim("sp_token").ShouldBe("anSpToken");
         }
 
@@ -164,6 +181,7 @@ namespace Stormpath.SDK.Tests.Impl.Saml
             var url = builder
                 .SetCallbackUri(FakeCallbackUri)
                 .SetOrganizationNameKey("first-order")
+                .SetAccountStore("http://foo.bar/foo")
                 .SetPath("/sso-site")
                 .SetSpToken("anSpToken")
                 .SetState("someState")
@@ -175,6 +193,7 @@ namespace Stormpath.SDK.Tests.Impl.Saml
             var jwt = this.ParseJwtFromUrl(url);
             jwt.Body.GetClaim("cb_uri").ShouldBe(FakeCallbackUri);
             jwt.Body.GetClaim("onk").ShouldBe("first-order");
+            jwt.Body.GetClaim("ash").ShouldBe("http://foo.bar/foo");
             jwt.Body.GetClaim("path").ShouldBe("/sso-site");
             jwt.Body.GetClaim("sp_token").ShouldBe("anSpToken");
             jwt.Body.GetClaim("state").ShouldBe("someState");

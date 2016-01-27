@@ -433,6 +433,7 @@
     <Compile Include="Impl\Saml\InlineSamlAsyncResultListener.cs" />
     <Compile Include="Impl\Saml\ISamlPolicySync.cs" />
     <Compile Include="Impl\Saml\ISamlServiceProviderSync.cs" />
+    <Compile Include="Impl\Saml\SamlClaims.cs" />
     <Compile Include="Impl\Serialization\DefaultSerializerFactory.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.Collections.cs" />
     <Compile Include="Impl\Tenant\DefaultTenant.TenantActions.cs" />
@@ -583,9 +584,8 @@
     <Compile Include="Saml\ISamlPolicy.cs" />
     <Compile Include="Saml\ISamlServiceProvider.cs" />
     <Compile Include="Saml\ISsoInitiationEndpoint.cs" />
-    <Compile Include="Saml\SamlException.cs" />
     <Compile Include="Saml\SamlResultStatus.cs" />
-    <Compile Include="Saml\SamlRuntimeException.cs" />
+    <Compile Include="Saml\SamlException.cs" />
     <Compile Include="Serialization\AbstractSerializerBuilder.cs" />
     <Compile Include="Serialization\ISerializerBuilder.cs" />
     <Compile Include="Serialization\ISerializerFactory.cs" />

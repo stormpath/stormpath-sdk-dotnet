@@ -16,6 +16,7 @@
 
 using System;
 using System.Text;
+using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.IdSite;
 using Stormpath.SDK.Impl.Jwt;
@@ -38,6 +39,7 @@ namespace Stormpath.SDK.Impl.Saml
         private string state;
         private string path;
         private string organizationNameKey;
+        private string accountStoreHref;
         private string stormpathSpToken;
 
         public DefaultSamlIdpUrlBuilder(
@@ -110,6 +112,18 @@ namespace Stormpath.SDK.Impl.Saml
             return this;
         }
 
+        ISamlIdpUrlBuilder ISamlIdpUrlBuilder.SetAccountStore(IAccountStore accountStore)
+        {
+            this.accountStoreHref = accountStore?.Href;
+            return this;
+        }
+
+        ISamlIdpUrlBuilder ISamlIdpUrlBuilder.SetAccountStore(string href)
+        {
+            this.accountStoreHref = href;
+            return this;
+        }
+
         ISamlIdpUrlBuilder ISamlIdpUrlBuilder.SetSpToken(string spToken)
         {
             this.stormpathSpToken = spToken;
@@ -152,6 +166,11 @@ namespace Stormpath.SDK.Impl.Saml
             if (!string.IsNullOrEmpty(this.organizationNameKey))
             {
                 this.jwtBuilder.SetClaim(IdSiteClaims.OrganizationNameKey, this.organizationNameKey);
+            }
+
+            if (!string.IsNullOrEmpty(this.accountStoreHref))
+            {
+                this.jwtBuilder.SetClaim(SamlClaims.AccountStoreHref, this.accountStoreHref);
             }
 
             if (!string.IsNullOrEmpty(this.stormpathSpToken))
