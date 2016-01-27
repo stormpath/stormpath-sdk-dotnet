@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Serialization
         /// </remarks>
         /// <seealso cref="Client.IClientBuilder.SetSerializer(ISerializerBuilder)"/>
         /// <returns>A <see cref="ISerializerBuilder">builder</see> capable of constructing the default serializer.</returns>
-        [Obsolete("Will be removed in 1.0. Instaed, manually specify a serializer, e.g. Serializers.Create().JsonNetSerializer()")]
+        [Obsolete("Will be removed in 1.0. Instead, manually specify a serializer, e.g. Serializers.Create().JsonNetSerializer()")]
         ISerializerBuilder AutoDetect();
     }
 }
