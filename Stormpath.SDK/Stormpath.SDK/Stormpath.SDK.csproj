@@ -535,6 +535,7 @@
     <Compile Include="Oauth\IRefreshToken.cs" />
     <Compile Include="Oauth\IAccessToken.cs" />
     <Compile Include="Oauth\IOauthPolicy.cs" />
+    <Compile Include="Oauth\JwtLocalValidationOptions.cs" />
     <Compile Include="Oauth\OauthRequests.cs" />
     <Compile Include="Organization\IOrganizationAccountStoreMapping.cs" />
     <Compile Include="Organization\IOrganizationCreationOptions.cs" />
