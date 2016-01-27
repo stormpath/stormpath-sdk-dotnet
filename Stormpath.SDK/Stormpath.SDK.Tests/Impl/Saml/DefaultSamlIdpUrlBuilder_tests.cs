@@ -114,18 +114,16 @@ namespace Stormpath.SDK.Tests.Impl.Saml
         }
 
         [Fact]
-        public void Generates_url_with_path_and_state()
+        public void Generates_url_with_state()
         {
             var builder = this.GetBuilder();
 
             var url = builder
                 .SetCallbackUri(FakeCallbackUri)
-                .SetPath("/sso-site")
                 .SetState("someState")
                 .Build();
 
             var jwt = this.ParseJwtFromUrl(url);
-            jwt.Body.GetClaim("path").ShouldBe("/sso-site");
             jwt.Body.GetClaim("state").ShouldBe("someState");
         }
 
@@ -160,20 +158,6 @@ namespace Stormpath.SDK.Tests.Impl.Saml
         }
 
         [Fact]
-        public void Generates_url_with_spToken()
-        {
-            var builder = this.GetBuilder();
-
-            var url = builder
-                .SetCallbackUri(FakeCallbackUri)
-                .SetSpToken("anSpToken")
-                .Build();
-
-            var jwt = this.ParseJwtFromUrl(url);
-            jwt.Body.GetClaim("sp_token").ShouldBe("anSpToken");
-        }
-
-        [Fact]
         public void Generates_url_with_all_the_things()
         {
             var builder = this.GetBuilder();
@@ -182,8 +166,6 @@ namespace Stormpath.SDK.Tests.Impl.Saml
                 .SetCallbackUri(FakeCallbackUri)
                 .SetOrganizationNameKey("first-order")
                 .SetAccountStore("http://foo.bar/foo")
-                .SetPath("/sso-site")
-                .SetSpToken("anSpToken")
                 .SetState("someState")
                 .AddProperty("unknown", "foobar")
                 .Build();
@@ -194,8 +176,6 @@ namespace Stormpath.SDK.Tests.Impl.Saml
             jwt.Body.GetClaim("cb_uri").ShouldBe(FakeCallbackUri);
             jwt.Body.GetClaim("onk").ShouldBe("first-order");
             jwt.Body.GetClaim("ash").ShouldBe("http://foo.bar/foo");
-            jwt.Body.GetClaim("path").ShouldBe("/sso-site");
-            jwt.Body.GetClaim("sp_token").ShouldBe("anSpToken");
             jwt.Body.GetClaim("state").ShouldBe("someState");
             jwt.Body.GetClaim("unknown").ShouldBe("foobar");
         }

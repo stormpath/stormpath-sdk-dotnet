@@ -14,8 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Linq;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Impl.Error;
 

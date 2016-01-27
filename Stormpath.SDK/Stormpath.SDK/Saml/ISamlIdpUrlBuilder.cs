@@ -56,14 +56,6 @@ namespace Stormpath.SDK.Saml
         ISamlIdpUrlBuilder SetState(string state);
 
         /// <summary>
-        /// Sets the initial path in the SAML Identity Provider where the user should be sent. If unspecified, this defaults to <c>/</c>,
-        /// implying that the SAML Identity Provider's landing/home page is the desired location.
-        /// </summary>
-        /// <param name="path">The initial path in the ID Site where the user should be sent.</param>
-        /// <returns>This instance for method chaining.</returns>
-        ISamlIdpUrlBuilder SetPath(string path);
-
-        /// <summary>
         /// Attempts to use first directory mapped to the specified <see cref="Organization.IOrganization">Organization</see>
         /// as a SAML Account Store.
         /// </summary>
@@ -84,19 +76,6 @@ namespace Stormpath.SDK.Saml
         /// <param name="href">The account store <c>href</c>.</param>
         /// <returns>This instance for method chaining.</returns>
         ISamlIdpUrlBuilder SetAccountStore(string href);
-
-        /// <summary>
-        /// Sets the <c>sp_token</c> property used by the SAML Identity Provider to complete an account password reset workflow.
-        /// </summary>
-        /// <remarks>
-        /// The <paramref name="spToken"/> must correspond to an actual password reset token issued to one of the accounts of this
-        /// <see cref="Application.IApplication">Application</see>. If <paramref name="spToken"/> property is present and valid, the user will be redirected to
-        /// the SAML Identity Provider URL (included the configured path, see <see cref="SetPath(string)"/>), with the <paramref name="spToken"/> embedded in
-        /// the signed JWT.
-        /// </remarks>
-        /// <param name="spToken">A unique token used to reset a password.</param>
-        /// <returns>This instance for method chaining.</returns>
-        ISamlIdpUrlBuilder SetSpToken(string spToken);
 
         /// <summary>
         /// Sets any key value in the SAML request payload.

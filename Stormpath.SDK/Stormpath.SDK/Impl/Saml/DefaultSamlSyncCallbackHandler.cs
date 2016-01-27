@@ -15,22 +15,15 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Api;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.IdSite;
 using Stormpath.SDK.Impl.Jwt;
-using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Saml;
-using Map = System.Collections.Generic.IDictionary<string, object>;
 using HandlerShared = Stormpath.SDK.Impl.Saml.DefaultSamlAsyncCallbackHandler;
 
 namespace Stormpath.SDK.Impl.Saml

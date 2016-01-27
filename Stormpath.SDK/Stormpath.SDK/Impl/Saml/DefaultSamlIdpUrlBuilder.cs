@@ -37,10 +37,8 @@ namespace Stormpath.SDK.Impl.Saml
 
         private string callbackUri;
         private string state;
-        private string path;
         private string organizationNameKey;
         private string accountStoreHref;
-        private string stormpathSpToken;
 
         public DefaultSamlIdpUrlBuilder(
             IInternalDataStore internalDataStore,
@@ -100,12 +98,6 @@ namespace Stormpath.SDK.Impl.Saml
             return this;
         }
 
-        ISamlIdpUrlBuilder ISamlIdpUrlBuilder.SetPath(string path)
-        {
-            this.path = path;
-            return this;
-        }
-
         ISamlIdpUrlBuilder ISamlIdpUrlBuilder.SetOrganizationNameKey(string organizationNameKey)
         {
             this.organizationNameKey = organizationNameKey;
@@ -121,12 +113,6 @@ namespace Stormpath.SDK.Impl.Saml
         ISamlIdpUrlBuilder ISamlIdpUrlBuilder.SetAccountStore(string href)
         {
             this.accountStoreHref = href;
-            return this;
-        }
-
-        ISamlIdpUrlBuilder ISamlIdpUrlBuilder.SetSpToken(string spToken)
-        {
-            this.stormpathSpToken = spToken;
             return this;
         }
 
@@ -153,11 +139,6 @@ namespace Stormpath.SDK.Impl.Saml
                 .SetSubject(this.applicationHref)
                 .SetClaim(IdSiteClaims.RedirectUri, this.callbackUri);
 
-            if (!string.IsNullOrEmpty(this.path))
-            {
-                this.jwtBuilder.SetClaim(IdSiteClaims.Path, this.path);
-            }
-
             if (!string.IsNullOrEmpty(this.state))
             {
                 this.jwtBuilder.SetClaim(IdSiteClaims.State, this.state);
@@ -171,11 +152,6 @@ namespace Stormpath.SDK.Impl.Saml
             if (!string.IsNullOrEmpty(this.accountStoreHref))
             {
                 this.jwtBuilder.SetClaim(SamlClaims.AccountStoreHref, this.accountStoreHref);
-            }
-
-            if (!string.IsNullOrEmpty(this.stormpathSpToken))
-            {
-                this.jwtBuilder.SetClaim(IdSiteClaims.SpToken, this.stormpathSpToken);
             }
 
             var jwt = this.jwtBuilder
