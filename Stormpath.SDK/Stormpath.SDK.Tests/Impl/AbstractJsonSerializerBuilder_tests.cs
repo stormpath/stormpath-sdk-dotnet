@@ -16,11 +16,8 @@
 
 using System;
 using System.Collections.Generic;
-using NSubstitute;
 using Shouldly;
-using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.Serialization;
-using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Serialization;
 using Xunit;
 
