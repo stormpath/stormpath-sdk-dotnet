@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Http
 {
     /// <summary>
-    /// Provides access to JsonNetSerializer by plugging into <see cref="IHttpClientFactory"/>.
+    /// Provides access to the RestSharpClient plugin by plugging into <see cref="IHttpClientFactory"/>.
     /// </summary>
     public static class RestSharpHttpClientFactoryExtensions
     {
