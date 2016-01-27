@@ -85,6 +85,8 @@
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
     <Compile Include="Cache\AbstractCacheProvider.cs" />
+    <Compile Include="Cache\CacheProviders.cs" />
+    <Compile Include="Cache\ICacheProviderFactory.cs" />
     <Compile Include="Http\AbstractHttpClientBuilder.cs" />
     <Compile Include="Http\HttpClients.cs" />
     <Compile Include="Http\IHttpClientFactory.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="Impl\Application\DefaultApplication.Saml.cs" />
     <Compile Include="Impl\Application\DefaultApplicationAccountStoreMapping.cs" />
     <Compile Include="Impl\Application\IApplicationAccountStoreMappingSync.cs" />
+    <Compile Include="Impl\Cache\DefaultCacheProviderFactory.cs" />
     <Compile Include="Impl\Client\DefaultClient.Jwt.cs" />
     <Compile Include="Impl\Client\IUserAgentBuilder.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Core.cs" />
