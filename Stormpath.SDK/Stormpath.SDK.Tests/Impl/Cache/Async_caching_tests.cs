@@ -444,7 +444,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
     ""href"": ""https://api.stormpath.com/v1/applications/foo/passwordResetTokens/bar"",
     ""email"": ""john.smith@stormpath.com"",
     ""account"": {
-        ""href"": ""https://api.stormpath.com/v1/accounts/cJoiwcorTTmkDDBsf02bAb""
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount""
     }
 }
 ";

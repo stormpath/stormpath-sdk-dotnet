@@ -193,7 +193,7 @@ namespace Stormpath.SDK.Sync
         /// <example>
         /// Providing an href:
         /// <code>
-        /// IAccountStoreMapping accountStoreMapping = application.AddAccountStore("https://api.stormpath.com/v1/groups/2rwq022yMt4u2DwKLfzriP");
+        /// IAccountStoreMapping accountStoreMapping = application.AddAccountStore("https://api.stormpath.com/v1/groups/myGroupHref");
         /// </code>
         /// Providing a name:
         /// <code>

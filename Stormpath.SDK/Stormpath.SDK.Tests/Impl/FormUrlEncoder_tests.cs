@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests.Impl
             var createGrantAttempt = dataStore.Instantiate<IPasswordGrantAuthenticationAttempt>();
             createGrantAttempt.SetLogin("tom@stormpath.com");
             createGrantAttempt.SetPassword("Secret1");
-            createGrantAttempt.SetAccountStore("https://api.stormpath.com/v1/directories/1bcd23ec1d0a8wa6");
+            createGrantAttempt.SetAccountStore("https://api.stormpath.com/v1/directories/1bcd23ec1d0aEXAMPLE");
 
             var properties = (createGrantAttempt as AbstractResource).GetResourceData().GetUpdatedProperties().ToDictionary();
             var result = new FormUrlEncoder(properties)
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests.Impl
             result.ShouldContain("grant_type=password");
             result.ShouldContain("username=tom%40stormpath.com");
             result.ShouldContain("password=Secret1");
-            result.ShouldContain("accountStore=https%3A%2F%2Fapi.stormpath.com%2Fv1%2Fdirectories%2F1bcd23ec1d0a8wa6");
+            result.ShouldContain("accountStore=https%3A%2F%2Fapi.stormpath.com%2Fv1%2Fdirectories%2F1bcd23ec1d0aEXAMPLE");
         }
     }
 }
