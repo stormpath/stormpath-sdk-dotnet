@@ -37,7 +37,7 @@ namespace Stormpath.SDK.Cache.Redis.Tests
         [DebugOnlyFact]
         public void Resource_is_cached_indefinitely()
         {
-            var cacheProvider = RedisCaches.NewRedisCacheProvider()
+            var cacheProvider = CacheProviders.Create().RedisCache()
                 .WithRedisConnection(this.fixture.Connection)
                 .Build();
 
@@ -64,7 +64,7 @@ namespace Stormpath.SDK.Cache.Redis.Tests
         [DebugOnlyFact]
         public void Resource_expired_by_TTL()
         {
-            var cacheProvider = RedisCaches.NewRedisCacheProvider()
+            var cacheProvider = CacheProviders.Create().RedisCache()
                 .WithRedisConnection(this.fixture.Connection)
                 .WithDefaultTimeToLive(TimeSpan.FromSeconds(1))
                 .Build();
@@ -87,7 +87,7 @@ namespace Stormpath.SDK.Cache.Redis.Tests
         [DebugOnlyFact]
         public void Resource_expired_by_TTI()
         {
-            var cacheProvider = RedisCaches.NewRedisCacheProvider()
+            var cacheProvider = CacheProviders.Create().RedisCache()
                 .WithRedisConnection(this.fixture.Connection)
                 .WithDefaultTimeToIdle(TimeSpan.FromSeconds(1))
                 .Build();
@@ -111,7 +111,7 @@ namespace Stormpath.SDK.Cache.Redis.Tests
         public void Resource_with_custom_configuration_expired_by_TTL()
         {
             // Make the default TTL 10 minutes, but IAccounts expire in 1 second
-            var cacheProvider = RedisCaches.NewRedisCacheProvider()
+            var cacheProvider = CacheProviders.Create().RedisCache()
                 .WithRedisConnection(this.fixture.Connection)
                 .WithDefaultTimeToLive(TimeSpan.FromMinutes(10))
                 .WithCache(Caches.ForResource<IAccount>()
@@ -139,7 +139,7 @@ namespace Stormpath.SDK.Cache.Redis.Tests
         public void Resource_with_custom_configuration_expired_by_TTI()
         {
             // Make the default TTL 10 minutes, but IAccounts expire in 1 second
-            var cacheProvider = RedisCaches.NewRedisCacheProvider()
+            var cacheProvider = CacheProviders.Create().RedisCache()
                 .WithRedisConnection(this.fixture.Connection)
                 .WithDefaultTimeToIdle(TimeSpan.FromMinutes(10))
                 .WithCache(Caches.ForResource<IAccount>()

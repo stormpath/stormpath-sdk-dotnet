@@ -1,4 +1,4 @@
-﻿// <copyright file="RedisCaches.cs" company="Stormpath, Inc.">
+﻿// <copyright file="RedisCacheProviderFactoryExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,21 @@
 // limitations under the License.
 // </copyright>
 
-using System;
+using Stormpath.SDK.Cache.Redis;
 
-namespace Stormpath.SDK.Cache.Redis
+namespace Stormpath.SDK.Cache
 {
     /// <summary>
-    /// Static entry point for working with Redis cache providers.
+    /// Provides access to the RedisCache plugin by plugging into <see cref="ICacheProviderFactory"/>.
     /// </summary>
-    public static class RedisCaches
+    public static class RedisCacheProviderFactoryExtensions
     {
         /// <summary>
         /// Instantiates a new <see cref="IRedisCacheProviderBuilder"/>, used to build Redis-backed cache providers.
         /// </summary>
+        /// <param name="factory">The factory.</param>
         /// <returns>A new <see cref="IRedisCacheProviderBuilder"/> instance.</returns>
-        [Obsolete("Use CacheProviders.Create().RedisCache().")]
-        public static IRedisCacheProviderBuilder NewRedisCacheProvider()
+        public static IRedisCacheProviderBuilder RedisCache(this ICacheProviderFactory factory)
             => new RedisCacheProviderBuilder();
     }
 }

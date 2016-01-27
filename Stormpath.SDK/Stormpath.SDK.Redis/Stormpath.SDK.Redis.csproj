@@ -64,6 +64,7 @@
     <Compile Include="CacheEntry.cs" />
     <Compile Include="IRedisCacheProviderBuilder.cs" />
     <Compile Include="RedisCacheProviderBuilder.cs" />
+    <Compile Include="RedisCacheProviderFactoryExtensions.cs" />
     <Compile Include="RedisCaches.cs" />
     <Compile Include="RedisSyncCache.cs" />
     <Compile Include="RedisAsyncCache.cs" />
