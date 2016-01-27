@@ -18,6 +18,7 @@ using System;
 using System.Linq.Expressions;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Directory;
@@ -132,6 +133,15 @@ namespace Stormpath.SDK
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
         /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
         public static IAsyncQueryable<IAuthenticationResult> Expand(this IAsyncQueryable<IAuthenticationResult> source, Expression<Func<IAuthenticationResultExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
+
+        /// <summary>
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
+        /// </summary>
+        /// <param name="source">The source query.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
+        /// <returns>An <see cref="IAsyncQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IAsyncQueryable<IApiKey> Expand(this IAsyncQueryable<IApiKey> source, Expression<Func<IApiKeyExpandables, object>> selector)
             => ExpandCommon.CreateQuery(source, selector);
     }
 }

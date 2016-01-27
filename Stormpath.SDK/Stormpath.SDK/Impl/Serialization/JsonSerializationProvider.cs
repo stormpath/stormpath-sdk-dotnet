@@ -39,7 +39,8 @@ namespace Stormpath.SDK.Impl.Serialization
                 new StatusFieldConverters.ApplicationStatusConverter(),
                 new StatusFieldConverters.DirectoryStatusConverter(),
                 new StatusFieldConverters.GroupStatusConverter(),
-                new StatusFieldConverters.OrganizationStatusConverter());
+                new StatusFieldConverters.OrganizationStatusConverter(),
+                new StatusFieldConverters.ApiKeyStatusConverter());
         }
 
         public string Serialize(Map map)

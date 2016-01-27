@@ -19,6 +19,7 @@ using System.Linq;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Cache;
@@ -474,6 +475,27 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 
             var result1 = authenticator.Authenticate("/loginAttempts", request, null);
             var result2 = authenticator.Authenticate("/loginAttempts", request, null);
+
+            // Not cached
+            this.dataStore.RequestExecutor.Received(2).Execute(
+                Arg.Any<IHttpRequest>());
+        }
+
+        [Fact]
+        [Obsolete("Add encryption functionality and remove this test.")]
+        public void Does_not_cache_api_keys()
+        {
+            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            this.dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.ApiKey).Object, cacheProvider);
+
+            var request1 = this.dataStore.GetResource<IApiKey>("https://api.stormpath.com/v1/apiKeys/83JFN57290NFKDHENXEXAMPLE");
+            var request2 = this.dataStore.GetResource<IApiKey>("https://api.stormpath.com/v1/apiKeys/83JFN57290NFKDHENXEXAMPLE");
+
+            // Verify data from FakeJson.ApiKey
+            request1.Href.ShouldBe("https://api.stormpath.com/v1/apiKeys/83JFN57290NFKDHENXEXAMPLE");
+            request1.Id.ShouldBe("83JFN57290NFKDHENXEXAMPLE");
+            request1.Secret.ShouldBe("asdfqwerty1234567890/ASDFQWERTY09876example");
+            request1.Status.ShouldBe(ApiKeyStatus.Enabled);
 
             // Not cached
             this.dataStore.RequestExecutor.Received(2).Execute(

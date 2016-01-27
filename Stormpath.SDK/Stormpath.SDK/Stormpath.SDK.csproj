@@ -69,6 +69,8 @@
     <Compile Include="Account\IEmailVerificationToken.cs" />
     <Compile Include="Account\IPasswordResetToken.cs" />
     <Compile Include="Account\IEmailVerificationRequest.cs" />
+    <Compile Include="Api\ApiKeyStatus.cs" />
+    <Compile Include="Api\IApiKey.cs" />
     <Compile Include="Application\ApplicationCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountCreationOptionsBuilder.cs" />
     <Compile Include="Account\AccountStatus.cs" />
@@ -82,8 +84,13 @@
     <Compile Include="Application\IApplicationAccountStoreMapping.cs" />
     <Compile Include="Application\IApplicationCreationOptions.cs" />
     <Compile Include="Application\IApplication.cs" />
+    <Compile Include="Auth\ApiAuthenticationException.cs" />
+    <Compile Include="Auth\ApiKeyRequestBuilder.cs" />
+    <Compile Include="Auth\DisabledAccountException.cs" />
     <Compile Include="Auth\IAuthenticationResult.cs" />
     <Compile Include="Auth\IAuthenticationRequest.cs" />
+    <Compile Include="Auth\DisabledApiKeyException.cs" />
+    <Compile Include="Auth\IncorrectCredentialsException.cs" />
     <Compile Include="Cache\AbstractCacheProvider.cs" />
     <Compile Include="Cache\CacheProviders.cs" />
     <Compile Include="Cache\ICacheProviderFactory.cs" />
@@ -98,12 +105,18 @@
     <Compile Include="Impl\AccountStore\IAccountStoreContainerSync.cs" />
     <Compile Include="Impl\AccountStore\IAccountStoreSync.cs" />
     <Compile Include="Cache\AbstractCacheProviderBuilder{T}.cs" />
+    <Compile Include="Impl\Account\DefaultAccount.ApiKeys.cs" />
     <Compile Include="Impl\Account\IEmailVerificationRequestSync.cs" />
+    <Compile Include="Impl\Api\DefaultApiKey.cs" />
+    <Compile Include="Impl\Api\IApiKeySync.cs" />
+    <Compile Include="Impl\Application\DefaultApplication.ApiKey.cs" />
     <Compile Include="Impl\Application\DefaultApplication.Oauth.cs" />
     <Compile Include="Impl\Application\DefaultApplication.Saml.cs" />
     <Compile Include="Impl\Application\DefaultApplicationAccountStoreMapping.cs" />
     <Compile Include="Impl\Application\IApplicationAccountStoreMappingSync.cs" />
     <Compile Include="Impl\Cache\DefaultCacheProviderFactory.cs" />
+    <Compile Include="Impl\Auth\ApiKeyAuthenticationRequest.cs" />
+    <Compile Include="Impl\Auth\ApiKeyAuthenticator.cs" />
     <Compile Include="Impl\Client\DefaultClient.Jwt.cs" />
     <Compile Include="Impl\Client\IUserAgentBuilder.cs" />
     <Compile Include="Impl\DataStore\DefaultDataStore.Core.cs" />
@@ -497,6 +510,7 @@
     <Compile Include="Jwt\InvalidJwtException.cs" />
     <Compile Include="Jwt\Jwts.cs" />
     <Compile Include="Linq\Expandables\IAccountExpandables.cs" />
+    <Compile Include="Linq\Expandables\IApiKeyExpandables.cs" />
     <Compile Include="Linq\Expandables\IOrganizationAccountStoreMappingExpandables.cs" />
     <Compile Include="Linq\Expandables\IAccountStoreMappingExpandables.cs" />
     <Compile Include="Linq\Expandables\IApplicationExpandables.cs" />
@@ -594,6 +608,7 @@
     <Compile Include="Serialization\ISerializerBuilder.cs" />
     <Compile Include="Serialization\ISerializerFactory.cs" />
     <Compile Include="Serialization\Serializers.cs" />
+    <Compile Include="Sync\SyncApiKeyExtensions.cs" />
     <Compile Include="Sync\SyncJwtAuthenticatorExtensions.cs" />
     <Compile Include="Sync\SyncIdSiteTokenAuthenticatorExtensions.cs" />
     <Compile Include="Sync\SyncRefreshGrantAuthenticatorExtensions.cs" />

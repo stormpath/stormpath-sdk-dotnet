@@ -17,6 +17,7 @@
 using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Http;
@@ -350,5 +351,28 @@ namespace Stormpath.SDK.Sync
         /// <returns>A new <see cref="ISamlSyncCallbackHandler"/> that allows your to customize how the <paramref name="request"/> will be handled.</returns>
         public static ISamlSyncCallbackHandler NewSamlSyncCallbackHandler(this IApplication application, IHttpRequest request)
             => (application as IApplicationSync).NewSamlSyncCallbackHandler(request);
+
+        /// <summary>
+        /// Synchronously gets an <see cref="IApiKey">API Key</see>, by its ID, that belongs to an <see cref="IAccount">Account</see>
+        /// that has access to this application by a mapped account store.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <param name="apiKeyId">The API Key ID.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
+        /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
+        public static IApiKey GetApiKey(this IApplication application, string apiKeyId)
+            => (application as IApplicationSync).GetApiKey(apiKeyId);
+
+        /// <summary>
+        /// Synchronously gets an <see cref="IApiKey">API Key</see>, by its ID, that belongs to an <see cref="IAccount">Account</see>
+        /// that has access to this application by a mapped account store.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <param name="apiKeyId">The API Key ID.</param>
+        /// <param name="retrievalOptionsAction">The options to apply to the request.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
+        /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
+        public static IApiKey GetApiKey(this IApplication application, string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction)
+            => (application as IApplicationSync).GetApiKey(apiKeyId, retrievalOptionsAction);
     }
 }

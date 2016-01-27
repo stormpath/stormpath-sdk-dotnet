@@ -14,11 +14,14 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Sync
 {
@@ -96,5 +99,36 @@ namespace Stormpath.SDK.Sync
         /// <returns>The ProviderData Resource belonging to the account.</returns>
         public static IProviderData GetProviderData(this IAccount account)
             => (account as IAccountSync).GetProviderData();
+
+        /// <summary>
+        /// Synchronously creates a new <see cref="IApiKey">API Key</see> assigned to this account on the Stormpath server and returns the created resource.
+        /// </summary>
+        /// <remarks>
+        /// The returned API Key's <see cref="IApiKey.Secret">secret</see> is considered
+        /// <em>extremely</em> sensitive. Stormpath strongly recommends that you make newly generated API Keys accessible
+        /// to your accounts via a file download that stays secure on their file system.
+        /// </remarks>
+        /// <param name="account">The account.</param>
+        /// <returns>The newly-created <see cref="IApiKey">API Key</see>.</returns>
+        /// <seealso cref="Auth.ApiKeyRequestBuilder"/>
+        /// <see cref="SyncApplicationExtensions.AuthenticateAccount(Application.IApplication, Auth.IAuthenticationRequest)"/>
+        public static IApiKey CreateApiKey(this IAccount account)
+            => (account as IAccountSync).CreateApiKey();
+
+        /// <summary>
+        /// Synchronously creates a new <see cref="IApiKey">API Key</see> assigned to this account on the Stormpath server and returns the created resource.
+        /// </summary>
+        /// <remarks>
+        /// The returned API Key's <see cref="IApiKey.Secret">secret</see> is considered
+        /// <em>extremely</em> sensitive. Stormpath strongly recommends that you make newly generated API Keys accessible
+        /// to your accounts via a file download that stays secure on their file system.
+        /// </remarks>
+        /// <param name="account">The account.</param>
+        /// <param name="retrievalOptionsAction">The options to apply to the request.</param>
+        /// <returns>The newly-created <see cref="IApiKey">API Key</see>.</returns>
+        /// <seealso cref="Auth.ApiKeyRequestBuilder"/>
+        /// <see cref="SyncApplicationExtensions.AuthenticateAccount(Application.IApplication, Auth.IAuthenticationRequest)"/>
+        public static IApiKey CreateApiKey(this IAccount account, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction)
+            => (account as IAccountSync).CreateApiKey(retrievalOptionsAction);
     }
 }

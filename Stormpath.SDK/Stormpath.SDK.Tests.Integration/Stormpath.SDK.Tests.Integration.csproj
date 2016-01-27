@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Async\Account_tests.cs" />
+    <Compile Include="Async\ApiKey_tests.cs" />
     <Compile Include="Async\Application_tests.cs" />
     <Compile Include="Async\Entity_tests.cs" />
     <Compile Include="Async\CustomData_embedded_tests.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Async\Oauth_tests.cs" />
     <Compile Include="Async\Organization_tests.cs" />
     <Compile Include="Async\Saml_tests.cs" />
+    <Compile Include="Sync\ApiKey_tests.cs" />
     <Compile Include="Sync\Expansion_linq_tests.cs" />
     <Compile Include="Sync\Expansion_retrieval_tests.cs" />
     <Compile Include="Meta_tests.cs" />

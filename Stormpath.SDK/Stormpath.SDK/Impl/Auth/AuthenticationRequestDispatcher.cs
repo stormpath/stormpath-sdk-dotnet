@@ -53,6 +53,11 @@ namespace Stormpath.SDK.Impl.Auth
                 return new BasicAuthenticator(dataStore).AuthenticateAsync(application.Href, request, options, cancellationToken);
             }
 
+            if (request is ApiKeyAuthenticationRequest)
+            {
+                return new ApiKeyAuthenticator(dataStore).AuthenticateAsync(application, request, cancellationToken);
+            }
+
             throw new InvalidOperationException($"The AuthenticationRequest {request.GetType().Name} is not supported by this implementation.");
         }
 
@@ -63,6 +68,11 @@ namespace Stormpath.SDK.Impl.Auth
             if (request is UsernamePasswordRequest)
             {
                 return new BasicAuthenticator(dataStore).Authenticate(application.Href, request, options);
+            }
+
+            if (request is ApiKeyAuthenticationRequest)
+            {
+                return new ApiKeyAuthenticator(dataStore).Authenticate(application, request);
             }
 
             throw new InvalidOperationException($"The AuthenticationRequest {request.GetType().Name} is not supported by this implementation.");

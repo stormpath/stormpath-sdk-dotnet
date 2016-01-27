@@ -17,6 +17,7 @@
 using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Group;
@@ -188,5 +189,22 @@ namespace Stormpath.SDK.Impl.Application
         /// </param>
         /// <returns>A new <see cref="ISamlSyncCallbackHandler"/> that allows your to customize how the <paramref name="request"/> will be handled.</returns>
         ISamlSyncCallbackHandler NewSamlSyncCallbackHandler(IHttpRequest request);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IApplication.GetApiKeyAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="apiKeyId">The API Key ID.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
+        /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
+        IApiKey GetApiKey(string apiKeyId);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IApplication.GetApiKeyAsync(string, Action{IRetrievalOptions{IApiKey}}, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="apiKeyId">The API Key ID.</param>
+        /// <param name="retrievalOptionsAction">The options to apply to the request.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
+        /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
+        IApiKey GetApiKey(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction);
     }
 }

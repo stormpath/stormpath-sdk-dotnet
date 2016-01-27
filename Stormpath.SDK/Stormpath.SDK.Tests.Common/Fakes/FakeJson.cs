@@ -984,6 +984,24 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         }";
 
         #endregion
+
+        #region API Key
+
+        public static readonly string ApiKey = @"
+{
+    ""account"": {
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount""
+    },
+    ""href"": ""https://api.stormpath.com/v1/apiKeys/83JFN57290NFKDHENXEXAMPLE"",
+    ""id"": ""83JFN57290NFKDHENXEXAMPLE"",
+    ""secret"": ""asdfqwerty1234567890/ASDFQWERTY09876example"",
+    ""status"": ""ENABLED"",
+    ""tenant"": {
+        ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
+    }
+}";
+
+        #endregion
     }
 #pragma warning restore SA1124 // Do not use regions
 }

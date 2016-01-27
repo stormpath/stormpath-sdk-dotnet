@@ -69,7 +69,8 @@ namespace Stormpath.SDK.Impl.Error
                 { "status", response.StatusCode },
                 { "code", response.StatusCode },
                 { "moreInfo", "HTTP error" },
-                { "developerMessage", response.ResponsePhrase }
+                { "developerMessage", response.ResponsePhrase },
+                { "message", "An error occurred." },
             });
         }
 
@@ -80,7 +81,20 @@ namespace Stormpath.SDK.Impl.Error
                 { "status", 0 },
                 { "code", 0 },
                 { "moreInfo", "HTTP error" },
-                { "developerMessage", developerMessage }
+                { "developerMessage", developerMessage },
+                { "message", "An error occurred." },
+            });
+        }
+
+        public static DefaultError With(int status, int code, string moreInfo, string developerMessage, string message)
+        {
+            return new DefaultError(new Dictionary<string, object>()
+            {
+                { "status", status },
+                { "code", code },
+                { "moreInfo", moreInfo },
+                { "developerMessage", developerMessage },
+                { "message", message },
             });
         }
     }

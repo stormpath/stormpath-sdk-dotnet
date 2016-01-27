@@ -14,12 +14,15 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Account
 {
@@ -83,5 +86,18 @@ namespace Stormpath.SDK.Impl.Account
         /// </summary>
         /// <returns>The provider data.</returns>
         IProviderData GetProviderData();
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccount.CreateApiKeyAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The new API Key.</returns>
+        IApiKey CreateApiKey();
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IAccount.CreateApiKeyAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="retrievalOptionsAction">The options to apply to the request.</param>
+        /// <returns>The new API Key.</returns>
+        IApiKey CreateApiKey(Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction);
     }
 }
