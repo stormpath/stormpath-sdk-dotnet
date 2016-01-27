@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Http
 {
     /// <summary>
@@ -30,6 +32,7 @@ namespace Stormpath.SDK.Http
         /// </remarks>
         /// <seealso cref="Client.IClientBuilder.SetHttpClient(IHttpClientBuilder)"/>
         /// <returns>A <see cref="IHttpClientBuilder">builder</see> capable of constructing the default HTTP client.</returns>
+        [Obsolete("Will be removed in 1.0. Instaed, manually specify a client, e.g. HttpClients.Create().RestSharpClient()")]
         IHttpClientBuilder AutoDetect();
     }
 }
