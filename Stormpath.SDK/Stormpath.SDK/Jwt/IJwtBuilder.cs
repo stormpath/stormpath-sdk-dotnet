@@ -32,6 +32,14 @@ namespace Stormpath.SDK.Jwt
         IJwtBuilder SetHeader(Map header);
 
         /// <summary>
+        /// Sets a single JWT header value.
+        /// </summary>
+        /// <param name="name">The header parameter name.</param>
+        /// <param name="value">The header parameter value.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IJwtBuilder SetHeaderParameter(string name, object value);
+
+        /// <summary>
         /// Sets the JWT claims.
         /// </summary>
         /// <param name="claims">An instance of <see cref="IJwtClaims"/> representing the claims.</param>

@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Tests.Helpers
                 serializer: Serializers.Create().JsonNetSerializer().Build(),
                 logger: logger ?? new NullLogger(),
                 userAgentBuilder: new FakeUserAgentBuilder(),
-                cacheProvider: cacheProvider ?? Caches.NewDisabledCacheProvider(),
+                cacheProvider: cacheProvider ?? CacheProviders.Create().DisabledCache(),
                 identityMapExpiration: TimeSpan.FromMinutes(10));
         }
     }

@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Serialization;
@@ -38,6 +37,7 @@ namespace Stormpath.SDK.Impl.Jwt
         {
             this.claimsBuilder = new DefaultJwtClaimsBuilder();
             this.serializer = serializer;
+            this.header = new Dictionary<string, object>();
         }
 
         private string Base64UrlEncode(Map map, Encoding encoding)
@@ -51,6 +51,12 @@ namespace Stormpath.SDK.Impl.Jwt
         IJwtBuilder IJwtBuilder.SetHeader(Map header)
         {
             this.header = header;
+            return this;
+        }
+
+        IJwtBuilder IJwtBuilder.SetHeaderParameter(string name, object value)
+        {
+            this.header[name] = value;
             return this;
         }
 
@@ -150,11 +156,6 @@ namespace Stormpath.SDK.Impl.Jwt
 
         private Tuple<string, string, string> Compact()
         {
-            if (this.header == null)
-            {
-                this.header = new Dictionary<string, object>();
-            }
-
             this.header[JwtHeaderParameters.Type] = "JWT";
             this.header[JwtHeaderParameters.Algorithm] = this.algorithm;
             var base64UrlEncodedHeader = this.Base64UrlEncode(this.header, Encoding.UTF8);

@@ -31,7 +31,7 @@ Public Class User_agent_tests
             .SetApiKey(FakeApiKey.Create(valid:=True)) _
             .SetBaseUrl("http://foo.bar") _
             .SetHttpClient(fakeHttpClient) _
-            .SetCacheProvider(Cache.Caches.NewDisabledCacheProvider) _
+            .SetCacheProvider(Cache.CacheProviders.Create().DisabledCache()) _
             .Build()
 
         Dim tenant = Await client.GetResourceAsync(Of IAccount)("http://foo.bar/fooAccount")

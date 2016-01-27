@@ -37,11 +37,13 @@ using Stormpath.SDK.Impl.Oauth;
 using Stormpath.SDK.Impl.Organization;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.Saml;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Saml;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.DataStore
@@ -86,6 +88,10 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(IRefreshGrantAuthenticationAttempt)] = typeof(DefaultRefreshGrantAuthenticationAttempt),
             [typeof(IIdSiteTokenAuthenticationAttempt)] = typeof(DefaultIdSiteTokenAuthenticationAttempt),
             [typeof(IApiKey)] = typeof(DefaultApiKey),
+            [typeof(ISamlPolicy)] = typeof(DefaultSamlPolicy),
+            [typeof(ISamlServiceProvider)] = typeof(DefaultSamlServiceProvider),
+            [typeof(ISsoInitiationEndpoint)] = typeof(DefaultSsoInitiationEndpoint),
+            [typeof(ISamlAccountResult)] = typeof(DefaultSamlAccountResult),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),

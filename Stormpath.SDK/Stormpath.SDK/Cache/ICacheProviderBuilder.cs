@@ -45,7 +45,7 @@ namespace Stormpath.SDK.Cache
         /// <example>
         /// Create an in-memory cache with a default TTL of 30 minutes:
         /// <code>
-        /// var cacheProvider = Caches.NewInMemoryCacheProvider()
+        /// var cacheProvider = CacheProviders.Create().InMemoryCache()
         ///     .WithDefaultTimeToLive(TimeSpan.FromMinutes(30))
         ///     .Build();
         /// </code>
@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Cache
         /// <example>
         /// Create an in-memory cache with a default TTI of 30 minutes:
         /// <code>
-        /// var cacheProvider = Caches.NewInMemoryCacheProvider()
+        /// var cacheProvider = CacheProviders.Create().InMemoryCache()
         ///     .WithDefaultTimeToIdle(TimeSpan.FromMinutes(30))
         ///     .Build();
         /// </code>
@@ -93,7 +93,7 @@ namespace Stormpath.SDK.Cache
         /// <example>
         /// Set the TTL and TTI for a specific cache region:
         /// <code>
-        /// var cacheProvider = Caches.NewInMemoryCacheProvider()
+        /// var cacheProvider = CacheProviders.Create().InMemoryCache()
         ///     .WithCache(Caches
         ///         .ForResource&lt;Account.IAccount&gt;()
         ///         .WithTimeToLive(TimeSpan.FromHours(2))

@@ -113,6 +113,7 @@
     <Compile Include="Async\OauthPolicy_tests.vb" />
     <Compile Include="Async\Oauth_tests.vb" />
     <Compile Include="Async\Organization_tests.vb" />
+    <Compile Include="Async\Saml_tests.vb" />
     <Compile Include="Async\Tenant_tests.vb" />
     <Compile Include="IntegrationTestCollection.vb" />
     <Compile Include="Linq_test.vb" />
@@ -145,6 +146,7 @@
     <Compile Include="Sync\OauthPolicy_tests.vb" />
     <Compile Include="Sync\Oauth_tests.vb" />
     <Compile Include="Sync\Organization_tests.vb" />
+    <Compile Include="Sync\Saml_tests.vb" />
     <Compile Include="Sync\Tenant_tests.vb" />
   </ItemGroup>
   <ItemGroup>

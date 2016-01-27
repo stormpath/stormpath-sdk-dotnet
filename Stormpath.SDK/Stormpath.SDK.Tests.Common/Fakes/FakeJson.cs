@@ -930,12 +930,12 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         public static readonly string GroupMembership = @"
 {
     ""account"": {
-        ""href"": ""https://api.stormpath.com/v1/accounts/dcQvuLVsF48MKEnv8lrGU""
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount""
     },
     ""group"": {
-        ""href"": ""https://api.stormpath.com/v1/groups/56ka3Sg8VIBMnwGg3fw9y""
+        ""href"": ""https://api.stormpath.com/v1/groups/foobarGroup""
     },
-    ""href"": ""https://api.stormpath.com/v1/groupMemberships/dohrFxk4XyyAMQZ6uEfog""
+    ""href"": ""https://api.stormpath.com/v1/groupMemberships/foobarGroupMembership""
 }";
 
         #endregion

@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Client;
@@ -115,6 +116,15 @@ namespace Stormpath.SDK.Impl.Resource
 
         public IEmbeddedProperty GetLinkProperty(string name)
             => (this.GetProperty(name) as IEmbeddedProperty) ?? new LinkProperty(null);
+
+        public IReadOnlyList<T> GetListProperty<T>(string name)
+        {
+            var boxedList = this.GetProperty(name) as List<object>;
+
+            return boxedList == null
+                ? new List<T>()
+                : boxedList.OfType<T>().ToList();
+        }
 
         public bool ContainsProperty(string name)
             => this.GetResourceData()?.ContainsProperty(name) ?? false;

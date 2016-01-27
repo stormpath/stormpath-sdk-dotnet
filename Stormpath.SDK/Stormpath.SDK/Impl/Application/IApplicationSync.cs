@@ -29,6 +29,7 @@ using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
+using Stormpath.SDK.Saml;
 
 namespace Stormpath.SDK.Impl.Application
 {
@@ -166,6 +167,28 @@ namespace Stormpath.SDK.Impl.Application
         /// </summary>
         /// <returns>The <see cref="IOauthPolicy">OauthPolicy</see> associated with this <see cref="IApplication">Application</see>.</returns>
         IOauthPolicy GetOauthPolicy();
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IApplication.GetSamlPolicyAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The <see cref="ISamlPolicy">SAML Policy</see> associated with this <see cref="IApplication">Application</see>.</returns>
+        ISamlPolicy GetSamlPolicy();
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IApplication.NewSamlIdpUrlBuilderAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>A new <see cref="ISamlIdpUrlBuilder"/> that can build a URL to redirect your users to a SAML Identity Provider.</returns>
+        ISamlIdpUrlBuilder NewSamlIdpUrlBuilder();
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IApplication.NewSamlAsyncCallbackHandler(IHttpRequest)"/>.
+        /// </summary>
+        /// <param name="request">
+        /// An instance of <see cref="IHttpRequest"/>.
+        /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
+        /// </param>
+        /// <returns>A new <see cref="ISamlSyncCallbackHandler"/> that allows your to customize how the <paramref name="request"/> will be handled.</returns>
+        ISamlSyncCallbackHandler NewSamlSyncCallbackHandler(IHttpRequest request);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IApplication.GetApiKeyAsync(string, System.Threading.CancellationToken)"/>.

@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Resource;
 
@@ -30,6 +31,7 @@ namespace Stormpath.SDK.Cache
         /// and instead implement the <see cref="ICacheProvider">Cache Provider</see> API directly to use your distributed/clustered cache technology of choice.
         /// </summary>
         /// <returns>A new <see cref="ICacheProviderBuilder"/> suitable for single-instance applications.</returns>
+        [Obsolete("Use CacheProviders.Create().InMemoryCache()")]
         public static ICacheProviderBuilder NewInMemoryCacheProvider()
             => new InMemoryCacheProviderBuilder();
 
@@ -39,6 +41,7 @@ namespace Stormpath.SDK.Cache
         /// your Client when testing or debugging to remove 'moving parts' for better clarity into request/response behavior.
         /// </summary>
         /// <returns>A new disabled <see cref="ICacheProvider">Cache Provider</see> instance.</returns>
+        [Obsolete("Use CacheProviders.Create().DisabledCache()")]
         public static ICacheProvider NewDisabledCacheProvider()
             => new NullCacheProvider();
 

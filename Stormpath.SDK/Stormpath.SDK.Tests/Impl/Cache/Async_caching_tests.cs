@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Resource_access_not_cached_with_null_cache()
         {
-            var cacheProvider = Caches.NewDisabledCacheProvider();
+            var cacheProvider = CacheProviders.Create().DisabledCache();
             this.BuildDataStore(FakeJson.Account, cacheProvider);
 
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Resource_access_is_cached()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             this.BuildDataStore(FakeJson.Account, cacheProvider);
 
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
@@ -105,7 +105,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Collection_access_is_not_cached()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             this.BuildDataStore(FakeJson.AccountList, cacheProvider);
 
             IAsyncQueryable<IAccount> accounts = new CollectionResourceQueryable<IAccount>("/accounts", this.dataStore);
@@ -122,7 +122,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Collection_items_are_cached()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             this.BuildDataStore(FakeJson.AccountList, cacheProvider);
 
             IAsyncQueryable<IAccount> accounts = new CollectionResourceQueryable<IAccount>("/accounts", this.dataStore);
@@ -140,7 +140,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Custom_data_is_cached()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             this.BuildDataStore(FakeJson.CustomData, cacheProvider);
 
             var customData1 = await this.dataStore.GetResourceAsync<ICustomData>("/accounts/foobarAccount/customData");
@@ -156,7 +156,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Expanded_nested_resources_are_cached()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             this.BuildDataStore(FakeJson.AccountWithExpandedCustomData, cacheProvider);
 
             var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
@@ -176,7 +176,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Expanded_collection_items_are_cached()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             this.BuildDataStore(FakeJson.AccountWithExpandedGroups, cacheProvider);
 
             var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount?expand=groups(offset:0,limit:25)");
@@ -194,7 +194,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Deleting_resource_removes_cached_item()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             this.BuildDataStore(FakeJson.Account, cacheProvider);
 
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
@@ -214,7 +214,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Updating_resource_updates_cache()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
             this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
@@ -247,7 +247,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Updating_custom_data_with_proxy_updates_cache()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
             this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
@@ -279,7 +279,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Custom_data_is_always_cached_on_parent_resource_save()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             this.BuildDataStore(FakeJson.Account, cacheProvider);
 
             var account = this.dataStore.Instantiate<IAccount>();
@@ -303,7 +303,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
             // This test differs from Updating_custom_data_with_proxy_updates_cache
             // because we aren't GETting the custom data first (whether explicitly or with an expanded query).
             // In this case, we don't want to cache updates because we have no authoritative version.
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             this.BuildDataStore(FakeJson.Account, cacheProvider);
 
             var account = await this.dataStore.GetResourceAsync<IAccount>("/account");
@@ -322,7 +322,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Deleting_custom_data_with_proxy_updates_cache()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
 
             var requestExecutor = Substitute.For<IRequestExecutor>();
             this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
@@ -352,7 +352,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Email_verification_result_removes_associated_account_from_cache()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
             this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
@@ -393,7 +393,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Does_not_cache_provider_account_access()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             this.BuildDataStore(FakeJson.Account, cacheProvider);
 
             var customData1 = await this.dataStore.GetResourceAsync<IProviderAccountResult>("/accounts/foobarAccount");
@@ -408,7 +408,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Does_not_cache_email_verification_tokens()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
             this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
@@ -436,7 +436,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Does_not_cache_password_reset_tokens()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
             this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
@@ -445,7 +445,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
     ""href"": ""https://api.stormpath.com/v1/applications/foo/passwordResetTokens/bar"",
     ""email"": ""john.smith@stormpath.com"",
     ""account"": {
-        ""href"": ""https://api.stormpath.com/v1/accounts/cJoiwcorTTmkDDBsf02bAb""
+        ""href"": ""https://api.stormpath.com/v1/accounts/foobarAccount""
     }
 }
 ";
@@ -472,7 +472,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Does_not_cache_login_attempts()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
             var requestExecutor = Substitute.For<IRequestExecutor>();
             this.dataStore = TestDataStore.Create(requestExecutor, cacheProvider);
 
@@ -530,7 +530,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         [Fact]
         public async Task Resource_with_unknown_property_is_cached()
         {
-            var cacheProvider = Caches.NewInMemoryCacheProvider().Build();
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
 
             var fakeResponse = FakeJson.Application.Replace("authorizedCallbackUris", "foobarProperty");
             this.BuildDataStore(fakeResponse, cacheProvider);

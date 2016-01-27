@@ -148,7 +148,7 @@ namespace Stormpath.SDK.Tests.Impl
         {
             var client = this.builder
                 .SetApiKey(FakeApiKey.Create(valid: true))
-                .SetCacheProvider(SDK.Cache.Caches.NewDisabledCacheProvider())
+                .SetCacheProvider(SDK.Cache.CacheProviders.Create().DisabledCache())
                 .Build();
 
             client.GetCacheProvider().ShouldBeOfType<NullCacheProvider>();

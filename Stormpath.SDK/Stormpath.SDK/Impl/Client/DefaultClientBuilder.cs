@@ -52,9 +52,6 @@ namespace Stormpath.SDK.Impl.Client
         public DefaultClientBuilder(IUserAgentBuilder userAgentBuilder)
         {
             this.userAgentBuilder = userAgentBuilder;
-
-            this.serializerBuilder = Serializers.Create().AutoDetect();
-            this.httpClientBuilder = HttpClients.Create().AutoDetect();
             this.clientApiKeyBuilder = ClientApiKeys.Builder();
         }
 
@@ -200,21 +197,50 @@ namespace Stormpath.SDK.Impl.Client
 
             var logger = this.logger ?? new NullLogger();
 
-            var serializer = this.overrideSerializer ?? this.serializerBuilder.Build();
+            IJsonSerializer serializer = null;
+            if (this.overrideSerializer != null)
+            {
+                serializer = this.overrideSerializer;
+            }
+            else
+            {
+                if (this.serializerBuilder == null)
+                {
+                    this.logger.Info("No serializer plugin specified, using default.");
+                    this.serializerBuilder = Serializers.Create().AutoDetect();
+                }
 
-            this.httpClientBuilder
-                .SetBaseUrl(this.baseUrl)
-                .SetConnectionTimeout(this.connectionTimeout)
-                .SetProxy(this.proxy)
-                .SetLogger(this.logger);
-            var httpClient = this.overrideHttpClient ?? this.httpClientBuilder.Build();
+                serializer = this.serializerBuilder.Build();
+            }
+
+            IHttpClient httpClient = null;
+            if (this.overrideHttpClient != null)
+            {
+                httpClient = this.overrideHttpClient;
+            }
+            else
+            {
+                if (this.httpClientBuilder == null)
+                {
+                    this.logger.Info("No HTTP client plugin specified, using default.");
+                    this.httpClientBuilder = HttpClients.Create().AutoDetect();
+                }
+
+                this.httpClientBuilder
+                    .SetBaseUrl(this.baseUrl)
+                    .SetConnectionTimeout(this.connectionTimeout)
+                    .SetProxy(this.proxy)
+                    .SetLogger(this.logger);
+
+                httpClient = this.httpClientBuilder.Build();
+            }
 
             if (this.cacheProvider == null)
             {
                 this.logger.Info("No CacheProvider configured. Defaulting to in-memory CacheProvider with default TTL and TTI of one hour.");
 
-                this.cacheProvider = Caches
-                    .NewInMemoryCacheProvider()
+                this.cacheProvider = CacheProviders.Create()
+                    .InMemoryCache()
                     .WithDefaultTimeToIdle(TimeSpan.FromHours(1))
                     .WithDefaultTimeToLive(TimeSpan.FromHours(1))
                     .Build();

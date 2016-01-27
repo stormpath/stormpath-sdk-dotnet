@@ -19,7 +19,7 @@ using System;
 namespace Stormpath.SDK.IdSite
 {
     /// <summary>
-    /// Helps build a URL you can use to redirect your application users to a hosted login/registration/forgot-password site -
+    /// Used to construct a URL you can use to redirect your application users to a hosted login/registration/forgot-password site -
     /// what Stormpath calls an 'Identity Site' (or 'ID Site' for short) - for performing common user identity functionality.
     /// When the user is done (logging in, registering, etc), they will be redirected back to a <c>callbackUri</c> of your choice.
     /// </summary>
@@ -60,9 +60,9 @@ namespace Stormpath.SDK.IdSite
 
         /// <summary>
         /// Ensures the ID Site is customized for the <c>Organization</c> with the specified <paramref name="organizationNameKey"/>
-        /// This is useful for multi-tenant or white label scenarios where you know the user belongs to a specific <c>Organization</c>.
+        /// This is useful for multi-tenant or white label scenarios where you know the user belongs to a specific <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>
-        /// <param name="organizationNameKey">The unique identifier of the <c>Organization</c> to use when customizing ID Site.</param>
+        /// <param name="organizationNameKey">The unique identifier of the <see cref="Organization.IOrganization">Organization</see> to use when customizing ID Site.</param>
         /// <returns>This instance for method chaining.</returns>
         IIdSiteUrlBuilder SetOrganizationNameKey(string organizationNameKey);
 

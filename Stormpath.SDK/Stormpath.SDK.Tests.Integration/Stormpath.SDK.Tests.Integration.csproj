@@ -88,6 +88,7 @@
     <Compile Include="Async\OauthPolicy_tests.cs" />
     <Compile Include="Async\Oauth_tests.cs" />
     <Compile Include="Async\Organization_tests.cs" />
+    <Compile Include="Async\Saml_tests.cs" />
     <Compile Include="Sync\ApiKey_tests.cs" />
     <Compile Include="Sync\Expansion_linq_tests.cs" />
     <Compile Include="Sync\Expansion_retrieval_tests.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Sync\OauthPolicy_tests.cs" />
     <Compile Include="Sync\Oauth_tests.cs" />
     <Compile Include="Sync\Organization_tests.cs" />
+    <Compile Include="Sync\Saml_tests.cs" />
     <Compile Include="Sync\Tenant_tests.cs" />
     <Compile Include="Async\Tenant_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

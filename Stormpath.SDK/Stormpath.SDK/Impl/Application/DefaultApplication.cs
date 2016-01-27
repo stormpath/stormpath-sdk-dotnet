@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Api;
@@ -33,6 +34,7 @@ namespace Stormpath.SDK.Impl.Application
         private static readonly string AccountsPropertyName = "accounts";
         private static readonly string ApiKeysPropertyName = "apiKeys";
         private static readonly string AuthTokensPropertyName = "authTokens";
+        private static readonly string AuthorizedCallbackUrisPropertyName = "authorizedCallbackUris";
         private static readonly string DefaultAccountStoreMappingPropertyName = AccountStoreContainerShared.DefaultAccountStoreMappingPropertyName;
         private static readonly string DefaultGroupStoreMappingPropertyName = AccountStoreContainerShared.DefaultGroupStoreMappingPropertyName;
         private static readonly string DescriptionPropertyName = "description";
@@ -40,6 +42,7 @@ namespace Stormpath.SDK.Impl.Application
         private static readonly string LoginAttemptsPropertyName = "loginAttempts";
         private static readonly string NamePropertyName = "name";
         private static readonly string OAuthPolicyPropertyName = "oAuthPolicy";
+        private static readonly string SamlPolicyPropertyName = "samlPolicy";
         private static readonly string PasswordResetTokensPropertyName = "passwordResetTokens";
         private static readonly string StatusPropertyName = "status";
         private static readonly string VerificationEmailsPropertyName = "verificationEmails";
@@ -61,6 +64,8 @@ namespace Stormpath.SDK.Impl.Application
 
         internal IEmbeddedProperty AuthTokens => this.GetLinkProperty(AuthTokensPropertyName);
 
+        IReadOnlyList<string> IApplication.AuthorizedCallbackUris => this.GetListProperty<string>(AuthorizedCallbackUrisPropertyName);
+
         internal IEmbeddedProperty DefaultAccountStoreMapping => this.GetLinkProperty(DefaultAccountStoreMappingPropertyName);
 
         internal IEmbeddedProperty DefaultGroupStoreMapping => this.GetLinkProperty(DefaultGroupStoreMappingPropertyName);
@@ -74,6 +79,8 @@ namespace Stormpath.SDK.Impl.Application
         internal IEmbeddedProperty LoginAttempts => this.GetLinkProperty(LoginAttemptsPropertyName);
 
         internal IEmbeddedProperty OAuthPolicy => this.GetLinkProperty(OAuthPolicyPropertyName);
+
+        internal IEmbeddedProperty SamlPolicy => this.GetLinkProperty(SamlPolicyPropertyName);
 
         internal IEmbeddedProperty PasswordResetToken => this.GetLinkProperty(PasswordResetTokensPropertyName);
 

@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Tests.Impl.IdSite
             var fakeRequestExecutor = Substitute.For<IRequestExecutor>();
             fakeRequestExecutor.ApiKey.Returns(testApiKey);
 
-            this.dataStore = TestDataStore.Create(fakeRequestExecutor, Caches.NewInMemoryCacheProvider().Build());
+            this.dataStore = TestDataStore.Create(fakeRequestExecutor, CacheProviders.Create().InMemoryCache().Build());
 
             var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri($"https://foo.bar?{IdSiteClaims.JwtResponse}={jwtResponse}"));
 

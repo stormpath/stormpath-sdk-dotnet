@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Http;
@@ -266,6 +267,22 @@ namespace Stormpath.SDK.Tests.Impl
             var account = dataStore.Instantiate<IAccount>();
 
             account.Client.ShouldBe(fakeClient);
+        }
+
+        [Fact]
+        public async Task Supports_list_property()
+        {
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Application).Object);
+
+            var application = await dataStore.GetResourceAsync<IApplication>("/account", CancellationToken.None);
+
+            // Verify against data from FakeJson.Application
+            application.Name.ShouldBe("Lightsabers Galore");
+
+            // AuthorizedCallbackUris should be a populated list
+            application.AuthorizedCallbackUris.Count.ShouldBe(2);
+            application.AuthorizedCallbackUris.ShouldContain("https://foo.bar/1");
+            application.AuthorizedCallbackUris.ShouldContain("https://foo.bar/2");
         }
     }
 }

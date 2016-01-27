@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests
                 .SetApiKey(FakeApiKey.Create(valid: true))
                 .SetBaseUrl("http://foo.bar/")
                 .SetHttpClient(fakeHttpClient)
-                .SetCacheProvider(Cache.Caches.NewDisabledCacheProvider())
+                .SetCacheProvider(Cache.CacheProviders.Create().DisabledCache())
                 .Build();
 
             var tenant = await client.GetResourceAsync<IAccount>("http://foo.bar/fooAccount");

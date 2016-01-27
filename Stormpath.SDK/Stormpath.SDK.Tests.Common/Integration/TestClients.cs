@@ -20,8 +20,6 @@ using Shouldly;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
-using Stormpath.SDK.Extensions.Http;
-using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Serialization;
 
@@ -31,7 +29,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
     {
         private static readonly Lazy<string> ApiBaseUrl = new Lazy<string>(() =>
         {
-            var fromEnvironment = Environment.GetEnvironmentVariable("STORMPATH_IT_API_URL");
+            var fromEnvironment = Environment.GetEnvironmentVariable("STORMPATH_CLIENT_BASEURL");
 
             return string.IsNullOrEmpty(fromEnvironment)
                 ? "https://api.stormpath.com/v1"
@@ -49,7 +47,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 .SetAuthenticationScheme(AuthenticationScheme.Basic)
                 .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
-                .SetCacheProvider(Caches.NewDisabledCacheProvider())
+                .SetCacheProvider(CacheProviders.Create().DisabledCache())
                 .Build();
         });
 
@@ -64,7 +62,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
-                .SetCacheProvider(Caches.NewDisabledCacheProvider())
+                .SetCacheProvider(CacheProviders.Create().DisabledCache())
                 .Build();
         });
 
@@ -79,7 +77,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
                 .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
-                .SetCacheProvider(Caches.NewInMemoryCacheProvider()
+                .SetCacheProvider(CacheProviders.Create().InMemoryCache()
                     .WithDefaultTimeToIdle(TimeSpan.FromMinutes(10))
                     .WithDefaultTimeToLive(TimeSpan.FromMinutes(10))
                     .Build())

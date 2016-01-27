@@ -129,6 +129,7 @@
     <Compile Include="Impl\IdSite\InlineIdSiteAsyncResultListener_tests.cs" />
     <Compile Include="Impl\Jwt\DefaultJwtParser_tests.cs" />
     <Compile Include="Impl\Jwt\Jwt_tests.cs" />
+    <Compile Include="Impl\Jwt\Local_validation_tests.cs" />
     <Compile Include="Impl\Linq\CollectionResourceQueryable_iteration_tests.cs" />
     <Compile Include="Impl\CreationOptions_tests.cs" />
     <Compile Include="Impl\Cache\InMemoryCache_tests.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Impl\PasswordResetToken_tests.cs" />
     <Compile Include="Impl\ResourceTypes_tests.cs" />
     <Compile Include="Impl\Extensions\String_SplitToKeyValuePair_tests.cs" />
+    <Compile Include="Impl\Saml\DefaultSamlIdpUrlBuilder_tests.cs" />
     <Compile Include="Impl\UriQualifier_tests.cs" />
     <Compile Include="Impl\Utility\AnonymousType_tests.cs" />
     <Compile Include="Impl\Utility\Base64_tests.cs" />
