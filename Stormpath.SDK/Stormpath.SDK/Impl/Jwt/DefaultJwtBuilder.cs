@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Serialization;
