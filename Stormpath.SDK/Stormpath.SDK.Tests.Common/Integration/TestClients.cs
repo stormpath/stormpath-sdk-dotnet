@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
     {
         private static readonly Lazy<string> ApiBaseUrl = new Lazy<string>(() =>
         {
-            var fromEnvironment = Environment.GetEnvironmentVariable("STORMPATH_IT_API_URL");
+            var fromEnvironment = Environment.GetEnvironmentVariable("STORMPATH_CLIENT_BASEURL");
 
             return string.IsNullOrEmpty(fromEnvironment)
                 ? "https://api.stormpath.com/v1"
