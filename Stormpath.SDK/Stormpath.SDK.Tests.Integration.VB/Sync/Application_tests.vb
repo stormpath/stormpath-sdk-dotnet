@@ -390,8 +390,15 @@ Namespace Sync
 
             ' Retrieving it again should have the same result
             Dim updated = client.GetResource(Of IApplication)(createdApplication.Href)
-            updated.GetDefaultAccountStore().Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
-            updated.GetDefaultGroupStore().Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+            updated.ShouldNotBeNull()
+
+            Dim updatedDefaultAccountStore = updated.GetDefaultAccountStore()
+            updatedDefaultAccountStore.ShouldNotBeNull()
+            updatedDefaultAccountStore.Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+
+            Dim updatedDefaultGroupStore = updated.GetDefaultGroupStore()
+            updatedDefaultGroupStore.ShouldNotBeNull()
+            updatedDefaultGroupStore.Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
 
             ' Clean up
             createdApplication.Delete().ShouldBeTrue()

@@ -433,8 +433,15 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Retrieving it again should have the same result
             var updated = client.GetResource<IApplication>(createdApplication.Href);
-            updated.GetDefaultAccountStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
-            updated.GetDefaultGroupStore().Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+            updated.ShouldNotBeNull();
+
+            var updatedDefaultAccountStore = updated.GetDefaultAccountStore();
+            updatedDefaultAccountStore.ShouldNotBeNull();
+            updatedDefaultAccountStore.Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+
+            var updatedDefaultGroupStore = updated.GetDefaultGroupStore();
+            updatedDefaultGroupStore.ShouldNotBeNull();
+            updatedDefaultGroupStore.Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
 
             // Clean up
             createdApplication.Delete().ShouldBeTrue();

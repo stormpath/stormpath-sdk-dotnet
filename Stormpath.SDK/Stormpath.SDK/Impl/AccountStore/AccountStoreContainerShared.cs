@@ -701,7 +701,7 @@ namespace Stormpath.SDK.Impl.AccountStore
             var asApplication = container as IApplication;
             if (asApplication != null)
             {
-                mapping.SetApplication(asApplication);
+                (mapping as IApplicationAccountStoreMapping).SetApplication(asApplication);
                 return;
             }
 

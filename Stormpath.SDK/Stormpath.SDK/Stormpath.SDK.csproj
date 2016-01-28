@@ -126,6 +126,7 @@
     <Compile Include="Impl\DataStore\DefaultDataStore.Save.cs" />
     <Compile Include="Impl\DataStore\Filters\AccountStoreMappingCacheInvalidationFilter.cs" />
     <Compile Include="Impl\DataStore\Filters\WriteCacheFilter.Sync.cs" />
+    <Compile Include="Impl\DataStore\TypeResolver.cs" />
     <Compile Include="Impl\DataStore\TypeNameResolver.cs" />
     <Compile Include="Impl\Extensions\ReflectionExtensions.cs" />
     <Compile Include="Impl\Http\DefaultHttpClientFactory.cs" />

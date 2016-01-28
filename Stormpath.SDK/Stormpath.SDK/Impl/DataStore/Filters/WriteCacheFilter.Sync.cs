@@ -52,7 +52,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             var result = chain.Filter(request, logger);
 
-            bool isEmailVerificationResponse = result.Type == typeof(IEmailVerificationToken);
+            var type = new TypeResolver()
+                .Resolve(result.Type);
+
+            bool isEmailVerificationResponse = type == typeof(IEmailVerificationToken);
             if (isEmailVerificationResponse)
             {
                 logger.Trace($"Request {request.Action} {request.Uri} is an email verification request, purging account from cache if exists", "WriteCacheFilter.Filter");
@@ -66,10 +69,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 this.CacheNestedCustomDataUpdates(request, result, logger);
             }
 
-            if (IsCacheable(request, result))
+            if (IsCacheable(request, result, type))
             {
                 logger.Trace($"Caching request {request.Action} {request.Uri}", "WriteCacheFilter.Filter");
-                this.Cache(result.Type, result.Body, logger);
+                this.Cache(type, result.Body, logger);
             }
 
             return result;

@@ -74,7 +74,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             var result = await chain.FilterAsync(request, logger, cancellationToken).ConfigureAwait(false);
 
-            bool isEmailVerificationResponse = result.Type == typeof(IEmailVerificationToken);
+            var type = new TypeResolver()
+                .Resolve(result.Type);
+
+            bool isEmailVerificationResponse = type == typeof(IEmailVerificationToken);
             if (isEmailVerificationResponse)
             {
                 logger.Trace($"Request {request.Action} {request.Uri} is an email verification request, purging account from cache if exists", "WriteCacheFilter.FilterAsync");
@@ -88,10 +91,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 await this.CacheNestedCustomDataUpdatesAsync(request, result, logger, cancellationToken).ConfigureAwait(false);
             }
 
-            if (IsCacheable(request, result))
+            if (IsCacheable(request, result, type))
             {
                 logger.Trace($"Caching request {request.Action} {request.Uri}", "WriteCacheFilter.FilterAsync");
-                await this.CacheAsync(result.Type, result.Body, logger, cancellationToken).ConfigureAwait(false);
+                await this.CacheAsync(type, result.Body, logger, cancellationToken).ConfigureAwait(false);
             }
 
             return result;
@@ -325,29 +328,29 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             await cache.RemoveAsync(this.GetCacheKey(accountHref), cancellationToken).ConfigureAwait(false);
         }
 
-        private static bool IsCacheable(IResourceDataRequest request, IResourceDataResult result)
+        private static bool IsCacheable(IResourceDataRequest request, IResourceDataResult result, Type resultType)
         {
             bool hasData = !result.Body.IsNullOrEmpty();
 
             return
 
                 // Must be a resource
-                IsResource(result?.Body) &&
+                IsResource(result?.Body)
 
                 // Don't cache password reset or email verification requests
-                result.Type != typeof(IPasswordResetToken) &&
-                result.Type != typeof(IEmailVerificationToken) &&
-                result.Type != typeof(IEmailVerificationRequest) &&
+                && resultType != typeof(IPasswordResetToken)
+                && resultType != typeof(IEmailVerificationToken)
+                && resultType != typeof(IEmailVerificationRequest)
 
                 // Don't cache login attempts
-                result.Type != typeof(IAuthenticationResult) &&
+                && resultType != typeof(IAuthenticationResult)
 
                 // ProviderAccountResults look like IAccounts but should not be cached either
-                result.Type != typeof(IProviderAccountResult)
+                && resultType != typeof(IProviderAccountResult)
 
                 // Don't cache API Keys (for now)
-                && result.Type != typeof(IApiKey)
-                && result.Type != typeof(CollectionResponsePage<IApiKey>);
+                && resultType != typeof(IApiKey)
+                && resultType != typeof(CollectionResponsePage<IApiKey>);
         }
 
         private static bool IsResource(Map data)

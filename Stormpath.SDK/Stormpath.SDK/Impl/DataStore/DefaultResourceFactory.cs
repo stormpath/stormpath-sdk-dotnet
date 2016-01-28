@@ -60,15 +60,18 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private object InstantiateSingle(Type type, Map properties, ILinkable original)
         {
-            var typeName = new TypeNameResolver().GetTypeName(type);
+            var resolvedType = new TypeResolver()
+                .Resolve(type);
 
-            var targetType = this.typeLookup.GetConcrete(type);
+            var typeName = resolvedType.Name;
+
+            var targetType = this.typeLookup.GetConcrete(resolvedType);
             if (targetType == null)
             {
                 throw new ApplicationException($"Unknown resource type {typeName}");
             }
 
-            var identityMapOptions = new IdentityMapOptionsResolver().GetOptions(type);
+            var identityMapOptions = new IdentityMapOptionsResolver().GetOptions(resolvedType);
 
             AbstractResource targetObject;
             try

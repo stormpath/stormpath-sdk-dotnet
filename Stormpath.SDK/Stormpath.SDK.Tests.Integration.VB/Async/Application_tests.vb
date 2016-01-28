@@ -397,8 +397,15 @@ Namespace Async
 
             ' Retrieving it again should have the same result
             Dim updated = Await client.GetResourceAsync(Of IApplication)(createdApplication.Href)
-            Call (Await updated.GetDefaultAccountStoreAsync()).Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
-            Call (Await updated.GetDefaultGroupStoreAsync()).Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+            updated.ShouldNotBeNull()
+
+            Dim updatedDefaultAccountStore = Await updated.GetDefaultAccountStoreAsync()
+            updatedDefaultAccountStore.ShouldNotBeNull()
+            updatedDefaultAccountStore.Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
+
+            Dim updatedDefaultGroupStore = Await updated.GetDefaultGroupStoreAsync()
+            updatedDefaultGroupStore.ShouldNotBeNull()
+            updatedDefaultGroupStore.Href.ShouldBe(Me.fixture.PrimaryDirectoryHref)
 
             ' Clean up
             Call (Await createdApplication.DeleteAsync()).ShouldBeTrue()

@@ -428,8 +428,15 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Retrieving it again should have the same result
             var updated = await client.GetResourceAsync<IApplication>(createdApplication.Href);
-            (await updated.GetDefaultAccountStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
-            (await updated.GetDefaultGroupStoreAsync()).Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+            updated.ShouldNotBeNull();
+
+            var updatedDefaultAccountStore = await updated.GetDefaultAccountStoreAsync();
+            updatedDefaultAccountStore.ShouldNotBeNull();
+            updatedDefaultAccountStore.Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
+
+            var updatedDefaultGroupStore = await updated.GetDefaultGroupStoreAsync();
+            updatedDefaultGroupStore.ShouldNotBeNull();
+            updatedDefaultGroupStore.Href.ShouldBe(this.fixture.PrimaryDirectoryHref);
 
             // Clean up
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
