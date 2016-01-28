@@ -27,10 +27,10 @@ namespace Stormpath.SDK.Impl.Organization
     internal sealed partial class DefaultOrganization
     {
         Task<IAccountStore> IAccountStoreContainer<IOrganizationAccountStoreMapping>.GetDefaultAccountStoreAsync(CancellationToken cancellationToken)
-            => AccountStoreContainerShared.GetDefaultStoreAsync(this.DefaultAccountStoreMapping.Href, this.GetInternalAsyncDataStore(), cancellationToken);
+            => AccountStoreContainerShared.GetDefaultStoreAsync<IOrganizationAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, this.GetInternalAsyncDataStore(), cancellationToken);
 
         Task<IAccountStore> IAccountStoreContainer<IOrganizationAccountStoreMapping>.GetDefaultGroupStoreAsync(CancellationToken cancellationToken)
-            => AccountStoreContainerShared.GetDefaultStoreAsync(this.DefaultGroupStoreMapping.Href, this.GetInternalAsyncDataStore(), cancellationToken);
+            => AccountStoreContainerShared.GetDefaultStoreAsync<IOrganizationAccountStoreMapping>(this.DefaultGroupStoreMapping.Href, this.GetInternalAsyncDataStore(), cancellationToken);
 
         Task IAccountStoreContainer<IOrganizationAccountStoreMapping>.SetDefaultAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken)
             => AccountStoreContainerShared.SetDefaultStoreAsync<IOrganization, IOrganizationAccountStoreMapping>(this, accountStore, isAccountStore: true, cancellationToken: cancellationToken);

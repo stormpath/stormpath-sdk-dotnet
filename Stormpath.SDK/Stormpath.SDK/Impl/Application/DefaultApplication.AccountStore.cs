@@ -31,10 +31,10 @@ namespace Stormpath.SDK.Impl.Application
             => new CollectionResourceQueryable<IApplicationAccountStoreMapping>(this.AccountStoreMappings.Href, this.GetInternalAsyncDataStore());
 
         Task<IAccountStore> IAccountStoreContainer<IApplicationAccountStoreMapping>.GetDefaultAccountStoreAsync(CancellationToken cancellationToken)
-            => AccountStoreContainerShared.GetDefaultStoreAsync(this.DefaultAccountStoreMapping.Href, this.GetInternalAsyncDataStore(), cancellationToken);
+            => AccountStoreContainerShared.GetDefaultStoreAsync<IApplicationAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, this.GetInternalAsyncDataStore(), cancellationToken);
 
         Task<IAccountStore> IAccountStoreContainer<IApplicationAccountStoreMapping>.GetDefaultGroupStoreAsync(CancellationToken cancellationToken)
-            => AccountStoreContainerShared.GetDefaultStoreAsync(this.DefaultGroupStoreMapping.Href, this.GetInternalAsyncDataStore(), cancellationToken);
+            => AccountStoreContainerShared.GetDefaultStoreAsync<IApplicationAccountStoreMapping>(this.DefaultGroupStoreMapping.Href, this.GetInternalAsyncDataStore(), cancellationToken);
 
         Task IAccountStoreContainer<IApplicationAccountStoreMapping>.SetDefaultAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken)
             => AccountStoreContainerShared.SetDefaultStoreAsync<IApplication, IApplicationAccountStoreMapping>(this, accountStore, isAccountStore: true, cancellationToken: cancellationToken);

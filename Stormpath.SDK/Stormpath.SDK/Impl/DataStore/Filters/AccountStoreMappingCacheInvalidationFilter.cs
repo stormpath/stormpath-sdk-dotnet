@@ -51,10 +51,12 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             var applicationHref = GetContainerHref("application", result);
             if (!string.IsNullOrEmpty(applicationHref))
             {
+                logger.Trace($"AccountStoreMapping update detected; refreshing all AccountStoreMappings in cache for Application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.Filter");
+
                 var application = chain.DataStore.GetResourceSkipCache<IApplication>(applicationHref);
                 var allMappings = application.GetAccountStoreMappings().Synchronously().ToList();
 
-                logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for Application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.Filter");
+                logger.Trace($"Done refreshing {allMappings.Count} AccountStoreMappings in cache for Application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.Filter");
 
                 return result; // done
             }
@@ -62,10 +64,12 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             var organizationHref = GetContainerHref("organization", result);
             if (!string.IsNullOrEmpty(organizationHref))
             {
+                logger.Trace($"AccountStoreMapping update detected; refreshing all AccountStoreMappings in cache for Organization '{organizationHref}'", "AccountStoreMappingCacheInvalidationFilter.Filter");
+
                 var organization = chain.DataStore.GetResourceSkipCache<IOrganization>(organizationHref);
                 var allMappings = organization.GetAccountStoreMappings().Synchronously().ToList();
 
-                logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for Organization '{organizationHref}'", "AccountStoreMappingCacheInvalidationFilter.Filter");
+                logger.Trace($"Done refreshing {allMappings.Count} AccountStoreMappings in cache for Organization '{organizationHref}'", "AccountStoreMappingCacheInvalidationFilter.Filter");
 
                 return result; // done
             }
@@ -90,10 +94,12 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             var applicationHref = GetContainerHref("application", result);
             if (!string.IsNullOrEmpty(applicationHref))
             {
+                logger.Trace($"AccountStoreMapping update detected; refreshing all AccountStoreMappings in cache for Application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.FilterAsync");
+
                 var application = await chain.DataStore.GetResourceSkipCacheAsync<IApplication>(applicationHref, cancellationToken).ConfigureAwait(false);
                 var allMappings = await application.GetAccountStoreMappings().ToListAsync(cancellationToken).ConfigureAwait(false);
 
-                logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for Application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.FilterAsync");
+                logger.Trace($"Done refreshing {allMappings.Count} AccountStoreMappings in cache for Application '{applicationHref}'", "AccountStoreMappingCacheInvalidationFilter.FilterAsync");
 
                 return result; // done
             }
@@ -101,10 +107,12 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             var organizationHref = GetContainerHref("organization", result);
             if (!string.IsNullOrEmpty(organizationHref))
             {
+                logger.Trace($"AccountStoreMapping update detected; refreshing all AccountStoreMappings in cache for Organization '{organizationHref}'", "AccountStoreMappingCacheInvalidationFilter.FilterAsync");
+
                 var organization = await chain.DataStore.GetResourceSkipCacheAsync<IOrganization>(organizationHref, cancellationToken).ConfigureAwait(false);
                 var allMappings = await organization.GetAccountStoreMappings().ToListAsync(cancellationToken).ConfigureAwait(false);
 
-                logger.Trace($"AccountStoreMapping update detected; refreshing all {allMappings.Count} AccountStoreMappings in cache for Organization '{organizationHref}'", "AccountStoreMappingCacheInvalidationFilter.FilterAsync");
+                logger.Trace($"Done refreshing {allMappings.Count} AccountStoreMappings in cache for Organization '{organizationHref}'", "AccountStoreMappingCacheInvalidationFilter.FilterAsync");
 
                 return result; // done
             }

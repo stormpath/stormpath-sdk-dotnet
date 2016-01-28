@@ -47,10 +47,11 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="internalDataStore">The <see cref="IInternalAsyncDataStore"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The <see cref="IAccountStore">Account Store</see>, or <see langword="null"/>.</returns>
-        public static async Task<IAccountStore> GetDefaultStoreAsync(
+        public static async Task<IAccountStore> GetDefaultStoreAsync<TMapping>(
             string storeMappingHref,
             IInternalAsyncDataStore internalDataStore,
             CancellationToken cancellationToken)
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             if (string.IsNullOrEmpty(storeMappingHref))
             {
@@ -58,7 +59,7 @@ namespace Stormpath.SDK.Impl.AccountStore
             }
 
             var accountStoreMapping = await internalDataStore
-                .GetResourceAsync<IAccountStoreMapping>(storeMappingHref, cancellationToken)
+                .GetResourceAsync<TMapping>(storeMappingHref, cancellationToken)
                 .ConfigureAwait(false);
 
             return accountStoreMapping == null
@@ -72,7 +73,8 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <param name="accountStoreMappingHref">The AccountStoreMapping <c>href</c>.</param>
         /// <param name="internalDataStore">The <see cref="IInternalAsyncDataStore"/>.</param>
         /// <returns>The <see cref="IAccountStore">Account Store</see>, or <see langword="null"/>.</returns>
-        public static IAccountStore GetDefaultStore(string accountStoreMappingHref, IInternalSyncDataStore internalDataStore)
+        public static IAccountStore GetDefaultStore<TMapping>(string accountStoreMappingHref, IInternalSyncDataStore internalDataStore)
+            where TMapping : class, IAccountStoreMapping<TMapping>
         {
             if (string.IsNullOrEmpty(accountStoreMappingHref))
             {
@@ -80,7 +82,7 @@ namespace Stormpath.SDK.Impl.AccountStore
             }
 
             var accountStoreMapping = internalDataStore
-                .GetResource<IAccountStoreMapping>(accountStoreMappingHref);
+                .GetResource<TMapping>(accountStoreMappingHref);
 
             return accountStoreMapping == null
                 ? null

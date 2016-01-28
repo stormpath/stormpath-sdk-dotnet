@@ -25,10 +25,10 @@ namespace Stormpath.SDK.Impl.Organization
     internal sealed partial class DefaultOrganization
     {
         IAccountStore IAccountStoreContainerSync<IOrganizationAccountStoreMapping>.GetDefaultAccountStore()
-            => AccountStoreContainerShared.GetDefaultStore(this.DefaultAccountStoreMapping.Href, this.GetInternalSyncDataStore());
+            => AccountStoreContainerShared.GetDefaultStore<IOrganizationAccountStoreMapping>(this.DefaultAccountStoreMapping.Href, this.GetInternalSyncDataStore());
 
         IAccountStore IAccountStoreContainerSync<IOrganizationAccountStoreMapping>.GetDefaultGroupStore()
-            => AccountStoreContainerShared.GetDefaultStore(this.DefaultGroupStoreMapping.Href, this.GetInternalSyncDataStore());
+            => AccountStoreContainerShared.GetDefaultStore<IOrganizationAccountStoreMapping>(this.DefaultGroupStoreMapping.Href, this.GetInternalSyncDataStore());
 
         void IAccountStoreContainerSync<IOrganizationAccountStoreMapping>.SetDefaultAccountStore(IAccountStore accountStore)
             => AccountStoreContainerShared.SetDefaultStore<IOrganization, IOrganizationAccountStoreMapping>(this, accountStore, isAccountStore: true);
