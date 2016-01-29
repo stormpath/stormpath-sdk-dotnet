@@ -528,7 +528,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         /// </summary>
         /// <returns>A <see cref="Task"/> that represents the asynchronous test.</returns>
         [Fact]
-        public async Task Resource_with_unknown_property_is_cached()
+        public async Task Resource_with_unknown_property_is_not_cached()
         {
             var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
 
@@ -543,6 +543,28 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 
             // Fail silently by falling back to no caching
             await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task Caches_scalar_arrays()
+        {
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
+
+            var fakeResponse = FakeJson.Application;
+            this.BuildDataStore(fakeResponse, cacheProvider);
+
+            var app1 = await this.dataStore.GetResourceAsync<IApplication>("/applications/foobarApplication");
+            var app2 = await this.dataStore.GetResourceAsync<IApplication>("/applications/foobarApplication");
+
+            // The authorizedCallbackUris property is a List<string>, which the caching layer couldn't
+            // handle in the first version.
+            app1.AuthorizedCallbackUris.Count.ShouldBe(2);
+            app2.AuthorizedCallbackUris.Count.ShouldBe(2);
+
+            // Second request should hit cache
+            await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
                 Arg.Any<IHttpRequest>(),
                 Arg.Any<CancellationToken>());
         }

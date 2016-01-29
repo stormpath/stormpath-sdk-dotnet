@@ -507,7 +507,7 @@ namespace Stormpath.SDK.Tests.Impl.Cache
         /// Unknown/new items in a JSON response should not cause the caching layer to explode.
         /// </summary>
         [Fact]
-        public void Resource_with_unknown_property_is_cached()
+        public void Resource_with_unknown_property_is_not_cached()
         {
             var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
 
@@ -522,6 +522,27 @@ namespace Stormpath.SDK.Tests.Impl.Cache
 
             // Fail silently by falling back to no caching
             this.dataStore.RequestExecutor.Received(2).Execute(
+                Arg.Any<IHttpRequest>());
+        }
+
+        [Fact]
+        public void Caches_scalar_arrays()
+        {
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
+
+            var fakeResponse = FakeJson.Application;
+            this.BuildDataStore(fakeResponse, cacheProvider);
+
+            var app1 = this.dataStore.GetResource<IApplication>("/applications/foobarApplication");
+            var app2 = this.dataStore.GetResource<IApplication>("/applications/foobarApplication");
+
+            // The authorizedCallbackUris property is a List<string>, which the caching layer couldn't
+            // handle in the first version.
+            app1.AuthorizedCallbackUris.Count.ShouldBe(2);
+            app2.AuthorizedCallbackUris.Count.ShouldBe(2);
+
+            // Second request should hit cache
+            this.dataStore.RequestExecutor.Received(1).Execute(
                 Arg.Any<IHttpRequest>());
         }
 

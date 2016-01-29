@@ -151,7 +151,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                     var nestedType = this.typeLookup.GetInnerCollectionInterface(resourceType);
                     if (nestedType == null)
                     {
-                        logger.Warn($"Can not cache array '{key}'. Item type for '{resourceType.Name}' unknown. '{href}' will not be cached.");
+                        logger.Warn($"Can not cache map array '{key}'. Item type for '{resourceType.Name}' unknown. '{href}' will not be cached.");
                         isCacheable = false; // gracefully disable caching
                         break;
                     }
@@ -187,11 +187,8 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                         break;
                     }
 
-                    // This is an array of primitives, such as string[].
-                    // (Not currently supported. Will be supported in the future.)
-                    logger.Warn($"Can not cache array '{key}'. Array caching is currently unsupported. '{href}' will not be cached.");
-                    isCacheable = false; // gracefully disable caching
-                    break;
+                    // This is an array of primitives.
+                    value = new List<object>(asNestedScalarArray);
                 }
 
                 if (!IsSensitive(key))
