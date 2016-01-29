@@ -43,6 +43,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// Gets the default Account or Group Store at the given <c>href</c>, if it exists.
         /// </summary>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="storeMappingHref">The AccountStoreMapping <c>href</c>.</param>
         /// <param name="internalDataStore">The <see cref="IInternalAsyncDataStore"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -70,6 +71,7 @@ namespace Stormpath.SDK.Impl.AccountStore
         /// <summary>
         /// Synchronously gets the default Account or Group Store at the given <c>href</c>, if it exists.
         /// </summary>
+        /// <typeparam name="TMapping">The Account Store Mapping type.</typeparam>
         /// <param name="accountStoreMappingHref">The AccountStoreMapping <c>href</c>.</param>
         /// <param name="internalDataStore">The <see cref="IInternalAsyncDataStore"/>.</param>
         /// <returns>The <see cref="IAccountStore">Account Store</see>, or <see langword="null"/>.</returns>
