@@ -45,10 +45,24 @@ namespace Stormpath.SDK.Impl.Resource
         ICustomDataProxy IExtendableSync.CustomData => this.customDataProxy;
 
         Task<ICustomData> IExtendable.GetCustomDataAsync(CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<ICustomData>(this.CustomData.Href, cancellationToken);
+        {
+            if (string.IsNullOrEmpty(this.CustomData?.Href))
+            {
+                throw new ArgumentNullException("href", "CustomData href is null. The parent resource might not be saved yet.");
+            }
+
+            return this.GetInternalAsyncDataStore().GetResourceAsync<ICustomData>(this.CustomData.Href, cancellationToken);
+        }
 
         ICustomData IExtendableSync.GetCustomData()
-            => this.GetInternalSyncDataStore().GetResource<ICustomData>(this.CustomData.Href);
+        {
+            if (string.IsNullOrEmpty(this.CustomData?.Href))
+            {
+                throw new ArgumentNullException("href", "CustomData href is null. The parent resource might not be saved yet.");
+            }
+
+            return this.GetInternalSyncDataStore().GetResource<ICustomData>(this.CustomData.Href);
+        }
 
         public void ResetCustomData()
         {
