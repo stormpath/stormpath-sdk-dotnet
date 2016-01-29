@@ -46,6 +46,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
             this.CreatedOrganizationHrefs = new List<string>();
 
             StaticLogger.Instance.Info($"IT run {this.testData.Nonce} starting...");
+            StaticLogger.Instance.Info($"Running against base URL: {TestClients.ApiBaseUrl.Value}");
 
             this.AddObjectsToTenantAsync()
                 .GetAwaiter().GetResult();

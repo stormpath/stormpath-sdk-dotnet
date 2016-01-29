@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
 {
     public static class TestClients
     {
-        private static readonly Lazy<string> ApiBaseUrl = new Lazy<string>(() =>
+        public static readonly Lazy<string> ApiBaseUrl = new Lazy<string>(() =>
         {
             var fromEnvironment = Environment.GetEnvironmentVariable("STORMPATH_CLIENT_BASEURL");
 

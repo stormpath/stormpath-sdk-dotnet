@@ -1,4 +1,4 @@
-﻿// <copyright file="Meta_tests.cs" company="Stormpath, Inc.">
+﻿// <copyright file="_Meta_tests.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,11 +21,12 @@ using Xunit.Abstractions;
 
 namespace Stormpath.SDK.Tests.Integration
 {
-    public class Meta_tests
+#pragma warning disable SA1300 // Element must begin with upper-case letter
+    public class _Meta_tests
     {
         private readonly ITestOutputHelper output;
 
-        public Meta_tests(ITestOutputHelper output)
+        public _Meta_tests(ITestOutputHelper output)
         {
             this.output = output;
         }
@@ -41,5 +42,12 @@ namespace Stormpath.SDK.Tests.Integration
 
             this.output.WriteLine($"ITs running with API key {apiKey.GetId()}");
         }
+
+        [Fact]
+        public void Output_API_base_URL()
+        {
+            this.output.WriteLine($"ITs running against base URL: {TestClients.ApiBaseUrl.Value}");
+        }
     }
+#pragma warning restore SA1300 // Element must begin with upper-case letter
 }

@@ -92,7 +92,7 @@
     <Compile Include="Sync\ApiKey_tests.cs" />
     <Compile Include="Sync\Expansion_linq_tests.cs" />
     <Compile Include="Sync\Expansion_retrieval_tests.cs" />
-    <Compile Include="Meta_tests.cs" />
+    <Compile Include="_Meta_tests.cs" />
     <Compile Include="Sync\Entity_tests.cs" />
     <Compile Include="Sync\Group_tests.cs" />
     <Compile Include="Sync\CustomData_embedded_tests.cs" />
