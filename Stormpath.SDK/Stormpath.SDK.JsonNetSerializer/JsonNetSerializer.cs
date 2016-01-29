@@ -84,7 +84,8 @@ namespace Stormpath.SDK.Extensions.Serialization
             switch (token.Type)
             {
                 case JTokenType.Array:
-                    if (token.Children().All(t => t.Type == JTokenType.Object))
+                    if (token.Children().Any() &&
+                        token.Children().All(t => t.Type == JTokenType.Object))
                     {
                         // Collections of sub-objects get recursively sanitized
                         var nestedObjects = token.Children()

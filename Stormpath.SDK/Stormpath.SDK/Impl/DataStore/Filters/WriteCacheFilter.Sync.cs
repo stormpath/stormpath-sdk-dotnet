@@ -111,7 +111,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 {
                     logger.Trace($"Attribute {key} on response {href} is an expanded resource, caching recursively", "WriteCacheFilter.Cache");
 
-                    var nestedType = this.typeLookup.GetInterfaceByPropertyName(item.Key);
+                    var nestedType = this.typeLookup.GetInterfaceByPropertyName(key);
                     if (nestedType == null)
                     {
                         logger.Warn($"Cannot cache nested item. Item type for '{key}' unknown. '{href}' will not be cached.");
@@ -129,7 +129,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                     var nestedType = this.typeLookup.GetInnerCollectionInterface(resourceType);
                     if (nestedType == null)
                     {
-                        logger.Warn($"Can not map cache array '{key}'. Item type for '{resourceType.Name}' unknown. '{href}' will not be cached.");
+                        logger.Warn($"Can not cache map array '{key}'. Item type for '{resourceType.Name}' unknown. '{href}' will not be cached.");
                         isCacheable = false; // gracefully disable caching
                         break;
                     }

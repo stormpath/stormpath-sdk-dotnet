@@ -546,6 +546,31 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 Arg.Any<IHttpRequest>());
         }
 
+        /// <summary>
+        /// Regression test for caching empty scalar arrays.
+        /// </summary>
+        [Fact]
+        public void Caches_empty_scalar_arrays()
+        {
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
+
+            var fakeResponse = FakeJson.Application.Replace(
+                    @"""authorizedCallbackUris"": [""https://foo.bar/1"", ""https://foo.bar/2""],",
+                    @"""authorizedCallbackUris"": [],");
+
+            this.BuildDataStore(fakeResponse, cacheProvider);
+
+            var app1 = this.dataStore.GetResource<IApplication>("/applications/foobarApplication");
+            var app2 = this.dataStore.GetResource<IApplication>("/applications/foobarApplication");
+
+            app1.AuthorizedCallbackUris.Count.ShouldBe(0);
+            app2.AuthorizedCallbackUris.Count.ShouldBe(0);
+
+            // Second request should hit cache
+            this.dataStore.RequestExecutor.Received(1).Execute(
+                Arg.Any<IHttpRequest>());
+        }
+
         public void Dispose()
         {
             this.dataStore?.Dispose();

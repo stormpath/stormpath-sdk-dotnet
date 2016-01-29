@@ -569,6 +569,33 @@ namespace Stormpath.SDK.Tests.Impl.Cache
                 Arg.Any<CancellationToken>());
         }
 
+        /// <summary>
+        /// Regression test for caching empty scalar arrays.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous test.</returns>
+        [Fact]
+        public async Task Caches_empty_scalar_arrays()
+        {
+            var cacheProvider = CacheProviders.Create().InMemoryCache().Build();
+
+            var fakeResponse = FakeJson.Application.Replace(
+                    @"""authorizedCallbackUris"": [""https://foo.bar/1"", ""https://foo.bar/2""],",
+                    @"""authorizedCallbackUris"": [],");
+
+            this.BuildDataStore(fakeResponse, cacheProvider);
+
+            var app1 = await this.dataStore.GetResourceAsync<IApplication>("/applications/foobarApplication");
+            var app2 = await this.dataStore.GetResourceAsync<IApplication>("/applications/foobarApplication");
+
+            app1.AuthorizedCallbackUris.Count.ShouldBe(0);
+            app2.AuthorizedCallbackUris.Count.ShouldBe(0);
+
+            // Second request should hit cache
+            await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
+                Arg.Any<IHttpRequest>(),
+                Arg.Any<CancellationToken>());
+        }
+
         public void Dispose()
         {
             this.dataStore?.Dispose();

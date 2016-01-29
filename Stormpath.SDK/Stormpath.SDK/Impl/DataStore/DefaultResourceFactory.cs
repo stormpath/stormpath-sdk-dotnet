@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Stormpath.SDK.Impl.IdentityMap;
 using Stormpath.SDK.Impl.Resource;
 using Map = System.Collections.Generic.IDictionary<string, object>;
@@ -175,33 +176,50 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'href' value.");
             }
 
-            var items = properties["items"] as IEnumerable<Map>;
+            var items = properties["items"] as IEnumerable<object>;
             if (items == null)
             {
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: 'items' sub-collection is invalid.");
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: 'items' sub-collection is missing.");
+            }
+
+            if (!items.Any())
+            {
+                // Empty list of innerType
+                return this.CreateCollection(collectionType, innerType, offset, limit, size, href, Enumerable.Empty<object>());
+            }
+
+            var itemMaps = items as IEnumerable<Map>;
+            if (itemMaps == null)
+            {
+                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: 'items' sub-collection is nonempty but not a collection of maps.");
             }
 
             try
             {
-                Type typeOfListType = typeof(List<>).MakeGenericType(innerType);
-                var listOfMaterializedItems = typeOfListType.GetConstructor(Type.EmptyTypes).Invoke(Type.EmptyTypes);
-                var addMethod = typeOfListType.GetMethod("Add", new Type[] { innerType });
+                var materializedItems = itemMaps
+                    .Select(item => this.InstantiateSingle(innerType, item, original: null));
 
-                foreach (var itemMap in items)
-                {
-                    var materialized = this.InstantiateSingle(innerType, itemMap, original: null);
-                    addMethod.Invoke(listOfMaterializedItems, new object[] { materialized });
-                }
-
-                object targetObject;
-                targetObject = Activator.CreateInstance(collectionType, new object[] { this.dataStore.Client, href, offset, limit, size, listOfMaterializedItems });
-
-                return targetObject;
+                return this.CreateCollection(collectionType, innerType, offset, limit, size, href, materializedItems);
             }
             catch (Exception e)
             {
                 throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: failed to add items to collection.", e);
             }
+        }
+
+        private object CreateCollection(Type collectionType, Type innerType, long offset, long limit, long size, string href, IEnumerable<object> items)
+        {
+            var typeOfListType = typeof(List<>).MakeGenericType(innerType);
+            var listOfMaterializedItems = typeOfListType.GetConstructor(Type.EmptyTypes).Invoke(Type.EmptyTypes);
+            var addMethod = typeOfListType.GetMethod("Add", new Type[] { innerType });
+
+            foreach (var item in items)
+            {
+                addMethod.Invoke(listOfMaterializedItems, new object[] { item });
+            }
+
+            var targetObject = Activator.CreateInstance(collectionType, new object[] { this.dataStore.Client, href, offset, limit, size, listOfMaterializedItems });
+            return targetObject;
         }
 
         private static string RandomResourceId(string typeName)
