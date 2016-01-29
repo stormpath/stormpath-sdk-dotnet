@@ -36,10 +36,13 @@ namespace Stormpath.SDK.Impl.Auth
         bool IAuthenticationResult.Success
             => !string.IsNullOrEmpty(this?.Account?.Href);
 
+        string IAuthenticationResult.AccountHref
+            => this?.Account?.Href;
+
         Task<IAccount> IAuthenticationResult.GetAccountAsync(CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account?.Href, cancellationToken);
 
         IAccount IAuthenticationResultSync.GetAccount()
-            => this.GetInternalSyncDataStore().GetResource<IAccount>(this.Account.Href);
+            => this.GetInternalSyncDataStore().GetResource<IAccount>(this.Account?.Href);
     }
 }

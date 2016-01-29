@@ -34,6 +34,13 @@ namespace Stormpath.SDK.Auth
         bool Success { get; }
 
         /// <summary>
+        /// Gets the Stormpath href of the successfully authenticated <see cref="IAccount">Account</see>.
+        /// </summary>
+        /// <remarks>If you need the account details, use <see cref="GetAccountAsync(CancellationToken)"/> instead.</remarks>
+        /// <value>The Stormpath href of the successfully authenticated <see cref="IAccount">Account</see>.</value>
+        string AccountHref { get; }
+
+        /// <summary>
         /// Gets the successfully authenticated <see cref="IAccount">Account</see>.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
