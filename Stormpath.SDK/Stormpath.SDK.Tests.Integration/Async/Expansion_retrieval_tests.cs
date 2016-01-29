@@ -91,7 +91,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var mapping = await app.GetAccountStoreMappings().FirstAsync();
 
-            await client.GetResourceAsync<IAccountStoreMapping>(mapping.Href, o => o.Expand(x => x.GetAccountStore()));
+            await client.GetResourceAsync<IApplicationAccountStoreMapping>(mapping.Href, o => o.Expand(x => x.GetAccountStore()));
         }
 
         [Theory]
