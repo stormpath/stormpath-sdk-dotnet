@@ -7,20 +7,20 @@
                 <linkText>Stormpath</linkText>
                 <linkUri>https://stormpath.com</linkUri>
                 <linkTarget>_blank</linkTarget>
-			</externalLink> 
+			</externalLink>
 			is a cloud-hosted user management service that automates best-in-class user security for your applications so you can ship your application faster and more securely.
 		</para>
 		<para>
-			The 
+			The
 			<externalLink>
                 <linkText>Stormpath .NET SDK</linkText>
                 <linkUri>https://github.com/stormpath/stormpath-sdk-dotnet</linkUri>
                 <linkTarget>_blank</linkTarget>
-			</externalLink> 
+			</externalLink>
 			provides C# and VB.NET developers a rich experience when using Stormpath from .NET projects.
 		</para>
     </introduction>
-	
+
 	<section>
 		<title>Installing the SDK</title>
 		<content>
@@ -28,7 +28,7 @@
 			<code>install-package Stormpath.SDK</code>
 		</content>
 	</section>
-	
+
 	<section>
 		<title>Getting Started</title>
 		<content>
@@ -37,11 +37,11 @@
                 <linkText>C# quickstart</linkText>
                 <linkUri>https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/README.MD#quickstart</linkUri>
                 <linkTarget>_blank</linkTarget>
-			</externalLink> 
+			</externalLink>
 			for a 15-minute introduction to the library.
 		</content>
 	</section>
-	
+
 	<section>
 	 <title>Benefits and Features</title>
 	<content>
@@ -58,6 +58,9 @@
 			</listItem>
 			<listItem>
 				<para>Social login with Facebook and Google OAuth.</para>
+			</listItem>
+      <listItem>
+				<para>Support for SAML login with an external Identity Provider (IdP).</para>
 			</listItem>
 			<listItem>
 				<para>Secure API key authentication for your service.</para>
@@ -80,22 +83,22 @@
 		</list>
 	</content>
 	</section>
-	
+
 	<section>
 		<title>Getting Help</title>
 		<content>
-			If you experience problems with the SDK, send us 
+			If you experience problems with the SDK, send us
 			<externalLink>
                 <linkText>an email</linkText>
                 <linkUri>mailto:support@stormpath.com</linkUri>
 				<linkTarget>_self</linkTarget>
-			</externalLink> 
-			or 
+			</externalLink>
+			or
 			<externalLink>
                 <linkText>open an issue</linkText>
                 <linkUri>https://github.com/stormpath/stormpath-sdk-dotnet/issues</linkUri>
                 <linkTarget>_blank</linkTarget>
-			</externalLink> 
+			</externalLink>
 			on Github.
 		</content>
 	</section>
