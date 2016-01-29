@@ -33,6 +33,6 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("21f7a025-7bb1-49b0-8ad3-cee8a3b1d542")]
 
-[assembly: AssemblyVersion("0.4.0.0")]
-[assembly: AssemblyFileVersion("0.4.0.0")]
+[assembly: AssemblyVersion("0.5.0.0")]
+[assembly: AssemblyFileVersion("0.5.0.0")]
 [assembly: InternalsVisibleTo("Stormpath.SDK.RestSharpClient.Tests")]
