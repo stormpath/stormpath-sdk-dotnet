@@ -54,17 +54,19 @@ namespace Stormpath.SDK.Impl.Resource
         {
             get
             {
-                var href = this.GetStringProperty(HrefPropertyName);
+                var href = this.InternalHref;
 
                 bool isEmptyOrDefault =
                     href == null ||
-                    href.StartsWith("autogen", System.StringComparison.InvariantCultureIgnoreCase);
+                    href.StartsWith("autogen", StringComparison.InvariantCultureIgnoreCase);
 
                 return isEmptyOrDefault
                     ? null
                     : href;
             }
         }
+
+        protected string InternalHref => this.GetStringProperty(HrefPropertyName);
 
         IClient IResource.Client
             => this.GetInternalDataStore()?.Client;

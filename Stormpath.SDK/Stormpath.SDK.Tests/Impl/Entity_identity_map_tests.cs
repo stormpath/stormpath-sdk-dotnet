@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -100,6 +101,19 @@ namespace Stormpath.SDK.Tests.Impl
                 .Body;
 
             body.ShouldBe(expectedBody);
+        }
+
+        [Fact]
+        public void Instantiated_resources_customData_proxies_are_not_linked()
+        {
+            var account1 = this.dataStore.Instantiate<IAccount>();
+            var account2 = this.dataStore.Instantiate<IAccount>();
+
+            account1.CustomData.Put("foo", "foo1");
+            account2.CustomData.Put("bar", "bar2");
+
+            (account1.CustomData as SDK.Impl.CustomData.DefaultCustomDataProxy).UpdatedCustomDataProperties.ShouldNotContain(new KeyValuePair<string, object>("bar", "bar2"));
+            (account2.CustomData as SDK.Impl.CustomData.DefaultCustomDataProxy).UpdatedCustomDataProperties.ShouldNotContain(new KeyValuePair<string, object>("foo", "foo1"));
         }
 
         [Fact]

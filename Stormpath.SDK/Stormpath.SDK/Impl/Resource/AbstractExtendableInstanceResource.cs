@@ -66,7 +66,7 @@ namespace Stormpath.SDK.Impl.Resource
 
         public void ResetCustomData()
         {
-            this.customDataProxy = new DefaultCustomDataProxy(this.GetInternalAsyncDataStore(), this.AsInterface.Href);
+            this.customDataProxy = new DefaultCustomDataProxy(this.GetInternalAsyncDataStore(), this.InternalHref);
         }
     }
 }
