@@ -111,6 +111,8 @@ namespace Stormpath.SDK.Tests.Common.Integration
 
         public List<string> CreatedOrganizationHrefs { get; private set; }
 
+        public ILogger Logger { get; } = StaticLogger.Instance;
+
         private async Task AddObjectsToTenantAsync()
         {
             // Get client and tenant
