@@ -184,6 +184,15 @@ namespace Stormpath.SDK.Impl.Tenant
         IOrganization GetOrganization(string href);
 
         /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetOrganizationByNameAsync(string, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStoreSync.GetResource{IOrganization}(string)"/>.</remarks>
+        /// <param name="nameKey">The name of the <see cref="IOrganization">Organization</see> to retrieve.</param>
+        /// <returns>The <see cref="IOrganization">Organization</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
+        IOrganization GetOrganizationByName(string nameKey);
+
+        /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetAccessTokenAsync(string, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStoreSync.GetResource{IAccessToken}(string)"/>.</remarks>

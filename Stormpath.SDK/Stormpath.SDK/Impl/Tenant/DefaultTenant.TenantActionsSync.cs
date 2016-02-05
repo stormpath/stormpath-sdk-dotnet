@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
@@ -24,6 +25,7 @@ using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
@@ -147,6 +149,11 @@ namespace Stormpath.SDK.Impl.Tenant
 
         IOrganization ITenantActionsSync.GetOrganization(string href)
             => this.GetInternalSyncDataStore().GetResource<IOrganization>(href);
+
+        IOrganization ITenantActionsSync.GetOrganizationByName(string nameKey)
+        {
+            return this.AsInterface.GetOrganizations().Where(org => org.Name == nameKey).Synchronously().SingleOrDefault();
+        }
 
         IAccessToken ITenantActionsSync.GetAccessToken(string href)
             => this.GetInternalSyncDataStore().GetResource<IAccessToken>(href);
