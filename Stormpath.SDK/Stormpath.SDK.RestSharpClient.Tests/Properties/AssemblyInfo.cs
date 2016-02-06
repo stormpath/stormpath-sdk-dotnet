@@ -25,12 +25,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Stormpath.SDK.RestSharpClient.Tests")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("Copyright © 2016 Stormpath, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("64893bf7-f4aa-4374-b81b-4572989852eb")]
 
-[assembly: AssemblyVersion("0.5.0.0")]
-[assembly: AssemblyFileVersion("0.5.0.0")]
+[assembly: AssemblyVersion("0.5.1")]
+[assembly: AssemblyFileVersion("0.5.1")]
