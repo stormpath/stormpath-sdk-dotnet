@@ -88,7 +88,7 @@ namespace Stormpath.SDK.Http
         /// </summary>
         /// <param name="method">A string containing the name of the HTTP method (matching is case-insensitive).</param>
         /// <returns>The <see cref="HttpMethod"/> with the specified name.</returns>
-        /// <exception cref="ApplicationException">No match is found.</exception>
+        /// <exception cref="Exception">No match is found.</exception>
         public static HttpMethod Parse(string method)
         {
             switch (method.ToUpper())
@@ -103,7 +103,7 @@ namespace Stormpath.SDK.Http
                 case "TRACE": return Trace;
                 case "CONNECT": return Connect;
                 default:
-                    throw new ApplicationException($"Could not parse HTTP method value '{method.ToUpper()}'");
+                    throw new Exception($"Could not parse HTTP method value '{method.ToUpper()}'");
             }
         }
     }

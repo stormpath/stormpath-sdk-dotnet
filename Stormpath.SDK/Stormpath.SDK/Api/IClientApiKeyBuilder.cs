@@ -155,7 +155,7 @@ namespace Stormpath.SDK.Api
         /// Constructs a new <see cref="IClientApiKey">Client API Key</see> instance based on the builder's current configuration state.
         /// </summary>
         /// <returns>A new <see cref="IClientApiKey">Client API Key</see> instance.</returns>
-        /// <exception cref="System.ApplicationException">No valid API Key ID and Secret can be found.</exception>
+        /// <exception cref="System.Exception">No valid API Key ID and Secret can be found.</exception>
         IClientApiKey Build();
     }
 }

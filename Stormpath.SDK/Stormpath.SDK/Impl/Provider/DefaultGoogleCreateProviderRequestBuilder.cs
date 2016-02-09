@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Impl.Provider
         {
             if (string.IsNullOrEmpty(this.redirectUri))
             {
-                throw new ApplicationException($"{nameof(this.redirectUri)} is a required property. It must be provided before building.");
+                throw new Exception($"{nameof(this.redirectUri)} is a required property. It must be provided before building.");
             }
 
             var provider = this.dataStore.Instantiate<IGoogleProvider>() as DefaultGoogleProvider;

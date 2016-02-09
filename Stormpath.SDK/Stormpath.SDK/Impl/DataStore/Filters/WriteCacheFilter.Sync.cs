@@ -266,7 +266,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             if (string.IsNullOrEmpty(propertyName) ||
                 string.IsNullOrEmpty(href))
             {
-                throw new ApplicationException("Could not update cache for removed custom data entry.");
+                throw new Exception("Could not update cache for removed custom data entry.");
             }
 
             var cache = this.GetSyncCache(typeof(ICustomData));

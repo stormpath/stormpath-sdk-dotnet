@@ -67,7 +67,7 @@ namespace Stormpath.SDK.Impl.IdSite
         {
             if (request.Method != HttpMethod.Get)
             {
-                throw new ApplicationException("Only HTTP GET method is supported.");
+                throw new Exception("Only HTTP GET method is supported.");
             }
 
             var jwtResponse = request.CanonicalUri.QueryString[IdSiteClaims.JwtResponse];
@@ -136,7 +136,7 @@ namespace Stormpath.SDK.Impl.IdSite
 
             if (!this.nonceStore.IsAsynchronousSupported || this.asyncNonceStore == null)
             {
-                throw new ApplicationException("The current nonce store does not support asynchronous operations.");
+                throw new Exception("The current nonce store does not support asynchronous operations.");
             }
 
             var responseNonce = (string)jwt.Body.GetClaim(IdSiteClaims.ResponseId);
@@ -240,7 +240,7 @@ namespace Stormpath.SDK.Impl.IdSite
             var errorData = claims.GetClaim(IdSiteClaims.Error) as Map;
             if (errorData == null)
             {
-                throw new ApplicationException("Error parsing ID Site error response.");
+                throw new Exception("Error parsing ID Site error response.");
             }
 
             object codeRaw;
@@ -248,7 +248,7 @@ namespace Stormpath.SDK.Impl.IdSite
             if (!errorData.TryGetValue("code", out codeRaw) ||
                 !int.TryParse(codeRaw.ToString(), out code))
             {
-                throw new ApplicationException($"Error type is unrecognized: '{codeRaw ?? "<null>"}'");
+                throw new Exception($"Error type is unrecognized: '{codeRaw ?? "<null>"}'");
             }
 
             if (code == 10011

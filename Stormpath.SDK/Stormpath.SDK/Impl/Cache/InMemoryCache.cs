@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Impl.Cache
         {
             if (this.isDisposed)
             {
-                throw new ApplicationException($"The object ({this.GetType().Name}) has been disposed.");
+                throw new Exception($"The object ({this.GetType().Name}) has been disposed.");
             }
         }
 

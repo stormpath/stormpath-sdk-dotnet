@@ -22,7 +22,7 @@ namespace Stormpath.SDK.Http
     /// Base class for request-related exceptions.
     /// </summary>
     [Serializable]
-    public class RequestException : ApplicationException
+    public class RequestException : Exception
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RequestException"/> class with the specified <paramref name="message"/>.

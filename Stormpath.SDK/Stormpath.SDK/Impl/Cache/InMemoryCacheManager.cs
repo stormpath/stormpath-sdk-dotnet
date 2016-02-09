@@ -15,7 +15,7 @@
 // </copyright>
 
 using System;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Cache
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Impl.Cache
         {
             if (this.isDisposed)
             {
-                throw new ApplicationException($"The object ({this.GetType().Name}) has been disposed.");
+                throw new Exception($"The object ({this.GetType().Name}) has been disposed.");
             }
         }
 

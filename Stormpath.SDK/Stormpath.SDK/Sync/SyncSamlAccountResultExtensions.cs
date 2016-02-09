@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="samlAccountResult">The <see cref="ISamlAccountResult"/>.</param>
         /// <returns>The user's <see cref="IAccount">Account</see> resource.</returns>
-        /// <exception cref="System.ApplicationException">The account is not present.</exception>
+        /// <exception cref="System.Exception">The account is not present.</exception>
         public static IAccount GetAccount(this ISamlAccountResult samlAccountResult)
             => (samlAccountResult as ISamlAccountResultSync).GetAccount();
     }

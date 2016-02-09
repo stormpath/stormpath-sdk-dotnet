@@ -21,7 +21,7 @@ namespace Stormpath.SDK.Jwt
     /// <summary>
     /// Represents a JSON Web Token validation error.
     /// </summary>
-    public class InvalidJwtException : ApplicationException
+    public class InvalidJwtException : Exception
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidJwtException"/> class with the given <paramref name="message"/>.

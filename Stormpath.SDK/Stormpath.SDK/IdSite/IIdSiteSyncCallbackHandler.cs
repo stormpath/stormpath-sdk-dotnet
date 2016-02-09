@@ -92,7 +92,7 @@ namespace Stormpath.SDK.IdSite
         /// </summary>
         /// <returns>The resolved identity in the form of an <see cref="IAccountResult"/>.</returns>
         /// <exception cref="Jwt.InvalidJwtException">The returned token is invalid.</exception>
-        /// <exception cref="ApplicationException">The current nonce store does not support synchronous operations.</exception>
+        /// <exception cref="Exception">The current nonce store does not support synchronous operations.</exception>
         IAccountResult GetAccountResult();
     }
 }

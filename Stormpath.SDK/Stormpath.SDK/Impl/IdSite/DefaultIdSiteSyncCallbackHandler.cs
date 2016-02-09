@@ -113,7 +113,7 @@ namespace Stormpath.SDK.Impl.IdSite
 
             if (!this.nonceStore.IsAsynchronousSupported || this.syncNonceStore == null)
             {
-                throw new ApplicationException("The current nonce store does not support synchronous operations.");
+                throw new Exception("The current nonce store does not support synchronous operations.");
             }
 
             var responseNonce = (string)jwt.Body.GetClaim(IdSiteClaims.ResponseId);

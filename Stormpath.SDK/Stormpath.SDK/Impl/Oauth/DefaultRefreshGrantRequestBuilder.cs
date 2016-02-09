@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Impl.Oauth
         {
             if (string.IsNullOrEmpty(this.refreshToken))
             {
-                throw new ApplicationException("The RefreshToken property has not been set.");
+                throw new Exception("The RefreshToken property has not been set.");
             }
 
             return new DefaultRefreshGrantRequest(this.refreshToken);

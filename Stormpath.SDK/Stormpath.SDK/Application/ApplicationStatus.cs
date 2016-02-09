@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Application
                 case "ENABLED": return Enabled;
                 case "DISABLED": return Disabled;
                 default:
-                    throw new ApplicationException($"Could not parse application status value '{status.ToUpper()}'");
+                    throw new Exception($"Could not parse application status value '{status.ToUpper()}'");
             }
         }
     }

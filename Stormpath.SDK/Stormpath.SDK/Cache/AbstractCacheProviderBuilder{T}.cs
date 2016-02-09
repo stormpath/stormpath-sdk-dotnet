@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Cache
             var cacheConfig = builder.Build();
             if (cacheConfig == null)
             {
-                throw new ApplicationException("The cache configuration is not valid.");
+                throw new Exception("The cache configuration is not valid.");
             }
 
             this.cacheConfigs.Add(cacheConfig);

@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Impl.Provider
             var providerId = this.ConcreteProviderId;
             if (string.IsNullOrEmpty(providerId))
             {
-                throw new ApplicationException("The Provider ID is missing.");
+                throw new Exception("The Provider ID is missing.");
             }
 
             return this.BuildConcrete();

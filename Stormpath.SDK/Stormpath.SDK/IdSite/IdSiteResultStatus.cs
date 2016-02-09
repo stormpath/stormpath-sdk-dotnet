@@ -49,7 +49,7 @@ namespace Stormpath.SDK.IdSite
         /// </summary>
         /// <param name="status">A string containing "registered", "authenticated", or "logout" (matching is case-insensitive).</param>
         /// <returns>The <see cref="IdSiteResultStatus"/> with the specified name.</returns>
-        /// <exception cref="ApplicationException">No match is found.</exception>
+        /// <exception cref="Exception">No match is found.</exception>
         public static IdSiteResultStatus Parse(string status)
         {
             status = status.ToUpper();
@@ -63,7 +63,7 @@ namespace Stormpath.SDK.IdSite
                 case "LOGOUT":
                     return Logout;
                 default:
-                    throw new ApplicationException($"Could not parse status value '{status}'");
+                    throw new Exception($"Could not parse status value '{status}'");
             }
         }
     }

@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Impl.Provider
         {
             if (string.IsNullOrEmpty(this.accessToken) && string.IsNullOrEmpty(this.code))
             {
-                throw new ApplicationException($"Either '{nameof(this.code)}' or '{nameof(this.accessToken)}' properties must exist in a Google account request.");
+                throw new Exception($"Either '{nameof(this.code)}' or '{nameof(this.accessToken)}' properties must exist in a Google account request.");
             }
 
             var providerData = this.dataStore.Instantiate<IGoogleProviderData>() as DefaultGoogleProviderData;

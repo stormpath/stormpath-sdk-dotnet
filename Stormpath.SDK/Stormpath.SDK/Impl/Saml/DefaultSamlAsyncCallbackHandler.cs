@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Impl.Saml
         {
             if (request.Method != HttpMethod.Get)
             {
-                throw new ApplicationException("Only HTTP GET method is supported.");
+                throw new Exception("Only HTTP GET method is supported.");
             }
 
             var jwtResponse = request.CanonicalUri.QueryString[IdSiteClaims.JwtResponse];
@@ -137,7 +137,7 @@ namespace Stormpath.SDK.Impl.Saml
 
             if (!this.nonceStore.IsAsynchronousSupported || this.asyncNonceStore == null)
             {
-                throw new ApplicationException("The current nonce store does not support asynchronous operations.");
+                throw new Exception("The current nonce store does not support asynchronous operations.");
             }
 
             var responseNonce = (string)jwt.Body.GetClaim(IdSiteClaims.ResponseId);
@@ -237,7 +237,7 @@ namespace Stormpath.SDK.Impl.Saml
             var errorData = claims.GetClaim(IdSiteClaims.Error) as Map;
             if (errorData == null)
             {
-                throw new ApplicationException("Error parsing SAML error response.");
+                throw new Exception("Error parsing SAML error response.");
             }
 
             object codeRaw;

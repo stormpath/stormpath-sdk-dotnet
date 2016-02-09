@@ -126,7 +126,7 @@ namespace Stormpath.SDK.Impl.Saml
         {
             if (string.IsNullOrEmpty(this.callbackUri))
             {
-                throw new ApplicationException("CallbackUri cannot be null or empty.");
+                throw new Exception("CallbackUri cannot be null or empty.");
             }
 
             var jti = this.jtiProvider.NewJti();

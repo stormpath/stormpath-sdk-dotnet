@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Impl.Http
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("Error while loading the default HTTP client. See the inner exception for details.", ex);
+                throw new Exception("Error while loading the default HTTP client. See the inner exception for details.", ex);
             }
 
             return new AbstractHttpClientBuilder<IHttpClient>(defaultClientType);

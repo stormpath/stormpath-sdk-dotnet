@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Group
         /// </summary>
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
         /// <returns>The <see cref="GroupStatus">Group Status</see> with the specified name.</returns>
-        /// <exception cref="ApplicationException">No match is found.</exception>
+        /// <exception cref="Exception">No match is found.</exception>
         public static GroupStatus Parse(string status)
         {
             switch (status.ToUpper())
@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Group
                 case "ENABLED": return Enabled;
                 case "DISABLED": return Disabled;
                 default:
-                    throw new ApplicationException($"Could not parse group status value '{status.ToUpper()}'");
+                    throw new Exception($"Could not parse group status value '{status.ToUpper()}'");
             }
         }
     }

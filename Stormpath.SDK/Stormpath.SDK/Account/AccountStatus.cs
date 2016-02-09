@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <param name="status">A string containing "enabled", "disabled", or "unverified" (matching is case-insensitive).</param>
         /// <returns>The <see cref="AccountStatus">Account Status</see> with the specified name.</returns>
-        /// <exception cref="ApplicationException">No match is found.</exception>
+        /// <exception cref="Exception">No match is found.</exception>
         public static AccountStatus Parse(string status)
         {
             switch (status.ToUpper())
@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Account
                 case "UNVERIFIED":
                     return Unverified;
                 default:
-                    throw new ApplicationException($"Could not parse account status value '{status.ToUpper()}'");
+                    throw new Exception($"Could not parse account status value '{status.ToUpper()}'");
             }
         }
     }

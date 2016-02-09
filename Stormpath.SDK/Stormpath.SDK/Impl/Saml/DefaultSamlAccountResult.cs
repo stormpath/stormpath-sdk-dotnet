@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Impl.Saml
         {
             if (!this.ContainsProperty(AccountPropertyName))
             {
-                throw new ApplicationException("The account is not present.");
+                throw new Exception("The account is not present.");
             }
         }
     }

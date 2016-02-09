@@ -117,7 +117,7 @@ namespace Stormpath.SDK.Impl.AccountStore
             var container = parent as IAccountStoreContainer<TMapping>;
             if (parent == null)
             {
-                throw new ApplicationException("SetDefaultStore must be used with a supported AccountStoreContainer.");
+                throw new Exception("SetDefaultStore must be used with a supported AccountStoreContainer.");
             }
 
             IAccountStoreMapping<TMapping> newOrExistingMapping = null;
@@ -171,7 +171,7 @@ namespace Stormpath.SDK.Impl.AccountStore
             var container = parent as IAccountStoreContainer<TMapping>;
             if (parent == null)
             {
-                throw new ApplicationException("SetDefaultStore must be used with a supported AccountStoreContainer.");
+                throw new Exception("SetDefaultStore must be used with a supported AccountStoreContainer.");
             }
 
             TMapping newOrExistingMapping = null;

@@ -96,12 +96,12 @@ namespace Stormpath.SDK.Impl.IdSite
             }
             catch (Exception e)
             {
-                throw new ApplicationException("ID Site base URL could not be constructed.", e);
+                throw new Exception("ID Site base URL could not be constructed.", e);
             }
 
             if (string.IsNullOrEmpty(baseUrl))
             {
-                throw new ApplicationException("ID Site base URL could not be constructed.");
+                throw new Exception("ID Site base URL could not be constructed.");
             }
 
             return baseUrl;
@@ -159,7 +159,7 @@ namespace Stormpath.SDK.Impl.IdSite
         {
             if (string.IsNullOrEmpty(this.callbackUri))
             {
-                throw new ApplicationException($"{nameof(this.callbackUri)} cannot be null or empty.");
+                throw new Exception($"{nameof(this.callbackUri)} cannot be null or empty.");
             }
 
             var jti = this.jtiProvider.NewJti();

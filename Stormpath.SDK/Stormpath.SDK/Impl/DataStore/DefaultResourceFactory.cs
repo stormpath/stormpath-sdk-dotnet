@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var targetType = this.typeLookup.GetConcrete(resolvedType);
             if (targetType == null)
             {
-                throw new ApplicationException($"Unknown resource type {typeName}");
+                throw new Exception($"Unknown resource type {typeName}");
             }
 
             var identityMapOptions = new IdentityMapOptionsResolver().GetOptions(resolvedType);
@@ -122,7 +122,7 @@ namespace Stormpath.SDK.Impl.DataStore
             }
             catch (Exception e)
             {
-                throw new ApplicationException($"Error creating resource type {targetType.Name}", e);
+                throw new Exception($"Error creating resource type {targetType.Name}", e);
             }
 
             return targetObject;
@@ -134,12 +134,12 @@ namespace Stormpath.SDK.Impl.DataStore
             var targetType = this.typeLookup.GetConcrete(innerType);
             if (innerType == null || targetType == null)
             {
-                throw new ApplicationException($"Error creating collection resource: unknown inner type '{innerType?.Name}'.");
+                throw new Exception($"Error creating collection resource: unknown inner type '{innerType?.Name}'.");
             }
 
             if (properties == null)
             {
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: no properties to materialize with.");
+                throw new Exception($"Unable to create collection resource of type {innerType.Name}: no properties to materialize with.");
             }
 
             long offset, limit, size;
@@ -149,7 +149,7 @@ namespace Stormpath.SDK.Impl.DataStore
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'offset' value.", ex);
+                throw new Exception($"Unable to create collection resource of type {innerType.Name}: invalid 'offset' value.", ex);
             }
 
             try
@@ -158,7 +158,7 @@ namespace Stormpath.SDK.Impl.DataStore
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'limit' value.", ex);
+                throw new Exception($"Unable to create collection resource of type {innerType.Name}: invalid 'limit' value.", ex);
             }
 
             try
@@ -167,19 +167,19 @@ namespace Stormpath.SDK.Impl.DataStore
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'size' value.", ex);
+                throw new Exception($"Unable to create collection resource of type {innerType.Name}: invalid 'size' value.", ex);
             }
 
             var href = properties["href"]?.ToString();
             if (string.IsNullOrEmpty(href))
             {
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: invalid 'href' value.");
+                throw new Exception($"Unable to create collection resource of type {innerType.Name}: invalid 'href' value.");
             }
 
             var items = properties["items"] as IEnumerable<object>;
             if (items == null)
             {
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: 'items' sub-collection is missing.");
+                throw new Exception($"Unable to create collection resource of type {innerType.Name}: 'items' sub-collection is missing.");
             }
 
             if (!items.Any())
@@ -191,7 +191,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var itemMaps = items as IEnumerable<Map>;
             if (itemMaps == null)
             {
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: 'items' sub-collection is nonempty but not a collection of maps.");
+                throw new Exception($"Unable to create collection resource of type {innerType.Name}: 'items' sub-collection is nonempty but not a collection of maps.");
             }
 
             try
@@ -203,7 +203,7 @@ namespace Stormpath.SDK.Impl.DataStore
             }
             catch (Exception e)
             {
-                throw new ApplicationException($"Unable to create collection resource of type {innerType.Name}: failed to add items to collection.", e);
+                throw new Exception($"Unable to create collection resource of type {innerType.Name}: failed to add items to collection.", e);
             }
         }
 

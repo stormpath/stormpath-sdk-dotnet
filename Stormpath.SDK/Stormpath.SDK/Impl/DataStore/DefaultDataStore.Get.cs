@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var targetType = typeLookup(result.Body);
             if (targetType == null)
             {
-                throw new ApplicationException("No type mapping could be found for this resource.");
+                throw new Exception("No type mapping could be found for this resource.");
             }
 
             return (T)this.resourceFactory.Create(targetType, result.Body);
@@ -106,7 +106,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var targetType = typeLookup(result.Body);
             if (targetType == null)
             {
-                throw new ApplicationException("No type mapping could be found for this resource.");
+                throw new Exception("No type mapping could be found for this resource.");
             }
 
             return (T)this.resourceFactory.Create(targetType, result.Body);

@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Saml
         /// </summary>
         /// <param name="status">A string containing "authenticated" or "logout" (matching is case-insensitive).</param>
         /// <returns>The <see cref="SamlResultStatus"/> with the specified name.</returns>
-        /// <exception cref="ApplicationException">No match is found.</exception>
+        /// <exception cref="Exception">No match is found.</exception>
         public static SamlResultStatus Parse(string status)
         {
             status = status.ToUpper();
@@ -56,7 +56,7 @@ namespace Stormpath.SDK.Saml
                 case "LOGOUT":
                     return Logout;
                 default:
-                    throw new ApplicationException($"Could not parse status value '{status}'");
+                    throw new Exception($"Could not parse status value '{status}'");
             }
         }
     }

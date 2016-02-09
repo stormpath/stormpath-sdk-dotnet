@@ -191,7 +191,7 @@ namespace Stormpath.SDK.Impl.Client
                 }
                 else
                 {
-                    throw new ApplicationException("No valid API Key and Secret could be found.");
+                    throw new Exception("No valid API Key and Secret could be found.");
                 }
             }
 

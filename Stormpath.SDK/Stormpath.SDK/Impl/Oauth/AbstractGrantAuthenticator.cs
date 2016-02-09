@@ -46,12 +46,12 @@ namespace Stormpath.SDK.Impl.Oauth
         {
             if (this.application == null)
             {
-                throw new ApplicationException($"{nameof(this.application)} cannot be null.");
+                throw new Exception($"{nameof(this.application)} cannot be null.");
             }
 
             if (authenticationRequest == null)
             {
-                throw new ApplicationException($"{nameof(authenticationRequest)} cannot be null.");
+                throw new Exception($"{nameof(authenticationRequest)} cannot be null.");
             }
         }
 

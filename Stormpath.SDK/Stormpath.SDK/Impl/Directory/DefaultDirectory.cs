@@ -91,7 +91,7 @@ namespace Stormpath.SDK.Impl.Directory
         {
             if (!string.IsNullOrEmpty(this.AsInterface.Href))
             {
-                throw new ApplicationException("Cannot change the provider of an existing Directory");
+                throw new Exception("Cannot change the provider of an existing Directory");
             }
 
             this.SetProperty(ProviderPropertyName, provider);

@@ -75,7 +75,7 @@ namespace Stormpath.SDK.Impl.Http
         {
             if (!apiKey.IsValid())
             {
-                throw new ApplicationException("API Key is invalid.");
+                throw new Exception("API Key is invalid.");
             }
 
             this.httpClient = httpClient;
@@ -99,7 +99,7 @@ namespace Stormpath.SDK.Impl.Http
         {
             if (!this.httpClient.IsAsynchronousSupported || this.asyncHttpClient == null)
             {
-                throw new ApplicationException("This HTTP client does not support asynchronous requests.");
+                throw new Exception("This HTTP client does not support asynchronous requests.");
             }
 
             return this.CoreRequestLoopAsync(
@@ -113,7 +113,7 @@ namespace Stormpath.SDK.Impl.Http
         {
             if (!this.httpClient.IsSynchronousSupported || this.syncHttpClient == null)
             {
-                throw new ApplicationException("This HTTP client does not support synchronous requests.");
+                throw new Exception("This HTTP client does not support synchronous requests.");
             }
 
             // We know what we're doing here, even though this looks like async-over-sync.

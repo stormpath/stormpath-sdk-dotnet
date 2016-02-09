@@ -73,12 +73,12 @@ namespace Stormpath.SDK.Cache
         /// <summary>
         /// Throws an error if the cache provider has been disposed.
         /// </summary>
-        /// <exception cref="ApplicationException">The cache provider has been disposed.</exception>
+        /// <exception cref="Exception">The cache provider has been disposed.</exception>
         protected void ThrowIfDisposed()
         {
             if (this.disposed)
             {
-                throw new ApplicationException("This cache provider has been disposed.");
+                throw new Exception("This cache provider has been disposed.");
             }
         }
 
@@ -107,7 +107,7 @@ namespace Stormpath.SDK.Cache
 
             if (!this.syncSupported)
             {
-                throw new ApplicationException("This cache provider does not support a synchronous execution path.");
+                throw new Exception("This cache provider does not support a synchronous execution path.");
             }
 
             if (string.IsNullOrEmpty(name))
@@ -130,7 +130,7 @@ namespace Stormpath.SDK.Cache
 
             if (!this.asyncSupported)
             {
-                throw new ApplicationException("This cache provider does not support an asynchronous execution path.");
+                throw new Exception("This cache provider does not support an asynchronous execution path.");
             }
 
             if (string.IsNullOrEmpty(name))
@@ -174,7 +174,7 @@ namespace Stormpath.SDK.Cache
         /// Sets the default time to live (TTL) for new caches.
         /// </summary>
         /// <param name="defaultTimeToLive">The default time to live.</param>
-        /// <exception cref="ApplicationException">The cache provider has been disposed.</exception>
+        /// <exception cref="Exception">The cache provider has been disposed.</exception>
         public void SetDefaultTimeToLive(TimeSpan defaultTimeToLive)
         {
             this.ThrowIfDisposed();
@@ -191,7 +191,7 @@ namespace Stormpath.SDK.Cache
         /// Sets the default time to live (TTI) for new caches.
         /// </summary>
         /// <param name="defaultTimeToIdle">The default time to idle.</param>
-        /// <exception cref="ApplicationException">The cache provider has been disposed.</exception>
+        /// <exception cref="Exception">The cache provider has been disposed.</exception>
         public void SetDefaultTimeToIdle(TimeSpan defaultTimeToIdle)
         {
             this.ThrowIfDisposed();
@@ -222,7 +222,7 @@ namespace Stormpath.SDK.Cache
             {
                 if (!this.cacheConfigs.TryAdd(config.Name, config))
                 {
-                    throw new ApplicationException("Unable to load cache configuration.");
+                    throw new Exception("Unable to load cache configuration.");
                 }
             }
         }

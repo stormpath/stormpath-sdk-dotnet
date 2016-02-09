@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="scheme">A string containing "basic" or "sauthc1" (matching is case-insensitive).</param>
         /// <returns>The <see cref="AuthenticationScheme">Authentication Scheme</see> with the specified name.</returns>
-        /// <exception cref="ApplicationException">No match is found.</exception>
+        /// <exception cref="Exception">No match is found.</exception>
         public static AuthenticationScheme Parse(string scheme)
         {
             switch (scheme.ToUpper())
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Client
                 case "BASIC": return Basic;
                 case "SAUTHC1": return SAuthc1;
                 default:
-                    throw new ApplicationException($"Could not parse scheme type '{scheme.ToUpper()}'");
+                    throw new Exception($"Could not parse scheme type '{scheme.ToUpper()}'");
             }
         }
     }

@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Impl.Serialization
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("Error while loading the default serializer. See the inner exception for details.", ex);
+                throw new Exception("Error while loading the default serializer. See the inner exception for details.", ex);
             }
 
             return new AbstractSerializerBuilder<IJsonSerializer>(defaultSerializerType);

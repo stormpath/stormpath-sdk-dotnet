@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Directory
         /// </summary>
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
         /// <returns>The <see cref="DirectoryStatus">Directory Status</see> with the specified name.</returns>
-        /// <exception cref="ApplicationException">No match is found.</exception>
+        /// <exception cref="Exception">No match is found.</exception>
         public static DirectoryStatus Parse(string status)
         {
             switch (status.ToUpper())
@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Directory
                 case "ENABLED": return Enabled;
                 case "DISABLED": return Disabled;
                 default:
-                    throw new ApplicationException($"Could not parse directory status value '{status.ToUpper()}'");
+                    throw new Exception($"Could not parse directory status value '{status.ToUpper()}'");
             }
         }
     }

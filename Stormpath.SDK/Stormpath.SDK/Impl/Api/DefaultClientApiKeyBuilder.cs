@@ -184,7 +184,7 @@ namespace Stormpath.SDK.Impl.Api
                 var message = "Unable to find an API Key ID, either from explicit configuration (for example, " +
                     nameof(IClientApiKeyBuilder) + ".setApiKeyId), or from a file location.\r\n" +
                     "Please provide the API Key ID by one of these methods.";
-                throw new ApplicationException(message);
+                throw new Exception(message);
             }
 
             if (string.IsNullOrEmpty(secret))
@@ -192,7 +192,7 @@ namespace Stormpath.SDK.Impl.Api
                 var message = "Unable to find an API Key Secret, either from explicit configuration (for example, " +
                     nameof(IClientApiKeyBuilder) + ".setApiKeySecret), or from a file location.\r\n" +
                     "Please provide the API Key Secret by one of these methods.";
-                throw new ApplicationException(message);
+                throw new Exception(message);
             }
 
             return new DefaultClientApiKey(id, secret);

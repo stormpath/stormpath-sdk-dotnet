@@ -69,12 +69,12 @@ namespace Stormpath.SDK.Impl.Oauth
         {
             if (string.IsNullOrEmpty(this.login))
             {
-                throw new ApplicationException("The username field has not been set. Use SetLogin() to set this field.");
+                throw new Exception("The username field has not been set. Use SetLogin() to set this field.");
             }
 
             if (string.IsNullOrEmpty(this.password))
             {
-                throw new ApplicationException("The password field has not been set. Use SetLogin() to set this field.");
+                throw new Exception("The password field has not been set. Use SetLogin() to set this field.");
             }
 
             var request = new DefaultPasswordGrantRequest(this.login, this.password);

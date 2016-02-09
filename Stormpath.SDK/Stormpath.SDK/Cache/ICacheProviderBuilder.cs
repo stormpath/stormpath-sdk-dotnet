@@ -101,7 +101,7 @@ namespace Stormpath.SDK.Cache
         ///     .Build();
         /// </code>
         /// </example>
-        /// <exception cref="ApplicationException">The cache configuration is not valid.</exception>
+        /// <exception cref="Exception">The cache configuration is not valid.</exception>
         ICacheProviderBuilder WithCache(ICacheConfigurationBuilder builder);
 
         /// <summary>

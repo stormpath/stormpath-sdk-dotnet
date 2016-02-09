@@ -64,14 +64,14 @@ namespace Stormpath.SDK.Serialization
             }
             catch (Exception ex)
             {
-                throw new ApplicationException(
+                throw new Exception(
                     $"Unable to build the serializer {typeof(T).Name}; see the inner exception for details. Try instantiating the serializer directly instead of using ISerializerBuilder.",
                     ex);
             }
 
             if (instance == null)
             {
-                throw new ApplicationException($"Unable to build the serializer {typeof(T).Name}. No exception was thrown, but the result was null. Try instantiating the serializer directly instead of using ISerializerBuilder.");
+                throw new Exception($"Unable to build the serializer {typeof(T).Name}. No exception was thrown, but the result was null. Try instantiating the serializer directly instead of using ISerializerBuilder.");
             }
 
             return instance;

@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Impl.DataStore
                 case "UPDATE": return Update;
                 case "DELETE": return Delete;
                 default:
-                    throw new ApplicationException($"Could not parse HTTP method value '{action.ToUpper()}'");
+                    throw new Exception($"Could not parse HTTP method value '{action.ToUpper()}'");
             }
         }
     }

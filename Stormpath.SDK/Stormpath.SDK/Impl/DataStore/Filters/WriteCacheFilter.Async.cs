@@ -288,7 +288,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             if (string.IsNullOrEmpty(propertyName) ||
                 string.IsNullOrEmpty(href))
             {
-                throw new ApplicationException("Could not update cache for removed custom data entry.");
+                throw new Exception("Could not update cache for removed custom data entry.");
             }
 
             var cache = this.GetAsyncCache(typeof(ICustomData));
@@ -370,7 +370,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return new LinkProperty(resourceData[AbstractResource.HrefPropertyName].ToString());
             }
 
-            throw new ApplicationException($"Could not convert embedded resource '{propertyName}' to a canonical reference.");
+            throw new Exception($"Could not convert embedded resource '{propertyName}' to a canonical reference.");
         }
 
         private static bool IsSensitive(string propertyName)

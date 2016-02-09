@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Impl.Cache
 
             if (iface == null)
             {
-                throw new ApplicationException($"Could not locate a cache region for resource type {type.Name}. Resource type unknown.");
+                throw new Exception($"Could not locate a cache region for resource type {type.Name}. Resource type unknown.");
             }
 
             return iface.Name;

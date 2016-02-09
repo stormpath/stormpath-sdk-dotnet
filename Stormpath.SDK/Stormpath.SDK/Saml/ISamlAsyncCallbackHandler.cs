@@ -93,7 +93,7 @@ namespace Stormpath.SDK.Saml
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The resolved identity in the form of an <see cref="IAccountResult"/>.</returns>
         /// <exception cref="Jwt.InvalidJwtException">The returned token is invalid.</exception>
-        /// <exception cref="ApplicationException">The current nonce store does not support asynchronous operations.</exception>
+        /// <exception cref="Exception">The current nonce store does not support asynchronous operations.</exception>
         /// <exception cref="SamlException">A SAML-related exception occurred.</exception>
         Task<ISamlAccountResult> GetAccountResultAsync(CancellationToken cancellationToken = default(CancellationToken));
     }

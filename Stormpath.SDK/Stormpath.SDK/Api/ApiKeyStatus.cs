@@ -51,7 +51,7 @@ namespace Stormpath.SDK.Api
                 case "ENABLED": return Enabled;
                 case "DISABLED": return Disabled;
                 default:
-                    throw new ApplicationException($"Could not parse API Key status value '{status.ToUpper()}'");
+                    throw new Exception($"Could not parse API Key status value '{status.ToUpper()}'");
             }
         }
     }

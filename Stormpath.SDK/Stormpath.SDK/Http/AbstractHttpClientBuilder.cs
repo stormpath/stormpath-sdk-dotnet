@@ -106,14 +106,14 @@ namespace Stormpath.SDK.Http
             }
             catch (Exception ex)
             {
-                throw new ApplicationException(
+                throw new Exception(
                     $"Unable to build the HTTP client {typeof(T).Name}; see the inner exception for details. Try instantiating the HTTP client directly instead of using IHttpClientBuilder.",
                     ex);
             }
 
             if (instance == null)
             {
-                throw new ApplicationException($"Unable to build the HTTP client {typeof(T).Name}. No exception was thrown, but the result was null. Try instantiating the HTTP client directly instead of using IHttpClientBuilder.");
+                throw new Exception($"Unable to build the HTTP client {typeof(T).Name}. No exception was thrown, but the result was null. Try instantiating the HTTP client directly instead of using IHttpClientBuilder.");
             }
 
             return instance;
