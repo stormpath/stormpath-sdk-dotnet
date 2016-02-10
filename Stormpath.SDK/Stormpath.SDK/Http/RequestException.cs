@@ -21,7 +21,6 @@ namespace Stormpath.SDK.Http
     /// <summary>
     /// Base class for request-related exceptions.
     /// </summary>
-    [Serializable]
     public class RequestException : Exception
     {
         /// <summary>

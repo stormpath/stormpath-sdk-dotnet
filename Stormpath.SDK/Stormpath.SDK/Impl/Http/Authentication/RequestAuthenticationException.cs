@@ -19,7 +19,6 @@ using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.Http.Authentication
 {
-    [Serializable]
     internal sealed class RequestAuthenticationException : RequestException
     {
         public RequestAuthenticationException(string message)

@@ -22,7 +22,6 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Error
 {
-    [Serializable]
     internal sealed class DefaultError : IError
     {
         private static readonly string StatusPropertyName = "status";

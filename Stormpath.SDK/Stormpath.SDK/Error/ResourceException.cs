@@ -15,7 +15,6 @@
 // </copyright>
 
 using System;
-using System.Runtime.Serialization;
 using Stormpath.SDK.Impl.Error;
 
 namespace Stormpath.SDK.Error
@@ -23,8 +22,7 @@ namespace Stormpath.SDK.Error
     /// <summary>
     /// Represents an error that occurs during a resource request.
     /// </summary>
-    [Serializable]
-    public class ResourceException : Exception, IError, ISerializable
+    public class ResourceException : Exception, IError
     {
         private readonly string constructedErrorMessage;
 
@@ -60,17 +58,6 @@ namespace Stormpath.SDK.Error
         /// </summary>
         /// <value>The HTTP status code associated with this error.</value>
         public int HttpStatus => this.Error.HttpStatus;
-
-        /// <inheritdoc/>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("code", this.Error.Code);
-            info.AddValue("developerMessage", this.Error.DeveloperMessage, typeof(string));
-            info.AddValue("moreInfo", this.Error.MoreInfo, typeof(string));
-            info.AddValue("status", this.Error.HttpStatus);
-
-            base.GetObjectData(info, context);
-        }
 
         private static string BuildExceptionMessage(IError error)
         {
