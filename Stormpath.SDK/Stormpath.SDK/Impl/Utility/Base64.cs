@@ -85,7 +85,9 @@ namespace Stormpath.SDK.Impl.Utility
                     throw new ArgumentException("Illegal base64 string.");
             }
 
-            return encoding.GetString(Convert.FromBase64String(encoded));
+            var base64Bytes = Convert.FromBase64String(encoded);
+
+            return encoding.GetString(base64Bytes, 0, base64Bytes.Length);
         }
     }
 }
