@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -85,7 +86,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             }
 
             bool possibleCustomDataUpdate = (request.Action == ResourceAction.Create || request.Action == ResourceAction.Update) &&
-                AbstractExtendableInstanceResource.IsExtendable(request.Type);
+                AbstractExtendableInstanceResource.IsExtendable(request.Type.GetTypeInfo());
             if (possibleCustomDataUpdate)
             {
                 await this.CacheNestedCustomDataUpdatesAsync(request, result, logger, cancellationToken).ConfigureAwait(false);

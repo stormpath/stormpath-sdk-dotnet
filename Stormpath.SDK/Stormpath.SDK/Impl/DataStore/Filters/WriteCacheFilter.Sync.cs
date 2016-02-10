@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Impl.Extensions;
@@ -63,7 +64,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             }
 
             bool possibleCustomDataUpdate = (request.Action == ResourceAction.Create || request.Action == ResourceAction.Update) &&
-                AbstractExtendableInstanceResource.IsExtendable(request.Type);
+                AbstractExtendableInstanceResource.IsExtendable(request.Type.GetTypeInfo());
             if (possibleCustomDataUpdate)
             {
                 this.CacheNestedCustomDataUpdates(request, result, logger);
