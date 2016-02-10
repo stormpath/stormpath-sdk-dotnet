@@ -249,7 +249,7 @@ namespace Stormpath.SDK.Impl.Http
             var delayMilliseconds = this.GetDelayMilliseconds(retryCount, isThrottling);
             this.logger.Trace($"Pausing for {delayMilliseconds}", "DefaultRequestExecutor.PauseSync");
 
-            Thread.Sleep(delayMilliseconds);
+            Task.Delay(delayMilliseconds).Wait();
         }
 
         private int GetDelayMilliseconds(int retryCount, bool isThrottling)
