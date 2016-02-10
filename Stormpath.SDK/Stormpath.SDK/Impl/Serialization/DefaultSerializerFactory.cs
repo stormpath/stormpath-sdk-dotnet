@@ -14,26 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Impl.Serialization
 {
     internal sealed class DefaultSerializerFactory : ISerializerFactory
     {
-        ISerializerBuilder ISerializerFactory.AutoDetect()
-        {
-            Type defaultSerializerType = null;
-            try
-            {
-                defaultSerializerType = DefaultSerializerLoader.Load();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error while loading the default serializer. See the inner exception for details.", ex);
-            }
-
-            return new AbstractSerializerBuilder<IJsonSerializer>(defaultSerializerType);
-        }
     }
 }

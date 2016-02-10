@@ -206,8 +206,7 @@ namespace Stormpath.SDK.Impl.Client
             {
                 if (this.serializerBuilder == null)
                 {
-                    this.logger.Info("No serializer plugin specified, using default.");
-                    this.serializerBuilder = Serializers.Create().AutoDetect();
+                    throw new Exception("No serializer plugin specified.");
                 }
 
                 serializer = this.serializerBuilder.Build();
@@ -222,8 +221,7 @@ namespace Stormpath.SDK.Impl.Client
             {
                 if (this.httpClientBuilder == null)
                 {
-                    this.logger.Info("No HTTP client plugin specified, using default.");
-                    this.httpClientBuilder = HttpClients.Create().AutoDetect();
+                    throw new Exception("No HTTP plugin specified.");
                 }
 
                 this.httpClientBuilder

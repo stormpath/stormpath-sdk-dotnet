@@ -23,16 +23,5 @@ namespace Stormpath.SDK.Serialization
     /// </summary>
     public interface ISerializerFactory
     {
-        /// <summary>
-        /// Use the default serializer.
-        /// </summary>
-        /// <remarks>
-        /// Dynamically loads the default serializer (currently <c>JsonNetSerializer</c>) by searching the application path.
-        /// This method is implicitly called by <see cref="Client.IClientBuilder"/> unless a different <see cref="ISerializerBuilder">serializer builder</see> is specified.
-        /// </remarks>
-        /// <seealso cref="Client.IClientBuilder.SetSerializer(ISerializerBuilder)"/>
-        /// <returns>A <see cref="ISerializerBuilder">builder</see> capable of constructing the default serializer.</returns>
-        [Obsolete("Will be removed in 1.0. Instead, manually specify a serializer, e.g. Serializers.Create().JsonNetSerializer()")]
-        ISerializerBuilder AutoDetect();
     }
 }

@@ -15,6 +15,7 @@
 // </copyright>
 
 using Stormpath.SDK.Impl.Client;
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Stormpath.SDK.Client
 {
@@ -36,10 +37,11 @@ namespace Stormpath.SDK.Client
         /// </example>
         public static IClientBuilder Builder()
         {
-            var userAgentBuilder = new UserAgentBuilder(
-                Impl.Introspection.Platform.Analyze(),
-                Impl.Introspection.Sdk.Anaylze(),
-                Impl.Introspection.SourceLanguage.Analyze(System.Reflection.Assembly.GetCallingAssembly()));
+            var userAgentBuilder = new DefaultUserAgentBuilder(
+                runtimeEnvironment: PlatformServices.Default.Runtime,
+                appEnvironment: PlatformServices.Default.Application,
+                frameworkUserAgent: string.Empty, // todo - from StormpathConfiguration
+                language: System.Reflection.Assembly.GetCallingAssembly().ToString()); // todo - libpolyglot
 
             return new DefaultClientBuilder(userAgentBuilder);
         }

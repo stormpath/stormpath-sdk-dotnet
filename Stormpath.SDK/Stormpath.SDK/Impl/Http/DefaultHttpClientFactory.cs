@@ -14,26 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.Http
 {
     internal sealed class DefaultHttpClientFactory : IHttpClientFactory
     {
-        IHttpClientBuilder IHttpClientFactory.AutoDetect()
-        {
-            Type defaultClientType = null;
-            try
-            {
-                defaultClientType = DefaultHttpClientLoader.Load();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error while loading the default HTTP client. See the inner exception for details.", ex);
-            }
-
-            return new AbstractHttpClientBuilder<IHttpClient>(defaultClientType);
-        }
     }
 }

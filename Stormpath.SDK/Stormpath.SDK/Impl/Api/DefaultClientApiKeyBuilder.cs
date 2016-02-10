@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using Microsoft.Extensions.PlatformAbstractions;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Impl.Logging;
 using Stormpath.SDK.Impl.Utility;
@@ -40,7 +41,6 @@ namespace Stormpath.SDK.Impl.Api
         private readonly IFile file;
 
         private readonly ILogger logger;
-        private readonly Introspection.Platform platform;
 
         // Instance fields
         private string apiKeyId;
@@ -59,8 +59,6 @@ namespace Stormpath.SDK.Impl.Api
             this.logger = logger != null
                 ? logger
                 : new NullLogger();
-
-            this.platform = Introspection.Platform.Analyze();
         }
 
         IClientApiKeyBuilder IClientApiKeyBuilder.SetId(string id)
@@ -319,18 +317,37 @@ namespace Stormpath.SDK.Impl.Api
                 return input;
             }
 
-            string homePath = null;
+            var homePath = GetHome();
 
-            if (this.platform.IsPlatformUnix)
+            return System.IO.Path.Combine(homePath, input.Replace($"~{System.IO.Path.DirectorySeparatorChar}", string.Empty));
+        }
+
+
+        // Copied from DNX's DnuEnvironment.cs
+        //todo use IEnvironment?
+        private static string GetHome()
+        {
+#if NET451
+            return Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+#else
+            var runtimeEnv = PlatformServices.Default.Runtime;
+            if (runtimeEnv.OperatingSystem == "Windows")
             {
-                homePath = this.env.GetEnvironmentVariable("HOME");
+                return Environment.GetEnvironmentVariable("USERPROFILE") ??
+                    Environment.GetEnvironmentVariable("HOMEDRIVE") + Environment.GetEnvironmentVariable("HOMEPATH");
             }
             else
             {
-                homePath = this.env.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
-            }
+                var home = Environment.GetEnvironmentVariable("HOME");
 
-            return System.IO.Path.Combine(homePath, input.Replace($"~{System.IO.Path.DirectorySeparatorChar}", string.Empty));
+                if (string.IsNullOrEmpty(home))
+                {
+                    throw new Exception("Home directory not found. The HOME environment variable is not set.");
+                }
+
+                return home;
+            }
+#endif
         }
     }
 }

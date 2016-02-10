@@ -14,8 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-
 namespace Stormpath.SDK.Http
 {
     /// <summary>
@@ -23,16 +21,5 @@ namespace Stormpath.SDK.Http
     /// </summary>
     public interface IHttpClientFactory
     {
-        /// <summary>
-        /// Use the default HTTP client.
-        /// </summary>
-        /// <remarks>
-        /// Dynamically loads the default HTTP client (currently <c>RestSharpClient</c>) by searching the application path.
-        /// This method is implicitly called by <see cref="Client.IClientBuilder"/> unless a different <see cref="IHttpClientBuilder">client builder</see> is specified.
-        /// </remarks>
-        /// <seealso cref="Client.IClientBuilder.SetHttpClient(IHttpClientBuilder)"/>
-        /// <returns>A <see cref="IHttpClientBuilder">builder</see> capable of constructing the default HTTP client.</returns>
-        [Obsolete("Will be removed in 1.0. Instead, manually specify a client, e.g. HttpClients.Create().RestSharpClient()")]
-        IHttpClientBuilder AutoDetect();
     }
 }
