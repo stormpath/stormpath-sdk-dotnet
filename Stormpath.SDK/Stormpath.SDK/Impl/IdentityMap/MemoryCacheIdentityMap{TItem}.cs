@@ -15,8 +15,8 @@
 // </copyright>
 
 using System;
-using System.Runtime.Caching;
 using System.Threading;
+using Microsoft.Extensions.Caching.Memory;
 using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.IdentityMap
@@ -25,14 +25,16 @@ namespace Stormpath.SDK.Impl.IdentityMap
         where TItem : class
     {
         private readonly ILogger logger;
-        private readonly MemoryCache itemCache;
+        private readonly IMemoryCache itemCache;
         private readonly TimeSpan slidingExpiration;
         private long lifetimeItemsAdded;
         private bool isDisposed = false; // To detect redundant calls
 
+        private object @lock;
+
         public MemoryCacheIdentityMap(TimeSpan slidingExpiration, ILogger logger)
         {
-            this.itemCache = new MemoryCache("StormpathSDKIdentityMap");
+            this.itemCache = new MemoryCache(new MemoryCacheOptions());
             this.slidingExpiration = slidingExpiration;
             this.logger = logger;
         }
@@ -44,17 +46,33 @@ namespace Stormpath.SDK.Impl.IdentityMap
 
         public TItem GetOrAdd(string key, Func<TItem> itemFactory, bool storeInfinitely)
         {
-            var lazyItem = new Lazy<TItem>(() => itemFactory());
-            var policy = new CacheItemPolicy()
-            {
-                SlidingExpiration = storeInfinitely
-                    ? ObjectCache.NoSlidingExpiration
-                    : this.slidingExpiration
-            };
+            var cacheKey = CreateCacheKey(key);
 
-            var existing = this.itemCache.AddOrGetExisting(CreateCacheKey(key), lazyItem, policy);
+            bool added = false;
+            Lazy<TItem> existingItem = null;
+            Lazy<TItem> addedItem = new Lazy<TItem>(() => itemFactory());
 
-            bool added = existing == null;
+            lock (@lock)
+            {   
+                if (!this.itemCache.TryGetValue(cacheKey, out existingItem))
+                {
+                    var options = new MemoryCacheEntryOptions();
+
+                    if (storeInfinitely)
+                    {
+                        options.SetPriority(CacheItemPriority.NeverRemove);
+                    }
+                    else
+                    {
+                        options.SetSlidingExpiration(this.slidingExpiration);
+                    }
+
+                    this.itemCache.Set(cacheKey, addedItem, options);
+
+                    added = true;
+                }
+            }
+
             if (added)
             {
                 Interlocked.Increment(ref this.lifetimeItemsAdded);
@@ -65,9 +83,9 @@ namespace Stormpath.SDK.Impl.IdentityMap
                 this.logger.Trace($"Retrieved item from identity map with key '{key}'. (Lifetime items: {this.lifetimeItemsAdded})");
             }
 
-            return existing == null
-                ? lazyItem.Value
-                : (existing as Lazy<TItem>).Value;
+            return added
+                ? addedItem.Value
+                : existingItem.Value;
         }
 
         protected virtual void Dispose(bool disposing)

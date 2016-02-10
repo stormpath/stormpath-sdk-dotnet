@@ -15,7 +15,7 @@
 // </copyright>
 
 using System;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Impl.Cache
         private readonly TimeSpan? timeToLive;
         private readonly TimeSpan? timeToIdle;
 
-        private InMemoryCacheManager cacheManager;
+        private IMemoryCache memoryCache;
         private bool isDisposed = false;
 
         private long accessCount;
@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Impl.Cache
                 throw new ArgumentException("TTI duration must be greater than zero.", nameof(timeToIdle));
             }
 
-            this.cacheManager = new InMemoryCacheManager();
+            this.memoryCache = Create();
             this.region = region;
             this.timeToLive = timeToLive;
             this.timeToIdle = timeToIdle;
@@ -69,6 +69,9 @@ namespace Stormpath.SDK.Impl.Cache
             this.hitCount = 0;
             this.missCount = 0;
         }
+
+        private static IMemoryCache Create()
+            => new MemoryCache(new MemoryCacheOptions());
 
         private void ThrowIfDisposed()
         {
@@ -91,20 +94,6 @@ namespace Stormpath.SDK.Impl.Cache
 
         TimeSpan? ICache.TimeToIdle => this.timeToIdle;
 
-        /// <summary>
-        /// Gets the number of items stored in all regions of the cache.
-        /// </summary>
-        /// <value>The total number of items stored in all regions of the cache.</value>
-        public long TotalSize
-        {
-            get
-            {
-                this.ThrowIfDisposed();
-
-                return this.cacheManager.Count;
-            }
-        }
-
         public long AccessCount => Interlocked.Read(ref this.accessCount);
 
         public long HitCount => Interlocked.Read(ref this.hitCount);
@@ -115,8 +104,8 @@ namespace Stormpath.SDK.Impl.Cache
 
         public void Clear()
         {
-            this.cacheManager.Dispose();
-            this.cacheManager = new InMemoryCacheManager();
+            this.memoryCache.Dispose();
+            this.memoryCache = Create();
         }
 
         Map ISynchronousCache.Get(string key)
@@ -126,15 +115,17 @@ namespace Stormpath.SDK.Impl.Cache
             Interlocked.Increment(ref this.accessCount);
 
             var compositeKey = this.CreateCompositeKey(key);
-            Map value = this.cacheManager.Get(compositeKey);
 
-            if (value == null)
+            Map value = null;
+            bool found = this.memoryCache.TryGetValue(compositeKey, out value);
+
+            if (found)
             {
-                Interlocked.Increment(ref this.missCount);
+                Interlocked.Increment(ref this.hitCount);
             }
             else
             {
-                Interlocked.Increment(ref this.hitCount);
+                Interlocked.Increment(ref this.missCount);
             }
 
             return value;
@@ -145,37 +136,35 @@ namespace Stormpath.SDK.Impl.Cache
             this.ThrowIfDisposed();
 
             var compositeKey = this.CreateCompositeKey(key);
-            var absoluteExpiration = this.timeToLive.HasValue
-                ? DateTimeOffset.Now.Add(this.timeToLive.Value)
-                : ObjectCache.InfiniteAbsoluteExpiration;
-            var slidingExpiration = this.timeToIdle.HasValue
-                ? this.timeToIdle.Value
-                : ObjectCache.NoSlidingExpiration;
+
+            var options = new MemoryCacheEntryOptions();
+
+            if (this.timeToLive != null)
+            {
+                options.SetAbsoluteExpiration(this.timeToLive.Value);
+            }
+
+            if (this.timeToIdle != null)
+            {
+                options.SetSlidingExpiration(this.timeToIdle.Value);
+            }
 
             Interlocked.Increment(ref this.putCount);
 
-            return this.cacheManager.Put(compositeKey, value, absoluteExpiration, slidingExpiration);
+            return this.memoryCache.Set<Map>(compositeKey, value, options);
         }
 
         Map ISynchronousCache.Remove(string key)
         {
             this.ThrowIfDisposed();
 
-            Interlocked.Increment(ref this.accessCount);
+            // Get the item, if it exists
+            var item = this.AsSyncInterface.Get(key);
 
-            var compositeKey = this.CreateCompositeKey(key);
-            var value = this.cacheManager.Remove(compositeKey);
+            // Actually remove it
+            this.memoryCache.Remove(this.CreateCompositeKey(key));
 
-            if (value == null)
-            {
-                Interlocked.Increment(ref this.missCount);
-            }
-            else
-            {
-                Interlocked.Increment(ref this.hitCount);
-            }
-
-            return value;
+            return item; // or null
         }
 
         Task<Map> IAsynchronousCache.GetAsync(string key, CancellationToken cancellationToken)
@@ -238,7 +227,7 @@ namespace Stormpath.SDK.Impl.Cache
 
                 if (disposing)
                 {
-                    this.cacheManager.Dispose();
+                    this.memoryCache.Dispose();
                 }
             }
         }

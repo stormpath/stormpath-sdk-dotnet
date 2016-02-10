@@ -42,6 +42,7 @@
     "AsyncUsageAnalyzers": "1.0.0-alpha003",
     "EWSoftware.SHFB": "2015.10.10.0",
     "EWSoftware.SHFB.NETFramework": "4.6",
+    "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
     "StyleCop.Analyzers": "1.0.0"
   }
 }
