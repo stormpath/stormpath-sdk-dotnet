@@ -225,8 +225,8 @@ namespace Stormpath.SDK.Http
         private static bool IsDatetimeSearchCriteria(string key)
         {
             return
-                key.Equals("createdAt", StringComparison.InvariantCultureIgnoreCase) ||
-                key.Equals("modifiedAt", StringComparison.InvariantCultureIgnoreCase);
+                key.Equals("createdAt", StringComparison.OrdinalIgnoreCase) ||
+                key.Equals("modifiedAt", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Stormpath.SDK.Http
         private static Dictionary<string, string> ToSortedDictionary(IEnumerable<KeyValuePair<string, string>> queryParams)
         {
             return queryParams
-                .OrderBy(x => x.Key, StringComparer.InvariantCultureIgnoreCase)
+                .OrderBy(x => x.Key, StringComparer.OrdinalIgnoreCase)
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
     }

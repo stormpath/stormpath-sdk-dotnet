@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Impl.Resource
 
                 bool isEmptyOrDefault =
                     href == null ||
-                    href.StartsWith("autogen", StringComparison.InvariantCultureIgnoreCase);
+                    href.StartsWith("autogen", StringComparison.OrdinalIgnoreCase);
 
                 return isEmptyOrDefault
                     ? null

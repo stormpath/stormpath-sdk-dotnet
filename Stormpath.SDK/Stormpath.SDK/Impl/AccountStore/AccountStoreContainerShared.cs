@@ -327,11 +327,11 @@ namespace Stormpath.SDK.Impl.AccountStore
                 bool? isDirectoryType = null;
                 if (splitHrefOrName.Length == container.Href.Split('/').Length)
                 {
-                    if (splitHrefOrName[4].Equals("directories", StringComparison.InvariantCultureIgnoreCase))
+                    if (splitHrefOrName[4].Equals("directories", StringComparison.OrdinalIgnoreCase))
                     {
                         isDirectoryType = true;
                     }
-                    else if (splitHrefOrName[4].Equals("groups", StringComparison.InvariantCultureIgnoreCase))
+                    else if (splitHrefOrName[4].Equals("groups", StringComparison.OrdinalIgnoreCase))
                     {
                         isDirectoryType = false;
                     }
@@ -413,11 +413,11 @@ namespace Stormpath.SDK.Impl.AccountStore
                 bool? isDirectoryType = null;
                 if (splitHrefOrName.Length == container.Href.Split('/').Length)
                 {
-                    if (splitHrefOrName[4].Equals("directories", StringComparison.InvariantCultureIgnoreCase))
+                    if (splitHrefOrName[4].Equals("directories", StringComparison.OrdinalIgnoreCase))
                     {
                         isDirectoryType = true;
                     }
-                    else if (splitHrefOrName[4].Equals("groups", StringComparison.InvariantCultureIgnoreCase))
+                    else if (splitHrefOrName[4].Equals("groups", StringComparison.OrdinalIgnoreCase))
                     {
                         isDirectoryType = false;
                     }

@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Impl.Group
             IGroupMembership foundMembership = null;
             foreach (var item in this.AsInterface.GetAccountMemberships().Synchronously())
             {
-                if ((item as IInternalGroupMembership).AccountHref.Equals(account.Href, StringComparison.InvariantCultureIgnoreCase))
+                if ((item as IInternalGroupMembership).AccountHref.Equals(account.Href, StringComparison.OrdinalIgnoreCase))
                 {
                     foundMembership = item;
                 }
@@ -85,9 +85,9 @@ namespace Stormpath.SDK.Impl.Group
             foreach (var item in this.AsInterface.GetAccountMemberships().Synchronously())
             {
                 IAccount account = item.GetAccount();
-                if (account.Href.Equals(hrefOrEmailOrUsername, StringComparison.InvariantCultureIgnoreCase) ||
-                    account.Email.Equals(hrefOrEmailOrUsername, StringComparison.InvariantCultureIgnoreCase) ||
-                    account.Username.Equals(hrefOrEmailOrUsername, StringComparison.InvariantCultureIgnoreCase))
+                if (account.Href.Equals(hrefOrEmailOrUsername, StringComparison.OrdinalIgnoreCase) ||
+                    account.Email.Equals(hrefOrEmailOrUsername, StringComparison.OrdinalIgnoreCase) ||
+                    account.Username.Equals(hrefOrEmailOrUsername, StringComparison.OrdinalIgnoreCase))
                 {
                     foundMembership = item;
                 }

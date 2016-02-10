@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
     {
         private static bool IsStatusField(KeyValuePair<string, object> token)
         {
-            return string.Equals(token.Key, "status", StringComparison.InvariantCultureIgnoreCase)
+            return string.Equals(token.Key, "status", StringComparison.OrdinalIgnoreCase)
                     && !string.IsNullOrEmpty(token.Value.ToString());
         }
 

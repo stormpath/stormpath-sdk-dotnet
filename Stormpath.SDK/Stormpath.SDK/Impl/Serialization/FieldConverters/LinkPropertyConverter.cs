@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             }
 
             var firstItem = asEmbeddedObject.FirstOrDefault();
-            var hasHref = string.Equals(firstItem.Key, "href", StringComparison.InvariantCultureIgnoreCase);
+            var hasHref = string.Equals(firstItem.Key, "href", StringComparison.OrdinalIgnoreCase);
 
             if (!hasHref)
             {

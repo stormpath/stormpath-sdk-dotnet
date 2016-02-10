@@ -211,7 +211,7 @@ namespace Stormpath.SDK.Impl.IdSite
 
         internal static void ThrowIfJwtSignatureInvalid(string jwtApiKey, IClientApiKey clientApiKey, IJwt jwt)
         {
-            if (!clientApiKey.GetId().Equals(jwtApiKey, StringComparison.InvariantCultureIgnoreCase))
+            if (!clientApiKey.GetId().Equals(jwtApiKey, StringComparison.OrdinalIgnoreCase))
             {
                 throw new JwtSignatureException("The client used to sign the response is different than the one used in this DataStore.");
             }

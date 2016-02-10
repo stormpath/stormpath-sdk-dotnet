@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Shared
                 return false;
             }
 
-            return x.Value.Equals(y.value, StringComparison.InvariantCultureIgnoreCase);
+            return x.Value.Equals(y.value, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Stormpath.SDK.Shared
             }
 
             var typeMatches = this.GetType().Equals(obj.GetType());
-            var valueMatches = this.value.Equals(otherValue.Value, StringComparison.InvariantCultureIgnoreCase);
+            var valueMatches = this.value.Equals(otherValue.Value, StringComparison.OrdinalIgnoreCase);
 
             return typeMatches && valueMatches;
         }
