@@ -82,6 +82,18 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_organization_by_nameKey(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var org = client.GetOrganization(this.fixture.PrimaryOrganizationHref);
+
+            var orgByNameKey = client.GetOrganizationByNameKey(org.NameKey);
+
+            org.Href.ShouldBe(orgByNameKey.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Saving_organization(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

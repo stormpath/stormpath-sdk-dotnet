@@ -81,6 +81,18 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_organization_by_nameKey(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var org = await client.GetOrganizationAsync(this.fixture.PrimaryOrganizationHref);
+
+            var orgByNameKey = await client.GetOrganizationByNameKeyAsync(org.NameKey);
+
+            org.Href.ShouldBe(orgByNameKey.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Saving_organization(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

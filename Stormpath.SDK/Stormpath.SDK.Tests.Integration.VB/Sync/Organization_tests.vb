@@ -77,6 +77,17 @@ Namespace Sync
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Sub Getting_organization_by_nameKey(clientBuilder As TestClientProvider)
+            Dim client = clientBuilder.GetClient()
+            Dim org = client.GetOrganization(Me.fixture.PrimaryOrganizationHref)
+
+            Dim orgByNameKey = client.GetOrganizationByNameKey(org.NameKey)
+
+            org.Href.ShouldBe(orgByNameKey.Href)
+        End Sub
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Sub Saving_organization(clientBuilder As TestClientProvider)
             Dim client = clientBuilder.GetClient()
 

@@ -77,6 +77,17 @@ Namespace Async
 
         <Theory>
         <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
+        Public Async Function Getting_organization_by_nameKey(clientBuilder As TestClientProvider) As Task
+            Dim client = clientBuilder.GetClient()
+            Dim org = Await client.GetOrganizationAsync(Me.fixture.PrimaryOrganizationHref)
+
+            Dim orgByNameKey = Await client.GetOrganizationByNameKeyAsync(org.NameKey)
+
+            org.Href.ShouldBe(orgByNameKey.Href)
+        End Function
+
+        <Theory>
+        <MemberData(NameOf(TestClients.GetClients), MemberType:=GetType(TestClients))>
         Public Async Function Saving_organization(clientBuilder As TestClientProvider) As Task
             Dim client = clientBuilder.GetClient()
 
