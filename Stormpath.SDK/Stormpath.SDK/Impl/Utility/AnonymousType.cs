@@ -15,31 +15,33 @@
 // </copyright>
 
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Reflection;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.Utility
 {
     internal static class AnonymousType
     {
-        public static Map ToDictionary(object nameValuePairs)
+        public static Map ToDictionary(object anonymous)
         {
-            if (nameValuePairs == null)
+            if (anonymous == null)
             {
                 return null;
             }
 
-            bool isConcreteType = !string.IsNullOrEmpty(nameValuePairs.GetType().Namespace);
+            var typeInfo = anonymous.GetType().GetTypeInfo();
+
+            bool isConcreteType = !string.IsNullOrEmpty(anonymous.GetType().Namespace);
             if (isConcreteType)
             {
                 return null;
             }
 
             var dictionary = new Dictionary<string, object>();
-            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(nameValuePairs))
+            foreach (var property in typeInfo.DeclaredProperties)
             {
-                object value = descriptor.GetValue(nameValuePairs);
-                dictionary.Add(descriptor.Name, value);
+                object value = property.GetValue(anonymous);
+                dictionary.Add(property.Name, value);
             }
 
             return dictionary;
