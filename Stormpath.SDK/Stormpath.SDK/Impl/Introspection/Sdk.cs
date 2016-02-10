@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Stormpath.SDK.Impl.Introspection
 {
@@ -42,9 +43,11 @@ namespace Stormpath.SDK.Impl.Introspection
 
         private static string GetSdkVersion()
         {
-            return typeof(SDK.Client.IClient).Assembly
-                .GetName().Version.ToString()
-                .Replace(".0", string.Empty); // remove unnecessary .0.0
+            return typeof(SDK.Client.IClient).GetTypeInfo()
+                .Assembly
+                .GetName()
+                .Version
+                .ToString();
         }
     }
 }

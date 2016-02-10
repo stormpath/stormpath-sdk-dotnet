@@ -16,6 +16,7 @@
 
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.AccountStore;
@@ -126,10 +127,10 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         private static bool IsAccountStoreMapping(IResourceDataResult result)
         {
-            var type = result.Type;
-            return typeof(IAccountStoreMapping).IsAssignableFrom(type)
-                || typeof(IAccountStoreMapping<IApplicationAccountStoreMapping>).IsAssignableFrom(type)
-                || typeof(IAccountStoreMapping<IOrganizationAccountStoreMapping>).IsAssignableFrom(type);
+            var typeInfo = result.Type.GetTypeInfo();
+            return typeof(IAccountStoreMapping).GetTypeInfo().IsAssignableFrom(typeInfo)
+                || typeof(IAccountStoreMapping<IApplicationAccountStoreMapping>).GetTypeInfo().IsAssignableFrom(typeInfo)
+                || typeof(IAccountStoreMapping<IOrganizationAccountStoreMapping>).GetTypeInfo().IsAssignableFrom(typeInfo);
         }
 
         private static string GetContainerHref(string key, IResourceDataResult result)

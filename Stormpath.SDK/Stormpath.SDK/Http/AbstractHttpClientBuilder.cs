@@ -50,9 +50,8 @@ namespace Stormpath.SDK.Http
 
         internal AbstractHttpClientBuilder(Type targetType)
         {
-            this.targetConstructor = targetType.FindConstructor(
-                new Type[] { typeof(string), typeof(int), typeof(IWebProxy), typeof(ILogger) },
-                findPrivate: true);
+            this.targetConstructor = targetType.GetTypeInfo()
+                .GetConstructor(parameterTypes: new Type[] { typeof(string), typeof(int), typeof(IWebProxy), typeof(ILogger) });
 
             if (this.targetConstructor == null)
             {

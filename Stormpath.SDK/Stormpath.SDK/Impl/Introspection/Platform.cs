@@ -77,7 +77,10 @@ namespace Stormpath.SDK.Impl.Introspection
                 return "unknown-2";
             }
 
-            var displayNameMethod = monoRuntimeType.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+            var displayNameMethod = monoRuntimeType.GetTypeInfo().DeclaredMethods
+                .Where(m => m.Name == "GetDisplayName" && !m.IsPublic && m.IsStatic)
+                .SingleOrDefault();
+
             if (displayNameMethod == null)
             {
                 return "unknown-3";

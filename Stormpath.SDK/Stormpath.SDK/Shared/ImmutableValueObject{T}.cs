@@ -165,9 +165,11 @@ namespace Stormpath.SDK.Shared
 
             while (type != baseType)
             {
-                fields.AddRange(type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public));
+                var typeInfo = type.GetTypeInfo();
 
-                type = type.BaseType;
+                fields.AddRange(typeInfo.DeclaredFields);
+
+                type = typeInfo.BaseType;
             }
 
             return fields;

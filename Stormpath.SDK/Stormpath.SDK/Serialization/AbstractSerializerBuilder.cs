@@ -42,9 +42,8 @@ namespace Stormpath.SDK.Serialization
 
         internal AbstractSerializerBuilder(Type targetType)
         {
-            this.targetConstructor = targetType.FindConstructor(
-                new Type[] { },
-                findPrivate: true);
+            this.targetConstructor = targetType.GetTypeInfo()
+                .GetDefaultConstructor();
 
             if (this.targetConstructor == null)
             {

@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Logging;
@@ -39,7 +40,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
         private static IResourceDataResult FilterCore(IResourceDataResult result)
         {
-            if (typeof(IProviderAccountResult).IsAssignableFrom(result.Type))
+            if (typeof(IProviderAccountResult).GetTypeInfo().IsAssignableFrom(result.Type.GetTypeInfo()))
             {
                 result.Body.Add("isNewAccount", result.HttpStatus == 201);
             }

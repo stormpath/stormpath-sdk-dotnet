@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.CustomData;
@@ -35,8 +36,8 @@ namespace Stormpath.SDK.Impl.Resource
             this.ResetCustomData();
         }
 
-        public static bool IsExtendable(Type type)
-            => typeof(IExtendable).IsAssignableFrom(type);
+        public static bool IsExtendable(TypeInfo typeInfo)
+            => typeof(IExtendable).GetTypeInfo().IsAssignableFrom(typeInfo);
 
         internal IEmbeddedProperty CustomData => this.GetLinkProperty(CustomDataPropertyName);
 

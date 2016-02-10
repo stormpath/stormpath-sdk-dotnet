@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Stormpath.SDK.Impl.DataStore;
 
 namespace Stormpath.SDK.Impl.Serialization.FieldConverters
@@ -51,7 +52,8 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             else
             {
                 bool isSupportedTargetType = this.appliesToTargetTypes.Contains(targetType);
-                bool isSupportedGenericTargetType = (targetType?.IsGenericType ?? false) && this.appliesToTargetTypes.Contains(this.typeLookup.GetInnerCollectionInterface(targetType));
+                bool isSupportedGenericTargetType = (targetType?.GetTypeInfo().IsGenericType ?? false) && this.appliesToTargetTypes.Contains(this.typeLookup.GetInnerCollectionInterface(targetType));
+
                 isSupported = isSupportedTargetType || isSupportedGenericTargetType;
             }
 

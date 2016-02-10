@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Api;
@@ -228,7 +229,7 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="type">The type to check</param>
         /// <returns><see langword="true"/> if this type represents a paged collection response; <see langword="false"/> otherwise.</returns>
         public bool IsCollectionResponse(Type type)
-            => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
+            => type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(CollectionResponsePage<>);
 
         /// <summary>
         /// Looks up an interface from a concrete type.

@@ -16,20 +16,22 @@
 
 using System;
 using System.Reflection;
+using System.Linq;
 
 namespace Stormpath.SDK.Impl.Extensions
 {
     internal static class ReflectionExtensions
     {
-        public static ConstructorInfo FindConstructor(this Type type, Type[] parameterTypes, bool findPrivate = false)
-        {
-            var bindingFlags = BindingFlags.Instance | BindingFlags.Public;
-            if (findPrivate)
-            {
-                bindingFlags |= BindingFlags.NonPublic;
-            }
+        public static ConstructorInfo GetDefaultConstructor(this TypeInfo typeInfo)
+            => typeInfo.GetConstructor(Type.EmptyTypes);
 
-            return type?.GetConstructor(bindingFlags, null, parameterTypes, null);
+        public static ConstructorInfo GetConstructor(this TypeInfo typeInfo, Type[] parameterTypes)
+        {
+            var constructor = typeInfo.DeclaredConstructors
+                .Where(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(parameterTypes))
+                .SingleOrDefault();
+
+            return constructor;
         }
     }
 }

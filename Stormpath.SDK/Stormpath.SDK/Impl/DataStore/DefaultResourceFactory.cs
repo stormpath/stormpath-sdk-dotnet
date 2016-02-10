@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.IdentityMap;
 using Stormpath.SDK.Impl.Resource;
 using Map = System.Collections.Generic.IDictionary<string, object>;
@@ -210,8 +212,11 @@ namespace Stormpath.SDK.Impl.DataStore
         private object CreateCollection(Type collectionType, Type innerType, long offset, long limit, long size, string href, IEnumerable<object> items)
         {
             var typeOfListType = typeof(List<>).MakeGenericType(innerType);
-            var listOfMaterializedItems = typeOfListType.GetConstructor(Type.EmptyTypes).Invoke(Type.EmptyTypes);
-            var addMethod = typeOfListType.GetMethod("Add", new Type[] { innerType });
+            var listOfMaterializedItems = typeOfListType.GetTypeInfo()
+                .GetDefaultConstructor()
+                .Invoke(Type.EmptyTypes);
+            var addMethod = typeOfListType.GetTypeInfo()
+                .GetDeclaredMethod("Add");
 
             foreach (var item in items)
             {

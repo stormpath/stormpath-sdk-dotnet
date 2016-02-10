@@ -18,6 +18,9 @@
     "net451": {
       "frameworkAssemblies": {
         "System.Threading": "4.0.0.0"
+      },
+      "dependencies": {
+        "System.Reflection": "4.1.0-beta-23516"
       }
     },
     "dotnet5.4": {

@@ -18,6 +18,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -70,7 +71,7 @@ namespace Stormpath.SDK.Impl.CustomData
         {
             var type = value.GetType();
 
-            if (type.IsPrimitive ||
+            if (type.GetTypeInfo().IsPrimitive ||
                 type == typeof(string) ||
                 type == typeof(decimal))
             {
