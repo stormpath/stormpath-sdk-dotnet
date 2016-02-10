@@ -154,11 +154,12 @@ namespace Stormpath.SDK.Impl.Client
 
             return await this.tenant.GetOrganizationAsync(href).ConfigureAwait(false);
         }
-        async Task<IOrganization> ITenantActions.GetOrganizationByNameAsync(string href, CancellationToken cancellationToken)
+
+        async Task<IOrganization> ITenantActions.GetOrganizationByNameKeyAsync(string href, CancellationToken cancellationToken)
         {
             await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
-            return await this.tenant.GetOrganizationByNameAsync(href).ConfigureAwait(false);
+            return await this.tenant.GetOrganizationByNameKeyAsync(href).ConfigureAwait(false);
         }
 
         async Task<IAccessToken> ITenantActions.GetAccessTokenAsync(string href, CancellationToken cancellationToken)

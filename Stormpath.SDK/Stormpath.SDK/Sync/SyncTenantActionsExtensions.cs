@@ -245,15 +245,15 @@ namespace Stormpath.SDK.Sync
             => (tenantActions as ITenantActionsSync).GetOrganization(href);
 
         /// <summary>
-        /// Synchronously retrieves the <see cref="IOrganization">Organization</see> by the Organization name.
+        /// Synchronously retrieves the <see cref="IOrganization">Organization</see> by the Organization <c>nameKey</c>.
         /// </summary>
-        /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IOrganization}(DataStore.IDataStore, string)"/>.</remarks>
+        /// <remarks>This is a convenience method that looks up an <see cref="IOrganization">Organization</see> by its <c>nameKey</c>.</remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
-        /// <param name="nameKey">The name of the <see cref="IOrganization">Organization</see> to retrieve.</param>
+        /// <param name="nameKey">The <c>nameKey</c> of the <see cref="IOrganization">Organization</see> to retrieve.</param>
         /// <returns>The <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
-        public static IOrganization GetOrganizationByName(this ITenantActions tenantActions, string nameKey)
-            => (tenantActions as ITenantActionsSync).GetOrganizationByName(nameKey);
+        public static IOrganization GetOrganizationByNameKey(this ITenantActions tenantActions, string nameKey)
+            => (tenantActions as ITenantActionsSync).GetOrganizationByNameKey(nameKey);
 
         /// <summary>
         /// Synchronously retrieves the <see cref="IAccessToken">Access Token</see> at the specified Stormpath URL.

@@ -229,15 +229,14 @@ namespace Stormpath.SDK.Tenant
         Task<IOrganization> GetOrganizationAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Retrieves the <see cref="IOrganization">Organization</see> by the Organization name.
+        /// Retrieves the <see cref="IOrganization">Organization</see> by the Organization <c>nameKey</c>.
         /// </summary>
-        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStore.GetResourceAsync{IOrganization}(string, CancellationToken)"/>.</remarks>
-        /// <param name="nameKey">The name of the <see cref="IOrganization">Organization</see> to retrieve.</param>
+        /// <remarks>This is a convenience method that looks up an <see cref="IOrganization">Organization</see> by its <c>nameKey</c>.</remarks>
+        /// <param name="nameKey">The <c>nameKey</c> of the <see cref="IOrganization">Organization</see> to retrieve.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
-        Task<IOrganization> GetOrganizationByNameAsync(string nameKey, CancellationToken cancellationToken = default(CancellationToken));
-
+        Task<IOrganization> GetOrganizationByNameKeyAsync(string nameKey, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Retrieves the <see cref="IAccessToken">Access Token</see> at the specified Stormpath URL.

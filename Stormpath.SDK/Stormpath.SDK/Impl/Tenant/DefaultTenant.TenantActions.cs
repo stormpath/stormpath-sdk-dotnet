@@ -150,10 +150,11 @@ namespace Stormpath.SDK.Impl.Tenant
         Task<IOrganization> ITenantActions.GetOrganizationAsync(string href, CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IOrganization>(href);
 
-        Task<IOrganization> ITenantActions.GetOrganizationByNameAsync(string nameKey, CancellationToken cancellationToken)
+        Task<IOrganization> ITenantActions.GetOrganizationByNameKeyAsync(string nameKey, CancellationToken cancellationToken)
         {
-            return this.AsInterface.GetOrganizations().Where(org => org.Name == nameKey).SingleOrDefaultAsync();
+            return this.AsInterface.GetOrganizations().Where(org => org.NameKey == nameKey).SingleOrDefaultAsync();
         }
+
         Task<IAccessToken> ITenantActions.GetAccessTokenAsync(string href, CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IAccessToken>(href);
 

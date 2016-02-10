@@ -150,9 +150,9 @@ namespace Stormpath.SDK.Impl.Tenant
         IOrganization ITenantActionsSync.GetOrganization(string href)
             => this.GetInternalSyncDataStore().GetResource<IOrganization>(href);
 
-        IOrganization ITenantActionsSync.GetOrganizationByName(string nameKey)
+        IOrganization ITenantActionsSync.GetOrganizationByNameKey(string nameKey)
         {
-            return this.AsInterface.GetOrganizations().Where(org => org.Name == nameKey).Synchronously().SingleOrDefault();
+            return this.AsInterface.GetOrganizations().Where(org => org.NameKey == nameKey).Synchronously().SingleOrDefault();
         }
 
         IAccessToken ITenantActionsSync.GetAccessToken(string href)

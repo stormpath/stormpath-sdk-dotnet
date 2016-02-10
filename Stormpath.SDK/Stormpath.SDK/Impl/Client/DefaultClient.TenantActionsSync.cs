@@ -153,11 +153,12 @@ namespace Stormpath.SDK.Impl.Client
 
             return this.tenant.GetOrganization(href);
         }
-        IOrganization ITenantActionsSync.GetOrganizationByName(string nameKey)
+
+        IOrganization ITenantActionsSync.GetOrganizationByNameKey(string nameKey)
         {
             this.EnsureTenant();
 
-            return this.tenant.GetOrganizationByName(nameKey);
+            return this.tenant.GetOrganizationByNameKey(nameKey);
         }
 
         IAccessToken ITenantActionsSync.GetAccessToken(string href)
