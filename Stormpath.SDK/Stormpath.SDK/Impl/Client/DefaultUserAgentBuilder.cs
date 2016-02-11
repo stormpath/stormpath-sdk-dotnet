@@ -33,6 +33,7 @@ namespace Stormpath.SDK.Impl.Client
         {
             this.runtime = runtimeEnvironment;
             this.app = appEnvironment;
+            this.frameworkUserAgent = frameworkUserAgent;
             this.language = language;
 
             this.userAgentValue = new Lazy<string>(() => this.Generate());

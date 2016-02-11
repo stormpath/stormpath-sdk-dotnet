@@ -37,11 +37,17 @@ namespace Stormpath.SDK.Client
         /// </example>
         public static IClientBuilder Builder()
         {
+            var language = string.Empty;
+#if NET451
+            var currentAssembly = System.Reflection.Assembly.GetCallingAssembly();
+#else
+#endif
+
             var userAgentBuilder = new DefaultUserAgentBuilder(
                 runtimeEnvironment: PlatformServices.Default.Runtime,
                 appEnvironment: PlatformServices.Default.Application,
                 frameworkUserAgent: string.Empty, // todo - from StormpathConfiguration
-                language: System.Reflection.Assembly.GetCallingAssembly().ToString()); // todo - libpolyglot
+                language: language);
 
             return new DefaultClientBuilder(userAgentBuilder);
         }

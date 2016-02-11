@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Impl.IdentityMap
         private long lifetimeItemsAdded;
         private bool isDisposed = false; // To detect redundant calls
 
-        private object @lock;
+        private object @lock = new object();
 
         public MemoryCacheIdentityMap(TimeSpan slidingExpiration, ILogger logger)
         {
