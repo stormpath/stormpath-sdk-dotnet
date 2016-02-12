@@ -9,9 +9,10 @@
     "defaultNamespace": "Stormpath.SDK.Extensions.Http"
   },
   "dependencies": {
-    "RestSharp": "105.2.2"
+    "RestSharp": "105.2.2",
+    "Stormpath.SDK.Abstractions": "0.6.0"
   },
   "frameworks": {
-    "net45": { }
+    "net451": { }
   }
 }

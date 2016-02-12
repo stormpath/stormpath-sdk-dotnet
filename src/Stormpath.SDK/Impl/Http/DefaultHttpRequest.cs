@@ -19,7 +19,7 @@ using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.Http
 {
-    internal sealed class DefaultHttpRequest : HttpMessageBase, IHttpRequest
+    internal sealed class DefaultHttpRequest : IHttpRequest
     {
         private readonly HttpMethod method;
         private readonly CanonicalUri canonicalUri;
@@ -64,14 +64,16 @@ namespace Stormpath.SDK.Impl.Http
             this.bodyContentType = bodyContentType;
         }
 
-        public override string Body => this.body;
+        public string Body => this.body;
 
-        public override string BodyContentType => this.bodyContentType;
+        public string BodyContentType => this.bodyContentType;
 
-        public override HttpHeaders Headers => this.headers;
+        public HttpHeaders Headers => this.headers;
 
         public HttpMethod Method => this.method;
 
         public CanonicalUri CanonicalUri => this.canonicalUri;
+
+        public bool HasBody => !string.IsNullOrEmpty(this.Body);
     }
 }

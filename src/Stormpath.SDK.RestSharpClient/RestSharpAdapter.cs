@@ -17,36 +17,37 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RestSharp;
 
-namespace Stormpath.SDK.Extensions.Http
+namespace Stormpath.SDK.Extensions.Http.RestSharp
 {
     internal class RestSharpAdapter
     {
-        public RestSharp.IRestRequest ToRestRequest(string baseUrl, SDK.Http.IHttpRequest request)
+        public IRestRequest ToRestRequest(string baseUrl, SDK.Http.IHttpRequest request)
         {
             var resourcePath = request.CanonicalUri.ToString().Replace(baseUrl, string.Empty);
             var method = this.ConvertMethod(request.Method);
 
-            var restRequest = new RestSharp.RestRequest(resourcePath, method);
-            restRequest.RequestFormat = RestSharp.DataFormat.Json;
+            var restRequest = new RestRequest(resourcePath, method);
+            restRequest.RequestFormat = DataFormat.Json;
             this.CopyHeaders(request.Headers, restRequest);
 
             if (request.HasBody)
             {
-                restRequest.AddParameter(request.BodyContentType, request.Body, RestSharp.ParameterType.RequestBody);
+                restRequest.AddParameter(request.BodyContentType, request.Body, ParameterType.RequestBody);
             }
 
             return restRequest;
         }
 
-        public SDK.Http.IHttpResponse ToHttpResponse(RestSharp.IRestResponse response)
+        public SDK.Http.IHttpResponse ToHttpResponse(IRestResponse response)
         {
             bool transportError = false;
             var responseMessages = new List<string>();
 
             transportError =
-                response.ResponseStatus == RestSharp.ResponseStatus.TimedOut ||
-                response.ResponseStatus == RestSharp.ResponseStatus.Aborted;
+                response.ResponseStatus == ResponseStatus.TimedOut ||
+                response.ResponseStatus == ResponseStatus.Aborted;
 
             if (response.ErrorException != null)
             {
@@ -64,7 +65,7 @@ namespace Stormpath.SDK.Extensions.Http
 
             var headers = this.ToHttpHeaders(response.Headers);
 
-            return new Impl.Http.DefaultHttpResponse(
+            return new RestSharpHttpResponse(
                 (int)response.StatusCode,
                 string.Join(Environment.NewLine, responseMessages),
                 headers,
@@ -73,7 +74,7 @@ namespace Stormpath.SDK.Extensions.Http
                 transportError);
         }
 
-        private void CopyHeaders(SDK.Http.HttpHeaders httpHeaders, RestSharp.IRestRequest restRequest)
+        private void CopyHeaders(SDK.Http.HttpHeaders httpHeaders, IRestRequest restRequest)
         {
             if (httpHeaders == null)
             {
@@ -89,11 +90,11 @@ namespace Stormpath.SDK.Extensions.Http
             }
         }
 
-        private SDK.Http.HttpHeaders ToHttpHeaders(IList<RestSharp.Parameter> restSharpHeaders)
+        private SDK.Http.HttpHeaders ToHttpHeaders(IList<Parameter> restSharpHeaders)
         {
             var result = new SDK.Http.HttpHeaders();
 
-            foreach (var header in restSharpHeaders.Where(x => x.Type == RestSharp.ParameterType.HttpHeader))
+            foreach (var header in restSharpHeaders.Where(x => x.Type == ParameterType.HttpHeader))
             {
                 result.Add(header.Name, header.Value);
             }
@@ -101,36 +102,36 @@ namespace Stormpath.SDK.Extensions.Http
             return result;
         }
 
-        private RestSharp.Method ConvertMethod(SDK.Http.HttpMethod httpMethod)
+        private Method ConvertMethod(SDK.Http.HttpMethod httpMethod)
         {
             if (httpMethod == SDK.Http.HttpMethod.Delete)
             {
-                return RestSharp.Method.DELETE;
+                return Method.DELETE;
             }
 
             if (httpMethod == SDK.Http.HttpMethod.Get)
             {
-                return RestSharp.Method.GET;
+                return Method.GET;
             }
 
             if (httpMethod == SDK.Http.HttpMethod.Head)
             {
-                return RestSharp.Method.HEAD;
+                return Method.HEAD;
             }
 
             if (httpMethod == SDK.Http.HttpMethod.Options)
             {
-                return RestSharp.Method.OPTIONS;
+                return Method.OPTIONS;
             }
 
             if (httpMethod == SDK.Http.HttpMethod.Post)
             {
-                return RestSharp.Method.POST;
+                return Method.POST;
             }
 
             if (httpMethod == SDK.Http.HttpMethod.Put)
             {
-                return RestSharp.Method.PUT;
+                return Method.PUT;
             }
 
             throw new ArgumentException($"Unknown method type {httpMethod}", nameof(httpMethod));

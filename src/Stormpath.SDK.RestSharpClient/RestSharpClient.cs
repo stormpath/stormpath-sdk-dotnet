@@ -19,9 +19,10 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using RestSharp;
 using Stormpath.SDK.Logging;
 
-namespace Stormpath.SDK.Extensions.Http
+namespace Stormpath.SDK.Extensions.Http.RestSharp
 {
     /// <summary>
     /// RestSharp-based HTTP client for Stormpath.SDK.
@@ -68,9 +69,9 @@ namespace Stormpath.SDK.Extensions.Http
             this.logger = logger;
         }
 
-        private RestSharp.IRestClient CreateClientForRequest(SDK.Http.IHttpRequest request)
+        private IRestClient CreateClientForRequest(SDK.Http.IHttpRequest request)
         {
-            var client = new RestSharp.RestClient();
+            var client = new RestClient();
 
             // Configure default settings
             client.BaseUrl = new Uri(this.baseUrl, UriKind.Absolute);
@@ -88,7 +89,7 @@ namespace Stormpath.SDK.Extensions.Http
             return client;
         }
 
-        private static bool IsValidBaseUrl(RestSharp.IRestClient client, SDK.Http.IHttpRequest request)
+        private static bool IsValidBaseUrl(IRestClient client, SDK.Http.IHttpRequest request)
         {
             return request.CanonicalUri
                 .ToString()

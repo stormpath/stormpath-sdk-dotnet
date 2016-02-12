@@ -27,6 +27,6 @@ namespace Stormpath.SDK.Http
         /// <param name="factory">The factory.</param>
         /// <returns>A <see cref="IHttpClientBuilder">builder</see> capable of constructing an instance of the RestSharp-based HTTP client.</returns>
         public static IHttpClientBuilder RestSharpClient(this IHttpClientFactory factory)
-            => new AbstractHttpClientBuilder<Extensions.Http.RestSharpClient>();
+            => new AbstractHttpClientBuilder<Extensions.Http.RestSharp.RestSharpClient>();
     }
 }
