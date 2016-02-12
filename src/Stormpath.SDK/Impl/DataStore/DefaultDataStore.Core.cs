@@ -32,6 +32,7 @@ using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
 using Map = System.Collections.Generic.IDictionary<string, object>;
+using Stormpath.SDK.Impl.Extensions;
 
 namespace Stormpath.SDK.Impl.DataStore
 {

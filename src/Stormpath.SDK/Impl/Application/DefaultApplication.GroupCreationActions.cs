@@ -27,9 +27,6 @@ namespace Stormpath.SDK.Impl.Application
         Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, CancellationToken cancellationToken)
             => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, cancellationToken);
 
-        Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-            => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, creationOptionsAction, cancellationToken);
-
         Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, IGroupCreationOptions creationOptions, CancellationToken cancellationToken)
             => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, creationOptions, cancellationToken);
 

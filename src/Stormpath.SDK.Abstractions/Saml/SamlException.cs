@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Saml
     /// </summary>
     public sealed class SamlException : ResourceException
     {
-        internal SamlException(IError error)
+        public SamlException(IError error)
             : base(error)
         {
         }

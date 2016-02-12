@@ -18,13 +18,15 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Impl.Account;
+using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Directory
 {
-    internal sealed partial class DefaultDirectory : AbstractExtendableInstanceResource, IDirectory, IDirectorySync
+    internal sealed partial class DefaultDirectory : AbstractExtendableInstanceResource, IDirectory, IDirectorySync, IAccountCreationActionsInternal, IGroupCreationActionsInternal
     {
         private static readonly string AccountCreationPolicyPropertyName = "accountCreationPolicy";
         private static readonly string AccountsPropertyName = "accounts";
@@ -44,7 +46,8 @@ namespace Stormpath.SDK.Impl.Directory
 
         internal IEmbeddedProperty AccountCreationPolicy => this.GetLinkProperty(AccountCreationPolicyPropertyName);
 
-        internal IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
+        // todo: internal after 1.0
+        public IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
         internal IEmbeddedProperty ApplicationMappings => this.GetLinkProperty(ApplicationMappingsPropertyName);
 
@@ -52,7 +55,8 @@ namespace Stormpath.SDK.Impl.Directory
 
         string IDirectory.Description => this.GetStringProperty(DescriptionPropertyName);
 
-        internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
+        // todo: internal after 1.0
+        public IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
         string IDirectory.Name => this.GetStringProperty(NamePropertyName);
 

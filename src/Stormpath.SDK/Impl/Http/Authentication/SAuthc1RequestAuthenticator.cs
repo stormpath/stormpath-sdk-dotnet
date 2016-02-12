@@ -183,7 +183,7 @@ namespace Stormpath.SDK.Impl.Http.Authentication
                 return "/";
             }
 
-            return RequestHelper.UrlEncode(relativeResourcePath, isPath: true, canonicalize: true);
+            return UrlEncoding.Encode(relativeResourcePath, isPath: true, canonicalize: true);
         }
 
         private static string CanonicalizeHeaders(IHttpRequest request)

@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Error
 
         internal readonly IError Error;
 
-        internal ResourceException(IError error)
+        public ResourceException(IError error)
             : base(error.Message)
         {
             this.Error = error;

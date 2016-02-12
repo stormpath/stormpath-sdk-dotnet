@@ -29,13 +29,6 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed partial class DefaultClient
     {
-        async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-        {
-            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
-
-            return await this.tenant.CreateApplicationAsync(application, creationOptionsAction, cancellationToken).ConfigureAwait(false);
-        }
-
         async Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken)
         {
             await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
@@ -64,13 +57,6 @@ namespace Stormpath.SDK.Impl.Client
             return await this.tenant.CreateDirectoryAsync(directory, cancellationToken).ConfigureAwait(false);
         }
 
-        async Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-        {
-            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
-
-            return await this.tenant.CreateDirectoryAsync(directory, creationOptionsAction, cancellationToken).ConfigureAwait(false);
-        }
-
         async Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, IDirectoryCreationOptions creationOptions, CancellationToken cancellationToken)
         {
             await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
@@ -90,13 +76,6 @@ namespace Stormpath.SDK.Impl.Client
             await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.CreateOrganizationAsync(organization, cancellationToken).ConfigureAwait(false);
-        }
-
-        async Task<IOrganization> ITenantActions.CreateOrganizationAsync(IOrganization organization, Action<OrganizationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-        {
-            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
-
-            return await this.tenant.CreateOrganizationAsync(organization, creationOptionsAction, cancellationToken).ConfigureAwait(false);
         }
 
         async Task<IOrganization> ITenantActions.CreateOrganizationAsync(IOrganization organization, IOrganizationCreationOptions creationOptions, CancellationToken cancellationToken)

@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultApplication.EmailVerification.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAccountCreationActionsInternal.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,16 @@
 // </copyright>
 
 using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Stormpath.SDK.Account;
-using Stormpath.SDK.Application;
-using Stormpath.SDK.Resource;
+using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Resource;
 
-namespace Stormpath.SDK.Impl.Application
+namespace Stormpath.SDK.Impl.Account
 {
-    internal sealed partial class DefaultApplication
+    [Obsolete("Remove when refactoring for 1.0")]
+    internal interface IAccountCreationActionsInternal
     {
-        Task IApplication.SendVerificationEmailAsync(string usernameOrEmail, CancellationToken cancellationToken)
-            => this.AsInterface.SendVerificationEmailAsync(request => request.Login = usernameOrEmail, cancellationToken);
+        IInternalAsyncDataStore GetInternalAsyncDataStore();
+
+        IEmbeddedProperty Accounts { get; }
     }
 }

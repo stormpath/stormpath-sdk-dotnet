@@ -20,6 +20,7 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.DataStore;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.DataStore.Filters;

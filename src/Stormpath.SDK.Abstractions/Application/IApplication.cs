@@ -214,59 +214,6 @@ namespace Stormpath.SDK.Application
         Task<IAuthenticationResult> AuthenticateAccountAsync(IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Authenticates an account's submitted principals and credentials (e.g. username and password)
-        /// against the specified account store.
-        /// If the account does not exist in the account store, the authentication attempt will fail.
-        /// </summary>
-        /// <param name="requestBuilder">Sets the login request parameters.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>
-        /// The result of the authentication.
-        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
-        /// </returns>
-        /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
-        /// <example>
-        /// To attempt to authenticate against a specific account store:
-        /// <code>
-        /// var result = await myApp.AuthenticateAccountAsync(request =>
-        /// {
-        ///     request.SetUsernameOrEmail("jsmith");
-        ///     request.SetPassword("Password123#");
-        ///     request.SetAccountStore(myAccountStore);
-        /// });
-        /// </code>
-        /// </example>
-        Task<IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Authenticates an account's submitted principals and credentials (e.g. username and password)
-        /// against the specified account store.
-        /// If the account does not exist in the account store, the authentication attempt will fail.
-        /// </summary>
-        /// <param name="requestBuilder">Sets the login request parameters.</param>
-        /// <param name="responseOptions">The options to apply to this request.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>
-        /// The result of the authentication.
-        /// The authenticated account can be obtained from <see cref="IAuthenticationResult.GetAccountAsync(CancellationToken)"/>.
-        /// </returns>
-        /// <exception cref="Error.ResourceException">The authentication attempt failed.</exception>
-        /// <example>
-        /// To attempt to authenticate against a specific account store, and cache the returned account details:
-        /// <code>
-        /// var result = await myApp.AuthenticateAccountAsync(
-        ///     request =>
-        ///     {
-        ///         request.SetUsernameOrEmail("jsmith");
-        ///         request.SetPassword("Password123#");
-        ///         request.SetAccountStore(myAccountStore);
-        ///     },
-        ///     response => response.Expand(x => x.GetAccountAsync));
-        /// </code>
-        /// </example>
-        Task<IAuthenticationResult> AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
         /// Authenticates an account's submitted principals and credentials (e.g. username and password).
         /// The account must be in one of the Application's assigned account stores.
         /// If not in an assigned account store, the authentication attempt will fail.
@@ -301,25 +248,6 @@ namespace Stormpath.SDK.Application
         /// }
         /// </example>
         Task<bool> TryAuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Triggers the delivery of a new verification email for the specified account.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// This method is useful in scenarios where the Account Registration and Verification workflow
-        /// is enabled. If the welcome email has not been received by a newly registered account,
-        /// then the user will not be able to login until the account is verified.
-        /// </para>
-        /// <para>This method re-sends the verification email and allows the user to verify the account.</para>
-        /// <para>
-        /// The <see cref="IEmailVerificationRequest"/> must contain the username or email identifying the account.
-        /// </para>
-        /// </remarks>
-        /// <param name="requestBuilderAction">Sets the options required for the verification email request.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        Task SendVerificationEmailAsync(Action<EmailVerificationRequestBuilder> requestBuilderAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Triggers the delivery of a new verification email for the specified account.

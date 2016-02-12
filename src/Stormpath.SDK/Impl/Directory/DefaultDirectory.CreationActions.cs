@@ -26,9 +26,6 @@ namespace Stormpath.SDK.Impl.Directory
 {
     internal sealed partial class DefaultDirectory
     {
-        Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-            => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalAsyncDataStore(), this.Accounts.Href, account, creationOptionsAction, cancellationToken);
-
         Task<IAccount> IAccountCreationActions.CreateAccountAsync(IAccount account, IAccountCreationOptions creationOptions, CancellationToken cancellationToken)
             => AccountCreationActionsShared.CreateAccountAsync(this.GetInternalAsyncDataStore(), this.Accounts.Href, account, creationOptions, cancellationToken);
 
@@ -43,9 +40,6 @@ namespace Stormpath.SDK.Impl.Directory
 
         Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, CancellationToken cancellationToken)
             => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, cancellationToken);
-
-        Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-            => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, creationOptionsAction, cancellationToken);
 
         Task<IGroup> IGroupCreationActions.CreateGroupAsync(IGroup group, IGroupCreationOptions creationOptions, CancellationToken cancellationToken)
             => GroupCreationActionsShared.CreateGroupAsync(this.GetInternalAsyncDataStore(), this.Groups.Href, group, creationOptions, cancellationToken);

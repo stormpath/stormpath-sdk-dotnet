@@ -159,7 +159,7 @@ namespace Stormpath.SDK.Http
         /// </summary>
         /// <param name="replacementParams">Query parameters to copy and merge.</param>
         /// <returns>A new <see cref="QueryString"/> instance containing the merged parameters.</returns>
-        internal QueryString Merge(QueryString replacementParams)
+        public QueryString Merge(QueryString replacementParams)
         {
             if (replacementParams == null)
             {

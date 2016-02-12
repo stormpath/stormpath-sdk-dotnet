@@ -32,18 +32,7 @@ namespace Stormpath.SDK.Group
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The new <see cref="IGroup">Group</see>.</returns>
         Task<IGroup> CreateGroupAsync(IGroup group, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Creates a new <see cref="IGroup">Group</see> that may be used by the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
-        /// </summary>
-        /// <param name="group">The group to create.</param>
-        /// <param name="creationOptionsAction">
-        /// An inline builder for an instance of <see cref="IGroupCreationOptions"/>, which will be used when sending the request.
-        /// </param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The new <see cref="IGroup">Group</see>.</returns>
-        Task<IGroup> CreateGroupAsync(IGroup group, Action<GroupCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
-
+        
         /// <summary>
         /// Creates a new <see cref="IGroup">Group</see> that may be used by the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>

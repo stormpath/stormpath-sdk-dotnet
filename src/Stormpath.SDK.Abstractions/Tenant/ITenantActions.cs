@@ -46,17 +46,6 @@ namespace Stormpath.SDK.Tenant
         /// Creates a new <see cref="Application.IApplication">Application</see> resource in the current tenant.
         /// </summary>
         /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
-        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IApplicationCreationOptions"/>,
-        /// which will be used when sending the request.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The created <see cref="IApplication">Application</see>.</returns>
-        /// <exception cref="Error.ResourceException">There was a problem creating the application.</exception>
-        Task<IApplication> CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Creates a new <see cref="Application.IApplication">Application</see> resource in the current tenant.
-        /// </summary>
-        /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
         /// <param name="creationOptions">An <see cref="IApplicationCreationOptions"/> instance to use when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The created <see cref="IApplication">Application</see>.</returns>
@@ -81,17 +70,6 @@ namespace Stormpath.SDK.Tenant
         /// <returns>The created <see cref="IDirectory">Directory</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
         Task<IDirectory> CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Creates a new Cloud- or Provider-based Directory resource in the Tenant.
-        /// </summary>
-        /// <param name="directory">The <see cref="IDirectory">Directory</see> to create.</param>
-        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
-        /// which will be used when sending the request.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The created <see cref="IDirectory">Directory</see>.</returns>
-        /// <exception cref="Error.ResourceException">There was a problem creating the directory.</exception>
-        Task<IDirectory> CreateDirectoryAsync(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Creates a new Cloud- or Provider-based Directory resource in the Tenant.
@@ -122,17 +100,6 @@ namespace Stormpath.SDK.Tenant
         /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
         /// <exception cref="Error.ResourceException">There was a problem creating the Organization.</exception>
         Task<IOrganization> CreateOrganizationAsync(IOrganization organization, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Creates a new <see cref="IOrganization">Organization</see> resource in the Tenant.
-        /// </summary>
-        /// <param name="organization">The Organization to create.</param>
-        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
-        /// which will be used when sending the request.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The created <see cref="IOrganization">Organization</see>.</returns>
-        /// <exception cref="Error.ResourceException">There was a problem creating the Organization.</exception>
-        Task<IOrganization> CreateOrganizationAsync(IOrganization organization, Action<OrganizationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Creates a new <see cref="IOrganization">Organization</see> resource in the Tenant.

@@ -18,17 +18,16 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
+using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.AccountStore;
+using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Application
 {
-    internal sealed partial class DefaultApplication : AbstractExtendableInstanceResource, IApplication, IApplicationSync
+    internal sealed partial class DefaultApplication : AbstractExtendableInstanceResource, IApplication, IApplicationSync, IAccountCreationActionsInternal, IGroupCreationActionsInternal
     {
         private static readonly string AccountStoreMappingsPropertyName = "accountStoreMappings";
         private static readonly string AccountsPropertyName = "accounts";
@@ -58,7 +57,8 @@ namespace Stormpath.SDK.Impl.Application
 
         internal IEmbeddedProperty AccountStoreMappings => this.GetLinkProperty(AccountStoreMappingsPropertyName);
 
-        internal IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
+        // todo: internal after 1.0
+        public IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
         internal IEmbeddedProperty ApiKeys => this.GetLinkProperty(ApiKeysPropertyName);
 
@@ -72,7 +72,8 @@ namespace Stormpath.SDK.Impl.Application
 
         string IApplication.Description => this.GetStringProperty(DescriptionPropertyName);
 
-        internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
+        // todo: internal after 1.0
+        public IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
         string IApplication.Name => this.GetStringProperty(NamePropertyName);
 

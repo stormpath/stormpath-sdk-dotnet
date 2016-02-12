@@ -31,15 +31,6 @@ namespace Stormpath.SDK.Impl.Tenant
 {
     internal sealed partial class DefaultTenant
     {
-        Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, Action<ApplicationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-        {
-            var builder = new ApplicationCreationOptionsBuilder();
-            creationOptionsAction(builder);
-            var options = builder.Build();
-
-            return this.GetInternalAsyncDataStore().CreateAsync(ApplicationsPropertyName, application, options, cancellationToken);
-        }
-
         Task<IApplication> ITenantActions.CreateApplicationAsync(IApplication application, IApplicationCreationOptions creationOptions, CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().CreateAsync(ApplicationsPropertyName, application, creationOptions, cancellationToken);
 
@@ -61,15 +52,6 @@ namespace Stormpath.SDK.Impl.Tenant
 
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().CreateAsync(DirectoriesPropertyName, directory, cancellationToken);
-
-        Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, Action<DirectoryCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-        {
-            var builder = new DirectoryCreationOptionsBuilder();
-            creationOptionsAction(builder);
-            var options = builder.Build();
-
-            return this.AsInterface.CreateDirectoryAsync(directory, options, cancellationToken);
-        }
 
         Task<IDirectory> ITenantActions.CreateDirectoryAsync(IDirectory directory, IDirectoryCreationOptions creationOptions, CancellationToken cancellationToken)
         {
@@ -98,15 +80,6 @@ namespace Stormpath.SDK.Impl.Tenant
 
         Task<IOrganization> ITenantActions.CreateOrganizationAsync(IOrganization organization, CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().CreateAsync(OrganizationsPropertyName, organization, cancellationToken);
-
-        Task<IOrganization> ITenantActions.CreateOrganizationAsync(IOrganization organization, Action<OrganizationCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken)
-        {
-            var builder = new OrganizationCreationOptionsBuilder();
-            creationOptionsAction(builder);
-            var options = builder.Build();
-
-            return this.AsInterface.CreateOrganizationAsync(organization, options, cancellationToken);
-        }
 
         Task<IOrganization> ITenantActions.CreateOrganizationAsync(IOrganization organization, IOrganizationCreationOptions creationOptions, CancellationToken cancellationToken)
         {

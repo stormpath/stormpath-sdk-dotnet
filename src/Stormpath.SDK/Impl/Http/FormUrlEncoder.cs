@@ -20,6 +20,7 @@ using System.Linq;
 using Stormpath.SDK.Shared.Extensions;
 using Stormpath.SDK.Impl.Utility;
 using Map = System.Collections.Generic.IDictionary<string, object>;
+using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Impl.Http
 {
@@ -40,7 +41,7 @@ namespace Stormpath.SDK.Impl.Http
             var sortedProperties = new SortedDictionary<string, object>(properties);
 
             var urlEncoded = sortedProperties
-                .Select(entry => $"{RequestHelper.UrlEncode(entry.Key)}={RequestHelper.UrlEncode(entry.Value.ToString())}")
+                .Select(entry => $"{UrlEncoding.Encode(entry.Key)}={UrlEncoding.Encode(entry.Value.ToString())}")
                 .Join("&");
             return urlEncoded;
         }

@@ -29,24 +29,6 @@ namespace Stormpath.SDK.Account
         /// Creates a new <see cref="IAccount">Account</see> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>
         /// <param name="account">The account to create/persist.</param>
-        /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IAccountCreationOptions"/>,
-        /// which will be used when sending the request.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <example>
-        /// If you would like to force disabling the backing directory's account registration workflow:
-        /// <code>
-        /// await IApplication.CreateAccountAsync(theAccount, options => options.RegistrationWorkflowEnabled = false, cancellationToken);
-        /// </code>
-        /// </example>
-        /// <returns>The persisted account.</returns>
-        /// <exception cref="Error.ResourceException">The <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see> does not have a dedicated
-        ///  <see cref="AccountStore.IAccountStore"/> or if the designated <see cref="AccountStore.IAccountStore"/> does not allow new accounts to be created.</exception>
-        Task<IAccount> CreateAccountAsync(IAccount account, Action<AccountCreationOptionsBuilder> creationOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Creates a new <see cref="IAccount">Account</see> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
-        /// </summary>
-        /// <param name="account">The account to create/persist.</param>
         /// <param name="creationOptions">An <see cref="IAccountCreationOptions"/> instance to use when sending the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The persisted account.</returns>

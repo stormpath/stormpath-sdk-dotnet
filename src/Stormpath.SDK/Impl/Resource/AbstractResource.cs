@@ -71,13 +71,14 @@ namespace Stormpath.SDK.Impl.Resource
         IClient IResource.Client
             => this.GetInternalDataStore()?.Client;
 
-        protected IInternalDataStore GetInternalDataStore()
+        // todo - set these back to protected when bumping to 1.0
+        public IInternalDataStore GetInternalDataStore()
             => this.GetResourceData()?.InternalDataStore;
 
-        protected IInternalAsyncDataStore GetInternalAsyncDataStore()
+        public IInternalAsyncDataStore GetInternalAsyncDataStore()
             => this.GetResourceData()?.InternalAsyncDataStore;
 
-        protected IInternalSyncDataStore GetInternalSyncDataStore()
+        public IInternalSyncDataStore GetInternalSyncDataStore()
             => this.GetResourceData()?.InternalSyncDataStore;
 
         public Task<ITenant> GetTenantAsync(CancellationToken cancellationToken)

@@ -93,7 +93,7 @@ namespace Stormpath.SDK.Http
         /// by copying values from a dictionary.
         /// </summary>
         /// <param name="existing">A collection of headers to copy.</param>
-        internal HttpHeaders(Map existing)
+        public HttpHeaders(Map existing)
         {
             this.headers = existing
                 .Select(x => new KeyValuePair<string, List<object>>(
@@ -108,7 +108,7 @@ namespace Stormpath.SDK.Http
         /// by copying values from an existing instance.
         /// </summary>
         /// <param name="existing">An existing <see cref="HttpHeaders"/> instance to copy.</param>
-        internal HttpHeaders(HttpHeaders existing)
+        public HttpHeaders(HttpHeaders existing)
         {
             this.headers = new Dictionary<string, List<object>>(existing.headers);
             this.readOnly = existing.readOnly;

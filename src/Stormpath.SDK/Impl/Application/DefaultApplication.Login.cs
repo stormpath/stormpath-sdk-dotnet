@@ -44,24 +44,6 @@ namespace Stormpath.SDK.Impl.Application
             return dispatcher.AuthenticateAsync(this.GetInternalAsyncDataStore(), this, request, options, cancellationToken);
         }
 
-        Task<IAuthenticationResult> IApplication.AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, CancellationToken cancellationToken)
-        {
-            var builder = new UsernamePasswordRequestBuilder();
-            requestBuilder(builder);
-            var request = builder.Build();
-
-            return this.AsInterface.AuthenticateAccountAsync(request, cancellationToken);
-        }
-
-        Task<IAuthenticationResult> IApplication.AuthenticateAccountAsync(Action<UsernamePasswordRequestBuilder> requestBuilder, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions, CancellationToken cancellationToken)
-        {
-            var builder = new UsernamePasswordRequestBuilder();
-            requestBuilder(builder);
-            var request = builder.Build();
-
-            return this.AsInterface.AuthenticateAccountAsync(request, responseOptions, cancellationToken);
-        }
-
         Task<IAuthenticationResult> IApplication.AuthenticateAccountAsync(string username, string password, CancellationToken cancellationToken)
         {
             var request = new UsernamePasswordRequest(username, password, null, null) as IAuthenticationRequest;

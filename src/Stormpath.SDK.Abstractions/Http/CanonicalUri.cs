@@ -80,7 +80,7 @@ namespace Stormpath.SDK.Http
         /// </summary>
         /// <param name="existing">An existing <see cref="CanonicalUri"/> to copy.</param>
         /// <param name="overrideResourcePath">A replacement for <see cref="ResourcePath"/>.</param>
-        internal CanonicalUri(CanonicalUri existing, Uri overrideResourcePath)
+        public CanonicalUri(CanonicalUri existing, Uri overrideResourcePath)
         {
             this.resourcePath = overrideResourcePath == null
                 ? new Uri(existing.ResourcePath.WithoutQueryAndFragment().ToString())

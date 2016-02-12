@@ -17,14 +17,16 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.AccountStore;
+using Stormpath.SDK.Impl.Group;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Organization
 {
-    internal sealed partial class DefaultOrganization : AbstractExtendableInstanceResource, IOrganization, IOrganizationSync
+    internal sealed partial class DefaultOrganization : AbstractExtendableInstanceResource, IOrganization, IOrganizationSync, IAccountCreationActionsInternal, IGroupCreationActionsInternal
     {
         private static readonly string AccountStoreMappingsPropertyName = "accountStoreMappings";
         private static readonly string AccountsPropertyName = "accounts";
@@ -43,7 +45,8 @@ namespace Stormpath.SDK.Impl.Organization
 
         internal IEmbeddedProperty AccountStoreMappings => this.GetLinkProperty(AccountStoreMappingsPropertyName);
 
-        internal IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
+        // todo: internal after 1.0
+        public IEmbeddedProperty Accounts => this.GetLinkProperty(AccountsPropertyName);
 
         internal IEmbeddedProperty DefaultAccountStoreMapping => this.GetLinkProperty(DefaultAccountStoreMappingPropertyName);
 
@@ -51,7 +54,8 @@ namespace Stormpath.SDK.Impl.Organization
 
         string IOrganization.Description => this.GetStringProperty(DescriptionPropertyName);
 
-        internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
+        // todo: internal after 1.0
+        public IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
         string IOrganization.Name => this.GetStringProperty(NamePropertyName);
 
