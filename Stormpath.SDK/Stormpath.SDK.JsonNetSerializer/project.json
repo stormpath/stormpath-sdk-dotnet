@@ -1,0 +1,17 @@
+{
+  "version": "0.6.0",
+  "description": "",
+  "authors": [ "" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "tooling": {
+    "defaultNamespace": "Stormpath.SDK.Extensions.Serialization"
+  },
+  "dependencies": {
+    "Newtonsoft.Json": "7.0.1",
+  },
+  "frameworks": {
+    "net45": { }
+  }
+}

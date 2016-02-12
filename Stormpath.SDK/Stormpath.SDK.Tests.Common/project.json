@@ -1,0 +1,27 @@
+{
+    "version": "0.6.0",
+    "description": "",
+    "authors": [ "" ],
+    "tags": [ "" ],
+    "projectUrl": "",
+    "licenseUrl": "",
+    "tooling": {
+      "defaultNamespace": "Stormpath.SDK.Tests.Common"
+    },
+  "dependencies": {
+    "xunit": "2.1.0",
+    "xunit.runner.console": "2.1.0",
+    "Stormpath.SDK": "0.6.0",
+    "NSubstitute": "1.9.2",
+    "Shouldly": "2.6.0",
+    "Newtonsoft.Json": "7.0.1"
+  },
+    "frameworks": {
+      "net451": {
+        "frameworkAssemblies": {
+          "System.Runtime": "4.0.10.0"
+
+        }
+      }
+    }
+}

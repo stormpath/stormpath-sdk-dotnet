@@ -1,0 +1,17 @@
+{
+  "version": "0.6.0",
+  "description": "",
+  "authors": [ "" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "tooling": {
+    "defaultNamespace": "Stormpath.SDK.Extensions.Http"
+  },
+  "dependencies": {
+    "RestSharp": "105.2.2"
+  },
+  "frameworks": {
+    "net45": { }
+  }
+}
