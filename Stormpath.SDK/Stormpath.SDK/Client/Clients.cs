@@ -17,7 +17,6 @@
 using Stormpath.SDK.Impl.Client;
 using Microsoft.Extensions.PlatformAbstractions;
 using System.Runtime.CompilerServices;
-using System.Runtime.Loader;
 
 namespace Stormpath.SDK.Client
 {

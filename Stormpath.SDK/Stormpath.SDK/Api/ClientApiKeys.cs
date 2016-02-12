@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Api
@@ -37,11 +38,7 @@ namespace Stormpath.SDK.Api
         /// </example>
         public static IClientApiKeyBuilder Builder(ILogger logger = null)
         {
-            return new Impl.Api.DefaultClientApiKeyBuilder(
-                new Impl.Utility.ConfigurationManagerWrapper(),
-                new Impl.Utility.EnvironmentWrapper(),
-                new Impl.Utility.FileWrapper(),
-                logger);
+            throw new NotImplementedException();
         }
     }
 }
