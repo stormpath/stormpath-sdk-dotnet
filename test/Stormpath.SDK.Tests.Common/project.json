@@ -1,0 +1,26 @@
+{
+    "version": "0.6.0",
+    "description": "Common test code for Stormpath.SDK tests",
+    "authors": [ "Nate Barbettini" ],
+    "owners": [ "Stormpath, Inc." ],
+    "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+    "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+    "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+    "copyright": "(c) 2016 Stormpath, Inc.",
+    "language": "en-US",
+    "tooling": {
+      "defaultNamespace": "Stormpath.SDK.Tests.Common"
+    },
+  "dependencies": {
+    "xunit": "2.1.0",
+    "xunit.runner.console": "2.1.0",
+    "Stormpath.SDK": "0.6.0",
+    "NSubstitute": "1.9.2",
+    "Shouldly": "2.6.0",
+    "Newtonsoft.Json": "7.0.1"
+  },
+    "frameworks": {
+      "net451": { }
+      }
+    }
+}

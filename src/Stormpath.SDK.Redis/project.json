@@ -1,0 +1,22 @@
+{
+  "version": "0.6.0",
+  "description": "Redis cache adapter for the Stormpath .NET SDK",
+  "authors": [ "Nate Barbettini" ],
+  "owners": [ "Stormpath, Inc." ],
+  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+  "copyright": "(c) 2016 Stormpath, Inc.",
+  "language": "en-US",
+  "tooling": {
+    "defaultNamespace": "Stormpath.SDK.Cache.Redis"
+  },
+  "dependencies": {
+  },
+  "frameworks": {
+    "net45": { }
+  },
+  "dependencies": {
+    "StackExchange.Redis": "1.0.488"
+  }
+}
