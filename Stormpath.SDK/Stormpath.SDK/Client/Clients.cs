@@ -16,6 +16,8 @@
 
 using Stormpath.SDK.Impl.Client;
 using Microsoft.Extensions.PlatformAbstractions;
+using System.Runtime.CompilerServices;
+using System.Runtime.Loader;
 
 namespace Stormpath.SDK.Client
 {
@@ -35,13 +37,20 @@ namespace Stormpath.SDK.Client
         ///     .Build();
         /// </code>
         /// </example>
-        public static IClientBuilder Builder()
+        public static IClientBuilder Builder([CallerFilePath] string callerFilePath = null)
         {
             var language = string.Empty;
 #if NET451
-            var currentAssembly = System.Reflection.Assembly.GetCallingAssembly();
+            var callingAssembly = System.Reflection.Assembly.GetCallingAssembly();
 #else
+            var callingAssembly = PlatformServices.Default.AssemblyLoadContextAccessor.Default.LoadFile(callerFilePath);
 #endif
+
+            if (callingAssembly != null)
+            {
+                var analyzer = new Polyglot.AssemblyAnalyzer(callingAssembly, failSilently: true);
+                language = analyzer.DetectedLanguage?.ToString();
+            }
 
             var userAgentBuilder = new DefaultUserAgentBuilder(
                 runtimeEnvironment: PlatformServices.Default.Runtime,
