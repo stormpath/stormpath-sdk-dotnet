@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
-using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Shared.Extensions;
 using Stormpath.SDK.Impl.Http.Authentication;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Logging;

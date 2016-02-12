@@ -17,7 +17,7 @@
 using System.Collections.Generic;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Shared.Extensions;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Provider;
 using Map = System.Collections.Generic.IDictionary<string, object>;

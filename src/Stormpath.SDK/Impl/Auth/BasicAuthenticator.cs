@@ -20,7 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Auth;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Shared.Extensions;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Resource;
 

@@ -25,7 +25,7 @@ using Stormpath.SDK.Auth;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Impl.Account;
 using Stormpath.SDK.Impl.Cache;
-using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Shared.Extensions;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Provider;

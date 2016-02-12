@@ -24,7 +24,7 @@ using Stormpath.SDK.Api;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Shared.Extensions;
 using Stormpath.SDK.Impl.Jwt;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Jwt;

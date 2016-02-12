@@ -26,7 +26,7 @@ using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.CustomData;
 using Stormpath.SDK.Impl.DataStore.Filters;
 using Stormpath.SDK.Impl.Error;
-using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Shared.Extensions;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;

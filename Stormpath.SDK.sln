@@ -3,15 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK", "Stormpath.SDK\Stormpath.SDK.xproj", "{E248629A-ECA1-487D-8C0E-EF29FF74ED5E}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK", "src\Stormpath.SDK\Stormpath.SDK.xproj", "{E248629A-ECA1-487D-8C0E-EF29FF74ED5E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Tests", "Stormpath.SDK.Tests\Stormpath.SDK.Tests.xproj", "{1468ACD2-8A96-4EE3-8103-53A519BFEE8E}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.JsonNetSerializer", "src\Stormpath.SDK.JsonNetSerializer\Stormpath.SDK.JsonNetSerializer.xproj", "{0E9A923B-66C2-46EC-9DB1-1F7DA2367679}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Tests.Common", "Stormpath.SDK.Tests.Common\Stormpath.SDK.Tests.Common.xproj", "{B5A17885-277B-4033-850A-20EDA614F278}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.JsonNetSerializer", "Stormpath.SDK.JsonNetSerializer\Stormpath.SDK.JsonNetSerializer.xproj", "{0E9A923B-66C2-46EC-9DB1-1F7DA2367679}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.RestSharpClient", "Stormpath.SDK.RestSharpClient\Stormpath.SDK.RestSharpClient.xproj", "{55712E3A-4A68-4D80-B8F4-C046E352304B}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Abstractions", "src\Stormpath.SDK.Abstractions\Stormpath.SDK.Abstractions.xproj", "{058BEFD7-B2D8-424A-ACD1-686B529473FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,22 +19,14 @@ Global
 		{E248629A-ECA1-487D-8C0E-EF29FF74ED5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E248629A-ECA1-487D-8C0E-EF29FF74ED5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E248629A-ECA1-487D-8C0E-EF29FF74ED5E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1468ACD2-8A96-4EE3-8103-53A519BFEE8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1468ACD2-8A96-4EE3-8103-53A519BFEE8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1468ACD2-8A96-4EE3-8103-53A519BFEE8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1468ACD2-8A96-4EE3-8103-53A519BFEE8E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B5A17885-277B-4033-850A-20EDA614F278}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B5A17885-277B-4033-850A-20EDA614F278}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B5A17885-277B-4033-850A-20EDA614F278}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B5A17885-277B-4033-850A-20EDA614F278}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0E9A923B-66C2-46EC-9DB1-1F7DA2367679}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E9A923B-66C2-46EC-9DB1-1F7DA2367679}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E9A923B-66C2-46EC-9DB1-1F7DA2367679}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E9A923B-66C2-46EC-9DB1-1F7DA2367679}.Release|Any CPU.Build.0 = Release|Any CPU
-		{55712E3A-4A68-4D80-B8F4-C046E352304B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{55712E3A-4A68-4D80-B8F4-C046E352304B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{55712E3A-4A68-4D80-B8F4-C046E352304B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{55712E3A-4A68-4D80-B8F4-C046E352304B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{058BEFD7-B2D8-424A-ACD1-686B529473FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{058BEFD7-B2D8-424A-ACD1-686B529473FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{058BEFD7-B2D8-424A-ACD1-686B529473FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{058BEFD7-B2D8-424A-ACD1-686B529473FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.CustomData;
-using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Shared.Extensions;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;
 using Map = System.Collections.Generic.IDictionary<string, object>;

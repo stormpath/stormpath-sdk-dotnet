@@ -17,7 +17,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Shared.Extensions;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Account

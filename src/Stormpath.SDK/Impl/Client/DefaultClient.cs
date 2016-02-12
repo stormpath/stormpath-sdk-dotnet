@@ -23,10 +23,10 @@ using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
+using Stormpath.SDK.Shared.Extensions;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tenant;
 

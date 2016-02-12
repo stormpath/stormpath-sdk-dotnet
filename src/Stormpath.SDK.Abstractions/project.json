@@ -1,0 +1,37 @@
+{
+  "title": "Stormpath.SDK",
+  "version": "0.6.0",
+  "description": "Abstractions for the Stormpath .NET SDK",
+  "authors": [ "Nate Barbettini", "Contributors" ],
+  "owners": [ "Stormpath, Inc." ],
+  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+  "copyright": "(c) 2016 Stormpath, Inc.",
+  "language": "en-US",
+  "tooling": {
+    "defaultNamespace": "Stormpath.SDK"
+  },
+
+  "frameworks": {
+    "net451": {
+      "dependencies": {
+
+      }
+    },
+    "dotnet5.4": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-beta-23516",
+        "System.Collections": "4.0.11-beta-23516",
+        "System.Linq": "4.0.1-beta-23516",
+        "System.Runtime": "4.0.21-beta-23516",
+        "System.Threading": "4.0.11-beta-23516",
+        "System.Collections.Concurrent": "4.0.11-beta-23516",
+        "System.Linq.Queryable": "4.0.1-beta-23516",
+        "System.Net.Primitives": "4.0.11-beta-23516"
+      }
+    }
+  },
+  "dependencies": {    
+  }
+}

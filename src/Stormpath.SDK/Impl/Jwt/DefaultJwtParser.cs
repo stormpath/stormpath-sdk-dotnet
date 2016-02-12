@@ -16,7 +16,7 @@
 
 using System;
 using System.Text;
-using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Shared.Extensions;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Serialization;
