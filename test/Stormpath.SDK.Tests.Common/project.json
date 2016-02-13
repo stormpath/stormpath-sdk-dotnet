@@ -1,5 +1,5 @@
 {
-  "version": "0.6.0",
+  "version": "0.6.0-beta1",
   "description": "Common test code for Stormpath.SDK tests",
   "authors": [ "Nate Barbettini" ],
   "owners": [ "Stormpath, Inc." ],
