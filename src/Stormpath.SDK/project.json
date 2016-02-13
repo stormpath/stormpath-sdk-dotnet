@@ -1,6 +1,6 @@
 {
   "title": "Stormpath.SDK",
-  "version": "0.6.0",
+  "version": "0.6.0-beta1",
   "description": "The official Stormpath SDK for .NET",
   "authors": [ "Nate Barbettini", "Contributors" ],
   "owners": [ "Stormpath, Inc." ],
@@ -51,6 +51,6 @@
     "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
     "Polyglot": "1.0.0-beta1",
     "StyleCop.Analyzers": "1.0.0",
-    "Stormpath.SDK.Abstractions": "0.6.0"
+    "Stormpath.SDK.Abstractions": "0.6.0-beta1"
   }
 }

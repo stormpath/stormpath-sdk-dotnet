@@ -1,6 +1,6 @@
 {
   "title": "Stormpath.SDK.Abstractions",
-  "version": "0.6.0",
+  "version": "0.6.0-beta1",
   "description": "Abstractions for the Stormpath .NET SDK",
   "authors": [ "Nate Barbettini", "Contributors" ],
   "owners": [ "Stormpath, Inc." ],
@@ -14,11 +14,7 @@
   },
 
   "frameworks": {
-    "net451": {
-      "dependencies": {
-
-      }
-    },
+    "net451": { },
     "dotnet5.4": {
       "dependencies": {
         "Microsoft.CSharp": "4.0.1-beta-23516",
@@ -43,7 +39,5 @@
         "System.Reflection": "4.1.0-beta-23516"
       }
     }
-  },
-  "dependencies": {    
   }
 }

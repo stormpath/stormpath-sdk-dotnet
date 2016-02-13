@@ -1,5 +1,5 @@
 {
-  "version": "0.6.0",
+  "version": "0.6.0-beta1",
   "description": "",
   "authors": [ "" ],
   "tags": [ "" ],
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "RestSharp": "105.2.2",
-    "Stormpath.SDK.Abstractions": "0.6.0"
+    "Stormpath.SDK.Abstractions": "0.6.0-beta1"
   },
   "frameworks": {
     "net451": { }

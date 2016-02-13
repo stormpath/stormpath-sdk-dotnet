@@ -14,9 +14,9 @@
   "dependencies": {
     "xunit": "2.1.0",
     "xunit.runner.console": "2.1.0",
-    "Stormpath.SDK": "0.6.0",
-    "Stormpath.SDK.RestSharpClient": "0.6.0",
-    "Stormpath.SDK.JsonNetSerializer": "0.6.0",
+    "Stormpath.SDK": "0.6.0-beta1",
+    "Stormpath.SDK.RestSharpClient": "0.6.0-beta1",
+    "Stormpath.SDK.JsonNetSerializer": "0.6.0-beta1",
     "NSubstitute": "1.9.2",
     "Shouldly": "2.6.0",
     "Newtonsoft.Json": "7.0.1"

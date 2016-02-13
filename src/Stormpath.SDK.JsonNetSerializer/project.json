@@ -1,5 +1,5 @@
 {
-  "version": "0.6.0",
+  "version": "0.6.0-beta1",
   "description": "JSON.NET-based serializer plugin for the Stormpath .NET SDK",
   "authors": [ "Nate Barbettini" ],
   "owners": [ "Stormpath, Inc." ],
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "Newtonsoft.Json": "7.0.1",
-    "Stormpath.SDK.Abstractions": "0.6.0"
+    "Stormpath.SDK.Abstractions": "0.6.0-beta1"
   },
   "frameworks": {
     "net451": { }
