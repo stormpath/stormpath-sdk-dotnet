@@ -21,7 +21,7 @@ using RestSharp;
 
 namespace Stormpath.SDK.Extensions.Http.RestSharp
 {
-    internal class RestSharpAdapter
+    public class RestSharpAdapter
     {
         public IRestRequest ToRestRequest(string baseUrl, SDK.Http.IHttpRequest request)
         {

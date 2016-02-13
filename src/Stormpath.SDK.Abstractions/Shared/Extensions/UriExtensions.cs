@@ -20,6 +20,7 @@ namespace Stormpath.SDK.Shared.Extensions
 {
     public static class UriExtensions
     {
-        public static Uri WithoutQueryAndFragment(this Uri source) => new Uri(source.AbsolutePath, UriKind.Absolute);
+        public static Uri WithoutQueryAndFragment(this Uri uri) 
+            => new Uri($"{uri.Scheme}://{uri.Authority}{uri.AbsolutePath}", UriKind.Absolute);
     }
 }

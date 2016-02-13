@@ -15,7 +15,9 @@
 // </copyright>
 
 using NSubstitute;
+using RestSharp;
 using Shouldly;
+using Stormpath.SDK.Extensions.Http.RestSharp;
 using Xunit;
 
 namespace Stormpath.SDK.Extensions.Http.RestSharpClient.Tests
@@ -40,12 +42,12 @@ namespace Stormpath.SDK.Extensions.Http.RestSharpClient.Tests
             var adapter = new RestSharpAdapter();
             var convertedRequest = adapter.ToRestRequest(this.baseUrl, request);
 
-            convertedRequest.Method.ShouldBe(RestSharp.Method.GET);
-            convertedRequest.RequestFormat.ShouldBe(RestSharp.DataFormat.Json);
+            convertedRequest.Method.ShouldBe(Method.GET);
+            convertedRequest.RequestFormat.ShouldBe(DataFormat.Json);
             convertedRequest.Resource.ShouldBe("/baz");
 
             convertedRequest.Parameters.ShouldContain(p =>
-                p.Type == RestSharp.ParameterType.HttpHeader &&
+                p.Type == ParameterType.HttpHeader &&
                 p.Name == "Authorization" &&
                 (string)p.Value == "Basic foobarabc123");
         }
@@ -70,17 +72,17 @@ namespace Stormpath.SDK.Extensions.Http.RestSharpClient.Tests
             var adapter = new RestSharpAdapter();
             var convertedRequest = adapter.ToRestRequest(this.baseUrl, request);
 
-            convertedRequest.Method.ShouldBe(RestSharp.Method.POST);
-            convertedRequest.RequestFormat.ShouldBe(RestSharp.DataFormat.Json);
+            convertedRequest.Method.ShouldBe(Method.POST);
+            convertedRequest.RequestFormat.ShouldBe(DataFormat.Json);
             convertedRequest.Resource.ShouldBe("/baz");
 
             convertedRequest.Parameters.ShouldContain(p =>
-                p.Type == RestSharp.ParameterType.HttpHeader &&
+                p.Type == ParameterType.HttpHeader &&
                 p.Name == "Authorization" &&
                 (string)p.Value == "Basic foobarabc123");
 
             convertedRequest.Parameters.ShouldContain(p =>
-                p.Type == RestSharp.ParameterType.RequestBody &&
+                p.Type == ParameterType.RequestBody &&
                 (string)p.Value == fakeBody);
         }
 
