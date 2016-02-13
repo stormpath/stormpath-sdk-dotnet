@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Extensions.Serialization.JsonNet.Tests
 
         public Deserialization_tests()
         {
-            this.serializer = Serializers.Create().JsonNetSerializer().Build();
+            this.serializer = new JsonNetSerializer();
         }
 
         [Fact]
