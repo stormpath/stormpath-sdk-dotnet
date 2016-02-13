@@ -1,5 +1,5 @@
 {
-  "title": "Stormpath.SDK",
+  "title": "Stormpath.SDK.Abstractions",
   "version": "0.6.0",
   "description": "Abstractions for the Stormpath .NET SDK",
   "authors": [ "Nate Barbettini", "Contributors" ],
