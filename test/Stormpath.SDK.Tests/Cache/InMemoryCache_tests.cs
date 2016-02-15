@@ -72,7 +72,7 @@ namespace Stormpath.SDK.Tests.Cache
                 (cache as ISynchronousCache).Name.ShouldBe("fooCache");
                 (cache as ISynchronousCache).TimeToLive.ShouldBeNull();
                 (cache as ISynchronousCache).TimeToIdle.ShouldBeNull();
-                cache.TotalSize.ShouldBe(0);
+
                 cache.AccessCount.ShouldBe(0);
                 cache.HitCount.ShouldBe(0);
                 cache.MissCount.ShouldBe(0);
@@ -86,9 +86,8 @@ namespace Stormpath.SDK.Tests.Cache
                 var iface = cache as ISynchronousCache;
 
                 iface.Put("foo", DummyItem);
-                cache.TotalSize.ShouldBe(1);
-
                 iface.Get("foo").ShouldBe(DummyItem);
+
                 cache.AccessCount.ShouldBe(1);
                 cache.HitCount.ShouldBe(1);
                 cache.MissCount.ShouldBe(0);
@@ -102,8 +101,8 @@ namespace Stormpath.SDK.Tests.Cache
                 var iface = cache as ISynchronousCache;
 
                 iface.Put("foo", DummyItem);
-
                 iface.Get("baz").ShouldBeNull();
+
                 cache.AccessCount.ShouldBe(1);
                 cache.HitCount.ShouldBe(0);
                 cache.MissCount.ShouldBe(1);
@@ -138,7 +137,6 @@ namespace Stormpath.SDK.Tests.Cache
                     iface.Get("baz").ShouldBeNull();
                 }
 
-                cache.TotalSize.ShouldBe(11);
                 cache.AccessCount.ShouldBe(30);
                 cache.HitCount.ShouldBe(20);
                 cache.MissCount.ShouldBe(10);
@@ -160,7 +158,6 @@ namespace Stormpath.SDK.Tests.Cache
                     iface.Get("baz").ShouldBeNull();
                 });
 
-                cache.TotalSize.ShouldBe(11);
                 cache.AccessCount.ShouldBe(30);
                 cache.HitCount.ShouldBe(20);
                 cache.MissCount.ShouldBe(10);
@@ -262,7 +259,7 @@ namespace Stormpath.SDK.Tests.Cache
                 (cache as IAsynchronousCache).Name.ShouldBe("fooCache");
                 (cache as IAsynchronousCache).TimeToLive.ShouldBeNull();
                 (cache as IAsynchronousCache).TimeToIdle.ShouldBeNull();
-                cache.TotalSize.ShouldBe(0);
+
                 cache.AccessCount.ShouldBe(0);
                 cache.HitCount.ShouldBe(0);
                 cache.MissCount.ShouldBe(0);
@@ -276,9 +273,8 @@ namespace Stormpath.SDK.Tests.Cache
                 var iface = cache as IAsynchronousCache;
 
                 await iface.PutAsync("foo", DummyItem);
-                cache.TotalSize.ShouldBe(1);
-
                 (await iface.GetAsync("foo")).ShouldBe(DummyItem);
+
                 cache.AccessCount.ShouldBe(1);
                 cache.HitCount.ShouldBe(1);
                 cache.MissCount.ShouldBe(0);
@@ -328,7 +324,6 @@ namespace Stormpath.SDK.Tests.Cache
                     (await iface.GetAsync("baz")).ShouldBeNull();
                 }
 
-                cache.TotalSize.ShouldBe(11);
                 cache.AccessCount.ShouldBe(30);
                 cache.HitCount.ShouldBe(20);
                 cache.MissCount.ShouldBe(10);
@@ -352,7 +347,6 @@ namespace Stormpath.SDK.Tests.Cache
                             });
                 await Task.WhenAll(tasks);
 
-                cache.TotalSize.ShouldBe(11);
                 cache.AccessCount.ShouldBe(30);
                 cache.HitCount.ShouldBe(20);
                 cache.MissCount.ShouldBe(10);
