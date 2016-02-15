@@ -51,19 +51,6 @@ namespace Stormpath.SDK.Tests
         }
 
         [Fact]
-        public void Constructs_instance_from_default_library()
-        {
-            IHttpClientBuilder builder = new AbstractHttpClientBuilder<IHttpClient>(DefaultHttpClientLoader.Load());
-
-            builder.SetBaseUrl("http://foo.bar");
-
-            var instance = builder.Build();
-            instance.ShouldBeAssignableTo<IHttpClient>();
-            instance.ShouldNotBeNull();
-            instance.BaseUrl.ShouldBe("http://foo.bar");
-        }
-
-        [Fact]
         public void Throws_when_type_is_null()
         {
             Should.Throw<NotSupportedException>(() => new AbstractHttpClientBuilder<IHttpClient>(null));

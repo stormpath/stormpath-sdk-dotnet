@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using Shouldly;
-using Stormpath.SDK.Impl.Serialization;
 using Stormpath.SDK.Serialization;
 using Xunit;
 
@@ -29,15 +28,6 @@ namespace Stormpath.SDK.Tests
         public void Constructs_instance_from_specified_type()
         {
             ISerializerBuilder builder = new AbstractSerializerBuilder<DummySerializer>();
-
-            var instance = builder.Build();
-            instance.ShouldNotBeNull();
-        }
-
-        [Fact]
-        public void Constructs_instance_from_default_library()
-        {
-            ISerializerBuilder builder = new AbstractSerializerBuilder<IJsonSerializer>(DefaultSerializerLoader.Load());
 
             var instance = builder.Build();
             instance.ShouldNotBeNull();
