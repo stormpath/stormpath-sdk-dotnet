@@ -15,7 +15,7 @@
 // </copyright>
 
 using Shouldly;
-using Stormpath.SDK.Impl.Http.Support;
+using Stormpath.SDK.Http;
 using Xunit;
 
 namespace Stormpath.SDK.Tests

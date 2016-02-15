@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Xunit;
@@ -34,7 +35,7 @@ namespace Stormpath.SDK.Tests
                 .SetApiKey(FakeApiKey.Create(valid: true))
                 .SetBaseUrl("http://foo.bar/")
                 .SetHttpClient(fakeHttpClient)
-                .SetCacheProvider(Cache.CacheProviders.Create().DisabledCache())
+                .SetCacheProvider(CacheProviders.Create().DisabledCache())
                 .Build();
 
             var tenant = await client.GetResourceAsync<IAccount>("http://foo.bar/fooAccount");

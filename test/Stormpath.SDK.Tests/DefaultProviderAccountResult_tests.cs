@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Tests
             var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object) as IInternalAsyncDataStore;
             dataStore.RequestExecutor
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(201, "Created", null, FakeJson.Account, "application/json", transportError: false)));
+                .Returns(Task.FromResult<IHttpResponse>(new FakeHttpResponse(201, "Created", null, FakeJson.Account, "application/json", transportError: false)));
 
             var providerAccountResult = await dataStore.GetResourceAsync<IProviderAccountResult>("/providerAccount", CancellationToken.None);
 
@@ -57,7 +57,7 @@ namespace Stormpath.SDK.Tests
             var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object) as IInternalAsyncDataStore;
             dataStore.RequestExecutor
                 .ExecuteAsync(Arg.Any<IHttpRequest>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult<IHttpResponse>(new DefaultHttpResponse(200, "OK", null, FakeJson.Account, "application/json", transportError: false)));
+                .Returns(Task.FromResult<IHttpResponse>(new FakeHttpResponse(200, "OK", null, FakeJson.Account, "application/json", transportError: false)));
 
             var providerAccountResult = await dataStore.GetResourceAsync<IProviderAccountResult>("/providerAccount", CancellationToken.None);
 

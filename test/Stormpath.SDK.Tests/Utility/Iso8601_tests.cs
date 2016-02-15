@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using Microsoft.Extensions.PlatformAbstractions;
 using Shouldly;
 using Stormpath.SDK.Impl.Utility;
 using Xunit;
@@ -28,8 +29,7 @@ namespace Stormpath.SDK.Tests.Utility
         {
             var pacificTimeZoneName = "Pacific Standard Time";
 
-            var platform = SDK.Impl.Introspection.Platform.Analyze();
-            if (platform.IsRunningOnMono)
+            if (PlatformServices.Default.Runtime.RuntimeType == "Mono")
             {
                 pacificTimeZoneName = "US/Pacific";
             }

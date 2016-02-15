@@ -16,7 +16,7 @@
 
 using System.Collections.Generic;
 using Shouldly;
-using Stormpath.SDK.Impl.Extensions;
+using Stormpath.SDK.Shared.Extensions;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Extensions

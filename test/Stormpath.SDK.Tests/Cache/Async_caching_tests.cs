@@ -221,12 +221,12 @@ namespace Stormpath.SDK.Tests.Cache
             // GET returns original
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Get), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), FakeJson.Account, "application/json", transportError: false) as IHttpResponse));
+                .Returns(Task.FromResult(new FakeHttpResponse(200, "OK", new HttpHeaders(), FakeJson.Account, "application/json", transportError: false) as IHttpResponse));
 
             // Save returns update data
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account.Replace("han.solo@corellia.core", "han@solo.me"), "application/json", transportError: false) as IHttpResponse));
+                .Returns(Task.FromResult(new FakeHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account.Replace("han.solo@corellia.core", "han@solo.me"), "application/json", transportError: false) as IHttpResponse));
 
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
             account1.Email.ShouldBe("han.solo@corellia.core");
@@ -254,12 +254,12 @@ namespace Stormpath.SDK.Tests.Cache
             // GET returns expanded request
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Get), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), FakeJson.AccountWithExpandedCustomData, "application/json", transportError: false) as IHttpResponse));
+                .Returns(Task.FromResult(new FakeHttpResponse(200, "OK", new HttpHeaders(), FakeJson.AccountWithExpandedCustomData, "application/json", transportError: false) as IHttpResponse));
 
             // Save is not an expanded request
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account, "application/json", transportError: false) as IHttpResponse));
+                .Returns(Task.FromResult(new FakeHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account, "application/json", transportError: false) as IHttpResponse));
 
             var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount?expand=customData");
 
@@ -330,12 +330,12 @@ namespace Stormpath.SDK.Tests.Cache
             // GET returns expanded request
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Get), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), FakeJson.AccountWithExpandedCustomData, "application/json", transportError: false) as IHttpResponse));
+                .Returns(Task.FromResult(new FakeHttpResponse(200, "OK", new HttpHeaders(), FakeJson.AccountWithExpandedCustomData, "application/json", transportError: false) as IHttpResponse));
 
             // Save is not an expanded request
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account, "application/json", transportError: false) as IHttpResponse));
+                .Returns(Task.FromResult(new FakeHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account, "application/json", transportError: false) as IHttpResponse));
 
             var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount?expand=customData");
             account.CustomData.Remove("isAdmin");
@@ -365,15 +365,15 @@ namespace Stormpath.SDK.Tests.Cache
             // POST returns email verification token response
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), emailVerificationTokenResponse, "application/json", transportError: false) as IHttpResponse));
+                .Returns(Task.FromResult(new FakeHttpResponse(200, "OK", new HttpHeaders(), emailVerificationTokenResponse, "application/json", transportError: false) as IHttpResponse));
 
             // GET returns account as unverified first,
             // then second GET returns account as verified
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Get), Arg.Any<CancellationToken>())
                 .Returns(
-                    Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), FakeJson.Account.Replace(@"""status"": ""ENABLED""", @"""status"": ""UNVERIFIED"""), "application/json", transportError: false) as IHttpResponse),
-                    Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), FakeJson.Account, "application/json", transportError: false) as IHttpResponse));
+                    Task.FromResult(new FakeHttpResponse(200, "OK", new HttpHeaders(), FakeJson.Account.Replace(@"""status"": ""ENABLED""", @"""status"": ""UNVERIFIED"""), "application/json", transportError: false) as IHttpResponse),
+                    Task.FromResult(new FakeHttpResponse(200, "OK", new HttpHeaders(), FakeJson.Account, "application/json", transportError: false) as IHttpResponse));
 
             var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
             account.Status.ShouldBe(AccountStatus.Unverified);
@@ -421,7 +421,7 @@ namespace Stormpath.SDK.Tests.Cache
             // POST returns email verification token response
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), emailVerificationTokenResponse, "application/json", transportError: false) as IHttpResponse));
+                .Returns(Task.FromResult(new FakeHttpResponse(200, "OK", new HttpHeaders(), emailVerificationTokenResponse, "application/json", transportError: false) as IHttpResponse));
 
             var href = $"/accounts/emailVerificationTokens/fooToken";
             await (this.dataStore as IInternalAsyncDataStore).CreateAsync<IResource, IEmailVerificationToken>(href, null, CancellationToken.None);
@@ -453,12 +453,12 @@ namespace Stormpath.SDK.Tests.Cache
             // POST returns token response
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), passwordResetTokenResponse, "application/json", transportError: false) as IHttpResponse));
+                .Returns(Task.FromResult(new FakeHttpResponse(200, "OK", new HttpHeaders(), passwordResetTokenResponse, "application/json", transportError: false) as IHttpResponse));
 
             // GET also returns token response
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Get), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), passwordResetTokenResponse, "application/json", transportError: false) as IHttpResponse));
+                .Returns(Task.FromResult(new FakeHttpResponse(200, "OK", new HttpHeaders(), passwordResetTokenResponse, "application/json", transportError: false) as IHttpResponse));
 
             await this.dataStore.GetResourceAsync<IPasswordResetToken>("https://api.stormpath.com/v1/applications/foo/passwordResetTokens/bar");
             await this.dataStore.GetResourceAsync<IPasswordResetToken>("https://api.stormpath.com/v1/applications/foo/passwordResetTokens/bar");
@@ -486,7 +486,7 @@ namespace Stormpath.SDK.Tests.Cache
             // POST returns auth response
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new DefaultHttpResponse(200, "OK", new HttpHeaders(), authResponse, "application/json", transportError: false) as IHttpResponse));
+                .Returns(Task.FromResult(new FakeHttpResponse(200, "OK", new HttpHeaders(), authResponse, "application/json", transportError: false) as IHttpResponse));
 
             var request = new UsernamePasswordRequest("foo", "bar", null, null) as IAuthenticationRequest;
             var authenticator = new BasicAuthenticator(this.dataStore);

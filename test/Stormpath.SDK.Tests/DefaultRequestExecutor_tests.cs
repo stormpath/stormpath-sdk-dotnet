@@ -97,7 +97,7 @@ namespace Stormpath.SDK.Tests
             {
                 // Set up a fake HttpClient that mysteriously always fails with recoverable errors
                 var failingHttpClient = GetSynchronousClient(
-                    new DefaultHttpResponse(0, null, new HttpHeaders(), null, null, transportError: true));
+                    new FakeHttpResponse(0, null, new HttpHeaders(), null, null, transportError: true));
 
                 var defaultBackoffStrategy = GetFakeBackoffStrategy();
                 var throttlingBackoffStrategy = GetFakeBackoffStrategy();
@@ -117,7 +117,7 @@ namespace Stormpath.SDK.Tests
             {
                 // Set up a fake HttpClient that always returns HTTP 429
                 var failingHttpClient = GetSynchronousClient(
-                    new DefaultHttpResponse(429, null, new HttpHeaders(), null, null, transportError: false));
+                    new FakeHttpResponse(429, null, new HttpHeaders(), null, null, transportError: false));
 
                 var defaultBackoffStrategy = GetFakeBackoffStrategy();
                 var throttlingBackoffStrategy = GetFakeBackoffStrategy();
@@ -137,7 +137,7 @@ namespace Stormpath.SDK.Tests
             {
                 // Set up a fake HttpClient that awlays returns HTTP 503
                 var failingHttpClient = GetSynchronousClient(
-                    new DefaultHttpResponse(503, null, new HttpHeaders(), null, null, transportError: false));
+                    new FakeHttpResponse(503, null, new HttpHeaders(), null, null, transportError: false));
 
                 var defaultBackoffStrategy = GetFakeBackoffStrategy();
                 var throttlingBackoffStrategy = GetFakeBackoffStrategy();
@@ -203,7 +203,7 @@ namespace Stormpath.SDK.Tests
             {
                 // Set up a fake HttpClient that mysteriously always fails with recoverable errors
                 var failingHttpClient = GetAsynchronousClient(
-                    new DefaultHttpResponse(0, null, new HttpHeaders(), null, null, transportError: true));
+                    new FakeHttpResponse(0, null, new HttpHeaders(), null, null, transportError: true));
 
                 var defaultBackoffStrategy = GetFakeBackoffStrategy();
                 var throttlingBackoffStrategy = GetFakeBackoffStrategy();
@@ -222,7 +222,7 @@ namespace Stormpath.SDK.Tests
             public async Task Retries_request_with_throttling_on_HTTP_429()
             {
                 // Set up a fake HttpClient that always returns HTTP 429
-                var failingHttpClient = GetAsynchronousClient(new DefaultHttpResponse(429, null, new HttpHeaders(), null, null, transportError: false));
+                var failingHttpClient = GetAsynchronousClient(new FakeHttpResponse(429, null, new HttpHeaders(), null, null, transportError: false));
 
                 var defaultBackoffStrategy = GetFakeBackoffStrategy();
                 var throttlingBackoffStrategy = GetFakeBackoffStrategy();
@@ -241,7 +241,7 @@ namespace Stormpath.SDK.Tests
             public async Task Retries_request_on_HTTP_503()
             {
                 // Set up a fake HttpClient that awlays returns HTTP 503
-                var failingHttpClient = GetAsynchronousClient(new DefaultHttpResponse(503, null, new HttpHeaders(), null, null, transportError: false));
+                var failingHttpClient = GetAsynchronousClient(new FakeHttpResponse(503, null, new HttpHeaders(), null, null, transportError: false));
 
                 var defaultBackoffStrategy = GetFakeBackoffStrategy();
                 var throttlingBackoffStrategy = GetFakeBackoffStrategy();

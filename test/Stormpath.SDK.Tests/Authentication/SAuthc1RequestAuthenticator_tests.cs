@@ -25,6 +25,7 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Authentication;
 using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Shared.Extensions;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Authentication

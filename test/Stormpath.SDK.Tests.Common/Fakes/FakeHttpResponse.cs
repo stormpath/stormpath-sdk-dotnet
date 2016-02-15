@@ -14,42 +14,39 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Tests.Common.Fakes
 {
     public sealed class FakeHttpResponse : IHttpResponse
     {
-        private readonly int statusCode;
-        private readonly string body;
-        private readonly string bodyContentType;
-
         public FakeHttpResponse(int statusCode, string body = null, string bodyContentType = null)
+            : this(statusCode, null, null, body, bodyContentType, false)
         {
-            this.statusCode = statusCode;
-            this.body = body;
-            this.bodyContentType = null;
         }
 
-        string IHttpMessage.Body => this.body;
-
-        string IHttpMessage.BodyContentType => this.bodyContentType;
-
-        bool IHttpMessage.HasBody => !string.IsNullOrEmpty(this.body);
-
-        HttpHeaders IHttpMessage.Headers => new HttpHeaders();
-
-        string IHttpResponse.ResponsePhrase
+        public FakeHttpResponse(int statusCode, string responsePhrase, HttpHeaders headers, string body, string bodyContentType, bool transportError)
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            this.StatusCode = statusCode;
+            this.ResponsePhrase = responsePhrase;
+            this.Headers = headers;
+            this.Body = body;
+            this.BodyContentType = bodyContentType;
+            this.TransportError = transportError;
         }
 
-        int IHttpResponse.StatusCode => this.statusCode;
+        public int StatusCode { get; private set; }
 
-        bool IHttpResponse.TransportError => false;
+        public bool TransportError { get; private set; }
+
+        public string ResponsePhrase { get; private set; }
+
+        public HttpHeaders Headers { get; private set; }
+
+        public bool HasBody { get; private set; }
+
+        public string Body { get; private set; }
+
+        public string BodyContentType { get; private set; }
     }
 }

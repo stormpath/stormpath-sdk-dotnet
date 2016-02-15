@@ -67,7 +67,7 @@ namespace Stormpath.SDK.Http
         /// by copying the internal item dictionary from an existing instance.
         /// </summary>
         /// <param name="queryParams">The parameters to copy.</param>
-        internal QueryString(Dictionary<string, string> queryParams)
+        public QueryString(Dictionary<string, string> queryParams)
             : this()
         {
             if (queryParams != null)
@@ -81,7 +81,7 @@ namespace Stormpath.SDK.Http
         /// by copying an existing <see cref="QueryString"/> instance.
         /// </summary>
         /// <param name="existing">The existing instance to copy.</param>
-        internal QueryString(QueryString existing)
+        public QueryString(QueryString existing)
             : this(existing.queryStringItems)
         {
         }
