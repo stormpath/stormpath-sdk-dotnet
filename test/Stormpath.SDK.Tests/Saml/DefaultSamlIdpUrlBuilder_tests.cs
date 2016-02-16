@@ -67,20 +67,20 @@ namespace Stormpath.SDK.Tests.Saml
         [Fact]
         public void Throws_for_missing_redirect_uri()
         {
-            Should.Throw<ApplicationException>(() =>
+            Should.Throw<Exception>(() =>
             {
                 var builder = this.GetBuilder();
                 builder.Build();
             });
 
-            Should.Throw<ApplicationException>(() =>
+            Should.Throw<Exception>(() =>
             {
                 var builder = this.GetBuilder();
                 builder.SetCallbackUri((Uri)null);
                 builder.Build();
             });
 
-            Should.Throw<ApplicationException>(() =>
+            Should.Throw<Exception>(() =>
             {
                 var builder = this.GetBuilder();
                 builder.SetCallbackUri(string.Empty);

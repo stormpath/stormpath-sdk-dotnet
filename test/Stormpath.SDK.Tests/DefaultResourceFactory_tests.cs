@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Tests
         [Fact]
         public void Should_throw_for_unsupported_type()
         {
-            Should.Throw<ApplicationException>(() =>
+            Should.Throw<Exception>(() =>
             {
                 var bad = this.factory.Create<IResource>();
             });

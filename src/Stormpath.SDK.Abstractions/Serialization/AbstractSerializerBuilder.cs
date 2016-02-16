@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Serialization
 
         public AbstractSerializerBuilder(Type targetType)
         {
-            this.targetConstructor = targetType.GetTypeInfo()
+            this.targetConstructor = targetType?.GetTypeInfo()
                 .GetDefaultConstructor();
 
             if (this.targetConstructor == null)

@@ -86,7 +86,7 @@ namespace Stormpath.SDK.Tests
 
                 var requestExecutor = GetRequestExecutor(noSyncPathClient);
 
-                Assert.Throws<ApplicationException>(() =>
+                Assert.Throws<Exception>(() =>
                 {
                     var response = requestExecutor.Execute(Substitute.For<IHttpRequest>());
                 });
@@ -163,7 +163,7 @@ namespace Stormpath.SDK.Tests
 
                 var requestExecutor = GetRequestExecutor(noAsyncPathClient);
 
-                Assert.Throws<ApplicationException>(() =>
+                Assert.Throws<Exception>(() =>
                 {
                     var response = requestExecutor.ExecuteAsync(Substitute.For<IHttpRequest>(), CancellationToken.None);
                 });

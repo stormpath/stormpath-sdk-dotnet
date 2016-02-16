@@ -92,7 +92,7 @@ namespace Stormpath.SDK.Tests
         public void Error_with_exception()
         {
             ILogger logger = Substitute.For<ILogger>();
-            var exception = new ApplicationException("Something bad happened");
+            var exception = new Exception("Something bad happened");
 
             logger.Error(exception);
 
@@ -103,7 +103,7 @@ namespace Stormpath.SDK.Tests
         public void Fatal_with_exception()
         {
             ILogger logger = Substitute.For<ILogger>();
-            var exception = new ApplicationException("Something really bad happened");
+            var exception = new Exception("Something really bad happened");
 
             logger.Fatal(exception);
 
