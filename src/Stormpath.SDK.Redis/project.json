@@ -1,22 +1,27 @@
 {
-  "version": "0.6.0",
-  "description": "Redis cache adapter for the Stormpath .NET SDK",
   "authors": [ "Nate Barbettini" ],
+  "copyright": "(c) 2016 Stormpath, Inc.",
+  "dependencies": {
+    "StackExchange.Redis": "1.1.0-alpha2",
+    "Stormpath.SDK.Abstractions": "0.6.0-beta1"
+  },
+  "description": "Redis cache adapter for the Stormpath .NET SDK",
+  "frameworks": {
+    "dnx451": { },
+    "dnxcore50": { },
+    "dotnet5.5": { },
+    "net451": { }
+  },
+  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+  "language": "en-US",
+  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
   "owners": [ "Stormpath, Inc." ],
   "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
-  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
-  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
-  "copyright": "(c) 2016 Stormpath, Inc.",
-  "language": "en-US",
+  "repository": {
+    "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+  },
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Cache.Redis"
   },
-  "dependencies": {
-  },
-  "frameworks": {
-    "net45": { }
-  },
-  "dependencies": {
-    "StackExchange.Redis": "1.0.488"
-  }
+  "version": "0.6.0-beta1"
 }

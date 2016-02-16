@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Cache.Redis
         {
             if (this.connection == null)
             {
-                throw new ApplicationException("No connection present. Set up the cache provider with NewRedisCacheProvider first.");
+                throw new Exception("No connection present. Set up the cache provider with NewRedisCacheProvider first.");
             }
         }
 

@@ -1,19 +1,18 @@
 {
-  "title": "Stormpath.SDK",
-  "version": "0.6.0-beta1",
-  "description": "The official Stormpath SDK for .NET",
   "authors": [ "Nate Barbettini", "Contributors" ],
-  "owners": [ "Stormpath, Inc." ],
-  "tags": [ "Stormpath API Authentication Authorization REST" ],
-  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
-  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
-  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
   "copyright": "(c) 2016 Stormpath, Inc.",
-  "language": "en-US",
-  "tooling": {
-    "defaultNamespace": "Stormpath.SDK"
+  "dependencies": {
+    "AsyncUsageAnalyzers": "1.0.0-alpha003",
+    "EWSoftware.SHFB": "2015.10.10.0",
+    "EWSoftware.SHFB.NETFramework": "4.6",
+    "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
+    "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
+    "Polyglot": "1.0.0-beta1",
+    "StyleCop.Analyzers": "1.0.0",
+    "Stormpath.SDK.Abstractions": "0.6.0-beta1",
+    "Stormpath.Configuration": "0.1.0-beta3"
   },
-
+  "description": "The official Stormpath SDK for .NET",
   "frameworks": {
     "net451": {
       "frameworkAssemblies": {
@@ -43,15 +42,18 @@
       }
     }
   },
-  "dependencies": {
-    "AsyncUsageAnalyzers": "1.0.0-alpha003",
-    "EWSoftware.SHFB": "2015.10.10.0",
-    "EWSoftware.SHFB.NETFramework": "4.6",
-    "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
-    "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
-    "Polyglot": "1.0.0-beta1",
-    "StyleCop.Analyzers": "1.0.0",
-    "Stormpath.SDK.Abstractions": "0.6.0-beta1",
-    "Stormpath.Configuration": "0.1.0-beta3"
-  }
+  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+  "language": "en-US",
+  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+  "owners": [ "Stormpath, Inc." ],
+  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+  "repository": {
+    "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+  },
+  "tags": [ "Stormpath API Authentication Authorization REST" ],
+  "title": "Stormpath.SDK",
+  "tooling": {
+    "defaultNamespace": "Stormpath.SDK"
+  },
+  "version": "0.6.0-beta1"
 }
