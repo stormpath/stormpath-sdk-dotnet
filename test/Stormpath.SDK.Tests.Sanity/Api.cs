@@ -39,9 +39,9 @@ namespace Stormpath.SDK.Tests.Sanity
         [Fact]
         public void All_Impl_members_are_hidden()
         {
-            var typesInNamespace = Assembly
-                .GetAssembly(typeof(Client.IClient))
-                .GetTypes()
+            var typesInNamespace = typeof(Client.IClient)
+                .GetTypeInfo()
+                .DeclaredNestedTypes
                 .Where(x =>
                     x.Namespace != null &&
                     x.Namespace.StartsWith("Stormpath.SDK.Impl", StringComparison.InvariantCultureIgnoreCase))
@@ -57,9 +57,9 @@ namespace Stormpath.SDK.Tests.Sanity
         [Obsolete("Replace with AsyncUsageAnalyzers when shipped")]
         public void All_async_methods_have_CancellationToken_parameters()
         {
-            var methodsInAssembly = Assembly
-                .GetAssembly(typeof(Client.IClient))
-                .GetTypes()
+            var methodsInAssembly = typeof(Client.IClient)
+                .GetTypeInfo()
+                .DeclaredNestedTypes
                 .Where(x => !Helpers.IsCompilerGenerated(x))
                 .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
 
@@ -81,9 +81,9 @@ namespace Stormpath.SDK.Tests.Sanity
         [Fact]
         public void All_Impl_async_methods_have_required_CancellationToken_parameters()
         {
-            var methodsInAssembly = Assembly
-                .GetAssembly(typeof(Client.IClient))
-                .GetTypes()
+            var methodsInAssembly = typeof(Client.IClient)
+                .GetTypeInfo()
+                .DeclaredNestedTypes
                 .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
 
             var asyncMethods = methodsInAssembly
@@ -119,9 +119,9 @@ namespace Stormpath.SDK.Tests.Sanity
                 "ISamlAsyncResultListener.OnLogoutAsync(ISamlAccountResult, CancellationToken)",
             };
 
-            var methodsInAssembly = Assembly
-                .GetAssembly(typeof(Client.IClient))
-                .GetTypes()
+            var methodsInAssembly = typeof(Client.IClient)
+                .GetTypeInfo()
+                .DeclaredNestedTypes
                 .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
 
             var asyncMethods = methodsInAssembly
@@ -197,9 +197,9 @@ namespace Stormpath.SDK.Tests.Sanity
             };
 
             // Get normal async API from interfaces
-            var asyncMethods = Assembly
-                .GetAssembly(typeof(Client.IClient))
-                .GetTypes()
+            var asyncMethods = typeof(Client.IClient)
+                .GetTypeInfo()
+                .DeclaredNestedTypes
                 .Where(t => t.IsPublic && t.IsInterface)
                 .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
                 .Where(m => m.ReturnType == typeof(Task) ||
@@ -220,9 +220,9 @@ namespace Stormpath.SDK.Tests.Sanity
                 .ToList();
 
             // Get extension methods in Stormpath.SDK.Sync
-            var syncMethods = Assembly
-                .GetAssembly(typeof(SyncClientExtensions))
-                .GetTypes()
+            var syncMethods = typeof(SyncClientExtensions)
+                .GetTypeInfo()
+                .DeclaredNestedTypes
                 .Where(t => t.Namespace != null && t.Namespace == "Stormpath.SDK.Sync" &&
                             t.IsSealed && !t.IsGenericType && !t.IsNested)
                 .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
