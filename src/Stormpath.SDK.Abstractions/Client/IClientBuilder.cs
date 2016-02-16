@@ -14,7 +14,9 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Net;
+using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Http;
@@ -86,7 +88,52 @@ namespace Stormpath.SDK.Client
         /// <exception cref="System.ArgumentNullException"><paramref name="apiKey"/> is null.</exception>
         /// <exception cref="System.ArgumentException"><paramref name="apiKey"/> is not valid.</exception>
         /// <seealso cref="ClientApiKeys.Builder(ILogger)"/>
+        [Obsolete("Set the API Key ID and Secret directly on the client")]
         IClientBuilder SetApiKey(IClientApiKey apiKey);
+
+        /// <summary>
+        /// Sets the Stormpath API Key ID to use when making requests.
+        /// </summary>
+        /// <remarks>
+        /// This can also be set by passing a configuration object to <see cref="SetConfiguration(StormpathConfiguration)"/>, or by a JSON or YAML configuration.
+        /// </remarks>
+        /// <param name="id">The Stormpath API Key ID.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IClientBuilder SetApiKeyId(string id);
+
+        /// <summary>
+        /// Sets the Stormpath API Key Secret to use when making requests.
+        /// </summary>
+        /// <remarks>
+        /// This can also be set by passing a configuration object to <see cref="SetConfiguration(StormpathConfiguration)"/>, or by a JSON or YAML configuration.
+        /// </remarks>
+        /// <param name="id">The Stormpath API Key Secret.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IClientBuilder SetApiKeySecret(string secret);
+
+        /// <summary>
+        /// Sets the location of an <c>apiKey.properties</c> file to load a Stormpath API Key ID/Secret pair to use when making requests.
+        /// </summary>
+        /// <remarks>
+        /// This can also be set by passing a configuration object to <see cref="SetConfiguration(StormpathConfiguration)"/>, or by a JSON or YAML configuration.
+        /// </remarks>
+        /// <param name="id">The path to <c>apiKey.properties</c>.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IClientBuilder SetApiKeyFilePath(string path);
+
+        /// <summary>
+        /// Sets the configuration options to use for this <see cref="IClient">Client</see>.
+        /// </summary>
+        /// <param name="configuration">An instance of <see cref="StormpathConfiguration"/>.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IClientBuilder SetConfiguration(StormpathConfiguration configuration);
+
+        /// <summary>
+        /// Sets the configuration options to use for this <see cref="IClient">Client</see>.
+        /// </summary>
+        /// <param name="configuration">An anonymous type containing configuration options.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IClientBuilder SetConfiguration(object configuration);
 
         /// <summary>
         /// Sets the authentication scheme to use when making requests.
@@ -94,7 +141,16 @@ namespace Stormpath.SDK.Client
         /// <param name="scheme">The authentication scheme to use.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <seealso cref="AuthenticationScheme.SAuthc1"/>
+        [Obsolete("Use SetAuthenticationScheme(ClientAuthenticationScheme)")]
         IClientBuilder SetAuthenticationScheme(AuthenticationScheme scheme);
+
+        /// <summary>
+        /// Sets the authentication scheme to use when making requests.
+        /// </summary>
+        /// <param name="scheme">The authentication scheme to use.</param>
+        /// <returns>This instance for method chaining.</returns>
+        /// <seealso cref="Configuration.Abstractions.Model.ClientAuthenticationScheme.SAuthc1"/>
+        IClientBuilder SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme scheme);
 
         /// <summary>
         /// Sets the HTTP connection timeout to observe when making requests.
@@ -119,7 +175,16 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="proxy">The proxy server to use.</param>
         /// <returns>This instance for method chaining.</returns>
+        [Obsolete("Use the SetProxy(ClientProxyConfiguration) method")]
         IClientBuilder SetProxy(IWebProxy proxy);
+
+        /// <summary>
+        /// Sets the proxy server to use when making requests.
+        /// To connect without a proxy server, don't call this method, or call with <paramref name="proxy"/> set to <see langword="null"/>.
+        /// </summary>
+        /// <param name="proxyConfiguration">The configuration server to use.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IClientBuilder SetProxy(Configuration.Abstractions.Model.ClientProxyConfiguration proxyConfiguration);
 
         /// <summary>
         /// Sets the cache provider that should be used to cache Stormpath resources, reducing round-trips

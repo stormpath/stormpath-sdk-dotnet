@@ -17,7 +17,9 @@
     "NSubstitute": "1.9.2",
     "Shouldly": "2.6.0",
     "Newtonsoft.Json": "7.0.1",
-    "Stormpath.SDK.Tests.Common": "0.6.0-beta1"
+    "Stormpath.SDK.Tests.Common": "0.6.0-beta1",
+    "Stormpath.SDK.JsonNetSerializer": "0.6.0-beta1",
+    "Stormpath.SDK.RestSharpClient": "0.6.0-beta1"
   },
   "frameworks": {
     "dnx451": {

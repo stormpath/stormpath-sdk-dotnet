@@ -25,6 +25,7 @@ using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.Client;
+using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
@@ -48,17 +49,6 @@ namespace Stormpath.SDK.Tests
         }
 
         [Fact]
-        public void Throws_for_missing_API_key()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                var client = this.builder
-                .SetApiKey(null)
-                .Build();
-            });
-        }
-
-        [Fact]
         public void Throws_for_invalid_API_key()
         {
             Assert.Throws<ArgumentException>(() =>
@@ -67,29 +57,6 @@ namespace Stormpath.SDK.Tests
                     .SetApiKey(FakeApiKey.Create(valid: false))
                     .Build();
             });
-        }
-
-        [Fact]
-        public void Looks_for_default_ClientApiKey_if_none_specified()
-        {
-            var fakeKey = FakeApiKey.Create(valid: true);
-            var fakeClientApiKeyBuilder = Substitute.For<IClientApiKeyBuilder>();
-            fakeClientApiKeyBuilder.Build().Returns(fakeKey);
-            IClientBuilder builder = new DefaultClientBuilder(fakeClientApiKeyBuilder, new FakeUserAgentBuilder());
-
-            var client = builder.Build();
-            (client as DefaultClient).ApiKey.ShouldBe(fakeKey);
-        }
-
-        [Fact]
-        public void AuthenticationScheme_is_optional()
-        {
-            var client = this.builder
-                .SetApiKey(FakeApiKey.Create(valid: true))
-                .Build();
-
-            // Defaults to SAuthc1
-            (client as DefaultClient).AuthenticationScheme.ShouldBe(AuthenticationScheme.SAuthc1);
         }
 
         [Fact]
@@ -121,14 +88,90 @@ namespace Stormpath.SDK.Tests
         }
 
         [Fact]
-        public void BaseUrl_is_optional()
+        public void Passes_authentication_scheme_to_RequestExecutor()
+        {
+            var client = this.builder
+                .SetApiKey(FakeApiKey.Create(valid: true))
+                .SetAuthenticationScheme(AuthenticationScheme.Basic)
+                .Build();
+
+            // Defaults to SAuthc1
+            ((client as DefaultClient).DataStore.RequestExecutor as DefaultRequestExecutor).AuthenticationScheme.ShouldBe(AuthenticationScheme.Basic);
+        }
+
+        [Fact]
+        public void Passes_base_url_to_DataStore()
+        {
+            var client = this.builder
+                .SetApiKey(FakeApiKey.Create(valid: true))
+                .SetBaseUrl("http://foo.bar")
+                .Build();
+
+            // Default value
+            (client as DefaultClient).DataStore.BaseUrl.ShouldBe("http://foo.bar");
+        }
+
+        [Fact]
+        public void Passes_api_credentials_to_DataStore()
         {
             var client = this.builder
                 .SetApiKey(FakeApiKey.Create(valid: true))
                 .Build();
 
-            // Default value
-            (client as DefaultClient).BaseUrl.ShouldBe("https://api.stormpath.com/v1");
+            (client as DefaultClient).DataStore.ApiKey.GetId().ShouldBe("FooId");
+            (client as DefaultClient).DataStore.ApiKey.GetSecret().ShouldBe("FooSecret");
+        }
+
+        [Fact]
+        public void Supports_legacy_api_key()
+        {
+            var legacyApiKey = ClientApiKeys.Builder()
+                .SetId("fooBar")
+                .SetSecret("secret123!")
+                .Build();
+
+            var client = this.builder
+                .SetApiKey(legacyApiKey)
+                .Build();
+
+            (client as DefaultClient).DataStore.ApiKey.GetId().ShouldBe("fooBar");
+            (client as DefaultClient).DataStore.ApiKey.GetSecret().ShouldBe("secret123!");
+        }
+
+        [Fact]
+        public void Supports_new_api_key()
+        {
+            var client = this.builder
+                .SetApiKeyId("barFoo")
+                .SetApiKeySecret("123secret!")
+                .Build();
+
+            (client as DefaultClient).DataStore.ApiKey.GetId().ShouldBe("barFoo");
+            (client as DefaultClient).DataStore.ApiKey.GetSecret().ShouldBe("123secret!");
+        }
+
+        [Fact]
+        public void Supports_legacy_stream_handling_and_name_overrides()
+        {
+            var propertiesFile = @"
+myId = fooBar
+mySecret = secret123!";
+
+            using (var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(propertiesFile)))
+            {
+                var legacyApiKey = ClientApiKeys.Builder()
+                    .SetIdPropertyName("myId")
+                    .SetSecretPropertyName("mySecret")
+                    .SetInputStream(stream)
+                    .Build();
+
+                var client = this.builder
+                    .SetApiKey(legacyApiKey)
+                    .Build();
+
+                (client as DefaultClient).DataStore.ApiKey.GetId().ShouldBe("fooBar");
+                (client as DefaultClient).DataStore.ApiKey.GetSecret().ShouldBe("secret123!");
+            }
         }
 
         [Fact]
@@ -166,17 +209,6 @@ namespace Stormpath.SDK.Tests
                 .Build();
 
             client.GetCacheProvider().ShouldBe(fakeCache);
-        }
-
-        [Fact]
-        public void ConnectionTimeout_is_optional()
-        {
-            var client = this.builder
-                .SetApiKey(FakeApiKey.Create(valid: true))
-                .Build();
-
-            // Default value
-            (client as DefaultClient).ConnectionTimeout.ShouldBe(20 * 1000);
         }
 
         [Fact]

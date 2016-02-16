@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Net;
 using Stormpath.SDK.Logging;
 
@@ -43,7 +44,15 @@ namespace Stormpath.SDK.Http
         /// </summary>
         /// <param name="proxy">The proxy.</param>
         /// <returns>This instance for method chaining.</returns>
+        [Obsolete("Use SetProxy(ClientProxyConfiguration)")]
         IHttpClientBuilder SetProxy(IWebProxy proxy);
+
+        /// <summary>
+        /// Sets the connection proxy.
+        /// </summary>
+        /// <param name="clientProxyConfiguration">The proxy configuration.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IHttpClientBuilder SetProxy(Configuration.Abstractions.Model.ClientProxyConfiguration clientProxyConfiguration);
 
         /// <summary>
         /// Builds a new <see cref="IHttpClient"/> instance from the current builder state.

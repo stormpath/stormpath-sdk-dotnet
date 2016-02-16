@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Api
 {
     /// <summary>
@@ -33,6 +35,7 @@ namespace Stormpath.SDK.Api
     ///     .Build();
     /// </code>
     /// </example>
+    [Obsolete("Use IClientBuilder")]
     public interface IClientApiKeyBuilder
     {
         /// <summary>
@@ -54,6 +57,7 @@ namespace Stormpath.SDK.Api
         ///     .Build();
         /// </code>
         /// </example>
+        [Obsolete("Use IClientBuilder.SetApiKeyId")]
         IClientApiKeyBuilder SetId(string id);
 
         /// <summary>
@@ -71,6 +75,7 @@ namespace Stormpath.SDK.Api
         ///     .Build();
         /// </code>
         /// </example>
+        [Obsolete("Use IClientBuilder.SetApiKeySecret")]
         IClientApiKeyBuilder SetSecret(string secret);
 
         /// <summary>
@@ -90,6 +95,7 @@ namespace Stormpath.SDK.Api
         /// }
         /// </code>
         /// </example>
+        [Obsolete("This method will be removed in 1.0.")]
         IClientApiKeyBuilder SetInputStream(System.IO.Stream stream);
 
         /// <summary>
@@ -109,6 +115,7 @@ namespace Stormpath.SDK.Api
         ///     .Build();
         /// </code>
         /// </example>
+        [Obsolete("Use IClientBuilder.SetApiKeyFilePath")]
         IClientApiKeyBuilder SetFileLocation(string path);
 
         /// <summary>
@@ -129,6 +136,7 @@ namespace Stormpath.SDK.Api
         ///     .Build();
         /// </code>
         /// </example>
+        [Obsolete("This method will be removed in 1.0.")]
         IClientApiKeyBuilder SetIdPropertyName(string idPropertyName);
 
         /// <summary>
@@ -149,6 +157,7 @@ namespace Stormpath.SDK.Api
         ///     .Build();
         /// </code>
         /// </example>
+        [Obsolete("This method will be removed in 1.0.")]
         IClientApiKeyBuilder SetSecretPropertyName(string secretPropertyName);
 
         /// <summary>
@@ -156,6 +165,7 @@ namespace Stormpath.SDK.Api
         /// </summary>
         /// <returns>A new <see cref="IClientApiKey">Client API Key</see> instance.</returns>
         /// <exception cref="System.Exception">No valid API Key ID and Secret can be found.</exception>
+        [Obsolete("This method will be removed in 1.0.")]
         IClientApiKey Build();
     }
 }

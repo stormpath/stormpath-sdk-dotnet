@@ -26,6 +26,7 @@ namespace Stormpath.SDK.Client
     /// in order for your code to properly communicate with Stormpath API server.
     /// There are currently two authentication schemes available: HTTP Basic Authentication (<see cref="Basic"/>) and Digest Authentication (<see cref="SAuthc1"/>).
     /// </summary>
+    [Obsolete("Use Stormpath.Configuration.Abstractions.Model.ClientAuthenticationScheme")]
     public sealed class AuthenticationScheme : StringEnumeration
     {
         /// <summary>
@@ -49,6 +50,7 @@ namespace Stormpath.SDK.Client
         /// <param name="scheme">A string containing "basic" or "sauthc1" (matching is case-insensitive).</param>
         /// <returns>The <see cref="AuthenticationScheme">Authentication Scheme</see> with the specified name.</returns>
         /// <exception cref="Exception">No match is found.</exception>
+        [Obsolete("Use Stormpath.Configuration.Abstractions.Model.ClientAuthenticationScheme")]
         public static AuthenticationScheme Parse(string scheme)
         {
             switch (scheme.ToUpper())

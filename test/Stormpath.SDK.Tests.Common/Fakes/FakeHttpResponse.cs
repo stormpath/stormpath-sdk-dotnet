@@ -29,7 +29,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         {
             this.StatusCode = statusCode;
             this.ResponsePhrase = responsePhrase;
-            this.Headers = headers;
+            this.Headers = headers ?? new HttpHeaders();
             this.Body = body;
             this.BodyContentType = bodyContentType;
             this.TransportError = transportError;
@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 
         public HttpHeaders Headers { get; private set; }
 
-        public bool HasBody { get; private set; }
+        public bool HasBody => !string.IsNullOrEmpty(this.Body);
 
         public string Body { get; private set; }
 

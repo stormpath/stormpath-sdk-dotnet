@@ -18,6 +18,7 @@ using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
@@ -34,11 +35,8 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed partial class DefaultClient : IClient, IClientSync
     {
-        private readonly IClientApiKey apiKey;
-        private readonly string baseUrl;
-        private readonly AuthenticationScheme authenticationScheme;
-        private readonly int connectionTimeout;
-        private readonly IWebProxy proxy;
+        private readonly StormpathConfiguration configuration;
+
         private readonly ICacheProvider cacheProvider;
         private readonly IJsonSerializer serializer;
         private readonly IHttpClient httpClient;
@@ -53,11 +51,7 @@ namespace Stormpath.SDK.Impl.Client
         private ITenant tenant;
 
         public DefaultClient(
-            IClientApiKey apiKey,
-            string baseUrl,
-            AuthenticationScheme authenticationScheme,
-            int connectionTimeout,
-            IWebProxy proxy,
+            StormpathConfiguration configuration,
             IHttpClient httpClient,
             IJsonSerializer serializer,
             ICacheProvider cacheProvider,
@@ -65,34 +59,27 @@ namespace Stormpath.SDK.Impl.Client
             ILogger logger,
             TimeSpan identityMapExpiration)
         {
-            if (apiKey == null || !apiKey.IsValid())
-            {
-                throw new ArgumentException("API Key is not valid.");
-            }
-
-            if (string.IsNullOrEmpty(baseUrl))
-            {
-                throw new ArgumentNullException("Base URL cannot be empty.");
-            }
-
-            if (connectionTimeout < 0)
-            {
-                throw new ArgumentException("Timeout cannot be negative.");
-            }
-
-            this.logger = logger;
-            this.apiKey = apiKey;
-            this.baseUrl = baseUrl;
-            this.connectionTimeout = connectionTimeout;
-            this.proxy = proxy;
-            this.cacheProvider = cacheProvider;
-            this.authenticationScheme = authenticationScheme;
-            this.serializer = serializer;
+            this.configuration = configuration;
             this.httpClient = httpClient;
+            this.serializer = serializer;
+            this.cacheProvider = cacheProvider;
+            this.logger = logger;
 
-            var requestExecutor = new DefaultRequestExecutor(httpClient, apiKey, authenticationScheme, this.logger);
+            var compatibleApiKey = new Api.DefaultClientApiKey(configuration.Client.ApiKey.Id, configuration.Client.ApiKey.Secret);
+            var compatibleAuthenticationScheme = AuthenticationScheme.Parse(configuration.Client.AuthenticationScheme.ToString());
 
-            this.dataStore = new DefaultDataStore(this as IClient, requestExecutor, baseUrl, this.serializer, this.logger, userAgentBuilder, cacheProvider, identityMapExpiration);
+            var requestExecutor = new DefaultRequestExecutor(httpClient, compatibleApiKey, compatibleAuthenticationScheme, this.logger);
+
+            this.dataStore = new DefaultDataStore(
+                this as IClient,
+                requestExecutor,
+                configuration.Client.BaseUrl,
+                this.serializer,
+                this.logger,
+                userAgentBuilder,
+                cacheProvider,
+                 identityMapExpiration);
+
             this.dataStoreAsync = this.dataStore as IInternalAsyncDataStore;
             this.dataStoreSync = this.dataStore as IInternalSyncDataStore;
         }
@@ -102,16 +89,6 @@ namespace Stormpath.SDK.Impl.Client
         private IClientSync AsSyncInterface => this;
 
         private string CurrentTenantHref => this.tenant?.Href.Nullable() ?? "tenants/current";
-
-        internal IClientApiKey ApiKey => this.apiKey;
-
-        internal string BaseUrl => this.dataStoreAsync.BaseUrl;
-
-        internal AuthenticationScheme AuthenticationScheme => this.authenticationScheme;
-
-        internal int ConnectionTimeout => this.connectionTimeout;
-
-        internal IWebProxy Proxy => this.proxy;
 
         internal IJsonSerializer Serializer => this.serializer;
 

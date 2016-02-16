@@ -82,6 +82,27 @@ namespace Stormpath.SDK.Http
         }
 
         /// <inheritdoc/>
+        IHttpClientBuilder IHttpClientBuilder.SetProxy(Configuration.Abstractions.Model.ClientProxyConfiguration clientProxyConfiguration)
+        {
+            bool proxyConfigurationMissing = string.IsNullOrEmpty(clientProxyConfiguration?.Host);
+
+            if (proxyConfigurationMissing)
+            {
+                return this;
+            }
+
+#if NET451
+            var proxy = new WebProxy(clientProxyConfiguration.Host, clientProxyConfiguration.Port.Value);
+            proxy.Credentials = new NetworkCredential(clientProxyConfiguration.Username, clientProxyConfiguration.Password);
+
+            this.proxy = proxy;
+            return this;
+#else
+            throw new NotImplementedException("Proxy support is not yet available for this platform.");
+#endif
+        }
+
+        /// <inheritdoc/>
         IHttpClientBuilder ILoggerConsumer<IHttpClientBuilder>.SetLogger(ILogger logger)
         {
             if (logger != null)

@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Api
@@ -36,9 +37,10 @@ namespace Stormpath.SDK.Api
         ///     .Build();
         /// </code>
         /// </example>
+        [Obsolete("Use IClientBuilder")]
         public static IClientApiKeyBuilder Builder(ILogger logger = null)
         {
-            throw new NotImplementedException();
+            return new ShimClientApiKeyBuilder(logger);
         }
     }
 }

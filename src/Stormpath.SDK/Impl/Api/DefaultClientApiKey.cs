@@ -20,6 +20,7 @@ using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Impl.Api
 {
+    [Obsolete("Remove after 1.0. Replace with ClientApiKeyConfiguration")]
     internal sealed class DefaultClientApiKey : ImmutableValueObject<DefaultClientApiKey>, IClientApiKey
     {
         private readonly string id;

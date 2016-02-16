@@ -96,6 +96,8 @@ namespace Stormpath.SDK.Impl.Http
 
         IClientApiKey IRequestExecutor.ApiKey => this.apiKey;
 
+        internal AuthenticationScheme AuthenticationScheme => this.authenticationScheme;
+
         Task<IHttpResponse> IRequestExecutor.ExecuteAsync(IHttpRequest request, CancellationToken cancellationToken)
         {
             if (!this.httpClient.IsAsynchronousSupported || this.asyncHttpClient == null)

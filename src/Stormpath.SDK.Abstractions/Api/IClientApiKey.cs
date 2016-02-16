@@ -14,11 +14,14 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Api
 {
     /// <summary>
     /// Represents a Stormpath customer's API-specific ID and secret. All Stormpath REST invocations must be authenticated with a <see cref="IClientApiKey">Client API Key</see>.
     /// </summary>
+    [Obsolete("Will be removed in 1.0")]
     public interface IClientApiKey
     {
         /// <summary>
