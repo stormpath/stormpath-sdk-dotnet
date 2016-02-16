@@ -42,6 +42,8 @@ namespace Stormpath.SDK.Cache.Redis.Tests
             this.fakeHttpClient = new ResourceReturningHttpClient(BaseUrl);
 
             this.client = Clients.Builder()
+                .SetApiKeyId("foobar")
+                .SetApiKeySecret("secret123!")
                 .SetHttpClient(this.fakeHttpClient)
                 .SetCacheProvider(cacheProvider)
                 .SetLogger(this.logger)

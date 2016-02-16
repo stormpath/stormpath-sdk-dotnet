@@ -1,19 +1,28 @@
 {
-  "version": "0.6.0",
-  "description": "Unit tests for Stormpath.SDK.Redis",
   "authors": [ "Nate Barbettini" ],
+  "commands": {
+    "test": "xunit.runner.dnx"
+  },
+  "copyright": "(c) 2016 Stormpath, Inc.",
+  "dependencies": {
+    "Shouldly": "2.6.0",
+    "Stormpath.SDK.Abstractions": "0.6.0-beta1",
+    "Stormpath.SDK.Redis": "0.6.0-beta1",
+    "Stormpath.SDK.Tests.Common": "0.6.0-beta1",
+    "xunit": "2.1.0",
+    "xunit.runner.dnx": "2.1.0-rc1-build204"
+  },
+  "description": "Unit tests for Stormpath.SDK.Redis",
+  "frameworks": {
+    "dnx451": { }
+  },
+  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+  "language": "en-US",
+  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
   "owners": [ "Stormpath, Inc." ],
   "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
-  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
-  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
-  "copyright": "(c) 2016 Stormpath, Inc.",
-  "language": "en-US",
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Cache.Redis.Tests"
   },
-  "dependencies": {
-  },
-  "frameworks": {
-    "net45": { }
-  }
+  "version": "0.6.0-beta1"
 }
