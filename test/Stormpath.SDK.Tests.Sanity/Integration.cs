@@ -26,93 +26,99 @@ namespace Stormpath.SDK.Tests.Sanity
     public class Integration
     {
         [Fact]
-        public void Equal_numbers_of_sync_and_async_tests()
+        public void Notice()
         {
-            var asyncTests = typeof(Tests.Integration.IntegrationTestCollection).Assembly
-                .GetTypes()
-                .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Async")
-                .SelectMany(x => x.GetMethods())
-                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-                .Select(x => Helpers.GetQualifiedMethodName(x));
-            asyncTests.ShouldNotBeEmpty();
-
-            var syncTests = typeof(Tests.Integration.IntegrationTestCollection).Assembly
-                .GetTypes()
-                .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Sync")
-                .SelectMany(x => x.GetMethods())
-                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-                .Select(x => Helpers.GetQualifiedMethodName(x));
-            syncTests.ShouldNotBeEmpty();
-
-            var asyncButNotSync = asyncTests
-                .Except(syncTests)
-                .ToList();
-
-            var syncButNotAsync = syncTests
-                .Except(asyncTests)
-                .ToList();
-
-            asyncButNotSync.Count.ShouldBe(
-                0,
-                $"These async tests do not have a corresponding sync test:{Helpers.NL}{string.Join(", ", asyncButNotSync)}");
-
-            syncButNotAsync.Count.ShouldBe(
-                0,
-                $"These sync tests do not have a corresponding async test:{Helpers.NL}{string.Join(", ", syncButNotAsync)}");
+            Assert.False(true, "Integration sanity tests should be restored!");
         }
 
-        [DebugOnlyFact]
-        public void Equal_numbers_of_Csharp_and_Vb_tests_run()
-        {
-            // TODO terrible hacks. The Equal_numbers_of_Csharp_and_Vb_tests theory can't use DebugOnly
-            // so this test is just a flag.
-        }
+        //[Fact]
+        //public void Equal_numbers_of_sync_and_async_tests()
+        //{
+        //    var asyncTests = typeof(Tests.Integration.IntegrationTestCollection).Assembly
+        //        .GetTypes()
+        //        .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Async")
+        //        .SelectMany(x => x.GetMethods())
+        //        .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
+        //        .Select(x => Helpers.GetQualifiedMethodName(x));
+        //    asyncTests.ShouldNotBeEmpty();
 
-        [Theory]
-        [InlineData("Async")]
-        [InlineData("Sync")]
-        public void Equal_numbers_of_Csharp_and_Vb_tests(string @namespace)
-        {
-            var csharpTests = typeof(Tests.Integration.IntegrationTestCollection).Assembly
-                .GetTypes()
-                .Where(x => x.Namespace == $"Stormpath.SDK.Tests.Integration.{@namespace}")
-                .SelectMany(x => x.GetMethods())
-                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-                .Select(x => Helpers.GetQualifiedMethodName(x));
+        //    var syncTests = typeof(Tests.Integration.IntegrationTestCollection).Assembly
+        //        .GetTypes()
+        //        .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Sync")
+        //        .SelectMany(x => x.GetMethods())
+        //        .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
+        //        .Select(x => Helpers.GetQualifiedMethodName(x));
+        //    syncTests.ShouldNotBeEmpty();
 
-            var vbAssembly = Helpers.GetVisualBasicIntegrationTestAssembly();
-            if (vbAssembly == null)
-            {
-                if (Debugger.IsAttached)
-                {
-                    Assertly.Fail("Could not locate VB IT assembly.");
-                }
+        //    var asyncButNotSync = asyncTests
+        //        .Except(syncTests)
+        //        .ToList();
 
-                return;
-            }
+        //    var syncButNotAsync = syncTests
+        //        .Except(asyncTests)
+        //        .ToList();
 
-            var vbTests = vbAssembly
-                .GetTypes()
-                .Where(x => x.Namespace == $"Stormpath.SDK.Tests.Integration.VB.{@namespace}")
-                .SelectMany(x => x.GetMethods())
-                .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-                .Select(x => Helpers.GetQualifiedMethodName(x));
+        //    asyncButNotSync.Count.ShouldBe(
+        //        0,
+        //        $"These async tests do not have a corresponding sync test:{Helpers.NL}{string.Join(", ", asyncButNotSync)}");
 
-            var csharpButNotVb = csharpTests
-                .Except(vbTests)
-                .ToList();
+        //    syncButNotAsync.Count.ShouldBe(
+        //        0,
+        //        $"These sync tests do not have a corresponding async test:{Helpers.NL}{string.Join(", ", syncButNotAsync)}");
+        //}
 
-            var vbButNotCsharp = vbTests
-                .Except(csharpTests)
-                .ToList();
+        //[DebugOnlyFact]
+        //public void Equal_numbers_of_Csharp_and_Vb_tests_run()
+        //{
+        //    // TODO terrible hacks. The Equal_numbers_of_Csharp_and_Vb_tests theory can't use DebugOnly
+        //    // so this test is just a flag.
+        //}
 
-            csharpButNotVb.Count.ShouldBe(
-                0,
-                $"These {@namespace} C# tests do not have a corresponding VB test:{Helpers.NL}{string.Join(", ", csharpButNotVb)}");
+        //[Theory]
+        //[InlineData("Async")]
+        //[InlineData("Sync")]
+        //public void Equal_numbers_of_Csharp_and_Vb_tests(string @namespace)
+        //{
+        //    var csharpTests = typeof(Tests.Integration.IntegrationTestCollection).Assembly
+        //        .GetTypes()
+        //        .Where(x => x.Namespace == $"Stormpath.SDK.Tests.Integration.{@namespace}")
+        //        .SelectMany(x => x.GetMethods())
+        //        .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
+        //        .Select(x => Helpers.GetQualifiedMethodName(x));
 
-            vbButNotCsharp.Count.ShouldBe(
-                0,
-                $"These {@namespace} VB tests do not have a corresponding C# test:{Helpers.NL}{string.Join(", ", vbButNotCsharp)}");
-        }
+        //    var vbAssembly = Helpers.GetVisualBasicIntegrationTestAssembly();
+        //    if (vbAssembly == null)
+        //    {
+        //        if (Debugger.IsAttached)
+        //        {
+        //            Assertly.Fail("Could not locate VB IT assembly.");
+        //        }
+
+        //        return;
+        //    }
+
+        //    var vbTests = vbAssembly
+        //        .GetTypes()
+        //        .Where(x => x.Namespace == $"Stormpath.SDK.Tests.Integration.VB.{@namespace}")
+        //        .SelectMany(x => x.GetMethods())
+        //        .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
+        //        .Select(x => Helpers.GetQualifiedMethodName(x));
+
+        //    var csharpButNotVb = csharpTests
+        //        .Except(vbTests)
+        //        .ToList();
+
+        //    var vbButNotCsharp = vbTests
+        //        .Except(csharpTests)
+        //        .ToList();
+
+        //    csharpButNotVb.Count.ShouldBe(
+        //        0,
+        //        $"These {@namespace} C# tests do not have a corresponding VB test:{Helpers.NL}{string.Join(", ", csharpButNotVb)}");
+
+        //    vbButNotCsharp.Count.ShouldBe(
+        //        0,
+        //        $"These {@namespace} VB tests do not have a corresponding C# test:{Helpers.NL}{string.Join(", ", vbButNotCsharp)}");
+        //}
     }
 }

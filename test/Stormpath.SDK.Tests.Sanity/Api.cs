@@ -21,8 +21,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using ApiApprover;
-using ApprovalTests.Reporters;
 using Shouldly;
 using Stormpath.SDK.Sync;
 using Xunit;
@@ -31,12 +29,12 @@ namespace Stormpath.SDK.Tests.Sanity
 {
     public class Api
     {
-        [Fact(Skip = "Run this test manually.")]
-        [UseReporter(typeof(DiffReporter))]
-        public void No_public_api_changes()
-        {
-            PublicApiApprover.ApprovePublicApi(typeof(Client.IClient).Assembly.Location);
-        }
+        //[Fact(Skip = "Run this test manually.")]
+        //[UseReporter(typeof(DiffReporter))]
+        //public void No_public_api_changes()
+        //{
+        //    PublicApiApprover.ApprovePublicApi(typeof(Client.IClient).Assembly.Location);
+        //}
 
         [Fact]
         public void All_Impl_members_are_hidden()
@@ -56,6 +54,7 @@ namespace Stormpath.SDK.Tests.Sanity
         }
 
         [Fact]
+        [Obsolete("Replace with AsyncUsageAnalyzers when shipped")]
         public void All_async_methods_have_CancellationToken_parameters()
         {
             var methodsInAssembly = Assembly
@@ -184,6 +183,17 @@ namespace Stormpath.SDK.Tests.Sanity
                 "IJwtAuthenticator.Authenticate(IJwtAuthenticationRequest)",
                 "IIdSiteTokenAuthenticator.Authenticate(IIdSiteTokenAuthenticationRequest)",
                 "IRefreshGrantAuthenticator.Authenticate(IRefreshGrantRequest)",
+
+                // These backwards-compatibility methods are manually checked
+                // TODO remove at 1.0
+                "IAccountCreationActions.CreateAccount(IAccount, Action`1)",
+                "IApplication.AuthenticateAccount(Action`1)",
+                "IApplication.AuthenticateAccount(Action`1, Action`1)",
+                "IApplication.SendVerificationEmail(Action`1)",
+                "IGroupCreationActions.CreateGroup(IGroup, Action`1)",
+                "ITenantActions.CreateApplication(IApplication, Action`1)",
+                "ITenantActions.CreateDirectory(IDirectory, Action`1)",
+                "ITenantActions.CreateOrganization(IOrganization, Action`1)"
             };
 
             // Get normal async API from interfaces
@@ -211,7 +221,7 @@ namespace Stormpath.SDK.Tests.Sanity
 
             // Get extension methods in Stormpath.SDK.Sync
             var syncMethods = Assembly
-                .GetAssembly(typeof(Client.IClient))
+                .GetAssembly(typeof(SyncClientExtensions))
                 .GetTypes()
                 .Where(t => t.Namespace != null && t.Namespace == "Stormpath.SDK.Sync" &&
                             t.IsSealed && !t.IsGenericType && !t.IsNested)

@@ -23,6 +23,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Redis", "src\
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Redis.Tests", "test\Stormpath.SDK.Redis.Tests\Stormpath.SDK.Redis.Tests.xproj", "{F5725A49-BE0A-4BE7-B67C-98EC31F3FE78}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Tests.Sanity", "test\Stormpath.SDK.Tests.Sanity\Stormpath.SDK.Tests.Sanity.xproj", "{292C3E35-0ED5-4D8B-BCD4-8CE2D5666447}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{F5725A49-BE0A-4BE7-B67C-98EC31F3FE78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5725A49-BE0A-4BE7-B67C-98EC31F3FE78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5725A49-BE0A-4BE7-B67C-98EC31F3FE78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{292C3E35-0ED5-4D8B-BCD4-8CE2D5666447}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{292C3E35-0ED5-4D8B-BCD4-8CE2D5666447}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{292C3E35-0ED5-4D8B-BCD4-8CE2D5666447}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{292C3E35-0ED5-4D8B-BCD4-8CE2D5666447}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
