@@ -6,7 +6,7 @@
   },
   "description": "Abstractions for the Stormpath .NET SDK",
   "frameworks": {
-    "dotnet5.3": {
+    "dotnet5.2": {
       "dependencies": {
         "Microsoft.CSharp": "4.0.1-beta-23516",
         "System.Collections": "4.0.11-beta-23516",
