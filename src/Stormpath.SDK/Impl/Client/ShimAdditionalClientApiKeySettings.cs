@@ -18,7 +18,7 @@ using System.IO;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    public class ShimAdditionalClientApiKeySettings
+    internal sealed class ShimAdditionalClientApiKeySettings
     {
         public string IdPropertyName { get; set; }
 

@@ -21,7 +21,7 @@ using Stormpath.SDK.Logging;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    public class ShimClientApiKeyBuilder : IClientApiKeyBuilder
+    internal sealed class ShimClientApiKeyBuilder : IClientApiKeyBuilder
     {
         private readonly ClientApiKeyConfiguration configuration = new ClientApiKeyConfiguration();
         private readonly ShimAdditionalClientApiKeySettings additionalSettings = new ShimAdditionalClientApiKeySettings(); 

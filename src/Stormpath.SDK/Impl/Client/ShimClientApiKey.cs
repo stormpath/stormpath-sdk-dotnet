@@ -19,7 +19,7 @@ using Stormpath.SDK.Api;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    public class ShimClientApiKey : IClientApiKey
+    internal sealed class ShimClientApiKey : IClientApiKey
     {
         public ShimClientApiKey(ClientApiKeyConfiguration configuration, ShimAdditionalClientApiKeySettings additionalSettings)
         {
