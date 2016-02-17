@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using Shouldly;
+using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
@@ -27,25 +28,12 @@ namespace Stormpath.SDK.Tests.Common.Integration
 {
     public static class TestClients
     {
-        public static readonly Lazy<string> ApiBaseUrl = new Lazy<string>(() =>
-        {
-            var fromEnvironment = Environment.GetEnvironmentVariable("STORMPATH_CLIENT_BASEURL");
-
-            return string.IsNullOrEmpty(fromEnvironment)
-                ? "https://api.stormpath.com/v1"
-                : fromEnvironment;
-        });
-
         public static readonly Lazy<IClient> Basic = new Lazy<IClient>(() =>
         {
             return Clients.Builder()
-                .SetApiKey(GetApiKey())
-                .SetHttpClient(HttpClients.Create().RestSharpClient()
-                    .SetBaseUrl(ApiBaseUrl.Value)
-                    .Build())
+                .SetHttpClient(HttpClients.Create().RestSharpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .SetAuthenticationScheme(AuthenticationScheme.Basic)
-                .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(CacheProviders.Create().DisabledCache())
                 .Build();
@@ -54,13 +42,9 @@ namespace Stormpath.SDK.Tests.Common.Integration
         public static readonly Lazy<IClient> SAuthc1 = new Lazy<IClient>(() =>
         {
             return Clients.Builder()
-                .SetApiKey(GetApiKey())
-                .SetHttpClient(HttpClients.Create().RestSharpClient()
-                    .SetBaseUrl(ApiBaseUrl.Value)
-                    .Build())
+                .SetHttpClient(HttpClients.Create().RestSharpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
-                .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(CacheProviders.Create().DisabledCache())
                 .Build();
@@ -69,13 +53,9 @@ namespace Stormpath.SDK.Tests.Common.Integration
         public static readonly Lazy<IClient> SAuthc1Caching = new Lazy<IClient>(() =>
         {
             return Clients.Builder()
-                .SetApiKey(GetApiKey())
-                .SetHttpClient(HttpClients.Create().RestSharpClient()
-                    .SetBaseUrl(ApiBaseUrl.Value)
-                    .Build())
+                .SetHttpClient(HttpClients.Create().RestSharpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
-                .SetBaseUrl(ApiBaseUrl.Value)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(CacheProviders.Create().InMemoryCache()
                     .WithDefaultTimeToIdle(TimeSpan.FromMinutes(10))
@@ -83,6 +63,11 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     .Build())
                 .Build();
         });
+
+        private static Lazy<StormpathConfiguration> lazyConfiguration =
+            new Lazy<StormpathConfiguration>(() => Configuration.ConfigurationLoader.Load());
+
+        public static StormpathConfiguration CurrentConfiguration => lazyConfiguration.Value;
 
         /// <summary>
         /// Return a list of clients available for parameter-driven tests.
@@ -97,13 +82,5 @@ namespace Stormpath.SDK.Tests.Common.Integration
 
         public static IClient GetSAuthc1Client()
             => SAuthc1Caching.Value;
-
-        public static IClientApiKey GetApiKey()
-        {
-            // Expect that API keys are in environment variables. (works with travis-ci)
-            var apiKey = ClientApiKeys.Builder().Build();
-            apiKey.IsValid().ShouldBe(true, "These integration tests look for a valid API Key and Secret in your local environment variables.");
-            return apiKey;
-        }
     }
 }

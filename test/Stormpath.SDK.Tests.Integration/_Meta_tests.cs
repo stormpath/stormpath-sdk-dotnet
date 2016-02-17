@@ -15,6 +15,7 @@
 // </copyright>
 
 using Shouldly;
+using Stormpath.Configuration;
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 using Xunit.Abstractions;
@@ -32,21 +33,9 @@ namespace Stormpath.SDK.Tests.Integration
         }
 
         [Fact]
-        public void Integration_test_API_key_is_valid()
-        {
-            var apiKey = TestClients.GetApiKey();
-
-            apiKey.IsValid().ShouldBeTrue();
-            apiKey.GetId().ShouldNotBeNullOrEmpty();
-            apiKey.GetSecret().ShouldNotBeNullOrEmpty();
-
-            this.output.WriteLine($"ITs running with API key {apiKey.GetId()}");
-        }
-
-        [Fact]
         public void Output_API_base_URL()
         {
-            this.output.WriteLine($"ITs running against base URL: {TestClients.ApiBaseUrl.Value}");
+            this.output.WriteLine($"ITs running against base URL: {TestClients.CurrentConfiguration.Client.BaseUrl}");
         }
     }
 #pragma warning restore SA1300 // Element must begin with upper-case letter

@@ -1,4 +1,4 @@
-﻿// <copyright file="IAccountCreationActionsInternal.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IHasAsyncDataStoreInternal.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +15,13 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Impl.DataStore;
 
-namespace Stormpath.SDK.Impl.Group
+namespace Stormpath.SDK.Impl.Resource
 {
     [Obsolete("Remove when refactoring for 1.0")]
-    internal interface IGroupCreationActionsInternal : IHasAsyncDataStoreInternal
+    internal interface IHasAsyncDataStoreInternal
     {
-        IEmbeddedProperty Groups { get; }
+        IInternalAsyncDataStore GetInternalAsyncDataStore();
     }
 }

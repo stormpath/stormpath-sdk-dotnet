@@ -25,6 +25,7 @@ using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Http;
+using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Shared.Extensions;
@@ -33,8 +34,9 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    internal sealed partial class DefaultClient : IClient, IClientSync
+    internal sealed partial class DefaultClient : IClient, IClientSync, IHasAsyncDataStoreInternal
     {
+        // TODO don't expose this, at least until it's immutable!
         private readonly StormpathConfiguration configuration;
 
         private readonly ICacheProvider cacheProvider;
@@ -95,6 +97,8 @@ namespace Stormpath.SDK.Impl.Client
         internal IHttpClient HttpClient => this.httpClient;
 
         internal IInternalDataStore DataStore => this.dataStore;
+
+        IInternalAsyncDataStore IHasAsyncDataStoreInternal.GetInternalAsyncDataStore() => this.dataStoreAsync;
 
         private async Task EnsureTenantAsync(CancellationToken cancellationToken)
         {

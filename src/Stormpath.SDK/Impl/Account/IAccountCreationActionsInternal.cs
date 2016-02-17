@@ -21,10 +21,8 @@ using Stormpath.SDK.Impl.Resource;
 namespace Stormpath.SDK.Impl.Account
 {
     [Obsolete("Remove when refactoring for 1.0")]
-    internal interface IAccountCreationActionsInternal
+    internal interface IAccountCreationActionsInternal : IHasAsyncDataStoreInternal
     {
-        IInternalAsyncDataStore GetInternalAsyncDataStore();
-
         IEmbeddedProperty Accounts { get; }
     }
 }

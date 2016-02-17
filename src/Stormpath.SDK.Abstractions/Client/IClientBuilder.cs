@@ -153,8 +153,8 @@ namespace Stormpath.SDK.Client
         IClientBuilder SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme scheme);
 
         /// <summary>
-        /// Sets the HTTP connection timeout to observe when making requests.
-        /// To use the default connection timeout (20 seconds), don't call this method.
+        /// Sets the HTTP connection timeout in milliseconds to observe when making requests.
+        /// To use the default connection timeout, don't call this method.
         /// </summary>
         /// <param name="timeout">The HTTP connection timeout to use, in milliseconds.</param>
         /// <returns>This instance for method chaining.</returns>

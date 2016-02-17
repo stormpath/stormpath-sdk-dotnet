@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
             this.CreatedOrganizationHrefs = new List<string>();
 
             StaticLogger.Instance.Info($"IT run {this.testData.Nonce} starting...");
-            StaticLogger.Instance.Info($"Running against base URL: {TestClients.ApiBaseUrl.Value}");
+            StaticLogger.Instance.Info($"Running against base URL: {TestClients.CurrentConfiguration.Client.BaseUrl}");
 
             this.AddObjectsToTenantAsync()
                 .GetAwaiter().GetResult();
@@ -119,7 +119,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
             // Get client and tenant
             var client = TestClients.GetSAuthc1Client();
 
-            var tenant = await client.GetCurrentTenantAsync();
+            var tenant = await client.GetCurrentTenantAsync().ConfigureAwait(false);
             tenant.ShouldNotBe(null);
             tenant.Href.ShouldNotBeNullOrEmpty();
             this.TenantHref = tenant.Href;
@@ -131,7 +131,8 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 var applicationsToCreate = this.testData.GetTestApplications(client);
                 var applicationCreationTasks = applicationsToCreate.Select(app =>
                     tenant.CreateApplicationAsync(app, opt => opt.CreateDirectory = false));
-                var resultingApplications = await Task.WhenAll(applicationCreationTasks);
+                var resultingApplications = await Task.WhenAll(applicationCreationTasks)
+                    .ConfigureAwait(false);
                 resultingApplications.ShouldNotContain(x => string.IsNullOrEmpty(x.Href));
 
                 // Add them all to the teardown list
@@ -142,7 +143,8 @@ namespace Stormpath.SDK.Tests.Common.Integration
             }
             catch (Exception e)
             {
-                await this.RemoveObjectsFromTenantAsync();
+                await this.RemoveObjectsFromTenantAsync()
+                    .ConfigureAwait(false);
                 throw new ApplicationException("Could not create applications", e);
             }
 
@@ -153,12 +155,14 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 var orgsToCreate = this.testData.GetTestOrganizations(client);
                 var orgCreationTasks = orgsToCreate.Select(o =>
                     tenant.CreateOrganizationAsync(o, opt => opt.CreateDirectory = true));
-                var resultingOrgs = await Task.WhenAll(orgCreationTasks);
+                var resultingOrgs = await Task.WhenAll(orgCreationTasks)
+                    .ConfigureAwait(false);
                 resultingOrgs.ShouldNotContain(x => string.IsNullOrEmpty(x.Href));
 
                 // Verify that directories were created, too
                 var getDirectoryTasks = resultingOrgs.Select(x => x.GetDefaultAccountStoreAsync());
-                var resultingDirectories = await Task.WhenAll(getDirectoryTasks);
+                var resultingDirectories = await Task.WhenAll(getDirectoryTasks)
+                    .ConfigureAwait(false);
                 resultingDirectories.ShouldNotContain(x => string.IsNullOrEmpty(x.Href));
 
                 // Add them all to the teardown list
@@ -169,22 +173,24 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 primaryOrganization = resultingOrgs.Where(x => x.Name.Contains("primary")).Single();
                 this.PrimaryOrganizationHref = primaryOrganization.Href;
                 this.PrimaryOrganizationNameKey = primaryOrganization.NameKey;
-                this.PrimaryDirectoryHref = (await primaryOrganization.GetDefaultAccountStoreAsync()).Href;
+                this.PrimaryDirectoryHref = (await primaryOrganization.GetDefaultAccountStoreAsync().ConfigureAwait(false)).Href;
             }
             catch (Exception e)
             {
-                await this.RemoveObjectsFromTenantAsync();
+                await this.RemoveObjectsFromTenantAsync().ConfigureAwait(false);
                 throw new ApplicationException("Could not create organizations", e);
             }
 
             // Add primary organization to primary application as an account store
-            var primaryApplication = await client.GetResourceAsync<IApplication>(this.PrimaryApplicationHref);
+            var primaryApplication = await client.GetResourceAsync<IApplication>(this.PrimaryApplicationHref)
+                .ConfigureAwait(false);
             var mapping = client.Instantiate<IApplicationAccountStoreMapping>()
                 .SetAccountStore(primaryOrganization)
                 .SetApplication(primaryApplication)
                 .SetDefaultAccountStore(true)
                 .SetDefaultGroupStore(true);
-            await primaryApplication.CreateAccountStoreMappingAsync(mapping);
+            await primaryApplication.CreateAccountStoreMappingAsync(mapping)
+                .ConfigureAwait(false);
 
             // Create accounts in primary organization
             try
@@ -198,12 +204,14 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 var accountCreationTasks = accountsToCreate.Select(acct =>
                     primaryOrganization.CreateAccountAsync(acct, createOptions));
 
-                var resultingAccounts = await Task.WhenAll(accountCreationTasks);
+                var resultingAccounts = await Task.WhenAll(accountCreationTasks)
+                    .ConfigureAwait(false);
                 this.CreatedAccountHrefs.AddRange(resultingAccounts.Select(x => x.Href));
             }
             catch (Exception e)
             {
-                await this.RemoveObjectsFromTenantAsync();
+                await this.RemoveObjectsFromTenantAsync()
+                    .ConfigureAwait(false);
                 throw new ApplicationException("Could not create accounts", e);
             }
 
@@ -214,14 +222,16 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 var groupCreationTasks = groupsToCreate.Select(g =>
                     primaryOrganization.CreateGroupAsync(g));
 
-                var resultingGroups = await Task.WhenAll(groupCreationTasks);
+                var resultingGroups = await Task.WhenAll(groupCreationTasks)
+                    .ConfigureAwait(false);
                 this.CreatedGroupHrefs.AddRange(resultingGroups.Select(x => x.Href));
 
                 this.PrimaryGroupHref = resultingGroups.Where(x => x.Name.Contains("primary")).Single().Href;
             }
             catch (Exception e)
             {
-                await this.RemoveObjectsFromTenantAsync();
+                await this.RemoveObjectsFromTenantAsync()
+                    .ConfigureAwait(false);
                 throw new ApplicationException("Could not create groups", e);
             }
 
@@ -230,15 +240,17 @@ namespace Stormpath.SDK.Tests.Common.Integration
             {
                 var luke = await primaryApplication.GetAccounts()
                     .Where(x => x.Email.StartsWith("lskywalker"))
-                    .SingleAsync();
-                await luke.AddGroupAsync(this.PrimaryGroupHref);
+                    .SingleAsync()
+                    .ConfigureAwait(false);
+                await luke.AddGroupAsync(this.PrimaryGroupHref).ConfigureAwait(false);
 
                 // Stash an account for easy access
                 this.PrimaryAccountHref = luke.Href;
             }
             catch (Exception e)
             {
-                await this.RemoveObjectsFromTenantAsync();
+                await this.RemoveObjectsFromTenantAsync()
+                    .ConfigureAwait(false);
                 throw new ApplicationException("Could not add accounts to groups", e);
             }
         }
@@ -253,8 +265,10 @@ namespace Stormpath.SDK.Tests.Common.Integration
             {
                 try
                 {
-                    var application = await client.GetResourceAsync<IApplication>(href);
-                    var deleteResult = await application.DeleteAsync();
+                    var application = await client.GetResourceAsync<IApplication>(href)
+                        .ConfigureAwait(false);
+                    var deleteResult = await application.DeleteAsync()
+                        .ConfigureAwait(false);
                     results.TryAdd(href, null);
                 }
                 catch (ResourceException rex)
@@ -276,8 +290,10 @@ namespace Stormpath.SDK.Tests.Common.Integration
             {
                 try
                 {
-                    var directory = await client.GetResourceAsync<IDirectory>(href);
-                    var deleteResult = await directory.DeleteAsync();
+                    var directory = await client.GetResourceAsync<IDirectory>(href)
+                        .ConfigureAwait(false);
+                    var deleteResult = await directory.DeleteAsync()
+                        .ConfigureAwait(false);
                     results.TryAdd(href, null);
                 }
                 catch (ResourceException rex)
@@ -299,8 +315,10 @@ namespace Stormpath.SDK.Tests.Common.Integration
             {
                 try
                 {
-                    var org = await client.GetResourceAsync<IOrganization>(href);
-                    var deleteResult = await org.DeleteAsync();
+                    var org = await client.GetResourceAsync<IOrganization>(href)
+                        .ConfigureAwait(false);
+                    var deleteResult = await org.DeleteAsync()
+                        .ConfigureAwait(false);
                     results.TryAdd(href, null);
                 }
                 catch (ResourceException rex)
@@ -320,7 +338,8 @@ namespace Stormpath.SDK.Tests.Common.Integration
             await Task.WhenAll(
                 Task.WhenAll(deleteApplicationTasks),
                 Task.WhenAll(deleteDirectoryTasks),
-                Task.WhenAll(deleteOrganizationTasks));
+                Task.WhenAll(deleteOrganizationTasks))
+            .ConfigureAwait(false);
 
             // All done! Throw errors if any occurred
             bool anyErrors = results.Any(kvp => kvp.Value != null);

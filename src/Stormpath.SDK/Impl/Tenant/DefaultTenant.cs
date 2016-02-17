@@ -19,7 +19,7 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
-    internal sealed partial class DefaultTenant : AbstractExtendableInstanceResource, ITenant, ITenantSync
+    internal sealed partial class DefaultTenant : AbstractExtendableInstanceResource, ITenant, ITenantSync, IHasAsyncDataStoreInternal
     {
         private static readonly string AccountsPropertyName = "accounts";
         private static readonly string AgentsPropertyName = "agents";

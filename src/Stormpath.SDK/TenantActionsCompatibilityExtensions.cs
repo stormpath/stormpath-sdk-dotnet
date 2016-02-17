@@ -42,7 +42,7 @@ namespace Stormpath.SDK
             creationOptionsAction(builder);
             var options = builder.Build();
 
-            return (tenantActions as AbstractResource).GetInternalAsyncDataStore().CreateAsync("applications", application, options, cancellationToken);
+            return (tenantActions as IHasAsyncDataStoreInternal).GetInternalAsyncDataStore().CreateAsync("applications", application, options, cancellationToken);
         }
 
 
