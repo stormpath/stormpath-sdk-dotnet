@@ -6,17 +6,22 @@
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
     "xunit": "2.1.0",
+    "xunit.runner.dnx": "2.1.0-rc1-build204",
     "Stormpath.SDK": "0.6.0-beta1",
-    "NSubstitute": "1.9.2",
-    "Shouldly": "2.6.0",
-    "Newtonsoft.Json": "7.0.1",
-    "Stormpath.SDK.Tests.Common": "0.6.0-beta1",
     "Stormpath.SDK.JsonNetSerializer": "0.6.0-beta1",
     "Stormpath.SDK.RestSharpClient": "0.6.0-beta1"
   },
-  "description": "Unit tests for Stormpath.SDK",
+  "description": "DNX unit tests for Stormpath.SDK",
   "frameworks": {
-    "dnx451": { }
+    "dnxcore50": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-beta-23516",
+        "System.Collections": "4.0.11-beta-23516",
+        "System.Linq": "4.0.1-beta-23516",
+        "System.Runtime": "4.0.21-beta-23516",
+        "System.Threading": "4.0.11-beta-23516"
+      }
+    }
   },
   "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
   "language": "en-US",
@@ -24,7 +29,7 @@
   "owners": [ "Stormpath, Inc." ],
   "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
   "tooling": {
-    "defaultNamespace": "Stormpath.SDK.Tests"
+    "defaultNamespace": "Stormpath.SDK.Tests.Dnx"
   },
   "version": "0.6.0-beta1"
 }
