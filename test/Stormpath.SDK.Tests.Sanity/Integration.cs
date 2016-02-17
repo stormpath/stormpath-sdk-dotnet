@@ -31,42 +31,6 @@ namespace Stormpath.SDK.Tests.Sanity
             Assert.False(true, "Integration sanity tests should be restored!");
         }
 
-        //[Fact]
-        //public void Equal_numbers_of_sync_and_async_tests()
-        //{
-        //    var asyncTests = typeof(Tests.Integration.IntegrationTestCollection).Assembly
-        //        .GetTypes()
-        //        .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Async")
-        //        .SelectMany(x => x.GetMethods())
-        //        .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-        //        .Select(x => Helpers.GetQualifiedMethodName(x));
-        //    asyncTests.ShouldNotBeEmpty();
-
-        //    var syncTests = typeof(Tests.Integration.IntegrationTestCollection).Assembly
-        //        .GetTypes()
-        //        .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Sync")
-        //        .SelectMany(x => x.GetMethods())
-        //        .Where(m => m.GetCustomAttributes().OfType<TheoryAttribute>().Any() || m.GetCustomAttributes().OfType<FactAttribute>().Any())
-        //        .Select(x => Helpers.GetQualifiedMethodName(x));
-        //    syncTests.ShouldNotBeEmpty();
-
-        //    var asyncButNotSync = asyncTests
-        //        .Except(syncTests)
-        //        .ToList();
-
-        //    var syncButNotAsync = syncTests
-        //        .Except(asyncTests)
-        //        .ToList();
-
-        //    asyncButNotSync.Count.ShouldBe(
-        //        0,
-        //        $"These async tests do not have a corresponding sync test:{Helpers.NL}{string.Join(", ", asyncButNotSync)}");
-
-        //    syncButNotAsync.Count.ShouldBe(
-        //        0,
-        //        $"These sync tests do not have a corresponding async test:{Helpers.NL}{string.Join(", ", syncButNotAsync)}");
-        //}
-
         //[DebugOnlyFact]
         //public void Equal_numbers_of_Csharp_and_Vb_tests_run()
         //{
