@@ -21,11 +21,11 @@ namespace Stormpath.SDK.Impl.Http
 {
     internal static class DefaultHttpClientLoader
     {
+#if NET451
         private static readonly string LibraryName = "Stormpath.SDK.RestSharpClient";
         private static readonly string FileName = "Stormpath.SDK.RestSharpClient.dll";
         private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Http.RestSharp.RestSharpClient";
 
-#if NET451
         // Caching result so expensive reflection only happens once
         private static readonly Lazy<Type> LoadTypeAction = new Lazy<Type>(() =>
         {
