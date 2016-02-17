@@ -2,14 +2,26 @@
   "authors": [ "Nate Barbettini" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Stormpath.SDK.Abstractions": "0.6.0-beta1",
-    "System.Net.Http": "4.0.1-beta-23516"
+    "Stormpath.SDK.Abstractions": "0.6.0-beta1"
   },
   "frameworks": {
-    "dotnet5.4": {
+    "dotnet5.2": {
+      "dependencies": {
+        "System.Net.Http": "4.0.1-beta-23516"
+      }
     },
-    "net451": { },
-    "netcore50": { }
+    "net451": {
+      "frameworkAssemblies": {
+        "System.Net.Http": "4.0.0.0"
+
+      }
+    },
+    "netcore50": {
+      "dependencies": {
+        "System.Net.Http": "4.0.1-beta-23516"
+
+      }
+    }
   },
   "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
   "language": "en-US",
