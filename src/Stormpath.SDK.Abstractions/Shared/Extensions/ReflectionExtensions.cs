@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Shared.Extensions
     public static class ReflectionExtensions
     {
         public static ConstructorInfo GetDefaultConstructor(this TypeInfo typeInfo)
-            => typeInfo.GetConstructor(Type.EmptyTypes);
+            => typeInfo.GetConstructor(new Type[] { });
 
         public static ConstructorInfo GetConstructor(this TypeInfo typeInfo, Type[] parameterTypes)
         {
