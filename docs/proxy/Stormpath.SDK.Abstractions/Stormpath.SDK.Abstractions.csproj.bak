@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Stormpath.SDK.Abstractions.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,7 +47,7 @@
   </ItemGroup>
   <!-- Auto-generated items (see generate-doc-proxy.ps1) -->
   <!-- #startAutogen -->
-
+    
   <!-- #endAutogen -->
   <ItemGroup>
     <None Include="packages.config" />
