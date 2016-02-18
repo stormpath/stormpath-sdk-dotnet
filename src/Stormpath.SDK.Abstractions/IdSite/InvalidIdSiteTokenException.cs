@@ -19,13 +19,17 @@ using Stormpath.SDK.Error;
 namespace Stormpath.SDK.IdSite
 {
     /// <summary>
-    /// This exception indicates that the token is invalid. Reasons for this could be:
+    /// Represents an error indicating that the token is invalid. Reasons for this could be:
     /// An expired token, the issued at time (iat) is after the current time,
     /// the specified organization name key does not exist in your Stormpath Tenant, or
     /// because the specified organization is disabled.
     /// </summary>
     public sealed class InvalidIdSiteTokenException : IdSiteRuntimeException
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="IdSiteSessionTimeoutException"/>.
+        /// </summary>
+        /// <param name="error">The Stormpath API error.</param>
         public InvalidIdSiteTokenException(IError error)
             : base(error)
         {

@@ -19,8 +19,16 @@ using Stormpath.SDK.Impl.Serialization;
 
 namespace Stormpath.SDK.Serialization
 {
+    /// <summary>
+    /// Provides access to the plugin autodetection behavior.
+    /// </summary>
     public static class SerializeFactoryAutodetectExtensions
     {
+        /// <summary>
+        /// Automatically detects the serializer plugin to use.
+        /// </summary>
+        /// <param name="factory">The plugin factory.</param>
+        /// <returns>A builder capable of building <see cref="IJsonSerializer"/> instances.</returns>
         [Obsolete("Will be removed in 1.0. Instead, manually specify a serializer, e.g. Serializers.Create().JsonNetSerializer()")]
         public static ISerializerBuilder AutoDetect (this ISerializerFactory factory)
         {

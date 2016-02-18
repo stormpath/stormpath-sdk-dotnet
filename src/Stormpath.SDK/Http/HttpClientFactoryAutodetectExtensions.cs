@@ -19,8 +19,16 @@ using Stormpath.SDK.Impl.Http;
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// Provides access to the plugin autodetection behavior.
+    /// </summary>
     public static class HttpClientFactoryAutodetectExtensions
     {
+        /// <summary>
+        /// Automatically detects the HTTP client plugin to use.
+        /// </summary>
+        /// <param name="factory">The plugin factory.</param>
+        /// <returns>A builder capable of building <see cref="IHttpClient"/> instances.</returns>
         [Obsolete("Will be removed in 1.0. Instead, manually specify a client, e.g. HttpClients.Create().RestSharpClient()")]
         public static IHttpClientBuilder AutoDetect(this IHttpClientFactory factory)
         {

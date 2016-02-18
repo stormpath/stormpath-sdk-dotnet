@@ -229,8 +229,11 @@ namespace Stormpath.SDK.Http
         }
 
         /// <summary>
-        /// <see cref="RequestHelper.UrlEncode(string, bool, bool)"/> over-encodes some symbols used in search syntax; we want to revert them.
+        /// Fixes URL encoding of search syntax tokens.
         /// </summary>
+        /// <remarks>
+        /// <see cref="UrlEncoding.Encode(string, bool, bool)"/> over-encodes some symbols used in search syntax; we want to revert them.
+        /// </remarks>
         /// <param name="encodedValue">URLEncoded datetime search criteria string</param>
         /// <returns>Properly encoded Stormpath datetime search criteria string</returns>
         private static string FixSearchSyntaxEncoding(string encodedValue)

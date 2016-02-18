@@ -40,6 +40,13 @@ namespace Stormpath.SDK.Serialization
         {
         }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="AbstractSerializerBuilder{T}"/> for the given <paramref name="targetType"/>.
+        /// </summary>
+        /// <remarks>
+        /// <paramref name="targetType"/> must have a parameterless constructor.
+        /// </remarks>
+        /// <param name="targetType">The target plugin type to build.</param>
         public AbstractSerializerBuilder(Type targetType)
         {
             this.targetConstructor = targetType?.GetTypeInfo()

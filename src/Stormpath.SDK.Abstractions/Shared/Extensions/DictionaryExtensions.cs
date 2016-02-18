@@ -18,8 +18,21 @@ using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Shared.Extensions
 {
+    /// <summary>
+    /// Extension methods for working with <see cref="Map"/> instances.
+    /// </summary>
     public static class DictionaryExtensions
     {
+        /// <summary>
+        /// Gets the value associated with the specified key.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="key">The key whose value to get.</param>
+        /// <param name="value">
+        /// When this method returns, the string value associated with the specified key, if the
+        /// key is found; otherwise, <see langword="null"/>. This parameter is passed uninitialized.
+        /// </param>
+        /// <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
         public static bool TryGetValueAsString(this Map source, string key, out string value)
         {
             value = null;

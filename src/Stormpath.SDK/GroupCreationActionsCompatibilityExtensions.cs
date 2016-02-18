@@ -22,11 +22,15 @@ using Stormpath.SDK.Impl.Group;
 
 namespace Stormpath.SDK
 {
+    /// <summary>
+    /// Provides backwards-compatibility for certain methods to comply with semver.
+    /// </summary>
     public static class GroupCreationActionsCompatibilityExtensions
     {
         /// <summary>
         /// Creates a new <see cref="IGroup">Group</see> that may be used by the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>
+        /// <param name="groupCreationActions">The interface.</param>
         /// <param name="group">The group to create.</param>
         /// <param name="creationOptionsAction">
         /// An inline builder for an instance of <see cref="IGroupCreationOptions"/>, which will be used when sending the request.

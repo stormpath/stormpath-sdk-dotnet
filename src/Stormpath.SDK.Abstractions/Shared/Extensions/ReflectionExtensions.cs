@@ -20,11 +20,25 @@ using System.Linq;
 
 namespace Stormpath.SDK.Shared.Extensions
 {
+    /// <summary>
+    /// Extension methods for working with the Reflection API.
+    /// </summary>
     public static class ReflectionExtensions
     {
+        /// <summary>
+        /// Gets the default (parameterless) constructor for a given <paramref name="typeInfo"/>.
+        /// </summary>
+        /// <param name="typeInfo">The type info.</param>
+        /// <returns>The constructor if found; otherwise, <see langword="null"/>.</returns>
         public static ConstructorInfo GetDefaultConstructor(this TypeInfo typeInfo)
             => typeInfo.GetConstructor(new Type[] { });
 
+        /// <summary>
+        /// Gets the constructor that accepts the given <paramref name="parameterTypes"/>.
+        /// </summary>
+        /// <param name="typeInfo">The type info.</param>
+        /// <param name="parameterTypes">The parameter types.</param>
+        /// <returns>The constructor if found; otherwise, <see langword="null"/>.</returns>
         public static ConstructorInfo GetConstructor(this TypeInfo typeInfo, Type[] parameterTypes)
         {
             var constructor = typeInfo.DeclaredConstructors

@@ -19,8 +19,16 @@ using System.Collections.Generic;
 
 namespace Stormpath.SDK.Shared.Extensions
 {
+    /// <summary>
+    /// Extension methods for working with strings.
+    /// </summary>
     public static class StringExtensions
     {
+        /// <summary>
+        /// Returns <c>null</c> if the string is empty.
+        /// </summary>
+        /// <param name="source">The string.</param>
+        /// <returns>The string, or <see langword="null"/> if the string is null or empty.</returns>
         public static string Nullable(this string source)
         {
             if (string.IsNullOrEmpty(source))

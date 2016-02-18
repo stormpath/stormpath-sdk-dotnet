@@ -59,8 +59,8 @@ namespace Stormpath.SDK.Client
     ///         <description>
     ///             If <see cref="SetCacheProvider(ICacheProvider)"/> is not called, an in-memory cache will be used to improve performance,
     ///             with a default TTL (Time to Live) and TTI (Time to Idle) of 1 hour. Caching can be disabled
-    ///             by passing <see cref="Caches.NewDisabledCacheProvider"/> to <see cref="SetCacheProvider(ICacheProvider)"/>.
-    ///         </description>
+    ///             by passing <see langword="null"/> to <see cref="SetCacheProvider(ICacheProvider)"/>.
+    ///         </description>  
     ///     </item>
     /// </list>
     /// <para>
@@ -85,9 +85,8 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="apiKey">The API Key to use.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="System.ArgumentNullException"><paramref name="apiKey"/> is null.</exception>
-        /// <exception cref="System.ArgumentException"><paramref name="apiKey"/> is not valid.</exception>
-        /// <seealso cref="ClientApiKeys.Builder(ILogger)"/>
+        /// <exception cref="ArgumentNullException"><paramref name="apiKey"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="apiKey"/> is not valid.</exception>
         [Obsolete("Set the API Key ID and Secret directly on the client")]
         IClientBuilder SetApiKey(IClientApiKey apiKey);
 
@@ -107,7 +106,7 @@ namespace Stormpath.SDK.Client
         /// <remarks>
         /// This can also be set by passing a configuration object to <see cref="SetConfiguration(StormpathConfiguration)"/>, or by a JSON or YAML configuration.
         /// </remarks>
-        /// <param name="id">The Stormpath API Key Secret.</param>
+        /// <param name="secret">The Stormpath API Key Secret.</param>
         /// <returns>This instance for method chaining.</returns>
         IClientBuilder SetApiKeySecret(string secret);
 
@@ -117,7 +116,7 @@ namespace Stormpath.SDK.Client
         /// <remarks>
         /// This can also be set by passing a configuration object to <see cref="SetConfiguration(StormpathConfiguration)"/>, or by a JSON or YAML configuration.
         /// </remarks>
-        /// <param name="id">The path to <c>apiKey.properties</c>.</param>
+        /// <param name="path">The path to <c>apiKey.properties</c>.</param>
         /// <returns>This instance for method chaining.</returns>
         IClientBuilder SetApiKeyFilePath(string path);
 
@@ -180,7 +179,7 @@ namespace Stormpath.SDK.Client
 
         /// <summary>
         /// Sets the proxy server to use when making requests.
-        /// To connect without a proxy server, don't call this method, or call with <paramref name="proxy"/> set to <see langword="null"/>.
+        /// To connect without a proxy server, don't call this method, or call with <paramref name="proxyConfiguration"/> set to <see langword="null"/>.
         /// </summary>
         /// <param name="proxyConfiguration">The configuration server to use.</param>
         /// <returns>This instance for method chaining.</returns>
@@ -190,43 +189,50 @@ namespace Stormpath.SDK.Client
         /// Sets the cache provider that should be used to cache Stormpath resources, reducing round-trips
         /// to the Stormpath API server and enhancing application performance.
         /// </summary>
+        /// <remarks>
+        /// Use the <c>CacheProviders</c> object construct a cache provider.
+        /// </remarks>
         /// <param name="cacheProvider">The cache provider to use.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="System.ArgumentNullException"><paramref name="cacheProvider"/> is null.</exception>
-        /// <seealso cref="CacheProviders.Create()"/>
+        /// <exception cref="ArgumentNullException"><paramref name="cacheProvider"/> is null.</exception>
         /// <seealso cref="ICacheProviderFactory.DisabledCache"/>
-        /// /// <seealso cref="ICacheProviderFactory.InMemoryCache"/>
+        /// <seealso cref="ICacheProviderFactory.InMemoryCache"/>
         IClientBuilder SetCacheProvider(ICacheProvider cacheProvider);
 
         /// <summary>
         /// Sets the HTTP client to use when making requests.
         /// </summary>
-        /// <remarks><see cref="SetHttpClient(IHttpClientBuilder)"/> is preferred, unless you have manually instantiated a class supporting <see cref="IHttpClient"/>.</remarks>
+        /// <remarks>
+        /// Use the <c>HttpClients</c> object construct an HTTP client.
+        /// <para>
+        /// <see cref="SetHttpClient(IHttpClientBuilder)"/> is preferred, unless you have manually instantiated a class supporting <see cref="IHttpClient"/>.
+        /// </para>
+        /// </remarks>
         /// <param name="httpClient">The HTTP client to use.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="System.ArgumentNullException"><paramref name="httpClient"/> is null.</exception>
-        /// <seealso cref="HttpClients.Create()"/>
-        /// <seealso cref="IHttpClientFactory.AutoDetect()"/>
+        /// <exception cref="ArgumentNullException"><paramref name="httpClient"/> is null.</exception>
         IClientBuilder SetHttpClient(IHttpClient httpClient);
 
         /// <summary>
         /// Sets the HTTP client to use when making requests.
         /// </summary>
+        /// <remarks>
+        /// Use the <c>HttpClients</c> object construct an HTTP client.
+        /// </remarks>
         /// <param name="httpClientBuilder">The HTTP client to use.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="System.ArgumentNullException"><paramref name="httpClientBuilder"/> is null.</exception>
-        /// <seealso cref="HttpClients.Create()"/>
-        /// <seealso cref="IHttpClientFactory"/>
+        /// <exception cref="ArgumentNullException"><paramref name="httpClientBuilder"/> is null.</exception>
         IClientBuilder SetHttpClient(IHttpClientBuilder httpClientBuilder);
 
         /// <summary>
         /// Sets the serializer to use when making requests.
         /// </summary>
+        /// <remarks>
+        /// Use the <c>Serializers</c> object construct a serializer.
+        /// </remarks>
         /// <param name="serializerBuilder">The serializer to use.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="System.ArgumentNullException"><paramref name="serializerBuilder"/> is null.</exception>
-        /// <seealso cref="Serializers.Create()"/>
-        /// <seealso cref="ISerializerFactory"/>
+        /// <exception cref="ArgumentNullException"><paramref name="serializerBuilder"/> is null.</exception>
         IClientBuilder SetSerializer(ISerializerBuilder serializerBuilder);
 
         /// <summary>

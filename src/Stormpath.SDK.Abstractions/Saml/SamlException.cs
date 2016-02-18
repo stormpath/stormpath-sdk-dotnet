@@ -23,6 +23,10 @@ namespace Stormpath.SDK.Saml
     /// </summary>
     public sealed class SamlException : ResourceException
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="SamlException"/>.
+        /// </summary>
+        /// <param name="error">The Stormpath API error.</param>
         public SamlException(IError error)
             : base(error)
         {

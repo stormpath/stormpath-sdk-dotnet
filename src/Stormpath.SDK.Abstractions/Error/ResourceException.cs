@@ -27,6 +27,10 @@ namespace Stormpath.SDK.Error
 
         internal readonly IError Error;
 
+        /// <summary>
+        /// Creates a new instance of <see cref="ResourceException"/>.
+        /// </summary>
+        /// <param name="error">The Stormpath API error.</param>
         public ResourceException(IError error)
             : base(error.Message)
         {

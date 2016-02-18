@@ -48,6 +48,13 @@ namespace Stormpath.SDK.Http
         {
         }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="AbstractHttpClientBuilder{T}"/> for the given <paramref name="targetType"/>.
+        /// </summary>
+        /// <remarks>
+        /// <paramref name="targetType"/> must have a constructor that accepts these parameters (in order): <c>string, int, IWebProxy, ILogger</c>
+        /// </remarks>
+        /// <param name="targetType">The target plugin type to build.</param>
         public AbstractHttpClientBuilder(Type targetType)
         {
             this.targetConstructor = targetType?.GetTypeInfo()

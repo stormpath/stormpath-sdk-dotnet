@@ -88,8 +88,14 @@ namespace Stormpath.SDK.Logging
         /// <param name="source">The source of the event, or <see langword="null"/> to use <see cref="Exception.Source"/>.</param>
         public static void Warn(this ILogger logger, Exception exception, string message = null, string source = null)
         {
-            var logMessage = message.Nullable() ?? exception.Message;
-            var logSource = source.Nullable() ?? exception.Source;
+            var logMessage = string.IsNullOrEmpty(message)
+                ? exception.Message
+                : message;
+
+            var logSource = string.IsNullOrEmpty(source)
+                ? exception.Source
+                : source;
+
             logger?.Log(new LogEntry(LogLevel.Warn, logMessage, source, exception));
         }
 
@@ -102,8 +108,14 @@ namespace Stormpath.SDK.Logging
         /// <param name="source">The source of the event, or <see langword="null"/> to use <see cref="Exception.Source"/>.</param>
         public static void Error(this ILogger logger, Exception exception, string message = null, string source = null)
         {
-            var logMessage = message.Nullable() ?? exception.Message;
-            var logSource = source.Nullable() ?? exception.Source;
+            var logMessage = string.IsNullOrEmpty(message)
+                ? exception.Message
+                : message;
+
+            var logSource = string.IsNullOrEmpty(source)
+                ? exception.Source
+                : source;
+
             logger?.Log(new LogEntry(LogLevel.Error, logMessage, source, exception));
         }
 
@@ -116,8 +128,14 @@ namespace Stormpath.SDK.Logging
         /// <param name="source">The source of the event, or <see langword="null"/> to use <see cref="Exception.Source"/>.</param>
         public static void Fatal(this ILogger logger, Exception exception, string message = null, string source = null)
         {
-            var logMessage = message.Nullable() ?? exception.Message;
-            var logSource = source.Nullable() ?? exception.Source;
+            var logMessage = string.IsNullOrEmpty(message)
+                ? exception.Message
+                : message;
+
+            var logSource = string.IsNullOrEmpty(source)
+                ? exception.Source
+                : source;
+
             logger?.Log(new LogEntry(LogLevel.Fatal, logMessage, source, exception));
         }
     }

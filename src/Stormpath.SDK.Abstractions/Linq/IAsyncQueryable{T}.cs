@@ -53,10 +53,19 @@ namespace Stormpath.SDK.Linq
         /// <value>The <see cref="IAsyncQueryProvider{T}"/> that is associated with this data source.</value>
         IAsyncQueryProvider<T> Provider { get; }
 
+        /// <summary>
+        /// The Stormpath API collection <c>size</c> property.
+        /// </summary>
         long Size { get; }
 
+        /// <summary>
+        /// The Stormpath API collection <c>offset</c> property.
+        /// </summary>
         long Offset { get; }
 
+        /// <summary>
+        /// The Stormpath API collection <c>limit</c> property.
+        /// </summary>
         long Limit { get; }
     }
 }

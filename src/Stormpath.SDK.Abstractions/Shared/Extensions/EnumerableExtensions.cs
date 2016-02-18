@@ -19,11 +19,27 @@ using System.Linq;
 
 namespace Stormpath.SDK.Shared.Extensions
 {
+    /// <summary>
+    /// Extension methods for working with <see cref="IEnumerable{T}"/>.
+    /// </summary>
     public static class EnumerableExtensions
     {
+        /// <summary>
+        /// Safely determines whether an enumerable is empty.
+        /// </summary>
+        /// <typeparam name="T">The enumerable type.</typeparam>
+        /// <param name="source">The enumerable.</param>
+        /// <returns><see langword="true"/> if the enumerable is <see langword="null"/> or empty; otherwise, <see langword="false"/>.</returns>
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
             => !(source?.Any() ?? false);
 
+        /// <summary>
+        /// Converts an enumerable of <see cref="KeyValuePair{TKey, TValue}"/> to a dictionary.
+        /// </summary>
+        /// <typeparam name="TKey">The key type.</typeparam>
+        /// <typeparam name="TValue">The value type.</typeparam>
+        /// <param name="source">The enumerable.</param>
+        /// <returns>A dictionary containing the key/value pairs.</returns>
         public static IDictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> source)
             => source?.ToDictionary(k => k.Key, v => v.Value);
     }

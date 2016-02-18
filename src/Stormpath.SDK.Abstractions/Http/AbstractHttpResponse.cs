@@ -16,8 +16,20 @@
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// Base class for HTTP responses returned from HTTP client plugins.
+    /// </summary>
     public abstract class AbstractHttpResponse : IHttpResponse
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="AbstractHttpResponse"/>.
+        /// </summary>
+        /// <param name="statusCode">The HTTP response status code.</param>
+        /// <param name="responseMessage">The HTTP response message.</param>
+        /// <param name="headers">The HTTP headers.</param>
+        /// <param name="body">The response body.</param>
+        /// <param name="contentType">The response body Content-Type.</param>
+        /// <param name="transportError">Determines whether the request failed due to a network or transport error.</param>
         public AbstractHttpResponse(
             int statusCode,
             string responseMessage,
@@ -34,18 +46,25 @@ namespace Stormpath.SDK.Http
             this.TransportError = transportError;
         }
 
+        /// <inheritdoc/>
         public string Body { get; private set; }
 
+        /// <inheritdoc/>
         public string BodyContentType { get; private set; }
 
+        /// <inheritdoc/>
         public bool HasBody => !string.IsNullOrEmpty(this.Body);
 
+        /// <inheritdoc/>
         public HttpHeaders Headers { get; private set; }
 
+        /// <inheritdoc/>
         public string ResponsePhrase { get; private set; }
 
+        /// <inheritdoc/>
         public int StatusCode { get; private set; }
 
+        /// <inheritdoc/>
         public bool TransportError { get; private set; }
     }
 }

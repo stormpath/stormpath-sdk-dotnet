@@ -21,13 +21,17 @@ using Stormpath.SDK.Error;
 namespace Stormpath.SDK.IdSite
 {
     /// <summary>
-    /// A sub-class of <see cref="ResourceException"/> representing an ID Site error.
+    /// Represents an ID Site error.
     /// </summary>
     public class IdSiteRuntimeException : ResourceException
     {
         private static readonly int[] SupportedErrors =
             { 10011, 10012, 11001, 11002, 11003, 12001 };
 
+        /// <summary>
+        /// Creates a new instance of <see cref="IdSiteRuntimeException"/>.
+        /// </summary>
+        /// <param name="error">The Stormpath API error.</param>
         public IdSiteRuntimeException(IError error)
             : base(error)
         {

@@ -222,7 +222,6 @@ namespace Stormpath.SDK.Account
         /// </remarks>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The newly-created <see cref="IApiKey">API Key</see>.</returns>
-        /// <seealso cref="Auth.ApiKeyRequestBuilder"/>
         /// <see cref="IApplication.AuthenticateAccountAsync(Auth.IAuthenticationRequest, CancellationToken)"/>
         Task<IApiKey> CreateApiKeyAsync(CancellationToken cancellationToken = default(CancellationToken));
 
@@ -237,7 +236,6 @@ namespace Stormpath.SDK.Account
         /// <param name="retrievalOptionsAction">The options to apply to the request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The newly-created <see cref="IApiKey">API Key</see>.</returns>
-        /// <seealso cref="Auth.ApiKeyRequestBuilder"/>
         /// <see cref="IApplication.AuthenticateAccountAsync(Auth.IAuthenticationRequest, CancellationToken)"/>
         Task<IApiKey> CreateApiKeyAsync(Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 

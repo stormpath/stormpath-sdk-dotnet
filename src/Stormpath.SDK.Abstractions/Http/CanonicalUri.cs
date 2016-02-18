@@ -49,7 +49,7 @@ namespace Stormpath.SDK.Http
                 throw new ArgumentException("URI is invalid.", nameof(href));
             }
 
-            this.resourcePath = parsedUri.WithoutQueryAndFragment();
+            this.resourcePath = WithoutQueryAndFragment(parsedUri);
             var queryPart = GetQueryParametersFromHref(href) ?? string.Empty;
             this.query = new QueryString(queryPart);
         }
@@ -83,8 +83,8 @@ namespace Stormpath.SDK.Http
         public CanonicalUri(CanonicalUri existing, Uri overrideResourcePath)
         {
             this.resourcePath = overrideResourcePath == null
-                ? new Uri(existing.ResourcePath.WithoutQueryAndFragment().ToString())
-                : overrideResourcePath.WithoutQueryAndFragment();
+                ? new Uri(WithoutQueryAndFragment(existing.ResourcePath).ToString())
+                : WithoutQueryAndFragment(overrideResourcePath);
 
             this.query = new QueryString(existing.QueryString);
         }
@@ -139,5 +139,8 @@ namespace Stormpath.SDK.Http
                 ? segments[1]
                 : null;
         }
+
+        private static Uri WithoutQueryAndFragment(Uri original)
+            => new Uri($"{original.Scheme}://{original.Authority}{original.AbsolutePath}", UriKind.Absolute);
     }
 }

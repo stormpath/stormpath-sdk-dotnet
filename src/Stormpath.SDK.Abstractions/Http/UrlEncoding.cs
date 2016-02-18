@@ -18,8 +18,18 @@ using System.Net;
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// Provides methods that encode URL-safe strings.
+    /// </summary>
     public static class UrlEncoding
     {
+        /// <summary>
+        /// Encodes a string using URL-safe encoding rules.
+        /// </summary>
+        /// <param name="value">The string to encode.</param>
+        /// <param name="isPath">Determines whether this string represents a resource path.</param>
+        /// <param name="canonicalize">Determines whether Stormpath canonicalization rules should be applied.</param>
+        /// <returns>The encoded string.</returns>
         public static string Encode(string value, bool isPath = false, bool canonicalize = false)
         {
             if (string.IsNullOrEmpty(value))

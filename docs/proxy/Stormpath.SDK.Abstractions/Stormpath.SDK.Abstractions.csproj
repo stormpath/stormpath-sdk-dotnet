@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET451</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Stormpath.SDK.Abstractions.XML</DocumentationFile>
@@ -261,8 +261,6 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Shared\Extensions\DictionaryExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Shared\Extensions\EnumerableExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Shared\Extensions\ReflectionExtensions.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Shared\Extensions\StringExtensions.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Shared\Extensions\UriExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Tenant\IHasTenant.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Tenant\ITenant.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Tenant\ITenantActions.cs" />

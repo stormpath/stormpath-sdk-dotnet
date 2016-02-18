@@ -25,11 +25,15 @@ using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK
 {
+    /// <summary>
+    /// Provides backwards-compatibility for certain methods to comply with semver.
+    /// </summary>
     public static class TenantActionsCompatibilityExtensions
     {
         /// <summary>
-        /// Creates a new <see cref="Application.IApplication">Application</see> resource in the current tenant.
+        /// Creates a new <see cref="IApplication">Application</see> resource in the current tenant.
         /// </summary>
+        /// <param name="tenantActions">The interface.</param>
         /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IApplicationCreationOptions"/>,
         /// which will be used when sending the request.</param>
@@ -45,10 +49,10 @@ namespace Stormpath.SDK
             return (tenantActions as IHasAsyncDataStoreInternal).GetInternalAsyncDataStore().CreateAsync("applications", application, options, cancellationToken);
         }
 
-
         /// <summary>
         /// Creates a new Cloud- or Provider-based Directory resource in the Tenant.
         /// </summary>
+        /// <param name="tenantActions">The interface.</param>
         /// <param name="directory">The <see cref="IDirectory">Directory</see> to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
         /// which will be used when sending the request.</param>
@@ -67,6 +71,7 @@ namespace Stormpath.SDK
         /// <summary>
         /// Creates a new <see cref="IOrganization">Organization</see> resource in the Tenant.
         /// </summary>
+        /// <param name="tenantActions">The interface.</param>
         /// <param name="organization">The Organization to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
         /// which will be used when sending the request.</param>

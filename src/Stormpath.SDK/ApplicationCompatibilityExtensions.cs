@@ -27,6 +27,9 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK
 {
+    /// <summary>
+    /// Provides backwards-compatibility for certain methods to comply with semver.
+    /// </summary>
     public static class ApplicationCompatibilityExtensions
     {
         /// <summary>
@@ -34,6 +37,7 @@ namespace Stormpath.SDK
         /// against the specified account store.
         /// If the account does not exist in the account store, the authentication attempt will fail.
         /// </summary>
+        /// <param name="application">The interface.</param>
         /// <param name="requestBuilder">Sets the login request parameters.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
@@ -66,6 +70,7 @@ namespace Stormpath.SDK
         /// against the specified account store.
         /// If the account does not exist in the account store, the authentication attempt will fail.
         /// </summary>
+        /// <param name="application">The interface.</param>
         /// <param name="requestBuilder">Sets the login request parameters.</param>
         /// <param name="responseOptions">The options to apply to this request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -110,6 +115,7 @@ namespace Stormpath.SDK
         /// The <see cref="IEmailVerificationRequest"/> must contain the username or email identifying the account.
         /// </para>
         /// </remarks>
+        /// <param name="application">The interface.</param>
         /// <param name="requestBuilderAction">Sets the options required for the verification email request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>

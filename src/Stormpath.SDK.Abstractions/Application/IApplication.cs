@@ -115,7 +115,6 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <param name="request">
         /// An instance of <see cref="IHttpRequest"/>.
-        /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
         /// </param>
         /// <returns>An <see cref="IIdSiteAsyncCallbackHandler"/> that allows you customize how the <paramref name="request"/> will be handled.</returns>
         IIdSiteAsyncCallbackHandler NewIdSiteAsyncCallbackHandler(IHttpRequest request);
@@ -162,7 +161,6 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <param name="request">
         /// An instance of <see cref="IHttpRequest"/>.
-        /// See the <see cref="HttpRequests"/> helper class to help build this from an existing request.
         /// </param>
         /// <returns>A new <see cref="ISamlAsyncCallbackHandler"/> that allows your to customize how the <paramref name="request"/> will be handled.</returns>
         ISamlAsyncCallbackHandler NewSamlAsyncCallbackHandler(IHttpRequest request);
@@ -172,7 +170,7 @@ namespace Stormpath.SDK.Application
         /// The account must be in one of the Application's assigned account stores.
         /// If not in an assigned account store, the authentication attempt will fail.
         /// </summary>
-        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
+        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> instance.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
         /// The result of the authentication.
@@ -194,7 +192,7 @@ namespace Stormpath.SDK.Application
         /// The account must be in one of the Application's assigned account stores.
         /// If not in an assigned account store, the authentication attempt will fail.
         /// </summary>
-        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
+        /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> instance.</param>
         /// <param name="responseOptions">The options to apply to this request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>

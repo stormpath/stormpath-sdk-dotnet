@@ -25,10 +25,11 @@ namespace Stormpath.SDK.Serialization
         /// <summary>
         /// Use the specified JSON serializer.
         /// </summary>
+        /// <remarks>
+        /// Use the <c>Serializers</c> object construct a serializer.
+        /// </remarks>
         /// <param name="serializer">The serializer to use.</param>
         /// <returns>The source object for method chaining.</returns>
-        /// <seealso cref="Serializers.Create()"/>
-        /// <seealso cref="ISerializerFactory.AutoDetect()"/>
         T SetSerializer(IJsonSerializer serializer);
     }
 }

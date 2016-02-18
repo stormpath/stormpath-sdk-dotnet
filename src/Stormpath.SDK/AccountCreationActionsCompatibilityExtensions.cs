@@ -22,11 +22,15 @@ using Stormpath.SDK.Impl.Account;
 
 namespace Stormpath.SDK
 {
+    /// <summary>
+    /// Provides backwards-compatibility for certain methods to comply with semver.
+    /// </summary>
     public static class AccountCreationActionsCompatibilityExtensions
     {
         /// <summary>
         /// Creates a new <see cref="IAccount">Account</see> that may login to the <see cref="Application.IApplication">Application</see> or <see cref="Organization.IOrganization">Organization</see>.
         /// </summary>
+        /// <param name="accountCreationActions">The interface.</param>
         /// <param name="account">The account to create/persist.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IAccountCreationOptions"/>,
         /// which will be used when sending the request.</param>

@@ -19,10 +19,14 @@ using Stormpath.SDK.Error;
 namespace Stormpath.SDK.IdSite
 {
     /// <summary>
-    /// This exception indicates that the session on ID Site has timed out.
+    /// Represents an error indicating that the session on ID Site has timed out.
     /// </summary>
     public sealed class IdSiteSessionTimeoutException : IdSiteRuntimeException
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="IdSiteSessionTimeoutException"/>.
+        /// </summary>
+        /// <param name="error">The Stormpath API error.</param>
         public IdSiteSessionTimeoutException(IError error)
             : base(error)
         {
