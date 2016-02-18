@@ -38,6 +38,7 @@ namespace Stormpath.SDK.Shared
         /// Converts a <see cref="HashCode"/> instance to an <c>int</c>.
         /// </summary>
         /// <param name="hashCode">The <see cref="HashCode"/> to convert.</param>
+        /// <returns>The <c>int</c> value of this <see cref="HashCode"/>.</returns>
         public static implicit operator int(HashCode hashCode) => hashCode.GetHashCode();
 
         /// <summary>

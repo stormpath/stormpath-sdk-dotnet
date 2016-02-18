@@ -20,7 +20,7 @@ using Stormpath.SDK.Shared.Extensions;
 namespace Stormpath.SDK.Http
 {
     /// <summary>
-    /// Represents a URI that has <see cref="ResourcePath"/> and <see cref="QueryString"/> elements.
+    /// Represents a URI that has a resource path and a query string.
     /// </summary>
     public sealed class CanonicalUri
     {
@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Http
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CanonicalUri"/> class
-        /// with the <see cref="resourcePath"/> overridden by the specified <see cref="Uri"/>.
+        /// with the <see cref="ResourcePath"/> overridden by the specified <see cref="Uri"/>.
         /// </summary>
         /// <param name="existing">An existing <see cref="CanonicalUri"/> to copy.</param>
         /// <param name="overrideResourcePath">A replacement for <see cref="ResourcePath"/>.</param>

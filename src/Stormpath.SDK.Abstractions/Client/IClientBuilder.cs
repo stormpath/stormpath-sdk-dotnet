@@ -148,7 +148,6 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="scheme">The authentication scheme to use.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <seealso cref="Configuration.Abstractions.Model.ClientAuthenticationScheme.SAuthc1"/>
         IClientBuilder SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme scheme);
 
         /// <summary>
