@@ -37,10 +37,10 @@ namespace Stormpath.SDK.Tests.Common.RandomData
 
             // Requirement: 1 lowercase, 1 uppercase, 1 number, 1 symbol, no whitespace
             password.Any(x => char.IsUpper(x)).Should().BeTrue();
-            password.Any(x => char.IsLower(x)).Should().BeTrue(); ;
-            password.Any(x => "!@#$%&|?".Contains(x)).Should().BeTrue(); ;
-            password.Any(x => char.IsNumber(x)).Should().BeTrue(); ;
-            password.Any(x => char.IsWhiteSpace(x)).Should().BeTrue(); ;
+            password.Any(x => char.IsLower(x)).Should().BeTrue();
+            password.Any(x => "!@#$%&|?".Contains(x)).Should().BeTrue();
+            password.Any(x => char.IsNumber(x)).Should().BeTrue();
+            password.Any(x => char.IsWhiteSpace(x)).Should().BeFalse();
         }
     }
 }
