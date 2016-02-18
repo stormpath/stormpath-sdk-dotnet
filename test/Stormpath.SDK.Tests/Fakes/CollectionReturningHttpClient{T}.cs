@@ -20,12 +20,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Shared.Extensions;
+using Stormpath.SDK.Tests.Common.Fakes;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
-namespace Stormpath.SDK.Tests.Common.Fakes
+namespace Stormpath.SDK.Tests.Fakes
 {
     public sealed class CollectionReturningHttpClient<T> : AbstractMockHttpClient
     {

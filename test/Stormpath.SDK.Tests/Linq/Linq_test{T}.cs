@@ -22,6 +22,7 @@ using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Tests.Common.Fakes;
+using Stormpath.SDK.Tests.Fakes;
 
 namespace Stormpath.SDK.Tests.Linq
 {

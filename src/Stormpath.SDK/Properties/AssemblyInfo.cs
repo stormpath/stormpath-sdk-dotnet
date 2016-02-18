@@ -14,11 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("Stormpath.SDK.Tests")]
-[assembly: InternalsVisibleTo("Stormpath.SDK.Tests.Common")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
-[assembly: InternalsVisibleTo("Stormpath.SDK.RestSharpClient")]
