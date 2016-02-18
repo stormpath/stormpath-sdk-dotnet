@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Shouldly;
 using Stormpath.SDK.Api;
@@ -110,9 +111,9 @@ namespace Stormpath.SDK.Tests.Authentication
 
             // Format "sauthc1Id=[id string], sauthc1SignedHeaders=[host;x-stormpath-date;...], sauthc1Signature=[signature in hex]"
             var parts = authenticationHeader.Parameter.Split(' ');
-            var sauthc1Id = parts[0].TrimEnd(',').SplitToKeyValuePair('=');
-            var sauthc1SignedHeaders = parts[1].TrimEnd(',').SplitToKeyValuePair('=');
-            var sauthc1Signature = parts[2].SplitToKeyValuePair('=');
+            var sauthc1Id = SplitToKeyValuePair(parts[0].TrimEnd(','));
+            var sauthc1SignedHeaders = SplitToKeyValuePair(parts[1].TrimEnd(','));
+            var sauthc1Signature = SplitToKeyValuePair(parts[2]);
             var dateString = this.fakeNow.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
 
             sauthc1Id.Key.ShouldBe("sauthc1Id");
@@ -123,6 +124,24 @@ namespace Stormpath.SDK.Tests.Authentication
 
             sauthc1Signature.Key.ShouldBe("sauthc1Signature");
             sauthc1Signature.Value.ShouldNotBe(null);
+        }
+
+        private KeyValuePair<string, string> SplitToKeyValuePair(string s)
+        {
+            char separator = '=';
+
+            if (string.IsNullOrEmpty(s) || !s.Contains(separator.ToString()))
+            {
+                throw new FormatException($"Input string is not a '{separator}'-separated string.");
+            }
+
+            var pair = s.Split(separator);
+            if (pair.Length != 2)
+            {
+                throw new FormatException($"Input string is not a key-value pair.");
+            }
+
+            return new KeyValuePair<string, string>(pair[0], pair[1]);
         }
 
         [Fact]

@@ -39,35 +39,12 @@ namespace Stormpath.SDK.Shared.Extensions
             return source;
         }
 
-        public static int? ToInt32(this string source)
-        {
-            int result;
-
-            if (string.IsNullOrEmpty(source)
-                || !int.TryParse(source, out result))
-            {
-                return null;
-            }
-
-            return result;
-        }
-
-        public static KeyValuePair<string, string> SplitToKeyValuePair(this string source, char separator)
-        {
-            if (string.IsNullOrEmpty(source) || !source.Contains(separator.ToString()))
-            {
-                throw new FormatException($"Input string is not a '{separator}'-separated string.");
-            }
-
-            var pair = source.Split(separator);
-            if (pair.Length != 2)
-            {
-                throw new FormatException($"Input string is not a key-value pair.");
-            }
-
-            return new KeyValuePair<string, string>(pair[0], pair[1]);
-        }
-
+        /// <summary>
+        /// Joins strings using a separator.
+        /// </summary>
+        /// <param name="source">A source of strings.</param>
+        /// <param name="separator">The separator</param>
+        /// <returns>The joined string.</returns>
         public static string Join(this IEnumerable<string> source, string separator)
         {
             return string.Join(separator, source);

@@ -47,8 +47,8 @@ namespace Stormpath.SDK.Tests.Fakes
 
         protected override IHttpResponse GetResponse(IHttpRequest request)
         {
-            var limit = request.CanonicalUri.QueryString["limit"].ToInt32() ?? DefaultLimit;
-            var offset = request.CanonicalUri.QueryString["offset"].ToInt32() ?? DefaultOffset;
+            var limit = ToNullableInt32(request.CanonicalUri.QueryString["limit"]) ?? DefaultLimit;
+            var offset = ToNullableInt32(request.CanonicalUri.QueryString["offset"]) ?? DefaultOffset;
 
             var responseItems = this.items
                 .Skip(offset)
@@ -66,6 +66,19 @@ namespace Stormpath.SDK.Tests.Fakes
 
             return new FakeHttpResponse(
                 200, Serialize(collectionResponse), "application/json");
+        }
+
+        public static int? ToNullableInt32(string s)
+        {
+            int result;
+
+            if (string.IsNullOrEmpty(s)
+                || !int.TryParse(s, out result))
+            {
+                return null;
+            }
+
+            return result;
         }
 
         private static string Serialize(object value)
