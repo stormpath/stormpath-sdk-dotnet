@@ -41,15 +41,15 @@ namespace Stormpath.SDK.Client
             var language = string.Empty;
 #if NET451
             var callingAssembly = System.Reflection.Assembly.GetCallingAssembly();
-#else
-            var callingAssembly = PlatformServices.Default.AssemblyLoadContextAccessor.Default.LoadFile(callerFilePath);
-#endif
 
             if (callingAssembly != null)
             {
                 var analyzer = new Polyglot.AssemblyAnalyzer(callingAssembly, failSilently: true);
                 language = analyzer.DetectedLanguage?.ToString();
             }
+#else
+            language = new DnxCallerFileLanguageDetector(callerFilePath).Language;
+#endif
 
             var userAgentBuilder = new DefaultUserAgentBuilder(
                 runtimeEnvironment: PlatformServices.Default.Runtime,

@@ -140,8 +140,23 @@ namespace Stormpath.SDK.Http
         /// <value>The length of the body in bytes.</value>
         public long? ContentLength
         {
-            get { return this.GetFirst<long?>(HeaderContentLengthName); }
-            set { this.Add(HeaderContentLengthName, value); }
+            get
+            {
+                var value = GetFirst<object>(HeaderContentLengthName);
+
+                try
+                {
+                    return Convert.ToInt64(value);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                this.Add(HeaderContentLengthName, value);
+            }
         }
 
         /// <summary>

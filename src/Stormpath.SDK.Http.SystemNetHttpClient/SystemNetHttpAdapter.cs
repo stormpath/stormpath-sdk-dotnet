@@ -35,10 +35,10 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
 
         public HttpRequestMessage ToHttpRequest(IHttpRequest stormpathRequest)
         {
-            var resourcePath = stormpathRequest.CanonicalUri.ToString().Replace(baseUrl, string.Empty);
+            //var resourcePath = stormpathRequest.CanonicalUri.ToString().Replace(baseUrl, string.Empty);
             var method = this.ToHttpMethod(stormpathRequest.Method);
 
-            var httpRequest = new HttpRequestMessage(method, resourcePath);
+            var httpRequest = new HttpRequestMessage(method, stormpathRequest.CanonicalUri.ToUri());
             this.ToHttpHeaders(stormpathRequest.Headers, httpRequest);
 
             if (stormpathRequest.HasBody)
@@ -64,7 +64,7 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
                     httpResponse.ReasonPhrase,
                     headers,
                     stringContent,
-                    content.Headers.ContentType.MediaType,
+                    content.Headers.ContentType?.MediaType,
                     transportError);
             }
         }
@@ -78,7 +78,11 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
 
             foreach (var header in stormpathHeaders)
             {
-                httpRequest.Headers.Add(header.Key, header.Value);
+                bool added = httpRequest.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                if (!added)
+                {
+                    throw new Exception($"Could not add header with key '{header.Key}' and value '{string.Join(",", header.Value)}'");
+                }
             }
         }
 
@@ -86,9 +90,14 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
         {
             var result = new HttpHeaders();
 
-            foreach (var header in responseHeaders.Concat(contentHeaders))
+            foreach (var header in responseHeaders)
             {
-                result.Add(header.Key, header.Value.ToList());
+                result.Add(header.Key, header.Value.FirstOrDefault());
+            }
+
+            foreach (var header in contentHeaders)
+            {
+                result.Add(header.Key, header.Value.FirstOrDefault());
             }
 
             return result;

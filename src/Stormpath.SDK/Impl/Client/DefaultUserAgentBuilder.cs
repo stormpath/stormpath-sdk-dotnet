@@ -44,7 +44,11 @@ namespace Stormpath.SDK.Impl.Client
         private string Generate()
         {
             var sdkToken = $"stormpath-sdk-dotnet/{this.app.ApplicationVersion}";
-            var langToken = $"lang/{this.language.ToLower()}";
+
+            var languageToken = string.IsNullOrEmpty(this.language)
+                ? string.Empty
+                : $"lang/{this.language.ToLower()}";
+
             var runtimeToken = $"runtime/{this.app.RuntimeFramework.Identifier.ToLower()}{this.app.RuntimeFramework.Version}";
 
             var osToken = this.runtime.OperatingSystem;
@@ -57,7 +61,7 @@ namespace Stormpath.SDK.Impl.Client
                 " ",
                 this.frameworkUserAgent,
                 sdkToken,
-                langToken,
+                languageToken,
                 runtimeToken,
                 osToken)
             .Trim();

@@ -85,7 +85,7 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
             using (var client = this.CreateClientForRequest(request))
             using (var response = await client.SendAsync(httpRequest, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false))
             {
-                return await this.adapter.ToStormpathResponseAsync(response);
+                return await this.adapter.ToStormpathResponseAsync(response).ConfigureAwait(false);
             }
         }
 
@@ -105,7 +105,7 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
             var client = new HttpClient(handler);
 
             // Configure default settings
-            client.BaseAddress = new Uri(this.baseUrl, UriKind.Absolute);
+            //client.BaseAddress = new Uri(this.baseUrl, UriKind.Absolute);
             client.Timeout = TimeSpan.FromMilliseconds(this.connectionTimeout);
 
             return client;
