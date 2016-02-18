@@ -26,6 +26,8 @@ Function Generate-Documentation-Proxy
         Write-Host ("Added {0} files" -f $count)
     }
 
+    $generatedOutput = $false
+
     try
     {
         $savedLocation = (Get-Location)
@@ -38,7 +40,7 @@ Function Generate-Documentation-Proxy
         $fileReader = New-Object System.IO.StreamReader -Arg $fileInfo.FullName -ErrorAction Stop
         $output = New-Object System.Text.StringBuilder
         $inAutogenBlock = $false
-        $generatedOutput = $false
+
 
         $startTag = "<!-- #startAutogen -->"
         $endTag = "<!-- #endAutogen -->"
@@ -55,7 +57,6 @@ Function Generate-Documentation-Proxy
             {
                 if (!$generatedOutput)
                 {
-
                     $indent = $line.Substring(0, $line.Length - $line.TrimStart().Length)
                     [void]$output.AppendLine("{0}<ItemGroup>" -f $indent)
 
@@ -81,5 +82,10 @@ Function Generate-Documentation-Proxy
 
     Set-Location $savedLocation
 
-    Set-Content -Path ($fileInfo.FullName) -Value $output.ToString() -ErrorAction Stop
+    if ($generatedOutput) {
+      Set-Content -Path ($fileInfo.FullName) -Value $output.ToString() -ErrorAction Stop
+    }
+    else {
+      throw "Did not add any output!"
+    }
 }
