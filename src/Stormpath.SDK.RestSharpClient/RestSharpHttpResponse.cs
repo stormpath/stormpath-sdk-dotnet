@@ -18,36 +18,17 @@ using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Extensions.Http.RestSharp
 {
-    internal class RestSharpHttpResponse : IHttpResponse
+    internal class RestSharpHttpResponse : AbstractHttpResponse
     {
         public RestSharpHttpResponse(
             int statusCode,
-            string responseMessage,
+            string responsePhrase,
             HttpHeaders headers,
             string body,
-            string contentType,
+            string bodyContentType,
             bool transportError)
+            : base(statusCode, responsePhrase, headers, body, bodyContentType, transportError)
         {
-            this.StatusCode = statusCode;
-            this.ResponsePhrase = responseMessage;
-            this.Headers = headers;
-            this.Body = body;
-            this.BodyContentType = contentType;
-            this.TransportError = transportError;
         }
-
-        public string Body { get; private set; }
-
-        public string BodyContentType { get; private set; }
-
-        public bool HasBody => !string.IsNullOrEmpty(this.Body);
-
-        public HttpHeaders Headers { get; private set; }
-
-        public string ResponsePhrase { get; private set; }
-
-        public int StatusCode { get; private set; }
-
-        public bool TransportError { get; private set; }
     }
 }

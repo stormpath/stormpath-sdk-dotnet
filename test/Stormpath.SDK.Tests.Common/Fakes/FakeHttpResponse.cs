@@ -18,7 +18,7 @@ using Stormpath.SDK.Http;
 
 namespace Stormpath.SDK.Tests.Common.Fakes
 {
-    public sealed class FakeHttpResponse : IHttpResponse
+    public sealed class FakeHttpResponse : AbstractHttpResponse
     {
         public FakeHttpResponse(int statusCode, string body = null, string bodyContentType = null)
             : this(statusCode, null, null, body, bodyContentType, false)
@@ -26,27 +26,8 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         }
 
         public FakeHttpResponse(int statusCode, string responsePhrase, HttpHeaders headers, string body, string bodyContentType, bool transportError)
+            : base(statusCode, responsePhrase, headers, body, bodyContentType, transportError)
         {
-            this.StatusCode = statusCode;
-            this.ResponsePhrase = responsePhrase;
-            this.Headers = headers ?? new HttpHeaders();
-            this.Body = body;
-            this.BodyContentType = bodyContentType;
-            this.TransportError = transportError;
         }
-
-        public int StatusCode { get; private set; }
-
-        public bool TransportError { get; private set; }
-
-        public string ResponsePhrase { get; private set; }
-
-        public HttpHeaders Headers { get; private set; }
-
-        public bool HasBody => !string.IsNullOrEmpty(this.Body);
-
-        public string Body { get; private set; }
-
-        public string BodyContentType { get; private set; }
     }
 }
