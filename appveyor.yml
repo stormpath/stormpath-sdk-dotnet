@@ -6,6 +6,8 @@ environment:
   build_docs: 1
 install:
 - ps: >-
+    # Inject Github private key (for doc deploy)
+
     $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
 
     $fileContent += $env:priv_key.Replace(' ', "`n")
@@ -13,9 +15,14 @@ install:
     $fileContent += "`n-----END RSA PRIVATE KEY-----`n"
 
     Set-Content c:\users\appveyor\.ssh\id_rsa $fileContent
+
+    # Install DNX
+    dnvm install 1.0.0-rc1-update1 -arch x86
+before_build:
+- ps: dnu restore
 build:
   verbosity: minimal
 after_build:
-- ps: .\deploy-docs.ps1
+- ps: .\scripts\deploy-docs.ps1
 test_script:
 - ps: .\scripts\unit-test.ps1
