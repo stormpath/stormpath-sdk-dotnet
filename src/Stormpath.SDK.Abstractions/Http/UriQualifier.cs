@@ -19,20 +19,32 @@ using System.Text;
 
 namespace Stormpath.SDK.Http
 {
+    /// <summary>
+    /// Provides methods that ensure resource paths are fully-qualified.
+    /// </summary>
     public sealed class UriQualifier
     {
-        private readonly string baseUrl;
+        private readonly string baseUri;
 
-        public UriQualifier(string baseUrl)
+        /// <summary>
+        /// Creates a new <see cref="UriQualifier"/> given the specified <paramref name="baseUri"/>.
+        /// </summary>
+        /// <param name="baseUri"></param>
+        public UriQualifier(string baseUri)
         {
-            if (string.IsNullOrEmpty(baseUrl))
+            if (string.IsNullOrEmpty(baseUri))
             {
                 throw new ArgumentNullException("baseUrl");
             }
 
-            this.baseUrl = baseUrl;
+            this.baseUri = baseUri;
         }
 
+        /// <summary>
+        /// Returns a fully-qualified URI for a given resource <paramref name="href"/>.
+        /// </summary>
+        /// <param name="href">The resource path.</param>
+        /// <returns><paramref name="href"/> if it is already fully-qualified; otherwise, <paramref name="href"/> with <c>baseUri</c> prepended.</returns>
         public string EnsureFullyQualified(string href)
         {
             if (string.IsNullOrEmpty(href))
@@ -45,7 +57,7 @@ namespace Stormpath.SDK.Http
                 return href;
             }
 
-            var fullyQualified = new StringBuilder(this.baseUrl);
+            var fullyQualified = new StringBuilder(this.baseUri);
             if (!href.StartsWith("/"))
             {
                 fullyQualified.Append("/");
@@ -55,6 +67,11 @@ namespace Stormpath.SDK.Http
             return fullyQualified.ToString();
         }
 
+        /// <summary>
+        /// Determines whether a resource <paramref name="href"/> is fully-qualified.
+        /// </summary>
+        /// <param name="href">The resource path.</param>
+        /// <returns><see langword="true"/> if <paramref name="href"/> is fully-qualified; otherwise, <see langword="false"/>.</returns>
         public static bool IsFullyQualified(string href)
         {
             bool tooShort = string.IsNullOrEmpty(href) || href.Length < 5;
