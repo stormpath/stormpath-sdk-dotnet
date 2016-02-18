@@ -28,7 +28,7 @@ namespace Stormpath.SDK.Http
         {
             this.StatusCode = statusCode;
             this.ResponsePhrase = responseMessage;
-            this.Headers = headers;
+            this.Headers = headers ?? new HttpHeaders();
             this.Body = body;
             this.BodyContentType = contentType;
             this.TransportError = transportError;

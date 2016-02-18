@@ -82,10 +82,21 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
         {
             var httpRequest = this.adapter.ToHttpRequest(request);
 
-            using (var client = this.CreateClientForRequest(request))
-            using (var response = await client.SendAsync(httpRequest, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false))
+            try
             {
-                return await this.adapter.ToStormpathResponseAsync(response).ConfigureAwait(false);
+                using (var client = this.CreateClientForRequest(request))
+                using (var response = await client.SendAsync(httpRequest, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false))
+                {
+                    return await this.adapter.ToStormpathResponseAsync(response).ConfigureAwait(false);
+                }
+            }
+            catch (TaskCanceledException tcx) when (tcx.CancellationToken != cancellationToken)
+            {
+                return this.adapter.ToStormpathErrorResponse("Timed out");
+            }
+            catch (Exception ex)
+            {
+                return this.adapter.ToStormpathErrorResponse(ex.Message);
             }
         }
 

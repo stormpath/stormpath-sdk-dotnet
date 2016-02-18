@@ -69,6 +69,17 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
             }
         }
 
+        public IHttpResponse ToStormpathErrorResponse(string errorMessage)
+        {
+            return new SystemNetHttpResponse(
+                statusCode: 599,
+                responseMessage: errorMessage,
+                headers: null,
+                body: null,
+                contentType: null,
+                transportError: true);
+        }
+
         private void ToHttpHeaders(HttpHeaders stormpathHeaders, HttpRequestMessage httpRequest)
         {
             if (stormpathHeaders == null)
