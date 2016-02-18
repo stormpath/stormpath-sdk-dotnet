@@ -19,7 +19,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Shouldly;
+using FluentAssertions;
+using Microsoft.Extensions.PlatformAbstractions;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
@@ -70,7 +71,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     StaticLogger.Instance.Info("Caching statistics:");
                     StaticLogger.Instance.Info(TestClients.GetSAuthc1Client().GetCacheProvider().ToString());
 
-                    var filename = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "its.log");
+                    var filename = System.IO.Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "its.log");
                     StaticLogger.Instance.Info($"Saving log to file {filename}");
                     System.IO.File.WriteAllText(filename, StaticLogger.GetLog());
                 }
@@ -120,8 +121,8 @@ namespace Stormpath.SDK.Tests.Common.Integration
             var client = TestClients.GetSAuthc1Client();
 
             var tenant = await client.GetCurrentTenantAsync().ConfigureAwait(false);
-            tenant.ShouldNotBe(null);
-            tenant.Href.ShouldNotBeNullOrEmpty();
+            tenant.Should().NotBeNull();
+            tenant.Href.Should().NotBeNullOrEmpty();
             this.TenantHref = tenant.Href;
 
             // Create applications
@@ -133,7 +134,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     tenant.CreateApplicationAsync(app, opt => opt.CreateDirectory = false));
                 var resultingApplications = await Task.WhenAll(applicationCreationTasks)
                     .ConfigureAwait(false);
-                resultingApplications.ShouldNotContain(x => string.IsNullOrEmpty(x.Href));
+                resultingApplications.Should().NotContain(x => string.IsNullOrEmpty(x.Href));
 
                 // Add them all to the teardown list
                 this.CreatedApplicationHrefs.AddRange(resultingApplications.Select(x => x.Href));
@@ -145,7 +146,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
             {
                 await this.RemoveObjectsFromTenantAsync()
                     .ConfigureAwait(false);
-                throw new ApplicationException("Could not create applications", e);
+                throw new Exception("Could not create applications", e);
             }
 
             // Create organizations
@@ -157,13 +158,13 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     tenant.CreateOrganizationAsync(o, opt => opt.CreateDirectory = true));
                 var resultingOrgs = await Task.WhenAll(orgCreationTasks)
                     .ConfigureAwait(false);
-                resultingOrgs.ShouldNotContain(x => string.IsNullOrEmpty(x.Href));
+                resultingOrgs.Should().NotContain(x => string.IsNullOrEmpty(x.Href));
 
                 // Verify that directories were created, too
                 var getDirectoryTasks = resultingOrgs.Select(x => x.GetDefaultAccountStoreAsync());
                 var resultingDirectories = await Task.WhenAll(getDirectoryTasks)
                     .ConfigureAwait(false);
-                resultingDirectories.ShouldNotContain(x => string.IsNullOrEmpty(x.Href));
+                resultingDirectories.Should().NotContain(x => string.IsNullOrEmpty(x.Href));
 
                 // Add them all to the teardown list
                 this.CreatedOrganizationHrefs.AddRange(resultingOrgs.Select(x => x.Href));
@@ -178,7 +179,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
             catch (Exception e)
             {
                 await this.RemoveObjectsFromTenantAsync().ConfigureAwait(false);
-                throw new ApplicationException("Could not create organizations", e);
+                throw new Exception("Could not create organizations", e);
             }
 
             // Add primary organization to primary application as an account store
@@ -212,7 +213,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
             {
                 await this.RemoveObjectsFromTenantAsync()
                     .ConfigureAwait(false);
-                throw new ApplicationException("Could not create accounts", e);
+                throw new Exception("Could not create accounts", e);
             }
 
             // Create groups
@@ -232,7 +233,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
             {
                 await this.RemoveObjectsFromTenantAsync()
                     .ConfigureAwait(false);
-                throw new ApplicationException("Could not create groups", e);
+                throw new Exception("Could not create groups", e);
             }
 
             // Add some accounts to groups
@@ -251,7 +252,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
             {
                 await this.RemoveObjectsFromTenantAsync()
                     .ConfigureAwait(false);
-                throw new ApplicationException("Could not add accounts to groups", e);
+                throw new Exception("Could not add accounts to groups", e);
             }
         }
 
@@ -345,7 +346,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
             bool anyErrors = results.Any(kvp => kvp.Value != null);
             if (anyErrors)
             {
-                throw new ApplicationException(
+                throw new Exception(
                     "Errors occurred during test cleanup. Full log: " + Environment.NewLine
                     + string.Join(Environment.NewLine, results.Select(kvp => $"{kvp.Key} : '{(kvp.Value == null ? "Good" : kvp.Value.Message)}'")));
             }

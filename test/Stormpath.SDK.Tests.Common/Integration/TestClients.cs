@@ -16,9 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using Shouldly;
 using Stormpath.Configuration.Abstractions;
-using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
@@ -31,9 +29,9 @@ namespace Stormpath.SDK.Tests.Common.Integration
         public static readonly Lazy<IClient> Basic = new Lazy<IClient>(() =>
         {
             return Clients.Builder()
-                .SetHttpClient(HttpClients.Create().RestSharpClient())
+                .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
-                .SetAuthenticationScheme(AuthenticationScheme.Basic)
+                .SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme.Basic)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(CacheProviders.Create().DisabledCache())
                 .Build();
@@ -42,9 +40,9 @@ namespace Stormpath.SDK.Tests.Common.Integration
         public static readonly Lazy<IClient> SAuthc1 = new Lazy<IClient>(() =>
         {
             return Clients.Builder()
-                .SetHttpClient(HttpClients.Create().RestSharpClient())
+                .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
-                .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
+                .SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme.SAuthc1)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(CacheProviders.Create().DisabledCache())
                 .Build();
@@ -53,9 +51,9 @@ namespace Stormpath.SDK.Tests.Common.Integration
         public static readonly Lazy<IClient> SAuthc1Caching = new Lazy<IClient>(() =>
         {
             return Clients.Builder()
-                .SetHttpClient(HttpClients.Create().RestSharpClient())
+                .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
-                .SetAuthenticationScheme(AuthenticationScheme.SAuthc1)
+                .SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme.SAuthc1)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(CacheProviders.Create().InMemoryCache()
                     .WithDefaultTimeToIdle(TimeSpan.FromMinutes(10))

@@ -14,21 +14,37 @@
 // limitations under the License.
 // </copyright>
 
-using NSubstitute;
+using System;
 using Stormpath.SDK.Api;
 
 namespace Stormpath.SDK.Tests.Common.Fakes
 {
     public static class FakeApiKey
     {
+        [Obsolete("Replace this before 1.0")]
         public static IClientApiKey Create(bool valid)
         {
-            var apiKey = Substitute.For<IClientApiKey>();
-            apiKey.GetId().Returns("FooId");
-            apiKey.GetSecret().Returns("FooSecret");
-            apiKey.IsValid().Returns(valid);
-
-            return apiKey;
+            return new MockApiKey()
+            {
+                Id = "FooId",
+                Secret = "FooSecret",
+                Valid = valid
+            };
         }
+    }
+
+    internal class MockApiKey : IClientApiKey
+    {
+        public string Id { get; set; }
+
+        public string Secret { get; set; }
+
+        public bool Valid { get; set; }
+
+        string IClientApiKey.GetId() => Id;
+
+        string IClientApiKey.GetSecret() => Secret;
+
+        bool IClientApiKey.IsValid() => Valid;
     }
 }

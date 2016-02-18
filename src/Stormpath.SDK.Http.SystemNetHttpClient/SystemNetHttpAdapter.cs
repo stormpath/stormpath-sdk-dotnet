@@ -35,16 +35,16 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
 
         public HttpRequestMessage ToHttpRequest(IHttpRequest stormpathRequest)
         {
-            //var resourcePath = stormpathRequest.CanonicalUri.ToString().Replace(baseUrl, string.Empty);
             var method = this.ToHttpMethod(stormpathRequest.Method);
 
             var httpRequest = new HttpRequestMessage(method, stormpathRequest.CanonicalUri.ToUri());
-            this.ToHttpHeaders(stormpathRequest.Headers, httpRequest);
 
             if (stormpathRequest.HasBody)
             {
-                httpRequest.Content = new StringContent(stormpathRequest.Body, Encoding.UTF8, stormpathRequest.BodyContentType);
+                httpRequest.Content = new StringContent(stormpathRequest.Body, Encoding.UTF8);
             }
+
+            this.ToHttpHeaders(stormpathRequest.Headers, httpRequest);
 
             return httpRequest;
         }
@@ -87,7 +87,24 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
                 return;
             }
 
-            foreach (var header in stormpathHeaders)
+            // Set Content-Type manually.
+            // This is necessary because new StringContent(...) will add
+            // a Content-Type like "application/json; charset=utf-8", which messes up SAuthc1
+            if (httpRequest.Content != null)
+            {
+                httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue(stormpathHeaders.ContentType);
+            }
+
+            var ignoredHeaders = new string[]
+            {
+                HttpHeaders.HeaderContentTypeName, // handled above
+                HttpHeaders.HeaderContentLengthName // handled automatically
+            };
+
+            var headersToCopy = stormpathHeaders
+                .Where(h => !ignoredHeaders.Contains(h.Key));
+
+            foreach (var header in headersToCopy)
             {
                 bool added = httpRequest.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 if (!added)

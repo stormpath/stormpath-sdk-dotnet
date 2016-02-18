@@ -20,7 +20,6 @@ using Xunit.Abstractions;
 
 namespace Stormpath.SDK.Tests.Common.Integration
 {
-    [Serializable]
     public class TestClientProvider : IXunitSerializable
     {
         private string clientName;

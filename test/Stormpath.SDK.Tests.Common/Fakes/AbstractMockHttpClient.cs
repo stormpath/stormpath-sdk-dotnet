@@ -75,7 +75,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             var response = this.GetResponse(request);
             if (response == null)
             {
-                throw new ApplicationException($"{this.GetType().Name} cannot handle this request.");
+                throw new Exception($"{this.GetType().Name} cannot handle this request.");
             }
 
             this.calls.Add(request);
@@ -100,7 +100,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         }
 
         private static bool MatchesBaseUrl(IHttpRequest request, string baseUrl)
-            => request.CanonicalUri.ToString().StartsWith(baseUrl, StringComparison.InvariantCultureIgnoreCase);
+            => request.CanonicalUri.ToString().StartsWith(baseUrl, StringComparison.OrdinalIgnoreCase);
 
         protected static string MergeWithBaseUrl(string baseUrl, string resourceUrl)
             => baseUrl + resourceUrl.Replace(baseUrl, string.Empty).TrimStart('/');

@@ -15,7 +15,7 @@
 // </copyright>
 
 using System.Linq;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Common.RandomData
@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Tests.Common.RandomData
         {
             string password = new RandomPassword(12);
 
-            password.Length.ShouldBeGreaterThanOrEqualTo(12);
+            password.Length.Should().BeGreaterOrEqualTo(12);
         }
 
         [Fact]
@@ -36,11 +36,11 @@ namespace Stormpath.SDK.Tests.Common.RandomData
             string password = new RandomPassword(3);
 
             // Requirement: 1 lowercase, 1 uppercase, 1 number, 1 symbol, no whitespace
-            password.ShouldContain(x => char.IsUpper(x));
-            password.ShouldContain(x => char.IsLower(x));
-            password.ShouldContain(x => "!@#$%&|?".Contains(x));
-            password.ShouldContain(x => char.IsNumber(x));
-            password.ShouldNotContain(x => char.IsWhiteSpace(x));
+            password.Any(x => char.IsUpper(x)).Should().BeTrue();
+            password.Any(x => char.IsLower(x)).Should().BeTrue(); ;
+            password.Any(x => "!@#$%&|?".Contains(x)).Should().BeTrue(); ;
+            password.Any(x => char.IsNumber(x)).Should().BeTrue(); ;
+            password.Any(x => char.IsWhiteSpace(x)).Should().BeTrue(); ;
         }
     }
 }
