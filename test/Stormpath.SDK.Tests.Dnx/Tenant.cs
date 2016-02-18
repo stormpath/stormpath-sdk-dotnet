@@ -12,7 +12,6 @@ namespace Stormpath.SDK.Tests.Dnx
         public async Task Getting_current_tenant()
         {
             var client = Clients.Builder()
-                .SetConnectionTimeout(30)
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
                 .Build();
