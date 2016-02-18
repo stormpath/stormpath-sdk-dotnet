@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stormpath.SDK", "Stormpath.SDK\Stormpath.SDK.csproj", "{A6038D9A-AF0C-4F82-8053-8A6294D92A30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stormpath.SDK.Abstractions", "Stormpath.SDK.Abstractions\Stormpath.SDK.Abstractions.csproj", "{9966941A-D894-4ADF-9B4B-810BBD2D5364}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A6038D9A-AF0C-4F82-8053-8A6294D92A30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6038D9A-AF0C-4F82-8053-8A6294D92A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6038D9A-AF0C-4F82-8053-8A6294D92A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6038D9A-AF0C-4F82-8053-8A6294D92A30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9966941A-D894-4ADF-9B4B-810BBD2D5364}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9966941A-D894-4ADF-9B4B-810BBD2D5364}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9966941A-D894-4ADF-9B4B-810BBD2D5364}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9966941A-D894-4ADF-9B4B-810BBD2D5364}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
