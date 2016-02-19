@@ -191,6 +191,7 @@ namespace Stormpath.SDK.Client
         /// <remarks>
         /// Use the <c>CacheProviders</c> object construct a cache provider.
         /// <para>
+        /// Passing <see langword="null"/> to this method will disable caching; this is equivalent to passing <see cref="ICacheProviderFactory.DisabledCache"/>.
         /// </para>
         /// </remarks>
         /// <param name="cacheProvider">The cache provider to use, or <see langword="null"/> to disable caching.</param>

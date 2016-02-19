@@ -279,12 +279,9 @@ namespace Stormpath.SDK.Impl.Client
 
         IClientBuilder IClientBuilder.SetCacheProvider(ICacheProvider cacheProvider)
         {
-            if (cacheProvider == null)
-            {
-                throw new ArgumentNullException(nameof(cacheProvider));
-            }
-
-            this.cacheProvider = cacheProvider;
+            this.cacheProvider = cacheProvider == null
+                ? this.cacheProvider = CacheProviders.Create().DisabledCache()
+                : cacheProvider;
 
             return this;
         }
