@@ -19,13 +19,16 @@ catch
   throw
 }
 
-Write-Host "Compiling documentation..."
+Write-Host "Building proxy solution..."
+& msbuild docs\proxy\Stormpath.SDK.sln /verbosity:quiet /nologo
+$exitCode = $exitCode + $LASTEXITCODE
+
+Write-Host "Building documentation..."
 
 & msbuild docs\StormpathSDKApiDocs.shfbproj /verbosity:minimal /nologo
-$exitCode = $LASTEXITCODE
+$exitCode = $exitCode + $LASTEXITCODE
 
 Write-Host "Cleaning up files..."
-
 try
 {
 	Remove-Item "docs\api\SearchHelp.aspx" -ErrorAction Stop
