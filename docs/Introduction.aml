@@ -69,7 +69,7 @@
 		<para>In addition to these core Stormpath features, this SDK provides:</para>
 		<list class="bullet">
 			<listItem>
-				<para>Support for .NET 4.5.1 (and later)</para>.
+				<para>Support for .NET 4.5.1 (and later).</para>
 			</listItem>
       <listItem>
 				<para>Support for CoreCLR and DNX platforms (<codeInline>dotnet5.4</codeInline> and <codeInline>dnxcore50</codeInline>).</para>
