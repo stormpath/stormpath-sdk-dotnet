@@ -15,7 +15,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Jwt

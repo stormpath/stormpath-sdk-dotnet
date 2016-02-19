@@ -17,7 +17,6 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Linq
 {

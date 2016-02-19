@@ -22,7 +22,6 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Api;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Http.Authentication;
-using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.Utility;
 using Xunit;
 

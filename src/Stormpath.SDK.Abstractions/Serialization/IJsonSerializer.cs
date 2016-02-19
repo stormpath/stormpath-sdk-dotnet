@@ -14,7 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Serialization

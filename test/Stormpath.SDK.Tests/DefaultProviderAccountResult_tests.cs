@@ -20,7 +20,6 @@ using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Provider;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;

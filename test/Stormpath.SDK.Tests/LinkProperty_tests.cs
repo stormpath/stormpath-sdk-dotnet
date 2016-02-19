@@ -16,7 +16,6 @@
 
 using Shouldly;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Shared;
 using Xunit;
 

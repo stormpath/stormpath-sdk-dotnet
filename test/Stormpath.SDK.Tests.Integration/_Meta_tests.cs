@@ -14,8 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using Shouldly;
-using Stormpath.Configuration;
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
 using Xunit.Abstractions;

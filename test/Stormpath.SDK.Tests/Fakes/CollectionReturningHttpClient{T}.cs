@@ -21,7 +21,6 @@ using Newtonsoft.Json.Serialization;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
-using Stormpath.SDK.Shared.Extensions;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 

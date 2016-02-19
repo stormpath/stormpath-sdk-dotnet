@@ -15,7 +15,6 @@
 // </copyright>
 
 using Shouldly;
-using Stormpath.SDK.Impl.Extensions;
 using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Oauth;
 using Stormpath.SDK.Impl.Resource;

@@ -15,11 +15,9 @@
 // </copyright>
 
 using System;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.Configuration.Abstractions;
-using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;

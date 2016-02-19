@@ -14,12 +14,9 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Application
 {

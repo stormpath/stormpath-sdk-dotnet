@@ -25,7 +25,6 @@ using Stormpath.SDK.Impl.Cache;
 using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.DataStore.Filters;
 using Stormpath.SDK.Impl.Http;
-using Stormpath.SDK.Impl.Http.Support;
 using Stormpath.SDK.Impl.IdentityMap;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Serialization;

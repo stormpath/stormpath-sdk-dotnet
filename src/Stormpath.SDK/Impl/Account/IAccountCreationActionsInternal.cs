@@ -15,7 +15,6 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Account

@@ -14,7 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading;
 using Stormpath.SDK.Impl.AccountStore;
 using Stormpath.SDK.Organization;
 

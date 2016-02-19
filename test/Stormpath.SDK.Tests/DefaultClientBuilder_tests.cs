@@ -19,7 +19,6 @@ using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
-using Stormpath.SDK.Extensions.Http;
 using Stormpath.SDK.Extensions.Http.RestSharp;
 using Stormpath.SDK.Extensions.Serialization;
 using Stormpath.SDK.Http;

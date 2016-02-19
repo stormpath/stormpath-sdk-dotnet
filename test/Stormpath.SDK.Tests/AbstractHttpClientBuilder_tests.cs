@@ -18,7 +18,6 @@ using System;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Http;
-using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Logging;
 using Xunit;
 

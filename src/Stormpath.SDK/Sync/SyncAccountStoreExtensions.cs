@@ -14,7 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.AccountStore;
 
 namespace Stormpath.SDK.Sync
 {

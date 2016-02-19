@@ -14,7 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.SDK.Oauth;
 
 namespace Stormpath.SDK.Impl.Oauth
 {

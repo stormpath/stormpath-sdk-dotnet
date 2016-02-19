@@ -15,7 +15,6 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Shared.Extensions;
 
 namespace Stormpath.SDK.Http
 {
