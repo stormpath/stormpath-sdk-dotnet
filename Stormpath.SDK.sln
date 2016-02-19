@@ -19,9 +19,9 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.RestSharpClie
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Tests", "test\Stormpath.SDK.Tests\Stormpath.SDK.Tests.xproj", "{1468ACD2-8A96-4EE3-8103-53A519BFEE8E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Cache.Redis", "src\Stormpath.SDK.Redis\Stormpath.SDK.Cache.Redis.xproj", "{F229BB90-7233-4FA6-BCAB-8E369A0B89F9}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Cache.Redis", "src\Stormpath.SDK.Cache.Redis\Stormpath.SDK.Cache.Redis.xproj", "{F229BB90-7233-4FA6-BCAB-8E369A0B89F9}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Cache.Redis.Tests", "test\Stormpath.SDK.Redis.Tests\Stormpath.SDK.Cache.Redis.Tests.xproj", "{F5725A49-BE0A-4BE7-B67C-98EC31F3FE78}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Cache.Redis.Tests", "test\Stormpath.SDK.Cache.Redis.Tests\Stormpath.SDK.Cache.Redis.Tests.xproj", "{F5725A49-BE0A-4BE7-B67C-98EC31F3FE78}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Tests.Sanity", "test\Stormpath.SDK.Tests.Sanity\Stormpath.SDK.Tests.Sanity.xproj", "{292C3E35-0ED5-4D8B-BCD4-8CE2D5666447}"
 EndProject
