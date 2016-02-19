@@ -51,7 +51,7 @@
     "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
   },
   "tags": [ "Stormpath API Authentication Authorization REST" ],
-  "title": "Stormpath.SDK",
+  "title": "Stormpath.SDK.Core",
   "tooling": {
     "defaultNamespace": "Stormpath.SDK"
   },
