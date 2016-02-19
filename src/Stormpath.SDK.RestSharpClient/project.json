@@ -17,5 +17,6 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Http"
   },
-  "version": "0.6.0-beta1"
+  "version": "0.6.0-beta1",
+  "xmlDoc": true
 }
