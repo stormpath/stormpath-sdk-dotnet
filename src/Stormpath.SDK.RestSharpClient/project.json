@@ -14,6 +14,9 @@
   "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
   "owners": [ "Stormpath, Inc." ],
   "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+  "repository": {
+    "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+  },
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Http"
   },
