@@ -197,6 +197,10 @@ namespace Stormpath.SDK.Client
         /// <param name="cacheProvider">The cache provider to use, or <see langword="null"/> to disable caching.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <seealso cref="ICacheProviderFactory"/>
+        /// <example>
+        /// <code source="CacheProviderExamples.cs" region="DisableCaching" lang="C#" title="Disable caching" />
+        /// <code source="CacheProviderExamples.cs" region="InMemoryCacheWithOptions" lang="C#" title="Use default (in-memory) cache with options" />
+        /// </example>
         IClientBuilder SetCacheProvider(ICacheProvider cacheProvider);
 
         /// <summary>
