@@ -89,3 +89,38 @@ Function Generate-Documentation-Proxy
       throw "Did not add any output!"
     }
 }
+
+Function Generate-AssemblyInfo
+{
+  param(
+      [Parameter(Mandatory = $true)]
+      [string]$assemblyInfoFile,
+
+      [Parameter(Mandatory = $true)]
+      [string]$projectJsonFile
+  )
+
+  # Get info from project.json
+  $json = Get-Content $projectJsonFile -Raw -ErrorAction Stop | ConvertFrom-Json
+
+  # Generate the AssemblyInfo bare essentials
+  $output = New-Object System.Text.StringBuilder
+  [void]$output.AppendLine("using System.Reflection;")
+  [void]$output.AppendLine("");
+
+  [void]$output.AppendLine("[assembly: AssemblyTitle(""{0}"")]" -f $json.title)
+  [void]$output.AppendLine("[assembly: AssemblyDescription(""{0}"")]" -f $json.description)
+  [void]$output.AppendLine("[assembly: AssemblyCompany(""{0}"")]" -f $json.owners[0])
+  [void]$output.AppendLine("[assembly: AssemblyCopyright(""{0}"")]" -f $json.copyright)
+
+  # Sanitize version (which may be like "1.0.0-beta2")
+  $safeVersion = $json.version
+  if ($safeVersion.Contains("-")) {
+    $safeVersion = $safeVersion.Substring(0, $safeVersion.IndexOf("-"))
+  }
+
+  [void]$output.AppendLine("[assembly: AssemblyVersion(""{0}"")]" -f $safeVersion)
+  [void]$output.AppendLine("[assembly: AssemblyFileVersion(""{0}"")]" -f $safeVersion)
+
+  Set-Content -Path (Get-Item $assemblyInfoFile).FullName -Value $output.ToString() -ErrorAction Stop
+}
