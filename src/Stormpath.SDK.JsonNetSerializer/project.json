@@ -24,6 +24,7 @@
   "repository": {
     "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
   },
+  "tags": [ "Stormpath JSON Serializer" ],
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Serialization"
   },

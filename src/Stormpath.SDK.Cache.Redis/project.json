@@ -24,6 +24,7 @@
   "repository": {
     "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
   },
+  "tags": [ "Stormpath Authentication Authorization REST Caching Redis" ],
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Cache.Redis"
   },

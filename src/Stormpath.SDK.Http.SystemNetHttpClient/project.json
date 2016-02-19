@@ -31,6 +31,7 @@
   "repository": {
     "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
   },
+  "tags": [ "Stormpath HTTP" ],
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Http.SystemNetHttpClient"
   },

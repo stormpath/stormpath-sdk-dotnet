@@ -12,7 +12,7 @@
     "Stormpath.SDK.Abstractions": "0.6.0-beta1",
     "Stormpath.Configuration": "0.1.0-beta5"
   },
-  "description": "The official Stormpath SDK for .NET. Don't install this package directly; install Stormpath.SDK unless you are bringing your own JSON serializer and HTTP client plugins.",
+  "description": "The official Stormpath SDK for .NET. Don't install this package directly; install the Stormpath.SDK package unless you are bringing your own JSON serializer and HTTP client plugins.",
   "frameworks": {
     "net451": {
       "frameworkAssemblies": {
