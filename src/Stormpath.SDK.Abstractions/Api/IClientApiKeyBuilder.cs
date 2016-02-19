@@ -48,15 +48,6 @@ namespace Stormpath.SDK.Api
         /// </remarks>
         /// <param name="id">The API Key ID to use when communicating with Stormpath.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <example>
-        /// This method <b>SHOULD NOT</b> be used on production machines:
-        /// <code>
-        /// IClientApiKey apiKey = builder
-        ///     .SetId("myApiKeyId")
-        ///     .SetSecret("mySuperSecretApiKeySecret")
-        ///     .Build();
-        /// </code>
-        /// </example>
         [Obsolete("Use IClientBuilder.SetApiKeyId")]
         IClientApiKeyBuilder SetId(string id);
 
@@ -66,15 +57,6 @@ namespace Stormpath.SDK.Api
         /// <remarks>See the security precautions outlined at <see cref="SetId(string)"/>.</remarks>
         /// <param name="secret">The API Key Secret to use when communicating with Stormpath.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <example>
-        /// This method <b>SHOULD NOT</b> be used on production machines:
-        /// <code>
-        /// IClientApiKey apiKey = builder
-        ///     .SetId("myApiKeyId")
-        ///     .SetSecret("mySuperSecretApiKeySecret")
-        ///     .Build();
-        /// </code>
-        /// </example>
         [Obsolete("Use IClientBuilder.SetApiKeySecret")]
         IClientApiKeyBuilder SetSecret(string secret);
 
@@ -84,17 +66,6 @@ namespace Stormpath.SDK.Api
         /// </summary>
         /// <param name="stream">The input stream to consume.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <example>
-        /// <code>
-        /// IClientApiKey = null;
-        /// using (var stream = new Stream(...))
-        /// {
-        ///     apiKey = builder
-        ///         .SetInputStream(myStream)
-        ///         .Build();
-        /// }
-        /// </code>
-        /// </example>
         [Obsolete("This method will be removed in 1.0.")]
         IClientApiKeyBuilder SetInputStream(System.IO.Stream stream);
 
@@ -108,13 +79,6 @@ namespace Stormpath.SDK.Api
         /// </remarks>
         /// <param name="path">The relative or absolute path to the .properties file.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <example>
-        /// <code>
-        /// IClientApiKey apiKey = builder
-        ///     .SetFileLocation("path\\to\\apiKey.properties")
-        ///     .Build();
-        /// </code>
-        /// </example>
         [Obsolete("Use IClientBuilder.SetApiKeyFilePath")]
         IClientApiKeyBuilder SetFileLocation(string path);
 
@@ -123,19 +87,6 @@ namespace Stormpath.SDK.Api
         /// </summary>
         /// <param name="idPropertyName">The API Key ID name.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <example>
-        /// <code>
-        /// // If the file at \path\to\apiKey.properties is formatted like:
-        /// // myApiKey = foobar
-        /// // mySecret = qux-secret-key!
-        ///
-        /// IClientApiKey apiKey = builder
-        ///     .SetIdPropertyName("myApiKey")
-        ///     .SetSecretPropertyName("mySecret")
-        ///     .SetFileLocation("path\\to\\apiKey.properties")
-        ///     .Build();
-        /// </code>
-        /// </example>
         [Obsolete("This method will be removed in 1.0.")]
         IClientApiKeyBuilder SetIdPropertyName(string idPropertyName);
 
@@ -144,19 +95,6 @@ namespace Stormpath.SDK.Api
         /// </summary>
         /// <param name="secretPropertyName">The API Key Secret name</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <example>
-        /// <code>
-        /// // If the file at \path\to\apiKey.properties is formatted like:
-        /// // myApiKey = foobar
-        /// // mySecret = qux-secret-key!
-        ///
-        /// IClientApiKey apiKey = builder
-        ///     .SetIdPropertyName("myApiKey")
-        ///     .SetSecretPropertyName("mySecret")
-        ///     .SetFileLocation("path\\to\\apiKey.properties")
-        ///     .Build();
-        /// </code>
-        /// </example>
         [Obsolete("This method will be removed in 1.0.")]
         IClientApiKeyBuilder SetSecretPropertyName(string secretPropertyName);
 

@@ -19,6 +19,8 @@ namespace Stormpath.SDK.Cache
     /// <summary>
     /// Represents a factory that can create <see cref="ICacheProviderBuilder">cache provider builders</see>. Cache provider plugins can use extension methods to add additional options to this interface.
     /// </summary>
+    /// <code source="ClientBuilderExamples.cs" region="DisableCaching" lang="C#" title="Disable caching" />
+    /// <code source="ClientBuilderExamples.cs" region="InMemoryCacheWithOptions" lang="C#" title="Use default (in-memory) cache with options" />
     public interface ICacheProviderFactory
     {
         /// <summary>
@@ -27,6 +29,7 @@ namespace Stormpath.SDK.Cache
         /// your Client when testing or debugging to remove 'moving parts' for better clarity into request/response behavior.
         /// </summary>
         /// <returns>A new disabled <see cref="ICacheProvider">Cache Provider</see> instance.</returns>
+        /// <code source="ClientBuilderExamples.cs" region="DisableCaching" lang="C#" title="Disable caching" />
         ICacheProvider DisabledCache();
 
         /// <summary>
@@ -35,6 +38,7 @@ namespace Stormpath.SDK.Cache
         /// and instead implement the <see cref="ICacheProvider">Cache Provider</see> API directly to use your distributed/clustered cache technology of choice.
         /// </summary>
         /// <returns>A new <see cref="ICacheProviderBuilder"/> suitable for single-instance applications.</returns>
+        /// <code source="ClientBuilderExamples.cs" region="InMemoryCacheWithOptions" lang="C#" title="Use default (in-memory) cache with options" />
         ICacheProviderBuilder InMemoryCache();
     }
 }

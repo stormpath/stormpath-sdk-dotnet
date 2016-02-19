@@ -2,20 +2,13 @@
   "authors": [ "Nate Barbettini", "Contributors" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Stormpath.SDK": "0.6.0-beta1"
+    "Stormpath.SDK": "0.6.0-beta1",
+    "Stormpath.SDK.JsonNetSerializer": "0.6.0-beta1",
+    "Stormpath.SDK.RestSharpClient": "0.6.0-beta1"
   },
   "description": "Documentation examples for the Stormpath .NET SDK",
   "frameworks": {
-    "dnx451": { },
-    "dotnet5.4": {
-      "dependencies": {
-        "Microsoft.CSharp": "4.0.1-beta-23516",
-        "System.Collections": "4.0.11-beta-23516",
-        "System.Linq": "4.0.1-beta-23516",
-        "System.Runtime": "4.0.21-beta-23516",
-        "System.Threading": "4.0.11-beta-23516"
-      }
-    }
+    "dnx451": { }
   },
   "language": "en-US",
   "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",

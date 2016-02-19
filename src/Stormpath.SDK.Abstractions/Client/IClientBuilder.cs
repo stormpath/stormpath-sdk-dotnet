@@ -26,33 +26,50 @@ using Stormpath.SDK.Serialization;
 namespace Stormpath.SDK.Client
 {
     /// <summary>
-    /// Represents a builder that can construct <see cref="IClient">Client</see> instances.
+    /// Represents a builder that can configure and construct <see cref="IClient">Client</see> instances.
     /// </summary>
     /// <remarks>
-    /// This builder uses a number of optional methods that fall back to sensible defaults:
+    /// <para>
+    /// The Stormpath SDK can be configured in a variety of ways. The methods on <c>IClientBuilder</c> can be used to set configuration,
+    /// but configuration options can also be loaded from a variety of sources.
+    /// (Further documentation is available at <see href="https://github.com/stormpath/stormpath-sdk-spec/blob/master/specifications/config.md">Stormpath SDK Configuration Spec</see>
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>Default configuration/fallback</description>
+    ///     </item>
+    ///     <item>
+    ///         <description><c>apiKey.properties</c> file from the <c>~/.stormpath</c> directory</description>
+    ///     </item>
+    ///     <item>
+    ///         <description><c>stormpath.json</c> or <c>stormpath.yaml</c> file from the <c>~/.stormpath</c> directory</description>
+    ///     </item>
+    ///     <item>
+    ///         <description><c>apiKey.properties</c> file from the application directory</description>
+    ///     </item>
+    ///     <item>
+    ///         <description><c>stormpath.json</c> or <c>stormpath.yaml</c> file from the application directory</description>
+    ///     </item>
+    ///     <item>
+    ///         <description>Environment variables prefixed by <c>STORMPATH_</c> (for example, <c>STORMPATH_CLIENT_APIKEY_ID</c>)</description>
+    ///     </item>
+    ///     <item>
+    ///         <description>Configuration provided by the <c>IClientBuilder</c> convenience methods, or <see cref="SetConfiguration(StormpathConfiguration)"/>.</description>
+    ///     </item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// This builder provides a number of optional methods that fall back to sensible defaults:
     /// <list type="bullet">
     ///     <item>
     ///         <description>
-    ///             If <see cref="SetApiKey(IClientApiKey)"/> is not called, the default locations will be searched
-    ///             to discover an API Key. See the documentation on <see cref="IClientApiKeyBuilder"/> for details.
+    ///             If API credentials are not set manually using <see cref="SetApiKeyId(string)"/> or <see cref="SetApiKeyFilePath(string)"/>, the default locations will be searched
+    ///             to discover an API Key (see above).
     ///         </description>
     ///     </item>
     ///     <item>
     ///         <description>
-    ///             If <see cref="SetAuthenticationScheme(AuthenticationScheme)"/> is not called, the default scheme
-    ///             (<see cref="AuthenticationScheme.SAuthc1">SAuthc1</see>) will be used.
-    ///         </description>
-    ///     </item>
-    ///     <item>
-    ///         <description>
-    ///             If <see cref="SetHttpClient(IHttpClient)"/> or <see cref="SetHttpClient(IHttpClientBuilder)"/> is not called,
-    ///             the <see cref="IHttpClientFactory.AutoDetect()">default</see> HTTP client will be used.
-    ///         </description>
-    ///     </item>
-    ///     <item>
-    ///         <description>
-    ///             If <see cref="ISerializerConsumer{T}.SetSerializer(IJsonSerializer)"/> or <see cref="SetSerializer(ISerializerBuilder)"/> is not called,
-    ///             the <see cref="ISerializerFactory.AutoDetect()">default</see> serializer will be used.
+    ///             If <see cref="SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme)"/> is not called, the default scheme
+    ///             (<see cref="Configuration.Abstractions.Model.ClientAuthenticationScheme.SAuthc1">SAuthc1</see>) will be used.
     ///         </description>
     ///     </item>
     ///     <item>
@@ -63,19 +80,17 @@ namespace Stormpath.SDK.Client
     ///         </description>  
     ///     </item>
     /// </list>
-    /// <para>
+    /// </para>
+    /// <note type="caution">
     /// Note: The default in-memory cache might not be sufficient for an application that runs on multiple servers,
     /// due to cache-coherency issues. If your application runs in multiple instances, consider plugging in a
     /// distributed cache like Redis.
-    /// </para>
+    /// </note>
     /// </remarks>
     /// <example>
-    /// Create a client with a specified API Key and default HTTP client, serializer, and caching options:
-    /// <code>
-    /// IClient client = Clients.Builder()
-    ///     .SetApiKey(apiKey)
-    ///     .Build();
-    /// </code>
+    /// <code source="ClientBuilderExamples.cs" region="DefaultClientOptions" lang="C#" title="Create a Client with the default options" />
+    /// <code source="ClientBuilderExamples.cs" region="InstanceClientOptions" lang="C#" title="Specify options using StormpathConfiguration" />
+    /// <code source="ClientBuilderExamples.cs" region="AnonTypeClientOptions" lang="C#" title="Specify options using an anonymous type" />
     /// </example>
     public interface IClientBuilder : ILoggerConsumer<IClientBuilder>, ISerializerConsumer<IClientBuilder>
     {
@@ -87,7 +102,7 @@ namespace Stormpath.SDK.Client
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="apiKey"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="apiKey"/> is not valid.</exception>
-        [Obsolete("Set the API Key ID and Secret directly on the client")]
+        [Obsolete("Set the API Key ID and Secret directly, or use SetApiKeyFilePath, or SetConfiguration")]
         IClientBuilder SetApiKey(IClientApiKey apiKey);
 
         /// <summary>
@@ -95,9 +110,13 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <remarks>
         /// This can also be set by passing a configuration object to <see cref="SetConfiguration(StormpathConfiguration)"/>, or by a JSON or YAML configuration.
+        /// If no API credentials are provided, the default locations will be searched.
         /// </remarks>
         /// <param name="id">The Stormpath API Key ID.</param>
         /// <returns>This instance for method chaining.</returns>
+        /// <example>
+        /// <code source = "ClientBuilderExamples.cs" region="SetApiCredentialsDirectly" lang="C#" title="Set API credentials directly" />
+        /// </example>
         IClientBuilder SetApiKeyId(string id);
 
         /// <summary>
@@ -105,9 +124,13 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <remarks>
         /// This can also be set by passing a configuration object to <see cref="SetConfiguration(StormpathConfiguration)"/>, or by a JSON or YAML configuration.
+        /// If no API credentials are provided, the default locations will be searched.
         /// </remarks>
         /// <param name="secret">The Stormpath API Key Secret.</param>
         /// <returns>This instance for method chaining.</returns>
+        /// <example>
+        /// <code source="ClientBuilderExamples.cs" region="SetApiCredentialsDirectly" lang="C#" title="Set API credentials directly" />
+        /// </example>
         IClientBuilder SetApiKeySecret(string secret);
 
         /// <summary>
@@ -115,9 +138,13 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <remarks>
         /// This can also be set by passing a configuration object to <see cref="SetConfiguration(StormpathConfiguration)"/>, or by a JSON or YAML configuration.
+        /// If no API credentials are provided, the default locations will be searched.
         /// </remarks>
         /// <param name="path">The path to <c>apiKey.properties</c>.</param>
         /// <returns>This instance for method chaining.</returns>
+        /// <example>
+        /// <code source="ClientBuilderExamples.cs" region="SetApiCredentialsFile" lang="C#" title="Load API credentials from a file" />
+        /// </example>
         IClientBuilder SetApiKeyFilePath(string path);
 
         /// <summary>
@@ -125,6 +152,9 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="configuration">An instance of <see cref="StormpathConfiguration"/>.</param>
         /// <returns>This instance for method chaining.</returns>
+        /// <example>
+        /// <code source="ClientBuilderExamples.cs" region="InstanceClientOptions" lang="C#" title="Specify options using StormpathConfiguration" />
+        /// </example>
         IClientBuilder SetConfiguration(StormpathConfiguration configuration);
 
         /// <summary>
@@ -132,6 +162,9 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="configuration">An anonymous type containing configuration options.</param>
         /// <returns>This instance for method chaining.</returns>
+        /// <example>
+        /// <code source="ClientBuilderExamples.cs" region="AnonTypeClientOptions" lang="C#" title="Specify options using an anonymous type" />
+        /// </example>
         IClientBuilder SetConfiguration(object configuration);
 
         /// <summary>
@@ -148,6 +181,9 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="scheme">The authentication scheme to use.</param>
         /// <returns>This instance for method chaining.</returns>
+        /// <example>
+        /// <code source="ClientBuilderExamples.cs" region="UseBasicAuthentication" lang="C#" title="Use HTTP Basic authentication" />
+        /// </example>
         IClientBuilder SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme scheme);
 
         /// <summary>
@@ -156,7 +192,7 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="timeout">The HTTP connection timeout to use, in milliseconds.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException"><paramref name="timeout"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="timeout"/> is negative.</exception>
         IClientBuilder SetConnectionTimeout(int timeout);
 
         /// <summary>
@@ -198,8 +234,8 @@ namespace Stormpath.SDK.Client
         /// <returns>This instance for method chaining.</returns>
         /// <seealso cref="ICacheProviderFactory"/>
         /// <example>
-        /// <code source="CacheProviderExamples.cs" region="DisableCaching" lang="C#" title="Disable caching" />
-        /// <code source="CacheProviderExamples.cs" region="InMemoryCacheWithOptions" lang="C#" title="Use default (in-memory) cache with options" />
+        /// <code source="ClientBuilderExamples.cs" region="DisableCaching" lang="C#" title="Disable caching" />
+        /// <code source="ClientBuilderExamples.cs" region="InMemoryCacheWithOptions" lang="C#" title="Use default (in-memory) cache with options" />
         /// </example>
         IClientBuilder SetCacheProvider(ICacheProvider cacheProvider);
 
@@ -216,6 +252,9 @@ namespace Stormpath.SDK.Client
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="httpClient"/> is null.</exception>
         /// <seealso cref="IHttpClientFactory"/>
+        /// <example>
+        /// <code source="ClientBuilderExamples.cs" region="DefaultClientOptions" lang="C#" title="Create a Client with the default options" />
+        /// </example>
         IClientBuilder SetHttpClient(IHttpClient httpClient);
 
         /// <summary>
@@ -228,6 +267,9 @@ namespace Stormpath.SDK.Client
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="httpClientBuilder"/> is null.</exception>
         /// <seealso cref="IHttpClientFactory"/>
+        /// <example>
+        /// <code source="ClientBuilderExamples.cs" region="DefaultClientOptions" lang="C#" title="Create a Client with the default options" />
+        /// </example>
         IClientBuilder SetHttpClient(IHttpClientBuilder httpClientBuilder);
 
         /// <summary>
@@ -240,13 +282,19 @@ namespace Stormpath.SDK.Client
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="serializerBuilder"/> is null.</exception>
         /// <seealso cref="ISerializerFactory"/>
+        /// <example>
+        /// <code source="ClientBuilderExamples.cs" region="DefaultClientOptions" lang="C#" title="Create a Client with the default options" />
+        /// </example>
         IClientBuilder SetSerializer(ISerializerBuilder serializerBuilder);
 
         /// <summary>
         /// Constructs a new <see cref="IClient">Client</see> instance based on the builder's current configuration state.
         /// </summary>
         /// <returns>A new <see cref="IClient">Client</see> instance.</returns>
-        /// <exception cref="System.Exception">No valid API Key ID and Secret could be found.</exception>
+        /// <exception cref="Exception">No valid API Key ID and Secret could be found.</exception>
+        /// <example>
+        /// <code source="ClientBuilderExamples.cs" region="DefaultClientOptions" lang="C#" title="Create a Client with the default options" />
+        /// </example>
         IClient Build();
     }
 }

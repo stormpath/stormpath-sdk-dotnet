@@ -31,6 +31,9 @@ namespace Stormpath.SDK.Serialization
         /// <param name="serializer">The serializer to use.</param>
         /// <returns>The source object for method chaining.</returns>
         /// <seealso cref="ISerializerFactory"/>
+        /// <example>
+        /// <code source="ClientBuilderExamples.cs" region="DefaultClientOptions" lang="C#" title="Create a Client with the default options" />
+        /// </example>
         T SetSerializer(IJsonSerializer serializer);
     }
 }
