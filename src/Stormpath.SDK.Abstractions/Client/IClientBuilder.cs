@@ -190,12 +190,12 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <remarks>
         /// Use the <c>CacheProviders</c> object construct a cache provider.
+        /// <para>
+        /// </para>
         /// </remarks>
-        /// <param name="cacheProvider">The cache provider to use.</param>
+        /// <param name="cacheProvider">The cache provider to use, or <see langword="null"/> to disable caching.</param>
         /// <returns>This instance for method chaining.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="cacheProvider"/> is null.</exception>
-        /// <seealso cref="ICacheProviderFactory.DisabledCache"/>
-        /// <seealso cref="ICacheProviderFactory.InMemoryCache"/>
+        /// <seealso cref="ICacheProviderFactory"/>
         IClientBuilder SetCacheProvider(ICacheProvider cacheProvider);
 
         /// <summary>
@@ -210,6 +210,7 @@ namespace Stormpath.SDK.Client
         /// <param name="httpClient">The HTTP client to use.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="httpClient"/> is null.</exception>
+        /// <seealso cref="IHttpClientFactory"/>
         IClientBuilder SetHttpClient(IHttpClient httpClient);
 
         /// <summary>
@@ -221,6 +222,7 @@ namespace Stormpath.SDK.Client
         /// <param name="httpClientBuilder">The HTTP client to use.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="httpClientBuilder"/> is null.</exception>
+        /// <seealso cref="IHttpClientFactory"/>
         IClientBuilder SetHttpClient(IHttpClientBuilder httpClientBuilder);
 
         /// <summary>
@@ -232,6 +234,7 @@ namespace Stormpath.SDK.Client
         /// <param name="serializerBuilder">The serializer to use.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="serializerBuilder"/> is null.</exception>
+        /// <seealso cref="ISerializerFactory"/>
         IClientBuilder SetSerializer(ISerializerBuilder serializerBuilder);
 
         /// <summary>

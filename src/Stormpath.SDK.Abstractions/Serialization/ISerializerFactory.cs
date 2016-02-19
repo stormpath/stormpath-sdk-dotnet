@@ -14,11 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-
 namespace Stormpath.SDK.Serialization
 {
     /// <summary>
-    /// Represents a factory that can create <see cref="ISerializerBuilder">serializer builders</see>.
+    /// Represents a factory that can create <see cref="ISerializerBuilder">serializer builders</see>. Serializer plugins can use extension methods to add additional options to this interface.
     /// </summary>
     public interface ISerializerFactory
     {

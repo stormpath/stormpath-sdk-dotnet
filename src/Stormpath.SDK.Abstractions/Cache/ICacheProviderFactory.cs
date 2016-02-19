@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Cache
 {
     /// <summary>
-    /// Represents a factory that can create <see cref="ICacheProviderBuilder">cache provider builders</see>.
+    /// Represents a factory that can create <see cref="ICacheProviderBuilder">cache provider builders</see>. Cache provider plugins can use extension methods to add additional options to this interface.
     /// </summary>
     public interface ICacheProviderFactory
     {

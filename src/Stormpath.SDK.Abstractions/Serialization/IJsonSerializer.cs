@@ -21,6 +21,7 @@ namespace Stormpath.SDK.Serialization
     /// <summary>
     /// A wrapper interface for JSON serialization plugins.
     /// </summary>
+    /// <seealso cref="ISerializerFactory"/>
     public interface IJsonSerializer
     {
         /// <summary>

@@ -22,6 +22,7 @@ namespace Stormpath.SDK.Http
     /// <summary>
     /// A wrapper interface for HTTP client plugins.
     /// </summary>
+    /// <seealso cref="IHttpClientFactory"/>
     public interface IHttpClient : IDisposable
     {
         /// <summary>

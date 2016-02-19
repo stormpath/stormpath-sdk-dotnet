@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Http
 {
     /// <summary>
-    /// Represents a factory that can create <see cref="IHttpClientBuilder">HTTP client builders</see>.
+    /// Represents a factory that can create <see cref="IHttpClientBuilder">HTTP client builders</see>. HTTP client plugins can use extension methods to add additional options to this interface.
     /// </summary>
     public interface IHttpClientFactory
     {

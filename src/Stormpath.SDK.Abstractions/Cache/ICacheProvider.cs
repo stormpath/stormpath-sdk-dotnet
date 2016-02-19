@@ -21,6 +21,7 @@ namespace Stormpath.SDK.Cache
     /// <summary>
     /// Base interface for <see cref="ISynchronousCacheProvider"/> and <see cref="IAsynchronousCacheProvider"/>.
     /// </summary>
+    /// /// <seealso cref="ICacheProviderFactory"/>
     public interface ICacheProvider : IDisposable
     {
         /// <summary>
