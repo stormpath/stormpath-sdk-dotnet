@@ -69,16 +69,19 @@
 		<para>In addition to these core Stormpath features, this SDK provides:</para>
 		<list class="bullet">
 			<listItem>
-				<para>Support for .NET 4.5 and later</para>
+				<para>Support for .NET 4.5.1 (and later)</para>.
+			</listItem>
+      <listItem>
+				<para>Support for CoreCLR and DNX platforms (<codeInline>dotnet5.4</codeInline> and <codeInline>dnxcore50</codeInline>).</para>
 			</listItem>
 			<listItem>
-				<para>Support for Linux and OS X via Mono</para>
+				<para>Support for Linux and OS X via Mono.</para>
 			</listItem>
 			<listItem>
-				<para>LINQ to Stormpath for readable, expressive queries</para>
+				<para>LINQ-to-Stormpath for readable, expressive queries.</para>
 			</listItem>
 			<listItem>
-				<para>Fully dual-stack design for native asynchronous and native synchronous access</para>
+				<para>Fully dual-stack design for native asynchronous and native synchronous access.</para>
 			</listItem>
 		</list>
 	</content>
