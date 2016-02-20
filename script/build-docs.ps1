@@ -22,23 +22,23 @@ catch
 }
 
 Write-Host "Building proxy solution..."
-& msbuild docs\proxy\Stormpath.SDK.sln /verbosity:quiet /nologo
+& msbuild "$($root)\doc\proxy\Stormpath.SDK.sln" /verbosity:quiet /nologo
 $exitCode = $exitCode + $LASTEXITCODE
 
 Write-Host "Building documentation..."
 
-& msbuild docs\StormpathSDKApiDocs.shfbproj /verbosity:minimal /nologo
+& msbuild "$($root)\doc\StormpathSDKApiDocs.shfbproj" /verbosity:minimal /nologo
 $exitCode = $exitCode + $LASTEXITCODE
 
 Write-Host "Cleaning up files..."
 try
 {
-	Remove-Item "docs\api\SearchHelp.aspx" -ErrorAction Stop
-	Remove-Item "docs\api\SearchHelp.inc.php" -ErrorAction Stop
-	Remove-Item "docs\api\SearchHelp.php" -ErrorAction Stop
-	Remove-Item "docs\api\LastBuild.log" -ErrorAction Stop
-	Remove-Item "docs\api\Web.Config" -ErrorAction Stop
-	(Get-Content "docs\api\index.html" -Raw -ErrorAction Stop).replace('html/Introduction.htm', '/dotnet/api/html/Introduction.htm') | Set-Content "docs\api\index.html" -ErrorAction Stop
+	Remove-Item "$($root)\doc\api\SearchHelp.aspx" -ErrorAction Stop
+	Remove-Item "$($root)\doc\api\SearchHelp.inc.php" -ErrorAction Stop
+	Remove-Item "$($root)\doc\api\SearchHelp.php" -ErrorAction Stop
+	Remove-Item "$($root)\doc\api\LastBuild.log" -ErrorAction Stop
+	Remove-Item "$($root)\doc\api\Web.Config" -ErrorAction Stop
+	(Get-Content "$($root)\doc\api\index.html" -Raw -ErrorAction Stop).replace('html/Introduction.htm', '/dotnet/api/html/Introduction.htm') | Set-Content "$($root)\doc\api\index.html" -ErrorAction Stop
 }
 catch
 {

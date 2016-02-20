@@ -97,7 +97,8 @@
     <ComponentConfigurations>
       <ComponentConfig id="Code Block Component" enabled="True" xmlns="">
         <component id="Code Block Component">
-  <basePath value="C:\Users\Nate\Documents\stormpath-sdk-csharp\docs\examples\" />
+  <!-- basePath is relative from doc\api\Working during compile -->
+  <basePath value="..\..\examples\" />
   <outputPaths>{@HelpFormatOutputPaths}</outputPaths>
   <allowMissingSource value="false" />
   <removeRegionMarkers value="false" />

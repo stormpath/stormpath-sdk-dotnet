@@ -1,6 +1,10 @@
 $built = $true
 
-if ($env:build_docs)
+if (!$env:build_docs)
+{
+	Write-Host "build_docs not set, skipping doc build."
+}
+else
 {
 	Write-Host "build_docs set, building documentation..."
 
@@ -52,7 +56,7 @@ if ($built -and $deploy_docs) {
 	git checkout -b $branchName 2> $null
 
 	Write-Host "Copying new files and pushing to repository"
-	Copy-Item ..\doc\api source\dotnet\ -recurse -force
+	Copy-Item "$($PSScriptRoot)\..\doc\api source\dotnet\" -recurse -force
 	git add --all
 	git commit -m "sdk-dotnet release $($latestTag)"
 	git push -u origin $branchName
