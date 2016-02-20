@@ -31,7 +31,7 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Tests.Dnx", "
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.Http.SystemNetHttpClient", "src\Stormpath.SDK.Http.SystemNetHttpClient\Stormpath.SDK.Http.SystemNetHttpClient.xproj", "{D56C4681-B4A3-49C9-B32D-EAB3BC874666}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.DocExamples", "docs\examples\Stormpath.SDK.DocExamples.xproj", "{B23DA7D8-6BFA-4106-9075-CE738A49C03A}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.SDK.DocExamples", "doc\examples\Stormpath.SDK.DocExamples.xproj", "{B23DA7D8-6BFA-4106-9075-CE738A49C03A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
