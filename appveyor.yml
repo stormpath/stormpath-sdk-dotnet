@@ -15,6 +15,7 @@ install:
 
     Set-Content c:\users\appveyor\.ssh\id_rsa $fileContent
 
+
     # Install DNX
 
     dnvm install 1.0.0-rc1-update1 -arch x86
@@ -26,8 +27,8 @@ build:
   verbosity: minimal
 after_build:
 - ps: >-
-  .\script\build-documentation.ps1
+    .\script\build-documentation.ps1
 
-  .\script\deploy-documentation.ps1
+    .\script\deploy-documentation.ps1
 test_script:
 - ps: .\script\unit-test.ps1
