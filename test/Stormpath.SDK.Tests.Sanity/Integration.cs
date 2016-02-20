@@ -21,9 +21,8 @@ namespace Stormpath.SDK.Tests.Sanity
 {
     public class Integration
     {
-        //[Fact(Skip = "Restore VB sanity tests.")]
+        [Fact(Skip = "Restore VB sanity tests.")]
         [Obsolete("Restore VB sanity tests.")]
-        [Fact]
         public void Notice()
         {
             Assert.False(true);
