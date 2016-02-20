@@ -1,0 +1,597 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A6038D9A-AF0C-4F82-8053-8A6294D92A30}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Stormpath.SDK</RootNamespace>
+    <AssemblyName>Stormpath.SDK</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET451</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Stormpath.SDK.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Caching.Abstractions.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Memory, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Caching.Memory.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Caching.Memory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Contrib.Stormpath.EnvironmentVariables, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Contrib.Stormpath.EnvironmentVariables.0.1.0-beta5\lib\net451\Microsoft.Extensions.Configuration.Contrib.Stormpath.EnvironmentVariables.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Contrib.Stormpath.ObjectReflection, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Contrib.Stormpath.ObjectReflection.0.1.0-beta5\lib\net451\Microsoft.Extensions.Configuration.Contrib.Stormpath.ObjectReflection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Contrib.Stormpath.PropertiesFile, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Contrib.Stormpath.PropertiesFile.0.1.0-beta5\lib\net451\Microsoft.Extensions.Configuration.Contrib.Stormpath.PropertiesFile.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Contrib.Stormpath.Yaml, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Contrib.Stormpath.Yaml.0.1.0-beta5\lib\net451\Microsoft.Extensions.Configuration.Contrib.Stormpath.Yaml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.FileExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.FileExtensions.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Configuration.FileExtensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Ini, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Ini.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Configuration.Ini.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Json, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Json.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Configuration.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.OptionsModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.OptionsModel.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.OptionsModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.PlatformAbstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.PlatformAbstractions.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.PlatformAbstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Polyglot, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polyglot.1.0.0-beta1\lib\net451\Polyglot.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Stormpath.Configuration, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stormpath.Configuration.0.1.0-beta5\lib\net451\Stormpath.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Stormpath.Configuration.Abstractions, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stormpath.Configuration.Abstractions.0.1.0-beta5\lib\net451\Stormpath.Configuration.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="YamlDotNet, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.3.8.0\lib\net35\YamlDotNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <!-- Auto-generated items (see generate-doc-proxy.ps1) -->
+  <!-- #startAutogen -->
+  <ItemGroup>
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\AccountCreationActionsCompatibilityExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\ApplicationCompatibilityExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\GroupCreationActionsCompatibilityExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\TenantActionsCompatibilityExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Account\AccountCreationOptionsBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Account\EmailVerificationRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Api\ClientApiKeys.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Application\ApplicationCreationOptionsBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Auth\ApiAuthenticationException.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Auth\ApiKeyRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Auth\DisabledAccountException.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Auth\DisabledApiKeyException.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Auth\IncorrectCredentialsException.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Auth\UsernamePasswordRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Cache\CacheProviders.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Cache\Caches.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Client\Clients.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Client\DnxCallerFileLanguageDetector.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Directory\DirectoryCreationOptionsBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Group\GroupCreationOptionsBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Http\HttpClientFactoryAutodetectExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Http\HttpClients.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Http\HttpRequests.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\AccountCreationActionsShared.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccount.ApiKeys.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccount.Collections.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccount.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccount.IGroup.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccount.IGroupSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccount.Resources.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccount.ResourcesSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccountCreationOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultEmailVerificationRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultEmailVerificationToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultPasswordResetToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IAccountCreationActionsInternal.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IAccountCreationActionsSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IAccountSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IEmailVerificationRequestSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IPasswordResetTokenSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\AccountStore\AbstractAccountStoreMapping.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\AccountStore\AccountStoreContainerShared.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\AccountStore\DefaultAccountStore.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\AccountStore\IAccountStoreContainerSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\AccountStore\IAccountStoreMappingSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\AccountStore\IAccountStoreSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Api\DefaultApiKey.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Api\DefaultClientApiKey.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Api\IApiKeySync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.AccountCreationActions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.AccountCreationActionsSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.AccountStore.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.AccountStoreSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.ApiKey.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.Collections.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.EmailVerification.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.EmailVerificationSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.GroupCreationActions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.GroupCreationActionsSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.IdSite.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.Login.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.LoginSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.Oauth.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.ResetPassword.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.ResetPasswordSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.Resources.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.ResourcesSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplication.Saml.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplicationAccountStoreMapping.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\DefaultApplicationCreationOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\IApplicationAccountStoreMappingSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Application\IApplicationSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Auth\AbstractLoginAttempt.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Auth\ApiKeyAuthenticationRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Auth\ApiKeyAuthenticator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Auth\AuthenticationRequestDispatcher.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Auth\BasicAuthenticator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Auth\DefaultAuthenticationResult.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Auth\DefaultBasicLoginAttempt.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Auth\IAuthenticationResultSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Auth\IBasicLoginAttempt.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Auth\IHasOrganizationNameKey.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Auth\ILoginAttempt.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Auth\UsernamePasswordRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\DefaultCacheConfiguration.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\DefaultCacheConfigurationBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\DefaultCacheProviderFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\DefaultCacheResolver.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\ICacheResolver.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\InMemoryCache.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\InMemoryCacheProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\InMemoryCacheProviderBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\NullCacheProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClient.Collections.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClient.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClient.DataStore.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClient.Jwt.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClient.TenantActions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClient.TenantActionsSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClientBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultUserAgentBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\IClientSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\IUserAgentBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\ShimAdditionalClientApiKeySettings.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\ShimClientApiKey.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\ShimClientApiKeyBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\CustomData\DefaultCustomData.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\CustomData\DefaultCustomDataProxy.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\CustomData\ICustomDataSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultDataStore.Core.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultDataStore.Create.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultDataStore.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultDataStore.Delete.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultDataStore.Get.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultDataStore.Save.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultResourceConverter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultResourceDataRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultResourceDataResult.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultResourceFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\IDataStoreSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\IInternalAsyncDataStore.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\IInternalDataStore.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\IInternalSyncDataStore.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\IResourceConverter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\IResourceDataRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\IResourceDataResult.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\IResourceFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\ResourceAction.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\ResourceTypeLookup.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\TypeNameResolver.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\TypeResolver.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\AbstractCacheFilter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\AccountStoreMappingCacheInvalidationFilter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\DefaultAsynchronousFilter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\DefaultAsynchronousFilterChain.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\DefaultSynchronousFilter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\DefaultSynchronousFilterChain.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\IAsynchronousFilter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\IAsynchronousFilterChain.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\ISynchronousFilter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\ISynchronousFilterChain.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\ProviderAccountResultFilter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\ReadCacheFilter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\WriteCacheFilter.Async.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\WriteCacheFilter.Sync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectory.Collections.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectory.CreationActions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectory.CreationActionsSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectory.Resources.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectory.ResourcesSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectoryCreationOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\IDirectorySync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Error\DefaultError.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Extensions\ConcurrentDictionaryExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Extensions\HttpExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\DefaultGroup.Collections.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\DefaultGroup.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\DefaultGroup.Membership.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\DefaultGroup.MembershipSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\DefaultGroup.Resources.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\DefaultGroup.ResourcesSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\DefaultGroupCreationOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\DefaultGroupMembership.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\GroupCreationActionsShared.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\IGroupCreationActionsInternal.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\IGroupCreationActionsSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\IGroupMembershipSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\IGroupSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Group\IInternalGroupMembership.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\DefaultHttpClientFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\DefaultHttpClientLoader.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\DefaultHttpRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\DefaultHttpRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\DefaultRequestExecutor.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\FormUrlEncoder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\IRequestExecutor.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Authentication\BasicRequestAuthenticator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Authentication\DefaultRequestAuthenticatorFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Authentication\IRequestAuthenticator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Authentication\IRequestAuthenticatorFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Authentication\RequestAuthenticationException.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Authentication\SAuthc1RequestAuthenticator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Support\DefaultBackoffStrategy.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Support\IBackoffStrategy.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Support\ThrottlingBackoffStrategy.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdentityMap\IdentityMapOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdentityMap\IdentityMapOptionsResolver.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdentityMap\IIdentityMap{TItem}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdentityMap\MemoryCacheIdentityMap{TItem}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\DefaultAccountResult.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\DefaultIdSiteAsyncCallbackHandler.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\DefaultIdSiteJtiProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\DefaultIdSiteSyncCallbackHandler.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\DefaultIdSiteUrlBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\DefaultNonce.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\DefaultNonceStore.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\IAccountResultSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\IdSiteClaims.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\IIdSiteJtiProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\InlineIdSiteAsyncResultListener.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\InlineIdSiteSyncResultListener.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\DefaultJwt.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\DefaultJwtBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\DefaultJwtClaims.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\DefaultJwtClaimsBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\DefaultJwtParser.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\JwtHeaderParameters.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\JwtLifetimeValidator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\Jwts.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\JwtSignatureValidator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\JwtSigner.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\JwtValidator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\CollectionResourceQueryable{TResult}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\CollectionResourceQueryProvider{TResult}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Executor\CollectionResourceExecutor{TResult}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Executor\IAsyncExecutor{TResult}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Executor\NullExecutor{TResult}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\CompilingExpressionVisitor.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\DatetimeAttributeTermWorkingModel.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\DiscoveringExpressionVisitor.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\OrderByDirection.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\QueryModelCompiler.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\QueryModelParser.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\QueryModelValidator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\ResultOperator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\WhereComparison.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\WhereExpressionVisitor.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\ExpandExpression.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\FilterExpression.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\OrderByExpression.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\ParsedExpression.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\SkipExpression.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\TakeExpression.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\WhereMemberExpression.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\ResultOperators\AnyResultOperator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\ResultOperators\CountResultOperator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\ResultOperators\FirstResultOperator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\ResultOperators\LongCountResultOperator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\ResultOperators\ResultOperatorExpression.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\ResultOperators\SingleResultOperator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\NameTranslators\AbstractNameTranslator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\NameTranslators\DateTimeFieldNameTranslator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\NameTranslators\FieldNameTranslator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\NameTranslators\MethodNameTranslator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Transformers\AbstractExpressionTransformer.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Transformers\IExpressionTransformer.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Transformers\PartialEvaluationTransformer.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Transformers\VbConvertInvocationTransformer.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Transformers\VbStringCompareTransformer.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\QueryModel\CollectionResourceQueryModel.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\QueryModel\DatetimeShorthandModel.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\QueryModel\ExecutionPlanModel.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\QueryModel\ExpandTerm.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\QueryModel\OrderByTerm.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\QueryModel\WhereTerm.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Sync\SyncCollectionEnumeratorAdapter{TResult}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Sync\SyncScalarExecutor{TItem}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Logging\NullLogger.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\AbstractGrantAuthenticator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultAccessToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultGrantAuthenticationToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultIdSiteTokenAuthenticationAttempt.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultIdSiteTokenAuthenticationRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultIdSiteTokenAuthenticationRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultIdSiteTokenAuthenticator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultJwtAuthenticationRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultJwtAuthenticationRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultJwtAuthenticator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultOauthPolicy.Async.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultOauthPolicy.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultOauthPolicy.Sync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultPasswordGrantAuthenticationAttempt.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultPasswordGrantAuthenticator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultPasswordGrantRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultPasswordGrantRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultRefreshGrantAuthenticationAttempt.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultRefreshGrantAuthenticator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultRefreshGrantRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultRefreshGrantRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultRefreshToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IAccessTokenSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IGrantAuthenticationToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IIdSiteTokenAuthenticationAttempt.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IIdSiteTokenAuthenticatorSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IJwtAuthenticatorSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IOauthAuthenticatorSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IOauthGrantAuthenticationResultSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IOauthPolicySync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IPasswordGrantAuthenticationAttempt.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IPasswordGrantAuthenticatorSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IRefreshGrantAuthenticationAttempt.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IRefreshGrantAuthenticatorSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IRefreshTokenSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Organization\DefaultOrganization.AccountStore.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Organization\DefaultOrganization.AccountStoreSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Organization\DefaultOrganization.Collections.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Organization\DefaultOrganization.CreationActions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Organization\DefaultOrganization.CreationActionsSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Organization\DefaultOrganization.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Organization\DefaultOrganizationAccountStoreMapping.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Organization\DefaultOrganizationCreationOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Organization\IOrganizationAccountStoreMappingSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Organization\IOrganizationSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\AbstractCreateProviderRequestBuilder{T}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\AbstractProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\AbstractProviderAccountRequestBuilder{T}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\AbstractProviderData.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultCreateProviderRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultFacebookAccountRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultFacebookCreateProviderRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultFacebookProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultFacebookProviderData.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultFacebookRequestFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultGithubAccountRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultGithubCreateProviderRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultGithubProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultGithubProviderData.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultGithubRequestFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultGoogleAccountRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultGoogleCreateProviderRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultGoogleProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultGoogleProviderData.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultGoogleRequestFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultLinkedInAccountRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultLinkedInCreateProviderRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultLinkedInProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultLinkedInProviderData.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultLinkedInRequestFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultProviderAccountAccess.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultProviderAccountRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultProviderAccountResult.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultProviderData.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultProviderFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\IProviderAccountAccess.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\ProviderAccountResolver.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\ProviderType.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\ProviderTypeConverter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\AbstractExtendableInstanceResource.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\AbstractInstanceResource.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\AbstractResource.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\CollectionResponsePage{T}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\DefaultRetrievalOptions{T}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\ExpandedProperty.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\IDeletableSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\IEmbeddedProperty.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\IExtendableSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\IHasAsyncDataStoreInternal.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\ILinkable.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\INotifiable.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\ISaveableSync{T}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\ISaveableWithOptionsSync{T}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\LinkProperty.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\ResourceData.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\DefaultSamlAccountResult.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\DefaultSamlAsyncCallbackHandler.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\DefaultSamlIdpUrlBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\DefaultSamlPolicy.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\DefaultSamlServiceProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\DefaultSamlSyncCallbackHandler.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\DefaultSsoInitiationEndpoint.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\InlineSamlAsyncResultListener.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\InlineSamlSyncResultListener.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\ISamlAccountResultSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\ISamlPolicySync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\ISamlServiceProviderSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Saml\SamlClaims.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Serialization\DefaultSerializerFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Serialization\DefaultSerializerLoader.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Serialization\JsonSerializationProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Serialization\FieldConverters\AbstractFieldConverter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Serialization\FieldConverters\ExpandedPropertyConverter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Serialization\FieldConverters\FieldConverterList.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Serialization\FieldConverters\FieldConverterResult.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Serialization\FieldConverters\FuncFieldConverter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Serialization\FieldConverters\LinkPropertyConverter.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Serialization\FieldConverters\StatusFieldConverters.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Tenant\DefaultTenant.Collections.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Tenant\DefaultTenant.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Tenant\DefaultTenant.TenantActions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Tenant\DefaultTenant.TenantActionsSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Tenant\IHasTenantSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Tenant\ITenantActionsSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Tenant\ITenantSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\AnonymousType.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\Base64.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\DefaultClock.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\DurationVisitor.Api.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\DurationVisitor.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\HmacGenerator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\IClock.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\IFile.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\Iso8601.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\Iso8601Duration.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\Properties.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\TypeLoader.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\UnixDate.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Linq\RetrievalOptionsExpandExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Oauth\OauthRequests.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Mono\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Mono\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Mono\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Release\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Release\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Release\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Organization\OrganizationCreationOptionsBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Properties\AssemblyInfo.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Provider\ClientProviderExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Serialization\SerializeFactoryAutodetectExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Serialization\Serializers.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncAccessTokenExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncAccountCreationActionsExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncAccountExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncAccountResultExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncAccountStoreContainerExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncAccountStoreExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncAccountStoreMappingExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncApiKeyExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncApplicationExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncAuthenticationResultExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncClientExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncDataStoreExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncDirectoryExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncEmailVerificationRequestExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncExtendableExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncGroupCreationExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncGroupExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncGroupMembershipExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncHasTenantExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncIdSiteTokenAuthenticatorExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncJwtAuthenticatorExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncOauthGrantAuthenticationResult.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncOauthPolicyExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncOrganizationAccountStoreMappingExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncPasswordGrantAuthenticatorExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncPasswordResetTokenExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncQueryableExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncRefreshGrantAuthenticatorExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncRefreshTokenExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncResourceExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncSamlAccountResultExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncSamlPolicyExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncSamlServiceProviderExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncTenantActionsExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Stormpath.SDK.Abstractions\Stormpath.SDK.Abstractions.csproj">
+      <Project>{9966941a-d894-4adf-9b4b-810bbd2d5364}</Project>
+      <Name>Stormpath.SDK.Abstractions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <!-- #endAutogen -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

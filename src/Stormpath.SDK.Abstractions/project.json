@@ -1,0 +1,51 @@
+{
+  "authors": [ "Nate Barbettini", "Contributors" ],
+  "copyright": "(c) 2016 Stormpath, Inc.",
+  "dependencies": {
+    "Stormpath.Configuration.Abstractions": "0.1.0-beta5"
+  },
+  "description": "Abstractions for the Stormpath .NET SDK",
+  "frameworks": {
+    "dotnet5.2": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-beta-23516",
+        "System.Collections": "4.0.11-beta-23516",
+        "System.Collections.Concurrent": "4.0.11-beta-23516",
+        "System.Linq": "4.0.1-beta-23516",
+        "System.Linq.Queryable": "4.0.1-beta-23516",
+        "System.Net.Primitives": "4.0.11-beta-23516",
+        "System.Reflection.Extensions": "4.0.1-beta-23516",
+        "System.Runtime": "4.0.21-beta-23516",
+        "System.Runtime.Extensions": "4.0.11-beta-23516",
+        "System.Threading": "4.0.11-beta-23516"
+      }
+    },
+    "net451": { },
+    "netcore50": {
+      "dependencies": {
+        "System.Collections.Concurrent": "4.0.11-beta-23516",
+        "System.Linq": "4.0.1-beta-23516",
+        "System.Linq.Expressions": "4.0.11-beta-23516",
+        "System.Linq.Queryable": "4.0.1-beta-23516",
+        "System.Net.Primitives": "4.0.11-beta-23516",
+        "System.Reflection": "4.1.0-beta-23516",
+        "System.Runtime": "4.0.21-beta-23516",
+        "System.Threading": "4.0.11-beta-23516"
+      }
+    }
+  },
+  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+  "language": "en-US",
+  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+  "owners": [ "Stormpath, Inc." ],
+  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+  "repository": {
+    "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+  },
+  "title": "Stormpath.SDK.Abstractions",
+  "tooling": {
+    "defaultNamespace": "Stormpath.SDK"
+  },
+  "version": "0.6.0-beta1",
+  "xmlDoc": true
+}

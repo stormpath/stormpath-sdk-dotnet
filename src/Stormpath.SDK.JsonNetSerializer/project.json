@@ -1,0 +1,33 @@
+{
+  "authors": [ "Nate Barbettini" ],
+  "copyright": "(c) 2016 Stormpath, Inc.",
+  "dependencies": {
+    "Newtonsoft.Json": "7.0.1",
+    "Stormpath.SDK.Abstractions": "0.6.0-beta1"
+  },
+  "description": "JSON.NET-based serializer plugin for the Stormpath .NET SDK",
+  "frameworks": {
+    "dotnet5.4": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-beta-23516",
+        "System.Collections": "4.0.11-beta-23516",
+        "System.Linq": "4.0.1-beta-23516"
+      }
+    },
+    "net451": { }
+  },
+  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+  "language": "en-US",
+  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+  "owners": [ "Stormpath, Inc." ],
+  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+  "repository": {
+    "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+  },
+  "tags": [ "Stormpath JSON Serializer" ],
+  "tooling": {
+    "defaultNamespace": "Stormpath.SDK.Extensions.Serialization"
+  },
+  "version": "0.6.0-beta1",
+  "xmlDoc": true
+}

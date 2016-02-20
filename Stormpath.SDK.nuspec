@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Stormpath.SDK</id>
-        <version>0.5.1</version>
+        <version>0.6.0-beta1</version>
         <authors>Nate Barbettini</authors>
         <owners>Stormpath, Inc.</owners>
         <licenseUrl>https://github.com/stormpath/stormpath-sdk-csharp/blob/master/LICENSE</licenseUrl>
@@ -10,13 +10,13 @@
         <iconUrl>https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/develop/icon.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>The official Stormpath SDK for .NET</description>
-        <copyright>(c) 2015 Stormpath, Inc.</copyright>
+        <copyright>(c) 2016 Stormpath, Inc.</copyright>
         <language>en-US</language>
         <tags>Stormpath API Authentication Authorization REST</tags>
         <dependencies>
-            <dependency id="Stormpath.SDK.Core" version="0.5.1" />
-            <dependency id="Stormpath.SDK.RestSharpClient" version="0.5.1" />
-            <dependency id="Stormpath.SDK.JsonNetSerializer" version="0.5.0" />
+            <dependency id="Stormpath.SDK.Core" version="0.6.0-beta1" />
+            <dependency id="Stormpath.SDK.RestSharpClient" version="0.6.0-beta1" />
+            <dependency id="Stormpath.SDK.JsonNetSerializer" version="0.6.0-beta1" />
         </dependencies>
     </metadata>
     <files />

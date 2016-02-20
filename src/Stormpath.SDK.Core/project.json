@@ -1,0 +1,60 @@
+{
+  "authors": [ "Nate Barbettini", "Contributors" ],
+  "copyright": "(c) 2016 Stormpath, Inc.",
+  "dependencies": {
+    "AsyncUsageAnalyzers": "1.0.0-alpha003",
+    "EWSoftware.SHFB": "2015.10.10.0",
+    "EWSoftware.SHFB.NETFramework": "4.6",
+    "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
+    "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
+    "Polyglot": "1.0.0-beta1",
+    "StyleCop.Analyzers": "1.0.0",
+    "Stormpath.SDK.Abstractions": "0.6.0-beta1",
+    "Stormpath.Configuration": "0.1.0-beta5"
+  },
+  "description": "The official Stormpath SDK for .NET. Don't install this package directly; install the Stormpath.SDK package unless you are bringing your own JSON serializer and HTTP client plugins.",
+  "frameworks": {
+    "net451": {
+      "frameworkAssemblies": {
+        "System.Threading": "4.0.0.0"
+      }
+    },
+    "dotnet5.4": {
+      "dependencies": {
+        "System.Collections": "4.0.11-beta-23516",
+        "System.Collections.Concurrent": "4.0.11-beta-23516",
+        "System.Linq": "4.0.1-beta-23516",
+        "System.Linq.Expressions": "4.0.11-beta-23516",
+        "System.Linq.Queryable": "4.0.1-beta-23516",
+        "System.Threading": "4.0.11-beta-23516",
+        "System.Net.Primitives": "4.0.11-beta-23516",
+        "System.Text.RegularExpressions": "4.0.11-beta-23516",
+        "System.Security.Cryptography.Primitives": "4.0.0-beta-23516",
+        "System.Security.Cryptography.Algorithms": "4.0.0-beta-23516",
+        "System.Runtime.Loader": "4.0.0-beta-23516",
+        "System.Reflection": "4.1.0-beta-23516"
+      }
+    },
+    "netcore50": {
+      "dependencies": {
+        "System.Security.Cryptography.Primitives": "4.0.0-beta-23516",
+        "System.Security.Cryptography.Algorithms": "4.0.0-beta-23516"
+      }
+    }
+  },
+  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+  "language": "en-US",
+  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+  "owners": [ "Stormpath, Inc." ],
+  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+  "repository": {
+    "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+  },
+  "tags": [ "Stormpath API Authentication Authorization REST" ],
+  "title": "Stormpath.SDK.Core",
+  "tooling": {
+    "defaultNamespace": "Stormpath.SDK"
+  },
+  "version": "0.6.0-beta1",
+  "xmlDoc": true
+}
