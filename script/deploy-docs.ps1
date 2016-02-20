@@ -2,13 +2,16 @@ $built = $true
 
 if ($env:build_docs)
 {
+	Write-Host "build_docs set, building documentation..."
+
 	Try
 	{
-		& .\build-docs.ps1
+		& "$($PSScriptRoot)\build-docs.ps1"
 		$built = ($LASTEXITCODE -eq 0)
 	}
 	Catch
 	{
+		Write-Host $_
 		Write-Host "Documentation failed to build."
 		$built = $false
 	}

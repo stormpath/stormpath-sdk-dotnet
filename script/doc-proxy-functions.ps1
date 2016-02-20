@@ -28,6 +28,8 @@ Function Generate-Documentation-Proxy
 
     $generatedOutput = $false
 
+    Write-Output ("Generating proxy {0} for project folder {1}" -f $csproj, $sourceDirectory)
+
     try
     {
         $savedLocation = (Get-Location)
@@ -99,6 +101,8 @@ Function Generate-AssemblyInfo
       [Parameter(Mandatory = $true)]
       [string]$projectJsonFile
   )
+
+  Write-Host ("Patching {0} with data from {1}" -f $assemblyInfoFile, $projectJsonFile)
 
   # Get info from project.json
   $json = Get-Content $projectJsonFile -Raw -ErrorAction Stop | ConvertFrom-Json
