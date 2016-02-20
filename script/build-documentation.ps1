@@ -1,5 +1,7 @@
 $exitCode = 0
 
+$root = (Get-Item $PSScriptRoot).Parent.FullName
+
 Write-Host "Building proxy solution..."
 & msbuild "$($root)\doc\proxy\Stormpath.SDK.sln" /verbosity:quiet /nologo
 $exitCode = $exitCode + $LASTEXITCODE
