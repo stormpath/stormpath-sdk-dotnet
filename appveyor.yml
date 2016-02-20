@@ -17,7 +17,7 @@ install:
     Set-Content c:\users\appveyor\.ssh\id_rsa $fileContent
 
     # Install DNX
-    
+
     dnvm install 1.0.0-rc1-update1 -arch x86
 cache: C:\Users\appveyor\.dnx\packages
 before_build:
@@ -26,6 +26,6 @@ build:
   project: Stormpath.SDK.sln
   verbosity: minimal
 after_build:
-- ps: .\scripts\deploy-docs.ps1
+- ps: .\script\deploy-docs.ps1
 test_script:
-- ps: .\scripts\unit-test.ps1
+- ps: .\script\unit-test.ps1
