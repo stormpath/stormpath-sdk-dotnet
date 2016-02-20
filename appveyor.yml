@@ -17,6 +17,7 @@ install:
     Set-Content c:\users\appveyor\.ssh\id_rsa $fileContent
 
     # Install DNX
+    
     dnvm install 1.0.0-rc1-update1 -arch x86
 cache: C:\Users\appveyor\.dnx\packages
 before_build:
