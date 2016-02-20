@@ -1,32 +1,3 @@
-$built = $true
-
-if (!$env:build_docs)
-{
-	Write-Host "build_docs not set, skipping doc build."
-}
-else
-{
-	Write-Host "build_docs set, building documentation..."
-
-	Try
-	{
-		& "$($PSScriptRoot)\build-docs.ps1"
-		$built = ($LASTEXITCODE -eq 0)
-	}
-	Catch
-	{
-		Write-Host $_
-		Write-Host "Documentation failed to build."
-		$built = $false
-	}
-}
-
-if ($built -ne $true)
-{
-	Write-Host "Documentation not built; skipping any remaining documentation deploy steps."
-	break
-}
-
 $deploy_docs = $env:deploy_docs
 $latestTag = git tag | tail -n 1
 if (!$deploy_docs) {
@@ -42,7 +13,7 @@ if (!$deploy_docs) {
 	}
 }
 
-if ($built -and $deploy_docs) {
+if ($deploy_docs) {
 	Write-Host "Deploying documentation!"
 
 	Write-Host "Cloning stormpath/stormpath.github.io"
