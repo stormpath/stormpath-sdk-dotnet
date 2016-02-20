@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Impl.Organization
     internal interface IOrganizationAccountStoreMappingSync : IAccountStoreMappingSync<IOrganizationAccountStoreMapping>
     {
         /// <summary>
-        /// Synchronous counterpart to <see cref="IOrganizationAccountStoreMapping.GetOrganizationAsync(CancellationToken)"/>.
+        /// Synchronous counterpart to <see cref="IOrganizationAccountStoreMapping.GetOrganizationAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <returns>The mapping's <see cref="IOrganization">Organization</see>.</returns>
         IOrganization GetOrganization();

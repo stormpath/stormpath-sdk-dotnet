@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Serialization
         /// Deserializes a JSON string to a property dictionary.
         /// </summary>
         /// <param name="json">The JSON string to deserialize.</param>
-        /// <returns>A tree of name-value pairs stored in an <see cref="IDictionary{TKey, TValue}"/>.</returns>
+        /// <returns>A tree of name-value pairs stored in an <see cref="System.Collections.Generic.IDictionary{TKey, TValue}"/>.</returns>
         Map Deserialize(string json);
     }
 }

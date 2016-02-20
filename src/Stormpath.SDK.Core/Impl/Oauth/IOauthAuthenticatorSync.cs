@@ -14,19 +14,18 @@
 // limitations under the License.
 // </copyright>
 
-
 namespace Stormpath.SDK.Impl.Oauth
 {
     /// <summary>
     /// Represents the synchronous actions that correspond to the default asynchronous actions
-    /// available on <see cref="IOauthAuthenticator{TRequest, TResult}"/>.
+    /// available on <see cref="SDK.Oauth.IOauthAuthenticator{TRequest, TResult}"/>.
     /// </summary>
     /// <typeparam name="TRequest">The request kind that the authenticator will accept.</typeparam>
     /// <typeparam name="TResult">The response kind that the authenticator will return.</typeparam>
     internal interface IOauthAuthenticatorSync<TRequest, TResult>
     {
         /// <summary>
-        /// Synchronous counterpart to <see cref="IOauthAuthenticator{TRequest, TResult}.AuthenticateAsync(TRequest, System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <see cref="SDK.Oauth.IOauthAuthenticator{TRequest, TResult}.AuthenticateAsync(TRequest, System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <param name="authenticationRequest">The Authentication Request this authenticator will attempt.</param>
         /// <returns>An Authentication Result representing the successful authentication.</returns>

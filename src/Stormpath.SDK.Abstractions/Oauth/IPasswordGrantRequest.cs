@@ -36,10 +36,10 @@ namespace Stormpath.SDK.Oauth
         string Password { get; }
 
         /// <summary>
-        /// Gets the <see cref="IAccountStore">Account Store</see> <c>href</c> used for this request, if any.
+        /// Gets the <see cref="AccountStore.IAccountStore">Account Store</see> <c>href</c> used for this request, if any.
         /// </summary>
         /// <value>
-        /// The <see cref="IAccountStore">Account Store</see> <c>href</c> used for this request,
+        /// The <see cref="AccountStore.IAccountStore">Account Store</see> <c>href</c> used for this request,
         /// or <see langword="null"/> if no Account Store is set.
         /// </value>
         string AccountStoreHref { get; }

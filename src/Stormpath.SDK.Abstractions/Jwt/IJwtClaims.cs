@@ -81,9 +81,9 @@ namespace Stormpath.SDK.Jwt
         object GetClaim(string claimName);
 
         /// <summary>
-        /// Builds a <see cref="IDictionary{TKey, TValue}"/> from the current JWT fields.
+        /// Builds a <see cref="System.Collections.Generic.IDictionary{TKey, TValue}"/> from the current JWT fields.
         /// </summary>
-        /// <returns>A new <see cref="IDictionary{TKey, TValue}"/> instance.</returns>
+        /// <returns>A new <see cref="System.Collections.Generic.IDictionary{TKey, TValue}"/> instance.</returns>
         Map ToDictionary();
     }
 }
