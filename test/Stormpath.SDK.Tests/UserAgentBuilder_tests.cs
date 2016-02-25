@@ -32,9 +32,9 @@ namespace Stormpath.SDK.Tests
         }
 
         [Fact]
-        public void UserAgent_is_known()
+        public void Generates_DNX_user_agent()
         {
-            var userAgent = new DefaultUserAgentBuilder(
+            var userAgent = new DnxUserAgentBuilder(
                     PlatformServices.Default.Runtime,
                     PlatformServices.Default.Application,
                     frameworkUserAgent: string.Empty,

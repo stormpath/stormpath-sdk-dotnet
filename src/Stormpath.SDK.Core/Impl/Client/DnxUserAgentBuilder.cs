@@ -14,12 +14,13 @@
 // limitations under the License.
 // </copyright>
 
+#if !NET451
 using System;
 using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    internal class DefaultUserAgentBuilder : IUserAgentBuilder
+    internal class DnxUserAgentBuilder : IUserAgentBuilder
     {
         private readonly IRuntimeEnvironment runtime;
         private readonly IApplicationEnvironment app;
@@ -29,7 +30,7 @@ namespace Stormpath.SDK.Impl.Client
         // Lazy ensures this only runs once and is cached.
         private readonly Lazy<string> userAgentValue;
 
-        public DefaultUserAgentBuilder(IRuntimeEnvironment runtimeEnvironment, IApplicationEnvironment appEnvironment, string frameworkUserAgent, string language)
+        public DnxUserAgentBuilder(IRuntimeEnvironment runtimeEnvironment, IApplicationEnvironment appEnvironment, string frameworkUserAgent, string language)
         {
             this.runtime = runtimeEnvironment;
             this.app = appEnvironment;
@@ -68,3 +69,4 @@ namespace Stormpath.SDK.Impl.Client
         }
     }
 }
+#endif
