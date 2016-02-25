@@ -34,7 +34,7 @@ namespace Stormpath.SDK.AccountStore
         /// <summary>
         /// Gets a queryable list of all Account Store Mappings accessible to the resource.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccountStoreMapping}"/> that may be used to asynchronously list or search <see cref="IAccountStoreMapping{T}">AccountStoreMappings</see>.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IAccountStoreMapping}"/> that may be used to list or search <see cref="IAccountStoreMapping{T}">AccountStoreMappings</see>.</returns>
         IAsyncQueryable<TMapping> GetAccountStoreMappings();
 
         /// <summary>

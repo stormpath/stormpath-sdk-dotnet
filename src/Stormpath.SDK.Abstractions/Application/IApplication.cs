@@ -388,7 +388,7 @@ namespace Stormpath.SDK.Application
         /// <summary>
         /// Gets a queryable list of all Accounts in this Application.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search <see cref="Account.IAccount">Accounts</see>.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to list or search <see cref="Account.IAccount">Accounts</see>.</returns>
         /// <example>
         /// var allAccounts = await myApp.GetAccounts().ToListAsync();
         /// </example>
@@ -399,7 +399,7 @@ namespace Stormpath.SDK.Application
         /// It will not only return any group associated directly as an <see cref="IAccountStore">Account Store</see>
         /// but also every group that exists inside every directory associated as an Account Store.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search <see cref="IGroup">Groups</see>.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to list or search <see cref="IGroup">Groups</see>.</returns>
         /// <example>
         /// var allGroups = await myApp.GetGroups().ToListAsync();
         /// </example>

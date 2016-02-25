@@ -103,7 +103,7 @@ namespace Stormpath.SDK.Directory
         /// <summary>
         /// Gets a queryable list of all <see cref="IGroup">Groups</see> in this Directory.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search Groups.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to list or search Groups.</returns>
         /// <example>
         /// <code>
         /// var directoryGroups = await directory.GetGroups().ToListAsync();
@@ -114,7 +114,7 @@ namespace Stormpath.SDK.Directory
         /// <summary>
         /// Gets a queryable list of the <see cref="IApplication">Applications</see> the Directory is mapped to as an <see cref="IAccountStore">Account Store</see>.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to asynchronously list or search Applications.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to list or search Applications.</returns>
         /// <example>
         /// <code>
         /// var directoryApplications = await directory.GetApplications().ToListAsync();

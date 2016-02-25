@@ -29,7 +29,7 @@ namespace Stormpath.SDK.AccountStore
         /// <summary>
         /// Gets a queryable list of all accounts in the Account Store.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to asynchronously list or search accounts.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IAccount}"/> that may be used to list or search accounts.</returns>
         IAsyncQueryable<IAccount> GetAccounts();
     }
 }

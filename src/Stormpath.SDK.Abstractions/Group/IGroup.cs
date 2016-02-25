@@ -138,13 +138,13 @@ namespace Stormpath.SDK.Group
         /// <summary>
         /// Gets a queryable list of all of the memberships in which this group participates.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to asynchronously list or search memberships.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to list or search memberships.</returns>
         IAsyncQueryable<IGroupMembership> GetAccountMemberships();
 
         /// <summary>
         /// Gets a queryable list of the <see cref="IApplication">Applications</see> the Group is mapped to as an <see cref="IAccountStore">Account Store</see>.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to asynchronously list or search Applications.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to list or search Applications.</returns>
         /// <example>
         /// <code>
         /// var groupApplications = await group.GetApplications().ToListAsync();

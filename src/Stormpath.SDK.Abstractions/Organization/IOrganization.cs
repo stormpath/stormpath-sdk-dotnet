@@ -109,7 +109,7 @@ namespace Stormpath.SDK.Organization
         /// It will not only return any group associated directly as an <see cref="IAccountStore">Account Store</see>
         /// but also every Group that exists inside every Directory associated as an Account Store.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search <see cref="IGroup">Groups</see>.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to list or search <see cref="IGroup">Groups</see>.</returns>
         /// <example>
         /// var allOrganizationGroups = await myOrg.GetGroups().ToListAsync();
         /// </example>
