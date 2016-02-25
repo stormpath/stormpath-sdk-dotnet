@@ -44,22 +44,20 @@ namespace Stormpath.SDK.DocExamples
         public void InstanceClientOptions()
         {
             #region InstanceClientOptions
-            // SetConfiguration takes an instance of StormpathConfiguration,
-            // or an anonymous type with keys matching the property names of StormpathConfiguration.
+            // SetConfiguration takes an instance of StormpathConfiguration. Null values fall back to the defaults.
             // These options can also be specified in a stormpath.json or stormpath.yaml file.
-            // See https://github.com/stormpath/stormpath-sdk-spec/blob/master/specifications/config.md
+            // See: https://github.com/stormpath/stormpath-sdk-spec/blob/master/specifications/config.md
             var client = clientBuilder
-                .SetConfiguration(new StormpathConfiguration()
-                {
-                    Client = new ClientConfiguration()
-                    {
-                        ApiKey = new ClientApiKeyConfiguration()
-                        {
-                            File = "my_apiKey.properties"
-                        },
-                        AuthenticationScheme = ClientAuthenticationScheme.Basic
-                    }
-                })
+                .SetConfiguration(new StormpathConfiguration(
+                    client: new ClientConfiguration(
+                        apiKey: new ClientApiKeyConfiguration(file: "my_apiKey.properties", id: null, secret: null),
+                        cacheManager: null,
+                        baseUrl: null,
+                        connectionTimeout: null,
+                        authenticationScheme: ClientAuthenticationScheme.Basic,
+                        proxy: null),
+                    application: null,
+                    web: null))
                 .SetHttpClient(HttpClients.Create().RestSharpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .Build();
@@ -69,10 +67,10 @@ namespace Stormpath.SDK.DocExamples
         public void AnonTypeClientOptions()
         {
             #region AnonTypeClientOptions
-            // SetConfiguration takes an instance of StormpathConfiguration,
-            // or an anonymous type with keys matching the property names of StormpathConfiguration.
+            // Passing an anonymous type with keys matching the property names of StormpathConfiguration.
+            // Omitted values fall back to the defaults.
             // These options can also be specified in a stormpath.json or stormpath.yaml file.
-            // See https://github.com/stormpath/stormpath-sdk-spec/blob/master/specifications/config.md
+            // See: https://github.com/stormpath/stormpath-sdk-spec/blob/master/specifications/config.md
             var client = clientBuilder
                 .SetConfiguration(new
                 {

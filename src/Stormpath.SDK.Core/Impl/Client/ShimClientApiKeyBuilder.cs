@@ -23,8 +23,11 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed class ShimClientApiKeyBuilder : IClientApiKeyBuilder
     {
-        private readonly ClientApiKeyConfiguration configuration = new ClientApiKeyConfiguration();
-        private readonly ShimAdditionalClientApiKeySettings additionalSettings = new ShimAdditionalClientApiKeySettings(); 
+        private readonly ShimAdditionalClientApiKeySettings additionalSettings = new ShimAdditionalClientApiKeySettings();
+
+        private string file;
+        private string id;
+        private string secret;
 
         public ShimClientApiKeyBuilder(ILogger logger)
         {
@@ -32,13 +35,13 @@ namespace Stormpath.SDK.Impl.Client
 
         IClientApiKeyBuilder IClientApiKeyBuilder.SetFileLocation(string path)
         {
-            this.configuration.File = path;
+            this.file = path;
             return this;
         }
 
         IClientApiKeyBuilder IClientApiKeyBuilder.SetId(string id)
         {
-            this.configuration.Id = id;
+            this.id = id;
             return this;
         }
 
@@ -56,7 +59,7 @@ namespace Stormpath.SDK.Impl.Client
 
         IClientApiKeyBuilder IClientApiKeyBuilder.SetSecret(string secret)
         {
-            this.configuration.Secret = secret;
+            this.secret = secret;
             return this;
         }
 
@@ -68,7 +71,9 @@ namespace Stormpath.SDK.Impl.Client
 
         IClientApiKey IClientApiKeyBuilder.Build()
         {
-            return new ShimClientApiKey(configuration, additionalSettings);
+            return new ShimClientApiKey(
+                new ClientApiKeyConfiguration(this.file, this.id, this.secret),
+                additionalSettings);
         }
     }
 }

@@ -45,42 +45,52 @@ namespace Stormpath.SDK.Impl.Client
         private ICacheProvider cacheProvider;
         private ILogger logger;
 
-        private StormpathConfiguration userConfiguration;
-        private object userConfigurationAnonymous = null;
+        // Set if the user supplies a configuration to use
+        private StormpathConfiguration useConfiguration = null;
+        private object useConfigurationAnonymous = null;
+
+        // These are for backwards compatibility and will be removed at 1.0
+        [Obsolete]
+        private string useApiKeyId = Default.Configuration.Client.ApiKey.Id;
+        private string useApiKeySecret = Default.Configuration.Client.ApiKey.Secret;
+        private string useApiKeyFileName = Default.Configuration.Client.ApiKey.File;
+        private ClientAuthenticationScheme useAuthenticationScheme = Default.Configuration.Client.AuthenticationScheme.Value;
+        private string useBaseUrl = Default.Configuration.Client.BaseUrl;
+        private int useConnectionTimeout = Default.Configuration.Client.ConnectionTimeout.Value;
+        private ClientProxyConfiguration useProxy = Default.Configuration.Client.Proxy;
 
         public DefaultClientBuilder(IUserAgentBuilder userAgentBuilder)
         {
             this.userAgentBuilder = userAgentBuilder;
-            this.userConfiguration = new StormpathConfiguration();
         }
 
         IClientBuilder IClientBuilder.SetApiKeyId(string id)
         {
-            this.userConfiguration.Client.ApiKey.Id = id;
+            this.useApiKeyId = id;
             return this;
         }
 
         IClientBuilder IClientBuilder.SetApiKeySecret(string secret)
         {
-            this.userConfiguration.Client.ApiKey.Secret = secret;
+            this.useApiKeySecret = secret;
             return this;
         }
 
         IClientBuilder IClientBuilder.SetApiKeyFilePath(string path)
         {
-            this.userConfiguration.Client.ApiKey.File = path;
+            this.useApiKeyFileName = path;
             return this;
         }
 
         IClientBuilder IClientBuilder.SetConfiguration(StormpathConfiguration configuration)
         {
-            this.userConfiguration = configuration;
+            this.useConfiguration = configuration;
             return this;
         }
 
         IClientBuilder IClientBuilder.SetConfiguration(object configuration)
         {
-            this.userConfigurationAnonymous = configuration;
+            this.useConfigurationAnonymous = configuration;
             return this;
         }
 
@@ -103,8 +113,8 @@ namespace Stormpath.SDK.Impl.Client
                 return this;
             }
 
-            this.userConfiguration.Client.ApiKey.Id = apiKey.GetId();
-            this.userConfiguration.Client.ApiKey.Secret = apiKey.GetSecret();
+            this.useApiKeyId = apiKey.GetId();
+            this.useApiKeySecret = apiKey.GetSecret();
 
             return this;
         }
@@ -132,9 +142,9 @@ namespace Stormpath.SDK.Impl.Client
 
             if (string.IsNullOrEmpty(contents))
             {
-                this.userConfiguration.Client.ApiKey.Id = shim.Configuration.Id;
-                this.userConfiguration.Client.ApiKey.Secret = shim.Configuration.Secret;
-                this.userConfiguration.Client.ApiKey.File = shim.Configuration.File;
+                this.useApiKeyId = shim.Configuration.Id;
+                this.useApiKeySecret = shim.Configuration.Secret;
+                this.useApiKeyFileName = shim.Configuration.File;
                 return; // done
             }
 
@@ -143,20 +153,20 @@ namespace Stormpath.SDK.Impl.Client
 
             var properties = new Properties(contents);
 
-            this.userConfiguration.Client.ApiKey.Id = properties.GetProperty(idPropertyName);
-            this.userConfiguration.Client.ApiKey.Secret = properties.GetProperty(secretPropertyName);
-            this.userConfiguration.Client.ApiKey.File = string.Empty;
+            this.useApiKeyId = properties.GetProperty(idPropertyName);
+            this.useApiKeySecret = properties.GetProperty(secretPropertyName);
+            this.useApiKeyFileName = string.Empty;
         }
 
         IClientBuilder IClientBuilder.SetAuthenticationScheme(AuthenticationScheme scheme)
         {
             if (scheme == AuthenticationScheme.Basic)
             {
-                this.userConfiguration.Client.AuthenticationScheme = ClientAuthenticationScheme.Basic;
+                this.useAuthenticationScheme = ClientAuthenticationScheme.Basic;
             }
             else if (scheme == AuthenticationScheme.SAuthc1)
             {
-                this.userConfiguration.Client.AuthenticationScheme = ClientAuthenticationScheme.SAuthc1;
+                this.useAuthenticationScheme = ClientAuthenticationScheme.SAuthc1;
             }
             else
             {
@@ -168,7 +178,7 @@ namespace Stormpath.SDK.Impl.Client
 
         IClientBuilder IClientBuilder.SetAuthenticationScheme(ClientAuthenticationScheme scheme)
         {
-            this.userConfiguration.Client.AuthenticationScheme = scheme;
+            this.useAuthenticationScheme = scheme;
             return this;
         }
 
@@ -179,7 +189,7 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentNullException("Base URL cannot be empty.");
             }
 
-            this.userConfiguration.Client.BaseUrl = baseUrl;
+            this.useBaseUrl = baseUrl;
 
             return this;
         }
@@ -191,34 +201,37 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentOutOfRangeException("Timeout cannot be negative.");
             }
 
-            this.userConfiguration.Client.ConnectionTimeout = timeout;
+            this.useConnectionTimeout = timeout;
 
             return this;
         }
 
         IClientBuilder IClientBuilder.SetProxy(IWebProxy proxy)
         {
-            var exampleDestination = new Uri(this.userConfiguration.Client.BaseUrl.Nullable() ?? "https://api.stormpath.com/v1");
+            var exampleDestination = new Uri(Default.Configuration.Client.BaseUrl);
 
             var proxyUri = proxy.GetProxy(exampleDestination);
 
-            this.userConfiguration.Client.Proxy.Host = proxyUri.Host;
-            this.userConfiguration.Client.Proxy.Port = proxyUri.Port;
+            string host = proxyUri.Host;
+            int port = proxyUri.Port;
+            string username = null;
+            string password = null;
 
             var proxyCredentials = proxy.Credentials.GetCredential(exampleDestination, "Basic");
-
             if (proxyCredentials != null)
             {
-                this.userConfiguration.Client.Proxy.Username = proxyCredentials.UserName;
-                this.userConfiguration.Client.Proxy.Password = proxyCredentials.Password;
+                username = proxyCredentials.UserName;
+                username = proxyCredentials.Password;
             }
+
+            this.useProxy = new ClientProxyConfiguration(port, host, username, password);
 
             return this;
         }
 
         IClientBuilder IClientBuilder.SetProxy(ClientProxyConfiguration proxyConfiguration)
         {
-            this.userConfiguration.Client.Proxy = proxyConfiguration ?? new ClientProxyConfiguration();
+            this.useProxy = proxyConfiguration ?? Default.Configuration.Client.Proxy;
             return this;
         }
 
@@ -286,14 +299,32 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
+        [Obsolete]
+        private StormpathConfiguration CreateSuppliedConfiguration()
+        {
+            return new StormpathConfiguration(
+                new ClientConfiguration(
+                    apiKey: new ClientApiKeyConfiguration(this.useApiKeyFileName, this.useApiKeyId, this.useApiKeySecret),
+                    cacheManager: null,
+                    baseUrl: this.useBaseUrl,
+                    connectionTimeout: this.useConnectionTimeout,
+                    authenticationScheme: this.useAuthenticationScheme,
+                    proxy: this.useProxy),
+                null,
+                null);
+        }
+
         IClient IClientBuilder.Build()
         {
             var logger = this.logger ?? new NullLogger();
 
             // Construct and validate the Stormpath configuration
             // ConfigurationLoader will throw if an API Key and Secret cannot be found
-            var finalConfiguration = ConfigurationLoader.Load(
-                this.userConfigurationAnonymous ?? this.userConfiguration); // todo logger
+            var suppliedConfiguration = this.useConfiguration
+                ?? this.useConfigurationAnonymous
+                ?? CreateSuppliedConfiguration();
+
+            var finalConfiguration = ConfigurationLoader.Load(suppliedConfiguration, logger: logger);
 
             ThrowForInvalidConfiguration(finalConfiguration);
 
