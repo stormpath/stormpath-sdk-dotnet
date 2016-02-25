@@ -18,7 +18,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+
+#if !NET451
 using Microsoft.Extensions.PlatformAbstractions;
+#endif
 
 namespace Stormpath.SDK.Impl.Utility
 {
@@ -45,7 +48,7 @@ namespace Stormpath.SDK.Impl.Utility
                 var assembly = Assembly.LoadFile(path);
                 return assembly.GetType(this.fullyQualifiedTypeName);
             }
-#endif
+#else
             var referencedLibrary = PlatformServices.Default.LibraryManager.GetLibrary(libraryName);
             if (referencedLibrary != null)
             {
@@ -58,6 +61,7 @@ namespace Stormpath.SDK.Impl.Utility
                     return type;
                 }
             }
+#endif
 
             throw new Exception($"Could not find plugin '{libraryName}'.");
         }
