@@ -15,12 +15,17 @@
 // </copyright>
 
 using System;
-using Microsoft.Extensions.Caching.Memory;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Cache;
 using Map = System.Collections.Generic.IDictionary<string, object>;
+
+#if NET451
+using Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory;
+#else
+using Microsoft.Extensions.Caching.Memory;
+#endif
 
 namespace Stormpath.SDK.Impl.Cache
 {

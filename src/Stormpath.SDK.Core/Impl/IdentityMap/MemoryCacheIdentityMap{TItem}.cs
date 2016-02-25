@@ -16,8 +16,13 @@
 
 using System;
 using System.Threading;
-using Microsoft.Extensions.Caching.Memory;
 using Stormpath.SDK.Logging;
+
+#if NET451
+using Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory;
+#else
+using Microsoft.Extensions.Caching.Memory;
+#endif
 
 namespace Stormpath.SDK.Impl.IdentityMap
 {
