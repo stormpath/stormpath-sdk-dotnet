@@ -30,13 +30,6 @@ namespace Stormpath.SDK.Api
         /// </summary>
         /// <param name="logger">A logger instance for capturing trace output; pass <see langword="null"/> to disable logging.</param>
         /// <returns>A new <see cref="IClientApiKeyBuilder"/> instance.</returns>
-        /// <example>
-        /// <code>
-        /// IClientApiKey apiKey = ClientApiKeys.Builder()
-        ///     .SetFileLocation("path\\to\\apiKey.properties")
-        ///     .Build();
-        /// </code>
-        /// </example>
         [Obsolete("Use IClientBuilder")]
         public static IClientApiKeyBuilder Builder(ILogger logger = null)
         {

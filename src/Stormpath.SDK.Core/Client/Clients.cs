@@ -33,11 +33,7 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <returns>A new <see cref="IClientBuilder"/> instance.</returns>
         /// <example>
-        /// <code>
-        /// IClient client = Clients.Builder()
-        ///     .SetApiKey(apiKey)
-        ///     .Build();
-        /// </code>
+        /// <code source="ClientBuilderExamples.cs" region="DefaultClientOptions" lang="C#" title="Create a Client with the default options" />
         /// </example>
 #if NET451
         public static IClientBuilder Builder()

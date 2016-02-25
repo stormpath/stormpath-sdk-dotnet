@@ -45,16 +45,7 @@ namespace Stormpath.SDK.AccountStore
         /// <returns>The default <see cref="IAccountStore">Account Store</see> for new <see cref="Account.IAccount">Accounts</see>,
         /// or <see langword="null"/> if no default <see cref="IAccountStore">Account Store</see> has been designated.</returns>
         /// <example>
-        /// Getting and using the default account store:
-        /// <code>
-        /// var accountStore = await application.GetDefaultAccountStoreAsync();
-        /// var accountStoreAsDirectory = accountStore as IDirectory;
-        /// var accountStoreAsGroup = accountStore as IGroup;
-        /// if (accountStoreAsDirectory != null)
-        ///     // use as directory
-        /// else if (accountStoreAsGroup != null)
-        ///     // use as group
-        /// </code>
+        /// <code source="IAccountStoreContainerExamples.cs" region="GetDefaultAccountStore" lang="C#" title="Getting and using the default Account Store" />
         /// </example>
         Task<IAccountStore> GetDefaultAccountStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
 
@@ -84,16 +75,7 @@ namespace Stormpath.SDK.AccountStore
         /// <returns>The default <see cref="IAccountStore">Account Store</see> for new <see cref="Group.IGroup">Groups</see>,
         /// or <see langword="null"/> if no default <see cref="IAccountStore">Account Store</see> has been designated.</returns>
         /// <example>
-        /// Getting and using the default group store:
-        /// <code>
-        /// var groupStore = await application.GetDefaultGroupStoreAsync();
-        /// var groupStoreAsDirectory = groupStore as IDirectory;
-        /// var groupStoreAsGroup = groupStore as IGroup;
-        /// if (groupStoreAsDirectory != null)
-        ///     // use as directory
-        /// else if (groupStoreAsGroup != null)
-        ///     // use as group
-        /// </code>
+        /// <code source="IAccountStoreContainerExamples.cs" region="GetDefaultGroupStore" lang="C#" title="Getting and using the default Group Store" />
         /// </example>
         Task<IAccountStore> GetDefaultGroupStoreAsync(CancellationToken cancellationToken = default(CancellationToken));
 
@@ -125,17 +107,7 @@ namespace Stormpath.SDK.AccountStore
         /// <returns>The newly-created <see cref="IAccountStoreMapping{T}">Account Store Mapping</see>.</returns>
         /// <exception cref="Error.ResourceException">The AccountStoreMapping's ListIndex is negative, or the mapping could not be added to the Application or Organization.</exception>
         /// <example>
-        /// Setting a new <see cref="IAccountStoreMapping{T}">Account Store Mapping</see>'s <see cref="IAccountStoreMapping{T}.ListIndex"/> to <c>500</c> and then adding the mapping to
-        /// an application with an existing 3-item list will automatically save the <see cref="IAccountStoreMapping{T}">Account Store Mapping</see>
-        /// at the end of the list and set its <see cref="IAccountStoreMapping{T}.ListIndex"/> value to <c>3</c> (items at index 0, 1, 2 were the original items,
-        /// the new fourth item will be at index 3):
-        /// <code>
-        /// IAccountStore directoryOrGroup = await GetDirectoryOrGroupAsync();
-        /// IAccountStoreMapping mapping = client.Instantiate&lt;IAccountStoreMapping&gt;();
-        /// mapping.SetAccountStore(directoryOrGroup);
-        /// mapping.SetListIndex(500);
-        /// mapping = await application.CreateAccountStoreMappingAsync(mapping);
-        /// </code>
+        /// <code source="IAccountStoreContainerExamples.cs" region="CreateAccountStoreMapping" lang="C#" />
         /// </example>
         Task<TMapping> CreateAccountStoreMappingAsync(TMapping mapping, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -151,10 +123,7 @@ namespace Stormpath.SDK.AccountStore
         /// <returns>The newly-created <see cref="IAccountStoreMapping{T}">Account Store Mapping</see>.</returns>
         /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application or Organization.</exception>
         /// <example>
-        /// <code>
-        /// IAccountStore directoryOrGroup = await GetDirectoryOrGroupAsync();
-        /// IAccountStoreMapping mapping = await application.AddAccountStoreAsync(directoryOrGroup);
-        /// </code>
+        /// <code source = "IAccountStoreContainerExamples.cs" region="AddAccountStore" lang="C#" />
         /// </example>
         Task<TMapping> AddAccountStoreAsync(IAccountStore accountStore, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -183,14 +152,8 @@ namespace Stormpath.SDK.AccountStore
         /// <exception cref="Error.ResourceException">The resource already exists as an account store in this Application or Organization.</exception>
         /// <exception cref="ArgumentException">The given <paramref name="hrefOrName"/> matches more than one resource in the current Tenant.</exception>
         /// <example>
-        /// Providing an href:
-        /// <code>
-        /// IAccountStoreMapping accountStoreMapping = await application.AddAccountStoreAsync("https://api.stormpath.com/v1/groups/myGroupHref");
-        /// </code>
-        /// Providing a name:
-        /// <code>
-        /// IAccountStoreMapping accountStoreMapping = await application.AddAccountStoreAsync("Foo Name");
-        /// </code>
+        /// <code source = "IAccountStoreContainerExamples.cs" region="AddAccountStoreByHref" lang="C#" title="Providing an href" />
+        /// <code source = "IAccountStoreContainerExamples.cs" region="AddAccountStoreByName" lang="C#" title="Providing a name" />
         /// </example>
         Task<TMapping> AddAccountStoreAsync(string hrefOrName, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -205,10 +168,7 @@ namespace Stormpath.SDK.AccountStore
         /// <exception cref="Error.ResourceException">The found resource already exists as an account store in the application.</exception>
         /// <exception cref="ArgumentException">The query matches more than one resource in the current Tenant.</exception>
         /// <example>
-        /// Adding a directory by partial name:
-        /// <code>
-        /// IAccountStoreMapping mapping = await application.AddAccountStoreAsync&lt;IDirectory&gt;(dirs => dirs.Where(d => d.Name.StartsWith(partialName)));
-        /// </code>
+        /// <code source = "IAccountStoreContainerExamples.cs" region="AddAccountStoreByQuery" lang="C#" />
         /// </example>
         Task<TMapping> AddAccountStoreAsync<TSource>(Func<IAsyncQueryable<TSource>, IAsyncQueryable<TSource>> query, CancellationToken cancellationToken = default(CancellationToken))
             where TSource : IAccountStore;

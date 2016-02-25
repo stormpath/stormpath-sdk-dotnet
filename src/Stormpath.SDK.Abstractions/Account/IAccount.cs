@@ -242,33 +242,27 @@ namespace Stormpath.SDK.Account
         /// <summary>
         /// Gets a queryable list of the <see cref="IApiKey">API Keys</see> that belong to this account.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IApiKey}"/> that may be used to synchronously list API Keys.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IApiKey}"/> that may be used to list API Keys.</returns>
         /// <example>
-        /// <code>
-        /// var allApiKeys = await account.GetApiKeys().ToListAsync();
-        /// </code>
+        /// <code source="IAccountExamples.cs" region="QueryableApiKeys" lang="C#"/>
         /// </example>
         IAsyncQueryable<IApiKey> GetApiKeys();
 
         /// <summary>
         /// Gets a queryable list of the <see cref="IApplication">Applications</see> the Account may log in to.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to asynchronously list or search Applications.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IApplication}"/> that may be used to list or search Applications.</returns>
         /// <example>
-        /// <code>
-        /// var allApplications = await account.GetApplications().ToListAsync();
-        /// </code>
+        /// <code source="IAccountExamples.cs" region="QueryableApplications" lang="C#"/>
         /// </example>
         IAsyncQueryable<IApplication> GetApplications();
 
         /// <summary>
         /// Gets a queryable list of the account's assigned <see cref="IGroup">Groups</see>.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to asynchronously list or search Groups.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to list or search Groups.</returns>
         /// <example>
-        /// <code>
-        /// var allGroups = await account.GetGroups().ToListAsync();
-        /// </code>
+        /// <code source="IAccountExamples.cs" region="QueryableGroups" lang="C#"/>
         /// </example>
         IAsyncQueryable<IGroup> GetGroups();
 
@@ -277,28 +271,27 @@ namespace Stormpath.SDK.Account
         /// This method is an alternative to <see cref="GetGroups"/> that returns the actual
         /// association entity representing the Account and a <see cref="IGroup">Group</see>.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to asynchronously list or search Group Memberships.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IGroupMembership}"/> that may be used to list or search Group Memberships.</returns>
+        /// <example>
+        /// <code source="IAccountExamples.cs" region="QueryableGroupMemberships" lang="C#"/>
+        /// </example>
         IAsyncQueryable<IGroupMembership> GetGroupMemberships();
 
         /// <summary>
         /// Gets a queryable list of the active <see cref="IAccessToken">Access Tokens</see> that belong to the account.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IAccessToken}"/> that may be used to asynchronously list or search Access Tokens.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IAccessToken}"/> that may be used to list or search Access Tokens.</returns>
         /// <example>
-        /// <code>
-        /// var activeAccessTokens = await account.GetAccessTokens().ToListAsync();
-        /// </code>
+        /// <code source="IAccountExamples.cs" region="QueryableAccessTokens" lang="C#"/>
         /// </example>
         IAsyncQueryable<IAccessToken> GetAccessTokens();
 
         /// <summary>
         /// Gets a queryable list of the active <see cref="IRefreshToken">Refresh Tokens</see> that belong to the account.
         /// </summary>
-        /// <returns>An <see cref="IAsyncQueryable{IRefreshToken}"/> that may be used to asynchronously list or search Refresh Tokens.</returns>
+        /// <returns>An <see cref="IAsyncQueryable{IRefreshToken}"/> that may be used to list or search Refresh Tokens.</returns>
         /// <example>
-        /// <code>
-        /// var refreshTokens = await account.GetRefreshTokens().ToListAsync();
-        /// </code>
+        /// <code source="IAccountExamples.cs" region="QueryableRefreshTokens" lang="C#"/>
         /// </example>
         IAsyncQueryable<IRefreshToken> GetRefreshTokens();
     }

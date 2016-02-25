@@ -30,10 +30,7 @@ namespace Stormpath.SDK.Group
         /// </summary>
         /// <value>The response options to apply to the request.</value>
         /// <example>
-        /// To request and cache custom data along with this request:
-        /// <code>
-        /// builder.ResponseOptions.Expand(x => x.GetCustomDataAsync());
-        /// </code>
+        /// <code source="CreationOptionsBuilderExamples.cs" region="RequestCustomData" lang="C#" title="Request and cache Custom Data" />
         /// </example>
         public IRetrievalOptions<IGroup> ResponseOptions { get; } = new DefaultRetrievalOptions<IGroup>();
 

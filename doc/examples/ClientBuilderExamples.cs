@@ -23,7 +23,7 @@ using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Serialization;
 
-namespace Stormpath.SDK.DocExamples
+namespace DocExamples
 {
     public class ClientBuilderExamples
     {
