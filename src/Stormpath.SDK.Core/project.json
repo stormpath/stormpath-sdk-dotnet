@@ -8,11 +8,6 @@
   },
   "description": "The official Stormpath SDK for .NET. Don't install this package directly; install the Stormpath.SDK package unless you are bringing your own JSON serializer and HTTP client plugins.",
   "frameworks": {
-    "net451": {
-      "frameworkAssemblies": {
-        "System.Threading": "4.0.0.0"
-      }
-    },
     "dnx451": {
       "dependencies": {
         "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
@@ -37,6 +32,7 @@
         "System.Threading": "4.0.11-beta-23516"
       }
     },
+    "net451": { },
     "netcore50": {
       "dependencies": {
         "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
