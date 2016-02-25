@@ -4,9 +4,9 @@
   "dependencies": {
     "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
     "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
-    "Polyglot": "1.0.0-beta1",
-    "Stormpath.SDK.Abstractions": "0.6.0-beta1",
-    "Stormpath.Configuration": "0.1.0-beta5"
+    "Polyglot": "1.0.0",
+    "Stormpath.SDK.Abstractions": "0.6.1",
+    "Stormpath.Configuration": "1.0.2"
   },
   "description": "The official Stormpath SDK for .NET. Don't install this package directly; install the Stormpath.SDK package unless you are bringing your own JSON serializer and HTTP client plugins.",
   "frameworks": {
@@ -51,6 +51,6 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK"
   },
-  "version": "0.6.0-beta1",
+  "version": "0.6.1",
   "xmlDoc": true
 }

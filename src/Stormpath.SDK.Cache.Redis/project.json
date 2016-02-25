@@ -2,19 +2,32 @@
   "authors": [ "Nate Barbettini" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "StackExchange.Redis": "1.1.572-alpha",
-    "Stormpath.SDK.Abstractions": "0.6.0-beta1"
+    "Stormpath.SDK.Abstractions": "0.6.1"
   },
   "description": "Redis cache adapter for the Stormpath .NET SDK",
   "frameworks": {
-    "dnx451": { },
-    "dnxcore50": {
+    "dnx451": {
       "dependencies": {
-        "System.Runtime": "4.0.20"
+        "StackExchange.Redis": "1.0.488"
       }
     },
-    "dotnet5.5": { },
-    "net451": { }
+    "dnxcore50": {
+      "dependencies": {
+        "System.Runtime": "4.0.20",
+        "StackExchange.Redis": "1.1.572-alpha"
+      }
+    },
+    "dotnet5.5": {
+      "dependencies": {
+        "StackExchange.Redis": "1.1.572-alpha"
+
+      }
+    },
+    "net451": {
+      "dependencies": {
+        "StackExchange.Redis": "1.0.488"
+      }
+    }
   },
   "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
   "language": "en-US",
@@ -28,6 +41,6 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Cache.Redis"
   },
-  "version": "0.6.0-beta1",
+  "version": "0.6.1",
   "xmlDoc": true
 }
