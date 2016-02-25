@@ -16,6 +16,7 @@
 
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Logging;
+using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Tests.Common.Fakes;
 
 namespace Stormpath.SDK.Cache.Redis.Tests
@@ -45,6 +46,7 @@ namespace Stormpath.SDK.Cache.Redis.Tests
                 .SetApiKeyId("foobar")
                 .SetApiKeySecret("secret123!")
                 .SetHttpClient(this.fakeHttpClient)
+                .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .SetCacheProvider(cacheProvider)
                 .SetLogger(this.logger)
                 .Build();

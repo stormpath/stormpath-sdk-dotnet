@@ -19,10 +19,12 @@ using Shouldly;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Oauth;
 using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Oauth;
+using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
@@ -43,6 +45,8 @@ namespace Stormpath.SDK.Tests.Jwt
 
             var stubClient = Clients.Builder()
                 .SetApiKey(fakeApiKey)
+                .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
+                .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .Build();
 
             var fakeDataStore = TestDataStore.Create(

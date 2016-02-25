@@ -19,12 +19,14 @@ using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.IdSite;
 using Stormpath.SDK.Impl.Saml;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Saml;
+using Stormpath.SDK.Serialization;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Saml
