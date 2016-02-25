@@ -21,6 +21,7 @@ using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.Linq;
 using Stormpath.SDK.Linq;
+using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
 
@@ -47,6 +48,7 @@ namespace Stormpath.SDK.Tests.Linq
                 .SetApiKey(FakeApiKey.Create(valid: true))
                 .SetBaseUrl(this.BaseUrl)
                 .SetHttpClient(this.FakeHttpClient)
+                .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .Build();
 
             this.Queryable = new CollectionResourceQueryable<T>(this.BaseUrl, (client as DefaultClient).DataStore);

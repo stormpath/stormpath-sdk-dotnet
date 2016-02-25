@@ -61,6 +61,8 @@ namespace Stormpath.SDK.Tests.Saml
 
             this.fakeClient = Clients.Builder()
                 .SetApiKey(testApiKey)
+                .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
+                .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .Build();
         }
 

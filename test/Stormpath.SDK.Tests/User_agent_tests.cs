@@ -20,6 +20,7 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Xunit;
 
@@ -35,6 +36,7 @@ namespace Stormpath.SDK.Tests
                 .SetApiKey(FakeApiKey.Create(valid: true))
                 .SetBaseUrl("http://foo.bar/")
                 .SetHttpClient(fakeHttpClient)
+                .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .SetCacheProvider(CacheProviders.Create().DisabledCache())
                 .Build();
 

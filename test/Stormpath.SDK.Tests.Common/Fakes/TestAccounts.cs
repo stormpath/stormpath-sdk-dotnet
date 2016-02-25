@@ -17,6 +17,8 @@
 using System.Collections.Generic;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Http;
+using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Tests.Common.Fakes
 {
@@ -25,6 +27,8 @@ namespace Stormpath.SDK.Tests.Common.Fakes
         private static readonly IClient TestClient =
             Clients.Builder()
             .SetApiKey(FakeApiKey.Create(valid: true))
+            .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
+            .SetSerializer(Serializers.Create().JsonNetSerializer())
             .Build();
 
         public static IAccount LukeSkywalker = TestClient.Instantiate<IAccount>()

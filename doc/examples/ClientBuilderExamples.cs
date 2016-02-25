@@ -50,14 +50,9 @@ namespace Stormpath.SDK.DocExamples
             var client = clientBuilder
                 .SetConfiguration(new StormpathConfiguration(
                     client: new ClientConfiguration(
-                        apiKey: new ClientApiKeyConfiguration(file: "my_apiKey.properties", id: null, secret: null),
+                        apiKey: new ClientApiKeyConfiguration(file: "my_apiKey.properties"),
                         cacheManager: null,
-                        baseUrl: null,
-                        connectionTimeout: null,
-                        authenticationScheme: ClientAuthenticationScheme.Basic,
-                        proxy: null),
-                    application: null,
-                    web: null))
+                        authenticationScheme: ClientAuthenticationScheme.Basic)))
                 .SetHttpClient(HttpClients.Create().RestSharpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .Build();

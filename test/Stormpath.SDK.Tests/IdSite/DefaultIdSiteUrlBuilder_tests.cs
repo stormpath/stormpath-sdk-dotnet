@@ -19,11 +19,13 @@ using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Http;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Impl.IdSite;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Jwt;
+using Stormpath.SDK.Serialization;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.IdSite
@@ -62,6 +64,8 @@ namespace Stormpath.SDK.Tests.IdSite
 
             this.fakeClient = Clients.Builder()
                 .SetApiKey(testApiKey)
+                .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
+                .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .Build();
         }
 

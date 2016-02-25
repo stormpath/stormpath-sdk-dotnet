@@ -305,13 +305,10 @@ namespace Stormpath.SDK.Impl.Client
             return new StormpathConfiguration(
                 new ClientConfiguration(
                     apiKey: new ClientApiKeyConfiguration(this.useApiKeyFileName, this.useApiKeyId, this.useApiKeySecret),
-                    cacheManager: null,
                     baseUrl: this.useBaseUrl,
                     connectionTimeout: this.useConnectionTimeout,
                     authenticationScheme: this.useAuthenticationScheme,
-                    proxy: this.useProxy),
-                null,
-                null);
+                    proxy: this.useProxy));
         }
 
         IClient IClientBuilder.Build()
