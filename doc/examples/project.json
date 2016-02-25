@@ -2,9 +2,9 @@
   "authors": [ "Nate Barbettini", "Contributors" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Stormpath.SDK.Core": "0.6.1",
-    "Stormpath.SDK.JsonNetSerializer": "0.6.1",
-    "Stormpath.SDK.RestSharpClient": "0.6.1"
+    "Stormpath.SDK.Core": "0.6.2",
+    "Stormpath.SDK.JsonNetSerializer": "0.6.2",
+    "Stormpath.SDK.RestSharpClient": "0.6.2"
   },
   "description": "Documentation examples for the Stormpath .NET SDK",
   "frameworks": {
@@ -21,5 +21,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.DocExamples"
   },
-  "version": "0.6.1"
+  "version": "0.6.2"
 }
