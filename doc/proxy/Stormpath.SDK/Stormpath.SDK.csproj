@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -32,85 +32,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Caching.Abstractions.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Caching.Memory, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Caching.Memory.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Caching.Memory.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Configuration.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Contrib.Stormpath.EnvironmentVariables, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Contrib.Stormpath.EnvironmentVariables.0.1.0-beta5\lib\net451\Microsoft.Extensions.Configuration.Contrib.Stormpath.EnvironmentVariables.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Contrib.Stormpath.ObjectReflection, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Contrib.Stormpath.ObjectReflection.0.1.0-beta5\lib\net451\Microsoft.Extensions.Configuration.Contrib.Stormpath.ObjectReflection.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Contrib.Stormpath.PropertiesFile, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Contrib.Stormpath.PropertiesFile.0.1.0-beta5\lib\net451\Microsoft.Extensions.Configuration.Contrib.Stormpath.PropertiesFile.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Contrib.Stormpath.Yaml, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Contrib.Stormpath.Yaml.0.1.0-beta5\lib\net451\Microsoft.Extensions.Configuration.Contrib.Stormpath.Yaml.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.FileExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.FileExtensions.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Configuration.FileExtensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Ini, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Ini.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Configuration.Ini.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Json, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Json.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Configuration.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.OptionsModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.OptionsModel.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.OptionsModel.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.PlatformAbstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.PlatformAbstractions.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.PlatformAbstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Primitives, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Primitives.1.0.0-rc1-final\lib\net451\Microsoft.Extensions.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="FlexibleConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FlexibleConfiguration.1.0.0\lib\net45\FlexibleConfiguration.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Polyglot, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Polyglot.1.0.0-beta1\lib\net451\Polyglot.dll</HintPath>
+      <HintPath>..\packages\Polyglot.1.0.0\lib\net451\Polyglot.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.Configuration, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stormpath.Configuration.0.1.0-beta5\lib\net451\Stormpath.Configuration.dll</HintPath>
+    <Reference Include="Stormpath.Configuration, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stormpath.Configuration.1.0.6\lib\net451\Stormpath.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Stormpath.Configuration.Abstractions, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stormpath.Configuration.Abstractions.0.1.0-beta5\lib\net451\Stormpath.Configuration.Abstractions.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Stormpath.Configuration.Abstractions.1.0.4\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -125,7 +61,7 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <!-- Auto-generated items (see generate-doc-proxy.ps1) -->
+  <!-- Auto-generated items (see prep-documentation.ps1) -->
   <!-- #startAutogen -->
   <ItemGroup>
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\AccountCreationActionsCompatibilityExtensions.cs" />
@@ -222,6 +158,19 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\InMemoryCacheProvider.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\InMemoryCacheProviderBuilder.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\NullCacheProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\CacheEntry.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\CacheExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\CacheItemPriority.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\EntryLink.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\EntryLinkHelpers.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\EvictionReason.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\GcNotification.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\IEntryLink.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\IMemoryCache.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\MemoryCache.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\MemoryCacheEntryExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\MemoryCacheEntryOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Cache\Polyfill.Microsoft.Extensions.Caching.Memory\MemoryCacheOptions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClient.Collections.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClient.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClient.DataStore.cs" />
@@ -229,9 +178,10 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClient.TenantActions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClient.TenantActionsSync.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultClientBuilder.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DefaultUserAgentBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\DnxUserAgentBuilder.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\IClientSync.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\IUserAgentBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\Net451UserAgentBuilder.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\ShimAdditionalClientApiKeySettings.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\ShimClientApiKey.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\ShimClientApiKeyBuilder.cs" />
@@ -331,6 +281,10 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\IIdSiteJtiProvider.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\InlineIdSiteAsyncResultListener.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\IdSite\InlineIdSiteSyncResultListener.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Introspection\IPlatform.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Introspection\ISdk.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Introspection\Platform.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Introspection\Sdk.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\DefaultJwt.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\DefaultJwtBuilder.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\DefaultJwtClaims.cs" />
@@ -529,15 +483,6 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Utility\UnixDate.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Linq\RetrievalOptionsExpandExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Oauth\OauthRequests.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Mono\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Mono\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Mono\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Release\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Release\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Core\obj\Release\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Organization\OrganizationCreationOptionsBuilder.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Provider\ClientProviderExtensions.cs" />
@@ -579,13 +524,16 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncTenantActionsExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <!-- #endAutogen -->
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Stormpath.SDK.Abstractions\Stormpath.SDK.Abstractions.csproj">
       <Project>{9966941a-d894-4adf-9b4b-810bbd2d5364}</Project>
       <Name>Stormpath.SDK.Abstractions</Name>
     </ProjectReference>
   </ItemGroup>
-  <!-- #endAutogen -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -595,3 +543,4 @@
   </Target>
   -->
 </Project>
+

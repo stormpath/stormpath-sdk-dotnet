@@ -17,10 +17,13 @@ Function Generate-Documentation-Proxy
 
         Get-ChildItem $directory -Recurse -Filter *.cs -ErrorAction Stop | `
         ForEach-Object {
+          if (!$_.FullName.Contains("\obj\"))
+          {
             $includeStatement = "{0}<Compile Include=""{1}"" />" -f $indent, ($_ | Resolve-Path -Relative)
 
             [void]$builder.AppendLine($includeStatement)
             $count++
+          }
         }
 
         Write-Host ("Added {0} files" -f $count)
