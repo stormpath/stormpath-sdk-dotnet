@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
 {
-    public class MemoryCache : IMemoryCache
+    internal class MemoryCache : IMemoryCache
     {
         private readonly Dictionary<object, CacheEntry> _entries;
         private readonly ReaderWriterLockSlim _entryLock;

@@ -21,7 +21,7 @@ using System;
 
 namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
 {
-    public class EntryLink : IEntryLink
+    internal class EntryLink : IEntryLink
     {
         private bool _disposed;
 

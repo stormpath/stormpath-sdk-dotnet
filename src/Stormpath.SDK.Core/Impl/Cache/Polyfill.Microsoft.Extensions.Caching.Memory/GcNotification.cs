@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
     /// presumably due to memory pressure.
     /// For this to work no components can have a reference to the instance.
     /// </summary>
-    public class GcNotification
+    internal class GcNotification
     {
         private readonly Func<object, bool> _callback;
         private readonly object _state;

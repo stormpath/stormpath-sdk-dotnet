@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
     /// expiration will be copied from the dependent entry to the parent entry. The parent entry will not expire if the
     /// dependent entry is removed manually, removed due to memory pressure, or expires due to sliding expiration.
     /// </summary>
-    public interface IEntryLink : IDisposable
+    internal interface IEntryLink : IDisposable
     {
         /// <summary>
         /// Gets the minimum absolute expiration for all dependent entries, or null if not set.

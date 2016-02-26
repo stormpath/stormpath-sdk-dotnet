@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
 {
-    public static class MemoryCacheEntryExtensions
+    internal static class MemoryCacheEntryExtensions
     {
         /// <summary>
         /// Sets the priority for keeping the cache entry in the cache during a memory pressure tokened cleanup.

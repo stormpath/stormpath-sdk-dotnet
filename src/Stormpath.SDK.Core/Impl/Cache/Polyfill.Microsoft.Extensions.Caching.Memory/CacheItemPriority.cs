@@ -19,7 +19,7 @@
 #if NET451
 namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
 {
-    public enum CacheItemPriority
+    internal enum CacheItemPriority
     {
         Low,
         Normal,

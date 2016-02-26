@@ -19,7 +19,7 @@
 #if NET451
 namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
 {
-    public static class CacheExtensions
+    internal static class CacheExtensions
     {
         public static object Get(this IMemoryCache cache, object key)
         {

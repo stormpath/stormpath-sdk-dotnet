@@ -21,7 +21,7 @@ using System;
 
 namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
 {
-    public class MemoryCacheOptions
+    internal class MemoryCacheOptions
     {
         public bool CompactOnMemoryPressure { get; set; } = true;
 

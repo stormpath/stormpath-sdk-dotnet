@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
 {
-    public interface IMemoryCache : IDisposable
+    internal interface IMemoryCache : IDisposable
     {
         /// <summary>
         /// Create or overwrite an entry in the cache.

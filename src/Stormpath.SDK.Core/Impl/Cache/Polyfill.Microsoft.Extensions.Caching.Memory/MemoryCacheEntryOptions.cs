@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
 {
-    public class MemoryCacheEntryOptions
+    internal class MemoryCacheEntryOptions
     {
         private DateTimeOffset? _absoluteExpiration;
         private TimeSpan? _absoluteExpirationRelativeToNow;
