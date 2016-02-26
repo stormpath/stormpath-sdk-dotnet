@@ -22,7 +22,7 @@ using System;
 namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
 {
     /// <summary>
-    /// Used to flow expiration information from one entry to another. <see cref="IChangeToken"/> instances and minimum absolute
+    /// Used to flow expiration information from one entry to another. Minimum absolute
     /// expiration will be copied from the dependent entry to the parent entry. The parent entry will not expire if the
     /// dependent entry is removed manually, removed due to memory pressure, or expires due to sliding expiration.
     /// </summary>

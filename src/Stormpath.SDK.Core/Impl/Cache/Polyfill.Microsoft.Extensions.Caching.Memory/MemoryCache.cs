@@ -39,7 +39,6 @@ namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
         /// <summary>
         /// Creates a new MemoryCache instance.
         /// </summary>
-        /// <param name="optionsAccessor"></param>
         public MemoryCache(MemoryCacheOptions options)
         {
             if (options == null)
