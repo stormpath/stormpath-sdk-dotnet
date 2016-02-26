@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Impl.Application
         IAccountStoreContainerSync<IApplicationAccountStoreMapping>
     {
         /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.AuthenticateAccountAsync(IAuthenticationRequest, System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <c>IApplication.AuthenticateAccountAsync(IAuthenticationRequest, System.Threading.CancellationToken)</c>.
         /// </summary>
         /// <param name="request">Any supported <see cref="IAuthenticationRequest"/> object (e.g. created by <see cref="UsernamePasswordRequestBuilder"/>).</param>
         /// <returns>The result of the authentication.</returns>
@@ -62,14 +62,14 @@ namespace Stormpath.SDK.Impl.Application
         IAuthenticationResult AuthenticateAccount(IAuthenticationRequest request, Action<IRetrievalOptions<IAuthenticationResult>> responseOptions);
 
         /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.AuthenticateAccountAsync(Action{UsernamePasswordRequestBuilder}, System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <c>IApplication.AuthenticateAccountAsync(Action{UsernamePasswordRequestBuilder}, System.Threading.CancellationToken)</c>.
         /// </summary>
         /// <param name="requestBuilder">Sets the login request parameters.</param>
         /// <returns>The result of the authentication.</returns>
         IAuthenticationResult AuthenticateAccount(Action<UsernamePasswordRequestBuilder> requestBuilder);
 
         /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.AuthenticateAccountAsync(Action{UsernamePasswordRequestBuilder}, Action{IRetrievalOptions{IAuthenticationResult}}, System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <c>IApplication.AuthenticateAccountAsync(Action{UsernamePasswordRequestBuilder}, Action{IRetrievalOptions{IAuthenticationResult}}, System.Threading.CancellationToken)</c>.
         /// </summary>
         /// <param name="requestBuilder">Sets the login request parameters.</param>
         /// <param name="responseOptions">The options to apply to this request.</param>
@@ -93,7 +93,7 @@ namespace Stormpath.SDK.Impl.Application
         bool TryAuthenticateAccount(string username, string password);
 
         /// <summary>
-        /// Synchronous counterpart to <see cref="IApplication.SendVerificationEmailAsync(Action{EmailVerificationRequestBuilder}, System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <c>IApplication.SendVerificationEmailAsync(Action{EmailVerificationRequestBuilder}, System.Threading.CancellationToken)</c>.
         /// </summary>
         /// <param name="requestBuilderAction">Sets the options required for the verification email request.</param>
         void SendVerificationEmail(Action<EmailVerificationRequestBuilder> requestBuilderAction);

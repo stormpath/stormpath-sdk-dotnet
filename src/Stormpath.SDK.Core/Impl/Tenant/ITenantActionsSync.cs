@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Impl.Tenant
     internal interface ITenantActionsSync
     {
         /// <summary>
-        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateApplicationAsync(IApplication, Action{ApplicationCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <c>SDK.Tenant.ITenantActions.CreateApplicationAsync(IApplication, Action{ApplicationCreationOptionsBuilder}, System.Threading.CancellationToken)</c>.
         /// </summary>
         /// <param name="application">The <see cref="IApplication">Application</see> to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IApplicationCreationOptions"/>,
@@ -70,7 +70,7 @@ namespace Stormpath.SDK.Impl.Tenant
         IDirectory CreateDirectory(IDirectory directory);
 
         /// <summary>
-        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateDirectoryAsync(IDirectory, Action{DirectoryCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <c>SDK.Tenant.ITenantActions.CreateDirectoryAsync(IDirectory, Action{DirectoryCreationOptionsBuilder}, System.Threading.CancellationToken)</c>.
         /// </summary>
         /// <param name="directory">The <see cref="IDirectory">Directory</see> to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,
@@ -104,7 +104,7 @@ namespace Stormpath.SDK.Impl.Tenant
         IOrganization CreateOrganization(IOrganization organization);
 
         /// <summary>
-        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.CreateOrganizationAsync(IOrganization, Action{OrganizationCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <c>SDK.Tenant.ITenantActions.CreateOrganizationAsync(IOrganization, Action{OrganizationCreationOptionsBuilder}, System.Threading.CancellationToken)</c>.
         /// </summary>
         /// <param name="organization">The Organization to create.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IDirectoryCreationOptions"/>,

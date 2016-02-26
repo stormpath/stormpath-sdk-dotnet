@@ -25,14 +25,14 @@ namespace Stormpath.SDK.Group
     internal interface IGroupCreationActionsSync
     {
         /// <summary>
-        /// Synchronous counterpart to <see cref="IGroupCreationActions.CreateGroupAsync(IGroup, System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <c>IGroupCreationActions.CreateGroupAsync(IGroup, System.Threading.CancellationToken)</c>.
         /// </summary>
         /// <param name="group">The group to create.</param>
         /// <returns>The new <see cref="IGroup">Group</see>.</returns>
         IGroup CreateGroup(IGroup group);
 
         /// <summary>
-        /// Synchronous counterpart to <see cref="IGroupCreationActions.CreateGroupAsync(IGroup, Action{GroupCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <c>IGroupCreationActions.CreateGroupAsync(IGroup, Action{GroupCreationOptionsBuilder}, System.Threading.CancellationToken)</c>.
         /// </summary>
         /// <param name="group">The group to create.</param>
         /// <param name="creationOptionsAction">

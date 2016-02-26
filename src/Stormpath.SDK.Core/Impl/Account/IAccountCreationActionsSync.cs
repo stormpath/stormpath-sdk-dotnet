@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Impl.Account
     internal interface IAccountCreationActionsSync
     {
         /// <summary>
-        /// Synchronous counterpart to <see cref="IAccountCreationActions.CreateAccountAsync(IAccount, Action{AccountCreationOptionsBuilder}, System.Threading.CancellationToken)"/>.
+        /// Synchronous counterpart to <c>IAccountCreationActions.CreateAccountAsync(IAccount, Action{AccountCreationOptionsBuilder}, System.Threading.CancellationToken)</c>.
         /// </summary>
         /// <param name="account">The account to create/persist.</param>
         /// <param name="creationOptionsAction">An inline builder for an instance of <see cref="IAccountCreationOptions"/>,
