@@ -13,9 +13,10 @@ library gives your ASP.NET, C#, or VB.NET application access to all of Stormpath
 
 In addition to these core Stormpath features, this SDK provides:
 
-- Support for .NET 4.5 and later
+- Support for .NET 4.5.1 (and later)
+- Support for CoreCLR and DNX platforms (`dotnet5.4` and `dnxcore50`)
 - Support for Linux and OS X via Mono
-- LINQ to Stormpath for readable, expressive queries
+- LINQ-to-Stormpath for readable, expressive queries
 - Fully dual-stack design for native asynchronous and native synchronous access
 
 If you have feedback about this library, please get in touch and share your
