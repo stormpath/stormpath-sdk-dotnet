@@ -2,10 +2,11 @@
   "authors": [ "Nate Barbettini", "Contributors" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Stormpath.Configuration.Abstractions": "1.0.4"
+    "Stormpath.Configuration.Abstractions": "2.0.0"
   },
-  "description": "Abstractions for the Stormpath .NET SDK",
+  "description": "Abstractions for the Stormpath .NET SDK.",
   "frameworks": {
+    "dnx451": { },
     "dotnet5.2": {
       "dependencies": {
         "Microsoft.CSharp": "4.0.1-beta-23516",
@@ -46,6 +47,6 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK"
   },
-  "version": "0.6.2",
+  "version": "0.6.3",
   "xmlDoc": true
 }
