@@ -66,27 +66,15 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return node;
             }
 
-            // .Where(x => x.Foo == 5)
-            if (node.Left.NodeType == ExpressionType.MemberAccess &&
-                node.Right.NodeType == ExpressionType.Constant)
+            // Handle .Where(x => x.Foo == 5)
+            //     or .Where(x => 5 == x.Foo)
+            var memberAccessNodes = GetBinaryAsConstantAnd<MemberExpression>(node);
+            if (memberAccessNodes != default(Tuple<ConstantExpression, MemberExpression>))
             {
                 this.parsedExpressions.Add(
                     new WhereMemberExpression(
-                        (node.Left as MemberExpression).Member.Name,
-                        (node.Right as ConstantExpression).Value,
-                        comparison.Value));
-
-                return node; // done
-            }
-
-            // .Where(x => 5 == x.Foo)
-            if (node.Left.NodeType == ExpressionType.Constant &&
-                node.Right.NodeType == ExpressionType.MemberAccess)
-            {
-                this.parsedExpressions.Add(
-                    new WhereMemberExpression(
-                        (node.Right as MemberExpression).Member.Name,
-                        (node.Left as ConstantExpression).Value,
+                        memberAccessNodes.Item2.Member.Name,
+                        memberAccessNodes.Item1.Value,
                         comparison.Value));
 
                 return node; // done
@@ -205,6 +193,36 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             this.parsedExpressions.Add(new WhereMemberExpression(fieldName, shorthandModel, WhereComparison.Equal));
 
             return node;
+        }
+
+        /// <summary>
+        /// This method will get the operands of a binary expression (a Constant and another expression type)
+        /// regardless of order (expr == constant and constant == expr are both valid).
+        /// </summary>
+        /// <typeparam name="TOther">The other expression type.</typeparam>
+        /// <param name="binaryNode">The binary node.</param>
+        /// <param name="expectedType">The expected type of the other expression.</param>
+        /// <returns>The constant expression and other expression.</returns>
+        private Tuple<ConstantExpression, TOther> GetBinaryAsConstantAnd<TOther>(BinaryExpression binaryNode)
+            where TOther: Expression
+        {
+            ConstantExpression constant = null;
+            TOther other = null;
+
+            if (binaryNode.Left.NodeType == ExpressionType.Constant)
+            {
+                constant = binaryNode.Left as ConstantExpression;
+                other = binaryNode.Right as TOther;
+            }
+            else if (binaryNode.Right.NodeType == ExpressionType.Constant)
+            {
+                constant = binaryNode.Right as ConstantExpression;
+                other = binaryNode.Left as TOther;
+            }
+
+            return (constant == null || other == null)
+                ? default(Tuple<ConstantExpression, TOther>)
+                : new Tuple<ConstantExpression, TOther>(constant, other);
         }
 
         private static Dictionary<ExpressionType, WhereComparison> comparisonLookup

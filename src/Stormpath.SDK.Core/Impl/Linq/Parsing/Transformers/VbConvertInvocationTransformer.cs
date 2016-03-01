@@ -34,6 +34,12 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.Transformers
         {
             var asUnary = invokedExpression as UnaryExpression;
 
+            bool needsCast = asUnary.Type != asUnary.Operand.Type;
+            if (needsCast)
+            {
+                return invokedExpression;
+            }
+
             var reduceFurther = asUnary != null && asUnary.Method == null;
             if (!reduceFurther)
             {
