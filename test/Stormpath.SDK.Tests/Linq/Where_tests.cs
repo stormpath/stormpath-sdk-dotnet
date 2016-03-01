@@ -62,13 +62,25 @@ namespace Stormpath.SDK.Tests.Linq
         }
 
         [Fact]
-        public async Task Throws_for_complex_overload_of_Equals()
+        public async Task Throws_when_specifying_string_comparison_for_Equals()
         {
             // TODO NotSupportedException after Shouldly Mono fix
             await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
-                    .Where(x => x.Email.Equals("bar", StringComparison.CurrentCulture))
+                    .Where(x => x.Email.Equals("bar", StringComparison.Ordinal))
+                    .MoveNextAsync();
+            });
+        }
+
+        [Fact]
+        public async Task Throws_when_specifying_string_comparison_for_customData_Equals()
+        {
+            // TODO NotSupportedException after Shouldly Mono fix
+            await Should.ThrowAsync<Exception>(async () =>
+            {
+                await this.Queryable
+                    .Where(x => ((string)x.CustomData["foobar"]).Equals("baz", StringComparison.Ordinal))
                     .MoveNextAsync();
             });
         }
@@ -296,6 +308,26 @@ namespace Stormpath.SDK.Tests.Linq
              select account).MoveNextAsync();
 
             this.ShouldBeCalledWithArguments("email=tk421%40deathstar.co");
+        }
+
+        [Fact]
+        public async Task Where_customData_equalsequals_string()
+        {
+            await this.Queryable
+                .Where(x => (string)x.CustomData["post"] == "Cell Block 1138")
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
+        }
+
+        [Fact]
+        public async Task Where_customData_Equals_string()
+        {
+            await this.Queryable
+                .Where(x => ((string)x.CustomData["post"]).Equals("Cell Block 1138"))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
         }
     }
 }

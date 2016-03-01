@@ -24,6 +24,13 @@ namespace Stormpath.SDK.CustomData
     public interface ICustomDataProxy
     {
         /// <summary>
+        /// Sets the custom data item with the given <paramref name="key"/> when the resource is saved.
+        /// </summary>
+        /// <param name="key">The custom data name (key). This must be unique for this resource.</param>
+        /// <returns><see langword="null"/>. This indexer cannot be used to retrieve data - use <see cref="Resource.IExtendable.GetCustomDataAsync(System.Threading.CancellationToken)"/>.</returns>
+        object this[string key] { get; set; }
+
+        /// <summary>
         /// Removes all custom data items when the resource is saved.
         /// </summary>
         /// <remarks>Does not take effect until the parent resource is saved using <see cref="Resource.ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/>.</remarks>

@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,6 +54,19 @@ namespace Stormpath.SDK.Impl.CustomData
 
         internal IReadOnlyDictionary<string, object> UpdatedCustomDataProperties
             => this.proxy.GetUpdatedProperties();
+
+        object ICustomDataProxy.this[string key]
+        {
+            get
+            {
+                throw new NotSupportedException("CustomData must be retrieved by using GetCustomDataAsync()");
+            }
+
+            set
+            {
+                (this as ICustomDataProxy).Put(value);
+            }
+        }
 
         void ICustomDataProxy.Clear()
             => this.deleteAll = true;
