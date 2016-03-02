@@ -1,4 +1,4 @@
-﻿// <copyright file="DatetimeAttributeTermWorkingModel.cs" company="Stormpath, Inc.">
+﻿// <copyright file="RangedDatetimeWhereTermWorkingModel.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,18 +16,12 @@
 
 using System;
 
-namespace Stormpath.SDK.Impl.Linq.Parsing
+namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
 {
-    internal sealed class DatetimeAttributeTermWorkingModel
+    internal sealed class RangedDatetimeWhereTermWorkingModel : AbstractRangedWhereTermWorkingModel
     {
-        public string FieldName { get; set; }
-
         public DateTimeOffset? Start { get; set; }
 
-        public bool? StartInclusive { get; set; }
-
         public DateTimeOffset? End { get; set; }
-
-        public bool? EndInclusive { get; set; }
     }
 }

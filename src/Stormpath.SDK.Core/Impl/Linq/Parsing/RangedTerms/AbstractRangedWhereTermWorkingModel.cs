@@ -1,4 +1,4 @@
-﻿// <copyright file="NumericAttributeTermWorkingModel.cs" company="Stormpath, Inc.">
+﻿// <copyright file="AbstractWhereTermWorkingModel.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +14,13 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Impl.Linq.Parsing
+namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
 {
-    internal sealed class IntegerAttributeTermWorkingModel
+    internal abstract class AbstractRangedWhereTermWorkingModel
     {
         public string FieldName { get; set; }
 
-        public long? Start { get; set; }
-
         public bool? StartInclusive { get; set; }
-
-        public long? End { get; set; }
 
         public bool? EndInclusive { get; set; }
     }
