@@ -236,5 +236,45 @@ namespace Stormpath.SDK.Tests.Linq
 
             this.ShouldBeCalledWithArguments("customData.score=[0.01,1.01)");
         }
+
+        [Fact]
+        public async Task Where_customData_float_with_specified_int_precision()
+        {
+            await this.Queryable
+                .Where(x => (float)x.CustomData["score"] > 1.WithPlaces(3))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("customData.score=(1.000,)");
+        }
+
+        [Fact]
+        public async Task Where_customData_float_with_specified_double_precision()
+        {
+            await this.Queryable
+                .Where(x => (float)x.CustomData["score"] > (1.0).WithPlaces(3))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("customData.score=(1.000,)");
+        }
+
+        [Fact]
+        public async Task Where_customData_double_with_specified_int_precision()
+        {
+            await this.Queryable
+                .Where(x => (double)x.CustomData["score"] > 1.WithPlaces(3))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("customData.score=(1.000,)");
+        }
+
+        [Fact]
+        public async Task Where_customData_double_with_specified_double_precision()
+        {
+            await this.Queryable
+                .Where(x => (double)x.CustomData["score"] > (1.0).WithPlaces(3))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("customData.score=(1.000,)");
+        }
     }
 }
