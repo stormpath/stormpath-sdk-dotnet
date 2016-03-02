@@ -314,6 +314,16 @@ namespace Stormpath.SDK.Tests.Linq
         public async Task Where_customData_equalsequals_string()
         {
             await this.Queryable
+                .Where(x => x.CustomData["post"] == "Cell Block 1138")
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
+        }
+
+        [Fact]
+        public async Task Where_customData_equalsequals_casted_string()
+        {
+            await this.Queryable
                 .Where(x => (string)x.CustomData["post"] == "Cell Block 1138")
                 .MoveNextAsync();
 
@@ -322,6 +332,16 @@ namespace Stormpath.SDK.Tests.Linq
 
         [Fact]
         public async Task Where_customData_Equals_string()
+        {
+            await this.Queryable
+                .Where(x => x.CustomData["post"].Equals("Cell Block 1138"))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
+        }
+
+        [Fact]
+        public async Task Where_customData_Equals_casted_string()
         {
             await this.Queryable
                 .Where(x => ((string)x.CustomData["post"]).Equals("Cell Block 1138"))

@@ -17,6 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Linq;
+using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Impl.Linq.Parsing.Expressions;
 using Stormpath.SDK.Impl.Linq.QueryModel;
 
@@ -51,7 +54,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         protected override Expression VisitBinary(BinaryExpression node)
         {
-            var comparison = this.GetBinaryComparisonType(node.NodeType);
+            var comparison = GetBinaryComparisonType(node.NodeType);
 
             if (!comparison.HasValue)
             {
@@ -66,21 +69,73 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return node;
             }
 
+            WhereMemberExpression parsedExpression = null;
+
             // Handle .Where(x => x.Foo == 5)
             //     or .Where(x => 5 == x.Foo)
-            var memberAccessNodes = GetBinaryAsConstantAnd<MemberExpression>(node);
-            if (memberAccessNodes != default(Tuple<ConstantExpression, MemberExpression>))
+            parsedExpression = ParseSimpleMemberAccess(node, comparison.Value);
+            if (parsedExpression != null)
             {
-                this.parsedExpressions.Add(
-                    new WhereMemberExpression(
-                        memberAccessNodes.Item2.Member.Name,
-                        memberAccessNodes.Item1.Value,
-                        comparison.Value));
+                this.parsedExpressions.Add(parsedExpression);
+                return node; // done
+            }
 
+            // Handle .Where(x => x.CustomData["foo"] == "bar")
+            // or     .Where(x => "bar" == x.CustomData["foo"])
+            parsedExpression = ParseCustomDataAccess(node, comparison.Value);
+            if (parsedExpression != null)
+            {
+                this.parsedExpressions.Add(parsedExpression);
                 return node; // done
             }
 
             throw new NotSupportedException("A Where expression must contain a method call, or member access and constant expressions.");
+        }
+
+        private static WhereMemberExpression ParseSimpleMemberAccess(BinaryExpression binaryNode, WhereComparison comparison)
+        {
+            WhereMemberExpression result = null;
+
+            var memberAccessNodes = GetBinaryAsConstantAnd<MemberExpression>(binaryNode);
+            if (memberAccessNodes != null)
+            {
+                result = new WhereMemberExpression(
+                                        memberAccessNodes.Item2.Member.Name,
+                                        memberAccessNodes.Item1.Value,
+                                        comparison);
+            }
+
+            return result;
+        }
+
+        private static WhereMemberExpression ParseCustomDataAccess(BinaryExpression binaryNode, WhereComparison comparison)
+        {
+            var callNodes = GetBinaryAsConstantAnd<MethodCallExpression>(binaryNode);
+            if (callNodes == null)
+            {
+                return null; // fail fast
+            }
+
+            var asMemberAccess = callNodes.Item2.Object as MemberExpression;
+            bool isAccessingCustomDataProxy = asMemberAccess.Type == typeof(ICustomDataProxy);
+            bool isAccessingIndexer = callNodes.Item2.Method == GetCustomDataProxyIndexer();
+
+            string argument = (callNodes.Item2.Arguments[0] as ConstantExpression)?.Value?.ToString();
+            bool isArgumentPresent = !string.IsNullOrEmpty(argument);
+
+            if (!isAccessingCustomDataProxy
+                || !isAccessingIndexer
+                || !isArgumentPresent)
+            {
+                return null; // fail fast
+            }
+
+            var value = callNodes.Item1.Value;
+            var fieldName = $"customData.{argument}";
+
+            var result = new WhereMemberExpression(fieldName, value, comparison);
+
+            return result;
         }
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
@@ -203,7 +258,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         /// <param name="binaryNode">The binary node.</param>
         /// <param name="expectedType">The expected type of the other expression.</param>
         /// <returns>The constant expression and other expression.</returns>
-        private Tuple<ConstantExpression, TOther> GetBinaryAsConstantAnd<TOther>(BinaryExpression binaryNode)
+        private static Tuple<ConstantExpression, TOther> GetBinaryAsConstantAnd<TOther>(BinaryExpression binaryNode)
             where TOther: Expression
         {
             ConstantExpression constant = null;
@@ -221,7 +276,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             }
 
             return (constant == null || other == null)
-                ? default(Tuple<ConstantExpression, TOther>)
+                ? null
                 : new Tuple<ConstantExpression, TOther>(constant, other);
         }
 
@@ -236,7 +291,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 [ExpressionType.LessThanOrEqual] = WhereComparison.LessThanOrEqual
             };
 
-        private WhereComparison? GetBinaryComparisonType(ExpressionType type)
+        private static WhereComparison? GetBinaryComparisonType(ExpressionType type)
         {
             WhereComparison found;
             if (!comparisonLookup.TryGetValue(type, out found))
@@ -246,5 +301,21 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
             return found;
         }
+
+        private static Lazy<MethodInfo> CachedCustomDataProxyIndexer = new Lazy<MethodInfo>(() =>
+        {
+            var proxyTypeInfo = typeof(ICustomDataProxy).GetTypeInfo();
+
+            var indexer = (proxyTypeInfo
+                .DeclaredMembers
+                .SingleOrDefault(x => x.Name == proxyTypeInfo
+                    .CustomAttributes.ElementAtOrDefault(0)?.ConstructorArguments[0].Value.ToString()
+                ) as PropertyInfo)?.GetMethod;
+
+            return indexer;
+        });
+
+        private static MethodInfo GetCustomDataProxyIndexer()
+            => CachedCustomDataProxyIndexer.Value;
     }
 }
