@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Stormpath.SDK.Impl.Linq.Parsing.RangedTerms;
 using Stormpath.SDK.Impl.Linq.QueryModel;
@@ -127,8 +128,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         private void HandleWhere()
         {
-            var stringTerms = this.queryModel.WhereTerms
-                .Where(x => x.Type == typeof(string));
+            var stringLikeTerms = this.queryModel.WhereTerms
+                .Where(x => x.Type == typeof(string) || typeof(Shared.StringEnumeration).GetTypeInfo().IsAssignableFrom(x.Type.GetTypeInfo()));
 
             var datetimeTerms = this.queryModel.WhereTerms
                 .Where(x => x.Type == typeof(DateTimeOffset));
@@ -142,7 +143,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             var decimalTerms = this.queryModel.WhereTerms
                 .Where(x => SupportedNumericDecimalTypes.Contains(x.Type));
 
-            var compiledArguments = HandleWhereStringTerms(stringTerms)
+            var compiledArguments = HandleWhereStringTerms(stringLikeTerms)
                 .Concat(HandleWhereRangedDateTerms(datetimeTerms))
                 .Concat(HandleWhereDateShorthandTerms(datetimeShorthandTerms))
                 .Concat(HandleWhereRangedIntegerTerms(integerTerms))
@@ -154,7 +155,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             }
 
             var remainingTerms = this.queryModel.WhereTerms
-                .Except(stringTerms)
+                .Except(stringLikeTerms)
                 .Except(datetimeTerms)
                 .Except(datetimeShorthandTerms)
                 .Except(integerTerms)
