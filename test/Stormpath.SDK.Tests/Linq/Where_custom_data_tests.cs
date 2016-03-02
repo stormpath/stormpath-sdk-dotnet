@@ -143,14 +143,14 @@ namespace Stormpath.SDK.Tests.Linq
                 .Where(x => (x.CustomData["score"] as string).StartsWith("1234"))
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArguments("customData.saying=1234*");
+            this.ShouldBeCalledWithArguments("customData.score=1234*");
         }
 
         [Fact]
         public async Task Where_customData_string_EndsWith()
         {
             await this.Queryable
-                .Where(x => (x.CustomData["saying"] as string).StartsWith("trap!"))
+                .Where(x => (x.CustomData["saying"] as string).EndsWith("trap!"))
                 .MoveNextAsync();
 
             this.ShouldBeCalledWithArguments("customData.saying=*trap!");
