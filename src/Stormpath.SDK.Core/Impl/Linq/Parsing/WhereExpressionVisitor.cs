@@ -171,49 +171,34 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 node.Arguments[0].NodeType == ExpressionType.Constant;
             if (!correctOverload)
             {
-                throw new NotSupportedException($"The {node.Method.Name} with these overloads is not supported.");
+                throw new NotSupportedException($"The '{node.Method.Name}' method with these overloads is not supported.");
             }
 
-            if (node.Method.Name == "Equals")
+            WhereComparison? comparison = null;
+
+            switch (node.Method.Name)
+            {
+                case "Equals":
+                    comparison = WhereComparison.Equal;
+                    break;
+                case "StartsWith":
+                    comparison = WhereComparison.StartsWith;
+                    break;
+                case "EndsWith":
+                    comparison = WhereComparison.EndsWith;
+                    break;
+                case "Contains":
+                    comparison = WhereComparison.Contains;
+                    break;
+            }
+
+            if (comparison != null)
             {
                 this.parsedExpressions.Add(
                     new WhereMemberExpression(
-                        (node.Object as MemberExpression).Member.Name,
-                        (string)(node.Arguments[0] as ConstantExpression).Value,
-                        WhereComparison.Equal));
-
-                return node; // done
-            }
-
-            if (node.Method.Name == "StartsWith")
-            {
-                this.parsedExpressions.Add(
-                    new WhereMemberExpression(
-                        (node.Object as MemberExpression).Member.Name,
-                        (string)(node.Arguments[0] as ConstantExpression).Value,
-                        WhereComparison.StartsWith));
-
-                return node; // done
-            }
-
-            if (node.Method.Name == "EndsWith")
-            {
-                this.parsedExpressions.Add(
-                    new WhereMemberExpression(
-                        (node.Object as MemberExpression).Member.Name,
-                        (string)(node.Arguments[0] as ConstantExpression).Value,
-                        WhereComparison.EndsWith));
-
-                return node; // done
-            }
-
-            if (node.Method.Name == "Contains")
-            {
-                this.parsedExpressions.Add(
-                    new WhereMemberExpression(
-                        (node.Object as MemberExpression).Member.Name,
-                        (string)(node.Arguments[0] as ConstantExpression).Value,
-                        WhereComparison.Contains));
+                    (node.Object as MemberExpression).Member.Name,
+                    (string)(node.Arguments[0] as ConstantExpression).Value,
+                    comparison.Value));
 
                 return node; // done
             }
