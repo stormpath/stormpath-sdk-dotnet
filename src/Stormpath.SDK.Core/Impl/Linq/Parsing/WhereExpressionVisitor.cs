@@ -73,66 +73,54 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
             // Handle .Where(x => x.Foo == 5)
             //     or .Where(x => 5 == x.Foo)
-            parsedExpression = ParseSimpleMemberAccess(node, comparison.Value);
-            if (parsedExpression != null)
+            var asMemberAccess = GetBinaryAsConstantAnd<MemberExpression>(node);
+            if (asMemberAccess != null)
             {
-                this.parsedExpressions.Add(parsedExpression);
+                this.parsedExpressions.Add(new WhereMemberExpression(
+                    asMemberAccess.Item2.Member.Name,
+                    asMemberAccess.Item1.Value,
+                    comparison.Value));
+
                 return node; // done
             }
 
             // Handle .Where(x => x.CustomData["foo"] == "bar")
             // or     .Where(x => "bar" == x.CustomData["foo"])
-            parsedExpression = ParseCustomDataAccess(node, comparison.Value);
-            if (parsedExpression != null)
+            var asCustomDataExpression = GetBinaryAsConstantAnd<Expression>(node);
+            if (asCustomDataExpression != null)
             {
-                this.parsedExpressions.Add(parsedExpression);
+                var fieldName = GetCustomDataFieldName(asCustomDataExpression.Item2);
+
+                this.parsedExpressions.Add(new WhereMemberExpression(
+                    fieldName,
+                    asCustomDataExpression.Item1.Value,
+                    comparison.Value));
+
                 return node; // done
             }
 
             throw new NotSupportedException("A Where expression must contain a method call, or member access and constant expressions.");
         }
 
-        private static WhereMemberExpression ParseSimpleMemberAccess(BinaryExpression binaryNode, WhereComparison comparison)
-        {
-            WhereMemberExpression result = null;
-
-            var memberAccessNodes = GetBinaryAsConstantAnd<MemberExpression>(binaryNode);
-            if (memberAccessNodes != null)
-            {
-                result = new WhereMemberExpression(
-                                        memberAccessNodes.Item2.Member.Name,
-                                        memberAccessNodes.Item1.Value,
-                                        comparison);
-            }
-
-            return result;
-        }
-
-        private static WhereMemberExpression ParseCustomDataAccess(BinaryExpression binaryNode, WhereComparison comparison)
+        private static string GetCustomDataFieldName(Expression node)
         {
             MethodCallExpression methodCall = null;
-            ConstantExpression constant = null;
 
             // Handle casting: (string)CustomData["foo"] or (CustomData["foo"] as string)
-            var asUnary = GetBinaryAsConstantAnd<UnaryExpression>(binaryNode);
-            bool isCast = asUnary?.Item2.NodeType == ExpressionType.Convert
-                || asUnary?.Item2.NodeType == ExpressionType.TypeAs;
+            bool isCast = node.NodeType == ExpressionType.Convert
+                || node.NodeType == ExpressionType.TypeAs;
             if (isCast)
             {
                 // We just unwrap the Convert() expression and ignore the cast
-                constant = asUnary.Item1;
-                methodCall = asUnary.Item2.Operand as MethodCallExpression;
-            }
-
-            // Handle straight member access: CustomData["foo"]
-            var asCall = GetBinaryAsConstantAnd<MethodCallExpression>(binaryNode);
-            if (asCall != null)
+                methodCall = (node as UnaryExpression)?.Operand as MethodCallExpression;
+            } 
+            else
             {
-                constant = asCall.Item1;
-                methodCall = asCall.Item2;
+                // Handle straight member access: CustomData["foo"]
+                methodCall = node as MethodCallExpression;
             }
 
-            if (methodCall == null || constant == null)
+            if (methodCall == null)
             {
                 return null; // Wasn't able to parse expression. Fail fast
             }
@@ -151,12 +139,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return null; // fail fast
             }
 
-            var value = constant.Value;
             var fieldName = $"customData.{argument}";
 
-            var result = new WhereMemberExpression(fieldName, value, comparison);
-
-            return result;
+            return fieldName;
         }
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
