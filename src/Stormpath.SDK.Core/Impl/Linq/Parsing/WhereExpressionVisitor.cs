@@ -166,13 +166,27 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         private Expression HandleWithinExtensionMethod(MethodCallExpression node)
         {
-            var methodCallMember = node.Arguments[0] as MemberExpression;
-            var fieldName = methodCallMember.Member.Name;
+            var fieldName = string.Empty;
 
-            bool isDateTimeField = methodCallMember?.Type == typeof(DateTimeOffset);
-            if (!isDateTimeField)
+            var targetAsMember = node.Arguments[0] as MemberExpression;
+            if (targetAsMember != null)
             {
-                throw new NotSupportedException("Within must be used on a supported datetime field.");
+                bool isDateTimeField = targetAsMember.Type == typeof(DateTimeOffset);
+                if (!isDateTimeField)
+                {
+                    throw new NotSupportedException("Within must be used on a supported datetime field.");
+                }
+
+                fieldName = targetAsMember.Member.Name;
+            }
+            else
+            {
+                fieldName = CustomDataParsingHelper.GetFieldName(node.Arguments[0]);
+            }
+
+            if (string.IsNullOrEmpty(fieldName))
+            {
+                throw new NotSupportedException($"The target of method '{node.Method.Name}' could not be parsed.");
             }
 
             var numberOfConstantArgs = node.Arguments.Count - 1;

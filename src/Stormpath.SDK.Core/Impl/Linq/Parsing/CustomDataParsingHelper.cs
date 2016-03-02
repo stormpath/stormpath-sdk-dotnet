@@ -42,6 +42,11 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         public static string GetFieldName(Expression node)
         {
+            if (node == null)
+            {
+                return null; // Fail fast
+            }
+
             MethodCallExpression methodCall = null;
             Expression currentNode = node;
 
