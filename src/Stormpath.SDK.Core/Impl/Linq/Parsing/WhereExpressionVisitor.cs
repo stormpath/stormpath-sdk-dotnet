@@ -160,7 +160,6 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             }
 
             WhereComparison? comparison = null;
-
             switch (node.Method.Name)
             {
                 case "Equals":
@@ -177,18 +176,33 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                     break;
             }
 
-            if (comparison != null)
+            if (comparison == null)
             {
-                this.parsedExpressions.Add(
-                    new WhereMemberExpression(
-                    (node.Object as MemberExpression).Member.Name,
-                    (string)(node.Arguments[0] as ConstantExpression).Value,
-                    comparison.Value));
-
-                return node; // done
+                throw new NotSupportedException($"The method '{node.Method.Name}' is not supported.");
             }
 
-            throw new NotSupportedException($"The method {node.Method.Name} is not supported.");
+            var value = (node.Arguments[0] as ConstantExpression).Value;
+            var fieldName = string.Empty;
+
+            var targetAsMember = node.Object as MemberExpression;
+            if (targetAsMember != null)
+            {
+                fieldName = targetAsMember.Member.Name;
+            }
+            else
+            {
+                fieldName = GetCustomDataFieldName(node.Object);
+            }
+
+            if (string.IsNullOrEmpty(fieldName))
+            {
+                throw new NotSupportedException($"The target of method '{node.Method.Name}' could not be parsed.");
+            }
+
+            this.parsedExpressions.Add(
+                new WhereMemberExpression(fieldName, value, comparison.Value));
+
+            return node; // done
         }
 
         private Expression HandleWithinExtensionMethod(MethodCallExpression node)
