@@ -74,18 +74,6 @@ namespace Stormpath.SDK.Tests.Linq
         }
 
         [Fact]
-        public async Task Throws_when_specifying_string_comparison_for_customData_Equals()
-        {
-            // TODO NotSupportedException after Shouldly Mono fix
-            await Should.ThrowAsync<Exception>(async () =>
-            {
-                await this.Queryable
-                    .Where(x => ((string)x.CustomData["foobar"]).Equals("baz", StringComparison.Ordinal))
-                    .MoveNextAsync();
-            });
-        }
-
-        [Fact]
         public async Task Throws_for_complex_overload_of_StartsWith()
         {
             // TODO NotSupportedException after Shouldly Mono fix
@@ -287,7 +275,7 @@ namespace Stormpath.SDK.Tests.Linq
         }
 
         [Fact]
-        public async Task Where_date_attribute_equals()
+        public async Task Throws_for_date_equality()
         {
             var testDate = new DateTime(2016, 01, 01, 12, 00, 00);
 
@@ -308,96 +296,6 @@ namespace Stormpath.SDK.Tests.Linq
              select account).MoveNextAsync();
 
             this.ShouldBeCalledWithArguments("email=tk421%40deathstar.co");
-        }
-
-        [Fact]
-        public async Task Where_customData_equalsequals_string()
-        {
-            await this.Queryable
-                .Where(x => x.CustomData["post"] == "Cell Block 1138")
-                .MoveNextAsync();
-
-            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
-        }
-
-        [Fact]
-        public async Task Where_customData_equalsequals_string_reversed()
-        {
-            await this.Queryable
-                .Where(x => "Cell Block 1138" == x.CustomData["post"])
-                .MoveNextAsync();
-
-            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
-        }
-
-        [Fact]
-        public async Task Where_customData_equalsequals_casted_string()
-        {
-            await this.Queryable
-                .Where(x => (string)x.CustomData["post"] == "Cell Block 1138")
-                .MoveNextAsync();
-
-            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
-        }
-
-        [Fact]
-        public async Task Where_customData_equalsequals_casted_string_reversed()
-        {
-            await this.Queryable
-                .Where(x => "Cell Block 1138" == (string)x.CustomData["post"])
-                .MoveNextAsync();
-
-            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
-        }
-
-        [Fact]
-        public async Task Where_customData_equalsequals_casted_as_string()
-        {
-            await this.Queryable
-                .Where(x => (x.CustomData["post"] as string) == "Cell Block 1138")
-                .MoveNextAsync();
-
-            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
-        }
-
-        [Fact]
-        public async Task Where_customData_equalsequals_casted_as_string_reversed()
-        {
-            await this.Queryable
-                .Where(x => "Cell Block 1138" == (x.CustomData["post"] as string))
-                .MoveNextAsync();
-
-            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
-        }
-
-        [Fact]
-        public async Task Where_customData_Equals_string()
-        {
-            await this.Queryable
-                .Where(x => x.CustomData["post"].Equals("Cell Block 1138"))
-                .MoveNextAsync();
-
-            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
-        }
-
-        [Fact]
-        public async Task Where_customData_Equals_casted_string()
-        {
-            await this.Queryable
-                .Where(x => ((string)x.CustomData["post"]).Equals("Cell Block 1138"))
-                .MoveNextAsync();
-
-            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
-        }
-
-        [Fact]
-        public async Task Where_customData_Equals_casted_as_string()
-        {
-            await this.Queryable
-                .Where(x => (x.CustomData["post"] as string).Equals("Cell Block 1138"))
-                .MoveNextAsync();
-
-            this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
         }
     }
 }

@@ -74,5 +74,25 @@ namespace Stormpath.SDK.Tests.Linq
 
             this.ShouldBeCalledWithArguments("orderBy=givenName,username+desc");
         }
+
+        [Fact]
+        public async Task Sort_by_customData_field()
+        {
+            await this.Queryable
+                .OrderBy(x => x.CustomData["score"])
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("orderBy=customData.score");
+        }
+
+        [Fact]
+        public async Task Sort_by_customData_field_descending()
+        {
+            await this.Queryable
+                .OrderByDescending(x => x.CustomData["score"])
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("orderBy=customData.score+desc");
+        }
     }
 }

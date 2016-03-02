@@ -175,5 +175,15 @@ namespace Stormpath.SDK.Tests.Linq
 
             this.ShouldBeCalledWithArguments("createdAt=2015-01-01T12:30:31");
         }
+
+        [Fact]
+        public async Task Where_customData_date_using_shorthand()
+        {
+            await this.Queryable
+                .Where(x => ((DateTimeOffset)x.CustomData["birthday"]).Within(2015, 01, 01))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("customData.birthday=2015-01-01");
+        }
     }
 }

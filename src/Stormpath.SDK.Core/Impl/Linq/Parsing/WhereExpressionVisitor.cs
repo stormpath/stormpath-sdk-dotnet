@@ -113,7 +113,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             {
                 // We just unwrap the Convert() expression and ignore the cast
                 methodCall = (node as UnaryExpression)?.Operand as MethodCallExpression;
-            } 
+            }
             else
             {
                 // Handle straight member access: CustomData["foo"]
