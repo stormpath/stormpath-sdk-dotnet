@@ -15,16 +15,24 @@
 // </copyright>
 
 using System;
+using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
 {
-    internal sealed class RangedDoubleWhereTermParser : AbstractRangedWhereTermParser<double>
+    internal sealed class RangedDoubleWhereTermParser : AbstractRangedWhereTermParser<SpecifiedPrecisionToken>
     {
-        protected override double? Coerce(object value)
+        protected override SpecifiedPrecisionToken? Coerce(object value)
         {
             try
             {
-                return Convert.ToDouble(value);
+                if (value is SpecifiedPrecisionToken)
+                {
+                    return (SpecifiedPrecisionToken)value;
+                }
+                else
+                {
+                    return new SpecifiedPrecisionToken(Convert.ToDouble(value));
+                }
             }
             catch (Exception ex)
             {
@@ -32,7 +40,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
             }
         }
 
-        protected override string Format(double value)
+        protected override string Format(SpecifiedPrecisionToken value)
             => value.ToString();
     }
 }

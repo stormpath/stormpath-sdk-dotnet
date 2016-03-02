@@ -53,6 +53,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         {
             var chain = new IExpressionTransformer[]
             {
+                //new CustomTokenReplacingTransformer(),
                 new PartialEvaluationTransformer(),
                 new VbStringCompareTransformer(),
                 new VbConvertInvocationTransformer(),

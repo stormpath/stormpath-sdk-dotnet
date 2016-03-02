@@ -23,12 +23,45 @@ namespace Stormpath.SDK.Linq
     /// </summary>
     public struct SpecifiedPrecisionToken
     {
+        public SpecifiedPrecisionToken(double value)
+        {
+            this.Value = value;
+            this.Places = null;
+        }
+
+        public SpecifiedPrecisionToken(double value, int places)
+        {
+            this.Value = value;
+            this.Places = places;
+        }
+
+        public override string ToString()
+        {
+            return this.Places == null
+                ? this.Value.ToString()
+                : this.Value.ToString($"#.{new string('0', this.Places.Value)}");
+        }
+
+        public double Value { get; private set; }
+
+        public int? Places { get; private set; }
+
         public static implicit operator float(SpecifiedPrecisionToken token)
         {
             throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ Where predicate.");
         }
 
         public static implicit operator double(SpecifiedPrecisionToken token)
+        {
+            throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ Where predicate.");
+        }
+
+        public static bool operator >(double left, SpecifiedPrecisionToken right)
+        {
+            throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ Where predicate.");
+        }
+
+        public static bool operator <(double left, SpecifiedPrecisionToken right)
         {
             throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ Where predicate.");
         }

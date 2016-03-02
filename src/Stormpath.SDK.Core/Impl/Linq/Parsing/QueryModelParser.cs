@@ -22,6 +22,7 @@ using System.Text;
 using Stormpath.SDK.Impl.Linq.Parsing.RangedTerms;
 using Stormpath.SDK.Impl.Linq.QueryModel;
 using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
 {
@@ -38,6 +39,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         {
             typeof(float),
             typeof(double),
+            typeof(SpecifiedPrecisionToken),
         };
 
         public static IList<string> GetArguments(CollectionResourceQueryModel queryModel)

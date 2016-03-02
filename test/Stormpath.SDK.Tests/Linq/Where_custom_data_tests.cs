@@ -218,6 +218,16 @@ namespace Stormpath.SDK.Tests.Linq
         }
 
         [Fact]
+        public async Task Where_customData_int_greater_than_with_specified_precision()
+        {
+            await this.Queryable
+                .Where(x => (int)x.CustomData["score"] > 50.WithPlaces(3))
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("customData.score=(50.000,]");
+        }
+
+        [Fact]
         public async Task Where_customData_int_less_than()
         {
             await this.Queryable
@@ -244,7 +254,7 @@ namespace Stormpath.SDK.Tests.Linq
                 .Where(x => (float)x.CustomData["score"] > 1.WithPlaces(3))
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArguments("customData.score=(1.000,)");
+            this.ShouldBeCalledWithArguments("customData.score=(1.000,]");
         }
 
         [Fact]
@@ -254,7 +264,7 @@ namespace Stormpath.SDK.Tests.Linq
                 .Where(x => (float)x.CustomData["score"] > (1.0).WithPlaces(3))
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArguments("customData.score=(1.000,)");
+            this.ShouldBeCalledWithArguments("customData.score=(1.000,]");
         }
 
         [Fact]
@@ -264,7 +274,7 @@ namespace Stormpath.SDK.Tests.Linq
                 .Where(x => (double)x.CustomData["score"] > 1.WithPlaces(3))
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArguments("customData.score=(1.000,)");
+            this.ShouldBeCalledWithArguments("customData.score=(1.000,]");
         }
 
         [Fact]
@@ -274,7 +284,7 @@ namespace Stormpath.SDK.Tests.Linq
                 .Where(x => (double)x.CustomData["score"] > (1.0).WithPlaces(3))
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArguments("customData.score=(1.000,)");
+            this.ShouldBeCalledWithArguments("customData.score=(1.000,]");
         }
     }
 }

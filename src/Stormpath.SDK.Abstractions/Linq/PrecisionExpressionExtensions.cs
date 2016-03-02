@@ -31,9 +31,7 @@ namespace Stormpath.SDK
         /// <param name="decimalPlaces">The number of decimal places.</param>
         /// <exception cref="NotSupportedException">This method can only be used from inside a LINQ Where predicate.</exception>
         public static SpecifiedPrecisionToken WithPlaces(this int target, int decimalPlaces)
-        {
-            throw new NotSupportedException("Direct calls to WithPlaces() are not supported. Use from inside a LINQ Where predicate.");
-        }
+            => new SpecifiedPrecisionToken(target, decimalPlaces);
 
         /// <summary>
         /// Specifies the number of decimal places to use in the query.
@@ -42,8 +40,6 @@ namespace Stormpath.SDK
         /// <param name="decimalPlaces">The number of decimal places.</param>
         /// <exception cref="NotSupportedException">This method can only be used from inside a LINQ Where predicate.</exception>
         public static SpecifiedPrecisionToken WithPlaces(this double target, int decimalPlaces)
-        {
-            throw new NotSupportedException("Direct calls to WithPlaces() are not supported. Use from inside a LINQ Where predicate.");
-        }
+            => new SpecifiedPrecisionToken(target, decimalPlaces);
     }
 }
