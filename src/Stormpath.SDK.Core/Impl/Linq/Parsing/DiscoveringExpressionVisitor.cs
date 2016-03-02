@@ -131,13 +131,25 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 throw new NotSupportedException("This overload of OrderBy is not supported.");
             }
 
-            var field = ((node.Arguments[1] as UnaryExpression)?.Operand as LambdaExpression)?.Body as MemberExpression;
-            if (field == null)
+            var fieldName = string.Empty;
+            var lambdaBody = ((node.Arguments[1] as UnaryExpression)?.Operand as LambdaExpression)?.Body;
+
+            var asMemberAccess = lambdaBody as MemberExpression;
+            if (asMemberAccess != null)
+            {
+                fieldName = asMemberAccess.Member.Name;
+            }
+            else
+            {
+                fieldName = CustomDataParsingHelper.GetFieldName(lambdaBody);
+            }
+
+            if (string.IsNullOrEmpty(fieldName))
             {
                 throw new NotSupportedException($"{node.Method.Name} must operate on a supported field.");
             }
 
-            this.orderByExpressions.Push(new OrderByExpression(field.Member.Name, direction.Value));
+            this.orderByExpressions.Push(new OrderByExpression(fieldName, direction.Value));
 
             return true;
         }

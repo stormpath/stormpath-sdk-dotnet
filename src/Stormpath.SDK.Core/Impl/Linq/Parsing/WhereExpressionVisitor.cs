@@ -69,8 +69,6 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return node;
             }
 
-            WhereMemberExpression parsedExpression = null;
-
             // Handle .Where(x => x.Foo == 5)
             //     or .Where(x => 5 == x.Foo)
             var asMemberAccess = GetBinaryAsConstantAnd<MemberExpression>(node);
@@ -89,7 +87,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             var asCustomDataExpression = GetBinaryAsConstantAnd<Expression>(node);
             if (asCustomDataExpression != null)
             {
-                var fieldName = GetCustomDataFieldName(asCustomDataExpression.Item2);
+                var fieldName = CustomDataParsingHelper.GetFieldName(asCustomDataExpression.Item2);
 
                 this.parsedExpressions.Add(new WhereMemberExpression(
                     fieldName,
@@ -100,48 +98,6 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             }
 
             throw new NotSupportedException("A Where expression must contain a method call, or member access and constant expressions.");
-        }
-
-        private static string GetCustomDataFieldName(Expression node)
-        {
-            MethodCallExpression methodCall = null;
-
-            // Handle casting: (string)CustomData["foo"] or (CustomData["foo"] as string)
-            bool isCast = node.NodeType == ExpressionType.Convert
-                || node.NodeType == ExpressionType.TypeAs;
-            if (isCast)
-            {
-                // We just unwrap the Convert() expression and ignore the cast
-                methodCall = (node as UnaryExpression)?.Operand as MethodCallExpression;
-            }
-            else
-            {
-                // Handle straight member access: CustomData["foo"]
-                methodCall = node as MethodCallExpression;
-            }
-
-            if (methodCall == null)
-            {
-                return null; // Wasn't able to parse expression. Fail fast
-            }
-
-            var asMemberAccess = methodCall.Object as MemberExpression;
-            bool isAccessingCustomDataProxy = asMemberAccess.Type == typeof(ICustomDataProxy);
-            bool isAccessingIndexer = methodCall.Method == GetCustomDataProxyIndexer();
-
-            string argument = (methodCall.Arguments[0] as ConstantExpression)?.Value?.ToString();
-            bool isArgumentPresent = !string.IsNullOrEmpty(argument);
-
-            if (!isAccessingCustomDataProxy
-                || !isAccessingIndexer
-                || !isArgumentPresent)
-            {
-                return null; // fail fast
-            }
-
-            var fieldName = $"customData.{argument}";
-
-            return fieldName;
         }
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
@@ -191,7 +147,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             }
             else
             {
-                fieldName = GetCustomDataFieldName(node.Object);
+                fieldName = CustomDataParsingHelper.GetFieldName(node.Object);
             }
 
             if (string.IsNullOrEmpty(fieldName))
@@ -306,21 +262,5 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
             return found;
         }
-
-        private static Lazy<MethodInfo> CachedCustomDataProxyIndexer = new Lazy<MethodInfo>(() =>
-        {
-            var proxyTypeInfo = typeof(ICustomDataProxy).GetTypeInfo();
-
-            var indexer = (proxyTypeInfo
-                .DeclaredMembers
-                .SingleOrDefault(x => x.Name == proxyTypeInfo
-                    .CustomAttributes.ElementAtOrDefault(0)?.ConstructorArguments[0].Value.ToString()
-                ) as PropertyInfo)?.GetMethod;
-
-            return indexer;
-        });
-
-        private static MethodInfo GetCustomDataProxyIndexer()
-            => CachedCustomDataProxyIndexer.Value;
     }
 }
