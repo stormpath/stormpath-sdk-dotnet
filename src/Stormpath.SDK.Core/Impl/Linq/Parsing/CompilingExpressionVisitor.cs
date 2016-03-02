@@ -130,7 +130,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         {
             string translatedFieldName = null;
 
-            // Custom Data "array" access doesn't need to be translated - use verbatim
+            // Custom Data access doesn't need to be translated - use verbatim
             if (node.FieldName.StartsWith("customData.", StringComparison.Ordinal))
             {
                 translatedFieldName = node.FieldName;

@@ -110,17 +110,26 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         private static WhereMemberExpression ParseCustomDataAccess(BinaryExpression binaryNode, WhereComparison comparison)
         {
-            var callNodes = GetBinaryAsConstantAnd<MethodCallExpression>(binaryNode);
-            if (callNodes == null)
+            MethodCallExpression methodCall = null;
+            ConstantExpression constant = null;
+
+            var asCall = GetBinaryAsConstantAnd<MethodCallExpression>(binaryNode);
+            if (asCall != null)
             {
-                return null; // fail fast
+                constant = asCall.Item1;
+                methodCall = asCall.Item2;
             }
 
-            var asMemberAccess = callNodes.Item2.Object as MemberExpression;
-            bool isAccessingCustomDataProxy = asMemberAccess.Type == typeof(ICustomDataProxy);
-            bool isAccessingIndexer = callNodes.Item2.Method == GetCustomDataProxyIndexer();
+            if (methodCall == null || constant == null)
+            {
+                return null; // Wasn't able to parse expression. Fail fast
+            }
 
-            string argument = (callNodes.Item2.Arguments[0] as ConstantExpression)?.Value?.ToString();
+            var asMemberAccess = methodCall.Object as MemberExpression;
+            bool isAccessingCustomDataProxy = asMemberAccess.Type == typeof(ICustomDataProxy);
+            bool isAccessingIndexer = methodCall.Method == GetCustomDataProxyIndexer();
+
+            string argument = (methodCall.Arguments[0] as ConstantExpression)?.Value?.ToString();
             bool isArgumentPresent = !string.IsNullOrEmpty(argument);
 
             if (!isAccessingCustomDataProxy
@@ -130,7 +139,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return null; // fail fast
             }
 
-            var value = callNodes.Item1.Value;
+            var value = constant.Value;
             var fieldName = $"customData.{argument}";
 
             var result = new WhereMemberExpression(fieldName, value, comparison);
