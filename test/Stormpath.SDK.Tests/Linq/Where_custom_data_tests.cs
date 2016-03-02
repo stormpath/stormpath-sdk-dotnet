@@ -234,7 +234,7 @@ namespace Stormpath.SDK.Tests.Linq
                 .Where(x => (float)x.CustomData["score"] >= 0.01 && (float)x.CustomData["score"] < 1.01)
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArguments("customData.score=[0.01, 1.01)");
+            this.ShouldBeCalledWithArguments("customData.score=[0.01,1.01)");
         }
     }
 }

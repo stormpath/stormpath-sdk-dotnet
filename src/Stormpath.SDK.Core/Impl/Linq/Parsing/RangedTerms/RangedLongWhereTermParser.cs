@@ -1,4 +1,4 @@
-﻿// <copyright file="RangedIntegerWhereTermParser.cs" company="Stormpath, Inc.">
+﻿// <copyright file="RangedLongWhereTermParser.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@ using System;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
 {
-    internal sealed class RangedIntegerWhereTermParser : AbstractRangedWhereTermParser<long>
+    internal sealed class RangedLongWhereTermParser : AbstractRangedWhereTermParser<long>
     {
         protected override long? Coerce(object value)
         {

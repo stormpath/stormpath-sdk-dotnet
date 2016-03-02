@@ -145,7 +145,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             var compiledArguments = HandleWhereStringTerms(stringTerms)
                 .Concat(HandleWhereRangedDateTerms(datetimeTerms))
                 .Concat(HandleWhereDateShorthandTerms(datetimeShorthandTerms))
-                .Concat(HandleWhereRangedIntegerTerms(integerTerms));
+                .Concat(HandleWhereRangedIntegerTerms(integerTerms))
+                .Concat(HandleWhereRangedDecimalTerms(decimalTerms));
 
             foreach (var arg in compiledArguments)
             {
@@ -156,7 +157,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 .Except(stringTerms)
                 .Except(datetimeTerms)
                 .Except(datetimeShorthandTerms)
-                .Except(integerTerms);
+                .Except(integerTerms)
+                .Except(decimalTerms);
 
             if (remainingTerms.Any())
             {
@@ -254,13 +256,14 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         private static IEnumerable<KeyValuePair<string, string>> HandleWhereRangedIntegerTerms(IEnumerable<WhereTerm> terms)
         {
-            var compiled = new RangedIntegerWhereTermParser().Parse(terms);
+            var compiled = new RangedLongWhereTermParser().Parse(terms);
             return compiled;
         }
 
         private static IEnumerable<KeyValuePair<string, string>> HandleWhereRangedDecimalTerms(IEnumerable<WhereTerm> terms)
         {
-            return Enumerable.Empty<KeyValuePair<string, string>>(); // todo
+            var compiled = new RangedDoubleWhereTermParser().Parse(terms);
+            return compiled;
         }
 
         private void HandleExpand()
