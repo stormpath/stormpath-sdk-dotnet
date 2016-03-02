@@ -113,9 +113,11 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             MethodCallExpression methodCall = null;
             ConstantExpression constant = null;
 
-            // Handle casting: (string)CustomData["foo"]
+            // Handle casting: (string)CustomData["foo"] or (CustomData["foo"] as string)
             var asUnary = GetBinaryAsConstantAnd<UnaryExpression>(binaryNode);
-            if (asUnary != null && asUnary.Item2.NodeType == ExpressionType.Convert)
+            bool isCast = asUnary?.Item2.NodeType == ExpressionType.Convert
+                || asUnary?.Item2.NodeType == ExpressionType.TypeAs;
+            if (isCast)
             {
                 // We just unwrap the Convert() expression and ignore the cast
                 constant = asUnary.Item1;
