@@ -23,8 +23,8 @@ using Stormpath.SDK.Impl.Linq.QueryModel;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
 {
-    internal abstract class AbstractRangedWhereTermParser<TModel>
-        where TModel : AbstractRangedWhereTermWorkingModel, new()
+    internal abstract class AbstractRangedWhereTermParser<T>
+        where T : struct
     {
         public IEnumerable<KeyValuePair<string, string>> Parse(IEnumerable<WhereTerm> terms)
         {
@@ -34,29 +34,19 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
             return attributes;
         }
 
-        protected abstract bool HasStart(TModel model);
+        protected abstract T? Coerce(object value);
 
-        protected abstract bool HasEnd(TModel model);
+        protected abstract string Format(T value);
 
-        protected abstract object GetStart(TModel model);
-
-        protected abstract object GetEnd(TModel model);
-
-        protected abstract void SetStart(TModel model, object value);
-
-        protected abstract void SetEnd(TModel model, object value);
-
-        protected abstract string Format(object value);
-
-        private IEnumerable<KeyValuePair<string, TModel>> ParseAndConsolidate(IEnumerable<WhereTerm> terms)
+        private IEnumerable<KeyValuePair<string, RangedWhereTermWorkingModel<T>>> ParseAndConsolidate(IEnumerable<WhereTerm> terms)
         {
-            var workingModels = new Dictionary<string, TModel>();
+            var workingModels = new Dictionary<string, RangedWhereTermWorkingModel<T>>();
 
             foreach (var term in terms)
             {
                 if (!workingModels.ContainsKey(term.FieldName))
                 {
-                    workingModels.Add(term.FieldName, new TModel());
+                    workingModels.Add(term.FieldName, new RangedWhereTermWorkingModel<T>());
                 }
 
                 var workingModel = workingModels[term.FieldName];
@@ -65,8 +55,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
                     term.Comparison == WhereComparison.GreaterThan ||
                     term.Comparison == WhereComparison.GreaterThanOrEqual;
                 bool collision =
-                    (isStartTerm && (HasStart(workingModel) || workingModel.StartInclusive != null)) ||
-                    (!isStartTerm && (HasEnd(workingModel) || workingModel.EndInclusive != null));
+                    (isStartTerm && (workingModel.Start != null || workingModel.StartInclusive != null)) ||
+                    (!isStartTerm && (workingModel.End != null || workingModel.EndInclusive != null));
                 if (collision)
                 {
                     throw new ArgumentException("Error compiling range terms.");
@@ -79,12 +69,12 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
                     term.Comparison == WhereComparison.LessThanOrEqual;
                 if (isStartTerm)
                 {
-                    SetStart(workingModel, term.Value);
+                    workingModel.Start = Coerce(term.Value);
                     workingModel.StartInclusive = term.Comparison == WhereComparison.GreaterThanOrEqual;
                 }
                 else
                 {
-                    SetEnd(workingModel, term.Value);
+                    workingModel.End = Coerce(term.Value);
                     workingModel.EndInclusive = term.Comparison == WhereComparison.LessThanOrEqual;
                 }
             }
@@ -92,7 +82,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
             return workingModels;
         }
 
-        private IEnumerable<KeyValuePair<string, string>> CreateAttributes(IEnumerable<KeyValuePair<string, TModel>> workingModels)
+        private IEnumerable<KeyValuePair<string, string>> CreateAttributes(IEnumerable<KeyValuePair<string, RangedWhereTermWorkingModel<T>>> workingModels)
         {
             var usedArguments = new List<string>();
             var attributeBuilder = new StringBuilder();
@@ -106,25 +96,25 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
 
                 attributeBuilder.Clear();
 
-                if (!HasStart(model))
+                if (model.Start == null)
                 {
                     attributeBuilder.Append("[");
                 }
                 else
                 {
                     attributeBuilder.Append(model.StartInclusive ?? true ? "[" : "(");
-                    attributeBuilder.Append(Format(GetStart(model)));
+                    attributeBuilder.Append(Format(model.Start.Value));
                 }
 
                 attributeBuilder.Append(",");
 
-                if (!HasEnd(model))
+                if (model.End == null)
                 {
                     attributeBuilder.Append("]");
                 }
                 else
                 {
-                    attributeBuilder.Append(Format(GetEnd(model)));
+                    attributeBuilder.Append(Format(model.End.Value));
                     attributeBuilder.Append(model.EndInclusive ?? true ? "]" : ")");
                 }
 

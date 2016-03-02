@@ -19,26 +19,26 @@ using Stormpath.SDK.Impl.Utility;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
 {
-    internal sealed class RangedDatetimeWhereTermParser : AbstractRangedWhereTermParser<RangedDatetimeWhereTermWorkingModel>
+    internal sealed class RangedDatetimeWhereTermParser : AbstractRangedWhereTermParser<DateTimeOffset>
     {
-        protected override object GetEnd(RangedDatetimeWhereTermWorkingModel model) => model.End;
-
-        protected override object GetStart(RangedDatetimeWhereTermWorkingModel model) => model.Start;
-
-        protected override bool HasEnd(RangedDatetimeWhereTermWorkingModel model) => model.End != null;
-
-        protected override bool HasStart(RangedDatetimeWhereTermWorkingModel model) => model.Start != null;
-
-        protected override void SetEnd(RangedDatetimeWhereTermWorkingModel model, object value)
+        protected override DateTimeOffset? Coerce(object value)
         {
-            model.End = (DateTimeOffset)value;
+            if (value == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                return (DateTimeOffset)value;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not parse ranged datetime term '{value}'. See the inner exception for details.", ex);
+            }
         }
 
-        protected override void SetStart(RangedDatetimeWhereTermWorkingModel model, object value)
-        {
-            model.Start = (DateTimeOffset)value;
-        }
-
-        protected override string Format(object value) => Iso8601.Format()
+        protected override string Format(DateTimeOffset value)
+            => Iso8601.Format(value);
     }
 }

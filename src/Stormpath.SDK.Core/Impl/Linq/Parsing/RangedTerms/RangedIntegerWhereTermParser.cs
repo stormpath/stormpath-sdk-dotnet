@@ -18,21 +18,13 @@ using System;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
 {
-    internal sealed class RangedIntegerWhereTermParser : AbstractRangedWhereTermParser<RangedIntegerWhereTermWorkingModel>
+    internal sealed class RangedIntegerWhereTermParser : AbstractRangedWhereTermParser<long>
     {
-        protected override object GetEnd(RangedIntegerWhereTermWorkingModel model) => model.End;
-
-        protected override object GetStart(RangedIntegerWhereTermWorkingModel model) => model.Start;
-
-        protected override bool HasEnd(RangedIntegerWhereTermWorkingModel model) => model.End != null;
-
-        protected override bool HasStart(RangedIntegerWhereTermWorkingModel model) => model.Start != null;
-
-        protected override void SetEnd(RangedIntegerWhereTermWorkingModel model, object value)
+        protected override long? Coerce(object value)
         {
             try
             {
-                model.End = Convert.ToInt64(value);
+                return Convert.ToInt64(value);
             }
             catch (Exception ex)
             {
@@ -40,16 +32,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
             }
         }
 
-        protected override void SetStart(RangedIntegerWhereTermWorkingModel model, object value)
-        {
-            try
-            {
-                model.Start = Convert.ToInt64(value);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Could not add ranged integer term. See the inner exception for details.", ex);
-            }
-        }
+        protected override string Format(long value)
+            => value.ToString();
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="AbstractWhereTermWorkingModel.cs" company="Stormpath, Inc.">
+﻿// <copyright file="RangedWhereTermWorkingModel.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +16,17 @@
 
 namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
 {
-    internal abstract class AbstractRangedWhereTermWorkingModel
+    internal class RangedWhereTermWorkingModel<T>
+        where T : struct
     {
         public string FieldName { get; set; }
 
         public bool? StartInclusive { get; set; }
 
+        public T? Start { get; set; }
+
         public bool? EndInclusive { get; set; }
+
+        public T? End { get; set; }
     }
 }
