@@ -231,10 +231,10 @@ namespace Stormpath.SDK.Tests.Linq
         public async Task Where_customData_float_between()
         {
             await this.Queryable
-                .Where(x => (float)x.CustomData["score"] >= 0.00 && (float)x.CustomData["score"] < 1.00)
+                .Where(x => (float)x.CustomData["score"] >= 0.01 && (float)x.CustomData["score"] < 1.01)
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArguments("customData.score=[0.00, 1.00)");
+            this.ShouldBeCalledWithArguments("customData.score=[0.01, 1.01)");
         }
     }
 }

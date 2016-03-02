@@ -43,24 +43,25 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         public static string GetFieldName(Expression node)
         {
             MethodCallExpression methodCall = null;
+            Expression currentNode = node;
+
+            bool isCast = currentNode.NodeType == ExpressionType.Convert || currentNode.NodeType == ExpressionType.TypeAs;
 
             // Handle casting: (string)CustomData["foo"] or (CustomData["foo"] as string)
-            bool isCast = node.NodeType == ExpressionType.Convert
-                || node.NodeType == ExpressionType.TypeAs;
-            if (isCast)
+            while (isCast)
             {
                 // We just unwrap the Convert() expression and ignore the cast
-                methodCall = (node as UnaryExpression)?.Operand as MethodCallExpression;
+                currentNode = (currentNode as UnaryExpression)?.Operand;
+
+                isCast = currentNode.NodeType == ExpressionType.Convert || currentNode.NodeType == ExpressionType.TypeAs;
             }
-            else
-            {
-                // Handle straight member access: CustomData["foo"]
-                methodCall = node as MethodCallExpression;
-            }
+
+            // Handle straight member access: CustomData["foo"]
+            methodCall = currentNode as MethodCallExpression;
 
             if (methodCall == null)
             {
-                return null; // Wasn't able to parse expression. Fail fast
+                return null; // Couldn't parse expression
             }
 
             var asMemberAccess = methodCall.Object as MemberExpression;
@@ -74,11 +75,10 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 || !isAccessingIndexer
                 || !isArgumentPresent)
             {
-                return null; // fail fast
+                return null; // Not correct syntax
             }
 
             var fieldName = $"customData.{argument}";
-
             return fieldName;
         }
     }

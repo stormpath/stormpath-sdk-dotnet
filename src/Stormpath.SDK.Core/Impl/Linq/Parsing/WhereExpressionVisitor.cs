@@ -89,12 +89,15 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             {
                 var fieldName = CustomDataParsingHelper.GetFieldName(asCustomDataExpression.Item2);
 
-                this.parsedExpressions.Add(new WhereMemberExpression(
-                    fieldName,
-                    asCustomDataExpression.Item1.Value,
-                    comparison.Value));
+                if (!string.IsNullOrEmpty(fieldName))
+                {
+                    this.parsedExpressions.Add(new WhereMemberExpression(
+                        fieldName,
+                        asCustomDataExpression.Item1.Value,
+                        comparison.Value));
 
-                return node; // done
+                    return node; // done
+                }
             }
 
             throw new NotSupportedException("A Where expression must contain a method call, or member access and constant expressions.");
