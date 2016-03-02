@@ -71,14 +71,14 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return;
             }
 
-            bool termsUseValidComparisonOperators = this.queryModel.WhereTerms
-                .Where(x => x.Type != typeof(DateTimeOffset))
+            bool stringComparisonsAreValid = this.queryModel.WhereTerms
+                .Where(x => x.Type == typeof(string))
                 .All(x => x.Comparison == WhereComparison.Contains ||
                         x.Comparison == WhereComparison.StartsWith ||
                         x.Comparison == WhereComparison.EndsWith ||
                         x.Comparison == WhereComparison.Equal);
 
-            if (!termsUseValidComparisonOperators)
+            if (!stringComparisonsAreValid)
             {
                 throw new NotSupportedException($"One or more Where terms use unsupported comparison operators.");
             }

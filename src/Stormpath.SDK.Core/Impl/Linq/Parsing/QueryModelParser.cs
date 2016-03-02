@@ -25,6 +25,13 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 {
     internal sealed class QueryModelParser
     {
+        private static readonly Type[] SupportedNumericIntegerTypes = new Type[]
+        {
+            typeof(short),
+            typeof(int),
+            typeof(long),
+        };
+
         public static IList<string> GetArguments(CollectionResourceQueryModel queryModel)
         {
             var builder = new QueryModelParser(queryModel);
@@ -113,19 +120,38 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         private void HandleWhere()
         {
+            var stringTerms = this.queryModel.WhereTerms
+                .Where(x => x.Type == typeof(string));
+
             var datetimeTerms = this.queryModel.WhereTerms
-                .Where(x => x.Type == typeof(DateTimeOffset))
-                .ToList();
+                .Where(x => x.Type == typeof(DateTimeOffset));
 
             var datetimeShorthandTerms = this.queryModel.WhereTerms
-                .Where(x => x.Type == typeof(DatetimeShorthandModel))
-                .ToList();
+                .Where(x => x.Type == typeof(DatetimeShorthandModel));
+
+            var integerTerms = this.queryModel.WhereTerms
+                .Where(x => SupportedNumericIntegerTypes.Contains(x.Type));
+
+            this.HandleWhereStringTerms(stringTerms);
+            this.HandleWhereDateTerms(datetimeTerms);
+            this.HandleWhereDateShorthandTerms(datetimeShorthandTerms);
+            this.HandleWhereIntegerTerms(integerTerms);
 
             var remainingTerms = this.queryModel.WhereTerms
+                .Except(stringTerms)
                 .Except(datetimeTerms)
-                .Except(datetimeShorthandTerms);
+                .Except(datetimeShorthandTerms)
+                .Except(integerTerms);
 
-            foreach (var term in remainingTerms)
+            if (remainingTerms.Any())
+            {
+                throw new NotSupportedException("One or more Where conditions were not parsed correctly.");
+            }
+        }
+
+        private void HandleWhereStringTerms(IEnumerable<WhereTerm> terms)
+        {
+            foreach (var term in terms)
             {
                 switch (term.Comparison)
                 {
@@ -145,12 +171,9 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                         throw new NotSupportedException($"The comparison operator {term.Comparison.ToString()} is not supported on this field.");
                 }
             }
-
-            this.HandleWhereDateTerms(datetimeTerms);
-            this.HandleWhereDateShorthandTerms(datetimeShorthandTerms);
         }
 
-        private void HandleWhereDateTerms(IList<WhereTerm> terms)
+        private void HandleWhereDateTerms(IEnumerable<WhereTerm> terms)
         {
             // Parse and consolidate terms
             var workingModels = new Dictionary<string, DatetimeAttributeTermWorkingModel>();
@@ -228,7 +251,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             }
         }
 
-        private void HandleWhereDateShorthandTerms(IList<WhereTerm> terms)
+        private void HandleWhereDateShorthandTerms(IEnumerable<WhereTerm> terms)
         {
             var shorthandAttributeBuilder = new StringBuilder();
 
@@ -279,6 +302,84 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 }
 
                 this.arguments.Add(term.FieldName, shorthandAttributeBuilder.ToString());
+            }
+        }
+
+        private void HandleWhereIntegerTerms(IEnumerable<WhereTerm> terms)
+        {
+            // Parse and consolidate terms
+            var workingModels = new Dictionary<string, IntegerAttributeTermWorkingModel>();
+            foreach (var term in terms)
+            {
+                if (!workingModels.ContainsKey(term.FieldName))
+                {
+                    workingModels.Add(term.FieldName, new IntegerAttributeTermWorkingModel());
+                }
+
+                var workingModel = workingModels[term.FieldName];
+
+                bool isStartTerm =
+                    term.Comparison == WhereComparison.GreaterThan ||
+                    term.Comparison == WhereComparison.GreaterThanOrEqual;
+                bool collision =
+                    (isStartTerm && (workingModel.Start.HasValue || workingModel.StartInclusive.HasValue)) ||
+                    (!isStartTerm && (workingModel.End.HasValue || workingModel.EndInclusive.HasValue));
+                if (collision)
+                {
+                    throw new ArgumentException("Error compiling integer terms.");
+                }
+
+                workingModel.FieldName = term.FieldName;
+
+                bool isInclusive =
+                    term.Comparison == WhereComparison.GreaterThanOrEqual ||
+                    term.Comparison == WhereComparison.LessThanOrEqual;
+                if (isStartTerm)
+                {
+                    workingModel.Start = Convert.ToInt64(term.Value);
+                    workingModel.StartInclusive = term.Comparison == WhereComparison.GreaterThanOrEqual;
+                }
+                else
+                {
+                    workingModel.End = Convert.ToInt64(term.Value);
+                    workingModel.EndInclusive = term.Comparison == WhereComparison.LessThanOrEqual;
+                }
+            }
+
+            // Add terms to query
+            var integerAttributeBuilder = new StringBuilder();
+            foreach (var term in workingModels.Values)
+            {
+                if (this.arguments.ContainsKey(term.FieldName))
+                {
+                    throw new NotSupportedException($"Multiple integer constraints on field {term.FieldName} are not supported");
+                }
+
+                integerAttributeBuilder.Clear();
+
+                if (!term.Start.HasValue)
+                {
+                    integerAttributeBuilder.Append("[");
+                }
+                else
+                {
+                    integerAttributeBuilder.Append(term.StartInclusive ?? true ? "[" : "(");
+                    integerAttributeBuilder.Append(term.Start.Value);
+                }
+
+                integerAttributeBuilder.Append(",");
+
+                if (!term.End.HasValue)
+                {
+                    integerAttributeBuilder.Append("]");
+                }
+                else
+                {
+                    integerAttributeBuilder.Append(term.End.Value);
+                    integerAttributeBuilder.Append(term.EndInclusive ?? true ? "]" : ")");
+                }
+
+                this.arguments.Add(term.FieldName, integerAttributeBuilder.ToString());
             }
         }
 
