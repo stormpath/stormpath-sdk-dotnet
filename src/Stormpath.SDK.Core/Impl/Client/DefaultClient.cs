@@ -34,7 +34,6 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed partial class DefaultClient : IClient, IClientSync, IHasAsyncDataStoreInternal
     {
-        // TODO don't expose this, at least until it's immutable!
         private readonly StormpathConfiguration configuration;
 
         private readonly ICacheProvider cacheProvider;
@@ -97,6 +96,8 @@ namespace Stormpath.SDK.Impl.Client
         internal IInternalDataStore DataStore => this.dataStore;
 
         IInternalAsyncDataStore IHasAsyncDataStoreInternal.GetInternalAsyncDataStore() => this.dataStoreAsync;
+
+        StormpathConfiguration IClient.Configuration => this.configuration;
 
         private async Task EnsureTenantAsync(CancellationToken cancellationToken)
         {

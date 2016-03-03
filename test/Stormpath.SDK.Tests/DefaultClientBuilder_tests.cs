@@ -235,5 +235,17 @@ mySecret = secret123!";
                     .Build();
             });
         }
+
+        [Fact]
+        public void Configuration_is_available()
+        {
+            var client = this.builder
+                .SetApiKeyId("barFoo")
+                .SetApiKeySecret("123secret!")
+                .Build();
+
+            client.Configuration.Client.ApiKey.Id.ShouldBe("barFoo");
+            client.Configuration.Client.ApiKey.Secret.ShouldBe("123secret!");
+        }
     }
 }

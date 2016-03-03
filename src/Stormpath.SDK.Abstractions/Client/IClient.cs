@@ -16,6 +16,7 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Jwt;
@@ -31,6 +32,12 @@ namespace Stormpath.SDK.Client
     /// <threadsafety instance="true"/>
     public interface IClient : ITenantActions, IDataStore
     {
+        /// <summary>
+        /// Gets the configuration used by this <see cref="IClient">Client</see>.
+        /// </summary>
+        /// <value>The read-only configuration used by this <see cref="IClient">Client</see>.</value>
+        StormpathConfiguration Configuration { get; }
+
         /// <summary>
         /// Gets the sole <see cref="ITenant">Tenant</see> associated to this <see cref="IClient">Client</see>.
         /// </summary>
