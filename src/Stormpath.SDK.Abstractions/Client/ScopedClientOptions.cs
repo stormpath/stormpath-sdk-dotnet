@@ -1,4 +1,4 @@
-﻿// <copyright file="ISdk.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ScopedClientOptions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Impl.Introspection
+using System;
+
+namespace Stormpath.SDK.Client
 {
-    /// <summary>
-    /// Represents the Stormpath .NET SDK version.
-    /// </summary>
-    internal interface ISdk
+    public sealed class ScopedClientOptions
     {
-        /// <summary>
-        /// Gets the Stormpath .NET SDK library version.
-        /// </summary>
-        /// <value>The Stormpath .NET SDK library version.</value>
-        string Version { get; }
+        public string Identifier { get; set; } = Guid.NewGuid().ToString();
+
+        public string UserAgent { get; set; } = string.Empty;
     }
 }

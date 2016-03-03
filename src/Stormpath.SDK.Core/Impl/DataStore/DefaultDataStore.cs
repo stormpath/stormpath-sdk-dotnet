@@ -42,6 +42,7 @@ namespace Stormpath.SDK.Impl.DataStore
         private readonly ICacheResolver cacheResolver;
         private readonly ICacheProvider cacheProvider;
         private readonly IUserAgentBuilder userAgentBuilder;
+        private readonly string instanceIdentifier;
         private readonly JsonSerializationProvider serializer;
         private readonly ILogger logger;
         private readonly IResourceFactory resourceFactory;
@@ -69,7 +70,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         IClient IInternalDataStore.Client => this.client;
 
-        internal DefaultDataStore(IClient client, IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, IUserAgentBuilder userAgentBuilder, ICacheProvider cacheProvider, TimeSpan identityMapExpiration)
+        internal DefaultDataStore(IClient client, IRequestExecutor requestExecutor, string baseUrl, IJsonSerializer serializer, ILogger logger, IUserAgentBuilder userAgentBuilder, string instanceIdentifier, ICacheProvider cacheProvider, TimeSpan identityMapExpiration)
         {
             if (client == null)
             {
@@ -102,6 +103,7 @@ namespace Stormpath.SDK.Impl.DataStore
             this.cacheProvider = cacheProvider;
             this.cacheResolver = new DefaultCacheResolver(cacheProvider, this.logger);
             this.userAgentBuilder = userAgentBuilder;
+            this.instanceIdentifier = instanceIdentifier;
 
             this.client = client;
             this.serializer = new JsonSerializationProvider(serializer);
@@ -113,6 +115,41 @@ namespace Stormpath.SDK.Impl.DataStore
 
             this.defaultAsyncFilters = this.BuildDefaultAsyncFilterChain();
             this.defaultSyncFilters = this.BuildDefaultSyncFilterChain();
+        }
+
+        /// <summary>
+        /// Create a scoped data store by cloning an existing data store.
+        /// </summary>
+        /// <param name="existing">The existing data store to clone.</param>
+        /// <param name="userAgentBuilder">The scoped user agent builder.</param>
+        /// <param name="instanceIdentifier">The scoping identifier.</param>
+        internal DefaultDataStore(IInternalDataStore existing, IUserAgentBuilder userAgentBuilder = null, string instanceIdentifier = null)
+        {
+            var asImpl = existing as DefaultDataStore;
+
+            if (asImpl == null)
+            {
+                throw new ArgumentException("Unknown DataStore type.", nameof(existing));
+            }
+
+            this.baseUrl = asImpl.baseUrl;
+            this.logger = asImpl.logger;
+            this.requestExecutor = asImpl.requestExecutor;
+            this.cacheProvider = asImpl.cacheProvider;
+            this.cacheResolver = asImpl.cacheResolver;
+            this.userAgentBuilder = userAgentBuilder ?? asImpl.userAgentBuilder;
+            this.instanceIdentifier = instanceIdentifier ?? asImpl.instanceIdentifier;
+
+            this.client = asImpl.client;
+            this.serializer = asImpl.serializer;
+            this.identityMap = asImpl.identityMap;
+            this.resourceFactory = asImpl.resourceFactory;
+            this.resourceConverter = asImpl.resourceConverter;
+
+            this.uriQualifier = asImpl.uriQualifier;
+
+            this.defaultAsyncFilters = asImpl.defaultAsyncFilters;
+            this.defaultSyncFilters = asImpl.defaultSyncFilters;
         }
 
         T IDataStore.Instantiate<T>()

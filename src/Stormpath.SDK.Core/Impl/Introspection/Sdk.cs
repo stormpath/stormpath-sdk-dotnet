@@ -14,7 +14,8 @@
 // limitations under the License.
 // </copyright>
 
-#if NET451
+using System.Reflection;
+
 namespace Stormpath.SDK.Impl.Introspection
 {
     internal sealed class Sdk : ISdk
@@ -25,7 +26,7 @@ namespace Stormpath.SDK.Impl.Introspection
         {
         }
 
-        public static Sdk Anaylze()
+        public static Sdk Analyze()
         {
             var info = new Sdk();
 
@@ -36,10 +37,12 @@ namespace Stormpath.SDK.Impl.Introspection
 
         private static string GetSdkVersion()
         {
-            return typeof(SDK.Client.IClient).Assembly
-                .GetName().Version.ToString()
+            return typeof(Client.DefaultClient).GetTypeInfo()
+                .Assembly
+                .GetName()
+                .Version
+                .ToString()
                 .Replace(".0", string.Empty); // remove unnecessary .0.0
         }
     }
 }
-#endif

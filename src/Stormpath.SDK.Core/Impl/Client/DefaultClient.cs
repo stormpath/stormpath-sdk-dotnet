@@ -34,13 +34,14 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal sealed partial class DefaultClient : IClient, IClientSync, IHasAsyncDataStoreInternal
     {
-        // TODO don't expose this, at least until it's immutable!
         private readonly StormpathConfiguration configuration;
 
         private readonly ICacheProvider cacheProvider;
         private readonly IJsonSerializer serializer;
         private readonly IHttpClient httpClient;
         private readonly ILogger logger;
+        private readonly IUserAgentBuilder userAgentBuilder;
+        private readonly string instanceIdentifier;
 
         private readonly IInternalDataStore dataStore;
         private readonly IInternalAsyncDataStore dataStoreAsync;
@@ -56,6 +57,7 @@ namespace Stormpath.SDK.Impl.Client
             IJsonSerializer serializer,
             ICacheProvider cacheProvider,
             IUserAgentBuilder userAgentBuilder,
+            string instanceIdentifier,
             ILogger logger,
             TimeSpan identityMapExpiration)
         {
@@ -64,6 +66,8 @@ namespace Stormpath.SDK.Impl.Client
             this.serializer = serializer;
             this.cacheProvider = cacheProvider;
             this.logger = logger;
+            this.userAgentBuilder = userAgentBuilder;
+            this.instanceIdentifier = instanceIdentifier;
 
             var compatibleApiKey = new Api.DefaultClientApiKey(configuration.Client.ApiKey.Id, configuration.Client.ApiKey.Secret);
             var compatibleAuthenticationScheme = AuthenticationScheme.Parse(configuration.Client.AuthenticationScheme.ToString());
@@ -76,9 +80,38 @@ namespace Stormpath.SDK.Impl.Client
                 configuration.Client.BaseUrl,
                 this.serializer,
                 this.logger,
-                userAgentBuilder,
+                this.userAgentBuilder,
+                this.instanceIdentifier,
                 cacheProvider,
-                 identityMapExpiration);
+                identityMapExpiration);
+
+            this.dataStoreAsync = this.dataStore as IInternalAsyncDataStore;
+            this.dataStoreSync = this.dataStore as IInternalSyncDataStore;
+        }
+
+        /// <summary>
+        /// Create a scoped client by cloning an existing client.
+        /// </summary>
+        /// <param name="existing">The existing client to clone.</param>
+        /// <param name="userAgentBuilder">The scoped user agent builder.</param>
+        /// <param name="instanceIdentifier">The scoping identifier.</param>
+        public DefaultClient(IClient existing, IUserAgentBuilder userAgentBuilder, string instanceIdentifier)
+        {
+            var asImpl = existing as DefaultClient;
+
+            if (asImpl == null)
+            {
+                throw new ArgumentException("Unknown client type.", nameof(existing));
+            }
+
+            this.configuration = asImpl.configuration;
+            this.httpClient = asImpl.httpClient;
+            this.serializer = asImpl.serializer;
+            this.cacheProvider = asImpl.cacheProvider;
+            this.logger = asImpl.logger;
+            this.instanceIdentifier = instanceIdentifier ?? asImpl.instanceIdentifier;
+
+            this.dataStore = new DefaultDataStore(asImpl.dataStore, userAgentBuilder, instanceIdentifier);
 
             this.dataStoreAsync = this.dataStore as IInternalAsyncDataStore;
             this.dataStoreSync = this.dataStore as IInternalSyncDataStore;
@@ -96,7 +129,11 @@ namespace Stormpath.SDK.Impl.Client
 
         internal IInternalDataStore DataStore => this.dataStore;
 
+        internal IUserAgentBuilder UserAgentBuilder => this.userAgentBuilder;
+
         IInternalAsyncDataStore IHasAsyncDataStoreInternal.GetInternalAsyncDataStore() => this.dataStoreAsync;
+
+        public StormpathConfiguration Configuration => this.configuration;
 
         private async Task EnsureTenantAsync(CancellationToken cancellationToken)
         {

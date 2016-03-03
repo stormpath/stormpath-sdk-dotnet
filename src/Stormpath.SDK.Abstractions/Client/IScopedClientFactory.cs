@@ -1,4 +1,4 @@
-﻿// <copyright file="ISdk.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IScopedClientFactory.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.SDK.Impl.Introspection
+namespace Stormpath.SDK.Client
 {
-    /// <summary>
-    /// Represents the Stormpath .NET SDK version.
-    /// </summary>
-    internal interface ISdk
+    public interface IScopedClientFactory
     {
-        /// <summary>
-        /// Gets the Stormpath .NET SDK library version.
-        /// </summary>
-        /// <value>The Stormpath .NET SDK library version.</value>
-        string Version { get; }
+        IClient Create(ScopedClientOptions options = null);
     }
 }

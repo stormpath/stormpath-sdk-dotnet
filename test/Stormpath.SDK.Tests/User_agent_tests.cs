@@ -14,26 +14,52 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.PlatformAbstractions;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Impl.Client;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Stormpath.SDK.Tests
 {
     public class User_agent_tests
     {
+        private readonly ITestOutputHelper output;
+
+        public User_agent_tests(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+
+        [Fact]
+        public void Generates_DNX_user_agent()
+        {
+            var userAgent = new DnxUserAgentBuilder(
+                    PlatformServices.Default.Runtime,
+                    PlatformServices.Default.Application,
+                    language: string.Empty)
+                .GetUserAgent();
+
+            userAgent.ShouldNotContain("unknown");
+
+            this.output.WriteLine($"UserAgent: {userAgent}");
+        }
+
         [Fact]
         public async Task Csharp_code_creates_csharp_user_agent()
         {
             var fakeHttpClient = new ResourceReturningHttpClient("http://foo.bar", FakeJson.Account);
             var client = Clients.Builder()
-                .SetApiKey(FakeApiKey.Create(valid: true))
+                .SetApiKeyId("foo")
+                .SetApiKeySecret("bar")
                 .SetBaseUrl("http://foo.bar/")
                 .SetHttpClient(fakeHttpClient)
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
@@ -45,6 +71,28 @@ namespace Stormpath.SDK.Tests
             var userAgent = fakeHttpClient.Calls.Single().Headers.UserAgent;
             userAgent.Split(' ').Count(x => x.StartsWith("lang")).ShouldBe(1);
             userAgent.ShouldContain("lang/csharp");
+        }
+
+        [Fact]
+        public void Decorator_prepends_additional_tokens()
+        {
+            var mockBuilder = new MockUserAgentBuilder("fake/1.0 qux/123");
+
+            IUserAgentBuilder prependingBuilder = new PrependingUserAgentBuilder(mockBuilder, "foo/1.0", "bar/2.0");
+
+            prependingBuilder.GetUserAgent().ShouldBe("foo/1.0 bar/2.0 fake/1.0 qux/123");
+        }
+
+        private class MockUserAgentBuilder : IUserAgentBuilder
+        {
+            private readonly string value;
+
+            public MockUserAgentBuilder(string value)
+            {
+                this.value = value;
+            }
+
+            public string GetUserAgent() => this.value;
         }
     }
 }

@@ -388,12 +388,15 @@ namespace Stormpath.SDK.Impl.Client
                 }
             }
 
+            var instanceIdentifier = Guid.NewGuid().ToString();
+
             return new DefaultClient(
                 finalConfiguration,
                 httpClient,
                 serializer,
                 this.cacheProvider,
                 this.userAgentBuilder,
+                instanceIdentifier,
                 logger,
                 DefaultIdentityMapSlidingExpiration);
         }
