@@ -84,7 +84,14 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         internal Expression VisitOrderBy(OrderByExpression node)
         {
             string translatedFieldName = null;
-            if (!this.fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
+
+            // Custom Data access doesn't need to be translated - use verbatim
+            if (node.FieldName.StartsWith("customData.", StringComparison.Ordinal))
+            {
+                translatedFieldName = node.FieldName;
+            }
+            // Other field names do (mostly for correct camelCasing; see the translator classes)
+            else if (!this.fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
             {
                 throw new NotSupportedException($"{node.FieldName} is not a supported field.");
             }
@@ -129,7 +136,14 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         internal Expression VisitWhereMember(WhereMemberExpression node)
         {
             string translatedFieldName = null;
-            if (!this.fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName) &&
+
+            // Custom Data access doesn't need to be translated - use verbatim
+            if (node.FieldName.StartsWith("customData.", StringComparison.Ordinal))
+            {
+                translatedFieldName = node.FieldName;
+            }
+            // Other field names do (mostly for correct camelCasing; see the translator classes)
+            else if (!this.fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName) &&
                 !this.datetimeFieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
             {
                 throw new NotSupportedException($"{node.FieldName} is not a supported field.");

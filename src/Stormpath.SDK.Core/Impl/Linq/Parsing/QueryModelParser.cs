@@ -17,14 +17,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using Stormpath.SDK.Impl.Linq.Parsing.RangedTerms;
 using Stormpath.SDK.Impl.Linq.QueryModel;
 using Stormpath.SDK.Impl.Utility;
+using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Impl.Linq.Parsing
 {
     internal sealed class QueryModelParser
     {
+        private static readonly Type[] SupportedNumericIntegerTypes = new Type[]
+        {
+            typeof(short),
+            typeof(int),
+            typeof(long),
+        };
+
+        private static readonly Type[] SupportedNumericDecimalTypes = new Type[]
+        {
+            typeof(float),
+            typeof(double),
+            typeof(SpecifiedPrecisionToken),
+        };
+
         public static IList<string> GetArguments(CollectionResourceQueryModel queryModel)
         {
             var builder = new QueryModelParser(queryModel);
@@ -113,122 +130,80 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
 
         private void HandleWhere()
         {
+            var stringLikeTerms = this.queryModel.WhereTerms
+                .Where(x => x.Type == typeof(string) || typeof(Shared.StringEnumeration).GetTypeInfo().IsAssignableFrom(x.Type.GetTypeInfo()));
+
             var datetimeTerms = this.queryModel.WhereTerms
-                .Where(x => x.Type == typeof(DateTimeOffset))
-                .ToList();
+                .Where(x => x.Type == typeof(DateTimeOffset));
 
             var datetimeShorthandTerms = this.queryModel.WhereTerms
-                .Where(x => x.Type == typeof(DatetimeShorthandModel))
-                .ToList();
+                .Where(x => x.Type == typeof(DatetimeShorthandModel));
+
+            var integerTerms = this.queryModel.WhereTerms
+                .Where(x => SupportedNumericIntegerTypes.Contains(x.Type));
+
+            var decimalTerms = this.queryModel.WhereTerms
+                .Where(x => SupportedNumericDecimalTypes.Contains(x.Type));
+
+            var compiledArguments = HandleWhereStringTerms(stringLikeTerms)
+                .Concat(HandleWhereRangedDateTerms(datetimeTerms))
+                .Concat(HandleWhereDateShorthandTerms(datetimeShorthandTerms))
+                .Concat(HandleWhereRangedIntegerTerms(integerTerms))
+                .Concat(HandleWhereRangedDecimalTerms(decimalTerms));
+
+            foreach (var arg in compiledArguments)
+            {
+                this.arguments.Add(arg.Key, arg.Value);
+            }
 
             var remainingTerms = this.queryModel.WhereTerms
+                .Except(stringLikeTerms)
                 .Except(datetimeTerms)
-                .Except(datetimeShorthandTerms);
+                .Except(datetimeShorthandTerms)
+                .Except(integerTerms)
+                .Except(decimalTerms);
 
-            foreach (var term in remainingTerms)
+            if (remainingTerms.Any())
             {
+                throw new NotSupportedException("One or more Where conditions were not parsed correctly.");
+            }
+        }
+
+        private static IEnumerable<KeyValuePair<string, string>> HandleWhereStringTerms(IEnumerable<WhereTerm> terms)
+        {
+            foreach (var term in terms)
+            {
+                var value = string.Empty;
+
                 switch (term.Comparison)
                 {
                     case WhereComparison.Contains:
-                        this.arguments.Add(term.FieldName, $"*{term.Value.ToString()}*");
+                        value = $"*{term.Value.ToString()}*";
                         break;
                     case WhereComparison.EndsWith:
-                        this.arguments.Add(term.FieldName, $"*{term.Value.ToString()}");
+                        value = $"*{term.Value.ToString()}";
                         break;
                     case WhereComparison.StartsWith:
-                        this.arguments.Add(term.FieldName, $"{term.Value.ToString()}*");
+                        value = $"{term.Value.ToString()}*";
                         break;
                     case WhereComparison.Equal:
-                        this.arguments.Add(term.FieldName, term.Value.ToString());
+                        value = term.Value.ToString();
                         break;
                     default:
                         throw new NotSupportedException($"The comparison operator {term.Comparison.ToString()} is not supported on this field.");
                 }
-            }
 
-            this.HandleWhereDateTerms(datetimeTerms);
-            this.HandleWhereDateShorthandTerms(datetimeShorthandTerms);
+                yield return new KeyValuePair<string, string>(term.FieldName, value);
+            }
         }
 
-        private void HandleWhereDateTerms(IList<WhereTerm> terms)
+        private static IEnumerable<KeyValuePair<string, string>> HandleWhereRangedDateTerms(IEnumerable<WhereTerm> terms)
         {
-            // Parse and consolidate terms
-            var workingModels = new Dictionary<string, DatetimeAttributeTermWorkingModel>();
-            foreach (var term in terms)
-            {
-                if (!workingModels.ContainsKey(term.FieldName))
-                {
-                    workingModels.Add(term.FieldName, new DatetimeAttributeTermWorkingModel());
-                }
-
-                var workingModel = workingModels[term.FieldName];
-
-                bool isStartTerm =
-                    term.Comparison == WhereComparison.GreaterThan ||
-                    term.Comparison == WhereComparison.GreaterThanOrEqual;
-                bool collision =
-                    (isStartTerm && (workingModel.Start.HasValue || workingModel.StartInclusive.HasValue)) ||
-                    (!isStartTerm && (workingModel.End.HasValue || workingModel.EndInclusive.HasValue));
-                if (collision)
-                {
-                    throw new ArgumentException("Error compiling date terms.");
-                }
-
-                workingModel.FieldName = term.FieldName;
-
-                bool isInclusive =
-                    term.Comparison == WhereComparison.GreaterThanOrEqual ||
-                    term.Comparison == WhereComparison.LessThanOrEqual;
-                if (isStartTerm)
-                {
-                    workingModel.Start = (DateTimeOffset)term.Value;
-                    workingModel.StartInclusive = term.Comparison == WhereComparison.GreaterThanOrEqual;
-                }
-                else
-                {
-                    workingModel.End = (DateTimeOffset)term.Value;
-                    workingModel.EndInclusive = term.Comparison == WhereComparison.LessThanOrEqual;
-                }
-            }
-
-            // Add terms to query
-            var datetimeAttributeBuilder = new StringBuilder();
-            foreach (var term in workingModels.Values)
-            {
-                if (this.arguments.ContainsKey(term.FieldName))
-                {
-                    throw new NotSupportedException($"Multiple date constraints on field {term.FieldName} are not supported");
-                }
-
-                datetimeAttributeBuilder.Clear();
-
-                if (!term.Start.HasValue)
-                {
-                    datetimeAttributeBuilder.Append("[");
-                }
-                else
-                {
-                    datetimeAttributeBuilder.Append(term.StartInclusive ?? true ? "[" : "(");
-                    datetimeAttributeBuilder.Append(Iso8601.Format(term.Start.Value));
-                }
-
-                datetimeAttributeBuilder.Append(",");
-
-                if (!term.End.HasValue)
-                {
-                    datetimeAttributeBuilder.Append("]");
-                }
-                else
-                {
-                    datetimeAttributeBuilder.Append(Iso8601.Format(term.End.Value));
-                    datetimeAttributeBuilder.Append(term.EndInclusive ?? true ? "]" : ")");
-                }
-
-                this.arguments.Add(term.FieldName, datetimeAttributeBuilder.ToString());
-            }
+            var compiled = new RangedDatetimeWhereTermParser().Parse(terms);
+            return compiled;
         }
 
-        private void HandleWhereDateShorthandTerms(IList<WhereTerm> terms)
+        private IEnumerable<KeyValuePair<string, string>> HandleWhereDateShorthandTerms(IEnumerable<WhereTerm> terms)
         {
             var shorthandAttributeBuilder = new StringBuilder();
 
@@ -278,8 +253,20 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                     shorthandAttributeBuilder.Append($":{shorthandModel.Second.Value:D2}");
                 }
 
-                this.arguments.Add(term.FieldName, shorthandAttributeBuilder.ToString());
+                yield return new KeyValuePair<string, string>(term.FieldName, shorthandAttributeBuilder.ToString());
             }
+        }
+
+        private static IEnumerable<KeyValuePair<string, string>> HandleWhereRangedIntegerTerms(IEnumerable<WhereTerm> terms)
+        {
+            var compiled = new RangedLongWhereTermParser().Parse(terms);
+            return compiled;
+        }
+
+        private static IEnumerable<KeyValuePair<string, string>> HandleWhereRangedDecimalTerms(IEnumerable<WhereTerm> terms)
+        {
+            var compiled = new RangedDoubleWhereTermParser().Parse(terms);
+            return compiled;
         }
 
         private void HandleExpand()

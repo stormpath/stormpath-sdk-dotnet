@@ -62,13 +62,13 @@ namespace Stormpath.SDK.Tests.Linq
         }
 
         [Fact]
-        public async Task Throws_for_complex_overload_of_Equals()
+        public async Task Throws_when_specifying_string_comparison_for_Equals()
         {
             // TODO NotSupportedException after Shouldly Mono fix
             await Should.ThrowAsync<Exception>(async () =>
             {
                 await this.Queryable
-                    .Where(x => x.Email.Equals("bar", StringComparison.CurrentCulture))
+                    .Where(x => x.Email.Equals("bar", StringComparison.Ordinal))
                     .MoveNextAsync();
             });
         }
@@ -275,7 +275,7 @@ namespace Stormpath.SDK.Tests.Linq
         }
 
         [Fact]
-        public async Task Where_date_attribute_equals()
+        public async Task Throws_for_date_equality()
         {
             var testDate = new DateTime(2016, 01, 01, 12, 00, 00);
 
