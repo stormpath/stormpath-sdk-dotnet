@@ -65,7 +65,6 @@ namespace Stormpath.SDK.Client
             var userAgentBuilder = new DnxUserAgentBuilder(
                 runtimeEnvironment: PlatformServices.Default.Runtime,
                 appEnvironment: PlatformServices.Default.Application,
-                frameworkUserAgent: string.Empty, // todo - from StormpathConfiguration
                 language: language);
 
             return new DefaultClientBuilder(userAgentBuilder);

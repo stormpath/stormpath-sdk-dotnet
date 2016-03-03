@@ -15,9 +15,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Stormpath.SDK.Impl.Client;
 
 namespace Stormpath.SDK.Client
@@ -44,8 +41,7 @@ namespace Stormpath.SDK.Client
             }
 
             // Create a new user agent builder
-            var userAgentBuilder = baseClient.UserAgentBuilder;
-            //todo
+            var userAgentBuilder = new PrependingUserAgentBuilder(baseClient.UserAgentBuilder, options.UserAgent);
 
             return new DefaultClient(this.baseClient, userAgentBuilder, options.Identifier);
         }

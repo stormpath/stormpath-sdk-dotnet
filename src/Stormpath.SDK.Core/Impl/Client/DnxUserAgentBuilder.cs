@@ -24,17 +24,15 @@ namespace Stormpath.SDK.Impl.Client
     {
         private readonly IRuntimeEnvironment runtime;
         private readonly IApplicationEnvironment app;
-        private readonly string frameworkUserAgent;
         private readonly string language;
 
         // Lazy ensures this only runs once and is cached.
         private readonly Lazy<string> userAgentValue;
 
-        public DnxUserAgentBuilder(IRuntimeEnvironment runtimeEnvironment, IApplicationEnvironment appEnvironment, string frameworkUserAgent, string language)
+        public DnxUserAgentBuilder(IRuntimeEnvironment runtimeEnvironment, IApplicationEnvironment appEnvironment, string language)
         {
             this.runtime = runtimeEnvironment;
             this.app = appEnvironment;
-            this.frameworkUserAgent = frameworkUserAgent;
             this.language = language;
 
             this.userAgentValue = new Lazy<string>(() => this.Generate());
@@ -58,9 +56,7 @@ namespace Stormpath.SDK.Impl.Client
                 osToken = $"{osToken}/{this.runtime.OperatingSystemVersion.Replace(" ", "-")}";
             }
 
-            return string.Join(
-                " ",
-                this.frameworkUserAgent,
+            return string.Join(" ",
                 sdkToken,
                 languageToken,
                 runtimeToken,
