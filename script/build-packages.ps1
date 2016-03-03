@@ -7,7 +7,7 @@ dnu pack ("{0}\Stormpath.SDK.Abstractions" -f $sourceFolder)
 dnu pack ("{0}\Stormpath.SDK.Core" -f $sourceFolder)
 dnu pack ("{0}\Stormpath.SDK.Http.SystemNetHttpClient" -f $sourceFolder)
 dnu pack ("{0}\Stormpath.SDK.JsonNetSerializer" -f $sourceFolder)
-dnu pack ("{0}\Stormpath.SDK.Redis" -f $sourceFolder)
+dnu pack ("{0}\Stormpath.SDK.Cache.Redis" -f $sourceFolder)
 dnu pack ("{0}\Stormpath.SDK.RestSharpClient" -f $sourceFolder)
 
 if ($local) {
