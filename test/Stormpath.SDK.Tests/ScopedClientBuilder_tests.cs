@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Tests
             var tenant = await scopedClient.GetResourceAsync<IAccount>("http://foo.bar/fooAccount");
             var userAgent = fakeHttpClient.Calls.Single().Headers.UserAgent;
 
-            userAgent.ShouldStartWith("foo/123");
+            userAgent.ShouldStartWith("foo/123 ");
         }
     }
 }

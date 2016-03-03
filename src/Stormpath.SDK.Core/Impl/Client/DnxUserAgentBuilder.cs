@@ -16,6 +16,7 @@
 
 #if !NET451
 using System;
+using System.Reflection;
 using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Stormpath.SDK.Impl.Client
@@ -42,7 +43,9 @@ namespace Stormpath.SDK.Impl.Client
 
         private string Generate()
         {
-            var sdkToken = $"stormpath-sdk-dotnet/{this.app.ApplicationVersion}";
+            var sdkVersion = Introspection.Sdk.Analyze().Version;
+
+            var sdkToken = $"stormpath-sdk-dotnet/{sdkVersion}";
 
             var languageToken = string.IsNullOrEmpty(this.language)
                 ? string.Empty

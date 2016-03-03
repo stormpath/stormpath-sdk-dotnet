@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Client
 
             var userAgentBuilder = new Net451UserAgentBuilder(
                 Impl.Introspection.Platform.Analyze(),
-                Impl.Introspection.Sdk.Anaylze(),
+                Impl.Introspection.Sdk.Analyze(),
                 language);
 
             return new DefaultClientBuilder(userAgentBuilder);

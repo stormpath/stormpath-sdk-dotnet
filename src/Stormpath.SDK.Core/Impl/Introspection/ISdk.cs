@@ -14,11 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-#if NET451
 namespace Stormpath.SDK.Impl.Introspection
 {
     /// <summary>
-    /// Represents the Stormpath .NET SDK version and any installed integration versions.
+    /// Represents the Stormpath .NET SDK version.
     /// </summary>
     internal interface ISdk
     {
@@ -29,4 +28,3 @@ namespace Stormpath.SDK.Impl.Introspection
         string Version { get; }
     }
 }
-#endif
