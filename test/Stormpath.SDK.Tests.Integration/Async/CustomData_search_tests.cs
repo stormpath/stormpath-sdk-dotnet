@@ -31,8 +31,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
         private static readonly TimeSpan[] RetryDelays = new TimeSpan[]
         {
             TimeSpan.FromSeconds(3),
-            TimeSpan.FromSeconds(5),
-            TimeSpan.FromSeconds(10),
+            TimeSpan.FromSeconds(7),
+            TimeSpan.FromSeconds(15),
         };
 
         private readonly TestFixture fixture;
