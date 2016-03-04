@@ -126,9 +126,10 @@ namespace Stormpath.SDK.Impl.Client
             this.serializer = asImpl.serializer;
             this.cacheProvider = asImpl.cacheProvider;
             this.logger = asImpl.logger;
+            this.userAgentBuilder = userAgentBuilder ?? asImpl.userAgentBuilder;
             this.instanceIdentifier = instanceIdentifier ?? asImpl.instanceIdentifier;
 
-            this.dataStore = new DefaultDataStore(asImpl.dataStore, userAgentBuilder, instanceIdentifier);
+            this.dataStore = new DefaultDataStore(asImpl.dataStore, this.userAgentBuilder, this.instanceIdentifier);
 
             this.dataStoreAsync = this.dataStore as IInternalAsyncDataStore;
             this.dataStoreSync = this.dataStore as IInternalSyncDataStore;
