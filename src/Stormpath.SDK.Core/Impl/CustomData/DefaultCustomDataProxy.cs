@@ -64,7 +64,7 @@ namespace Stormpath.SDK.Impl.CustomData
 
             set
             {
-                (this as ICustomDataProxy).Put(value);
+                (this as ICustomDataProxy).Put(new KeyValuePair<string, object>(key, value));
             }
         }
 

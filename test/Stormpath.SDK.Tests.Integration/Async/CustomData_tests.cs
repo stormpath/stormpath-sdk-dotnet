@@ -91,6 +91,60 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Creating_account_with_custom_data_inline(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
+
+            var account = await directory.CreateAccountAsync(
+                "Test",
+                "Testerman CD Inline",
+                new RandomEmail("testing.foo"),
+                new RandomPassword(12),
+                new { foo = "bar", baz = "qux123!" });
+
+            var customData = await account.GetCustomDataAsync();
+
+            customData.Get("foo").ShouldBe("bar");
+            customData["baz"].ShouldBe("qux123!");
+
+            // Cleanup
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Creating_account_with_custom_data(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
+
+            var account = client.Instantiate<IAccount>()
+                .SetGivenName("Test")
+                .SetSurname("Testerman CD")
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12));
+
+            account.CustomData.Put("foo", "bar");
+            account.CustomData["baz"] = "qux123!";
+
+            await directory.CreateAccountAsync(account);
+
+            var customData = await account.GetCustomDataAsync();
+
+            customData.Get("foo").ShouldBe("bar");
+            customData["baz"].ShouldBe("qux123!");
+
+            // Cleanup
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Deleting_all_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

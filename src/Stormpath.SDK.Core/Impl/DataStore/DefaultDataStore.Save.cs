@@ -33,7 +33,7 @@ namespace Stormpath.SDK.Impl.DataStore
             var href = resource?.Href;
             if (string.IsNullOrEmpty(href))
             {
-                throw new ArgumentNullException(nameof(resource.Href));
+                throw new ArgumentNullException(nameof(resource.Href), "The resource href cannot be null. The resource might need to be created first.");
             }
 
             var queryParams = new QueryString(queryString);
