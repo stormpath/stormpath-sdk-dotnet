@@ -133,6 +133,8 @@ namespace Stormpath.SDK.Impl.Client
             this.dataStoreAsync = this.dataStore as IInternalAsyncDataStore;
             this.dataStoreSync = this.dataStore as IInternalSyncDataStore;
 
+            this.tenant = asImpl.tenant;
+
             this.isScopedInstance = true;
         }
 
