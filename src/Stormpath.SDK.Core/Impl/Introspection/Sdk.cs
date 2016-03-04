@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Impl.Introspection
                 .GetName()
                 .Version
                 .ToString()
-                .Replace(".0", string.Empty); // remove unnecessary .0.0
+                .Replace(".0.0", ".0");
         }
     }
 }
