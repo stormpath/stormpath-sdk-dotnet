@@ -32,5 +32,12 @@ namespace Stormpath.SDK.Account
         /// If you want to ensure the registration workflow behavior matches the Login Source default, leave this <see langword="null"/>.
         /// </value>
         bool? RegistrationWorkflowEnabled { get; }
+
+        /// <summary>
+        /// Gets the password format, used for importing passwords.
+        /// </summary>
+        /// <remarks>This value should be <see langword="null"/> unless you are importing existing password hashes into Stormpath.</remarks>
+        /// <value>The password format.</value>
+        PasswordFormat PasswordFormat { get; }
     }
 }

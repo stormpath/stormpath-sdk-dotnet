@@ -36,6 +36,13 @@ namespace Stormpath.SDK.Account
         public bool? RegistrationWorkflowEnabled { get; set; }
 
         /// <summary>
+        /// Gets or sets the password format, used for importing passwords.
+        /// </summary>
+        /// <remarks>This value should be <see langword="null"/> unless you are importing existing password hashes into Stormpath.</remarks>
+        /// <value>The password format.</value>
+        public PasswordFormat PasswordFormat { get; set; }
+
+        /// <summary>
         /// Gets the response options to apply to the request.
         /// </summary>
         /// <value>The response options to apply to the request.</value>
@@ -50,7 +57,7 @@ namespace Stormpath.SDK.Account
         /// <returns>A new <see cref="IAccountCreationOptions"/> based on the current builder state.</returns>
         public IAccountCreationOptions Build()
         {
-            return new DefaultAccountCreationOptions(this.RegistrationWorkflowEnabled, this.ResponseOptions);
+            return new DefaultAccountCreationOptions(this.RegistrationWorkflowEnabled, this.PasswordFormat, this.ResponseOptions);
         }
     }
 }

@@ -25,15 +25,19 @@ namespace Stormpath.SDK.Impl.Account
     internal sealed class DefaultAccountCreationOptions : IAccountCreationOptions
     {
         private readonly bool? registrationWorkflowEnabled;
+        private readonly PasswordFormat passwordFormat;
         private readonly IRetrievalOptions<IAccount> responseOptions;
 
-        public DefaultAccountCreationOptions(bool? registrationWorkflowEnabled, IRetrievalOptions<IAccount> responseOptions)
+        public DefaultAccountCreationOptions(bool? registrationWorkflowEnabled, PasswordFormat passwordFormat, IRetrievalOptions<IAccount> responseOptions)
         {
             this.registrationWorkflowEnabled = registrationWorkflowEnabled;
+            this.passwordFormat = passwordFormat;
             this.responseOptions = responseOptions;
         }
 
         bool? IAccountCreationOptions.RegistrationWorkflowEnabled => this.registrationWorkflowEnabled;
+
+        PasswordFormat IAccountCreationOptions.PasswordFormat => this.passwordFormat;
 
         public string GetQueryString()
         {
@@ -43,11 +47,16 @@ namespace Stormpath.SDK.Impl.Account
                 return string.Empty;
             }
 
-            var arguments = new List<string>(2);
+            var arguments = new List<string>();
 
             if (this.registrationWorkflowEnabled != null)
             {
                 arguments.Add("registrationWorkflowEnabled=" + (this.registrationWorkflowEnabled.Value ? "true" : "false"));
+            }
+
+            if (this.passwordFormat != null)
+            {
+                arguments.Add($"passwordFormat={this.passwordFormat.ToString().ToLower()}");
             }
 
             if (this.responseOptions != null)

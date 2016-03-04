@@ -183,14 +183,26 @@ namespace Stormpath.SDK.Tests
             }
 
             [Fact]
+            public async Task Create_with_password_format()
+            {
+                var options = new AccountCreationOptionsBuilder()
+                {
+                    PasswordFormat = PasswordFormat.MCF
+                }.Build();
+
+                await this.VerifyThat(options, resultsInQueryString: "?passwordFormat=mcf");
+            }
+
+            [Fact]
             public async Task Create_with_all_options()
             {
                 var optionsBuilder = new AccountCreationOptionsBuilder();
                 optionsBuilder.RegistrationWorkflowEnabled = true;
+                optionsBuilder.PasswordFormat = PasswordFormat.MCF;
                 optionsBuilder.ResponseOptions.Expand(x => x.GetGroups(0, 10));
                 var options = optionsBuilder.Build();
 
-                await this.VerifyThat(options, resultsInQueryString: "?expand=groups(offset:0,limit:10)&registrationWorkflowEnabled=true");
+                await this.VerifyThat(options, resultsInQueryString: "?expand=groups(offset:0,limit:10)&passwordFormat=mcf&registrationWorkflowEnabled=true");
             }
 
             public void Dispose()
