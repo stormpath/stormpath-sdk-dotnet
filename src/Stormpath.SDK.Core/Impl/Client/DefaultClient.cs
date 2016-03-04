@@ -47,10 +47,25 @@ namespace Stormpath.SDK.Impl.Client
         private readonly IInternalAsyncDataStore dataStoreAsync;
         private readonly IInternalSyncDataStore dataStoreSync;
 
+        // Flags whether this is a scoped instance of another client or not.
+        // If it's a scoped instance, we shouldn't dispose the underlying objects.
+        private readonly bool isScopedInstance;
+
         private bool alreadyDisposed = false;
 
         private ITenant tenant;
 
+        /// <summary>
+        /// Create a base (non-scoped) client.
+        /// </summary>
+        /// <param name="configuration">The configuration model.</param>
+        /// <param name="httpClient">The HTTP client.</param>
+        /// <param name="serializer">The JSON serializer.</param>
+        /// <param name="cacheProvider">The cache provider.</param>
+        /// <param name="userAgentBuilder">The user agent builder.</param>
+        /// <param name="instanceIdentifier">A string that uniquely identifies this client instance for logging.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="identityMapExpiration">The internal identity map expiration time.</param>
         public DefaultClient(
             StormpathConfiguration configuration,
             IHttpClient httpClient,
@@ -87,6 +102,8 @@ namespace Stormpath.SDK.Impl.Client
 
             this.dataStoreAsync = this.dataStore as IInternalAsyncDataStore;
             this.dataStoreSync = this.dataStore as IInternalSyncDataStore;
+
+            this.isScopedInstance = false;
         }
 
         /// <summary>
@@ -115,6 +132,8 @@ namespace Stormpath.SDK.Impl.Client
 
             this.dataStoreAsync = this.dataStore as IInternalAsyncDataStore;
             this.dataStoreSync = this.dataStore as IInternalSyncDataStore;
+
+            this.isScopedInstance = true;
         }
 
         private IClient AsInterface => this;
@@ -172,15 +191,17 @@ namespace Stormpath.SDK.Impl.Client
 
         private void Dispose(bool disposing)
         {
-            if (!this.alreadyDisposed)
+            if (this.alreadyDisposed)
             {
-                if (disposing)
-                {
-                    this.dataStore.Dispose();
-                }
-
-                this.alreadyDisposed = true;
+                return;
             }
+
+            if (!isScopedInstance && disposing)
+            {
+                this.dataStore.Dispose();
+            }
+
+            this.alreadyDisposed = true;
         }
 
         void IDisposable.Dispose()
