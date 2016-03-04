@@ -5,6 +5,7 @@
   },
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
+    "Polly": "4.0.0",
     "Shouldly": "2.6.0",
     "Stormpath.SDK.Core": "0.6.4",
     "Stormpath.SDK.Tests.Common": "0.6.3",
