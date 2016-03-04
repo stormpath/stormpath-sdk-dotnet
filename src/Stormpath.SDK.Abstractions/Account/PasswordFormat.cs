@@ -23,6 +23,9 @@ namespace Stormpath.SDK.Account
     /// </summary>
     public sealed class PasswordFormat : StringEnumeration
     {
+        /// <summary>
+        /// Modular Crypt Format (a <c>$</c> delimited string).
+        /// </summary>
         public static PasswordFormat MCF = new PasswordFormat("MCF");
 
         private PasswordFormat(string value)

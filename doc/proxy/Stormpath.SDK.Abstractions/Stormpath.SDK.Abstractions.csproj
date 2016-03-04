@@ -55,6 +55,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IEmailVerificationRequest.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IEmailVerificationToken.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IPasswordResetToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\PasswordFormat.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\AccountStore\IAccountStore.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\AccountStore\IAccountStoreContainer.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\AccountStore\IAccountStoreMapping.cs" />
