@@ -15,15 +15,16 @@
 // </copyright>
 
 using System;
-using System.Threading.Tasks;
+using System.Linq;
 using Polly;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Integration.Async
+namespace Stormpath.SDK.Tests.Integration.Sync
 {
     [Collection(nameof(IntegrationTestCollection))]
     public class CustomData_search_tests
@@ -44,7 +45,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Searching_by_string(TestClientProvider clientBuilder)
+        public void Searching_by_string(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
 
@@ -56,23 +57,23 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSurname("421");
             tk421.CustomData["post"] = "Cell Block 1138";
 
-            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
-            await directory.CreateAccountAsync(tk421);
+            var directory = client.GetDirectory(this.fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tk421);
             this.fixture.CreatedAccountHrefs.Add(tk421.Href);
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            await Policy.Handle<ShouldAssertException>()
-                .WaitAndRetryAsync(RetryDelays)
-                .ExecuteAsync(async () =>
+            Policy.Handle<ShouldAssertException>()
+                .WaitAndRetry(RetryDelays)
+                .Execute(() =>
                 {
-                    var foundAccount1 = await directory.GetAccounts()
-                        .Where(account => account.CustomData["post"] == "Cell Block 1138").SingleOrDefaultAsync();
+                    var foundAccount1 = directory.GetAccounts()
+                        .Where(account => account.CustomData["post"] == "Cell Block 1138").Synchronously().SingleOrDefault();
 
-                    var foundAccount2 = await directory.GetAccounts()
-                        .Where(account => (string)account.CustomData["post"] == "Cell Block 1138").SingleOrDefaultAsync();
+                    var foundAccount2 = directory.GetAccounts()
+                        .Where(account => (string)account.CustomData["post"] == "Cell Block 1138").Synchronously().SingleOrDefault();
 
-                    var foundAccount3 = await directory.GetAccounts()
-                        .Where(account => (account.CustomData["post"] as string).Equals("Cell Block 1138")).SingleOrDefaultAsync();
+                    var foundAccount3 = directory.GetAccounts()
+                        .Where(account => (account.CustomData["post"] as string).Equals("Cell Block 1138")).Synchronously().SingleOrDefault();
 
                     foundAccount1.ShouldNotBeNull();
                     foundAccount2.ShouldNotBeNull();
@@ -84,13 +85,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 });
 
             // Cleanup
-            (await tk421.DeleteAsync()).ShouldBeTrue();
+            (tk421.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tk421.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Searching_by_partial_string(TestClientProvider clientBuilder)
+        public void Searching_by_partial_string(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
 
@@ -102,20 +103,20 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSurname("TestermanPartial");
             tester.CustomData["stuff"] = "foobar";
 
-            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
-            await directory.CreateAccountAsync(tester);
+            var directory = client.GetDirectory(this.fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            await Policy.Handle<ShouldAssertException>()
-                .WaitAndRetryAsync(RetryDelays)
-                .ExecuteAsync(async () =>
+            Policy.Handle<ShouldAssertException>()
+                .WaitAndRetry(RetryDelays)
+                .Execute(() =>
                 {
-                    var foundAccount1 = await directory.GetAccounts()
-                        .Where(account => (account.CustomData["stuff"] as string).StartsWith("foo")).SingleOrDefaultAsync();
+                    var foundAccount1 = directory.GetAccounts()
+                        .Where(account => (account.CustomData["stuff"] as string).StartsWith("foo")).Synchronously().SingleOrDefault();
 
-                    var foundAccount2 = await directory.GetAccounts()
-                        .Where(account => (account.CustomData["stuff"] as string).EndsWith("bar")).SingleOrDefaultAsync();
+                    var foundAccount2 = directory.GetAccounts()
+                        .Where(account => (account.CustomData["stuff"] as string).EndsWith("bar")).Synchronously().SingleOrDefault();
 
                     foundAccount1.ShouldNotBeNull();
                     foundAccount2.ShouldNotBeNull();
@@ -125,13 +126,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 });
 
             // Cleanup
-            (await tester.DeleteAsync()).ShouldBeTrue();
+            (tester.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Searching_by_date_range(TestClientProvider clientBuilder)
+        public void Searching_by_date_range(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
 
@@ -143,20 +144,20 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSurname("TestermanDate");
             tester.CustomData["birthday"] = "1983-05-02T13:00:00Z"; // store as ISO 8601 date
 
-            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
-            await directory.CreateAccountAsync(tester);
+            var directory = client.GetDirectory(this.fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            await Policy.Handle<ShouldAssertException>()
-                .WaitAndRetryAsync(RetryDelays)
-                .ExecuteAsync(async () =>
+            Policy.Handle<ShouldAssertException>()
+                .WaitAndRetry(RetryDelays)
+                .Execute(() =>
                 {
-                    var foundAccount1 = await directory.GetAccounts()
-                        .Where(account => (DateTimeOffset)account.CustomData["birthday"] < new DateTimeOffset(1990, 01, 01, 00, 00, 00, TimeSpan.Zero)).SingleOrDefaultAsync();
+                    var foundAccount1 = directory.GetAccounts()
+                        .Where(account => (DateTimeOffset)account.CustomData["birthday"] < new DateTimeOffset(1990, 01, 01, 00, 00, 00, TimeSpan.Zero)).Synchronously().SingleOrDefault();
 
-                    var foundAccount2 = await directory.GetAccounts()
-                        .Where(account => (DateTimeOffset)account.CustomData["birthday"] > new DateTimeOffset(1983, 05, 01, 00, 00, 00, TimeSpan.Zero)).SingleOrDefaultAsync();
+                    var foundAccount2 = directory.GetAccounts()
+                        .Where(account => (DateTimeOffset)account.CustomData["birthday"] > new DateTimeOffset(1983, 05, 01, 00, 00, 00, TimeSpan.Zero)).Synchronously().SingleOrDefault();
 
                     foundAccount1.ShouldNotBeNull();
                     foundAccount2.ShouldNotBeNull();
@@ -166,13 +167,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 });
 
             // Cleanup
-            (await tester.DeleteAsync()).ShouldBeTrue();
+            (tester.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Searching_by_int_range(TestClientProvider clientBuilder)
+        public void Searching_by_int_range(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
 
@@ -184,20 +185,20 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSurname("TestermanDate");
             tester.CustomData["score"] = 75;
 
-            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
-            await directory.CreateAccountAsync(tester);
+            var directory = client.GetDirectory(this.fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            await Policy.Handle<ShouldAssertException>()
-                .WaitAndRetryAsync(RetryDelays)
-                .ExecuteAsync(async () =>
+            Policy.Handle<ShouldAssertException>()
+                .WaitAndRetry(RetryDelays)
+                .Execute(() =>
                 {
-                    var foundAccount1 = await directory.GetAccounts()
-                        .Where(account => (int)account.CustomData["score"] < 100).SingleOrDefaultAsync();
+                    var foundAccount1 = directory.GetAccounts()
+                        .Where(account => (int)account.CustomData["score"] < 100).Synchronously().SingleOrDefault();
 
-                    var foundAccount2 = await directory.GetAccounts()
-                        .Where(account => (int)account.CustomData["score"] > 50 && (int)account.CustomData["score"] <= 75).SingleOrDefaultAsync();
+                    var foundAccount2 = directory.GetAccounts()
+                        .Where(account => (int)account.CustomData["score"] > 50 && (int)account.CustomData["score"] <= 75).Synchronously().SingleOrDefault();
 
                     foundAccount1.ShouldNotBeNull();
                     foundAccount2.ShouldNotBeNull();
@@ -207,13 +208,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 });
 
             // Cleanup
-            (await tester.DeleteAsync()).ShouldBeTrue();
+            (tester.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester.Href);
         }
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Searching_by_float_range(TestClientProvider clientBuilder)
+        public void Searching_by_float_range(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
 
@@ -225,20 +226,20 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSurname("TestermanDate");
             tester.CustomData["stdDev"] = 2.02;
 
-            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
-            await directory.CreateAccountAsync(tester);
+            var directory = client.GetDirectory(this.fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            await Policy.Handle<ShouldAssertException>()
-                .WaitAndRetryAsync(RetryDelays)
-                .ExecuteAsync(async () =>
+            Policy.Handle<ShouldAssertException>()
+                .WaitAndRetry(RetryDelays)
+                .Execute(() =>
                 {
-                    var foundAccount1 = await directory.GetAccounts()
-                        .Where(account => (float)account.CustomData["stdDev"] < 3.WithPlaces(5)).SingleOrDefaultAsync();
+                    var foundAccount1 = directory.GetAccounts()
+                        .Where(account => (float)account.CustomData["stdDev"] < 3.WithPlaces(5)).Synchronously().SingleOrDefault();
 
-                    var foundAccount2 = await directory.GetAccounts()
-                        .Where(account => (float)account.CustomData["stdDev"] > 0.01 && (int)account.CustomData["stdDev"] <= 2.02).SingleOrDefaultAsync();
+                    var foundAccount2 = directory.GetAccounts()
+                        .Where(account => (float)account.CustomData["stdDev"] > 0.01 && (int)account.CustomData["stdDev"] <= 2.02).Synchronously().SingleOrDefault();
 
                     foundAccount1.ShouldNotBeNull();
                     foundAccount2.ShouldNotBeNull();
@@ -248,13 +249,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 });
 
             // Cleanup
-            (await tester.DeleteAsync()).ShouldBeTrue();
+            (tester.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester.Href);
         }
 
         [Theory(Skip = "Try again after CDS is ready.")]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Ordering_by_custom_data(TestClientProvider clientBuilder)
+        public void Ordering_by_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
 
@@ -274,25 +275,27 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSurname("TestermanOrdering2");
             tester2.CustomData["score"] = 50;
 
-            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
+            var directory = client.GetDirectory(this.fixture.PrimaryDirectoryHref);
 
-            await directory.CreateAccountAsync(tester1);
+            directory.CreateAccountAsync(tester1);
             this.fixture.CreatedAccountHrefs.Add(tester1.Href);
-            await directory.CreateAccountAsync(tester2);
+            directory.CreateAccountAsync(tester2);
             this.fixture.CreatedAccountHrefs.Add(tester2.Href);
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            await Policy.Handle<ShouldAssertException>()
-                .WaitAndRetryAsync(RetryDelays)
-                .ExecuteAsync(async () =>
+            Policy.Handle<ShouldAssertException>()
+                .WaitAndRetry(RetryDelays)
+                .Execute(() =>
                 {
-                    var foundAccount1 = await directory.GetAccounts()
+                    var foundAccount1 = directory.GetAccounts()
                         .OrderBy(x => x.CustomData["score"])
-                        .FirstAsync();
+                        .Synchronously()
+                        .First();
 
-                    var foundAccount2 = await directory.GetAccounts()
+                    var foundAccount2 = directory.GetAccounts()
                         .OrderByDescending(x => x.CustomData["score"])
-                        .FirstAsync();
+                        .Synchronously()
+                        .First();
 
                     foundAccount1.ShouldNotBeNull();
                     foundAccount2.ShouldNotBeNull();
@@ -302,9 +305,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 });
 
             // Cleanup
-            (await tester1.DeleteAsync()).ShouldBeTrue();
+            (tester1.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester1.Href);
-            (await tester2.DeleteAsync()).ShouldBeTrue();
+            (tester2.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester2.Href);
         }
     }
