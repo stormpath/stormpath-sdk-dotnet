@@ -16,8 +16,16 @@
 
 namespace Stormpath.SDK.Client
 {
+    /// <summary>
+    /// Represents a <see cref="IClient">Client</see> instance scoped for a specific request or transaction.
+    /// </summary>
     public interface IScopedClientFactory
     {
+        /// <summary>
+        /// Creates a new scoped <see cref="IClient">Client</see> from an existing client instance.
+        /// </summary>
+        /// <param name="options">The options for this scoped client.</param>
+        /// <returns>A scoped instance of the existing <see cref="IClient">Client</see>.</returns>
         IClient Create(ScopedClientOptions options = null);
     }
 }

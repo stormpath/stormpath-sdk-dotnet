@@ -18,10 +18,22 @@ using System;
 
 namespace Stormpath.SDK.Client
 {
+    /// <summary>
+    /// Represents options for a scoped <see cref="IClient">Client</see> instance.
+    /// </summary>
+    /// <seealso cref="IScopedClientFactory"/>
     public sealed class ScopedClientOptions
     {
+        /// <summary>
+        /// Gets or sets the unique identifier for this scoped instance. Used for logging.
+        /// </summary>
+        /// <value>The unique identifier for this scoped instance.</value>
         public string Identifier { get; set; } = Guid.NewGuid().ToString();
 
+        /// <summary>
+        /// Gets or sets the additional keywords to prepend to the SDK <c>User-Agent</c> string for this scoped instance.
+        /// </summary>
+        /// <value>The additional User-Agent keywords for this scoped instance.</value>
         public string UserAgent { get; set; } = string.Empty;
     }
 }

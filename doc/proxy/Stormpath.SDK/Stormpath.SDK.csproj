@@ -82,6 +82,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Cache\Caches.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Client\Clients.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Client\DnxCallerFileLanguageDetector.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Client\ScopedClientFactory.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Directory\DirectoryCreationOptionsBuilder.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Group\GroupCreationOptionsBuilder.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Http\HttpClientFactoryAutodetectExtensions.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\IClientSync.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\IUserAgentBuilder.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\Net451UserAgentBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\PrependingUserAgentBuilder.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\ShimAdditionalClientApiKeySettings.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\ShimClientApiKey.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Client\ShimClientApiKeyBuilder.cs" />
@@ -302,7 +304,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Executor\IAsyncExecutor{TResult}.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Executor\NullExecutor{TResult}.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\CompilingExpressionVisitor.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\DatetimeAttributeTermWorkingModel.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\CustomDataParsingHelper.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\DiscoveringExpressionVisitor.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\OrderByDirection.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\QueryModelCompiler.cs" />
@@ -328,6 +330,11 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\NameTranslators\DateTimeFieldNameTranslator.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\NameTranslators\FieldNameTranslator.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\NameTranslators\MethodNameTranslator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\RangedTerms\AbstractRangedWhereTermParser.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\RangedTerms\RangedDatetimeWhereTermParser.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\RangedTerms\RangedDoubleWhereTermParser.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\RangedTerms\RangedLongWhereTermParser.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\RangedTerms\RangedWhereTermWorkingModel.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Transformers\AbstractExpressionTransformer.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Transformers\IExpressionTransformer.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Transformers\PartialEvaluationTransformer.cs" />

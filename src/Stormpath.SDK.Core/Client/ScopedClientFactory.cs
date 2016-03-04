@@ -19,10 +19,15 @@ using Stormpath.SDK.Impl.Client;
 
 namespace Stormpath.SDK.Client
 {
+    /// <inheritdoc/>
     public sealed class ScopedClientFactory : IScopedClientFactory
     {
         private readonly DefaultClient baseClient;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScopedClientFactory"/> class based on an existing <see cref="IClient">Client</see>.
+        /// </summary>
+        /// <param name="existing">The existing <see cref="IClient">Client</see>.</param>
         public ScopedClientFactory(IClient existing)
         {
             this.baseClient = existing as DefaultClient;
@@ -33,6 +38,7 @@ namespace Stormpath.SDK.Client
             }
         }
 
+        /// <inheritdoc/>
         public IClient Create(ScopedClientOptions options = null)
         {
             if (options == null)

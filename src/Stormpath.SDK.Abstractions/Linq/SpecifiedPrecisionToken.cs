@@ -23,18 +23,28 @@ namespace Stormpath.SDK.Linq
     /// </summary>
     public struct SpecifiedPrecisionToken
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpecifiedPrecisionToken"/> class with the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
         public SpecifiedPrecisionToken(double value)
         {
             this.Value = value;
             this.Places = null;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpecifiedPrecisionToken"/> class with the specified value and number of decimal places.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="places">The number of decimal places.</param>
         public SpecifiedPrecisionToken(double value, int places)
         {
             this.Value = value;
             this.Places = places;
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return this.Places == null
@@ -42,25 +52,37 @@ namespace Stormpath.SDK.Linq
                 : this.Value.ToString($"#.{new string('0', this.Places.Value)}");
         }
 
+        /// <summary>
+        /// Gets the value represented by this token.
+        /// </summary>
+        /// <value>The value represented by this token.</value>
         public double Value { get; private set; }
 
+        /// <summary>
+        /// Gets the number of decimal places represented by this token.
+        /// </summary>
+        /// <value>The number of decimal places represented by this token.</value>
         public int? Places { get; private set; }
 
+        /// <inheritdoc/>
         public static implicit operator float(SpecifiedPrecisionToken token)
         {
             throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ Where predicate.");
         }
 
+        /// <inheritdoc/>
         public static implicit operator double(SpecifiedPrecisionToken token)
         {
             throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ Where predicate.");
         }
 
+        /// <inheritdoc/>
         public static bool operator >(double left, SpecifiedPrecisionToken right)
         {
             throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ Where predicate.");
         }
 
+        /// <inheritdoc/>
         public static bool operator <(double left, SpecifiedPrecisionToken right)
         {
             throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ Where predicate.");

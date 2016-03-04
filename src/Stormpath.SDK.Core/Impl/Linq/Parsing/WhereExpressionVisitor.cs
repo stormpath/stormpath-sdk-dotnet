@@ -234,7 +234,6 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         /// </summary>
         /// <typeparam name="TOther">The other expression type.</typeparam>
         /// <param name="binaryNode">The binary node.</param>
-        /// <param name="expectedType">The expected type of the other expression.</param>
         /// <returns>The constant expression and other expression.</returns>
         private static Tuple<ConstantExpression, TOther> GetBinaryAsConstantAnd<TOther>(BinaryExpression binaryNode)
             where TOther: Expression

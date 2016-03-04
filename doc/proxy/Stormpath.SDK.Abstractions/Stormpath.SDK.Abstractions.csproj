@@ -83,6 +83,8 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Client\AuthenticationScheme.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Client\IClient.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Client\IClientBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Client\IScopedClientFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Client\ScopedClientOptions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\CustomData\ICustomData.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\CustomData\ICustomDataProxy.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\DataStore\IDataStore.cs" />
@@ -150,6 +152,8 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\IAsyncQueryProvider{T}.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\IOrderedAsyncQueryable{T}.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\LinqHelper.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\PrecisionExpressionExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\SpecifiedPrecisionToken.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\SyncExpandExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\SyncFilterExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\WithinExpressionExtensions.cs" />
