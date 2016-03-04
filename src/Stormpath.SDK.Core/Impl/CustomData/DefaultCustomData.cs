@@ -193,6 +193,7 @@ namespace Stormpath.SDK.Impl.CustomData
             if (anonymousAsDictionary != null)
             {
                 this.AsInterface.Put(anonymousAsDictionary);
+                return;
             }
 
             throw new ArgumentException("Could not parse the supplied Custom Data object. The value must be passed as a key/value pair or an anonymous type.");
