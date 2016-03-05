@@ -67,6 +67,18 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             }
         }
 
+        //public override Expression Visit(Expression node)
+        //{
+        //    if (node.NodeType == ExpressionType.Convert)
+        //    {
+        //        return base.Visit((node as UnaryExpression).Operand);
+        //    }
+        //    else
+        //    {
+        //        return base.Visit(node);
+        //    }
+        //}
+
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
             // Query operators
@@ -248,10 +260,12 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 return false;
             }
 
-            var methodCallExpression =
+            var lambdaBody =
                 ((node.Arguments[1] as UnaryExpression)
                     ?.Operand as LambdaExpression)
-                        ?.Body as MethodCallExpression;
+                        ?.Body;
+            var methodCallExpression = NodeReducer.Reduce(lambdaBody) as MethodCallExpression;
+
             if (methodCallExpression == null)
             {
                 throw new ArgumentException("Method selector passed to Expand operator could not be parsed.");

@@ -241,15 +241,18 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             ConstantExpression constant = null;
             TOther other = null;
 
-            if (binaryNode.Left.NodeType == ExpressionType.Constant)
+            var left = NodeReducer.Reduce(binaryNode.Left);
+            var right = NodeReducer.Reduce(binaryNode.Right);
+
+            if (left.NodeType == ExpressionType.Constant)
             {
-                constant = binaryNode.Left as ConstantExpression;
-                other = binaryNode.Right as TOther;
+                constant = left as ConstantExpression;
+                other = right as TOther;
             }
-            else if (binaryNode.Right.NodeType == ExpressionType.Constant)
+            else if (right.NodeType == ExpressionType.Constant)
             {
-                constant = binaryNode.Right as ConstantExpression;
-                other = binaryNode.Left as TOther;
+                constant = right as ConstantExpression;
+                other = left as TOther;
             }
 
             return (constant == null || other == null)
