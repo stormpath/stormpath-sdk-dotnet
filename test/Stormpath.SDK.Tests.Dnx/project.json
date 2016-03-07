@@ -5,9 +5,9 @@
   },
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Stormpath.SDK.Core": "0.6.4",
-    "Stormpath.SDK.Http.SystemNetHttpClient": "0.6.3",
-    "Stormpath.SDK.JsonNetSerializer": "0.6.3",
+    "Stormpath.SDK.Core": "0.7.0",
+    "Stormpath.SDK.Http.SystemNetHttpClient": "0.7.0",
+    "Stormpath.SDK.JsonNetSerializer": "0.7.0",
     "xunit": "2.1.0",
     "xunit.runner.dnx": "2.1.0-rc1-build204"
   },
@@ -31,5 +31,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Tests.Dnx"
   },
-  "version": "0.6.3"
+  "version": "0.7.0"
 }

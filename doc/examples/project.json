@@ -3,8 +3,8 @@
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
     "Stormpath.SDK.Core": "0.7.0",
-    "Stormpath.SDK.JsonNetSerializer": "0.6.3",
-    "Stormpath.SDK.RestSharpClient": "0.6.3"
+    "Stormpath.SDK.JsonNetSerializer": "0.7.0",
+    "Stormpath.SDK.RestSharpClient": "0.7.0"
   },
   "description": "Documentation examples for the Stormpath .NET SDK.",
   "frameworks": {
