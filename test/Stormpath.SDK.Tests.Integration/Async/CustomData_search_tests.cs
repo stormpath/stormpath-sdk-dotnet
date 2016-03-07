@@ -60,6 +60,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await directory.CreateAccountAsync(tk421);
             this.fixture.CreatedAccountHrefs.Add(tk421.Href);
 
+#pragma warning disable CS0252 // Unintended reference comparison
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             await Policy.Handle<ShouldAssertException>()
                 .WaitAndRetryAsync(RetryDelays)
@@ -82,6 +83,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                     foundAccount2.Href.ShouldBe(tk421.Href);
                     foundAccount3.Href.ShouldBe(tk421.Href);
                 });
+#pragma warning restore CS0252
 
             // Cleanup
             (await tk421.DeleteAsync()).ShouldBeTrue();

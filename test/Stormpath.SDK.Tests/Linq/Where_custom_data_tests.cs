@@ -36,6 +36,7 @@ namespace Stormpath.SDK.Tests.Linq
             });
         }
 
+#pragma warning disable CS0252 // Unintended reference comparison
         [Fact]
         public async Task Where_customData_string_equalsequals()
         {
@@ -45,7 +46,9 @@ namespace Stormpath.SDK.Tests.Linq
 
             this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
         }
+#pragma warning restore CS0252
 
+#pragma warning disable CS0253 // Unintended reference comparison
         [Fact]
         public async Task Where_customData_string_equalsequals_reversed()
         {
@@ -55,6 +58,7 @@ namespace Stormpath.SDK.Tests.Linq
 
             this.ShouldBeCalledWithArguments("customData.post=Cell+Block+1138");
         }
+#pragma warning restore CS0253
 
         [Fact]
         public async Task Where_customData_casted_string_equalsequals()
