@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Polly;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
@@ -28,13 +29,6 @@ namespace Stormpath.SDK.Tests.Integration.Async
     [Collection(nameof(IntegrationTestCollection))]
     public class CustomData_search_tests
     {
-        private static readonly TimeSpan[] RetryDelays = new TimeSpan[]
-        {
-            TimeSpan.FromSeconds(3),
-            TimeSpan.FromSeconds(7),
-            TimeSpan.FromSeconds(15),
-        };
-
         private readonly TestFixture fixture;
 
         public CustomData_search_tests(TestFixture fixture)
@@ -63,7 +57,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 #pragma warning disable CS0252 // Unintended reference comparison
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             await Policy.Handle<ShouldAssertException>()
-                .WaitAndRetryAsync(RetryDelays)
+                .WaitAndRetryAsync(Delay.CustomDataRetry)
                 .ExecuteAsync(async () =>
                 {
                     var foundAccount1 = await directory.GetAccounts()
@@ -110,7 +104,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             await Policy.Handle<ShouldAssertException>()
-                .WaitAndRetryAsync(RetryDelays)
+                .WaitAndRetryAsync(Delay.CustomDataRetry)
                 .ExecuteAsync(async () =>
                 {
                     var foundAccount1 = await directory.GetAccounts()
@@ -151,7 +145,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             await Policy.Handle<ShouldAssertException>()
-                .WaitAndRetryAsync(RetryDelays)
+                .WaitAndRetryAsync(Delay.CustomDataRetry)
                 .ExecuteAsync(async () =>
                 {
                     var foundAccount1 = await directory.GetAccounts()
@@ -192,7 +186,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             await Policy.Handle<ShouldAssertException>()
-                .WaitAndRetryAsync(RetryDelays)
+                .WaitAndRetryAsync(Delay.CustomDataRetry)
                 .ExecuteAsync(async () =>
                 {
                     var foundAccount1 = await directory.GetAccounts()
@@ -233,7 +227,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             await Policy.Handle<ShouldAssertException>()
-                .WaitAndRetryAsync(RetryDelays)
+                .WaitAndRetryAsync(Delay.CustomDataRetry)
                 .ExecuteAsync(async () =>
                 {
                     var foundAccount1 = await directory.GetAccounts()
@@ -285,7 +279,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             await Policy.Handle<ShouldAssertException>()
-                .WaitAndRetryAsync(RetryDelays)
+                .WaitAndRetryAsync(Delay.CustomDataRetry)
                 .ExecuteAsync(async () =>
                 {
                     var foundAccount1 = await directory.GetAccounts()

@@ -23,5 +23,12 @@ namespace Stormpath.SDK.Tests.Common
         public static readonly int UpdatePropogation = 250;
 
         public static TimeSpan ReasonableTestRunWindow = TimeSpan.FromMinutes(10);
+
+        public static readonly TimeSpan[] CustomDataRetry = new TimeSpan[]
+        {
+            TimeSpan.FromSeconds(5),
+            TimeSpan.FromSeconds(10),
+            TimeSpan.FromSeconds(20),
+        };
     }
 }
