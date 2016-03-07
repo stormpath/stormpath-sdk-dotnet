@@ -91,6 +91,60 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Creating_account_with_custom_data_inline(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var directory = client.GetDirectory(this.fixture.PrimaryDirectoryHref);
+
+            var account = directory.CreateAccount(
+                "Test",
+                "Testerman CD Inline",
+                new RandomEmail("testing.foo"),
+                new RandomPassword(12),
+                new { foo = "bar", baz = "qux123!" });
+
+            var customData = account.GetCustomData();
+
+            customData.Get("foo").ShouldBe("bar");
+            customData["baz"].ShouldBe("qux123!");
+
+            // Cleanup
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Creating_account_with_custom_data(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var directory = client.GetDirectory(this.fixture.PrimaryDirectoryHref);
+
+            var account = client.Instantiate<IAccount>()
+                .SetGivenName("Test")
+                .SetSurname("Testerman CD")
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12));
+
+            account.CustomData.Put("foo", "bar");
+            account.CustomData["baz"] = "qux123!";
+
+            directory.CreateAccount(account);
+
+            var customData = account.GetCustomData();
+
+            customData.Get("foo").ShouldBe("bar");
+            customData["baz"].ShouldBe("qux123!");
+
+            // Cleanup
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Deleting_all_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
