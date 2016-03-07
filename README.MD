@@ -131,7 +131,7 @@ IClient client = Clients.Builder()
 
 > :bulb: You can skip the call to `.SetApiKeyFilePath()` if you or placed the `apiKey.properties` file in the default location (`%homedrive%%homepath%\.stormpath\`). Calling `client.Build()` without specifying an API Key will check the default location. It will also examine the environment variables `STORMPATH_CLIENT_APIKEY_ID` and `STORMPATH_CLIENT_APIKEY_SECRET`.
 
-Once you have built a `IClient`, keep it around! You should only need to create it **once** per application. It's thread-safe, so you can safely reuse it, even in an ASP.NET application.
+Once you have built a `IClient`, keep it around! You should only need to create it **once** per application. It's thread-safe, so you can safely reuse it, even in a multithreaded ASP.NET application.
 
 #### Retrieving your application
 
