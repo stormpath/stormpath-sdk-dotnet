@@ -11,7 +11,7 @@
     "Stormpath.SDK.Core": "0.7.0",
     "Stormpath.SDK.JsonNetSerializer": "0.6.3",
     "Stormpath.SDK.RestSharpClient": "0.6.3",
-    "Stormpath.SDK.Tests.Common": "0.6.3",
+    "Stormpath.SDK.Tests.Common": "0.7.0",
     "xunit": "2.1.0"
   },
   "description": "Unit tests for Stormpath.SDK",
