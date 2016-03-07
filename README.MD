@@ -53,14 +53,14 @@ All API requests to Stormpath require a valid API Key and Secret. The Stormpath 
  2. Log in to the [Stormpath Admin Console](https://api.stormpath.com/).
  3. Click the **Create API Key** or **Manage Existing Keys** under Developer Tools on the right side of the page.
  4. Scroll down to Security Credentials and click **Create API Key**. This will generate your API Key and download it to your computer as an `apiKey.properties` file.
- 
+
 We recommend you store the API Key and Secret values as environment variables, or place the downloaded file into a hidden folder in your home directory. (In a production environment, environment variables are highly preferred!)
 
 * To store the API Key and Secret as secure environment variables, open the `apiKey.properties` file in a text editor and execute these commands in a terminal window (Command Prompt or PowerShell both work)
 
 ```
-setx STORMPATH_API_KEY_ID "[value-from-properties-file]"
-setx STORMPATH_API_KEY_SECRET "[value-from-properties-file]"
+setx STORMPATH_CLIENT_APIKEY_ID "[value-from-properties-file]"
+setx STORMPATH_CLIENT_APIKEY_SECRET "[value-from-properties-file]"
 ```
 
 * To store the file in a hidden home directory folder, execute these commands instead:
@@ -86,13 +86,13 @@ Next, create a simple Visual Studio project and add the Stormpath SDK.
  1. Create a new Console Application project.
  2. Use the [instructions above](#installation-instructions) to install the Stormpath SDK into your project.
  3. Add the following using statements to the top of your `Program.cs` file:
- 
+
  ```csharp
  using Stormpath.SDK;
  using Stormpath.SDK.Client;
  using Stormpath.SDK.Error;
  ```
- 
+
 #### `await` a minute
 
 The Stormpath SDK performs `await`able asynchronous operations by default. This makes it possible to make requests to the Stormpath API without tying up a worker thread - super cool for ASP.NET projects!
@@ -102,7 +102,7 @@ In the Console Application template, however, the entry point is `static void Ma
 You can work around this by writing a separate method instead:
 
 ```csharp
-static Task MainAsync()
+static async Task MainAsync()
 {
 }
 ```
@@ -123,17 +123,13 @@ If you are confused by all this `async` business, check out Stephen Cleary's [ex
 The first thing you need to connect to the Stormpath API is a `IClient` object. Create one in your new `MainAsync` method:
 
 ```csharp
-IClientApiKey myApiKey = ClientApiKeys.Builder()
-    .SetFileLocation("path\\to\\apiKey.properties")
-    .Build();
-
 // Create an IClient. Everything starts here!
 IClient client = Clients.Builder()
-    .SetApiKey(myApiKey)
+    .SetApiKeyFilePath("path\\to\\apiKey.properties")
     .Build();
 ```
 
-> :bulb: You can skip building the `IClientApiKey` object and the call to `.SetApiKey()` if you put your API Key and Secret in environment variables, or stored the `apiKey.properties` file in the default location. Calling `client.Build()` without specifying an API Key will check the default location.
+> :bulb: You can skip the call to `.SetApiKeyFilePath()` if you or placed the `apiKey.properties` file in the default location (`%homedrive%%homepath%\.stormpath\`). Calling `client.Build()` without specifying an API Key will check the default location. It will also examine the environment variables `STORMPATH_CLIENT_APIKEY_ID` and `STORMPATH_CLIENT_APIKEY_SECRET`.
 
 Once you have built a `IClient`, keep it around! You should only need to create it **once** per application. It's thread-safe, so you can safely reuse it, even in an ASP.NET application.
 
@@ -161,7 +157,7 @@ var joe = await myApp.CreateAccountAsync("Joe", "Stormtrooper",
 Console.WriteLine("User " + joe.FullName + " created");
 ```
 
-The returned `IAccount` object will contain all the account's data. Easy! :smile: 
+The returned `IAccount` object will contain all the account's data. Easy! :smile:
 
 #### Logging in
 
@@ -213,7 +209,7 @@ Console.ReadKey(false);
 
 #### Other things you can do with the SDK
 
- * Search for any resource using LINQ 
+ * Search for any resource using LINQ
  * Create and delete entire applications
  * Create and manage directories
  * Create and manage groups and account membership in groups
