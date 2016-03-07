@@ -306,6 +306,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\CompilingExpressionVisitor.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\CustomDataParsingHelper.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\DiscoveringExpressionVisitor.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\NodeReducer.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\OrderByDirection.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\QueryModelCompiler.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\QueryModelParser.cs" />
