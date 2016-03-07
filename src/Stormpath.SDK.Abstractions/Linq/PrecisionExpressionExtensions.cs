@@ -30,6 +30,7 @@ namespace Stormpath.SDK
         /// <param name="target">The base number.</param>
         /// <param name="decimalPlaces">The number of decimal places.</param>
         /// <exception cref="NotSupportedException">This method can only be used from inside a LINQ Where predicate.</exception>
+        /// <returns>An identifier that contains the specified precision for a LINQ-to-Stormpath query.</returns>
         public static SpecifiedPrecisionToken WithPlaces(this int target, int decimalPlaces)
             => new SpecifiedPrecisionToken(target, decimalPlaces);
 
@@ -39,6 +40,7 @@ namespace Stormpath.SDK
         /// <param name="target">The base number.</param>
         /// <param name="decimalPlaces">The number of decimal places.</param>
         /// <exception cref="NotSupportedException">This method can only be used from inside a LINQ Where predicate.</exception>
+        /// <returns>An identifier that contains the specified precision for a LINQ-to-Stormpath query.</returns>
         public static SpecifiedPrecisionToken WithPlaces(this double target, int decimalPlaces)
             => new SpecifiedPrecisionToken(target, decimalPlaces);
     }

@@ -64,28 +64,54 @@ namespace Stormpath.SDK.Linq
         /// <value>The number of decimal places represented by this token.</value>
         public int? Places { get; private set; }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Casts a <see cref="SpecifiedPrecisionToken"/> to a <c>float</c> in a LINQ-to-Stormpath query.
+        /// </summary>
+        /// <remarks>This cast is only valid in a LINQ-to-Stormpath query. It will throw an exception if used outside of a query expression.</remarks>
+        /// <param name="token">The token.</param>
+        /// <exception cref="NotSupportedException">Use WithPlaces() from inside a LINQ Where predicate.</exception>
+        /// <returns>Not applicable; only used to build query expressions for LINQ-to-Stormpath.</returns>
         public static implicit operator float(SpecifiedPrecisionToken token)
         {
-            throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ Where predicate.");
+            throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ-to-Stormpath Where predicate.");
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Casts a <see cref="SpecifiedPrecisionToken"/> to a <c>double</c> in a LINQ-to-Stormpath query.
+        /// </summary>
+        /// <remarks>This cast is only valid in a LINQ-to-Stormpath query. It will throw an exception if used outside of a query expression.</remarks>
+        /// <param name="token">The token.</param>
+        /// <exception cref="NotSupportedException">Use WithPlaces() from inside a LINQ Where predicate.</exception>
+        /// <returns>Not applicable; only used to build query expressions for LINQ-to-Stormpath.</returns>
         public static implicit operator double(SpecifiedPrecisionToken token)
         {
-            throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ Where predicate.");
+            throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ-to-Stormpath Where predicate.");
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Compares a <see cref="SpecifiedPrecisionToken"/> to a <c>double</c> in a LINQ-to-Stormpath query.
+        /// </summary>
+        /// <remarks>This operator is only valid in a LINQ-to-Stormpath query. It will throw an exception if used outside of a query expression.</remarks>
+        /// <param name="left">The value to compare.</param>
+        /// <param name="right">The token.</param>
+        /// <exception cref="NotSupportedException">Use WithPlaces() from inside a LINQ Where predicate.</exception>
+        /// <returns>Not applicable; only used to build query expressions for LINQ-to-Stormpath.</returns>
         public static bool operator >(double left, SpecifiedPrecisionToken right)
         {
-            throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ Where predicate.");
+            throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ-to-Stormpath Where predicate.");
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Compares a <see cref="SpecifiedPrecisionToken"/> to a <c>double</c> in a LINQ-to-Stormpath query.
+        /// </summary>
+        /// <remarks>This operator is only valid in a LINQ-to-Stormpath query. It will throw an exception if used outside of a query expression.</remarks>
+        /// <param name="left">The value to compare.</param>
+        /// <param name="right">The token.</param>
+        /// <exception cref="NotSupportedException">Use WithPlaces() from inside a LINQ Where predicate.</exception>
+        /// <returns>Not applicable; only used to build query expressions for LINQ-to-Stormpath.</returns>
         public static bool operator <(double left, SpecifiedPrecisionToken right)
         {
-            throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ Where predicate.");
+            throw new NotSupportedException("Direct calls are not supported. Use WithPlaces() from inside a LINQ-to-Stormpath Where predicate.");
         }
     }
 }
