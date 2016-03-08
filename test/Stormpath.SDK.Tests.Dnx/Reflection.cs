@@ -14,18 +14,18 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using Xunit;
 using Stormpath.SDK.Shared.Extensions;
+using Xunit;
 
 namespace Stormpath.SDK.Tests.Dnx
 {
     public class Reflection
     {
+        /// <summary>
+        /// Regression test for stormpath/stormpath-sdk-dotnet#159
+        /// </summary>
         [Fact]
         public void Getting_default_constructor()
         {
