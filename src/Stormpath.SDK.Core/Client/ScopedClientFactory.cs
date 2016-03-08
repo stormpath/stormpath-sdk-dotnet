@@ -19,7 +19,9 @@ using Stormpath.SDK.Impl.Client;
 
 namespace Stormpath.SDK.Client
 {
-    /// <inheritdoc/>
+    /// <summary>
+    /// A factory that can created scoped client instances from an existing <see cref="IClient">Client</see>.
+    /// </summary>
     public sealed class ScopedClientFactory : IScopedClientFactory
     {
         private readonly DefaultClient baseClient;
