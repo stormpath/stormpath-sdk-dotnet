@@ -1,4 +1,4 @@
-﻿// <copyright file="Tenant.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Reflection.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,27 +14,26 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
-using Stormpath.SDK.Client;
-using Stormpath.SDK.Http;
-using Stormpath.SDK.Serialization;
 using Xunit;
+using Stormpath.SDK.Shared.Extensions;
 
 namespace Stormpath.SDK.Tests.Dnx
 {
-    public class Tenant
+    public class Reflection
     {
         [Fact]
-        public async Task Getting_current_tenant()
+        public void Getting_default_constructor()
         {
-            var client = Clients.Builder()
-                .SetSerializer(Serializers.Create().JsonNetSerializer())
-                .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
-                .Build();
+            var typeInfo = typeof(List<string>).GetTypeInfo();
 
-            var tenant = await client.GetCurrentTenantAsync();
+            var defaultConstructor = typeInfo.GetDefaultConstructor();
 
-            Assert.NotNull(tenant);
+            Assert.NotNull(defaultConstructor);
         }
     }
 }
