@@ -18,11 +18,13 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
+using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
+using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Async
@@ -79,6 +81,49 @@ namespace Stormpath.SDK.Tests.Integration.Async
             // Clean up
             (await accessToken.DeleteAsync()).ShouldBeTrue();
 
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        /// <summary>
+        /// Regression test for stormpath/stormpath-sdk-dotnet#161
+        /// </summary>
+        /// <remarks>The ! character was causing the SAuthc1 signer to break.</remarks>
+        /// <param name="clientBuilder">The client builder.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous unit test.</returns>
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Password_grant_with_special_characters(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            // Create a dummy application
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Password Grant Flow With Special Characters",
+                createDirectory: true);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            var createdDirectory = await createdApplication.GetDefaultAccountStoreAsync();
+            this.fixture.CreatedDirectoryHrefs.Add(createdDirectory.Href);
+
+            // Add the test accounts
+            var randomEmail = new RandomEmail("foo.bar");
+            var password = "P@sword#123$!";
+            await createdApplication.CreateAccountAsync("Test", "testerman", randomEmail, password);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin(randomEmail)
+                .SetPassword(password)
+                .Build();
+            var authenticateResult = await createdApplication.NewPasswordGrantAuthenticator()
+                .AuthenticateAsync(passwordGrantRequest);
+
+            // Verify authentication response
+            authenticateResult.AccessTokenString.ShouldNotBeNullOrEmpty();
+
+            // Clean up
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }

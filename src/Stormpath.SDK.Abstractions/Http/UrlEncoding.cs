@@ -39,6 +39,9 @@ namespace Stormpath.SDK.Http
 
             var encoded = WebUtility.UrlEncode(value);
 
+            // WebUtility doesn't escape ! by default
+            encoded = encoded.Replace("!", "%21");
+
             // Perform some custom Stormpath encoding
             if (canonicalize)
             {

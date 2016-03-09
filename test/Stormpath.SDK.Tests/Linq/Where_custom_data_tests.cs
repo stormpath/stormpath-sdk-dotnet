@@ -157,7 +157,7 @@ namespace Stormpath.SDK.Tests.Linq
                 .Where(x => (x.CustomData["saying"] as string).EndsWith("trap!"))
                 .MoveNextAsync();
 
-            this.ShouldBeCalledWithArguments("customData.saying=*trap!");
+            this.ShouldBeCalledWithArguments("customData.saying=*trap%21");
         }
 
         [Fact]
