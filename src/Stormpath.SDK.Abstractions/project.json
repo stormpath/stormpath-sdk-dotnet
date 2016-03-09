@@ -47,6 +47,6 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK"
   },
-  "version": "0.7.1-beta2",
+  "version": "0.7.1-beta3",
   "xmlDoc": true
 }
