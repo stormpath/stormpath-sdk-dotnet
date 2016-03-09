@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Polly;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Directory;
 using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
 using Stormpath.SDK.Tests.Common.RandomData;
@@ -27,13 +28,15 @@ using Xunit;
 namespace Stormpath.SDK.Tests.Integration.Async
 {
     [Collection(nameof(IntegrationTestCollection))]
-    public class CustomData_search_tests
+    public class CustomData_search_tests : IClassFixture<CreateSingleDirectoryFixture>
     {
         private readonly TestFixture fixture;
+        private readonly string directoryHref;
 
-        public CustomData_search_tests(TestFixture fixture)
+        public CustomData_search_tests(TestFixture fixture, CreateSingleDirectoryFixture directoryFixture)
         {
             this.fixture = fixture;
+            this.directoryHref = directoryFixture.DirectoryHref;
         }
 
         [Theory]
@@ -50,7 +53,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSurname("421");
             tk421.CustomData["post"] = "Cell Block 1138";
 
-            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
+            var directory = await client.GetDirectoryAsync(this.directoryHref);
             await directory.CreateAccountAsync(tk421);
             this.fixture.CreatedAccountHrefs.Add(tk421.Href);
 
@@ -98,7 +101,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSurname("TestermanPartial");
             tester.CustomData["stuff"] = "foobar";
 
-            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
+            var directory = await client.GetDirectoryAsync(this.directoryHref);
             await directory.CreateAccountAsync(tester);
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
@@ -139,7 +142,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSurname("TestermanDate");
             tester.CustomData["birthday"] = "1983-05-02T13:00:00Z"; // store as ISO 8601 date
 
-            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
+            var directory = await client.GetDirectoryAsync(this.directoryHref);
             await directory.CreateAccountAsync(tester);
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
@@ -180,7 +183,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSurname("TestermanDate");
             tester.CustomData["score"] = 75;
 
-            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
+            var directory = await client.GetDirectoryAsync(this.directoryHref);
             await directory.CreateAccountAsync(tester);
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
@@ -221,7 +224,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSurname("TestermanDate");
             tester.CustomData["stdDev"] = 2.02;
 
-            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
+            var directory = await client.GetDirectoryAsync(this.directoryHref);
             await directory.CreateAccountAsync(tester);
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
@@ -270,7 +273,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSurname("TestermanOrdering2");
             tester2.CustomData["score"] = 50;
 
-            var directory = await client.GetDirectoryAsync(this.fixture.PrimaryDirectoryHref);
+            var directory = await client.GetDirectoryAsync(this.directoryHref);
 
             await directory.CreateAccountAsync(tester1);
             this.fixture.CreatedAccountHrefs.Add(tester1.Href);
