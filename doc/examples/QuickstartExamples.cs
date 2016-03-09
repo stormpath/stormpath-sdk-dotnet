@@ -15,7 +15,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Stormpath.SDK;
@@ -25,7 +24,7 @@ using Stormpath.SDK.Error;
 namespace examples
 {
     /// <summary>
-    /// Content from README.md
+    /// Content from README.md and the Product Guide
     /// </summary>
     public class QuickstartExamples
     {

@@ -19,7 +19,7 @@
   },
   "title": "Stormpath.SDK.DocExamples",
   "tooling": {
-    "defaultNamespace": "Stormpath.SDK.DocExamples"
+    "defaultNamespace": "DocExamples"
   },
   "version": "0.7.1-beta3"
 }
