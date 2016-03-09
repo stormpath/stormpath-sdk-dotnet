@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Impl.Introspection
                 .GetName()
                 .Version;
 
-            return $"{sdkVersion.Major}.{sdkVersion.Minor}.{sdkVersion.Revision}";
+            return $"{sdkVersion.Major}.{sdkVersion.Minor}.{sdkVersion.Build}";
         }
     }
 }
