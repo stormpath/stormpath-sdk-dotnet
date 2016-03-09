@@ -23,6 +23,7 @@ using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
+using Stormpath.SDK.Tests.Common.RandomData;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Integration.Sync
@@ -80,6 +81,48 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             accessToken.Delete().ShouldBeTrue();
 
             createdApplication.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        /// <summary>
+        /// Regression test for stormpath/stormpath-sdk-dotnet#161
+        /// </summary>
+        /// <remarks>The ! character was causing the SAuthc1 signer to break.</remarks>
+        /// <param name="clientBuilder">The client builder.</param>
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Password_grant_with_special_characters(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            // Create a dummy application
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Password Grant Flow With Special Characters",
+                createDirectory: true);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            var createdDirectory = createdApplication.GetDefaultAccountStore();
+            this.fixture.CreatedDirectoryHrefs.Add(createdDirectory.Href);
+
+            // Add the test accounts
+            var randomEmail = new RandomEmail("foo.bar");
+            var password = "P@sword#123$!";
+            createdApplication.CreateAccount("Test", "testerman", randomEmail, password);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin(randomEmail)
+                .SetPassword(password)
+                .Build();
+            var authenticateResult = createdApplication.NewPasswordGrantAuthenticator()
+                .Authenticate(passwordGrantRequest);
+
+            // Verify authentication response
+            authenticateResult.AccessTokenString.ShouldNotBeNullOrEmpty();
+
+            // Clean up
+            (createdApplication.Delete()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
