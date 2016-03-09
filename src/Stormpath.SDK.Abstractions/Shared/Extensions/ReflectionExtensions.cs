@@ -44,7 +44,6 @@ namespace Stormpath.SDK.Shared.Extensions
             var constructor = typeInfo.DeclaredConstructors
                 .Where(c => 
                     c.GetParameters().Select(p => p.ParameterType).SequenceEqual(parameterTypes)
-                    && c.IsPublic
                     && !c.IsStatic)
                 .SingleOrDefault();
 
