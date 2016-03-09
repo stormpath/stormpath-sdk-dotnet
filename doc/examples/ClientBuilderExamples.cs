@@ -144,5 +144,14 @@ namespace DocExamples
             clientBuilder.SetAuthenticationScheme(ClientAuthenticationScheme.Basic);
             #endregion
         }
+
+        public void SetBaseUrl()
+        {
+            #region SetBaseUrl
+            // Use a different base URL than the default (https://api.stormpath.com/v1).
+            // This isn't necessary unless you are running an Enterprise or Private deployment of Stormpath:
+            clientBuilder.SetBaseUrl("https://enterprise.stormpath.io/v1");
+            #endregion
+        }
     }
 }

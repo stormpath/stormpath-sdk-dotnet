@@ -201,6 +201,9 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="baseUrl">The base API URL to use.</param>
         /// <returns>This instance for method chaining.</returns>
+        /// <example>
+        /// <code source="ClientBuilderExamples.cs" region="SetBaseUrl" lang="C#" />
+        /// </example>
         IClientBuilder SetBaseUrl(string baseUrl);
 
         /// <summary>
