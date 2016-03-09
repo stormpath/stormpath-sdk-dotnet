@@ -37,12 +37,12 @@ namespace Stormpath.SDK.Impl.Introspection
 
         private static string GetSdkVersion()
         {
-            return typeof(Client.DefaultClient).GetTypeInfo()
+            var sdkVersion = typeof(Client.DefaultClient).GetTypeInfo()
                 .Assembly
                 .GetName()
-                .Version
-                .ToString()
-                .Replace(".0.0", ".0");
+                .Version;
+
+            return $"{sdkVersion.Major}.{sdkVersion.Minor}.{sdkVersion.Revision}";
         }
     }
 }
