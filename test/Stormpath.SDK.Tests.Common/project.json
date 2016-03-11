@@ -7,7 +7,7 @@
   "dependencies": {
     "FluentAssertions": "4.2.2",
     "Newtonsoft.Json": "7.0.1",
-    "Stormpath.SDK.Core": "0.7.0",
+    "Stormpath.SDK.Core": "0.7.1",
     "Stormpath.SDK.Http.SystemNetHttpClient": "0.7.0",
     "Stormpath.SDK.JsonNetSerializer": "0.7.0",
     "xunit": "2.1.0",
@@ -30,5 +30,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Tests.Common"
   },
-  "version": "0.7.0"
+  "version": "0.7.1"
 }

@@ -7,8 +7,8 @@
   "dependencies": {
     "Polly": "4.0.0",
     "Shouldly": "2.6.0",
-    "Stormpath.SDK.Core": "0.7.0",
-    "Stormpath.SDK.Tests.Common": "0.7.0",
+    "Stormpath.SDK.Core": "0.7.1",
+    "Stormpath.SDK.Tests.Common": "0.7.1",
     "xunit": "2.1.0",
     "xunit.runner.dnx": "2.1.0-rc1-build204"
   },
@@ -24,5 +24,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Tests.Integration"
   },
-  "version": "0.7.0"
+  "version": "0.7.1"
 }
