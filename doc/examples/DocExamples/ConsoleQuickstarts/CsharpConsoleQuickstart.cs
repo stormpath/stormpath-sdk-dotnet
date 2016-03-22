@@ -8,6 +8,7 @@ using Stormpath.SDK.Error;
 
 namespace examples.ConsoleQuickstarts
 {
+#pragma warning disable CS0168 // The variable is declared but never used
     public class CsharpConsoleQuickstart
     {
         public static async Task MainAsync()
@@ -97,4 +98,5 @@ namespace examples.ConsoleQuickstarts
             }
         }
     }
+#pragma warning restore CS0168 // The variable is declared but never used
 }
