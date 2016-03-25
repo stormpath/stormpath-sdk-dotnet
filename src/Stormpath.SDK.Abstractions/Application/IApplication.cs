@@ -260,6 +260,7 @@ namespace Stormpath.SDK.Application
         /// </remarks>
         /// <param name="usernameOrEmail">The username or email identifying the account to send the verification email to.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// <seealso cref="ITenantActions.VerifyAccountEmailAsync(string, CancellationToken)"/>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task SendVerificationEmailAsync(string usernameOrEmail, CancellationToken cancellationToken = default(CancellationToken));
 
