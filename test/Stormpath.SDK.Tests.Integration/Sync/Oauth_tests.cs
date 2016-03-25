@@ -291,6 +291,10 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var retrievedDirectly = client.GetRefreshToken(refreshTokenForApplication.Href);
             retrievedDirectly.Href.ShouldBe(refreshTokenForApplication.Href);
 
+            // Get account (with some expansions)
+            var tokenAccount = retrievedDirectly.GetAccount(opt => opt.Expand(acct => acct.GetGroups()));
+            account.Email.ShouldBe(account.Email);
+
             // Clean up
             refreshTokenForApplication.Delete().ShouldBeTrue();
 

@@ -290,6 +290,10 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var retrievedDirectly = await client.GetRefreshTokenAsync(refreshTokenForApplication.Href);
             retrievedDirectly.Href.ShouldBe(refreshTokenForApplication.Href);
 
+            // Get account (with some expansions)
+            var tokenAccount = await retrievedDirectly.GetAccountAsync(opt => opt.Expand(acct => acct.GetGroups()));
+            account.Email.ShouldBe(account.Email);
+
             // Clean up
             (await refreshTokenForApplication.DeleteAsync()).ShouldBeTrue();
 

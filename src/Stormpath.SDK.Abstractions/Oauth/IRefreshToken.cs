@@ -58,10 +58,28 @@ namespace Stormpath.SDK.Oauth
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Retrieves the <see cref="IAccount">Account</see> associated with this <see cref="IRefreshToken">RefreshToken</see>
+        /// with the specified retrieval options.
+        /// </summary>
+        /// <param name="retrievalOptions">The retrieval options.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IAccount">Account</see> associated with this <see cref="IRefreshToken">RefreshToken</see>.</returns>
+        Task<IAccount> GetAccountAsync(Action<IRetrievalOptions<IAccount>> retrievalOptions, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Retrieves the <see cref="IApplication">Application</see> associated with this <see cref="IRefreshToken">RefreshToken</see>.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The <see cref="IApplication">Application</see> associated with this <see cref="IRefreshToken">RefreshToken</see>.</returns>
         Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves the <see cref="IApplication">Application</see> associated with this <see cref="IRefreshToken">RefreshToken</see>
+        /// with the specified retrieval options.
+        /// </summary>
+        /// <param name="retrievalOptions">The retrieval options.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IApplication">Application</see> associated with this <see cref="IRefreshToken">RefreshToken</see>.</returns>
+        Task<IApplication> GetApplicationAsync(Action<IRetrievalOptions<IApplication>> retrievalOptions, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
