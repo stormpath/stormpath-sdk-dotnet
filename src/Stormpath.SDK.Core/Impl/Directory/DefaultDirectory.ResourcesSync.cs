@@ -27,5 +27,8 @@ namespace Stormpath.SDK.Impl.Directory
 
         IAccountCreationPolicy IDirectorySync.GetAccountCreationPolicy()
             => this.GetInternalSyncDataStore().GetResource<IAccountCreationPolicy>(this.AccountCreationPolicy.Href);
+
+        IPasswordPolicy IDirectorySync.GetPasswordPolicy()
+            => this.GetInternalSyncDataStore().GetResource<IPasswordPolicy>(this.PasswordPolicy.Href);
     }
 }

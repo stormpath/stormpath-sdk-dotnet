@@ -40,5 +40,13 @@ namespace Stormpath.SDK.Sync
         /// <returns>The Account Creation Policy for this Directory.</returns>
         public static IAccountCreationPolicy GetAccountCreationPolicy(this IDirectory directory)
             => (directory as IDirectorySync).GetAccountCreationPolicy();
+
+        /// <summary>
+        /// Synchronously gets the <see cref="IPasswordPolicy">Password Policy</see> for this directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <returns>The Password Policy for this Directory.</returns>
+        public static IPasswordPolicy GetPasswordPolicy(this IDirectory directory)
+            => (directory as IDirectorySync).GetPasswordPolicy();
     }
 }

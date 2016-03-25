@@ -94,6 +94,8 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(ISsoInitiationEndpoint)] = typeof(DefaultSsoInitiationEndpoint),
             [typeof(ISamlAccountResult)] = typeof(DefaultSamlAccountResult),
             [typeof(IAccountCreationPolicy)] = typeof(DefaultAccountCreationPolicy),
+            [typeof(IPasswordPolicy)] = typeof(DefaultPasswordPolicy),
+            [typeof(IPasswordStrengthPolicy)] = typeof(DefaultPasswordStrengthPolicy),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
@@ -141,6 +143,8 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultIdSiteTokenAuthenticationAttempt)] = typeof(IIdSiteTokenAuthenticationAttempt),
             [typeof(DefaultApiKey)] = typeof(IApiKey),
             [typeof(DefaultAccountCreationPolicy)] = typeof(IAccountCreationPolicy),
+            [typeof(DefaultPasswordPolicy)] = typeof(IPasswordPolicy),
+            [typeof(DefaultPasswordStrengthPolicy)] = typeof(IPasswordStrengthPolicy),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(DefaultApplicationAccountStoreMapping)] = typeof(IApplicationAccountStoreMapping),
@@ -163,6 +167,7 @@ namespace Stormpath.SDK.Impl.DataStore
             ["accountStore"] = typeof(IAccountStore),
             ["oAuthPolicy"] = typeof(IOauthPolicy),
             ["accountCreationPolicy"] = typeof(IAccountCreationPolicy),
+            ["passwordPolicy"] = typeof(IPasswordPolicy),
 
             ["organizations"] = typeof(CollectionResponsePage<IOrganization>),
             ["applications"] = typeof(CollectionResponsePage<IApplication>),

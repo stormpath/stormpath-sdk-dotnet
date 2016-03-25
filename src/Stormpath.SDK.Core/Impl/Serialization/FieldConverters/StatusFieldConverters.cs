@@ -138,7 +138,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
         internal sealed class EmailStatusConverter : AbstractFieldConverter
         {
             public EmailStatusConverter()
-                : base(nameof(EmailStatusConverter), appliesToTargetType: typeof(SDK.Directory.IAccountCreationPolicy))
+                : base(nameof(EmailStatusConverter), typeof(SDK.Directory.IAccountCreationPolicy), typeof(SDK.Directory.IPasswordPolicy))
             {
             }
 

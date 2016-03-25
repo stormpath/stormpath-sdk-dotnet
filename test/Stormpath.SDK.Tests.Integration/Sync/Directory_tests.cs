@@ -352,5 +352,94 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             directory.Delete().ShouldBeTrue();
             this.fixture.CreatedDirectoryHrefs.Remove(directory.Href);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_and_modifying_password_policy(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var directory = client.CreateDirectory(
+                $"Password Policy Test (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})",
+                "Testing Password Policy",
+                DirectoryStatus.Enabled);
+
+            directory.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
+
+            var passwordPolicy = directory.GetPasswordPolicy();
+
+            // Default values
+            passwordPolicy.ResetEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+            passwordPolicy.ResetSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+            passwordPolicy.ResetTokenTtl.ShouldBe(24);
+
+            // Update
+            passwordPolicy
+                .SetResetEmailStatus(Mail.EmailStatus.Disabled)
+                .SetResetEmailSuccessStatus(Mail.EmailStatus.Disabled)
+                .SetResetTokenTtl(48);
+            var updatedPolicy = passwordPolicy.Save();
+
+            passwordPolicy.ResetEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+            passwordPolicy.ResetSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+            passwordPolicy.ResetTokenTtl.ShouldBe(48);
+
+            // Cleanup
+            (directory.Delete()).ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(directory.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_and_modifying_password_strength_policy(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var directory = client.CreateDirectory(
+                $"Password Strength Policy Test (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})",
+                "Testing Password Strength Policy",
+                DirectoryStatus.Enabled);
+
+            directory.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
+
+            var passwordPolicy = directory.GetPasswordPolicy();
+            var strengthPolicy = passwordPolicy.GetPasswordStrengthPolicy();
+
+            // Default values
+            strengthPolicy.MaximumLength.ShouldBe(100);
+            strengthPolicy.MinimumDiacritic.ShouldBe(0);
+            strengthPolicy.MinimumLength.ShouldBe(8);
+            strengthPolicy.MinimumLowercase.ShouldBe(1);
+            strengthPolicy.MinimumNumeric.ShouldBe(1);
+            strengthPolicy.MinimumSymbols.ShouldBe(0);
+            strengthPolicy.MinimumUppercase.ShouldBe(1);
+
+            // Update
+            strengthPolicy
+                .SetMaximumLength(50)
+                .SetMinimumDiacritic(2)
+                .SetMinimumLength(3)
+                .SetMinimumLowercase(4)
+                .SetMinimumNumeric(5)
+                .SetMinimumSymbols(6)
+                .SetMinimumUppercase(7);
+            var updatedPolicy = strengthPolicy.Save();
+
+            strengthPolicy.MaximumLength.ShouldBe(50);
+            strengthPolicy.MinimumDiacritic.ShouldBe(2);
+            strengthPolicy.MinimumLength.ShouldBe(3);
+            strengthPolicy.MinimumLowercase.ShouldBe(4);
+            strengthPolicy.MinimumNumeric.ShouldBe(5);
+            strengthPolicy.MinimumSymbols.ShouldBe(6);
+            strengthPolicy.MinimumUppercase.ShouldBe(7);
+
+            // Cleanup
+            (directory.Delete()).ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(directory.Href);
+        }
     }
 }

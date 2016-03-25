@@ -27,18 +27,30 @@ namespace Stormpath.SDK.Impl.Directory
     /// Represents the synchronous actions that correspond to the default asynchronous actions
     /// available on <see cref="IDirectory">Directory</see>.
     /// </summary>
-    internal interface IDirectorySync : ISaveableWithOptionsSync<IDirectory>, IDeletableSync, IExtendableSync, IAccountCreationActionsSync, IGroupCreationActionsSync, IAccountStoreSync
+    internal interface IDirectorySync :
+        ISaveableWithOptionsSync<IDirectory>,
+        IDeletableSync,
+        IExtendableSync,
+        IAccountCreationActionsSync,
+        IGroupCreationActionsSync,
+        IAccountStoreSync
     {
         /// <summary>
         /// Synchronous counterpart to <see cref="IDirectory.GetProviderAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <returns>The Provider.</returns>
+        /// <returns>The Provider for this Directory.</returns>
         IProvider GetProvider();
 
         /// <summary>
         /// Synchronous counterpart to <see cref="IDirectory.GetAccountCreationPolicyAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
-        /// <returns>The Account Creation Policy.</returns>
+        /// <returns>The Account Creation Policy for this Directory.</returns>
         IAccountCreationPolicy GetAccountCreationPolicy();
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IDirectory.GetPasswordPolicyAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Password Policy for this Directory.</returns>
+        IPasswordPolicy GetPasswordPolicy();
     }
 }
