@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using Stormpath.SDK.IdSite;
 using Stormpath.SDK.Impl.DataStore;
@@ -35,13 +36,9 @@ namespace Stormpath.SDK.Impl.IdSite
         private readonly IIdSiteJtiProvider jtiProvider;
         private readonly IClock clock;
 
-        private string callbackUri;
-        private string state;
-        private string path;
         private bool logout = false;
-        private string organizationNameKey;
-        private bool? useSubdomain;
-        private bool? showOrganizationField;
+        private string callbackUri = string.Empty;
+        private Dictionary<string, object> claims = new Dictionary<string, object>();
 
         public DefaultIdSiteUrlBuilder(IInternalDataStore internalDataStore, string applicationHref, IIdSiteJtiProvider jtiProvider, IClock clock)
         {
@@ -127,31 +124,43 @@ namespace Stormpath.SDK.Impl.IdSite
 
         IIdSiteUrlBuilder IIdSiteUrlBuilder.SetPath(string path)
         {
-            this.path = path;
+            this.claims.Add(IdSiteClaims.Path, path);
             return this;
         }
 
         IIdSiteUrlBuilder IIdSiteUrlBuilder.SetOrganizationNameKey(string organizationNameKey)
         {
-            this.organizationNameKey = organizationNameKey;
+            this.claims.Add(IdSiteClaims.OrganizationNameKey, organizationNameKey);
             return this;
         }
 
         IIdSiteUrlBuilder IIdSiteUrlBuilder.SetUseSubdomain(bool useSubdomain)
         {
-            this.useSubdomain = useSubdomain;
+            this.claims.Add(IdSiteClaims.UseSubdomain, useSubdomain);
             return this;
         }
 
         IIdSiteUrlBuilder IIdSiteUrlBuilder.SetShowOrganizationField(bool showOrganizationField)
         {
-            this.showOrganizationField = showOrganizationField;
+            this.claims.Add(IdSiteClaims.ShowOrganizationField, showOrganizationField);
             return this;
         }
 
         IIdSiteUrlBuilder IIdSiteUrlBuilder.SetState(string state)
         {
-            this.state = state;
+            this.claims.Add(IdSiteClaims.State, state);
+            return this;
+        }
+
+        IIdSiteUrlBuilder IIdSiteUrlBuilder.SetSpToken(string sptoken)
+        {
+            this.claims.Add(IdSiteClaims.SpToken, sptoken);
+            return this;
+        }
+
+        IIdSiteUrlBuilder IIdSiteUrlBuilder.SetClaim(string key, object value)
+        {
+            this.claims.Add(key, value);
             return this;
         }
 
@@ -174,29 +183,9 @@ namespace Stormpath.SDK.Impl.IdSite
                 .SetClaim(IdSiteClaims.RedirectUri, this.callbackUri)
                 .SignWith(apiKey.GetSecret(), Encoding.UTF8);
 
-            if (!string.IsNullOrEmpty(this.path))
+            foreach (var claim in this.claims)
             {
-                jwtBuilder.SetClaim(IdSiteClaims.Path, this.path);
-            }
-
-            if (!string.IsNullOrEmpty(this.state))
-            {
-                jwtBuilder.SetClaim(IdSiteClaims.State, this.state);
-            }
-
-            if (!string.IsNullOrEmpty(this.organizationNameKey))
-            {
-                jwtBuilder.SetClaim(IdSiteClaims.OrganizationNameKey, this.organizationNameKey);
-            }
-
-            if (this.useSubdomain != null)
-            {
-                jwtBuilder.SetClaim(IdSiteClaims.UseSubdomain, this.useSubdomain.Value);
-            }
-
-            if (this.showOrganizationField != null)
-            {
-                jwtBuilder.SetClaim(IdSiteClaims.ShowOrganizationField, this.showOrganizationField.Value);
+                jwtBuilder.SetClaim(claim.Key, claim.Value);
             }
 
             string jwt = jwtBuilder.Build()
