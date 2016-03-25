@@ -78,6 +78,10 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             accessToken.ApplicationHref.ShouldBe(createdApplication.Href);
             accessToken.AccountHref.ShouldNotBeNullOrEmpty();
 
+            // Get account (with some expansions)
+            var account = accessToken.GetAccount(opt => opt.Expand(acct => acct.GetGroups()));
+            account.Email.ShouldBe("lskywalker@tattooine.rim");
+
             // Clean up
             accessToken.Delete().ShouldBeTrue();
 
