@@ -34,5 +34,11 @@ namespace Stormpath.SDK.Impl.Directory
         /// </summary>
         /// <returns>The Provider.</returns>
         IProvider GetProvider();
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="IDirectory.GetAccountCreationPolicyAsync(System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <returns>The Account Creation Policy.</returns>
+        IAccountCreationPolicy GetAccountCreationPolicy();
     }
 }

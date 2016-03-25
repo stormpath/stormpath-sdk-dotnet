@@ -32,5 +32,13 @@ namespace Stormpath.SDK.Sync
         /// <returns>The Provider of this Directory.</returns>
         public static IProvider GetProvider(this IDirectory directory)
             => (directory as IDirectorySync).GetProvider();
+
+        /// <summary>
+        /// Synchronously gets the <see cref="IAccountCreationPolicy">Account Creation Policy</see> for this directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <returns>The Account Creation Policy for this Directory.</returns>
+        public static IAccountCreationPolicy GetAccountCreationPolicy(this IDirectory directory)
+            => (directory as IDirectorySync).GetAccountCreationPolicy();
     }
 }

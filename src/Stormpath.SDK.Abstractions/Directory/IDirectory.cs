@@ -101,6 +101,13 @@ namespace Stormpath.SDK.Directory
         Task<IProvider> GetProviderAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Gets the <see cref="IAccountCreationPolicy">Account Creation Policy</see> for this Directory.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The Account Creation Policy for this Directory.</returns>
+        Task<IAccountCreationPolicy> GetAccountCreationPolicyAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Gets a queryable list of all <see cref="IGroup">Groups</see> in this Directory.
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IGroup}"/> that may be used to list or search Groups.</returns>

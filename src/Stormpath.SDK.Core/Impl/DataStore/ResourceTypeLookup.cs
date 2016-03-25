@@ -93,6 +93,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(ISamlServiceProvider)] = typeof(DefaultSamlServiceProvider),
             [typeof(ISsoInitiationEndpoint)] = typeof(DefaultSsoInitiationEndpoint),
             [typeof(ISamlAccountResult)] = typeof(DefaultSamlAccountResult),
+            [typeof(IAccountCreationPolicy)] = typeof(DefaultAccountCreationPolicy),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
@@ -139,6 +140,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultRefreshGrantAuthenticationAttempt)] = typeof(IRefreshGrantAuthenticationAttempt),
             [typeof(DefaultIdSiteTokenAuthenticationAttempt)] = typeof(IIdSiteTokenAuthenticationAttempt),
             [typeof(DefaultApiKey)] = typeof(IApiKey),
+            [typeof(DefaultAccountCreationPolicy)] = typeof(IAccountCreationPolicy),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(DefaultApplicationAccountStoreMapping)] = typeof(IApplicationAccountStoreMapping),
@@ -160,6 +162,7 @@ namespace Stormpath.SDK.Impl.DataStore
             ["defaultGroupStoreMapping"] = typeof(IAccountStoreMapping),
             ["accountStore"] = typeof(IAccountStore),
             ["oAuthPolicy"] = typeof(IOauthPolicy),
+            ["accountCreationPolicy"] = typeof(IAccountCreationPolicy),
 
             ["organizations"] = typeof(CollectionResponsePage<IOrganization>),
             ["applications"] = typeof(CollectionResponsePage<IApplication>),

@@ -314,5 +314,43 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             created.Delete().ShouldBeTrue();
             this.fixture.CreatedDirectoryHrefs.Remove(created.Href);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_and_modifying_account_creation_policy(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var directory = client.CreateDirectory(
+                $"Account Creation Policy Test (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})",
+                "Testing Account Creation Policy",
+                DirectoryStatus.Enabled);
+
+            directory.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
+
+            var accountCreationPolicy = directory.GetAccountCreationPolicy();
+
+            // Default values
+            accountCreationPolicy.VerificationEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+            accountCreationPolicy.VerificationSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+            accountCreationPolicy.WelcomeEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+
+            // Update
+            accountCreationPolicy
+                .SetVerificationEmailStatus(Mail.EmailStatus.Enabled)
+                .SetVerificationSuccessEmailStatus(Mail.EmailStatus.Enabled)
+                .SetWelcomeEmailStatus(Mail.EmailStatus.Enabled);
+            var updatedPolicy = accountCreationPolicy.Save();
+
+            accountCreationPolicy.VerificationEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+            accountCreationPolicy.VerificationSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+            accountCreationPolicy.WelcomeEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+
+            // Cleanup
+            directory.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(directory.Href);
+        }
     }
 }

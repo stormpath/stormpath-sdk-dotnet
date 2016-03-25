@@ -317,5 +317,43 @@ namespace Stormpath.SDK.Tests.Integration.Async
             (await created.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedDirectoryHrefs.Remove(created.Href);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_and_modifying_account_creation_policy(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var directory = await client.CreateDirectoryAsync(
+                $"Account Creation Policy Test (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})",
+                "Testing Account Creation Policy",
+                DirectoryStatus.Enabled);
+
+            directory.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
+
+            var accountCreationPolicy = await directory.GetAccountCreationPolicyAsync();
+
+            // Default values
+            accountCreationPolicy.VerificationEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+            accountCreationPolicy.VerificationSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+            accountCreationPolicy.WelcomeEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+
+            // Update
+            accountCreationPolicy
+                .SetVerificationEmailStatus(Mail.EmailStatus.Enabled)
+                .SetVerificationSuccessEmailStatus(Mail.EmailStatus.Enabled)
+                .SetWelcomeEmailStatus(Mail.EmailStatus.Enabled);
+            var updatedPolicy = await accountCreationPolicy.SaveAsync();
+
+            accountCreationPolicy.VerificationEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+            accountCreationPolicy.VerificationSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+            accountCreationPolicy.WelcomeEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+
+            // Cleanup
+            (await directory.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(directory.Href);
+        }
     }
 }

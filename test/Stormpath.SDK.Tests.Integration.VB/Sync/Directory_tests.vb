@@ -288,5 +288,38 @@ Namespace Sync
             created.Delete().ShouldBeTrue()
             Me.fixture.CreatedDirectoryHrefs.Remove(created.Href)
         End Sub
+
+        <Theory>
+        <MemberData(nameof(TestClients.GetClients), MemberType := GetType(TestClients))>
+        Public Sub Getting_and_modifying_account_creation_policy(clientBuilder As TestClientProvider)
+        	Dim client = clientBuilder.GetClient()
+        	Dim tenant = Await client.GetCurrentTenant()
+
+        	Dim directory = client.CreateDirectory($"Account Creation Policy Test (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})", "Testing Account Creation Policy", DirectoryStatus.Enabled)
+
+        	directory.Href.ShouldNotBeNullOrEmpty()
+        	Me.fixture.CreatedDirectoryHrefs.Add(directory.Href)
+
+        	Dim accountCreationPolicy = directory.GetAccountCreationPolicy()
+
+        	' Default values
+        	accountCreationPolicy.VerificationEmailStatus.ShouldBe(Mail.EmailStatus.Disabled)
+        	accountCreationPolicy.VerificationSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Disabled)
+        	accountCreationPolicy.WelcomeEmailStatus.ShouldBe(Mail.EmailStatus.Disabled)
+
+        	' Update
+        	accountCreationPolicy.SetVerificationEmailStatus(Mail.EmailStatus.Enabled) _
+            .SetVerificationSuccessEmailStatus(Mail.EmailStatus.Enabled) _
+            .SetWelcomeEmailStatus(Mail.EmailStatus.Enabled)
+        	Dim updatedPolicy = accountCreationPolicy.Save()
+
+        	accountCreationPolicy.VerificationEmailStatus.ShouldBe(Mail.EmailStatus.Enabled)
+        	accountCreationPolicy.VerificationSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Enabled)
+        	accountCreationPolicy.WelcomeEmailStatus.ShouldBe(Mail.EmailStatus.Enabled)
+
+        	' Cleanup
+        	(directory.Delete()).ShouldBeTrue()
+        	Me.fixture.CreatedDirectoryHrefs.Remove(directory.Href)
+        End Sub
     End Class
 End Namespace

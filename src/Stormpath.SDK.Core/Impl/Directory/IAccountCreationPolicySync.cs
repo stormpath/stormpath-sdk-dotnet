@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultDirectory.ResourcesSync.cs" company="Stormpath, Inc.">
+﻿// <copyright file="IAccountCreationPolicySync.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,15 @@
 // </copyright>
 
 using Stormpath.SDK.Directory;
-using Stormpath.SDK.Impl.Provider;
-using Stormpath.SDK.Provider;
+using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Directory
 {
-    internal sealed partial class DefaultDirectory
+    /// <summary>
+    /// Represents the synchronous actions that correspond to the default asynchronous actions
+    /// available on an<see cref="IAccountCreationPolicy">Account Creation Policy</see>.
+    /// </summary>
+    internal interface IAccountCreationPolicySync : ISaveableSync<IAccountCreationPolicy>
     {
-        IProvider IDirectorySync.GetProvider()
-            => this.GetInternalSyncDataStore().GetResource<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup);
-
-        IAccountCreationPolicy IDirectorySync.GetAccountCreationPolicy()
-            => this.GetInternalSyncDataStore().GetResource<IAccountCreationPolicy>(this.AccountCreationPolicy.Href);
     }
 }
