@@ -67,6 +67,7 @@ Namespace Async
             accessToken.Href.ShouldBe(authenticateResult.AccessTokenHref)
             accessToken.Jwt.ShouldBe(authenticateResult.AccessTokenString)
             accessToken.ApplicationHref.ShouldBe(createdApplication.Href)
+            accessToken.AccountHref.ShouldNotBeNullOrEmpty()
 
             ' Clean up
             Call (Await accessToken.DeleteAsync()).ShouldBeTrue()
@@ -253,6 +254,7 @@ Namespace Async
 
             validAccessToken.ShouldNotBeNull()
             validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href)
+            validAccessToken.AccountHref.ShouldNotBeNullOrEmpty()
             validAccessToken.CreatedAt.ShouldBe(DateTimeOffset.Now, Delay.ReasonableTestRunWindow)
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref)
             validAccessToken.Jwt.ShouldBe(accessTokenJwt)
@@ -331,6 +333,7 @@ Namespace Async
 
             validAccessToken.ShouldNotBeNull()
             validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href)
+            validAccessToken.AccountHref.ShouldNotBeNullOrEmpty()
             validAccessToken.CreatedAt.ShouldBe(DateTimeOffset.Now, Delay.ReasonableTestRunWindow)
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref)
             validAccessToken.Jwt.ShouldBe(accessTokenJwt)

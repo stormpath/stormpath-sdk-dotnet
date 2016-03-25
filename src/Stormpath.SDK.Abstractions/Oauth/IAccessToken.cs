@@ -45,6 +45,13 @@ namespace Stormpath.SDK.Oauth
         string ApplicationHref { get; }
 
         /// <summary>
+        /// Gets the <c>href</c> of the associated <see cref="IAccount">Account</see>.
+        /// </summary>
+        /// <remarks>If you want to get the Account details, use <see cref="GetAccountAsync(CancellationToken)"/>.</remarks>
+        /// <value>The <c>href</c> of the associated <see cref="IAccount">Account</see>.</value>
+        string AccountHref { get; }
+
+        /// <summary>
         /// Gets the creation date of the token.
         /// </summary>
         /// <value>The creation <see cref="DateTimeOffset"/> of this resource.</value>

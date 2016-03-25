@@ -46,6 +46,8 @@ namespace Stormpath.SDK.Impl.Oauth
 
         string IAccessToken.ApplicationHref => this.Application?.Href;
 
+        string IAccessToken.AccountHref => this.Account?.Href;
+
         Task<IAccount> IAccessToken.GetAccountAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href);
 

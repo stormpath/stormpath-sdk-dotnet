@@ -76,6 +76,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             accessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
             accessToken.Jwt.ShouldBe(authenticateResult.AccessTokenString);
             accessToken.ApplicationHref.ShouldBe(createdApplication.Href);
+            accessToken.AccountHref.ShouldNotBeNullOrEmpty();
 
             // Clean up
             accessToken.Delete().ShouldBeTrue();
@@ -327,6 +328,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             validAccessToken.ShouldNotBeNull();
             validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href);
+            validAccessToken.AccountHref.ShouldNotBeNullOrEmpty();
             validAccessToken.CreatedAt.ShouldBe(DateTimeOffset.Now, Delay.ReasonableTestRunWindow);
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
             validAccessToken.Jwt.ShouldBe(accessTokenJwt);
@@ -413,6 +415,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             validAccessToken.ShouldNotBeNull();
             validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href);
+            validAccessToken.AccountHref.ShouldNotBeNullOrEmpty();
             validAccessToken.CreatedAt.ShouldBe(DateTimeOffset.Now, Delay.ReasonableTestRunWindow);
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
             validAccessToken.Jwt.ShouldBe(accessTokenJwt);
