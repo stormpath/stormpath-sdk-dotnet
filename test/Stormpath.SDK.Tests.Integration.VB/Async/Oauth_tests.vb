@@ -69,6 +69,10 @@ Namespace Async
             accessToken.ApplicationHref.ShouldBe(createdApplication.Href)
             accessToken.AccountHref.ShouldNotBeNullOrEmpty()
 
+            // Get account (with some expansions)
+            Dim account = Await accessToken.GetAccountAsync(Function(opt) opt.Expand(Function(acct) acct.GetGroups()))
+            account.Email.ShouldBe("lskywalker@tattooine.rim")
+
             ' Clean up
             Call (Await accessToken.DeleteAsync()).ShouldBeTrue()
 
@@ -215,6 +219,10 @@ Namespace Async
 
             Dim retrievedDirectly = Await client.GetRefreshTokenAsync(refreshTokenForApplication.Href)
             retrievedDirectly.Href.ShouldBe(refreshTokenForApplication.Href)
+
+            // Get account (with some expansions)
+            Dim tokenAccount = Await retrievedDirectly.GetAccountAsync(Function(opt) opt.Expand(Function(acct) acct.GetGroups()))
+            account.Email.ShouldBe(account.Email)
 
             ' Clean up
             Call (Await refreshTokenForApplication.DeleteAsync()).ShouldBeTrue()

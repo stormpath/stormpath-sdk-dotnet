@@ -70,6 +70,10 @@ Namespace Sync
             accessToken.ApplicationHref.ShouldBe(createdApplication.Href)
             accessToken.AccountHref.ShouldNotBeNullOrEmpty()
 
+            // Get account (with some expansions)
+            Dim account = accessToken.GetAccount(Function(opt) opt.Expand(Function(acct) acct.GetGroups()))
+            account.Email.ShouldBe("lskywalker@tattooine.rim")
+
             ' Clean up
             Call (accessToken.Delete()).ShouldBeTrue()
 
@@ -222,6 +226,10 @@ Namespace Sync
 
             Dim retrievedDirectly = client.GetRefreshToken(refreshTokenForApplication.Href)
             retrievedDirectly.Href.ShouldBe(refreshTokenForApplication.Href)
+
+            // Get account (with some expansions)
+            Dim tokenAccount = retrievedDirectly.GetAccount(Function(opt) opt.Expand(Function(acct) acct.GetGroups()))
+            account.Email.ShouldBe(account.Email)
 
             ' Clean up
             Call (refreshTokenForApplication.Delete()).ShouldBeTrue()
