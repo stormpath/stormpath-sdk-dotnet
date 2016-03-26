@@ -14,10 +14,12 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Impl.Tenant;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
@@ -36,9 +38,23 @@ namespace Stormpath.SDK.Impl.Oauth
         IAccount GetAccount();
 
         /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Oauth.IRefreshToken.GetAccountAsync(Action{SDK.Resource.IRetrievalOptions{IAccount}}, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="retrievalOptions">The retrieval options.</param>
+        /// <returns>The <see cref="IAccount">Account</see> associated with this <see cref="SDK.Oauth.IRefreshToken">RefreshToken</see>.</returns>
+        IAccount GetAccount(Action<IRetrievalOptions<IAccount>> retrievalOptions);
+
+        /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Oauth.IRefreshToken.GetApplicationAsync(System.Threading.CancellationToken)"/>.
         /// </summary>
         /// <returns>The <see cref="IApplication">Application</see> associated with this <see cref="SDK.Oauth.IRefreshToken">RefreshToken</see>.</returns>
         IApplication GetApplication();
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Oauth.IRefreshToken.GetApplicationAsync(Action{SDK.Resource.IRetrievalOptions{IApplication}}, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <param name="retrievalOptions">The retrieval options.</param>
+        /// <returns>The <see cref="IApplication">Application</see> associated with this <see cref="SDK.Oauth.IRefreshToken">RefreshToken</see>.</returns>
+        IApplication GetApplication(Action<IRetrievalOptions<IApplication>> retrievalOptions);
     }
 }

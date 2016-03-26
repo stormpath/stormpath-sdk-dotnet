@@ -159,6 +159,32 @@ namespace Stormpath.SDK.Tests.IdSite
         }
 
         [Fact]
+        public void Generates_url_with_sptoken()
+        {
+            var builder = this.GetBuilder();
+            builder.SetSpToken("sPtOkEn!");
+
+            var url = builder.Build();
+
+            var jwt = this.ParseUrl(url);
+            this.VerifyCommon(jwt);
+            jwt.Body.GetClaim("sp_token").ShouldBe("sPtOkEn!");
+        }
+
+        [Fact]
+        public void Generates_url_with_arbitrary_claim()
+        {
+            var builder = this.GetBuilder();
+            builder.SetClaim("foo", "bar?");
+
+            var url = builder.Build();
+
+            var jwt = this.ParseUrl(url);
+            this.VerifyCommon(jwt);
+            jwt.Body.GetClaim("foo").ShouldBe("bar?");
+        }
+
+        [Fact]
         public void Generates_url_with_all_the_things()
         {
             var builder = this.GetBuilder();
@@ -168,6 +194,8 @@ namespace Stormpath.SDK.Tests.IdSite
             builder.SetShowOrganizationField(false);
             builder.SetState("123");
             builder.SetUseSubdomain(false);
+            builder.SetSpToken("awesome_sptoken");
+            builder.SetClaim("foobar", "bazqux123");
 
             var url = builder.Build();
             url.ShouldStartWith($"{SsoUrl}/logout{JwtArg}");
@@ -179,6 +207,8 @@ namespace Stormpath.SDK.Tests.IdSite
             jwt.Body.GetClaim("sof").ShouldBe(false);
             jwt.Body.GetClaim("state").ShouldBe("123");
             jwt.Body.GetClaim("usd").ShouldBe(false);
+            jwt.Body.GetClaim("sp_token").ShouldBe("awesome_sptoken");
+            jwt.Body.GetClaim("foobar").ShouldBe("bazqux123");
         }
 
         private IIdSiteUrlBuilder GetBuilder()

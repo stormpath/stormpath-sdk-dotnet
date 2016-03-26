@@ -279,5 +279,117 @@ Namespace Async
             Assert.True(Await created.DeleteAsync())
             Me.fixture.CreatedDirectoryHrefs.Remove(created.Href)
         End Function
+
+        <Theory>
+        <MemberData(nameof(TestClients.GetClients), MemberType := GetType(TestClients))>
+        Public Async Function Getting_and_modifying_account_creation_policy(clientBuilder As TestClientProvider) As Task
+        	Dim client = clientBuilder.GetClient()
+        	Dim tenant = Await client.GetCurrentTenantAsync()
+
+        	Dim directory = Await client.CreateDirectoryAsync($"Account Creation Policy Test (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name} - VB)", "Testing Account Creation Policy", DirectoryStatus.Enabled)
+
+        	directory.Href.ShouldNotBeNullOrEmpty()
+        	Me.fixture.CreatedDirectoryHrefs.Add(directory.Href)
+
+        	Dim accountCreationPolicy = Await directory.GetAccountCreationPolicyAsync()
+
+        	' Default values
+        	accountCreationPolicy.VerificationEmailStatus.ShouldBe(Mail.EmailStatus.Disabled)
+        	accountCreationPolicy.VerificationSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Disabled)
+        	accountCreationPolicy.WelcomeEmailStatus.ShouldBe(Mail.EmailStatus.Disabled)
+
+        	' Update
+        	accountCreationPolicy.SetVerificationEmailStatus(Mail.EmailStatus.Enabled) _
+            .SetVerificationSuccessEmailStatus(Mail.EmailStatus.Enabled) _
+            .SetWelcomeEmailStatus(Mail.EmailStatus.Enabled)
+        	Dim updatedPolicy = Await accountCreationPolicy.SaveAsync()
+
+        	accountCreationPolicy.VerificationEmailStatus.ShouldBe(Mail.EmailStatus.Enabled)
+        	accountCreationPolicy.VerificationSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Enabled)
+        	accountCreationPolicy.WelcomeEmailStatus.ShouldBe(Mail.EmailStatus.Enabled)
+
+        	' Cleanup
+        	(Call Await directory.DeleteAsync()).ShouldBeTrue()
+        	Me.fixture.CreatedDirectoryHrefs.Remove(directory.Href)
+        End Function
+
+        <Theory> _
+        <MemberData(nameof(TestClients.GetClients), MemberType := GetType(TestClients))> _
+        Public Async Function Getting_and_modifying_password_policy(clientBuilder As TestClientProvider) As Task
+        	Dim client = clientBuilder.GetClient()
+        	Dim tenant = Await client.GetCurrentTenantAsync()
+
+        	Dim directory = Await client.CreateDirectoryAsync("Password Policy Test (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name} - VB)", "Testing Password Policy", DirectoryStatus.Enabled)
+
+        	directory.Href.ShouldNotBeNullOrEmpty()
+        	Me.fixture.CreatedDirectoryHrefs.Add(directory.Href)
+        
+        	Dim passwordPolicy = Await directory.GetPasswordPolicyAsync()
+
+        	' Default values
+        	passwordPolicy.ResetEmailStatus.ShouldBe(Mail.EmailStatus.Enabled)
+        	passwordPolicy.ResetSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Enabled)
+        	passwordPolicy.ResetTokenTtl.ShouldBe(24)
+
+        	' Update
+        	passwordPolicy.SetResetEmailStatus(Mail.EmailStatus.Disabled) _
+            .SetResetEmailSuccessStatus(Mail.EmailStatus.Disabled) _
+            .SetResetTokenTtl(48)
+        	Dim updatedPolicy = Await passwordPolicy.SaveAsync()
+
+        	passwordPolicy.ResetEmailStatus.ShouldBe(Mail.EmailStatus.Disabled)
+        	passwordPolicy.ResetSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Disabled)
+        	passwordPolicy.ResetTokenTtl.ShouldBe(48)
+
+        	' Cleanup
+        	(Call Await directory.DeleteAsync()).ShouldBeTrue()
+        	Me.fixture.CreatedDirectoryHrefs.Remove(directory.Href)
+        End Function
+
+        <Theory> _
+        <MemberData(nameof(TestClients.GetClients), MemberType := GetType(TestClients))> _
+        Public Async Function Getting_and_modifying_password_strength_policy(clientBuilder As TestClientProvider) As Task
+        	Dim client = clientBuilder.GetClient()
+        	Dim tenant = Await client.GetCurrentTenantAsync()
+
+        	Dim directory = Await client.CreateDirectoryAsync("Password Strength Policy Test (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name} - VB)", "Testing Password Strength Policy", DirectoryStatus.Enabled)
+
+        	directory.Href.ShouldNotBeNullOrEmpty()
+        	Me.fixture.CreatedDirectoryHrefs.Add(directory.Href)
+
+        	Dim passwordPolicy = Await directory.GetPasswordPolicyAsync()
+        	Dim strengthPolicy = Await passwordPolicy.GetPasswordStrengthPolicyAsync()
+
+        	' Default values
+        	strengthPolicy.MaximumLength.ShouldBe(100)
+        	strengthPolicy.MinimumDiacritic.ShouldBe(0)
+        	strengthPolicy.MinimumLength.ShouldBe(8)
+        	strengthPolicy.MinimumLowercase.ShouldBe(1)
+        	strengthPolicy.MinimumNumeric.ShouldBe(1)
+        	strengthPolicy.MinimumSymbols.ShouldBe(0)
+        	strengthPolicy.MinimumUppercase.ShouldBe(1)
+
+        	' Update
+        	strengthPolicy.SetMaximumLength(50) _
+            .SetMinimumDiacritic(2) _
+            .SetMinimumLength(3) _
+            .SetMinimumLowercase(4) _
+            .SetMinimumNumeric(5) _
+            .SetMinimumSymbols(6) _
+            .SetMinimumUppercase(7)
+        	Dim updatedPolicy = Await strengthPolicy.SaveAsync()
+
+        	strengthPolicy.MaximumLength.ShouldBe(50)
+        	strengthPolicy.MinimumDiacritic.ShouldBe(2)
+        	strengthPolicy.MinimumLength.ShouldBe(3)
+        	strengthPolicy.MinimumLowercase.ShouldBe(4)
+        	strengthPolicy.MinimumNumeric.ShouldBe(5)
+        	strengthPolicy.MinimumSymbols.ShouldBe(6)
+        	strengthPolicy.MinimumUppercase.ShouldBe(7)
+
+        	' Cleanup
+        	(Call Await directory.DeleteAsync()).ShouldBeTrue()
+        	Me.fixture.CreatedDirectoryHrefs.Remove(directory.Href)
+        End Function
     End Class
 End Namespace

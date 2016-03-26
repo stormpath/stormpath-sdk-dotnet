@@ -24,7 +24,7 @@ Public Class Account_Management
 #Region "search_directory_group_description1.vb"
         Dim groupsInUS = Await myDirectory _
             .GetGroups() _
-            .Where(Function(g) g.Description.StartsWith("US")) _
+            .Where(Function(g) g.Description.Contains("/US")) _
             .ToListAsync()
 #End Region
     End Function
@@ -35,7 +35,7 @@ Public Class Account_Management
 #Region "search_directory_group_description2.vb"
         Dim groupsInUSEast = Await myDirectory _
             .GetGroups() _
-            .Where(Function(g) g.Description.StartsWith("US East")) _
+            .Where(Function(g) g.Description.Contains("/US East")) _
             .ToListAsync()
 #End Region
     End Function

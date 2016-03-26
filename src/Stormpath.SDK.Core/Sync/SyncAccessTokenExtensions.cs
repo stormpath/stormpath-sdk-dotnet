@@ -14,10 +14,12 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Oauth;
 using Stormpath.SDK.Oauth;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Sync
 {
@@ -35,11 +37,31 @@ namespace Stormpath.SDK.Sync
             => (accessToken as IAccessTokenSync).GetAccount();
 
         /// <summary>
+        /// Synchronously retrieves the <see cref="IAccount">Account</see> associated with this <see cref="IAccessToken">AccessToken</see>
+        /// with the specified retrieval options.
+        /// </summary>
+        /// <param name="accessToken">The access token.</param>
+        /// <param name="retrievalOptions">The retrieval options.</param>
+        /// <returns>The <see cref="IAccount">Account</see> associated with this <see cref="IAccessToken">AccessToken</see>.</returns>
+        public static IAccount GetAccount(this IAccessToken accessToken, Action<IRetrievalOptions<IAccount>> retrievalOptions)
+            => (accessToken as IAccessTokenSync).GetAccount(retrievalOptions);
+
+        /// <summary>
         /// Synchronously retrieves the <see cref="IApplication">Application</see> associated with this <see cref="IAccessToken">AccessToken</see>.
         /// </summary>
         /// <param name="accessToken">The access token.</param>
         /// <returns>The <see cref="IApplication">Application</see> associated with this <see cref="IAccessToken">AccessToken</see>.</returns>
         public static IApplication GetApplication(this IAccessToken accessToken)
             => (accessToken as IAccessTokenSync).GetApplication();
+
+        /// <summary>
+        /// Synchronously retrieves the <see cref="IApplication">Application</see> associated with this <see cref="IAccessToken">AccessToken</see>
+        /// with the specified retrieval options.
+        /// </summary>
+        /// <param name="accessToken">The access token.</param>
+        /// <param name="retrievalOptions">The retrieval options.</param>
+        /// <returns>The <see cref="IApplication">Application</see> associated with this <see cref="IAccessToken">AccessToken</see>.</returns>
+        public static IApplication GetApplication(this IAccessToken accessToken, Action<IRetrievalOptions<IApplication>> retrievalOptions)
+            => (accessToken as IAccessTokenSync).GetApplication(retrievalOptions);
     }
 }

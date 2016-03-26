@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -46,17 +47,31 @@ namespace Stormpath.SDK.Impl.Oauth
 
         string IAccessToken.ApplicationHref => this.Application?.Href;
 
+        string IAccessToken.AccountHref => this.Account?.Href;
+
         Task<IAccount> IAccessToken.GetAccountAsync(CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href);
+            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(this.Account.Href, cancellationToken);
+
+        Task<IAccount> IAccessToken.GetAccountAsync(Action<IRetrievalOptions<IAccount>> retrievalOptions, CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync(this.Account.Href, retrievalOptions, cancellationToken);
 
         IAccount IAccessTokenSync.GetAccount()
             => this.GetInternalSyncDataStore().GetResource<IAccount>(this.Account.Href);
 
+        IAccount IAccessTokenSync.GetAccount(Action<IRetrievalOptions<IAccount>> retrievalOptions)
+            => this.GetInternalSyncDataStore().GetResource(this.Account.Href, retrievalOptions);
+
         Task<IApplication> IAccessToken.GetApplicationAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IApplication>(this.Application.Href);
 
+        Task<IApplication> IAccessToken.GetApplicationAsync(Action<IRetrievalOptions<IApplication>> retrievalOptions, CancellationToken cancellationToken)
+            => this.GetInternalAsyncDataStore().GetResourceAsync(this.Application.Href, retrievalOptions, cancellationToken);
+
         IApplication IAccessTokenSync.GetApplication()
             => this.GetInternalSyncDataStore().GetResource<IApplication>(this.Application.Href);
+
+        IApplication IAccessTokenSync.GetApplication(Action<IRetrievalOptions<IApplication>> retrievalOptions)
+            => this.GetInternalSyncDataStore().GetResource(this.Application.Href, retrievalOptions);
 
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);

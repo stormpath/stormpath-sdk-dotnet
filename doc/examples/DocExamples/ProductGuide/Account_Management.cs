@@ -48,7 +48,7 @@ namespace DocExamples.ProductGuide
             #region search_directory_group_description1.cs
             var groupsInUS = await myDirectory
                 .GetGroups()
-                .Where(g => g.Description.StartsWith("US"))
+                .Where(g => g.Description.Contains("/US"))
                 .ToListAsync();
             #endregion
         }
@@ -60,7 +60,7 @@ namespace DocExamples.ProductGuide
             #region search_directory_group_description2.cs
             var groupsInUSEast = await myDirectory
                 .GetGroups()
-                .Where(g => g.Description.StartsWith("US East"))
+                .Where(g => g.Description.Contains("/US East"))
                 .ToListAsync();
             #endregion
         }

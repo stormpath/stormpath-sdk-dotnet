@@ -45,6 +45,13 @@ namespace Stormpath.SDK.Oauth
         string ApplicationHref { get; }
 
         /// <summary>
+        /// Gets the <c>href</c> of the associated <see cref="IAccount">Account</see>.
+        /// </summary>
+        /// <remarks>If you want to get the Account details, use <see cref="GetAccountAsync(CancellationToken)"/>.</remarks>
+        /// <value>The <c>href</c> of the associated <see cref="IAccount">Account</see>.</value>
+        string AccountHref { get; }
+
+        /// <summary>
         /// Gets the creation date of the token.
         /// </summary>
         /// <value>The creation <see cref="DateTimeOffset"/> of this resource.</value>
@@ -58,10 +65,28 @@ namespace Stormpath.SDK.Oauth
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Retrieves the <see cref="IAccount">Account</see> associated with this <see cref="IAccessToken">AccessToken</see>
+        /// with the specified retrieval options.
+        /// </summary>
+        /// <param name="retrievalOptions">The retrieval options.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IAccount">Account</see> associated with this <see cref="IAccessToken">AccessToken</see>.</returns>
+        Task<IAccount> GetAccountAsync(Action<IRetrievalOptions<IAccount>> retrievalOptions, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Retrieves the <see cref="IApplication">Application</see> associated with this <see cref="IAccessToken">AccessToken</see>.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The <see cref="IApplication">Application</see> associated with this <see cref="IAccessToken">AccessToken</see>.</returns>
         Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves the <see cref="IApplication">Application</see> associated with this <see cref="IAccessToken">AccessToken</see>
+        /// with the specified retrieval options.
+        /// </summary>
+        /// <param name="retrievalOptions">The retrieval options.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IApplication">Application</see> associated with this <see cref="IAccessToken">AccessToken</see>.</returns>
+        Task<IApplication> GetApplicationAsync(Action<IRetrievalOptions<IApplication>> retrievalOptions, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

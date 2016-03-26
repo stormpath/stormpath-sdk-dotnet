@@ -77,6 +77,11 @@ namespace Stormpath.SDK.Tests.Integration.Async
             accessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
             accessToken.Jwt.ShouldBe(authenticateResult.AccessTokenString);
             accessToken.ApplicationHref.ShouldBe(createdApplication.Href);
+            accessToken.AccountHref.ShouldNotBeNullOrEmpty();
+
+            // Get account (with some expansions)
+            var account = await accessToken.GetAccountAsync(opt => opt.Expand(acct => acct.GetGroups()));
+            account.Email.ShouldBe("lskywalker@tattooine.rim");
 
             // Clean up
             (await accessToken.DeleteAsync()).ShouldBeTrue();
@@ -285,6 +290,10 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var retrievedDirectly = await client.GetRefreshTokenAsync(refreshTokenForApplication.Href);
             retrievedDirectly.Href.ShouldBe(refreshTokenForApplication.Href);
 
+            // Get account (with some expansions)
+            var tokenAccount = await retrievedDirectly.GetAccountAsync(opt => opt.Expand(acct => acct.GetGroups()));
+            account.Email.ShouldBe(account.Email);
+
             // Clean up
             (await refreshTokenForApplication.DeleteAsync()).ShouldBeTrue();
 
@@ -326,6 +335,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             validAccessToken.ShouldNotBeNull();
             validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href);
+            validAccessToken.AccountHref.ShouldNotBeNullOrEmpty();
             validAccessToken.CreatedAt.ShouldBe(DateTimeOffset.Now, Delay.ReasonableTestRunWindow);
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
             validAccessToken.Jwt.ShouldBe(accessTokenJwt);
@@ -412,6 +422,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             validAccessToken.ShouldNotBeNull();
             validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href);
+            validAccessToken.AccountHref.ShouldNotBeNullOrEmpty();
             validAccessToken.CreatedAt.ShouldBe(DateTimeOffset.Now, Delay.ReasonableTestRunWindow);
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
             validAccessToken.Jwt.ShouldBe(accessTokenJwt);

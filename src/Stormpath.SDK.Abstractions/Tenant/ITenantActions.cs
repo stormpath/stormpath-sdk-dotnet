@@ -141,6 +141,7 @@ namespace Stormpath.SDK.Tenant
         /// <param name="token">The <c>sptoken</c> query parameter value.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The verified account.</returns>
+        /// <seealso cref="IApplication.SendVerificationEmailAsync(string, CancellationToken)"/>
         /// <exception cref="Error.ResourceException">The token was not valid.</exception>
         Task<IAccount> VerifyAccountEmailAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
 

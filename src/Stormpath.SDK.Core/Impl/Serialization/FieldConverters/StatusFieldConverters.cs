@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
     {
         private static bool IsStatusField(KeyValuePair<string, object> token)
         {
-            return string.Equals(token.Key, "status", StringComparison.OrdinalIgnoreCase)
+            return token.Key.EndsWith("status", StringComparison.OrdinalIgnoreCase)
                     && !string.IsNullOrEmpty(token.Value.ToString());
         }
 
@@ -132,6 +132,24 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
                 }
 
                 return new FieldConverterResult(true, SDK.Api.ApiKeyStatus.Parse(token.Value.ToString()));
+            }
+        }
+
+        internal sealed class EmailStatusConverter : AbstractFieldConverter
+        {
+            public EmailStatusConverter()
+                : base(nameof(EmailStatusConverter), typeof(SDK.Directory.IAccountCreationPolicy), typeof(SDK.Directory.IPasswordPolicy))
+            {
+            }
+
+            protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
+            {
+                if (!IsStatusField(token))
+                {
+                    return FieldConverterResult.Failed;
+                }
+
+                return new FieldConverterResult(true, SDK.Mail.EmailStatus.Parse(token.Value.ToString()));
             }
         }
     }

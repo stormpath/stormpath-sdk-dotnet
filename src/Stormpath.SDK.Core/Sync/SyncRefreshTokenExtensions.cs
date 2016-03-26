@@ -14,10 +14,12 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Oauth;
 using Stormpath.SDK.Oauth;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Sync
 {
@@ -35,11 +37,29 @@ namespace Stormpath.SDK.Sync
             => (refreshToken as IRefreshTokenSync).GetAccount();
 
         /// <summary>
+        /// Synchronously retrieves the <see cref="IAccount">Account</see> associated with this <see cref="IRefreshToken">RefreshToken</see>.
+        /// </summary>
+        /// <param name="refreshToken">The Refresh token.</param>
+        /// <returns>The <see cref="IAccount">Account</see> associated with this <see cref="IRefreshToken">RefreshToken</see>.</returns>
+        /// <param name="retrievalOptions">The retrieval options.</param>
+        public static IAccount GetAccount(this IRefreshToken refreshToken, Action<IRetrievalOptions<IAccount>> retrievalOptions)
+            => (refreshToken as IRefreshTokenSync).GetAccount(retrievalOptions);
+
+        /// <summary>
         /// Synchronously retrieves the <see cref="IApplication">Application</see> associated with this <see cref="IRefreshToken">RefreshToken</see>.
         /// </summary>
         /// <param name="refreshToken">The Refresh token.</param>
         /// <returns>The <see cref="IApplication">Application</see> associated with this <see cref="IRefreshToken">RefreshToken</see>.</returns>
         public static IApplication GetApplication(this IRefreshToken refreshToken)
             => (refreshToken as IRefreshTokenSync).GetApplication();
+
+        /// <summary>
+        /// Synchronously retrieves the <see cref="IApplication">Application</see> associated with this <see cref="IRefreshToken">RefreshToken</see>.
+        /// </summary>
+        /// <param name="refreshToken">The Refresh token.</param>
+        /// <param name="retrievalOptions">The retrieval options.</param>
+        /// <returns>The <see cref="IApplication">Application</see> associated with this <see cref="IRefreshToken">RefreshToken</see>.</returns>
+        public static IApplication GetApplication(this IRefreshToken refreshToken, Action<IRetrievalOptions<IApplication>> retrievalOptions)
+            => (refreshToken as IRefreshTokenSync).GetApplication(retrievalOptions);
     }
 }

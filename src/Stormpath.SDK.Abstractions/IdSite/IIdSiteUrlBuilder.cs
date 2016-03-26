@@ -98,6 +98,21 @@ namespace Stormpath.SDK.IdSite
         IIdSiteUrlBuilder SetState(string state);
 
         /// <summary>
+        /// Sets the <c>sptoken</c> claim, used when initiating an ID Site-based password reset.
+        /// </summary>
+        /// <param name="sptoken">The <c>sptoken</c> parameter provided by Stormpath.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IIdSiteUrlBuilder SetSpToken(string sptoken);
+
+        /// <summary>
+        /// Sets an ID Site claim.
+        /// </summary>
+        /// <param name="key">The claim name.</param>
+        /// <param name="value">The claim value.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IIdSiteUrlBuilder SetClaim(string key, object value);
+
+        /// <summary>
         /// Builds the fully-qualified URL representing the initial location in the ID Site where the end-user should be redirected.
         /// </summary>
         /// <returns>The fully-qualified URL representing the initial location in the ID Site where the end-user should be redirected.</returns>

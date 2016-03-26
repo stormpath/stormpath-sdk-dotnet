@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
@@ -316,6 +317,133 @@ namespace Stormpath.SDK.Tests.Integration.Async
             // Cleanup
             (await created.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedDirectoryHrefs.Remove(created.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_and_modifying_account_creation_policy(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var directory = await client.CreateDirectoryAsync(
+                $"Account Creation Policy Test (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})",
+                "Testing Account Creation Policy",
+                DirectoryStatus.Enabled);
+
+            directory.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
+
+            var accountCreationPolicy = await directory.GetAccountCreationPolicyAsync();
+
+            // Default values
+            accountCreationPolicy.VerificationEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+            accountCreationPolicy.VerificationSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+            accountCreationPolicy.WelcomeEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+
+            // Update
+            accountCreationPolicy
+                .SetVerificationEmailStatus(Mail.EmailStatus.Enabled)
+                .SetVerificationSuccessEmailStatus(Mail.EmailStatus.Enabled)
+                .SetWelcomeEmailStatus(Mail.EmailStatus.Enabled);
+            var updatedPolicy = await accountCreationPolicy.SaveAsync();
+
+            accountCreationPolicy.VerificationEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+            accountCreationPolicy.VerificationSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+            accountCreationPolicy.WelcomeEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+
+            // Cleanup
+            (await directory.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(directory.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_and_modifying_password_policy(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var directory = await client.CreateDirectoryAsync(
+                $"Password Policy Test (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})",
+                "Testing Password Policy",
+                DirectoryStatus.Enabled);
+
+            directory.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
+
+            var passwordPolicy = await directory.GetPasswordPolicyAsync();
+
+            // Default values
+            passwordPolicy.ResetEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+            passwordPolicy.ResetSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Enabled);
+            passwordPolicy.ResetTokenTtl.ShouldBe(24);
+
+            // Update
+            passwordPolicy
+                .SetResetEmailStatus(Mail.EmailStatus.Disabled)
+                .SetResetEmailSuccessStatus(Mail.EmailStatus.Disabled)
+                .SetResetTokenTtl(48);
+            var updatedPolicy = await passwordPolicy.SaveAsync();
+
+            passwordPolicy.ResetEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+            passwordPolicy.ResetSuccessEmailStatus.ShouldBe(Mail.EmailStatus.Disabled);
+            passwordPolicy.ResetTokenTtl.ShouldBe(48);
+
+            // Cleanup
+            (await directory.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(directory.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_and_modifying_password_strength_policy(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var directory = await client.CreateDirectoryAsync(
+                $"Password Strength Policy Test (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})",
+                "Testing Password Strength Policy",
+                DirectoryStatus.Enabled);
+
+            directory.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
+
+            var passwordPolicy = await directory.GetPasswordPolicyAsync();
+            var strengthPolicy = await passwordPolicy.GetPasswordStrengthPolicyAsync();
+
+            // Default values
+            strengthPolicy.MaximumLength.ShouldBe(100);
+            strengthPolicy.MinimumDiacritic.ShouldBe(0);
+            strengthPolicy.MinimumLength.ShouldBe(8);
+            strengthPolicy.MinimumLowercase.ShouldBe(1);
+            strengthPolicy.MinimumNumeric.ShouldBe(1);
+            strengthPolicy.MinimumSymbols.ShouldBe(0);
+            strengthPolicy.MinimumUppercase.ShouldBe(1);
+
+            // Update
+            strengthPolicy
+                .SetMaximumLength(50)
+                .SetMinimumDiacritic(2)
+                .SetMinimumLength(3)
+                .SetMinimumLowercase(4)
+                .SetMinimumNumeric(5)
+                .SetMinimumSymbols(6)
+                .SetMinimumUppercase(7);
+            var updatedPolicy = await strengthPolicy.SaveAsync();
+
+            strengthPolicy.MaximumLength.ShouldBe(50);
+            strengthPolicy.MinimumDiacritic.ShouldBe(2);
+            strengthPolicy.MinimumLength.ShouldBe(3);
+            strengthPolicy.MinimumLowercase.ShouldBe(4);
+            strengthPolicy.MinimumNumeric.ShouldBe(5);
+            strengthPolicy.MinimumSymbols.ShouldBe(6);
+            strengthPolicy.MinimumUppercase.ShouldBe(7);
+
+            // Cleanup
+            (await directory.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(directory.Href);
         }
     }
 }

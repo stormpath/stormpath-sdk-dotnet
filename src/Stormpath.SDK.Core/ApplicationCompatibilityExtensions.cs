@@ -116,6 +116,7 @@ namespace Stormpath.SDK
         /// <param name="application">The interface.</param>
         /// <param name="requestBuilderAction">Sets the options required for the verification email request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// <seealso cref="Tenant.ITenantActions.VerifyAccountEmailAsync(string, CancellationToken)"/>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static Task SendVerificationEmailAsync(this IApplication application, Action<EmailVerificationRequestBuilder> requestBuilderAction, CancellationToken cancellationToken = default(CancellationToken))
         {

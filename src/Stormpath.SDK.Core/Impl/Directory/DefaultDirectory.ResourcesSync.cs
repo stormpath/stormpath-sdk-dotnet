@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.SDK.Directory;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Provider;
 
@@ -23,5 +24,11 @@ namespace Stormpath.SDK.Impl.Directory
     {
         IProvider IDirectorySync.GetProvider()
             => this.GetInternalSyncDataStore().GetResource<IProvider>(this.Provider.Href, ProviderTypeConverter.TypeLookup);
+
+        IAccountCreationPolicy IDirectorySync.GetAccountCreationPolicy()
+            => this.GetInternalSyncDataStore().GetResource<IAccountCreationPolicy>(this.AccountCreationPolicy.Href);
+
+        IPasswordPolicy IDirectorySync.GetPasswordPolicy()
+            => this.GetInternalSyncDataStore().GetResource<IPasswordPolicy>(this.PasswordPolicy.Href);
     }
 }

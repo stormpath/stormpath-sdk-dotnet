@@ -76,6 +76,11 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             accessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
             accessToken.Jwt.ShouldBe(authenticateResult.AccessTokenString);
             accessToken.ApplicationHref.ShouldBe(createdApplication.Href);
+            accessToken.AccountHref.ShouldNotBeNullOrEmpty();
+
+            // Get account (with some expansions)
+            var account = accessToken.GetAccount(opt => opt.Expand(acct => acct.GetGroups()));
+            account.Email.ShouldBe("lskywalker@tattooine.rim");
 
             // Clean up
             accessToken.Delete().ShouldBeTrue();
@@ -286,6 +291,10 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var retrievedDirectly = client.GetRefreshToken(refreshTokenForApplication.Href);
             retrievedDirectly.Href.ShouldBe(refreshTokenForApplication.Href);
 
+            // Get account (with some expansions)
+            var tokenAccount = retrievedDirectly.GetAccount(opt => opt.Expand(acct => acct.GetGroups()));
+            account.Email.ShouldBe(account.Email);
+
             // Clean up
             refreshTokenForApplication.Delete().ShouldBeTrue();
 
@@ -327,6 +336,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             validAccessToken.ShouldNotBeNull();
             validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href);
+            validAccessToken.AccountHref.ShouldNotBeNullOrEmpty();
             validAccessToken.CreatedAt.ShouldBe(DateTimeOffset.Now, Delay.ReasonableTestRunWindow);
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
             validAccessToken.Jwt.ShouldBe(accessTokenJwt);
@@ -413,6 +423,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             validAccessToken.ShouldNotBeNull();
             validAccessToken.ApplicationHref.ShouldBe(createdApplication.Href);
+            validAccessToken.AccountHref.ShouldNotBeNullOrEmpty();
             validAccessToken.CreatedAt.ShouldBe(DateTimeOffset.Now, Delay.ReasonableTestRunWindow);
             validAccessToken.Href.ShouldBe(authenticateResult.AccessTokenHref);
             validAccessToken.Jwt.ShouldBe(accessTokenJwt);
