@@ -14,16 +14,18 @@
     <Name>Documentation</Name>
     <!-- SHFB properties -->
     <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
-    <OutputPath>.\Help\</OutputPath>
+    <OutputPath>config-api\</OutputPath>
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="proxy\packages\Stormpath.Configuration.Abstractions.1.0.4\lib\net45\Stormpath.Configuration.Abstractions.dll" />
-<DocumentationSource sourceFile="proxy\packages\Stormpath.Configuration.Abstractions.1.0.4\lib\net45\Stormpath.Configuration.Abstractions.xml" /></DocumentationSources>
+      <DocumentationSource sourceFile="proxy\packages\Stormpath.Configuration.Abstractions.3.0.0\lib\net45\Stormpath.Configuration.Abstractions.dll" />
+      <DocumentationSource sourceFile="proxy\packages\Stormpath.Configuration.Abstractions.3.0.0\lib\net45\Stormpath.Configuration.Abstractions.xml" />
+    </DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False" xmlns="" />
-<NamespaceSummaryItem name="Stormpath.Configuration.Abstractions" isDocumented="True" xmlns="">This namespace contains the base configuration abstractions.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Stormpath.Configuration.Abstractions.Model" isDocumented="True" xmlns="">This namespace contains the classes that make up the configuration data model.</NamespaceSummaryItem></NamespaceSummaries>
+      <NamespaceSummaryItem name="Stormpath.Configuration.Abstractions" isDocumented="True" xmlns="">This namespace contains the base configuration abstractions.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Stormpath.Configuration.Abstractions.Model" isDocumented="True" xmlns="">This namespace contains the classes that make up the configuration data model.</NamespaceSummaryItem>
+    </NamespaceSummaries>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
     <IndentHtml>False</IndentHtml>
