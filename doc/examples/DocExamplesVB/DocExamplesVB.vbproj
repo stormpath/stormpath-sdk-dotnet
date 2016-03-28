@@ -68,12 +68,12 @@
       <HintPath>..\..\..\packages\Stormpath.Configuration.Abstractions.2.0.0\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.SDK.Abstractions, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Stormpath.SDK.Abstractions.0.7.0\lib\net451\Stormpath.SDK.Abstractions.dll</HintPath>
+    <Reference Include="Stormpath.SDK.Abstractions, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Stormpath.SDK.Abstractions.0.8.0-beta1\lib\net451\Stormpath.SDK.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.SDK.Core, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Stormpath.SDK.Core.0.7.0\lib\net451\Stormpath.SDK.Core.dll</HintPath>
+    <Reference Include="Stormpath.SDK.Core, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Stormpath.SDK.Core.0.8.0-beta1\lib\net451\Stormpath.SDK.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Stormpath.SDK.JsonNetSerializer, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">

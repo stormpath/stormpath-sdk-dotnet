@@ -23,6 +23,7 @@ using Stormpath.SDK.Client;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Mail;
 
 namespace DocExamples.ProductGuide
 {
@@ -273,6 +274,35 @@ namespace DocExamples.ProductGuide
 
             #region resend_verification_email.cs
             await myApplication.SendVerificationEmailAsync("han@newrepublic.gov");
+            #endregion
+        }
+
+        public async Task UpdatePasswordStrengthPolicy()
+        {
+            IDirectory myDirectory = null;
+
+            #region update_dir_pwd_strength_req.cs
+            // Get the Password Strength Policy from the Directory's Password Policy resource
+            var passwordPolicy = await myDirectory.GetPasswordPolicyAsync();
+            var strengthPolicy = await passwordPolicy.GetPasswordStrengthPolicyAsync();
+
+            // Update and save
+            strengthPolicy.SetMinimumLength(1)
+                .SetMaximumLength(24)
+                .SetMinimumSymbols(1);
+            await strengthPolicy.SaveAsync();
+            #endregion
+        }
+
+        public async Task EnablePasswordResetEmail()
+        {
+            IDirectory myDirectory = null;
+
+            #region enable_pwd_reset_email.cs
+            var passwordPolicy = await myDirectory.GetPasswordPolicyAsync();
+
+            passwordPolicy.SetResetEmailStatus(EmailStatus.Enabled);
+            await passwordPolicy.SaveAsync();
             #endregion
         }
     }

@@ -227,4 +227,33 @@ Public Class Account_Management
         Await myApplication.SendVerificationEmailAsync("han@newrepublic.gov")
 #End Region
     End Function
+
+
+    Public Async Function UpdatePasswordStrengthPolicy() As Task
+        Dim myDirectory As IDirectory = Nothing
+
+#Region "update_dir_pwd_strength_req.vb"
+        ' Get the Password Strength Policy from the Directory's Password Policy resource
+        Dim passwordPolicy = Await myDirectory.GetPasswordPolicyAsync()
+        Dim strengthPolicy = Await passwordPolicy.GetPasswordStrengthPolicyAsync()
+
+        ' Update and save
+        strengthPolicy.SetMinimumLength(1) _
+            .SetMaximumLength(24) _
+            .SetMinimumSymbols(1)
+        Await strengthPolicy.SaveAsync()
+#End Region
+    End Function
+
+
+    Public Async Function EnablePasswordResetEmail() As Task
+        Dim myDirectory As IDirectory = Nothing
+
+#Region "enable_pwd_reset_email.vb"
+        Dim passwordPolicy = Await myDirectory.GetPasswordPolicyAsync()
+
+        passwordPolicy.SetResetEmailStatus(EmailStatus.Enabled)
+        Await passwordPolicy.SaveAsync()
+#End Region
+    End Function
 End Class
