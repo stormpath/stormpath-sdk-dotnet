@@ -19,6 +19,9 @@ using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Directory
 {
+    /// <summary>
+    /// Represents the Account Creation Policy for a <see cref="IDirectory">Directory</see>.
+    /// </summary>
     public interface IAccountCreationPolicy : IResource, ISaveable<IAccountCreationPolicy>
     {
         /// <summary>

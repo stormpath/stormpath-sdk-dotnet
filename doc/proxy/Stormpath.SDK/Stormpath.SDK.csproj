@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -32,21 +32,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FlexibleConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FlexibleConfiguration.1.0.0\lib\net45\FlexibleConfiguration.dll</HintPath>
+    <Reference Include="FlexibleConfiguration, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FlexibleConfiguration.1.0.1\lib\net45\FlexibleConfiguration.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Polyglot, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polyglot.1.0.0\lib\net451\Polyglot.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.Configuration, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stormpath.Configuration.1.0.6\lib\net451\Stormpath.Configuration.dll</HintPath>
+    <Reference Include="Stormpath.Configuration, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stormpath.Configuration.3.0.0\lib\net451\Stormpath.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.Configuration.Abstractions, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Stormpath.Configuration.Abstractions.1.0.4\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
+    <Reference Include="Stormpath.Configuration.Abstractions, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stormpath.Configuration.Abstractions.3.0.0\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -226,6 +226,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\ReadCacheFilter.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\WriteCacheFilter.Async.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\Filters\WriteCacheFilter.Sync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultAccountCreationPolicy.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectory.Collections.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectory.CreationActions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectory.CreationActionsSync.cs" />
@@ -233,7 +234,12 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectory.Resources.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectory.ResourcesSync.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultDirectoryCreationOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultPasswordPolicy.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\DefaultPasswordStrengthPolicy.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\IAccountCreationPolicySync.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\IDirectorySync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\IPasswordPolicySync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Directory\IPasswordStrengthPolicySync.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Error\DefaultError.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Extensions\ConcurrentDictionaryExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Extensions\HttpExtensions.cs" />
@@ -521,6 +527,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncOauthPolicyExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncOrganizationAccountStoreMappingExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncPasswordGrantAuthenticatorExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncPasswordPolicyExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncPasswordResetTokenExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncQueryableExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncRefreshGrantAuthenticatorExtensions.cs" />
@@ -551,4 +558,3 @@
   </Target>
   -->
 </Project>
-

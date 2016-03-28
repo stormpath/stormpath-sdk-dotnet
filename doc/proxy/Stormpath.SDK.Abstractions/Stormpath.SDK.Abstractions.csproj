@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Stormpath.Configuration.Abstractions, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stormpath.Configuration.Abstractions.1.0.4\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
+    <Reference Include="Stormpath.Configuration.Abstractions, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stormpath.Configuration.Abstractions.3.0.0\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -90,8 +90,11 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\CustomData\ICustomDataProxy.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\DataStore\IDataStore.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Directory\DirectoryStatus.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Directory\IAccountCreationPolicy.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Directory\IDirectory.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Directory\IDirectoryCreationOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Directory\IPasswordPolicy.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Directory\IPasswordStrengthPolicy.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Error\IError.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Error\ResourceException.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Group\GroupStatus.cs" />
@@ -183,6 +186,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Logging\LogEntry.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Logging\LoggerExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Logging\LogLevel.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Mail\EmailStatus.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Oauth\IAccessToken.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Oauth\IIdSiteTokenAuthenticationRequest.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Oauth\IIdSiteTokenAuthenticationRequestBuilder.cs" />
@@ -272,10 +276,10 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Tenant\ITenantActions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <!-- #endAutogen -->
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <!-- #endAutogen -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -285,4 +289,3 @@
   </Target>
   -->
 </Project>
-

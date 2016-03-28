@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Directory
 {
     /// <summary>
-    /// Represents the password strength policy for a <see cref="IDirectory">Directory</see>.
+    /// Represents the Password Strength Policy for a <see cref="IDirectory">Directory</see>.
     /// </summary>
     public interface IPasswordStrengthPolicy : IResource, ISaveable<IPasswordStrengthPolicy>
     {
@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Directory
         /// Gets the minimum quantity of symbols required by this policy.
         /// </summary>
         /// <remarks>
-        /// The supported symbols are: space, !, ", #, $, %, &, ', (, ), *, +, comma, -, ., /, :, ;, <, =, >, @, [, \, ], ^, _, {, |, }, ~, ¡, §, ©, «, ¬, ® , ±, µ, ¶, ·, », ½, ¿, ×, ÷
+        /// The supported symbols are: <![CDATA[space, !, ", #, $, %, &, ', (, ), *, +, comma, -, ., /, :, ;, <, =, >, @, [, \, ], ^, _, {, |, }, ~, ¡, §, ©, «, ¬, ® , ±, µ, ¶, ·, », ½, ¿, ×, ÷]]>
         /// </remarks>
         /// <value>
         /// The minimum quantity of symbols required by this policy.
@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Directory
         /// Gets the minimum quantity of diacritic characters required by this policy.
         /// </summary>
         /// <remarks>
-        /// The supported diacritic characters are: À, Á, Â, Ã, Ä, Å, Æ, Ç, È, É, Ê, Ë, Ì, Í, Î, Ï, Ð, Ñ, Ò, Ó, Ô, Õ, Ö, Ø, Ù, Ú, Û, Ü, Ý, Þ, ß, à, á, â, ã, ä, å, æ, ç, è, é, ê, ë, ì, í, î, ï, ð, ñ, ò, ó, ô, õ, ö, ø, ù, ú, û, ü, ý, þ, ÿ
+        /// The supported diacritic characters are: <![CDATA[À, Á, Â, Ã, Ä, Å, Æ, Ç, È, É, Ê, Ë, Ì, Í, Î, Ï, Ð, Ñ, Ò, Ó, Ô, Õ, Ö, Ø, Ù, Ú, Û, Ü, Ý, Þ, ß, à, á, â, ã, ä, å, æ, ç, è, é, ê, ë, ì, í, î, ï, ð, ñ, ò, ó, ô, õ, ö, ø, ù, ú, û, ü, ý, þ, ÿ]]>
         /// </remarks>
         /// <value>
         /// The minimum quantity of diacritic characters required by this policy.
@@ -92,7 +92,7 @@ namespace Stormpath.SDK.Directory
         /// Sets the minimum quantity of symbols required by this policy.
         /// </summary>
         /// <remarks>
-        /// The supported symbols are: space, !, ", #, $, %, &, ', (, ), *, +, comma, -, ., /, :, ;, <, =, >, @, [, \, ], ^, _, {, |, }, ~, ¡, §, ©, «, ¬, ® , ±, µ, ¶, ·, », ½, ¿, ×, ÷
+        /// The supported symbols are: <![CDATA[space, !, ", #, $, %, &, ', (, ), *, +, comma, -, ., /, :, ;, <, =, >, @, [, \, ], ^, _, {, |, }, ~, ¡, §, ©, «, ¬, ® , ±, µ, ¶, ·, », ½, ¿, ×, ÷]]>
         /// </remarks>
         /// <param name="minimumSymbols">The minimum quantity of symbols required.</param>
         /// <returns>This instance for method chaining.</returns>
@@ -102,7 +102,7 @@ namespace Stormpath.SDK.Directory
         /// Sets the minimum quantity of diacritic characters required by this policy.
         /// </summary>
         /// <remarks>
-        /// The supported diacritic characters are: À, Á, Â, Ã, Ä, Å, Æ, Ç, È, É, Ê, Ë, Ì, Í, Î, Ï, Ð, Ñ, Ò, Ó, Ô, Õ, Ö, Ø, Ù, Ú, Û, Ü, Ý, Þ, ß, à, á, â, ã, ä, å, æ, ç, è, é, ê, ë, ì, í, î, ï, ð, ñ, ò, ó, ô, õ, ö, ø, ù, ú, û, ü, ý, þ, ÿ
+        /// The supported diacritic characters are: <![CDATA[À, Á, Â, Ã, Ä, Å, Æ, Ç, È, É, Ê, Ë, Ì, Í, Î, Ï, Ð, Ñ, Ò, Ó, Ô, Õ, Ö, Ø, Ù, Ú, Û, Ü, Ý, Þ, ß, à, á, â, ã, ä, å, æ, ç, è, é, ê, ë, ì, í, î, ï, ð, ñ, ò, ó, ô, õ, ö, ø, ù, ú, û, ü, ý, þ, ÿ]]>
         /// </remarks>
         /// <param name="minimumDiacritics">The minimum quantity of diacritic characters required.</param>
         /// <returns>This instance for method chaining.</returns>
