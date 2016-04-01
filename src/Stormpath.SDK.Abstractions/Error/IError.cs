@@ -50,5 +50,12 @@ namespace Stormpath.SDK.Error
         /// </summary>
         /// <value>Additional information related to this error, if any.</value>
         string MoreInfo { get; }
+
+        /// <summary>
+        /// Gets a property on the response message.
+        /// </summary>
+        /// <param name="key">The property name.</param>
+        /// <returns>The property value, if any.</returns>
+        string GetProperty(string key);
     }
 }

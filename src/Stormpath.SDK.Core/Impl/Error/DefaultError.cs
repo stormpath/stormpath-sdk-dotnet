@@ -61,6 +61,8 @@ namespace Stormpath.SDK.Impl.Error
 
         public int HttpStatus => this.GetIntProperty(StatusPropertyName);
 
+        string IError.GetProperty(string key) => this.GetStringProperty(key);
+
         public static DefaultError FromHttpResponse(IHttpResponse response)
         {
             return new DefaultError(new Dictionary<string, object>()

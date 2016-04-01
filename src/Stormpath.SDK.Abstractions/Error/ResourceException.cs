@@ -62,6 +62,13 @@ namespace Stormpath.SDK.Error
         /// <value>The HTTP status code associated with this error.</value>
         public int HttpStatus => this.Error.HttpStatus;
 
+        /// <summary>
+        /// Gets a property on the response message.
+        /// </summary>
+        /// <param name="key">The property name.</param>
+        /// <returns>The property value, if any.</returns>
+        public string GetProperty(string key) => this.Error.GetProperty(key);
+
         private static string BuildExceptionMessage(IError error)
         {
             if (error == null)
