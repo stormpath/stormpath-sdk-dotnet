@@ -20,6 +20,7 @@ using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
+using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tenant;
@@ -98,60 +99,32 @@ namespace Stormpath.SDK.Impl.Client
             return await this.tenant.VerifyAccountEmailAsync(token, cancellationToken).ConfigureAwait(false);
         }
 
-        async Task<IAccount> ITenantActions.GetAccountAsync(string href, CancellationToken cancellationToken)
-        {
-            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+        Task<IAccount> ITenantActions.GetAccountAsync(string href, CancellationToken cancellationToken)
+            => TenantActionsShared.GetAccountAsync(this.dataStoreAsync, href, cancellationToken);
 
-            return await this.tenant.GetAccountAsync(href).ConfigureAwait(false);
-        }
+        Task<IApplication> ITenantActions.GetApplicationAsync(string href, CancellationToken cancellationToken)
+            => TenantActionsShared.GetApplicationAsync(this.dataStoreAsync, href, cancellationToken);
 
-        async Task<IApplication> ITenantActions.GetApplicationAsync(string href, CancellationToken cancellationToken)
-        {
-            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+        Task<IDirectory> ITenantActions.GetDirectoryAsync(string href, CancellationToken cancellationToken)
+            => TenantActionsShared.GetDirectoryAsync(this.dataStoreAsync, href, cancellationToken);
 
-            return await this.tenant.GetApplicationAsync(href).ConfigureAwait(false);
-        }
+        Task<IGroup> ITenantActions.GetGroupAsync(string href, CancellationToken cancellationToken)
+            => TenantActionsShared.GetGroupAsync(this.dataStoreAsync, href, cancellationToken);
 
-        async Task<IDirectory> ITenantActions.GetDirectoryAsync(string href, CancellationToken cancellationToken)
-        {
-            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
+        Task<IOrganization> ITenantActions.GetOrganizationAsync(string href, CancellationToken cancellationToken)
+            => TenantActionsShared.GetOrganizationAsync(this.dataStoreAsync, href, cancellationToken);
 
-            return await this.tenant.GetDirectoryAsync(href).ConfigureAwait(false);
-        }
+        Task<IAccessToken> ITenantActions.GetAccessTokenAsync(string href, CancellationToken cancellationToken)
+            => TenantActionsShared.GetAccessTokenAsync(this.dataStoreAsync, href, cancellationToken);
 
-        async Task<IGroup> ITenantActions.GetGroupAsync(string href, CancellationToken cancellationToken)
-        {
-            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
-
-            return await this.tenant.GetGroupAsync(href).ConfigureAwait(false);
-        }
-
-        async Task<IOrganization> ITenantActions.GetOrganizationAsync(string href, CancellationToken cancellationToken)
-        {
-            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
-
-            return await this.tenant.GetOrganizationAsync(href).ConfigureAwait(false);
-        }
+        Task<IRefreshToken> ITenantActions.GetRefreshTokenAsync(string href, CancellationToken cancellationToken)
+            => TenantActionsShared.GetRefreshTokenAsync(this.dataStoreAsync, href, cancellationToken);
 
         async Task<IOrganization> ITenantActions.GetOrganizationByNameKeyAsync(string href, CancellationToken cancellationToken)
         {
             await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
 
             return await this.tenant.GetOrganizationByNameKeyAsync(href).ConfigureAwait(false);
-        }
-
-        async Task<IAccessToken> ITenantActions.GetAccessTokenAsync(string href, CancellationToken cancellationToken)
-        {
-            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
-
-            return await this.tenant.GetAccessTokenAsync(href).ConfigureAwait(false);
-        }
-
-        async Task<IRefreshToken> ITenantActions.GetRefreshTokenAsync(string href, CancellationToken cancellationToken)
-        {
-            await this.EnsureTenantAsync(cancellationToken).ConfigureAwait(false);
-
-            return await this.tenant.GetRefreshTokenAsync(href).ConfigureAwait(false);
         }
     }
 }

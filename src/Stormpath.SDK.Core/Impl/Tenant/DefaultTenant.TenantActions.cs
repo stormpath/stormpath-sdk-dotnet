@@ -109,29 +109,29 @@ namespace Stormpath.SDK.Impl.Tenant
         }
 
         Task<IAccount> ITenantActions.GetAccountAsync(string href, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccount>(href);
+            => TenantActionsShared.GetAccountAsync(this.GetInternalAsyncDataStore(), href, cancellationToken);
 
         Task<IApplication> ITenantActions.GetApplicationAsync(string href, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IApplication>(href);
+            => TenantActionsShared.GetApplicationAsync(this.GetInternalAsyncDataStore(), href, cancellationToken);
 
         Task<IDirectory> ITenantActions.GetDirectoryAsync(string href, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IDirectory>(href);
+            => TenantActionsShared.GetDirectoryAsync(this.GetInternalAsyncDataStore(), href, cancellationToken);
 
         Task<IGroup> ITenantActions.GetGroupAsync(string href, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IGroup>(href);
+            => TenantActionsShared.GetGroupAsync(this.GetInternalAsyncDataStore(), href, cancellationToken);
 
         Task<IOrganization> ITenantActions.GetOrganizationAsync(string href, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IOrganization>(href);
+            => TenantActionsShared.GetOrganizationAsync(this.GetInternalAsyncDataStore(), href, cancellationToken);
+
+        Task<IAccessToken> ITenantActions.GetAccessTokenAsync(string href, CancellationToken cancellationToken)
+            => TenantActionsShared.GetAccessTokenAsync(this.GetInternalAsyncDataStore(), href, cancellationToken);
+
+        Task<IRefreshToken> ITenantActions.GetRefreshTokenAsync(string href, CancellationToken cancellationToken)
+            => TenantActionsShared.GetRefreshTokenAsync(this.GetInternalAsyncDataStore(), href, cancellationToken);
 
         Task<IOrganization> ITenantActions.GetOrganizationByNameKeyAsync(string nameKey, CancellationToken cancellationToken)
         {
             return this.AsInterface.GetOrganizations().Where(org => org.NameKey == nameKey).SingleOrDefaultAsync();
         }
-
-        Task<IAccessToken> ITenantActions.GetAccessTokenAsync(string href, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IAccessToken>(href);
-
-        Task<IRefreshToken> ITenantActions.GetRefreshTokenAsync(string href, CancellationToken cancellationToken)
-            => this.GetInternalAsyncDataStore().GetResourceAsync<IRefreshToken>(href);
     }
 }

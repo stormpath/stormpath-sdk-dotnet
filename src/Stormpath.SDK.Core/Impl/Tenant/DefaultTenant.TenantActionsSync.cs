@@ -136,29 +136,29 @@ namespace Stormpath.SDK.Impl.Tenant
         }
 
         IAccount ITenantActionsSync.GetAccount(string href)
-            => this.GetInternalSyncDataStore().GetResource<IAccount>(href);
+            => TenantActionsShared.GetAccount(this.GetInternalSyncDataStore(), href);
 
         IApplication ITenantActionsSync.GetApplication(string href)
-            => this.GetInternalSyncDataStore().GetResource<IApplication>(href);
+            => TenantActionsShared.GetApplication(this.GetInternalSyncDataStore(), href);
 
         IDirectory ITenantActionsSync.GetDirectory(string href)
-            => this.GetInternalSyncDataStore().GetResource<IDirectory>(href);
+            => TenantActionsShared.GetDirectory(this.GetInternalSyncDataStore(), href);
 
         IGroup ITenantActionsSync.GetGroup(string href)
-            => this.GetInternalSyncDataStore().GetResource<IGroup>(href);
+            => TenantActionsShared.GetGroup(this.GetInternalSyncDataStore(), href);
 
         IOrganization ITenantActionsSync.GetOrganization(string href)
-            => this.GetInternalSyncDataStore().GetResource<IOrganization>(href);
+            => TenantActionsShared.GetOrganization(this.GetInternalSyncDataStore(), href);
+
+        IAccessToken ITenantActionsSync.GetAccessToken(string href)
+            => TenantActionsShared.GetAccessToken(this.GetInternalSyncDataStore(), href);
+
+        IRefreshToken ITenantActionsSync.GetRefreshToken(string href)
+            => TenantActionsShared.GetRefreshToken(this.GetInternalSyncDataStore(), href);
 
         IOrganization ITenantActionsSync.GetOrganizationByNameKey(string nameKey)
         {
             return this.AsInterface.GetOrganizations().Where(org => org.NameKey == nameKey).Synchronously().SingleOrDefault();
         }
-
-        IAccessToken ITenantActionsSync.GetAccessToken(string href)
-            => this.GetInternalSyncDataStore().GetResource<IAccessToken>(href);
-
-        IRefreshToken ITenantActionsSync.GetRefreshToken(string href)
-            => this.GetInternalSyncDataStore().GetResource<IRefreshToken>(href);
     }
 }
