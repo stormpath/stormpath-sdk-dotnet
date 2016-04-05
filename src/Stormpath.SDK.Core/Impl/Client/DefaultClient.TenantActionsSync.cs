@@ -22,6 +22,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
 
 namespace Stormpath.SDK.Impl.Client
@@ -120,59 +121,34 @@ namespace Stormpath.SDK.Impl.Client
         }
 
         IAccount ITenantActionsSync.GetAccount(string href)
-        {
-            this.EnsureTenant();
+            => TenantActionsShared.GetAccount(this.dataStoreSync, href);
 
-            return this.tenant.GetAccount(href);
-        }
+        IAccount ITenantActionsSync.GetAccount(string href, Action<IRetrievalOptions<IAccount>> retrievalOptions)
+            => TenantActionsShared.GetAccount(this.dataStoreSync, href, retrievalOptions);
 
         IApplication ITenantActionsSync.GetApplication(string href)
-        {
-            this.EnsureTenant();
-
-            return this.tenant.GetApplication(href);
-        }
+            => TenantActionsShared.GetApplication(this.dataStoreSync, href);
 
         IDirectory ITenantActionsSync.GetDirectory(string href)
-        {
-            this.EnsureTenant();
-
-            return this.tenant.GetDirectory(href);
-        }
+            => TenantActionsShared.GetDirectory(this.dataStoreSync, href);
 
         IGroup ITenantActionsSync.GetGroup(string href)
-        {
-            this.EnsureTenant();
-
-            return this.tenant.GetGroup(href);
-        }
+            => TenantActionsShared.GetGroup(this.dataStoreSync, href);
 
         IOrganization ITenantActionsSync.GetOrganization(string href)
-        {
-            this.EnsureTenant();
+            => TenantActionsShared.GetOrganization(this.dataStoreSync, href);
 
-            return this.tenant.GetOrganization(href);
-        }
+        IAccessToken ITenantActionsSync.GetAccessToken(string href)
+            => TenantActionsShared.GetAccessToken(this.dataStoreSync, href);
+
+        IRefreshToken ITenantActionsSync.GetRefreshToken(string href)
+            => TenantActionsShared.GetRefreshToken(this.dataStoreSync, href);
 
         IOrganization ITenantActionsSync.GetOrganizationByNameKey(string nameKey)
         {
             this.EnsureTenant();
 
             return this.tenant.GetOrganizationByNameKey(nameKey);
-        }
-
-        IAccessToken ITenantActionsSync.GetAccessToken(string href)
-        {
-            this.EnsureTenant();
-
-            return this.tenant.GetAccessToken(href);
-        }
-
-        IRefreshToken ITenantActionsSync.GetRefreshToken(string href)
-        {
-            this.EnsureTenant();
-
-            return this.tenant.GetRefreshToken(href);
         }
     }
 }

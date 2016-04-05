@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -23,6 +24,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Impl.Client
@@ -101,6 +103,9 @@ namespace Stormpath.SDK.Impl.Client
 
         Task<IAccount> ITenantActions.GetAccountAsync(string href, CancellationToken cancellationToken)
             => TenantActionsShared.GetAccountAsync(this.dataStoreAsync, href, cancellationToken);
+
+        Task<IAccount> ITenantActions.GetAccountAsync(string href, Action<IRetrievalOptions<IAccount>> retrievalOptions, CancellationToken cancellationToken)
+            => TenantActionsShared.GetAccountAsync(this.dataStoreAsync, href, retrievalOptions, cancellationToken);
 
         Task<IApplication> ITenantActions.GetApplicationAsync(string href, CancellationToken cancellationToken)
             => TenantActionsShared.GetApplicationAsync(this.dataStoreAsync, href, cancellationToken);

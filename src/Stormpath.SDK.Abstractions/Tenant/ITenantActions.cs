@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -23,6 +24,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Linq;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Tenant
 {
@@ -154,6 +156,17 @@ namespace Stormpath.SDK.Tenant
         /// <returns>The <see cref="IAccount">Account</see>.</returns>
         /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
         Task<IAccount> GetAccountAsync(string href, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves the <see cref="IAccount">Account</see> at the specified Stormpath URL using the specified retrieval options.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStore.GetResourceAsync{T}(string, Action{IRetrievalOptions{T}}, CancellationToken)"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IAccount">Account</see> to retrieve.</param>
+        /// <param name="retrievalOptions">The retrieval options to use.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IAccount">Account</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        Task<IAccount> GetAccountAsync(string href, Action<IRetrievalOptions<IAccount>> retrievalOptions, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Retrieves the <see cref="IApplication">Application</see> at the specified Stormpath URL.

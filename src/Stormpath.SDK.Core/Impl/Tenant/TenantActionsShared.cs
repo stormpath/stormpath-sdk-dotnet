@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
@@ -23,6 +24,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
@@ -34,6 +36,9 @@ namespace Stormpath.SDK.Impl.Tenant
     {
         public static Task<IAccount> GetAccountAsync(IInternalAsyncDataStore asyncDataStore, string href, CancellationToken cancellationToken)
             => asyncDataStore.GetResourceAsync<IAccount>(href, cancellationToken);
+
+        public static Task<IAccount> GetAccountAsync(IInternalAsyncDataStore asyncDataStore, string href, Action<IRetrievalOptions<IAccount>> retrievalOptions, CancellationToken cancellationToken)
+            => asyncDataStore.GetResourceAsync(href, retrievalOptions, cancellationToken);
 
         public static Task<IApplication> GetApplicationAsync(IInternalAsyncDataStore asyncDataStore, string href, CancellationToken cancellationToken)
             => asyncDataStore.GetResourceAsync<IApplication>(href, cancellationToken);
@@ -55,6 +60,9 @@ namespace Stormpath.SDK.Impl.Tenant
 
         public static IAccount GetAccount(IInternalSyncDataStore syncDataStore, string href)
             => syncDataStore.GetResource<IAccount>(href);
+
+        public static IAccount GetAccount(IInternalSyncDataStore syncDataStore, string href, Action<IRetrievalOptions<IAccount>> retrievalOptions)
+            => syncDataStore.GetResource(href, retrievalOptions);
 
         public static IApplication GetApplication(IInternalSyncDataStore syncDataStore, string href)
             => syncDataStore.GetResource<IApplication>(href);

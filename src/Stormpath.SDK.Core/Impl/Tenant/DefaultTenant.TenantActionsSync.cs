@@ -138,6 +138,9 @@ namespace Stormpath.SDK.Impl.Tenant
         IAccount ITenantActionsSync.GetAccount(string href)
             => TenantActionsShared.GetAccount(this.GetInternalSyncDataStore(), href);
 
+        IAccount ITenantActionsSync.GetAccount(string href, Action<IRetrievalOptions<IAccount>> retrievalOptions)
+            => TenantActionsShared.GetAccount(this.GetInternalSyncDataStore(), href, retrievalOptions);
+
         IApplication ITenantActionsSync.GetApplication(string href)
             => TenantActionsShared.GetApplication(this.GetInternalSyncDataStore(), href);
 

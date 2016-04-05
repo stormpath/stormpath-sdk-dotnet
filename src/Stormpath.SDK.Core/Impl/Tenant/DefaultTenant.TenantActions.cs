@@ -111,6 +111,9 @@ namespace Stormpath.SDK.Impl.Tenant
         Task<IAccount> ITenantActions.GetAccountAsync(string href, CancellationToken cancellationToken)
             => TenantActionsShared.GetAccountAsync(this.GetInternalAsyncDataStore(), href, cancellationToken);
 
+        Task<IAccount> ITenantActions.GetAccountAsync(string href, Action<IRetrievalOptions<IAccount>> retrievalOptions, CancellationToken cancellationToken)
+            => TenantActionsShared.GetAccountAsync(this.GetInternalAsyncDataStore(), href, retrievalOptions, cancellationToken);
+
         Task<IApplication> ITenantActions.GetApplicationAsync(string href, CancellationToken cancellationToken)
             => TenantActionsShared.GetApplicationAsync(this.GetInternalAsyncDataStore(), href, cancellationToken);
 

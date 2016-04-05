@@ -21,6 +21,7 @@ using Stormpath.SDK.Directory;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Tenant
 {
@@ -146,6 +147,16 @@ namespace Stormpath.SDK.Impl.Tenant
         /// <returns>The <see cref="IAccount">Account</see>.</returns>
         /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
         IAccount GetAccount(string href);
+
+        /// <summary>
+        /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetAccountAsync(string, Action{SDK.Resource.IRetrievalOptions{IAccount}}, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="DataStore.IDataStoreSync.GetResource{T}(string, Action{SDK.Resource.IRetrievalOptions{T}})"/>.</remarks>
+        /// <param name="href">The resource URL of the <see cref="IAccount">Account</see> to retrieve.</param>
+        /// <param name="retrievalOptions">The retrieval options to use.</param>
+        /// <returns>The <see cref="IAccount">Account</see>.</returns>
+        /// <exception cref="SDK.Error.ResourceException">The resource could not be found.</exception>
+        IAccount GetAccount(string href, Action<IRetrievalOptions<IAccount>> retrievalOptions);
 
         /// <summary>
         /// Synchronous counterpart to <see cref="SDK.Tenant.ITenantActions.GetApplicationAsync(string, System.Threading.CancellationToken)"/>.

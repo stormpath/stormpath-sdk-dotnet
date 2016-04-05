@@ -22,6 +22,7 @@ using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Organization;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Sync
@@ -199,6 +200,17 @@ namespace Stormpath.SDK.Sync
         /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
         public static IAccount GetAccount(this ITenantActions tenantActions, string href)
             => (tenantActions as ITenantActionsSync).GetAccount(href);
+
+        /// <summary>
+        /// Synchronously retrieves the <see cref="IAccount">Account</see> at the specified Stormpath URL using the specified retrieval options.
+        /// </summary>
+        /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IAccount}(DataStore.IDataStore, string)"/>.</remarks>
+        /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
+        /// <param name="href">The resource URL of the <see cref="IAccount">Account</see> to retrieve.</param>
+        /// <returns>The <see cref="IAccount">Account</see>.</returns>
+        /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
+        public static IAccount GetAccount(this ITenantActions tenantActions, string href, Action<IRetrievalOptions<IAccount>> retrievalOptions)
+            => (tenantActions as ITenantActionsSync).GetAccount(href, retrievalOptions);
 
         /// <summary>
         /// Synchronously retrieves the <see cref="IApplication">Application</see> at the specified Stormpath URL.
