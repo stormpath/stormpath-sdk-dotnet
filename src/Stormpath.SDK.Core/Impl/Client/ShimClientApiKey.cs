@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-using Stormpath.Configuration.Abstractions.Model;
+using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.SDK.Api;
 
 namespace Stormpath.SDK.Impl.Client

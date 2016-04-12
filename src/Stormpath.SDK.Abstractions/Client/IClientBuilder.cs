@@ -184,7 +184,7 @@ namespace Stormpath.SDK.Client
         /// <example>
         /// <code source="ClientBuilderExamples.cs" region="UseBasicAuthentication" lang="C#" title="Use HTTP Basic authentication" />
         /// </example>
-        IClientBuilder SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme scheme);
+        IClientBuilder SetAuthenticationScheme(ClientAuthenticationScheme scheme);
 
         /// <summary>
         /// Sets the HTTP connection timeout in milliseconds to observe when making requests.
@@ -221,7 +221,7 @@ namespace Stormpath.SDK.Client
         /// </summary>
         /// <param name="proxyConfiguration">The configuration server to use.</param>
         /// <returns>This instance for method chaining.</returns>
-        IClientBuilder SetProxy(Configuration.Abstractions.Model.ClientProxyConfiguration proxyConfiguration);
+        IClientBuilder SetProxy(ClientProxyConfiguration proxyConfiguration);
 
         /// <summary>
         /// Sets the cache provider that should be used to cache Stormpath resources, reducing round-trips

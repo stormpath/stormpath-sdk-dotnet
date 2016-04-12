@@ -16,7 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using Stormpath.Configuration.Abstractions;
+using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
             return Clients.Builder()
                 .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
-                .SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme.Basic)
+                .SetAuthenticationScheme(Configuration.Abstractions.ClientAuthenticationScheme.Basic)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(CacheProviders.Create().DisabledCache())
                 .Build();
@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
             return Clients.Builder()
                 .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
-                .SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme.SAuthc1)
+                .SetAuthenticationScheme(Configuration.Abstractions.ClientAuthenticationScheme.SAuthc1)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(CacheProviders.Create().DisabledCache())
                 .Build();
@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
             return Clients.Builder()
                 .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
-                .SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme.SAuthc1)
+                .SetAuthenticationScheme(Configuration.Abstractions.ClientAuthenticationScheme.SAuthc1)
                 .SetLogger(StaticLogger.Instance)
                 .SetCacheProvider(CacheProviders.Create().InMemoryCache()
                     .WithDefaultTimeToIdle(TimeSpan.FromMinutes(10))
@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
         });
 
         private static Lazy<StormpathConfiguration> lazyConfiguration =
-            new Lazy<StormpathConfiguration>(() => Configuration.ConfigurationLoader.Load());
+            new Lazy<StormpathConfiguration>(() => Configuration.ConfigurationLoader.Initialize().Load());
 
         public static StormpathConfiguration CurrentConfiguration => lazyConfiguration.Value;
 

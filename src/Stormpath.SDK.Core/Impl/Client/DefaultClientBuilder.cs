@@ -19,7 +19,6 @@ using System.IO;
 using System.Net;
 using Stormpath.Configuration;
 using Stormpath.Configuration.Abstractions;
-using Stormpath.Configuration.Abstractions.Model;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
@@ -57,7 +56,7 @@ namespace Stormpath.SDK.Impl.Client
         private ClientAuthenticationScheme useAuthenticationScheme = Default.Configuration.Client.AuthenticationScheme.Value;
         private string useBaseUrl = Default.Configuration.Client.BaseUrl;
         private int useConnectionTimeout = Default.Configuration.Client.ConnectionTimeout.Value;
-        private ClientProxyConfiguration useProxy = Default.Configuration.Client.Proxy;
+        private ClientProxyConfiguration useProxy = null;
 
         public DefaultClientBuilder(IUserAgentBuilder userAgentBuilder)
         {
@@ -221,17 +220,23 @@ namespace Stormpath.SDK.Impl.Client
             if (proxyCredentials != null)
             {
                 username = proxyCredentials.UserName;
-                username = proxyCredentials.Password;
+                password = proxyCredentials.Password;
             }
 
-            this.useProxy = new ClientProxyConfiguration(port, host, username, password);
+            this.useProxy = new ClientProxyConfiguration()
+            {
+                Port = port,
+                Host = host,
+                Username = username,
+                Password = password
+            };
 
             return this;
         }
 
         IClientBuilder IClientBuilder.SetProxy(ClientProxyConfiguration proxyConfiguration)
         {
-            this.useProxy = proxyConfiguration ?? Default.Configuration.Client.Proxy;
+            this.useProxy = proxyConfiguration;
             return this;
         }
 
@@ -302,13 +307,22 @@ namespace Stormpath.SDK.Impl.Client
         [Obsolete]
         private StormpathConfiguration CreateSuppliedConfiguration()
         {
-            return new StormpathConfiguration(
-                new ClientConfiguration(
-                    apiKey: new ClientApiKeyConfiguration(this.useApiKeyFileName, this.useApiKeyId, this.useApiKeySecret),
-                    baseUrl: this.useBaseUrl,
-                    connectionTimeout: this.useConnectionTimeout,
-                    authenticationScheme: this.useAuthenticationScheme,
-                    proxy: this.useProxy));
+            return new StormpathConfiguration()
+            {
+                Client = new ClientConfiguration()
+                {
+                    ApiKey = new ClientApiKeyConfiguration()
+                    {
+                        File = this.useApiKeyFileName,
+                        Id = this.useApiKeyId,
+                        Secret = this.useApiKeySecret
+                    },
+                    BaseUrl = this.useBaseUrl,
+                    ConnectionTimeout = this.useConnectionTimeout,
+                    AuthenticationScheme = this.useAuthenticationScheme,
+                    Proxy = this.useProxy
+                }
+            };
         }
 
         IClient IClientBuilder.Build()
@@ -321,7 +335,7 @@ namespace Stormpath.SDK.Impl.Client
                 ?? this.useConfigurationAnonymous
                 ?? CreateSuppliedConfiguration();
 
-            var finalConfiguration = ConfigurationLoader.Load(suppliedConfiguration, logger: logger);
+            var finalConfiguration = ConfigurationLoader.Initialize().Load(suppliedConfiguration); // TODO: restore logging
 
             ThrowForInvalidConfiguration(finalConfiguration);
 
@@ -401,7 +415,7 @@ namespace Stormpath.SDK.Impl.Client
                 DefaultIdentityMapSlidingExpiration);
         }
 
-        private void ThrowForInvalidConfiguration(StormpathConfiguration configuration)
+        private void ThrowForInvalidConfiguration(Configuration.Abstractions.Immutable.StormpathConfiguration configuration)
         {
             if (string.IsNullOrEmpty(configuration.Client.BaseUrl))
             {

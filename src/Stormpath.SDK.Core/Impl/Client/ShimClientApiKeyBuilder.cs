@@ -15,7 +15,7 @@
 // </copyright>
 
 using System.IO;
-using Stormpath.Configuration.Abstractions.Model;
+using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Logging;
 

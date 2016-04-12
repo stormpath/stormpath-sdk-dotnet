@@ -89,7 +89,7 @@ namespace Stormpath.SDK.Http
         }
 
         /// <inheritdoc/>
-        IHttpClientBuilder IHttpClientBuilder.SetProxy(Configuration.Abstractions.Model.ClientProxyConfiguration clientProxyConfiguration)
+        IHttpClientBuilder IHttpClientBuilder.SetProxy(Configuration.Abstractions.Immutable.ClientProxyConfiguration clientProxyConfiguration)
         {
             bool proxyConfigurationMissing = string.IsNullOrEmpty(clientProxyConfiguration?.Host);
 

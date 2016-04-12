@@ -16,7 +16,7 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.Configuration.Abstractions;
+using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.DataStore;
 using Stormpath.SDK.Jwt;

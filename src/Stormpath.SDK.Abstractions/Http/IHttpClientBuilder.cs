@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Http
         /// </summary>
         /// <param name="clientProxyConfiguration">The proxy configuration.</param>
         /// <returns>This instance for method chaining.</returns>
-        IHttpClientBuilder SetProxy(Configuration.Abstractions.Model.ClientProxyConfiguration clientProxyConfiguration);
+        IHttpClientBuilder SetProxy(Configuration.Abstractions.Immutable.ClientProxyConfiguration clientProxyConfiguration);
 
         /// <summary>
         /// Builds a new <see cref="IHttpClient"/> instance from the current builder state.

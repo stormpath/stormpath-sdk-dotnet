@@ -16,7 +16,6 @@
 
 using System;
 using Stormpath.Configuration.Abstractions;
-using Stormpath.Configuration.Abstractions.Model;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
@@ -48,11 +47,17 @@ namespace DocExamples
             // These options can also be specified in a stormpath.json or stormpath.yaml file.
             // See: https://github.com/stormpath/stormpath-sdk-spec/blob/master/specifications/config.md
             var client = clientBuilder
-                .SetConfiguration(new StormpathConfiguration(
-                    client: new ClientConfiguration(
-                        apiKey: new ClientApiKeyConfiguration(file: "my_apiKey.properties"),
-                        cacheManager: null,
-                        authenticationScheme: ClientAuthenticationScheme.Basic)))
+                .SetConfiguration(new StormpathConfiguration()
+                {
+                    Client = new ClientConfiguration()
+                    {
+                        ApiKey = new ClientApiKeyConfiguration()
+                        {
+                            File = "my_apiKey.properties"
+                        },
+                        AuthenticationScheme = ClientAuthenticationScheme.Basic
+                    }
+                })
                 .SetHttpClient(HttpClients.Create().RestSharpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .Build();
