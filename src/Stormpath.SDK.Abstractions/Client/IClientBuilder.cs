@@ -68,8 +68,8 @@ namespace Stormpath.SDK.Client
     ///     </item>
     ///     <item>
     ///         <description>
-    ///             If <see cref="SetAuthenticationScheme(Configuration.Abstractions.Model.ClientAuthenticationScheme)"/> is not called, the default scheme
-    ///             (<see cref="Configuration.Abstractions.Model.ClientAuthenticationScheme.SAuthc1">SAuthc1</see>) will be used.
+    ///             If <see cref="SetAuthenticationScheme(ClientAuthenticationScheme)"/> is not called, the default scheme
+    ///             (<see cref="ClientAuthenticationScheme.SAuthc1">SAuthc1</see>) will be used.
     ///         </description>
     ///     </item>
     ///     <item>

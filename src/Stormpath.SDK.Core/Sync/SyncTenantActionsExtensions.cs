@@ -207,6 +207,7 @@ namespace Stormpath.SDK.Sync
         /// <remarks>This is a convenience method equivalent to <see cref="SyncDataStoreExtensions.GetResource{IAccount}(DataStore.IDataStore, string)"/>.</remarks>
         /// <param name="tenantActions">The object supporting the <see cref="ITenantActions"/> interface.</param>
         /// <param name="href">The resource URL of the <see cref="IAccount">Account</see> to retrieve.</param>
+        /// <param name="retrievalOptions">The retrieval options to use.</param>
         /// <returns>The <see cref="IAccount">Account</see>.</returns>
         /// <exception cref="Error.ResourceException">The resource could not be found.</exception>
         public static IAccount GetAccount(this ITenantActions tenantActions, string href, Action<IRetrievalOptions<IAccount>> retrievalOptions)
