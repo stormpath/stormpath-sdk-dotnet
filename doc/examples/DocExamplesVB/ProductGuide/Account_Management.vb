@@ -6,6 +6,7 @@ Imports Stormpath.SDK.Client
 Imports Stormpath.SDK.Directory
 Imports Stormpath.SDK.Error
 Imports Stormpath.SDK.Group
+Imports Stormpath.SDK.Mail
 
 Public Class Account_Management
     Private client As IClient = Nothing
