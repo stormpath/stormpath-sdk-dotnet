@@ -87,11 +87,13 @@ Next, create a simple Visual Studio project and add the Stormpath SDK.
  2. Use the [instructions above](#installation-instructions) to install the Stormpath SDK into your project.
  3. Add the following using statements to the top of your `Program.cs` file:
 
- ```csharp
- using Stormpath.SDK;
- using Stormpath.SDK.Client;
- using Stormpath.SDK.Error;
- ```
+```csharp
+using Stormpath.SDK;
+using Stormpath.SDK.Client;
+using Stormpath.SDK.Error;
+using Stormpath.SDK.Http;
+using Stormpath.SDK.Serialization;
+```
 
 #### `await` a minute
 
@@ -126,6 +128,8 @@ The first thing you need to connect to the Stormpath API is a `IClient` object. 
 // Create an IClient. Everything starts here!
 IClient client = Clients.Builder()
     .SetApiKeyFilePath("path\\to\\apiKey.properties")
+    .SetHttpClient(HttpClients.Create().RestSharpClient())
+    .SetSerializer(Serializers.Create().JsonNetSerializer())
     .Build();
 ```
 
@@ -150,10 +154,13 @@ You can use this `IApplication` object to create user accounts, log in user acco
 You can create a new user by calling `CreateAccountAsync`:
 
 ```csharp
-var joe = await myApp.CreateAccountAsync("Joe", "Stormtrooper",
-                                         "tk421@galacticempire.co",
-                                         "Changeme123!",
-                                         new { isAtPost = false });
+var joe = await myApp.CreateAccountAsync(
+    givenName: "Joe",
+    surname: "Stormtrooper",
+    email: "tk421@galacticempire.co",
+    password: "Changeme123!",
+    customData: new { isAtPost = false });
+
 Console.WriteLine("User " + joe.FullName + " created");
 ```
 
@@ -164,18 +171,15 @@ The returned `IAccount` object will contain all the account's data. Easy! :smile
 Now that you have a valid user in the Stormpath application, you can perform a login request.
 
 ```csharp
-// Imagine that we got these values from a web request:
-var usernameOrEmail = "tk421@galacticempire.co";
-var password = "Changeme123!";
-
 try
 {
-     var loginResult = await myApp.AuthenticateAccountAsync(usernameOrEmail, password);
-     var loggedInAccount = await loginResult.GetAccountAsync();
-     var accountCustomData = await loggedInAccount.GetCustomDataAsync();
-     Console.WriteLine("User {0} logged in. Is at post: {1}",
-                       loggedInAccount.FullName,
-                       accountCustomData["isAtPost"]);
+    var loginResult = await myApp.AuthenticateAccountAsync("tk421@galacticempire.co", "Changeme123!");
+    var loggedInAccount = await loginResult.GetAccountAsync();
+    var accountCustomData = await loggedInAccount.GetCustomDataAsync();
+
+    Console.WriteLine("User {0} logged in. At post? {1}",
+                      loggedInAccount.FullName,
+                      accountCustomData["isAtPost"]);
 }
 catch (ResourceException rex)
 {
@@ -198,6 +202,7 @@ catch (ResourceException rex)
 {
     Console.WriteLine("Unexpected error when deleting " + joe.Email + ". Error: " + rex.Message);
 }
+
 Console.WriteLine("Done!");
 ```
 
