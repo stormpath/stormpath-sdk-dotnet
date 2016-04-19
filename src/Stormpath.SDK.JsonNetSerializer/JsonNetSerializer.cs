@@ -95,10 +95,7 @@ namespace Stormpath.SDK.Extensions.Serialization
                     }
                     else
                     {
-                        var nestedScalars = token.Children()
-                            .Select(c => this.SanitizeToken(c))
-                            .ToList();
-                        return nestedScalars;
+                        return this.SanitizeArrayOfPrimitives(token);
                     }
 
                 case JTokenType.Object:
@@ -133,6 +130,60 @@ namespace Stormpath.SDK.Extensions.Serialization
 
                 default:
                     return token.ToString();
+            }
+        }
+
+        private object SanitizeArrayOfPrimitives(JToken token)
+        {
+            var boxedScalars = token.Children()
+                .Select(c => this.SanitizeToken(c));
+
+            var singleTokenType = GetSingleTokenType(token.Children());
+            if (singleTokenType != null)
+            {
+                switch (singleTokenType)
+                {
+                    case JTokenType.Boolean:
+                        return boxedScalars.Cast<bool>().ToList();
+
+                    case JTokenType.Date:
+                        return boxedScalars.Cast<DateTimeOffset>().ToList();
+
+                    case JTokenType.Integer:
+                        if (boxedScalars.All(x => x.GetType() == typeof(int)))
+                        {
+                            return boxedScalars.Cast<int>().ToList();
+                        }
+                        else
+                        {
+                            return boxedScalars.Cast<long>().ToList();
+                        }
+
+                    case JTokenType.String:
+                        return boxedScalars.Cast<string>().ToList();
+                }
+            }
+
+            // Fall back to List<object> if consistent inner type cannot be determined
+            return boxedScalars.ToList();
+        }
+
+        private static JTokenType? GetSingleTokenType(JEnumerable<JToken> tokens)
+        {
+            if (!tokens.Any())
+            {
+                return null;
+            }
+
+            var firstType = tokens.First().Type;
+
+            if (tokens.All(t => t.Type == firstType))
+            {
+                return firstType;
+            }
+            else
+            {
+                return null;
             }
         }
     }

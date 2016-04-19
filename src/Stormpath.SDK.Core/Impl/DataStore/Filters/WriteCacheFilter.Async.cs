@@ -30,6 +30,7 @@ using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Provider;
 using Map = System.Collections.Generic.IDictionary<string, object>;
+using System.Linq;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
 {
@@ -181,6 +182,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 else if (asNestedScalarArray != null)
                 {
                     var nestedType = this.typeLookup.GetInterfaceByPropertyName(key);
+
                     if (nestedType == null)
                     {
                         logger.Warn($"Can not cache array '{key}'. Item type for '{resourceType.Name}' unknown. '{href}' will not be cached.");
@@ -188,8 +190,23 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                         break;
                     }
 
-                    // This is an array of primitives.
-                    value = new List<object>(asNestedScalarArray);
+                    // Empty arrays will be deserialized as List<object>,
+                    // so we need to check for this case and spit out an empty array if necessary
+                    if (!asNestedScalarArray.Any())
+                    {
+                        value = Array.CreateInstance(nestedType.GenericTypeArguments[0], 0);
+                    }
+                    else
+                    {
+                        if (nestedType != value.GetType())
+                        {
+                            logger.Warn($"Can not cache array '{key}'. Item type for '{resourceType.Name}' does not match. '{href}' will not be cached.");
+                            isCacheable = false; // gracefully disable caching
+                            break;
+                        }
+
+                        // All good; value will be preserved
+                    }
                 }
 
                 if (!IsSensitive(key))

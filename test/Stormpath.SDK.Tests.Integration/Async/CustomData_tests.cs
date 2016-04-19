@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
@@ -104,8 +105,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             customData.Put("someInts", new int[] { 123, 456, 789 });
             await customData.SaveAsync();
 
-            customData.Get("someStrings").ShouldBe(new string[] { "foo", "bar", "baz" });
-            customData.Get("someInts").ShouldBe(new int[] { 123, 456, 789 });
+            customData.Get<IEnumerable<string>>("someStrings").ShouldBe(new string[] { "foo", "bar", "baz" });
+            customData.Get<IEnumerable<int>>("someInts").ShouldBe(new int[] { 123, 456, 789 });
 
             // Cleanup
             (await account.DeleteAsync()).ShouldBeTrue();

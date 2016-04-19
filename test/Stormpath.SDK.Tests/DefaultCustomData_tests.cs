@@ -57,7 +57,6 @@ namespace Stormpath.SDK.Tests
             yield return new object[] { Guid.NewGuid() };
             yield return new object[] { new System.Text.StringBuilder("foobar!") };
             yield return new object[] { new Lazy<bool>(() => false) };
-            yield return new object[] { new string[] { "foo", "bar" } };
             yield return new object[]
             {
                 new Dictionary<int, bool>()

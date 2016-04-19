@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
 using Stormpath.SDK.Account;
@@ -83,6 +84,29 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var updated = customData.Save();
             updated.IsEmptyOrDefault().ShouldBeFalse();
             updated.Count().ShouldBe(4);
+
+            // Cleanup
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Putting_array_into_custom_data(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var account = this.CreateRandomAccount(client);
+            var customData = account.GetCustomData();
+            customData.IsEmptyOrDefault().ShouldBeTrue();
+
+            // Add some custom data
+            customData.Put("someStrings", new string[] { "foo", "bar", "baz" });
+            customData.Put("someInts", new int[] { 123, 456, 789 });
+            customData.Save();
+
+            customData.Get<IEnumerable<string>>("someStrings").ShouldBe(new string[] { "foo", "bar", "baz" });
+            customData.Get<IEnumerable<int>>("someInts").ShouldBe(new int[] { 123, 456, 789 });
 
             // Cleanup
             account.Delete().ShouldBeTrue();
