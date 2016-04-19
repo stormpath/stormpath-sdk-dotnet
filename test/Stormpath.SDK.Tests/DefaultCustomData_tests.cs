@@ -163,6 +163,34 @@ namespace Stormpath.SDK.Tests
             customData["baz"].ShouldBe(123);
         }
 
+        [Fact]
+        public void Put_array_of_supported_items()
+        {
+            var customData = this.GetInstance();
+
+            customData.Put("foobars", new string[] { "foo", "bar" });
+
+            customData.Get<IEnumerable<string>>("foobars").ShouldBeSubsetOf(new string[] { "foo", "bar" });
+        }
+
+        [Fact]
+        public void Put_list_of_supported_items()
+        {
+            var customData = this.GetInstance();
+
+            customData.Put("foobars", new List<string>() { "foo", "bar" });
+
+            customData.Get<IEnumerable<string>>("foobars").ShouldBeSubsetOf(new string[] { "foo", "bar" });
+        }
+
+        [Fact]
+        public void Put_array_of_unsupported_items()
+        {
+            var customData = this.GetInstance();
+
+            Should.Throw<ArgumentOutOfRangeException>(() => customData.Put("invalid_array", new object[] { 123, "456" }));
+        }
+
         [Theory]
         [InlineData("href")]
         [InlineData("createdAt")]

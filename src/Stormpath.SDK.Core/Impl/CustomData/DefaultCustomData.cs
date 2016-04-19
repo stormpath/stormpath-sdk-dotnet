@@ -69,11 +69,28 @@ namespace Stormpath.SDK.Impl.CustomData
 
         private static bool IsValidValue(object value)
         {
-            var type = value.GetType();
+            var typeInfo = value.GetType().GetTypeInfo();
 
-            if (type.GetTypeInfo().IsPrimitive ||
-                type == typeof(string) ||
-                type == typeof(decimal))
+            if (typeInfo.IsArray)
+            {
+                return IsValidPrimitiveType(typeInfo.GetElementType().GetTypeInfo());
+            }
+
+            bool isEnumerableOfT = typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(typeInfo);
+            if (isEnumerableOfT && typeInfo.GenericTypeArguments.Count() == 1)
+            {
+                var innerType = typeInfo.GenericTypeArguments.Single().GetTypeInfo();
+                return IsValidPrimitiveType(innerType);
+            }
+
+            return IsValidPrimitiveType(typeInfo);
+        }
+
+        private static bool IsValidPrimitiveType(TypeInfo typeInfo)
+        {
+            if (typeInfo.IsPrimitive ||
+                typeInfo == typeof(string).GetTypeInfo() ||
+                typeInfo == typeof(decimal).GetTypeInfo())
             {
                 return true;
             }
@@ -127,6 +144,19 @@ namespace Stormpath.SDK.Impl.CustomData
 
         object ICustomData.Get(string key)
             => this.GetProperty(key);
+
+        T ICustomData.Get<T>(string key)
+        {
+            var value = AsInterface.Get(key);
+
+            if (value == null)
+            {
+                return default(T);
+            }
+
+            return (T)value;
+
+        }
 
         void ICustomData.Put(string key, object value)
         {

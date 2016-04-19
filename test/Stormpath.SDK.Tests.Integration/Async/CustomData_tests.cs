@@ -91,6 +91,29 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Putting_array_into_custom_data(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var account = await this.CreateRandomAccountAsync(client);
+            var customData = await account.GetCustomDataAsync();
+            customData.IsEmptyOrDefault().ShouldBeTrue();
+
+            // Add some custom data
+            customData.Put("someStrings", new string[] { "foo", "bar", "baz" });
+            customData.Put("someInts", new int[] { 123, 456, 789 });
+            await customData.SaveAsync();
+
+            customData.Get("someStrings").ShouldBe(new string[] { "foo", "bar", "baz" });
+            customData.Get("someInts").ShouldBe(new int[] { 123, 456, 789 });
+
+            // Cleanup
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Creating_account_with_custom_data_inline(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

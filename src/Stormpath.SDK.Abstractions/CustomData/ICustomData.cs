@@ -61,6 +61,15 @@ namespace Stormpath.SDK.CustomData
         object Get(string key);
 
         /// <summary>
+        /// Gets the custom data item with the specified <paramref name="key"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the item.</typeparam>
+        /// <param name="key">The name (key) of the custom data item to find.</param>
+        /// <returns>The value associated with <paramref name="key"/> if it exists; <see langword="null"/> otherwise.</returns>
+        /// <exception cref="System.InvalidCastException">The data cannot be cast to the requested type.</exception>
+        T Get<T>(string key);
+
+        /// <summary>
         /// Adds a new custom data item.
         /// </summary>
         /// <remarks>You must call <see cref="ISaveable{T}.SaveAsync(System.Threading.CancellationToken)"/> to save the changes.</remarks>
