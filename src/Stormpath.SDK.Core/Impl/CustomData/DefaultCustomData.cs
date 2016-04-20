@@ -352,7 +352,11 @@ namespace Stormpath.SDK.Impl.CustomData
 
             if (typeof(T) == typeof(DateTimeOffset))
             {
-                return (T)(object)Iso8601.Parse(value.ToString());
+                bool valueAlreadyParsed = value.GetType() == typeof(DateTimeOffset);
+                if (!valueAlreadyParsed)
+                {
+                    return (T)(object)Iso8601.Parse(value.ToString());
+                }
             }
 
             if (typeof(T) == typeof(TimeSpan))

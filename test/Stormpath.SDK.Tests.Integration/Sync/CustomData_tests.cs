@@ -92,7 +92,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Putting_array_into_custom_data(TestClientProvider clientBuilder)
+        public void Putting_arrays_into_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
 
@@ -107,6 +107,39 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             customData.Get<IEnumerable<string>>("someStrings").ShouldBe(new string[] { "foo", "bar", "baz" });
             customData.Get<IEnumerable<int>>("someInts").ShouldBe(new int[] { 123, 456, 789 });
+
+            // Cleanup
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Putting_interesting_types_into_custom_data(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var account = this.CreateRandomAccount(client);
+            var customData = account.GetCustomData();
+
+            // Add some custom data
+            customData.Put("double", 1.2345);
+            customData.Put("duration", TimeSpan.FromMinutes(3));
+
+            var guid = Guid.NewGuid();
+            customData.Put("guid", guid);
+
+            var now = DateTimeOffset.Now;
+            customData.Put("now", now);
+
+            customData.Save();
+
+            var updated = account.GetCustomData();
+
+            updated.Get<double>("double").ShouldBe(1.2345);
+            updated.Get<TimeSpan>("duration").ShouldBe(TimeSpan.FromMinutes(3));
+            updated.Get<Guid>("guid").ShouldBe(guid);
+            updated.Get<DateTimeOffset>("now").ShouldBe(now, tolerance: TimeSpan.FromMilliseconds(50));
 
             // Cleanup
             account.Delete().ShouldBeTrue();

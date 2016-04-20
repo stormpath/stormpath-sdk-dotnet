@@ -105,21 +105,29 @@ namespace Stormpath.SDK.Extensions.Serialization
                     return token.ToObject<DateTimeOffset>();
 
                 case JTokenType.Integer:
-                    var raw = token.ToString();
-                    int intResult;
-                    long longResult;
+                    var rawInt = token.ToString();
+                    long parsedLong;
 
-                    if (int.TryParse(raw, out intResult))
+                    if (long.TryParse(rawInt, out parsedLong))
                     {
-                        return intResult;
-                    }
-                    else if (long.TryParse(raw, out longResult))
-                    {
-                        return longResult;
+                        return parsedLong;
                     }
                     else
                     {
-                        return raw;
+                        return rawInt;
+                    }
+
+                case JTokenType.Float:
+                    var rawFloat = token.ToString();
+                    double parsedDouble;
+
+                    if (double.TryParse(rawFloat, out parsedDouble))
+                    {
+                        return parsedDouble;
+                    }
+                    else
+                    {
+                        return rawFloat;
                     }
 
                 case JTokenType.Boolean:
