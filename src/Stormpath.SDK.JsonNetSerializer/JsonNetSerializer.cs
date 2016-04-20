@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Extensions.Serialization
                         // Collections of sub-objects get recursively sanitized
                         var nestedObjects = token.Children()
                             .Select(c => this.Sanitize((JObject)c))
-                            .ToList();
+                            .ToArray();
                         return nestedObjects;
                     }
                     else
@@ -144,28 +144,28 @@ namespace Stormpath.SDK.Extensions.Serialization
                 switch (singleTokenType)
                 {
                     case JTokenType.Boolean:
-                        return boxedScalars.Cast<bool>().ToList();
+                        return boxedScalars.Cast<bool>().ToArray();
 
                     case JTokenType.Date:
-                        return boxedScalars.Cast<DateTimeOffset>().ToList();
+                        return boxedScalars.Cast<DateTimeOffset>().ToArray();
 
                     case JTokenType.Integer:
                         if (boxedScalars.All(x => x.GetType() == typeof(int)))
                         {
-                            return boxedScalars.Cast<int>().ToList();
+                            return boxedScalars.Cast<int>().ToArray();
                         }
                         else
                         {
-                            return boxedScalars.Cast<long>().ToList();
+                            return boxedScalars.Cast<long>().ToArray();
                         }
 
                     case JTokenType.String:
-                        return boxedScalars.Cast<string>().ToList();
+                        return boxedScalars.Cast<string>().ToArray();
                 }
             }
 
             // Fall back to List<object> if consistent inner type cannot be determined
-            return boxedScalars.ToList();
+            return boxedScalars.ToArray();
         }
 
         private static JTokenType? GetSingleTokenType(JEnumerable<JToken> tokens)
