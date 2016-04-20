@@ -228,6 +228,16 @@ namespace Stormpath.SDK.Tests
             customData.Get("lastLogin").ShouldBe("2016-01-01T12:45:00.123-07:00");
         }
 
+        [Fact]
+        public void Put_DateTime_as_iso8601_string()
+        {
+            var customData = this.GetInstance();
+
+            customData.Put("lastLogin", new DateTime(2016, 01, 01, 12, 45, 00, 123, DateTimeKind.Utc));
+
+            customData.Get("lastLogin").ShouldBe("2016-01-01T12:45:00.123Z");
+        }
+
         [Theory]
         [InlineData("href")]
         [InlineData("createdAt")]
@@ -254,11 +264,10 @@ namespace Stormpath.SDK.Tests
         public void Put_accepts_valid_primitives(object value)
         {
             var customData = this.GetInstance();
-            var dummyKey = value.GetType().Name;
 
-            customData.Put(dummyKey, value);
+            customData.Put("testing", value);
 
-            customData[dummyKey].ShouldBe(value);
+            customData["testing"].ShouldBe(value);
         }
 
         [Theory]
@@ -276,11 +285,10 @@ namespace Stormpath.SDK.Tests
         public void Put_accepts_primitives_in_keyValue_pairs(object value)
         {
             var customData = this.GetInstance();
-            var dummyKey = value.GetType().Name;
 
-            customData.Put(new KeyValuePair<string, object>(dummyKey, value));
+            customData.Put(new KeyValuePair<string, object>("testing", value));
 
-            customData[dummyKey].ShouldBe(value);
+            customData["testing"].ShouldBe(value);
         }
 
         [Theory]
@@ -298,11 +306,10 @@ namespace Stormpath.SDK.Tests
         public void Put_accepts_primitives_in_dictionary(object value)
         {
             var customData = this.GetInstance();
-            var dummyKey = value.GetType().Name;
 
-            customData.Put(new Dictionary<string, object>() { [dummyKey] = value });
+            customData.Put(new Dictionary<string, object>() { ["testing"] = value });
 
-            customData[dummyKey].ShouldBe(value);
+            customData["testing"].ShouldBe(value);
         }
 
         [Theory]
