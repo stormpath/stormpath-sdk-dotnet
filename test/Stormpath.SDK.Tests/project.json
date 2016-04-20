@@ -8,8 +8,8 @@
     "Newtonsoft.Json": "7.0.1",
     "NSubstitute": "1.9.2",
     "Shouldly": "2.6.0",
-    "Stormpath.SDK.Core": "0.7.1",
-    "Stormpath.SDK.JsonNetSerializer": "0.7.0",
+    "Stormpath.SDK.Core": "0.9.0-beta1",
+    "Stormpath.SDK.JsonNetSerializer": "0.9.0-beta1",
     "Stormpath.SDK.RestSharpClient": "0.7.0",
     "Stormpath.SDK.Tests.Common": "0.7.1",
     "xunit": "2.1.0"
@@ -26,5 +26,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Tests"
   },
-  "version": "0.7.1"
+  "version": "0.9.0-beta1"
 }
