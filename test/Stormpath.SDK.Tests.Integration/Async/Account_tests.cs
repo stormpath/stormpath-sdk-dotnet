@@ -654,5 +654,24 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             Assert.True(didFailCorrectly);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Resetting_password_updates_modified_date(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var account = await application.GetAccounts()
+                .Where(a => a.Email == "chewie@kashyyyk.rim")
+                .SingleAsync();
+
+            var oldModificationDate = account.PasswordModifiedAt.Value;
+
+            account.SetPassword(new RandomPassword(16));
+            await account.SaveAsync();
+
+            account.PasswordModifiedAt.Value.ShouldBeGreaterThan(oldModificationDate);
+        }
     }
 }

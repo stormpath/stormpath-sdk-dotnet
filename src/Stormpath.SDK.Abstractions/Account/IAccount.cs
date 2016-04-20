@@ -79,6 +79,12 @@ namespace Stormpath.SDK.Account
         string Surname { get; }
 
         /// <summary>
+        /// Gets the date of the last password change, if any.
+        /// </summary>
+        /// <value>The date of the last password change, or <see langword="null"/>.</value>
+        DateTimeOffset? PasswordModifiedAt { get; }
+
+        /// <summary>
         /// Gets the account's email verification token. This will only be non-null if the account holder
         /// has been asked to verify their email account by clicking a link in an email.
         /// </summary>

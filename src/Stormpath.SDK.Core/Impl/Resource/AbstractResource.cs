@@ -110,8 +110,17 @@ namespace Stormpath.SDK.Impl.Resource
         public bool GetBoolProperty(string name)
             => Convert.ToBoolean(this.GetProperty(name) ?? default(bool));
 
-        public DateTimeOffset GetDateTimeProperty(string name)
-            => (DateTimeOffset)this.GetProperty(name);
+        public DateTimeOffset? GetDateTimeProperty(string name)
+        {
+            var value = this.GetProperty(name);
+
+            if (value == null)
+            {
+                return null;
+            }
+
+            return (DateTimeOffset)value;
+        }
 
         public T GetProperty<T>(string name)
             where T : class

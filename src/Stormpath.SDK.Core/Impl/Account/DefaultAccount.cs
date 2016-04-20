@@ -37,6 +37,7 @@ namespace Stormpath.SDK.Impl.Account
         private static readonly string GroupsPropertyName = "groups";
         private static readonly string MiddleNamePropertyName = "middleName";
         public static readonly string PasswordPropertyName = "password";
+        private static readonly string PasswordModifiedAtPropertyName = "passwordModifiedAt";
         private static readonly string ProviderDataPropertyName = "providerData";
         private static readonly string RefreshTokensPropertyName = "refreshTokens";
         private static readonly string StatusPropertyName = "status";
@@ -88,6 +89,8 @@ namespace Stormpath.SDK.Impl.Account
         internal IEmbeddedProperty Groups => this.GetLinkProperty(GroupsPropertyName);
 
         string IAccount.MiddleName => this.GetStringProperty(MiddleNamePropertyName);
+
+        DateTimeOffset? IAccount.PasswordModifiedAt => this.GetDateTimeProperty(PasswordModifiedAtPropertyName);
 
         internal IEmbeddedProperty ProviderData => this.GetLinkProperty(ProviderDataPropertyName);
 

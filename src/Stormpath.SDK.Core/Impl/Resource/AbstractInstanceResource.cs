@@ -31,9 +31,9 @@ namespace Stormpath.SDK.Impl.Resource
         {
         }
 
-        public DateTimeOffset CreatedAt => this.GetDateTimeProperty(CreatedAtPropertyName);
+        public DateTimeOffset CreatedAt => this.GetDateTimeProperty(CreatedAtPropertyName).Value;
 
-        public DateTimeOffset ModifiedAt => this.GetDateTimeProperty(ModifiedAtPropertyName);
+        public DateTimeOffset ModifiedAt => this.GetDateTimeProperty(ModifiedAtPropertyName).Value;
 
         protected virtual Task<T> SaveAsync<T>(CancellationToken cancellationToken)
             where T : class, IResource, ISaveable<T>

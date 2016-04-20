@@ -676,5 +676,25 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             Assert.True(didFailCorrectly);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Resetting_password_updates_modified_date(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var account = application.GetAccounts()
+                .Where(a => a.Email == "chewie@kashyyyk.rim")
+                .Synchronously()
+                .Single();
+
+            var oldModificationDate = account.PasswordModifiedAt.Value;
+
+            account.SetPassword(new RandomPassword(16));
+            account.Save();
+
+            account.PasswordModifiedAt.Value.ShouldBeGreaterThan(oldModificationDate);
+        }
     }
 }
