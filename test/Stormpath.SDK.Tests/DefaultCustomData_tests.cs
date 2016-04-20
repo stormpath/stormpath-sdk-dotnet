@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests
             this.dataStore = TestDataStore.Create();
         }
 
-        private static IEnumerable<object[]> ValidTypes()
+        public static IEnumerable<object[]> ValidTypes()
         {
             yield return new object[] { short.MinValue };
             yield return new object[] { int.MaxValue };
@@ -47,12 +47,9 @@ namespace Stormpath.SDK.Tests
             yield return new object[] { "foobar" };
             yield return new object[] { 'x' };
             yield return new object[] { new string[] { "foo", "bar" } };
-            yield return new object[] { DateTime.Now };
-            yield return new object[] { DateTimeOffset.Now };
-            yield return new object[] { TimeSpan.FromSeconds(1) };
         }
 
-        private static IEnumerable<object[]> InvalidTypes()
+        public static IEnumerable<object[]> InvalidTypes()
         {
             yield return new object[] { new object() };
             yield return new object[] { Guid.NewGuid() };
