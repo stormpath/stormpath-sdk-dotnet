@@ -34,7 +34,7 @@ namespace Stormpath.SDK.Tests
             this.dataStore = TestDataStore.Create();
         }
 
-        private static IEnumerable<object[]> ValidValueTypes()
+        private static IEnumerable<object[]> ValidTypes()
         {
             yield return new object[] { short.MinValue };
             yield return new object[] { int.MaxValue };
@@ -46,13 +46,14 @@ namespace Stormpath.SDK.Tests
             yield return new object[] { true };
             yield return new object[] { "foobar" };
             yield return new object[] { 'x' };
-        }
-
-        private static IEnumerable<object[]> InvalidValueTypes()
-        {
-            yield return new object[] { new object() };
+            yield return new object[] { new string[] { "foo", "bar" } };
             yield return new object[] { DateTime.Now };
             yield return new object[] { DateTimeOffset.Now };
+        }
+
+        private static IEnumerable<object[]> InvalidTypes()
+        {
+            yield return new object[] { new object() };
             yield return new object[] { TimeSpan.FromSeconds(1) };
             yield return new object[] { Guid.NewGuid() };
             yield return new object[] { new System.Text.StringBuilder("foobar!") };
@@ -249,7 +250,7 @@ namespace Stormpath.SDK.Tests
         }
 
         [Theory]
-        [MemberData(nameof(ValidValueTypes))]
+        [MemberData(nameof(ValidTypes))]
         public void Put_accepts_valid_primitives(object value)
         {
             var customData = this.GetInstance();
@@ -261,7 +262,7 @@ namespace Stormpath.SDK.Tests
         }
 
         [Theory]
-        [MemberData(nameof(InvalidValueTypes))]
+        [MemberData(nameof(InvalidTypes))]
         public void Put_throws_for_invalid_primitives(object value)
         {
             var customData = this.GetInstance();
@@ -271,7 +272,7 @@ namespace Stormpath.SDK.Tests
         }
 
         [Theory]
-        [MemberData(nameof(ValidValueTypes))]
+        [MemberData(nameof(ValidTypes))]
         public void Put_accepts_primitives_in_keyValue_pairs(object value)
         {
             var customData = this.GetInstance();
@@ -283,7 +284,7 @@ namespace Stormpath.SDK.Tests
         }
 
         [Theory]
-        [MemberData(nameof(InvalidValueTypes))]
+        [MemberData(nameof(InvalidTypes))]
         public void Put_throws_for_invalid_primitives_in_keyValue_pairs(object value)
         {
             var customData = this.GetInstance();
@@ -293,7 +294,7 @@ namespace Stormpath.SDK.Tests
         }
 
         [Theory]
-        [MemberData(nameof(ValidValueTypes))]
+        [MemberData(nameof(ValidTypes))]
         public void Put_accepts_primitives_in_dictionary(object value)
         {
             var customData = this.GetInstance();
@@ -305,7 +306,7 @@ namespace Stormpath.SDK.Tests
         }
 
         [Theory]
-        [MemberData(nameof(InvalidValueTypes))]
+        [MemberData(nameof(InvalidTypes))]
         public void Put_throws_for_invalid_primitives_in_dictionary(object value)
         {
             var customData = this.GetInstance();
