@@ -97,22 +97,7 @@ namespace Stormpath.SDK.Impl.CustomData
         {
             var value = AsInterface.Get(key);
 
-            if (typeof(T) == typeof(DateTime))
-            {
-                throw new Exception("Use DateTimeOffset to retrieve dates saved in Custom Data.");
-            }
-
-            if (typeof(T) == typeof(DateTimeOffset))
-            {
-                return (T)(object)Iso8601.Parse(value.ToString());
-            }
-
-            if (value == null)
-            {
-                return default(T);
-            }
-
-            return (T)value;
+            return UnsanitizeValue<T>(value);
         }
 
         void ICustomData.Put(string key, object value)
@@ -323,7 +308,8 @@ namespace Stormpath.SDK.Impl.CustomData
                 valueType == typeof(string)||
                 valueType == typeof(decimal) ||
                 valueType == typeof(DateTimeOffset) ||
-                valueType == typeof(DateTime))
+                valueType == typeof(DateTime) ||
+                valueType == typeof(TimeSpan))
             {
                 return true;
             }
@@ -343,7 +329,37 @@ namespace Stormpath.SDK.Impl.CustomData
                 value = Iso8601.Format((DateTimeOffset)value, convertToUtc: false);
             }
 
+            if (value.GetType() == typeof(TimeSpan))
+            {
+                value = Iso8601Duration.Format((TimeSpan)value);
+            }
+
             return value;
+        }
+
+        private static T UnsanitizeValue<T>(object value)
+        {
+            if (typeof(T) == typeof(DateTime))
+            {
+                throw new Exception("Use DateTimeOffset to retrieve dates saved in Custom Data.");
+            }
+
+            if (typeof(T) == typeof(DateTimeOffset))
+            {
+                return (T)(object)Iso8601.Parse(value.ToString());
+            }
+
+            if (typeof(T) == typeof(TimeSpan))
+            {
+                return (T)(object)Iso8601Duration.Parse(value.ToString());
+            }
+
+            if (value == null)
+            {
+                return default(T);
+            }
+
+            return (T)value;
         }
     }
 }

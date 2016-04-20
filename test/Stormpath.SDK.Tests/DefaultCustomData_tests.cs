@@ -49,12 +49,12 @@ namespace Stormpath.SDK.Tests
             yield return new object[] { new string[] { "foo", "bar" } };
             yield return new object[] { DateTime.Now };
             yield return new object[] { DateTimeOffset.Now };
+            yield return new object[] { TimeSpan.FromSeconds(1) };
         }
 
         private static IEnumerable<object[]> InvalidTypes()
         {
             yield return new object[] { new object() };
-            yield return new object[] { TimeSpan.FromSeconds(1) };
             yield return new object[] { Guid.NewGuid() };
             yield return new object[] { new System.Text.StringBuilder("foobar!") };
             yield return new object[] { new Lazy<bool>(() => false) };
@@ -96,7 +96,7 @@ namespace Stormpath.SDK.Tests
         {
             var customData = this.GetInstance();
 
-            customData.Put("lastLogin", new DateTimeOffset(2016, 01, 01, 12, 45, 05, 123, TimeSpan.FromHours(-7)));
+            customData.Put("lastLogin", "2016-01-01T12:45:05.123-07:00");
 
             var dto = customData.Get<DateTimeOffset>("lastLogin");
             dto.Year.ShouldBe(2016);
@@ -107,6 +107,19 @@ namespace Stormpath.SDK.Tests
             dto.Second.ShouldBe(5);
             dto.Millisecond.ShouldBe(123);
             dto.Offset.ShouldBe(TimeSpan.FromHours(-7));
+        }
+
+        [Fact]
+        public void Get_iso8601_duration_as_TimeSpan()
+        {
+            var customData = this.GetInstance();
+
+            customData.Put("lastSession", "PT39M5S");
+
+            var ts = customData.Get<TimeSpan>("lastSession");
+            ts.Minutes.ShouldBe(39);
+            ts.Seconds.ShouldBe(5);
+            ts.TotalSeconds.ShouldBe(2345);
         }
 
         [Fact]
@@ -223,9 +236,9 @@ namespace Stormpath.SDK.Tests
         {
             var customData = this.GetInstance();
 
-            customData.Put("lastLogin", new DateTimeOffset(2016, 01, 01, 12, 45, 00, 123, TimeSpan.FromHours(-7)));
+            customData.Put("lastLogin", new DateTimeOffset(2016, 1, 1, 12, 45, 5, 123, TimeSpan.FromHours(-7)));
 
-            customData.Get("lastLogin").ShouldBe("2016-01-01T12:45:00.123-07:00");
+            customData.Get("lastLogin").ShouldBe("2016-01-01T12:45:05.123-07:00");
         }
 
         [Fact]
@@ -233,9 +246,19 @@ namespace Stormpath.SDK.Tests
         {
             var customData = this.GetInstance();
 
-            customData.Put("lastLogin", new DateTime(2016, 01, 01, 12, 45, 00, 123, DateTimeKind.Utc));
+            customData.Put("lastLogin", new DateTime(2016, 1, 1, 12, 45, 5, 123, DateTimeKind.Utc));
 
-            customData.Get("lastLogin").ShouldBe("2016-01-01T12:45:00.123Z");
+            customData.Get("lastLogin").ShouldBe("2016-01-01T12:45:05.123Z");
+        }
+
+        [Fact]
+        public void Put_TimeSpan_as_iso8601_string()
+        {
+            var customData = this.GetInstance();
+
+            customData.Put("lastSession", TimeSpan.FromMinutes(39).Add(TimeSpan.FromSeconds(5)));
+
+            customData.Get("lastSession").ShouldBe("PT39M5S");
         }
 
         [Theory]
@@ -355,13 +378,9 @@ namespace Stormpath.SDK.Tests
             var invalidValueTypesAnon = new
             {
                 aObject = new object(),
-                aDate = DateTime.Now,
-                aDateWithTimezone = DateTimeOffset.Now,
-                aDuration = TimeSpan.FromSeconds(1),
                 aGuid = Guid.NewGuid(),
                 aStringBuilder = new System.Text.StringBuilder("foobar!"),
                 aLazyBool = new Lazy<bool>(() => false),
-                aStringArray = new string[] { "foo", "bar" },
                 aDictionary = new Dictionary<int, bool>()
                 {
                     [123] = true
