@@ -114,7 +114,7 @@ namespace Stormpath.SDK.Impl.CustomData
 
             if (!IsValidValue(value))
             {
-                throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'. Only primitives, strings, dates, and durations can be stored in Custom Data.");
+                throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'. Only primitives, strings, GUIDs, dates, and durations can be stored in Custom Data.");
             }
 
             var sanitizedValue = SanitizeValueForStorage(value);
@@ -309,7 +309,8 @@ namespace Stormpath.SDK.Impl.CustomData
                 valueType == typeof(decimal) ||
                 valueType == typeof(DateTimeOffset) ||
                 valueType == typeof(DateTime) ||
-                valueType == typeof(TimeSpan))
+                valueType == typeof(TimeSpan) ||
+                valueType == typeof(Guid))
             {
                 return true;
             }
@@ -334,6 +335,11 @@ namespace Stormpath.SDK.Impl.CustomData
                 value = Iso8601Duration.Format((TimeSpan)value);
             }
 
+            if (value.GetType() == typeof(Guid))
+            {
+                value = value.ToString();
+            }
+
             return value;
         }
 
@@ -352,6 +358,11 @@ namespace Stormpath.SDK.Impl.CustomData
             if (typeof(T) == typeof(TimeSpan))
             {
                 return (T)(object)Iso8601Duration.Parse(value.ToString());
+            }
+            
+            if (typeof(T) == typeof(Guid))
+            {
+                return (T)(object)Guid.Parse(value.ToString());
             }
 
             if (value == null)

@@ -52,7 +52,6 @@ namespace Stormpath.SDK.Tests
         public static IEnumerable<object[]> InvalidTypes()
         {
             yield return new object[] { new object() };
-            yield return new object[] { Guid.NewGuid() };
             yield return new object[] { new System.Text.StringBuilder("foobar!") };
             yield return new object[] { new Lazy<bool>(() => false) };
             yield return new object[]
@@ -126,6 +125,17 @@ namespace Stormpath.SDK.Tests
 
             // We want people to use DateTimeOffset!
             Should.Throw<Exception>(() => customData.Get<DateTime>("lastLogin"));
+        }
+
+        [Fact]
+        public void Get_guid_as_guid()
+        {
+            var customData = this.GetInstance();
+            var dummyId = Guid.NewGuid();
+
+            customData.Put("id", dummyId);
+
+            customData.Get<Guid>("id").ShouldBe(dummyId);
         }
 
         [Fact]
@@ -256,6 +266,17 @@ namespace Stormpath.SDK.Tests
             customData.Put("lastSession", TimeSpan.FromMinutes(39).Add(TimeSpan.FromSeconds(5)));
 
             customData.Get("lastSession").ShouldBe("PT39M5S");
+        }
+
+        [Fact]
+        public void Put_guid_stores_as_string()
+        {
+            var customData = this.GetInstance();
+            var dummyId = Guid.NewGuid();
+
+            customData.Put("id", dummyId);
+
+            customData.Get("id").ShouldBe(dummyId.ToString());
         }
 
         [Theory]
