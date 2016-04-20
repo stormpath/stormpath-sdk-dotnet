@@ -46,58 +46,6 @@ namespace Stormpath.SDK.Impl.CustomData
 
         private new ICustomData AsInterface => this;
 
-        private static bool IsValidKey(string possibleKey)
-        {
-            if (possibleKey.Length > 255)
-            {
-                return false;
-            }
-
-            bool isValidCharacters = ValidKeyCharactersRegex.IsMatch(possibleKey);
-            if (!isValidCharacters)
-            {
-                return false;
-            }
-
-            if (ReservedKeys.Contains(possibleKey))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private static bool IsValidValue(object value)
-        {
-            var typeInfo = value.GetType().GetTypeInfo();
-
-            if (typeInfo.IsArray)
-            {
-                return IsValidPrimitiveType(typeInfo.GetElementType().GetTypeInfo());
-            }
-
-            bool isEnumerableOfT = typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(typeInfo);
-            if (isEnumerableOfT && typeInfo.GenericTypeArguments.Count() == 1)
-            {
-                var innerType = typeInfo.GenericTypeArguments.Single().GetTypeInfo();
-                return IsValidPrimitiveType(innerType);
-            }
-
-            return IsValidPrimitiveType(typeInfo);
-        }
-
-        private static bool IsValidPrimitiveType(TypeInfo typeInfo)
-        {
-            if (typeInfo.IsPrimitive ||
-                typeInfo == typeof(string).GetTypeInfo() ||
-                typeInfo == typeof(decimal).GetTypeInfo())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         private List<string> GetAvailableKeys()
         {
             var keys = new List<string>();
@@ -149,13 +97,17 @@ namespace Stormpath.SDK.Impl.CustomData
         {
             var value = AsInterface.Get(key);
 
+            if (typeof(T) == typeof(DateTimeOffset))
+            {
+                return (T)(object)Iso8601.Parse(value.ToString());
+            }
+
             if (value == null)
             {
                 return default(T);
             }
 
             return (T)value;
-
         }
 
         void ICustomData.Put(string key, object value)
@@ -172,12 +124,14 @@ namespace Stormpath.SDK.Impl.CustomData
 
             if (!IsValidValue(value))
             {
-                throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'. Only primitives and strings can be stored in Custom Data.");
+                throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'. Only primitives, strings, dates, and durations can be stored in Custom Data.");
             }
+
+            var sanitizedValue = SanitizeValue(value);
 
             this.GetResourceData()?.RemoveProperty(key);
 
-            this.SetProperty(key, value);
+            this.SetProperty(key, sanitizedValue);
         }
 
         void ICustomData.Put(IEnumerable<KeyValuePair<string, object>> keyValuePairs)
@@ -316,5 +270,75 @@ namespace Stormpath.SDK.Impl.CustomData
 
         bool IDeletableSync.Delete()
             => this.GetInternalSyncDataStore().Delete(this);
+
+        private static bool IsValidKey(string possibleKey)
+        {
+            if (possibleKey.Length > 255)
+            {
+                return false;
+            }
+
+            bool isValidCharacters = ValidKeyCharactersRegex.IsMatch(possibleKey);
+            if (!isValidCharacters)
+            {
+                return false;
+            }
+
+            if (ReservedKeys.Contains(possibleKey))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool IsValidValue(object value)
+        {
+            var type = value.GetType();
+            var typeInfo = type.GetTypeInfo();
+
+            if (typeInfo.IsArray)
+            {
+                return IsValidPrimitiveType(typeInfo.GetElementType());
+            }
+
+            bool isEnumerableOfT = typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(typeInfo);
+            if (isEnumerableOfT && typeInfo.GenericTypeArguments.Count() == 1)
+            {
+                var innerType = typeInfo.GenericTypeArguments.Single();
+                return IsValidPrimitiveType(innerType);
+            }
+
+            return IsValidPrimitiveType(type);
+        }
+
+        private static bool IsValidPrimitiveType(Type valueType)
+        {
+            if (valueType.GetTypeInfo().IsPrimitive ||
+                valueType == typeof(string)||
+                valueType == typeof(decimal) ||
+                valueType == typeof(DateTimeOffset) ||
+                valueType == typeof(DateTime))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static object SanitizeValue(object value)
+        {
+            if (value.GetType() == typeof(DateTime))
+            {
+                value = new DateTimeOffset((DateTime)value);
+            }
+
+            if (value.GetType() == typeof(DateTimeOffset))
+            {
+                value = Iso8601.Format((DateTimeOffset)value, convertToUtc: false);
+            }
+
+            return value;
+        }
     }
 }

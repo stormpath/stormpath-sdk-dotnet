@@ -91,6 +91,24 @@ namespace Stormpath.SDK.Tests
         }
 
         [Fact]
+        public void Get_iso8601_as_DateTimeOffset()
+        {
+            var customData = this.GetInstance();
+
+            customData.Put("lastLogin", new DateTimeOffset(2016, 01, 01, 12, 45, 05, 123, TimeSpan.FromHours(-7)));
+
+            var dto = customData.Get<DateTimeOffset>("lastLogin");
+            dto.Year.ShouldBe(2016);
+            dto.Month.ShouldBe(1);
+            dto.Day.ShouldBe(1);
+            dto.Hour.ShouldBe(12);
+            dto.Minute.ShouldBe(45);
+            dto.Second.ShouldBe(5);
+            dto.Millisecond.ShouldBe(123);
+            dto.Offset.ShouldBe(TimeSpan.FromHours(-7));
+        }
+
+        [Fact]
         public void Put_single_item()
         {
             var customData = this.GetInstance();
@@ -188,6 +206,16 @@ namespace Stormpath.SDK.Tests
             var customData = this.GetInstance();
 
             Should.Throw<ArgumentOutOfRangeException>(() => customData.Put("invalid_array", new object[] { 123, "456" }));
+        }
+
+        [Fact]
+        public void Put_DateTimeOffset_as_iso8601_string()
+        {
+            var customData = this.GetInstance();
+
+            customData.Put("lastLogin", new DateTimeOffset(2016, 01, 01, 12, 45, 00, 123, TimeSpan.FromHours(-7)));
+
+            customData.Get("lastLogin").ShouldBe("2016-01-01T12:45:00.123-07:00");
         }
 
         [Theory]

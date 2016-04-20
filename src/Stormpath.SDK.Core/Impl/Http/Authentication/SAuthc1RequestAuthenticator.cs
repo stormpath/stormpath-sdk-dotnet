@@ -63,8 +63,7 @@ namespace Stormpath.SDK.Impl.Http.Authentication
 
             var relativeResourcePath = uri.AbsolutePath;
 
-            var timestamp = Iso8601.Format(now, withSeparators: false);
-            var dateStamp = now.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+            var timestamp = Iso8601Formatter.StripSeparators(Iso8601.Format(now, convertToUtc: true));
 
             // Add HOST header before signing
             var hostHeader = uri.Host;
@@ -95,6 +94,8 @@ namespace Stormpath.SDK.Impl.Http.Authentication
                 .Append(Newline)
                 .Append(requestBodyHash)
                 .ToString();
+
+            var dateStamp = now.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
 
             var id = new StringBuilder()
                 .Append(apiKey.GetId()).Append("/")

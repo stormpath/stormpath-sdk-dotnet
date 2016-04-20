@@ -34,7 +34,8 @@ namespace Stormpath.SDK.Impl.Http.Authentication
 
         internal void AuthenticateCore(IHttpRequest request, IClientApiKey apiKey, DateTimeOffset now)
         {
-            request.Headers.Add(StormpathDateHeaderName, Iso8601.Format(now, withSeparators: false));
+            var now8601 = Iso8601Formatter.StripSeparators(Iso8601.Format(now, convertToUtc: true));
+            request.Headers.Add(StormpathDateHeaderName, now8601);
 
             var authorizationHeaderContent = $"{apiKey.GetId()}:{apiKey.GetSecret()}";
             var authorizationHeaderEncrypted = Base64.Encode(authorizationHeaderContent, Encoding.UTF8);
