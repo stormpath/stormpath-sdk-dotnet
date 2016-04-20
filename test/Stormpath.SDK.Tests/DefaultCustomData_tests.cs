@@ -109,6 +109,15 @@ namespace Stormpath.SDK.Tests
         }
 
         [Fact]
+        public void Get_throws_for_DateTime()
+        {
+            var customData = this.GetInstance();
+
+            // We want people to use DateTimeOffset!
+            Should.Throw<Exception>(() => customData.Get<DateTime>("lastLogin"));
+        }
+
+        [Fact]
         public void Put_single_item()
         {
             var customData = this.GetInstance();

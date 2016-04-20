@@ -97,6 +97,11 @@ namespace Stormpath.SDK.Impl.CustomData
         {
             var value = AsInterface.Get(key);
 
+            if (typeof(T) == typeof(DateTime))
+            {
+                throw new Exception("Use DateTimeOffset to retrieve dates saved in Custom Data.");
+            }
+
             if (typeof(T) == typeof(DateTimeOffset))
             {
                 return (T)(object)Iso8601.Parse(value.ToString());
@@ -127,7 +132,7 @@ namespace Stormpath.SDK.Impl.CustomData
                 throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'. Only primitives, strings, dates, and durations can be stored in Custom Data.");
             }
 
-            var sanitizedValue = SanitizeValue(value);
+            var sanitizedValue = SanitizeValueForStorage(value);
 
             this.GetResourceData()?.RemoveProperty(key);
 
@@ -326,7 +331,7 @@ namespace Stormpath.SDK.Impl.CustomData
             return false;
         }
 
-        private static object SanitizeValue(object value)
+        private static object SanitizeValueForStorage(object value)
         {
             if (value.GetType() == typeof(DateTime))
             {
