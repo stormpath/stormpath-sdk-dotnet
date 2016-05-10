@@ -167,7 +167,7 @@ namespace Stormpath.SDK.Tests.Authentication
         {
             IClientApiKey apiKey = new DefaultClientApiKey("MyId", "Shush!");
             var uriQualifier = new UriQualifier("http://api.stormpath.com/v1");
-            var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/directories?orderBy=name+asc")));
+            var request = new DefaultHttpRequest(HttpMethod.Get, new CanonicalUri(uriQualifier.EnsureFullyQualified("/directories?orderBy=name asc")));
             var now = new DateTimeOffset(2013, 7, 1, 0, 0, 0, TimeSpan.Zero);
             var nonce = "a43a9d25-ab06-421e-8605-33fd1e760825";
 
