@@ -31,6 +31,14 @@ namespace Stormpath.SDK.Tests
         }
 
         [Fact]
+        public void Escapes_email_with_plus()
+        {
+            var escaped = UrlEncoding.Encode("foo.bar+baz@example.com");
+
+            escaped.ShouldBe("foo.bar%2Bbaz%40example.com");
+        }
+
+        [Fact]
         public void Canonicalizes_special_characters()
         {
             var escaped = UrlEncoding.Encode(" *~");
@@ -66,6 +74,14 @@ namespace Stormpath.SDK.Tests
             var canonicalized = UrlEncoding.Encode("()", canonicalize: true);
 
             canonicalized.ShouldBe("%28%29");
+        }
+
+        [Fact]
+        public void Canonicalizes_email_with_plus()
+        {
+            var escaped = UrlEncoding.Encode("foo.bar+baz@example.com", canonicalize: true);
+
+            escaped.ShouldBe("foo.bar%2Bbaz%40example.com");
         }
     }
 }

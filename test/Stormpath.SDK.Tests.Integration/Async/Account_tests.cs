@@ -674,6 +674,38 @@ namespace Stormpath.SDK.Tests.Integration.Async
             account.PasswordModifiedAt.Value.ShouldBeGreaterThan(oldModificationDate);
         }
 
+        /// <summary>
+        /// Regression test for https://github.com/stormpath/stormpath-sdk-dotnet/issues/175
+        /// </summary>
+        /// <param name="clientBuilder">The client to use.</param>
+        /// <returns>A Task that represents the asynchronous test.</returns>
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Creating_account_with_special_chars(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var trickyEmail = "admiral.ackbar+itsatrap@dac.rim";
+            var password = new RandomPassword(12);
+            var account = await application.CreateAccountAsync("Gial", "Ackbar", trickyEmail, password);
+
+            account.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var searchResult = await application.GetAccounts().Where(x => x.Username == trickyEmail).SingleAsync();
+            searchResult.Username.ShouldBe(trickyEmail);
+            searchResult.Email.ShouldBe("admiral.ackbar+itsatrap@dac.rim");
+            searchResult.Status.ShouldBe(AccountStatus.Enabled);
+
+            var loginResult = await application.AuthenticateAccountAsync(trickyEmail, password);
+            loginResult.Success.ShouldBeTrue();
+
+            var deleted = await account.DeleteAsync();
+            deleted.ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Creating_account_with_UTF8_properties(TestClientProvider clientBuilder)

@@ -46,10 +46,9 @@ namespace Stormpath.SDK.Http
             if (canonicalize)
             {
                 encoded = encoded
-                    .Replace("%2B", "+")
-                    .Replace("+", "%20")
+                    .Replace("+", "%20") // Spaces as %20
                     .Replace("*", "%2A")
-                    .Replace("%7E", "~")
+                    .Replace("%7E", "~") // Tildes stay as they are
                     .Replace("(", "%28")
                     .Replace(")", "%29");
 
