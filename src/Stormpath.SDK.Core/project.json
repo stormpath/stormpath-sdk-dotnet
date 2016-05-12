@@ -44,7 +44,6 @@
     }
   },
   "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
-  "language": "en-US",
   "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
   "owners": [ "Stormpath, Inc." ],
   "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
@@ -56,6 +55,6 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK"
   },
-  "version": "0.9.0-beta1",
+  "version": "0.9.0-beta2",
   "xmlDoc": true
 }

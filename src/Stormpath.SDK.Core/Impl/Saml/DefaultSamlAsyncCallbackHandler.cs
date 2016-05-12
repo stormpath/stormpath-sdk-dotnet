@@ -121,14 +121,7 @@ namespace Stormpath.SDK.Impl.Saml
             ThrowIfRequiredParametersMissing(jwt.Body);
 
             string apiKeyFromJwt = null;
-            if (IsError(jwt.Body))
-            {
-                jwt.Header.TryGetValueAsString(JwtHeaderParameters.KeyId, out apiKeyFromJwt);
-            }
-            else
-            {
-                apiKeyFromJwt = (string)jwt.Body.GetClaim(DefaultJwtClaims.Audience);
-            }
+            jwt.Header.TryGetValueAsString(JwtHeaderParameters.KeyId, out apiKeyFromJwt);
 
             ThrowIfJwtSignatureInvalid(apiKeyFromJwt, this.internalDataStore.ApiKey, jwt);
             ThrowIfJwtIsExpired(jwt.Body);
@@ -189,7 +182,6 @@ namespace Stormpath.SDK.Impl.Saml
             var requiredKeys = new string[]
             {
                 DefaultJwtClaims.Id,
-                DefaultJwtClaims.Audience,
                 DefaultJwtClaims.Expiration,
                 DefaultJwtClaims.Issuer,
                 IdSiteClaims.ResponseId,
@@ -208,7 +200,12 @@ namespace Stormpath.SDK.Impl.Saml
 
         internal static void ThrowIfJwtSignatureInvalid(string jwtApiKey, IClientApiKey clientApiKey, IJwt jwt)
         {
-            if (!clientApiKey.GetId().Equals(jwtApiKey, StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(jwtApiKey))
+            {
+                throw new JwtSignatureException("The JWT key is invalid.");
+            }
+
+            if (!clientApiKey.GetId().Equals(jwtApiKey, StringComparison.Ordinal))
             {
                 throw new JwtSignatureException("The client used to sign the response is different than the one used in this DataStore.");
             }

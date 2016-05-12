@@ -97,14 +97,7 @@ namespace Stormpath.SDK.Impl.IdSite
             HandlerShared.ThrowIfRequiredParametersMissing(jwt.Body);
 
             string apiKeyFromJwt = null;
-            if (HandlerShared.IsError(jwt.Body))
-            {
-                jwt.Header.TryGetValueAsString(JwtHeaderParameters.KeyId, out apiKeyFromJwt);
-            }
-            else
-            {
-                apiKeyFromJwt = (string)jwt.Body.GetClaim(DefaultJwtClaims.Audience);
-            }
+            jwt.Header.TryGetValueAsString(JwtHeaderParameters.KeyId, out apiKeyFromJwt);
 
             HandlerShared.ThrowIfJwtSignatureInvalid(apiKeyFromJwt, this.internalDataStore.ApiKey, jwt);
             HandlerShared.ThrowIfJwtIsExpired(jwt.Body);
