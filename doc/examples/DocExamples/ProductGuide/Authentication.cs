@@ -375,7 +375,7 @@ namespace examples.ProductGuide
                         .Builder()
                         .SetClientId("YOUR_LINKEDIN_APP_ID")
                         .SetClientSecret("YOUR_LINKEDIN_APP_SECRET")
-                        .Build()
+                        .Build()));
             #endregion
         }
 
