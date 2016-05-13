@@ -696,5 +696,23 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             account.PasswordModifiedAt.Value.ShouldBeGreaterThan(oldModificationDate);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Creating_account_with_UTF8_properties(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var account = application.CreateAccount("四", "李", "utf8@test.foo", "Supersecret!123");
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var searched = application.GetAccounts().Where(x => x.Surname == "李").Synchronously().Single();
+            searched.GivenName.ShouldBe("四");
+            searched.Surname.ShouldBe("李");
+
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
     }
 }

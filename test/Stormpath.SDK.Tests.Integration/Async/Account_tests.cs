@@ -673,5 +673,23 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             account.PasswordModifiedAt.Value.ShouldBeGreaterThan(oldModificationDate);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Creating_account_with_UTF8_properties(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var account = await application.CreateAccountAsync("四", "李", "utf8@test.foo", "Supersecret!123");
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var searched = await application.GetAccounts().Where(x => x.Surname == "李").SingleAsync();
+            searched.GivenName.ShouldBe("四");
+            searched.Surname.ShouldBe("李");
+
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
     }
 }
