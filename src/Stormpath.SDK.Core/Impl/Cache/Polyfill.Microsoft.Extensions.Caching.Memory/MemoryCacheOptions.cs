@@ -16,7 +16,7 @@
 // Contains code modified from aspnet/Caching. Copyright (c) .NET Foundation. All rights reserved.
 // </copyright>
 
-#if NET451
+#if NET45
 using System;
 
 namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory

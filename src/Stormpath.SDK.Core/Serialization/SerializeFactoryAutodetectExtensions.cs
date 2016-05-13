@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Serialization
         [Obsolete("Will be removed in 1.0. Instead, manually specify a serializer, e.g. Serializers.Create().JsonNetSerializer()")]
         public static ISerializerBuilder AutoDetect (this ISerializerFactory factory)
         {
-#if NET451
+#if NET45
             Type defaultSerializerType = null;
             try
             {

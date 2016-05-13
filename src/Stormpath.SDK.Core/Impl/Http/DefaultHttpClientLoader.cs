@@ -21,7 +21,7 @@ namespace Stormpath.SDK.Impl.Http
 {
     internal static class DefaultHttpClientLoader
     {
-#if NET451
+#if NET45
         private static readonly string LibraryName = "Stormpath.SDK.RestSharpClient";
         private static readonly string FileName = "Stormpath.SDK.RestSharpClient.dll";
         private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Http.RestSharp.RestSharpClient";

@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-#if NET451
+#if NET45
 using System;
 using Stormpath.SDK.Impl.Introspection;
 

@@ -19,7 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-#if !NET451
+#if !NET45
 using Microsoft.Extensions.PlatformAbstractions;
 #endif
 
@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Impl.Utility
 
         public Type Load()
         {
-#if NET451
+#if NET45
             var path = this.GetPath();
 
             if (!string.IsNullOrEmpty(path))
@@ -66,7 +66,7 @@ namespace Stormpath.SDK.Impl.Utility
             throw new Exception($"Could not find plugin '{libraryName}'.");
         }
 
-#if NET451
+#if NET45
         private string GetPath()
         {
             // Try to load via AppDomain.CurrentDomain

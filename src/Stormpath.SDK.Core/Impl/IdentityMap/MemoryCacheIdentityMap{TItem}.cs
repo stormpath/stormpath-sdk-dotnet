@@ -18,7 +18,7 @@ using System;
 using System.Threading;
 using Stormpath.SDK.Logging;
 
-#if NET451
+#if NET45
 using Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory;
 #else
 using Microsoft.Extensions.Caching.Memory;

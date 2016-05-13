@@ -21,7 +21,7 @@ namespace Stormpath.SDK.Impl.Serialization
 {
     internal static class DefaultSerializerLoader
     {
-#if NET451
+#if NET45
         private static readonly string LibraryName = "Stormpath.SDK.JsonNetSerializer";
         private static readonly string FileName = "Stormpath.SDK.JsonNetSerializer.dll";
         private static readonly string FullyQualifiedType = "Stormpath.SDK.Extensions.Serialization.JsonNetSerializer";
