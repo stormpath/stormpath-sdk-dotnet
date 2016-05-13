@@ -98,7 +98,7 @@ namespace Stormpath.SDK.Http
                 return this;
             }
 
-#if NET451
+#if NET45
             var proxy = new WebProxy(clientProxyConfiguration.Host, clientProxyConfiguration.Port.Value);
             proxy.Credentials = new NetworkCredential(clientProxyConfiguration.Username, clientProxyConfiguration.Password);
 
