@@ -45,7 +45,7 @@
 	<section>
 	 <title>Benefits and Features</title>
 	<content>
-		<para>This library gives your ASP.NET, C#, or VB.NET application access to all of Stormpath's features:</para>
+		<para>This library gives your C# or VB.NET application access to all of Stormpath's features:</para>
 		<list class="bullet">
 			<listItem>
 				<para>Robust authentication and authorization.</para>
@@ -69,19 +69,16 @@
 		<para>In addition to these core Stormpath features, this SDK provides:</para>
 		<list class="bullet">
 			<listItem>
-				<para>Support for .NET 4.5.1 (and later).</para>
+				<para>Support for .NET 4.5 and later.</para>
 			</listItem>
       <listItem>
-				<para>Support for CoreCLR and DNX platforms (<codeInline>dotnet5.4</codeInline> and <codeInline>dnxcore50</codeInline>).</para>
-			</listItem>
-			<listItem>
-				<para>Support for Linux and OS X via Mono.</para>
+				<para>Support for CoreCLR and Mono.</para>
 			</listItem>
 			<listItem>
 				<para>LINQ-to-Stormpath for readable, expressive queries.</para>
 			</listItem>
 			<listItem>
-				<para>Fully dual-stack design for native asynchronous and native synchronous access.</para>
+				<para>Fully dual-stack design for native asynchronous and native synchronous API calls.</para>
 			</listItem>
 		</list>
 	</content>
