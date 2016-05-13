@@ -3,7 +3,7 @@
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
     "Polyglot": "1.0.0",
-    "Stormpath.Configuration": "5.0.0-beta2",
+    "Stormpath.Configuration": "5.0.0",
     "Stormpath.SDK.Abstractions": "0.9.0-beta3"
   },
   "description": "The official Stormpath SDK for .NET. Don't install this package directly; install the Stormpath.SDK package unless you are bringing your own JSON serializer and HTTP client plugins.",

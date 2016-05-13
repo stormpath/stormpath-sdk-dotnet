@@ -2,7 +2,7 @@
   "authors": [ "Nate Barbettini", "Contributors" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Stormpath.Configuration.Abstractions": "5.0.0-beta2"
+    "Stormpath.Configuration.Abstractions": "5.0.0"
   },
   "description": "Abstractions for the Stormpath .NET SDK.",
   "frameworks": {
