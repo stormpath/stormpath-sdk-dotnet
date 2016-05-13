@@ -39,6 +39,6 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.RangedTerms
         }
 
         protected override string Format(DateTimeOffset value)
-            => Iso8601.Format(value);
+            => Iso8601.Format(value, includeMilliseconds: false);
     }
 }

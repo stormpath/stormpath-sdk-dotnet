@@ -178,7 +178,7 @@ namespace Stormpath.SDK.Impl.DataStore
             ["groupMemberships"] = typeof(CollectionResponsePage<IGroupMembership>),
             ["accountMemberships"] = typeof(CollectionResponsePage<IGroupMembership>),
             ["apiKeys"] = typeof(CollectionResponsePage<IApiKey>),
-            ["authorizedCallbackUris"] = typeof(List<string>),
+            ["authorizedCallbackUris"] = typeof(string[]),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()

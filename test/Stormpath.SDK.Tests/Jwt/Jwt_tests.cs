@@ -30,7 +30,7 @@ namespace Stormpath.SDK.Tests.Jwt
         {
             yield return new object[]
             {
-                new Dictionary<string, object>() { ["FirstName"] = "Bob", ["Age"] = 37 },
+                new Dictionary<string, object>() { ["FirstName"] = "Bob", ["Age"] = 37L },
                 "ABC",
                 "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJGaXJzdE5hbWUiOiJCb2IiLCJBZ2UiOjM3fQ.cr0xw8c_HKzhFBMQrseSPGoJ0NPlRp_3BKzP96jwBdY"
             };

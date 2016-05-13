@@ -21,21 +21,31 @@ namespace Stormpath.SDK.Impl.Utility
 {
     internal static class Iso8601
     {
-        private static readonly string FormatWithoutOffset = "yyyy-MM-ddTHH:mm:ss.fff";
+        private static readonly string BaseFormat = "yyyy-MM-ddTHH:mm:ss";
+        private static readonly string MillisecondComponent = ".fff";
+        private static readonly string OffsetComponent = "zzz";
+        private static readonly string OffsetComponentUTC = "Z";
 
         private static readonly string ParsePatternWithSeparators = "yyyy-MM-dd'T'HH:mm:ss.FFFK";
         private static readonly string ParsePatternWithoutSeparators = "yyyyMMdd'T'HHmmssFFFK";
 
-        public static string Format(DateTimeOffset dto, bool convertToUtc = true)
+        public static string Format(DateTimeOffset dto, bool convertToUtc = true, bool includeMilliseconds = true)
         {
-            var offsetComponent = "zzz";
+            var outputFormat = BaseFormat;
+
+            if (includeMilliseconds)
+            {
+                outputFormat = $"{outputFormat}{MillisecondComponent}";
+            }
 
             if (convertToUtc || dto.Offset == TimeSpan.Zero)
             {
-                offsetComponent = "Z";
+                outputFormat = $"{outputFormat}{OffsetComponentUTC}";
             }
-
-            var outputFormat = $"{FormatWithoutOffset}{offsetComponent}";
+            else
+            {
+                outputFormat = $"{outputFormat}{OffsetComponent}";
+            }
 
             return convertToUtc
                 ? dto.UtcDateTime.ToString(outputFormat, CultureInfo.InvariantCulture)

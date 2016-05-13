@@ -131,11 +131,11 @@ namespace Stormpath.SDK.Impl.Resource
 
         public IReadOnlyList<T> GetListProperty<T>(string name)
         {
-            var boxedList = this.GetProperty(name) as List<object>;
+            var boxedList = this.GetProperty(name) as IEnumerable<object>;
 
             return boxedList == null
-                ? new List<T>()
-                : boxedList.OfType<T>().ToList();
+                ? Enumerable.Empty<T>().ToArray()
+                : boxedList.OfType<T>().ToArray();
         }
 
         public bool ContainsProperty(string name)

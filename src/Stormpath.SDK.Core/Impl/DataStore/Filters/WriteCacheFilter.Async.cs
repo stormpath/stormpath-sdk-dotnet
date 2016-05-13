@@ -190,11 +190,17 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                         break;
                     }
 
+                    // Sanity check for type consistency
+                    if (!nestedType.IsArray)
+                    {
+                        throw new Exception("Nested scalar array type must be an array.");
+                    }
+
                     // Empty arrays will be deserialized as List<object>,
                     // so we need to check for this case and spit out an empty array if necessary
                     if (!asNestedScalarArray.Any())
                     {
-                        value = Array.CreateInstance(nestedType.GenericTypeArguments[0], 0);
+                        value = Array.CreateInstance(nestedType.GetElementType(), 0);
                     }
                     else
                     {

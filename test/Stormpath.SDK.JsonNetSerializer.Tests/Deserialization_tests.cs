@@ -132,7 +132,7 @@ namespace Stormpath.SDK.Extensions.Serialization.JsonNet.Tests
 
             result.Count.ShouldBe(1);
             result.Single().Key.ShouldBe("items");
-            result.Single().Value.ShouldBeOfType<int>();
+            result.Single().Value.ShouldBeOfType<long>();
             result.Single().Value.ShouldBe(12);
         }
 
@@ -180,11 +180,11 @@ namespace Stormpath.SDK.Extensions.Serialization.JsonNet.Tests
         }
 
         [Fact]
-        public void Unknown_types_are_deserialized_as_strings()
+        public void Doubles_are_deserialized_properly()
         {
-            var floatResult = this.serializer.Deserialize(@"{ pi: 3.14 }");
-            floatResult.Single().Value.ShouldBeOfType<string>();
-            floatResult.Single().Value.ShouldBe("3.14");
+            var doubleResult = this.serializer.Deserialize(@"{ pi: 3.14 }");
+            doubleResult.Single().Value.ShouldBeOfType<double>();
+            doubleResult.Single().Value.ShouldBe(3.14);
         }
     }
 }
