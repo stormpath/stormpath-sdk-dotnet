@@ -23,7 +23,7 @@
 
       }
     },
-    "net451": {
+    "net45": {
       "dependencies": {
         "StackExchange.Redis": "1.0.488"
       }
