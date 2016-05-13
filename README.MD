@@ -1,5 +1,7 @@
 # Stormpath .NET SDK  [![Build Status](https://travis-ci.org/stormpath/stormpath-sdk-dotnet.svg?branch=develop)](https://travis-ci.org/stormpath/stormpath-sdk-dotnet)
 
+[![Join the chat at https://gitter.im/stormpath/stormpath-sdk-dotnet](https://badges.gitter.im/stormpath/stormpath-sdk-dotnet.svg)](https://gitter.im/stormpath/stormpath-sdk-dotnet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 *An advanced, reliable and easy-to-use user management API for .NET by security experts*
 
 [Stormpath](https://stormpath.com) is a complete user management API.  This
