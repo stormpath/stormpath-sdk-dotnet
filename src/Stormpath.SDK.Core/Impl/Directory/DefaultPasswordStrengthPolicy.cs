@@ -35,6 +35,7 @@ namespace Stormpath.SDK.Impl.Directory
         private readonly string MinimumLowercasePropertyName = "minLowerCase";
         private readonly string MinimumNumericPropertyName = "minNumeric";
         private readonly string MaximumLengthPropertyName = "maxLength";
+        private readonly string PreventReusePropertyName = "preventReuse";
 
         public DefaultPasswordStrengthPolicy(ResourceData data)
             : base(data)
@@ -61,6 +62,9 @@ namespace Stormpath.SDK.Impl.Directory
 
         int IPasswordStrengthPolicy.MaximumLength
             => this.GetIntProperty(MaximumLengthPropertyName);
+
+        int IPasswordStrengthPolicy.PreventReuse
+            => this.GetIntProperty(PreventReusePropertyName);
 
         IPasswordStrengthPolicy IPasswordStrengthPolicy.SetMinimumSymbols(int minimumSymbols)
         {
@@ -136,6 +140,17 @@ namespace Stormpath.SDK.Impl.Directory
             }
 
             this.SetProperty(MaximumLengthPropertyName, maximumCharacters);
+            return this;
+        }
+
+        IPasswordStrengthPolicy IPasswordStrengthPolicy.SetPreventReuse(int historyLength)
+        {
+            if (historyLength < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(historyLength), "Value must not be negative.");
+            }
+
+            this.SetProperty(PreventReusePropertyName, historyLength);
             return this;
         }
 

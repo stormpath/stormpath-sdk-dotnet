@@ -89,6 +89,15 @@ namespace Stormpath.SDK.Directory
         int MaximumLength { get; }
 
         /// <summary>
+        /// Gets the number of entries saved in the password history that cannot be reused.
+        /// </summary>
+        /// <remarks>
+        /// A value of <c>10</c> will prevent the last ten passwords from being reused when changing an Account's password.
+        /// A value of <c>0</c> disables this feature.
+        /// </remarks>
+        int PreventReuse { get; }
+
+        /// <summary>
         /// Sets the minimum quantity of symbols required by this policy.
         /// </summary>
         /// <remarks>
@@ -142,5 +151,16 @@ namespace Stormpath.SDK.Directory
         /// <param name="maximumCharacters">The maximum quantity of characters required.</param>
         /// <returns>This instance for method chaining.</returns>
         IPasswordStrengthPolicy SetMaximumLength(int maximumCharacters);
+
+        /// <summary>
+        /// Sets the number of previous passwords stored that cannot be reused.
+        /// </summary>
+        /// <remarks>
+        /// A value of <c>10</c> will prevent the last ten passwords from being reused when changing an Account's password.
+        /// A value of <c>0</c> disables this feature.
+        /// </remarks>
+        /// <param name="historyLength">The number of previous passwords saved.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IPasswordStrengthPolicy SetPreventReuse(int historyLength);
     }
 }

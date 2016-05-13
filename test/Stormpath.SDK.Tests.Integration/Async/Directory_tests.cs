@@ -421,6 +421,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             strengthPolicy.MinimumNumeric.ShouldBe(1);
             strengthPolicy.MinimumSymbols.ShouldBe(0);
             strengthPolicy.MinimumUppercase.ShouldBe(1);
+            strengthPolicy.PreventReuse.ShouldBe(0);
 
             // Update
             strengthPolicy
@@ -430,7 +431,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetMinimumLowercase(4)
                 .SetMinimumNumeric(5)
                 .SetMinimumSymbols(6)
-                .SetMinimumUppercase(7);
+                .SetMinimumUppercase(7)
+                .SetPreventReuse(10);
             var updatedPolicy = await strengthPolicy.SaveAsync();
 
             strengthPolicy.MaximumLength.ShouldBe(50);
@@ -440,6 +442,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             strengthPolicy.MinimumNumeric.ShouldBe(5);
             strengthPolicy.MinimumSymbols.ShouldBe(6);
             strengthPolicy.MinimumUppercase.ShouldBe(7);
+            strengthPolicy.PreventReuse.ShouldBe(10);
 
             // Cleanup
             (await directory.DeleteAsync()).ShouldBeTrue();
