@@ -53,9 +53,9 @@ namespace Stormpath.SDK.Impl.Client
         private string useApiKeyId = Default.Configuration.Client.ApiKey.Id;
         private string useApiKeySecret = Default.Configuration.Client.ApiKey.Secret;
         private string useApiKeyFileName = Default.Configuration.Client.ApiKey.File;
-        private ClientAuthenticationScheme useAuthenticationScheme = Default.Configuration.Client.AuthenticationScheme.Value;
+        private ClientAuthenticationScheme useAuthenticationScheme = Default.Configuration.Client.AuthenticationScheme;
         private string useBaseUrl = Default.Configuration.Client.BaseUrl;
-        private int useConnectionTimeout = Default.Configuration.Client.ConnectionTimeout.Value;
+        private int useConnectionTimeout = Default.Configuration.Client.ConnectionTimeout;
         private ClientProxyConfiguration useProxy = null;
 
         public DefaultClientBuilder(IUserAgentBuilder userAgentBuilder)
@@ -370,7 +370,7 @@ namespace Stormpath.SDK.Impl.Client
 
                 this.httpClientBuilder
                     .SetBaseUrl(finalConfiguration.Client.BaseUrl)
-                    .SetConnectionTimeout(finalConfiguration.Client.ConnectionTimeout.Value)
+                    .SetConnectionTimeout(finalConfiguration.Client.ConnectionTimeout)
                     .SetProxy(finalConfiguration.Client.Proxy)
                     .SetLogger(this.logger);
 
@@ -422,7 +422,7 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentNullException("Base URL cannot be empty.");
             }
 
-            if (configuration.Client.ConnectionTimeout == null || configuration.Client.ConnectionTimeout.Value < 0)
+            if (configuration.Client.ConnectionTimeout < 0)
             {
                 throw new ArgumentException("Timeout cannot be negative.");
             }
