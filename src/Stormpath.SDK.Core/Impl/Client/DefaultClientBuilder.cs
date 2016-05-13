@@ -377,15 +377,24 @@ namespace Stormpath.SDK.Impl.Client
                 httpClient = this.httpClientBuilder.Build();
             }
 
+
+
             if (this.cacheProvider == null)
             {
-                this.logger.Info("No CacheProvider configured. Defaulting to in-memory CacheProvider with default TTL and TTI of one hour.");
+                if (finalConfiguration.Client.CacheManager.Enabled == false)
+                {
+                    this.cacheProvider = CacheProviders.Create().DisabledCache();
+                }
+                else
+                {
+                    this.logger.Info("No CacheProvider configured. Defaulting to in-memory CacheProvider with default TTL and TTI of one hour.");
 
-                this.cacheProvider = CacheProviders.Create()
-                    .InMemoryCache()
-                    .WithDefaultTimeToIdle(TimeSpan.FromHours(1))
-                    .WithDefaultTimeToLive(TimeSpan.FromHours(1))
-                    .Build();
+                    this.cacheProvider = CacheProviders.Create()
+                        .InMemoryCache()
+                        .WithDefaultTimeToIdle(TimeSpan.FromHours(1))
+                        .WithDefaultTimeToLive(TimeSpan.FromHours(1))
+                        .Build();
+                }
             }
             else
             {

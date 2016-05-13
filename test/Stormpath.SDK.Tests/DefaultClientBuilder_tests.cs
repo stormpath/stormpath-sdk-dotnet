@@ -18,6 +18,7 @@ using System;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Api;
+using Stormpath.SDK.Cache;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Extensions.Http.RestSharp;
 using Stormpath.SDK.Extensions.Serialization;
@@ -195,6 +196,49 @@ mySecret = secret123!";
                 .Build();
 
             client.GetCacheProvider().ShouldBeOfType<NullCacheProvider>();
+        }
+
+        [Fact]
+        public void Disabling_cacheManager_with_configuration()
+        {
+            var client = this.builder
+                .SetConfiguration(new
+                {
+                    client = new
+                    {
+                        cacheManager = new
+                        {
+                            enabled = false
+                        }
+                    }
+                })
+                .SetApiKeyId("fake")
+                .SetApiKeySecret("fake")
+                .Build();
+
+            client.GetCacheProvider().ShouldBeOfType<NullCacheProvider>();
+        }
+
+        [Fact]
+        public void Explicit_cacheManager_settings_override_configuration()
+        {
+            var client = this.builder
+                .SetConfiguration(new
+                {
+                    client = new
+                    {
+                        cacheManager = new
+                        {
+                            enabled = false
+                        }
+                    }
+                })
+                .SetApiKeyId("fake")
+                .SetApiKeySecret("fake")
+                .SetCacheProvider(CacheProviders.Create().InMemoryCache().Build())
+                .Build();
+
+            client.GetCacheProvider().ShouldBeOfType<InMemoryCacheProvider>();
         }
 
         [Fact]
