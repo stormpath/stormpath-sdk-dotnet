@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-#if NET45
+#if NET45 || NET451
 namespace Stormpath.SDK.Impl.Introspection
 {
     /// <summary>

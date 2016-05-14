@@ -16,7 +16,7 @@
 // Contains code modified from aspnet/Caching. Copyright (c) .NET Foundation. All rights reserved.
 // </copyright>
 
-#if NET45
+#if NET45 || NET451
 namespace Stormpath.SDK.Impl.Cache.Polyfill.Microsoft.Extensions.Caching.Memory
 {
     internal enum CacheItemPriority

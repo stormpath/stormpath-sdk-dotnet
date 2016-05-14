@@ -2,7 +2,7 @@
   "authors": [ "Nate Barbettini" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Stormpath.SDK.Abstractions": "0.9.0-beta3"
+    "Stormpath.SDK.Abstractions": "0.9.0-beta4"
   },
   "description": "System.Net.Http plugin for the Stormpath .NET SDK.",
   "frameworks": {
@@ -39,6 +39,6 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Http.SystemNetHttpClient"
   },
-  "version": "0.9.0-beta3",
+  "version": "0.9.0-beta4",
   "xmlDoc": true
 }

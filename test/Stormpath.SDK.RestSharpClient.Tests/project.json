@@ -8,8 +8,8 @@
     "NSubstitute": "1.9.2",
     "RestSharp": "105.2.2",
     "Shouldly": "2.6.0",
-    "Stormpath.SDK.Abstractions": "0.9.0-beta3",
-    "Stormpath.SDK.RestSharpClient": "0.9.0-beta3",
+    "Stormpath.SDK.Abstractions": "0.9.0-beta4",
+    "Stormpath.SDK.RestSharpClient": "0.9.0-beta4",
     "xunit": "2.1.0",
     "xunit.runner.dnx": "2.1.0-rc1-build204"
   },
@@ -25,5 +25,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Http.RestSharpClient.Tests"
   },
-  "version": "0.9.0-beta3"
+  "version": "0.9.0-beta4"
 }

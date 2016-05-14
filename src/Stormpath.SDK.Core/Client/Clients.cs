@@ -16,7 +16,7 @@
 
 using Stormpath.SDK.Impl.Client;
 
-#if !NET45
+#if !NET45 && !NET451
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.PlatformAbstractions;
 #endif
@@ -35,7 +35,7 @@ namespace Stormpath.SDK.Client
         /// <example>
         /// <code source="ClientBuilderExamples.cs" region="DefaultClientOptions" lang="C#" title="Create a Client with the default options" />
         /// </example>
-#if NET45
+#if NET45 || NET451
         public static IClientBuilder Builder()
         {
             var language = string.Empty;

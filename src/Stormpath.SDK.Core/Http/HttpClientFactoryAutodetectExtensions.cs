@@ -32,7 +32,7 @@ namespace Stormpath.SDK.Http
         [Obsolete("Will be removed in 1.0. Instead, manually specify a client, e.g. HttpClients.Create().RestSharpClient()")]
         public static IHttpClientBuilder AutoDetect(this IHttpClientFactory factory)
         {
-#if NET45
+#if NET45 || NET451
             Type defaultClientType = null;
             try
             {
