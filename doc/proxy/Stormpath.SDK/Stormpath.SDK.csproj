@@ -36,16 +36,16 @@
       <HintPath>..\packages\FlexibleConfiguration.1.0.2\lib\net45\FlexibleConfiguration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Polyglot, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Polyglot.1.0.0\lib\net451\Polyglot.dll</HintPath>
+    <Reference Include="Polyglot, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polyglot.1.0.1\lib\net45\Polyglot.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.Configuration, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stormpath.Configuration.4.0.1\lib\net451\Stormpath.Configuration.dll</HintPath>
+    <Reference Include="Stormpath.Configuration, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stormpath.Configuration.5.0.0\lib\net45\Stormpath.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.Configuration.Abstractions, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stormpath.Configuration.Abstractions.4.0.1\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
+    <Reference Include="Stormpath.Configuration.Abstractions, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stormpath.Configuration.Abstractions.5.0.0\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -268,6 +268,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Authentication\DefaultRequestAuthenticatorFactory.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Authentication\IRequestAuthenticator.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Authentication\IRequestAuthenticatorFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Authentication\Iso8601Formatter.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Authentication\RequestAuthenticationException.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Authentication\SAuthc1RequestAuthenticator.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Http\Support\DefaultBackoffStrategy.cs" />
