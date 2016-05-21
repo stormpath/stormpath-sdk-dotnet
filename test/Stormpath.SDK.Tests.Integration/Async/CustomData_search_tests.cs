@@ -171,6 +171,78 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Searching_by_date_range_within(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account with some custom data
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Test")
+                .SetSurname("TestermanDate");
+            tester.CustomData["birthday"] = new DateTimeOffset(1982, 05, 02, 13, 00, 00, TimeSpan.Zero); // store as ISO 8601 date
+
+            var directory = await client.GetDirectoryAsync(this.directoryHref);
+            await directory.CreateAccountAsync(tester);
+            this.fixture.CreatedAccountHrefs.Add(tester.Href);
+
+            // Retry up to 3 times if CDS infrastructure isn't ready yet
+            await Policy.Handle<ShouldAssertException>()
+                .WaitAndRetryAsync(Delay.CustomDataRetry)
+                .ExecuteAsync(async () =>
+                {
+                    var foundAccount = await directory.GetAccounts()
+                        .Where(account => ((DateTimeOffset)account.CustomData["birthday"]).Within(1982)).SingleOrDefaultAsync();
+
+                    foundAccount.ShouldNotBeNull();
+
+                    foundAccount.Href.ShouldBe(tester.Href);
+                });
+
+            // Cleanup
+            (await tester.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(tester.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Searching_by_date_range_hack(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account with some custom data
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Test")
+                .SetSurname("TestermanDate");
+            tester.CustomData["birthday"] = new DateTimeOffset(1982, 05, 02, 13, 00, 00, TimeSpan.Zero); // store as ISO 8601 date
+
+            var directory = await client.GetDirectoryAsync(this.directoryHref);
+            await directory.CreateAccountAsync(tester);
+            this.fixture.CreatedAccountHrefs.Add(tester.Href);
+
+            // Retry up to 3 times if CDS infrastructure isn't ready yet
+            await Policy.Handle<ShouldAssertException>()
+                .WaitAndRetryAsync(Delay.CustomDataRetry)
+                .ExecuteAsync(async () =>
+                {
+                    var foundAccount = await directory.GetAccounts()
+                        .Where(account => (int)account.CustomData["birthday"] >= 1982 && (int)account.CustomData["birthday"] <= 1983).SingleOrDefaultAsync();
+
+                    foundAccount.ShouldNotBeNull();
+
+                    foundAccount.Href.ShouldBe(tester.Href);
+                });
+
+            // Cleanup
+            (await tester.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(tester.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Searching_by_int_range(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -251,7 +323,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedAccountHrefs.Remove(tester.Href);
         }
 
-        [Theory(Skip = "Try again after CDS is ready.")]
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Ordering_by_custom_data(TestClientProvider clientBuilder)
         {
