@@ -24,6 +24,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.NameTranslators
         {
             ["CreatedAt"] = "createdAt",
             ["ModifiedAt"] = "modifiedAt",
+            ["PasswordModifiedAt"] = "passwordModifiedAt",
         };
 
         public DateTimeFieldNameTranslator()

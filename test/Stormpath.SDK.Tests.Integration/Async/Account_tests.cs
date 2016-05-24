@@ -674,6 +674,27 @@ namespace Stormpath.SDK.Tests.Integration.Async
             account.PasswordModifiedAt.Value.ShouldBeGreaterThan(oldModificationDate);
         }
 
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Searching_accounts_with_modified_passwords(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
+
+            var chewie = await application.GetAccounts()
+                .Where(a => a.Email == "chewie@kashyyyk.rim")
+                .SingleAsync();
+            chewie.SetPassword(new RandomPassword(16));
+            await chewie.SaveAsync();
+
+            // Get all accounts that modified their passwords this year
+            var accounts = await application.GetAccounts()
+                .Where(a => a.PasswordModifiedAt <= new DateTimeOffset(DateTimeOffset.Now.Year, 1, 1, 0, 0, 0, TimeSpan.Zero))
+                .ToListAsync();
+
+            accounts.ShouldContain(a => a.Email == "chewie@kashyyyk.rim");
+        }
+
         /// <summary>
         /// Regression test for https://github.com/stormpath/stormpath-sdk-dotnet/issues/175
         /// </summary>
