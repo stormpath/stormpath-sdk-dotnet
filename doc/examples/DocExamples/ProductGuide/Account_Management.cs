@@ -305,6 +305,30 @@ namespace DocExamples.ProductGuide
             await passwordPolicy.SaveAsync();
             #endregion
         }
+
+        public async Task SearchPasswordModified()
+        {
+            IDirectory myDirectory = null;
+
+            #region search_password_modified.cs
+            var passwordsModifiedIn2015 = await myDirectory.GetAccounts()
+                .Where(acct => acct.PasswordModifiedAt < new DateTimeOffset(2016, 1, 1, 0, 0, 0, TimeSpan.Zero))
+                .ToListAsync();
+            #endregion
+        }
+
+        public async Task UpdatePreventReuse()
+        {
+            IDirectory myDirectory = null;
+
+            #region update_prevent_reuse.cs
+            var passwordPolicy = await myDirectory.GetPasswordPolicyAsync();
+            var strengthPolicy = await passwordPolicy.GetPasswordStrengthPolicyAsync();
+
+            strengthPolicy.SetPreventReuse(10);
+            await strengthPolicy.SaveAsync();
+            #endregion
+        }
     }
 #pragma warning restore CS0168 // The variable is declared but never used
 }

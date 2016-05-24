@@ -257,4 +257,27 @@ Public Class Account_Management
         Await passwordPolicy.SaveAsync()
 #End Region
     End Function
+
+
+    Public Async Function SearchPasswordModified() As Task
+        Dim myDirectory As IDirectory = Nothing
+
+#Region "search_password_modified.vb"
+        Dim passwordsModifiedIn2015 = Await myDirectory.GetAccounts() _
+            .Where(Function(acct) acct.PasswordModifiedAt < New DateTimeOffset(2016, 1, 1, 0, 0, 0, TimeSpan.Zero)) _
+            .ToListAsync()
+#End Region
+    End Function
+
+    Public Async Function UpdatePreventReuse() As Task
+        Dim myDirectory As IDirectory = Nothing
+
+#Region "update_prevent_reuse.cs"
+        Dim passwordPolicy = Await myDirectory.GetPasswordPolicyAsync()
+        Dim strengthPolicy = Await passwordPolicy.GetPasswordStrengthPolicyAsync()
+
+        strengthPolicy.SetPreventReuse(10)
+        Await strengthPolicy.SaveAsync()
+#End Region
+    End Function
 End Class
