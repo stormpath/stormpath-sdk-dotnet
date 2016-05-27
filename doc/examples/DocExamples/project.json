@@ -2,6 +2,7 @@
   "authors": [ "Nate Barbettini", "Contributors" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
+    "Stormpath.SDK.Cache.Redis": "0.7.0",
     "Stormpath.SDK.Core": "0.9.0",
     "Stormpath.SDK.JsonNetSerializer": "0.9.0",
     "Stormpath.SDK.RestSharpClient": "0.9.0"

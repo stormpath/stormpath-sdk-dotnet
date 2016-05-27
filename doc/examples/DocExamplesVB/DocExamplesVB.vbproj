@@ -60,6 +60,10 @@
       <HintPath>..\..\..\packages\RestSharp.105.2.2\lib\net451\RestSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\StackExchange.Redis.1.0.488\lib\net45\StackExchange.Redis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Stormpath.Configuration, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Stormpath.Configuration.5.0.0\lib\net45\Stormpath.Configuration.dll</HintPath>
       <Private>True</Private>
@@ -70,6 +74,10 @@
     </Reference>
     <Reference Include="Stormpath.SDK.Abstractions, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Stormpath.SDK.Abstractions.0.9.0\lib\net45\Stormpath.SDK.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Stormpath.SDK.Cache.Redis, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Stormpath.SDK.Cache.Redis.0.7.0\lib\net451\Stormpath.SDK.Cache.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Stormpath.SDK.Core, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -127,6 +135,7 @@
     </Compile>
     <Compile Include="ProductGuide\Account_Management.vb" />
     <Compile Include="ProductGuide\Authentication.vb" />
+    <Compile Include="ProductGuide\Configuration.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
