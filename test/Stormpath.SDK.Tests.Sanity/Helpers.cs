@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Tests.Sanity
             }
 
             return t.IsDefined(typeof(CompilerGeneratedAttribute), false)
-                || IsCompilerGenerated(t.DeclaringType.GetTypeInfo());
+                || IsCompilerGenerated(t.DeclaringType?.GetTypeInfo());
         }
 
         /// <summary>

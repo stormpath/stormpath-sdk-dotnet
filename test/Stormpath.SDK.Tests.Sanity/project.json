@@ -3,6 +3,10 @@
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
     "dotnet-test-xunit": "1.0.0-rc2-build10025",
+    "Microsoft.NETCore.App": {
+      "type": "platform",
+      "version": "1.0.0-rc2-3002702"
+    },
     "Shouldly": "2.7.0",
     "Stormpath.SDK.Core": {
       "target": "project",
@@ -27,6 +31,7 @@
     "owners": [ "Stormpath, Inc." ],
     "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet"
   },
+  "testRunner": "xunit",
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Tests.Sanity"
   },
