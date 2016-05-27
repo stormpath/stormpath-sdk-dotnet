@@ -2,25 +2,36 @@
   "authors": [ "Nate Barbettini", "Contributors" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Stormpath.SDK.Cache.Redis": "0.7.0",
-    "Stormpath.SDK.Core": "0.9.0",
-    "Stormpath.SDK.JsonNetSerializer": "0.9.0",
-    "Stormpath.SDK.RestSharpClient": "0.9.0"
+    "Stormpath.SDK.Core": {
+      "target": "project",
+      "version": "0.10.0-beta1"
+    },
+    "Stormpath.SDK.JsonNetSerializer": {
+      "target": "project",
+      "version": "0.10.0-beta2"
+    },
+    "Stormpath.SDK.Http.SystemNetHttpClient": {
+      "target": "project",
+      "version": "0.10.0-beta1"
+    }
   },
   "description": "Documentation examples for the Stormpath .NET SDK.",
   "frameworks": {
-    "dnx451": { }
+    "netstandard1.3": {
+      "imports": "dotnet"
+    }
   },
-  "language": "en-US",
-  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
-  "owners": [ "Stormpath, Inc." ],
-  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
-  "repository": {
-    "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+  "packOptions": {
+    "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+    "owners": [ "Stormpath, Inc." ],
+    "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+    "repository": {
+      "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+    }
   },
   "title": "Stormpath.SDK.DocExamples",
   "tooling": {
     "defaultNamespace": "DocExamples"
   },
-  "version": "0.9.0"
+  "version": "0.10.0-beta1"
 }
