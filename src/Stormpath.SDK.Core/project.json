@@ -2,36 +2,12 @@
   "authors": [ "Nate Barbettini", "Contributors" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Polyglot": "1.0.1",
-    "Stormpath.Configuration": "5.0.0",
-    "Stormpath.SDK.Abstractions": "0.9.0"
+    "Polyglot": "1.1.0-beta1",
+    "Stormpath.Configuration": "5.1.0-beta2",
+    "Stormpath.SDK.Abstractions": "0.10.0-beta1"
   },
   "description": "The official Stormpath SDK for .NET. Don't install this package directly; install the Stormpath.SDK package unless you are bringing your own JSON serializer and HTTP client plugins.",
   "frameworks": {
-    "dnx451": {
-      "dependencies": {
-        "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
-        "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final"
-      }
-    },
-    "dotnet5.4": {
-      "dependencies": {
-        "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
-        "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
-        "System.Collections": "4.0.11-beta-23516",
-        "System.Collections.Concurrent": "4.0.11-beta-23516",
-        "System.Linq": "4.0.1-beta-23516",
-        "System.Linq.Expressions": "4.0.11-beta-23516",
-        "System.Linq.Queryable": "4.0.1-beta-23516",
-        "System.Net.Primitives": "4.0.11-beta-23516",
-        "System.Reflection": "4.1.0-beta-23516",
-        "System.Runtime.Loader": "4.0.0-beta-23516",
-        "System.Security.Cryptography.Algorithms": "4.0.0-beta-23516",
-        "System.Security.Cryptography.Primitives": "4.0.0-beta-23516",
-        "System.Text.RegularExpressions": "4.0.11-beta-23516",
-        "System.Threading": "4.0.11-beta-23516"
-      }
-    },
     "net45": {
       "frameworkAssemblies": {
         "System.Reflection": "4.0.0.0",
@@ -42,28 +18,32 @@
       }
     },
     "net451": { },
-    "netcore50": {
+    "netstandard1.3": {
       "dependencies": {
-        "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
-        "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
-        "System.IO.FileSystem": "4.0.1-beta-23516",
-        "System.Security.Cryptography.Algorithms": "4.0.0-beta-23516",
-        "System.Security.Cryptography.Primitives": "4.0.0-beta-23516"
-      }
+        "Microsoft.Extensions.Caching.Memory": "1.0.0-rc2-final",
+        "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc2-final",
+        "NETStandard.Library": "1.5.0-rc2-24027",
+        "System.Security.Cryptography.Algorithms": "4.1.0-rc2-24027"
+      },
+      "imports": "dotnet"
     }
   },
-  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
-  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
-  "owners": [ "Stormpath, Inc." ],
-  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
-  "repository": {
-    "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+  "packOptions": {
+    "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+    "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+    "owners": [ "Stormpath, Inc." ],
+    "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+    "repository": {
+      "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+    },
+    "tags": [ "Stormpath API Authentication Authorization REST" ]
   },
-  "tags": [ "Stormpath API Authentication Authorization REST" ],
   "title": "Stormpath.SDK.Core",
   "tooling": {
     "defaultNamespace": "Stormpath.SDK"
   },
   "version": "0.9.0",
-  "xmlDoc": true
+  "buildOptions": {
+    "xmlDoc": true
+  }
 }
