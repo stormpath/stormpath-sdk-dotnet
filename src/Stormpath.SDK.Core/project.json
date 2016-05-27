@@ -11,13 +11,18 @@
     "net45": {
       "frameworkAssemblies": {
         "System.Reflection": "4.0.0.0",
+        "System.Threading.Tasks": "4.0.0.0",
+        "System.IO": "4.0.0.0",
+        "System.Text.Encoding": "4.0.0.0",
+        "System.Linq.Expressions": "4.0.0.0",
+        "System.Collections": "4.0.0.0",
+        "System.Net.Primitives": "4.0.0.0",
         "System.Runtime": {
           "type": "build",
           "version": "4.0.0.0"
         }
       }
     },
-    "net451": { },
     "netstandard1.3": {
       "dependencies": {
         "Microsoft.Extensions.Caching.Memory": "1.0.0-rc2-final",

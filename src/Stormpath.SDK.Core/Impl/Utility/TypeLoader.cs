@@ -15,6 +15,8 @@
 // </copyright>
 
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace Stormpath.SDK.Impl.Utility
 {
