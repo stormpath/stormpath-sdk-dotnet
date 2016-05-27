@@ -1,5 +1,10 @@
 {
   "authors": [ "Nate Barbettini" ],
+  "buildOptions": {
+    "copyToOutput": {
+      "include": [ "xunit.runner.json" ]
+    }
+  },
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
     "dotnet-test-xunit": "1.0.0-rc2-build10025",
