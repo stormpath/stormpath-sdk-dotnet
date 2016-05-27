@@ -16,7 +16,6 @@
     "netstandard1.5": {
       "dependencies": {
         "StackExchange.Redis": "1.1.604-alpha"
-
       }
     },
     "net45": {
@@ -24,11 +23,11 @@
         "StackExchange.Redis": "1.0.603"
       },
       "frameworkAssemblies": {
-        "System.Threading.Tasks": "4.0.0.0",
         "System.Runtime": {
           "type": "build",
           "version": "4.0.0.0"
-        }
+        },
+        "System.Threading.Tasks": "4.0.0.0"
       }
     }
   },
