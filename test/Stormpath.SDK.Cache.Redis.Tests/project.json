@@ -1,28 +1,41 @@
 {
   "authors": [ "Nate Barbettini" ],
-  "commands": {
-    "test": "xunit.runner.dnx"
-  },
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Shouldly": "2.6.0",
-    "Stormpath.SDK.Abstractions": "0.7.0",
-    "Stormpath.SDK.Cache.Redis": "0.7.0",
-    "Stormpath.SDK.Tests.Common": "0.7.0",
-    "xunit": "2.1.0",
-    "xunit.runner.dnx": "2.1.0-rc1-build204"
+    "dotnet-test-xunit": "1.0.0-rc2-build10025",
+    "Microsoft.NETCore.App": {
+      "type": "platform",
+      "version": "1.0.0-rc2-3002702"
+    },
+    "Shouldly": "2.7.0",
+    "Stormpath.SDK.Abstractions": {
+      "target": "project",
+      "version": "0.10.0-beta1"
+    },
+    "Stormpath.SDK.Cache.Redis": {
+      "target": "project",
+      "version": "0.10.0-beta1"
+    },
+    "Stormpath.SDK.Tests.Common": {
+      "target": "project",
+      "version": "0.10.0-beta1"
+    },
+    "xunit": "2.1.0"
   },
   "description": "Unit tests for Stormpath.SDK.Redis",
   "frameworks": {
-    "dnx451": { }
+    "netcoreapp1.0": {
+      "imports": [ "dotnet", "portable-net45+win8" ]
+    }
   },
-  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
-  "language": "en-US",
-  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
-  "owners": [ "Stormpath, Inc." ],
-  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+  "packOptions": {
+    "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+    "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+    "owners": [ "Stormpath, Inc." ],
+    "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet"
+  },
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Cache.Redis.Tests"
   },
-  "version": "0.7.0"
+  "version": "0.10.0-beta1"
 }
