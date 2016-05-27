@@ -12,6 +12,7 @@
       "target": "project",
       "version": "0.10.0-beta1"
     },
+    "System.Runtime.InteropServices": "4.1.0-rc2-24027",
     "xunit": "2.1.0"
   },
   "description": "Sanity and public API tests for Stormpath.SDK",

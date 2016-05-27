@@ -36,11 +36,11 @@ namespace Stormpath.SDK.Tests.Sanity
             //PublicApiApprover.ApprovePublicApi(typeof(Client.IClient).Assembly.Location);
         }
 
-        private static IEnumerable<Type> InterfaceAndImplTypes()
+        private static IEnumerable<TypeInfo> InterfaceAndImplTypes()
         {
             return
-                typeof(Client.IClient).Assembly.GetTypes()
-                    .Concat(typeof(Client.Clients).Assembly.GetTypes());
+                typeof(Client.IClient).GetTypeInfo().Assembly.GetTypes().Select(t => t.GetTypeInfo())
+                    .Concat(typeof(Client.Clients).GetTypeInfo().Assembly.GetTypes().Select(t => t.GetTypeInfo()));
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Tests.Sanity
             var asyncMethods = methodsInAssembly
                 .Where(method =>
                     method.ReturnType == typeof(Task) ||
-                    (method.ReturnType.IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>)));
+                    (method.ReturnType.GetTypeInfo().IsGenericType && method.ReturnType.GetTypeInfo().GetGenericTypeDefinition() == typeof(Task<>)));
 
             var asyncMethodsWithoutCancellationToken = asyncMethods
                 .Where(method => !method.GetParameters().Any(p => p.ParameterType == typeof(CancellationToken)));
@@ -90,7 +90,7 @@ namespace Stormpath.SDK.Tests.Sanity
             var asyncMethods = methodsInAssembly
                 .Where(method =>
                     method.ReturnType == typeof(Task) ||
-                    (method.ReturnType.IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>)));
+                    (method.ReturnType.GetTypeInfo().IsGenericType && method.ReturnType.GetTypeInfo().GetGenericTypeDefinition() == typeof(Task<>)));
 
             var asyncMethodsWithOptionalCT = asyncMethods
                 .Where(method => method.GetParameters().Any(p => p.ParameterType == typeof(CancellationToken) && p.IsOptional))
@@ -126,7 +126,7 @@ namespace Stormpath.SDK.Tests.Sanity
             var asyncMethods = methodsInAssembly
                 .Where(method =>
                     method.ReturnType == typeof(Task) ||
-                    (method.ReturnType.IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>)));
+                    (method.ReturnType.GetTypeInfo().IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>)));
 
             var asyncMethodsWithRequiredCT = asyncMethods
                 .Where(method => method.GetParameters().Any(p => p.ParameterType == typeof(CancellationToken) && !p.IsOptional))
@@ -200,7 +200,7 @@ namespace Stormpath.SDK.Tests.Sanity
                 .Where(t => t.IsPublic && t.IsInterface)
                 .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
                 .Where(m => m.ReturnType == typeof(Task) ||
-                            (m.ReturnType.IsGenericType && m.ReturnType.GetGenericTypeDefinition() == typeof(Task<>)))
+                            (m.ReturnType.GetTypeInfo().IsGenericType && m.ReturnType.GetGenericTypeDefinition() == typeof(Task<>)))
                 .ToList();
 
             var asyncMethodsByName = asyncMethods

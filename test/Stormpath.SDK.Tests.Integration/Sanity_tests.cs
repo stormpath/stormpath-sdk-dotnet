@@ -27,7 +27,7 @@ namespace Stormpath.SDK.Tests.Integration
         [Fact]
         public void Equal_numbers_of_sync_and_async_tests()
         {
-            var asyncTests = typeof(Tests.Integration.IntegrationTestCollection).Assembly
+            var asyncTests = typeof(Tests.Integration.IntegrationTestCollection).GetTypeInfo().Assembly
                 .GetTypes()
                 .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Async")
                 .SelectMany(x => x.GetMethods())
@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Tests.Integration
 
             asyncTests.ShouldNotBeEmpty();
 
-            var syncTests = typeof(Tests.Integration.IntegrationTestCollection).Assembly
+            var syncTests = typeof(Tests.Integration.IntegrationTestCollection).GetTypeInfo().Assembly
                 .GetTypes()
                 .Where(x => x.Namespace == "Stormpath.SDK.Tests.Integration.Sync")
                 .SelectMany(x => x.GetMethods())
