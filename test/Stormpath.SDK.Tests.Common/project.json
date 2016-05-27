@@ -8,7 +8,6 @@
       "type": "platform",
       "version": "1.0.0-rc2-3002702"
     },
-    "Newtonsoft.Json": "7.0.1",
     "Stormpath.SDK.Core": {
       "target": "project",
       "version": "0.10.0-beta1"
