@@ -1,44 +1,47 @@
 {
   "authors": [ "Nate Barbettini" ],
+  "buildOptions": {
+    "xmlDoc": true
+  },
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Stormpath.SDK.Abstractions": "0.9.0"
+    "Stormpath.SDK.Abstractions": {
+      "target": "project",
+      "version": "0.10.0-beta1"
+    }
   },
   "description": "System.Net.Http plugin for the Stormpath .NET SDK.",
   "frameworks": {
-    "dnx451": {
-      "dependencies": {
-        "System.Net.Http": "4.0.1-beta-23516"
-      }
-    },
-    "dotnet5.2": {
-      "dependencies": {
-        "System.Net.Http": "4.0.1-beta-23516"
-      }
-    },
     "net45": {
       "frameworkAssemblies": {
-        "System.Net.Http": "4.0.0.0"
+        "System.Net.Http": "4.0.0.0",
+        "System.Net.Primitives": "4.0.0.0",
+        "System.Runtime": {
+          "type": "build",
+          "version": "4.0.0.0"
+        },
+        "System.Threading.Tasks": "4.0.0.0"
       }
     },
-    "netcore50": {
+    "netstandard1.1": {
       "dependencies": {
-        "System.Net.Http": "4.0.1-beta-23516"
+        "NETStandard.Library": "1.5.0-rc2-24027",
+        "System.Net.Http": "4.0.1-rc2-24027"
       }
     }
   },
-  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
-  "language": "en-US",
-  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
-  "owners": [ "Stormpath, Inc." ],
-  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
-  "repository": {
-    "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+  "packOptions": {
+    "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+    "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+    "owners": [ "Stormpath, Inc." ],
+    "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+    "repository": {
+      "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+    },
+    "tags": [ "stormpath", "http" ]
   },
-  "tags": [ "Stormpath HTTP" ],
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Http.SystemNetHttpClient"
   },
-  "version": "0.9.0",
-  "xmlDoc": true
+  "version": "0.10.0-beta1"
 }
