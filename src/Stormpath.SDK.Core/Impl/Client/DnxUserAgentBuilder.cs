@@ -23,14 +23,15 @@ namespace Stormpath.SDK.Impl.Client
 {
     internal class DnxUserAgentBuilder : IUserAgentBuilder
     {
-        private readonly IRuntimeEnvironment runtime;
-        private readonly IApplicationEnvironment app;
+        // TODO - might need to be updated post-RC3/RTM
+        private readonly RuntimeEnvironment runtime;
+        private readonly ApplicationEnvironment app;
         private readonly string language;
 
         // Lazy ensures this only runs once and is cached.
         private readonly Lazy<string> userAgentValue;
 
-        public DnxUserAgentBuilder(IRuntimeEnvironment runtimeEnvironment, IApplicationEnvironment appEnvironment, string language)
+        public DnxUserAgentBuilder(RuntimeEnvironment runtimeEnvironment, ApplicationEnvironment appEnvironment, string language)
         {
             this.runtime = runtimeEnvironment;
             this.app = appEnvironment;

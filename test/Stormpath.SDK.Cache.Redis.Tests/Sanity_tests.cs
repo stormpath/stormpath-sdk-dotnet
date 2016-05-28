@@ -16,7 +16,7 @@
 
 using System.Linq;
 using System.Reflection;
-using Shouldly;
+using FluentAssertions;
 using Stormpath.SDK.Tests.Common;
 using Xunit;
 
@@ -29,29 +29,31 @@ namespace Stormpath.SDK.Cache.Redis.Tests
         [Fact]
         public void All_tests_must_be_debug_only()
         {
-            var facts = Assembly
-                .GetExecutingAssembly()
+            var facts = typeof(Sanity_tests)
+                .GetTypeInfo()
+                .Assembly
                 .GetTypes()
                 .SelectMany(t => t.GetMethods())
-                .Where(m => m.GetCustomAttributes(typeof(FactAttribute), false).Length > 0);
+                .Where(m => m.GetCustomAttributes<FactAttribute>(false).Count() > 0);
 
-            var theories = Assembly
-                .GetExecutingAssembly()
+            var theories = typeof(Sanity_tests)
+                .GetTypeInfo()
+                .Assembly
                 .GetTypes()
                 .SelectMany(t => t.GetMethods())
-                .Where(m => m.GetCustomAttributes(typeof(TheoryAttribute), false).Length > 0);
+                .Where(m => m.GetCustomAttributes<TheoryAttribute>(false).Count() > 0);
 
             var nonDebugFactNames = facts
-                .Where(m => m.GetCustomAttributes(typeof(DebugOnlyFactAttribute), false).Length == 0)
+                .Where(m => m.GetCustomAttributes<DebugOnlyFactAttribute>(false).Count() == 0)
                 .Select(m => $"{m.DeclaringType.Name}.{m.Name}")
                 .Except(new string[] { Self });
 
             var nonDebugTheoryNames = theories
-                .Where(m => m.GetCustomAttributes(typeof(DebugOnlyTheoryAttribute), false).Length == 0)
+                .Where(m => m.GetCustomAttributes<DebugOnlyTheoryAttribute>(false).Count() == 0)
                 .Select(m => $"{m.DeclaringType.Name}.{m.Name}");
 
-            nonDebugFactNames.Count().ShouldBe(0);
-            nonDebugTheoryNames.Count().ShouldBe(0);
+            nonDebugFactNames.Count().Should().Be(0);
+            nonDebugTheoryNames.Count().Should().Be(0);
         }
     }
 }

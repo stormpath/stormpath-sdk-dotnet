@@ -1,34 +1,47 @@
 {
   "authors": [ "Nate Barbettini" ],
+  "buildOptions": {
+    "xmlDoc": true
+  },
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Newtonsoft.Json": "7.0.1",
-    "Stormpath.SDK.Abstractions": "0.9.0"
+    "Stormpath.SDK.Abstractions": {
+      "target": "project",
+      "version": "0.9.1"
+    }
   },
   "description": "JSON.NET serializer plugin for the Stormpath .NET SDK.",
   "frameworks": {
-    "dnx451": { },
-    "dotnet5.4": {
+    "net45": {
       "dependencies": {
-        "Microsoft.CSharp": "4.0.1-beta-23516",
-        "System.Collections": "4.0.11-beta-23516",
-        "System.Linq": "4.0.1-beta-23516"
+        "Newtonsoft.Json": "8.0.3"
+      },
+      "frameworkAssemblies": {
+        "System.Runtime": {
+          "type": "build",
+          "version": "4.0.0.0"
+        }
       }
     },
-    "net45": { }
+    "netstandard1.1": {
+      "dependencies": {
+        "NETStandard.Library": "1.5.0-rc2-24027",
+        "Newtonsoft.Json": "8.0.4-beta1"
+      }
+    }
   },
-  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
-  "language": "en-US",
-  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
-  "owners": [ "Stormpath, Inc." ],
-  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
-  "repository": {
-    "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+  "packOptions": {
+    "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+    "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+    "owners": [ "Stormpath, Inc." ],
+    "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+    "repository": {
+      "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+    },
+    "tags": [ "stormpath", "json", "serializer" ]
   },
-  "tags": [ "Stormpath JSON Serializer" ],
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Serialization"
   },
-  "version": "0.9.0",
-  "xmlDoc": true
+  "version": "0.9.1"
 }

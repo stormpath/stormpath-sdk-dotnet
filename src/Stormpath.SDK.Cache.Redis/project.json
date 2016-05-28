@@ -1,46 +1,49 @@
 {
   "authors": [ "Nate Barbettini" ],
+  "buildOptions": {
+    "xmlDoc": true
+
+  },
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Stormpath.SDK.Abstractions": "0.7.0"
+    "Stormpath.SDK.Abstractions": {
+      "target": "project",
+      "version": "0.9.1"
+    }
   },
   "description": "Redis cache adapter for the Stormpath .NET SDK.",
   "frameworks": {
-    "dnx451": {
+    "netstandard1.5": {
       "dependencies": {
-        "StackExchange.Redis": "1.0.488"
-      }
-    },
-    "dnxcore50": {
-      "dependencies": {
-        "System.Runtime": "4.0.20",
-        "StackExchange.Redis": "1.1.572-alpha"
-      }
-    },
-    "dotnet5.5": {
-      "dependencies": {
-        "StackExchange.Redis": "1.1.572-alpha"
-
+        "NETStandard.Library": "1.5.0-rc2-24027",
+        "StackExchange.Redis": "1.1.604-alpha"
       }
     },
     "net45": {
       "dependencies": {
-        "StackExchange.Redis": "1.0.488"
+        "StackExchange.Redis": "1.0.603"
+      },
+      "frameworkAssemblies": {
+        "System.Runtime": {
+          "type": "build",
+          "version": "4.0.0.0"
+        },
+        "System.Threading.Tasks": "4.0.0.0"
       }
     }
   },
-  "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
-  "language": "en-US",
-  "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
-  "owners": [ "Stormpath, Inc." ],
-  "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
-  "repository": {
-    "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+  "packOptions": {
+    "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+    "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
+    "owners": [ "Stormpath, Inc." ],
+    "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
+    "repository": {
+      "url": "https://github.com/stormpath/stormpath-sdk-dotnet"
+    },
+    "tags": [ "stormpath", "cache", "redis" ]
   },
-  "tags": [ "Stormpath Authentication Authorization REST Caching Redis" ],
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Cache.Redis"
   },
-  "version": "0.7.0",
-  "xmlDoc": true
+  "version": "0.9.1"
 }

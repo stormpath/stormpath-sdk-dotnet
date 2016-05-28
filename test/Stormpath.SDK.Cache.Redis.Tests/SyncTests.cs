@@ -16,7 +16,7 @@
 
 using System;
 using System.Threading;
-using Shouldly;
+using FluentAssertions;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Sync;
@@ -56,9 +56,9 @@ namespace Stormpath.SDK.Cache.Redis.Tests
             var key = TestHelper.CreateKey(account);
             var cached = db.StringGetWithExpiry(key);
 
-            cached.Expiry.ShouldBeNull(); // No TTI
-            cached.Value.ToString().ShouldNotBeNullOrEmpty();
-            this.fakeHttpClient.Calls.Count.ShouldBe(1);
+            cached.Expiry.Should().Be(null); // No TTI
+            cached.Value.ToString().Should().NotBeNullOrEmpty();
+            this.fakeHttpClient.Calls.Count.Should().Be(1);
         }
 
         [DebugOnlyFact]
@@ -75,13 +75,13 @@ namespace Stormpath.SDK.Cache.Redis.Tests
             var account = this.client.GetResource<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
             this.client.GetResource<IAccount>(account.Href);
             this.client.GetResource<IAccount>(account.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(1);
+            this.fakeHttpClient.Calls.Count.Should().Be(1);
 
             Thread.Sleep(1500);
 
             this.client.GetResource<IAccount>(account.Href);
             this.client.GetResource<IAccount>(account.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(2);
+            this.fakeHttpClient.Calls.Count.Should().Be(2);
         }
 
         [DebugOnlyFact]
@@ -98,13 +98,13 @@ namespace Stormpath.SDK.Cache.Redis.Tests
             var account = this.client.GetResource<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
             this.client.GetResource<IAccount>(account.Href);
             this.client.GetResource<IAccount>(account.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(1);
+            this.fakeHttpClient.Calls.Count.Should().Be(1);
 
             Thread.Sleep(1500);
 
             this.client.GetResource<IAccount>(account.Href);
             this.client.GetResource<IAccount>(account.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(2);
+            this.fakeHttpClient.Calls.Count.Should().Be(2);
         }
 
         [DebugOnlyFact]
@@ -124,15 +124,15 @@ namespace Stormpath.SDK.Cache.Redis.Tests
 
             var group = this.client.GetResource<IGroup>("https://api.stormpath.com/v1/groups/group1");
             var account = this.client.GetResource<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
-            this.fakeHttpClient.Calls.Count.ShouldBe(2);
+            this.fakeHttpClient.Calls.Count.Should().Be(2);
 
             Thread.Sleep(1500);
 
             this.client.GetResourceAsync<IAccount>(account.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(3);
+            this.fakeHttpClient.Calls.Count.Should().Be(3);
 
             this.client.GetResource<IGroup>(group.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(3);
+            this.fakeHttpClient.Calls.Count.Should().Be(3);
         }
 
         [DebugOnlyFact]
@@ -152,15 +152,15 @@ namespace Stormpath.SDK.Cache.Redis.Tests
 
             var group = this.client.GetResource<IGroup>("https://api.stormpath.com/v1/groups/group1");
             var account = this.client.GetResource<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
-            this.fakeHttpClient.Calls.Count.ShouldBe(2);
+            this.fakeHttpClient.Calls.Count.Should().Be(2);
 
             Thread.Sleep(1500);
 
             this.client.GetResource<IAccount>(account.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(3);
+            this.fakeHttpClient.Calls.Count.Should().Be(3);
 
             this.client.GetResource<IGroup>(group.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(3);
+            this.fakeHttpClient.Calls.Count.Should().Be(3);
         }
     }
 }

@@ -16,12 +16,7 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-
-#if !NET45 && !NET451
-using Microsoft.Extensions.PlatformAbstractions;
-#endif
 
 namespace Stormpath.SDK.Impl.Utility
 {
@@ -48,22 +43,9 @@ namespace Stormpath.SDK.Impl.Utility
                 var assembly = Assembly.LoadFile(path);
                 return assembly.GetType(this.fullyQualifiedTypeName);
             }
-#else
-            var referencedLibrary = PlatformServices.Default.LibraryManager.GetLibrary(libraryName);
-            if (referencedLibrary != null)
-            {
-                var assemblyName = referencedLibrary.Assemblies.Single();
-                var assembly = PlatformServices.Default.AssemblyLoadContextAccessor.Default.Load(assemblyName);
-                var type = assembly.ExportedTypes.Where(t => t.FullName == this.fullyQualifiedTypeName).SingleOrDefault();
-
-                if (type != null)
-                {
-                    return type;
-                }
-            }
 #endif
 
-            throw new Exception($"Could not find plugin '{libraryName}'.");
+            throw new Exception($"Could not find plugin '{libraryName}'. Try specifying the plugins manually.");
         }
 
 #if NET45 || NET451

@@ -16,7 +16,7 @@
 
 using System;
 using System.Threading.Tasks;
-using Shouldly;
+using FluentAssertions;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Tests.Common;
@@ -55,9 +55,9 @@ namespace Stormpath.SDK.Cache.Redis.Tests
             var key = TestHelper.CreateKey(account);
             var cached = await db.StringGetWithExpiryAsync(key);
 
-            cached.Expiry.ShouldBeNull(); // No TTI
-            cached.Value.ToString().ShouldNotBeNullOrEmpty();
-            this.fakeHttpClient.Calls.Count.ShouldBe(1);
+            cached.Expiry.Should().Be(null); // No TTI
+            cached.Value.ToString().Should().NotBeNullOrEmpty();
+            this.fakeHttpClient.Calls.Count.Should().Be(1);
         }
 
         [DebugOnlyFact]
@@ -74,13 +74,13 @@ namespace Stormpath.SDK.Cache.Redis.Tests
             var account = await this.client.GetResourceAsync<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
             await this.client.GetResourceAsync<IAccount>(account.Href);
             await this.client.GetResourceAsync<IAccount>(account.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(1);
+            this.fakeHttpClient.Calls.Count.Should().Be(1);
 
             await Task.Delay(1500);
 
             await this.client.GetResourceAsync<IAccount>(account.Href);
             await this.client.GetResourceAsync<IAccount>(account.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(2);
+            this.fakeHttpClient.Calls.Count.Should().Be(2);
         }
 
         [DebugOnlyFact]
@@ -97,13 +97,13 @@ namespace Stormpath.SDK.Cache.Redis.Tests
             var account = await this.client.GetResourceAsync<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
             await this.client.GetResourceAsync<IAccount>(account.Href);
             await this.client.GetResourceAsync<IAccount>(account.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(1);
+            this.fakeHttpClient.Calls.Count.Should().Be(1);
 
             await Task.Delay(1500);
 
             await this.client.GetResourceAsync<IAccount>(account.Href);
             await this.client.GetResourceAsync<IAccount>(account.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(2);
+            this.fakeHttpClient.Calls.Count.Should().Be(2);
         }
 
         [DebugOnlyFact]
@@ -123,15 +123,15 @@ namespace Stormpath.SDK.Cache.Redis.Tests
 
             var account = await this.client.GetResourceAsync<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
             var group = await this.client.GetResourceAsync<IGroup>("https://api.stormpath.com/v1/groups/group1");
-            this.fakeHttpClient.Calls.Count.ShouldBe(2);
+            this.fakeHttpClient.Calls.Count.Should().Be(2);
 
             await Task.Delay(1500);
 
             await this.client.GetResourceAsync<IAccount>(account.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(3);
+            this.fakeHttpClient.Calls.Count.Should().Be(3);
 
             await this.client.GetResourceAsync<IGroup>(group.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(3);
+            this.fakeHttpClient.Calls.Count.Should().Be(3);
         }
 
         [DebugOnlyFact]
@@ -151,15 +151,15 @@ namespace Stormpath.SDK.Cache.Redis.Tests
 
             var account = await this.client.GetResourceAsync<IAccount>("https://api.stormpath.com/v1/accounts/foobarAccount");
             var group = await this.client.GetResourceAsync<IGroup>("https://api.stormpath.com/v1/groups/group1");
-            this.fakeHttpClient.Calls.Count.ShouldBe(2);
+            this.fakeHttpClient.Calls.Count.Should().Be(2);
 
             await Task.Delay(1500);
 
             await this.client.GetResourceAsync<IAccount>(account.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(3);
+            this.fakeHttpClient.Calls.Count.Should().Be(3);
 
             await this.client.GetResourceAsync<IGroup>(group.Href);
-            this.fakeHttpClient.Calls.Count.ShouldBe(3);
+            this.fakeHttpClient.Calls.Count.Should().Be(3);
         }
     }
 }
