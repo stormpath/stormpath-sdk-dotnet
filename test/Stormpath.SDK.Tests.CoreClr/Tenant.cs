@@ -20,7 +20,7 @@ using Stormpath.SDK.Http;
 using Stormpath.SDK.Serialization;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Dnx
+namespace Stormpath.SDK.Tests.CoreClr
 {
     public class Tenant
     {

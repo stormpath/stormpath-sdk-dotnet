@@ -19,7 +19,7 @@ using System.Reflection;
 using Stormpath.SDK.Shared.Extensions;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Dnx
+namespace Stormpath.SDK.Tests.CoreClr
 {
     public class Reflection
     {
