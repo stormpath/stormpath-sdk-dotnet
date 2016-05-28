@@ -6,15 +6,15 @@
     "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc2-final",
     "Stormpath.SDK.Core": {
       "target": "project",
-      "version": "0.9.1-beta1"
+      "version": "0.9.1"
     },
     "Stormpath.SDK.Http.SystemNetHttpClient": {
       "target": "project",
-      "version": "0.9.1-beta1"
+      "version": "0.9.1"
     },
     "Stormpath.SDK.JsonNetSerializer": {
       "target": "project",
-      "version": "0.9.1-beta2"
+      "version": "0.9.1"
     },
     "xunit": "2.1.0"
   },
@@ -42,5 +42,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Tests.Common"
   },
-  "version": "0.9.1-beta1"
+  "version": "0.9.1"
 }

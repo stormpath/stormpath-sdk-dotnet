@@ -9,7 +9,7 @@
     "Stormpath.Configuration": "5.1.0-beta2",
     "Stormpath.SDK.Abstractions": {
       "target": "project",
-      "version": "0.9.1-beta1"
+      "version": "0.9.1"
     }
   },
   "description": "The official Stormpath SDK for .NET. Don't install this package directly; install the Stormpath.SDK package unless you are bringing your own JSON serializer and HTTP client plugins.",
@@ -53,5 +53,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK"
   },
-  "version": "0.9.1-beta1"
+  "version": "0.9.1"
 }

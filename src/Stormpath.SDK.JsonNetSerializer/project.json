@@ -7,7 +7,7 @@
   "dependencies": {
     "Stormpath.SDK.Abstractions": {
       "target": "project",
-      "version": "0.9.1-beta1"
+      "version": "0.9.1"
     }
   },
   "description": "JSON.NET serializer plugin for the Stormpath .NET SDK.",
@@ -43,5 +43,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Serialization"
   },
-  "version": "0.9.1-beta2"
+  "version": "0.9.1"
 }

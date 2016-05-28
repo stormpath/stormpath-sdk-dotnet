@@ -4,15 +4,15 @@
   "dependencies": {
     "Stormpath.SDK.Core": {
       "target": "project",
-      "version": "0.9.1-beta1"
+      "version": "0.9.1"
     },
     "Stormpath.SDK.JsonNetSerializer": {
       "target": "project",
-      "version": "0.9.1-beta1"
+      "version": "0.9.1"
     },
     "Stormpath.SDK.RestSharpClient": {
       "target": "project",
-      "version": "0.9.1-beta1"
+      "version": "0.9.1"
     }
   },
   "description": "Documentation examples for the Stormpath .NET SDK.",
@@ -31,5 +31,5 @@
   "tooling": {
     "defaultNamespace": "DocExamples"
   },
-  "version": "0.9.1-beta1"
+  "version": "0.9.1"
 }

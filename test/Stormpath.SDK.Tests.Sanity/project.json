@@ -10,11 +10,11 @@
     "Shouldly": "2.7.0",
     "Stormpath.SDK.Core": {
       "target": "project",
-      "version": "0.9.1-beta1"
+      "version": "0.9.1"
     },
     "Stormpath.SDK.Tests.Common": {
       "target": "project",
-      "version": "0.9.1-beta1"
+      "version": "0.9.1"
     },
     "System.Runtime.InteropServices": "4.1.0-rc2-24027",
     "xunit": "2.1.0"
@@ -35,5 +35,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Tests.Sanity"
   },
-  "version": "0.9.1-beta1"
+  "version": "0.9.1"
 }

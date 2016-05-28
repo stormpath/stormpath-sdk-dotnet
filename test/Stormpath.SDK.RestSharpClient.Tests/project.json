@@ -8,11 +8,11 @@
     "Shouldly": "2.7.0",
     "Stormpath.SDK.Abstractions": {
       "target": "project",
-      "version": "0.9.1-beta1"
+      "version": "0.9.1"
     },
     "Stormpath.SDK.RestSharpClient": {
       "target": "project",
-      "version": "0.9.1-beta1"
+      "version": "0.9.1"
     },
     "xunit": "2.1.0"
   },
@@ -34,5 +34,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Http.RestSharpClient.Tests"
   },
-  "version": "0.9.1-beta1"
+  "version": "0.9.1"
 }

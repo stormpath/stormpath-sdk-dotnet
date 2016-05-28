@@ -8,7 +8,7 @@
     "RestSharp": "105.2.2",
     "Stormpath.SDK.Abstractions": {
       "target": "project",
-      "version": "0.9.1-beta1"
+      "version": "0.9.1"
     }
   },
   "description": "RestSharp HTTP plugin for the Stormpath .NET SDK.",
@@ -37,5 +37,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Http"
   },
-  "version": "0.9.1-beta1"
+  "version": "0.9.1"
 }
