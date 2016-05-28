@@ -7,7 +7,7 @@
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
     <ProjectGuid>80d9b81c-613b-4358-b47f-cc4ebae480c2</ProjectGuid>
-    <RootNamespace>Stormpath.SDK.Tests.Dnx</RootNamespace>
+    <RootNamespace>Stormpath.SDK.Tests.CoreClr</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
   </PropertyGroup>
