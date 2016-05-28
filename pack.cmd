@@ -1,0 +1,1 @@
+nuget pack Stormpath.SDK.nuspec -Exclude **\*
