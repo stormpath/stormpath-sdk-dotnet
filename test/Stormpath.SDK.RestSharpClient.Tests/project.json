@@ -18,7 +18,11 @@
   },
   "description": "Unit tests for Stormpath.SDK.RestSharpClient",
   "frameworks": {
-    "net451": { }
+    "net451": {
+      "dependencies": {
+        "Microsoft.NETCore.Platforms": "1.0.1-rc2-24027"
+      }
+    }
   },
   "packOptions": {
     "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
@@ -26,6 +30,7 @@
     "owners": [ "Stormpath, Inc." ],
     "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet"
   },
+  "testRunner": "xunit",
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Http.RestSharpClient.Tests"
   },

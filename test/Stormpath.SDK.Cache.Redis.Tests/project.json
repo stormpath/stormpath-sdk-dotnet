@@ -35,6 +35,7 @@
     "owners": [ "Stormpath, Inc." ],
     "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet"
   },
+  "testRunner": "xunit",
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Cache.Redis.Tests"
   },
