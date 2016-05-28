@@ -10,16 +10,14 @@
       "target": "project",
       "version": "0.10.0-beta2"
     },
-    "Stormpath.SDK.Http.SystemNetHttpClient": {
+    "Stormpath.SDK.RestSharpClient": {
       "target": "project",
       "version": "0.10.0-beta1"
     }
   },
   "description": "Documentation examples for the Stormpath .NET SDK.",
   "frameworks": {
-    "netstandard1.3": {
-      "imports": "dotnet"
-    }
+    "net451": { }
   },
   "packOptions": {
     "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
