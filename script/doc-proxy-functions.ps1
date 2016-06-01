@@ -117,7 +117,7 @@ Function Generate-AssemblyInfo
 
   [void]$output.AppendLine("[assembly: AssemblyTitle(""{0}"")]" -f $json.title)
   [void]$output.AppendLine("[assembly: AssemblyDescription(""{0}"")]" -f $json.description)
-  [void]$output.AppendLine("[assembly: AssemblyCompany(""{0}"")]" -f $json.owners[0])
+  [void]$output.AppendLine("[assembly: AssemblyCompany(""{0}"")]" -f $json.packOptions.owners[0])
   [void]$output.AppendLine("[assembly: AssemblyCopyright(""{0}"")]" -f $json.copyright)
 
   # Sanitize version (which may be like "1.0.0-beta2")
