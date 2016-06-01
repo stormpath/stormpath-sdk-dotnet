@@ -2,6 +2,10 @@
   "authors": [ "Nate Barbettini", "Contributors" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
+    "Stormpath.SDK.Cache.Redis": {
+      "target": "project",
+      "version": "0.9.1"
+    },
     "Stormpath.SDK.Core": {
       "target": "project",
       "version": "0.9.1"
