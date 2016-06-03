@@ -565,7 +565,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedOrganizationHrefs.Remove(createdOrganization.Href);
         }
 
-        [Theory]
+        [Theory(Skip = "Fix shouldly async throw tests")]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Setting_group_group_store_throws(TestClientProvider clientBuilder)
         {
@@ -799,7 +799,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedOrganizationHrefs.Remove(createdOrganization.Href);
         }
 
-        [Theory]
+        [Theory(Skip = "Fix shouldly async throw tests")]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Adding_directory_as_account_store_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
         {
@@ -839,7 +839,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedOrganizationHrefs.Remove(createdOrganization.Href);
         }
 
-        [Theory]
+        [Theory(Skip = "Fix shouldly async throw tests")]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Adding_group_as_account_store_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
         {
