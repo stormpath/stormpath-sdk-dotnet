@@ -2,6 +2,7 @@
   "authors": [ "Nate Barbettini" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
+    "dotnet-test-xunit": "1.0.0-rc2-build10025",
     "Microsoft.NETCore.App": {
       "type": "platform",
       "version": "1.0.0-rc2-3002702"
