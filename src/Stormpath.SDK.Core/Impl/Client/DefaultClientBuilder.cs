@@ -50,12 +50,12 @@ namespace Stormpath.SDK.Impl.Client
 
         // These are for backwards compatibility and will be removed at 1.0
         [Obsolete]
-        private string useApiKeyId = Default.Configuration.Client.ApiKey.Id;
-        private string useApiKeySecret = Default.Configuration.Client.ApiKey.Secret;
-        private string useApiKeyFileName = Default.Configuration.Client.ApiKey.File;
-        private ClientAuthenticationScheme useAuthenticationScheme = Default.Configuration.Client.AuthenticationScheme;
-        private string useBaseUrl = Default.Configuration.Client.BaseUrl;
-        private int useConnectionTimeout = Default.Configuration.Client.ConnectionTimeout;
+        private string useApiKeyId = null;
+        private string useApiKeySecret = null;
+        private string useApiKeyFileName = null;
+        private ClientAuthenticationScheme? useAuthenticationScheme = null;
+        private string useBaseUrl = null;
+        private int? useConnectionTimeout = null;
         private ClientProxyConfiguration useProxy = null;
 
         public DefaultClientBuilder(IUserAgentBuilder userAgentBuilder)
@@ -318,8 +318,8 @@ namespace Stormpath.SDK.Impl.Client
                         Secret = this.useApiKeySecret
                     },
                     BaseUrl = this.useBaseUrl,
-                    ConnectionTimeout = this.useConnectionTimeout,
-                    AuthenticationScheme = this.useAuthenticationScheme,
+                    ConnectionTimeout = this.useConnectionTimeout ?? 30000, // TODO this needs more logic
+                    AuthenticationScheme = this.useAuthenticationScheme ?? ClientAuthenticationScheme.SAuthc1,
                     Proxy = this.useProxy
                 }
             };
