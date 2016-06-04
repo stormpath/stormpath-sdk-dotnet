@@ -1,14 +1,12 @@
 # Stormpath .NET SDK  [![Build Status](https://travis-ci.org/stormpath/stormpath-sdk-dotnet.svg?branch=develop)](https://travis-ci.org/stormpath/stormpath-sdk-dotnet) [![Join the chat at https://gitter.im/stormpath/stormpath-sdk-dotnet](https://badges.gitter.im/stormpath/stormpath-sdk-dotnet.svg)](https://gitter.im/stormpath/stormpath-sdk-dotnet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-*An advanced, reliable and easy-to-use user management API for .NET by security experts*
-
 [Stormpath](https://stormpath.com) is a complete user management API.  This
-library gives your ASP.NET, C#, or VB.NET application access to all of Stormpath's features:
+library gives your ASP.NET, C#, or Visual Basic application access to all of Stormpath's features:
 
 - Robust authentication and authorization.
 - Schemaless user data and profiles.
 - A hosted login subdomain, for easy Single Sign-On across your apps.
-- Social login with Facebook and Google OAuth.
+- External login with social providers like Facebook and Google, or SAML IdPs.
 - Secure API key authentication for your service.
 
 In addition to these core Stormpath features, this SDK provides:
@@ -18,14 +16,11 @@ In addition to these core Stormpath features, this SDK provides:
 - LINQ-to-Stormpath for readable, expressive queries.
 - Fully dual-stack design for native asynchronous and native synchronous API calls.
 
-If you have feedback about this library, please open an issue or get in touch and share your
-thoughts! support@stormpath.com
-
 ## Installation
 
 #### Using the Nuget Package Manager
 
- 1. Right-click on the new project in the Solution Explorer and choose **Manage Nuget Packages...**
+ 1. Right-click on your project in the Solution Explorer and choose **Manage Nuget Packages...**
  2. Search for Stormpath. Install the `Stormpath.SDK` package.
 
 #### Using the Package Manager Console
@@ -34,7 +29,7 @@ Simply run `install-package Stormpath.SDK`. Done!
 
 ## Quickstart
 
-To learn how to use the Stompath .NET SDK in a simple project, follow our quickstart:
+To learn how to use the Stompath .NET SDK in a simple project, follow our easy quickstart:
 
 * [C# Quickstart](http://docs.stormpath.com/csharp/product-guide/latest/quickstart.html)
 * [Visual Basic Quickstart](http://docs.stormpath.com/vbnet/product-guide/latest/quickstart.html)
@@ -43,7 +38,7 @@ To learn how to use the Stompath .NET SDK in a simple project, follow our quicks
 
 #### Building with Visual Studio
 
-Building the SDK requires Visual Studio 2015.
+Building the SDK requires Visual Studio 2015 or later.
 
  1. Use `git clone` or the Visual Studio GitHub extension to check out the `develop` branch.
  2. Open `stormpath-sdk-dotnet\Stormpath.SDK.sln` in Visual Studio.
@@ -57,9 +52,11 @@ If you have the `dotnet` tool installed (included with the [.NET Core SDK](https
 git clone https://github.com/stormpath/stormpath-sdk-dotnet.git
 cd stormpath-sdk-dotnet
 git checkout develop
+
 cd src\Stormpath.SDK.Abstractions
 dotnet restore
 dotnet build
+
 cd ..\Stormpath.SDK.Core
 dotnet restore
 dotnet build
@@ -67,7 +64,7 @@ dotnet build
 
 ## Contributing
 
-Contributions, bug reports and issues are very welcome. Stormpath regularly maintains this repository, and are quick to review pull requests and accept changes!
+Contributions, bug reports, and issues are very welcome! Stormpath regularly maintains this repository, and are quick to review pull requests and accept changes.
 
 You can make your own contributions by forking the develop branch of this repository, making your changes, and issuing pull requests against the `develop` branch.
 
