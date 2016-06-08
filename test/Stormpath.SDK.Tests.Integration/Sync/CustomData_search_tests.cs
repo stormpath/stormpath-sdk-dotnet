@@ -59,9 +59,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
 #pragma warning disable CS0252 // Unintended reference comparison
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            Policy.Handle<ShouldAssertException>()
+            var result = Policy.Handle<ShouldAssertException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
-                .Execute(() =>
+                .ExecuteAndCapture(() =>
                 {
                     var foundAccount1 = directory.GetAccounts()
                         .Where(account => account.CustomData["post"] == "Cell Block 1138").Synchronously().SingleOrDefault();
@@ -85,6 +85,12 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             // Cleanup
             (tk421.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tk421.Href);
+
+            // Report
+            if (result.Outcome == OutcomeType.Failure)
+            {
+                throw result.FinalException;
+            }
         }
 
         [Theory]
@@ -106,9 +112,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            Policy.Handle<ShouldAssertException>()
+            var result = Policy.Handle<ShouldAssertException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
-                .Execute(() =>
+                .ExecuteAndCapture(() =>
                 {
                     var foundAccount1 = directory.GetAccounts()
                         .Where(account => (account.CustomData["stuff"] as string).StartsWith("foo")).Synchronously().SingleOrDefault();
@@ -126,6 +132,12 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             // Cleanup
             (tester.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester.Href);
+
+            // Report
+            if (result.Outcome == OutcomeType.Failure)
+            {
+                throw result.FinalException;
+            }
         }
 
         [Theory]
@@ -147,9 +159,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            Policy.Handle<ShouldAssertException>()
+            var result = Policy.Handle<ShouldAssertException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
-                .Execute(() =>
+                .ExecuteAndCapture(() =>
                 {
                     var foundAccount1 = directory.GetAccounts()
                         .Where(account => (DateTimeOffset)account.CustomData["birthday"] < new DateTimeOffset(1990, 01, 01, 00, 00, 00, TimeSpan.Zero)).Synchronously().SingleOrDefault();
@@ -167,42 +179,12 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             // Cleanup
             (tester.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester.Href);
-        }
 
-        [Theory]
-        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public void Searching_by_date_range_within(TestClientProvider clientBuilder)
-        {
-            var client = clientBuilder.GetClient();
-
-            // Create an account with some custom data
-            var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
-                .SetPassword(new RandomPassword(12))
-                .SetGivenName("Test")
-                .SetSurname("TestermanDate");
-            tester.CustomData["birthday"] = new DateTimeOffset(1982, 05, 02, 13, 00, 00, TimeSpan.Zero); // store as ISO 8601 date
-
-            var directory = client.GetDirectory(this.directoryHref);
-            directory.CreateAccount(tester);
-            this.fixture.CreatedAccountHrefs.Add(tester.Href);
-
-            // Retry up to 3 times if CDS infrastructure isn't ready yet
-            Policy.Handle<ShouldAssertException>()
-                .WaitAndRetry(Delay.CustomDataRetry)
-                .Execute( () =>
-                {
-                    var foundAccount = directory.GetAccounts()
-                        .Where(account => ((DateTimeOffset)account.CustomData["birthday"]).Within(1982)).Synchronously().SingleOrDefault();
-
-                    foundAccount.ShouldNotBeNull();
-
-                    foundAccount.Href.ShouldBe(tester.Href);
-                });
-
-            // Cleanup
-            (tester.Delete()).ShouldBeTrue();
-            this.fixture.CreatedAccountHrefs.Remove(tester.Href);
+            // Report
+            if (result.Outcome == OutcomeType.Failure)
+            {
+                throw result.FinalException;
+            }
         }
 
         [Theory]
@@ -224,9 +206,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            Policy.Handle<ShouldAssertException>()
+            var result = Policy.Handle<ShouldAssertException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
-                .Execute( () =>
+                .ExecuteAndCapture(() =>
                 {
                     var foundAccount = directory.GetAccounts()
                         .Where(account => (int)account.CustomData["birthday"] >= 1982 && (int)account.CustomData["birthday"] <= 1983).Synchronously().SingleOrDefault();
@@ -239,6 +221,12 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             // Cleanup
             (tester.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester.Href);
+
+            // Report
+            if (result.Outcome == OutcomeType.Failure)
+            {
+                throw result.FinalException;
+            }
         }
 
         [Theory]
@@ -260,9 +248,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            Policy.Handle<ShouldAssertException>()
+            var result = Policy.Handle<ShouldAssertException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
-                .Execute(() =>
+                .ExecuteAndCapture(() =>
                 {
                     var foundAccount1 = directory.GetAccounts()
                         .Where(account => (int)account.CustomData["score"] < 100).Synchronously().SingleOrDefault();
@@ -280,6 +268,12 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             // Cleanup
             (tester.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester.Href);
+
+            // Report
+            if (result.Outcome == OutcomeType.Failure)
+            {
+                throw result.FinalException;
+            }
         }
 
         [Theory]
@@ -301,9 +295,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedAccountHrefs.Add(tester.Href);
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            Policy.Handle<ShouldAssertException>()
+            var result = Policy.Handle<ShouldAssertException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
-                .Execute(() =>
+                .ExecuteAndCapture(() =>
                 {
                     var foundAccount1 = directory.GetAccounts()
                         .Where(account => (float)account.CustomData["stdDev"] < 3.WithPlaces(5)).Synchronously().SingleOrDefault();
@@ -321,6 +315,12 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             // Cleanup
             (tester.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester.Href);
+
+            // Report
+            if (result.Outcome == OutcomeType.Failure)
+            {
+                throw result.FinalException;
+            }
         }
 
         [Theory]
@@ -353,9 +353,9 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedAccountHrefs.Add(tester2.Href);
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
-            Policy.Handle<ShouldAssertException>()
+            var result = Policy.Handle<ShouldAssertException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
-                .Execute(() =>
+                .ExecuteAndCapture(() =>
                 {
                     var foundAccount1 = directory.GetAccounts()
                         .OrderBy(x => x.CustomData["score"])
@@ -379,6 +379,12 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedAccountHrefs.Remove(tester1.Href);
             (tester2.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester2.Href);
+
+            // Report
+            if (result.Outcome == OutcomeType.Failure)
+            {
+                throw result.FinalException;
+            }
         }
     }
 }
