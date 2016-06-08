@@ -143,6 +143,7 @@
     <Compile Include="ProductGuide\Authentication.vb" />
     <Compile Include="ProductGuide\Authorization.vb" />
     <Compile Include="ProductGuide\Configuration.vb" />
+    <Compile Include="ProductGuide\IdSite.vb" />
     <Compile Include="ProductGuide\Multitenancy.vb" />
   </ItemGroup>
   <ItemGroup>
