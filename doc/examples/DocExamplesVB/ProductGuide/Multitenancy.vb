@@ -11,7 +11,7 @@ Namespace DocExamplesVB.ProductGuide
         Public Async Function SearchForGroupsByNameAndRole() As Task
             Dim myDirectory As IDirectory = Nothing
 
-#Region "code/csharp/multitenancy/search_groups_by_name_ex1.cs"
+#Region "code/vbnet/multitenancy/search_groups_by_name_ex1.vb"
 
             Dim roleGroups = Await myDirectory.GetGroups() _
             .Where(Function(group) group.Name.StartsWith("bank-of-a.role.")) _
@@ -19,7 +19,7 @@ Namespace DocExamplesVB.ProductGuide
 
 #End Region
 
-#Region "code/csharp/multitenancy/search_groups_by_name_ex2.cs"
+#Region "code/vbnet/multitenancy/search_groups_by_name_ex2.vb"
 
             Dim tenantGroups = Await myDirectory.GetGroups() _
             .Where(Function(group) group.Name.StartsWith("bank-of-a.")) _
@@ -31,7 +31,7 @@ Namespace DocExamplesVB.ProductGuide
         Public Async Function CreateOrganization() As Task
             Dim client As IClient = Nothing
 
-#Region "code/csharp/multitenancy/create_org_req.cs"
+#Region "code/vbnet/multitenancy/create_org_req.vb"
 
             Dim bankOfAOrg = client.Instantiate(Of IOrganization)() _
             .SetName("Bank of A") _
@@ -47,7 +47,7 @@ Namespace DocExamplesVB.ProductGuide
             Dim bankOfAOrg As IOrganization = Nothing
             Dim existingDirectory As IDirectory = Nothing
 
-#Region "code/csharp/multitenancy/asm_to_org.cs"
+#Region "code/vbnet/multitenancy/asm_to_org.vb"
 
             ' With a reference to an IDirectory:
             Dim newMapping = Await bankOfAOrg.AddAccountStoreAsync(existingDirectory)
@@ -57,7 +57,7 @@ Namespace DocExamplesVB.ProductGuide
 
 #End Region
 
-#Region "code/csharp/multitenancy/asm_to_org_with_default_req.cs"
+#Region "code/vbnet/multitenancy/asm_to_org_with_default_req.vb"
 
             newMapping.SetDefaultAccountStore(True) _
                 .SetDefaultGroupStore(True)
@@ -72,7 +72,7 @@ Namespace DocExamplesVB.ProductGuide
             Dim bankOfAOrg As IOrganization = Nothing
             Dim existingDirectory As IDirectory = Nothing
 
-#Region "code/csharp/multitenancy/create_oasm_full_req.cs"
+#Region "code/vbnet/multitenancy/create_oasm_full_req.vb"
 
             Dim newMapping = client.Instantiate(Of IOrganizationAccountStoreMapping)() _
                 .SetAccountStore(existingDirectory) _
@@ -89,7 +89,7 @@ Namespace DocExamplesVB.ProductGuide
             Dim client As IClient = Nothing
             Dim bankOfAOrg As IOrganization = Nothing
 
-#Region "code/csharp/multitenancy/create_oasm_full_req.cs"
+#Region "code/vbnet/multitenancy/create_oasm_full_req.vb"
 
             Dim chewie = client.Instantiate(Of IAccount)() _
                 .SetGivenName("Chewbacca") _
@@ -103,9 +103,6 @@ Namespace DocExamplesVB.ProductGuide
 
 #End Region
         End Function
-
-
-#Region FIX THEM ALL
 
     End Class
 

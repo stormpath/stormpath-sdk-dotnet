@@ -47,7 +47,7 @@ Public Class Configuration
     End Sub
 
     Public Sub ConfigureBaseUrl()
-#Region "code/vbnet/configuration/use_enterprise_url.cs"
+#Region "code/vbnet/configuration/use_enterprise_url.vb"
         Dim client = Clients.Builder() _
             .SetBaseUrl("https://enterprise.stormpath.io/v1") _
             .Build()

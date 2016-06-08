@@ -272,7 +272,7 @@ Public Class Account_Management
     Public Async Function UpdatePreventReuse() As Task
         Dim myDirectory As IDirectory = Nothing
 
-#Region "update_prevent_reuse.cs"
+#Region "update_prevent_reuse.vb"
         Dim passwordPolicy = Await myDirectory.GetPasswordPolicyAsync()
         Dim strengthPolicy = Await passwordPolicy.GetPasswordStrengthPolicyAsync()
 
