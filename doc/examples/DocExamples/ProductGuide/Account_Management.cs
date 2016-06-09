@@ -34,7 +34,7 @@ namespace DocExamples.ProductGuide
 
         public async Task CreateCloudDirectory()
         {
-            #region create_cloud_dir_req.cs
+            #region code/csharp/account_management/create_cloud_dir_req.cs
             var captainsDirectory = await client.CreateDirectoryAsync(
                 "Captains", 
                 "Captains from a variety of stories",
@@ -46,7 +46,7 @@ namespace DocExamples.ProductGuide
         {
             IDirectory myDirectory = null;
 
-            #region search_directory_group_description1.cs
+            #region code/csharp/account_management/search_directory_group_description1.cs
             var groupsInUS = await myDirectory
                 .GetGroups()
                 .Where(g => g.Description.Contains("/US"))
@@ -58,7 +58,7 @@ namespace DocExamples.ProductGuide
         {
             IDirectory myDirectory = null;
 
-            #region search_directory_group_description2.cs
+            #region code/csharp/account_management/search_directory_group_description2.cs
             var groupsInUSEast = await myDirectory
                 .GetGroups()
                 .Where(g => g.Description.Contains("/US East"))
@@ -70,7 +70,7 @@ namespace DocExamples.ProductGuide
         {
             IDirectory captainsDirectory = null;
 
-            #region create_group_req.cs
+            #region code/csharp/account_management/create_group_req.cs
             var officersGroup = await captainsDirectory.CreateGroupAsync(
                 "Starfleet Officers",
                 "Commissioned officers in Starfleet");
@@ -81,7 +81,7 @@ namespace DocExamples.ProductGuide
         {
             IDirectory captainsDirectory = null;
 
-            #region create_disabled_group_req.cs
+            #region code/csharp/account_management/create_disabled_group_req.cs
             var officersGroup = client.Instantiate<IGroup>()
                 .SetName("Starfleet Officers")
                 .SetDescription("Commissioned officers in Starfleet")
@@ -94,7 +94,7 @@ namespace DocExamples.ProductGuide
         {
             IDirectory captainsDirectory = null;
 
-            #region create_account_in_dir_req.cs
+            #region code/csharp/account_management/create_account_in_dir_req.cs
             var picard = client.Instantiate<IAccount>()
                 .SetUsername("jlpicard")
                 .SetEmail("capt@enterprise.com")
@@ -110,7 +110,7 @@ namespace DocExamples.ProductGuide
             IGroup officersGroup = null;
             IAccount picard = null;
 
-            #region add_account_to_group_req.cs
+            #region code/csharp/account_management/add_account_to_group_req.cs
             await officersGroup.AddAccountAsync(picard);
             #endregion
         }
@@ -120,7 +120,7 @@ namespace DocExamples.ProductGuide
             IDirectory myDirectory = null;
             IAccount acct = null;
 
-            #region create_account_disable_reg_workflow.cs
+            #region code/csharp/account_management/create_account_disable_reg_workflow.cs
             await myDirectory.CreateAccountAsync(acct, opt => opt.RegistrationWorkflowEnabled = false);
             #endregion
         }
@@ -130,7 +130,7 @@ namespace DocExamples.ProductGuide
             IDirectory myDirectory = null;
             IAccount acct = null;
 
-            #region create_account_mcf_hash.cs
+            #region code/csharp/account_management/create_account_mcf_hash.cs
             await myDirectory.CreateAccountAsync(acct, opt => opt.PasswordFormat = PasswordFormat.MCF);
             #endregion
         }
@@ -139,7 +139,7 @@ namespace DocExamples.ProductGuide
         {
             IAccount picard = null;
 
-            #region add_cd_to_account_req.cs
+            #region code/csharp/account_management/add_cd_to_account_req.cs
             picard.CustomData["currentAssignment"] = "USS Enterprise (NCC-1701-E)";
             await picard.SaveAsync();
             #endregion
@@ -149,7 +149,7 @@ namespace DocExamples.ProductGuide
         {
             IApplication myApplication = null;
 
-            #region search_app_accounts_for_word_req.cs
+            #region code/csharp/account_management/search_app_accounts_for_word_req.cs
             var accountsContainingLuc = await myApplication
                 .GetAccounts()
                 .Filter("Luc")
@@ -161,7 +161,7 @@ namespace DocExamples.ProductGuide
         {
             IDirectory myDirectory = null;
 
-            #region search_dir_accounts_for_disabled_req.cs
+            #region code/csharp/account_management/search_dir_accounts_for_disabled_req.cs
             var disabledAccounts = await myDirectory
                 .GetAccounts()
                 .Where(acct => acct.Status == AccountStatus.Disabled)
@@ -173,7 +173,7 @@ namespace DocExamples.ProductGuide
         {
             IDirectory myDirectory = null;
 
-            #region search_dir_accounts_for_create_date_req.cs
+            #region code/csharp/account_management/search_dir_accounts_for_create_date_req.cs
             var accountsModifiedOnDec1 = await myDirectory
                 .GetAccounts()
                 .Where(acct => acct.ModifiedAt.Within(2015, 12, 01))
@@ -185,7 +185,7 @@ namespace DocExamples.ProductGuide
         {
             IDirectory myDirectory = null;
 
-            #region search_dir_accounts_for_create_after_date_req.cs
+            #region code/csharp/account_management/search_dir_accounts_for_create_after_date_req.cs
             var accountsCreatedAfterMidnightJan5 = await myDirectory
                 .GetAccounts()
                 // Jan 5 2016, midnight GMT
@@ -198,7 +198,7 @@ namespace DocExamples.ProductGuide
         {
             IAccount picard = null;
 
-            #region update_account_pwd.cs
+            #region code/csharp/account_management/update_account_pwd.cs
             picard.SetPassword("some_New+Value1234");
             await picard.SaveAsync();
             #endregion
@@ -208,7 +208,7 @@ namespace DocExamples.ProductGuide
         {
             IApplication myApplication = null;
 
-            #region reset1_trigger_req.cs
+            #region code/csharp/account_management/reset1_trigger_req.cs
             var token = await myApplication.SendPasswordResetEmailAsync("phasma@empire.gov");
             #endregion
         }
@@ -218,7 +218,7 @@ namespace DocExamples.ProductGuide
             IApplication myApplication = null;
             Stormpath.SDK.AccountStore.IAccountStore someAccountStore = null;
 
-            #region reset1_trigger_req_accountstore.cs
+            #region code/csharp/account_management/reset1_trigger_req_accountstore.cs
             var token = await myApplication.SendPasswordResetEmailAsync(
                 "phasma@empire.gov", someAccountStore);
             #endregion
@@ -229,7 +229,7 @@ namespace DocExamples.ProductGuide
             IApplication myApplication = null;
             string tokenFromRequest = null;
 
-            #region reset2_verify_token.cs
+            #region code/csharp/account_management/reset2_verify_token.cs
             try
             {
                 var account = await myApplication.VerifyPasswordResetTokenAsync(tokenFromRequest);
@@ -247,7 +247,7 @@ namespace DocExamples.ProductGuide
             string tokenFromRequest = null;
             string newPassword = null;
 
-            #region reset3_update.cs
+            #region code/csharp/account_management/reset3_update.cs
             await myApplication.ResetPasswordAsync(tokenFromRequest, newPassword);
             #endregion
         }
@@ -256,7 +256,7 @@ namespace DocExamples.ProductGuide
         {
             string tokenFromRequest = null;
 
-            #region verify_email_req.cs
+            #region code/csharp/account_management/verify_email_req.cs
             try
             {
                 var account = await client.VerifyAccountEmailAsync(tokenFromRequest);
@@ -272,7 +272,7 @@ namespace DocExamples.ProductGuide
         {
             IApplication myApplication = null;
 
-            #region resend_verification_email.cs
+            #region code/csharp/account_management/resend_verification_email.cs
             await myApplication.SendVerificationEmailAsync("han@newrepublic.gov");
             #endregion
         }
@@ -281,7 +281,7 @@ namespace DocExamples.ProductGuide
         {
             IDirectory myDirectory = null;
 
-            #region update_dir_pwd_strength_req.cs
+            #region code/csharp/account_management/update_dir_pwd_strength_req.cs
             // Get the Password Strength Policy from the Directory's Password Policy resource
             var passwordPolicy = await myDirectory.GetPasswordPolicyAsync();
             var strengthPolicy = await passwordPolicy.GetPasswordStrengthPolicyAsync();
@@ -298,7 +298,7 @@ namespace DocExamples.ProductGuide
         {
             IDirectory myDirectory = null;
 
-            #region enable_pwd_reset_email.cs
+            #region code/csharp/account_management/enable_pwd_reset_email.cs
             var passwordPolicy = await myDirectory.GetPasswordPolicyAsync();
 
             passwordPolicy.SetResetEmailStatus(EmailStatus.Enabled);
@@ -310,7 +310,7 @@ namespace DocExamples.ProductGuide
         {
             IDirectory myDirectory = null;
 
-            #region search_password_modified.cs
+            #region code/csharp/account_management/search_password_modified.cs
             var passwordsModifiedIn2015 = await myDirectory.GetAccounts()
                 .Where(acct => acct.PasswordModifiedAt < new DateTimeOffset(2016, 1, 1, 0, 0, 0, TimeSpan.Zero))
                 .ToListAsync();
@@ -321,7 +321,7 @@ namespace DocExamples.ProductGuide
         {
             IDirectory myDirectory = null;
 
-            #region update_prevent_reuse.cs
+            #region code/csharp/account_management/update_prevent_reuse.cs
             var passwordPolicy = await myDirectory.GetPasswordPolicyAsync();
             var strengthPolicy = await passwordPolicy.GetPasswordStrengthPolicyAsync();
 

@@ -12,7 +12,7 @@ Public Class Account_Management
     Private client As IClient = Nothing
 
     Public Async Function CreateCloudDirectory() As Task
-#Region "create_cloud_dir_req.vb"
+#Region "code/vbnet/account_management/create_cloud_dir_req.vb"
         Dim captainsDirectory = Await client.CreateDirectoryAsync("Captains",
                                                                   "Captains from a variety of stories",
                                                                   DirectoryStatus.Enabled)
@@ -22,7 +22,7 @@ Public Class Account_Management
     Public Async Function SearchDirectoryGroupDescription1() As Task
         Dim myDirectory As IDirectory = Nothing
 
-#Region "search_directory_group_description1.vb"
+#Region "code/vbnet/account_management/search_directory_group_description1.vb"
         Dim groupsInUS = Await myDirectory _
             .GetGroups() _
             .Where(Function(g) g.Description.Contains("/US")) _
@@ -33,7 +33,7 @@ Public Class Account_Management
     Public Async Function SearchDirectoryGroupDescription2() As Task
         Dim myDirectory As IDirectory = Nothing
 
-#Region "search_directory_group_description2.vb"
+#Region "code/vbnet/account_management/search_directory_group_description2.vb"
         Dim groupsInUSEast = Await myDirectory _
             .GetGroups() _
             .Where(Function(g) g.Description.Contains("/US East")) _
@@ -44,7 +44,7 @@ Public Class Account_Management
     Public Async Function CreateDirectoryGroup() As Task
         Dim captainsDirectory As IDirectory = Nothing
 
-#Region "create_group_req.vb"
+#Region "code/vbnet/account_management/create_group_req.vb"
         Dim officersGroup = Await captainsDirectory.CreateGroupAsync(
             "Starfleet Officers",
             "Commissioned officers in Starfleet")
@@ -54,7 +54,7 @@ Public Class Account_Management
     Public Async Function CreateDirectoryGroupDisabled() As Task
         Dim captainsDirectory As IDirectory = Nothing
 
-#Region "create_disabled_group_req.vb"
+#Region "code/vbnet/account_management/create_disabled_group_req.vb"
         Dim officersGroup = client.Instantiate(Of IGroup)() _
             .SetName("Starfleet Officers") _
             .SetDescription("Commissioned officers in Starfleet") _
@@ -66,7 +66,7 @@ Public Class Account_Management
     Public Async Function CreateDirectoryAccount() As Task
         Dim captainsDirectory As IDirectory = Nothing
 
-#Region "create_account_in_dir_req.vb"
+#Region "code/vbnet/account_management/create_account_in_dir_req.vb"
         Dim picard = client.Instantiate(Of IAccount)() _
             .SetUsername("jlpicard") _
             .SetEmail("capt@enterprise.com") _
@@ -81,7 +81,7 @@ Public Class Account_Management
         Dim officersGroup As IGroup = Nothing
         Dim picard As IAccount = Nothing
 
-#Region "add_account_to_group_req.vb"
+#Region "code/vbnet/account_management/add_account_to_group_req.vb"
         Await officersGroup.AddAccountAsync(picard)
 #End Region
     End Function
@@ -90,7 +90,7 @@ Public Class Account_Management
         Dim myDirectory As IDirectory = Nothing
         Dim acct As IAccount = Nothing
 
-#Region "create_account_disable_reg_workflow.vb"
+#Region "code/vbnet/account_management/create_account_disable_reg_workflow.vb"
         Await myDirectory.CreateAccountAsync(
             acct, Function(opt) opt.RegistrationWorkflowEnabled = False)
 #End Region
@@ -100,7 +100,7 @@ Public Class Account_Management
         Dim myDirectory As IDirectory = Nothing
         Dim acct As IAccount = Nothing
 
-#Region "create_account_mcf_hash.vb"
+#Region "code/vbnet/account_management/create_account_mcf_hash.vb"
         Await myDirectory.CreateAccountAsync(
             acct, Function(opt) opt.PasswordFormat = PasswordFormat.MCF)
 #End Region
@@ -109,7 +109,7 @@ Public Class Account_Management
     Public Async Function AddCustomDataToAccount() As Task
         Dim picard As IAccount = Nothing
 
-#Region "add_cd_to_account_req.vb"
+#Region "code/vbnet/account_management/add_cd_to_account_req.vb"
         picard.CustomData("currentAssignment") = "USS Enterprise (NCC-1701-E)"
         Await picard.SaveAsync()
 #End Region
@@ -118,7 +118,7 @@ Public Class Account_Management
     Public Async Function SearchApplicationAccountsForWord() As Task
         Dim myApplication As IApplication = Nothing
 
-#Region "search_app_accounts_for_word_req.vb"
+#Region "code/vbnet/account_management/search_app_accounts_for_word_req.vb"
         Dim accountsContainingLuc = Await myApplication _
             .GetAccounts() _
             .Filter("Luc") _
@@ -129,7 +129,7 @@ Public Class Account_Management
     Public Async Function SearchDirectoryAccountsForDisabled() As Task
         Dim myDirectory As IDirectory = Nothing
 
-#Region "search_dir_accounts_for_disabled_req.vb"
+#Region "code/vbnet/account_management/search_dir_accounts_for_disabled_req.vb"
         Dim disabledAccounts = Await myDirectory _
             .GetAccounts() _
             .Where(Function(acct) acct.Status = AccountStatus.Disabled) _
@@ -140,7 +140,7 @@ Public Class Account_Management
     Public Async Function SearchDirectoryAccountsByDatetimeWithin() As Task
         Dim myDirectory As IDirectory = Nothing
 
-#Region "search_dir_accounts_for_create_date_req.vb"
+#Region "code/vbnet/account_management/search_dir_accounts_for_create_date_req.vb"
         Dim accountsModifiedOnDec1 = Await myDirectory _
             .GetAccounts() _
             .Where(Function(acct) acct.ModifiedAt.Within(2015, 12, 1)) _
@@ -151,7 +151,7 @@ Public Class Account_Management
     Public Async Function SearchDirectoryAccountsByDatetimeGreaterThan() As Task
         Dim myDirectory As IDirectory = Nothing
 
-#Region "search_dir_accounts_for_create_after_date_req.vb"
+#Region "code/vbnet/account_management/search_dir_accounts_for_create_after_date_req.vb"
         Dim accountsCreatedAfterMidnightJan5 = Await myDirectory _
             .GetAccounts() _
             .Where(Function(acct) acct.CreatedAt > New DateTimeOffset(2016, 1, 5, 0, 0, 0, TimeSpan.Zero)) _
@@ -162,7 +162,7 @@ Public Class Account_Management
     Public Async Function UpdateAccountPassword() As Task
         Dim picard As IAccount = Nothing
 
-#Region "update_account_pwd.vb"
+#Region "code/vbnet/account_management/update_account_pwd.vb"
         picard.SetPassword("some_New+Value1234")
         Await picard.SaveAsync()
 #End Region
@@ -171,7 +171,7 @@ Public Class Account_Management
     Public Async Function ResetPassword() As Task
         Dim myApplication As IApplication = Nothing
 
-#Region "reset1_trigger_req.vb"
+#Region "code/vbnet/account_management/reset1_trigger_req.vb"
         Dim token = Await myApplication.SendPasswordResetEmailAsync("phasma@empire.gov")
 #End Region
     End Function
@@ -180,7 +180,7 @@ Public Class Account_Management
         Dim myApplication As IApplication = Nothing
         Dim someAccountStore As Stormpath.SDK.AccountStore.IAccountStore = Nothing
 
-#Region "reset1_trigger_req_accountstore.vb"
+#Region "code/vbnet/account_management/reset1_trigger_req_accountstore.vb"
         Dim token = Await myApplication.SendPasswordResetEmailAsync(
             "phasma@empire.gov", someAccountStore)
 #End Region
@@ -190,7 +190,7 @@ Public Class Account_Management
         Dim myApplication As IApplication = Nothing
         Dim tokenFromRequest As String = Nothing
 
-#Region "reset2_verify_token.vb"
+#Region "code/vbnet/account_management/reset2_verify_token.vb"
         Try
             Dim account = Await myApplication.VerifyPasswordResetTokenAsync(tokenFromRequest)
         Catch rex As ResourceException
@@ -204,7 +204,7 @@ Public Class Account_Management
         Dim tokenFromRequest As String = Nothing
         Dim newPassword As String = Nothing
 
-#Region "reset3_update.vb"
+#Region "code/vbnet/account_management/reset3_update.vb"
         Await myApplication.ResetPasswordAsync(tokenFromRequest, newPassword)
 #End Region
     End Function
@@ -212,7 +212,7 @@ Public Class Account_Management
     Public Async Function VerifyEmailFinish() As Task
         Dim tokenFromRequest As String = Nothing
 
-#Region "verify_email_req.vb"
+#Region "code/vbnet/account_management/verify_email_req.vb"
         Try
             Dim account = Await client.VerifyAccountEmailAsync(tokenFromRequest)
         Catch rex As ResourceException
@@ -224,7 +224,7 @@ Public Class Account_Management
     Public Async Function ResendVerificationEmail() As Task
         Dim myApplication As IApplication = Nothing
 
-#Region "resend_verification_email.vb"
+#Region "code/vbnet/account_management/resend_verification_email.vb"
         Await myApplication.SendVerificationEmailAsync("han@newrepublic.gov")
 #End Region
     End Function
@@ -233,7 +233,7 @@ Public Class Account_Management
     Public Async Function UpdatePasswordStrengthPolicy() As Task
         Dim myDirectory As IDirectory = Nothing
 
-#Region "update_dir_pwd_strength_req.vb"
+#Region "code/vbnet/account_management/update_dir_pwd_strength_req.vb"
         ' Get the Password Strength Policy from the Directory's Password Policy resource
         Dim passwordPolicy = Await myDirectory.GetPasswordPolicyAsync()
         Dim strengthPolicy = Await passwordPolicy.GetPasswordStrengthPolicyAsync()
@@ -250,7 +250,7 @@ Public Class Account_Management
     Public Async Function EnablePasswordResetEmail() As Task
         Dim myDirectory As IDirectory = Nothing
 
-#Region "enable_pwd_reset_email.vb"
+#Region "code/vbnet/account_management/enable_pwd_reset_email.vb"
         Dim passwordPolicy = Await myDirectory.GetPasswordPolicyAsync()
 
         passwordPolicy.SetResetEmailStatus(EmailStatus.Enabled)
@@ -262,7 +262,7 @@ Public Class Account_Management
     Public Async Function SearchPasswordModified() As Task
         Dim myDirectory As IDirectory = Nothing
 
-#Region "search_password_modified.vb"
+#Region "code/vbnet/account_management/search_password_modified.vb"
         Dim passwordsModifiedIn2015 = Await myDirectory.GetAccounts() _
             .Where(Function(acct) acct.PasswordModifiedAt < New DateTimeOffset(2016, 1, 1, 0, 0, 0, TimeSpan.Zero)) _
             .ToListAsync()
@@ -272,7 +272,7 @@ Public Class Account_Management
     Public Async Function UpdatePreventReuse() As Task
         Dim myDirectory As IDirectory = Nothing
 
-#Region "update_prevent_reuse.vb"
+#Region "code/vbnet/account_management/update_prevent_reuse.vb"
         Dim passwordPolicy = Await myDirectory.GetPasswordPolicyAsync()
         Dim strengthPolicy = Await passwordPolicy.GetPasswordStrengthPolicyAsync()
 

@@ -5,7 +5,7 @@
     PluginError = require('gulp-util').PluginError,
     File = require('vinyl');
 
-var inputGlob = "./ProductGuide/*.cs";
+var inputGlob = "./ProductGuide/*.vb";
 var outputPath = "../../examples-output/";
 
 gulp.task("clean", function (cb) {
@@ -56,8 +56,8 @@ function extractSamples() {
 }
 
 function parseFile(data) {
-  var startToken = "#region";
-  var endToken = "#endregion";
+  var startToken = "#Region";
+  var endToken = "#End Region";
   var pos = 0;
 
   var extracted = [];
@@ -72,6 +72,8 @@ function parseFile(data) {
     var eol = data.indexOf(os.EOL, start);
 
     var name = data.substring(start + startToken.length, eol).trim();
+    name = trimStart('"', name);
+    name = trimEnd('"', name);
 
     start = eol + os.EOL.length;
 
@@ -120,6 +122,17 @@ function trimStart(stringToRemove, input) {
     }
 
     return input.substr(startIndex);
+}
+
+function trimEnd(stringToRemove, input) {
+    var endIndex = input.length;
+    var len = stringToRemove.length;
+
+    while (input.substr(endIndex - len, len) === stringToRemove) {
+        endIndex -= len;
+    }
+
+    return input.substr(0, endIndex);
 }
 
 function trimEndWhitespace(input) {
