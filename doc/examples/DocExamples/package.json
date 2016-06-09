@@ -1,0 +1,11 @@
+{
+  "name": "docexamples",
+  "version": "0.9.1",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-file": "^0.3.0",
+    "gulp-file-parser": "0.0.1",
+    "rimraf": "^2.5.2",
+    "through2": "^2.0.1"
+  }
+}
