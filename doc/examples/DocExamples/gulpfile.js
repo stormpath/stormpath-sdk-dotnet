@@ -1,12 +1,9 @@
 ﻿var gulp = require("gulp"),
     rimraf = require("rimraf"),
     through = require("through2"),
-    file = require("gulp-file"),
-    parser = require('gulp-file-parser'),
     os = require('os'),
     PluginError = require('gulp-util').PluginError,
-    File = require('vinyl'),
-    path = require('path');
+    File = require('vinyl');
 
 //var inputGlob = "./**/*.cs";
 var inputGlob = "./ProductGuide/Authentication.cs";
