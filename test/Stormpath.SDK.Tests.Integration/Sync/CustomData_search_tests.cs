@@ -60,6 +60,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 #pragma warning disable CS0252 // Unintended reference comparison
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
                 .ExecuteAndCapture(() =>
                 {
@@ -113,6 +114,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
                 .ExecuteAndCapture(() =>
                 {
@@ -160,6 +162,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
                 .ExecuteAndCapture(() =>
                 {
@@ -207,6 +210,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
                 .ExecuteAndCapture(() =>
                 {
@@ -249,6 +253,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
                 .ExecuteAndCapture(() =>
                 {
@@ -296,6 +301,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
                 .ExecuteAndCapture(() =>
                 {
@@ -354,6 +360,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetry(Delay.CustomDataRetry)
                 .ExecuteAndCapture(() =>
                 {

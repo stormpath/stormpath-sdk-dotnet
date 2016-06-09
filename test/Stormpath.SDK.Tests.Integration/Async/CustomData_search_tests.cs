@@ -113,6 +113,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = await Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetryAsync(Delay.CustomDataRetry)
                 .ExecuteAndCaptureAsync(async () =>
                 {
@@ -160,6 +161,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = await Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetryAsync(Delay.CustomDataRetry)
                 .ExecuteAndCaptureAsync(async () =>
                 {
@@ -207,6 +209,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = await Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetryAsync(Delay.CustomDataRetry)
                 .ExecuteAndCaptureAsync(async () =>
                 {
@@ -249,6 +252,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = await Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetryAsync(Delay.CustomDataRetry)
                 .ExecuteAndCaptureAsync(async () =>
                 {
@@ -296,6 +300,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = await Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetryAsync(Delay.CustomDataRetry)
                 .ExecuteAndCaptureAsync(async () =>
                 {
@@ -354,6 +359,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Retry up to 3 times if CDS infrastructure isn't ready yet
             var result = await Policy.Handle<ShouldAssertException>()
+                .Or<InvalidOperationException>()
                 .WaitAndRetryAsync(Delay.CustomDataRetry)
                 .ExecuteAndCaptureAsync(async () =>
                 {
