@@ -15,11 +15,11 @@ gulp.task("clean", function (cb) {
 
 gulp.task("extract-samples", ["clean"], function () {
     gulp.src(inputGlob)
-        .pipe(extract())
+        .pipe(extractSamples())
         .pipe(gulp.dest(outputPath));
 });
 
-function extract() {
+function extractSamples() {
   var self = this;
 
   return through.obj(function (file, enc, cb) {
@@ -28,7 +28,7 @@ function extract() {
     }
 
     if (file.isStream()) {
-      self.emit('error', new PluginError("foobar", "Streams aren't supported."));
+      self.emit("error", new PluginError("gulp-extract-samples", "Streams aren't supported."));
       return cb();
     }
 
@@ -37,12 +37,12 @@ function extract() {
 
       var extracted = parseFile(contents);
 
-      // check for file without splits
+      // check for file without samples
       if (extracted.length === 0) {
         return cb(null, file);
       }
 
-      // create a new Vinyl file for each split with content in it
+      // create a new Vinyl file for each sample
       extracted.forEach(function (s) {
         this.push(new File({
           path: s.name,
@@ -82,9 +82,10 @@ function parseFile(data) {
     }
 
     var contents = data.substring(start, end);
+    contents = trimStart(os.EOL, contents);
+    contents = trimEndWhitespace(contents);
 
     var indentation = findIndentation(contents);
-
     contents = reduceWhitespace(contents, indentation);
 
     extracted.push({ name: name, contents: contents });
@@ -101,6 +102,7 @@ function findIndentation(input) {
   return first.search(/\S|$/);
 }
 
+// Removes the specified amount of whitespace from the beginning of each line
 function reduceWhitespace(input, normativeWhitespace) {
     return input
         .split(os.EOL)
@@ -108,4 +110,19 @@ function reduceWhitespace(input, normativeWhitespace) {
             return line.substring(normativeWhitespace);
         })
         .join(os.EOL);
+}
+
+function trimStart(stringToRemove, input) {
+    var startIndex = 0;
+    var len = stringToRemove.length;
+
+    while (input.substr(startIndex, len) === stringToRemove) {
+        startIndex += len;
+    }
+
+    return input.substr(startIndex);
+}
+
+function trimEndWhitespace(input) {
+    return input.replace(/\s*$/, "");
 }
