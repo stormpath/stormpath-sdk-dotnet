@@ -24,10 +24,9 @@ namespace Stormpath.SDK.Tests.Common
 
         public static TimeSpan ReasonableTestRunWindow = TimeSpan.FromMinutes(10);
 
-        public static readonly TimeSpan[] CustomDataRetry = new TimeSpan[]
-        {
+        public static readonly TimeSpan[] CustomDataRetry = {
+            TimeSpan.FromSeconds(1),
             TimeSpan.FromSeconds(5),
-            TimeSpan.FromSeconds(10),
             TimeSpan.FromSeconds(20),
             TimeSpan.FromSeconds(25)
         };
