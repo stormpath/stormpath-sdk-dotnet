@@ -6,7 +6,7 @@
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
     "Polyglot": "1.1.0",
-    "Stormpath.Configuration": "5.1.0",
+    "Stormpath.Configuration": "5.1.1",
     "Stormpath.SDK.Abstractions": {
       "target": "project",
       "version": "0.9.1"
@@ -53,5 +53,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK"
   },
-  "version": "0.9.1"
+  "version": "0.9.2"
 }
