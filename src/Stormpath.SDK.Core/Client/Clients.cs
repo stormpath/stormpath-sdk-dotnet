@@ -18,7 +18,6 @@ using Stormpath.SDK.Impl.Client;
 
 #if !NET45 && !NET451
 using System.Runtime.CompilerServices;
-using Microsoft.Extensions.PlatformAbstractions;
 #endif
 
 namespace Stormpath.SDK.Client
@@ -62,10 +61,7 @@ namespace Stormpath.SDK.Client
 
             language = new DnxCallerFileLanguageDetector(callerFilePath).Language;
 
-            var userAgentBuilder = new DnxUserAgentBuilder(
-                runtimeEnvironment: PlatformServices.Default.Runtime,
-                appEnvironment: PlatformServices.Default.Application,
-                language: language);
+            var userAgentBuilder = new DnxUserAgentBuilder(language);
 
             return new DefaultClientBuilder(userAgentBuilder);
         }

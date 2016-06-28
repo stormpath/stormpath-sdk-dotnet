@@ -16,6 +16,8 @@
 
 #if NET45 || NET451
 using System;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using Stormpath.SDK.Impl.Introspection;
 
 namespace Stormpath.SDK.Impl.Client
@@ -31,41 +33,61 @@ namespace Stormpath.SDK.Impl.Client
 
         public Net451UserAgentBuilder(IPlatform platformInfo, ISdk sdkInfo, string language)
         {
-            this.platform = platformInfo;
-            this.sdk = sdkInfo;
+            //this.platform = platformInfo;
+            //this.sdk = sdkInfo;
             this.language = language;
 
-            this.userAgentValue = new Lazy<string>(() => this.Generate());
+            this.userAgentValue = new Lazy<string>(Generate);
         }
 
         public string GetUserAgent() => this.userAgentValue.Value;
 
         private string Generate()
         {
+            var sdkToken = $"stormpath-sdk-dotnet/{GetSdkVersion()}";
+
+            var languageToken = string.IsNullOrEmpty(this.language)
+                ? string.Empty
+                : $"lang/{language.ToLower()}";
+
+            var runtimeToken = $"runtime/{RuntimeInformation.FrameworkDescription}";
+
+            var osToken = $"os/{RuntimeInformation.OSDescription}";
+
             return string.Join(
                 " ",
-                $"stormpath-sdk-dotnet/{this.sdk.Version}",
-                $"lang/{this.language.ToString().ToLower()}",
-                this.GetRuntimeInfo(),
-                $"{this.platform.OsName}/{this.platform.OsVersion}")
+                sdkToken,
+                languageToken,
+                runtimeToken,
+                osToken)
             .Trim();
         }
 
-        private string GetRuntimeInfo()
+        private static string GetSdkVersion()
         {
-            string runtimeInfo;
+            var sdkVersion = typeof(Client.DefaultClient).GetTypeInfo()
+                .Assembly
+                .GetName()
+                .Version;
 
-            if (this.platform.IsRunningOnMono)
-            {
-                runtimeInfo = $"mono/{this.platform.MonoRuntimeVersion} mono-dotnetframework/{this.platform.FrameworkVersion}";
-            }
-            else
-            {
-                runtimeInfo = $"dotnetframework/{this.platform.FrameworkVersion}";
-            }
-
-            return runtimeInfo;
+            return $"{sdkVersion.Major}.{sdkVersion.Minor}.{sdkVersion.Build}";
         }
+
+        //private string GetRuntimeInfo()
+        //{
+        //    string runtimeInfo;
+
+        //    if (this.platform.IsRunningOnMono)
+        //    {
+        //        runtimeInfo = $"mono/{this.platform.MonoRuntimeVersion} mono-dotnetframework/{this.platform.FrameworkVersion}";
+        //    }
+        //    else
+        //    {
+        //        runtimeInfo = $"dotnetframework/{this.platform.FrameworkVersion}";
+        //    }
+
+        //    return runtimeInfo;
+        //}
     }
 }
 #endif

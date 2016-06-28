@@ -16,28 +16,22 @@
 
 #if !NET45 && !NET451
 using System;
-using System.Reflection;
-using Microsoft.Extensions.PlatformAbstractions;
+using System.Runtime.InteropServices;
 
 namespace Stormpath.SDK.Impl.Client
 {
     internal class DnxUserAgentBuilder : IUserAgentBuilder
     {
-        // TODO - might need to be updated post-RC3/RTM
-        private readonly RuntimeEnvironment runtime;
-        private readonly ApplicationEnvironment app;
         private readonly string language;
 
         // Lazy ensures this only runs once and is cached.
         private readonly Lazy<string> userAgentValue;
 
-        public DnxUserAgentBuilder(RuntimeEnvironment runtimeEnvironment, ApplicationEnvironment appEnvironment, string language)
+        public DnxUserAgentBuilder(string language)
         {
-            this.runtime = runtimeEnvironment;
-            this.app = appEnvironment;
             this.language = language;
 
-            this.userAgentValue = new Lazy<string>(() => this.Generate());
+            this.userAgentValue = new Lazy<string>(Generate);
         }
 
         public string GetUserAgent() => this.userAgentValue.Value;
@@ -50,15 +44,11 @@ namespace Stormpath.SDK.Impl.Client
 
             var languageToken = string.IsNullOrEmpty(this.language)
                 ? string.Empty
-                : $"lang/{this.language.ToLower()}";
+                : $"lang/{language.ToLower()}";
 
-            var runtimeToken = $"runtime/{this.app.RuntimeFramework.Identifier.ToLower()}{this.app.RuntimeFramework.Version}";
+            var runtimeToken = $"runtime/{RuntimeInformation.FrameworkDescription}";
 
-            var osToken = this.runtime.OperatingSystem;
-            if (!string.IsNullOrEmpty(this.runtime.OperatingSystemVersion))
-            {
-                osToken = $"{osToken}/{this.runtime.OperatingSystemVersion.Replace(" ", "-")}";
-            }
+            var osToken = $"os/{RuntimeInformation.OSDescription}";
 
             return string.Join(" ",
                 sdkToken,
