@@ -9,10 +9,10 @@
   },
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "RestSharp": "105.2.2",
+    "RestSharp": "105.2.3",
     "Stormpath.SDK.Abstractions": {
       "target": "project",
-      "version": "0.9.1"
+      "version": "0.91.0-beta1"
     }
   },
   "description": "RestSharp HTTP plugin for the Stormpath .NET SDK.",
@@ -41,5 +41,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Http"
   },
-  "version": "0.9.1"
+  "version": "0.91.0-beta1"
 }
