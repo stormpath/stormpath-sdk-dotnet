@@ -1,7 +1,11 @@
 {
   "authors": [ "Nate Barbettini" ],
   "buildOptions": {
-    "xmlDoc":  true
+    "nowarn": [
+      "CS1591"
+    ],
+    "warningsAsErrors": true,
+    "xmlDoc": true
   },
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
