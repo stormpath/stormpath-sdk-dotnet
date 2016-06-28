@@ -23,6 +23,9 @@ using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Http.SystemNetHttpClient
 {
+    /// <summary>
+    /// Translates requests and responses to Stormpath SDK interface types.
+    /// </summary>
     public class SystemNetHttpAdapter
     {
         private readonly string baseUrl;
