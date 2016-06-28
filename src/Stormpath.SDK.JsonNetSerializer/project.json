@@ -11,15 +11,13 @@
   "dependencies": {
     "Stormpath.SDK.Abstractions": {
       "target": "project",
-      "version": "0.9.1"
-    }
+      "version": "0.91.0-beta1"
+    },
+    "Newtonsoft.Json": "9.0.1" 
   },
   "description": "JSON.NET serializer plugin for the Stormpath .NET SDK.",
   "frameworks": {
     "net45": {
-      "dependencies": {
-        "Newtonsoft.Json": "8.0.3"
-      },
       "frameworkAssemblies": {
         "System.Runtime": {
           "type": "build",
@@ -27,12 +25,7 @@
         }
       }
     },
-    "netstandard1.1": {
-      "dependencies": {
-        "NETStandard.Library": "1.5.0-rc2-24027",
-        "Newtonsoft.Json": "9.0.1-beta1"
-      }
-    }
+    "netstandard1.1": { }
   },
   "packOptions": {
     "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
@@ -47,5 +40,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Serialization"
   },
-  "version": "0.9.1"
+  "version": "0.91.0-beta1"
 }
