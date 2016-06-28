@@ -17,7 +17,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.PlatformAbstractions;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Cache;
@@ -37,20 +36,6 @@ namespace Stormpath.SDK.Tests
         public User_agent_tests(ITestOutputHelper output)
         {
             this.output = output;
-        }
-
-        [Fact(Skip = "Refactor DNX stuff")]
-        public void Generates_DNX_user_agent()
-        {
-            //var userAgent = new DnxUserAgentBuilder(
-            //        PlatformServices.Default.Runtime,
-            //        PlatformServices.Default.Application,
-            //        language: string.Empty)
-            //    .GetUserAgent();
-
-            //userAgent.ShouldNotContain("unknown");
-
-            //this.output.WriteLine($"UserAgent: {userAgent}");
         }
 
         [Fact]

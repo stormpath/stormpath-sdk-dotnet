@@ -17,10 +17,11 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using FlexibleConfiguration.Abstractions;
 using FluentAssertions;
-using Microsoft.Extensions.PlatformAbstractions;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
@@ -71,7 +72,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     StaticLogger.Instance.Info("Caching statistics:");
                     StaticLogger.Instance.Info(TestClients.GetSAuthc1Client().GetCacheProvider().ToString());
 
-                    var filename = System.IO.Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "its.log");
+                    var filename = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "its.log");
                     StaticLogger.Instance.Info($"Saving log to file {filename}");
                     System.IO.File.WriteAllText(filename, StaticLogger.GetLog());
                 }
@@ -113,7 +114,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
 
         public List<string> CreatedOrganizationHrefs { get; private set; }
 
-        public ILogger Logger { get; } = StaticLogger.Instance;
+        public Stormpath.SDK.Logging.ILogger Logger { get; } = StaticLogger.Instance;
 
         private async Task AddObjectsToTenantAsync()
         {

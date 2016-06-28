@@ -2,19 +2,15 @@
   "authors": [ "Nate Barbettini" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "dotnet-test-xunit": "1.0.0-rc2-build10025",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Microsoft.NETCore.App": {
       "type": "platform",
-      "version": "1.0.0-rc2-3002702"
+      "version": "1.0.0"
     },
-    "Shouldly": "2.7.0",
-    "Stormpath.SDK.Abstractions": {
-      "target": "project",
-      "version": "0.9.1"
-    },
+    "Shouldly": "2.8.0",
     "Stormpath.SDK.JsonNetSerializer": {
       "target": "project",
-      "version": "0.9.1"
+      "version": "0.91.0-beta1"
     },
     "xunit": "2.1.0"
   },
@@ -34,5 +30,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Serialization.JsonNet.Tests"
   },
-  "version": "0.9.1"
+  "version": "0.91.0-beta1"
 }

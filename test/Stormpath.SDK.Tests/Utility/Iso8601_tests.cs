@@ -15,7 +15,6 @@
 // </copyright>
 
 using System;
-using Microsoft.Extensions.PlatformAbstractions;
 using Shouldly;
 using Stormpath.SDK.Impl.Utility;
 using Xunit;
@@ -29,10 +28,11 @@ namespace Stormpath.SDK.Tests.Utility
         {
             var pacificTimeZoneName = "Pacific Standard Time";
 
-            if (PlatformServices.Default.Runtime.RuntimeType == "Mono")
-            {
-                pacificTimeZoneName = "US/Pacific";
-            }
+            // TODO fix this for Mono?
+            //if (PlatformServices.Default.Runtime.RuntimeType == "Mono")
+            //{
+            //    pacificTimeZoneName = "US/Pacific";
+            //}
 
             // Midnight Pacific Time, Jan 1, 2015 = 2015-01-01 08:00 UTC
             var midnightPacificTimeJan1 = new DateTimeOffset(2015, 01, 01, 00, 00, 00, 00, TimeSpan.FromHours(-8));
