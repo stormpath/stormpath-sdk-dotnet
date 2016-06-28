@@ -18,8 +18,8 @@
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="proxy\packages\Stormpath.Configuration.Abstractions.4.0.1\lib\net45\Stormpath.Configuration.Abstractions.dll" />
-<DocumentationSource sourceFile="proxy\packages\Stormpath.Configuration.Abstractions.4.0.1\lib\net45\Stormpath.Configuration.Abstractions.xml" /></DocumentationSources>
+      <DocumentationSource sourceFile="proxy\packages\Stormpath.Configuration.Abstractions.5.2.0\lib\net45\Stormpath.Configuration.Abstractions.dll" />
+<DocumentationSource sourceFile="proxy\packages\Stormpath.Configuration.Abstractions.5.2.0\lib\net45\Stormpath.Configuration.Abstractions.xml" /></DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False" xmlns="" />
       <NamespaceSummaryItem name="Stormpath.Configuration.Abstractions" isDocumented="True" xmlns="">This namespace contains the base configuration abstractions.</NamespaceSummaryItem>

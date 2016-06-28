@@ -4,6 +4,6 @@ using System.Reflection;
 [assembly: AssemblyDescription("Abstractions for the Stormpath .NET SDK.")]
 [assembly: AssemblyCompany("Stormpath, Inc.")]
 [assembly: AssemblyCopyright("(c) 2016 Stormpath, Inc.")]
-[assembly: AssemblyVersion("0.9.1")]
-[assembly: AssemblyFileVersion("0.9.1")]
+[assembly: AssemblyVersion("0.91.0")]
+[assembly: AssemblyFileVersion("0.91.0")]
 
