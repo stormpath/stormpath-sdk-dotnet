@@ -11,7 +11,7 @@
   "dependencies": {
     "Stormpath.SDK.Abstractions": {
       "target": "project",
-      "version": "0.91.0-beta1"
+      "version": "0.91.0"
     },
     "Newtonsoft.Json": "9.0.1" 
   },
@@ -40,5 +40,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Extensions.Serialization"
   },
-  "version": "0.91.0-beta1"
+  "version": "0.91.0"
 }
