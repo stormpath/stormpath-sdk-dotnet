@@ -1,4 +1,4 @@
-﻿// <copyright file="Net451UserAgentBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DefaultUserAgentBuilder.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,27 +14,21 @@
 // limitations under the License.
 // </copyright>
 
-#if NET45 || NET451
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Stormpath.SDK.Impl.Introspection;
 
 namespace Stormpath.SDK.Impl.Client
 {
-    internal class Net451UserAgentBuilder : IUserAgentBuilder
+    internal class DefaultUserAgentBuilder : IUserAgentBuilder
     {
-        private readonly IPlatform platform;
-        private readonly ISdk sdk;
         private readonly string language;
 
         // Lazy ensures this only runs once and is cached.
         private readonly Lazy<string> userAgentValue;
 
-        public Net451UserAgentBuilder(IPlatform platformInfo, ISdk sdkInfo, string language)
+        public DefaultUserAgentBuilder(string language)
         {
-            //this.platform = platformInfo;
-            //this.sdk = sdkInfo;
             this.language = language;
 
             this.userAgentValue = new Lazy<string>(Generate);
@@ -65,29 +59,12 @@ namespace Stormpath.SDK.Impl.Client
 
         private static string GetSdkVersion()
         {
-            var sdkVersion = typeof(Client.DefaultClient).GetTypeInfo()
+            var sdkVersion = typeof(DefaultClient).GetTypeInfo()
                 .Assembly
                 .GetName()
                 .Version;
 
             return $"{sdkVersion.Major}.{sdkVersion.Minor}.{sdkVersion.Build}";
         }
-
-        //private string GetRuntimeInfo()
-        //{
-        //    string runtimeInfo;
-
-        //    if (this.platform.IsRunningOnMono)
-        //    {
-        //        runtimeInfo = $"mono/{this.platform.MonoRuntimeVersion} mono-dotnetframework/{this.platform.FrameworkVersion}";
-        //    }
-        //    else
-        //    {
-        //        runtimeInfo = $"dotnetframework/{this.platform.FrameworkVersion}";
-        //    }
-
-        //    return runtimeInfo;
-        //}
     }
 }
-#endif

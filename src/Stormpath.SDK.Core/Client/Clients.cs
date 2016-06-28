@@ -47,10 +47,7 @@ namespace Stormpath.SDK.Client
                 language = analyzer.DetectedLanguage?.ToString();
             }
 
-            var userAgentBuilder = new Net451UserAgentBuilder(
-                Impl.Introspection.Platform.Analyze(),
-                Impl.Introspection.Sdk.Analyze(),
-                language);
+            var userAgentBuilder = new DefaultUserAgentBuilder(language);
 
             return new DefaultClientBuilder(userAgentBuilder);
         }
@@ -61,7 +58,7 @@ namespace Stormpath.SDK.Client
 
             language = new DnxCallerFileLanguageDetector(callerFilePath).Language;
 
-            var userAgentBuilder = new DnxUserAgentBuilder(language);
+            var userAgentBuilder = new DefaultUserAgentBuilder(language);
 
             return new DefaultClientBuilder(userAgentBuilder);
         }
