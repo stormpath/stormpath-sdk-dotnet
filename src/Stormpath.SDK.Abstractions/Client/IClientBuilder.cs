@@ -168,6 +168,14 @@ namespace Stormpath.SDK.Client
         IClientBuilder SetConfiguration(object configuration);
 
         /// <summary>
+        /// Sets the base path that is used when searching for configuration files (<c>stormpath.json</c>, etc).
+        /// If the value is <c>null</c>, the current directory is searched.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IClientBuilder SetConfigurationFileRoot(string path);
+
+        /// <summary>
         /// Sets the authentication scheme to use when making requests.
         /// </summary>
         /// <param name="scheme">The authentication scheme to use.</param>

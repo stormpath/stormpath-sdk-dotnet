@@ -47,6 +47,7 @@ namespace Stormpath.SDK.Impl.Client
         // Set if the user supplies a configuration to use
         private StormpathConfiguration useConfiguration = null;
         private object useConfigurationAnonymous = null;
+        private string configurationFileBasePath = null;
 
         // These are for backwards compatibility and will be removed at 1.0
         [Obsolete]
@@ -90,6 +91,12 @@ namespace Stormpath.SDK.Impl.Client
         IClientBuilder IClientBuilder.SetConfiguration(object configuration)
         {
             this.useConfigurationAnonymous = configuration;
+            return this;
+        }
+
+        IClientBuilder IClientBuilder.SetConfigurationFileRoot(string path)
+        {
+            this.configurationFileBasePath = path;
             return this;
         }
 
@@ -335,7 +342,8 @@ namespace Stormpath.SDK.Impl.Client
                 ?? this.useConfigurationAnonymous
                 ?? CreateSuppliedConfiguration();
 
-            var finalConfiguration = ConfigurationLoader.Initialize().Load(suppliedConfiguration); // TODO: restore logging
+            // TODO: restore logging
+            var finalConfiguration = ConfigurationLoader.Initialize().Load(suppliedConfiguration, configurationFileBasePath);
 
             ThrowForInvalidConfiguration(finalConfiguration);
 
