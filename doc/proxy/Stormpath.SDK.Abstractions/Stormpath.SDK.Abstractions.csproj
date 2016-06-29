@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Stormpath.Configuration.Abstractions, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stormpath.Configuration.Abstractions.5.2.0\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
+    <Reference Include="Stormpath.Configuration.Abstractions, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stormpath.Configuration.Abstractions.5.3.0\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
