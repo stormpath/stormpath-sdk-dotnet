@@ -112,6 +112,7 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
             }
 
             var client = new HttpClient(handler);
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             // Configure default settings
             //client.BaseAddress = new Uri(this.baseUrl, UriKind.Absolute);

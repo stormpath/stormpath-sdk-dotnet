@@ -72,6 +72,7 @@ namespace Stormpath.SDK.Extensions.Http.RestSharp
         private IRestClient CreateClientForRequest(SDK.Http.IHttpRequest request)
         {
             var client = new RestClient();
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
 
             // Configure default settings
             client.BaseUrl = new Uri(this.baseUrl, UriKind.Absolute);
