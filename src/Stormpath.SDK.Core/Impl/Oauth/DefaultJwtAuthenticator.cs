@@ -104,22 +104,13 @@ namespace Stormpath.SDK.Impl.Oauth
         {
             var options = this.localValidationOptions ?? new JwtLocalValidationOptions();
 
-            // Allow the issuer claim to be manually specified. This is necessary
-            // because ID Site tokens have a different issuer and break local validation
-            // with the default rules.
-            var expectedIssuer = options.Issuer;
-            if (string.IsNullOrEmpty(expectedIssuer))
-            {
-                expectedIssuer = this.application.Href;
-            }
-
             var parser = this.application.Client.NewJwtParser()
+                .SetSigningKey(this.internalDataStore.ApiKey.GetSecret(), Encoding.UTF8);
 
-                // Require secret key signature
-                .SetSigningKey(this.internalDataStore.ApiKey.GetSecret(), Encoding.UTF8)
-
-                // Require this application to be the issuer
-                .RequireIssuer(expectedIssuer);
+            if (!string.IsNullOrEmpty(options.Issuer))
+            {
+                parser.RequireIssuer(options.Issuer);
+            }
 
             // During parsing, the JWT is validated for lifetime, signature, and tampering
             var jwt = parser.Parse(request.Jwt);
@@ -128,7 +119,7 @@ namespace Stormpath.SDK.Impl.Oauth
             var properties = new Dictionary<string, object>();
 
             var accessTokenHref = this.application.Href.Replace(ApplicationPath, AccessTokenPath);
-            var accessTokenIdStartingPoint = accessTokenHref.LastIndexOf("/") + 1;
+            var accessTokenIdStartingPoint = accessTokenHref.LastIndexOf("/", StringComparison.Ordinal) + 1;
             accessTokenHref = accessTokenHref.Substring(0, accessTokenIdStartingPoint);
             accessTokenHref = accessTokenHref + jwt.Body.Id;
 
