@@ -240,5 +240,5 @@ doc/api/
 doc/config-api/
 
 # Temporary files for gource
-gource.ppm
+*.ppm
 combined.txt
