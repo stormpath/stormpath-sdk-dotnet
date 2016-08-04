@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Impl.Linq.QueryModel
         public static CollectionResourceQueryModel Default = new CollectionResourceQueryModel()
         {
             Offset = null,
-            Limit = null,
+            Limit = 100,
             FilterTerm = null,
             ExecutionPlan = new ExecutionPlanModel()
             {

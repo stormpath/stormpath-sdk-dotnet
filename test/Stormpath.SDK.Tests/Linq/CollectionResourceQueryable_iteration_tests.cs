@@ -40,20 +40,35 @@ namespace Stormpath.SDK.Tests.Linq
         }
 
         [Fact]
-        public async Task First_iteration_does_not_add_pagination_arguments()
+        public async Task First_iteration_does_not_add_offset_argument()
         {
             this.InitializeClientWithCollection(TestAccounts.RebelAlliance);
 
             var query = this.Queryable;
 
             await query.MoveNextAsync();
-            this.FakeHttpClient.Calls.Single().CanonicalUri.ToString().ShouldNotContain("?");
+            this.FakeHttpClient.Calls.Single().CanonicalUri.ToString().ShouldNotContain("offset");
+        }
+
+        /// <remarks>        
+        /// The default behavior is to grab the max (100) items when enumerating the collection.
+        /// (If an operator like Take(x) or Single() is used, then this behavior is modified.)
+        /// </remarks>
+        [Fact]
+        public async Task First_iteration_adds_limit_argument()
+        {
+            this.InitializeClientWithCollection(TestAccounts.RebelAlliance);
+
+            var query = this.Queryable;
+
+            await query.MoveNextAsync();
+            this.FakeHttpClient.Calls.Single().CanonicalUri.ToString().ShouldContain("limit");
         }
 
         [Fact]
         public async Task Subsequent_iterations_add_pagination_arguments_if_none_exist()
         {
-            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.AdmiralAckbar, 50));
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.AdmiralAckbar, 150));
 
             var query = this.Queryable;
 

@@ -77,7 +77,7 @@ namespace Stormpath.SDK.Tests.Linq
                 .MoveNextAsync();
 
             // Expected behavior: the last call will be kept
-            this.FakeHttpClient.Calls.Single().CanonicalUri.ToString().ShouldNotContain("limit");
+            this.FakeHttpClient.Calls.Single().CanonicalUri.ToString().ShouldContain("limit=100");
         }
 
         [Fact]

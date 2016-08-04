@@ -46,13 +46,13 @@ namespace Stormpath.SDK.Tests.Linq
         [Fact]
         public void Correct_number_of_calls()
         {
-            // Scenario: 51 items in a server-side collection. The default limit is 25,
-            // so two calls will return 25 items, and the 3rd will return 1.
-            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.BobaFett, 51));
+            // Scenario: 201 items in a server-side collection. The default limit is 100,
+            // so two calls will return 100 items, and the 3rd will return 1.
+            this.InitializeClientWithCollection(Enumerable.Repeat(TestAccounts.BobaFett, 201));
 
             var longList = this.Queryable.Synchronously().ToList();
 
-            longList.Count.ShouldBe(51);
+            longList.Count.ShouldBe(201);
             this.FakeHttpClient.Calls.Count().ShouldBe(3);
         }
     }

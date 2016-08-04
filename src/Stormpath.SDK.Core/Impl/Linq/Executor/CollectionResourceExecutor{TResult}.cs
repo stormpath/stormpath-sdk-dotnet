@@ -177,8 +177,16 @@ namespace Stormpath.SDK.Impl.Linq.Executor
 
                 this.compiledModel = shouldUseDefaultValues
                     ? CollectionResourceQueryModel.Default
-                    : QueryModelCompiler.Compile(this.expression);
+                    : ExtendDefaultValues(QueryModelCompiler.Compile(this.expression));
             }
+        }
+
+        private static CollectionResourceQueryModel ExtendDefaultValues(CollectionResourceQueryModel model)
+        {
+            model.Offset = model.Offset ?? CollectionResourceQueryModel.Default.Offset;
+            model.Limit = model.Limit ?? CollectionResourceQueryModel.Default.Limit;
+
+            return model;
         }
 
         private bool AlreadyRetrievedEnoughItems()
