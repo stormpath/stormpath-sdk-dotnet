@@ -29,6 +29,7 @@ namespace Stormpath.SDK.Impl.Error
         private static readonly string MessagePropertyName = "message";
         private static readonly string DevMessagePropertyName = "developerMessage";
         private static readonly string MoreInfoPropertyName = "moreInfo";
+        private static readonly string RequestIdPropertyName = "requestId";
 
         private readonly IReadOnlyDictionary<string, object> properties;
 
@@ -60,6 +61,8 @@ namespace Stormpath.SDK.Impl.Error
         public string MoreInfo => this.GetStringProperty(MoreInfoPropertyName);
 
         public int HttpStatus => this.GetIntProperty(StatusPropertyName);
+
+        public string RequestId => GetStringProperty(RequestIdPropertyName);
 
         string IError.GetProperty(string key) => this.GetStringProperty(key);
 

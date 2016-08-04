@@ -52,6 +52,12 @@ namespace Stormpath.SDK.Error
         string MoreInfo { get; }
 
         /// <summary>
+        /// Gets a unique ID that represents the request.
+        /// </summary>
+        /// <value>An ID that represents the request.</value>
+        string RequestId { get; }
+
+        /// <summary>
         /// Gets a property on the response message.
         /// </summary>
         /// <param name="key">The property name.</param>

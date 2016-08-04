@@ -12,7 +12,7 @@
     "Stormpath.Configuration": "5.3.1",
     "Stormpath.SDK.Abstractions": {
       "target": "project",
-      "version": "0.92.0"
+      "version": "0.93.0-beta1"
     },
     "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
   },
@@ -48,5 +48,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK"
   },
-  "version": "0.92.3-beta1"
+  "version": "0.93.0-beta1"
 }
