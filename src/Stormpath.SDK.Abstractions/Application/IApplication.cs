@@ -380,6 +380,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
         /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
+        [Obsolete("Use GetApiKeys() collection")]
         Task<IApiKey> GetApiKeyAsync(string apiKeyId, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -391,6 +392,7 @@ namespace Stormpath.SDK.Application
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
         /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
+        [Obsolete("Use GetApiKeys() collection")]
         Task<IApiKey> GetApiKeyAsync(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -412,5 +414,8 @@ namespace Stormpath.SDK.Application
         /// var allGroups = await myApp.GetGroups().ToListAsync();
         /// </example>
         IAsyncQueryable<IGroup> GetGroups();
+
+        // todo
+        IAsyncQueryable<IApiKey> GetApiKeys();
     }
 }

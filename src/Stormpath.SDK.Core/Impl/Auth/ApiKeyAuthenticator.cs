@@ -25,6 +25,7 @@ using Stormpath.SDK.Auth;
 using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Sync;
+using System.Linq;
 
 namespace Stormpath.SDK.Impl.Auth
 {
@@ -49,7 +50,10 @@ namespace Stormpath.SDK.Impl.Auth
             var id = request.Principals;
             var secret = request.Credentials;
 
-            var foundApiKey = await application.GetApiKeyAsync(id, opt => opt.Expand(e => e.GetAccount()), cancellationToken).ConfigureAwait(false);
+            var foundApiKey = await application.GetApiKeys()
+                .Where(key => key.Id == id)
+                .Expand(key => key.GetAccount())
+                .SingleOrDefaultAsync(cancellationToken);
 
             ThrowIfApiKeyInvalid(foundApiKey, secret);
 
@@ -70,7 +74,11 @@ namespace Stormpath.SDK.Impl.Auth
             var id = request.Principals;
             var secret = request.Credentials;
 
-            var foundApiKey = application.GetApiKey(id, opt => opt.Expand(e => e.GetAccount()));
+            var foundApiKey = application.GetApiKeys()
+                .Where(key => key.Id == id)
+                .Expand(key => key.GetAccount())
+                .Synchronously()
+                .SingleOrDefault();
 
             ThrowIfApiKeyInvalid(foundApiKey, secret);
 

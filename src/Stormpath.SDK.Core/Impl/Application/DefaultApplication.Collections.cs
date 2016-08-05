@@ -15,6 +15,7 @@
 // </copyright>
 
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Impl.Linq;
@@ -29,5 +30,8 @@ namespace Stormpath.SDK.Impl.Application
 
         IAsyncQueryable<IGroup> IApplication.GetGroups()
             => new CollectionResourceQueryable<IGroup>(this.Groups.Href, this.GetInternalAsyncDataStore());
+
+        IAsyncQueryable<IApiKey> IApplication.GetApiKeys()
+            => new CollectionResourceQueryable<IApiKey>(this.ApiKeys.Href, this.GetInternalAsyncDataStore());
     }
 }

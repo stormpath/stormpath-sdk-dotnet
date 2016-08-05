@@ -20,8 +20,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Impl.Linq;
-using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Sync;
 
@@ -29,46 +27,31 @@ namespace Stormpath.SDK.Impl.Application
 {
     internal sealed partial class DefaultApplication
     {
+        [Obsolete("Use GetApiKeys() collection")]
         Task<IApiKey> IApplication.GetApiKeyAsync(string apiKeyId, CancellationToken cancellationToken)
             => this.AsInterface.GetApiKeyAsync(apiKeyId, opt => { }, cancellationToken);
 
+        [Obsolete("Use GetApiKeys() collection")]
         Task<IApiKey> IApplication.GetApiKeyAsync(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction, CancellationToken cancellationToken)
         {
-            var href = this.ConstructHref(apiKeyId, retrievalOptionsAction);
-
-            var apiKeyCollection = new CollectionResourceQueryable<IApiKey>(href, this.GetInternalDataStore());
-            return apiKeyCollection.SingleOrDefaultAsync();
+            return AsInterface.GetApiKeys()
+                .Where(key => key.Id == apiKeyId)
+                .Expand(key => key.GetAccount())
+                .SingleOrDefaultAsync(cancellationToken);
         }
 
+        [Obsolete("Use GetApiKeys() collection")]
         IApiKey IApplicationSync.GetApiKey(string apiKeyId)
             => this.AsSyncInterface.GetApiKey(apiKeyId, opt => { });
 
+        [Obsolete("Use GetApiKeys() collection")]
         IApiKey IApplicationSync.GetApiKey(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction)
         {
-            var href = this.ConstructHref(apiKeyId, retrievalOptionsAction);
-
-            var apiKeyCollection = new CollectionResourceQueryable<IApiKey>(href, this.GetInternalDataStore());
-            return apiKeyCollection.Synchronously().SingleOrDefault();
-        }
-
-        private string ConstructHref(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction)
-        {
-            if (string.IsNullOrEmpty(apiKeyId))
-            {
-                throw new ArgumentNullException(nameof(apiKeyId));
-            }
-
-            var retrievalOptions = new DefaultRetrievalOptions<IApiKey>();
-            retrievalOptionsAction(retrievalOptions);
-            var additionalQueryString = retrievalOptions.ToString();
-
-            var href = $"{this.ApiKeys}?id={apiKeyId}";
-            if (!string.IsNullOrEmpty(additionalQueryString))
-            {
-                href += $"&{additionalQueryString}";
-            }
-
-            return href;
+            return AsInterface.GetApiKeys()
+                .Where(key => key.Id == apiKeyId)
+                .Expand(key => key.GetAccount())
+                .Synchronously()
+                .SingleOrDefault();
         }
     }
 }
