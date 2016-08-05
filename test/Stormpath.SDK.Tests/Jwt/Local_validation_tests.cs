@@ -57,26 +57,6 @@ namespace Stormpath.SDK.Tests.Jwt
         }
 
         /// <summary>
-        /// Regression test for stormpath/stormpath-sdk-dotnet#124
-        /// </summary>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous unit test.</returns>
-        [Fact]
-        public async Task Validating_ID_site_token_fails()
-        {
-            var fakeDataStore = GetFakeDataStore();
-            var fakeApplication = await fakeDataStore.GetResourceAsync<IApplication>("https://api.stormpath.com/v1/applications/foobarApplication");
-
-            var request = OauthRequests.NewJwtAuthenticationRequest()
-                .SetJwt(IDSiteAccessToken)
-                .Build();
-
-            IJwtAuthenticator authenticator = new DefaultJwtAuthenticator(fakeApplication, fakeDataStore);
-            authenticator.WithLocalValidation();
-
-            await Should.ThrowAsync<MismatchedClaimException>(authenticator.AuthenticateAsync(request));
-        }
-
-        /// <summary>
         /// Regression test for the fix for stormpath/stormpath-sdk-dotnet#124
         /// </summary>
         /// <returns>A <see cref="Task"/> that represents the asynchronous unit test.</returns>
