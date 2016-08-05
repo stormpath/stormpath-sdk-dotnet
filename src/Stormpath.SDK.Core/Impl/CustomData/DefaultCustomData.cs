@@ -18,7 +18,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -320,6 +319,11 @@ namespace Stormpath.SDK.Impl.CustomData
                 throw new Exception("Use DateTimeOffset to retrieve dates saved in Custom Data.");
             }
 
+            if (value == null)
+            {
+                return default(T);
+            }
+
             if (typeof(T) == typeof(DateTimeOffset))
             {
                 bool valueAlreadyParsed = value.GetType() == typeof(DateTimeOffset);
@@ -339,14 +343,15 @@ namespace Stormpath.SDK.Impl.CustomData
                 return (T)(object)Guid.Parse(value.ToString());
             }
 
-            if (value == null)
-            {
-                return default(T);
-            }
-
             var asExpandedProperty = value as ExpandedProperty;
             if (asExpandedProperty != null)
             {
+                if (typeof(T) == typeof(IDictionary<string, object>)
+                    || typeof(T) == typeof(IReadOnlyDictionary<string, object>))
+                {
+                    return (T)(object)new Dictionary<string, object>(asExpandedProperty.Data);
+                }
+
                 return new PocoAdapter<T>().Adapt(asExpandedProperty.Data);
             }
 

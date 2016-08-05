@@ -143,6 +143,33 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Putting_anonymous_types_into_custom_data(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var account = await this.CreateRandomAccountAsync(client);
+            var customData = await account.GetCustomDataAsync();
+            customData.IsEmptyOrDefault().ShouldBeTrue();
+
+            // Add some POCOs
+            customData.Put("anon", new { Roses = "Red", Violet = 222 });
+            await customData.SaveAsync();
+
+            var anonAsDict = customData.Get<IDictionary<string, object>>("anon");
+            anonAsDict["Roses"].ShouldBe("Red");
+            anonAsDict["Violet"].ShouldBe(222);
+
+            var anonAsReadOnlyDict = customData.Get<IReadOnlyDictionary<string, object>>("anon");
+            anonAsReadOnlyDict["Roses"].ShouldBe("Red");
+            anonAsReadOnlyDict["Violet"].ShouldBe(222);
+
+            // Cleanup
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Putting_interesting_types_into_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
