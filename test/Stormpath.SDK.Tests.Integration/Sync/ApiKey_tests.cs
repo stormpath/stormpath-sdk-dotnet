@@ -15,6 +15,7 @@
 // </copyright>
 
 using System.Linq;
+using FluentAssertions;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Api;
@@ -85,6 +86,34 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var retrieved = account.GetApiKeys().Synchronously().Single();
             retrieved.Status.ShouldBe(ApiKeyStatus.Disabled);
+
+            // Clean up
+            newKey.Delete().ShouldBeTrue();
+
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Updating_api_key_name_and_description(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var newKey = account.CreateApiKey();
+            newKey.Name.Should().BeNull();
+            newKey.Description.Should().BeNull();
+
+            newKey.SetName("Awesome key");
+            newKey.SetDescription("This key was awesome before API authentication was cool");
+
+            var updated = newKey.Save();
+
+            updated.Name.Should().Be("Awesome key");
+            updated.Description.Should().Be("This key was awesome before API authentication was cool");
 
             // Clean up
             newKey.Delete().ShouldBeTrue();

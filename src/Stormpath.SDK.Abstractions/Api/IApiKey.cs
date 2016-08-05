@@ -59,6 +59,18 @@ namespace Stormpath.SDK.Api
         string Secret { get; }
 
         /// <summary>
+        /// Gets the optional name used to identify this API key.
+        /// </summary>
+        /// <value>The name of the API key.</value>
+        string Name { get; }
+
+        /// <summary>
+        /// Gets the optional description used to identify this API key.
+        /// </summary>
+        /// <value>The description for the API key.</value>
+        string Description { get; }
+
+        /// <summary>
         /// Gets the API Key status.
         /// </summary>
         /// <remarks>
@@ -81,6 +93,18 @@ namespace Stormpath.SDK.Api
         /// </remarks>
         /// <param name="status">The status.</param>
         void SetStatus(ApiKeyStatus status);
+
+        /// <summary>
+        /// Sets the API key name.
+        /// </summary>
+        /// <param name="name">The API key name, or <c>null</c>.</param>
+        void SetName(string name);
+
+        /// <summary>
+        /// Sets the API key description.
+        /// </summary>
+        /// <param name="description">The API key description, or <c>null</c>.</param>
+        void SetDescription(string description);
 
         /// <summary>
         /// Gets the <see cref="IAccount">Account</see> to which the API Key belongs.

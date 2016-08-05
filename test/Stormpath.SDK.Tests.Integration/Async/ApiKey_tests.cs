@@ -14,7 +14,9 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Api;
@@ -94,6 +96,34 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Updating_api_key_name_and_description(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            this.fixture.CreatedAccountHrefs.Add(account.Href);
+
+            var newKey = await account.CreateApiKeyAsync();
+            newKey.Name.Should().BeNull();
+            newKey.Description.Should().BeNull();
+
+            newKey.SetName("Awesome key");
+            newKey.SetDescription("This key was awesome before API authentication was cool");
+
+            var updated = await newKey.SaveAsync();
+
+            updated.Name.Should().Be("Awesome key");
+            updated.Description.Should().Be("This key was awesome before API authentication was cool");
+
+            // Clean up
+            (await newKey.DeleteAsync()).ShouldBeTrue();
+
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Looking_up_api_key_via_application(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
@@ -146,7 +176,6 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
-        [Theory(Skip = "Refactor Shouldly")]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Throws_when_id_is_invalid(TestClientProvider clientBuilder)
         {
@@ -162,7 +191,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSecret(newKey.Secret)
                 .Build();
 
-            //await Should.ThrowAsync<IncorrectCredentialsException>(app.AuthenticateAccountAsync(apiKeyAuthRequest));
+            Func<Task> act = async () => { await app.AuthenticateAccountAsync(apiKeyAuthRequest); };
+            act.ShouldThrow<IncorrectCredentialsException>();
 
             // Clean up
             (await newKey.DeleteAsync()).ShouldBeTrue();
@@ -171,7 +201,6 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
-        [Theory(Skip = "Refactor Shouldly")]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Throws_when_secret_is_invalid(TestClientProvider clientBuilder)
         {
@@ -187,7 +216,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSecret("notARealSecret123")
                 .Build();
 
-            //await Should.ThrowAsync<IncorrectCredentialsException>(app.AuthenticateAccountAsync(apiKeyAuthRequest));
+            Func<Task> act = async () => { await app.AuthenticateAccountAsync(apiKeyAuthRequest); };
+            act.ShouldThrow<IncorrectCredentialsException>();
 
             // Clean up
             (await newKey.DeleteAsync()).ShouldBeTrue();
@@ -196,7 +226,6 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
-        [Theory(Skip = "Refactor Shouldly")]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Throws_when_key_is_disabled(TestClientProvider clientBuilder)
         {
@@ -214,7 +243,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSecret(newKey.Secret)
                 .Build();
 
-            // await Should.ThrowAsync<DisabledApiKeyException>(app.AuthenticateAccountAsync(apiKeyAuthRequest));
+            Func<Task> act = async () => { await app.AuthenticateAccountAsync(apiKeyAuthRequest); };
+            act.ShouldThrow<DisabledApiKeyException>();
 
             // Clean up
             (await newKey.DeleteAsync()).ShouldBeTrue();
@@ -223,7 +253,6 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
-        [Theory(Skip = "Refactor Shouldly")]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Throws_when_account_is_disabled(TestClientProvider clientBuilder)
         {
@@ -243,7 +272,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetSecret(newKey.Secret)
                 .Build();
 
-            // await Should.ThrowAsync<DisabledAccountException>(app.AuthenticateAccountAsync(apiKeyAuthRequest));
+            Func<Task> act = async () => { await app.AuthenticateAccountAsync(apiKeyAuthRequest); };
+            act.ShouldThrow<DisabledAccountException>();
 
             // Clean up
             (await newKey.DeleteAsync()).ShouldBeTrue();

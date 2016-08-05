@@ -29,6 +29,8 @@ namespace Stormpath.SDK.Impl.Api
         private static readonly string SecretPropertyName = "secret";
         private static readonly string StatusPropertyName = "status";
         private static readonly string AccountPropertyName = "account";
+        private const string NamePropertyName = "name";
+        private const string DescriptionPropertyName = "description";
 
         public DefaultApiKey(ResourceData data)
             : base(data)
@@ -43,11 +45,23 @@ namespace Stormpath.SDK.Impl.Api
         string IApiKey.Secret
             => this.GetStringProperty(SecretPropertyName);
 
+        string IApiKey.Name
+            => GetStringProperty(NamePropertyName);
+
+        string IApiKey.Description
+            => GetStringProperty(DescriptionPropertyName);
+
         ApiKeyStatus IApiKey.Status
             => this.GetProperty<ApiKeyStatus>(StatusPropertyName);
 
         void IApiKey.SetStatus(ApiKeyStatus status)
             => this.SetProperty(StatusPropertyName, status);
+
+        void IApiKey.SetName(string name)
+            => SetProperty(NamePropertyName, name);
+
+        void IApiKey.SetDescription(string description)
+            => SetProperty(DescriptionPropertyName, description);
 
         Task<IApiKey> ISaveable<IApiKey>.SaveAsync(CancellationToken cancellationToken)
             => this.SaveAsync<IApiKey>(cancellationToken);
