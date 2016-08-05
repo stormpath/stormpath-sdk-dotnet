@@ -360,6 +360,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="apiKeyId">The API Key ID.</param>
         /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
         /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
+        [Obsolete("Use GetApiKeys() collection")]
         public static IApiKey GetApiKey(this IApplication application, string apiKeyId)
             => (application as IApplicationSync).GetApiKey(apiKeyId);
 
@@ -372,6 +373,7 @@ namespace Stormpath.SDK.Sync
         /// <param name="retrievalOptionsAction">The options to apply to the request.</param>
         /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
         /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
+        [Obsolete("Use GetApiKeys() collection")]
         public static IApiKey GetApiKey(this IApplication application, string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction)
             => (application as IApplicationSync).GetApiKey(apiKeyId, retrievalOptionsAction);
     }
