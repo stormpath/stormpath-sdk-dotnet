@@ -63,6 +63,12 @@ namespace Stormpath.SDK.Error
         public int HttpStatus => this.Error.HttpStatus;
 
         /// <summary>
+        /// Gets a unique ID that represents the request.
+        /// </summary>
+        /// <value>An ID that represents the request.</value>
+        public string RequestId => Error.RequestId;
+
+        /// <summary>
         /// Gets a property on the response message.
         /// </summary>
         /// <param name="key">The property name.</param>
