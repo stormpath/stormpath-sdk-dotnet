@@ -112,10 +112,10 @@ namespace Stormpath.SDK.Impl.CustomData
                 throw new ArgumentOutOfRangeException($"{key} is not a valid key name.");
             }
 
-            if (!IsValidValue(value))
-            {
-                throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'. Only primitives, strings, GUIDs, dates, and durations can be stored in Custom Data.");
-            }
+            //if (!IsValidValue(value))
+            //{
+            //    throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'. Only primitives, strings, GUIDs, dates, and durations can be stored in Custom Data.");
+            //}
 
             var sanitizedValue = SanitizeValueForStorage(value);
 
@@ -372,6 +372,12 @@ namespace Stormpath.SDK.Impl.CustomData
             if (value == null)
             {
                 return default(T);
+            }
+
+            var asExpandedProperty = value as ExpandedProperty;
+            if (asExpandedProperty != null)
+            {
+                return new PocoAdapter<T>().Adapt(asExpandedProperty.Data);
             }
 
             return (T)value;

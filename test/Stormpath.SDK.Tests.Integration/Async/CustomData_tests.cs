@@ -115,6 +115,34 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Putting_pocos_into_custom_data(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var account = await this.CreateRandomAccountAsync(client);
+            var customData = await account.GetCustomDataAsync();
+            customData.IsEmptyOrDefault().ShouldBeTrue();
+
+            // Add some POCOs
+            customData.Put("data1", new SimplePoco {Foo = "foobar", Bar = 123});
+            customData.Put("data2", new SimplePoco {Foo = "barbaz", Bar = 999});
+            await customData.SaveAsync();
+
+            var data1 = customData.Get<SimplePoco>("data1");
+            data1.Foo.ShouldBe("foobar");
+            data1.Bar.ShouldBe(123);
+
+            var data2 = customData.Get<SimplePoco>("data2");
+            data2.Foo.ShouldBe("barbaz");
+            data2.Bar.ShouldBe(999);
+
+            // Cleanup
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Putting_interesting_types_into_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

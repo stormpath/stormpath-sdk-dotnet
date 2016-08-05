@@ -115,6 +115,34 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Putting_pocos_into_custom_data(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var account = this.CreateRandomAccount(client);
+            var customData = account.GetCustomData();
+            customData.IsEmptyOrDefault().ShouldBeTrue();
+
+            // Add some POCOs
+            customData.Put("data1", new SimplePoco { Foo = "foobar", Bar = 123 });
+            customData.Put("data2", new SimplePoco { Foo = "barbaz", Bar = 999 });
+            customData.Save();
+
+            var data1 = customData.Get<SimplePoco>("data1");
+            data1.Foo.ShouldBe("foobar");
+            data1.Bar.ShouldBe(123);
+
+            var data2 = customData.Get<SimplePoco>("data2");
+            data2.Foo.ShouldBe("barbaz");
+            data2.Bar.ShouldBe(999);
+
+            // Cleanup
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Putting_interesting_types_into_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
