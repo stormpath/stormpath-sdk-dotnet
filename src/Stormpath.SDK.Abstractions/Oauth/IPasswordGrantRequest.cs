@@ -43,5 +43,14 @@ namespace Stormpath.SDK.Oauth
         /// or <see langword="null"/> if no Account Store is set.
         /// </value>
         string AccountStoreHref { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Organization.IOrganization">Organization</see> <c>nameKey</c> used for this request, if any.
+        /// </summary>
+        /// <value>
+        /// The <see cref="Organization.IOrganization">Organization</see> <c>nameKey</c> used for this request,
+        /// or <see langword="null"/> if no name key is set.
+        /// </value>
+        string OrganizationNameKey { get; }
     }
 }

@@ -23,6 +23,7 @@ namespace Stormpath.SDK.Impl.Oauth
         private readonly string login;
         private readonly string password;
         private string accountStoreHref;
+        private string organizationNameKey;
 
         public DefaultPasswordGrantRequest(string login, string password)
         {
@@ -36,9 +37,16 @@ namespace Stormpath.SDK.Impl.Oauth
 
         string IPasswordGrantRequest.AccountStoreHref => this.accountStoreHref;
 
+        string IPasswordGrantRequest.OrganizationNameKey => organizationNameKey;
+
         public void SetAccountStore(string accountStoreHref)
         {
             this.accountStoreHref = accountStoreHref;
+        }
+
+        public void SetOrganizationNameKey(string nameKey)
+        {
+            this.organizationNameKey = nameKey;
         }
     }
 }

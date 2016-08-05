@@ -89,6 +89,40 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Creating_token_with_password_grant_and_nameKey(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            // Create a dummy application
+            var createdApplication = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Creating Token With Password Grant Flow + ONK",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            // Add the test organization
+            var primaryOrg = client.GetOrganization(fixture.PrimaryOrganizationHref);
+            createdApplication.AddAccountStore(primaryOrg);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin("lskywalker@tattooine.rim")
+                .SetPassword("whataPieceofjunk$1138")
+                .SetOrganizationNameKey(fixture.PrimaryOrganizationNameKey)
+                .Build();
+            var authenticateResult = createdApplication.NewPasswordGrantAuthenticator()
+                .Authenticate(passwordGrantRequest);
+
+            // Clean up
+            var accessToken = authenticateResult.GetAccessToken();
+            accessToken.Delete().ShouldBeTrue();
+
+            createdApplication.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
         /// <summary>
         /// Regression test for stormpath/stormpath-sdk-dotnet#161
         /// </summary>

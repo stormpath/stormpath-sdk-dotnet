@@ -17,7 +17,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Shouldly;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
 using Stormpath.SDK.Error;
 using Stormpath.SDK.Jwt;
@@ -84,6 +86,40 @@ namespace Stormpath.SDK.Tests.Integration.Async
             account.Email.ShouldBe("lskywalker@tattooine.rim");
 
             // Clean up
+            (await accessToken.DeleteAsync()).ShouldBeTrue();
+
+            (await createdApplication.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Creating_token_with_password_grant_and_nameKey(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            // Create a dummy application
+            var createdApplication = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Creating Token With Password Grant Flow + ONK",
+                createDirectory: false);
+            createdApplication.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(createdApplication.Href);
+
+            // Add the test organization
+            var primaryOrg = await client.GetOrganizationAsync(fixture.PrimaryOrganizationHref);
+            await createdApplication.AddAccountStoreAsync(primaryOrg);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin("lskywalker@tattooine.rim")
+                .SetPassword("whataPieceofjunk$1138")
+                .SetOrganizationNameKey(fixture.PrimaryOrganizationNameKey)
+                .Build();
+            var authenticateResult = await createdApplication.NewPasswordGrantAuthenticator()
+                .AuthenticateAsync(passwordGrantRequest);
+
+            // Clean up
+            var accessToken = await authenticateResult.GetAccessTokenAsync();
             (await accessToken.DeleteAsync()).ShouldBeTrue();
 
             (await createdApplication.DeleteAsync()).ShouldBeTrue();

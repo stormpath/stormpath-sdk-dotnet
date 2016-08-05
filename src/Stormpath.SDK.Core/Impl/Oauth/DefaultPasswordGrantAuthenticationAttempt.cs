@@ -25,6 +25,8 @@ namespace Stormpath.SDK.Impl.Oauth
         private static readonly string PasswordPropertyName = "password";
         private static readonly string AccountStoreHrefPropertyName = "accountStore";
         private static readonly string GrantTypePropertyName = "grant_type";
+        private const string OrganizationNameKeyPropertyName = "organizationNameKey";
+
 
         public DefaultPasswordGrantAuthenticationAttempt(ResourceData data)
             : base(data)
@@ -41,6 +43,9 @@ namespace Stormpath.SDK.Impl.Oauth
         string IPasswordGrantAuthenticationAttempt.Password
             => this.GetStringProperty(PasswordPropertyName);
 
+        string IPasswordGrantAuthenticationAttempt.OrganizationNameKey
+            => GetStringProperty(OrganizationNameKeyPropertyName);
+
         void IPasswordGrantAuthenticationAttempt.SetLogin(string login)
             => this.SetProperty(LoginPropertyName, login);
 
@@ -52,5 +57,8 @@ namespace Stormpath.SDK.Impl.Oauth
 
         void IPasswordGrantAuthenticationAttempt.SetAccountStore(string accountStoreHref)
             => this.SetProperty(AccountStoreHrefPropertyName, accountStoreHref);
+
+        void IPasswordGrantAuthenticationAttempt.SetOrganizationNameKey(string nameKey)
+            => SetProperty(OrganizationNameKeyPropertyName, nameKey);
     }
 }

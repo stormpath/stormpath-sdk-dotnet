@@ -50,5 +50,12 @@ namespace Stormpath.SDK.Oauth
         /// <param name="accountStoreHref">The specific <see cref="IAccountStore">Account Store</see> that will be queried using the provided credentials.</param>
         /// <returns>This instance for method chaining.</returns>
         IPasswordGrantRequestBuilder SetAccountStore(string accountStoreHref);
+
+        /// <summary>
+        /// Sets the target <see cref="Organization.IOrganization">Organization</see> <c>nameKey</c> to be used for the request.
+        /// </summary>
+        /// <param name="nameKey">The <c>nameKey</c> that will be used for this request.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IPasswordGrantRequestBuilder SetOrganizationNameKey(string nameKey);
     }
 }

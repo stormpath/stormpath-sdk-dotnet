@@ -31,6 +31,12 @@ namespace Stormpath.SDK.Impl.Oauth
         string AccountStoreHref { get; }
 
         /// <summary>
+        /// Gets the <see cref="Stormpath.SDK.Organization.IOrganization">Organization</see> <c>nameKey</c> that will used for the token exchange request.
+        /// </summary>
+        /// <value>The <c>nameKey</c> that will used for the token exchange request.</value>
+        string OrganizationNameKey { get; }
+
+        /// <summary>
         /// Gets the username to be used in the token exchange request.
         /// </summary>
         /// <value>The username to be used in the token exchange request.</value>
@@ -47,6 +53,12 @@ namespace Stormpath.SDK.Impl.Oauth
         /// </summary>
         /// <param name="accountStore">The Account Store.</param>
         void SetAccountStore(IAccountStore accountStore);
+
+        /// <summary>
+        /// Sets the <see cref="Stormpath.SDK.Organization.IOrganization">Organization</see> <c>nameKey</c> that will be used for the token exchange request.
+        /// </summary>
+        /// <param name="nameKey">The <c>nameKey</c>.</param>
+        void SetOrganizationNameKey(string nameKey);
 
         /// <summary>
         /// Sets the <see cref="IAccountStore">Account Store</see> <c>href</c> that will be used for the token exchange request.

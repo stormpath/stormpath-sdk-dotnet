@@ -72,6 +72,11 @@ namespace Stormpath.SDK.Impl.Oauth
                 passwordGrantAttempt.SetAccountStore(authenticationRequest.AccountStoreHref);
             }
 
+            if (!string.IsNullOrEmpty(authenticationRequest.OrganizationNameKey))
+            {
+                passwordGrantAttempt.SetOrganizationNameKey(authenticationRequest.OrganizationNameKey);
+            }
+
             return passwordGrantAttempt;
         }
     }

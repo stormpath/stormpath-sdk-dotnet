@@ -25,6 +25,7 @@ namespace Stormpath.SDK.Impl.Oauth
         private string login;
         private string password;
         private string accountStoreHref;
+        private string organizationNameKey;
 
         IPasswordGrantRequestBuilder IPasswordGrantRequestBuilder.SetLogin(string login)
         {
@@ -65,6 +66,12 @@ namespace Stormpath.SDK.Impl.Oauth
             return this;
         }
 
+        IPasswordGrantRequestBuilder IPasswordGrantRequestBuilder.SetOrganizationNameKey(string nameKey)
+        {
+            organizationNameKey = nameKey;
+            return this;
+        }
+
         IPasswordGrantRequest IOauthAuthenticationRequestBuilder<IPasswordGrantRequest>.Build()
         {
             if (string.IsNullOrEmpty(this.login))
@@ -82,6 +89,11 @@ namespace Stormpath.SDK.Impl.Oauth
             if (this.accountStoreHref != null)
             {
                 request.SetAccountStore(this.accountStoreHref);
+            }
+
+            if (!string.IsNullOrEmpty(organizationNameKey))
+            {
+                request.SetOrganizationNameKey(organizationNameKey);
             }
 
             return request;
