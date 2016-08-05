@@ -20,6 +20,7 @@ using System.Dynamic;
 using Shouldly;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
@@ -47,20 +48,13 @@ namespace Stormpath.SDK.Tests
             yield return new object[] { "foobar" };
             yield return new object[] { 'x' };
             yield return new object[] { new string[] { "foo", "bar" } };
+            yield return new object[] { new SimplePoco { Foo = "stuff", Bar = 123} };
+            yield return new object[] { new { SomeString = "anonymous ftw!", bar = 456 }};
         }
 
         public static IEnumerable<object[]> InvalidTypes()
         {
-            yield return new object[] { new object() };
-            yield return new object[] { new System.Text.StringBuilder("foobar!") };
-            yield return new object[] { new Lazy<bool>(() => false) };
-            yield return new object[]
-            {
-                new Dictionary<int, bool>()
-                    {
-                        [123] = true
-                    }
-            };
+            yield return new[] { new object() };
         }
 
         private ICustomData GetInstance(IDictionary<string, object> properties = null)
@@ -228,14 +222,6 @@ namespace Stormpath.SDK.Tests
             customData.Put("foobars", new List<string>() { "foo", "bar" });
 
             customData.Get<IEnumerable<string>>("foobars").ShouldBeSubsetOf(new string[] { "foo", "bar" });
-        }
-
-        [Fact]
-        public void Put_array_of_unsupported_items()
-        {
-            var customData = this.GetInstance();
-
-            Should.Throw<ArgumentOutOfRangeException>(() => customData.Put("invalid_array", new object[] { 123, "456" }));
         }
 
         [Fact]

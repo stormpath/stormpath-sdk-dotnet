@@ -30,9 +30,6 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         private FieldNameTranslator fieldNameTranslator
             = new FieldNameTranslator();
 
-        private DateTimeFieldNameTranslator datetimeFieldNameTranslator
-            = new DateTimeFieldNameTranslator();
-
         private MethodNameTranslator methodNameTranslator
             = new MethodNameTranslator();
 
@@ -85,15 +82,12 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         {
             string translatedFieldName = null;
 
-            // Custom Data access doesn't need to be translated - use verbatim
-            if (node.FieldName.StartsWith("customData.", StringComparison.Ordinal))
+            // Some field names need to be camelCased
+            if (!fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
             {
-                translatedFieldName = node.FieldName;
-            }
-            // Other field names do (mostly for correct camelCasing; see the translator classes)
-            else if (!this.fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
-            {
-                throw new NotSupportedException($"{node.FieldName} is not a supported field.");
+                translatedFieldName = node.FieldName.StartsWith("customData.", StringComparison.Ordinal)
+                    ? node.FieldName // Custom Data field names should be passed verbatim
+                    : node.FieldName.ToLower(); // Otherwise, lowercase it
             }
 
             this.Model.OrderByTerms.Add(new OrderByTerm()
@@ -137,19 +131,15 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
         {
             string translatedFieldName = null;
 
-            // Custom Data access doesn't need to be translated - use verbatim
-            if (node.FieldName.StartsWith("customData.", StringComparison.Ordinal))
+            // Some field names need to be camelCased
+            if (!fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
             {
-                translatedFieldName = node.FieldName;
-            }
-            // Other field names do (mostly for correct camelCasing; see the translator classes)
-            else if (!this.fieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName) &&
-                !this.datetimeFieldNameTranslator.TryGetValue(node.FieldName, out translatedFieldName))
-            {
-                throw new NotSupportedException($"{node.FieldName} is not a supported field.");
+                translatedFieldName = node.FieldName.StartsWith("customData.", StringComparison.Ordinal)
+                    ? node.FieldName // Custom Data field names should be passed verbatim
+                    : node.FieldName.ToLower(); // Otherwise, lowercase it
             }
 
-            this.Model.WhereTerms.Add(new WhereTerm()
+            Model.WhereTerms.Add(new WhereTerm()
             {
                 FieldName = translatedFieldName,
                 Comparison = node.Comparison,

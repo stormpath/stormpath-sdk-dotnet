@@ -1,4 +1,4 @@
-﻿namespace Stormpath.SDK.Tests.Integration
+﻿namespace Stormpath.SDK.Tests.Common
 {
     public class SimplePoco
     {

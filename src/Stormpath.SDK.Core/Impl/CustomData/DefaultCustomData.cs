@@ -112,10 +112,10 @@ namespace Stormpath.SDK.Impl.CustomData
                 throw new ArgumentOutOfRangeException($"{key} is not a valid key name.");
             }
 
-            //if (!IsValidValue(value))
-            //{
-            //    throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'. Only primitives, strings, GUIDs, dates, and durations can be stored in Custom Data.");
-            //}
+            if (!IsValidValue(value))
+            {
+                throw new ArgumentOutOfRangeException($"'{value}' is not a valid value for key '{key}'.");
+            }
 
             var sanitizedValue = SanitizeValueForStorage(value);
 
@@ -285,37 +285,7 @@ namespace Stormpath.SDK.Impl.CustomData
         private static bool IsValidValue(object value)
         {
             var type = value.GetType();
-            var typeInfo = type.GetTypeInfo();
-
-            if (typeInfo.IsArray)
-            {
-                return IsValidPrimitiveType(typeInfo.GetElementType());
-            }
-
-            bool isEnumerableOfT = typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(typeInfo);
-            if (isEnumerableOfT && typeInfo.GenericTypeArguments.Count() == 1)
-            {
-                var innerType = typeInfo.GenericTypeArguments.Single();
-                return IsValidPrimitiveType(innerType);
-            }
-
-            return IsValidPrimitiveType(type);
-        }
-
-        private static bool IsValidPrimitiveType(Type valueType)
-        {
-            if (valueType.GetTypeInfo().IsPrimitive ||
-                valueType == typeof(string)||
-                valueType == typeof(decimal) ||
-                valueType == typeof(DateTimeOffset) ||
-                valueType == typeof(DateTime) ||
-                valueType == typeof(TimeSpan) ||
-                valueType == typeof(Guid))
-            {
-                return true;
-            }
-
-            return false;
+            return type != typeof(object);
         }
 
         private static object SanitizeValueForStorage(object value)
