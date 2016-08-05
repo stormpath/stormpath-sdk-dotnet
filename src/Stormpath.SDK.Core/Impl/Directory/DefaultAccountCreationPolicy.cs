@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Directory;
@@ -31,6 +32,8 @@ namespace Stormpath.SDK.Impl.Directory
         private static readonly string VerificationEmailStatusPropertyName = "verificationEmailStatus";
         private static readonly string VerificationSuccessEmailStatusPropertyName = "verificationSuccessEmailStatus";
         private static readonly string WelcomeEmailStatusPropertyName = "welcomeEmailStatus";
+        private const string EmailDomainBlacklistPropertyName = "emailDomainBlacklist";
+        private const string EmailDomainWhitelistPropertyName = "emailDomainWhitelist";
 
         public DefaultAccountCreationPolicy(ResourceData data)
             : base(data)
@@ -45,6 +48,12 @@ namespace Stormpath.SDK.Impl.Directory
 
         EmailStatus IAccountCreationPolicy.WelcomeEmailStatus
             => this.GetProperty<EmailStatus>(WelcomeEmailStatusPropertyName);
+
+        IReadOnlyList<string> IAccountCreationPolicy.EmailDomainBlacklist
+            => GetListProperty<string>(EmailDomainBlacklistPropertyName);
+
+        IReadOnlyList<string> IAccountCreationPolicy.EmailDomainWhitelist
+            => GetListProperty<string>(EmailDomainWhitelistPropertyName);
 
         IAccountCreationPolicy IAccountCreationPolicy.SetVerificationEmailStatus(EmailStatus verificationEmailStatus)
         {
@@ -61,6 +70,18 @@ namespace Stormpath.SDK.Impl.Directory
         IAccountCreationPolicy IAccountCreationPolicy.SetWelcomeEmailStatus(EmailStatus welcomeEmailStatus)
         {
             this.SetProperty(WelcomeEmailStatusPropertyName, welcomeEmailStatus);
+            return this;
+        }
+
+        IAccountCreationPolicy IAccountCreationPolicy.SetEmailDomainBlacklist(IEnumerable<string> blacklistDomains)
+        {
+            SetListProperty(EmailDomainBlacklistPropertyName, blacklistDomains);
+            return this;
+        }
+
+        IAccountCreationPolicy IAccountCreationPolicy.SetEmailDomainWhitelist(IEnumerable<string> whitelistDomains)
+        {
+            SetListProperty(EmailDomainWhitelistPropertyName, whitelistDomains);
             return this;
         }
 

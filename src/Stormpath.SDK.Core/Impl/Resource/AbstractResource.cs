@@ -134,7 +134,7 @@ namespace Stormpath.SDK.Impl.Resource
             var boxedList = this.GetProperty(name) as IEnumerable<object>;
 
             return boxedList == null
-                ? Enumerable.Empty<T>().ToArray()
+                ? new T[0]
                 : boxedList.OfType<T>().ToArray();
         }
 
@@ -149,5 +149,8 @@ namespace Stormpath.SDK.Impl.Resource
 
         public void SetLinkProperty(string name, string href)
             => this.SetProperty(name, new LinkProperty(href));
+
+        public void SetListProperty<T>(string name, IEnumerable<T> items)
+            => SetProperty(name, items.ToArray());
     }
 }

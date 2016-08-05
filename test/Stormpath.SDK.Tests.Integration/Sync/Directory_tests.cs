@@ -355,6 +355,51 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_and_modifying_account_creation_domain_lists(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var directory = client.CreateDirectory(
+                $"Account Creation Blacklist Policy Test (.NET IT {this.fixture.TestRunIdentifier} - {clientBuilder.Name})",
+                "Testing Account Creation Policy",
+                DirectoryStatus.Enabled);
+
+            directory.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedDirectoryHrefs.Add(directory.Href);
+
+            var accountCreationPolicy = directory.GetAccountCreationPolicy();
+
+            // Default values
+            accountCreationPolicy.EmailDomainBlacklist.Any().ShouldBeFalse();
+            accountCreationPolicy.EmailDomainWhitelist.Any().ShouldBeFalse();
+
+            // Update #1
+            accountCreationPolicy.SetEmailDomainBlacklist(new string[] { "badguys.biz", "1337h4x0rz.us" });
+            accountCreationPolicy.SetEmailDomainWhitelist(new string[] { "goodapps.com" });
+
+            accountCreationPolicy.EmailDomainBlacklist.Count.ShouldBe(2);
+            accountCreationPolicy.EmailDomainWhitelist.Count.ShouldBe(1);
+
+            var updatedPolicy = accountCreationPolicy.Save();
+
+            updatedPolicy.EmailDomainBlacklist.Count.ShouldBe(2);
+            updatedPolicy.EmailDomainWhitelist.Count.ShouldBe(1);
+
+            // Update #2
+            var newWhitelist = new[] { "trustysite.com" }.Concat(accountCreationPolicy.EmailDomainWhitelist);
+            accountCreationPolicy.SetEmailDomainWhitelist(newWhitelist);
+            accountCreationPolicy.Save();
+
+            updatedPolicy.EmailDomainWhitelist.Count.ShouldBe(2);
+
+            // Cleanup
+            directory.Delete().ShouldBeTrue();
+            this.fixture.CreatedDirectoryHrefs.Remove(directory.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Getting_and_modifying_password_policy(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();

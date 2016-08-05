@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System.Collections.Generic;
 using Stormpath.SDK.Mail;
 using Stormpath.SDK.Resource;
 
@@ -55,6 +56,20 @@ namespace Stormpath.SDK.Directory
         EmailStatus WelcomeEmailStatus { get; }
 
         /// <summary>
+        /// Gets the email domain blacklist.
+        /// </summary>
+        /// <remarks>Users cannot register with an email domain that is present in the blacklist.</remarks>
+        /// <value>The email domain blacklist.</value>
+        IReadOnlyList<string> EmailDomainBlacklist { get; }
+
+        /// <summary>
+        /// Gets the email domain whitelist.
+        /// </summary>
+        /// <remarks>Users are allowed to register with email domains that are present in the whitelist.</remarks>
+        /// <value>The email domain whitelist.</value>
+        IReadOnlyList<string> EmailDomainWhitelist { get; }
+
+            /// <summary>
         /// Sets whether the Account Verification Workflow is enabled or disabled for the parent <see cref="IDirectory">Directory</see>.
         /// </summary>
         /// <remarks>
@@ -83,5 +98,21 @@ namespace Stormpath.SDK.Directory
         /// <param name="welcomeEmailStatus">The status of the Welcome Email Workflow.</param>
         /// <returns>This instance for method chaining.</returns>
         IAccountCreationPolicy SetWelcomeEmailStatus(EmailStatus welcomeEmailStatus);
+
+        /// <summary>
+        /// Sets the domains in the blacklist. Setting this value overwrites the entire list.
+        /// </summary>
+        /// <remarks>Users cannot register with an email domain that is present in the blacklist.</remarks>
+        /// <param name="blacklistDomains">The list of domains.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IAccountCreationPolicy SetEmailDomainBlacklist(IEnumerable<string> blacklistDomains);
+
+        /// <summary>
+        /// Sets the domains in the whitelist. Setting this value overwrites the entire list.
+        /// </summary>
+        /// <remarks>Users are allowed to register with email domains that are present in the whitelist.</remarks>
+        /// <param name="whitelistDomains">The list of domains.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IAccountCreationPolicy SetEmailDomainWhitelist(IEnumerable<string> whitelistDomains);
     }
 }
