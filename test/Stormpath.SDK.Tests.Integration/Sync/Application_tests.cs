@@ -911,5 +911,44 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             createdApplication.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Updating_authorized_callback_uris(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var application = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier} Updating Authorized Callback URIs Application",
+                createDirectory: false);
+            application.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(application.Href);
+
+            application.AuthorizedCallbackUris.Any().ShouldBeFalse();
+
+            // Update #1
+            application.SetAuthorizedCallbackUris(new string[] { "http://foo", "http://bar" });
+            application.AuthorizedCallbackUris.Count.ShouldBe(2);
+            application.Save();
+
+            // Update #2
+            var updatedUriList =
+                new string[] { "http://baz/callback", "https://secure/qux" }
+                .Concat(application.AuthorizedCallbackUris);
+            application.SetAuthorizedCallbackUris(updatedUriList);
+
+            application.Save();
+
+            application.AuthorizedCallbackUris.ShouldContain("http://foo");
+            application.AuthorizedCallbackUris.ShouldContain("http://bar");
+            application.AuthorizedCallbackUris.ShouldContain("http://baz/callback");
+            application.AuthorizedCallbackUris.ShouldContain("https://secure/qux");
+            application.AuthorizedCallbackUris.Count.ShouldBe(4);
+
+            // Clean up
+            application.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(application.Href);
+        }
     }
 }

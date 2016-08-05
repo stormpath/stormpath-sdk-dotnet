@@ -115,6 +115,12 @@ namespace Stormpath.SDK.Impl.Application
             return this;
         }
 
+        IApplication IApplication.SetAuthorizedCallbackUris(IEnumerable<string> authorizedCallbackUris)
+        {
+            SetListProperty(AuthorizedCallbackUrisPropertyName, authorizedCallbackUris);
+            return this;
+        }
+
         Task<bool> IDeletable.DeleteAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
 

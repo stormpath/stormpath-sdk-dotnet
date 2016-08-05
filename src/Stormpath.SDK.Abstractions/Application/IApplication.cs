@@ -101,6 +101,13 @@ namespace Stormpath.SDK.Application
         IApplication SetStatus(ApplicationStatus status);
 
         /// <summary>
+        /// Sets the callback URIs that are authorized for this Application.
+        /// </summary>
+        /// <param name="authorizedCallbackUris">The authorized URIs.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IApplication SetAuthorizedCallbackUris(IEnumerable<string> authorizedCallbackUris);
+
+        /// <summary>
         /// Creates a new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your
         /// application users to a hosted login/registration/forgot-password site - what Stormpath calls an 'Identity Site'
         /// (or 'ID Site' for short) - for performing common user identity functionality.
