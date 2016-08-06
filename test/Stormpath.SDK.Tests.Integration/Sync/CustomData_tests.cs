@@ -106,7 +106,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             customData.Save();
 
             customData.Get<IEnumerable<string>>("someStrings").ShouldBe(new string[] { "foo", "bar", "baz" });
-            customData.Get<IEnumerable<int>>("someInts").ShouldBe(new int[] { 123, 456, 789 });
+            customData.Get<IEnumerable<long>>("someInts").ShouldBe(new long[] { 123, 456, 789 });
 
             // Cleanup
             account.Delete().ShouldBeTrue();
