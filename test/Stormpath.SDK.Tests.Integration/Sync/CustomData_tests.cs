@@ -143,6 +143,33 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Putting_anonymous_types_into_custom_data(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var account = this.CreateRandomAccount(client);
+            var customData = account.GetCustomData();
+            customData.IsEmptyOrDefault().ShouldBeTrue();
+
+            // Add some POCOs
+            customData.Put("anon", new { Roses = "Red", Violet = 222 });
+            customData.Save();
+
+            var anonAsDict = customData.Get<IDictionary<string, object>>("anon");
+            anonAsDict["Roses"].ShouldBe("Red");
+            anonAsDict["Violet"].ShouldBe(222);
+
+            var anonAsReadOnlyDict = customData.Get<IReadOnlyDictionary<string, object>>("anon");
+            anonAsReadOnlyDict["Roses"].ShouldBe("Red");
+            anonAsReadOnlyDict["Violet"].ShouldBe(222);
+
+            // Cleanup
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Putting_interesting_types_into_custom_data(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
