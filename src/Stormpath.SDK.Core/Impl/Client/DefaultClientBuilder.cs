@@ -42,7 +42,11 @@ namespace Stormpath.SDK.Impl.Client
         private IJsonSerializer overrideSerializer;
         private IHttpClient overrideHttpClient;
         private ICacheProvider cacheProvider;
+        private ICacheProviderBuilder cacheProviderBuilder;
         private ILogger logger;
+
+        private TimeSpan? cacheTimeToLive;
+        private TimeSpan? cacheTimeToIdle;
 
         // Set if the user supplies a configuration to use
         private StormpathConfiguration useConfiguration = null;
@@ -311,6 +315,12 @@ namespace Stormpath.SDK.Impl.Client
             return this;
         }
 
+        IClientBuilder IClientBuilder.SetCacheProviderBuilder(ICacheProviderBuilder cacheProviderBuilder)
+        {
+            this.cacheProviderBuilder = cacheProviderBuilder;
+            return this;
+        }
+
         [Obsolete]
         private StormpathConfiguration CreateSuppliedConfiguration()
         {
@@ -325,8 +335,8 @@ namespace Stormpath.SDK.Impl.Client
                         Secret = this.useApiKeySecret
                     },
                     BaseUrl = this.useBaseUrl,
-                    ConnectionTimeout = this.useConnectionTimeout ?? 30000, // TODO this needs more logic
-                    AuthenticationScheme = this.useAuthenticationScheme ?? ClientAuthenticationScheme.SAuthc1,
+                    ConnectionTimeout = this.useConnectionTimeout ?? Default.Configuration.Client.ConnectionTimeout,
+                    AuthenticationScheme = this.useAuthenticationScheme ?? Default.Configuration.Client.AuthenticationScheme,
                     Proxy = this.useProxy
                 }
             };
@@ -385,39 +395,13 @@ namespace Stormpath.SDK.Impl.Client
                 httpClient = this.httpClientBuilder.Build();
             }
 
+            ConfigureCache(finalConfiguration);
 
+            var injectableWithSerializer = this.cacheProvider as ISerializerConsumer<ICacheProvider>;
+            injectableWithSerializer?.SetSerializer(serializer);
 
-            if (this.cacheProvider == null)
-            {
-                if (finalConfiguration.Client.CacheManager.Enabled == false)
-                {
-                    this.cacheProvider = CacheProviders.Create().DisabledCache();
-                }
-                else
-                {
-                    this.logger.Info("No CacheProvider configured. Defaulting to in-memory CacheProvider with default TTL and TTI of one hour.");
-
-                    this.cacheProvider = CacheProviders.Create()
-                        .InMemoryCache()
-                        .WithDefaultTimeToIdle(TimeSpan.FromHours(1))
-                        .WithDefaultTimeToLive(TimeSpan.FromHours(1))
-                        .Build();
-                }
-            }
-            else
-            {
-                var injectableWithSerializer = this.cacheProvider as ISerializerConsumer<ICacheProvider>;
-                if (injectableWithSerializer != null)
-                {
-                    injectableWithSerializer.SetSerializer(serializer);
-                }
-
-                var injectableWithLogger = this.cacheProvider as ILoggerConsumer<ICacheProvider>;
-                if (injectableWithLogger != null)
-                {
-                    injectableWithLogger.SetLogger(this.logger);
-                }
-            }
+            var injectableWithLogger = this.cacheProvider as ILoggerConsumer<ICacheProvider>;
+            injectableWithLogger?.SetLogger(this.logger);
 
             var instanceIdentifier = Guid.NewGuid().ToString();
 
@@ -430,6 +414,94 @@ namespace Stormpath.SDK.Impl.Client
                 instanceIdentifier,
                 logger,
                 DefaultIdentityMapSlidingExpiration);
+        }
+
+        private void ConfigureCache(Configuration.Abstractions.Immutable.StormpathConfiguration finalConfiguration)
+        {
+            if (finalConfiguration.Client.CacheManager.Enabled == false)
+            {
+                this.cacheProvider = CacheProviders.Create().DisabledCache();
+                this.logger.Info("Caching disabled via configuration");
+                return;
+            }
+
+            if (this.cacheProvider != null)
+            {
+                this.logger.Trace($"Using supplied CacheProvider instance {this.cacheProvider.GetType().Name}");
+                return;
+            }
+
+            if (this.cacheProviderBuilder == null)
+            {
+                this.cacheProviderBuilder = CacheProviders.Create().InMemoryCache();
+                this.logger.Info("No CacheProvider configured. Defaulting to in-memory cache");
+            }
+
+            var defaultTti = TimeSpan.FromSeconds(finalConfiguration.Client.CacheManager.DefaultTti);
+            var defaultTtl = TimeSpan.FromSeconds(finalConfiguration.Client.CacheManager.DefaultTtl);
+
+            this.cacheProviderBuilder
+                .WithDefaultTimeToIdle(defaultTti)
+                .WithDefaultTimeToLive(defaultTtl);
+            this.logger.Info($"Setting cache default time-to-idle to {defaultTti.TotalSeconds} seconds");
+            this.logger.Info($"Setting cache default time-to-live to {defaultTtl.TotalSeconds} seconds");
+
+            foreach (var cacheRegion in finalConfiguration.Client.CacheManager.Caches)
+            {
+                var cacheTti = cacheRegion.Value.Tti == null
+                    ? defaultTti
+                    : TimeSpan.FromSeconds(cacheRegion.Value.Tti.Value);
+                var cacheTtl = cacheRegion.Value.Ttl == null
+                    ? defaultTtl
+                    : TimeSpan.FromSeconds(cacheRegion.Value.Ttl.Value);
+
+                ICacheConfigurationBuilder cacheConfigurationBuilder = null;
+                if (cacheRegion.Key.Equals("account", StringComparison.OrdinalIgnoreCase))
+                {
+                    cacheConfigurationBuilder = Caches.ForResource<SDK.Account.IAccount>();
+                }
+                else if (cacheRegion.Key.Equals("organization", StringComparison.OrdinalIgnoreCase))
+                {
+                    cacheConfigurationBuilder = Caches.ForResource<SDK.Organization.IOrganization>();
+                }
+                else if (cacheRegion.Key.Equals("application", StringComparison.OrdinalIgnoreCase))
+                {
+                    cacheConfigurationBuilder = Caches.ForResource<SDK.Application.IApplication>();
+                }
+                else if (cacheRegion.Key.Equals("directory", StringComparison.OrdinalIgnoreCase))
+                {
+                    cacheConfigurationBuilder = Caches.ForResource<SDK.Directory.IDirectory>();
+                }
+                else if (cacheRegion.Key.Equals("group", StringComparison.OrdinalIgnoreCase))
+                {
+                    cacheConfigurationBuilder = Caches.ForResource<SDK.Group.IGroup>();
+                }
+                else if (cacheRegion.Key.Equals("customData", StringComparison.OrdinalIgnoreCase))
+                {
+                    cacheConfigurationBuilder = Caches.ForResource<SDK.CustomData.ICustomData>();
+                }
+                else if (cacheRegion.Key.Equals("provider", StringComparison.OrdinalIgnoreCase))
+                {
+                    cacheConfigurationBuilder = Caches.ForResource<SDK.Provider.IProvider>();
+                }
+                else if (cacheRegion.Key.Equals("providerData", StringComparison.OrdinalIgnoreCase))
+                {
+                    cacheConfigurationBuilder = Caches.ForResource<SDK.Provider.IProviderData>();
+                }
+                else if (cacheRegion.Key.Equals("tenant", StringComparison.OrdinalIgnoreCase))
+                {
+                    cacheConfigurationBuilder = Caches.ForResource<SDK.Tenant.ITenant>();
+                }
+
+                if (cacheConfigurationBuilder != null)
+                {
+                    this.cacheProviderBuilder.WithCache(cacheConfigurationBuilder
+                        .WithTimeToIdle(cacheTti)
+                        .WithTimeToLive(cacheTtl));
+                }
+            }
+
+            this.cacheProvider = this.cacheProviderBuilder.Build();
         }
 
         private void ThrowForInvalidConfiguration(Configuration.Abstractions.Immutable.StormpathConfiguration configuration)

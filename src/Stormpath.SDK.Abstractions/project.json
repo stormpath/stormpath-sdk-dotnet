@@ -8,7 +8,7 @@
   },
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Stormpath.Configuration.Abstractions": "5.3.1"
+    "Stormpath.Configuration.Abstractions": "6.0.0-beta1"
   },
   "description": "Abstractions for the Stormpath .NET SDK.",
   "frameworks": {
@@ -36,5 +36,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK"
   },
-  "version": "0.93.0"
+  "version": "0.94.0-beta1"
 }
