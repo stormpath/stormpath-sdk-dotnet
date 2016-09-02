@@ -1,4 +1,4 @@
-# Stormpath .NET SDK  [![Build Status](https://travis-ci.org/stormpath/stormpath-sdk-dotnet.svg?branch=develop)](https://travis-ci.org/stormpath/stormpath-sdk-dotnet) [![Join the chat at https://gitter.im/stormpath/stormpath-sdk-dotnet](https://badges.gitter.im/stormpath/stormpath-sdk-dotnet.svg)](https://gitter.im/stormpath/stormpath-sdk-dotnet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# Stormpath .NET SDK  [![Build status](https://ci.appveyor.com/api/projects/status/f80jk6h98ewgf3md?svg=true)](https://ci.appveyor.com/project/nbarbettini/stormpath-sdk-dotnet)
 
 [Stormpath](https://stormpath.com) is a complete user management API.  This
 library gives your ASP.NET, C#, or Visual Basic application access to all of Stormpath's features:
