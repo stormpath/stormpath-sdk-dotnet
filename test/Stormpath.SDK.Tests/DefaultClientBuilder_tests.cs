@@ -205,6 +205,8 @@ mySecret = secret123!";
         public void Disabling_cacheManager_with_configuration()
         {
             var client = this.builder
+                .SetApiKeyId("fake")
+                .SetApiKeySecret("fake")
                 .SetConfiguration(new
                 {
                     client = new
@@ -215,8 +217,6 @@ mySecret = secret123!";
                         }
                     }
                 })
-                .SetApiKeyId("fake")
-                .SetApiKeySecret("fake")
                 .Build();
 
             client.GetCacheProvider().ShouldBeOfType<NullCacheProvider>();
@@ -239,6 +239,8 @@ mySecret = secret123!";
         public void Configuring_cache_with_builder()
         {
             var client = this.builder
+                .SetApiKeyId("fake")
+                .SetApiKeySecret("fake")
                 .SetCacheProvider(CacheProviders.Create()
                     .InMemoryCache()
                     .WithDefaultTimeToIdle(TimeSpan.FromSeconds(600))
@@ -265,6 +267,8 @@ mySecret = secret123!";
         public void Configuring_cache_with_configuration()
         {
             var client = this.builder
+                .SetApiKeyId("fake")
+                .SetApiKeySecret("fake")
                 .SetConfiguration(new StormpathConfiguration
                 {
                     Client = new ClientConfiguration
