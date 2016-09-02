@@ -205,12 +205,15 @@ mySecret = secret123!";
         public void Disabling_cacheManager_with_configuration()
         {
             var client = this.builder
-                .SetApiKeyId("fake")
-                .SetApiKeySecret("fake")
                 .SetConfiguration(new
                 {
                     client = new
                     {
+                        apiKey = new
+                        {
+                            id = "fake",
+                            secret = "fake"
+                        },
                         cacheManager = new
                         {
                             enabled = false
@@ -267,12 +270,15 @@ mySecret = secret123!";
         public void Configuring_cache_with_configuration()
         {
             var client = this.builder
-                .SetApiKeyId("fake")
-                .SetApiKeySecret("fake")
                 .SetConfiguration(new StormpathConfiguration
                 {
                     Client = new ClientConfiguration
                     {
+                        ApiKey = new ClientApiKeyConfiguration
+                        {
+                            Id = "fake",
+                            Secret = "fake",
+                        },
                         CacheManager = new ClientCacheManagerConfiguration
                         {
                             DefaultTti = 600,
