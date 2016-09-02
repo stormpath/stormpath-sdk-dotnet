@@ -22,7 +22,9 @@ using System.Threading.Tasks;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Application;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Jwt;
 using Stormpath.SDK.Impl.Resource;
+using Stormpath.SDK.Jwt;
 using Stormpath.SDK.Oauth;
 
 namespace Stormpath.SDK.Impl.Oauth
@@ -114,6 +116,14 @@ namespace Stormpath.SDK.Impl.Oauth
 
             // During parsing, the JWT is validated for lifetime, signature, and tampering
             var jwt = parser.Parse(request.Jwt);
+
+            // Assert that this is an access token, not a refresh token
+            object stormpathTokenType;
+            jwt.Header.TryGetValue(StormpathClaims.TokenType, out stormpathTokenType);
+            if (stormpathTokenType == null || !stormpathTokenType.ToString().Equals("access", StringComparison.Ordinal))
+            {
+                throw new InvalidJwtException("Token is not an access token.");
+            }
 
             // Build an IAccessToken instance from scratch
             var properties = new Dictionary<string, object>();

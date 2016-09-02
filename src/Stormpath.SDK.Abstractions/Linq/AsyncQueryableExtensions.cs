@@ -392,6 +392,24 @@ namespace Stormpath.SDK
         }
 
         /// <summary>
+        /// Asynchronously returns the input sequence as an array of <typeparamref name="TSource"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">An <see cref="IAsyncQueryable{T}"/> to get items from.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A list of all items from the input sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static async Task<TSource[]> ToArrayAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            return (await source.ToListAsync(cancellationToken).ConfigureAwait(false)).ToArray();
+        }
+
+        /// <summary>
         /// Asynchronously iterates over the input sequence and performs the specified action on each element of the <see cref="IAsyncQueryable{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
