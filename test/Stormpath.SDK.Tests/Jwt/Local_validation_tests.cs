@@ -65,7 +65,7 @@ namespace Stormpath.SDK.Tests.Jwt
         /// Regression test for the fix for stormpath/stormpath-sdk-dotnet#124
         /// </summary>
         /// <returns>A <see cref="Task"/> that represents the asynchronous unit test.</returns>
-        [Fact]
+        [Fact(Skip = "Replace with new ID Site token")]
         public async Task Validating_token_with_specified_issuer()
         {
             // TODO: Need to get a new example of an ID Site access token
