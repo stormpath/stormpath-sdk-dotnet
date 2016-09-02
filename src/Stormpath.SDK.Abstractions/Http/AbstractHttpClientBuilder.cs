@@ -36,7 +36,7 @@ namespace Stormpath.SDK.Http
         private readonly ConstructorInfo targetConstructor;
 
         private string baseUrl;
-        private int connectionTimeout;
+        private TimeSpan connectionTimeout;
         private IWebProxy proxy;
         private ILogger logger;
 
@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Http
         public AbstractHttpClientBuilder(Type targetType)
         {
             this.targetConstructor = targetType?.GetTypeInfo()
-                .GetConstructor(parameterTypes: new Type[] { typeof(string), typeof(int), typeof(IWebProxy), typeof(ILogger) });
+                .GetConstructor(parameterTypes: new Type[] { typeof(string), typeof(TimeSpan), typeof(IWebProxy), typeof(ILogger) });
 
             if (this.targetConstructor == null)
             {
@@ -77,7 +77,14 @@ namespace Stormpath.SDK.Http
         /// <inheritdoc/>
         IHttpClientBuilder IHttpClientBuilder.SetConnectionTimeout(int connectionTimeout)
         {
-            this.connectionTimeout = connectionTimeout;
+            this.connectionTimeout = TimeSpan.FromMilliseconds(connectionTimeout);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        IHttpClientBuilder IHttpClientBuilder.SetConnectionTimeout(TimeSpan timeout)
+        {
+            connectionTimeout = timeout;
             return this;
         }
 

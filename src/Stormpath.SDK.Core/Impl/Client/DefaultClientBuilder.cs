@@ -388,7 +388,7 @@ namespace Stormpath.SDK.Impl.Client
 
                 this.httpClientBuilder
                     .SetBaseUrl(finalConfiguration.Client.BaseUrl)
-                    .SetConnectionTimeout(finalConfiguration.Client.ConnectionTimeout)
+                    .SetConnectionTimeout(TimeSpan.FromSeconds(finalConfiguration.Client.ConnectionTimeout))
                     .SetProxy(finalConfiguration.Client.Proxy)
                     .SetLogger(this.logger);
 

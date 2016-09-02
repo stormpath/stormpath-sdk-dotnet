@@ -17,7 +17,7 @@
     },
     "Stormpath.SDK.Http.SystemNetHttpClient": {
       "target": "project",
-      "version": "0.91.1"
+      "version": "0.94.0-beta1"
     },
     "Stormpath.SDK.Cache.Redis": {
       "target": "project",
