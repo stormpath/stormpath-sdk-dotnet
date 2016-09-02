@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Tests
             IHttpClientBuilder builder = new AbstractHttpClientBuilder<DummyHttpClient>();
 
             var fakeUrl = "http://foo.bar";
-            var fakeTimeout = 101;
+            var fakeTimeout = TimeSpan.FromSeconds(101);
             var fakeProxy = Substitute.For<System.Net.IWebProxy>();
             var fakeLogger = Substitute.For<ILogger>();
 
@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests
             instance.ShouldBeAssignableTo<IHttpClient>();
             instance.ShouldNotBeNull();
             instance.BaseUrl.ShouldBe(fakeUrl);
-            instance.ConnectionTimeout.ShouldBe(fakeTimeout);
+            instance.ConnectionTimeout.ShouldBe((int)fakeTimeout.TotalMilliseconds);
             instance.Proxy.ShouldBe(fakeProxy);
             (instance as DummyHttpClient).Logger.ShouldBe(fakeLogger);
         }
@@ -69,10 +69,10 @@ namespace Stormpath.SDK.Tests
 
             public bool IsAsynchronousSupported => false;
 
-            public DummyHttpClient(string baseUrl, int timeout, System.Net.IWebProxy proxy, ILogger logger)
+            public DummyHttpClient(string baseUrl, TimeSpan timeout, System.Net.IWebProxy proxy, ILogger logger)
             {
                 this.BaseUrl = baseUrl;
-                this.ConnectionTimeout = timeout;
+                this.ConnectionTimeout = (int)timeout.TotalMilliseconds;
                 this.Proxy = proxy;
                 this.Logger = logger;
             }

@@ -201,7 +201,17 @@ namespace Stormpath.SDK.Client
         /// <param name="timeout">The HTTP connection timeout to use, in milliseconds.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="timeout"/> is negative.</exception>
+        [Obsolete("Use SetConnectionTimeout(TimeSpan)")]
         IClientBuilder SetConnectionTimeout(int timeout);
+
+        /// <summary>
+        /// Sets the HTTP connection timeout to observe when making requests.
+        /// To use the default connection timeout, don't call this method.
+        /// </summary>
+        /// <param name="timeout">The HTTP connection timeout to use.</param>
+        /// <returns>This instance for method chaining.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="timeout"/> is negative.</exception>
+        IClientBuilder SetConnectionTimeout(TimeSpan timeout);
 
         /// <summary>
         /// Sets the base API URL to use when making requests.
@@ -249,6 +259,18 @@ namespace Stormpath.SDK.Client
         /// <code source="ClientBuilderExamples.cs" region="InMemoryCacheWithOptions" lang="C#" title="Use default (in-memory) cache with options" />
         /// </example>
         IClientBuilder SetCacheProvider(ICacheProvider cacheProvider);
+
+        /// <summary>
+        /// Sets the cache provider builder that should be used to cache Stormpath resources, reducing round-trips
+        /// to the Stormpath API server and enhancing application performance.
+        /// </summary>
+        /// <remarks>
+        /// Use the <c>CacheProviders</c> object construct a cache provider.
+        /// </remarks>
+        /// <param name="cacheProviderBuilder">The cache provider builder to use.</param>
+        /// <returns>This instance for method chaining.</returns>
+        /// <seealso cref="ICacheProviderFactory"/>
+        IClientBuilder SetCacheProviderBuilder(ICacheProviderBuilder cacheProviderBuilder);
 
         /// <summary>
         /// Sets the HTTP client to use when making requests.

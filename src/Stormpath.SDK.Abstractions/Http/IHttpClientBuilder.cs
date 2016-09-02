@@ -37,7 +37,15 @@ namespace Stormpath.SDK.Http
         /// </summary>
         /// <param name="connectionTimeout">The timeout in milliseconds.</param>
         /// <returns>This instance for method chaining.</returns>
+        [Obsolete("Use SetConnectionTimeout(TimeSpan)")]
         IHttpClientBuilder SetConnectionTimeout(int connectionTimeout);
+
+        /// <summary>
+        /// Sets the connection timeout.
+        /// </summary>
+        /// <param name="timeout">The timeout..</param>
+        /// <returns>This instance for method chaining.</returns>
+        IHttpClientBuilder SetConnectionTimeout(TimeSpan timeout);
 
         /// <summary>
         /// Sets the connection proxy.

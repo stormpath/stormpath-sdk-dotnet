@@ -52,6 +52,8 @@ namespace Stormpath.SDK.Cache
             this.caches = new ConcurrentDictionary<string, object>();
         }
 
+        public IReadOnlyDictionary<string, ICacheConfiguration> CacheConfigs => new Dictionary<string, ICacheConfiguration>(cacheConfigs);
+
         /// <summary>
         /// Gets the default time to live (TTL) of new caches.
         /// </summary>

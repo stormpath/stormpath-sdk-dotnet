@@ -238,3 +238,5 @@ _Pvt_Extensions
 # Ignore SHFB generated documentation
 doc/api/
 doc/config-api/
+
+artifacts/

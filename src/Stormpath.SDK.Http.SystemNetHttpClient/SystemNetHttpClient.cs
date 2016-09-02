@@ -27,17 +27,23 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
     {
         private readonly SystemNetHttpAdapter adapter;
         private readonly string baseUrl;
-        private readonly int connectionTimeout;
+        private readonly TimeSpan timeout;
         private readonly IWebProxy proxy;
         private readonly ILogger logger;
 
         private bool alreadyDisposed = false;
 
+        [Obsolete("Use ctor with TimeSpan")]
         internal SystemNetHttpClient(string baseUrl, int connectionTimeout, IWebProxy proxy, ILogger logger)
+            : this(baseUrl, TimeSpan.FromMilliseconds(connectionTimeout), proxy, logger)
+        {
+        }
+
+        internal SystemNetHttpClient(string baseUrl, TimeSpan timeout, IWebProxy proxy, ILogger logger)
         {
             this.adapter = new SystemNetHttpAdapter(baseUrl);
             this.baseUrl = baseUrl;
-            this.connectionTimeout = connectionTimeout;
+            this.timeout = timeout;
             this.proxy = proxy;
             this.logger = logger;
         }
@@ -46,7 +52,7 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
         string IHttpClient.BaseUrl => this.baseUrl;
 
         /// <inheritdoc/>
-        int IHttpClient.ConnectionTimeout => this.connectionTimeout;
+        int IHttpClient.ConnectionTimeout => (int)this.timeout.TotalMilliseconds;
 
         /// <inheritdoc/>
         bool IHttpClient.IsAsynchronousSupported => true;
@@ -114,8 +120,7 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
             var client = new HttpClient(handler);
 
             // Configure default settings
-            //client.BaseAddress = new Uri(this.baseUrl, UriKind.Absolute);
-            client.Timeout = TimeSpan.FromMilliseconds(this.connectionTimeout);
+            client.Timeout = this.timeout;
 
             return client;
         }

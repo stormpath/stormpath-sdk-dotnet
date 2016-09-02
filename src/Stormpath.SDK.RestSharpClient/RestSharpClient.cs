@@ -31,7 +31,7 @@ namespace Stormpath.SDK.Extensions.Http.RestSharp
     {
         private readonly RestSharpAdapter adapter;
         private readonly string baseUrl;
-        private readonly int connectionTimeout;
+        private readonly TimeSpan timeout;
         private readonly IWebProxy proxy;
         private readonly ILogger logger;
 
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Extensions.Http.RestSharp
         string SDK.Http.IHttpClient.BaseUrl => this.baseUrl;
 
         /// <inheritdoc/>
-        int SDK.Http.IHttpClient.ConnectionTimeout => this.connectionTimeout;
+        int SDK.Http.IHttpClient.ConnectionTimeout => (int)this.timeout.TotalMilliseconds;
 
         /// <inheritdoc/>
         IWebProxy SDK.Http.IHttpClient.Proxy => this.proxy;
@@ -61,10 +61,15 @@ namespace Stormpath.SDK.Extensions.Http.RestSharp
         /// <param name="logger">The logger.</param>
         [Obsolete("Don't create clients directly. Use HttpClients.Create().Default() or Create().RestSharpClient() instead.")]
         public RestSharpClient(string baseUrl, int connectionTimeout, IWebProxy proxy, ILogger logger)
+            : this(baseUrl, TimeSpan.FromMilliseconds(connectionTimeout), proxy, logger)
+        {
+        }
+
+        internal RestSharpClient(string baseUrl, TimeSpan timeout, IWebProxy proxy, ILogger logger)
         {
             this.adapter = new RestSharpAdapter();
             this.baseUrl = baseUrl;
-            this.connectionTimeout = connectionTimeout;
+            this.timeout = timeout;
             this.proxy = proxy;
             this.logger = logger;
         }
@@ -78,7 +83,7 @@ namespace Stormpath.SDK.Extensions.Http.RestSharp
             client.DefaultParameters.Clear();
             client.Encoding = Encoding.UTF8;
             client.FollowRedirects = false;
-            client.Timeout = this.connectionTimeout;
+            client.Timeout = (this as SDK.Http.IHttpClient).ConnectionTimeout;
             client.UserAgent = request.Headers?.UserAgent;
 
             if (this.proxy != null)
