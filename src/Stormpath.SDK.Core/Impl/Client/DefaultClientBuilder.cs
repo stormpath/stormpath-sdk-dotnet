@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Impl.Client
         private string useApiKeyFileName = null;
         private ClientAuthenticationScheme? useAuthenticationScheme = null;
         private string useBaseUrl = null;
-        private int? useConnectionTimeout = null;
+        private TimeSpan? useConnectionTimeout = null;
         private ClientProxyConfiguration useProxy = null;
 
         public DefaultClientBuilder(IUserAgentBuilder userAgentBuilder)
@@ -211,6 +211,18 @@ namespace Stormpath.SDK.Impl.Client
                 throw new ArgumentOutOfRangeException("Timeout cannot be negative.");
             }
 
+            this.useConnectionTimeout = TimeSpan.FromMilliseconds(timeout);
+
+            return this;
+        }
+
+        IClientBuilder IClientBuilder.SetConnectionTimeout(TimeSpan timeout)
+        {
+            if (timeout < TimeSpan.Zero)
+            {
+                throw new ArgumentOutOfRangeException("Timeout cannot be negative.");
+            }
+
             this.useConnectionTimeout = timeout;
 
             return this;
@@ -308,9 +320,7 @@ namespace Stormpath.SDK.Impl.Client
 
         IClientBuilder IClientBuilder.SetCacheProvider(ICacheProvider cacheProvider)
         {
-            this.cacheProvider = cacheProvider == null
-                ? this.cacheProvider = CacheProviders.Create().DisabledCache()
-                : cacheProvider;
+            this.cacheProvider = cacheProvider ?? (this.cacheProvider = CacheProviders.Create().DisabledCache());
 
             return this;
         }
@@ -335,7 +345,7 @@ namespace Stormpath.SDK.Impl.Client
                         Secret = this.useApiKeySecret
                     },
                     BaseUrl = this.useBaseUrl,
-                    ConnectionTimeout = this.useConnectionTimeout ?? Default.Configuration.Client.ConnectionTimeout,
+                    ConnectionTimeout = ((int?)this.useConnectionTimeout?.TotalSeconds) ?? Default.Configuration.Client.ConnectionTimeout,
                     AuthenticationScheme = this.useAuthenticationScheme ?? Default.Configuration.Client.AuthenticationScheme,
                     Proxy = this.useProxy
                 }

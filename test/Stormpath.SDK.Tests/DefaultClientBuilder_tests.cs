@@ -15,6 +15,8 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using NSubstitute;
 using Shouldly;
 using Stormpath.SDK.Api;
@@ -29,6 +31,7 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Serialization;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Stormpath.SDK.Tests.Fakes;
+using Stormpath.Configuration.Abstractions;
 using Xunit;
 
 namespace Stormpath.SDK.Tests
@@ -220,28 +223,6 @@ mySecret = secret123!";
         }
 
         [Fact]
-        public void Explicit_cacheManager_settings_override_configuration()
-        {
-            var client = this.builder
-                .SetConfiguration(new
-                {
-                    client = new
-                    {
-                        cacheManager = new
-                        {
-                            enabled = false
-                        }
-                    }
-                })
-                .SetApiKeyId("fake")
-                .SetApiKeySecret("fake")
-                .SetCacheProvider(CacheProviders.Create().InMemoryCache().Build())
-                .Build();
-
-            client.GetCacheProvider().ShouldBeOfType<InMemoryCacheProvider>();
-        }
-
-        [Fact]
         public void Passing_custom_cache()
         {
             var fakeCache = Substitute.For<SDK.Cache.ICacheProvider>();
@@ -252,6 +233,64 @@ mySecret = secret123!";
                 .Build();
 
             client.GetCacheProvider().ShouldBe(fakeCache);
+        }
+
+        [Fact]
+        public void Configuring_cache_with_builder()
+        {
+            var client = this.builder
+                .SetCacheProvider(CacheProviders.Create()
+                    .InMemoryCache()
+                    .WithDefaultTimeToIdle(TimeSpan.FromSeconds(600))
+                    .WithDefaultTimeToLive(TimeSpan.FromSeconds(900))
+                    .WithCache(Caches
+                        .ForResource<Account.IAccount>()
+                        .WithTimeToIdle(TimeSpan.FromSeconds(5000))
+                        .WithTimeToLive(TimeSpan.FromSeconds(6000)))
+                    .Build())
+                .Build();
+
+            client.GetCacheProvider().ShouldBeOfType<InMemoryCacheProvider>();
+
+            var provider = client.GetCacheProvider() as InMemoryCacheProvider;
+            provider.DefaultTimeToIdle.ShouldBe(TimeSpan.FromSeconds(600));
+            provider.DefaultTimeToLive.ShouldBe(TimeSpan.FromSeconds(900));
+
+            provider.CacheConfigs.Single().Key.ShouldBe("IAccount");
+            provider.CacheConfigs.Single().Value.TimeToIdle.ShouldBe(TimeSpan.FromSeconds(5000));
+            provider.CacheConfigs.Single().Value.TimeToLive.ShouldBe(TimeSpan.FromSeconds(6000));
+        }
+
+        [Fact]
+        public void Configuring_cache_with_configuration()
+        {
+            var client = this.builder
+                .SetConfiguration(new StormpathConfiguration
+                {
+                    Client = new ClientConfiguration
+                    {
+                        CacheManager = new ClientCacheManagerConfiguration
+                        {
+                            DefaultTti = 600,
+                            DefaultTtl = 900,
+                            Caches = new Dictionary<string, ClientCacheConfiguration>()
+                            {
+                                ["account"] = new ClientCacheConfiguration {Tti = 5000, Ttl = 6000}
+                            }
+                        }
+                    }
+                })
+                .Build();
+
+            client.GetCacheProvider().ShouldBeOfType<InMemoryCacheProvider>();
+
+            var provider = client.GetCacheProvider() as InMemoryCacheProvider;
+            provider.DefaultTimeToIdle.ShouldBe(TimeSpan.FromSeconds(600));
+            provider.DefaultTimeToLive.ShouldBe(TimeSpan.FromSeconds(900));
+
+            provider.CacheConfigs.Single().Key.ShouldBe("IAccount");
+            provider.CacheConfigs.Single().Value.TimeToIdle.ShouldBe(TimeSpan.FromSeconds(5000));
+            provider.CacheConfigs.Single().Value.TimeToLive.ShouldBe(TimeSpan.FromSeconds(6000));
         }
 
         [Fact]

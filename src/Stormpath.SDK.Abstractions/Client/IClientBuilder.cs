@@ -201,7 +201,17 @@ namespace Stormpath.SDK.Client
         /// <param name="timeout">The HTTP connection timeout to use, in milliseconds.</param>
         /// <returns>This instance for method chaining.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="timeout"/> is negative.</exception>
+        [Obsolete("Use SetConnectionTimeout(TimeSpan)")]
         IClientBuilder SetConnectionTimeout(int timeout);
+
+        /// <summary>
+        /// Sets the HTTP connection timeout to observe when making requests.
+        /// To use the default connection timeout, don't call this method.
+        /// </summary>
+        /// <param name="timeout">The HTTP connection timeout to use.</param>
+        /// <returns>This instance for method chaining.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="timeout"/> is negative.</exception>
+        IClientBuilder SetConnectionTimeout(TimeSpan timeout);
 
         /// <summary>
         /// Sets the base API URL to use when making requests.

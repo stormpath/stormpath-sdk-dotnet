@@ -68,7 +68,7 @@ namespace Stormpath.SDK.UAT
                             DefaultTtl = 900,
                             Caches = new Dictionary<string, ClientCacheConfiguration>()
                             {
-                                ["account"] = new ClientCacheConfiguration { Tti = 5000, Ttl = 10000 }
+                                ["account"] = new ClientCacheConfiguration { Tti = 5000, Ttl = 6000 }
                             }
                         }
                     }
