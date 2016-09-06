@@ -53,22 +53,18 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
 
         public async Task<IHttpResponse> ToStormpathResponseAsync(HttpResponseMessage httpResponse)
         {
-            bool transportError = false;
+            var transportError = false;
 
-            using (var content = httpResponse.Content)
-            {
-                var stringContent = await content.ReadAsStringAsync().ConfigureAwait(false);
+            var stringContent = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var headers = ToStormpathHeaders(httpResponse.Headers, httpResponse.Content.Headers);
 
-                var headers = this.ToStormpathHeaders(httpResponse.Headers, content.Headers);
-
-                return new SystemNetHttpResponse(
-                    (int)httpResponse.StatusCode,
-                    httpResponse.ReasonPhrase,
-                    headers,
-                    stringContent,
-                    content.Headers.ContentType?.MediaType,
-                    transportError);
-            }
+            return new SystemNetHttpResponse(
+                (int) httpResponse.StatusCode,
+                httpResponse.ReasonPhrase,
+                headers,
+                stringContent,
+                httpResponse.Content.Headers.ContentType?.MediaType,
+                transportError);
         }
 
         public IHttpResponse ToStormpathErrorResponse(string errorMessage)
@@ -97,7 +93,7 @@ namespace Stormpath.SDK.Http.SystemNetHttpClient
                 httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue(stormpathHeaders.ContentType);
             }
 
-            var ignoredHeaders = new string[]
+            var ignoredHeaders = new[]
             {
                 HttpHeaders.HeaderContentTypeName, // handled above
                 HttpHeaders.HeaderContentLengthName // handled automatically

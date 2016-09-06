@@ -45,5 +45,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Http.SystemNetHttpClient"
   },
-  "version": "0.94.0-beta1"
+  "version": "0.94.0-beta2"
 }
