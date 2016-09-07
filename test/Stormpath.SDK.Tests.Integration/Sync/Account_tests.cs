@@ -713,7 +713,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Get all accounts that modified their passwords this year
             var accounts = application.GetAccounts()
-                .Where(a => a.PasswordModifiedAt <= new DateTimeOffset(DateTimeOffset.Now.Year, 1, 1, 0, 0, 0, TimeSpan.Zero))
+                .Where(a => a.PasswordModifiedAt > new DateTimeOffset(DateTimeOffset.Now.Year, 1, 1, 0, 0, 0, TimeSpan.Zero))
                 .Synchronously()
                 .ToList();
 

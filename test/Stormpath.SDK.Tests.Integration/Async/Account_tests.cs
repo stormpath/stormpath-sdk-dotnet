@@ -689,7 +689,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Get all accounts that modified their passwords this year
             var accounts = await application.GetAccounts()
-                .Where(a => a.PasswordModifiedAt <= new DateTimeOffset(DateTimeOffset.Now.Year, 1, 1, 0, 0, 0, TimeSpan.Zero))
+                .Where(a => a.PasswordModifiedAt > new DateTimeOffset(DateTimeOffset.Now.Year, 1, 1, 0, 0, 0, TimeSpan.Zero))
                 .ToListAsync();
 
             accounts.ShouldContain(a => a.Email == "chewie@kashyyyk.rim");
