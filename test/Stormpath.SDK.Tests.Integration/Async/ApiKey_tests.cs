@@ -176,6 +176,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Throws_when_id_is_invalid(TestClientProvider clientBuilder)
         {
@@ -201,6 +202,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Throws_when_secret_is_invalid(TestClientProvider clientBuilder)
         {
@@ -226,6 +228,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Throws_when_key_is_disabled(TestClientProvider clientBuilder)
         {
@@ -253,6 +256,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
 
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Throws_when_account_is_disabled(TestClientProvider clientBuilder)
         {
