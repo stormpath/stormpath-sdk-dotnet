@@ -9,10 +9,10 @@
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
     "Polyglot": "1.2.0",
-    "Stormpath.Configuration": "6.0.0-beta1",
+    "Stormpath.Configuration": "6.0.0",
     "Stormpath.SDK.Abstractions": {
       "target": "project",
-      "version": "0.94.0-beta1"
+      "version": "0.94.0"
     },
     "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
   },
@@ -48,5 +48,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK"
   },
-  "version": "0.94.0-beta1"
+  "version": "0.94.0"
 }

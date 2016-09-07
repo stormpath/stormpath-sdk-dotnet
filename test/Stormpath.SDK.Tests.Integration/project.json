@@ -17,7 +17,7 @@
     "Shouldly": "2.8.0",
     "Stormpath.SDK.Core": {
       "target": "project",
-      "version": "0.91.0"
+      "version": "0.94.0"
     },
     "Stormpath.SDK.Tests.Common": {
       "target": "project",
@@ -42,5 +42,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Tests.Integration"
   },
-  "version": "0.91.0"
+  "version": "0.94.0"
 }

@@ -11,7 +11,7 @@
   "dependencies": {
     "Stormpath.SDK.Abstractions": {
       "target": "project",
-      "version": "0.94.0-beta1"
+      "version": "0.94.0"
     }
   },
   "description": "System.Net.Http plugin for the Stormpath .NET SDK.",
@@ -45,5 +45,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Http.SystemNetHttpClient"
   },
-  "version": "0.94.0-beta2"
+  "version": "0.94.0"
 }
