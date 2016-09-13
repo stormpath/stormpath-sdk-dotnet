@@ -1002,6 +1002,28 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 }";
 
         #endregion
+
+        #region Providers
+
+        public static readonly string SamlProvider = @"
+{
+   ""href"":""https://api.stormpath.com/v1/directories/directory1/provider"",
+   ""createdAt"":""2016-05-16T18:59:59.183Z"",
+   ""modifiedAt"":""2016-05-16T18:59:59.183Z"",
+   ""providerId"":""saml"",
+   ""ssoLoginUrl"":""https://test.foo.bar/trust/saml2/http-post/sso/12345"",
+   ""ssoLogoutUrl"":""https://test.foo.bar/trust/saml2/http-post/slo/12345"",
+   ""encodedX509SigningCert"":""-----BEGIN CERTIFICATE-----fakefakefake\n-----END CERTIFICATE-----"",
+   ""requestSignatureAlgorithm"":""RSA-SHA1"",
+   ""attributeStatementMappingRules"":{
+      ""href"":""https://api.stormpath.com/v1/attributeStatementMappingRules/foobarAsm1""
+   },
+   ""serviceProviderMetadata"":{
+      ""href"":""https://api.stormpath.com/v1/samlServiceProviderMetadatas/foobarSpm1""
+   }
+}";
+
+        #endregion
     }
 #pragma warning restore SA1124 // Do not use regions
 }

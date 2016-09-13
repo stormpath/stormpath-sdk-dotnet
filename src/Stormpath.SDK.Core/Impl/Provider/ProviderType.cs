@@ -33,6 +33,8 @@ namespace Stormpath.SDK.Impl.Provider
 
         public static ProviderType LinkedIn = new ProviderType("linkedin");
 
+        public static ProviderType Saml = new ProviderType("saml");
+
         private ProviderType(string value)
             : base(value)
         {
