@@ -77,6 +77,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
     },
     ""email"": ""han.solo@corellia.core"",
     ""emailVerificationToken"": null,
+    ""emailVerificationStatus"": ""UNKNOWN"",
     ""fullName"": ""Han Solo"",
     ""givenName"": ""Han"",
     ""groupMemberships"": {

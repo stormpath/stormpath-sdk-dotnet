@@ -41,7 +41,37 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
                     return FieldConverterResult.Failed;
                 }
 
+                // Only convert the Account.Status value
+                if (!token.Key.Equals("status", StringComparison.OrdinalIgnoreCase))
+                {
+                    return FieldConverterResult.Failed;
+                }
+
                 return new FieldConverterResult(true, SDK.Account.AccountStatus.Parse(token.Value.ToString()));
+            }
+        }
+
+        internal sealed class AccountEmailVerificationStatusConverter : AbstractFieldConverter
+        {
+            public AccountEmailVerificationStatusConverter()
+                : base(nameof(AccountEmailVerificationStatusConverter), typeof(SDK.Account.IAccount))
+            {
+            }
+
+            protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
+            {
+                if (!IsStatusField(token))
+                {
+                    return FieldConverterResult.Failed;
+                }
+
+                // Only convert the Account.EmailVerificationStatus value
+                if (!token.Key.Equals("emailVerificationStatus", StringComparison.OrdinalIgnoreCase))
+                {
+                    return FieldConverterResult.Failed;
+                }
+
+                return new FieldConverterResult(true, SDK.Account.EmailVerificationStatus.Parse(token.Value.ToString()));
             }
         }
 
@@ -55,6 +85,12 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
             {
                 if (!IsStatusField(token))
+                {
+                    return FieldConverterResult.Failed;
+                }
+
+                // Only convert the Application.Status value
+                if (!token.Key.Equals("status", StringComparison.OrdinalIgnoreCase))
                 {
                     return FieldConverterResult.Failed;
                 }
@@ -77,6 +113,12 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
                     return FieldConverterResult.Failed;
                 }
 
+                // Only convert the Directory.Status value
+                if (!token.Key.Equals("status", StringComparison.OrdinalIgnoreCase))
+                {
+                    return FieldConverterResult.Failed;
+                }
+
                 return new FieldConverterResult(true, SDK.Directory.DirectoryStatus.Parse(token.Value.ToString()));
             }
         }
@@ -91,6 +133,12 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
             {
                 if (!IsStatusField(token))
+                {
+                    return FieldConverterResult.Failed;
+                }
+
+                // Only convert the Group.Status value
+                if (!token.Key.Equals("status", StringComparison.OrdinalIgnoreCase))
                 {
                     return FieldConverterResult.Failed;
                 }
@@ -113,6 +161,12 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
                     return FieldConverterResult.Failed;
                 }
 
+                // Only convert the Organization.Status value
+                if (!token.Key.Equals("status", StringComparison.OrdinalIgnoreCase))
+                {
+                    return FieldConverterResult.Failed;
+                }
+
                 return new FieldConverterResult(true, SDK.Organization.OrganizationStatus.Parse(token.Value.ToString()));
             }
         }
@@ -131,6 +185,12 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
                     return FieldConverterResult.Failed;
                 }
 
+                // Only convert the ApiKey.Status value
+                if (!token.Key.Equals("status", StringComparison.OrdinalIgnoreCase))
+                {
+                    return FieldConverterResult.Failed;
+                }
+
                 return new FieldConverterResult(true, SDK.Api.ApiKeyStatus.Parse(token.Value.ToString()));
             }
         }
@@ -145,6 +205,12 @@ namespace Stormpath.SDK.Impl.Serialization.FieldConverters
             protected override FieldConverterResult ConvertImpl(KeyValuePair<string, object> token)
             {
                 if (!IsStatusField(token))
+                {
+                    return FieldConverterResult.Failed;
+                }
+
+                // Only convert the Email.Status value
+                if (!token.Key.EndsWith("EmailStatus", StringComparison.OrdinalIgnoreCase))
                 {
                     return FieldConverterResult.Failed;
                 }

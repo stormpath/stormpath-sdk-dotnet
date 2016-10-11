@@ -36,6 +36,7 @@ namespace Stormpath.SDK.Impl.Serialization
                 new LinkPropertyConverter(),
                 new ExpandedPropertyConverter(converter: this.ConvertProperties),
                 new StatusFieldConverters.AccountStatusConverter(),
+                new StatusFieldConverters.AccountEmailVerificationStatusConverter(),
                 new StatusFieldConverters.ApplicationStatusConverter(),
                 new StatusFieldConverters.DirectoryStatusConverter(),
                 new StatusFieldConverters.GroupStatusConverter(),

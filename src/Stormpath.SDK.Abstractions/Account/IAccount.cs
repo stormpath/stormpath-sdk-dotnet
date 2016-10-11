@@ -92,6 +92,12 @@ namespace Stormpath.SDK.Account
         IEmailVerificationToken EmailVerificationToken { get; }
 
         /// <summary>
+        /// Gets the account's email verification status.
+        /// </summary>
+        /// <value>The account's email verification status.</value>
+        EmailVerificationStatus EmailVerificationStatus { get; }
+
+        /// <summary>
         /// Gets the account's status.
         /// </summary>
         /// <value>The account's status. Accounts that are not <see cref="AccountStatus.Enabled">Enabled</see> may not login to applications.</value>

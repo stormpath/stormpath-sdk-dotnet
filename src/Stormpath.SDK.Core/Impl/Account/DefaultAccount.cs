@@ -31,6 +31,7 @@ namespace Stormpath.SDK.Impl.Account
         private static readonly string DirectoryPropertyName = "directory";
         private static readonly string EmailPropertyName = "email";
         private static readonly string EmailVerificationTokenPropertyName = "emailVerificationToken";
+        private static readonly string EmailVerificationStatusPropertyName = "emailVerificationStatus";
         private static readonly string FullNamePropertyName = "fullName";
         private static readonly string GivenNamePropertyName = "givenName";
         private static readonly string GroupMembershipsPropertyName = "groupMemberships";
@@ -64,6 +65,8 @@ namespace Stormpath.SDK.Impl.Account
         string IAccount.Email => this.GetStringProperty(EmailPropertyName);
 
         internal IEmbeddedProperty EmailVerificationToken => this.GetLinkProperty(EmailVerificationTokenPropertyName);
+
+        EmailVerificationStatus IAccount.EmailVerificationStatus => GetProperty<EmailVerificationStatus>(EmailVerificationStatusPropertyName);
 
         IEmailVerificationToken IAccount.EmailVerificationToken
         {

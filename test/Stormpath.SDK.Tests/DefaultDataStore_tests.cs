@@ -273,7 +273,7 @@ namespace Stormpath.SDK.Tests
         {
             var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Application).Object);
 
-            var application = await dataStore.GetResourceAsync<IApplication>("/account", CancellationToken.None);
+            var application = await dataStore.GetResourceAsync<IApplication>("/application", CancellationToken.None);
 
             // Verify against data from FakeJson.Application
             application.Name.ShouldBe("Lightsabers Galore");
@@ -283,5 +283,21 @@ namespace Stormpath.SDK.Tests
             application.AuthorizedCallbackUris.ShouldContain("https://foo.bar/1");
             application.AuthorizedCallbackUris.ShouldContain("https://foo.bar/2");
         }
+
+        /// <summary>
+        /// Regression test for https://github.com/stormpath/stormpath-sdk-dotnet/issues/212
+        /// </summary>
+        /// <returns>A Task that represents the asynchronous test.</returns>
+        [Fact]
+        public async Task Supports_email_verification_status_unknown()
+        {
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Account).Object);
+
+            var account = await dataStore.GetResourceAsync<IAccount>("/account", CancellationToken.None);
+
+            // Verify against data from FakeJson.Application
+            account.EmailVerificationStatus.ShouldBe(EmailVerificationStatus.Unknown);
+        }
+
     }
 }
