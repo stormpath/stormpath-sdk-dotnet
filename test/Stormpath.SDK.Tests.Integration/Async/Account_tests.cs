@@ -668,6 +668,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var oldModificationDate = account.PasswordModifiedAt.Value;
 
+            await Task.Delay(1000);
+            
             account.SetPassword(new RandomPassword(16));
             await account.SaveAsync();
 
