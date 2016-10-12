@@ -689,6 +689,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var oldModificationDate = account.PasswordModifiedAt.Value;
 
+            System.Threading.Thread.Sleep(3000); // Wait for a bit because sometimes clocks are slow
+
             account.SetPassword(new RandomPassword(16));
             account.Save();
 
