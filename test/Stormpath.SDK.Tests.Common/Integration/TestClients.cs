@@ -73,8 +73,13 @@ namespace Stormpath.SDK.Tests.Common.Integration
         /// <returns>A list of testing clients.</returns>
         public static IEnumerable<object[]> GetClients()
         {
-            yield return new object[] { new TestClientProvider(nameof(Basic)) };
+            var isFastMode = false;
+            bool.TryParse(Environment.GetEnvironmentVariable("STORMPATH_IT_FASTMODE"), out isFastMode);
+
             yield return new object[] { new TestClientProvider(nameof(SAuthc1)) };
+
+            if (isFastMode) yield break;
+            yield return new object[] { new TestClientProvider(nameof(Basic)) };
             yield return new object[] { new TestClientProvider(nameof(SAuthc1Caching)) };
         }
 

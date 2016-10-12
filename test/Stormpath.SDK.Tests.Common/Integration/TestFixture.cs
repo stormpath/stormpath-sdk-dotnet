@@ -49,6 +49,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
 
             StaticLogger.Instance.Info($"IT run {this.testData.Nonce} starting...");
             StaticLogger.Instance.Info($"Running against base URL: {TestClients.CurrentConfiguration.Client.BaseUrl}");
+            Console.WriteLine($"Running against base URL: {TestClients.CurrentConfiguration.Client.BaseUrl}"); // Also write to stdout
 
             this.AddObjectsToTenantAsync()
                 .GetAwaiter().GetResult();
@@ -63,6 +64,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 if (disposing)
                 {
                     StaticLogger.Instance.Info($"IT run {this.testData.Nonce} finished. Cleaning up...");
+                    Console.WriteLine($"IT run {this.testData.Nonce} finished. Cleaning up..."); // Also write to stdout
 
                     this.RemoveObjectsFromTenantAsync()
                         .GetAwaiter().GetResult();
