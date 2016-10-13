@@ -40,12 +40,12 @@
       <HintPath>..\packages\Polyglot.1.2.0\lib\net45\Polyglot.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.Configuration, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stormpath.Configuration.5.3.0\lib\net45\Stormpath.Configuration.dll</HintPath>
+    <Reference Include="Stormpath.Configuration, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stormpath.Configuration.6.0.0\lib\net45\Stormpath.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.Configuration.Abstractions, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stormpath.Configuration.Abstractions.5.3.0\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
+    <Reference Include="Stormpath.Configuration.Abstractions, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stormpath.Configuration.Abstractions.6.0.0\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -193,6 +193,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\CustomData\DefaultCustomData.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\CustomData\DefaultCustomDataProxy.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\CustomData\ICustomDataSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\CustomData\PocoAdapter{T}.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultDataStore.Core.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultDataStore.Create.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\DataStore\DefaultDataStore.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\JwtSignatureValidator.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\JwtSigner.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\JwtValidator.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Jwt\StormpathClaims.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\CollectionResourceQueryable{TResult}.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\CollectionResourceQueryProvider{TResult}.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Executor\CollectionResourceExecutor{TResult}.cs" />
@@ -334,7 +336,6 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\ResultOperators\ResultOperatorExpression.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\Expressions\ResultOperators\SingleResultOperator.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\NameTranslators\AbstractNameTranslator.cs" />
-    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\NameTranslators\DateTimeFieldNameTranslator.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\NameTranslators\FieldNameTranslator.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\NameTranslators\MethodNameTranslator.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Linq\Parsing\RangedTerms\AbstractRangedWhereTermParser.cs" />
@@ -432,6 +433,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultProviderAccountResult.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultProviderData.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultProviderFactory.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\DefaultSamlProvider.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\IProviderAccountAccess.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\ProviderAccountResolver.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Provider\ProviderType.cs" />

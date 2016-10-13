@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Stormpath.Configuration.Abstractions, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stormpath.Configuration.Abstractions.5.3.0\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
+    <Reference Include="Stormpath.Configuration.Abstractions, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stormpath.Configuration.Abstractions.6.0.0\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -49,6 +49,7 @@
   <!-- #startAutogen -->
   <ItemGroup>
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\AccountStatus.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\EmailVerificationStatus.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IAccount.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IAccountCreationActions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IAccountCreationOptions.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Provider\IProviderData.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Provider\IProviderFactory.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Provider\IProviderRequestFactory{A,P}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Provider\ISamlProvider.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Resource\IAuditable.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Resource\ICreationOptions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Resource\IDeletable.cs" />
