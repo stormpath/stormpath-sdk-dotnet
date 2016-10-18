@@ -99,7 +99,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(IPasswordStrengthPolicy)] = typeof(DefaultPasswordStrengthPolicy),
             [typeof(IFactor)] = typeof(DefaultFactor),
             [typeof(ISmsFactor)] = typeof(DefaultSmsFactor),
-            //[typeof(IGoogleAuthenticatorFactor)] = typeof(DefaultGoogleAuthenticatorFactor), // TODO
+            [typeof(IGoogleAuthenticatorFactor)] = typeof(DefaultGoogleAuthenticatorFactor),
             [typeof(IChallenge)] = typeof(DefaultChallenge),
             [typeof(IPhone)] = typeof(DefaultPhone),
 
@@ -154,7 +154,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultPasswordStrengthPolicy)] = typeof(IPasswordStrengthPolicy),
             [typeof(DefaultFactor)] = typeof(IFactor),
             [typeof(DefaultSmsFactor)] = typeof(ISmsFactor),
-            // todo google-authenticator
+            [typeof(DefaultGoogleAuthenticatorFactor)] = typeof(IGoogleAuthenticatorFactor),
             [typeof(DefaultPhone)] = typeof(IPhone),
 
             // TODO these will be greatly simplified on a breaking version change

@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Stormpath.SDK.Impl.Resource;
@@ -44,6 +45,11 @@ namespace Stormpath.SDK.Impl.DataStore
 
         public Map ToMap(object resource)
         {
+            if (resource == null)
+            {
+                return null;
+            }
+
             var typeInfo = resource.GetType().GetTypeInfo();
 
             return typeInfo.DeclaredProperties
@@ -54,14 +60,18 @@ namespace Stormpath.SDK.Impl.DataStore
                     var isPrimitive = propertyTypeInfo.IsPrimitive || p.PropertyType == typeof(string);
                     var rawValue = p.GetValue(resource);
 
-                    var value = isPrimitive
-                        ? SanitizeValue(rawValue)
-                        : ToMap(rawValue);
+                    object value = null;
+                    if (rawValue != null)
+                    {
+                        value = isPrimitive
+                            ? SanitizeValue(rawValue)
+                            : ToMap(rawValue);
+                    }
 
                     return new {name = p.Name.ToLower(), value};
-                }).ToDictionary(
-                    map => map.name,
-                    map => map.value);
+                })
+                .Where(pair => pair.value != null)
+                .ToDictionary(pair => pair.name, pair => pair.value);
         }
 
         private object SanitizeValue(object rawValue)

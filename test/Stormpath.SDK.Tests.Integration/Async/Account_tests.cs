@@ -787,23 +787,24 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             var factor = await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
             {
-                
+                Issuer = "MyApp"
             });
 
             (await factor.GetAccountAsync()).Href.Should().Be(luke.Href);
 
             factor.Href.Should().NotBeNullOrEmpty();
-            factor.Type.Should().Be(FactorType.Sms);
+            factor.Type.Should().Be(FactorType.GoogleAuthenticator);
             factor.Status.Should().Be(FactorStatus.Enabled);
             factor.VerificationStatus.Should().Be(FactorVerificationStatus.Unverified);
+            factor.AccountName.Should().NotBeNullOrEmpty();
+            factor.Base64QrImage.Should().NotBeNullOrEmpty();
+            factor.Issuer.Should().Be("MyApp");
+            factor.KeyUri.Should().NotBeNullOrEmpty();
+            factor.Secret.Should().NotBeNullOrEmpty();
 
             // No challenges yet
             (await factor.GetMostRecentChallengeAsync()).Should().BeNull();
             (await factor.Challenges.AnyAsync()).ShouldBeFalse();
-
-            // Get the phone associated with this factor
-            var phone = await factor.GetPhoneAsync();
-            phone.Number.Should().Be("+18185552593");
 
             (await factor.DeleteAsync()).ShouldBeTrue();
         }
@@ -903,7 +904,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Update_factor_and_save(TestClientProvider clientBuilder)
+        public async Task Update_sms_factor_and_save(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
@@ -920,6 +921,31 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await factor.SaveAsync();
 
             factor.Status.Should().Be(FactorStatus.Enabled);
+
+            (await factor.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Update_totp_factor_and_save(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
+
+            var factor = await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp"
+            });
+
+            factor.Issuer.Should().Be("MyApp");
+            factor.AccountName.Should().Be(luke.Username);
+
+            factor.Issuer = "MyBetterApp";
+            factor.AccountName = "luke@hoth.rim";
+            await factor.SaveAsync();
+
+            factor.Issuer.Should().Be("MyBetterApp");
+            factor.AccountName.Should().Be("luke@hoth.rim");
 
             (await factor.DeleteAsync()).ShouldBeTrue();
         }

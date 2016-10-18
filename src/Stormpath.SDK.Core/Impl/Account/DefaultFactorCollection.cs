@@ -26,7 +26,7 @@ namespace Stormpath.SDK.Impl.Account
                 {
                     Number = options.Number
                 },
-                Status = options.Status.ToString()
+                Status = options.Status
             };
 
             var parameters = new Dictionary<string, string>();
@@ -49,7 +49,27 @@ namespace Stormpath.SDK.Impl.Account
             GoogleAuthenticatorFactorCreationOptions options,
             CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var googleAuthFactorCreationData = new GoogleAuthenticatorFactorCreationData
+            {
+                AccountName = options.AccountName,
+                Issuer = options.Issuer,
+                Status = options.Status
+            };
+
+            var parameters = new Dictionary<string, string>();
+            if (options.Challenge)
+            {
+                parameters.Add("challenge", "true");
+            }
+
+            var creationOptions = new DefaultCreationOptions(parameters);
+
+            return (_dataStore as IInternalAsyncDataStore).CreateAsync<GoogleAuthenticatorFactorCreationData, IGoogleAuthenticatorFactor>(
+                _collectionHref,
+                googleAuthFactorCreationData,
+                creationOptions,
+                null,
+                cancellationToken);
         }
     }
 }

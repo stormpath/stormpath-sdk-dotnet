@@ -14,7 +14,6 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-
         public Task<IPhone> GetPhoneAsync(CancellationToken cancellationToken = new CancellationToken())
             => GetInternalAsyncDataStore().GetResourceAsync<IPhone>(
                 GetLinkProperty(PhonePropertyName).Href,

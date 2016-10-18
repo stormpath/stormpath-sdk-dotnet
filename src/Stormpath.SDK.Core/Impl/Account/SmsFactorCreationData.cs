@@ -1,12 +1,14 @@
-﻿namespace Stormpath.SDK.Impl.Account
+﻿using Stormpath.SDK.Account;
+
+namespace Stormpath.SDK.Impl.Account
 {
     internal sealed class SmsFactorCreationData
     {
-        public string Type { get; set; } = "SMS";
+        public string Type { get; } = "SMS";
 
         public SmsFactorCreationPhoneData Phone { get; set; }
 
-        public string Status { get; set; }
+        public FactorStatus Status { get; set; }
     }
 
     internal sealed class SmsFactorCreationPhoneData

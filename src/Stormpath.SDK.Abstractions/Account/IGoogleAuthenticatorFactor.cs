@@ -2,6 +2,14 @@
 {
     public interface IGoogleAuthenticatorFactor : IFactor
     {
-        // TODO properties?
+        string AccountName { get; set; }
+
+        string Issuer { get; set; }
+
+        string Secret { get; }
+
+        string KeyUri { get; }
+
+        string Base64QrImage { get; }
     }
 }
