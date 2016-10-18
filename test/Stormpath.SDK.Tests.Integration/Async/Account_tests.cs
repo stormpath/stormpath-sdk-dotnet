@@ -753,12 +753,11 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Create_sms_factor_for_account(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-
             var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
 
             var factor = await luke.Factors.AddAsync(new SmsFactorCreationOptions
             {
-                Number = "+1 818-555-2593"
+                Number = "+1 818-555-2593" // Jack is back
             });
 
             factor.Href.Should().NotBeNullOrEmpty();
@@ -771,6 +770,42 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // todo test challenges
             // todo test phone
+
+            (await factor.DeleteAsync()).ShouldBeTrue();
+        }
+
+        /// <summary>
+        /// Tests that polymorphism is handled correctly when retrieving this resource.
+        /// </summary>
+        /// <remarks>
+        /// An SMS factor should be retrieved as an ISmsFactor, which implements IFactor.
+        /// </remarks>
+        /// <param name="clientBuilder">The client to use.</param>
+        /// <returns>A Task that represents the asynchronous test.</returns>
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Retrieving_sms_factor_should_create_sms_class(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
+
+            var factor = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+
+            factor.Should().BeAssignableTo<ISmsFactor>();
+            factor.Should().BeAssignableTo<IFactor>();
+
+            var retrievedGenericFactor = await client.GetResourceAsync<IFactor>(factor.Href);
+            retrievedGenericFactor.Should().BeAssignableTo<ISmsFactor>();
+            retrievedGenericFactor.Should().BeAssignableTo<IFactor>();
+            retrievedGenericFactor.Href.Should().Be(factor.Href);
+
+            var retrievedSpecificFactor = await client.GetResourceAsync<ISmsFactor>(factor.Href);
+            retrievedSpecificFactor.Should().BeAssignableTo<ISmsFactor>();
+            retrievedSpecificFactor.Should().BeAssignableTo<IFactor>();
+            retrievedSpecificFactor.Href.Should().Be(factor.Href);
 
             (await factor.DeleteAsync()).ShouldBeTrue();
         }
