@@ -778,6 +778,36 @@ namespace Stormpath.SDK.Tests.Integration.Async
             (await factor.DeleteAsync()).ShouldBeTrue();
         }
 
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Create_totp_factor_for_account(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
+
+            var factor = await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                
+            });
+
+            (await factor.GetAccountAsync()).Href.Should().Be(luke.Href);
+
+            factor.Href.Should().NotBeNullOrEmpty();
+            factor.Type.Should().Be(FactorType.Sms);
+            factor.Status.Should().Be(FactorStatus.Enabled);
+            factor.VerificationStatus.Should().Be(FactorVerificationStatus.Unverified);
+
+            // No challenges yet
+            (await factor.GetMostRecentChallengeAsync()).Should().BeNull();
+            (await factor.Challenges.AnyAsync()).ShouldBeFalse();
+
+            // Get the phone associated with this factor
+            var phone = await factor.GetPhoneAsync();
+            phone.Number.Should().Be("+18185552593");
+
+            (await factor.DeleteAsync()).ShouldBeTrue();
+        }
+
         /// <summary>
         /// Tests that polymorphism is handled correctly when retrieving this resource.
         /// </summary>
@@ -830,7 +860,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var challenge = await factor.GetMostRecentChallengeAsync();
             challenge.Href.Should().NotBeNullOrEmpty();
             challenge.Message.Should().NotBeNullOrEmpty();
-            //challenge.Status.Should().Match(x => x == ChallengeStatus.Created || x == ChallengeStatus.Waiting)
+            challenge.Status.Should().BeOfType<ChallengeStatus>();
 
             (await challenge.GetAccountAsync()).Href.Should().Be(luke.Href);
             (await challenge.GetFactorAsync()).Href.Should().Be(factor.Href);
@@ -838,6 +868,58 @@ namespace Stormpath.SDK.Tests.Integration.Async
             // Should get the same object when accessing the Challenges collection
             var challenge2 = await factor.Challenges.SingleAsync();
             challenge2.Href.Should().Be(challenge.Href);
+
+            (await factor.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Challenge_existing_factor(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
+
+            var factor = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+
+            var challenge = await factor.Challenges.AddAsync(new ChallengeCreationOptions
+            {
+                Message = "Dammit Chloe! The code is ${code}"
+            });
+
+            var retrievedChallenge = await factor.Challenges.SingleAsync();
+            retrievedChallenge.Href.Should().Be(retrievedChallenge.Href);
+
+            challenge.Message.Should().StartWith("Dammit Chloe!");
+            challenge.Status.Should().BeOfType<ChallengeStatus>();
+
+            (await challenge.GetAccountAsync()).Href.Should().Be(luke.Href);
+            (await challenge.GetFactorAsync()).Href.Should().Be(factor.Href);
+
+            (await factor.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Update_factor_and_save(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
+
+            var factor = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+
+            factor.Status.Should().Be(FactorStatus.Disabled);
+
+            factor.Status = FactorStatus.Enabled;
+            await factor.SaveAsync();
+
+            factor.Status.Should().Be(FactorStatus.Enabled);
 
             (await factor.DeleteAsync()).ShouldBeTrue();
         }

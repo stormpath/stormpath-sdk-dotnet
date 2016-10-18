@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.DataStore;
@@ -13,9 +13,13 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-        public Task<IChallenge> AddAsync(ChallengeCreationOptions options)
+        public Task<IChallenge> AddAsync(ChallengeCreationOptions options, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return (_dataStore as IInternalAsyncDataStore).CreateAsync<ChallengeCreationOptions, IChallenge>(
+                _collectionHref,
+                options,
+                null,
+                cancellationToken);
         }
     }
 }
