@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -56,14 +57,12 @@ namespace Stormpath.SDK.Impl.DataStore
                 .Where(p => p.CanRead)
                 .Select(p =>
                 {
-                    var propertyTypeInfo = p.PropertyType.GetTypeInfo();
-                    var isPrimitive = propertyTypeInfo.IsPrimitive || p.PropertyType == typeof(string);
                     var rawValue = p.GetValue(resource);
 
                     object value = null;
                     if (rawValue != null)
                     {
-                        value = isPrimitive
+                        value = IsPrimitive(p.PropertyType)
                             ? SanitizeValue(rawValue)
                             : ToMap(rawValue);
                     }
@@ -96,6 +95,23 @@ namespace Stormpath.SDK.Impl.DataStore
 
             // Already a primitive-like type, no need to sanitize
             return rawValue;
+        }
+
+        private bool IsPrimitive(Type type)
+        {
+            if (type == typeof(string))
+            {
+                return true;
+            }
+
+            var typeInfo = type.GetTypeInfo();
+
+            if (typeof(StringEnumeration).GetTypeInfo().IsAssignableFrom(typeInfo))
+            {
+                return true;
+            }
+
+            return type.GetTypeInfo().IsPrimitive;
         }
     }
 }

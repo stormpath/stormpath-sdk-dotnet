@@ -810,7 +810,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         }
 
         /// <summary>
-        /// Tests that polymorphism is handled correctly when retrieving this resource.
+        /// Tests that polymorphism is handled correctly when retrieving the Factor resource.
         /// </summary>
         /// <remarks>
         /// An SMS factor should be retrieved as an ISmsFactor, which implements IFactor.
@@ -843,6 +843,41 @@ namespace Stormpath.SDK.Tests.Integration.Async
             retrievedSpecificFactor.Href.Should().Be(factor.Href);
 
             (await factor.DeleteAsync()).ShouldBeTrue();
+        }
+
+        /// <summary>
+        /// Tests that polymorphism is handled correctly when retrieving a list of Factors.
+        /// </summary>
+        /// <param name="clientBuilder">The client to use.</param>
+        /// <returns>A Task that represents the asynchronous test.</returns>
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Retrieving_list_of_factors_should_be_polymorphic(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
+
+            await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+            await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp"
+            });
+
+            var factors = await luke.Factors.ToArrayAsync();
+
+            var factor1 = factors.First() as ISmsFactor;
+            factor1.Should().NotBeNull();
+            (await factor1.GetPhoneAsync()).Number.Should().Be("+18185552593");
+
+            var factor2 = factors.Last() as IGoogleAuthenticatorFactor;
+            factor2.Should().NotBeNull();
+            factor2.Issuer.Should().Be("MyApp");
+
+            (await factor1.DeleteAsync()).ShouldBeTrue();
+            (await factor2.DeleteAsync()).ShouldBeTrue();
         }
 
         [Theory]

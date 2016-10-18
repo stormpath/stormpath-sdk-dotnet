@@ -204,6 +204,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(CollectionResponsePage<IRefreshToken>)] = typeof(IRefreshToken),
             [typeof(CollectionResponsePage<IApiKey>)] = typeof(IApiKey),
             [typeof(CollectionResponsePage<IChallenge>)] = typeof(IChallenge),
+            [typeof(CollectionResponsePage<IFactor>)] = typeof(IFactor),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(CollectionResponsePage<IApplicationAccountStoreMapping>)] = typeof(IApplicationAccountStoreMapping),
