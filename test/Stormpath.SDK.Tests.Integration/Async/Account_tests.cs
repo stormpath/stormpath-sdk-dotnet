@@ -984,5 +984,95 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             (await factor.DeleteAsync()).ShouldBeTrue();
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Searching_factors_by_status(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
+
+            var factor1 = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+            var factor2 = await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp",
+                Status = FactorStatus.Enabled
+            });
+
+            var disabledFactor = await luke.Factors
+                .Where(f => f.Status == FactorStatus.Disabled)
+                .SingleAsync();
+            disabledFactor.Href.Should().Be(factor2.Href);
+
+            var enabledFactor = await luke.Factors
+                .Where(f => f.Status == FactorStatus.Enabled)
+                .SingleAsync();
+            enabledFactor.Href.Should().Be(factor1.Href);
+
+            (await factor1.DeleteAsync()).ShouldBeTrue();
+            (await factor2.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Searching_factors_by_type(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
+
+            var factor1 = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+            var factor2 = await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp",
+                Status = FactorStatus.Enabled
+            });
+
+            var disabledFactor = await luke.Factors
+                .Where(f => f.Type == FactorType.Sms)
+                .SingleAsync();
+            disabledFactor.Href.Should().Be(factor1.Href);
+
+            var enabledFactor = await luke.Factors
+                .Where(f => f.Type == FactorType.GoogleAuthenticator)
+                .SingleAsync();
+            enabledFactor.Href.Should().Be(factor2.Href);
+
+            (await factor1.DeleteAsync()).ShouldBeTrue();
+            (await factor2.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Searching_factors_by_totp_account_name(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
+
+            var factor1 = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+            var factor2 = await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp",
+                Status = FactorStatus.Enabled
+            });
+
+            var totpFactor = await luke.Factors
+                .Where(f => ((IGoogleAuthenticatorFactor)f).AccountName == luke.Username)
+                .SingleAsync();
+
+            (await factor1.DeleteAsync()).ShouldBeTrue();
+            (await factor2.DeleteAsync()).ShouldBeTrue();
+        }
     }
 }
