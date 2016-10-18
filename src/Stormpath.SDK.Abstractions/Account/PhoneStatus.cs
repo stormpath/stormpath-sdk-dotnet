@@ -1,4 +1,4 @@
-﻿// <copyright file="PhoneVerificationStatus.cs" company="Stormpath, Inc.">
+﻿// <copyright file="PhoneStatus.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,21 +19,21 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// Represents the various states an <see cref="IAccount">Account</see>'s phone may be in with regards to verification.
+    /// Represents the various states an <see cref="IAccount">Account</see>'s phone may be in.
     /// </summary>
-    public sealed class PhoneVerificationStatus : AbstractEnumProperty
+    public sealed class PhoneStatus : AbstractEnumProperty
     {
         /// <summary>
-        /// The phone has been verified.
+        /// The phone is enabled.
         /// </summary>
-        public static PhoneVerificationStatus Verified = new PhoneVerificationStatus("VERIFIED");
+        public static PhoneStatus Verified = new PhoneStatus("ENABLED");
 
         /// <summary>
-        /// The phone has not been verified.
+        /// The phone is disabled.
         /// </summary>
-        public static PhoneVerificationStatus Unverified = new PhoneVerificationStatus("UNVERIFIED");
+        public static PhoneStatus Unverified = new PhoneStatus("DISABLED");
 
-        public PhoneVerificationStatus(string value)
+        public PhoneStatus(string value)
             : base(value)
         {
         }

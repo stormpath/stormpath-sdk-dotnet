@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Account
@@ -6,6 +7,7 @@ namespace Stormpath.SDK.Account
     public interface IPhone : 
         IResource,
         IDeletable,
+        ISaveable<IPhone>,
         IAuditable
     {
         string Number { get; set; }
@@ -14,8 +16,10 @@ namespace Stormpath.SDK.Account
 
         string Description { get; set; }
 
-        PhoneVerificationStatus VerificationStatus { get; set; }
+        PhoneVerificationStatus VerificationStatus { get; }
 
-        Task<IAccount> GetAccountAsync();
+        PhoneStatus Status { get; set; }
+
+        Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

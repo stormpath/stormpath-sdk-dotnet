@@ -760,16 +760,20 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 Number = "+1 818-555-2593" // Jack is back
             });
 
+            (await factor.GetAccountAsync()).Href.Should().Be(luke.Href);
+
             factor.Href.Should().NotBeNullOrEmpty();
             factor.Type.Should().Be(FactorType.Sms);
             factor.Status.Should().Be(FactorStatus.Enabled);
             factor.VerificationStatus.Should().Be(FactorVerificationStatus.Unverified);
+
+            // No challenges yet
             (await factor.GetMostRecentChallengeAsync()).Should().BeNull();
+            (await factor.Challenges.AnyAsync()).ShouldBeFalse();
 
-            (await factor.GetAccountAsync()).Href.Should().Be(luke.Href);
-
-            // todo test challenges
-            // todo test phone
+            // Get the phone associated with this factor
+            var phone = await factor.GetPhoneAsync();
+            phone.Number.Should().Be("+18185552593");
 
             (await factor.DeleteAsync()).ShouldBeTrue();
         }
@@ -806,6 +810,34 @@ namespace Stormpath.SDK.Tests.Integration.Async
             retrievedSpecificFactor.Should().BeAssignableTo<ISmsFactor>();
             retrievedSpecificFactor.Should().BeAssignableTo<IFactor>();
             retrievedSpecificFactor.Href.Should().Be(factor.Href);
+
+            (await factor.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Create_sms_factor_for_account_and_challenge_immediately(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
+
+            var factor = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Challenge = true
+            });
+
+            var challenge = await factor.GetMostRecentChallengeAsync();
+            challenge.Href.Should().NotBeNullOrEmpty();
+            challenge.Message.Should().NotBeNullOrEmpty();
+            //challenge.Status.Should().Match(x => x == ChallengeStatus.Created || x == ChallengeStatus.Waiting)
+
+            (await challenge.GetAccountAsync()).Href.Should().Be(luke.Href);
+            (await challenge.GetFactorAsync()).Href.Should().Be(factor.Href);
+
+            // Should get the same object when accessing the Challenges collection
+            var challenge2 = await factor.Challenges.SingleAsync();
+            challenge2.Href.Should().Be(challenge.Href);
 
             (await factor.DeleteAsync()).ShouldBeTrue();
         }

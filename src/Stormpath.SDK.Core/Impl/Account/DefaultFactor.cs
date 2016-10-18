@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.Resource;
@@ -47,13 +46,7 @@ namespace Stormpath.SDK.Impl.Account
         }
 
         public IChallengeCollection Challenges
-        {
-            get
-            {
-                // todo
-                throw new NotImplementedException();
-            }
-        }
+            => new DefaultChallengeCollection(GetLinkProperty(ChallengesPropertyName).Href, GetInternalAsyncDataStore());
 
         public FactorVerificationStatus VerificationStatus
         {

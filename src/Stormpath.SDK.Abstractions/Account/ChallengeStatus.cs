@@ -14,15 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Account
 {
     /// <summary>
     /// Represents the various states a <see cref="IChallenge">Challenge</see> may be in.
     /// </summary>
-    public sealed class ChallengeStatus : StringEnumeration
+    public sealed class ChallengeStatus : AbstractEnumProperty
     {
         /// <summary>
         /// The challenge has been created.
@@ -69,21 +68,9 @@ namespace Stormpath.SDK.Account
         /// </summary>
         public static ChallengeStatus Undelivered = new ChallengeStatus("UNDELIVERED");
 
-        private ChallengeStatus(string value)
+        public ChallengeStatus(string value)
             : base(value)
         {
-        }
-
-        /// <summary>
-        /// Parses a string to a <see cref="ChallengeStatus"/>.
-        /// </summary>
-        /// <param name="status">A string containing a challenge status (matching is case-insensitive).</param>
-        /// <returns>The <see cref="ChallengeStatus"/> with the specified name.</returns>
-        /// <exception cref="Exception">No match is found.</exception>
-        public static ChallengeStatus Parse(string status)
-        {
-            // TODO don't think I need the switch
-            return new ChallengeStatus(status);
         }
     }
 }
