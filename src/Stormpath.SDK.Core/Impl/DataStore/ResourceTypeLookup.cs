@@ -97,6 +97,9 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(IAccountCreationPolicy)] = typeof(DefaultAccountCreationPolicy),
             [typeof(IPasswordPolicy)] = typeof(DefaultPasswordPolicy),
             [typeof(IPasswordStrengthPolicy)] = typeof(DefaultPasswordStrengthPolicy),
+            [typeof(IFactor)] = typeof(DefaultFactor),
+            [typeof(ISmsFactor)] = typeof(DefaultSmsFactor),
+            //[typeof(IGoogleAuthenticatorFactor)] = typeof(DefaultGoogleAuthenticatorFactor), // TODO
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
@@ -147,6 +150,9 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultAccountCreationPolicy)] = typeof(IAccountCreationPolicy),
             [typeof(DefaultPasswordPolicy)] = typeof(IPasswordPolicy),
             [typeof(DefaultPasswordStrengthPolicy)] = typeof(IPasswordStrengthPolicy),
+            [typeof(DefaultFactor)] = typeof(IFactor),
+            [typeof(DefaultSmsFactor)] = typeof(ISmsFactor),
+            // todo google-authenticator
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(DefaultApplicationAccountStoreMapping)] = typeof(IApplicationAccountStoreMapping),

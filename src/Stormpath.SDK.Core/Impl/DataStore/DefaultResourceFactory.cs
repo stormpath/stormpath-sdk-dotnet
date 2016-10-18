@@ -63,8 +63,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
         private object InstantiateSingle(Type type, Map properties, ILinkable original)
         {
-            var resolvedType = new TypeResolver()
-                .Resolve(type);
+            var resolvedType = new TypeResolver().Resolve(type, properties);
 
             var typeName = resolvedType.Name;
 

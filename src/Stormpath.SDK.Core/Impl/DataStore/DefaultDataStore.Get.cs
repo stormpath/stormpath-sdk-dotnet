@@ -133,11 +133,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ArgumentNullException(nameof(href));
             }
 
-            var targetType = new TypeResolver()
-                .Resolve(typeof(T));
-
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href));
-            this.logger.Trace($"Asynchronously getting resource type {targetType.Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResourceAsync<T>");
+            this.logger.Trace($"Asynchronously getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResourceAsync<T>");
 
             IAsynchronousFilterChain chain = new DefaultAsynchronousFilterChain(this.defaultAsyncFilters as DefaultAsynchronousFilterChain)
                 .Add(new DefaultAsynchronousFilter(async (req, next, logger, ct) =>
@@ -146,11 +143,12 @@ namespace Stormpath.SDK.Impl.DataStore
 
                     var response = await this.ExecuteAsync(httpRequest, ct).ConfigureAwait(false);
                     var body = this.GetBody<T>(response);
+                    var targetType = new TypeResolver().Resolve(typeof(T), body);
 
                     return new DefaultResourceDataResult(req.Action, targetType, req.Uri, response.StatusCode, body);
                 }));
 
-            var request = new DefaultResourceDataRequest(ResourceAction.Read, targetType, canonicalUri, skipCache);
+            var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri, skipCache);
             return chain.FilterAsync(request, this.logger, cancellationToken);
         }
 
@@ -161,11 +159,8 @@ namespace Stormpath.SDK.Impl.DataStore
                 throw new ArgumentNullException(nameof(href));
             }
 
-            var targetType = new TypeResolver()
-                .Resolve(typeof(T));
-
             var canonicalUri = new CanonicalUri(this.uriQualifier.EnsureFullyQualified(href));
-            this.logger.Trace($"Synchronously getting resource type {targetType} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResource<T>");
+            this.logger.Trace($"Synchronously getting resource type {typeof(T).Name} from: {canonicalUri.ToString()}", "DefaultDataStore.GetResource<T>");
 
             ISynchronousFilterChain chain = new DefaultSynchronousFilterChain(this.defaultSyncFilters as DefaultSynchronousFilterChain)
                 .Add(new DefaultSynchronousFilter((req, next, logger) =>
@@ -174,11 +169,12 @@ namespace Stormpath.SDK.Impl.DataStore
 
                     var response = this.Execute(httpRequest);
                     var body = this.GetBody<T>(response);
+                    var targetType = new TypeResolver().Resolve(typeof(T), body);
 
                     return new DefaultResourceDataResult(req.Action, targetType, req.Uri, response.StatusCode, body);
                 }));
 
-            var request = new DefaultResourceDataRequest(ResourceAction.Read, targetType, canonicalUri, skipCache);
+            var request = new DefaultResourceDataRequest(ResourceAction.Read, typeof(T), canonicalUri, skipCache);
             return chain.Filter(request, this.logger);
         }
     }

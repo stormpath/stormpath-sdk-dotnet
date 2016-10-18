@@ -189,6 +189,11 @@ namespace Stormpath.SDK.Http
         {
             var resultItems = new Dictionary<string, string>();
 
+            if (string.IsNullOrEmpty(queryString))
+            {
+                return resultItems; // empty
+            }
+
             if (queryString.Contains("?"))
             {
                 queryString = queryString.Split('?')?[1];

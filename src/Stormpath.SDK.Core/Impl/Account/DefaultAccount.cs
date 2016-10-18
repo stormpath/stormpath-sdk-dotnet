@@ -25,25 +25,27 @@ namespace Stormpath.SDK.Impl.Account
 {
     internal sealed partial class DefaultAccount : AbstractExtendableInstanceResource, IAccount, IAccountSync
     {
-        private static readonly string AccessTokensPropertyName = "accessTokens";
-        private static readonly string ApiKeysPropertyName = "apiKeys";
-        private static readonly string ApplicationsPropertyName = "applications";
-        private static readonly string DirectoryPropertyName = "directory";
-        private static readonly string EmailPropertyName = "email";
-        private static readonly string EmailVerificationTokenPropertyName = "emailVerificationToken";
-        private static readonly string EmailVerificationStatusPropertyName = "emailVerificationStatus";
-        private static readonly string FullNamePropertyName = "fullName";
-        private static readonly string GivenNamePropertyName = "givenName";
-        private static readonly string GroupMembershipsPropertyName = "groupMemberships";
-        private static readonly string GroupsPropertyName = "groups";
-        private static readonly string MiddleNamePropertyName = "middleName";
-        public static readonly string PasswordPropertyName = "password";
-        private static readonly string PasswordModifiedAtPropertyName = "passwordModifiedAt";
-        private static readonly string ProviderDataPropertyName = "providerData";
-        private static readonly string RefreshTokensPropertyName = "refreshTokens";
-        private static readonly string StatusPropertyName = "status";
-        private static readonly string SurnamePropertyName = "surname";
-        private static readonly string UsernamePropertyName = "username";
+        private const string AccessTokensPropertyName = "accessTokens";
+        private const string ApiKeysPropertyName = "apiKeys";
+        private const string ApplicationsPropertyName = "applications";
+        private const string DirectoryPropertyName = "directory";
+        private const string EmailPropertyName = "email";
+        private const string EmailVerificationTokenPropertyName = "emailVerificationToken";
+        private const string EmailVerificationStatusPropertyName = "emailVerificationStatus";
+        private const string FullNamePropertyName = "fullName";
+        private const string FactorsPropertyName = "factors";
+        private const string GivenNamePropertyName = "givenName";
+        private const string GroupMembershipsPropertyName = "groupMemberships";
+        private const string GroupsPropertyName = "groups";
+        private const string MiddleNamePropertyName = "middleName";
+        public const string PasswordPropertyName = "password";
+        private const string PasswordModifiedAtPropertyName = "passwordModifiedAt";
+        private const string PhonesPropertyName = "phones";
+        private const string ProviderDataPropertyName = "providerData";
+        private const string RefreshTokensPropertyName = "refreshTokens";
+        private const string StatusPropertyName = "status";
+        private const string SurnamePropertyName = "surname";
+        private const string UsernamePropertyName = "username";
 
         public DefaultAccount(ResourceData data)
             : base(data)

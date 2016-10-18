@@ -27,14 +27,20 @@ using Stormpath.SDK.Linq;
 
 namespace Stormpath.SDK.Impl.Linq
 {
-    internal sealed class CollectionResourceQueryable<TResult> : IOrderedAsyncQueryable<TResult>, IOrderedQueryable<TResult>
+    internal class CollectionResourceQueryable<TResult> : IOrderedAsyncQueryable<TResult>, IOrderedQueryable<TResult>
     {
+        protected readonly IInternalDataStore _dataStore;
+        protected readonly string _collectionHref;
+
         private readonly IAsyncExecutor<TResult> executor;
         private readonly CollectionResourceQueryProvider<TResult> queryProvider;
         private readonly Expression expression;
 
         public CollectionResourceQueryable(string collectionHref, IInternalDataStore dataStore)
         {
+            _dataStore = dataStore;
+            _collectionHref = collectionHref;
+
             this.expression = Expression.Constant(this);
             this.executor = new CollectionResourceExecutor<TResult>(collectionHref, dataStore, this.expression);
             this.queryProvider = new CollectionResourceQueryProvider<TResult>(this.executor);

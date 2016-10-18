@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
@@ -9,17 +10,18 @@ namespace Stormpath.SDK.Account
         IHasTenant,
         ISaveable<IFactor>,
         IDeletable,
-        IAuditable // TODO?
-        //, TODO IExtendable?
+        IAuditable
     {
+        string Type { get; }
+
         FactorVerificationStatus VerificationStatus { get; }
 
         FactorStatus Status { get; set; }
 
-        Task<IAccount> GetAccountAsync();
+        Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<IChallenge> GetMostRecentChallengeAsync();
+        Task<IChallenge> GetMostRecentChallengeAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        IChallengeCollection Challenges { get; set; }
+        IChallengeCollection Challenges { get; }
     }
 }

@@ -1,11 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace Stormpath.SDK.Account
 {
     public interface ISmsFactor : IFactor
     {
-        // TODO properties
-
-        Task<IPhone> GetPhoneAsync();
+        Task<IPhone> GetPhoneAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

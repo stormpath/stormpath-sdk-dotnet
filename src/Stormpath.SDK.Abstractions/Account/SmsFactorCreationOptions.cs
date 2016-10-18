@@ -4,7 +4,7 @@
     {
         // TODO check all default values
 
-        public bool Challenge { get; set; }
+        public bool Challenge { get; set; } = false;
 
         public string Number { get; set; }
 

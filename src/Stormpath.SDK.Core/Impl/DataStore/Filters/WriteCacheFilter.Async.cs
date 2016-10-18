@@ -76,8 +76,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             var result = await chain.FilterAsync(request, logger, cancellationToken).ConfigureAwait(false);
 
-            var type = new TypeResolver()
-                .Resolve(result.Type);
+            var type = new TypeResolver().Resolve(result.Type, result.Body);
 
             bool isEmailVerificationResponse = type == typeof(IEmailVerificationToken);
             if (isEmailVerificationResponse)

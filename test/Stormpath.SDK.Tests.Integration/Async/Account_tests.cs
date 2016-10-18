@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
@@ -745,6 +746,31 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             (await account.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Create_sms_factor_for_account(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
+
+            var factor = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+
+            factor.Href.Should().NotBeNullOrEmpty();
+            factor.Type.Should().BeEquivalentTo("sms");
+            factor.Status.Should().Be(FactorStatus.Enabled);
+            factor.VerificationStatus.Should().Be(FactorVerificationStatus.Unverified);
+            (await factor.GetMostRecentChallengeAsync()).Should().BeNull();
+
+            (await factor.GetAccountAsync()).Href.Should().Be(luke.Href);
+
+            // todo test challenges
+            // todo test phone
         }
     }
 }
