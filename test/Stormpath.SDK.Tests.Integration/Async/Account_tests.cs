@@ -1079,12 +1079,12 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var disabledFactor = await tester.Factors
                 .Where(f => f.Status == FactorStatus.Disabled)
                 .SingleAsync();
-            disabledFactor.Href.Should().Be(factor2.Href);
+            disabledFactor.Href.Should().Be(factor1.Href);
 
             var enabledFactor = await tester.Factors
                 .Where(f => f.Status == FactorStatus.Enabled)
                 .SingleAsync();
-            enabledFactor.Href.Should().Be(factor1.Href);
+            enabledFactor.Href.Should().Be(factor2.Href);
 
             (await tester.DeleteAsync()).ShouldBeTrue();
         }
