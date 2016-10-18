@@ -138,6 +138,13 @@ namespace Stormpath.SDK.Impl.Resource
                 : boxedList.OfType<T>().ToArray();
         }
 
+        public TEnum GetEnumProperty<TEnum>(string name)
+            where TEnum : AbstractEnumProperty
+        {
+            var value = GetProperty(name)?.ToString() ?? string.Empty;
+            return (TEnum)Activator.CreateInstance(typeof(TEnum), value);
+        }
+
         public bool ContainsProperty(string name)
             => this.GetResourceData()?.ContainsProperty(name) ?? false;
 

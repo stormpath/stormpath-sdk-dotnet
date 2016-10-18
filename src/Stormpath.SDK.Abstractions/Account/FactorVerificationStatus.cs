@@ -14,15 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Account
 {
     /// <summary>
     /// Represents the various states a <see cref="IFactor">Factor</see> may be in with regards to verification.
     /// </summary>
-    public sealed class FactorVerificationStatus : StringEnumeration
+    public sealed class FactorVerificationStatus : AbstractEnumProperty
     {
         // TODO are these all the values?
         /// <summary>
@@ -35,21 +34,9 @@ namespace Stormpath.SDK.Account
         /// </summary>
         public static FactorVerificationStatus Unverified = new FactorVerificationStatus("UNVERIFIED");
 
-        private FactorVerificationStatus(string value)
+        public FactorVerificationStatus(string value)
             : base(value)
         {
-        }
-
-        /// <summary>
-        /// Parses a string to an <see cref="FactorVerificationStatus"/>.
-        /// </summary>
-        /// <param name="status">A string containing "verified" or "unverified" (matching is case-insensitive).</param>
-        /// <returns>The <see cref="FactorVerificationStatus"/> with the specified name.</returns>
-        /// <exception cref="Exception">No match is found.</exception>
-        public static FactorVerificationStatus Parse(string status)
-        {
-            // TODO don't think I need the switch
-            return new FactorVerificationStatus(status);
         }
     }
 }

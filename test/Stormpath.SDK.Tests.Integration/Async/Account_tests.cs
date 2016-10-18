@@ -762,7 +762,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             });
 
             factor.Href.Should().NotBeNullOrEmpty();
-            factor.Type.Should().BeEquivalentTo("sms");
+            factor.Type.Should().Be(FactorType.Sms);
             factor.Status.Should().Be(FactorStatus.Enabled);
             factor.VerificationStatus.Should().Be(FactorVerificationStatus.Unverified);
             (await factor.GetMostRecentChallengeAsync()).Should().BeNull();
@@ -771,6 +771,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // todo test challenges
             // todo test phone
+
+            (await factor.DeleteAsync()).ShouldBeTrue();
         }
     }
 }

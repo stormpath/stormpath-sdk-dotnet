@@ -20,16 +20,15 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-        public string Type
+        public FactorType Type
         {
-            get { return GetStringProperty(TypePropertyName); }
+            get { return GetEnumProperty<FactorType>(TypePropertyName); }
             set { SetProperty(TypePropertyName, value); }
         }
 
         public FactorStatus Status
         {
-            // TODO get status from string
-            get { return GetStatusProperty<FactorStatus>(StatusPropertyName); }
+            get { return GetEnumProperty<FactorStatus>(StatusPropertyName); }
             set { SetProperty(StatusPropertyName, value); }
         }
 
@@ -58,7 +57,7 @@ namespace Stormpath.SDK.Impl.Account
 
         public FactorVerificationStatus VerificationStatus
         {
-            get { return GetProperty<FactorVerificationStatus>(VerificationStatusPropertyName); }
+            get { return GetEnumProperty<FactorVerificationStatus>(VerificationStatusPropertyName); }
             set { SetProperty(VerificationStatusPropertyName, value); }
         }
 

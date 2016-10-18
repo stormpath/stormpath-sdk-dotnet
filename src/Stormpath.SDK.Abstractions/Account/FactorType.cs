@@ -1,4 +1,4 @@
-﻿// <copyright file="FactorStatus.cs" company="Stormpath, Inc.">
+﻿// <copyright file="FactorType.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,21 +19,21 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// Represents the various states a <see cref="IFactor">Factor</see>.
+    /// Represents the various <see cref="IFactor">Factor</see> types.
     /// </summary>
-    public sealed class FactorStatus : AbstractEnumProperty
+    public sealed class FactorType : AbstractEnumProperty
     {
         /// <summary>
-        /// The factor is enabled.
+        /// An SMS-based factor.
         /// </summary>
-        public static FactorStatus Enabled = new FactorStatus("ENABLED");
+        public static FactorType Sms = new FactorType("SMS");
 
         /// <summary>
-        /// The factor is disabled.
+        /// A Google Authenticator/TOTP-based factor.
         /// </summary>
-        public static FactorStatus Disabled = new FactorStatus("DISABLED");
+        public static FactorType GoogleAuthenticator = new FactorType("GOOGLE-AUTHENTICATOR");
 
-        public FactorStatus(string value)
+        public FactorType(string value)
             : base(value)
         {
         }

@@ -12,7 +12,7 @@ namespace Stormpath.SDK.Account
         IDeletable,
         IAuditable
     {
-        string Type { get; }
+        FactorType Type { get; }
 
         FactorVerificationStatus VerificationStatus { get; }
 
