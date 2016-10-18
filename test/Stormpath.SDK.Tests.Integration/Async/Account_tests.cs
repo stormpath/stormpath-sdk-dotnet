@@ -1143,20 +1143,22 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
             await directory.CreateAccountAsync(tester);
 
-            var factor1 = await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            await tester.Factors.AddAsync(new SmsFactorCreationOptions
             {
                 Number = "+1 818-555-2593",
                 Status = FactorStatus.Disabled
             });
-            var factor2 = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            var totpFactor = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
             {
                 Issuer = "MyApp",
                 Status = FactorStatus.Enabled
             });
 
-            var totpFactor = await tester.Factors
+            var foundFactor = await tester.Factors
                 .Where(f => ((IGoogleAuthenticatorFactor)f).AccountName == tester.Username)
                 .SingleAsync();
+
+            foundFactor.Href.Should().Be(totpFactor.Href);
 
             (await tester.DeleteAsync()).ShouldBeTrue();
         }
