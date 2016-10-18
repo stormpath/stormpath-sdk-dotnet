@@ -21,7 +21,7 @@ namespace Stormpath.SDK.Linq.Expandables
     /// <summary>
     /// Represents resources that can be expanded from a <see cref="ISmsFactor">SMS Factor</see>.
     /// </summary>
-    public interface ISmsFactorExpandables 
+    public interface ISmsFactorExpandables : IFactorExpandables
     {
         /// <summary>
         /// Expands the <c>phone</c> resource.

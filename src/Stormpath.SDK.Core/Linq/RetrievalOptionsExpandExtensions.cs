@@ -198,6 +198,18 @@ namespace Stormpath.SDK
         /// <param name="options">The options for this request.</param>
         /// <param name="selector">A function to select a resource-returning method to expand.</param>
         /// <returns>The current instance for method chaining.</returns>
+        public static IRetrievalOptions<ISmsFactor> Expand(this IRetrievalOptions<ISmsFactor> options, Expression<Func<ISmsFactorExpandables, object>> selector)
+        {
+            (options as DefaultRetrievalOptions<ISmsFactor>).SetProxy(x => x.Expand(selector));
+            return options;
+        }
+
+        /// <summary>
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
+        /// </summary>
+        /// <param name="options">The options for this request.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
+        /// <returns>The current instance for method chaining.</returns>
         public static IRetrievalOptions<IPhone> Expand(this IRetrievalOptions<IPhone> options, Expression<Func<IPhoneExpandables, object>> selector)
         {
             (options as DefaultRetrievalOptions<IPhone>).SetProxy(x => x.Expand(selector));

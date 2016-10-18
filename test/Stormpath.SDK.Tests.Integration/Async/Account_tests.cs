@@ -1162,5 +1162,50 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             (await tester.DeleteAsync()).ShouldBeTrue();
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_factors_with_expansion(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var smsFactor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+            var totpFactor = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp",
+                Status = FactorStatus.Enabled
+            });
+
+            // We can't verify that the HTTP call was correct, but we can verify that it didn't fail
+            var allFactors = await tester.Factors
+                .Expand(e => e.Account)
+                .Expand(e => e.GetChallenges())
+                .ToArrayAsync();
+            allFactors.Length.Should().Be(2);
+
+            // Also try getting a factor directly
+            var directFactor =
+                await client.GetResourceAsync<ISmsFactor>(smsFactor.Href, opt =>
+                {
+                    opt.Expand(e => e.Phone);
+                    opt.Expand(e => e.Account);
+                    opt.Expand(e => e.MostRecentChallenge);
+                });
+
+            directFactor.Href.Should().Be(smsFactor.Href);
+        }
     }
 }

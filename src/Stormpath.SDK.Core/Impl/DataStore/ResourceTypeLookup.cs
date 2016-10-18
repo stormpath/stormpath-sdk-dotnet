@@ -179,6 +179,7 @@ namespace Stormpath.SDK.Impl.DataStore
             ["oAuthPolicy"] = typeof(IOauthPolicy),
             ["accountCreationPolicy"] = typeof(IAccountCreationPolicy),
             ["passwordPolicy"] = typeof(IPasswordPolicy),
+            ["phone"] = typeof(IPhone),
 
             ["organizations"] = typeof(CollectionResponsePage<IOrganization>),
             ["applications"] = typeof(CollectionResponsePage<IApplication>),
@@ -190,6 +191,7 @@ namespace Stormpath.SDK.Impl.DataStore
             ["accountMemberships"] = typeof(CollectionResponsePage<IGroupMembership>),
             ["apiKeys"] = typeof(CollectionResponsePage<IApiKey>),
             ["authorizedCallbackUris"] = typeof(string[]),
+            ["challenges"] = typeof(CollectionResponsePage<IChallenge>),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()

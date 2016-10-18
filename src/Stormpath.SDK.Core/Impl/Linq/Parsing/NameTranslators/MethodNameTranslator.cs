@@ -52,6 +52,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.NameTranslators
             ["Account"] = "account",
             ["MostRecentChallenge"] = "mostRecentChallenge",
             ["Factor"] = "factor",
+            ["Phone"] = "phone",
         };
 
         public MethodNameTranslator()
