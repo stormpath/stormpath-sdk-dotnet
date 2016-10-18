@@ -753,14 +753,22 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Create_sms_factor_for_account(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
 
-            var factor = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
             {
                 Number = "+1 818-555-2593" // Jack is back
             });
 
-            (await factor.GetAccountAsync()).Href.Should().Be(luke.Href);
+            (await factor.GetAccountAsync()).Href.Should().Be(tester.Href);
 
             factor.Href.Should().NotBeNullOrEmpty();
             factor.Type.Should().Be(FactorType.Sms);
@@ -769,13 +777,14 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // No challenges yet
             (await factor.GetMostRecentChallengeAsync()).Should().BeNull();
-            (await factor.Challenges.AnyAsync()).ShouldBeFalse();
+            (await factor.Challenges.AnyAsync()).Should().BeFalse();
 
             // Get the phone associated with this factor
             var phone = await factor.GetPhoneAsync();
             phone.Number.Should().Be("+18185552593");
 
-            (await factor.DeleteAsync()).ShouldBeTrue();
+            (await factor.DeleteAsync()).Should().BeTrue();
+            (await tester.DeleteAsync()).Should().BeTrue();
         }
 
         [Theory]
@@ -783,14 +792,22 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Create_totp_factor_for_account(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
 
-            var factor = await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
             {
                 Issuer = "MyApp"
             });
 
-            (await factor.GetAccountAsync()).Href.Should().Be(luke.Href);
+            (await factor.GetAccountAsync()).Href.Should().Be(tester.Href);
 
             factor.Href.Should().NotBeNullOrEmpty();
             factor.Type.Should().Be(FactorType.GoogleAuthenticator);
@@ -806,7 +823,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             (await factor.GetMostRecentChallengeAsync()).Should().BeNull();
             (await factor.Challenges.AnyAsync()).ShouldBeFalse();
 
-            (await factor.DeleteAsync()).ShouldBeTrue();
+            (await factor.DeleteAsync()).Should().BeTrue();
+            (await tester.DeleteAsync()).Should().BeTrue();
         }
 
         /// <summary>
@@ -822,9 +840,17 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Retrieving_sms_factor_should_create_sms_class(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
 
-            var factor = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
             {
                 Number = "+1 818-555-2593"
             });
@@ -842,7 +868,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             retrievedSpecificFactor.Should().BeAssignableTo<IFactor>();
             retrievedSpecificFactor.Href.Should().Be(factor.Href);
 
-            (await factor.DeleteAsync()).ShouldBeTrue();
+            (await tester.DeleteAsync()).Should().BeTrue();
         }
 
         /// <summary>
@@ -855,18 +881,26 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Retrieving_list_of_factors_should_be_polymorphic(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
 
-            await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            await tester.Factors.AddAsync(new SmsFactorCreationOptions
             {
                 Number = "+1 818-555-2593"
             });
-            await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
             {
                 Issuer = "MyApp"
             });
 
-            var factors = await luke.Factors.ToArrayAsync();
+            var factors = await tester.Factors.ToArrayAsync();
 
             var factor1 = factors.First() as ISmsFactor;
             factor1.Should().NotBeNull();
@@ -876,8 +910,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             factor2.Should().NotBeNull();
             factor2.Issuer.Should().Be("MyApp");
 
-            (await factor1.DeleteAsync()).ShouldBeTrue();
-            (await factor2.DeleteAsync()).ShouldBeTrue();
+            (await tester.DeleteAsync()).Should().BeTrue();
         }
 
         [Theory]
@@ -885,9 +918,17 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Create_sms_factor_for_account_and_challenge_immediately(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
 
-            var factor = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
             {
                 Number = "+1 818-555-2593",
                 Challenge = true
@@ -898,14 +939,14 @@ namespace Stormpath.SDK.Tests.Integration.Async
             challenge.Message.Should().NotBeNullOrEmpty();
             challenge.Status.Should().BeOfType<ChallengeStatus>();
 
-            (await challenge.GetAccountAsync()).Href.Should().Be(luke.Href);
+            (await challenge.GetAccountAsync()).Href.Should().Be(tester.Href);
             (await challenge.GetFactorAsync()).Href.Should().Be(factor.Href);
 
             // Should get the same object when accessing the Challenges collection
             var challenge2 = await factor.Challenges.SingleAsync();
             challenge2.Href.Should().Be(challenge.Href);
 
-            (await factor.DeleteAsync()).ShouldBeTrue();
+            (await tester.DeleteAsync()).ShouldBeTrue();
         }
 
         [Theory]
@@ -913,9 +954,17 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Challenge_existing_factor(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
 
-            var factor = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
             {
                 Number = "+1 818-555-2593"
             });
@@ -931,10 +980,10 @@ namespace Stormpath.SDK.Tests.Integration.Async
             challenge.Message.Should().StartWith("Dammit Chloe!");
             challenge.Status.Should().BeOfType<ChallengeStatus>();
 
-            (await challenge.GetAccountAsync()).Href.Should().Be(luke.Href);
+            (await challenge.GetAccountAsync()).Href.Should().Be(tester.Href);
             (await challenge.GetFactorAsync()).Href.Should().Be(factor.Href);
 
-            (await factor.DeleteAsync()).ShouldBeTrue();
+            (await tester.DeleteAsync()).ShouldBeTrue();
         }
 
         [Theory]
@@ -942,9 +991,17 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Update_sms_factor_and_save(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
 
-            var factor = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
             {
                 Number = "+1 818-555-2593",
                 Status = FactorStatus.Disabled
@@ -957,7 +1014,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             factor.Status.Should().Be(FactorStatus.Enabled);
 
-            (await factor.DeleteAsync()).ShouldBeTrue();
+            (await tester.DeleteAsync()).ShouldBeTrue();
         }
 
         [Theory]
@@ -965,15 +1022,23 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Update_totp_factor_and_save(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
 
-            var factor = await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
             {
                 Issuer = "MyApp"
             });
 
             factor.Issuer.Should().Be("MyApp");
-            factor.AccountName.Should().Be(luke.Username);
+            factor.AccountName.Should().Be(tester.Username);
 
             factor.Issuer = "MyBetterApp";
             factor.AccountName = "luke@hoth.rim";
@@ -982,7 +1047,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             factor.Issuer.Should().Be("MyBetterApp");
             factor.AccountName.Should().Be("luke@hoth.rim");
 
-            (await factor.DeleteAsync()).ShouldBeTrue();
+            (await tester.DeleteAsync()).ShouldBeTrue();
         }
 
         [Theory]
@@ -990,31 +1055,38 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Searching_factors_by_status(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
 
-            var factor1 = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor1 = await tester.Factors.AddAsync(new SmsFactorCreationOptions
             {
                 Number = "+1 818-555-2593",
                 Status = FactorStatus.Disabled
             });
-            var factor2 = await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            var factor2 = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
             {
                 Issuer = "MyApp",
                 Status = FactorStatus.Enabled
             });
 
-            var disabledFactor = await luke.Factors
+            var disabledFactor = await tester.Factors
                 .Where(f => f.Status == FactorStatus.Disabled)
                 .SingleAsync();
             disabledFactor.Href.Should().Be(factor2.Href);
 
-            var enabledFactor = await luke.Factors
+            var enabledFactor = await tester.Factors
                 .Where(f => f.Status == FactorStatus.Enabled)
                 .SingleAsync();
             enabledFactor.Href.Should().Be(factor1.Href);
 
-            (await factor1.DeleteAsync()).ShouldBeTrue();
-            (await factor2.DeleteAsync()).ShouldBeTrue();
+            (await tester.DeleteAsync()).ShouldBeTrue();
         }
 
         [Theory]
@@ -1022,31 +1094,38 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Searching_factors_by_type(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
 
-            var factor1 = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor1 = await tester.Factors.AddAsync(new SmsFactorCreationOptions
             {
                 Number = "+1 818-555-2593",
                 Status = FactorStatus.Disabled
             });
-            var factor2 = await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            var factor2 = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
             {
                 Issuer = "MyApp",
                 Status = FactorStatus.Enabled
             });
 
-            var disabledFactor = await luke.Factors
+            var disabledFactor = await tester.Factors
                 .Where(f => f.Type == FactorType.Sms)
                 .SingleAsync();
             disabledFactor.Href.Should().Be(factor1.Href);
 
-            var enabledFactor = await luke.Factors
+            var enabledFactor = await tester.Factors
                 .Where(f => f.Type == FactorType.GoogleAuthenticator)
                 .SingleAsync();
             enabledFactor.Href.Should().Be(factor2.Href);
 
-            (await factor1.DeleteAsync()).ShouldBeTrue();
-            (await factor2.DeleteAsync()).ShouldBeTrue();
+            (await tester.DeleteAsync()).ShouldBeTrue();
         }
 
         [Theory]
@@ -1054,25 +1133,32 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Searching_factors_by_totp_account_name(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var luke = await client.GetAccountAsync(fixture.PrimaryAccountHref);
 
-            var factor1 = await luke.Factors.AddAsync(new SmsFactorCreationOptions
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor1 = await tester.Factors.AddAsync(new SmsFactorCreationOptions
             {
                 Number = "+1 818-555-2593",
                 Status = FactorStatus.Disabled
             });
-            var factor2 = await luke.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            var factor2 = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
             {
                 Issuer = "MyApp",
                 Status = FactorStatus.Enabled
             });
 
-            var totpFactor = await luke.Factors
-                .Where(f => ((IGoogleAuthenticatorFactor)f).AccountName == luke.Username)
+            var totpFactor = await tester.Factors
+                .Where(f => ((IGoogleAuthenticatorFactor)f).AccountName == tester.Username)
                 .SingleAsync();
 
-            (await factor1.DeleteAsync()).ShouldBeTrue();
-            (await factor2.DeleteAsync()).ShouldBeTrue();
+            (await tester.DeleteAsync()).ShouldBeTrue();
         }
     }
 }
