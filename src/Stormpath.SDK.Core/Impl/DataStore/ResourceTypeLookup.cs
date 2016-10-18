@@ -205,6 +205,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(CollectionResponsePage<IApiKey>)] = typeof(IApiKey),
             [typeof(CollectionResponsePage<IChallenge>)] = typeof(IChallenge),
             [typeof(CollectionResponsePage<IFactor>)] = typeof(IFactor),
+            [typeof(CollectionResponsePage<IPhone>)] = typeof(IPhone),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(CollectionResponsePage<IApplicationAccountStoreMapping>)] = typeof(IApplicationAccountStoreMapping),

@@ -264,8 +264,24 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
                 ((node.Arguments[1] as UnaryExpression)
                     ?.Operand as LambdaExpression)
                         ?.Body;
-            var methodCallExpression = NodeReducer.Reduce(lambdaBody) as MethodCallExpression;
 
+            var memberAccessExpression = lambdaBody as MemberExpression;
+            if (memberAccessExpression != null)
+            {
+                // New syntax style
+                var targetMember = memberAccessExpression.Member;
+
+                if (targetMember == null)
+                {
+                    throw new ArgumentException("Member selector passed to Expand operator is not supported.");
+                }
+
+                expandExpressions.Push(new ExpandExpression(targetMember.Name, null, null));
+                return true;
+            }
+
+            // Older syntax style -- will be deprecated with v1.0+ -- todo
+            var methodCallExpression = NodeReducer.Reduce(lambdaBody) as MethodCallExpression;
             if (methodCallExpression == null)
             {
                 throw new ArgumentException("Method selector passed to Expand operator could not be parsed.");
