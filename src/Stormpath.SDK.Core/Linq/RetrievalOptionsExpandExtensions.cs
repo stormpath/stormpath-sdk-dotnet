@@ -203,5 +203,17 @@ namespace Stormpath.SDK
             (options as DefaultRetrievalOptions<IPhone>).SetProxy(x => x.Expand(selector));
             return options;
         }
+
+        /// <summary>
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
+        /// </summary>
+        /// <param name="options">The options for this request.</param>
+        /// <param name="selector">A function to select a resource-returning method to expand.</param>
+        /// <returns>The current instance for method chaining.</returns>
+        public static IRetrievalOptions<IChallenge> Expand(this IRetrievalOptions<IChallenge> options, Expression<Func<IChallengeExpandables, object>> selector)
+        {
+            (options as DefaultRetrievalOptions<IChallenge>).SetProxy(x => x.Expand(selector));
+            return options;
+        }
     }
 }

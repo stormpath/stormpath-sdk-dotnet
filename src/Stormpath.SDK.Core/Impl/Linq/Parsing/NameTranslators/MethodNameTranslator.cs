@@ -51,6 +51,7 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.NameTranslators
             // New syntax style (member access)
             ["Account"] = "account",
             ["MostRecentChallenge"] = "mostRecentChallenge",
+            ["Factor"] = "factor",
         };
 
         public MethodNameTranslator()

@@ -295,6 +295,29 @@ namespace Stormpath.SDK.Tests.Linq
             this.ShouldBeCalledWithArguments("expand=account");
         }
     }
+
+    public class Expand_challenge_tests : Linq_test<IChallenge>
+    {
+        [Fact]
+        public async Task Account_is_expanded()
+        {
+            await this.Queryable
+                .Expand(x => x.Account)
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("expand=account");
+        }
+
+        [Fact]
+        public async Task Factor_is_expanded()
+        {
+            await this.Queryable
+                .Expand(x => x.Factor)
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("expand=factor");
+        }
+    }
 #pragma warning restore SA1402 // File may only contain a single class
 #pragma warning restore SA1649 // File name must match first class
 }
