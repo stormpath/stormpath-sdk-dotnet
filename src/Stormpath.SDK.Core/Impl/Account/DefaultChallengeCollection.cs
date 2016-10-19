@@ -13,6 +13,9 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
+        public Task<IChallenge> AddAsync(CancellationToken cancellationToken)
+            => AddAsync(new ChallengeCreationOptions(), cancellationToken);
+
         public Task<IChallenge> AddAsync(ChallengeCreationOptions options, CancellationToken cancellationToken)
         {
             return (_dataStore as IInternalAsyncDataStore).CreateAsync<ChallengeCreationOptions, IChallenge>(

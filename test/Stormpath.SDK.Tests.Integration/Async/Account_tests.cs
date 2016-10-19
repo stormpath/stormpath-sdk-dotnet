@@ -969,6 +969,39 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 Number = "+1 818-555-2593"
             });
 
+            var challenge = await factor.Challenges.AddAsync();
+
+            var retrievedChallenge = await factor.Challenges.SingleAsync();
+            retrievedChallenge.Href.Should().Be(retrievedChallenge.Href);
+
+            challenge.Status.Should().BeOfType<ChallengeStatus>();
+
+            (await challenge.GetAccountAsync()).Href.Should().Be(tester.Href);
+            (await challenge.GetFactorAsync()).Href.Should().Be(factor.Href);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Challenge_existing_factor_with_options(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+
             var challenge = await factor.Challenges.AddAsync(new ChallengeCreationOptions
             {
                 Message = "Dammit Chloe! The code is ${code}"
@@ -982,6 +1015,58 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             (await challenge.GetAccountAsync()).Href.Should().Be(tester.Href);
             (await challenge.GetFactorAsync()).Href.Should().Be(factor.Href);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Submit_challenge_with_bad_code(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions());
+
+            var challenge = await factor.Challenges.AddAsync();
+            await challenge.SubmitAsync("123456");
+
+            // That's definitely not the right code
+            challenge.Status.Should().Be(ChallengeStatus.Failed);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Validate_challenge_with_bad_code(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions());
+
+            var challenge = await factor.Challenges.AddAsync();
+            var result = await challenge.ValidateAsync("123456");
+
+            // That's definitely not the right code
+            result.Should().BeFalse();
 
             (await tester.DeleteAsync()).ShouldBeTrue();
         }

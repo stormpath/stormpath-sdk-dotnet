@@ -14,7 +14,8 @@ namespace Stormpath.SDK.Account
 
         Task<IFactor> GetFactorAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        // TODO what does this return?
-        Task SubmitAsync(string code, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IChallenge> SubmitAsync(string code, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<bool> ValidateAsync(string code, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

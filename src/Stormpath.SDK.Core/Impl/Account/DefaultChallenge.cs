@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Impl.Resource;
@@ -35,9 +34,19 @@ namespace Stormpath.SDK.Impl.Account
                 GetLinkProperty(FactorPropertyName).Href,
                 cancellationToken);
 
-        public Task SubmitAsync(string code, CancellationToken cancellationToken)
+        public Task<IChallenge> SubmitAsync(string code, CancellationToken cancellationToken)
+            => GetInternalAsyncDataStore().CreateAsync<ChallengeSubmitData, IChallenge>(
+                InternalHref,
+                new ChallengeSubmitData
+                {
+                    Code = code
+                },
+                cancellationToken);
+
+        public async Task<bool> ValidateAsync(string code, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await SubmitAsync(code, cancellationToken);
+            return Status == ChallengeStatus.Success;
         }
     }
 }
