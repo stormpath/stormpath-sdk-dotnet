@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var defaultApplication = client.GetApplications()
                 .Where(x => x.Name == "My Application")
                 .Synchronously()
-                .SingleOrDefault();
+                .Single();
 
             var samlPolicy = defaultApplication.GetSamlPolicy();
             samlPolicy.Href.ShouldNotBeNullOrEmpty();

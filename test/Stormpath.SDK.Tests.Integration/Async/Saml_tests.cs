@@ -38,7 +38,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var client = clientBuilder.GetClient();
             var defaultApplication = await client.GetApplications()
                 .Where(x => x.Name == "My Application")
-                .SingleOrDefaultAsync();
+                .SingleAsync();
 
             var samlPolicy = await defaultApplication.GetSamlPolicyAsync();
             samlPolicy.Href.ShouldNotBeNullOrEmpty();
