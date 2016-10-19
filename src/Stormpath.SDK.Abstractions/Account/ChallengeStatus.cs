@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Account
         public static ChallengeStatus Cancelled = new ChallengeStatus("CANCELLED");
 
         /// <summary>
-        /// The challenge expired.
+        /// The challenge has expired.
         /// </summary>
         public static ChallengeStatus Expired = new ChallengeStatus("EXPIRED");
 

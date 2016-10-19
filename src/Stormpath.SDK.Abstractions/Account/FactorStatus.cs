@@ -19,7 +19,7 @@ using Stormpath.SDK.Resource;
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// Represents the various states a <see cref="IFactor">Factor</see>.
+    /// Represents the various states a <see cref="IFactor">Factor</see> may be in.
     /// </summary>
     public sealed class FactorStatus : AbstractEnumProperty
     {

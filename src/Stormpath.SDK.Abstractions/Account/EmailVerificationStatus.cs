@@ -20,7 +20,7 @@ using Stormpath.SDK.Shared;
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// Represents the various states an <see cref="IAccount">Account</see>'s email address may be in.
+    /// Represents the various states an <see cref="IAccount">Account</see>'s email address may be in with regards to verification.
     /// </summary>
     public sealed class EmailVerificationStatus : StringEnumeration
     {
