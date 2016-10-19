@@ -1382,5 +1382,70 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             (await tester.DeleteAsync()).ShouldBeTrue();
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Listing_account_phones(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            // Add some phones
+            await tester.Phones.AddAsync("+1 818-555-7993");
+            await tester.Phones.AddAsync("+1 818-555-2593");
+
+            // Grab them via LINQ
+            var phones = await tester.Phones
+                .Expand(e => e.Account)
+                .ToArrayAsync();
+            phones.First().Number.Should().Be("+18185557993");
+            phones.Last().Number.Should().Be("+18185552593");
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Searching_account_phones(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            // Add some phones
+            await tester.Phones.AddAsync("+1 818-555-7993");
+            await tester.Phones.AddAsync(new PhoneCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Name = "Cell"
+            });
+
+            var findByNumber = await tester.Phones
+                .Where(p => p.Number.Contains("5557"))
+                .SingleAsync();
+            findByNumber.Number.Should().Be("+18185557993");
+
+            var findByName = await tester.Phones
+                .Where(p => p.Name == "Cell")
+                .SingleAsync();
+            findByName.Number.Should().Be("+18185552593");
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
     }
 }
