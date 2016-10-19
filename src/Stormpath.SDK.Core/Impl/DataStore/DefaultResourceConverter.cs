@@ -67,7 +67,7 @@ namespace Stormpath.SDK.Impl.DataStore
                             : ToMap(rawValue);
                     }
 
-                    return new {name = p.Name.ToLower(), value};
+                    return new {name = ToCamelCase(p.Name), value};
                 })
                 .Where(pair => pair.value != null)
                 .ToDictionary(pair => pair.name, pair => pair.value);
@@ -112,6 +112,13 @@ namespace Stormpath.SDK.Impl.DataStore
             }
 
             return type.GetTypeInfo().IsPrimitive;
+        }
+
+        private static string ToCamelCase(string input)
+        {
+            return string.IsNullOrEmpty(input)
+                ? input
+                : $"{input[0].ToString().ToLower()}{input.Substring(1)}";
         }
     }
 }
