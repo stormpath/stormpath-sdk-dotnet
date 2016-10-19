@@ -49,9 +49,6 @@ namespace Stormpath.SDK.Impl.Account
             return Status == ChallengeStatus.Success;
         }
 
-        public Task<bool> DeleteAsync(CancellationToken cancellationToken)
-            => GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
-
         // Sync methods are implemented in DefaultChallenge.Sync.cs
     }
 }

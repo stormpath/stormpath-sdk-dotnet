@@ -24,8 +24,5 @@ namespace Stormpath.SDK.Impl.Account
             Submit(code);
             return Status == ChallengeStatus.Success;
         }
-
-        public bool Delete()
-            => GetInternalSyncDataStore().Delete(this);
     }
 }

@@ -9,7 +9,6 @@ namespace Stormpath.SDK.Account
     /// </summary>
     public interface IChallenge : 
         IResource,
-        IDeletable,
         IAuditable
     {
         /// <summary>

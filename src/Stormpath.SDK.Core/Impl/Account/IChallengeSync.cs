@@ -7,8 +7,7 @@ namespace Stormpath.SDK.Impl.Account
     /// Represents the synchronous actions that correspond to the default asynchronous actions
     /// available on the <see cref="IChallenge">Challenge</see> resource.
     /// </summary>
-    internal interface IChallengeSync : 
-        IDeletableSync
+    internal interface IChallengeSync
     {
         /// <summary>
         /// Synchronous counterpart to <see cref="IChallenge.GetAccountAsync(System.Threading.CancellationToken)"/>.
