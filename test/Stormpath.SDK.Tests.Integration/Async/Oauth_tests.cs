@@ -169,7 +169,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
-        [Theory(Skip = "Refactor Shouldly")]
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Failed_password_grant_throws_ResourceException(TestClientProvider clientBuilder)
         {
@@ -191,7 +191,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetPassword("notLukesPassword")
                 .Build();
 
-            //await Should.ThrowAsync<ResourceException>(async () => await createdApplication.NewPasswordGrantAuthenticator().AuthenticateAsync(badPasswordGrantRequest));
+            Func<Task> act = async () => await createdApplication.NewPasswordGrantAuthenticator().AuthenticateAsync(badPasswordGrantRequest);
+            act.ShouldThrow<ResourceException>();
 
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
@@ -383,7 +384,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
-        [Theory(Skip = "Refactor Shouldly")]
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Validating_jwt_throws_for_bad_jwt(TestClientProvider clientBuilder)
         {
@@ -415,8 +416,9 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetJwt(badJwt)
                 .Build();
 
-            //await Should.ThrowAsync<ResourceException>(async () =>
-            //    await createdApplication.NewJwtAuthenticator().AuthenticateAsync(jwtAuthenticationRequest));
+            Func<Task> act = async () =>
+                await createdApplication.NewJwtAuthenticator().AuthenticateAsync(jwtAuthenticationRequest);
+            act.ShouldThrow<ResourceException>();
 
             // Clean up
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
@@ -470,7 +472,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
-        [Theory(Skip = "Refactor Shouldly")]
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Validating_jwt_locally_throws_for_bad_jwt(TestClientProvider clientBuilder)
         {
@@ -502,15 +504,16 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetJwt(badJwt)
                 .Build();
 
-            //await Should.ThrowAsync<JwtSignatureException>(async () =>
-            //    await createdApplication.NewJwtAuthenticator().WithLocalValidation().AuthenticateAsync(jwtAuthenticationRequest));
+            Func<Task> act = async () =>
+                await createdApplication.NewJwtAuthenticator().WithLocalValidation().AuthenticateAsync(jwtAuthenticationRequest);
+            act.ShouldThrow<JwtSignatureException>();
 
             // Clean up
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
-        [Theory(Skip = "Refactor Shouldly")]
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Validating_token_after_revocation(TestClientProvider clientBuilder)
         {
@@ -542,7 +545,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 .SetJwt(accessToken.Jwt)
                 .Build();
 
-            //await Should.ThrowAsync<ResourceException>(async () => await createdApplication.NewJwtAuthenticator().AuthenticateAsync(jwtAuthenticationRequest));
+            Func<Task> act = async () => await createdApplication.NewJwtAuthenticator().AuthenticateAsync(jwtAuthenticationRequest);
+            act.ShouldThrow<ResourceException>();
 
             // Clean up
             (await createdApplication.DeleteAsync()).ShouldBeTrue();

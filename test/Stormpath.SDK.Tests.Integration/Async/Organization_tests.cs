@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Shouldly;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Error;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Organization;
 using Stormpath.SDK.Tests.Common.Integration;
@@ -565,7 +566,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedOrganizationHrefs.Remove(createdOrganization.Href);
         }
 
-        [Theory(Skip = "Fix shouldly async throw tests")]
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Setting_group_group_store_throws(TestClientProvider clientBuilder)
         {
@@ -583,11 +584,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
             // If this errors, the server-side API behavior has changed.
-            // TOTO ResourceException after Shouldly Mono update
-            Should.Throw<Exception>(async () =>
-            {
-                await createdOrganization.SetDefaultGroupStoreAsync(group);
-            });
+            Func<Task> act = async () => await createdOrganization.SetDefaultGroupStoreAsync(group);
+            act.ShouldThrow<ResourceException>();
 
             // Clean up
             (await createdOrganization.DeleteAsync()).ShouldBeTrue();
@@ -799,7 +797,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedOrganizationHrefs.Remove(createdOrganization.Href);
         }
 
-        [Theory(Skip = "Fix shouldly async throw tests")]
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Adding_directory_as_account_store_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
         {
@@ -820,13 +818,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedDirectoryHrefs.Add(dir1.Href);
             this.fixture.CreatedDirectoryHrefs.Add(dir2.Href);
 
-            // TODO ArgumentException after Shouldly Mono update
-            Should.Throw<Exception>(async () =>
+            Func<Task> act = async () =>
             {
                 // Throws because multiple matching results exist
                 var mapping = await createdOrganization
                     .AddAccountStoreAsync<IDirectory>(dirs => dirs.Where(d => d.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Organization Multiple Directory Query Results")));
-            });
+            };
+            act.ShouldThrow<ArgumentException>();
 
             // Clean up
             (await dir1.DeleteAsync()).ShouldBeTrue();
@@ -839,7 +837,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedOrganizationHrefs.Remove(createdOrganization.Href);
         }
 
-        [Theory(Skip = "Fix shouldly async throw tests")]
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Adding_group_as_account_store_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
         {
@@ -864,13 +862,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedGroupHrefs.Add(group1.Href);
             this.fixture.CreatedGroupHrefs.Add(group2.Href);
 
-            // TODO ArgumentException after Shouldly Mono update
-            Should.Throw<Exception>(async () =>
+            Func<Task> act = async () =>
             {
                 // Throws because multiple matching results exist
                 var mapping = await createdOrganization
                     .AddAccountStoreAsync<IGroup>(groups => groups.Where(x => x.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Organization Multiple Group Query Results")));
-            });
+            };
+            act.ShouldThrow<ArgumentException>();
 
             // Clean up
             (await group1.DeleteAsync()).ShouldBeTrue();

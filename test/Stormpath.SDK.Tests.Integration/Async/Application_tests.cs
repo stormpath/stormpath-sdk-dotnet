@@ -21,6 +21,7 @@ using Shouldly;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Directory;
+using Stormpath.SDK.Error;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Tests.Common.Integration;
 using Xunit;
@@ -605,7 +606,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
-        [Theory(Skip = "Fix shouldly async throw tests")]
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Setting_group_group_store_throws(TestClientProvider clientBuilder)
         {
@@ -621,11 +622,11 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
             // If this errors, the server-side API behavior has changed.
-            // TODO fix Exception after Shouldly update.
-            Should.Throw<Exception>(async () =>
+            Func<Task> act = async () =>
             {
                 await createdApplication.SetDefaultGroupStoreAsync(group);
-            });
+            };
+            act.ShouldThrow<ResourceException>();
 
             // Clean up
             (await createdApplication.DeleteAsync()).ShouldBeTrue();
@@ -823,7 +824,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
-        [Theory(Skip = "Fix shouldly async throw tests")]
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Adding_directory_as_account_store_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
         {
@@ -842,13 +843,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedDirectoryHrefs.Add(dir1.Href);
             this.fixture.CreatedDirectoryHrefs.Add(dir2.Href);
 
-            // TODO should be ArgumentException after Shouldly update
-            Should.Throw<Exception>(async () =>
+            Func<Task> act = async () =>
             {
                 // Throws because multiple matching results exist
                 var mapping = await createdApplication
                     .AddAccountStoreAsync<IDirectory>(dirs => dirs.Where(d => d.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Directory Query Results")));
-            });
+            };
+            act.ShouldThrow<ArgumentException>();
 
             // Clean up
             (await dir1.DeleteAsync()).ShouldBeTrue();
@@ -861,7 +862,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedApplicationHrefs.Remove(createdApplication.Href);
         }
 
-        [Theory(Skip = "Fix shouldly async throw tests")]
+        [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public async Task Adding_group_as_account_store_by_query_throws_for_multiple_results(TestClientProvider clientBuilder)
         {
@@ -885,13 +886,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedGroupHrefs.Add(group1.Href);
             this.fixture.CreatedGroupHrefs.Add(group2.Href);
 
-            // TODO should be ArgumentException after Shouldly update
-            Should.Throw<Exception>(async () =>
+            Func<Task> act = async () =>
             {
                 // Throws because multiple matching results exist
                 var mapping = await createdApplication
                     .AddAccountStoreAsync<IGroup>(groups => groups.Where(x => x.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Application Multiple Group Query Results")));
-            });
+            };
+            act.ShouldThrow<ArgumentException>();
 
             // Clean up
             (await group1.DeleteAsync()).ShouldBeTrue();
