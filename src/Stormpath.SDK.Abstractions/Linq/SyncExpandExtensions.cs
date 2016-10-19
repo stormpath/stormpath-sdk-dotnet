@@ -143,5 +143,41 @@ namespace Stormpath.SDK.Sync
         /// <returns>An <see cref="IQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
         public static IQueryable<IApiKey> Expand(this IQueryable<IApiKey> source, Expression<Func<IApiKeyExpandables, object>> selector)
             => ExpandCommon.CreateQuery(source, selector);
+
+        /// <summary>
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
+        /// </summary>
+        /// <param name="source">The source query.</param>
+        /// <param name="selector">A function to select a resource-returning method or property to expand.</param>
+        /// <returns>An <see cref="IQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IQueryable<IFactor> Expand(this IQueryable<IFactor> source, Expression<Func<IFactorExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
+
+        /// <summary>
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
+        /// </summary>
+        /// <param name="source">The source query.</param>
+        /// <param name="selector">A function to select a resource-returning method or property to expand.</param>
+        /// <returns>An <see cref="IQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IQueryable<ISmsFactor> Expand(this IQueryable<ISmsFactor> source, Expression<Func<ISmsFactorExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
+
+        /// <summary>
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
+        /// </summary>
+        /// <param name="source">The source query.</param>
+        /// <param name="selector">A function to select a resource-returning method or property to expand.</param>
+        /// <returns>An <see cref="IQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IQueryable<IPhone> Expand(this IQueryable<IPhone> source, Expression<Func<IPhoneExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
+
+        /// <summary>
+        /// Retrieves additional data in this request from a linked resource. This has no effect if caching is disabled on the <see cref="Client.IClient">Client</see> object.
+        /// </summary>
+        /// <param name="source">The source query.</param>
+        /// <param name="selector">A function to select a resource-returning method or property to expand.</param>
+        /// <returns>An <see cref="IQueryable{T}"/> whose elements will include additional data selected by <paramref name="selector"/>.</returns>
+        public static IQueryable<IChallenge> Expand(this IQueryable<IChallenge> source, Expression<Func<IChallengeExpandables, object>> selector)
+            => ExpandCommon.CreateQuery(source, selector);
     }
 }

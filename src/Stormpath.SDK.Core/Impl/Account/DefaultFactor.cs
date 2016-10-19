@@ -5,7 +5,7 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Account
 {
-    internal class DefaultFactor : AbstractInstanceResource, IFactor
+    internal partial class DefaultFactor : AbstractInstanceResource, IFactor, IFactorSync
     {
         private const string TypePropertyName = "type";
         private const string StatusPropertyName = "status";
@@ -59,5 +59,7 @@ namespace Stormpath.SDK.Impl.Account
 
         public Task<bool> DeleteAsync(CancellationToken cancellationToken)
             => GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
+
+        // Sync methods implemented in DefaultFactor.Sync.cs
     }
 }

@@ -5,7 +5,7 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Account
 {
-    internal sealed class DefaultSmsFactor : DefaultFactor, ISmsFactor
+    internal sealed class DefaultSmsFactor : DefaultFactor, ISmsFactor, ISmsFactorSync
     {
         private const string PhonePropertyName = "phone";
 
@@ -14,9 +14,13 @@ namespace Stormpath.SDK.Impl.Account
         {
         }
 
-        public Task<IPhone> GetPhoneAsync(CancellationToken cancellationToken = new CancellationToken())
+        public Task<IPhone> GetPhoneAsync(CancellationToken cancellationToken)
             => GetInternalAsyncDataStore().GetResourceAsync<IPhone>(
                 GetLinkProperty(PhonePropertyName).Href,
                 cancellationToken);
+
+        public IPhone GetPhone()
+            => GetInternalSyncDataStore().GetResource<IPhone>(
+                GetLinkProperty(PhonePropertyName).Href);
     }
 }
