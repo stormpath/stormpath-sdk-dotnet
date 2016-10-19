@@ -13,7 +13,7 @@ namespace Stormpath.SDK.Sync
         /// </summary>
         /// <param name="smsFactor">The factor.</param>
         /// <returns>The <see cref="IPhone">Phone</see> associated with this factor.</returns>
-        public static IPhone GetPhoneAsync(this ISmsFactor smsFactor)
+        public static IPhone GetPhone(this ISmsFactor smsFactor)
             => (smsFactor as ISmsFactorSync).GetPhone();
     }
 }
