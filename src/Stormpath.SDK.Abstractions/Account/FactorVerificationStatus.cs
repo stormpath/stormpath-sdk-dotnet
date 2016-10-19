@@ -23,7 +23,6 @@ namespace Stormpath.SDK.Account
     /// </summary>
     public sealed class FactorVerificationStatus : AbstractEnumProperty
     {
-        // TODO are these all the values?
         /// <summary>
         /// The factor has been verified.
         /// </summary>
