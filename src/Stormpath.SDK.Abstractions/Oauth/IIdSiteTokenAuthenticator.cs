@@ -17,7 +17,7 @@
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
-    /// Represents a an <see cref="IOauthAuthenticator{TRequest, TResult}">OAuth 2.0 Authenticator</see> used to
+    /// Represents an <see cref="IOauthAuthenticator{TRequest, TResult}">OAuth 2.0 Authenticator</see> used to
     /// validate and exchange an ID Site response for an access token.
     /// </summary>
     /// <example>

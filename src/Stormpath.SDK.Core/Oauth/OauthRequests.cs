@@ -58,5 +58,14 @@ namespace Stormpath.SDK.Oauth
         /// </returns>
         public static IRefreshGrantRequestBuilder NewRefreshGrantRequest()
             => new DefaultRefreshGrantRequestBuilder();
+
+        /// <summary>
+        /// Start a new factor challenge request.
+        /// </summary>
+        /// <returns>
+        /// A new <see cref="IFactorChallengeAuthenticationRequestBuilder"/> instance, used to construct <see cref="IFactorChallengeAuthenticationRequest">Factor Challenge requests</see>.
+        /// </returns>
+        public static IFactorChallengeAuthenticationRequestBuilder NewFactorChallengeRequest()
+            => new DefaultFactorChallengeAuthenticationRequestBuilder();
     }
 }

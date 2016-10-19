@@ -155,6 +155,13 @@ namespace Stormpath.SDK.Application
         IJwtAuthenticator NewJwtAuthenticator();
 
         /// <summary>
+        /// Creates a new <see cref="IFactorChallengeAuthenticator">Factor Challenge Authenticator</see> that allows you to 
+        /// exchange a factor challenge code for an OAuth 2.0 access token.
+        /// </summary>
+        /// <returns>A new <see cref="IFactorChallengeAuthenticator"/></returns> instance.
+        IFactorChallengeAuthenticator NewFactorChallengeAuthenticator();
+
+        /// <summary>
         /// Creates a new <see cref="ISamlIdpUrlBuilder"/> that allows you to build a URL you can use to redirect
         /// your application users to an external SAML Identity Provider.
         /// </summary>
