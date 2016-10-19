@@ -33,14 +33,14 @@ namespace Stormpath.SDK.Account
         FactorStatus Status { get; set; }
 
         /// <summary>
-        /// Gets the <see cref="IAccount">account</see> associated with this factor.
+        /// Gets the <see cref="IAccount">Account</see> associated with this factor.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The account.</returns>
         Task<IAccount> GetAccountAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Gets the most recent <see cref="IChallenge">challenge</see> against this factor, if any.
+        /// Gets the most recent <see cref="IChallenge">Challenge</see> against this factor, if any.
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns>The most recent challenge, or <see langword="null"/>.</returns>

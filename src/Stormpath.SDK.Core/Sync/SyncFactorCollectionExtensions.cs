@@ -3,6 +3,9 @@ using Stormpath.SDK.Impl.Account;
 
 namespace Stormpath.SDK.Sync
 {
+    /// <summary>
+    /// Provides synchronous access to the methods available on the <see cref="IFactorCollection">Factor collection</see>.
+    /// </summary>
     public static class SyncFactorCollectionExtensions
     {
         /// <summary>

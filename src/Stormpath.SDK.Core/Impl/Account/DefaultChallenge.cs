@@ -5,7 +5,7 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Account
 {
-    internal sealed class DefaultChallenge : AbstractInstanceResource, IChallenge
+    internal sealed partial class DefaultChallenge : AbstractInstanceResource, IChallenge, IChallengeSync
     {
         private const string StatusPropertyName = "status";
         private const string MessagePropertyName = "message";
@@ -48,5 +48,10 @@ namespace Stormpath.SDK.Impl.Account
             await SubmitAsync(code, cancellationToken);
             return Status == ChallengeStatus.Success;
         }
+
+        public Task<bool> DeleteAsync(CancellationToken cancellationToken)
+            => GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
+
+        // Sync methods are implemented in DefaultChallenge.Sync.cs
     }
 }

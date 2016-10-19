@@ -9,7 +9,7 @@ namespace Stormpath.SDK.Sync
     public static class SyncFactorExtensions
     {
         /// <summary>
-        /// Synchronously gets the <see cref="IAccount">account</see> associated with this factor.
+        /// Synchronously gets the <see cref="IAccount">Account</see> associated with this factor.
         /// </summary>
         /// <param name="factor">The factor.</param>
         /// <returns>The account.</returns>
@@ -17,7 +17,7 @@ namespace Stormpath.SDK.Sync
             => (factor as IFactorSync).GetAccount();
 
         /// <summary>
-        /// Synchronously gets the most recent <see cref="IChallenge">challenge</see> against this factor, if any.
+        /// Synchronously gets the most recent <see cref="IChallenge">Challenge</see> against this factor, if any.
         /// </summary>
         /// <param name="factor">The factor.</param>
         /// <returns>The most recent challenge, or <see langword="null"/>.</returns>
