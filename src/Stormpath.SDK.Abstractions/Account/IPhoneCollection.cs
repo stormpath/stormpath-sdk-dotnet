@@ -8,7 +8,6 @@ namespace Stormpath.SDK.Account
     {
         Task<IPhone> AddAsync(string number, CancellationToken cancellationToken = default(CancellationToken));
 
-        // TODO
-        //Task<IPhone> AddPhoneAsync(PhoneCreationOptions options);
+        Task<IPhone> AddAsync(PhoneCreationOptions options, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

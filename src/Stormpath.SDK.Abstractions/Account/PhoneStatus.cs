@@ -26,12 +26,12 @@ namespace Stormpath.SDK.Account
         /// <summary>
         /// The phone is enabled.
         /// </summary>
-        public static PhoneStatus Verified = new PhoneStatus("ENABLED");
+        public static PhoneStatus Enabled = new PhoneStatus("ENABLED");
 
         /// <summary>
         /// The phone is disabled.
         /// </summary>
-        public static PhoneStatus Unverified = new PhoneStatus("DISABLED");
+        public static PhoneStatus Disabled = new PhoneStatus("DISABLED");
 
         public PhoneStatus(string value)
             : base(value)

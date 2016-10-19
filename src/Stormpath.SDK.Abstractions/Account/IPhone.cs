@@ -16,7 +16,7 @@ namespace Stormpath.SDK.Account
 
         string Description { get; set; }
 
-        PhoneVerificationStatus VerificationStatus { get; }
+        PhoneVerificationStatus VerificationStatus { get; set; }
 
         PhoneStatus Status { get; set; }
 

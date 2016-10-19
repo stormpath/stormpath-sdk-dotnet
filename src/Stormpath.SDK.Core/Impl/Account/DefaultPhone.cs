@@ -44,7 +44,10 @@ namespace Stormpath.SDK.Impl.Account
         }
 
         public PhoneVerificationStatus VerificationStatus
-            => GetEnumProperty<PhoneVerificationStatus>(VerificationStatusPropertyName);
+        {
+            get { return GetEnumProperty<PhoneVerificationStatus>(VerificationStatusPropertyName); }
+            set { SetProperty(VerificationStatusPropertyName, value); }
+        }
 
         public Task<IAccount> GetAccountAsync(CancellationToken cancellationToken)
             => GetInternalAsyncDataStore().GetResourceAsync<IAccount>(

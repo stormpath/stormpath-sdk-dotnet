@@ -46,14 +46,9 @@ namespace Stormpath.SDK.Impl.Account
             => new CollectionResourceQueryable<IApiKey>(this.ApiKeys.Href, this.GetInternalAsyncDataStore());
 
         public IFactorCollection Factors
-            => new DefaultFactorCollection(GetLinkProperty(FactorsPropertyName).Href, GetInternalAsyncDataStore());
+            => new DefaultFactorCollection(GetLinkProperty(FactorsPropertyName).Href, GetInternalDataStore());
 
         public IPhoneCollection Phones
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+            => new DefaultPhoneCollection(GetLinkProperty(PhonesPropertyName).Href, GetInternalDataStore());
     }
 }

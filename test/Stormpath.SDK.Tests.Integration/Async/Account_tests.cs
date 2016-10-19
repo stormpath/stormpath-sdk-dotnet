@@ -1292,5 +1292,95 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             directFactor.Href.Should().Be(smsFactor.Href);
         }
+
+        // TODO start here!
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Adding_phone_to_account(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            // Add a phone
+            var phone = await tester.Phones.AddAsync("+1 818-555-7993");
+            phone.Number.Should().Be("+18185557993");
+
+            (await phone.GetAccountAsync()).Href.Should().Be(tester.Href);
+
+            // Try deleting it
+            await phone.DeleteAsync();
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Adding_phone_to_account_with_all_options(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            // Add a phone
+            var phone = await tester.Phones.AddAsync(new PhoneCreationOptions
+            {
+                Number = "+1 818-555-7993",
+                Name = "Nina's cell",
+                Description = "Danger danger",
+                Status = PhoneStatus.Disabled,
+                VerificationStatus = PhoneVerificationStatus.Verified
+            });
+
+            phone.Number.Should().Be("+18185557993");
+            phone.Name.Should().Be("Nina's cell");
+            phone.Description.Should().Be("Danger danger");
+            phone.Status.Should().Be(PhoneStatus.Disabled);
+            phone.VerificationStatus.Should().Be(PhoneVerificationStatus.Verified);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Updating_existing_phone(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            // Add a phone
+            var phone = await tester.Phones.AddAsync("+1 818-555-7993");
+            phone.VerificationStatus.Should().Be(PhoneVerificationStatus.Unverified);
+
+            phone.VerificationStatus = PhoneVerificationStatus.Verified;
+            var updated = await phone.SaveAsync();
+
+            updated.VerificationStatus.Should().Be(PhoneVerificationStatus.Verified);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
     }
 }
