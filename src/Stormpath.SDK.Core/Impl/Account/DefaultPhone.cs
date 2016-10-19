@@ -5,7 +5,7 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Account
 {
-    internal sealed class DefaultPhone : AbstractInstanceResource, IPhone
+    internal sealed class DefaultPhone : AbstractInstanceResource, IPhone, IPhoneSync
     {
         private const string NumberPropertyName = "number";
         private const string DescriptionPropertyName = "description";
@@ -54,10 +54,19 @@ namespace Stormpath.SDK.Impl.Account
                 GetLinkProperty(AccountPropertyName).Href,
                 cancellationToken);
 
+        public IAccount GetAccount()
+            => GetInternalSyncDataStore().GetResource<IAccount>(
+                GetLinkProperty(AccountPropertyName).Href);
+
         public Task<IPhone> SaveAsync(CancellationToken cancellationToken)
             => SaveAsync<IPhone>(cancellationToken);
 
+        public IPhone Save() => Save<IPhone>();
+
         public Task<bool> DeleteAsync(CancellationToken cancellationToken)
             => GetInternalAsyncDataStore().DeleteAsync(this, cancellationToken);
+
+        public bool Delete()
+            => GetInternalSyncDataStore().Delete(this);
     }
 }

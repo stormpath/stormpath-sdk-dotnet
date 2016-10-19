@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Resource;
-using Stormpath.SDK.Tenant;
 
 namespace Stormpath.SDK.Account
 {
@@ -27,7 +26,7 @@ namespace Stormpath.SDK.Account
         FactorVerificationStatus VerificationStatus { get; }
 
         /// <summary>
-        /// Gets the factor's status.
+        /// Gets or sets the factor's status.
         /// </summary>
         /// <value>The factor's status.</value>
         FactorStatus Status { get; set; }
