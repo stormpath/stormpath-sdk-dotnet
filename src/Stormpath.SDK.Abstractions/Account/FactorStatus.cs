@@ -33,6 +33,10 @@ namespace Stormpath.SDK.Account
         /// </summary>
         public static FactorStatus Disabled = new FactorStatus("DISABLED");
 
+        /// <summary>
+        /// Creates a new <see cref="FactorStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
         public FactorStatus(string value)
             : base(value)
         {

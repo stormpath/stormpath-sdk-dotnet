@@ -33,6 +33,10 @@ namespace Stormpath.SDK.Account
         /// </summary>
         public static PhoneVerificationStatus Unverified = new PhoneVerificationStatus("UNVERIFIED");
 
+        /// <summary>
+        /// Creates a new <see cref="PhoneVerificationStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
         public PhoneVerificationStatus(string value)
             : base(value)
         {

@@ -33,6 +33,10 @@ namespace Stormpath.SDK.Account
         /// </summary>
         public static FactorType GoogleAuthenticator = new FactorType("GOOGLE-AUTHENTICATOR");
 
+        /// <summary>
+        /// Creates a new <see cref="FactorType"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
         public FactorType(string value)
             : base(value)
         {

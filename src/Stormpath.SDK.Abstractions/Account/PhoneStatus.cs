@@ -33,6 +33,10 @@ namespace Stormpath.SDK.Account
         /// </summary>
         public static PhoneStatus Disabled = new PhoneStatus("DISABLED");
 
+        /// <summary>
+        /// Creates a new <see cref="PhoneStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
         public PhoneStatus(string value)
             : base(value)
         {

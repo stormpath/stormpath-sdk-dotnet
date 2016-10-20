@@ -422,7 +422,10 @@ namespace Stormpath.SDK.Application
         /// </example>
         IAsyncQueryable<IGroup> GetGroups();
 
-        // todo
+        /// <summary>
+        /// Gets a queryable list of all <see cref="IApiKey">API Keys</see> created for accounts in this application.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IApiKey}"/> that may be used to list or search <see cref="IApiKey">API Keys</see>.</returns>
         IAsyncQueryable<IApiKey> GetApiKeys();
     }
 }

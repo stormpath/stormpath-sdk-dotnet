@@ -33,6 +33,10 @@ namespace Stormpath.SDK.Account
         /// </summary>
         public static FactorVerificationStatus Unverified = new FactorVerificationStatus("UNVERIFIED");
 
+        /// <summary>
+        /// Creates a new <see cref="FactorVerificationStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
         public FactorVerificationStatus(string value)
             : base(value)
         {

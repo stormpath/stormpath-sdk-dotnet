@@ -68,6 +68,10 @@ namespace Stormpath.SDK.Account
         /// </summary>
         public static ChallengeStatus Undelivered = new ChallengeStatus("UNDELIVERED");
 
+        /// <summary>
+        /// Creates a new <see cref="ChallengeStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
         public ChallengeStatus(string value)
             : base(value)
         {
