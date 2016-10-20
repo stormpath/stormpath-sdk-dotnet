@@ -155,6 +155,13 @@ namespace Stormpath.SDK.Application
         IJwtAuthenticator NewJwtAuthenticator();
 
         /// <summary>
+        /// Creates a new <see cref="IFactorChallengeAuthenticator">Factor Challenge Authenticator</see> that allows you to 
+        /// exchange a factor challenge code for an OAuth 2.0 access token.
+        /// </summary>
+        /// <returns>A new <see cref="IFactorChallengeAuthenticator"/></returns> instance.
+        IFactorChallengeAuthenticator NewFactorChallengeAuthenticator();
+
+        /// <summary>
         /// Creates a new <see cref="ISamlIdpUrlBuilder"/> that allows you to build a URL you can use to redirect
         /// your application users to an external SAML Identity Provider.
         /// </summary>
@@ -415,7 +422,10 @@ namespace Stormpath.SDK.Application
         /// </example>
         IAsyncQueryable<IGroup> GetGroups();
 
-        // todo
+        /// <summary>
+        /// Gets a queryable list of all <see cref="IApiKey">API Keys</see> created for accounts in this application.
+        /// </summary>
+        /// <returns>An <see cref="IAsyncQueryable{IApiKey}"/> that may be used to list or search <see cref="IApiKey">API Keys</see>.</returns>
         IAsyncQueryable<IApiKey> GetApiKeys();
     }
 }

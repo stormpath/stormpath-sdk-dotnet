@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
@@ -745,6 +746,736 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             (await account.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Create_sms_factor_for_account(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593" // Jack is back
+            });
+
+            (await factor.GetAccountAsync()).Href.Should().Be(tester.Href);
+
+            factor.Href.Should().NotBeNullOrEmpty();
+            factor.Type.Should().Be(FactorType.Sms);
+            factor.Status.Should().Be(FactorStatus.Enabled);
+            factor.VerificationStatus.Should().Be(FactorVerificationStatus.Unverified);
+
+            // No challenges yet
+            (await factor.GetMostRecentChallengeAsync()).Should().BeNull();
+            (await factor.Challenges.AnyAsync()).Should().BeFalse();
+
+            // Get the phone associated with this factor
+            var phone = await factor.GetPhoneAsync();
+            phone.Number.Should().Be("+18185552593");
+
+            (await factor.DeleteAsync()).Should().BeTrue();
+            (await tester.DeleteAsync()).Should().BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Create_totp_factor_for_account(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp"
+            });
+
+            (await factor.GetAccountAsync()).Href.Should().Be(tester.Href);
+
+            factor.Href.Should().NotBeNullOrEmpty();
+            factor.Type.Should().Be(FactorType.GoogleAuthenticator);
+            factor.Status.Should().Be(FactorStatus.Enabled);
+            factor.VerificationStatus.Should().Be(FactorVerificationStatus.Unverified);
+            factor.AccountName.Should().NotBeNullOrEmpty();
+            factor.Base64QrImage.Should().NotBeNullOrEmpty();
+            factor.Issuer.Should().Be("MyApp");
+            factor.KeyUri.Should().NotBeNullOrEmpty();
+            factor.Secret.Should().NotBeNullOrEmpty();
+
+            // No challenges yet
+            (await factor.GetMostRecentChallengeAsync()).Should().BeNull();
+            (await factor.Challenges.AnyAsync()).ShouldBeFalse();
+
+            (await factor.DeleteAsync()).Should().BeTrue();
+            (await tester.DeleteAsync()).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Tests that polymorphism is handled correctly when retrieving the Factor resource.
+        /// </summary>
+        /// <remarks>
+        /// An SMS factor should be retrieved as an ISmsFactor, which implements IFactor.
+        /// </remarks>
+        /// <param name="clientBuilder">The client to use.</param>
+        /// <returns>A Task that represents the asynchronous test.</returns>
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Retrieving_sms_factor_should_create_sms_class(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+
+            factor.Should().BeAssignableTo<ISmsFactor>();
+            factor.Should().BeAssignableTo<IFactor>();
+
+            var retrievedGenericFactor = await client.GetResourceAsync<IFactor>(factor.Href);
+            retrievedGenericFactor.Should().BeAssignableTo<ISmsFactor>();
+            retrievedGenericFactor.Should().BeAssignableTo<IFactor>();
+            retrievedGenericFactor.Href.Should().Be(factor.Href);
+
+            var retrievedSpecificFactor = await client.GetResourceAsync<ISmsFactor>(factor.Href);
+            retrievedSpecificFactor.Should().BeAssignableTo<ISmsFactor>();
+            retrievedSpecificFactor.Should().BeAssignableTo<IFactor>();
+            retrievedSpecificFactor.Href.Should().Be(factor.Href);
+
+            (await tester.DeleteAsync()).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Tests that polymorphism is handled correctly when retrieving a list of Factors.
+        /// </summary>
+        /// <param name="clientBuilder">The client to use.</param>
+        /// <returns>A Task that represents the asynchronous test.</returns>
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Retrieving_list_of_factors_should_be_polymorphic(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+            await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp"
+            });
+
+            var factors = await tester.Factors.ToArrayAsync();
+
+            var factor1 = factors.First() as ISmsFactor;
+            factor1.Should().NotBeNull();
+            (await factor1.GetPhoneAsync()).Number.Should().Be("+18185552593");
+
+            var factor2 = factors.Last() as IGoogleAuthenticatorFactor;
+            factor2.Should().NotBeNull();
+            factor2.Issuer.Should().Be("MyApp");
+
+            (await tester.DeleteAsync()).Should().BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Create_sms_factor_for_account_and_challenge_immediately(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Challenge = true
+            });
+
+            var challenge = await factor.GetMostRecentChallengeAsync();
+            challenge.Href.Should().NotBeNullOrEmpty();
+            challenge.Message.Should().NotBeNullOrEmpty();
+            challenge.Status.Should().BeOfType<ChallengeStatus>();
+
+            (await challenge.GetAccountAsync()).Href.Should().Be(tester.Href);
+            (await challenge.GetFactorAsync()).Href.Should().Be(factor.Href);
+
+            // Should get the same object when accessing the Challenges collection
+            var challenge2 = await factor.Challenges.SingleAsync();
+            challenge2.Href.Should().Be(challenge.Href);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Challenge_existing_factor(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+
+            var challenge = await factor.Challenges.AddAsync();
+
+            var retrievedChallenge = await factor.Challenges.SingleAsync();
+            retrievedChallenge.Href.Should().Be(retrievedChallenge.Href);
+
+            challenge.Status.Should().BeOfType<ChallengeStatus>();
+
+            (await challenge.GetAccountAsync()).Href.Should().Be(tester.Href);
+            (await challenge.GetFactorAsync()).Href.Should().Be(factor.Href);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Challenge_existing_factor_with_options(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+
+            var challenge = await factor.Challenges.AddAsync(new ChallengeCreationOptions
+            {
+                Message = "Dammit Chloe! The code is ${code}"
+            });
+
+            var retrievedChallenge = await factor.Challenges.SingleAsync();
+            retrievedChallenge.Href.Should().Be(retrievedChallenge.Href);
+
+            challenge.Message.Should().StartWith("Dammit Chloe!");
+            challenge.Status.Should().BeOfType<ChallengeStatus>();
+
+            (await challenge.GetAccountAsync()).Href.Should().Be(tester.Href);
+            (await challenge.GetFactorAsync()).Href.Should().Be(factor.Href);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Submit_challenge_with_bad_code(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions());
+
+            var challenge = await factor.Challenges.AddAsync();
+            await challenge.SubmitAsync("123456");
+
+            // That's definitely not the right code
+            challenge.Status.Should().Be(ChallengeStatus.Failed);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Validate_challenge_with_bad_code(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions());
+
+            var challenge = await factor.Challenges.AddAsync();
+            var result = await challenge.ValidateAsync("123456");
+
+            // That's definitely not the right code
+            result.Should().BeFalse();
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Update_sms_factor_and_save(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+
+            factor.Status.Should().Be(FactorStatus.Disabled);
+
+            factor.Status = FactorStatus.Enabled;
+            await factor.SaveAsync();
+
+            factor.Status.Should().Be(FactorStatus.Enabled);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Update_totp_factor_and_save(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp"
+            });
+
+            factor.Issuer.Should().Be("MyApp");
+            factor.AccountName.Should().Be(tester.Username);
+
+            factor.Issuer = "MyBetterApp";
+            factor.AccountName = "luke@hoth.rim";
+            await factor.SaveAsync();
+
+            factor.Issuer.Should().Be("MyBetterApp");
+            factor.AccountName.Should().Be("luke@hoth.rim");
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Searching_factors_by_status(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor1 = await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+            var factor2 = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp",
+                Status = FactorStatus.Enabled
+            });
+
+            var disabledFactor = await tester.Factors
+                .Where(f => f.Status == FactorStatus.Disabled)
+                .SingleAsync();
+            disabledFactor.Href.Should().Be(factor1.Href);
+
+            var enabledFactor = await tester.Factors
+                .Where(f => f.Status == FactorStatus.Enabled)
+                .SingleAsync();
+            enabledFactor.Href.Should().Be(factor2.Href);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Searching_factors_by_type(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var factor1 = await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+            var factor2 = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp",
+                Status = FactorStatus.Enabled
+            });
+
+            var disabledFactor = await tester.Factors
+                .Where(f => f.Type == FactorType.Sms)
+                .SingleAsync();
+            disabledFactor.Href.Should().Be(factor1.Href);
+
+            var enabledFactor = await tester.Factors
+                .Where(f => f.Type == FactorType.GoogleAuthenticator)
+                .SingleAsync();
+            enabledFactor.Href.Should().Be(factor2.Href);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Searching_factors_by_totp_account_name(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+            var totpFactor = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp",
+                Status = FactorStatus.Enabled
+            });
+
+            var foundFactor = await tester.Factors
+                .Where(f => ((IGoogleAuthenticatorFactor)f).AccountName == tester.Username)
+                .SingleAsync();
+
+            foundFactor.Href.Should().Be(totpFactor.Href);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_factors_with_expansion(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            var smsFactor = await tester.Factors.AddAsync(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+            var totpFactor = await tester.Factors.AddAsync(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp",
+                Status = FactorStatus.Enabled
+            });
+
+            // We can't verify that the HTTP call was correct, but we can verify that it didn't fail
+            var allFactors = await tester.Factors
+                .Expand(e => e.Account)
+                .Expand(e => e.GetChallenges())
+                .ToArrayAsync();
+            allFactors.Length.Should().Be(2);
+
+            // Also try getting a factor directly
+            var directFactor =
+                await client.GetResourceAsync<ISmsFactor>(smsFactor.Href, opt =>
+                {
+                    opt.Expand(e => e.Phone);
+                    opt.Expand(e => e.Account);
+                    opt.Expand(e => e.MostRecentChallenge);
+                });
+
+            directFactor.Href.Should().Be(smsFactor.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Adding_phone_to_account(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            // Add a phone
+            var phone = await tester.Phones.AddAsync("+1 818-555-7993");
+            phone.Number.Should().Be("+18185557993");
+
+            (await phone.GetAccountAsync()).Href.Should().Be(tester.Href);
+
+            // Try deleting it
+            await phone.DeleteAsync();
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Adding_phone_to_account_with_all_options(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            // Add a phone
+            var phone = await tester.Phones.AddAsync(new PhoneCreationOptions
+            {
+                Number = "+1 818-555-7993",
+                Name = "Nina's cell",
+                Description = "Danger danger",
+                Status = PhoneStatus.Disabled,
+                VerificationStatus = PhoneVerificationStatus.Verified
+            });
+
+            phone.Number.Should().Be("+18185557993");
+            phone.Name.Should().Be("Nina's cell");
+            phone.Description.Should().Be("Danger danger");
+            phone.Status.Should().Be(PhoneStatus.Disabled);
+            phone.VerificationStatus.Should().Be(PhoneVerificationStatus.Verified);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Updating_existing_phone(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            // Add a phone
+            var phone = await tester.Phones.AddAsync("+1 818-555-7993");
+            phone.VerificationStatus.Should().Be(PhoneVerificationStatus.Unverified);
+
+            phone.VerificationStatus = PhoneVerificationStatus.Verified;
+            var updated = await phone.SaveAsync();
+
+            updated.VerificationStatus.Should().Be(PhoneVerificationStatus.Verified);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Listing_account_phones(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            // Add some phones
+            await tester.Phones.AddAsync("+1 818-555-7993");
+            await tester.Phones.AddAsync("+1 818-555-2593");
+
+            // Grab them via LINQ
+            var phones = await tester.Phones.ToArrayAsync();
+            phones.First().Number.Should().Be("+18185557993");
+            phones.Last().Number.Should().Be("+18185552593");
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Searching_account_phones(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            // Add some phones
+            await tester.Phones.AddAsync("+1 818-555-7993");
+            await tester.Phones.AddAsync(new PhoneCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Name = "Cell"
+            });
+
+            var findByNumber = await tester.Phones
+                .Where(p => p.Number.Contains("5557"))
+                .SingleAsync();
+            findByNumber.Number.Should().Be("+18185557993");
+
+            var findByName = await tester.Phones
+                .Where(p => p.Name == "Cell")
+                .SingleAsync();
+            findByName.Number.Should().Be("+18185552593");
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_phones_with_expansion(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = await client.GetDirectoryAsync(fixture.PrimaryDirectoryHref);
+            await directory.CreateAccountAsync(tester);
+
+            // Add some phones
+            await tester.Phones.AddAsync("+1 818-555-7993");
+            await tester.Phones.AddAsync("+1 818-555-2593");
+
+            // We can't verify that the HTTP call was correct, but we can verify that it didn't fail
+            var allPhones = await tester.Phones
+                .Expand(e => e.Account)
+                .ToArrayAsync();
+            allPhones.Length.Should().Be(2);
+
+            // Also try getting a phone directly
+            var directPhone = await client.GetResourceAsync<IPhone>(allPhones[0].Href, opt =>
+            {
+                opt.Expand(e => e.Account);
+            });
+
+            directPhone.Href.Should().Be(allPhones[0].Href);
         }
     }
 }

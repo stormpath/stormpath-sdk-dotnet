@@ -44,6 +44,15 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.NameTranslators
             ["GetApplications"] = "applications",
             ["GetDirectories"] = "directories",
             ["GetOrganizations"] = "organizations",
+            ["GetFactors"] = "factors",
+            ["GetPhones"] = "phones",
+            ["GetChallenges"] = "challenges",
+
+            // New syntax style (member access)
+            ["Account"] = "account",
+            ["MostRecentChallenge"] = "mostRecentChallenge",
+            ["Factor"] = "factor",
+            ["Phone"] = "phone",
         };
 
         public MethodNameTranslator()

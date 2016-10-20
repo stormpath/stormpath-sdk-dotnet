@@ -194,9 +194,14 @@ namespace Stormpath.SDK.Impl.DataStore
             Map propertiesMap = null;
 
             var abstractResource = resource as AbstractResource;
-            if (abstractResource != null)
+            if (abstractResource == null)
             {
-                // Serialize properties
+                // Just a POCO we need to serialize
+                propertiesMap = resourceConverter.ToMap(resource);
+            }
+            else
+            {
+                // Serialize properties from resource
                 propertiesMap = this.resourceConverter.ToMap(abstractResource);
 
                 var extendableInstanceResource = abstractResource as AbstractExtendableInstanceResource;
@@ -304,7 +309,12 @@ namespace Stormpath.SDK.Impl.DataStore
             Map propertiesMap = null;
 
             var abstractResource = resource as AbstractResource;
-            if (abstractResource != null)
+            if (abstractResource == null)
+            {
+                // Just a POCO we need to serialize
+                propertiesMap = resourceConverter.ToMap(resource);
+            }
+            else
             {
                 // Serialize properties
                 propertiesMap = this.resourceConverter.ToMap(abstractResource);

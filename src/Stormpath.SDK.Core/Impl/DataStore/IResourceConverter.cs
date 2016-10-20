@@ -30,5 +30,12 @@ namespace Stormpath.SDK.Impl.DataStore
         /// <param name="resource">The resource.</param>
         /// <returns>A <see cref="Map"/> of key-value pairs.</returns>
         Map ToMap(AbstractResource resource);
+
+        /// <summary>
+        /// Converts any POCO into a <see cref="Map"/>.
+        /// </summary>
+        /// <param name="resource">The object.</param>
+        /// <returns>A <see cref="Map"/> of key-value pairs.</returns>
+        Map ToMap(object resource);
     }
 }

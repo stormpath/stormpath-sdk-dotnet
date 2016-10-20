@@ -1025,6 +1025,19 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 }";
 
         #endregion
+
+        #region OAuthResponse
+
+        public static readonly string OauthResponse = @"
+{
+  ""access_token"": ""eyJraWQiOiIyWkZNV...TvUt2WBOl3k"",
+  ""refresh_token"": ""eyJraWQiOiIyWkZNV...8TvvrB7cBEmNF_g"",
+  ""token_type"": ""Bearer"",
+  ""expires_in"": 1800,
+  ""stormpath_access_token_href"": ""https://api.stormpath.com/v1/accessTokens/1vHI0jBXDrmmvPqEXaMPle""
+}";
+
+        #endregion
     }
 #pragma warning restore SA1124 // Do not use regions
 }

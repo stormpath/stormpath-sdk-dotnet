@@ -97,6 +97,11 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(IAccountCreationPolicy)] = typeof(DefaultAccountCreationPolicy),
             [typeof(IPasswordPolicy)] = typeof(DefaultPasswordPolicy),
             [typeof(IPasswordStrengthPolicy)] = typeof(DefaultPasswordStrengthPolicy),
+            [typeof(IFactor)] = typeof(DefaultFactor),
+            [typeof(ISmsFactor)] = typeof(DefaultSmsFactor),
+            [typeof(IGoogleAuthenticatorFactor)] = typeof(DefaultGoogleAuthenticatorFactor),
+            [typeof(IChallenge)] = typeof(DefaultChallenge),
+            [typeof(IPhone)] = typeof(DefaultPhone),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
@@ -147,6 +152,10 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultAccountCreationPolicy)] = typeof(IAccountCreationPolicy),
             [typeof(DefaultPasswordPolicy)] = typeof(IPasswordPolicy),
             [typeof(DefaultPasswordStrengthPolicy)] = typeof(IPasswordStrengthPolicy),
+            [typeof(DefaultFactor)] = typeof(IFactor),
+            [typeof(DefaultSmsFactor)] = typeof(ISmsFactor),
+            [typeof(DefaultGoogleAuthenticatorFactor)] = typeof(IGoogleAuthenticatorFactor),
+            [typeof(DefaultPhone)] = typeof(IPhone),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(DefaultApplicationAccountStoreMapping)] = typeof(IApplicationAccountStoreMapping),
@@ -170,6 +179,7 @@ namespace Stormpath.SDK.Impl.DataStore
             ["oAuthPolicy"] = typeof(IOauthPolicy),
             ["accountCreationPolicy"] = typeof(IAccountCreationPolicy),
             ["passwordPolicy"] = typeof(IPasswordPolicy),
+            ["phone"] = typeof(IPhone),
 
             ["organizations"] = typeof(CollectionResponsePage<IOrganization>),
             ["applications"] = typeof(CollectionResponsePage<IApplication>),
@@ -181,6 +191,7 @@ namespace Stormpath.SDK.Impl.DataStore
             ["accountMemberships"] = typeof(CollectionResponsePage<IGroupMembership>),
             ["apiKeys"] = typeof(CollectionResponsePage<IApiKey>),
             ["authorizedCallbackUris"] = typeof(string[]),
+            ["challenges"] = typeof(CollectionResponsePage<IChallenge>),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()
@@ -194,6 +205,9 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(CollectionResponsePage<IAccessToken>)] = typeof(IAccessToken),
             [typeof(CollectionResponsePage<IRefreshToken>)] = typeof(IRefreshToken),
             [typeof(CollectionResponsePage<IApiKey>)] = typeof(IApiKey),
+            [typeof(CollectionResponsePage<IChallenge>)] = typeof(IChallenge),
+            [typeof(CollectionResponsePage<IFactor>)] = typeof(IFactor),
+            [typeof(CollectionResponsePage<IPhone>)] = typeof(IPhone),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(CollectionResponsePage<IApplicationAccountStoreMapping>)] = typeof(IApplicationAccountStoreMapping),

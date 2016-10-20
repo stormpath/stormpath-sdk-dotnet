@@ -106,6 +106,26 @@ namespace Stormpath.SDK.Tests.Linq
 
             this.ShouldBeCalledWithArguments("expand=tenant");
         }
+
+        [Fact]
+        public async Task Factors_are_expanded()
+        {
+            await this.Queryable
+                .Expand(x => x.GetFactors())
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("expand=factors");
+        }
+
+        [Fact]
+        public async Task Phones_are_expanded()
+        {
+            await this.Queryable
+                .Expand(x => x.GetPhones())
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("expand=phones");
+        }
     }
 
     public class Expand_application_tests : Linq_test<IApplication>
@@ -227,6 +247,75 @@ namespace Stormpath.SDK.Tests.Linq
                 .MoveNextAsync();
 
             this.ShouldBeCalledWithArguments("expand=group");
+        }
+    }
+
+    public class Expand_factor_tests : Linq_test<IFactor>
+    {
+        [Fact]
+        public async Task Account_is_expanded()
+        {
+            await this.Queryable
+                .Expand(x => x.Account)
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("expand=account");
+        }
+
+        [Fact]
+        public async Task Most_recent_challenge_is_expanded()
+        {
+            await this.Queryable
+                .Expand(x => x.MostRecentChallenge)
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("expand=mostRecentChallenge");
+        }
+
+        [Fact]
+        public async Task Challenges_are_expanded()
+        {
+            await this.Queryable
+                .Expand(x => x.GetChallenges())
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("expand=challenges");
+        }
+    }
+
+    public class Expand_phone_tests : Linq_test<IPhone>
+    {
+        [Fact]
+        public async Task Account_is_expanded()
+        {
+            await this.Queryable
+                .Expand(x => x.Account)
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("expand=account");
+        }
+    }
+
+    public class Expand_challenge_tests : Linq_test<IChallenge>
+    {
+        [Fact]
+        public async Task Account_is_expanded()
+        {
+            await this.Queryable
+                .Expand(x => x.Account)
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("expand=account");
+        }
+
+        [Fact]
+        public async Task Factor_is_expanded()
+        {
+            await this.Queryable
+                .Expand(x => x.Factor)
+                .MoveNextAsync();
+
+            this.ShouldBeCalledWithArguments("expand=factor");
         }
     }
 #pragma warning restore SA1402 // File may only contain a single class

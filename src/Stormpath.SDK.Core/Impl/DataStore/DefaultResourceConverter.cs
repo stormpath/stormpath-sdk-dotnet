@@ -14,7 +14,10 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Shared;
 using Map = System.Collections.Generic.IDictionary<string, object>;
@@ -25,14 +28,14 @@ namespace Stormpath.SDK.Impl.DataStore
     {
         private IResourceConverter AsInterface => this;
 
-        Map IResourceConverter.ToMap(AbstractResource resource)
+        public Map ToMap(AbstractResource resource)
         {
             var propertyNames = resource.GetUpdatedPropertyNames();
 
             var resultMap = propertyNames.Select(name =>
             {
                 var rawValue = resource.GetProperty(name);
-                var value = this.SanitizeValue(resource, name, rawValue);
+                var value = this.SanitizeValue(rawValue);
                 return new { name, value };
             }).ToDictionary(
                 map => map.name,
@@ -41,7 +44,36 @@ namespace Stormpath.SDK.Impl.DataStore
             return resultMap;
         }
 
-        private object SanitizeValue(AbstractResource resource, string propertyName, object rawValue)
+        public Map ToMap(object resource)
+        {
+            if (resource == null)
+            {
+                return null;
+            }
+
+            var typeInfo = resource.GetType().GetTypeInfo();
+
+            return typeInfo.DeclaredProperties
+                .Where(p => p.CanRead)
+                .Select(p =>
+                {
+                    var rawValue = p.GetValue(resource);
+
+                    object value = null;
+                    if (rawValue != null)
+                    {
+                        value = IsPrimitive(p.PropertyType)
+                            ? SanitizeValue(rawValue)
+                            : ToMap(rawValue);
+                    }
+
+                    return new {name = ToCamelCase(p.Name), value};
+                })
+                .Where(pair => pair.value != null)
+                .ToDictionary(pair => pair.name, pair => pair.value);
+        }
+
+        private object SanitizeValue(object rawValue)
         {
             var asEmbedded = rawValue as IEmbeddedProperty;
             if (asEmbedded != null)
@@ -63,6 +95,30 @@ namespace Stormpath.SDK.Impl.DataStore
 
             // Already a primitive-like type, no need to sanitize
             return rawValue;
+        }
+
+        private bool IsPrimitive(Type type)
+        {
+            if (type == typeof(string))
+            {
+                return true;
+            }
+
+            var typeInfo = type.GetTypeInfo();
+
+            if (typeof(StringEnumeration).GetTypeInfo().IsAssignableFrom(typeInfo))
+            {
+                return true;
+            }
+
+            return type.GetTypeInfo().IsPrimitive;
+        }
+
+        private static string ToCamelCase(string input)
+        {
+            return string.IsNullOrEmpty(input)
+                ? input
+                : $"{input[0].ToString().ToLower()}{input.Substring(1)}";
         }
     }
 }

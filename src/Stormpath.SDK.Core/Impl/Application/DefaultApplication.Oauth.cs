@@ -33,5 +33,8 @@ namespace Stormpath.SDK.Impl.Application
 
         IJwtAuthenticator IApplication.NewJwtAuthenticator()
             => new DefaultJwtAuthenticator(this, this.GetInternalDataStore());
+
+        public IFactorChallengeAuthenticator NewFactorChallengeAuthenticator()
+            => new DefaultFactorChallengeAuthenticator(this, GetInternalDataStore());
     }
 }

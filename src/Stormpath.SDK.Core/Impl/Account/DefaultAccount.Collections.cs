@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Application;
@@ -43,5 +44,11 @@ namespace Stormpath.SDK.Impl.Account
 
         IAsyncQueryable<IApiKey> IAccount.GetApiKeys()
             => new CollectionResourceQueryable<IApiKey>(this.ApiKeys.Href, this.GetInternalAsyncDataStore());
+
+        public IFactorCollection Factors
+            => new DefaultFactorCollection(GetLinkProperty(FactorsPropertyName).Href, GetInternalDataStore());
+
+        public IPhoneCollection Phones
+            => new DefaultPhoneCollection(GetLinkProperty(PhonesPropertyName).Href, GetInternalDataStore());
     }
 }

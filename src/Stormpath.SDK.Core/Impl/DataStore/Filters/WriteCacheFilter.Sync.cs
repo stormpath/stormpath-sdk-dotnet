@@ -54,8 +54,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             var result = chain.Filter(request, logger);
 
-            var type = new TypeResolver()
-                .Resolve(result.Type);
+            var type = new TypeResolver().Resolve(result.Type, result.Body);
 
             bool isEmailVerificationResponse = type == typeof(IEmailVerificationToken);
             if (isEmailVerificationResponse)

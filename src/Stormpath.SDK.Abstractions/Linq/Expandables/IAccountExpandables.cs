@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
 
@@ -63,5 +64,33 @@ namespace Stormpath.SDK.Linq.Expandables
         /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
         /// <returns>Not applicable.</returns>
         IAsyncQueryable<IAccessToken> GetRefreshTokens(int? offset, int? limit);
+
+        /// <summary>
+        /// Expands the <c>factors</c> collection with the default pagination options.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
+        IAsyncQueryable<IFactor> GetFactors();
+
+        /// <summary>
+        /// Expands the <c>factors</c> collection with the specified pagination options.
+        /// </summary>
+        /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
+        /// <returns>Not applicable.</returns>
+        IAsyncQueryable<IFactor> GetFactors(int? offset, int? limit);
+
+        /// <summary>
+        /// Expands the <c>phones</c> collection with the default pagination options.
+        /// </summary>
+        /// <returns>Not applicable.</returns>
+        IAsyncQueryable<IPhone> GetPhones();
+
+        /// <summary>
+        /// Expands the <c>phones</c> collection with the specified pagination options.
+        /// </summary>
+        /// <param name="offset">The pagination offset, or <see langword="null"/> use the default value.</param>
+        /// <param name="limit">The pagination limit, or <see langword="null"/> use the default value.</param>
+        /// <returns>Not applicable.</returns>
+        IAsyncQueryable<IPhone> GetPhones(int? offset, int? limit);
     }
 }

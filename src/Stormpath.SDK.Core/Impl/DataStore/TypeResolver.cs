@@ -15,19 +15,40 @@
 // </copyright>
 
 using System;
+using System.Linq;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Organization;
+using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Impl.DataStore
 {
-    [Obsolete("Remove after IAccountStoreMapping refactoring.")]
     internal sealed class TypeResolver
     {
-        public Type Resolve(Type type)
+        public Type Resolve(Type type, Map properties)
         {
-            if (type == typeof(IAccountStoreMapping<IApplicationAccountStoreMapping>)
-                || type == typeof(IAccountStoreMapping))
+            Type resolvedType = null;
+
+            resolvedType = ResolveAccountStoreMappingTypes(type);
+            if (resolvedType != null)
+            {
+                return resolvedType;
+            }
+
+            resolvedType = ResolveFactorPolymorphism(type, properties);
+            if (resolvedType != null)
+            {
+                return resolvedType;
+            }
+
+            // The original type is fine!
+            return type;
+        }
+
+        private Type ResolveAccountStoreMappingTypes(Type type)
+        {
+            if (type == typeof(IAccountStoreMapping<IApplicationAccountStoreMapping>) || type == typeof(IAccountStoreMapping))
             {
                 return typeof(IApplicationAccountStoreMapping);
             }
@@ -36,7 +57,40 @@ namespace Stormpath.SDK.Impl.DataStore
                 return typeof(IOrganizationAccountStoreMapping);
             }
 
-            return type;
+            return null;
+        }
+
+        // TODO refactor this so it's not hardcoded into TypeResolver
+        private Type ResolveFactorPolymorphism(Type type, Map properties)
+        {
+            if (type != typeof(IFactor))
+            {
+                return null;
+            }
+
+            var hasItems = properties?.Any() ?? false;
+            if (!hasItems)
+            {
+                return null;
+            }
+
+            object rawFactorType;
+            if (!properties.TryGetValue("type", out rawFactorType))
+            {
+                return null;
+            }
+
+            var factorType = rawFactorType.ToString();
+            if (factorType.Equals("sms", StringComparison.OrdinalIgnoreCase))
+            {
+                return typeof(ISmsFactor);
+            }
+            else if (factorType.Equals("google-authenticator", StringComparison.OrdinalIgnoreCase))
+            {
+                return typeof(IGoogleAuthenticatorFactor);
+            }
+
+            return null;
         }
     }
 }

@@ -306,5 +306,17 @@ namespace Stormpath.SDK.Account
         /// <code source="IAccountExamples.cs" region="QueryableRefreshTokens" lang="C#"/>
         /// </example>
         IAsyncQueryable<IRefreshToken> GetRefreshTokens();
+
+        /// <summary>
+        /// Gets the collection of <see cref="IFactor">Factors</see> that belong to the account.
+        /// </summary>
+        /// <returns>The collection of <see cref="IFactor">Factors</see> that belong to the account.</returns>
+        IFactorCollection Factors { get; }
+
+        /// <summary>
+        /// Gets the collection of <see cref="IPhone">Phones</see> that belong to the account.
+        /// </summary>
+        /// <returns>The collection of <see cref="IPhone">Phones</see> that belong to the account.</returns>
+        IPhoneCollection Phones { get; }
     }
 }

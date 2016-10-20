@@ -52,6 +52,9 @@ namespace Stormpath.SDK.Cache
             this.caches = new ConcurrentDictionary<string, object>();
         }
 
+        /// <summary>
+        /// Gets a copy of the cache configuration for this provider.
+        /// </summary>
         public IReadOnlyDictionary<string, ICacheConfiguration> CacheConfigs => new Dictionary<string, ICacheConfiguration>(cacheConfigs);
 
         /// <summary>

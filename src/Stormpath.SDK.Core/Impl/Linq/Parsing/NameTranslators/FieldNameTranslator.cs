@@ -28,7 +28,8 @@ namespace Stormpath.SDK.Impl.Linq.Parsing.NameTranslators
             ["NameKey"] = "nameKey",
             ["CreatedAt"] = "createdAt",
             ["ModifiedAt"] = "modifiedAt",
-            ["PasswordModifiedAt"] = "passwordModifiedAt"
+            ["PasswordModifiedAt"] = "passwordModifiedAt",
+            ["AccountName"] = "accountName"
         };
 
         public FieldNameTranslator()
