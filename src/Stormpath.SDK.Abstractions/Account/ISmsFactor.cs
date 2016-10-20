@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Stormpath.SDK.Account
 {
     /// <summary>
-    /// A SMS-specific <see cref="IFactor">Factor</see>.
+    /// A SMS <see cref="IFactor">Factor</see>.
     /// </summary>
     public interface ISmsFactor : IFactor
     {

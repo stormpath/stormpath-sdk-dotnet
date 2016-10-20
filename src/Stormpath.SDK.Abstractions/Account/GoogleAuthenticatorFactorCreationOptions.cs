@@ -8,6 +8,7 @@
         /// <summary>
         /// Gets or sets whether to challenge this factor immediately.
         /// </summary>
+        /// <remarks>If <see langword="true"/>, the factor will be challenged immediately.</remarks>
         /// <value>Whether to challenge this factor immediately.</value>
         public bool Challenge { get; set; }
 

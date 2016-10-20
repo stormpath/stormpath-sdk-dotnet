@@ -46,9 +46,9 @@ namespace Stormpath.SDK.Account
         Task<IChallenge> GetMostRecentChallengeAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Accesses the factor's <c>challenges</c> collection.
+        /// Gets the collection of <see cref="IChallenge">Challenges</see> against this factor.
         /// </summary>
-        /// <returns>A queryable list of the <see cref="IChallenge">challenge</see>s against this factor.</returns>
+        /// <returns>A collection of the <see cref="IChallenge">challenges</see> against this factor.</returns>
         IChallengeCollection Challenges { get; }
     }
 }
