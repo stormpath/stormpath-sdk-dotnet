@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -93,6 +93,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Http\HttpClients.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Http\HttpRequests.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\AccountCreationActionsShared.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\ChallengeSubmitData.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccount.ApiKeys.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccount.Collections.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccount.cs" />
@@ -101,14 +102,33 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccount.Resources.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccount.ResourcesSync.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultAccountCreationOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultChallenge.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultChallenge.Sync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultChallengeCollection.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultEmailVerificationRequest.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultEmailVerificationToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultFactor.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultFactor.Sync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultFactorCollection.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultGoogleAuthenticatorFactor.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultPasswordResetToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultPhone.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultPhoneCollection.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\DefaultSmsFactor.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\GoogleAuthenticatorFactorCreationData.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IAccountCreationActionsInternal.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IAccountCreationActionsSync.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IAccountSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IChallengeCollectionSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IChallengeSync.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IEmailVerificationRequestSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IFactorCollectionSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IFactorSync.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IPasswordResetTokenSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IPhoneCollectionSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\IPhoneSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\ISmsFactorSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Account\SmsFactorCreationData.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\AccountStore\AbstractAccountStoreMapping.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\AccountStore\AccountStoreContainerShared.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\AccountStore\DefaultAccountStore.cs" />
@@ -359,6 +379,9 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Logging\NullLogger.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\AbstractGrantAuthenticator.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultAccessToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultFactorChallengeAuthenticationRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultFactorChallengeAuthenticationRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultFactorChallengeAuthenticator.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultGrantAuthenticationToken.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultIdSiteTokenAuthenticationAttempt.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultIdSiteTokenAuthenticationRequest.cs" />
@@ -379,7 +402,9 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultRefreshGrantRequest.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultRefreshGrantRequestBuilder.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\DefaultRefreshToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\FactorChallengeAuthenticationData.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IAccessTokenSync.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IFactorChallengeAuthenticatorSync.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IGrantAuthenticationToken.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IIdSiteTokenAuthenticationAttempt.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Oauth\IIdSiteTokenAuthenticatorSync.cs" />
@@ -442,6 +467,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\AbstractInstanceResource.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\AbstractResource.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\CollectionResponsePage{T}.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\DefaultCreationOptions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\DefaultRetrievalOptions{T}.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\ExpandedProperty.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Impl\Resource\IDeletableSync.cs" />
@@ -515,11 +541,15 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncApiKeyExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncApplicationExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncAuthenticationResultExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncChallengeCollectionExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncChallengeExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncClientExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncDataStoreExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncDirectoryExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncEmailVerificationRequestExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncExtendableExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncFactorCollectionExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncFactorExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncGroupCreationExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncGroupExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncGroupMembershipExtensions.cs" />
@@ -532,6 +562,8 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncPasswordGrantAuthenticatorExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncPasswordPolicyExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncPasswordResetTokenExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncPhoneCollectionExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncPhoneExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncQueryableExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncRefreshGrantAuthenticatorExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncRefreshTokenExtensions.cs" />
@@ -539,6 +571,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncSamlAccountResultExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncSamlPolicyExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncSamlServiceProviderExtensions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncSmsFactorExtensions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Core\Sync\SyncTenantActionsExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -561,3 +594,4 @@
   </Target>
   -->
 </Project>
+

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -49,14 +49,32 @@
   <!-- #startAutogen -->
   <ItemGroup>
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\AccountStatus.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\ChallengeCreationOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\ChallengeStatus.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\EmailVerificationStatus.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\FactorStatus.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\FactorType.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\FactorVerificationStatus.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\GoogleAuthenticatorFactorCreationOptions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IAccount.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IAccountCreationActions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IAccountCreationOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IChallenge.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IChallengeCollection.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IEmailVerificationRequest.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IEmailVerificationToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IFactor.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IFactorCollection.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IGoogleAuthenticatorFactor.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IPasswordResetToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IPhone.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\IPhoneCollection.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\ISmsFactor.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\PasswordFormat.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\PhoneCreationOptions.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\PhoneStatus.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\PhoneVerificationStatus.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Account\SmsFactorCreationOptions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\AccountStore\IAccountStore.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\AccountStore\IAccountStoreContainer.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\AccountStore\IAccountStoreMapping.cs" />
@@ -167,6 +185,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IApiKeyExpandables.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IApplicationExpandables.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IAuthenticationResultExpandables.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IChallengeExpandables.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IDirectoryExpandables.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IExpandableAccounts.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IExpandableApplications.cs" />
@@ -176,10 +195,13 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IExpandableGroupMemberships.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IExpandableGroups.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IExpandableTenant.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IFactorExpandables.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IGroupExpandables.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IGroupMembershipExpandables.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IOrganizationAccountStoreMappingExpandables.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IOrganizationExpandables.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\IPhoneExpandables.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\ISmsFactorExpandables.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Linq\Expandables\ITenantExpandables.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Logging\ILogger.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Logging\ILoggerConsumer{T}.cs" />
@@ -189,6 +211,9 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Logging\LogLevel.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Mail\EmailStatus.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Oauth\IAccessToken.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Oauth\IFactorChallengeAuthenticationRequest.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Oauth\IFactorChallengeAuthenticationRequestBuilder.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Oauth\IFactorChallengeAuthenticator.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Oauth\IIdSiteTokenAuthenticationRequest.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Oauth\IIdSiteTokenAuthenticationRequestBuilder.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Oauth\IIdSiteTokenAuthenticator.cs" />
@@ -242,6 +267,7 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Provider\IProviderFactory.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Provider\IProviderRequestFactory{A,P}.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Provider\ISamlProvider.cs" />
+    <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Resource\AbstractEnumProperty.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Resource\IAuditable.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Resource\ICreationOptions.cs" />
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Resource\IDeletable.cs" />
@@ -278,9 +304,6 @@
     <Compile Include="..\..\..\src\Stormpath.SDK.Abstractions\Tenant\ITenantActions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <!-- #endAutogen -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
@@ -291,3 +314,4 @@
   </Target>
   -->
 </Project>
+
