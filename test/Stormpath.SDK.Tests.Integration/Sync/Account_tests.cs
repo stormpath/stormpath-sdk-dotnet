@@ -16,6 +16,7 @@
 
 using System;
 using System.Linq;
+using FluentAssertions;
 using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Application;
@@ -726,7 +727,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         /// Regression test for https://github.com/stormpath/stormpath-sdk-dotnet/issues/175
         /// </summary>
         /// <param name="clientBuilder">The client to use.</param>
-        /// <returns>A Task that represents the asynchronous test.</returns>
+        /// <returns>A Task that represents the hronous test.</returns>
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
         public void Creating_account_with_special_chars(TestClientProvider clientBuilder)
@@ -770,6 +771,745 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             account.Delete().ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Create_sms_factor_for_account(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var factor = tester.Factors.Add(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593" // Jack is back
+            });
+
+            (factor.GetAccount()).Href.Should().Be(tester.Href);
+
+            factor.Href.Should().NotBeNullOrEmpty();
+            factor.Type.Should().Be(FactorType.Sms);
+            factor.Status.Should().Be(FactorStatus.Enabled);
+            factor.VerificationStatus.Should().Be(FactorVerificationStatus.Unverified);
+
+            // No challenges yet
+            (factor.GetMostRecentChallenge()).Should().BeNull();
+            (factor.Challenges.Synchronously().Any()).Should().BeFalse();
+
+            // Get the phone associated with this factor
+            var phone = factor.GetPhone();
+            phone.Number.Should().Be("+18185552593");
+
+            (factor.Delete()).Should().BeTrue();
+            (tester.Delete()).Should().BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Create_totp_factor_for_account(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var factor = tester.Factors.Add(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp"
+            });
+
+            (factor.GetAccount()).Href.Should().Be(tester.Href);
+
+            factor.Href.Should().NotBeNullOrEmpty();
+            factor.Type.Should().Be(FactorType.GoogleAuthenticator);
+            factor.Status.Should().Be(FactorStatus.Enabled);
+            factor.VerificationStatus.Should().Be(FactorVerificationStatus.Unverified);
+            factor.AccountName.Should().NotBeNullOrEmpty();
+            factor.Base64QrImage.Should().NotBeNullOrEmpty();
+            factor.Issuer.Should().Be("MyApp");
+            factor.KeyUri.Should().NotBeNullOrEmpty();
+            factor.Secret.Should().NotBeNullOrEmpty();
+
+            // No challenges yet
+            (factor.GetMostRecentChallenge()).Should().BeNull();
+            (factor.Challenges.Synchronously().Any()).ShouldBeFalse();
+
+            (factor.Delete()).Should().BeTrue();
+            (tester.Delete()).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Tests that polymorphism is handled correctly when retrieving the Factor resource.
+        /// </summary>
+        /// <remarks>
+        /// An SMS factor should be retrieved as an ISmsFactor, which implements IFactor.
+        /// </remarks>
+        /// <param name="clientBuilder">The client to use.</param>
+        /// <returns>A Task that represents the hronous test.</returns>
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Retrieving_sms_factor_should_create_sms_class(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var factor = tester.Factors.Add(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+
+            factor.Should().BeAssignableTo<ISmsFactor>();
+            factor.Should().BeAssignableTo<IFactor>();
+
+            var retrievedGenericFactor = client.GetResource<IFactor>(factor.Href);
+            retrievedGenericFactor.Should().BeAssignableTo<ISmsFactor>();
+            retrievedGenericFactor.Should().BeAssignableTo<IFactor>();
+            retrievedGenericFactor.Href.Should().Be(factor.Href);
+
+            var retrievedSpecificFactor = client.GetResource<ISmsFactor>(factor.Href);
+            retrievedSpecificFactor.Should().BeAssignableTo<ISmsFactor>();
+            retrievedSpecificFactor.Should().BeAssignableTo<IFactor>();
+            retrievedSpecificFactor.Href.Should().Be(factor.Href);
+
+            (tester.Delete()).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Tests that polymorphism is handled correctly when retrieving a list of Factors.
+        /// </summary>
+        /// <param name="clientBuilder">The client to use.</param>
+        /// <returns>A Task that represents the hronous test.</returns>
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Retrieving_list_of_factors_should_be_polymorphic(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            tester.Factors.Add(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+            tester.Factors.Add(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp"
+            });
+
+            var factors = tester.Factors.Synchronously().ToArray();
+
+            var factor1 = factors.First() as ISmsFactor;
+            factor1.Should().NotBeNull();
+            (factor1.GetPhone()).Number.Should().Be("+18185552593");
+
+            var factor2 = factors.Last() as IGoogleAuthenticatorFactor;
+            factor2.Should().NotBeNull();
+            factor2.Issuer.Should().Be("MyApp");
+
+            (tester.Delete()).Should().BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Create_sms_factor_for_account_and_challenge_immediately(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var factor = tester.Factors.Add(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Challenge = true
+            });
+
+            var challenge = factor.GetMostRecentChallenge();
+            challenge.Href.Should().NotBeNullOrEmpty();
+            challenge.Message.Should().NotBeNullOrEmpty();
+            challenge.Status.Should().BeOfType<ChallengeStatus>();
+
+            (challenge.GetAccount()).Href.Should().Be(tester.Href);
+            (challenge.GetFactor()).Href.Should().Be(factor.Href);
+
+            // Should get the same object when accessing the Challenges collection
+            var challenge2 = factor.Challenges.Synchronously().Single();
+            challenge2.Href.Should().Be(challenge.Href);
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Challenge_existing_factor(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var factor = tester.Factors.Add(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+
+            var challenge = factor.Challenges.Add();
+
+            var retrievedChallenge = factor.Challenges.Synchronously().Single();
+            retrievedChallenge.Href.Should().Be(retrievedChallenge.Href);
+
+            challenge.Status.Should().BeOfType<ChallengeStatus>();
+
+            (challenge.GetAccount()).Href.Should().Be(tester.Href);
+            (challenge.GetFactor()).Href.Should().Be(factor.Href);
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Challenge_existing_factor_with_options(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var factor = tester.Factors.Add(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593"
+            });
+
+            var challenge = factor.Challenges.Add(new ChallengeCreationOptions
+            {
+                Message = "Dammit Chloe! The code is ${code}"
+            });
+
+            var retrievedChallenge = factor.Challenges.Synchronously().Single();
+            retrievedChallenge.Href.Should().Be(retrievedChallenge.Href);
+
+            challenge.Message.Should().StartWith("Dammit Chloe!");
+            challenge.Status.Should().BeOfType<ChallengeStatus>();
+
+            (challenge.GetAccount()).Href.Should().Be(tester.Href);
+            (challenge.GetFactor()).Href.Should().Be(factor.Href);
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Submit_challenge_with_bad_code(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var factor = tester.Factors.Add(new GoogleAuthenticatorFactorCreationOptions());
+
+            var challenge = factor.Challenges.Add();
+            challenge.Submit("123456");
+
+            // That's definitely not the right code
+            challenge.Status.Should().Be(ChallengeStatus.Failed);
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Validate_challenge_with_bad_code(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var factor = tester.Factors.Add(new GoogleAuthenticatorFactorCreationOptions());
+
+            var challenge = factor.Challenges.Add();
+            var result = challenge.Validate("123456");
+
+            // That's definitely not the right code
+            result.Should().BeFalse();
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Update_sms_factor_and_save(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var factor = tester.Factors.Add(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+
+            factor.Status.Should().Be(FactorStatus.Disabled);
+
+            factor.Status = FactorStatus.Enabled;
+            factor.Save();
+
+            factor.Status.Should().Be(FactorStatus.Enabled);
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Update_totp_factor_and_save(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var factor = tester.Factors.Add(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp"
+            });
+
+            factor.Issuer.Should().Be("MyApp");
+            factor.AccountName.Should().Be(tester.Username);
+
+            factor.Issuer = "MyBetterApp";
+            factor.AccountName = "luke@hoth.rim";
+            factor.Save();
+
+            factor.Issuer.Should().Be("MyBetterApp");
+            factor.AccountName.Should().Be("luke@hoth.rim");
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Searching_factors_by_status(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var factor1 = tester.Factors.Add(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+            var factor2 = tester.Factors.Add(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp",
+                Status = FactorStatus.Enabled
+            });
+
+            var disabledFactor = tester.Factors
+                .Where(f => f.Status == FactorStatus.Disabled)
+                .Synchronously()
+                .Single();
+            disabledFactor.Href.Should().Be(factor1.Href);
+
+            var enabledFactor = tester.Factors
+                .Where(f => f.Status == FactorStatus.Enabled)
+                .Synchronously()
+                .Single();
+            enabledFactor.Href.Should().Be(factor2.Href);
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Searching_factors_by_type(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var factor1 = tester.Factors.Add(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+            var factor2 = tester.Factors.Add(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp",
+                Status = FactorStatus.Enabled
+            });
+
+            var disabledFactor = tester.Factors
+                .Where(f => f.Type == FactorType.Sms)
+                .Synchronously()
+                .Single();
+            disabledFactor.Href.Should().Be(factor1.Href);
+
+            var enabledFactor = tester.Factors
+                .Where(f => f.Type == FactorType.GoogleAuthenticator)
+                .Synchronously()
+                .Single();
+            enabledFactor.Href.Should().Be(factor2.Href);
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Searching_factors_by_totp_account_name(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            tester.Factors.Add(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+            var totpFactor = tester.Factors.Add(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp",
+                Status = FactorStatus.Enabled
+            });
+
+            var foundFactor = tester.Factors
+                .Where(f => ((IGoogleAuthenticatorFactor)f).AccountName == tester.Username)
+                .Synchronously()
+                .Single();
+
+            foundFactor.Href.Should().Be(totpFactor.Href);
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_factors_with_expansion(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            var smsFactor = tester.Factors.Add(new SmsFactorCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Status = FactorStatus.Disabled
+            });
+            var totpFactor = tester.Factors.Add(new GoogleAuthenticatorFactorCreationOptions
+            {
+                Issuer = "MyApp",
+                Status = FactorStatus.Enabled
+            });
+
+            // We can't verify that the HTTP call was correct, but we can verify that it didn't fail
+            var allFactors = tester.Factors
+                .Expand(e => e.Account)
+                .Expand(e => e.GetChallenges())
+                .Synchronously()
+                .ToArray();
+            allFactors.Length.Should().Be(2);
+
+            // Also try getting a factor directly
+            var directFactor =
+                client.GetResource<ISmsFactor>(smsFactor.Href, opt =>
+                {
+                    opt.Expand(e => e.Phone);
+                    opt.Expand(e => e.Account);
+                    opt.Expand(e => e.MostRecentChallenge);
+                });
+
+            directFactor.Href.Should().Be(smsFactor.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Adding_phone_to_account(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            // Add a phone
+            var phone = tester.Phones.Add("+1 818-555-7993");
+            phone.Number.Should().Be("+18185557993");
+
+            (phone.GetAccount()).Href.Should().Be(tester.Href);
+
+            // Try deleting it
+            phone.Delete();
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Adding_phone_to_account_with_all_options(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            // Add a phone
+            var phone = tester.Phones.Add(new PhoneCreationOptions
+            {
+                Number = "+1 818-555-7993",
+                Name = "Nina's cell",
+                Description = "Danger danger",
+                Status = PhoneStatus.Disabled,
+                VerificationStatus = PhoneVerificationStatus.Verified
+            });
+
+            phone.Number.Should().Be("+18185557993");
+            phone.Name.Should().Be("Nina's cell");
+            phone.Description.Should().Be("Danger danger");
+            phone.Status.Should().Be(PhoneStatus.Disabled);
+            phone.VerificationStatus.Should().Be(PhoneVerificationStatus.Verified);
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Updating_existing_phone(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            // Add a phone
+            var phone = tester.Phones.Add("+1 818-555-7993");
+            phone.VerificationStatus.Should().Be(PhoneVerificationStatus.Unverified);
+
+            phone.VerificationStatus = PhoneVerificationStatus.Verified;
+            var updated = phone.Save();
+
+            updated.VerificationStatus.Should().Be(PhoneVerificationStatus.Verified);
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Listing_account_phones(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            // Add some phones
+            tester.Phones.Add("+1 818-555-7993");
+            tester.Phones.Add("+1 818-555-2593");
+
+            // Grab them via LINQ
+            var phones = tester.Phones.Synchronously().ToArray();
+            phones.First().Number.Should().Be("+18185557993");
+            phones.Last().Number.Should().Be("+18185552593");
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Searching_account_phones(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Tony")
+                .SetSurname("Almeida");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            // Add some phones
+            tester.Phones.Add("+1 818-555-7993");
+            tester.Phones.Add(new PhoneCreationOptions
+            {
+                Number = "+1 818-555-2593",
+                Name = "Cell"
+            });
+
+            var findByNumber = tester.Phones
+                .Where(p => p.Number.Contains("5557"))
+                .Synchronously()
+                .Single();
+            findByNumber.Number.Should().Be("+18185557993");
+
+            var findByName = tester.Phones
+                .Where(p => p.Name == "Cell")
+                .Synchronously()
+                .Single();
+            findByName.Number.Should().Be("+18185552593");
+
+            (tester.Delete()).ShouldBeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_phones_with_expansion(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account
+            var tester = client.Instantiate<IAccount>()
+                .SetEmail(new RandomEmail("testing.foo"))
+                .SetPassword(new RandomPassword(12))
+                .SetGivenName("Jack")
+                .SetSurname("Bauer");
+            var directory = client.GetDirectory(fixture.PrimaryDirectoryHref);
+            directory.CreateAccount(tester);
+
+            // Add some phones
+            tester.Phones.Add("+1 818-555-7993");
+            tester.Phones.Add("+1 818-555-2593");
+
+            // We can't verify that the HTTP call was correct, but we can verify that it didn't fail
+            var allPhones = tester.Phones
+                .Expand(e => e.Account)
+                .Synchronously()
+                .ToArray();
+            allPhones.Length.Should().Be(2);
+
+            // Also try getting a phone directly
+            var directPhone = client.GetResource<IPhone>(allPhones[0].Href, opt =>
+            {
+                opt.Expand(e => e.Account);
+            });
+
+            directPhone.Href.Should().Be(allPhones[0].Href);
         }
     }
 }
