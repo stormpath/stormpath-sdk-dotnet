@@ -3,7 +3,7 @@
     /// <summary>
     /// A request to exchange a Factor Challenge code for an OAuth 2.0 access token.
     /// </summary>
-    public class FactorChallengeRequest : AbstractOauthGrantRequest
+    public sealed class FactorChallengeRequest : AbstractOauthGrantRequest
     {
         /// <summary>
         /// Creates a new <see cref="FactorChallengeRequest"/> instance.

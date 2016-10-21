@@ -31,6 +31,9 @@ namespace Stormpath.SDK.Tests.Helpers
     {
         private static readonly string BaseUrl = "https://api.stormpath.com/v1";
 
+        internal static IInternalDataStore Create(string resourceJson)
+            => Create(new StubRequestExecutor(resourceJson).Object);
+
         internal static IInternalDataStore Create(IRequestExecutor requestExecutor = null, ICacheProvider cacheProvider = null, ILogger logger = null, IClient client = null)
         {
             return new DefaultDataStore(

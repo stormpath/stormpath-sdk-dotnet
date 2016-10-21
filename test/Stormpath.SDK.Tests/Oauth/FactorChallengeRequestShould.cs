@@ -4,11 +4,9 @@ using FluentAssertions;
 using NSubstitute;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Http;
-using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common.Fakes;
-using Stormpath.SDK.Tests.Fakes;
 using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
@@ -16,15 +14,10 @@ namespace Stormpath.SDK.Tests.Oauth
 {
     public class FactorChallengeRequestShould
     {
-        private static IInternalDataStore BuildDataStore(string resourceResponse)
-        {
-            return TestDataStore.Create(new StubRequestExecutor(resourceResponse).Object);
-        }
-
         [Fact]
         public async Task MatchExpectedSyntaxAsync()
         {
-            var dataStore = BuildDataStore(FakeJson.Application);
+            var dataStore = TestDataStore.Create(FakeJson.Application);
 
             var application = await dataStore.GetResourceAsync<IApplication>("http://myapp");
 
@@ -42,7 +35,7 @@ namespace Stormpath.SDK.Tests.Oauth
         [Fact]
         public void MatchExpectedSyntax()
         {
-            var dataStore = BuildDataStore(FakeJson.Application);
+            var dataStore = TestDataStore.Create(FakeJson.Application);
 
             var application = dataStore.GetResource<IApplication>("http://myapp");
 
