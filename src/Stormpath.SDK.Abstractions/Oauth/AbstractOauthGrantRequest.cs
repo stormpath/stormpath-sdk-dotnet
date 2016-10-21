@@ -9,8 +9,8 @@
 
         internal string grant_type { get; }
 
-        public string AccountStoreHref { get; set; }
+        public string AccountStore { get; set; }
 
-        public string OrganizationNameKey { get; set; }
+        public string NameKey { get; set; }
     }
 }

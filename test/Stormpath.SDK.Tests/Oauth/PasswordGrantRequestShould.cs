@@ -50,6 +50,52 @@ namespace Stormpath.SDK.Tests.Oauth
             ValidateParameters(httpRequest);
         }
 
+        [Fact]
+        public async Task IncludeAccountStoreAsync()
+        {
+            var dataStore = TestDataStore.Create(FakeJson.Application);
+
+            var application = await dataStore.GetResourceAsync<IApplication>("http://myapp");
+
+            await application.ExecuteOauthRequestAsync(new PasswordGrantRequest
+            {
+                Username = "tom@stormpath.com",
+                Password = "Secret123!!",
+                AccountStore = "https://api.stormpath.com/v1/directories/1bcd23ec1d0a8wa6"
+            });
+
+            var call = dataStore.RequestExecutor.ReceivedCalls().Last();
+            var httpRequest = call.GetArguments()[0] as IHttpRequest;
+            ValidateParameters(httpRequest);
+
+            // Ensure Account Store href is included
+            var requestBody = httpRequest.Body.Split('&');
+            requestBody.Should().Contain("accountStore=https%3A%2F%2Fapi.stormpath.com%2Fv1%2Fdirectories%2F1bcd23ec1d0a8wa6");
+        }
+
+        [Fact]
+        public async Task IncludeNameKeyAsync()
+        {
+            var dataStore = TestDataStore.Create(FakeJson.Application);
+
+            var application = await dataStore.GetResourceAsync<IApplication>("http://myapp");
+
+            await application.ExecuteOauthRequestAsync(new PasswordGrantRequest
+            {
+                Username = "tom@stormpath.com",
+                Password = "Secret123!!",
+                NameKey = "anOrganization"
+            });
+
+            var call = dataStore.RequestExecutor.ReceivedCalls().Last();
+            var httpRequest = call.GetArguments()[0] as IHttpRequest;
+            ValidateParameters(httpRequest);
+
+            // Ensure Account Store href is included
+            var requestBody = httpRequest.Body.Split('&');
+            requestBody.Should().Contain("nameKey=anOrganization");
+        }
+
         private static void ValidateParameters(IHttpRequest request)
         {
             request.CanonicalUri.ToString().Should().EndWith("/oauth/token");
