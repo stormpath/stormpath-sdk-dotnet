@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var typeInfo = resource.GetType().GetTypeInfo();
 
-            return typeInfo.DeclaredProperties
+            return typeInfo.GetAllProperties()
                 .Where(p => p.CanRead)
                 .Select(p =>
                 {

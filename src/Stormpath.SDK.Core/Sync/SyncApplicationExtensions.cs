@@ -176,6 +176,15 @@ namespace Stormpath.SDK.Sync
             => (application as IApplicationSync).TryAuthenticateAccount(username, password);
 
         /// <summary>
+        /// Synchronously executes an OAuth request against the <see cref="IApplication">Application</see>.
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <param name="request">The request.</param>
+        /// <returns>An <see cref="IOauthGrantAuthenticationResult">OAuth 2.0 response</see>.</returns>
+        public static IOauthGrantAuthenticationResult ExecuteOauthRequest(this IApplication application, AbstractOauthGrantRequest request)
+            => (application as IApplicationSync).ExecuteOauthRequest(request);
+
+        /// <summary>
         /// Synchronously triggers the delivery of a new verification email for the specified account.
         /// </summary>
         /// <remarks>

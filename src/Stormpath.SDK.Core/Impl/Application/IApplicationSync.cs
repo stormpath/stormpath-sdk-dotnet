@@ -93,6 +93,13 @@ namespace Stormpath.SDK.Impl.Application
         bool TryAuthenticateAccount(string username, string password);
 
         /// <summary>
+        /// Synchronous counterpart to <see cref="IApplication.ExecuteOauthRequestAsync(AbstractOauthGrantRequest, System.Threading.CancellationToken)"/>
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>An <see cref="IOauthGrantAuthenticationResult">OAuth 2.0 response</see>.</returns>
+        IOauthGrantAuthenticationResult ExecuteOauthRequest(AbstractOauthGrantRequest request);
+
+        /// <summary>
         /// Synchronous counterpart to <c>IApplication.SendVerificationEmailAsync(Action{EmailVerificationRequestBuilder}, System.Threading.CancellationToken)</c>.
         /// </summary>
         /// <param name="requestBuilderAction">Sets the options required for the verification email request.</param>
