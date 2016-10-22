@@ -19,6 +19,7 @@ using Stormpath.SDK.Oauth;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
+    [Obsolete("Remove in 1.0")]
     internal sealed class DefaultIdSiteTokenAuthenticationRequestBuilder : IIdSiteTokenAuthenticationRequestBuilder
     {
         private string jwt;

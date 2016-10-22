@@ -131,6 +131,7 @@ namespace Stormpath.SDK.Application
         /// exchange an ID Site result for an OAuth 2.0 access token.
         /// </summary>
         /// <returns>A new <see cref="IIdSiteTokenAuthenticator"/> instance.</returns>
+        [Obsolete("Use ExecuteOauthRequestAsync")]
         IIdSiteTokenAuthenticator NewIdSiteTokenAuthenticator();
 
         /// <summary>

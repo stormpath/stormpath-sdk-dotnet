@@ -14,10 +14,12 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Oauth;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
+    [Obsolete("Remove in 1.0")]
     internal sealed class DefaultIdSiteTokenAuthenticationRequest : IIdSiteTokenAuthenticationRequest
     {
         private readonly string jwt;

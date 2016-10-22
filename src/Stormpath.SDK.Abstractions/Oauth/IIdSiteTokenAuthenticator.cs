@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
@@ -31,6 +33,7 @@ namespace Stormpath.SDK.Oauth
     ///     .NewIdSiteTokenAuthenticator()
     ///     .AuthenticateAsync(idSiteTokenRequest);
     /// </example>
+    [Obsolete("Use new StormpathTokenGrantRequest()")]
     public interface IIdSiteTokenAuthenticator : IOauthAuthenticator<IIdSiteTokenAuthenticationRequest, IOauthGrantAuthenticationResult>
     {
     }

@@ -49,6 +49,7 @@ namespace Stormpath.SDK.Oauth
         /// <returns>
         /// A new <see cref="IIdSiteTokenAuthenticationRequestBuilder"/> instance, used to construct <see cref="IIdSiteTokenAuthenticationRequest">ID Site Token Authentication requests</see>.
         /// </returns>
+        [Obsolete("Use new StormpathTokenGrantRequest()")]
         public static IIdSiteTokenAuthenticationRequestBuilder NewIdSiteTokenAuthenticationRequest()
             => new DefaultIdSiteTokenAuthenticationRequestBuilder();
 

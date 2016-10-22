@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Impl.Oauth
@@ -21,6 +22,7 @@ namespace Stormpath.SDK.Impl.Oauth
     /// <summary>
     /// Represents the information required to build an ID Site Token Authentication request.
     /// </summary>
+    [Obsolete("Remove in 1.0")]
     internal interface IIdSiteTokenAuthenticationAttempt : IResource
     {
         /// <summary>
