@@ -5,9 +5,8 @@ using Stormpath.SDK.Impl.DataStore;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Provider;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Fakes;
-using Stormpath.SDK.Tests.Fakes;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests

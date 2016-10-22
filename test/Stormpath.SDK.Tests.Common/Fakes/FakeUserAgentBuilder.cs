@@ -16,7 +16,7 @@
 
 using Stormpath.SDK.Impl.Client;
 
-namespace Stormpath.SDK.Tests.Fakes
+namespace Stormpath.SDK.Tests.Common.Fakes
 {
     public sealed class FakeUserAgentBuilder : IUserAgentBuilder
     {

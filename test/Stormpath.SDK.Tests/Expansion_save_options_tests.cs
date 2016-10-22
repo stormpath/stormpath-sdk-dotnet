@@ -20,9 +20,8 @@ using NSubstitute;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Fakes;
-using Stormpath.SDK.Tests.Fakes;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests

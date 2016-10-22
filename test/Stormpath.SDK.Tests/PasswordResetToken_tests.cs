@@ -16,7 +16,7 @@
 
 using Shouldly;
 using Stormpath.SDK.Account;
-using Stormpath.SDK.Tests.Helpers;
+using Stormpath.SDK.Tests.Common;
 using Xunit;
 
 namespace Stormpath.SDK.Tests

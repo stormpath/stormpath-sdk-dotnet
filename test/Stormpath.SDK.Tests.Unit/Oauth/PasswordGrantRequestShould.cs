@@ -6,8 +6,8 @@ using Stormpath.SDK.Application;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Sync;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Fakes;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests.Oauth
