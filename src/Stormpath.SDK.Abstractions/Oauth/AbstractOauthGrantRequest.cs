@@ -4,13 +4,16 @@
     {
         protected AbstractOauthGrantRequest(string grantType)
         {
-            grant_type = grantType;
+            GrantType = grantType;
         }
 
-        internal string grant_type { get; }
+        [SerializedProperty(Name="grant_type")]
+        internal string GrantType { get; }
 
-        public string AccountStore { get; set; }
+        [SerializedProperty(Name="accountStore")]
+        public string AccountStoreHref { get; set; }
 
-        public string NameKey { get; set; }
+        [SerializedProperty(Name="nameKey")]
+        public string OrganizationNameKey { get; set; }
     }
 }

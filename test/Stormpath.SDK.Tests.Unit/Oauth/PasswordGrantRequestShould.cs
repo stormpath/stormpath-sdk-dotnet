@@ -10,7 +10,7 @@ using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Fakes;
 using Xunit;
 
-namespace Stormpath.SDK.Tests.Oauth
+namespace Stormpath.SDK.Tests.Unit.Oauth
 {
     public class PasswordGrantRequestShould
     {
@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Tests.Oauth
             {
                 Username = "tom@stormpath.com",
                 Password = "Secret123!!",
-                AccountStore = "https://api.stormpath.com/v1/directories/1bcd23ec1d0a8wa6"
+                AccountStoreHref = "https://api.stormpath.com/v1/directories/1bcd23ec1d0a8wa6"
             });
 
             var call = dataStore.RequestExecutor.ReceivedCalls().Last();
@@ -84,7 +84,7 @@ namespace Stormpath.SDK.Tests.Oauth
             {
                 Username = "tom@stormpath.com",
                 Password = "Secret123!!",
-                NameKey = "anOrganization"
+                OrganizationNameKey = "anOrganization"
             });
 
             var call = dataStore.RequestExecutor.ReceivedCalls().Last();

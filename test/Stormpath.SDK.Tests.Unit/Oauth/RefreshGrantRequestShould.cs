@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Stormpath.SDK.Tests.Unit.Oauth
 {
-    public class FactorChallengeRequestShould
+    public class RefreshGrantRequestShould
     {
         [Fact]
         public async Task MatchExpectedSyntaxAsync()
@@ -21,10 +21,9 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             var application = await dataStore.GetResourceAsync<IApplication>("http://myapp");
 
-            await application.ExecuteOauthRequestAsync(new FactorChallengeRequest
+            await application.ExecuteOauthRequestAsync(new RefreshGrantRequest
             {
-                ChallengeHref = "http://mychallengehref",
-                Code = "12345"
+                RefreshToken = "eyJra..."
             });
 
             var call = dataStore.RequestExecutor.ReceivedCalls().Last();
@@ -39,10 +38,9 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             var application = dataStore.GetResource<IApplication>("http://myapp");
 
-            application.ExecuteOauthRequest(new FactorChallengeRequest
+            application.ExecuteOauthRequest(new RefreshGrantRequest()
             {
-                ChallengeHref = "http://mychallengehref",
-                Code = "12345"
+                RefreshToken = "eyJra..."
             });
 
             var call = dataStore.RequestExecutor.ReceivedCalls().Last();
@@ -56,9 +54,8 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
             request.BodyContentType.Should().Be("application/x-www-form-urlencoded");
 
             var requestBody = request.Body.Split('&');
-            requestBody.Should().Contain("grant_type=stormpath_factor_challenge");
-            requestBody.Should().Contain("code=12345");
-            requestBody.Should().Contain("challenge=http%3A%2F%2Fmychallengehref");
+            requestBody.Should().Contain("grant_type=refresh_token");
+            requestBody.Should().Contain("refresh_token=eyJra...");
         }
     }
 }

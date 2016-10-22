@@ -17,7 +17,8 @@
         /// Gets or sets the <see cref="Account.IChallenge">Challenge</see> <c>href</c>.
         /// </summary>
         /// <value>The <see cref="Account.IChallenge">Challenge</see> <c>href</c>.</value>
-        public string Challenge { get; set; }
+        [SerializedProperty(Name="challenge")]
+        public string ChallengeHref { get; set; }
 
         /// <summary>
         /// Gets or sets the code.
