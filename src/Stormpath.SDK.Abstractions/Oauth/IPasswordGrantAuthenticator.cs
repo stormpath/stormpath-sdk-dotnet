@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
@@ -32,6 +34,7 @@ namespace Stormpath.SDK.Oauth
     ///     .NewPasswordGrantAuthenticator()
     ///     .AuthenticateAsync(passwordGrantRequest);
     /// </example>
+    [Obsolete("Use new PasswordGrantRequest()")]
     public interface IPasswordGrantAuthenticator : IOauthAuthenticator<IPasswordGrantRequest, IOauthGrantAuthenticationResult>
     {
     }

@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Impl.Oauth;
 
 namespace Stormpath.SDK.Oauth
@@ -29,6 +30,7 @@ namespace Stormpath.SDK.Oauth
         /// <returns>
         /// A new <see cref="IPasswordGrantRequestBuilder"/> instance, used to construct <see cref="IPasswordGrantRequest">Password Grant requests</see>.
         /// </returns>
+        [Obsolete("Use new PasswordGrantRequest()")]
         public static IPasswordGrantRequestBuilder NewPasswordGrantRequest()
             => new DefaultPasswordGrantRequestBuilder();
 

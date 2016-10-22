@@ -15,12 +15,15 @@
 // </copyright>
 
 
+using System;
+
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
     /// Represents a request for Stormpath to authenticate an <see cref="Account.IAccount">Account</see> and exchange its
     /// credentials for a valid OAuth 2.0 access token.
     /// </summary>
+    [Obsolete("Use new PasswordGrantRequest()")]
     public interface IPasswordGrantRequest : IOauthGrantRequest
     {
         /// <summary>

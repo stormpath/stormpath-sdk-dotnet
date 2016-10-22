@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Oauth;
 
 namespace Stormpath.SDK.Impl.Oauth
@@ -22,6 +23,7 @@ namespace Stormpath.SDK.Impl.Oauth
     /// Represents the synchronous actions that correspond to the default asynchronous actions
     /// available on <see cref="IPasswordGrantAuthenticator"/>.
     /// </summary>
+    [Obsolete("Remove in 1.0")]
     internal interface IPasswordGrantAuthenticatorSync : IOauthAuthenticatorSync<IPasswordGrantRequest, IOauthGrantAuthenticationResult>
     {
     }

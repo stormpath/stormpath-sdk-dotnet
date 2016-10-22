@@ -138,6 +138,7 @@ namespace Stormpath.SDK.Application
         /// authenticate an account and exchange its credentials for a valid OAuth 2.0 token.
         /// </summary>
         /// <returns>A new <see cref="IPasswordGrantAuthenticator"/></returns> instance.
+        [Obsolete("Use ExecuteOauthRequestAsync")]
         IPasswordGrantAuthenticator NewPasswordGrantAuthenticator();
 
         /// <summary>
