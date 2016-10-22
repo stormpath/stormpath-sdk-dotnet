@@ -58,6 +58,7 @@ namespace Stormpath.SDK.Oauth
         /// <returns>
         /// A new <see cref="IRefreshGrantRequestBuilder"/> instance, used to construct <see cref="IRefreshGrantRequest">Refresh Grant requests</see>.
         /// </returns>
+        [Obsolete("Use new RefreshGrantRequest()")]
         public static IRefreshGrantRequestBuilder NewRefreshGrantRequest()
             => new DefaultRefreshGrantRequestBuilder();
     }

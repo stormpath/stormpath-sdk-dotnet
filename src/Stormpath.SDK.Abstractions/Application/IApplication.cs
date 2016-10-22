@@ -146,6 +146,7 @@ namespace Stormpath.SDK.Application
         /// refresh an OAuth 2.0 token created in Stormpath.
         /// </summary>
         /// <returns>A new <see cref="IRefreshGrantAuthenticator"/></returns> instance.
+        [Obsolete("Use ExecuteOauthRequestAsync")]
         IRefreshGrantAuthenticator NewRefreshGrantAuthenticator();
 
         /// <summary>

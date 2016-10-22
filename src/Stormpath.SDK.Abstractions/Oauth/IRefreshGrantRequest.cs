@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
@@ -26,6 +28,7 @@ namespace Stormpath.SDK.Oauth
         /// Gets the string representation of the JSON Web Token used to generate new OAuth 2.0 access tokens.
         /// </summary>
         /// <value>The string representation of the JSON Web Token used to generate new OAuth 2.0 access tokens.</value>
+        [Obsolete("Use new RefreshGrantRequest()")]
         string RefreshToken { get; }
     }
 }

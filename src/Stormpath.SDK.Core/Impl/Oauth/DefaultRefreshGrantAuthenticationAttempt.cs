@@ -14,10 +14,12 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
+    [Obsolete("Remove in 1.0")]
     internal sealed class DefaultRefreshGrantAuthenticationAttempt : AbstractResource, IRefreshGrantAuthenticationAttempt
     {
         private static readonly string RefreshTokenPropertyName = "refresh_token";
