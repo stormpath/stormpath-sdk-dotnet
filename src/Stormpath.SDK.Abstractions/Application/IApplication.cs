@@ -131,6 +131,7 @@ namespace Stormpath.SDK.Application
         /// exchange an ID Site result for an OAuth 2.0 access token.
         /// </summary>
         /// <returns>A new <see cref="IIdSiteTokenAuthenticator"/> instance.</returns>
+        [Obsolete("Use ExecuteOauthRequestAsync")]
         IIdSiteTokenAuthenticator NewIdSiteTokenAuthenticator();
 
         /// <summary>
@@ -138,6 +139,7 @@ namespace Stormpath.SDK.Application
         /// authenticate an account and exchange its credentials for a valid OAuth 2.0 token.
         /// </summary>
         /// <returns>A new <see cref="IPasswordGrantAuthenticator"/></returns> instance.
+        [Obsolete("Use ExecuteOauthRequestAsync")]
         IPasswordGrantAuthenticator NewPasswordGrantAuthenticator();
 
         /// <summary>
@@ -145,6 +147,7 @@ namespace Stormpath.SDK.Application
         /// refresh an OAuth 2.0 token created in Stormpath.
         /// </summary>
         /// <returns>A new <see cref="IRefreshGrantAuthenticator"/></returns> instance.
+        [Obsolete("Use ExecuteOauthRequestAsync")]
         IRefreshGrantAuthenticator NewRefreshGrantAuthenticator();
 
         /// <summary>
@@ -155,11 +158,14 @@ namespace Stormpath.SDK.Application
         IJwtAuthenticator NewJwtAuthenticator();
 
         /// <summary>
-        /// Creates a new <see cref="IFactorChallengeAuthenticator">Factor Challenge Authenticator</see> that allows you to 
-        /// exchange a factor challenge code for an OAuth 2.0 access token.
+        /// Executes an OAuth request against the <see cref="IApplication">Application</see>.
         /// </summary>
-        /// <returns>A new <see cref="IFactorChallengeAuthenticator"/></returns> instance.
-        IFactorChallengeAuthenticator NewFactorChallengeAuthenticator();
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>An <see cref="IOauthGrantAuthenticationResult">OAuth 2.0 response</see>.</returns>
+        Task<IOauthGrantAuthenticationResult> ExecuteOauthRequestAsync(
+            AbstractOauthGrantRequest request,
+            CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Creates a new <see cref="ISamlIdpUrlBuilder"/> that allows you to build a URL you can use to redirect

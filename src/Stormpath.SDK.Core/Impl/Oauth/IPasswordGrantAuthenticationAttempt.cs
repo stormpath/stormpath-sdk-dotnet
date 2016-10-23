@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Resource;
 
@@ -22,6 +23,7 @@ namespace Stormpath.SDK.Impl.Oauth
     /// <summary>
     /// Represents the information required to build a Password Grant Authentication request.
     /// </summary>
+    [Obsolete("Remove in 1.0")]
     internal interface IPasswordGrantAuthenticationAttempt : IResource
     {
         /// <summary>

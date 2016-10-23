@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
@@ -35,6 +37,7 @@ namespace Stormpath.SDK.Oauth
     /// // New access token stored at
     /// // refreshGrantResult.AccessTokenString
     /// </example>
+    [Obsolete("Use new RefreshGrantRequest()")]
     public interface IRefreshGrantAuthenticator : IOauthAuthenticator<IRefreshGrantRequest, IOauthGrantAuthenticationResult>
     {
     }

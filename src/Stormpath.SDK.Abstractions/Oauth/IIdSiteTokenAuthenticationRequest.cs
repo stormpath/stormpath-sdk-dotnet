@@ -14,12 +14,15 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
     /// Represents a request for Stormpath to create a new OAuth 2.0 <see cref="IAccessToken">Access Token</see>
     /// from an existing ID Site response.
     /// </summary>
+    [Obsolete("Use new StormpathTokenGrantRequest()")]
     public interface IIdSiteTokenAuthenticationRequest : IOauthGrantRequest
     {
         /// <summary>

@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.AccountStore;
 
 namespace Stormpath.SDK.Oauth
@@ -21,6 +22,7 @@ namespace Stormpath.SDK.Oauth
     /// <summary>
     /// Builder pattern used to construct <see cref="IPasswordGrantRequestBuilder"/> instances.
     /// </summary>
+    [Obsolete("Use new PasswordGrantRequest()")]
     public interface IPasswordGrantRequestBuilder : IOauthAuthenticationRequestBuilder<IPasswordGrantRequest>
     {
         /// <summary>

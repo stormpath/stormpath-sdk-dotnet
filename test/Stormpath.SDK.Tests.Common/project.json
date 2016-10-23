@@ -2,7 +2,8 @@
   "authors": [ "Nate Barbettini" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "FluentAssertions": "4.9.1",
+    "FluentAssertions": "4.15.0",
+    "NSubstitute": "2.0.0-rc", 
     "Stormpath.SDK.Core": {
       "target": "project",
       "version": "0.91.0"

@@ -14,11 +14,14 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
     /// Builder pattern used to construct <see cref="IIdSiteTokenAuthenticationRequest"/> instances.
     /// </summary>
+    [Obsolete("Use new StormpathTokenGrantRequest()")]
     public interface IIdSiteTokenAuthenticationRequestBuilder : IOauthAuthenticationRequestBuilder<IIdSiteTokenAuthenticationRequest>
     {
         /// <summary>

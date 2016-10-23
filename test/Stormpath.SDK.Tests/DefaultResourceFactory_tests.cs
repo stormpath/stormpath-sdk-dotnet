@@ -31,7 +31,7 @@ using Stormpath.SDK.Impl.Tenant;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
-using Stormpath.SDK.Tests.Helpers;
+using Stormpath.SDK.Tests.Common;
 using Xunit;
 
 namespace Stormpath.SDK.Tests

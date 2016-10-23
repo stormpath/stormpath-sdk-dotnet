@@ -19,7 +19,7 @@ using Stormpath.SDK.Impl.Http;
 using Stormpath.SDK.Impl.Oauth;
 using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Shared.Extensions;
-using Stormpath.SDK.Tests.Helpers;
+using Stormpath.SDK.Tests.Common;
 using Xunit;
 
 namespace Stormpath.SDK.Tests

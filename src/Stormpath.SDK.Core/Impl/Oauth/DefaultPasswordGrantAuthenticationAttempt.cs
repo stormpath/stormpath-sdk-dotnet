@@ -14,11 +14,13 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.AccountStore;
 using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
+    [Obsolete("Remove in 1.0")]
     internal sealed class DefaultPasswordGrantAuthenticationAttempt : AbstractResource, IPasswordGrantAuthenticationAttempt
     {
         private static readonly string LoginPropertyName = "username";

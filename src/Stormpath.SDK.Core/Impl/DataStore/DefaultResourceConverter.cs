@@ -53,7 +53,7 @@ namespace Stormpath.SDK.Impl.DataStore
 
             var typeInfo = resource.GetType().GetTypeInfo();
 
-            return typeInfo.DeclaredProperties
+            return typeInfo.GetAllProperties()
                 .Where(p => p.CanRead)
                 .Select(p =>
                 {
@@ -67,7 +67,12 @@ namespace Stormpath.SDK.Impl.DataStore
                             : ToMap(rawValue);
                     }
 
-                    return new {name = ToCamelCase(p.Name), value};
+                    var specifiedName = p.GetCustomAttribute<SerializedPropertyAttribute>()?.Name;
+                    var name = string.IsNullOrEmpty(specifiedName)
+                        ? ToCamelCase(p.Name)
+                        : specifiedName;
+
+                    return new {name, value};
                 })
                 .Where(pair => pair.value != null)
                 .ToDictionary(pair => pair.name, pair => pair.value);

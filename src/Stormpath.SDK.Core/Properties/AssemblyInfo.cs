@@ -17,4 +17,6 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Stormpath.SDK.Tests")]
+[assembly: InternalsVisibleTo("Stormpath.SDK.Tests.Unit")]
+[assembly: InternalsVisibleTo("Stormpath.SDK.Tests.Common")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

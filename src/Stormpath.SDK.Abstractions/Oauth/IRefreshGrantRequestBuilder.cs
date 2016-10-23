@@ -14,11 +14,14 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
     /// Builder pattern used to construct <see cref="IRefreshGrantRequest"/> instances.
     /// </summary>
+    [Obsolete("Use new RefreshGrantRequest()")]
     public interface IRefreshGrantRequestBuilder : IOauthAuthenticationRequestBuilder<IRefreshGrantRequest>
     {
         /// <summary>

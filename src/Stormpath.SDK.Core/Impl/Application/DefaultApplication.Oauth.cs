@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Threading;
+using System.Threading.Tasks;
 using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Oauth;
 using Stormpath.SDK.Oauth;
@@ -34,7 +36,12 @@ namespace Stormpath.SDK.Impl.Application
         IJwtAuthenticator IApplication.NewJwtAuthenticator()
             => new DefaultJwtAuthenticator(this, this.GetInternalDataStore());
 
-        public IFactorChallengeAuthenticator NewFactorChallengeAuthenticator()
-            => new DefaultFactorChallengeAuthenticator(this, GetInternalDataStore());
+        public Task<IOauthGrantAuthenticationResult> ExecuteOauthRequestAsync(
+            AbstractOauthGrantRequest request,
+            CancellationToken cancellationToken)
+            => new DefaultGrantAuthenticator(this, GetInternalDataStore()).AuthenticateAsync(request, cancellationToken);
+
+        public IOauthGrantAuthenticationResult ExecuteOauthRequest(AbstractOauthGrantRequest request)
+            => new DefaultGrantAuthenticator(this, GetInternalDataStore()).Authenticate(request);
     }
 }

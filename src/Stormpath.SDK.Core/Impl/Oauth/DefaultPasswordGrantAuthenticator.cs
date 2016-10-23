@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Application;
@@ -22,6 +23,7 @@ using Stormpath.SDK.Oauth;
 
 namespace Stormpath.SDK.Impl.Oauth
 {
+    [Obsolete("Remove in 1.0")]
     internal sealed class DefaultPasswordGrantAuthenticator :
         AbstractGrantAuthenticator<IPasswordGrantRequest>,
         IPasswordGrantAuthenticator,

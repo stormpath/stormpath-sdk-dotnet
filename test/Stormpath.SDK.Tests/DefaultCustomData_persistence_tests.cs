@@ -22,9 +22,8 @@ using Shouldly;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.CustomData;
 using Stormpath.SDK.Http;
+using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Fakes;
-using Stormpath.SDK.Tests.Fakes;
-using Stormpath.SDK.Tests.Helpers;
 using Xunit;
 
 namespace Stormpath.SDK.Tests

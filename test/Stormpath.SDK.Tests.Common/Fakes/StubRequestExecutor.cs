@@ -20,57 +20,54 @@ using NSubstitute;
 using Stormpath.SDK.Api;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Impl.Http;
-using Stormpath.SDK.Tests.Common.Fakes;
 
-namespace Stormpath.SDK.Tests.Fakes
+namespace Stormpath.SDK.Tests.Common.Fakes
 {
     public class StubRequestExecutor
     {
-        private readonly IRequestExecutor fakeRequestExecutor;
-        private readonly string resourceJson;
+        private readonly IRequestExecutor _fakeRequestExecutor;
 
         public StubRequestExecutor(string resourceJson, IClientApiKey clientApiKey = null)
         {
-            this.resourceJson = resourceJson;
-            this.fakeRequestExecutor = Substitute.For<IRequestExecutor>();
+            _fakeRequestExecutor = Substitute.For<IRequestExecutor>();
 
             // API Key
-            this.fakeRequestExecutor.ApiKey.Returns(clientApiKey);
+            _fakeRequestExecutor.ApiKey.Returns(clientApiKey);
 
             // All GETs return 200 OK
-            this.fakeRequestExecutor
+            _fakeRequestExecutor
                 .ExecuteAsync(
                     Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Get), Arg.Any<CancellationToken>())
                 .Returns(
                     Task.FromResult(new FakeHttpResponse(200, "OK", new HttpHeaders(), resourceJson, "application/json", transportError: false) as IHttpResponse));
-            this.fakeRequestExecutor
+            _fakeRequestExecutor
                 .Execute(
                     Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Get))
                 .Returns(new FakeHttpResponse(200, "OK", new HttpHeaders(), resourceJson, "application/json", transportError: false));
 
             // All POSTs return 201 Created
-            this.fakeRequestExecutor
+            _fakeRequestExecutor
                 .ExecuteAsync(
                     Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
                 .Returns(
                     Task.FromResult(new FakeHttpResponse(201, "Created", new HttpHeaders(), resourceJson, "application/json", transportError: false) as IHttpResponse));
-            this.fakeRequestExecutor
+            _fakeRequestExecutor
                 .Execute(
                     Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post))
                 .Returns(new FakeHttpResponse(201, "Created", new HttpHeaders(), resourceJson, "application/json", transportError: false));
 
             // All DELETEs return 204 No Content
-            this.fakeRequestExecutor
+            _fakeRequestExecutor
                 .ExecuteAsync(
                     Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Delete), Arg.Any<CancellationToken>())
                 .Returns(
                     Task.FromResult(new FakeHttpResponse(204, "No Content", new HttpHeaders(), null, null, transportError: false) as IHttpResponse));
-            this.fakeRequestExecutor
+            _fakeRequestExecutor
                 .Execute(
                     Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Delete))
                 .Returns(new FakeHttpResponse(204, "No Content", new HttpHeaders(), null, null, transportError: false));
         }
 
-        internal IRequestExecutor Object => this.fakeRequestExecutor;
+        internal IRequestExecutor Object => _fakeRequestExecutor;
     }
 }

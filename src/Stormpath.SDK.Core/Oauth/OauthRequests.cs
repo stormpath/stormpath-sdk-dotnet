@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Stormpath.SDK.Impl.Oauth;
 
 namespace Stormpath.SDK.Oauth
@@ -29,6 +30,7 @@ namespace Stormpath.SDK.Oauth
         /// <returns>
         /// A new <see cref="IPasswordGrantRequestBuilder"/> instance, used to construct <see cref="IPasswordGrantRequest">Password Grant requests</see>.
         /// </returns>
+        [Obsolete("Use new PasswordGrantRequest()")]
         public static IPasswordGrantRequestBuilder NewPasswordGrantRequest()
             => new DefaultPasswordGrantRequestBuilder();
 
@@ -47,6 +49,7 @@ namespace Stormpath.SDK.Oauth
         /// <returns>
         /// A new <see cref="IIdSiteTokenAuthenticationRequestBuilder"/> instance, used to construct <see cref="IIdSiteTokenAuthenticationRequest">ID Site Token Authentication requests</see>.
         /// </returns>
+        [Obsolete("Use new StormpathTokenGrantRequest()")]
         public static IIdSiteTokenAuthenticationRequestBuilder NewIdSiteTokenAuthenticationRequest()
             => new DefaultIdSiteTokenAuthenticationRequestBuilder();
 
@@ -56,16 +59,8 @@ namespace Stormpath.SDK.Oauth
         /// <returns>
         /// A new <see cref="IRefreshGrantRequestBuilder"/> instance, used to construct <see cref="IRefreshGrantRequest">Refresh Grant requests</see>.
         /// </returns>
+        [Obsolete("Use new RefreshGrantRequest()")]
         public static IRefreshGrantRequestBuilder NewRefreshGrantRequest()
             => new DefaultRefreshGrantRequestBuilder();
-
-        /// <summary>
-        /// Start a new factor challenge request.
-        /// </summary>
-        /// <returns>
-        /// A new <see cref="IFactorChallengeAuthenticationRequestBuilder"/> instance, used to construct <see cref="IFactorChallengeAuthenticationRequest">Factor Challenge requests</see>.
-        /// </returns>
-        public static IFactorChallengeAuthenticationRequestBuilder NewFactorChallengeRequest()
-            => new DefaultFactorChallengeAuthenticationRequestBuilder();
     }
 }

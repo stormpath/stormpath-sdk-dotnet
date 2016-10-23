@@ -54,6 +54,7 @@ Task("Test")
         "Stormpath.SDK.JsonNetSerializer.Tests",
         "Stormpath.SDK.RestSharpClient.Tests",
         "Stormpath.SDK.Tests",
+        "Stormpath.SDK.Tests.Unit",
         "Stormpath.SDK.Tests.Sanity"
     }.ForEach(name =>
     {
