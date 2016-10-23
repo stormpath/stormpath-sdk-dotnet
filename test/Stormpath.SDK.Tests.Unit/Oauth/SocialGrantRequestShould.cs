@@ -97,7 +97,7 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
             requestBodyAccessToken.Should().Contain("accessToken=0987aBCdefg.654hiJkL");
 
             var requestBodyAuthCode = request.Body.Split('&');
-            requestBodyAuthCode.Should().Contain("grant_type=google");
+            requestBodyAuthCode.Should().Contain("grant_type=stormpath_social");
             requestBodyAuthCode.Should().Contain("providerID=google");
             requestBodyAuthCode.Should().Contain("code=BFt6789oiHGFRjbgf67UGkjhg");
         }

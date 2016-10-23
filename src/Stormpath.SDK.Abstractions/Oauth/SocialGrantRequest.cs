@@ -1,7 +1,8 @@
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
-    /// A request to exchange a client_id and client_secret for an OAuth 2.0 access token.
+    /// A request to exchange a social providerss Access Token or Authorization Code for an OAuth 2.0 access token from Stormpath.
+    /// Either an access token or an authorization code MUST be specified
     /// </summary>
     public sealed class SocialGrantRequest : AbstractOauthGrantRequest
     {
@@ -30,6 +31,6 @@ namespace Stormpath.SDK.Oauth
         /// Gets or sets the Authorization Code. This is referred to only as "code" in the REST call. 
         /// </summary>
         /// <value>Authorization Code</value>
-        public string AuthorizationCode { get; set; }
+        public string Code { get; set; }
     }
 }

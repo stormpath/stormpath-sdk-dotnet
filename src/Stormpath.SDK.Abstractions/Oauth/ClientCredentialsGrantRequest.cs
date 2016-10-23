@@ -17,12 +17,14 @@ namespace Stormpath.SDK.Oauth
         /// Gets or sets the client id.
         /// </summary>
         /// <value>Client ID.</value>
-        public string ClientID { get; set; }
+        [SerializedProperty(Name="client_id")]
+        public string ID { get; set; }
 
         /// <summary>
         /// Gets or sets the client secret.
         /// </summary>
         /// <value>Client Secret</value>
-        public string ClientSecret { get; set; }
+        [SerializedProperty(Name="client_secret")]
+        public string Secret { get; set; }
     }
 }
