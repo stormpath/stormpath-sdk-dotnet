@@ -240,3 +240,6 @@ doc/api/
 doc/config-api/
 
 artifacts/
+
+# Ignore VS Code support files
+.vscode/
