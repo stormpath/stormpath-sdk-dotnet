@@ -23,8 +23,8 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             await application.ExecuteOauthRequestAsync(new ClientCredentialsGrantRequest
             {
-                ClientID = "clientidtest",
-                ClientSecret = "clientsecret+test"
+                ID = "clientidtest",
+                Secret = "clientsecret+test"
             });
 
             var call = dataStore.RequestExecutor.ReceivedCalls().Last();
@@ -41,8 +41,8 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             application.ExecuteOauthRequest(new ClientCredentialsGrantRequest
             {
-                ClientID = "clientidtest",
-                ClientSecret = "clientsecret+test"
+                ID = "clientidtest",
+                Secret = "clientsecret+test"
             });
 
             var call = dataStore.RequestExecutor.ReceivedCalls().Last();
@@ -59,8 +59,8 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             await application.ExecuteOauthRequestAsync(new ClientCredentialsGrantRequest
             {
-                ClientID = "clientidtest",
-                ClientSecret = "clientsecret+test",
+                ID = "clientidtest",
+                Secret = "clientsecret+test",
                 AccountStoreHref = "https://api.stormpath.com/v1/directories/1bcd23ec1d0a8wa6"
             });
 

@@ -30,6 +30,11 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
             var call = dataStore.RequestExecutor.ReceivedCalls().Last();
             var httpRequest = call.GetArguments()[0] as IHttpRequest;
             ValidateParameters(httpRequest);
+
+            var requestBodyAccessToken = httpRequest.Body.Split('&');
+            requestBodyAccessToken.Should().Contain("grant_type=stormpath_social");
+            requestBodyAccessToken.Should().Contain("providerID=facebook");
+            requestBodyAccessToken.Should().Contain("accessToken=0987aBCdefg.654hiJkL");
         }
 
         [Fact]
@@ -48,6 +53,11 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
             var call = dataStore.RequestExecutor.ReceivedCalls().Last();
             var httpRequest = call.GetArguments()[0] as IHttpRequest;
             ValidateParameters(httpRequest);
+            
+            var requestBodyAccessToken = httpRequest.Body.Split('&');
+            requestBodyAccessToken.Should().Contain("grant_type=stormpath_social");
+            requestBodyAccessToken.Should().Contain("providerID=facebook");
+            requestBodyAccessToken.Should().Contain("accessToken=0987aBCdefg.654hiJkL");
         }
 
  [Fact]
@@ -60,12 +70,17 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
             await application.ExecuteOauthRequestAsync(new SocialGrantRequest
             {
                 ProviderID = "google",
-                AuthorizationCode = "BFt6789oiHGFRjbgf67UGkjhg"
+                Code = "BFt6789oiHGFRjbgf67UGkjhg"
             });
 
             var call = dataStore.RequestExecutor.ReceivedCalls().Last();
             var httpRequest = call.GetArguments()[0] as IHttpRequest;
             ValidateParameters(httpRequest);
+
+            var requestBodyAuthCode = httpRequest.Body.Split('&');
+            requestBodyAuthCode.Should().Contain("grant_type=stormpath_social");
+            requestBodyAuthCode.Should().Contain("providerID=google");
+            requestBodyAuthCode.Should().Contain("code=BFt6789oiHGFRjbgf67UGkjhg");
         }
 
         [Fact]
@@ -78,12 +93,18 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
             application.ExecuteOauthRequest(new SocialGrantRequest
             {
                 ProviderID = "google",
-                AuthorizationCode = "BFt6789oiHGFRjbgf67UGkjhg"
+                Code = "BFt6789oiHGFRjbgf67UGkjhg"
             });
 
             var call = dataStore.RequestExecutor.ReceivedCalls().Last();
             var httpRequest = call.GetArguments()[0] as IHttpRequest;
             ValidateParameters(httpRequest);
+
+            
+            var requestBodyAuthCode = httpRequest.Body.Split('&');
+            requestBodyAuthCode.Should().Contain("grant_type=stormpath_social");
+            requestBodyAuthCode.Should().Contain("providerID=google");
+            requestBodyAuthCode.Should().Contain("code=BFt6789oiHGFRjbgf67UGkjhg");
         }
 
         private static void ValidateParameters(IHttpRequest request)
@@ -91,15 +112,6 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
             request.CanonicalUri.ToString().Should().EndWith("/oauth/token");
             request.BodyContentType.Should().Be("application/x-www-form-urlencoded");
 
-            var requestBodyAccessToken = request.Body.Split('&');
-            requestBodyAccessToken.Should().Contain("grant_type=stormpath_social");
-            requestBodyAccessToken.Should().Contain("providerID=facebook");
-            requestBodyAccessToken.Should().Contain("accessToken=0987aBCdefg.654hiJkL");
-
-            var requestBodyAuthCode = request.Body.Split('&');
-            requestBodyAuthCode.Should().Contain("grant_type=stormpath_social");
-            requestBodyAuthCode.Should().Contain("providerID=google");
-            requestBodyAuthCode.Should().Contain("code=BFt6789oiHGFRjbgf67UGkjhg");
         }
     }
 }
