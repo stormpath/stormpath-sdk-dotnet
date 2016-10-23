@@ -15,7 +15,7 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
     public class SocialGrantShould
     {
         [Fact]
-        public async Task MatchExpectedSyntaxAccessTokenAsync()
+        public async Task IncludeAccessTokenAsync()
         {
             var dataStore = TestDataStore.Create(FakeJson.Application);
 
@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             await application.ExecuteOauthRequestAsync(new SocialGrantRequest
             {
-                ProviderID = "facebook",
+                ProviderId = "facebook",
                 AccessToken = "0987aBCdefg.654hiJkL"
             });
 
@@ -33,12 +33,12 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             var requestBodyAccessToken = httpRequest.Body.Split('&');
             requestBodyAccessToken.Should().Contain("grant_type=stormpath_social");
-            requestBodyAccessToken.Should().Contain("providerID=facebook");
+            requestBodyAccessToken.Should().Contain("providerId=facebook");
             requestBodyAccessToken.Should().Contain("accessToken=0987aBCdefg.654hiJkL");
         }
 
         [Fact]
-        public void MatchExpectedSyntaxAccessToken()
+        public void IncludeAccessToken()
         {
             var dataStore = TestDataStore.Create(FakeJson.Application);
 
@@ -46,7 +46,7 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             application.ExecuteOauthRequest(new SocialGrantRequest
             {
-                ProviderID = "facebook",
+                ProviderId = "facebook",
                 AccessToken = "0987aBCdefg.654hiJkL"
             });
 
@@ -56,12 +56,12 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
             
             var requestBodyAccessToken = httpRequest.Body.Split('&');
             requestBodyAccessToken.Should().Contain("grant_type=stormpath_social");
-            requestBodyAccessToken.Should().Contain("providerID=facebook");
+            requestBodyAccessToken.Should().Contain("providerId=facebook");
             requestBodyAccessToken.Should().Contain("accessToken=0987aBCdefg.654hiJkL");
         }
 
- [Fact]
-        public async Task MatchExpectedSyntaxAuthCodeAsync()
+        [Fact]
+        public async Task IncludeAuthCodeAsync()
         {
             var dataStore = TestDataStore.Create(FakeJson.Application);
 
@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             await application.ExecuteOauthRequestAsync(new SocialGrantRequest
             {
-                ProviderID = "google",
+                ProviderId = "google",
                 Code = "BFt6789oiHGFRjbgf67UGkjhg"
             });
 
@@ -79,12 +79,12 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             var requestBodyAuthCode = httpRequest.Body.Split('&');
             requestBodyAuthCode.Should().Contain("grant_type=stormpath_social");
-            requestBodyAuthCode.Should().Contain("providerID=google");
+            requestBodyAuthCode.Should().Contain("providerId=google");
             requestBodyAuthCode.Should().Contain("code=BFt6789oiHGFRjbgf67UGkjhg");
         }
 
         [Fact]
-        public void MatchExpectedSyntaxAuthCode()
+        public void IncludeAuthCode()
         {
             var dataStore = TestDataStore.Create(FakeJson.Application);
 
@@ -92,18 +92,17 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             application.ExecuteOauthRequest(new SocialGrantRequest
             {
-                ProviderID = "google",
+                ProviderId = "google",
                 Code = "BFt6789oiHGFRjbgf67UGkjhg"
             });
 
             var call = dataStore.RequestExecutor.ReceivedCalls().Last();
             var httpRequest = call.GetArguments()[0] as IHttpRequest;
             ValidateParameters(httpRequest);
-
             
             var requestBodyAuthCode = httpRequest.Body.Split('&');
             requestBodyAuthCode.Should().Contain("grant_type=stormpath_social");
-            requestBodyAuthCode.Should().Contain("providerID=google");
+            requestBodyAuthCode.Should().Contain("providerId=google");
             requestBodyAuthCode.Should().Contain("code=BFt6789oiHGFRjbgf67UGkjhg");
         }
 

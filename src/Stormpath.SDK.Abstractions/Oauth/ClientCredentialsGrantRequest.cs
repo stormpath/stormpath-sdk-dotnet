@@ -1,7 +1,7 @@
 namespace Stormpath.SDK.Oauth
 {
     /// <summary>
-    /// A request to exchange a client_id and client_secret for an OAuth 2.0 access token.
+    /// A request to exchange a client ID and secret for an OAuth 2.0 access token.
     /// </summary>
     public sealed class ClientCredentialsGrantRequest : AbstractOauthGrantRequest
     {
@@ -14,16 +14,16 @@ namespace Stormpath.SDK.Oauth
         }
 
         /// <summary>
-        /// Gets or sets the client id.
+        /// Gets or sets the client ID.
         /// </summary>
-        /// <value>Client ID.</value>
+        /// <value>The client ID.</value>
         [SerializedProperty(Name="client_id")]
-        public string ID { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the client secret.
         /// </summary>
-        /// <value>Client Secret</value>
+        /// <value>The client secret.</value>
         [SerializedProperty(Name="client_secret")]
         public string Secret { get; set; }
     }
