@@ -41,13 +41,13 @@ namespace Stormpath.SDK.Impl.Directory
         }
 
         EmailStatus IAccountCreationPolicy.VerificationEmailStatus
-            => this.GetProperty<EmailStatus>(VerificationEmailStatusPropertyName);
+            => GetEnumProperty<EmailStatus>(VerificationEmailStatusPropertyName);
 
         EmailStatus IAccountCreationPolicy.VerificationSuccessEmailStatus
-            => this.GetProperty<EmailStatus>(VerificationSuccessEmailStatusPropertyName);
+            => GetEnumProperty<EmailStatus>(VerificationSuccessEmailStatusPropertyName);
 
         EmailStatus IAccountCreationPolicy.WelcomeEmailStatus
-            => this.GetProperty<EmailStatus>(WelcomeEmailStatusPropertyName);
+            => GetEnumProperty<EmailStatus>(WelcomeEmailStatusPropertyName);
 
         IReadOnlyList<string> IAccountCreationPolicy.EmailDomainBlacklist
             => GetListProperty<string>(EmailDomainBlacklistPropertyName);

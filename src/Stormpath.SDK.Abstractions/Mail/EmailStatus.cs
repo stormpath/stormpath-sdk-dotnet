@@ -15,14 +15,14 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Mail
 {
     /// <summary>
     /// Represents the status of an email template or workflow.
     /// </summary>
-    public sealed class EmailStatus : StringEnumeration
+    public sealed class EmailStatus : AbstractEnumProperty
     {
         /// <summary>
         /// Emails will be sent.
@@ -34,7 +34,11 @@ namespace Stormpath.SDK.Mail
         /// </summary>
         public static EmailStatus Disabled = new EmailStatus("DISABLED");
 
-        private EmailStatus(string value)
+        /// <summary>
+        /// Creates a new <see cref="EmailStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public EmailStatus(string value)
             : base(value)
         {
         }
@@ -45,6 +49,7 @@ namespace Stormpath.SDK.Mail
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
         /// <returns>The <see cref="EmailStatus">Email Status</see> with the specified name.</returns>
         /// <exception cref="Exception">No match is found.</exception>
+        [Obsolete("Use constructor")]
         public static EmailStatus Parse(string status)
         {
             switch (status.ToUpper())

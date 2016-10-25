@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Impl.Saml
 
         string ISamlAccountResult.State => this.GetStringProperty(StatePropertyName);
 
-        SamlResultStatus ISamlAccountResult.Status => this.GetProperty<SamlResultStatus>(StatusPropertyName);
+        SamlResultStatus ISamlAccountResult.Status => GetEnumProperty<SamlResultStatus>(StatusPropertyName);
 
         Task<IAccount> ISamlAccountResult.GetAccountAsync(CancellationToken cancellationToken)
         {

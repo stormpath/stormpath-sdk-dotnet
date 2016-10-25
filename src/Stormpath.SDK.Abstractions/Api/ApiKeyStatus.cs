@@ -15,14 +15,15 @@
 // </copyright>
 
 using System;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Api
 {
     /// <summary>
-    /// Represents the status (usability) of an <see cref="IApiKey">API Key</see> instance.
+    /// Represents the status of an <see cref="IApiKey">API Key</see> resource.
     /// </summary>
-    public sealed class ApiKeyStatus : StringEnumeration
+    public sealed class ApiKeyStatus : AbstractEnumProperty
     {
         /// <summary>
         /// An enabled API Key may be used for API Authentication.
@@ -34,7 +35,11 @@ namespace Stormpath.SDK.Api
         /// </summary>
         public static ApiKeyStatus Disabled = new ApiKeyStatus("DISABLED");
 
-        private ApiKeyStatus(string value)
+        /// <summary>
+        /// Creates a new <see cref="ApiKeyStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public ApiKeyStatus(string value)
             : base(value)
         {
         }
@@ -44,6 +49,7 @@ namespace Stormpath.SDK.Api
         /// </summary>
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
         /// <returns>The <see cref="ApiKeyStatus">Application Status</see> with the specified name.</returns>
+        [Obsolete("Use constructor")]
         public static ApiKeyStatus Parse(string status)
         {
             switch (status.ToUpper())

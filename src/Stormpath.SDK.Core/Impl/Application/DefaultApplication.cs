@@ -86,7 +86,7 @@ namespace Stormpath.SDK.Impl.Application
 
         internal IEmbeddedProperty PasswordResetToken => this.GetLinkProperty(PasswordResetTokensPropertyName);
 
-        ApplicationStatus IApplication.Status => this.GetProperty<ApplicationStatus>(StatusPropertyName);
+        ApplicationStatus IApplication.Status => GetEnumProperty<ApplicationStatus>(StatusPropertyName);
 
         internal IEmbeddedProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 

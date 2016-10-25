@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Impl.Organization
 
         string IOrganization.NameKey => this.GetStringProperty(NameKeyPropertyName);
 
-        OrganizationStatus IOrganization.Status => this.GetProperty<OrganizationStatus>(StatusPropertyName);
+        OrganizationStatus IOrganization.Status => GetEnumProperty<OrganizationStatus>(StatusPropertyName);
 
         internal IEmbeddedProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 

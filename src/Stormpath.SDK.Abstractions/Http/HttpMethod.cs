@@ -69,7 +69,11 @@ namespace Stormpath.SDK.Http
         /// </summary>
         public static HttpMethod Connect = new HttpMethod("CONNECT");
 
-        private HttpMethod(string value)
+        /// <summary>
+        /// Creates a new <see cref="HttpMethod"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public HttpMethod(string value)
             : base(value)
         {
         }
@@ -89,6 +93,7 @@ namespace Stormpath.SDK.Http
         /// <param name="method">A string containing the name of the HTTP method (matching is case-insensitive).</param>
         /// <returns>The <see cref="HttpMethod"/> with the specified name.</returns>
         /// <exception cref="Exception">No match is found.</exception>
+        [Obsolete("Use constructor")]
         public static HttpMethod Parse(string method)
         {
             switch (method.ToUpper())

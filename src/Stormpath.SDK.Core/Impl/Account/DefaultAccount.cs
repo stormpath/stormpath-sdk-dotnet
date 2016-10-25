@@ -68,7 +68,7 @@ namespace Stormpath.SDK.Impl.Account
 
         internal IEmbeddedProperty EmailVerificationToken => this.GetLinkProperty(EmailVerificationTokenPropertyName);
 
-        EmailVerificationStatus IAccount.EmailVerificationStatus => GetProperty<EmailVerificationStatus>(EmailVerificationStatusPropertyName);
+        EmailVerificationStatus IAccount.EmailVerificationStatus => GetEnumProperty<EmailVerificationStatus>(EmailVerificationStatusPropertyName);
 
         IEmailVerificationToken IAccount.EmailVerificationToken
         {
@@ -101,7 +101,7 @@ namespace Stormpath.SDK.Impl.Account
 
         internal IEmbeddedProperty RefreshTokens => this.GetLinkProperty(RefreshTokensPropertyName);
 
-        AccountStatus IAccount.Status => this.GetProperty<AccountStatus>(StatusPropertyName);
+        AccountStatus IAccount.Status => this.GetEnumProperty<AccountStatus>(StatusPropertyName);
 
         string IAccount.Surname => this.GetStringProperty(SurnamePropertyName);
 

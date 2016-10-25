@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Impl.Group
 
         string IGroup.Description => this.GetStringProperty(DescriptionPropertyName);
 
-        GroupStatus IGroup.Status => this.GetProperty<GroupStatus>(StatusPropertyName);
+        GroupStatus IGroup.Status => this.GetEnumProperty<GroupStatus>(StatusPropertyName);
 
         internal IEmbeddedProperty Directory => this.GetLinkProperty(DirectoryPropertyName);
 

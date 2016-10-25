@@ -15,14 +15,14 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Organization
 {
     /// <summary>
     /// Represents the states an <see cref="IOrganization">Organization</see> may be in.
     /// </summary>
-    public sealed class OrganizationStatus : StringEnumeration
+    public sealed class OrganizationStatus : AbstractEnumProperty
     {
         /// <summary>
         /// Enabled Organizations can be used as <see cref="AccountStore.IAccountStore">Account Stores</see> for <see cref="Application.IApplication">Applications</see>.
@@ -34,7 +34,11 @@ namespace Stormpath.SDK.Organization
         /// </summary>
         public static OrganizationStatus Disabled = new OrganizationStatus("DISABLED");
 
-        private OrganizationStatus(string value)
+        /// <summary>
+        /// Creates a new <see cref="OrganizationStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public OrganizationStatus(string value)
             : base(value)
         {
         }
@@ -44,6 +48,7 @@ namespace Stormpath.SDK.Organization
         /// </summary>
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
         /// <returns>The <see cref="OrganizationStatus">Organization Status</see> with the specified name.</returns>
+        [Obsolete("Use constructor")]
         public static OrganizationStatus Parse(string status)
         {
             switch (status.ToUpper())

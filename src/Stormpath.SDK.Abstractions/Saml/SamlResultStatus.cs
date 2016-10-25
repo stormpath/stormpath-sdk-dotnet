@@ -15,14 +15,14 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Saml
 {
     /// <summary>
     /// Represents the possible results of a SAML invocation.
     /// </summary>
-    public sealed class SamlResultStatus : StringEnumeration
+    public sealed class SamlResultStatus : AbstractEnumProperty
     {
         /// <summary>
         /// A successful account authentication via SAML.
@@ -34,7 +34,11 @@ namespace Stormpath.SDK.Saml
         /// </summary>
         public static SamlResultStatus Logout = new SamlResultStatus("LOGOUT");
 
-        private SamlResultStatus(string value)
+        /// <summary>
+        /// Creates a new <see cref="SamlResultStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public SamlResultStatus(string value)
             : base(value)
         {
         }
@@ -45,6 +49,7 @@ namespace Stormpath.SDK.Saml
         /// <param name="status">A string containing "authenticated" or "logout" (matching is case-insensitive).</param>
         /// <returns>The <see cref="SamlResultStatus"/> with the specified name.</returns>
         /// <exception cref="Exception">No match is found.</exception>
+        [Obsolete("Use constructor")]
         public static SamlResultStatus Parse(string status)
         {
             status = status.ToUpper();

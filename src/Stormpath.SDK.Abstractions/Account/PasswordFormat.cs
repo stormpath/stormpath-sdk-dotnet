@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Account
@@ -21,14 +22,18 @@ namespace Stormpath.SDK.Account
     /// <summary>
     /// Represents the various formats supported for importing passwords.
     /// </summary>
-    public sealed class PasswordFormat : StringEnumeration
+    public sealed class PasswordFormat : AbstractEnumProperty
     {
         /// <summary>
         /// Modular Crypt Format (a <c>$</c> delimited string).
         /// </summary>
         public static PasswordFormat MCF = new PasswordFormat("MCF");
 
-        private PasswordFormat(string value)
+        /// <summary>
+        /// Creates a new <see cref="PasswordFormat"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public PasswordFormat(string value)
             : base(value)
         {
         }

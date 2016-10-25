@@ -52,7 +52,7 @@ namespace Stormpath.SDK.Impl.Api
             => GetStringProperty(DescriptionPropertyName);
 
         ApiKeyStatus IApiKey.Status
-            => this.GetProperty<ApiKeyStatus>(StatusPropertyName);
+            => GetEnumProperty<ApiKeyStatus>(StatusPropertyName);
 
         void IApiKey.SetStatus(ApiKeyStatus status)
             => this.SetProperty(StatusPropertyName, status);

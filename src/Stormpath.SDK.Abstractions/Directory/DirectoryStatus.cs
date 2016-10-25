@@ -15,14 +15,14 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Directory
 {
     /// <summary>
     /// Represents the status of a <see cref="IDirectory">Directory</see>.
     /// </summary>
-    public sealed class DirectoryStatus : StringEnumeration
+    public sealed class DirectoryStatus : AbstractEnumProperty
     {
         /// <summary>
         /// Accounts in this directory may login to applications.
@@ -34,7 +34,11 @@ namespace Stormpath.SDK.Directory
         /// </summary>
         public static DirectoryStatus Disabled = new DirectoryStatus("DISABLED");
 
-        private DirectoryStatus(string value)
+        /// <summary>
+        /// Creates a new <see cref="DirectoryStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public DirectoryStatus(string value)
             : base(value)
         {
         }
@@ -45,6 +49,7 @@ namespace Stormpath.SDK.Directory
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
         /// <returns>The <see cref="DirectoryStatus">Directory Status</see> with the specified name.</returns>
         /// <exception cref="Exception">No match is found.</exception>
+        [Obsolete("Use constructor")]
         public static DirectoryStatus Parse(string status)
         {
             switch (status.ToUpper())

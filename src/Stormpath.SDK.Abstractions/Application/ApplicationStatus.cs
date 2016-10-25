@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using Stormpath.SDK.Resource;
 using Stormpath.SDK.Shared;
 
 namespace Stormpath.SDK.Application
@@ -22,7 +23,7 @@ namespace Stormpath.SDK.Application
     /// <summary>
     /// Represents the states an <see cref="IApplication">Application</see> may be in.
     /// </summary>
-    public sealed class ApplicationStatus : StringEnumeration
+    public sealed class ApplicationStatus : AbstractEnumProperty
     {
         /// <summary>
         /// Accounts can log into this application.
@@ -34,7 +35,11 @@ namespace Stormpath.SDK.Application
         /// </summary>
         public static ApplicationStatus Disabled = new ApplicationStatus("DISABLED");
 
-        private ApplicationStatus(string value)
+        /// <summary>
+        /// Creates a new <see cref="ApplicationStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public ApplicationStatus(string value)
             : base(value)
         {
         }
@@ -44,6 +49,7 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
         /// <returns>The <see cref="ApplicationStatus">Application Status</see> with the specified name.</returns>
+        [Obsolete("Use constructor")]
         public static ApplicationStatus Parse(string status)
         {
             switch (status.ToUpper())

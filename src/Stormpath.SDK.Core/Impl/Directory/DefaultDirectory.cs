@@ -64,7 +64,7 @@ namespace Stormpath.SDK.Impl.Directory
 
         internal IEmbeddedProperty Provider => this.GetLinkProperty(ProviderPropertyName);
 
-        DirectoryStatus IDirectory.Status => this.GetProperty<DirectoryStatus>(StatusPropertyName);
+        DirectoryStatus IDirectory.Status => GetEnumProperty<DirectoryStatus>(StatusPropertyName);
 
         internal IEmbeddedProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 

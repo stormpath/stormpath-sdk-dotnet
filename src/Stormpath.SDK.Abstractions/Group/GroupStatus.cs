@@ -15,14 +15,14 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Group
 {
     /// <summary>
     /// Represents the status of a <see cref="IGroup">Group</see>.
     /// </summary>
-    public sealed class GroupStatus : StringEnumeration
+    public sealed class GroupStatus : AbstractEnumProperty
     {
         /// <summary>
         /// Accounts in enabled Groups mapped to applications may login to those applications.
@@ -34,7 +34,11 @@ namespace Stormpath.SDK.Group
         /// </summary>
         public static GroupStatus Disabled = new GroupStatus("DISABLED");
 
-        private GroupStatus(string value)
+        /// <summary>
+        /// Creates a new <see cref="GroupStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public GroupStatus(string value)
             : base(value)
         {
         }
@@ -45,6 +49,7 @@ namespace Stormpath.SDK.Group
         /// <param name="status">A string containing "enabled" or "disabled" (matching is case-insensitive).</param>
         /// <returns>The <see cref="GroupStatus">Group Status</see> with the specified name.</returns>
         /// <exception cref="Exception">No match is found.</exception>
+        [Obsolete("Use constructor")]
         public static GroupStatus Parse(string status)
         {
             switch (status.ToUpper())

@@ -15,14 +15,14 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.IdSite
 {
     /// <summary>
     /// Represents the possible results of an ID Site invocation.
     /// </summary>
-    public sealed class IdSiteResultStatus : StringEnumeration
+    public sealed class IdSiteResultStatus : AbstractEnumProperty
     {
         /// <summary>
         /// A new account registration via ID Site.
@@ -39,7 +39,11 @@ namespace Stormpath.SDK.IdSite
         /// </summary>
         public static IdSiteResultStatus Logout = new IdSiteResultStatus("LOGOUT");
 
-        private IdSiteResultStatus(string value)
+        /// <summary>
+        /// Creates a new <see cref="IdSiteResultStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public IdSiteResultStatus(string value)
             : base(value)
         {
         }
@@ -50,6 +54,7 @@ namespace Stormpath.SDK.IdSite
         /// <param name="status">A string containing "registered", "authenticated", or "logout" (matching is case-insensitive).</param>
         /// <returns>The <see cref="IdSiteResultStatus"/> with the specified name.</returns>
         /// <exception cref="Exception">No match is found.</exception>
+        [Obsolete("Use constructor")]
         public static IdSiteResultStatus Parse(string status)
         {
             status = status.ToUpper();

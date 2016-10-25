@@ -15,14 +15,14 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Account
 {
     /// <summary>
     /// Represents the various states an <see cref="IAccount">Account</see>'s email address may be in with regards to verification.
     /// </summary>
-    public sealed class EmailVerificationStatus : StringEnumeration
+    public sealed class EmailVerificationStatus : AbstractEnumProperty
     {
         /// <summary>
         /// The account's email has been verified.
@@ -39,7 +39,11 @@ namespace Stormpath.SDK.Account
         /// </summary>
         public static EmailVerificationStatus Unknown = new EmailVerificationStatus("UNKNOWN");
 
-        private EmailVerificationStatus(string value)
+        /// <summary>
+        /// Creates a new <see cref="EmailVerificationStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public EmailVerificationStatus(string value)
             : base(value)
         {
         }
@@ -50,6 +54,7 @@ namespace Stormpath.SDK.Account
         /// <param name="status">A string containing "verified", "unverified", or "unknown" (matching is case-insensitive).</param>
         /// <returns>The <see cref="EmailVerificationStatus"/> with the specified name.</returns>
         /// <exception cref="Exception">No match is found.</exception>
+        [Obsolete("Use constructor")]
         public static EmailVerificationStatus Parse(string status)
         {
             switch (status.ToUpper())

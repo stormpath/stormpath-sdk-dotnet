@@ -15,14 +15,14 @@
 // </copyright>
 
 using System;
-using Stormpath.SDK.Shared;
+using Stormpath.SDK.Resource;
 
 namespace Stormpath.SDK.Account
 {
     /// <summary>
     /// Represents the various states an <see cref="IAccount">Account</see> may be in.
     /// </summary>
-    public sealed class AccountStatus : StringEnumeration
+    public sealed class AccountStatus : AbstractEnumProperty
     {
         /// <summary>
         /// A disabled account may not login to applications.
@@ -39,7 +39,11 @@ namespace Stormpath.SDK.Account
         /// </summary>
         public static AccountStatus Unverified = new AccountStatus("UNVERIFIED");
 
-        private AccountStatus(string value)
+        /// <summary>
+        /// Creates a new <see cref="AccountStatus"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public AccountStatus(string value)
             : base(value)
         {
         }
@@ -49,7 +53,8 @@ namespace Stormpath.SDK.Account
         /// </summary>
         /// <param name="status">A string containing "enabled", "disabled", or "unverified" (matching is case-insensitive).</param>
         /// <returns>The <see cref="AccountStatus">Account Status</see> with the specified name.</returns>
-        /// <exception cref="Exception">No match is found.</exception>
+        /// <exception cref="Exception">No match is found.</exception>.
+        [Obsolete("Use constructor")]
         public static AccountStatus Parse(string status)
         {
             switch (status.ToUpper())

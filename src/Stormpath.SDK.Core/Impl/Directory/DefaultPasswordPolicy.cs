@@ -47,10 +47,10 @@ namespace Stormpath.SDK.Impl.Directory
             => this.GetIntProperty(ResetTokenTtlPropertyName);
 
         EmailStatus IPasswordPolicy.ResetEmailStatus
-            => this.GetProperty<EmailStatus>(ResetEmailStatusPropertyName);
+            => GetEnumProperty<EmailStatus>(ResetEmailStatusPropertyName);
 
         EmailStatus IPasswordPolicy.ResetSuccessEmailStatus
-            => this.GetProperty<EmailStatus>(ResetSuccessEmailStatusPropertyName);
+            => GetEnumProperty<EmailStatus>(ResetSuccessEmailStatusPropertyName);
 
         IPasswordPolicy IPasswordPolicy.SetResetTokenTtl(int hoursToLive)
         {

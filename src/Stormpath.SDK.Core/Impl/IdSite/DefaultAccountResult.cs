@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Impl.IdSite
 
         string IAccountResult.State => this.GetStringProperty(StatePropertyName);
 
-        IdSiteResultStatus IAccountResult.Status => this.GetProperty<IdSiteResultStatus>(StatusPropertyName);
+        IdSiteResultStatus IAccountResult.Status => GetEnumProperty<IdSiteResultStatus>(StatusPropertyName);
 
         Task<IAccount> IAccountResult.GetAccountAsync(CancellationToken cancellationToken)
         {
