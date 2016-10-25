@@ -1,9 +1,15 @@
+$currentBranch = git rev-parse --abbrev-ref HEAD
+if ($currentBranch -ne "develop") {
+	Write-Host "Not on develop branch; will not deploy documentation."
+	return;
+}
+
 $deploy_docs = $env:deploy_docs
-$latestTag = git tag | tail -n 1
+$latestTag = git tag | select -last 1
 if (!$deploy_docs) {
 	Write-Host "deploy_docs not set; checking for tagged release"
 
-	if ((git log --decorate --oneline | head -n 1).contains("HEAD, tag: " + $latestTag)) {
+	if ((git log --decorate --oneline | select -first 1).contains("HEAD, tag: " + $latestTag)) {
 		Write-Host "Tagged release $($latestTag) found"
 		$deploy_docs = 1
 	}
