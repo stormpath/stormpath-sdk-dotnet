@@ -313,6 +313,6 @@ namespace Stormpath.SDK.Impl.IdSite
         }
 
         internal static IdSiteResultStatus GetResultStatus(IJwtClaims claims)
-            => IdSiteResultStatus.Parse((string)claims.GetClaim(IdSiteClaims.Status));
+            => new IdSiteResultStatus((string)claims.GetClaim(IdSiteClaims.Status));
     }
 }

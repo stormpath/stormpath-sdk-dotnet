@@ -85,7 +85,7 @@ namespace Stormpath.SDK.Impl.Client
             this.instanceIdentifier = instanceIdentifier;
 
             var compatibleApiKey = new Api.DefaultClientApiKey(configuration.Client.ApiKey.Id, configuration.Client.ApiKey.Secret);
-            var compatibleAuthenticationScheme = AuthenticationScheme.Parse(configuration.Client.AuthenticationScheme.ToString());
+            var compatibleAuthenticationScheme = new AuthenticationScheme(configuration.Client.AuthenticationScheme.ToString());
 
             var requestExecutor = new DefaultRequestExecutor(httpClient, compatibleApiKey, compatibleAuthenticationScheme, this.logger);
 

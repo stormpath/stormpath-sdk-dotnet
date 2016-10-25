@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Impl.Http
 
         IHttpRequestBuilder IHttpRequestBuilder.WithMethod(string methodName)
         {
-            this.method = HttpMethod.Parse(methodName);
+            this.method = new HttpMethod(methodName);
             return this;
         }
 

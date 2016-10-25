@@ -39,7 +39,11 @@ namespace Stormpath.SDK.Client
         /// </summary>
         public static AuthenticationScheme SAuthc1 = new AuthenticationScheme("SAUTHC1");
 
-        private AuthenticationScheme(string value)
+        /// <summary>
+        /// Creates a new <see cref="AuthenticationScheme"/> instance.
+        /// </summary>
+        /// <param name="value">The value to use.</param>
+        public AuthenticationScheme(string value)
             : base(value)
         {
         }

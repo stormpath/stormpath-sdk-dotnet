@@ -295,6 +295,6 @@ namespace Stormpath.SDK.Impl.Saml
         }
 
         internal static SamlResultStatus GetResultStatus(IJwtClaims claims)
-            => SamlResultStatus.Parse((string)claims.GetClaim(IdSiteClaims.Status));
+            => new SamlResultStatus((string)claims.GetClaim(IdSiteClaims.Status));
     }
 }

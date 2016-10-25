@@ -113,7 +113,7 @@ namespace Stormpath.SDK.Tests.IdSite
             accountResult.State.ShouldBe(expectedState);
             accountResultFromListener.State.ShouldBe(expectedState);
 
-            var expectedResultStatus = IdSiteResultStatus.Parse(expectedStatus);
+            var expectedResultStatus = new IdSiteResultStatus(expectedStatus);
             accountResult.Status.ShouldBe(expectedResultStatus);
             accountResultFromListener.Status.ShouldBe(expectedResultStatus);
         }

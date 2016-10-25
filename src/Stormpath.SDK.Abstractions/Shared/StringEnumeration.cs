@@ -104,6 +104,7 @@ namespace Stormpath.SDK.Shared
 
         /// <inheritdoc/>
         /// <param name="other">The object to compare to.</param>
-        public int CompareTo(object other) => this.Value.CompareTo(((StringEnumeration)other).Value);
+        public int CompareTo(object other)
+            => string.Compare(Value, ((StringEnumeration) other).Value, StringComparison.OrdinalIgnoreCase);
     }
 }

@@ -82,6 +82,7 @@ namespace Stormpath.SDK.Http
         /// Creates a deep copy of an HttpMethod instance.
         /// </summary>
         /// <returns>A new instance representing the same <see cref="HttpMethod"/> action.</returns>
+        [Obsolete("Use constructor")]
         public HttpMethod Clone()
         {
             return Parse(this.Value);

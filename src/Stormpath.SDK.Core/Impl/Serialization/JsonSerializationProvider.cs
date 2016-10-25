@@ -34,15 +34,7 @@ namespace Stormpath.SDK.Impl.Serialization
 
             this.converterChain = new FieldConverterList(
                 new LinkPropertyConverter(),
-                new ExpandedPropertyConverter(converter: this.ConvertProperties),
-                new StatusFieldConverters.AccountStatusConverter(),
-                new StatusFieldConverters.AccountEmailVerificationStatusConverter(),
-                new StatusFieldConverters.ApplicationStatusConverter(),
-                new StatusFieldConverters.DirectoryStatusConverter(),
-                new StatusFieldConverters.GroupStatusConverter(),
-                new StatusFieldConverters.OrganizationStatusConverter(),
-                new StatusFieldConverters.ApiKeyStatusConverter(),
-                new StatusFieldConverters.EmailStatusConverter());
+                new ExpandedPropertyConverter(converter: this.ConvertProperties));
         }
 
         public string Serialize(Map map)
