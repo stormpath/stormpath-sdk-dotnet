@@ -6,3 +6,5 @@ test_script:
 artifacts:
 - path: artifacts/*.nupkg
 deploy: off
+on_success:
+- ps: ./script/BuildAndDeployDocs.ps1
