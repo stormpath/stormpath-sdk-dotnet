@@ -37,12 +37,11 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         public void Getting_sso_initiation_endpoint(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var defaultApplication = client.GetApplications()
-                .Where(x => x.Name == "My Application")
+            var application = client.GetApplications()
                 .Synchronously()
-                .SingleOrDefault();
+                .First();
 
-            var samlPolicy = defaultApplication.GetSamlPolicy();
+            var samlPolicy = application.GetSamlPolicy();
             samlPolicy.Href.ShouldNotBeNullOrEmpty();
 
             var samlProvider = samlPolicy.GetSamlServiceProvider();
