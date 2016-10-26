@@ -793,7 +793,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 Number = "+1 818-555-2593" // Jack is back
             });
 
-            (factor.GetAccount()).Href.Should().Be(tester.Href);
+            factor.GetAccount().Href.Should().Be(tester.Href);
 
             factor.Href.Should().NotBeNullOrEmpty();
             factor.Type.Should().Be(FactorType.Sms);
@@ -801,15 +801,15 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             factor.VerificationStatus.Should().Be(FactorVerificationStatus.Unverified);
 
             // No challenges yet
-            (factor.GetMostRecentChallenge()).Should().BeNull();
-            (factor.Challenges.Synchronously().Any()).Should().BeFalse();
+            factor.GetMostRecentChallenge().Should().BeNull();
+            factor.Challenges.Synchronously().Any().Should().BeFalse();
 
             // Get the phone associated with this factor
             var phone = factor.GetPhone();
             phone.Number.Should().Be("+18185552593");
 
-            (factor.Delete()).Should().BeTrue();
-            (tester.Delete()).Should().BeTrue();
+            factor.Delete().Should().BeTrue();
+            tester.Delete().Should().BeTrue();
         }
 
         [Theory]
@@ -832,7 +832,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 Issuer = "MyApp"
             });
 
-            (factor.GetAccount()).Href.Should().Be(tester.Href);
+            factor.GetAccount().Href.Should().Be(tester.Href);
 
             factor.Href.Should().NotBeNullOrEmpty();
             factor.Type.Should().Be(FactorType.GoogleAuthenticator);
@@ -845,11 +845,11 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             factor.Secret.Should().NotBeNullOrEmpty();
 
             // No challenges yet
-            (factor.GetMostRecentChallenge()).Should().BeNull();
-            (factor.Challenges.Synchronously().Any()).ShouldBeFalse();
+            factor.GetMostRecentChallenge().Should().BeNull();
+            factor.Challenges.Synchronously().Any().ShouldBeFalse();
 
-            (factor.Delete()).Should().BeTrue();
-            (tester.Delete()).Should().BeTrue();
+            factor.Delete().Should().BeTrue();
+            tester.Delete().Should().BeTrue();
         }
 
         /// <summary>
@@ -893,7 +893,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             retrievedSpecificFactor.Should().BeAssignableTo<IFactor>();
             retrievedSpecificFactor.Href.Should().Be(factor.Href);
 
-            (tester.Delete()).Should().BeTrue();
+            tester.Delete().Should().BeTrue();
         }
 
         /// <summary>
@@ -929,13 +929,13 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var factor1 = factors.First() as ISmsFactor;
             factor1.Should().NotBeNull();
-            (factor1.GetPhone()).Number.Should().Be("+18185552593");
+            factor1.GetPhone().Number.Should().Be("+18185552593");
 
             var factor2 = factors.Last() as IGoogleAuthenticatorFactor;
             factor2.Should().NotBeNull();
             factor2.Issuer.Should().Be("MyApp");
 
-            (tester.Delete()).Should().BeTrue();
+            tester.Delete().Should().BeTrue();
         }
 
         [Theory]
@@ -964,14 +964,14 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             challenge.Message.Should().NotBeNullOrEmpty();
             challenge.Status.Should().BeOfType<ChallengeStatus>();
 
-            (challenge.GetAccount()).Href.Should().Be(tester.Href);
-            (challenge.GetFactor()).Href.Should().Be(factor.Href);
+            challenge.GetAccount().Href.Should().Be(tester.Href);
+            challenge.GetFactor().Href.Should().Be(factor.Href);
 
             // Should get the same object when accessing the Challenges collection
             var challenge2 = factor.Challenges.Synchronously().Single();
             challenge2.Href.Should().Be(challenge.Href);
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1001,10 +1001,10 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             challenge.Status.Should().BeOfType<ChallengeStatus>();
 
-            (challenge.GetAccount()).Href.Should().Be(tester.Href);
-            (challenge.GetFactor()).Href.Should().Be(factor.Href);
+            challenge.GetAccount().Href.Should().Be(tester.Href);
+            challenge.GetFactor().Href.Should().Be(factor.Href);
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1038,10 +1038,10 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             challenge.Message.Should().StartWith("Dammit Chloe!");
             challenge.Status.Should().BeOfType<ChallengeStatus>();
 
-            (challenge.GetAccount()).Href.Should().Be(tester.Href);
-            (challenge.GetFactor()).Href.Should().Be(factor.Href);
+            challenge.GetAccount().Href.Should().Be(tester.Href);
+            challenge.GetFactor().Href.Should().Be(factor.Href);
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1067,7 +1067,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             // That's definitely not the right code
             challenge.Status.Should().Be(ChallengeStatus.Failed);
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1093,7 +1093,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             // That's definitely not the right code
             result.Should().BeFalse();
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1124,7 +1124,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             factor.Status.Should().Be(FactorStatus.Enabled);
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1157,7 +1157,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             factor.Issuer.Should().Be("MyBetterApp");
             factor.AccountName.Should().Be("luke@hoth.rim");
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1198,7 +1198,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .Single();
             enabledFactor.Href.Should().Be(factor2.Href);
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1239,7 +1239,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .Single();
             enabledFactor.Href.Should().Be(factor2.Href);
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1275,7 +1275,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             foundFactor.Href.Should().Be(totpFactor.Href);
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1322,6 +1322,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 });
 
             directFactor.Href.Should().Be(smsFactor.Href);
+
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1343,12 +1345,12 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var phone = tester.Phones.Add("+1 818-555-7993");
             phone.Number.Should().Be("+18185557993");
 
-            (phone.GetAccount()).Href.Should().Be(tester.Href);
+            phone.GetAccount().Href.Should().Be(tester.Href);
 
             // Try deleting it
             phone.Delete();
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1382,7 +1384,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             phone.Status.Should().Be(PhoneStatus.Disabled);
             phone.VerificationStatus.Should().Be(PhoneVerificationStatus.Verified);
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1409,7 +1411,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             updated.VerificationStatus.Should().Be(PhoneVerificationStatus.Verified);
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1436,7 +1438,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             phones.First().Number.Should().Be("+18185557993");
             phones.Last().Number.Should().Be("+18185552593");
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1474,7 +1476,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .Single();
             findByName.Number.Should().Be("+18185552593");
 
-            (tester.Delete()).ShouldBeTrue();
+            tester.Delete().ShouldBeTrue();
         }
 
         [Theory]
@@ -1510,6 +1512,8 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             });
 
             directPhone.Href.Should().Be(allPhones[0].Href);
+
+            tester.Delete().ShouldBeTrue();
         }
     }
 }

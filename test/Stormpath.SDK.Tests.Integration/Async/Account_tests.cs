@@ -1291,6 +1291,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
                 });
 
             directFactor.Href.Should().Be(smsFactor.Href);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
         }
 
         [Theory]
@@ -1476,6 +1478,8 @@ namespace Stormpath.SDK.Tests.Integration.Async
             });
 
             directPhone.Href.Should().Be(allPhones[0].Href);
+
+            (await tester.DeleteAsync()).ShouldBeTrue();
         }
     }
 }
