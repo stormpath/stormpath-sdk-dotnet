@@ -36,11 +36,10 @@ namespace Stormpath.SDK.Tests.Integration.Async
         public async Task Getting_sso_initiation_endpoint(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
-            var defaultApplication = await client.GetApplications()
-                .Where(x => x.Name == "My Application")
-                .SingleAsync();
+            var application = await client.GetApplications()
+                .FirstAsync();
 
-            var samlPolicy = await defaultApplication.GetSamlPolicyAsync();
+            var samlPolicy = await application.GetSamlPolicyAsync();
             samlPolicy.Href.ShouldNotBeNullOrEmpty();
 
             var samlProvider = await samlPolicy.GetSamlServiceProviderAsync();
