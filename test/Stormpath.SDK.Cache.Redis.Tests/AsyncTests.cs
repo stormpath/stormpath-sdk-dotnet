@@ -164,6 +164,30 @@ namespace Stormpath.SDK.Cache.Redis.Tests
         }
 
         [DebugOnlyFact]
+        public async Task Date_properties_are_cached_correctly()
+        {
+            var cacheProvider = CacheProviders.Create().RedisCache()
+                .WithRedisConnection(fixture.Connection)
+                .Build();
+
+            CreateClient(cacheProvider);
+            fakeHttpClient.SetupGet("https://api.stormpath.com/v1/applications/foobarApplication", 200, FakeJson.Application);
+
+            // Prime the cache
+            await client.GetApplicationAsync("https://api.stormpath.com/v1/applications/foobarApplication");
+
+            // Retrieve it from the cache
+            var app = await client.GetApplicationAsync("https://api.stormpath.com/v1/applications/foobarApplication");
+            app.CreatedAt.Year.Should().Be(2015);
+            app.CreatedAt.Month.Should().Be(7);
+            app.CreatedAt.Day.Should().Be(21);
+            app.CreatedAt.Hour.Should().Be(23);
+            app.CreatedAt.Minute.Should().Be(50);
+            app.CreatedAt.Second.Should().Be(49);
+            app.CreatedAt.Millisecond.Should().Be(563);
+        }
+
+        [DebugOnlyFact]
         public async Task Status_properties_are_cached_correctly()
         {
             var cacheProvider = CacheProviders.Create().RedisCache()

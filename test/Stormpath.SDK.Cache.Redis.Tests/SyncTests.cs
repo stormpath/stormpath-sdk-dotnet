@@ -15,9 +15,11 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using System.Threading;
 using FluentAssertions;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common;
@@ -128,7 +130,7 @@ namespace Stormpath.SDK.Cache.Redis.Tests
 
             Thread.Sleep(1500);
 
-            this.client.GetResourceAsync<IAccount>(account.Href);
+            this.client.GetResource<IAccount>(account.Href);
             this.fakeHttpClient.Calls.Count.Should().Be(3);
 
             this.client.GetResource<IGroup>(group.Href);
@@ -161,6 +163,89 @@ namespace Stormpath.SDK.Cache.Redis.Tests
 
             this.client.GetResource<IGroup>(group.Href);
             this.fakeHttpClient.Calls.Count.Should().Be(3);
+        }
+
+        [DebugOnlyFact]
+        public void Date_properties_are_cached_correctly()
+        {
+            var cacheProvider = CacheProviders.Create().RedisCache()
+                .WithRedisConnection(fixture.Connection)
+                .Build();
+
+            CreateClient(cacheProvider);
+            fakeHttpClient.SetupGet("https://api.stormpath.com/v1/applications/foobarApplication", 200, FakeJson.Application);
+
+            // Prime the cache
+            client.GetApplication("https://api.stormpath.com/v1/applications/foobarApplication");
+
+            // Retrieve it from the cache
+            var app = client.GetApplication("https://api.stormpath.com/v1/applications/foobarApplication");
+            app.CreatedAt.Year.Should().Be(2015);
+            app.CreatedAt.Month.Should().Be(7);
+            app.CreatedAt.Day.Should().Be(21);
+            app.CreatedAt.Hour.Should().Be(23);
+            app.CreatedAt.Minute.Should().Be(50);
+            app.CreatedAt.Second.Should().Be(49);
+            app.CreatedAt.Millisecond.Should().Be(563);
+        }
+
+        [DebugOnlyFact]
+        public void Status_properties_are_cached_correctly()
+        {
+            var cacheProvider = CacheProviders.Create().RedisCache()
+                .WithRedisConnection(fixture.Connection)
+                .Build();
+
+            CreateClient(cacheProvider);
+            fakeHttpClient.SetupGet("https://api.stormpath.com/v1/applications/foobarApplication", 200, FakeJson.Application);
+
+            // Prime the cache
+            var app = client.GetApplication("https://api.stormpath.com/v1/applications/foobarApplication");
+            app.Status.Should().Be(ApplicationStatus.Enabled);
+
+            // Retrieve it from the cache
+            var app2 = client.GetApplication("https://api.stormpath.com/v1/applications/foobarApplication");
+            app2.Status.Should().Be(ApplicationStatus.Enabled);
+        }
+
+        [DebugOnlyFact]
+        public void Link_properties_are_cached_correctly()
+        {
+            var cacheProvider = CacheProviders.Create().RedisCache()
+                .WithRedisConnection(fixture.Connection)
+                .Build();
+
+            CreateClient(cacheProvider);
+            fakeHttpClient.SetupGet("https://api.stormpath.com/v1/applications/foobarApplication", 200, FakeJson.Application);
+            fakeHttpClient.SetupGet("https://api.stormpath.com/v1/applications/foobarApplication/accounts?limit=100", 200, FakeJson.AccountList);
+
+            // Prime the cache
+            client.GetApplication("https://api.stormpath.com/v1/applications/foobarApplication");
+
+            // Retrieve it from the cache
+            var app = client.GetApplication("https://api.stormpath.com/v1/applications/foobarApplication");
+            var accounts = app.GetAccounts().Synchronously().ToArray();
+            accounts.Length.Should().Be(6);
+        }
+
+        [DebugOnlyFact]
+        public void Collection_resource_access_works()
+        {
+            var cacheProvider = CacheProviders.Create().RedisCache()
+                .WithRedisConnection(fixture.Connection)
+                .Build();
+
+            CreateClient(cacheProvider);
+            fakeHttpClient.SetupGet("/tenants/current", 200, FakeJson.Tenant);
+            fakeHttpClient.SetupGet("https://api.stormpath.com/v1/tenants/foo-bar/applications?limit=100", 200, FakeJson.ApplicationList);
+
+            // Get the collection
+            var applications = client.GetApplications().Synchronously().ToArray();
+            applications.Length.Should().Be(2);
+
+            // Try getting an item from the cache
+            var app1 = client.GetApplication(applications[0].Href);
+            app1.Href.Should().NotBeNullOrEmpty();
         }
     }
 }
