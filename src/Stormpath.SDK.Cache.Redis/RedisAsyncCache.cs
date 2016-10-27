@@ -15,10 +15,14 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using Stormpath.SDK.Logging;
+using Stormpath.SDK.Redis;
 using Stormpath.SDK.Serialization;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
@@ -88,7 +92,7 @@ namespace Stormpath.SDK.Cache.Redis
                     return null;
                 }
 
-                var map = this.serializer.Deserialize(entry.Data);
+                var map = JsonConvert.DeserializeObject<IDictionary<string, object>>(entry.Data, Constants.SerializerSettings);
                 return map;
             }
             catch (Exception e)
@@ -108,7 +112,7 @@ namespace Stormpath.SDK.Cache.Redis
                 var db = this.connection.GetDatabase();
 
                 var cacheKey = this.ConstructKey(key);
-                var cacheData = this.serializer.Serialize((Map)value);
+                var cacheData = JsonConvert.SerializeObject(value, Constants.SerializerSettings);
 
                 var entry = new CacheEntry(
                     cacheData,
