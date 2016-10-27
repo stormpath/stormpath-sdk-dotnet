@@ -24,6 +24,7 @@ using Stormpath.SDK.Impl.Resource;
 using Stormpath.SDK.Logging;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 using System.Linq;
+using Stormpath.SDK.Cache;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
 {
@@ -42,14 +43,14 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
 
             if (isCustomDataPropertyRequest && isDelete)
             {
-                logger.Trace($"Request {request.Action} {request.Uri} is a custom data property delete, deleting cached property name if exists", "WriteCacheFilter.FilterAsync");
+                logger.Trace($"Request {request.Action} {request.Uri} is a custom data property delete, deleting cached property name if exists", "WriteCacheFilter.Filter");
                 this.UncacheCustomDataProperty(request.Uri.ResourcePath, logger);
             }
             else if (isDelete)
             {
                 logger.Trace($"Request {request.Action} {request.Uri} is a resource deletion, purging from cache if exists", "WriteCacheFilter.Filter");
                 var cacheKey = this.GetCacheKey(request);
-                this.Uncache(request.Type, cacheKey);
+                this.Uncache(request.Type, cacheKey, logger);
             }
 
             var result = chain.Filter(request, logger);
@@ -60,7 +61,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             if (isEmailVerificationResponse)
             {
                 logger.Trace($"Request {request.Action} {request.Uri} is an email verification request, purging account from cache if exists", "WriteCacheFilter.Filter");
-                this.UncacheAccountOnEmailVerification(result);
+                this.UncacheAccountOnEmailVerification(result, logger);
             }
 
             bool possibleCustomDataUpdate = (request.Action == ResourceAction.Create || request.Action == ResourceAction.Update) &&
@@ -90,8 +91,15 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             {
                 logger.Trace($"Response {href} is a custom data resource, caching directly", "WriteCacheFilter.Cache");
 
-                var cache = this.GetSyncCache(resourceType);
-                cache.Put(this.GetCacheKey(href), data);
+                try
+                {
+                    var cache = this.GetSyncCache(resourceType);
+                    cache.Put(this.GetCacheKey(href), data);
+                }
+                catch (Exception ex)
+                {
+                    logger.Warn(ex, $"Error during cache write, skipping cache", source: nameof(Cache) + "+isCustomData");
+                }
                 return; // simple! return early
             }
 
@@ -125,7 +133,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 }
                 else if (asNestedMapArray != null)
                 {
-                    logger.Trace($"Attribute {key} on response {href} is an array, caching items recursively", "WriteCacheFilter.CacheAsync");
+                    logger.Trace($"Attribute {key} on response {href} is an array, caching items recursively", "WriteCacheFilter.Cache");
 
                     var nestedType = this.typeLookup.GetInnerCollectionInterface(resourceType);
                     if (nestedType == null)
@@ -202,14 +210,16 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             {
                 logger.Trace($"Caching {href} as type {resourceType.Name}", "WriteCacheFilter.Cache");
 
-                var cache = this.GetSyncCache(resourceType);
-                if (cache == null)
+                try
                 {
-                    return;
+                    var cache = this.GetSyncCache(resourceType);
+                    var cacheKey = this.GetCacheKey(href);
+                    cache.Put(cacheKey, cacheData);
                 }
-
-                var cacheKey = this.GetCacheKey(href);
-                cache.Put(cacheKey, cacheData);
+                catch (Exception ex)
+                {
+                    logger.Warn(ex, $"Error during cache write, skipping cache", source: nameof(Cache) + "+isCacheable");
+                }
             }
         }
 
@@ -264,7 +274,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             this.Cache(typeof(ICustomData), dataToCache, logger);
         }
 
-        private void Uncache(Type resourceType, string cacheKey)
+        private void Uncache(Type resourceType, string cacheKey, ILogger logger)
         {
             if (string.IsNullOrEmpty(cacheKey))
             {
@@ -276,8 +286,15 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 throw new ArgumentNullException(nameof(resourceType));
             }
 
-            var cache = this.GetSyncCache(resourceType);
-            cache.Remove(cacheKey);
+            try
+            {
+                var cache = this.GetSyncCache(resourceType);
+                cache.Remove(cacheKey);
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex, "Error during cache deletion, skipping cache", source: nameof(Uncache));
+            }
         }
 
         private void UncacheCustomDataProperty(Uri resourceUri, ILogger logger)
@@ -292,22 +309,42 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 throw new Exception("Could not update cache for removed custom data entry.");
             }
 
-            var cache = this.GetSyncCache(typeof(ICustomData));
-            var cacheKey = this.GetCacheKey(href);
+            ISynchronousCache cache = null;
+            string cacheKey = null;
+            Map existingData = null;
 
-            var existingData = cache.Get(cacheKey);
-            if (existingData.IsNullOrEmpty())
+            try
+            {
+                cache = this.GetSyncCache(typeof(ICustomData));
+                cacheKey = this.GetCacheKey(href);
+
+                existingData = cache.Get(cacheKey);
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex, $"Error during cache read, skipping cache", source: nameof(UncacheCustomDataProperty));
+            }
+
+            if (existingData == null || existingData.IsNullOrEmpty())
             {
                 return;
             }
 
-            logger.Trace($"Deleting custom data property '{propertyName}' from resource {href}", "WriteCacheFilter.UncacheCustomDataProperty");
+            logger.Trace($"Deleting custom data property '{propertyName}' from resource {href}", nameof(UncacheCustomDataProperty));
 
             existingData.Remove(propertyName);
-            cache.Put(cacheKey, existingData);
+
+            try
+            {
+                cache.Put(cacheKey, existingData);
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex, $"Error during cache write, skipping cache", source: nameof(UncacheCustomDataProperty));
+            }
         }
 
-        private void UncacheAccountOnEmailVerification(IResourceDataResult result)
+        private void UncacheAccountOnEmailVerification(IResourceDataResult result, ILogger logger)
         {
             object accountHrefRaw = null;
             string accountHref = null;
@@ -322,8 +359,15 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return;
             }
 
-            var cache = this.GetSyncCache(typeof(IAccount));
-            cache.Remove(this.GetCacheKey(accountHref));
+            try
+            {
+                var cache = this.GetSyncCache(typeof(IAccount));
+                cache.Remove(this.GetCacheKey(accountHref));
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex, $"Error during cache deletion, skipping cache", source: nameof(UncacheAccountOnEmailVerification));
+            }
         }
     }
 }

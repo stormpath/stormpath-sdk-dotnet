@@ -31,6 +31,7 @@ using Stormpath.SDK.Logging;
 using Stormpath.SDK.Provider;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 using System.Linq;
+using Stormpath.SDK.Cache;
 
 namespace Stormpath.SDK.Impl.DataStore.Filters
 {
@@ -71,7 +72,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             {
                 logger.Trace($"Request {request.Action} {request.Uri} is a resource deletion, purging from cache if exists", "WriteCacheFilter.FilterAsync");
                 var cacheKey = this.GetCacheKey(request);
-                await this.UncacheAsync(request.Type, cacheKey, cancellationToken).ConfigureAwait(false);
+                await this.UncacheAsync(request.Type, cacheKey, logger, cancellationToken).ConfigureAwait(false);
             }
 
             var result = await chain.FilterAsync(request, logger, cancellationToken).ConfigureAwait(false);
@@ -82,7 +83,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             if (isEmailVerificationResponse)
             {
                 logger.Trace($"Request {request.Action} {request.Uri} is an email verification request, purging account from cache if exists", "WriteCacheFilter.FilterAsync");
-                await this.UncacheAccountOnEmailVerificationAsync(result, cancellationToken).ConfigureAwait(false);
+                await this.UncacheAccountOnEmailVerificationAsync(result, logger, cancellationToken).ConfigureAwait(false);
             }
 
             bool possibleCustomDataUpdate = (request.Action == ResourceAction.Create || request.Action == ResourceAction.Update) &&
@@ -112,8 +113,16 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             {
                 logger.Trace($"Response {href} is a custom data resource, caching directly", "WriteCacheFilter.CacheAsync");
 
-                var cache = this.GetAsyncCache(resourceType);
-                await cache.PutAsync(this.GetCacheKey(href), data, cancellationToken).ConfigureAwait(false);
+                try
+                {
+                    var cache = this.GetAsyncCache(resourceType);
+                    await cache.PutAsync(this.GetCacheKey(href), data, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    logger.Warn(ex, $"Error during cache write, skipping cache", source: nameof(CacheAsync) + "+isCustomData");
+                }
+
                 return; // simple! return early
             }
 
@@ -224,14 +233,16 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             {
                 logger.Trace($"Caching {href} as type {resourceType.Name}", "WriteCacheFilter.CacheAsync");
 
-                var cache = this.GetAsyncCache(resourceType);
-                if (cache == null)
+                try
                 {
-                    return;
+                    var cache = this.GetAsyncCache(resourceType);
+                    var cacheKey = this.GetCacheKey(href);
+                    await cache.PutAsync(cacheKey, cacheData, cancellationToken).ConfigureAwait(false);
                 }
-
-                var cacheKey = this.GetCacheKey(href);
-                await cache.PutAsync(cacheKey, cacheData, cancellationToken).ConfigureAwait(false);
+                catch (Exception ex)
+                {
+                    logger.Warn(ex, $"Error during cache write, skipping cache", source: nameof(CacheAsync) + "+isCacheable");
+                }
             }
         }
 
@@ -286,7 +297,7 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
             await this.CacheAsync(typeof(ICustomData), dataToCache, logger, cancellationToken).ConfigureAwait(false);
         }
 
-        private async Task UncacheAsync(Type resourceType, string cacheKey, CancellationToken cancellationToken)
+        private async Task UncacheAsync(Type resourceType, string cacheKey, ILogger logger, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(cacheKey))
             {
@@ -298,8 +309,15 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 throw new ArgumentNullException(nameof(resourceType));
             }
 
-            var cache = this.GetAsyncCache(resourceType);
-            await cache.RemoveAsync(cacheKey, cancellationToken).ConfigureAwait(false);
+            try
+            {
+                var cache = this.GetAsyncCache(resourceType);
+                await cache.RemoveAsync(cacheKey, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex, $"Error during cache deletion, skipping cache", source: nameof(UncacheAsync));
+            }
         }
 
         private async Task UncacheCustomDataPropertyAsync(Uri resourceUri, ILogger logger, CancellationToken cancellationToken)
@@ -314,22 +332,42 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 throw new Exception("Could not update cache for removed custom data entry.");
             }
 
-            var cache = this.GetAsyncCache(typeof(ICustomData));
-            var cacheKey = this.GetCacheKey(href);
+            IAsynchronousCache cache = null;
+            string cacheKey = null;
+            Map existingData = null;
 
-            var existingData = await cache.GetAsync(cacheKey, cancellationToken).ConfigureAwait(false);
-            if (existingData.IsNullOrEmpty())
+            try
+            {
+                cache = this.GetAsyncCache(typeof(ICustomData));
+                cacheKey = this.GetCacheKey(href);
+
+                existingData = await cache.GetAsync(cacheKey, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex, $"Error during cache read, skipping cache", source: nameof(UncacheCustomDataPropertyAsync));
+            }
+
+            if (existingData == null || existingData.IsNullOrEmpty())
             {
                 return;
             }
 
-            logger.Trace($"Deleting custom data property '{propertyName}' from resource {href}", "WriteCacheFilter.UncacheCustomDataPropertyAsync");
+            logger.Trace($"Deleting custom data property '{propertyName}' from resource {href}", nameof(UncacheCustomDataPropertyAsync));
 
             existingData.Remove(propertyName);
-            await cache.PutAsync(cacheKey, existingData, cancellationToken).ConfigureAwait(false);
+
+            try
+            {
+                await cache.PutAsync(cacheKey, existingData, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex, $"Error during cache write, skipping cache", source: nameof(UncacheCustomDataPropertyAsync));
+            }
         }
 
-        private async Task UncacheAccountOnEmailVerificationAsync(IResourceDataResult result, CancellationToken cancellationToken)
+        private async Task UncacheAccountOnEmailVerificationAsync(IResourceDataResult result, ILogger logger, CancellationToken cancellationToken)
         {
             object accountHrefRaw = null;
             string accountHref = null;
@@ -344,8 +382,15 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return;
             }
 
-            var cache = this.GetAsyncCache(typeof(IAccount));
-            await cache.RemoveAsync(this.GetCacheKey(accountHref), cancellationToken).ConfigureAwait(false);
+            try
+            {
+                var cache = this.GetAsyncCache(typeof(IAccount));
+                await cache.RemoveAsync(this.GetCacheKey(accountHref), cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex, $"Error during cache deletion, skipping cache", source: nameof(UncacheAccountOnEmailVerificationAsync));
+            }
         }
 
         private static bool IsCacheable(IResourceDataRequest request, IResourceDataResult result, Type resultType)

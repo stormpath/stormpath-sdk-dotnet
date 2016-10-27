@@ -97,14 +97,19 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return null;
             }
 
-            var data = await this.GetCachedValueAsync(request.Type, cacheKey, cancellationToken).ConfigureAwait(false);
-
-            if (data == null)
+            try
             {
-                return null;
-            }
+                var data = await this.GetCachedValueAsync(request.Type, cacheKey, cancellationToken).ConfigureAwait(false);
 
-            return new DefaultResourceDataResult(request.Action, request.Type, request.Uri, 200, data);
+                return data == null
+                    ? null
+                    : new DefaultResourceDataResult(request.Action, request.Type, request.Uri, 200, data);
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex, "Error during cache read, skipping cache", source: nameof(GetCachedResourceDataAsync));
+                throw;
+            }
         }
 
         private IResourceDataResult GetCachedResourceData(IResourceDataRequest request, ILogger logger)
@@ -117,14 +122,19 @@ namespace Stormpath.SDK.Impl.DataStore.Filters
                 return null;
             }
 
-            var data = this.GetCachedValue(request.Type, cacheKey);
-
-            if (data == null)
+            try
             {
+                var data = this.GetCachedValue(request.Type, cacheKey);
+
+                return data == null
+                    ? null 
+                    : new DefaultResourceDataResult(request.Action, request.Type, request.Uri, 200, data);
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex, $"Error during cache read, skipping cache", source: nameof(GetCachedResourceData));
                 return null;
             }
-
-            return new DefaultResourceDataResult(request.Action, request.Type, request.Uri, 200, data);
         }
 
         private bool IsCacheRetrievalEnabled(IResourceDataRequest request)
