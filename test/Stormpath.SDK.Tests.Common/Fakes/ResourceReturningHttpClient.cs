@@ -56,14 +56,14 @@ namespace Stormpath.SDK.Tests.Common.Fakes
                 return response;
             }
 
-            return this.DefaultResponse();
+            return this.DefaultResponse(key);
         }
 
-        private IHttpResponse DefaultResponse()
+        private IHttpResponse DefaultResponse(string key)
         {
             if (string.IsNullOrEmpty(this.defaultResponse))
             {
-                throw new ArgumentException("No default response set up in FakeHttpClient.");
+                throw new ArgumentException($"No default response set up in FakeHttpClient. Request was '{key}'");
             }
 
             return new FakeHttpResponse(200, this.defaultResponse);

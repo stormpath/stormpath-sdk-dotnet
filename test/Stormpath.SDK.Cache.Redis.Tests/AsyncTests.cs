@@ -18,6 +18,7 @@ using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Group;
 using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Fakes;
@@ -160,6 +161,65 @@ namespace Stormpath.SDK.Cache.Redis.Tests
 
             await this.client.GetResourceAsync<IGroup>(group.Href);
             this.fakeHttpClient.Calls.Count.Should().Be(3);
+        }
+
+        [DebugOnlyFact]
+        public async Task Status_properties_are_cached_correctly()
+        {
+            var cacheProvider = CacheProviders.Create().RedisCache()
+                .WithRedisConnection(fixture.Connection)
+                .Build();
+
+            CreateClient(cacheProvider);
+            fakeHttpClient.SetupGet("https://api.stormpath.com/v1/applications/foobarApplication", 200, FakeJson.Application);
+
+            // Prime the cache
+            var app = await client.GetApplicationAsync("https://api.stormpath.com/v1/applications/foobarApplication");
+            app.Status.Should().Be(ApplicationStatus.Enabled);
+
+            // Retrieve it from the cache
+            var app2 = await client.GetApplicationAsync("https://api.stormpath.com/v1/applications/foobarApplication");
+            app2.Status.Should().Be(ApplicationStatus.Enabled);
+        }
+
+        [DebugOnlyFact]
+        public async Task Link_properties_are_cached_correctly()
+        {
+            var cacheProvider = CacheProviders.Create().RedisCache()
+                .WithRedisConnection(fixture.Connection)
+                .Build();
+
+            CreateClient(cacheProvider);
+            fakeHttpClient.SetupGet("https://api.stormpath.com/v1/applications/foobarApplication", 200, FakeJson.Application);
+            fakeHttpClient.SetupGet("https://api.stormpath.com/v1/applications/foobarApplication/accounts?limit=100", 200, FakeJson.AccountList);
+
+            // Prime the cache
+            await client.GetApplicationAsync("https://api.stormpath.com/v1/applications/foobarApplication");
+
+            // Retrieve it from the cache
+            var app = await client.GetApplicationAsync("https://api.stormpath.com/v1/applications/foobarApplication");
+            var accounts = await app.GetAccounts().ToArrayAsync();
+            accounts.Length.Should().Be(6);
+        }
+
+        [DebugOnlyFact]
+        public async Task Collection_resource_access_works()
+        {
+            var cacheProvider = CacheProviders.Create().RedisCache()
+                .WithRedisConnection(fixture.Connection)
+                .Build();
+
+            CreateClient(cacheProvider);
+            fakeHttpClient.SetupGet("/tenants/current", 200, FakeJson.Tenant);
+            fakeHttpClient.SetupGet("https://api.stormpath.com/v1/tenants/foo-bar/applications?limit=100", 200, FakeJson.ApplicationList);
+
+            // Get the collection
+            var applications = await client.GetApplications().ToArrayAsync();
+            applications.Length.Should().Be(2);
+
+            // Try getting an item from the cache
+            var app1 = await client.GetApplicationAsync(applications[0].Href);
+            app1.Href.Should().NotBeNullOrEmpty();
         }
     }
 }
