@@ -17,13 +17,14 @@
 using System;
 using StackExchange.Redis;
 using Stormpath.SDK.Logging;
+using Stormpath.SDK.Redis;
 
 namespace Stormpath.SDK.Cache.Redis
 {
     internal class RedisCacheProvider : AbstractCacheProvider, ILoggerConsumer<RedisCacheProvider>
     {
-        private IConnectionMultiplexer connection;
-        private ILogger logger;
+        private IConnectionMultiplexer _connection;
+        private ILogger _logger;
 
         public RedisCacheProvider()
             : base(syncSupported: true, asyncSupported: true)
@@ -32,19 +33,19 @@ namespace Stormpath.SDK.Cache.Redis
 
         public RedisCacheProvider SetLogger(ILogger logger)
         {
-            this.logger = logger;
+            this._logger = logger;
             return this;
         }
 
         public RedisCacheProvider SetRedisConnectionMultiplexer(IConnectionMultiplexer connection)
         {
-            this.connection = connection;
+            this._connection = connection;
             return this;
         }
 
         private void ThrowIfNotConfigured()
         {
-            if (this.connection == null)
+            if (_connection == null)
             {
                 throw new Exception("No connection present. Set up the cache provider with NewRedisCacheProvider first.");
             }
@@ -52,16 +53,16 @@ namespace Stormpath.SDK.Cache.Redis
 
         protected override IAsynchronousCache CreateAsyncCache(string name, TimeSpan? ttl, TimeSpan? tti)
         {
-            this.ThrowIfNotConfigured();
+            ThrowIfNotConfigured();
 
-            return new RedisAsyncCache(this.connection, this.logger, name, ttl, tti);
+            return new RedisCache(_connection, _logger, name, ttl, tti);
         }
 
         protected override ISynchronousCache CreateSyncCache(string name, TimeSpan? ttl, TimeSpan? tti)
         {
-            this.ThrowIfNotConfigured();
+            ThrowIfNotConfigured();
 
-            return new RedisSyncCache(this.connection, this.logger, name, ttl, tti);
+            return new RedisCache(_connection, _logger, name, ttl, tti);
         }
     }
 }
