@@ -17,25 +17,17 @@
 using System;
 using StackExchange.Redis;
 using Stormpath.SDK.Logging;
-using Stormpath.SDK.Serialization;
 
 namespace Stormpath.SDK.Cache.Redis
 {
-    internal class RedisCacheProvider : AbstractCacheProvider, ISerializerConsumer<RedisCacheProvider>, ILoggerConsumer<RedisCacheProvider>
+    internal class RedisCacheProvider : AbstractCacheProvider, ILoggerConsumer<RedisCacheProvider>
     {
         private IConnectionMultiplexer connection;
-        private IJsonSerializer serializer;
         private ILogger logger;
 
         public RedisCacheProvider()
             : base(syncSupported: true, asyncSupported: true)
         {
-        }
-
-        public RedisCacheProvider SetSerializer(IJsonSerializer serializer)
-        {
-            this.serializer = serializer;
-            return this;
         }
 
         public RedisCacheProvider SetLogger(ILogger logger)
@@ -62,14 +54,14 @@ namespace Stormpath.SDK.Cache.Redis
         {
             this.ThrowIfNotConfigured();
 
-            return new RedisAsyncCache(this.connection, this.serializer, this.logger, name, ttl, tti);
+            return new RedisAsyncCache(this.connection, this.logger, name, ttl, tti);
         }
 
         protected override ISynchronousCache CreateSyncCache(string name, TimeSpan? ttl, TimeSpan? tti)
         {
             this.ThrowIfNotConfigured();
 
-            return new RedisSyncCache(this.connection, this.serializer, this.logger, name, ttl, tti);
+            return new RedisSyncCache(this.connection, this.logger, name, ttl, tti);
         }
     }
 }

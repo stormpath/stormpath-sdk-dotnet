@@ -15,15 +15,12 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Redis;
-using Stormpath.SDK.Serialization;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Cache.Redis
@@ -31,7 +28,6 @@ namespace Stormpath.SDK.Cache.Redis
     internal sealed class RedisAsyncCache : IAsynchronousCache
     {
         private readonly IConnectionMultiplexer connection;
-        private readonly IJsonSerializer serializer;
         private readonly ILogger logger;
         private readonly string region;
         private readonly TimeSpan? ttl;
@@ -39,14 +35,12 @@ namespace Stormpath.SDK.Cache.Redis
 
         public RedisAsyncCache(
             IConnectionMultiplexer connection,
-            IJsonSerializer serializer,
             ILogger logger,
             string region,
             TimeSpan? ttl,
             TimeSpan? tti)
         {
             this.connection = connection;
-            this.serializer = serializer;
             this.logger = logger;
 
             this.region = region;
@@ -92,7 +86,7 @@ namespace Stormpath.SDK.Cache.Redis
                     return null;
                 }
 
-                var map = JsonConvert.DeserializeObject<IDictionary<string, object>>(entry.Data, Constants.SerializerSettings);
+                var map = JsonConvert.DeserializeObject<Map>(entry.Data, Constants.SerializerSettings);
                 return map;
             }
             catch (Exception e)
@@ -149,7 +143,7 @@ namespace Stormpath.SDK.Cache.Redis
                 }
 
                 var entry = CacheEntry.Parse(lastValue.Result);
-                var map = this.serializer.Deserialize(entry.Data);
+                var map = JsonConvert.DeserializeObject<Map>(entry.Data, Constants.SerializerSettings);
                 return map;
             }
             catch (Exception e)

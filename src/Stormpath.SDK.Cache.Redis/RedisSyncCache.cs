@@ -19,7 +19,6 @@ using Newtonsoft.Json;
 using StackExchange.Redis;
 using Stormpath.SDK.Logging;
 using Stormpath.SDK.Redis;
-using Stormpath.SDK.Serialization;
 using Map = System.Collections.Generic.IDictionary<string, object>;
 
 namespace Stormpath.SDK.Cache.Redis
@@ -27,7 +26,6 @@ namespace Stormpath.SDK.Cache.Redis
     internal sealed class RedisSyncCache : ISynchronousCache
     {
         private readonly IConnectionMultiplexer connection;
-        private readonly IJsonSerializer serializer;
         private readonly ILogger logger;
         private readonly string region;
         private readonly TimeSpan? ttl;
@@ -35,14 +33,12 @@ namespace Stormpath.SDK.Cache.Redis
 
         public RedisSyncCache(
             IConnectionMultiplexer connection,
-            IJsonSerializer serializer,
             ILogger logger,
             string region,
             TimeSpan? ttl,
             TimeSpan? tti)
         {
             this.connection = connection;
-            this.serializer = serializer;
             this.logger = logger;
             this.region = region;
             this.ttl = ttl;
@@ -136,7 +132,7 @@ namespace Stormpath.SDK.Cache.Redis
                 }
 
                 var entry = CacheEntry.Parse(lastValue.Result);
-                var map = this.serializer.Deserialize(entry.Data);
+                var map = JsonConvert.DeserializeObject<Map>(entry.Data, Constants.SerializerSettings);
                 return map;
             }
             catch (Exception e)
