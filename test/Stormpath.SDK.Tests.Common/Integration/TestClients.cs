@@ -62,6 +62,21 @@ namespace Stormpath.SDK.Tests.Common.Integration
                 .Build();
         });
 
+        public static readonly Lazy<IClient> SAuthc1RedisCaching = new Lazy<IClient>(() =>
+        {
+            return Clients.Builder()
+                .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
+                .SetSerializer(Serializers.Create().JsonNetSerializer())
+                .SetAuthenticationScheme(Configuration.Abstractions.ClientAuthenticationScheme.SAuthc1)
+                .SetLogger(StaticLogger.Instance)
+                .SetCacheProvider(CacheProviders.Create().RedisCache()
+                    .WithRedisConnection("localhost:6379")
+                    .WithDefaultTimeToIdle(TimeSpan.FromMinutes(10))
+                    .WithDefaultTimeToLive(TimeSpan.FromMinutes(10))
+                    .Build())
+                .Build();
+        });
+
         private static Lazy<StormpathConfiguration> lazyConfiguration =
             new Lazy<StormpathConfiguration>(() => Configuration.ConfigurationLoader.Initialize().Load());
 
@@ -73,14 +88,21 @@ namespace Stormpath.SDK.Tests.Common.Integration
         /// <returns>A list of testing clients.</returns>
         public static IEnumerable<object[]> GetClients()
         {
-            var isFastMode = false;
-            bool.TryParse(Environment.GetEnvironmentVariable("STORMPATH_IT_FASTMODE"), out isFastMode);
-
+            // Always return the default client - SAuthc1 with caching disabled
             yield return new object[] { new TestClientProvider(nameof(SAuthc1)) };
 
+            // Allow the STORMPATH_IT_QUICK env var to skip the remaining clients
+            bool isFastMode = false;
+            bool.TryParse(Environment.GetEnvironmentVariable("STORMPATH_IT_QUICK"), out isFastMode);
             if (isFastMode) yield break;
+
             yield return new object[] { new TestClientProvider(nameof(Basic)) };
             yield return new object[] { new TestClientProvider(nameof(SAuthc1Caching)) };
+
+            // Optionally support SAutch1 with the Redis cache adapter
+            bool enableRedisTests;
+            bool.TryParse(Environment.GetEnvironmentVariable("STORMPATH_IT_REDIS"), out enableRedisTests);
+            if (enableRedisTests) yield return new object[] { new TestClientProvider(nameof(SAuthc1RedisCaching)) };
         }
 
         public static IClient GetSAuthc1Client()

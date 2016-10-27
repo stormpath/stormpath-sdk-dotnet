@@ -48,6 +48,9 @@ namespace Stormpath.SDK.Tests.Common.Integration
 
                 case nameof(TestClients.SAuthc1Caching):
                     return TestClients.SAuthc1Caching.Value;
+
+                case nameof(TestClients.SAuthc1RedisCaching):
+                    return TestClients.SAuthc1RedisCaching.Value;
             }
 
             throw new NotImplementedException($"Client '{this.clientName}' is not supported.");
