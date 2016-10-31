@@ -5,12 +5,12 @@
   },
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
+    "Newtonsoft.Json": "9.0.1",
+    "StackExchange.Redis": "1.1.608",
     "Stormpath.SDK.Abstractions": {
       "target": "project",
-      "version": "0.95.0-beta2"
-    },
-    "Newtonsoft.Json": "9.0.1",
-    "StackExchange.Redis": "1.1.608" 
+      "version": "0.95.0-beta3"
+    }
   },
   "description": "Redis cache adapter for the Stormpath .NET SDK.",
   "frameworks": {
@@ -38,5 +38,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Cache.Redis"
   },
-  "version": "0.95.0-beta1"
+  "version": "0.95.0-beta2"
 }
