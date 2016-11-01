@@ -584,8 +584,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var group = await client.GetResourceAsync<IGroup>(this.fixture.PrimaryGroupHref);
 
             // If this errors, the server-side API behavior has changed.
-            Func<Task> act = async () => await createdOrganization.SetDefaultGroupStoreAsync(group);
-            act.ShouldThrow<ResourceException>();
+            await Should.ThrowAsync<ResourceException>(async () => await createdOrganization.SetDefaultGroupStoreAsync(group));
 
             // Clean up
             (await createdOrganization.DeleteAsync()).ShouldBeTrue();
@@ -818,13 +817,12 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedDirectoryHrefs.Add(dir1.Href);
             this.fixture.CreatedDirectoryHrefs.Add(dir2.Href);
 
-            Func<Task> act = async () =>
+            await Should.ThrowAsync<ArgumentException>(async () =>
             {
                 // Throws because multiple matching results exist
                 var mapping = await createdOrganization
                     .AddAccountStoreAsync<IDirectory>(dirs => dirs.Where(d => d.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Organization Multiple Directory Query Results")));
-            };
-            act.ShouldThrow<ArgumentException>();
+            });
 
             // Clean up
             (await dir1.DeleteAsync()).ShouldBeTrue();
@@ -862,13 +860,12 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedGroupHrefs.Add(group1.Href);
             this.fixture.CreatedGroupHrefs.Add(group2.Href);
 
-            Func<Task> act = async () =>
+            await Should.ThrowAsync<ArgumentException>(async () =>
             {
                 // Throws because multiple matching results exist
                 var mapping = await createdOrganization
                     .AddAccountStoreAsync<IGroup>(groups => groups.Where(x => x.Name.StartsWith($".NET IT {this.fixture.TestRunIdentifier}-{clientBuilder.Name} Organization Multiple Group Query Results")));
-            };
-            act.ShouldThrow<ArgumentException>();
+            });
 
             // Clean up
             (await group1.DeleteAsync()).ShouldBeTrue();
