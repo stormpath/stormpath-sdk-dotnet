@@ -207,16 +207,14 @@ namespace Stormpath.SDK.Impl.CustomData
 
         public async Task<bool> DeleteRemovedPropertiesAsync(string parentHref, CancellationToken cancellationToken)
         {
-            var propertyDeletionTasks = this.GetResourceData()?.GetDeletedPropertyNames()
-                .Select(async x =>
-                {
-                    var successful =
-                        await this.GetInternalAsyncDataStore().DeletePropertyAsync(parentHref, x, cancellationToken).ConfigureAwait(false)
-                        && (this.GetResourceData()?.OnDeletingRemovedProperty(x) ?? false);
-                    return successful;
-                });
+            var results = new List<bool>();
 
-            var results = await Task.WhenAll(propertyDeletionTasks).ConfigureAwait(false);
+            foreach (var propName in this.GetResourceData()?.GetDeletedPropertyNames())
+            {
+                var successful = await this.GetInternalAsyncDataStore().DeletePropertyAsync(parentHref, propName, cancellationToken)
+                    && (this.GetResourceData()?.OnDeletingRemovedProperty(propName) ?? false);
+                results.Add(successful);
+            }
 
             return results.All(x => x == true);
         }
@@ -224,8 +222,9 @@ namespace Stormpath.SDK.Impl.CustomData
         public bool DeleteRemovedProperties(string parentHref)
         {
             var results = new List<bool>();
+
             foreach (var propName in this.GetResourceData()?.GetDeletedPropertyNames())
-                {
+            {
                 var successful = this.GetInternalSyncDataStore().DeleteProperty(parentHref, propName)
                     && (this.GetResourceData()?.OnDeletingRemovedProperty(propName) ?? false);
                 results.Add(successful);
