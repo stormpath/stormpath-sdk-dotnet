@@ -3,7 +3,7 @@
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "FluentAssertions": "4.15.0",
+    "FluentAssertions": "4.16.0",
     "Microsoft.NETCore.App": {
       "type": "platform",
       "version": "1.0.0"
