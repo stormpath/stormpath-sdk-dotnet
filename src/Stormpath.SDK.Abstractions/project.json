@@ -1,5 +1,5 @@
 {
-  "authors": [ "Nate Barbettini", "Sai Maddali" "Contributors" ],
+  "authors": [ "Nate Barbettini", "Sai Maddali", "Contributors" ],
   "buildOptions": {
     "nowarn": [
       "CS1591"
