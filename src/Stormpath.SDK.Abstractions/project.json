@@ -1,5 +1,5 @@
 {
-  "authors": [ "Nate Barbettini", "Contributors" ],
+  "authors": [ "Nate Barbettini", "Sai Maddali" "Contributors" ],
   "buildOptions": {
     "nowarn": [
       "CS1591"
@@ -10,7 +10,7 @@
   "dependencies": {
     "Stormpath.Configuration.Abstractions": "6.0.0"
   },
-  "description": "Abstractions for the Stormpath .NET SDK.",
+  "description": "Abstractions for the Stormpath .NET SDK",
   "frameworks": {
     "net45": { },
     "netstandard1.1": {
@@ -24,7 +24,7 @@
     }
   },
   "packOptions": {
-    "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
+    "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-dotnet/develop/icon.png",
     "licenseUrl": "https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE",
     "owners": [ "Stormpath, Inc." ],
     "projectUrl": "https://github.com/stormpath/stormpath-sdk-dotnet",
@@ -36,5 +36,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK"
   },
-  "version": "0.95.0-beta3"
+  "version": "0.95.0-beta4"
 }

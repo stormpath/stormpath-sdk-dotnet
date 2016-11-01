@@ -2,24 +2,24 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Stormpath.SDK</id>
-        <version>0.95.0-beta3</version>
-        <authors>Nate Barbettini</authors>
+        <version>0.95.0-beta4</version>
+        <authors>Nate Barbettini, Sai Maddali, and contributors</authors>
         <owners>Stormpath, Inc.</owners>
-        <licenseUrl>https://github.com/stormpath/stormpath-sdk-csharp/blob/master/LICENSE</licenseUrl>
-        <projectUrl>https://github.com/stormpath/stormpath-sdk-csharp</projectUrl>
-        <iconUrl>https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/develop/icon.png</iconUrl>
+        <licenseUrl>https://github.com/stormpath/stormpath-sdk-dotnet/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/stormpath/stormpath-sdk-dotnet</projectUrl>
+        <iconUrl>https://raw.githubusercontent.com/stormpath/stormpath-sdk-dotnet/develop/icon.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>The official Stormpath SDK for .NET</description>
         <copyright>(c) 2016 Stormpath, Inc.</copyright>
         <tags>Stormpath API Authentication Authorization REST</tags>
         <dependencies>
           <group targetFramework=".NETStandard1.3">
-            <dependency id="Stormpath.SDK.Core" version="[0.95.0-beta3, )" />
+            <dependency id="Stormpath.SDK.Core" version="[0.95.0-beta4, )" />
             <dependency id="Stormpath.SDK.Http.SystemNetHttpClient" version="[0.94.0, )" />
             <dependency id="Stormpath.SDK.JsonNetSerializer" version="[0.91.0, )" />
           </group>
           <group targetFramework=".NETFramework4.5">
-            <dependency id="Stormpath.SDK.Core" version="[0.95.0-beta3, )" />
+            <dependency id="Stormpath.SDK.Core" version="[0.95.0-beta4, )" />
             <dependency id="Stormpath.SDK.RestSharpClient" version="[0.94.0, )" />
             <dependency id="Stormpath.SDK.JsonNetSerializer" version="[0.91.0, )" />
           </group>
