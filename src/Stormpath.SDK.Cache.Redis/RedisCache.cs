@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -53,16 +51,18 @@ namespace Stormpath.SDK.Redis
                 var cacheKey = ConstructKey(key);
 
                 var transaction = db.CreateTransaction();
-                var value = transaction.StringGetAsync(cacheKey);
+                var valueTask = transaction.StringGetAsync(cacheKey);
                 transaction.KeyExpireAsync(cacheKey, TimeToIdle);
                 await transaction.ExecuteAsync().ConfigureAwait(false);
 
-                if (value.Result.IsNullOrEmpty)
+                var value = await valueTask.ConfigureAwait(false);
+
+                if (value.IsNullOrEmpty)
                 {
                     return null;
                 }
 
-                var entry = CacheEntry.Parse(value.Result);
+                var entry = CacheEntry.Parse(value);
                 if (IsExpired(entry))
                 {
                     _logger.Trace($"Entry {cacheKey} was expired (TTL), purging", "RedisAsyncCache.GetAsync");
