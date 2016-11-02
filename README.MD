@@ -1,4 +1,4 @@
-# Stormpath .NET SDK [![NuGet](https://img.shields.io/nuget/v/Stormpath.SDK.svg)](https://www.nuget.org/packages/Stormpath.SDK) [![Slack Status](https://talkstormpath.shipit.xyz/badge.svg)](https://talkstormpath.shipit.xyz) 
+# Stormpath .NET SDK [![Slack Status](https://talkstormpath.shipit.xyz/badge.svg)](https://talkstormpath.shipit.xyz) [![NuGet](https://img.shields.io/nuget/v/Stormpath.SDK.svg)](https://www.nuget.org/packages/Stormpath.SDK)
 
 [Stormpath](https://stormpath.com) is a complete user management API.  This
 library gives your ASP.NET, C#, or Visual Basic application access to all of Stormpath's features:
