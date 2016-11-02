@@ -55,7 +55,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 
         #endregion
 
-        #region Account han.solo@corellia.core
+        #region Account han.solo@testmail.stormpath.com
 
         public static readonly string Account = @"
 {
@@ -75,7 +75,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
     ""directory"": {
         ""href"": ""https://api.stormpath.com/v1/directories/foobarDirectory""
     },
-    ""email"": ""han.solo@corellia.core"",
+    ""email"": ""han.solo@testmail.stormpath.com"",
     ""emailVerificationToken"": null,
     ""emailVerificationStatus"": ""UNKNOWN"",
     ""fullName"": ""Han Solo"",
@@ -100,7 +100,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
     ""tenant"": {
         ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
     },
-    ""username"": ""han.solo@corellia.core""
+    ""username"": ""han.solo@testmail.stormpath.com""
 }";
 
         public static readonly string AccountWithExpandedCustomData = @"
@@ -124,7 +124,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
     ""directory"": {
         ""href"": ""https://api.stormpath.com/v1/directories/foobarDirectory""
     },
-    ""email"": ""han.solo@corellia.core"",
+    ""email"": ""han.solo@testmail.stormpath.com"",
     ""emailVerificationToken"": null,
     ""fullName"": ""Han Solo"",
     ""givenName"": ""Han"",
@@ -148,7 +148,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
     ""tenant"": {
         ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
     },
-    ""username"": ""han.solo@corellia.core""
+    ""username"": ""han.solo@testmail.stormpath.com""
 }";
 
         public static readonly string AccountWithExpandedGroups = @"
@@ -169,7 +169,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
     ""directory"": {
         ""href"": ""https://api.stormpath.com/v1/directories/foobarDirectory""
     },
-    ""email"": ""han.solo@corellia.core"",
+    ""email"": ""han.solo@testmail.stormpath.com"",
     ""emailVerificationToken"": null,
     ""fullName"": ""Han Solo"",
     ""givenName"": ""Han"",
@@ -250,7 +250,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
     ""tenant"": {
         ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
     },
-    ""username"": ""han.solo@corellia.core""
+    ""username"": ""han.solo@testmail.stormpath.com""
 }";
 
         #endregion
@@ -278,7 +278,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""directory"": {
                 ""href"": ""https://api.stormpath.com/v1/directories/directory1""
             },
-            ""email"": ""han.solo@corellia.core"",
+            ""email"": ""han.solo@testmail.stormpath.com"",
             ""emailVerificationToken"": null,
             ""fullName"": ""Han Solo"",
             ""givenName"": ""Han"",
@@ -302,7 +302,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""tenant"": {
                 ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
             },
-            ""username"": ""han.solo@corellia.core""
+            ""username"": ""han.solo@testmail.stormpath.com""
         },
         {
             ""accessTokens"": {
@@ -321,7 +321,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""directory"": {
                 ""href"": ""https://api.stormpath.com/v1/directories/directory1""
             },
-            ""email"": ""lskywalker@tattooine.rim"",
+            ""email"": ""lskywalker@testmail.stormpath.com"",
             ""emailVerificationToken"": null,
             ""fullName"": ""Luke Skywalker"",
             ""givenName"": ""Luke"",
@@ -345,7 +345,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""tenant"": {
                 ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
             },
-            ""username"": ""lskywalker@tattooine.rim""
+            ""username"": ""lskywalker@testmail.stormpath.com""
         },
         {
             ""accessTokens"": {
@@ -364,7 +364,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""directory"": {
                 ""href"": ""https://api.stormpath.com/v1/directories/directory1""
             },
-            ""email"": ""leia.organa@alderaan.core"",
+            ""email"": ""leia.organa@testmail.stormpath.com"",
             ""emailVerificationToken"": null,
             ""fullName"": ""Leia Organa"",
             ""givenName"": ""Leia"",
@@ -388,7 +388,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""tenant"": {
                 ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
             },
-            ""username"": ""leia.organa@alderaan.core""
+            ""username"": ""leia.organa@testmail.stormpath.com""
         },
         {
             ""accessTokens"": {
@@ -407,7 +407,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""directory"": {
                 ""href"": ""https://api.stormpath.com/v1/directories/directory1""
             },
-            ""email"": ""chewbacca@kashyyyk.rim"",
+            ""email"": ""chewbacca@testmail.stormpath.com"",
             ""emailVerificationToken"": null,
             ""fullName"": ""Chewbacca"",
             ""givenName"": ""Chewbacca"",
@@ -431,7 +431,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""tenant"": {
                 ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
             },
-            ""username"": ""chewbacca@kashyyk.rim""
+            ""username"": ""chewbacca@testmail.stormpath.com""
         },
         {
             ""accessTokens"": {
@@ -450,7 +450,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""directory"": {
                 ""href"": ""https://api.stormpath.com/v1/directories/directory1""
             },
-            ""email"": ""lcalrissian@socorro.rim"",
+            ""email"": ""lcalrissian@testmail.stormpath.com"",
             ""emailVerificationToken"": null,
             ""fullName"": ""Lando Calrissian"",
             ""givenName"": ""Lando"",
@@ -474,7 +474,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""tenant"": {
                 ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
             },
-            ""username"": ""lcalrissian@socorro.rim""
+            ""username"": ""lcalrissian@testmail.stormpath.com""
         },
         {
             ""accessTokens"": {
@@ -493,7 +493,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""directory"": {
                 ""href"": ""https://api.stormpath.com/v1/directories/directory1""
             },
-            ""email"": ""ackbar@dac.rim"",
+            ""email"": ""ackbar@testmail.stormpath.com"",
             ""emailVerificationToken"": null,
             ""fullName"": ""Gial Ackbar"",
             ""givenName"": ""Gial"",
@@ -517,7 +517,7 @@ namespace Stormpath.SDK.Tests.Common.Fakes
             ""tenant"": {
                 ""href"": ""https://api.stormpath.com/v1/tenants/foobarTenant""
             },
-            ""username"": ""micah@stormpath.com""
+            ""username"": ""micah@testmail.stormpath.com""
         }
     ],
     ""limit"": 25,

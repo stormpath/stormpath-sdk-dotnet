@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             (await account.GetApiKeys().CountAsync()).ShouldBe(0);
@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = await account.CreateApiKeyAsync();
@@ -100,7 +100,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = await account.CreateApiKeyAsync();
@@ -128,7 +128,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = await account.CreateApiKeyAsync();
@@ -154,7 +154,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = await account.CreateApiKeyAsync();
@@ -182,7 +182,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = await account.CreateApiKeyAsync();
@@ -208,7 +208,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = await account.CreateApiKeyAsync();
@@ -234,7 +234,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         {
             var client = clientBuilder.GetClient();
             var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
-            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = await account.CreateApiKeyAsync();
@@ -263,7 +263,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var client = clientBuilder.GetClient();
             var app = await client.GetApplicationAsync(this.fixture.PrimaryApplicationHref);
 
-            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = await app.CreateAccountAsync("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             account.SetStatus(AccountStatus.Disabled);

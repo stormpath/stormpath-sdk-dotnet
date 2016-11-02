@@ -43,7 +43,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
             var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
-            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             account.GetApiKeys().Synchronously().Count().ShouldBe(0);
@@ -74,7 +74,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
             var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
-            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = account.CreateApiKey();
@@ -100,7 +100,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
             var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
-            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = account.CreateApiKey();
@@ -128,7 +128,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
             var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
-            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = account.CreateApiKey();
@@ -154,7 +154,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
             var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
-            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = account.CreateApiKey();
@@ -182,7 +182,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
             var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
-            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = account.CreateApiKey();
@@ -207,7 +207,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
             var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
-            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = account.CreateApiKey();
@@ -232,7 +232,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         {
             var client = clientBuilder.GetClient();
             var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
-            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var newKey = account.CreateApiKey();
@@ -260,7 +260,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var client = clientBuilder.GetClient();
             var app = client.GetApplication(this.fixture.PrimaryApplicationHref);
 
-            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("foo.foo"), new RandomPassword(12));
+            var account = app.CreateAccount("ApiKey", "Tester", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12));
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             account.SetStatus(AccountStatus.Disabled);

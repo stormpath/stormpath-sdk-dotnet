@@ -54,7 +54,7 @@ namespace Stormpath.SDK.Tests
                 "/foobarAccount",
                 o => o.Expand(x => x.GetDirectory()).Expand(x => x.GetGroupMemberships()));
 
-            account.Email.ShouldBe("han.solo@corellia.core");
+            account.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account.FullName.ShouldBe("Han Solo");
 
             await GeneratedArgumentsWere(dataStore, "expand=directory,groupMemberships");

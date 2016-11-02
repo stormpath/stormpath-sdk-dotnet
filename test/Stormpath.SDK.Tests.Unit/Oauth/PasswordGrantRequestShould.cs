@@ -23,7 +23,7 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             await application.ExecuteOauthRequestAsync(new PasswordGrantRequest
             {
-                Username = "tom@stormpath.com",
+                Username = "tom@testmail.stormpath.com",
                 Password = "Secret123!!"
             });
 
@@ -41,7 +41,7 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             application.ExecuteOauthRequest(new PasswordGrantRequest
             {
-                Username = "tom@stormpath.com",
+                Username = "tom@testmail.stormpath.com",
                 Password = "Secret123!!"
             });
 
@@ -59,7 +59,7 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             await application.ExecuteOauthRequestAsync(new PasswordGrantRequest
             {
-                Username = "tom@stormpath.com",
+                Username = "tom@testmail.stormpath.com",
                 Password = "Secret123!!",
                 AccountStoreHref = "https://api.stormpath.com/v1/directories/1bcd23ec1d0a8wa6"
             });
@@ -82,7 +82,7 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             await application.ExecuteOauthRequestAsync(new PasswordGrantRequest
             {
-                Username = "tom@stormpath.com",
+                Username = "tom@testmail.stormpath.com",
                 Password = "Secret123!!",
                 OrganizationNameKey = "anOrganization"
             });
@@ -103,7 +103,7 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
 
             var requestBody = request.Body.Split('&');
             requestBody.Should().Contain("grant_type=password");
-            requestBody.Should().Contain("username=tom%40stormpath.com");
+            requestBody.Should().Contain("username=tom%40testmail.stormpath.com");
             requestBody.Should().Contain("password=Secret123%21%21");
         }
     }

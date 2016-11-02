@@ -65,13 +65,13 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var luke = accounts.Where(x => x.GivenName == "Luke").Single();
             luke.FullName.ShouldBe("Luke Skywalker");
-            luke.Email.ShouldBe("lskywalker@tattooine.rim");
+            luke.Email.ShouldBe("lskywalker@testmail.stormpath.com");
             luke.Username.ShouldStartWith("sonofthesuns");
             luke.Status.ShouldBe(AccountStatus.Enabled);
 
             var vader = accounts.Where(x => x.Surname == "Vader").Single();
             vader.FullName.ShouldBe("Darth Vader");
-            vader.Email.ShouldStartWith("vader@galacticempire.co");
+            vader.Email.ShouldStartWith("vader@testmail.stormpath.com");
             vader.Username.ShouldStartWith("lordvader");
         }
 
@@ -103,7 +103,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var leia = application
                 .GetAccounts()
                 .Synchronously()
-                .Where(a => a.Email == "leia.organa@alderaan.core")
+                .Where(a => a.Email == "leia.organa@testmail.stormpath.com")
                 .Single();
 
             leia.SetMiddleName("Organa");
@@ -124,7 +124,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var chewie = application
                 .GetAccounts()
                 .Synchronously()
-                .Where(a => a.Email == "chewie@kashyyyk.rim")
+                .Where(a => a.Email == "chewie@testmail.stormpath.com")
                 .Single();
 
             chewie.SetUsername($"rwaaargh-{this.fixture.TestRunIdentifier}");
@@ -186,21 +186,19 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var coreCitizens = application
+            var testAccounts = application
                 .GetAccounts()
                 .Synchronously()
-                .Where(acct => acct.Email.EndsWith(".core"))
+                .Where(acct => acct.Email.EndsWith("testmail.stormpath.com"))
                 .ToList();
 
             // Verify data from IntegrationTestData
-            coreCitizens.Count.ShouldBe(2);
-
-            var han = coreCitizens.Where(x => x.GivenName == "Han").Single();
-            han.Email.ShouldBe("han.solo@corellia.core");
+            var han = testAccounts.Where(x => x.GivenName == "Han").Single();
+            han.Email.ShouldBe("han.solo@testmail.stormpath.com");
             han.Username.ShouldStartWith("cptsolo");
 
-            var leia = coreCitizens.Where(x => x.GivenName == "Leia").Single();
-            leia.Email.ShouldStartWith("leia.organa@alderaan.core");
+            var leia = testAccounts.Where(x => x.GivenName == "Leia").Single();
+            leia.Email.ShouldStartWith("leia.organa@testmail.stormpath.com");
             leia.Username.ShouldStartWith("princessleia");
         }
 
@@ -269,7 +267,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .Single();
 
             // Verify data from IntegrationTestData
-            vader.Email.ShouldBe("vader@galacticempire.co");
+            vader.Email.ShouldBe("vader@testmail.stormpath.com");
         }
 
         [Theory]
@@ -438,7 +436,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var anyWookiees = application
                 .GetAccounts()
                 .Synchronously()
-                .Where(x => x.Email.EndsWith("kashyyyk.rim"))
+                .Where(x => x.Email.EndsWith("testmail.stormpath.com"))
                 .Any();
 
             anyWookiees.ShouldBeTrue();
@@ -451,14 +449,14 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var account = application.CreateAccount("Gial", "Ackbar", "admiralackbar@dac.rim", new RandomPassword(12));
+            var account = application.CreateAccount("Gial", "Ackbar", "admiralackbar@testmail.stormpath.com", new RandomPassword(12));
 
             account.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             account.FullName.ShouldBe("Gial Ackbar");
-            account.Email.ShouldBe("admiralackbar@dac.rim");
-            account.Username.ShouldBe("admiralackbar@dac.rim");
+            account.Email.ShouldBe("admiralackbar@testmail.stormpath.com");
+            account.Username.ShouldBe("admiralackbar@testmail.stormpath.com");
             account.Status.ShouldBe(AccountStatus.Enabled);
             account.CreatedAt.ShouldBe(DateTimeOffset.Now, TimeSpan.FromSeconds(10));
             account.ModifiedAt.ShouldBe(DateTimeOffset.Now, TimeSpan.FromSeconds(10));
@@ -476,7 +474,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var account = application.CreateAccount(
-                "Mara", "Jade", new RandomEmail("empire.co"), new RandomPassword(12), new { quote = "I'm a fighter. I've always been a fighter.", birth = -17, death = 40 });
+                "Mara", "Jade", new RandomEmail("testmail.stormpath.com"), new RandomPassword(12), new { quote = "I'm a fighter. I've always been a fighter.", birth = -17, death = 40 });
 
             account.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedAccountHrefs.Add(account.Href);
@@ -503,7 +501,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .Instantiate<IAccount>()
                 .SetGivenName("Galen")
                 .SetSurname("Marek")
-                .SetEmail("gmarek@kashyyk.rim")
+                .SetEmail("gmarek@testmail.stormpath.com")
                 .SetPassword(new RandomPassword(12));
             application.CreateAccount(account, opt =>
             {
@@ -686,7 +684,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var account = application.GetAccounts()
-                .Where(a => a.Email == "chewie@kashyyyk.rim")
+                .Where(a => a.Email == "chewie@testmail.stormpath.com")
                 .Synchronously()
                 .Single();
 
@@ -708,7 +706,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var chewie = application.GetAccounts()
-                .Where(a => a.Email == "chewie@kashyyyk.rim")
+                .Where(a => a.Email == "chewie@testmail.stormpath.com")
                 .Synchronously()
                 .Single();
             chewie.SetPassword(new RandomPassword(16));
@@ -720,7 +718,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
                 .Synchronously()
                 .ToList();
 
-            accounts.ShouldContain(a => a.Email == "chewie@kashyyyk.rim");
+            accounts.ShouldContain(a => a.Email == "chewie@testmail.stormpath.com");
         }
 
         /// <summary>
@@ -735,7 +733,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var trickyEmail = "admiral.ackbar+itsatrap@dac.rim";
+            var trickyEmail = "admiral.ackbar+itsatrap@testmail.stormpath.com";
             var password = new RandomPassword(12);
             var account = application.CreateAccount("Gial", "Ackbar", trickyEmail, password);
 
@@ -744,7 +742,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             var searchResult = application.GetAccounts().Synchronously().Where(x => x.Username == trickyEmail).Single();
             searchResult.Username.ShouldBe(trickyEmail);
-            searchResult.Email.ShouldBe("admiral.ackbar+itsatrap@dac.rim");
+            searchResult.Email.ShouldBe("admiral.ackbar+itsatrap@testmail.stormpath.com");
             searchResult.Status.ShouldBe(AccountStatus.Enabled);
 
             var loginResult = application.AuthenticateAccount(trickyEmail, password);
@@ -762,7 +760,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var account = application.CreateAccount("四", "李", "utf8@test.foo", "Supersecret!123");
+            var account = application.CreateAccount("四", "李", "utf8@testmail.stormpath.com", "Supersecret!123");
             this.fixture.CreatedAccountHrefs.Add(account.Href);
 
             var searched = application.GetAccounts().Where(x => x.Surname == "李").Synchronously().Single();
@@ -781,7 +779,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -820,7 +818,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -868,7 +866,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -909,7 +907,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -946,7 +944,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -982,7 +980,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -1015,7 +1013,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -1052,7 +1050,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -1078,7 +1076,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -1104,7 +1102,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -1135,7 +1133,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -1151,11 +1149,11 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             factor.AccountName.Should().Be(tester.Username);
 
             factor.Issuer = "MyBetterApp";
-            factor.AccountName = "luke@hoth.rim";
+            factor.AccountName = "luke@testmail.stormpath.com";
             factor.Save();
 
             factor.Issuer.Should().Be("MyBetterApp");
-            factor.AccountName.Should().Be("luke@hoth.rim");
+            factor.AccountName.Should().Be("luke@testmail.stormpath.com");
 
             tester.Delete().ShouldBeTrue();
         }
@@ -1168,7 +1166,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -1209,7 +1207,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -1250,7 +1248,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -1286,7 +1284,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");
@@ -1334,7 +1332,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Tony")
                 .SetSurname("Almeida");
@@ -1361,7 +1359,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Tony")
                 .SetSurname("Almeida");
@@ -1395,7 +1393,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Tony")
                 .SetSurname("Almeida");
@@ -1422,7 +1420,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Tony")
                 .SetSurname("Almeida");
@@ -1449,7 +1447,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Tony")
                 .SetSurname("Almeida");
@@ -1487,7 +1485,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Jack")
                 .SetSurname("Bauer");

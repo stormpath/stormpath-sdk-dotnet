@@ -59,7 +59,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
@@ -83,7 +83,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Get account (with some expansions)
             var account = await accessToken.GetAccountAsync(opt => opt.Expand(acct => acct.GetGroups()));
-            account.Email.ShouldBe("lskywalker@tattooine.rim");
+            account.Email.ShouldBe("lskywalker@testmail.stormpath.com");
 
             // Clean up
             (await accessToken.DeleteAsync()).ShouldBeTrue();
@@ -111,7 +111,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(primaryOrg);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetOrganizationNameKey(fixture.PrimaryOrganizationNameKey)
                 .Build();
@@ -150,7 +150,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             this.fixture.CreatedDirectoryHrefs.Add(createdDirectory.Href);
 
             // Add the test accounts
-            var randomEmail = new RandomEmail("foo.bar");
+            var randomEmail = new RandomEmail("testmail.stormpath.com");
             var password = "P@sword#123$!";
             await createdApplication.CreateAccountAsync("Test", "testerman", randomEmail, password);
 
@@ -187,7 +187,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var badPasswordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("notLukesPassword")
                 .Build();
 
@@ -216,7 +216,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
@@ -258,7 +258,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
@@ -305,7 +305,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
@@ -356,7 +356,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
@@ -402,7 +402,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
@@ -443,7 +443,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
@@ -490,7 +490,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
@@ -531,7 +531,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
@@ -571,7 +571,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();
@@ -612,7 +612,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             await createdApplication.AddAccountStoreAsync(this.fixture.PrimaryDirectoryHref);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
-                .SetLogin("lskywalker@tattooine.rim")
+                .SetLogin("lskywalker@testmail.stormpath.com")
                 .SetPassword("whataPieceofjunk$1138")
                 .SetAccountStore(this.fixture.PrimaryDirectoryHref)
                 .Build();

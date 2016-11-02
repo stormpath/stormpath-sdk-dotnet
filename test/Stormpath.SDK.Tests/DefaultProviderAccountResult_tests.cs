@@ -44,7 +44,7 @@ namespace Stormpath.SDK.Tests
             var account = providerAccountResult.Account;
 
             // Verify against data from FakeJson.Account
-            account.Email.ShouldBe("han.solo@corellia.core");
+            account.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account.FullName.ShouldBe("Han Solo");
         }
 
@@ -63,7 +63,7 @@ namespace Stormpath.SDK.Tests
             var account = providerAccountResult.Account;
 
             // Verify against data from FakeJson.Account
-            account.Email.ShouldBe("han.solo@corellia.core");
+            account.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account.FullName.ShouldBe("Han Solo");
         }
     }

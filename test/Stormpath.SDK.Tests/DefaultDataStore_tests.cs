@@ -50,7 +50,7 @@ namespace Stormpath.SDK.Tests
 
             // Verify against data from FakeJson.Account
             account.CreatedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.078Z"));
-            account.Email.ShouldBe("han.solo@corellia.core");
+            account.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account.FullName.ShouldBe("Han Solo");
             account.GivenName.ShouldBe("Han");
             account.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount");
@@ -58,7 +58,7 @@ namespace Stormpath.SDK.Tests
             account.ModifiedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.078Z"));
             account.Status.ShouldBe(AccountStatus.Enabled);
             account.Surname.ShouldBe("Solo");
-            account.Username.ShouldBe("han.solo@corellia.core");
+            account.Username.ShouldBe("han.solo@testmail.stormpath.com");
 
             (account as DefaultAccount).AccessTokens.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/accessTokens");
             (account as DefaultAccount).ApiKeys.Href.ShouldBe("https://api.stormpath.com/v1/accounts/foobarAccount/apiKeys");
@@ -89,7 +89,7 @@ namespace Stormpath.SDK.Tests
 
             var account = accounts.CurrentPage.First();
             account.CreatedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.078Z"));
-            account.Email.ShouldBe("han.solo@corellia.core");
+            account.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account.FullName.ShouldBe("Han Solo");
             account.GivenName.ShouldBe("Han");
             account.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1");
@@ -97,7 +97,7 @@ namespace Stormpath.SDK.Tests
             account.ModifiedAt.ShouldBe(Iso8601.Parse("2015-07-21T23:50:49.078Z"));
             account.Status.ShouldBe(AccountStatus.Enabled);
             account.Surname.ShouldBe("Solo");
-            account.Username.ShouldBe("han.solo@corellia.core");
+            account.Username.ShouldBe("han.solo@testmail.stormpath.com");
 
             (account as DefaultAccount).AccessTokens.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/accessTokens");
             (account as DefaultAccount).ApiKeys.Href.ShouldBe("https://api.stormpath.com/v1/accounts/account1/apiKeys");

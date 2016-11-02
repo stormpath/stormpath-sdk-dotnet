@@ -221,13 +221,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var token = await application.SendPasswordResetEmailAsync("vader@galacticempire.co");
+            var token = await application.SendPasswordResetEmailAsync("vader@testmail.stormpath.com");
 
             var validTokenResponse = await application.VerifyPasswordResetTokenAsync(token.GetValue());
-            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+            validTokenResponse.Email.ShouldBe("vader@testmail.stormpath.com");
 
             var resetPasswordResponse = await application.ResetPasswordAsync(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
-            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+            resetPasswordResponse.Email.ShouldBe("vader@testmail.stormpath.com");
         }
 
         [Theory]
@@ -237,17 +237,17 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var client = clientBuilder.GetClient();
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var token = await application.SendPasswordResetEmailAsync("vader@galacticempire.co");
+            var token = await application.SendPasswordResetEmailAsync("vader@testmail.stormpath.com");
 
             // When reset tokens are sent via email, the JWT . separator is encoded as %2E
             var encodedToken = token.GetValue()
                 .Replace(".", "%2E");
 
             var validTokenResponse = await application.VerifyPasswordResetTokenAsync(encodedToken);
-            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+            validTokenResponse.Email.ShouldBe("vader@testmail.stormpath.com");
 
             var resetPasswordResponse = await application.ResetPasswordAsync(encodedToken, "Ifindyourlackofsecuritydisturbing!1");
-            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+            resetPasswordResponse.Email.ShouldBe("vader@testmail.stormpath.com");
         }
 
         [Theory]
@@ -258,13 +258,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
             var accountStore = await application.GetDefaultAccountStoreAsync();
 
-            var token = await application.SendPasswordResetEmailAsync("vader@galacticempire.co", accountStore);
+            var token = await application.SendPasswordResetEmailAsync("vader@testmail.stormpath.com", accountStore);
 
             var validTokenResponse = await application.VerifyPasswordResetTokenAsync(token.GetValue());
-            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+            validTokenResponse.Email.ShouldBe("vader@testmail.stormpath.com");
 
             var resetPasswordResponse = await application.ResetPasswordAsync(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
-            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+            resetPasswordResponse.Email.ShouldBe("vader@testmail.stormpath.com");
         }
 
         [Theory]
@@ -275,13 +275,13 @@ namespace Stormpath.SDK.Tests.Integration.Async
             var application = await client.GetResourceAsync<IApplication>(this.fixture.PrimaryApplicationHref);
             var accountStore = await application.GetDefaultAccountStoreAsync();
 
-            var token = await application.SendPasswordResetEmailAsync("vader@galacticempire.co", this.fixture.PrimaryOrganizationNameKey);
+            var token = await application.SendPasswordResetEmailAsync("vader@testmail.stormpath.com", this.fixture.PrimaryOrganizationNameKey);
 
             var validTokenResponse = await application.VerifyPasswordResetTokenAsync(token.GetValue());
-            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+            validTokenResponse.Email.ShouldBe("vader@testmail.stormpath.com");
 
             var resetPasswordResponse = await application.ResetPasswordAsync(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
-            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+            resetPasswordResponse.Email.ShouldBe("vader@testmail.stormpath.com");
         }
 
         [Theory]
