@@ -47,7 +47,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account with some custom data
             var tk421 = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("TK")
                 .SetSurname("421");
@@ -102,7 +102,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account with some custom data
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Test")
                 .SetSurname("TestermanPartial");
@@ -150,7 +150,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account with some custom data
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Test")
                 .SetSurname("TestermanDate");
@@ -198,7 +198,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account with some custom data
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Test")
                 .SetSurname("TestermanDate");
@@ -241,7 +241,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account with some custom data
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Test")
                 .SetSurname("TestermanDate");
@@ -289,7 +289,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account with some custom data
             var tester = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Test")
                 .SetSurname("TestermanDate");
@@ -337,7 +337,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create an account with some custom data
             var tester1 = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Test")
                 .SetSurname("TestermanOrdering1");
@@ -345,7 +345,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
 
             // Create another
             var tester2 = client.Instantiate<IAccount>()
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12))
                 .SetGivenName("Test")
                 .SetSurname("TestermanOrdering2");

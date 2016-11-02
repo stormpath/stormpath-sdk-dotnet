@@ -57,7 +57,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var newAccount = client.Instantiate<IAccount>();
-            newAccount.SetEmail("identity-maps-are-useful-sync@test.foo");
+            newAccount.SetEmail("identity-maps-are-useful-sync@testmail.stormpath.com");
             newAccount.SetPassword("Changeme123!");
             newAccount.SetGivenName("Testing");
             newAccount.SetSurname("IdentityMaps");
@@ -83,7 +83,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var newAccount = client.Instantiate<IAccount>();
-            newAccount.SetEmail("super-smart-objects@test.foo");
+            newAccount.SetEmail("super-smart-objects@testmail.stormpath.com");
             newAccount.SetPassword("Changeme123!");
             newAccount.SetGivenName("Testing");
             newAccount.SetSurname("InitialProxy");
@@ -108,7 +108,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
             var newAccount = client.Instantiate<IAccount>();
-            newAccount.SetEmail("indistinguishable-from-magic@test.foo");
+            newAccount.SetEmail("indistinguishable-from-magic@testmail.stormpath.com");
             newAccount.SetPassword("Changeme123!");
             newAccount.SetGivenName("Testing");
             newAccount.SetSurname("InitialProxy-NonCaptureWorkflow");

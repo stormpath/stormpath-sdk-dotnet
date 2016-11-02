@@ -61,7 +61,7 @@ namespace Stormpath.SDK.Tests.Cache
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
 
-            account1.Email.ShouldBe("han.solo@corellia.core");
+            account1.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account1.FullName.ShouldBe("Han Solo");
 
             await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
@@ -78,7 +78,7 @@ namespace Stormpath.SDK.Tests.Cache
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
 
-            account1.Email.ShouldBe("han.solo@corellia.core");
+            account1.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account1.FullName.ShouldBe("Han Solo");
 
             await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
@@ -99,7 +99,7 @@ namespace Stormpath.SDK.Tests.Cache
             this.BuildDataStore(FakeJson.Account, fakeCacheProvider);
 
             var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
-            account.Email.ShouldBe("han.solo@corellia.core");
+            account.Email.ShouldBe("han.solo@testmail.stormpath.com");
         }
 
         [Fact]
@@ -129,7 +129,7 @@ namespace Stormpath.SDK.Tests.Cache
             await accounts.MoveNextAsync();
 
             var han = await this.dataStore.GetResourceAsync<IAccount>("/accounts/account1");
-            han.Email.ShouldBe("han.solo@corellia.core");
+            han.Email.ShouldBe("han.solo@testmail.stormpath.com");
             han.FullName.ShouldBe("Han Solo");
 
             await this.dataStore.RequestExecutor.Received(1).ExecuteAsync(
@@ -160,7 +160,7 @@ namespace Stormpath.SDK.Tests.Cache
             this.BuildDataStore(FakeJson.AccountWithExpandedCustomData, cacheProvider);
 
             var account = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
-            account.Email.ShouldBe("han.solo@corellia.core");
+            account.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account.FullName.ShouldBe("Han Solo");
 
             var customDataFromHref = await this.dataStore.GetResourceAsync<ICustomData>("/accounts/foobarAccount/customData");
@@ -203,7 +203,7 @@ namespace Stormpath.SDK.Tests.Cache
 
             var account2 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
 
-            account1.Email.ShouldBe("han.solo@corellia.core");
+            account1.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account1.FullName.ShouldBe("Han Solo");
 
             await this.dataStore.RequestExecutor.Received(2).ExecuteAsync(
@@ -226,10 +226,10 @@ namespace Stormpath.SDK.Tests.Cache
             // Save returns update data
             requestExecutor
                 .ExecuteAsync(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult(new FakeHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account.Replace("han.solo@corellia.core", "han@solo.me"), "application/json", transportError: false) as IHttpResponse));
+                .Returns(Task.FromResult(new FakeHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account.Replace("han.solo@testmail.stormpath.com", "han@solo.me"), "application/json", transportError: false) as IHttpResponse));
 
             var account1 = await this.dataStore.GetResourceAsync<IAccount>("/accounts/foobarAccount");
-            account1.Email.ShouldBe("han.solo@corellia.core");
+            account1.Email.ShouldBe("han.solo@testmail.stormpath.com");
 
             account1.SetEmail("han@solo.me");
             await account1.SaveAsync();

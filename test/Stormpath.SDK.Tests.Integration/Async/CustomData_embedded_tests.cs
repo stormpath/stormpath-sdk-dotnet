@@ -39,7 +39,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
         private IAccount CreateRandomAccountInstance(IClient client)
         {
             var accountObject = client.Instantiate<IAccount>();
-            accountObject.SetEmail(new RandomEmail("testing.foo"));
+            accountObject.SetEmail(new RandomEmail("testmail.stormpath.com"));
             accountObject.SetGivenName("Test");
             accountObject.SetSurname("Testerman");
             accountObject.SetPassword(new RandomPassword(12));

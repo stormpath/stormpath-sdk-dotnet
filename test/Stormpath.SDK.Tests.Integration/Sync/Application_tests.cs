@@ -225,13 +225,13 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var token = application.SendPasswordResetEmail("vader@galacticempire.co");
+            var token = application.SendPasswordResetEmail("vader@testmail.stormpath.com");
 
             var validTokenResponse = application.VerifyPasswordResetToken(token.GetValue());
-            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+            validTokenResponse.Email.ShouldBe("vader@testmail.stormpath.com");
 
             var resetPasswordResponse = application.ResetPassword(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
-            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+            resetPasswordResponse.Email.ShouldBe("vader@testmail.stormpath.com");
         }
 
         [Theory]
@@ -241,17 +241,17 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var client = clientBuilder.GetClient();
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
 
-            var token = application.SendPasswordResetEmail("vader@galacticempire.co");
+            var token = application.SendPasswordResetEmail("vader@testmail.stormpath.com");
 
             // When reset tokens are sent via email, the JWT . separator is encoded as %2E
             var encodedToken = token.GetValue()
                 .Replace(".", "%2E");
 
             var validTokenResponse = application.VerifyPasswordResetToken(encodedToken);
-            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+            validTokenResponse.Email.ShouldBe("vader@testmail.stormpath.com");
 
             var resetPasswordResponse = application.ResetPassword(encodedToken, "Ifindyourlackofsecuritydisturbing!1");
-            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+            resetPasswordResponse.Email.ShouldBe("vader@testmail.stormpath.com");
         }
 
         [Theory]
@@ -262,13 +262,13 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var accountStore = application.GetDefaultAccountStore();
 
-            var token = application.SendPasswordResetEmail("vader@galacticempire.co", accountStore);
+            var token = application.SendPasswordResetEmail("vader@testmail.stormpath.com", accountStore);
 
             var validTokenResponse = application.VerifyPasswordResetToken(token.GetValue());
-            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+            validTokenResponse.Email.ShouldBe("vader@testmail.stormpath.com");
 
             var resetPasswordResponse = application.ResetPassword(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
-            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+            resetPasswordResponse.Email.ShouldBe("vader@testmail.stormpath.com");
         }
 
         [Theory]
@@ -279,13 +279,13 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var application = client.GetResource<IApplication>(this.fixture.PrimaryApplicationHref);
             var accountStore = application.GetDefaultAccountStore();
 
-            var token = application.SendPasswordResetEmail("vader@galacticempire.co", this.fixture.PrimaryOrganizationNameKey);
+            var token = application.SendPasswordResetEmail("vader@testmail.stormpath.com", this.fixture.PrimaryOrganizationNameKey);
 
             var validTokenResponse = application.VerifyPasswordResetToken(token.GetValue());
-            validTokenResponse.Email.ShouldBe("vader@galacticempire.co");
+            validTokenResponse.Email.ShouldBe("vader@testmail.stormpath.com");
 
             var resetPasswordResponse = application.ResetPassword(token.GetValue(), "Ifindyourlackofsecuritydisturbing!1");
-            resetPasswordResponse.Email.ShouldBe("vader@galacticempire.co");
+            resetPasswordResponse.Email.ShouldBe("vader@testmail.stormpath.com");
         }
 
         [Theory]

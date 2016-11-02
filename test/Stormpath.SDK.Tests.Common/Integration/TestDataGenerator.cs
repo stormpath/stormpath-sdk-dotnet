@@ -92,7 +92,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     client.Instantiate<IAccount>()
                         .SetGivenName("Luke")
                         .SetSurname("Skywalker")
-                        .SetEmail("lskywalker@tattooine.rim")
+                        .SetEmail("lskywalker@testmail.stormpath.com")
                         .SetPassword("whataPieceofjunk$1138")
                         .SetUsername($"sonofthesuns-{this.Nonce}")
                 },
@@ -100,7 +100,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     client.Instantiate<IAccount>()
                         .SetGivenName("Han")
                         .SetSurname("Solo")
-                        .SetEmail("han.solo@corellia.core")
+                        .SetEmail("han.solo@testmail.stormpath.com")
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"cptsolo-{this.Nonce}")
                 },
@@ -108,7 +108,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     client.Instantiate<IAccount>()
                         .SetGivenName("Leia")
                         .SetSurname("Organa")
-                        .SetEmail("leia.organa@alderaan.core")
+                        .SetEmail("leia.organa@testmail.stormpath.com")
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"princessleia-{this.Nonce}")
                 },
@@ -117,7 +117,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                         .SetGivenName("Chewbacca")
                         .SetMiddleName("the")
                         .SetSurname("Wookiee")
-                        .SetEmail("chewie@kashyyyk.rim")
+                        .SetEmail("chewie@testmail.stormpath.com")
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"rrwwwggg-{this.Nonce}")
                 },
@@ -125,7 +125,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     client.Instantiate<IAccount>()
                         .SetGivenName("Lando")
                         .SetSurname("Calrissian")
-                        .SetEmail("lcalrissian@socorro.rim")
+                        .SetEmail("lcalrissian@testmail.stormpath.com")
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"lottanerve-{this.Nonce}")
                 },
@@ -133,7 +133,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     client.Instantiate<IAccount>()
                         .SetGivenName("Darth")
                         .SetSurname("Vader")
-                        .SetEmail("vader@galacticempire.co")
+                        .SetEmail("vader@testmail.stormpath.com")
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"lordvader-{this.Nonce}")
                 },
@@ -141,7 +141,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     client.Instantiate<IAccount>()
                         .SetGivenName("Emperor")
                         .SetSurname("Palpatine")
-                        .SetEmail("emperor@galacticempire.co")
+                        .SetEmail("emperor@testmail.stormpath.com")
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"rulethegalaxy-{this.Nonce}")
                 },
@@ -149,7 +149,7 @@ namespace Stormpath.SDK.Tests.Common.Integration
                     client.Instantiate<IAccount>()
                         .SetGivenName("Wilhuff")
                         .SetSurname("Tarkin")
-                        .SetEmail("grandmofftarkin@galacticempire.co")
+                        .SetEmail("grandmofftarkin@testmail.stormpath.com")
                         .SetStatus(AccountStatus.Disabled)
                         .SetPassword(new RandomPassword(12))
                         .SetUsername($"tarkin-{this.Nonce}")

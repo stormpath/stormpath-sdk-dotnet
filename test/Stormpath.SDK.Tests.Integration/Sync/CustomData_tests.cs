@@ -42,7 +42,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
         private IAccount CreateRandomAccount(IClient client)
         {
             var accountObject = client.Instantiate<IAccount>();
-            accountObject.SetEmail(new RandomEmail("testing.foo"));
+            accountObject.SetEmail(new RandomEmail("testmail.stormpath.com"));
             accountObject.SetGivenName("Test");
             accountObject.SetSurname("Testerman");
             accountObject.SetPassword(new RandomPassword(12));
@@ -212,7 +212,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var account = directory.CreateAccount(
                 "Test",
                 "Testerman CD Inline",
-                new RandomEmail("testing.foo"),
+                new RandomEmail("testmail.stormpath.com"),
                 new RandomPassword(12),
                 new { foo = "bar", baz = "qux123!" });
 
@@ -237,7 +237,7 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             var account = client.Instantiate<IAccount>()
                 .SetGivenName("Test")
                 .SetSurname("Testerman CD")
-                .SetEmail(new RandomEmail("testing.foo"))
+                .SetEmail(new RandomEmail("testmail.stormpath.com"))
                 .SetPassword(new RandomPassword(12));
 
             account.CustomData.Put("foo", "bar");

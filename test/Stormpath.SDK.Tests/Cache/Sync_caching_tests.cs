@@ -60,7 +60,7 @@ namespace Stormpath.SDK.Tests.Cache
             var account1 = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount");
             var account2 = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount");
 
-            account1.Email.ShouldBe("han.solo@corellia.core");
+            account1.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account1.FullName.ShouldBe("Han Solo");
 
             this.dataStore.RequestExecutor.Received(2).Execute(
@@ -76,7 +76,7 @@ namespace Stormpath.SDK.Tests.Cache
             var account1 = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount");
             var account2 = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount");
 
-            account1.Email.ShouldBe("han.solo@corellia.core");
+            account1.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account1.FullName.ShouldBe("Han Solo");
 
             this.dataStore.RequestExecutor.Received(1).Execute(
@@ -96,7 +96,7 @@ namespace Stormpath.SDK.Tests.Cache
             this.BuildDataStore(FakeJson.Account, fakeCacheProvider);
 
             var account = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount");
-            account.Email.ShouldBe("han.solo@corellia.core");
+            account.Email.ShouldBe("han.solo@testmail.stormpath.com");
         }
 
         [Fact]
@@ -125,7 +125,7 @@ namespace Stormpath.SDK.Tests.Cache
             accounts.First();
 
             var han = this.dataStore.GetResource<IAccount>("/accounts/account1");
-            han.Email.ShouldBe("han.solo@corellia.core");
+            han.Email.ShouldBe("han.solo@testmail.stormpath.com");
             han.FullName.ShouldBe("Han Solo");
 
             this.dataStore.RequestExecutor.Received(1).Execute(
@@ -154,7 +154,7 @@ namespace Stormpath.SDK.Tests.Cache
             this.BuildDataStore(FakeJson.AccountWithExpandedCustomData, cacheProvider);
 
             var account = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount");
-            account.Email.ShouldBe("han.solo@corellia.core");
+            account.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account.FullName.ShouldBe("Han Solo");
 
             var customDataFromHref = this.dataStore.GetResource<ICustomData>("/accounts/foobarAccount/customData");
@@ -195,7 +195,7 @@ namespace Stormpath.SDK.Tests.Cache
 
             var account2 = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount");
 
-            account1.Email.ShouldBe("han.solo@corellia.core");
+            account1.Email.ShouldBe("han.solo@testmail.stormpath.com");
             account1.FullName.ShouldBe("Han Solo");
 
             this.dataStore.RequestExecutor.Received(2).Execute(
@@ -217,10 +217,10 @@ namespace Stormpath.SDK.Tests.Cache
             // Save returns update data
             requestExecutor
                 .Execute(Arg.Is<IHttpRequest>(req => req.Method == HttpMethod.Post))
-                .Returns(new FakeHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account.Replace("han.solo@corellia.core", "han@solo.me"), "application/json", transportError: false));
+                .Returns(new FakeHttpResponse(201, "Created", new HttpHeaders(), FakeJson.Account.Replace("han.solo@testmail.stormpath.com", "han@solo.me"), "application/json", transportError: false));
 
             var account1 = this.dataStore.GetResource<IAccount>("/accounts/foobarAccount");
-            account1.Email.ShouldBe("han.solo@corellia.core");
+            account1.Email.ShouldBe("han.solo@testmail.stormpath.com");
 
             account1.SetEmail("han@solo.me");
             account1.Save();
