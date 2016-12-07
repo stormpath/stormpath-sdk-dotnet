@@ -43,53 +43,53 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FlexibleConfiguration, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\FlexibleConfiguration.1.1.0\lib\net45\FlexibleConfiguration.dll</HintPath>
+    <Reference Include="FlexibleConfiguration, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\FlexibleConfiguration.1.2.0\lib\net45\FlexibleConfiguration.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Polyglot, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Polyglot.1.1.0\lib\net45\Polyglot.dll</HintPath>
+    <Reference Include="Polyglot, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Polyglot.1.2.0\lib\net45\Polyglot.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RestSharp, Version=105.2.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\RestSharp.105.2.2\lib\net451\RestSharp.dll</HintPath>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\RestSharp.105.2.3\lib\net451\RestSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="StackExchange.Redis, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\StackExchange.Redis.1.1.603\lib\net45\StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.Configuration, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Stormpath.Configuration.5.1.0\lib\net45\Stormpath.Configuration.dll</HintPath>
+    <Reference Include="Stormpath.Configuration, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Stormpath.Configuration.6.0.0\lib\net45\Stormpath.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.Configuration.Abstractions, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Stormpath.Configuration.Abstractions.5.1.0\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
+    <Reference Include="Stormpath.Configuration.Abstractions, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Stormpath.Configuration.Abstractions.6.0.0\lib\net45\Stormpath.Configuration.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.SDK.Abstractions, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Stormpath.SDK.Abstractions.0.9.1\lib\net45\Stormpath.SDK.Abstractions.dll</HintPath>
+    <Reference Include="Stormpath.SDK.Abstractions, Version=0.95.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Stormpath.SDK.Abstractions.0.95.0\lib\net45\Stormpath.SDK.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Stormpath.SDK.Cache.Redis, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Stormpath.SDK.Cache.Redis.0.9.1\lib\net45\Stormpath.SDK.Cache.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.SDK.Core, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Stormpath.SDK.Core.0.9.1\lib\net45\Stormpath.SDK.Core.dll</HintPath>
+    <Reference Include="Stormpath.SDK.Core, Version=0.95.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Stormpath.SDK.Core.0.95.0\lib\net45\Stormpath.SDK.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.SDK.JsonNetSerializer, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Stormpath.SDK.JsonNetSerializer.0.9.1\lib\net45\Stormpath.SDK.JsonNetSerializer.dll</HintPath>
+    <Reference Include="Stormpath.SDK.JsonNetSerializer, Version=0.91.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Stormpath.SDK.JsonNetSerializer.0.91.0\lib\net45\Stormpath.SDK.JsonNetSerializer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Stormpath.SDK.RestSharpClient, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Stormpath.SDK.RestSharpClient.0.9.1\lib\net45\Stormpath.SDK.RestSharpClient.dll</HintPath>
+    <Reference Include="Stormpath.SDK.RestSharpClient, Version=0.94.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Stormpath.SDK.RestSharpClient.0.94.0\lib\net45\Stormpath.SDK.RestSharpClient.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -99,6 +99,10 @@
     <Reference Include="System.Linq.Expressions" />
     <Reference Include="System.Net.Primitives" />
     <Reference Include="System.Reflection" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Text.Encoding" />
     <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Xml" />
@@ -106,8 +110,8 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="YamlDotNet, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\YamlDotNet.3.8.0\lib\net35\YamlDotNet.dll</HintPath>
+    <Reference Include="YamlDotNet, Version=3.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\YamlDotNet.3.9.0\lib\net35\YamlDotNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

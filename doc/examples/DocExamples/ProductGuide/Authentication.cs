@@ -457,5 +457,129 @@ namespace examples.ProductGuide
             var account = await result.GetAccountAsync();
             #endregion
         }
+
+        public async Task CreateAccountForMfa()
+        {
+            IApplication app = null;
+
+            #region code/csharp/authentication/mfa_create_account.cs
+
+            var account = await app.CreateAccountAsync(
+                "Joe",
+                "Factorman",
+                "joe.factorman@stormpath.com",
+                "Changeme123");
+
+            #endregion
+        }
+
+        public async Task CreateSmsFactor()
+        {
+            IAccount account = null;
+
+            #region code/csharp/authentication/mfa_add_sms_factor_req.cs
+
+            var smsFactor = await account.Factors.AddAsync(
+                new SmsFactorCreationOptions()
+            {
+                Number = "2675555555"
+            });
+
+            #endregion
+        }
+
+        public async Task CreateGoogleAuthenticatorFactor()
+        {
+            IAccount account = null;
+
+            #region code/csharp/authentication/mfa_add_ga_factor_req.cs
+
+            var googleAuthFactor = await account.Factors.AddAsync(
+                new GoogleAuthenticatorFactorCreationOptions()
+            {
+                AccountName = "joe.factorman@stormpath.com",
+                Issuer = "Example App"
+            });
+
+            #endregion
+        }
+
+        public async Task ListAccountFactors()
+        {
+            IAccount account = null;
+
+            #region code/csharp/authentication/mfa_get_account_factors_req.cs
+
+            var factors = await account.Factors.ToListAsync();
+
+            #endregion
+        }
+
+        public async Task ChallengeSmsFactor()
+        {
+            ISmsFactor smsFactor = null;
+
+            #region code/csharp/authentication/mfa_challenge_sms_factor_req.cs
+
+            var challenge = await smsFactor.Challenges.AddAsync(
+                new ChallengeCreationOptions()
+            {
+                Message = "For the sake of example, your code is ${code}."
+            });
+
+            #endregion
+        }
+
+        public async Task SubmitSmsChallengeCode()
+        {
+            IChallenge challenge = null;
+
+            #region code/csharp/authentication/mfa_challenge_sms_code.cs
+
+            await challenge.SubmitAsync("633559");
+
+            #endregion
+        }
+
+        public async Task SubmitTotpChallengeCode()
+        {
+            IGoogleAuthenticatorFactor googleAuthFactor = null;
+
+            #region code/csharp/authentication/mfa_challenge_ga_factor_req.cs
+
+            var challenge = await googleAuthFactor.Challenges.AddAsync();
+            await challenge.SubmitAsync("786393");
+
+            #endregion
+        }
+
+        public async Task CreateSmsFactorAndChallenge()
+        {
+            IAccount account = null;
+
+            #region code/csharp/authentication/mfa_create_and_challenge_req.cs
+
+            var smsFactor = await account.Factors.AddAsync(
+                new SmsFactorCreationOptions()
+            {
+                Number = "2675555555",
+                Challenge = true
+                // Currently it's not possible to specify the challenge message
+            });
+
+            #endregion
+        }
+
+        public async Task LoginAttemptForMfa()
+        {
+            IApplication app = null;
+
+            #region code/csharp/authentication/mfa_auth_account_req.cs
+            var loginResult = await app.AuthenticateAccountAsync(
+                "joe.factorman@stormpath.com", "Changeme123");
+
+            var account = await loginResult.GetAccountAsync();
+            #endregion
+        }
     }
 }

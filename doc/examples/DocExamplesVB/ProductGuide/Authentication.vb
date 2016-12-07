@@ -425,4 +425,120 @@ Public Class Authentication
 #End Region
     End Function
 
+    
+    Public Async Function CreateAccountForMfa() As Task
+	    Dim app As IApplication = Nothing
+
+	    #Region "code/vbnet/authentication/mfa_create_account.vb"
+
+	    Dim account = Await app.CreateAccountAsync(
+            "Joe", 
+            "Factorman",
+            "joe.factorman@stormpath.com", 
+            "Changeme123")
+
+	    #End Region
+    End Function
+
+    
+    Public Async Function CreateSmsFactor() As Task
+	    Dim account As IAccount = Nothing
+
+	    #Region "code/vbnet/authentication/mfa_add_sms_factor_req.vb"
+
+	    Dim smsFactor = Await account.Factors.AddAsync( _
+            New SmsFactorCreationOptions() With { _
+		        .Number = "2675555555"
+	    })
+
+	    #End Region
+    End Function
+
+    
+    Public Async Function CreateGoogleAuthenticatorFactor() As Task
+	    Dim account As IAccount = Nothing
+
+	    #Region "code/vbnet/authentication/mfa_add_ga_factor_req.vb"
+
+	    Dim googleAuthFactor = Await account.Factors.AddAsync( _
+            New GoogleAuthenticatorFactorCreationOptions() With { _
+		        .AccountName = "joe.factorman@stormpath.com", _
+		        .Issuer = "Example App"
+	    })
+
+	    #End Region
+    End Function
+
+    Public Async Function ListAccountFactors() As Task
+	    Dim account As IAccount = Nothing
+
+	    #Region "code/vbnet/authentication/mfa_get_account_factors_req.vb"
+
+	    Dim factors = Await account.Factors.ToListAsync()
+
+	    #End Region
+    End Function
+
+    
+    Public Async Function ChallengeSmsFactor() As Task
+	    Dim smsFactor As ISmsFactor = Nothing
+
+	    #Region "code/vbnet/authentication/mfa_challenge_sms_factor_req.vb"
+
+	    Dim challenge = Await smsFactor.Challenges.AddAsync( _
+            New ChallengeCreationOptions() With { _
+		        .Message = "For the sake of example, your code is ${code}."
+	    })
+
+	    #End Region
+End Function
+
+    Public Async Function SubmitSmsChallengeCode() As Task
+	    Dim challenge As IChallenge = Nothing
+
+	    #Region "code/vbnet/authentication/mfa_challenge_sms_code.vb"
+
+	    Await challenge.SubmitAsync("633559")
+
+	    #End Region
+    End Function
+
+    
+    Public Async Function SubmitTotpChallengeCode() As Task
+	    Dim googleAuthFactor As IGoogleAuthenticatorFactor = Nothing
+
+	    #Region "code/vbnet/authentication/mfa_challenge_ga_factor_req.vb"
+
+	    Dim challenge = Await googleAuthFactor.Challenges.AddAsync()
+	    Await challenge.SubmitAsync("786393")
+
+	    #End Region
+    End Function
+
+    Public Async Function CreateSmsFactorAndChallenge() As Task
+	    Dim account As IAccount = Nothing
+
+	    #Region "code/vbnet/authentication/mfa_create_and_challenge_req.vb"
+
+	    Dim smsFactor = Await account.Factors.AddAsync( _
+            New SmsFactorCreationOptions() With { _
+		        .Number = "2675555555", _
+		        .Challenge = True ' Currently it's not possible to specify the message
+	    })
+
+	    #End Region
+    End Function
+
+    Public Async Function LoginAttemptForMfa() As Task
+	    Dim app As IApplication = Nothing
+
+	    #Region "code/vbnet/authentication/mfa_auth_account_req.vb"
+	    Dim loginResult = Await app.AuthenticateAccountAsync(
+            "joe.factorman@stormpath.com",
+            "Changeme123")
+
+	    Dim account = Await loginResult.GetAccountAsync()
+	    #End Region
+    End Function
+
 End Class
