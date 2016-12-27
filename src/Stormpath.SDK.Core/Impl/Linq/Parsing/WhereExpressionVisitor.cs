@@ -52,6 +52,16 @@ namespace Stormpath.SDK.Impl.Linq.Parsing
             return base.VisitLambda<T>(node);
         }
 
+        protected override Expression VisitUnary(UnaryExpression node)
+        {
+            if (node.NodeType == ExpressionType.Not)
+            {
+                throw new NotSupportedException("The NOT operator is not supported in LINQ-to-Stormpath.");
+            }
+
+            return base.VisitUnary(node);
+        }
+
         protected override Expression VisitBinary(BinaryExpression node)
         {
             var comparison = GetBinaryComparisonType(node.NodeType);

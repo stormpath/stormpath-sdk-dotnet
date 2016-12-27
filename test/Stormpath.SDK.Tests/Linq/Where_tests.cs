@@ -297,5 +297,27 @@ namespace Stormpath.SDK.Tests.Linq
 
             this.ShouldBeCalledWithArguments("email=tk421%40deathstar.co");
         }
+
+        [Fact]
+        public async Task Throws_for_not_operator_in_comparison()
+        {
+            await Should.ThrowAsync<NotSupportedException>(async () =>
+            {
+                await this.Queryable
+                    .Where(x => x.Email != "FOO")
+                    .MoveNextAsync();
+            });
+        }
+
+        [Fact]
+        public async Task Throws_for_not_operator_and_method()
+        {
+            await Should.ThrowAsync<NotSupportedException>(async () =>
+            {
+                await this.Queryable
+                    .Where(g => !g.Email.EndsWith("SomeString"))
+                    .MoveNextAsync();
+            });
+        }
     }
 }
