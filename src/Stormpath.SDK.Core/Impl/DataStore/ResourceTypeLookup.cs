@@ -193,6 +193,8 @@ namespace Stormpath.SDK.Impl.DataStore
             ["authorizedCallbackUris"] = typeof(string[]),
             ["authorizedOriginUris"] = typeof(string[]),
             ["challenges"] = typeof(CollectionResponsePage<IChallenge>),
+            ["emailDomainWhitelist"] = typeof(string[]),
+            ["emailDomainBlacklist"] = typeof(string[]),
         };
 
         private static readonly IReadOnlyDictionary<Type, Type> CollectionInterfaceLookup = new Dictionary<Type, Type>()
