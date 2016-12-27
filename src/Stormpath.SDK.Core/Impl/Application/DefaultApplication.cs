@@ -35,6 +35,7 @@ namespace Stormpath.SDK.Impl.Application
         private static readonly string ApiKeysPropertyName = "apiKeys";
         private static readonly string AuthTokensPropertyName = "authTokens";
         private static readonly string AuthorizedCallbackUrisPropertyName = "authorizedCallbackUris";
+        private static readonly string AuthorizedOriginUrisPropertyName = "authorizedOriginUris";
         private static readonly string DefaultAccountStoreMappingPropertyName = AccountStoreContainerShared.DefaultAccountStoreMappingPropertyName;
         private static readonly string DefaultGroupStoreMappingPropertyName = AccountStoreContainerShared.DefaultGroupStoreMappingPropertyName;
         private static readonly string DescriptionPropertyName = "description";
@@ -66,6 +67,8 @@ namespace Stormpath.SDK.Impl.Application
         internal IEmbeddedProperty AuthTokens => this.GetLinkProperty(AuthTokensPropertyName);
 
         IReadOnlyList<string> IApplication.AuthorizedCallbackUris => this.GetListProperty<string>(AuthorizedCallbackUrisPropertyName);
+
+        IReadOnlyList<string> IApplication.AuthorizedOriginUris => this.GetListProperty<string>(AuthorizedOriginUrisPropertyName);
 
         internal IEmbeddedProperty DefaultAccountStoreMapping => this.GetLinkProperty(DefaultAccountStoreMappingPropertyName);
 
@@ -118,6 +121,12 @@ namespace Stormpath.SDK.Impl.Application
         IApplication IApplication.SetAuthorizedCallbackUris(IEnumerable<string> authorizedCallbackUris)
         {
             SetListProperty(AuthorizedCallbackUrisPropertyName, authorizedCallbackUris);
+            return this;
+        }
+
+        IApplication IApplication.SetAuthorizedOriginUris(IEnumerable<string> authorizedOriginUris)
+        {
+            SetListProperty(AuthorizedOriginUrisPropertyName, authorizedOriginUris);
             return this;
         }
 
