@@ -191,6 +191,7 @@ namespace Stormpath.SDK.Impl.DataStore
             ["accountMemberships"] = typeof(CollectionResponsePage<IGroupMembership>),
             ["apiKeys"] = typeof(CollectionResponsePage<IApiKey>),
             ["authorizedCallbackUris"] = typeof(string[]),
+            ["authorizedOriginUris"] = typeof(string[]),
             ["challenges"] = typeof(CollectionResponsePage<IChallenge>),
         };
 
