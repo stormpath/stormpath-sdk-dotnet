@@ -950,5 +950,33 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             application.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(application.Href);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Updating_authorized_origin_uris(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var application = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier} Updating Authorized Origin URIs Application - Sync",
+                createDirectory: false);
+            application.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(application.Href);
+
+            // Add to existing list
+            var updatedUriList =
+                new[] { "https://fantastic-qux.apps.stormpath.io" }
+                .Concat(application.AuthorizedOriginUris);
+            application.SetAuthorizedOriginUris(updatedUriList);
+
+            application.Save();
+
+            application.AuthorizedOriginUris.ShouldContain("https://fantastic-qux.apps.stormpath.io");
+
+            // Clean up
+            application.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(application.Href);
+        }
     }
 }

@@ -67,6 +67,12 @@ namespace Stormpath.SDK.Application
         IReadOnlyList<string> AuthorizedCallbackUris { get; }
 
         /// <summary>
+        /// Gets the authorized origin URIs for this <see cref="IApplication">Application</see>.
+        /// </summary>
+        /// <value>The authorized origin URIs for this <see cref="IApplication">Application</see>.</value>
+        IReadOnlyList<string> AuthorizedOriginUris { get; }
+
+        /// <summary>
         /// Gets the Application's status.
         /// </summary>
         /// <value>
@@ -106,6 +112,13 @@ namespace Stormpath.SDK.Application
         /// <param name="authorizedCallbackUris">The authorized URIs.</param>
         /// <returns>This instance for method chaining.</returns>
         IApplication SetAuthorizedCallbackUris(IEnumerable<string> authorizedCallbackUris);
+
+        /// <summary>
+        /// Sets the origin URIs that are authorized for this Application.
+        /// </summary>
+        /// <param name="authorizedOriginUris">The authorized origin URIs.</param>
+        /// <returns>This instance for method chaining.</returns>
+        IApplication SetAuthorizedOriginUris(IEnumerable<string> authorizedOriginUris);
 
         /// <summary>
         /// Creates a new <see cref="IIdSiteUrlBuilder"/> that allows you to build a URL you can use to redirect your
