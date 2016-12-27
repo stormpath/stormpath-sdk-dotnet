@@ -19,6 +19,7 @@ using System.Linq;
 using Polly;
 using Shouldly;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Group;
 using Stormpath.SDK.Sync;
 using Stormpath.SDK.Tests.Common;
 using Stormpath.SDK.Tests.Common.Integration;
@@ -386,6 +387,48 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             this.fixture.CreatedAccountHrefs.Remove(tester1.Href);
             (tester2.Delete()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(tester2.Href);
+
+            // Report
+            if (result.Outcome == OutcomeType.Failure)
+            {
+                throw result.FinalException;
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Searching_for_group_by_custom_data(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            // Create an account with some custom data
+            var testGroup = client.Instantiate<IGroup>()
+                .SetName($"CDS Group {fixture.TestRunIdentifier}");
+            testGroup.CustomData["on_duty"] = "TK421";
+
+            var directory = client.GetDirectory(this.directoryHref);
+            directory.CreateGroup(testGroup);
+            this.fixture.CreatedGroupHrefs.Add(testGroup.Href);
+
+#pragma warning disable CS0252 // Unintended reference comparison
+            // Retry up to 3 times if CDS infrastructure isn't ready yet
+            var result = Policy.Handle<ShouldAssertException>()
+                .WaitAndRetry(Delay.CustomDataRetry)
+                .ExecuteAndCapture(() =>
+                {
+                    var foundGroup = directory.GetGroups()
+                        .Where(g => g.CustomData["on_duty"] == "TK421")
+                        .Synchronously()
+                        .SingleOrDefault();
+
+                    foundGroup.ShouldNotBeNull();
+                    foundGroup.Href.ShouldBe(testGroup.Href);
+                });
+#pragma warning restore CS0252
+
+            // Cleanup
+            testGroup.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(testGroup.Href);
 
             // Report
             if (result.Outcome == OutcomeType.Failure)
