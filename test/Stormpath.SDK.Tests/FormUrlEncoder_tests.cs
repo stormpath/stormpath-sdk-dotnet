@@ -46,5 +46,27 @@ namespace Stormpath.SDK.Tests
             result.ShouldContain("password=Secret1");
             result.ShouldContain("accountStore=https%3A%2F%2Fapi.stormpath.com%2Fv1%2Fdirectories%2F1bcd23ec1d0aEXAMPLE");
         }
+
+        /// <summary>
+        /// Regression test for https://github.com/stormpath/stormpath-sdk-dotnet/issues/235
+        /// </summary>
+        [Fact]
+        public void Encodes_parenthesis_correctly()
+        {
+            var dataStore = TestDataStore.Create();
+
+            var createGrantAttempt = dataStore.Instantiate<IPasswordGrantAuthenticationAttempt>();
+            createGrantAttempt.SetLogin("nate@stormpath.com");
+            createGrantAttempt.SetPassword("Testing123()");
+            createGrantAttempt.SetAccountStore("https://api.stormpath.com/v1/directories/1bcd23ec1d0aEXAMPLE");
+
+            var properties = (createGrantAttempt as AbstractResource).GetResourceData().GetUpdatedProperties().ToDictionary();
+            var result = new FormUrlEncoder(properties)
+                .ToString()
+                .Split('&');
+
+            result.ShouldContain("username=nate%40stormpath.com");
+            result.ShouldContain("password=Testing123%28%29");
+        }
     }
 }

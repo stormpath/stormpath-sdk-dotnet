@@ -151,7 +151,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
             // Add the test accounts
             var randomEmail = new RandomEmail("testmail.stormpath.com");
-            var password = "P@sword#123$!";
+            var password = "P@ss* word#123$!()~";
             await createdApplication.CreateAccountAsync("Test", "testerman", randomEmail, password);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()

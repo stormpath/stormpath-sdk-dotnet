@@ -61,17 +61,9 @@ namespace Stormpath.SDK.Tests
         }
 
         [Fact]
-        public void Does_not_escape_parenthesis()
-        {
-            var escaped = UrlEncoding.Encode("()");
-
-            escaped.ShouldBe("()");
-        }
-
-        [Fact]
         public void Canonicalizes_parenthesis()
         {
-            var canonicalized = UrlEncoding.Encode("()", canonicalize: true);
+            var canonicalized = UrlEncoding.Encode("()");
 
             canonicalized.ShouldBe("%28%29");
         }
