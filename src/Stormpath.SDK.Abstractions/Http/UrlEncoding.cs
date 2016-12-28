@@ -39,8 +39,11 @@ namespace Stormpath.SDK.Http
 
             var encoded = WebUtility.UrlEncode(value);
 
-            // WebUtility doesn't escape ! by default
-            encoded = encoded.Replace("!", "%21");
+            // WebUtility doesn't escape some characters by default
+            encoded = encoded
+                .Replace("!", "%21")
+                .Replace("(", "%28")
+                .Replace(")", "%29");
 
             // Perform some custom Stormpath encoding
             if (canonicalize)
@@ -48,9 +51,7 @@ namespace Stormpath.SDK.Http
                 encoded = encoded
                     .Replace("+", "%20") // Spaces as %20
                     .Replace("*", "%2A")
-                    .Replace("%7E", "~") // Tildes stay as they are
-                    .Replace("(", "%28")
-                    .Replace(")", "%29");
+                    .Replace("%7E", "~"); // Tildes stay unencoded
 
                 if (isPath)
                 {

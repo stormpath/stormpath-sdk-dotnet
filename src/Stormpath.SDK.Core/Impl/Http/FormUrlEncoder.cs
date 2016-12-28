@@ -40,7 +40,7 @@ namespace Stormpath.SDK.Impl.Http
             var sortedProperties = new SortedDictionary<string, object>(properties);
 
             var urlEncoded = sortedProperties
-                .Select(entry => $"{UrlEncoding.Encode(entry.Key, canonicalize: true)}={UrlEncoding.Encode(entry.Value.ToString(), canonicalize: true)}")
+                .Select(entry => $"{UrlEncoding.Encode(entry.Key)}={UrlEncoding.Encode(entry.Value.ToString())}")
                 .Join("&");
             return urlEncoded;
         }
