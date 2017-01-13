@@ -30,5 +30,8 @@ namespace Stormpath.SDK.Impl.Application
 
         Task<IOauthPolicy> IApplication.GetOauthPolicyAsync(CancellationToken cancellationToken)
             => this.GetInternalAsyncDataStore().GetResourceAsync<IOauthPolicy>(this.OAuthPolicy.Href, cancellationToken);
+
+        public Task<IApplicationWebConfiguration> GetClientApiConfigurationAsync(CancellationToken cancellationToken)
+            => GetInternalAsyncDataStore().GetResourceAsync<IApplicationWebConfiguration>(WebConfig.Href, cancellationToken);
     }
 }

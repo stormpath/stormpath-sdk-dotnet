@@ -21,6 +21,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Impl.DataStore;
+using Stormpath.SDK.Impl.Utility;
 using Stormpath.SDK.Resource;
 using Stormpath.SDK.Tenant;
 
@@ -159,5 +160,16 @@ namespace Stormpath.SDK.Impl.Resource
 
         public void SetListProperty<T>(string name, IEnumerable<T> items)
             => SetProperty(name, items.ToArray());
+
+        public T GetPocoProperty<T>(string name)
+            where T : class, new()
+        {
+            var adapter = new PocoAdapter<T>();
+            IDictionary<string, object> data;
+
+            return adapter.IsSupportedData(GetProperty(name), out data)
+                ? adapter.Adapt(data, StringComparer.OrdinalIgnoreCase)
+                : null;
+        }
     }
 }

@@ -971,5 +971,58 @@ namespace Stormpath.SDK.Tests.Integration.Async
             (await application.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(application.Href);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_client_api_configuration(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var application = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier} Get Client API Config Application",
+                createDirectory: false);
+            application.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(application.Href);
+
+            var config = await application.GetClientApiConfigurationAsync();
+
+            config.Status.ShouldBe(ClientApiStatus.Enabled);
+            config.DnsLabel.ShouldNotBeNullOrEmpty();
+            config.DomainName.ShouldNotBeNullOrEmpty();
+
+            config.ChangePassword.ShouldNotBeNull();
+            config.ChangePassword.Enabled.ShouldBeNull();
+
+            config.ForgotPassword.ShouldNotBeNull();
+            config.ForgotPassword.Enabled.ShouldBeNull();
+
+            config.Login.ShouldNotBeNull();
+            config.Login.Enabled.ShouldBe(true);
+
+            config.Me.ShouldNotBeNull();
+            config.Me.Enabled.ShouldBe(true);
+            config.Me.Expand.ApiKeys.ShouldBe(false);
+            config.Me.Expand.Applications.ShouldBe(false);
+            config.Me.Expand.CustomData.ShouldBe(false);
+            config.Me.Expand.Directory.ShouldBe(false);
+            config.Me.Expand.GroupMemberships.ShouldBe(false);
+            config.Me.Expand.Groups.ShouldBe(false);
+            config.Me.Expand.ProviderData.ShouldBe(false);
+            config.Me.Expand.Tenant.ShouldBe(false);
+
+            config.Oauth2.ShouldNotBeNull();
+            config.Oauth2.Enabled.ShouldBe(true);
+
+            config.Register.ShouldNotBeNull();
+            config.Register.Enabled.ShouldBe(true);
+
+            config.VerifyEmail.ShouldNotBeNull();
+            config.VerifyEmail.Enabled.ShouldBeNull();
+
+            // Clean up
+            (await application.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(application.Href);
+        }
     }
 }
