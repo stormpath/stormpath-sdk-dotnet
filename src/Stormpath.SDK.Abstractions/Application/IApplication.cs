@@ -446,5 +446,12 @@ namespace Stormpath.SDK.Application
         /// </summary>
         /// <returns>An <see cref="IAsyncQueryable{IApiKey}"/> that may be used to list or search <see cref="IApiKey">API Keys</see>.</returns>
         IAsyncQueryable<IApiKey> GetApiKeys();
+
+        /// <summary>
+        /// Gets the <see cref="IApplicationWebConfiguration">Client API configuration</see> for this Application.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The <see cref="IApplicationWebConfiguration">Client API configuration</see> for this Application.</returns>
+        Task<IApplicationWebConfiguration> GetClientApiConfigurationAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

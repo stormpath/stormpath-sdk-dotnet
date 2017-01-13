@@ -47,6 +47,7 @@ namespace Stormpath.SDK.Impl.Application
         private static readonly string PasswordResetTokensPropertyName = "passwordResetTokens";
         private static readonly string StatusPropertyName = "status";
         private static readonly string VerificationEmailsPropertyName = "verificationEmails";
+        private const string WebConfigPropertyName = "webConfig";
 
         public DefaultApplication(ResourceData data)
             : base(data)
@@ -94,6 +95,8 @@ namespace Stormpath.SDK.Impl.Application
         internal IEmbeddedProperty Tenant => this.GetLinkProperty(TenantPropertyName);
 
         internal IEmbeddedProperty VerificationEmails => this.GetLinkProperty(VerificationEmailsPropertyName);
+
+        internal IEmbeddedProperty WebConfig => GetLinkProperty(WebConfigPropertyName);
 
         IApplication IApplication.SetDescription(string description)
         {

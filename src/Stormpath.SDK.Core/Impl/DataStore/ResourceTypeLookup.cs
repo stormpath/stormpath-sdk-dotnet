@@ -102,6 +102,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(IGoogleAuthenticatorFactor)] = typeof(DefaultGoogleAuthenticatorFactor),
             [typeof(IChallenge)] = typeof(DefaultChallenge),
             [typeof(IPhone)] = typeof(DefaultPhone),
+            [typeof(IApplicationWebConfiguration)] = typeof(DefaultApplicationWebConfiguration),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(IAccountStoreMapping)] = typeof(DefaultApplicationAccountStoreMapping),
@@ -156,6 +157,7 @@ namespace Stormpath.SDK.Impl.DataStore
             [typeof(DefaultSmsFactor)] = typeof(ISmsFactor),
             [typeof(DefaultGoogleAuthenticatorFactor)] = typeof(IGoogleAuthenticatorFactor),
             [typeof(DefaultPhone)] = typeof(IPhone),
+            [typeof(DefaultApplicationWebConfiguration)] = typeof(IApplication),
 
             // TODO these will be greatly simplified on a breaking version change
             [typeof(DefaultApplicationAccountStoreMapping)] = typeof(IApplicationAccountStoreMapping),
