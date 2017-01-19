@@ -974,7 +974,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
 
         [Theory]
         [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
-        public async Task Getting_client_api_configuration(TestClientProvider clientBuilder)
+        public async Task Getting_application_web_configuration(TestClientProvider clientBuilder)
         {
             var client = clientBuilder.GetClient();
             var tenant = await client.GetCurrentTenantAsync();
@@ -1024,5 +1024,33 @@ namespace Stormpath.SDK.Tests.Integration.Async
             (await application.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(application.Href);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Getting_application_web_configuration_linked_resources(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = await client.GetCurrentTenantAsync();
+
+            var application = await tenant.CreateApplicationAsync(
+                $".NET IT {this.fixture.TestRunIdentifier} Get Client API Config Linked Resources Application",
+                createDirectory: false);
+            application.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(application.Href);
+
+            var config = await application.GetClientApiConfigurationAsync();
+
+            var appFromConfig = await config.GetApplicationAsync();
+            appFromConfig.ShouldNotBeNull();
+            appFromConfig.Href.ShouldBe(application.Href);
+
+            var signingKeyFromConfig = await config.GetSigningApiKeyAsync();
+            signingKeyFromConfig.ShouldNotBeNull();
+
+            // Clean up
+            (await application.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(application.Href);
+        }
+
     }
 }

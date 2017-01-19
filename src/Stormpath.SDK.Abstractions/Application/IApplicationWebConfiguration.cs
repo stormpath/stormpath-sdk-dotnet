@@ -8,27 +8,27 @@ namespace Stormpath.SDK.Application
 {
     public interface IApplicationWebConfiguration : IResource, IHasTenant, IAuditable
     {
-        ClientApiWebChangePasswordConfiguration ChangePassword { get; set; }
+        IApplicationWebChangePasswordConfiguration ChangePassword { get; }
 
-        string DnsLabel { get; set; }
+        string DnsLabel { get; }
 
         string DomainName { get; }
 
-        ClientApiWebForgotPasswordConfiguration ForgotPassword { get; set; }
+        IApplicationWebForgotPasswordConfiguration ForgotPassword { get; }
 
-        ClientApiWebLoginConfiguration Login { get; set; }
+        IApplicationWebLoginConfiguration Login { get; }
 
-        ClientApiWebMeConfiguration Me { get; set; }
+        IApplicationWebMeConfiguration Me { get; }
 
-        ClientApiWebOauth2Configuration Oauth2 { get; set; }
+        IApplicationWebOauth2Configuration Oauth2 { get; }
 
-        ClientApiWebRegisterConfiguration Register { get; set; }
+        IApplicationWebRegisterConfiguration Register { get; }
 
-        IApiKey SigningApiKey { set; }
+        //IApiKey SigningApiKey { set; }
 
-        ClientApiStatus Status { get; set; }
+        ClientApiStatus Status { get; }
 
-        ClientApiWebVerifyEmailConfiguration VerifyEmail { get; set; }
+        IApplicationWebVerifyEmailConfiguration VerifyEmail { get; }
 
         Task<IApiKey> GetSigningApiKeyAsync(CancellationToken cancellationToken = default(CancellationToken));
 
