@@ -181,5 +181,29 @@ namespace Stormpath.SDK.Tests
                     req.Method == HttpMethod.Post),
                 Arg.Any<CancellationToken>());
         }
+
+        /// <summary>
+        /// Regression test for https://github.com/stormpath/stormpath-sdk-dotnet/issues/241
+        /// </summary>
+        /// <returns>The asynchronous test.</returns>
+        [Fact]
+        public async Task Nulls_are_persisted()
+        {
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.CustomData).Object);
+
+            var customData = await dataStore.GetResourceAsync<ICustomData>("/customData", CancellationToken.None);
+            customData.Count().ShouldBe(5);
+
+            customData.Put("newprop", null);
+            await customData.SaveAsync();
+
+            var expectedBody = @"{""newprop"":null}";
+
+            await dataStore.RequestExecutor.Received().ExecuteAsync(
+                Arg.Is<IHttpRequest>(request =>
+                    request.Method == HttpMethod.Post &&
+                    request.Body == expectedBody),
+                Arg.Any<CancellationToken>());
+        }
     }
 }

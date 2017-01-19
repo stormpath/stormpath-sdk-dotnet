@@ -282,12 +282,22 @@ namespace Stormpath.SDK.Impl.CustomData
 
         private static bool IsValidValue(object value)
         {
+            if (value == null)
+            {
+                return true; // Nulls are a-ok!
+            }
+
             var type = value.GetType();
             return type != typeof(object);
         }
 
         private static object SanitizeValueForStorage(object value)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
             if (value.GetType() == typeof(DateTime))
             {
                 value = new DateTimeOffset((DateTime)value);
