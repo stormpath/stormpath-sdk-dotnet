@@ -25,9 +25,9 @@ namespace Stormpath.SDK.Impl.Application
         {
         }
 
-        public ClientApiWebChangePasswordConfiguration ChangePassword
+        public IApplicationWebChangePasswordConfiguration ChangePassword
         {
-            get { return GetPocoProperty<ClientApiWebChangePasswordConfiguration>(ChangePasswordPropertyName); }
+            get { return GetPocoProperty<DefaultApplicationWebChangePasswordConfiguration>(ChangePasswordPropertyName); }
             set { SetProperty(ChangePasswordPropertyName, value); }
         }
 
@@ -43,33 +43,33 @@ namespace Stormpath.SDK.Impl.Application
             set { SetProperty(DomainNamePropertyName, value); }
         }
 
-        public ClientApiWebForgotPasswordConfiguration ForgotPassword
+        public IApplicationWebForgotPasswordConfiguration ForgotPassword
         {
-            get { return GetPocoProperty<ClientApiWebForgotPasswordConfiguration>(ForgotPasswordPropertyName); }
+            get { return GetPocoProperty<DefaultApplicationWebForgotPasswordConfiguration>(ForgotPasswordPropertyName); }
             set { SetProperty(ForgotPasswordPropertyName, value); }
         }
 
-        public ClientApiWebLoginConfiguration Login
+        public IApplicationWebLoginConfiguration Login
         {
-            get { return GetPocoProperty<ClientApiWebLoginConfiguration>(LoginPropertyName); }
+            get { return GetPocoProperty<DefaultApplicationWebLoginConfiguration>(LoginPropertyName); }
             set { SetProperty(LoginPropertyName, value); }
         }
 
-        public ClientApiWebMeConfiguration Me
+        public IApplicationWebMeConfiguration Me
         {
-            get { return GetPocoProperty<ClientApiWebMeConfiguration>(MePropertyName); }
+            get { return GetPocoProperty<DefaultApplicationWebMeConfiguration>(MePropertyName); }
             set { SetProperty(MePropertyName, value); }
         }
 
-        public ClientApiWebOauth2Configuration Oauth2
+        public IApplicationWebOauth2Configuration Oauth2
         {
-            get { return GetPocoProperty<ClientApiWebOauth2Configuration>(Oauth2PropertyName); }
+            get { return GetPocoProperty<DefaultApplicationWebOauth2Configuration>(Oauth2PropertyName); }
             set { SetProperty(Oauth2PropertyName, value); }
         }
 
-        public ClientApiWebRegisterConfiguration Register
+        public IApplicationWebRegisterConfiguration Register
         {
-            get { return GetPocoProperty<ClientApiWebRegisterConfiguration>(RegisterPropertyName); }
+            get { return GetPocoProperty<DefaultApplicationWebRegisterConfiguration>(RegisterPropertyName); }
             set { SetProperty(RegisterPropertyName, value); }
         }
 
@@ -79,26 +79,18 @@ namespace Stormpath.SDK.Impl.Application
             set { SetProperty(StatusPropertyName, value);}
         }
 
-        public IApiKey SigningApiKey
+        public IApplicationWebVerifyEmailConfiguration VerifyEmail
         {
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public ClientApiWebVerifyEmailConfiguration VerifyEmail
-        {
-            get { return GetPocoProperty<ClientApiWebVerifyEmailConfiguration>(VerifyEmailPropertyName); }
+            get { return GetPocoProperty<DefaultApplicationWebVerifyEmailConfiguration>(VerifyEmailPropertyName); }
             set { SetProperty(VerifyEmailPropertyName, value); }
         }
 
-        public Task<IApiKey> GetSigningApiKeyAsync(CancellationToken cancellationToken = new CancellationToken())
+        public Task<IApiKey> GetSigningApiKeyAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken = new CancellationToken())
+        public Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
