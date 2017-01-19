@@ -9,6 +9,7 @@ namespace Stormpath.SDK.Impl.Application
 {
     internal class DefaultApplicationWebConfiguration : AbstractInstanceResource, IApplicationWebConfiguration
     {
+        private const string ApplicationPropertyName = "application";
         private const string ChangePasswordPropertyName = "changePassword";
         private const string DnsLabelPropertyName = "dnsLabel";
         private const string DomainNamePropertyName = "domainName";
@@ -17,6 +18,7 @@ namespace Stormpath.SDK.Impl.Application
         private const string MePropertyName = "me";
         private const string Oauth2PropertyName = "oauth2";
         private const string RegisterPropertyName = "register";
+        private const string SigningApiKeyPropertyName = "signingApiKey";
         private const string StatusPropertyName = "status";
         private const string VerifyEmailPropertyName = "verifyEmail";
 
@@ -24,6 +26,10 @@ namespace Stormpath.SDK.Impl.Application
             : base(data)
         {
         }
+
+        internal IEmbeddedProperty Application => GetLinkProperty(ApplicationPropertyName);
+
+        internal IEmbeddedProperty SigningApiKey => GetLinkProperty(SigningApiKeyPropertyName);
 
         public IApplicationWebChangePasswordConfiguration ChangePassword
         {
@@ -86,13 +92,9 @@ namespace Stormpath.SDK.Impl.Application
         }
 
         public Task<IApiKey> GetSigningApiKeyAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+            => GetInternalAsyncDataStore().GetResourceAsync<IApiKey>(SigningApiKey.Href, cancellationToken);
 
         public Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+            => GetInternalAsyncDataStore().GetResourceAsync<IApplication>(Application.Href, cancellationToken);
     }
 }

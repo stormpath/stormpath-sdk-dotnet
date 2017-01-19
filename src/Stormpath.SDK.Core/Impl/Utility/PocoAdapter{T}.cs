@@ -79,7 +79,9 @@ namespace Stormpath.SDK.Impl.Utility
                     continue;
                 }
 
-                if (!IsClass(property.PropertyType))
+                var propertyTypeInfo = property.PropertyType.GetTypeInfo();
+
+                if (!propertyTypeInfo.IsInterface && !IsClass(property.PropertyType, propertyTypeInfo))
                 {
                     ConvertAndSet(result, property, value);
                     continue;
@@ -91,8 +93,15 @@ namespace Stormpath.SDK.Impl.Utility
                     continue;
                 }
 
+                var concreteType = property.PropertyType;
+
+                if (propertyTypeInfo.IsInterface)
+                {
+                    concreteType = PocoTypeLookup.GetConcreteType(property.PropertyType) ?? concreteType;
+                }
+
                 // Recurse (assume it's another POCO)
-                var adapter = new PocoAdapter(property.PropertyType);
+                var adapter = new PocoAdapter(concreteType);
                 property.SetValue(result, adapter.Adapt(propertyDictionary, comparer));
             }
 
@@ -108,21 +117,19 @@ namespace Stormpath.SDK.Impl.Utility
             property.SetValue(obj, convertedValue);
         }
 
-        private static bool IsClass(Type type)
+        private static bool IsClass(Type type, TypeInfo typeInfo)
         {
             if (type == typeof(string))
             {
                 return false;
             }
 
-            var typeInfo = type.GetTypeInfo();
-
             if (typeof(StringEnumeration).GetTypeInfo().IsAssignableFrom(typeInfo))
             {
                 return false;
             }
 
-            return type.GetTypeInfo().IsClass;
+            return typeInfo.IsClass;
         }
     }
 }
