@@ -69,7 +69,7 @@ namespace Stormpath.SDK.Impl.Linq
             var concreteProvider = provider as CollectionResourceQueryProvider<TResult>;
             if (concreteProvider == null)
             {
-                throw new NotSupportedException("Source and destination provider types do not match.");
+                throw new NotSupportedException("One of the methods in this query is not supported.");
             }
 
             this.expression = expression;

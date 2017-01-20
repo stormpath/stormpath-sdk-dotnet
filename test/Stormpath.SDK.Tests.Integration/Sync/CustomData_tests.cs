@@ -345,5 +345,31 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             account.Delete().ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
+
+        /// <summary>
+        /// Regression test for https://github.com/stormpath/stormpath-sdk-dotnet/issues/241
+        /// </summary>
+        /// <param name="clientBuilder">The client to use.</param>
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Putting_null_value_in_custom_data(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var account = this.CreateRandomAccount(client);
+            var customData = account.GetCustomData();
+            customData.IsEmptyOrDefault().ShouldBeTrue();
+
+            // Add some custom data
+            customData.Put("billionDollarMistake", null);
+            var updated = customData.Save();
+            updated.IsEmptyOrDefault().ShouldBeFalse();
+
+            updated["billionDollarMistake"].ShouldBeNull();
+
+            // Cleanup
+            account.Delete().ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
     }
 }

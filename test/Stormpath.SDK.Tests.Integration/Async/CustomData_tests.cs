@@ -345,5 +345,33 @@ namespace Stormpath.SDK.Tests.Integration.Async
             (await account.DeleteAsync()).ShouldBeTrue();
             this.fixture.CreatedAccountHrefs.Remove(account.Href);
         }
+
+
+        /// <summary>
+        /// Regression test for https://github.com/stormpath/stormpath-sdk-dotnet/issues/241
+        /// </summary>
+        /// <param name="clientBuilder">The client to use.</param>
+        /// <returns>The asynchronous test.</returns>
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public async Task Putting_null_value_in_custom_data(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+
+            var account = await this.CreateRandomAccountAsync(client);
+            var customData = await account.GetCustomDataAsync();
+            customData.IsEmptyOrDefault().ShouldBeTrue();
+
+            // Add some custom data
+            customData.Put("billionDollarMistake", null);
+            var updated = await customData.SaveAsync();
+            updated.IsEmptyOrDefault().ShouldBeFalse();
+            
+            updated["billionDollarMistake"].ShouldBeNull();
+
+            // Cleanup
+            (await account.DeleteAsync()).ShouldBeTrue();
+            this.fixture.CreatedAccountHrefs.Remove(account.Href);
+        }
     }
 }
