@@ -37,5 +37,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Cache.Redis"
   },
-  "version": "0.95.2-beta1"
+  "version": "0.95.2"
 }
