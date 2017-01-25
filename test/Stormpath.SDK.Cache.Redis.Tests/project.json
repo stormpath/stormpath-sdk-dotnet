@@ -10,15 +10,15 @@
     },
     "Stormpath.SDK.Abstractions": {
       "target": "project",
-      "version": "0.94.2"
+      "version": "0.96.0"
     },
     "Stormpath.SDK.Cache.Redis": {
       "target": "project",
-      "version": "0.9.1"
+      "version": "0.95.2"
     },
     "Stormpath.SDK.Tests.Common": {
       "target": "project",
-      "version": "0.91.0"
+      "version": "0.96.0"
     },
     "xunit": "2.1.0"
   },
@@ -38,5 +38,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Cache.Redis.Tests"
   },
-  "version": "0.94.2"
+  "version": "0.95.2"
 }

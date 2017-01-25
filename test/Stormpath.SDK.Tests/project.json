@@ -7,7 +7,7 @@
     "Shouldly": "2.8.0",
     "Stormpath.SDK.Core": {
       "target": "project",
-      "version": "0.94.0"
+      "version": "0.96.0"
     },
     "Stormpath.SDK.JsonNetSerializer": {
       "target": "project",
@@ -19,7 +19,7 @@
     },
     "Stormpath.SDK.Tests.Common": {
       "target": "project",
-      "version": "0.91.0"
+      "version": "0.96.0"
     },
     "xunit": "2.2.0-beta2-build3300"
   },
@@ -41,5 +41,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Tests"
   },
-  "version": "0.94.0"
+  "version": "0.96.0"
 }

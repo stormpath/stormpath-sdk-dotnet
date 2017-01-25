@@ -9,11 +9,11 @@
     },
     "Stormpath.SDK.Core": {
       "target": "project",
-      "version": "0.91.0"
+      "version": "0.96.0"
     },
     "Stormpath.SDK.Http.SystemNetHttpClient": {
       "target": "project",
-      "version": "0.91.0"
+      "version": "0.94.0"
     },
     "Stormpath.SDK.JsonNetSerializer": {
       "target": "project",
@@ -38,5 +38,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Tests.CoreClr"
   },
-  "version": "0.91.0"
+  "version": "0.96.0"
 }

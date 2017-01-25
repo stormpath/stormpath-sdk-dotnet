@@ -6,11 +6,11 @@
     "NSubstitute": "2.0.0-rc",
     "Stormpath.SDK.Core": {
       "target": "project",
-      "version": "0.91.0"
+      "version": "0.96.0"
     },
     "Stormpath.SDK.Http.SystemNetHttpClient": {
       "target": "project",
-      "version": "0.91.0"
+      "version": "0.94.0"
     },
     "Stormpath.SDK.JsonNetSerializer": {
       "target": "project",
@@ -18,7 +18,7 @@
     },
     "Stormpath.SDK.Cache.Redis": {
       "target": "project",
-      "version": "0.95.0-beta1"
+      "version": "0.95.2"
     },
     "xunit": "2.1.0"
   },
@@ -48,5 +48,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.SDK.Tests.Common"
   },
-  "version": "0.91.0"
+  "version": "0.96.0"
 }
