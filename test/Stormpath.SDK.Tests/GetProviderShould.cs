@@ -32,5 +32,19 @@ namespace Stormpath.SDK.Tests
             (provider as ISamlProvider).EncodedX509SigningCertificate.Should()
                 .Be("-----BEGIN CERTIFICATE-----fakefakefake\n-----END CERTIFICATE-----");
         }
+
+        [Fact]
+        public async Task ReturnAdProvider()
+        {
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.AdProvider).Object);
+
+            var provider = await (dataStore as IInternalAsyncDataStore).GetResourceAsync<IProvider>("/provider", ProviderTypeConverter.TypeLookup, CancellationToken.None);
+
+            // Verify against data from FakeJson.AdProvider
+            provider.Href.Should().Be("https://api.stormpath.com/v1/directories/foobarDirectory/provider");
+            provider.ProviderId.Should().Be("ad");
+
+            // TODO test getting Agent href
+        }
     }
 }

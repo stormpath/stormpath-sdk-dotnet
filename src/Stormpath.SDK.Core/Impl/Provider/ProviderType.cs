@@ -35,6 +35,8 @@ namespace Stormpath.SDK.Impl.Provider
 
         public static ProviderType Saml = new ProviderType("saml");
 
+        public static ProviderType AdLdap = new ProviderType("ad");
+
         private ProviderType(string value)
             : base(value)
         {

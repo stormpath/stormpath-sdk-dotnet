@@ -1007,6 +1007,24 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 
         #region Providers
 
+        public static readonly string FacebookProvider = @"
+{
+    ""clientId"": ""1533729543583787"",
+    ""clientSecret"": ""a8fe59b05c8390845badec86c8bef79a"",
+    ""createdAt"": ""2015-10-14T00:29:21.485Z"",
+    ""href"": ""https://api.stormpath.com/v1/directories/4mLvYfHjofeFCOhh2rEust/provider"",
+    ""modifiedAt"": ""2016-07-02T05:03:49.601Z"",
+    ""providerId"": ""facebook"",
+    ""providerType"": ""facebook"",
+    ""scope"": [
+        ""public_profile"",
+        ""email""
+    ],
+    ""userInfoMappingRules"": {
+        ""href"": ""https://api.stormpath.com/v1/userInfoMappingRules/4mLvYfHjofeFCOhh2rEust""
+    }
+}";
+
         public static readonly string SamlProvider = @"
 {
    ""href"":""https://api.stormpath.com/v1/directories/directory1/provider"",
@@ -1023,6 +1041,15 @@ namespace Stormpath.SDK.Tests.Common.Fakes
    ""serviceProviderMetadata"":{
       ""href"":""https://api.stormpath.com/v1/samlServiceProviderMetadatas/foobarSpm1""
    }
+}";
+
+        public static readonly string AdProvider = @"
+{
+    ""agent"": {
+        ""href"": ""https://api.stormpath.com/v1/agents/foobarAgent""
+    },
+    ""href"": ""https://api.stormpath.com/v1/directories/foobarDirectory/provider"",
+    ""providerId"": ""ad""
 }";
 
         #endregion

@@ -30,7 +30,8 @@ namespace Stormpath.SDK.Impl.Provider
             ["github"] = typeof(IGithubProvider),
             ["google"] = typeof(IGoogleProvider),
             ["linkedin"] = typeof(ILinkedInProvider),
-            ["saml"] = typeof(ISamlProvider)
+            ["saml"] = typeof(ISamlProvider),
+            ["ad"] = typeof(IAdLdapProvider)
         };
 
         private static readonly IReadOnlyDictionary<string, Type> DataTypeLookupTable = new Dictionary<string, Type>()
