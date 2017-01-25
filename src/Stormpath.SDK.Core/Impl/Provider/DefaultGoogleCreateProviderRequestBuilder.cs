@@ -49,6 +49,7 @@ namespace Stormpath.SDK.Impl.Provider
             provider.SetClientId(this.clientId);
             provider.SetClientSecret(this.clientSecret);
             provider.SetRedirectUri(this.redirectUri);
+            provider.SetProperty("providerId", ConcreteProviderId);
 
             return new DefaultCreateProviderRequest(provider);
         }

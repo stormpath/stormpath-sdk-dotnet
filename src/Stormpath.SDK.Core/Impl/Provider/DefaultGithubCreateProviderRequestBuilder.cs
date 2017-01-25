@@ -34,6 +34,7 @@ namespace Stormpath.SDK.Impl.Provider
             var provider = this.dataStore.Instantiate<IGithubProvider>() as DefaultGithubProvider;
             provider.SetClientId(this.clientId);
             provider.SetClientSecret(this.clientSecret);
+            provider.SetProperty("providerId", ConcreteProviderId);
 
             return new DefaultCreateProviderRequest(provider);
         }

@@ -34,6 +34,7 @@ namespace Stormpath.SDK.Impl.Provider
             var provider = this.dataStore.Instantiate<IFacebookProvider>() as DefaultFacebookProvider;
             provider.SetClientId(this.clientId);
             provider.SetClientSecret(this.clientSecret);
+            provider.SetProperty("providerId", ConcreteProviderId);
 
             return new DefaultCreateProviderRequest(provider);
         }
