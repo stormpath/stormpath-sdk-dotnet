@@ -1067,6 +1067,26 @@ namespace Stormpath.SDK.Tests.Common.Fakes
   }
 }";
 
+        public static readonly string Oauth2Provider = @"
+{
+  ""href"": ""https://api.stormpath.com/v1/directories/directory1/provider"",
+  ""createdAt"": ""2017-01-25T19:19:46.323Z"",
+  ""modifiedAt"": ""2017-01-25T19:19:46.351Z"",
+  ""accessTokenType"": ""bearer"",
+  ""authorizationEndpoint"": ""https://api.imgur.com/oauth2/authorize"",
+  ""clientId"": ""12345"",
+  ""clientSecret"": ""abc123"",
+  ""idField"": ""data.id"",
+  ""providerId"": ""imgur"",
+  ""providerType"": ""oauth2"",
+  ""resourceEndpoint"": ""https://api.imgur.com/3/account/me"",
+  ""scope"": [],
+  ""tokenEndpoint"": ""https://api.imgur.com/oauth2/token"",
+  ""userInfoMappingRules"": {
+    ""href"": ""https://api.stormpath.com/v1/userInfoMappingRules/foobarUIMR""
+  }
+}";
+
         #endregion
 
         #region OAuthResponse

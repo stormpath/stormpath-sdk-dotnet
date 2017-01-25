@@ -104,5 +104,26 @@ namespace Stormpath.SDK.Tests
             (provider as ITwitterProvider).ClientId.Should().Be("foobar");
             (provider as ITwitterProvider).ClientSecret.Should().Be("nopenopenope");
         }
+
+        [Fact]
+        public async Task ReturnGenericOauth2Provider()
+        {
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.Oauth2Provider).Object);
+
+            var provider = await (dataStore as IInternalAsyncDataStore).GetResourceAsync<IProvider>("/provider", ProviderTypeConverter.TypeLookup, CancellationToken.None);
+
+            // Verify against data from FakeJson.SamlProvider
+            provider.Href.Should().Be("https://api.stormpath.com/v1/directories/directory1/provider");
+            provider.CreatedAt.Should().Be(Iso8601.Parse("2017-01-25T19:19:46.323Z"));
+            provider.ModifiedAt.Should().Be(Iso8601.Parse("2017-01-25T19:19:46.351Z"));
+            provider.ProviderId.Should().Be("imgur");
+            provider.ProviderType.Should().Be("oauth2");
+
+            (provider as IOauth2Provider).AccessTokenType.Should().Be("bearer");
+            (provider as IOauth2Provider).AuthorizationEndpoint.Should().Be("https://api.imgur.com/oauth2/authorize");
+            (provider as IOauth2Provider).IdField.Should().Be("data.id");
+            (provider as IOauth2Provider).ResourceEndpoint.Should().Be("https://api.imgur.com/3/account/me");
+            (provider as IOauth2Provider).TokenEndpoint.Should().Be("https://api.imgur.com/oauth2/token");
+        }
     }
 }
