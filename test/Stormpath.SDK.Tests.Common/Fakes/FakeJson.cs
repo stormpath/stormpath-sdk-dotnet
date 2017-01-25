@@ -1052,6 +1052,21 @@ namespace Stormpath.SDK.Tests.Common.Fakes
     ""providerId"": ""ad""
 }";
 
+        public static readonly string TwitterProvider = @"
+{
+  ""href"": ""https://api.stormpath.com/v1/directories/directory1/provider"",
+  ""createdAt"": ""2016-12-29T02:16:38.940Z"",
+  ""modifiedAt"": ""2016-12-29T02:16:38.965Z"",
+  ""clientId"": ""foobar"",
+  ""clientSecret"": ""nopenopenope"",
+  ""providerId"": ""twitter"",
+  ""providerType"": ""twitter"",
+  ""scope"": [],
+  ""userInfoMappingRules"": {
+    ""href"": ""https://api.stormpath.com/v1/userInfoMappingRules/foobarUIMR""
+  }
+}";
+
         #endregion
 
         #region OAuthResponse

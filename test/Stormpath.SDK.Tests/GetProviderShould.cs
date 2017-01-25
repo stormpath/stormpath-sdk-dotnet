@@ -86,5 +86,23 @@ namespace Stormpath.SDK.Tests
             provider.Href.Should().Be("https://api.stormpath.com/v1/directories/foobarDirectory/provider");
             provider.ProviderId.Should().Be("foo");
         }
+
+        [Fact]
+        public async Task ReturnTwitterProvider()
+        {
+            var dataStore = TestDataStore.Create(new StubRequestExecutor(FakeJson.TwitterProvider).Object);
+
+            var provider = await (dataStore as IInternalAsyncDataStore).GetResourceAsync<IProvider>("/provider", ProviderTypeConverter.TypeLookup, CancellationToken.None);
+
+            // Verify against data from FakeJson.TwitterProvider
+            provider.Href.Should().Be("https://api.stormpath.com/v1/directories/directory1/provider");
+            provider.CreatedAt.Should().Be(Iso8601.Parse("2016-12-29T02:16:38.940Z"));
+            provider.ModifiedAt.Should().Be(Iso8601.Parse("2016-12-29T02:16:38.965Z"));
+            provider.ProviderId.Should().Be("twitter");
+            provider.ProviderType.Should().Be("twitter");
+
+            (provider as ITwitterProvider).ClientId.Should().Be("foobar");
+            (provider as ITwitterProvider).ClientSecret.Should().Be("nopenopenope");
+        }
     }
 }
