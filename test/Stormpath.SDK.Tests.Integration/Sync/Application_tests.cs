@@ -978,5 +978,85 @@ namespace Stormpath.SDK.Tests.Integration.Sync
             application.Delete().ShouldBeTrue();
             this.fixture.CreatedApplicationHrefs.Remove(application.Href);
         }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_application_web_configuration(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var application = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier} Get Client API Config Application",
+                createDirectory: false);
+            application.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(application.Href);
+
+            var config = application.GetWebConfiguration();
+
+            config.Status.ShouldBe(ClientApiStatus.Enabled);
+            config.DnsLabel.ShouldNotBeNullOrEmpty();
+            config.DomainName.ShouldNotBeNullOrEmpty();
+
+            config.ChangePassword.ShouldNotBeNull();
+            config.ChangePassword.Enabled.ShouldBeNull();
+
+            config.ForgotPassword.ShouldNotBeNull();
+            config.ForgotPassword.Enabled.ShouldBeNull();
+
+            config.Login.ShouldNotBeNull();
+            config.Login.Enabled.ShouldBe(true);
+
+            config.Me.ShouldNotBeNull();
+            config.Me.Enabled.ShouldBe(true);
+            config.Me.Expand.ApiKeys.ShouldBe(false);
+            config.Me.Expand.Applications.ShouldBe(false);
+            config.Me.Expand.CustomData.ShouldBe(false);
+            config.Me.Expand.Directory.ShouldBe(false);
+            config.Me.Expand.GroupMemberships.ShouldBe(false);
+            config.Me.Expand.Groups.ShouldBe(false);
+            config.Me.Expand.ProviderData.ShouldBe(false);
+            config.Me.Expand.Tenant.ShouldBe(false);
+
+            config.Oauth2.ShouldNotBeNull();
+            config.Oauth2.Enabled.ShouldBe(true);
+
+            config.Register.ShouldNotBeNull();
+            config.Register.Enabled.ShouldBe(true);
+
+            config.VerifyEmail.ShouldNotBeNull();
+            config.VerifyEmail.Enabled.ShouldBeNull();
+
+            // Clean up
+            application.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(application.Href);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestClients.GetClients), MemberType = typeof(TestClients))]
+        public void Getting_application_web_configuration_linked_resources(TestClientProvider clientBuilder)
+        {
+            var client = clientBuilder.GetClient();
+            var tenant = client.GetCurrentTenant();
+
+            var application = tenant.CreateApplication(
+                $".NET IT {this.fixture.TestRunIdentifier} Get Client API Config Linked Resources Application",
+                createDirectory: false);
+            application.Href.ShouldNotBeNullOrEmpty();
+            this.fixture.CreatedApplicationHrefs.Add(application.Href);
+
+            var config = application.GetWebConfiguration();
+
+            var appFromConfig = config.GetApplication();
+            appFromConfig.ShouldNotBeNull();
+            appFromConfig.Href.ShouldBe(application.Href);
+
+            var signingKeyFromConfig = config.GetSigningApiKey();
+            signingKeyFromConfig.ShouldNotBeNull();
+
+            // Clean up
+            application.Delete().ShouldBeTrue();
+            this.fixture.CreatedApplicationHrefs.Remove(application.Href);
+        }
     }
 }

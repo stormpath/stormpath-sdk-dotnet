@@ -985,7 +985,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             application.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(application.Href);
 
-            var config = await application.GetClientApiConfigurationAsync();
+            var config = await application.GetWebConfigurationAsync();
 
             config.Status.ShouldBe(ClientApiStatus.Enabled);
             config.DnsLabel.ShouldNotBeNullOrEmpty();
@@ -1038,7 +1038,7 @@ namespace Stormpath.SDK.Tests.Integration.Async
             application.Href.ShouldNotBeNullOrEmpty();
             this.fixture.CreatedApplicationHrefs.Add(application.Href);
 
-            var config = await application.GetClientApiConfigurationAsync();
+            var config = await application.GetWebConfigurationAsync();
 
             var appFromConfig = await config.GetApplicationAsync();
             appFromConfig.ShouldNotBeNull();

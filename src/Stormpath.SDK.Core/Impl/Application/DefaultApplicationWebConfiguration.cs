@@ -7,7 +7,7 @@ using Stormpath.SDK.Impl.Resource;
 
 namespace Stormpath.SDK.Impl.Application
 {
-    internal class DefaultApplicationWebConfiguration : AbstractInstanceResource, IApplicationWebConfiguration
+    internal class DefaultApplicationWebConfiguration : AbstractInstanceResource, IApplicationWebConfiguration, IApplicationWebConfigurationSync
     {
         private const string ApplicationPropertyName = "application";
         private const string ChangePasswordPropertyName = "changePassword";
@@ -96,5 +96,11 @@ namespace Stormpath.SDK.Impl.Application
 
         public Task<IApplication> GetApplicationAsync(CancellationToken cancellationToken)
             => GetInternalAsyncDataStore().GetResourceAsync<IApplication>(Application.Href, cancellationToken);
+
+        public IApiKey GetSigningApiKey()
+            => GetInternalSyncDataStore().GetResource<IApiKey>(SigningApiKey.Href);
+
+        public IApplication GetApplication()
+            => GetInternalSyncDataStore().GetResource<IApplication>(Application.Href);
     }
 }

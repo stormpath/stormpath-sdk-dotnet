@@ -213,5 +213,7 @@ namespace Stormpath.SDK.Impl.Application
         /// <exception cref="ArgumentNullException"><paramref name="apiKeyId"/> is null or empty.</exception>
         /// <returns>The API Key, or <see langword="null"/> if no API Key could be found.</returns>
         IApiKey GetApiKey(string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction);
+
+        IApplicationWebConfiguration GetWebConfiguration();
     }
 }

@@ -385,5 +385,12 @@ namespace Stormpath.SDK.Sync
         [Obsolete("Use GetApiKeys() collection")]
         public static IApiKey GetApiKey(this IApplication application, string apiKeyId, Action<IRetrievalOptions<IApiKey>> retrievalOptionsAction)
             => (application as IApplicationSync).GetApiKey(apiKeyId, retrievalOptionsAction);
+
+        /// <summary>
+        /// Synchronously gets the <see cref="IApplicationWebConfiguration">Web configuration</see> for this Application.
+        /// </summary>
+        /// <returns>The <see cref="IApplicationWebConfiguration">Web configuration</see> for this Application.</returns>
+        public static IApplicationWebConfiguration GetWebConfiguration(this IApplication application)
+            => (application as IApplicationSync).GetWebConfiguration();
     }
 }

@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Impl.Provider;
 using Stormpath.SDK.Oauth;
 using Stormpath.SDK.Provider;
@@ -27,5 +28,8 @@ namespace Stormpath.SDK.Impl.Application
 
         IOauthPolicy IApplicationSync.GetOauthPolicy()
             => this.GetInternalSyncDataStore().GetResource<IOauthPolicy>(this.OAuthPolicy.Href);
+
+        public IApplicationWebConfiguration GetWebConfiguration()
+            => GetInternalSyncDataStore().GetResource<IApplicationWebConfiguration>(WebConfig.Href);
     }
 }
