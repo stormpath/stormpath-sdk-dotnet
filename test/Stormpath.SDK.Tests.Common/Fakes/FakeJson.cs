@@ -1009,10 +1009,10 @@ namespace Stormpath.SDK.Tests.Common.Fakes
 
         public static readonly string FacebookProvider = @"
 {
-    ""clientId"": ""1533729543583787"",
-    ""clientSecret"": ""a8fe59b05c8390845badec86c8bef79a"",
+    ""clientId"": ""12345"",
+    ""clientSecret"": ""abc123"",
     ""createdAt"": ""2015-10-14T00:29:21.485Z"",
-    ""href"": ""https://api.stormpath.com/v1/directories/4mLvYfHjofeFCOhh2rEust/provider"",
+    ""href"": ""https://api.stormpath.com/v1/directories/directory1/provider"",
     ""modifiedAt"": ""2016-07-02T05:03:49.601Z"",
     ""providerId"": ""facebook"",
     ""providerType"": ""facebook"",

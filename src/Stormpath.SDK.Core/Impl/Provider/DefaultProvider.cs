@@ -27,8 +27,5 @@ namespace Stormpath.SDK.Impl.Provider
             : base(data)
         {
         }
-
-        protected override string ConcreteProviderId
-            => ProviderType.Stormpath;
     }
 }

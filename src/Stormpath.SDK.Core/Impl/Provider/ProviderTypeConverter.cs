@@ -23,6 +23,9 @@ namespace Stormpath.SDK.Impl.Provider
 {
     internal static class ProviderTypeConverter
     {
+        private static readonly Type DefaultProviderType = typeof(IProvider);
+        // TODO default provider data type?
+
         private static readonly IReadOnlyDictionary<string, Type> TypeLookupTable = new Dictionary<string, Type>()
         {
             ["stormpath"] = typeof(IProvider),
@@ -43,35 +46,41 @@ namespace Stormpath.SDK.Impl.Provider
             ["linkedin"] = typeof(ILinkedInProviderData),
         };
 
-        private static string GetProviderId(Map properties)
+        private static string GetProviderType(Map properties)
         {
-            object rawProviderId = null;
+            object rawProviderId;
 
-            if (!properties.TryGetValue("providerId", out rawProviderId))
+            if (properties.TryGetValue("providerType", out rawProviderId))
             {
-                return null;
+                return rawProviderId.ToString();
             }
 
-            return ((string)rawProviderId).ToLower();
+            // Fall back to providerId for older resources
+            if (properties.TryGetValue("providerId", out rawProviderId))
+            {
+                return rawProviderId.ToString();
+            }
+
+            return null;
         }
 
         public static Type TypeLookup(Map properties)
         {
-            var providerId = GetProviderId(properties);
+            var providerId = GetProviderType(properties);
             if (string.IsNullOrEmpty(providerId))
             {
-                return null;
+                return DefaultProviderType;
             }
 
             Type provider = null;
             TypeLookupTable.TryGetValue(providerId, out provider);
 
-            return provider;
+            return provider ?? DefaultProviderType;
         }
 
         public static Type DataTypeLookup(Map properties)
         {
-            var providerId = GetProviderId(properties);
+            var providerId = GetProviderType(properties);
             if (string.IsNullOrEmpty(providerId))
             {
                 return null;

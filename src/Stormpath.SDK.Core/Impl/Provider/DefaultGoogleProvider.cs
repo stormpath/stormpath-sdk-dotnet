@@ -30,9 +30,6 @@ namespace Stormpath.SDK.Impl.Provider
         {
         }
 
-        protected override string ConcreteProviderId
-            => ProviderType.Google;
-
         string IGoogleProvider.ClientId
             => this.GetStringProperty(ClientIdPropertyName);
 

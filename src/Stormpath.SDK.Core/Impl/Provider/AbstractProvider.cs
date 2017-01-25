@@ -24,17 +24,18 @@ namespace Stormpath.SDK.Impl.Provider
     /// </summary>
     internal abstract class AbstractProvider : AbstractInstanceResource, IProvider
     {
-        private static readonly string ProviderIdPropertyName = "providerId";
+        private const string ProviderIdPropertyName = "providerId";
+        private const string ProviderTypePropertyName = "providerType";
 
-        public AbstractProvider(ResourceData data)
+        protected AbstractProvider(ResourceData data)
             : base(data)
         {
-            this.SetProperty(ProviderIdPropertyName, this.ConcreteProviderId);
         }
 
         string IProvider.ProviderId
-            => this.GetStringProperty(ProviderIdPropertyName);
+            => GetStringProperty(ProviderIdPropertyName);
 
-        protected abstract string ConcreteProviderId { get; }
+        string IProvider.ProviderType
+            => GetStringProperty(ProviderTypePropertyName);
     }
 }

@@ -31,10 +31,6 @@ namespace Stormpath.SDK.Impl.Provider
         {
         }
 
-        protected override string ConcreteProviderId
-            => ProviderType.Saml;
-
-
         string ISamlProvider.SsoLoginUrl => GetStringProperty(SsoLoginUrlPropertyName);
 
         string ISamlProvider.SsoLogoutUrl => GetStringProperty(SsoLogoutUrlPropertyName);

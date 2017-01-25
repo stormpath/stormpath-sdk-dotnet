@@ -24,9 +24,17 @@ namespace Stormpath.SDK.Provider
     public interface IProvider : IResource, IAuditable
     {
         /// <summary>
-        /// Gets the Stormpath ID of the Provider (e.g. "facebook" or "google").
+        /// Gets the ID of the Provider (e.g. "facebook" or "google").
         /// </summary>
-        /// <value>The Stormpath ID of the Provider</value>
+        /// <remarks>For generic OAuth 2.0 providers, this can be any unique string.</remarks>
+        /// <value>The ID of the Provider.</value>
         string ProviderId { get; }
+
+        /// <summary>
+        /// Gets the type of the Provider (e.g. "facebook" or "google").
+        /// </summary>
+        /// <remarks>For generic OAuth 2.0 providers, this will always be "oauth2".</remarks>
+        /// <value>The type of the Provider.</value>
+        string ProviderType { get; }
     }
 }
