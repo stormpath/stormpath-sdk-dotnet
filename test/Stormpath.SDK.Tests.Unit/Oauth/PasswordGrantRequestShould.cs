@@ -91,9 +91,9 @@ namespace Stormpath.SDK.Tests.Unit.Oauth
             var httpRequest = call.GetArguments()[0] as IHttpRequest;
             ValidateParameters(httpRequest);
 
-            // Ensure Account Store href is included
+            // Ensure nameKey is included
             var requestBody = httpRequest.Body.Split('&');
-            requestBody.Should().Contain("nameKey=anOrganization");
+            requestBody.Should().Contain("organizationNameKey=anOrganization");
         }
 
         private static void ValidateParameters(IHttpRequest request)

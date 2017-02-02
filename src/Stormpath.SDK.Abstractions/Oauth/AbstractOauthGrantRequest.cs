@@ -13,7 +13,7 @@
         [SerializedProperty(Name="accountStore")]
         public string AccountStoreHref { get; set; }
 
-        [SerializedProperty(Name="nameKey")]
+        [SerializedProperty(Name="organizationNameKey")]
         public string OrganizationNameKey { get; set; }
     }
 }
