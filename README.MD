@@ -3,9 +3,9 @@ We are incredibly excited to announce that [Stormpath is joining forces with Okt
 
 We're available to answer all questions at [support@stormpath.com](mailto:support@stormpath.com).
 
-# Stormpath .NET SDK [![NuGet](https://img.shields.io/nuget/v/Stormpath.SDK.svg)](https://www.nuget.org/packages/Stormpath.SDK)
+:warning: **Deprecation notice: This library will no longer be updated. The [Okta .NET SDK](https://github.com/okta/oktasdk-csharp) should be used for applications that connect to Okta.** We're currently hard at work building a new version of the Okta SDK that supports .NET Standard and many of the popular features from the Stormpath SDK. If there are things you'd like to see, please let us know by filing an [issue](https://github.com/okta/oktasdk-csharp/issues)!
 
-:warning: **Deprecation notice: This library will no longer be updated. The [Okta .NET SDK](https://github.com/okta/oktasdk-csharp) should be used for applications that connect to Okta.**
+# Stormpath .NET SDK [![NuGet](https://img.shields.io/nuget/v/Stormpath.SDK.svg)](https://www.nuget.org/packages/Stormpath.SDK)
 
 [Stormpath](https://stormpath.com) is a complete user management API.  This
 library gives your ASP.NET, C#, or Visual Basic application access to all of Stormpath's features:
